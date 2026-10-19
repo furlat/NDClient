@@ -59,7 +59,7 @@ static func _movement_allowances(before:Dictionary,after:Dictionary,sequence:int
                 "operation_sequence":sequence,"source":"PlayerOperation.hud.sheets[].resources[movement]"}
     return result
 
-static func read(directory: String, token: Dictionary={}, projection:Dictionary={}) -> Dictionary:
+static func read(directory: String, token: Dictionary={}, projection:Dictionary={}, source_cache:Dictionary={}) -> Dictionary:
     var started = Time.get_ticks_usec()
     if not DirAccess.dir_exists_absolute(directory): return {"ok":false,"error":"Recording directory does not exist: "+directory}
     var journal = Journal.new()
@@ -74,6 +74,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     if files.is_empty(): return {"ok":false,"error":"No SDK packets found in "+directory}
     var result = {"ok":true,"directory":directory,"initialization":{},"groups":[],"rows":[],"duration_ms":0.0,"operations":0,"cache":{},"bytes":0,"compile_ms":0.0}
     var read_profile={"decode_ms":0.0,"reduce_ms":0.0,"compile_ms":0.0,"index_ms":0.0,"packets":[]}
+    result.cache=source_cache.duplicate()
     if not projection.is_empty():result.cache=projection.cache.duplicate()
     # Inspection spacing is explicit display timing, not a server event or an
     # authored action duration. Compiler-owned group-local clocks stay intact.
@@ -115,7 +116,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                 "events":Compiler.EventTrace.initialization(admitted.normalized.initialization)}
             _observe_condition_history(condition_history,condition_intervals,condition_parents,journal.state.actors,0.0,"",true)
             preview_state=journal.state.duplicate(true)
-            NativeItems.observe(item_owners,preview_state,0.0,[],result.cache)
+            NativeItems.observe(item_owners,preview_state,0.0,result.cache)
             _observe_item_history(item_history,item_spans,item_owners,preview_state,0.0,"",result.cache)
             _preview_states(preview_states,preview_state,preview_state.actors,condition_history,0.0,result.cache)
             LightTracks.observe(light_history,preview_state,0.0,"",0,result.cache)
@@ -156,9 +157,10 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             var nodes={}
             for event in group.events:nodes[event.event_uuid]=event
             for commit in group.commits:
+                var captures:Dictionary=Timeline.pose_admissions(commit,preview_state.actors,condition_history,group,offset,previous_directions,result.cache)
                 Compiler.apply_delta(preview_state,commit.delta)
-                if NativeItems.interested(item_owners,commit.get("item_appearance_origins",[]),commit.delta,result.cache):
-                    NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,commit.get("item_appearance_origins",[]),result.cache)
+                if NativeItems.interested(item_owners,commit.delta,result.cache):
+                    NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,result.cache,str(commit.get("event_uuid","")))
                     _observe_item_history(item_history,item_spans,item_owners,preview_state,offset+commit.at_ms,"%s:%s"%[sequence,commit.get("event_uuid","")],result.cache)
                 LightTracks.observe(light_history,preview_state,offset+commit.at_ms,commit.get("event_uuid",""),sequence,result.cache)
                 _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),offset+commit.at_ms,commit.get("event_uuid",""))
@@ -172,7 +174,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     perception[event.event_uuid]=contacts
                 var actors: Dictionary=commit.delta.get("actors",{})
                 _observe_condition_history(condition_history,condition_intervals,condition_parents,actors,offset+commit.at_ms,
-                    "%s:%s"%[sequence,commit.get("event_uuid","")],false,commit.get("condition_rows",[]))
+                    "%s:%s"%[sequence,commit.get("event_uuid","")],false,commit.get("condition_rows",[]),captures)
                 _preview_states(preview_states,preview_state,actors,condition_history,offset+commit.at_ms,result.cache,commit.get("event_uuid",""))
             var events: Dictionary = {}
             for event in group.events:
@@ -306,6 +308,13 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         span.component=component
         span.erase("signature")
         result.rows.append(span)
+        var receiver:Dictionary=span.duplicate(false)
+        receiver.merge({"id":component.id+":weapon_surface:span:"+str(span.start_ms),"parent":span.id,"kind":"native_material",
+            "label":"Weapon surface","trace_track_id":component.id+":weapon_surface",
+            "render_method":{"surface":"separate modular weapon layer","renderer":"res://presentation/native_weapon_inputs.gd","item_uuid":component.item_owner_uuid},
+            "preview_scope":"live_composed_actor","preview_status":"missing","preview_reason":"Inspect the attached effect on the actual weapon in the replay; no isolated composed-weapon thumbnail is supplied."},true)
+        result.rows.append(receiver)
+        _persistent_native_channels(result.rows,span,component)
     result.rows.append_array(LightTracks.rows(light_history,result,preview_tracks))
     _spatial_rows(result,spatial_history,spatial_owners,occurrence_ids)
     for row in result.rows:
@@ -346,7 +355,7 @@ static func _condition_presentation_at(states:Array,tracks:Array,at_ms:float,cac
         state=candidate
     if state.is_empty():return {}
     var body:Dictionary=Compiler.Tracks.samples(tracks.filter(func(track):return at_ms<track.group_end_ms),at_ms).get(state.actor.id,{})
-    var pose:Dictionary=state.sampled_pose if body.is_empty() else body
+    var pose:Dictionary=state.sampled_pose if body.is_empty() or state.sampled_pose.get("condition_pose",{}).get("captured",false) else body
     var selected:Dictionary=pose.get("condition_pose",{})
     var source:String=selected.get("source",body.get("source","catalog/rigs.json:/"+state.actor.rig+"/clips/"+pose.clip))
     if source.is_empty():source="catalog/rigs.json:/"+state.actor.rig+"/clips/"+pose.clip
@@ -941,8 +950,9 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
         var body:Dictionary=bodies.get(owner.actor_uuid,{})
         if not pose_state.is_empty():
             var pose_actor:Dictionary=pose_state.pose_actor
-            if body.is_empty():
-                selected_pose=ConditionPose.select(pose_actor,pose_state.actor.rig,"idle",cache)
+            var held_pose:Dictionary=ConditionPose.select(pose_actor,pose_state.actor.rig,"idle",cache,sampled_owners)
+            if body.is_empty() or held_pose.get("captured",false):
+                selected_pose=held_pose
             else:
                 pose_activity=body.get("activity","")
                 # The compiler selected this pose from its event-time actor;
@@ -996,7 +1006,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                             "coverage":{"implementation":requirement.get("implementation","not_examined"),"source":requirement.get("availability","not_examined"),"prepared":"not_examined","rendered":"not_witnessed"}},true)
                         rows.append(material)
                 if selected_pose.get("condition_uuid")==owner.id:
-                    var pose=common.duplicate();pose.merge({"id":prefix+"pose","kind":"condition_pose","label":pose_activity.capitalize()+" · "+selected_pose.clip,
+                    var pose=common.duplicate();pose.merge({"id":prefix+"pose","kind":"condition_pose","label":("Captured · "+selected_pose.clip+" · frame "+str(selected_pose.frame)) if selected_pose.get("captured",false) else pose_activity.capitalize()+" · "+selected_pose.clip,
                         "pose":selected_pose if selected_pose.legacy_source.contains("/activityPoses/") else persistent.get("frozenPose",persistent.get("bodyPose")),
                         "selected_pose":selected_pose,"source_fps":Compiler.Authoring.rigs(cache)[pose_state.actor.rig].clips[selected_pose.clip].fps,"activity":pose_activity,"source":selected_pose.source,"legacy_source":selected_pose.legacy_source},true)
                     rows.append(pose)
@@ -1089,7 +1099,7 @@ static func _preview_states(output: Dictionary,state: Dictionary,actors: Diction
         if not rest.ok:continue
         var pose={"rig":row.rig,"clip":rest.value.clip,"source_seconds":rest.value.source_seconds,
             "clock":"fixed" if actor.life_state in ["dead","dying","stable"] else "display"}
-        var condition=Timeline.Conditions.pose(actor,row.rig,cache)
+        var condition=Timeline.Conditions.pose(actor,row.rig,cache,owners)
         if not condition.is_empty() and rig.clips.has(condition.clip):
             pose.clip=condition.clip;pose.clock="condition"
             pose.condition_pose=condition
@@ -1103,7 +1113,7 @@ static func _preview_states(output: Dictionary,state: Dictionary,actors: Diction
         output[id].append({"at_ms":at_ms,"actor":row,"actor_name":actor.get("name",""),"sampled_pose":pose,"pose_owner":condition.get("condition_uuid",""),"pose_actor":{"life_state":actor.life_state,"conditions":actor.get("conditions",[])},"condition_owners":local_owners,"source_event_uuid":source_event_uuid})
 
 static func _observe_condition_history(history: Dictionary, intervals: Dictionary, parents: Dictionary,
-        actors: Dictionary, at_ms: float, event: String, initial: bool=false,rows:Array=[])->void:
+        actors: Dictionary, at_ms: float, event: String, initial: bool=false,rows:Array=[],captures:Dictionary={})->void:
     # An event's final snapshot can erase an entire transient lifetime or
     # conceal remove/reapply of an equal member. Keep the native row boundaries
     # before reconciling ordinary member/suppression snapshots below.
@@ -1144,10 +1154,11 @@ static func _observe_condition_history(history: Dictionary, intervals: Dictionar
                 var states: Array=intervals[owner.id]
                 if not states.is_empty() and is_inf(states[-1].end_ms):states[-1].end_ms=at_ms
                 if is_inf(owner.end_ms):parents[owner.id].removal_event=event
-    Timeline.Conditions.observe(history,actors,at_ms,initial,rows)
+    Timeline.Conditions.observe(history,actors,at_ms,initial,rows,captures)
 
 static func restore(index: Dictionary, target_ms: float, token: Dictionary={}) -> RefCounted:
     var timeline = Timeline.new()
+    timeline.appearance_cache=Compiler.Authoring.Catalog.source_snapshot(index.cache)
     var initial: Dictionary = index.initialization.duplicate()
     # Each playback owns mutable state containers. The retained prefix is immutable.
     initial.state = index.initialization.state.duplicate(true)
@@ -1214,21 +1225,21 @@ static func step_time(index: Dictionary, row: Dictionary, time_ms: float, direct
 static func _observe_item_history(current:Dictionary,spans:Array,owners:Dictionary,state:Dictionary,at_ms:float,event_id:String,cache:Dictionary)->void:
     var active:Dictionary={}
     for sample in NativeItems.samples(owners,state,at_ms):
-        active[sample.item_owner_uuid]=sample
+        active[sample.id]=sample
     for id in current.keys():
         if not active.has(id):
             current[id].end_ms=at_ms;current.erase(id)
     for id in active:
         var component:Dictionary=active[id]
-        var location:Dictionary=NativeItems.membership(id,state)
+        var location:Dictionary=component.item_effect.location
         var signature:Array=[component.status,component.get("reason",""),location.kind,location.get("holder_uuid",""),location.get("render_slot","")]
         if current.has(id) and current[id].signature==signature:continue
         if current.has(id):current[id].end_ms=at_ms
-        var origin:Dictionary=component.item_origin
-        var parent:String="%s:%s"%[origin.operation_sequence,origin.creation_occurrence] if origin.has("operation_sequence") else event_id
-        var row={"id":component.id+":span:"+str(spans.size()),"parent":parent,"kind":"native_effect","label":"Item appearance · "+str(component.item_origin.item_id).get_file().replace("weapon.","").capitalize(),
+        var origin:Dictionary=component.item_effect
+        var parent:String=event_id
+        var row={"id":component.id+":span:"+str(spans.size()),"parent":parent,"kind":"native_effect","label":"Weapon effect · "+str(component.native_cue.clip).get_file(),
             "start_ms":at_ms,"end_ms":INF,"source_start_ms":component.start_ms,"group_start_ms":component.start_ms,"group_id":"",
             "source_event_uuid":component.source_event_uuid,"actor_uuid":component.actor_uuid,"component":component,
             "source":component.source,"status":component.status,"reason":component.get("reason",""),"signature":signature,
-            "markers":[],"source_fps":0,"preview_scope":"actual_item_in_scene","coverage":{"implementation":"resolved","source":component.status,"prepared":"not_examined","rendered":"not_witnessed"}}
+            "markers":[],"source_fps":0,"render_method":{"renderer":"res://presentation/native_spell_renderer.gd","attachment":component.native_cue.attachment,"item_uuid":component.item_owner_uuid,"inputs":component.native_clip.get("inputs",[])},"preview_scope":"actual_item_in_scene","coverage":{"implementation":"resolved","source":component.status,"prepared":"not_examined","rendered":"not_witnessed"}}
         current[id]=row;spans.append(row)

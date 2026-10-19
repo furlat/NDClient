@@ -184,13 +184,13 @@ func case_run(request:Dictionary)->Dictionary:
         elif not await execute(step,names):break
     report.native_items=[]
     if healthy():
-        for owner in scene.timeline.item_appearance_owners.values():
-            if not owner.reason.is_empty() or not NativeItems.active(owner,scene.timeline.state):continue
-            var id:String="item:"+owner.item_uuid+":appearance"
+        for owner in scene.timeline.item_effect_owners.values():
+            if not NativeItems.active(owner,scene.timeline.state):continue
+            var id:String=owner.id
             var drawn:bool=await until(func():return scene.component_renderer.native_spells.diagnostics.get(id,{}).get("status")=="rendered","Actual native item reaches first draw",30000)
             if drawn:
                 var handle:Dictionary=scene.component_renderer.native_spells.handles[id]
-                report.native_items.append({"id":id,"item_uuid":owner.item_uuid,"inputs":handle.created_item_input,"construction_ms":handle.construction_phases})
+                report.native_items.append({"id":id,"item_uuid":owner.item_uuid,"inputs":scene.component_renderer.native_spells.diagnostics.get(id,{}).get("input_bindings",{}),"construction_ms":handle.construction_phases})
     report.merge({"checks":checks,"failures":failures,"ok":failures.is_empty(),"issue":scene.session.issue,"presentation_errors":scene.presentation_errors,
         "render_trace":scene.timeline.event_trace(2000)})
     if not failures.is_empty():

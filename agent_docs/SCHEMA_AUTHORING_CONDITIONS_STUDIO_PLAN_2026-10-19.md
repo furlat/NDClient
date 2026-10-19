@@ -247,3 +247,47 @@ For each live slow action record exclusive `selection/click→Preview→submit�
 Warm meaningful actual inputs: Web after growth; exact Fly rig/clip media; real actor-history context. Surprise event queue lead must be measured, never assumed; selection/backlog is an opportunity, not a guarantee. No per-frame validation/readback, all-library preload, clock hold or effect dropping to hide a late preparation. Fix costs in their actual shared owner and preserve ordering/pixels.
 
 Run relevant current fast/native/live gates, not only manifest defaults; preserve named unrelated failures instead of claiming universal green. Zero new failures, script/engine/resource errors. Investigate Factory's known combined-fixture 21-instance shutdown warning through production repeat create/remove/seek/loop/teardown: neither assume a client leak nor ignore an actual one. Hand off exact identities/commands/gaps/rejected art/performance; leave no owned test process keeping the PC awake.
+
+
+## Immediate weapon-authoring cohort — user clarification, 19 October
+
+The user prioritizes the authoring structure, shared renderer and Studio tracks
+before requesting corresponding Factory effects. All wielded bodies remain
+sprite sheets. Native wielded weapon-body replacements are rejected. Begin with
+modular characters' separate weapon layers; full authored-character weapons are
+baked into their sprites and their attachment support is deferred. Spiritual
+Weapon is a separate summoned actor, not an equipped weapon substitute.
+
+- [x] Preserve each item's existing sprite family/body and add typed `Gear.effects`
+  using the common EffectUse resources. Compile to the existing body source index;
+  do not introduce another registry or runtime JSON loader.
+- [x] Reuse NativeItems/Timeline for independently keyed attached uses, with real
+  item UUID plus authored Resource locator; never invent a condition/effect UUID
+  or require creation ancestry for an ordinary existing item. Share change-time
+  membership work across effects, with live current modular weapon geometry.
+- [x] Conditions retain temporary enchantment/buff lifetimes; spells/actions retain
+  finite cast/contact cues. Intrinsic effects belong to actual item membership.
+  Unequip, replacement, transfer and loss of disclosure cannot coat another item.
+- [x] Expose each actual use and its input/source/channel in Studio, preserving
+  independent uses on one item, seek/loop, and truthful unsupported inputs. No
+  manufactured application event for an item already present at replay start.
+- [x] Qualify base sprite preservation, multiple private uses, actual journals,
+  seek/loop and native receiving pixels with existing delivered coating sources
+  in test-only staging. No new unaccepted production artwork assignment.
+- [x] Then write the Factory handoff with the executable Resource example,
+  ownership/input contract, output locations and named backend data gaps.
+
+Gate: affected headless/native checks with no script/resource errors; current
+ordered publication/approved lighting unchanged. Plan-adherence, antislop and
+antiOOP review are short passes at this cohort boundary. Do not expand into a
+native mesh/body system or baked-in weapon segmentation.
+
+
+Cohort receipt: implemented in the private worktree, not published through the
+failed actor-context candidate. The bounded held-modular contract and executable
+Factory handoff are in `MODULAR_WEAPON_EFFECTS_FACTORY_HANDOFF_2026-10-20.md`.
+Nine affected gates passed, then the actual-draw child-witness regression passed
+24 ownership/22 native checks. Offhand, baked-character/dropped-item support,
+full transfer and final performance remain explicit gaps; the checked cohort
+means the structure/render/Studio contract is ready, not that those variants or
+all art are complete.

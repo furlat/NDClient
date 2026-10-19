@@ -641,6 +641,26 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             await command(seat, now, actor, {'kind': 'end_turn'}, {'request': {'do': 'end_turn', 'until_removed': tracked['condition_id']}})
         if tracked_on(): raise CaseError('The tracked condition '+str(tracked['condition_id'])+' did not end within '+str(step.get('max_turns', 40))+' ended turns')
 
+    async def wait_condition(step):
+        """Advance ordinary turns until the named observed condition is present.
+
+        This records real delayed rule outcomes such as Flesh to Stone's saves;
+        it never creates a condition or replaces a failed outcome with a cast.
+        """
+        holder, _ = actor_of(step['target'])
+        if holder is None: raise CaseError('Condition recipient is not observed: '+step['target'])
+        for ended in range(step.get('max_turns', 24)+1):
+            if any(behavior == step['condition'] for behavior, _ in conditions_of(holder)):
+                notes.append({'step':'wait_condition', 'target':step['target'], 'condition':step['condition'], 'ended_turns':ended})
+                return
+            if ended == step.get('max_turns', 24): break
+            if step.get('while_condition') and not any(behavior == step['while_condition'] for behavior, _ in conditions_of(holder)):
+                raise CaseError('The prerequisite '+step['while_condition']+' ended before '+step['condition'])
+            seat, now, actor = await active()
+            await command(seat, now, actor, {'kind':'end_turn'},
+                {'request':{'do':'end_turn', 'until_condition':step['condition'], 'target':step['target']}})
+        raise CaseError('No observed '+step['condition']+' after '+str(step.get('max_turns', 24))+' ended turns')
+
     try:
         for credential in config.credentials:
             connection = await open_seat(url, credential.token)
@@ -666,6 +686,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
                 if tracked_on(): await walk(holder_role(), step.get('offset', (0, 3)), 'hold')
                 elif ctx['tracked'] is not None: gaps.append({'step': 'hold', 'reason': 'The tracked condition ended before its holder could walk'})
             elif step['do'] == 'end_tracked': await end_tracked(step)
+            elif step['do'] == 'wait_condition': await wait_condition(step)
             elif step['do'] == 'tail_walk':
                 if ctx['tracked'] is None or not tracked_on(): await walk(step.get('by') or holder_role() or step.get('fallback'), step.get('offset', (3, 0)), 'tail')
             else: await perform(step)

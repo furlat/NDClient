@@ -7,7 +7,7 @@ const AudioCues=preload("res://presentation/audio_cues.gd")
 const ConditionPose=preload("res://presentation/condition_pose.gd")
 const BodySurfaces=preload("res://presentation/body_surfaces.gd")
 
-static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false, rows:Array=[]) -> bool:
+static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false, rows:Array=[],captures:Dictionary={}) -> bool:
     var changed:bool=false
     # These are the native event's ordered immutable row captures, not a fold
     # over invented facts or a diff of final snapshots.
@@ -22,6 +22,7 @@ static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initia
         elif change.before==null:
             owners[identity]={"id":identity,"actor_uuid":change.actor_uuid,"start_ms":at_ms,"initial":false,"condition":change.after,"end_ms":INF,
                 "life_state":actors.get(change.actor_uuid,{}).get("life_state","alive")}
+            if captures.has(identity):owners[identity].logical_pose=captures[identity]
             changed=true
     for actor_id in actors:
         var actor: Dictionary=actors[actor_id]
@@ -216,8 +217,8 @@ static func paths(actor: Dictionary, cache: Dictionary) -> Dictionary:
         if resources.has(ramp.get("texture")): result[resources[ramp.texture]]=true
     return result
 
-static func pose(actor: Dictionary, rig_id: String, cache: Dictionary) -> Dictionary:
-    return ConditionPose.select(actor,rig_id,"idle",cache)
+static func pose(actor: Dictionary, rig_id: String, cache: Dictionary,owners:Dictionary={}) -> Dictionary:
+    return ConditionPose.select(actor,rig_id,"idle",cache,owners)
 
 static func material(actor_id: String, samples: Array) -> Dictionary:
     var value={"tint":Vector3.ONE,"saturation":1.0,"brightness":1.0,"alpha":1.0,"outline":{},"ramp":{},"flash":{},"body_surfaces":BodySurfaces.compose(actor_id,samples),"time_ms":0.0}

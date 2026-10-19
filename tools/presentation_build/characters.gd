@@ -161,6 +161,7 @@ static func _check_characters(state: Dictionary, characters: Dictionary) -> Dict
 static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
     var report: Dictionary = state.report
     var ids: Dictionary = Common.server_ids().get("ids", {}).get("item", {})
+    var clips: Dictionary = {}
     var root: Resource = null
     for rig in state.rigs.values():
         if rig.kind == "layered":root = rig
@@ -170,16 +171,26 @@ static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
         if entry.id != id:Common.error(report, where, "id differs from its key: " + entry.id)
         if not entry.family.is_empty() and not gear.has(entry.family):Common.error(report, where, "family missing: " + entry.family)
         if entry.icon != null and entry.icon.status != "missing":Common.asset(report, where, entry.icon.path)
-        if entry.native_appearance!=null:
-            var use:Resource=entry.native_appearance
-            var package:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
-            var matches:Array=package.clips.filter(func(clip):return clip.clip_id==use.clip)
-            if matches.size()!=1:Common.error(report,where,"native appearance needs one delivered clip")
-            elif "created_item_binding" not in matches[0].inputs:Common.error(report,where,"native item clip lacks exact item binding")
-            if use.attachment!="item" or use.constructor_input.get("kind")!="created_item" or use.constructor_input.get("creation_behaviors",[]).is_empty():
-                Common.error(report,where,"native item requires item registration and exact creation behaviors")
+        for use in entry.effects:
+            if use==null:Common.error(report,where,"null item decoration");continue
+            if clips.is_empty():
+                var package:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
+                for clip in package.clips:clips[clip.clip_id]=clip
+            if not clips.has(use.clip):Common.error(report,where,"item decoration clip is not delivered: "+use.clip)
+            elif "created_item_binding" in clips[use.clip].get("inputs",[]):
+                Common.error(report,where,"native item-body source cannot be authored as a weapon decoration: "+use.clip)
+            if use.role not in ["sustain","attached"] or use.at not in ["","owner_start"] or not is_zero_approx(use.delay):
+                Common.error(report,where,"intrinsic item effects sustain on displayed item membership; finite/delayed cues belong to spells/actions/conditions")
+            if not use.lifecycle.is_empty() or not is_zero_approx(use.source_start) or use.source_end>=0 or not is_equal_approx(use.source_rate,1.0):
+                Common.error(report,where,"intrinsic item effects use the unscaled held source clock; finite/rate staging belongs to event/condition authoring")
+            if not use.follow:Common.error(report,where,"intrinsic weapon decorations must follow the displayed weapon")
+            if use.attachment not in ["item","recipient_weapon"]:
+                Common.error(report,where,"item decoration requires an item or recipient_weapon attachment")
+            if use.recipient_slots.is_empty():Common.error(report,where,"modular item decoration requires explicit recipient_slots")
+            for slot in use.recipient_slots:
+                if slot not in ["weapon","offhand"]:Common.error(report,where,"item decoration needs a separate modular weapon/offhand receiver: "+slot)
             for slot in use.extra.get("equipment_slots",[]):
-                if slot not in GEAR_SLOTS:Common.error(report,where,"unknown native equipment slot "+str(slot))
+                if slot not in GEAR_SLOTS:Common.error(report,where,"unknown item decoration equipment slot "+str(slot))
         var looks: Array = []
         for slot in entry.slots:
             if slot not in GEAR_SLOTS:Common.error(report, where, "unknown visual slot " + slot)
@@ -462,10 +473,17 @@ static func _equipment(state: Dictionary, gear: Dictionary) -> void:
     var index: Index = state.index
     for id in gear:
         var entry: Resource = gear[id]
-        if entry.native_appearance!=null:
-            var cue:Dictionary=Records.cue_from_effect(entry.native_appearance,0)
-            cue.source=entry.resource_path+"::native_appearance"
-            index.native_item_appearances[id]=cue
+        if not entry.effects.is_empty():
+            var effects:Array=[]
+            for ordinal in entry.effects.size():
+                var cue:Dictionary=Records.cue_from_effect(entry.effects[ordinal],ordinal)
+                cue.source=entry.resource_path+"::effects/"+str(ordinal)
+                Records.F.emit(cue,"selection",entry.effects[ordinal],"selection","string")
+                Records.F.emit(cue,"offset",entry.effects[ordinal],"offset","vec3")
+                if not entry.effects[ordinal].recipient_slots.is_empty():
+                    cue.entity_geometry={"actor":"recipient","slots":Array(entry.effects[ordinal].recipient_slots)}
+                effects.append(cue)
+            index.item_effects[id]=effects
         if not entry.family.is_empty():index.gear[id] = [entry.family, entry.visual_variant_id]
         if entry.slots.is_empty() and entry.hands.is_empty():continue
         index.gear[id] = [id, ""]

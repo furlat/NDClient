@@ -2710,7 +2710,7 @@ func _sample_actors() -> void:
         row.visual_height = float(sample.get("lift_pixels",0))*(128.0/rig_config.TILE_W)/64.0
         var rig: Dictionary = rigs[row.rig]
         var resting = Characters.rest_sample(actor,rig,catalog_cache)
-        var condition_pose=Conditions.pose(actor,row.rig,catalog_cache)
+        var condition_pose=Conditions.pose(actor,row.rig,catalog_cache,timeline.condition_owners)
         var material_state=Conditions.material(id,material_samples.get(id,[]))
         # Material values are independently clocked from the sprite frame. In
         # particular, damage/body surfaces must keep sampling between frames,
@@ -2737,6 +2737,7 @@ func _sample_actors() -> void:
         if actor.life_state in ["dead","dying","stable"]:
             seconds = resting.value.source_seconds
             occurrence = "terminal:"+id
+        var body_pose:Dictionary=Conditions.ConditionPose.body_sample(resting.value,actor.life_state,rig,condition_pose,sample,timeline.display_ms,condition_ages.get(condition_pose.get("condition_uuid",""),0.0))
         if not sample.is_empty():
             idle = sample.clip
             seconds = sample.source_seconds
@@ -2749,10 +2750,9 @@ func _sample_actors() -> void:
             if target != null and origin != null:
                 var direction = Vector2(target[0]-origin[0],target[1]-origin[1])
                 if not direction.is_zero_approx(): row.facing = _facing(direction)
-        elif not condition_pose.is_empty() and rig.clips.has(condition_pose.clip):
-            idle=condition_pose.clip
-            seconds=Conditions.ConditionPose.source_seconds(condition_pose,rig.clips[idle],condition_ages.get(condition_pose.condition_uuid,0.0))
-            occurrence="condition_pose:"+condition_pose.condition_uuid+":"+idle
+        idle=body_pose.clip;seconds=body_pose.source_seconds
+        if body_pose.has("condition_uuid"):occurrence="condition_pose:"+body_pose.condition_uuid+":"+idle
+        if body_pose.has("world_facing"):row.facing=body_pose.world_facing
         FrameProfile.end_phase(profile,"actor_sprite_setup",actor_setup_started)
         var graph_started:int=Time.get_ticks_usec()
         var sampled = Graphs.sample(playbacks[id],idle,seconds,occurrence)
@@ -2919,8 +2919,7 @@ func claim_receiving() -> void:
     else: ground_supports_revision = -1
 
 func _facing(direction: Vector2) -> String:
-    var cycle: Array = rig_config.FACING_CYCLE
-    return cycle[posmod(roundi((atan2(direction.y,direction.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
+    return Placement.facing(direction,rig_config.FACING_CYCLE)
 
 func _sync_native_lighting() -> void:
     var phase = Time.get_ticks_usec()

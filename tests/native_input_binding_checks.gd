@@ -3,7 +3,10 @@ extends SceneTree
 const Inputs=preload("res://presentation/native_inputs.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Body=preload("res://modular.gdshader")
+class OwnerTimeline extends RefCounted:
+    var condition_owners:Dictionary={}
 class World extends Node3D:
+    var timeline:RefCounted=OwnerTimeline.new()
     var visual_actors:Dictionary={}
     var rigs:Dictionary={"fixture":{"cell_width":128,"cell_height":128,"origin_y_from_ground":32,"facing_rows":{"SW":0},"clips":{"Idle":{"fps":1.0,"frames":1}},"body_anchor":Vector2(64,64),
         "pose_sockets":{"head":{"Idle":{"SW":[Vector2(64,16)]}},"hand":{"Idle":{"SW":[Vector2(72,64)]}}}}}
@@ -109,8 +112,16 @@ func run()->void:
     var capture:Node3D=capture_phase.make_component({"layer_mask":0});world.add_child(capture)
     var capture_handle:Dictionary={"clip":Effects.clip("conditions/continuation/condition_petrified_body_persistent/application"),"occurrence":capture}
     var missing:Dictionary=bridge.sync(world,capture_handle,component,points)
-    check(missing.unavailable.get("pose_provider")=="provider_not_bound" and b.material.shader==Body,"A logical pose capture remains unavailable instead of displaying the live pose as petrified capture")
+    check(missing.unavailable.get("pose_provider")=="condition_original_pose_not_observed" and b.material.shader==Body,"A logical pose capture remains unavailable instead of displaying the live pose as petrified capture")
+    component.condition_uuid="stone-owner"
+    world.timeline.condition_owners["stone-owner"]={"logical_pose":{"actor_uuid":"b","clip":"Attack1","frame":4,"source_seconds":.4,"world_facing":"NE"}}
+    missing=bridge.sync(world,capture_handle,component,points)
+    check(missing.unavailable.is_empty() and capture.body_treatment.logical_capture,"Actual original logical pose acquires before the first layer binding")
+    check(b.material.shader!=Body and capture.body_treatment.materials==[b.material],"Petrification binds actual layers after capture admission without a lost first delivery")
+    var pose_binding:RefCounted=capture_handle.pose_provider_binding
     capture.free()
+    check(pose_binding.owners.is_empty() and b.material.shader==Body,"Closing captured source releases only its lease and restores actual current material")
+    component.erase("condition_uuid")
 
     # Contract probes use disclosed values explicitly. These do not claim a
     # real server count transition; the native replay gate checks actual art.

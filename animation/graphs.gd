@@ -1,4 +1,5 @@
 extends RefCounted
+const Tracks=preload("res://presentation/tracks.gd")
 const Playback = preload("res://animation/playback.gd")
 const DESTRUCTION_SCENE = preload("res://generated/destruction_animation.tscn")
 
@@ -68,16 +69,8 @@ static func instantiate(parent: Node, library: AnimationLibrary, graph: Animatio
     host.set_meta("state", state)
     return host
 
-static func character_loops(rig: Dictionary, clip: String) -> bool:
-    if rig.clips.get(clip,{}).has("loop"): return bool(rig.clips[clip].loop)
-    if rig.get("rest_pose_anchors",{}).has(clip):return false
-    var loop=clip in ["Idle","Idle2","Idle4","Run"]
-    for context in rig.get("body_contexts", []):
-        var body: Dictionary = context.body
-        if not body.actor.enabled or body.actor.clip!=clip:continue
-        if context.role=="death":return false
-        if body.get("playback")=="loop":loop=true
-    return loop
+static func character_loops(rig:Dictionary,clip:String)->bool:
+    return Tracks.character_loops(rig,clip)
 
 static func build_character(parent: Node, rig: Dictionary, sampled: bool = false) -> Node:
     var animations = {}
@@ -154,11 +147,8 @@ static func clip_clock(parent: Node, lengths: Dictionary) -> Node:
 
 ## The tree's sample_seconds: a linear value track keyed 0 -> 0 and length ->
 ## length, evaluated by Animation._interpolate (float32 weight, double lerp).
-static func _track_seconds(time: float, length: float) -> float:
-    if time <= 0.0: return 0.0
-    if time >= length: return length
-    var weight: float = PackedFloat32Array([PackedFloat32Array([time])[0] / PackedFloat32Array([length])[0]])[0]
-    return length * weight
+static func _track_seconds(time:float,length:float)->float:
+    return Tracks.sample_seconds(time,length,false)
 
 static func seek_node(name: String) -> AnimationNodeBlendTree:
     var blend = AnimationNodeBlendTree.new()

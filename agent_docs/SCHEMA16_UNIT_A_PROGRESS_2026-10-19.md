@@ -3,12 +3,13 @@
 19 October 2026. Implementation branch `codex/schema16-unit-a`, worktree
 `C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`, based on
 the committed plan `9b73f29a` on requested branch `codex-authoring-schemabump`.
-Current code checkpoint `0022d050` is published in main `NDClientGodot` as
-`556dc0cd`, with the matching abilities build and original two-faction class
-recordings. Main publication receipts/backups remain under
-`.runtime/schema16-publication/`. Current package is the complete sealed
-`production-bindings-2081189e43bf0443`: 1,159 clips, 504 selections, 155 condition
-families and 465 lifecycle roles. No official engine or Factory source was edited.
+Current sealed package is `production-bindings-c494177f9ef03e3d` in the private
+and receiving checkouts. The latest receiving qualification is recorded in
+[readiness integration](FACTORY_READINESS_INTEGRATION_2026-10-19.md). The logical
+capture and modular weapon authoring cohort below is still private; do not merge
+the failed actor-copy candidate with it. Main publication receipts/backups remain
+under `.runtime/schema16-publication/`. Official engine and Factory source remain
+read-only.
 
 This ledger records successive cohorts. The current shared-provider implementation,
 exact native evidence, remaining gaps and live spike ledger are in
@@ -412,3 +413,26 @@ active-condition restore, real count loss, source colour parity, Blur and
 Banishment remain open. No new art or approved graphics were changed. The full
 migration estimates remain unchanged; this is a candidate checkpoint, not a
 completed provider cohort.
+
+
+## Logical capture and modular weapon authoring — 20 October
+
+[Ordered capture cohort](LOGICAL_POSE_CAPTURE_COHORT_2026-10-20.md) now passes actual
+idle-target petrification/cure, four views, seek/restore and native body pixels.
+Studio shares admission/history and tracks the original clip/frame. Rare moving
+trap/reaction capture remains contract-only, not a fabricated recorded scenario.
+
+The user corrected weapon scope: wielded bodies are sheets; full-character baked-in
+weapon attachment is deferred. The mistaken native Blade/Mace body path and its
+acceptance tests were removed. The new [typed weapon-effect contract](MODULAR_WEAPON_EFFECTS_FACTORY_HANDOFF_2026-10-20.md)
+adds sustained decorations through the existing owner/preparation/renderer/Studio
+path, preserving the sprite and separating actual conditions and finite casts.
+Two test-only delivered coatings on one actual item pass native receiving/pixel
+and independent-track/seek/loop tests. No new production coating art is assigned.
+
+[Remaining provider audit](REMAINING_PROVIDER_BATCH_AUDIT_2026-10-19.md) identifies
+next event/retained-owner cohorts. The offline art join now includes all14 class
+features with nine honest generic placeholders; 3,153 headless checks pass. Native
+actor-copy shader blockers, source construction costs, missing public operands,
+new-package complete safety/live gates and final performance remain open. Neither
+this note nor a passing bounded cohort claims the full migration complete.

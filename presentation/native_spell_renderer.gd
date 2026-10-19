@@ -431,7 +431,11 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             diagnostics[id].status="partial";diagnostics[id].reason="native_input_unavailable"
         if lifecycle:diagnostics[id].lifecycle_phase=handle.lifecycle_phase
         if not caught_up:ready=false
-        if drawn and caught_up and submitted_bounds and input_bindings.unavailable.is_empty():witnesses.append({"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())})
+        if drawn and caught_up and submitted_bounds and input_bindings.unavailable.is_empty():
+            var witness={"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())}
+            witnesses.append(witness)
+            if component.get("intrinsic_item_effect",false) and "weapon_binding" in input_bindings.supplied and input_bindings.supplied.any(func(name):return name in ["entity_geometry","recipient_geometry"]):
+                var receiver:Dictionary=witness.duplicate(false);receiver.id=id+":weapon_surface";witnesses.append(receiver)
         if float(handle.drawn_time)!=sample_time:
             var sampled_root:WeakRef=weakref(handle.root)
             RenderingServer.frame_post_draw.connect(func():
@@ -579,7 +583,7 @@ func _queued_ids(world:Node)->Dictionary:
     for id in handles:
         var component:Dictionary=handles[id].component
         if component.has("item_owner_uuid"):
-            var item:Dictionary=world.timeline.item_appearance_owners.get(component.item_owner_uuid,{})
+            var item:Dictionary=world.timeline.item_effect_owners.get(component.get("item_effect_owner",""),{})
             if not item.is_empty() and NativeItems.active(item,world.timeline.state):
                 result[id]=true;continue
         var owner_id:Variant=component.get("condition_uuid",component.get("spatial_effect_uuid"))

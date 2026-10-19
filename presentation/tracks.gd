@@ -1,6 +1,25 @@
 extends RefCounted
 # Shared passive authored tracks. No clock ownership or reducer writes.
 
+static func character_loops(rig:Dictionary,clip:String)->bool:
+    if rig.clips.get(clip,{}).has("loop"):return bool(rig.clips[clip].loop)
+    if rig.get("rest_pose_anchors",{}).has(clip):return false
+    var loop:bool=clip in ["Idle","Idle2","Idle4","Run"]
+    for context in rig.get("body_contexts",[]):
+        var body:Dictionary=context.body
+        if not body.actor.enabled or body.actor.clip!=clip:continue
+        if context.role=="death":return false
+        if body.get("playback")=="loop":loop=true
+    return loop
+
+## Same float32 linear-track interpolation as the native animation clock.
+static func sample_seconds(seconds:float,length:float,loop:bool)->float:
+    var time:float=fposmod(seconds,length) if loop else minf(seconds,length)
+    if time<=0.0:return 0.0
+    if time>=length:return length
+    var weight:float=PackedFloat32Array([PackedFloat32Array([time])[0]/PackedFloat32Array([length])[0]])[0]
+    return length*weight
+
 static func samples(tracks: Array, local: float) -> Dictionary:
     var result: Dictionary = {}
     for track in tracks:

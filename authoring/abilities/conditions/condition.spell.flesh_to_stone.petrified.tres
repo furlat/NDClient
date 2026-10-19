@@ -3,6 +3,19 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_4l5ns"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_ix5cs"]
 
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_capture_look"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_capture_step"]
+
+[sub_resource type="Resource" id="Resource_capture_pose"]
+script = ExtResource("3_capture_step")
+kind = "pose"
+pose_role = "frozen"
+capture_current = true
+
+[sub_resource type="Resource" id="Resource_capture_look"]
+script = ExtResource("2_capture_look")
+steps = Array[ExtResource("3_capture_step")]([SubResource("Resource_capture_pose")])
+
 [sub_resource type="Resource" id="Resource_hwq53"]
 script = ExtResource("1_4l5ns")
 path = "art/media/ui/icons/smooth48/condition.dnd-conditions-petrified.png"
@@ -12,4 +25,9 @@ source = "ui/resources.json icon:condition.dnd-conditions-petrified"
 [resource]
 script = ExtResource("1_ix5cs")
 id = "condition.spell.flesh_to_stone.petrified"
+disposition = "authored"
+priority = 80.0
+group = "body"
+max_layers = 3.0
+look = SubResource("Resource_capture_look")
 icon = SubResource("Resource_hwq53")

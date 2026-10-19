@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationGear" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="gear"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="FireOverlay"]
+script = ExtResource("effect")
+clip = "conditions/continuation/condition_coating_fire_persistent/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "test-only typed item decoration using delivered measured fire coating; not a production assignment or art approval"
+
+[resource]
+script = ExtResource("gear")
+id = "weapon.flame_blade"
+kind = "weapon"
+family = "weapon.scimitar"
+effects = Array[ExtResource("effect")]([SubResource("FireOverlay"), SubResource("FireOverlay")])
+status = "partial"
+notes = "Build contract only. Base weapon sheets remain separate from the delivered native coating. No engine item or condition is fabricated."

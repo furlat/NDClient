@@ -125,8 +125,6 @@ static func header(path:String,cache:Dictionary)->Dictionary:
 static func equipment(item:Dictionary,slot:String,cache:Dictionary)->Dictionary:
     var selected:Index=index(cache)
     if selected==null:return {"ok":false,"error":{"kind":"authoring","message":"Body source index has not been built"}}
-    var native:Dictionary=selected.native_item_appearances.get(str(item.get("item_id","")),{})
-    if slot in native.get("equipment_slots",[]):return {"ok":true,"value":[],"native_appearance":native}
     var gear:Array=selected.gear.get(str(item.get("item_id","")),[])
     var key:Array=["" if gear.is_empty() else gear[0],item.get("visual_variant_id"),slot]
     if selected.equipment.has(key):return {"ok":true,"value":selected.equipment[key]}

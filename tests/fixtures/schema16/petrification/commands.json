@@ -1,0 +1,601 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "1d176f10-c05f-43ca-b4ce-4c2abaf1a6ed",
+   "state_revision": "a3081e69-f695-47bb-9b73-e2ddfeaf5d59",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    4,
+    6
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+   "state_revision": "5c7d8256-c1d3-4e1d-804b-60dff04e5440",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 6,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+   "state_revision": "d6e664b0-d448-40f7-b47f-0b229fd80f42",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 5
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "1f49b81b-2a50-4441-ad7c-87406bc898e0",
+   "state_revision": "1f616518-97af-41f3-be8c-db83ae9b3f62",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 7
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue restorer"
+ },
+ {
+  "request": {
+   "do": "spell.flesh_to_stone",
+   "by": "caster",
+   "target": "target"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.flesh_to_stone",
+   "display_name": "Flesh to Stone (Level 6)",
+   "cast_at_level": 6,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "1d176f10-c05f-43ca-b4ce-4c2abaf1a6ed",
+   "state_revision": "56629145-7102-4402-b43d-fcb052c88c02",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+    "sequence": 9
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "1d176f10-c05f-43ca-b4ce-4c2abaf1a6ed",
+   "state_revision": "3e204234-9aa5-4cbd-ba7c-0b4e26b81784",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+    "sequence": 10
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+   "state_revision": "aea20615-1120-4e13-bafa-1d24483c9c6c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 12
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "1f49b81b-2a50-4441-ad7c-87406bc898e0",
+   "state_revision": "3f57a982-da2d-49b6-80a6-1b4e861a67d7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 14
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue restorer"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "1d176f10-c05f-43ca-b4ce-4c2abaf1a6ed",
+   "state_revision": "bbed36c5-a374-4f6b-8fe1-278d2107dd12",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+    "sequence": 16
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+   "state_revision": "cd4bb410-9906-45dc-80ff-18994daf0b8a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 18
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "1f49b81b-2a50-4441-ad7c-87406bc898e0",
+   "state_revision": "a7a0becb-47b1-4db4-a6f5-4859dd762b60",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 20
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue restorer"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "1d176f10-c05f-43ca-b4ce-4c2abaf1a6ed",
+   "state_revision": "18c646b5-df2e-413c-bdb5-482e6c2e79ee",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+    "sequence": 22
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "until_condition": "condition.spell.flesh_to_stone.petrified",
+   "target": "target"
+  },
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+   "state_revision": "6c962177-da2d-4f95-b778-e7853bc92a96",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 24
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.greater_restoration",
+   "by": "restorer",
+   "target": "target"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.greater_restoration",
+   "display_name": "Greater Restoration (Level 5)",
+   "cast_at_level": 5,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "1f49b81b-2a50-4441-ad7c-87406bc898e0",
+   "state_revision": "783a5a53-a50e-459b-8556-b809e9129526",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 26
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue restorer"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "1f49b81b-2a50-4441-ad7c-87406bc898e0",
+   "state_revision": "185c373d-58b4-4975-85d9-b356d8deff75",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 27
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue restorer"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "1d176f10-c05f-43ca-b4ce-4c2abaf1a6ed",
+   "state_revision": "70a45902-6929-4537-b9b4-504589863977",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "3720ffa7-d9fd-42d5-8405-74f93d6bb880",
+    "sequence": 29
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    4,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 11,
+   "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+   "state_revision": "d43acd44-eee7-49ba-9577-96cae65f73df",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 6,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+   "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+   "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+   "command_number": 11,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flesh_to_stone_petrification_restoration",
+    "game_epoch": "2ab87bab-c859-4983-a8d1-6b352078e106",
+    "audience_id": "ca6ba63c-849b-427c-87e3-f749c18f0a69",
+    "sequence": 31
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ }
+]

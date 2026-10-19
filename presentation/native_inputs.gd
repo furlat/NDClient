@@ -5,8 +5,8 @@ const Effects=preload("res://presentation/effect_package.gd")
 const Surface=preload("res://presentation/entity_surface.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
-const NativeItems=preload("res://presentation/native_items.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
+const ConditionPose=preload("res://presentation/condition_pose.gd")
 const Appearances=preload("res://presentation/condition_appearance.gd")
 var appearances:RefCounted=Appearances.new()
 var surfaces:RefCounted=Surface.new()
@@ -254,12 +254,11 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             supplied.append("history_state")
         else:unavailable.history_state="duplicate_count_not_disclosed"
     if "created_item_binding" in requested:
-        if component.get("native_item",false):
-            var packet:Dictionary=created_item_binding(component,world.timeline.state,points)
-            if packet!=handle.get("created_item_input",{}):
-                Effects.set_input(handle,"created_item_binding",packet);handle.created_item_input=packet
-            supplied.append("created_item_binding")
-        else:unavailable.created_item_binding="created_item_appearance_owner_not_bound"
+        unavailable.created_item_binding="wielded_native_bodies_not_supported"
+    if component.get("intrinsic_item_effect",false) and "owner_state" in requested:
+        var age:float=maxf(0.0,float(world.timeline.display_ms)-float(component.start_ms))/1000.0
+        Effects.set_input(handle,"owner_state",{"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age})
+        supplied.append("owner_state")
     if "owner_visibility" in requested:
         var visibility:float=float(component.get("alpha",1.0)) if Sockets.displayed(world.visual_actors.get(actor,{})) else 0.0
         if visibility!=float(handle.get("owner_visibility_input",-1.0)):
@@ -330,6 +329,24 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             handle.occurrence.call(handle.clip.input_setters.delivery_timing,timing.x,timing.y)
             handle.delivery_input=timing
         supplied.append("delivery_timing")
+    if "pose_provider" in requested:
+        if not handle.occurrence.parameters.get("actor_operation",{}).get("capture_pose",false):supplied.append("pose_provider")
+        else:
+            var identity:String=str(component.get("condition_uuid",component.get("condition",{}).get("condition_uuid","")))
+            var owner:Dictionary=world.timeline.condition_owners.get(identity,{})
+            var capture:Dictionary=owner.get("logical_pose",{})
+            if capture.is_empty():unavailable.pose_provider="condition_original_pose_not_observed"
+            elif capture.actor_uuid!=actor:unavailable.pose_provider="condition_capture_actor_mismatch"
+            else:
+                if not handle.has("pose_provider_binding"):
+                    var binding:RefCounted=ConditionPose.Binding.new()
+                    binding.actor_uuid=actor;binding.condition_uuid=identity;binding.capture=capture
+                    handle.pose_provider_binding=binding
+                var packet:Dictionary={"provider":handle.pose_provider_binding,"actor_uuid":actor,"owner_uuid":identity,"admitted":true}
+                if handle.occurrence.call(handle.clip.input_setters.pose_provider,packet):
+                    if not handle.get("pose_provider_admitted",false):handle.erase("actor_layer_input")
+                    handle.pose_provider_admitted=true;supplied.append("pose_provider")
+                else:unavailable.pose_provider="condition_pose_not_accepted"
     if "actor_layers" in requested:
         var packet:Dictionary=actor_layers(world,actor)
         var previous:Dictionary=handle.get("actor_layer_input",{})
@@ -353,8 +370,6 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         var reason:String=appearances.bind(world,handle,component)
         if reason.is_empty():supplied.append("appearance_provider")
         else:unavailable.appearance_provider=reason
-    if "pose_provider" in requested and not handle.occurrence.parameters.get("actor_operation",{}).get("capture_pose",false):
-        supplied.append("pose_provider") # This operation does not request a capture.
     if "owner_projection" in requested and component.get("persistent_owner",false) and component.has("condition"):
         if component.get("initial",false):unavailable.owner_projection="condition_application_not_observed"
         else:
@@ -385,22 +400,3 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
 func clear()->void:
     surfaces.clear()
     appearances.clear()
-
-static func created_item_binding(component:Dictionary,state:Dictionary,points:Dictionary)->Dictionary:
-    var owner:Dictionary=component.item_origin
-    var location:Dictionary=points.item_location
-    var held:bool=location.kind=="held"
-    var packet={"item_uuid":owner.item_uuid,"item_id":owner.item_id,"present":true,"observed":true,"suppressed":false,
-        "item_exists":true,"equipped":held,"location_kind":location.kind,"holder_uuid":location.get("holder_uuid","") if held else "",
-        "render_slot":location.get("render_slot","") if held else "","hand":"off" if held and location.render_slot=="offhand" else "main" if held else "",
-        "visibility":component.get("alpha",1.0)}
-    packet["hand_transform" if held else "world_transform"]=points.item_transform
-    if owner.lifetime_condition_uuid.is_empty():packet.creator_uuid=owner.creator_uuid
-    else:
-        var creator:Dictionary=state.actors.get(owner.creator_uuid,{})
-        var holdings:Variant=creator.get("controlled_items")
-        var held_by_caster:bool=held and location.holder_uuid==owner.creator_uuid
-        packet.merge({"caster_uuid":owner.creator_uuid,"lifetime_condition_uuid":owner.lifetime_condition_uuid,
-            "lifetime_present":NativeItems.lifetime_present(owner,state),
-            "item_in_caster_holdings":held_by_caster or holdings!=null and owner.item_uuid in holdings})
-    return packet

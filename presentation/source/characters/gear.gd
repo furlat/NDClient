@@ -18,8 +18,10 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 @export var hands: Dictionary[String, Dictionary] = {}
 ## How the item looks dropped: [{variant, part, clip, frame, rows_by_camera, pivots_by_camera, scale, tint, shadow_part, shadow_scale}].
 @export var ground: Array[Dictionary] = []
-## An owned native item body, separate from sprite layers and enchantments.
-@export var native_appearance: EffectUse
+## Intrinsic native decorations on this item's real membership. They preserve
+## its sprite body and use the actual modular weapon layer/slot as receiver.
+## Temporary enhancements belong to their observed Condition instead.
+@export var effects: Array[EffectUse] = []
 @export var icon: ImageRef
 ## Natural, summoned and internal items draw no layers.
 @export var natural: bool = false

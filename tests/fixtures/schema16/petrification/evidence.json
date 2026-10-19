@@ -1,0 +1,233 @@
+{
+ "ok": true,
+ "commands": 17,
+ "notes": [
+  {
+   "step": "wait_condition",
+   "target": "target",
+   "condition": "condition.spell.flesh_to_stone.petrified",
+   "ended_turns": 8
+  }
+ ],
+ "summary": {
+  "facts": {
+   "turn": 35,
+   "spatial": 4,
+   "sensory": 2,
+   "step": 2,
+   "movement": 2,
+   "saving_throw": 4,
+   "actor_change": 8,
+   "spell": 2
+  },
+  "behaviors": {
+   "action.move": 2,
+   "spell.flesh_to_stone": 1,
+   "spell.greater_restoration": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.flesh_to_stone.petrified",
+   "condition.spell.flesh_to_stone.stages"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.spell.flesh_to_stone.petrified",
+   "condition.spell.flesh_to_stone.stages"
+  ]
+ },
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "source": ".runtime/petrification-provider-cohort/cases/spell.flesh_to_stone__petrification_restoration/20261019T213521.988582Z",
+ "observations": {
+  "amber": {
+   "packets": 32,
+   "conditions": [
+    {
+     "sequence": 9,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "47374d00-e370-489b-92be-813937b74723",
+     "condition": "condition.spell.flesh_to_stone.stages",
+     "operation": "upsert"
+    },
+    {
+     "sequence": 11,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "47374d00-e370-489b-92be-813937b74723",
+     "condition": "condition.spell.flesh_to_stone.stages",
+     "operation": "upsert"
+    },
+    {
+     "sequence": 24,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "c4c9d508-59be-41b2-8c87-4203b9567b44",
+     "condition": "condition.spell.flesh_to_stone.petrified",
+     "operation": "upsert"
+    },
+    {
+     "sequence": 24,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "47374d00-e370-489b-92be-813937b74723",
+     "condition": "condition.spell.flesh_to_stone.stages",
+     "operation": "remove"
+    },
+    {
+     "sequence": 26,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "c4c9d508-59be-41b2-8c87-4203b9567b44",
+     "condition": "condition.spell.flesh_to_stone.petrified",
+     "operation": "remove"
+    }
+   ],
+   "saving_throws": [
+    {
+     "sequence": 9,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.saving_throw"
+    },
+    {
+     "sequence": 12,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.progress"
+    },
+    {
+     "sequence": 18,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.progress"
+    },
+    {
+     "sequence": 24,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.progress"
+    }
+   ],
+   "movements": [
+    {
+     "sequence": 4,
+     "kind": "movement",
+     "source_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "trajectory": "path",
+     "movement_mode": "walking"
+    },
+    {
+     "sequence": 31,
+     "kind": "movement",
+     "source_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "trajectory": "path",
+     "movement_mode": "walking"
+    }
+   ]
+  },
+  "blue": {
+   "packets": 32,
+   "conditions": [
+    {
+     "sequence": 9,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "47374d00-e370-489b-92be-813937b74723",
+     "condition": "condition.spell.flesh_to_stone.stages",
+     "operation": "upsert"
+    },
+    {
+     "sequence": 11,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "47374d00-e370-489b-92be-813937b74723",
+     "condition": "condition.spell.flesh_to_stone.stages",
+     "operation": "upsert"
+    },
+    {
+     "sequence": 24,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "c4c9d508-59be-41b2-8c87-4203b9567b44",
+     "condition": "condition.spell.flesh_to_stone.petrified",
+     "operation": "upsert"
+    },
+    {
+     "sequence": 24,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "47374d00-e370-489b-92be-813937b74723",
+     "condition": "condition.spell.flesh_to_stone.stages",
+     "operation": "remove"
+    },
+    {
+     "sequence": 26,
+     "actor_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "condition_uuid": "c4c9d508-59be-41b2-8c87-4203b9567b44",
+     "condition": "condition.spell.flesh_to_stone.petrified",
+     "operation": "remove"
+    }
+   ],
+   "saving_throws": [
+    {
+     "sequence": 9,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.saving_throw"
+    },
+    {
+     "sequence": 12,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.progress"
+    },
+    {
+     "sequence": 18,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.progress"
+    },
+    {
+     "sequence": 24,
+     "kind": "saving_throw",
+     "target_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "ability_name": "constitution",
+     "succeeded": false,
+     "effect_id": "spell.flesh_to_stone.progress"
+    }
+   ],
+   "movements": [
+    {
+     "sequence": 4,
+     "kind": "movement",
+     "source_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "trajectory": "path",
+     "movement_mode": "walking",
+     "start_layer": "ground",
+     "end_layer": "ground"
+    },
+    {
+     "sequence": 31,
+     "kind": "movement",
+     "source_entity_uuid": "33f93e47-ff33-4070-8ff9-ee4bb12c7e56",
+     "trajectory": "path",
+     "movement_mode": "walking",
+     "start_layer": "ground",
+     "end_layer": "ground"
+    }
+   ]
+  }
+ }
+}
