@@ -537,6 +537,16 @@
    "reason": ""
   },
   {
+   "name": "condition_handover_checks",
+   "script": "res://tests/condition_handover_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
    "name": "condition_lifecycle_checks",
    "script": "res://tests/condition_lifecycle_checks.gd",
    "mode": "gpu",
@@ -729,6 +739,16 @@
    "timeout": 600,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "entity_surface_checks",
+   "script": "res://tests/entity_surface_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Actual admitted metadata/image mask fixtures, shared worker projection, owner transforms and bounded revision caches; no texture upload or backend."
   },
   {
    "name": "environment_input_state_checks",
@@ -1148,6 +1168,16 @@
    "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
   },
   {
+   "name": "item_targeting_checks",
+   "script": "res://tests/item_targeting_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": ""
+  },
+  {
    "name": "legacy_preparation_checks",
    "script": "res://tests/legacy_preparation_checks.gd",
    "mode": "gpu",
@@ -1290,10 +1320,18 @@
   {
    "name": "live_all_spells_checks",
    "script": "res://tests/live_all_spells_checks.gd",
-   "mode": "none",
-   "tier": "none",
-   "status": "helper",
-   "reason": "Single-process native batch owned by tools/studio_cases/live.py; promote its runner gate after the first actual live cast qualifies."
+   "mode": "live",
+   "tier": "live",
+   "status": "ok",
+   "reason": "One native process; actual player UI gestures per current spell baseline. Initial Fire Bolt smoke qualified; all IDs and native logs gate, including explicit server/setup failures.",
+   "runner": "studio_spell_batch",
+   "args": [
+    "--only",
+    "spell",
+    "--timeout",
+    "180"
+   ],
+   "timeout": 5400
   },
   {
    "name": "live_chain_separation_checks",
@@ -1612,6 +1650,28 @@
    "reason": ""
   },
   {
+   "name": "native_action_cue_checks",
+   "script": "res://tests/native_action_cue_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Real Factory class/action cue ownership and source attribution; no synthetic action outcomes or native drawing."
+  },
+  {
+   "name": "native_application_constructor_checks",
+   "script": "res://tests/native_application_constructor_checks.gd",
+   "mode": "headless",
+   "tier": "gate",
+   "args": [
+    "--journal=res://.runtime/studio-library/cases/spell.circle_of_death__baseline/20261019T142214.366493Z/amber/journal"
+   ],
+   "timeout": 90,
+   "status": "needs-args",
+   "reason": "Requires retained actual Circle amber journal; scope/constructor/order test, separate from native output and timing."
+  },
+  {
    "name": "native_area_mask_checks",
    "script": "res://tests/native_area_mask_checks.gd",
    "mode": "gpu",
@@ -1687,6 +1747,16 @@
    "reason": ""
   },
   {
+   "name": "native_cast_socket_checks",
+   "script": "res://tests/native_cast_socket_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": ""
+  },
+  {
    "name": "native_choice_prefetch_checks",
    "script": "res://tests/native_choice_prefetch_checks.gd",
    "mode": "headless",
@@ -1725,6 +1795,16 @@
    "timeout": 600,
    "status": "owned-by-migration",
    "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+  },
+  {
+   "name": "native_constructor_gap_checks",
+   "script": "res://tests/native_constructor_gap_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": ""
   },
   {
    "name": "native_demo_parity_checks",
@@ -1828,6 +1908,16 @@
    "timeout": 600,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "native_input_binding_checks",
+   "script": "res://tests/native_input_binding_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Actual delivered Factory setters, private body materials, stacking/restoration, endpoint and cell bindings; native pixels remain separate."
   },
   {
    "name": "native_light_cap_checks",
@@ -2265,6 +2355,16 @@
    ],
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "native_weapon_input_checks",
+   "script": "res://tests/native_weapon_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Exact current item/loadout and actual Factory setter contracts; public ownership/suppression gaps and native-output qualification stay explicit."
   },
   {
    "name": "normal_profile_checks",
@@ -3041,6 +3141,26 @@
    "reason": ""
   },
   {
+   "name": "schema16_condition_selection_checks",
+   "script": "res://tests/schema16_condition_selection_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Independent package-only owner selection, authored legacy composition and sparse native condition semantics."
+  },
+  {
+   "name": "schema16_effect_actor_policy_checks",
+   "script": "res://tests/schema16_effect_actor_policy_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": ""
+  },
+  {
    "name": "schema16_fold_vectors_checks",
    "script": "res://tests/schema16_fold_vectors_checks.gd",
    "mode": "headless",
@@ -3053,6 +3173,16 @@
   {
    "name": "schema16_interaction_checks",
    "script": "res://tests/schema16_interaction_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "schema16_native_preparation_checks",
+   "script": "res://tests/schema16_native_preparation_checks.gd",
    "mode": "headless",
    "tier": "fast",
    "args": [],
@@ -3081,6 +3211,36 @@
    "timeout": 300,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "schema16_recording_safety_checks",
+   "script": "res://tests/schema16_recording_safety_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "known-red",
+   "reason": "Complete189-spell inventory currently has six explicit frozen-engine/setup unavailable baselines (Branding/Searing Smite, Ensnaring Strike, fixture.test_bless, Hellish Rebuke, Spare the Dying). Actual available183 two-faction recordings pass. Full script/resource-log qualification: tools/studio_cases/check_recordings.py; do not interpret available-recording success as a complete inventory pass."
+  },
+  {
+   "name": "schema16_residue_preparation_checks",
+   "script": "res://tests/schema16_residue_preparation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Real current Fireball journal at mid-effect restore: exact authoritative residue worker fields and fresh paused Play epoch before publication; no texture upload."
+  },
+  {
+   "name": "schema16_spatial_lifecycle_checks",
+   "script": "res://tests/schema16_spatial_lifecycle_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Current real Web recording through shared spatial lifecycle ownership and admitted footprint; requires recorded library, not native output."
   },
   {
    "name": "schema16_spool_oracle_checks",

@@ -7,6 +7,7 @@ var scene:Node
 var viewport:SubViewport
 var batch_path=""
 var last_id=""
+var last_request_file=""
 var checks=0
 var failures:Array=[]
 var report:Dictionary={}
@@ -78,14 +79,17 @@ func select_family(behavior:String)->bool:
 func target_point(step:Dictionary,names:Dictionary)->Vector2:
     var action:Dictionary=scene.selected_action
     var preview:Dictionary=scene.selection_preview
+    var requested:Variant=step.get("target","first_legal")
     if step.has("then") and not scene.target_selection.target_indices.is_empty() and scene.target_selection.extra_target_positions.is_empty():
         var allowed:Array=Choices.preview_positions(preview)
-        if step.then in allowed:return grid_screen(step.then)
-        return Vector2(INF,INF)
+        if allowed.any(func(cell):return Play.Interaction.same_position(cell,step.then)):return grid_screen(step.then)
+        # Some native selections offer the destination as another binding,
+        # others as a position-only domain. Match the exact authored cell in
+        # either public form; do not choose an unrelated first legal target.
+        requested=step.then
     if action.get("position_region")!=null:return grid_screen(step.get("aim",step.get("target",[])))
     var domains:Dictionary=scene.selection_preview if not scene.target_selection.target_indices.is_empty() else scene.available_actions
     var options:Array=Choices.next_options(domains) if domains.has("next_target_set") else Choices.action_options(domains,action)
-    var requested:Variant=step.get("target","first_legal")
     var recipients:Array=step.get("recipients",[])
     if scene.target_selection.target_indices.size()<recipients.size():requested=recipients[scene.target_selection.target_indices.size()]
     if step.get("target")=="first_legal":
@@ -101,10 +105,17 @@ func target_point(step:Dictionary,names:Dictionary)->Vector2:
         var wanted:String=requested if requested is String else ""
         if wanted=="self":wanted=step.by
         if subject!=null and (wanted=="first_legal" or subject.get("name")==names.get(wanted,wanted)):
+            if subject.get("kind")=="object":
+                var inventory_button:Button=scene.hud.inventory_buttons.get(subject.uuid)
+                if inventory_button!=null and inventory_button.is_visible_in_tree() and not inventory_button.disabled:
+                    return inventory_button.get_global_rect().get_center()
+                for slot in scene.hud.slot_buttons.values():
+                    if slot.get_meta("item_uuid","")==subject.uuid and slot.is_visible_in_tree() and not slot.disabled:
+                        return slot.get_global_rect().get_center()
             var point=actor_screen(subject.uuid)
             if point.is_finite():return point
         var position:Variant=Choices.binding_position(domains,option)
-        if position!=null and step.get("target") is Array and position==step.target:return grid_screen(position)
+        if position!=null and requested is Array and Play.Interaction.same_position(position,requested):return grid_screen(position)
         if position!=null and step.get("target")=="first_legal" and subject==null:return grid_screen(position)
     return Vector2(INF,INF)
 func execute(step:Dictionary,names:Dictionary)->bool:
@@ -123,7 +134,11 @@ func execute(step:Dictionary,names:Dictionary)->bool:
                 if not check(scene.hud.confirm_button.visible and not scene.hud.confirm_button.disabled,"Native Confirm enabled"):return false
                 click(scene.hud.confirm_button.get_global_rect().get_center());break
             var point=target_point(step,names)
-            if not check(point.is_finite(),"Requested recipient/cell is actually pickable"):return false
+            if not check(point.is_finite(),"Requested recipient/cell is actually pickable"):
+                report.target_input={"behavior":scene.selected_action.get("behavior_id"),"target_indices":scene.target_selection.target_indices,
+                    "extra_positions":scene.target_selection.extra_target_positions,"next_positions":Choices.preview_positions(scene.selection_preview),
+                    "preview_reason":scene.selection_preview.get("reason"),"can_confirm":scene.selection_preview.get("can_confirm")}
+                return false
             hover(point);await process_frame
             click(point);await process_frame
     var success=await until(func():return scene.timeline.sequence>sequence and not scene.timeline.busy() and not scene.command_busy,"Real command reduced and rendered to its boundary",90000)
@@ -149,6 +164,7 @@ func opponent(step:Dictionary,names:Dictionary)->bool:
     return check(false,"Opponent trigger did not complete")
 func case_run(request:Dictionary)->Dictionary:
     checks=0;failures=[];report={"id":request.id,"steps":[]}
+    print("LIVE_SPELL_CASE_START ",request.id," ",request.scenario.id)
     viewport=SubViewport.new();viewport.size=Vector2i(1600,900);viewport.own_world_3d=true;viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
     root.add_child(viewport)
     var display=TextureRect.new();display.size=Vector2(1600,900);display.texture=viewport.get_texture();display.mouse_filter=Control.MOUSE_FILTER_IGNORE;root.add_child(display)
@@ -165,7 +181,14 @@ func case_run(request:Dictionary)->Dictionary:
         if other:
             if not await opponent(step,names):break
         elif not await execute(step,names):break
-    report.merge({"checks":checks,"failures":failures,"ok":failures.is_empty(),"issue":scene.session.issue,"presentation_errors":scene.presentation_errors})
+    report.merge({"checks":checks,"failures":failures,"ok":failures.is_empty(),"issue":scene.session.issue,"presentation_errors":scene.presentation_errors,
+        "render_trace":scene.timeline.event_trace(2000)})
+    if not failures.is_empty():
+        report.player_boundary=scene.error_report(str(failures))
+        report.preparation={"media":scene.media_gate,"component_ready":scene.component_renderer.ready,
+            "pending_world":scene.pending_world.phase if scene.pending_world!=null else "none",
+            "native_samples":scene.component_renderer.native_spells.diagnostics.values().map(func(row):return {
+                "id":row.get("id"),"status":row.get("status"),"reason":row.get("reason")}).slice(0,8)}
     scene.set_process(false);scene.session.close();scene.queue_free();await process_frame
     display.queue_free();viewport.queue_free();await process_frame
     scene=null;viewport=null
@@ -175,14 +198,25 @@ func run()->void:
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--batch="):batch_path=arg.trim_prefix("--batch=")
-    if batch_path.is_empty():printerr("Live spell batch requires --batch=<request.json>");quit(1);return
+    if batch_path.is_empty():printerr("Live spell batch requires --batch=<immutable request directory>");quit(1);return
     while true:
-        if FileAccess.file_exists(batch_path):
-            var request:Variant=JSON.parse_string(FileAccess.get_file_as_string(batch_path))
+        var requests=DirAccess.open(batch_path)
+        if requests!=null:
+            var files=Array(requests.get_files());files.sort()
+            var next:String=""
+            for filename in files:
+                if str(filename).ends_with(".json") and str(filename)>last_request_file:next=str(filename);break
+            if next.is_empty():await process_frame;continue
+            last_request_file=next
+            var request:Variant=JSON.parse_string(FileAccess.get_file_as_string(batch_path.path_join(next)))
             if request is Dictionary and request.get("id","")!=last_id:
                 if request.get("stop",false):quit(0);return
                 last_id=request.id
                 var result=await case_run(request)
-                var file=FileAccess.open(request.result,FileAccess.WRITE);file.store_string(JSON.stringify(result));file.close()
-                print("LIVE_SPELL_SAFETY_CASE ",JSON.stringify(result))
+                var pending:String=request.result+".pending"
+                var file=FileAccess.open(pending,FileAccess.WRITE);file.store_string(JSON.stringify(result));file.close()
+                var published=DirAccess.rename_absolute(pending,request.result)
+                if published!=OK:printerr("Native safety result publication failed: ",error_string(published));quit(2);return
+                var summary:Dictionary=result.duplicate(false);summary.erase("render_trace")
+                print("LIVE_SPELL_SAFETY_CASE ",JSON.stringify(summary))
         await process_frame

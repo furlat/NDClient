@@ -39,6 +39,7 @@ ramp = PackedColorArray()
 [sub_resource type="Resource" id="Resource_iktdi"]
 script = ExtResource("3_iwkxs")
 clip = "review/circle_of_death/whole/impact"
+scope = "cast"
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
@@ -60,6 +61,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_acojy"]
 script = ExtResource("3_iwkxs")
 clip = "review/circle_of_death/whole/circle_of_death__whole.receive_caster"
+unbound_constructor_inputs = PackedStringArray("application")
 role = "attached"
 at = "release"
 delay = 0.375
@@ -92,6 +94,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_ol48r"]
 script = ExtResource("3_iwkxs")
 clip = "review/circle_of_death/whole/circle_of_death__whole.receive_target"
+scope = "application"
+constructor_input = {
+"kind": "application_result",
+"component_path": ["receiving", "received"],
+"input_field": "application",
+"save_effect_id": "spell.circle_of_death.saving_throw",
+"damage_type": "Necrotic"
+}
 role = "attached"
 at = "release"
 delay = 0.375
@@ -124,6 +134,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_0ok8r"]
 script = ExtResource("3_iwkxs")
 clip = "review/circle_of_death/whole/circle_of_death__whole.receive_target2"
+unbound_constructor_inputs = PackedStringArray("application")
 role = "attached"
 at = "release"
 delay = 0.375
@@ -224,7 +235,7 @@ delivery = "projectile"
 body = SubResource("Resource_jqv4e")
 hand_layers = Array[ExtResource("4_8obgw")]([SubResource("Resource_tvfsn"), SubResource("Resource_p2n65")])
 sockets = "measured/abilities/spells/spell.circle_of_death.sockets.json"
-effects = Array[ExtResource("3_iwkxs")]([SubResource("Resource_iktdi"), SubResource("Resource_acojy"), SubResource("Resource_ol48r"), SubResource("Resource_0ok8r")])
+effects = Array[ExtResource("3_iwkxs")]([SubResource("Resource_iktdi"), SubResource("Resource_ol48r")])
 native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()

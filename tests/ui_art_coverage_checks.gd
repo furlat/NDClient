@@ -24,6 +24,13 @@ func run()->void:
     var maps:Dictionary=UI.icon_maps()
     var inventory:Dictionary=Coverage.inventory(abilities,characters,ids,maps)
     check(report.errors.is_empty() and inventory.errors.is_empty(),"Every current native UI assignment resolves through the actual shipping HUD maps")
+    for id in abilities.actions:
+        var entry:Resource=abilities.actions[id]
+        var row:Dictionary=inventory.icons[entry.kind][id]
+        check(row.exists and row.built_matches,"Typed capability remains visible even when absent from the static server catalog: "+id)
+        check((row.availability=="server_id")==ids.get(entry.kind,{}).has(id),"Typed-only capability does not claim static server availability: "+id)
+    for id in ["action.class.fighter.action_surge","action.class.fighter.second_wind","action.class.sorcerer.quickened_spell","action.class.sorcerer.twinned_spell"]:
+        check(inventory.icons.action[id].art=="assigned","Existing exact class action artwork is assigned: "+id)
     for id in ids.spell:
         var row:Dictionary=inventory.icons.spell[id]
         check(row.exists and row.built_matches,"Current spell image is shipped: "+id)

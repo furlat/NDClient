@@ -46,7 +46,7 @@ static func transform(cue:Dictionary,time:float,hand:Vector3,scale_multiplier:fl
     elif cue.role in ["impact","strike"]:origin=cue.to
     elif cue.role=="area":origin=cue.ground
     elif cue.role=="attached":
-        origin={"recipient_ground":cue.ground,"recipient_body":cue.to,
+        origin={"recipient_ground":cue.ground,"recipient_body":cue.to,"recipient_head":cue.to,"recipient_weapon":cue.to,
             "caster_ground":cue.get("caster_ground",cue.from),"caster_hand":hand,"caster_release":cue.from}[cue.attachment]
     if cue.get("orientation","")=="facing":direction.y=0
     var basis=Basis.IDENTITY

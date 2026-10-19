@@ -27,11 +27,29 @@ static func selected_for(selected:Dictionary,fact:Dictionary)->Dictionary:
         result.staging.cues=selected.staging.cues.filter(func(cue):return cue.role in roles)
     return result
 
-static func owns_delivery(node:Dictionary,graph:Dictionary,selection:Dictionary,has_applications:bool)->bool:
-    var fact:Dictionary=node.fact
+static func owns_delivery(node:Dictionary,_graph:Dictionary,selection:Dictionary,has_applications:bool)->bool:
+    if not Occurrences.application(node) and selection.get("staging",{}).get("cues",[]).any(func(cue):return cue.get("scope")=="cast"):return true
+    return _inherited_delivery(node,selection,has_applications)
+
+static func _inherited_delivery(node:Dictionary,selection:Dictionary,has_applications:bool)->bool:
     var scope:String=selection.get("delivery",{}).get("scope","application")
     if scope=="area":return not Occurrences.application(node)
     return Occurrences.application(node) or not has_applications
+
+static func for_occurrence(selection:Dictionary,node:Dictionary,has_applications:bool)->Dictionary:
+    var cues:Array=selection.staging.cues
+    if not cues.any(func(cue):return not str(cue.get("scope","")).is_empty()):return selection
+    var application:bool=Occurrences.application(node)
+    var inherited:bool=_inherited_delivery(node,selection,has_applications)
+    var result:Dictionary=selection.duplicate()
+    result.staging=selection.staging.duplicate()
+    result.staging.cues=cues.filter(func(cue):return application if cue.get("scope")=="application" else not application if cue.get("scope")=="cast" else inherited)
+    # Explicit recipient scope uses the real recipient, while the carrier's
+    # area piece keeps the disclosed area origin and footprint.
+    if application:
+        result.delivery=selection.get("delivery",{}).duplicate()
+        result.delivery.scope="application"
+    return result
 
 static func aim_position(fact:Dictionary,graph:Dictionary)->Variant:
     var geometry:Dictionary=fact.get("area_geometry",{}) if fact.get("area_geometry")!=null else {}

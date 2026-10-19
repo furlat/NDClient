@@ -2,6 +2,7 @@ extends RefCounted
 ## Authored painted placement and measured optical socket registration.
 const Placement=preload("res://placement.gd")
 const Surfaces=preload("res://presentation/surface_sockets.gd")
+const Weapons=preload("res://presentation/native_weapon_inputs.gd")
 
 static func facing(world:Node,row:Dictionary)->String:
     var cycle:Array=world.rig_config.FACING_CYCLE
@@ -73,8 +74,25 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
     var target:Dictionary=world.visual_actors.get(component.get("target_uuid"),{})
     var role:String=cue.role
     var attachment:String=cue.get("attachment","")
+    # These registrations need actual head/equipment ownership. Never fall
+    # through to an unrelated ground/body point or a missing transform key.
+    if attachment=="item":return {"ready":false,"unavailable":true,"reason":"native_item_registration_not_bound"}
+    if attachment=="recipient_weapon":
+        var weapon:Dictionary=Weapons.resolve(world,component)
+        if not weapon.ready:return {"ready":false,"unavailable":true,"reason":weapon.reason}
+        if weapon.render_slot!="weapon":return {"ready":false,"unavailable":true,"reason":"weapon_offhand_socket_not_authored"}
+        var received:Dictionary=pose_point(world,world.visual_actors[weapon.actor].row,"hand")
+        if not received.ready:return received
+        var ground:Vector3=Placement.contact(world.visual_actors[weapon.actor].row)
+        return {"ready":true,"from":received.point,"hand":received.point,"to":received.point,"ground":ground,"caster_ground":ground,
+            "surfaces":[received],"fixed":{},"item_uuid":weapon.item_uuid,"holder_uuid":weapon.actor,"equipment_slot":weapon.equipment_slot}
+    if attachment=="recipient_head" and (target.is_empty() or not has_socket(world,target.row,"head")):
+        return {"ready":false,"unavailable":true,"reason":"native_head_registration_not_bound"}
     var needs_hand:bool=role in ["cast","flight","spray"] or attachment in ["caster_hand","caster_release"]
-    var needs_body:bool=not component.get("ground_target",false) and (role in ["flight","impact","strike"] or attachment=="recipient_body")
+    for endpoint in cue.get("live_endpoints",[]):
+        if endpoint.get("actor")=="caster" and endpoint.get("socket") in ["hand","cast_hand"]:
+            needs_hand=true
+    var needs_body:bool=not component.get("ground_target",false) and (role in ["flight","impact","strike"] or attachment in ["recipient_body","recipient_head"])
     if needs_hand and not displayed(source):return {"ready":false,"unavailable":true,"reason":"native_spell_actor_not_displayed"}
     if (needs_body or persistent and not component.get("spatial_owner",false)) and not displayed(target):return {"ready":false,"unavailable":true,"reason":"native_spell_recipient_not_displayed"}
     var from_position:Array=component.get("from_position",[0,0])
@@ -120,7 +138,7 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
         else:
             # A condition registers at its declared socket (a marker at the
             # head); rigs without that socket use their body centre.
-            var anchor:String=str(cue.get("anchor","body_center"))
+            var anchor:String="head" if attachment=="recipient_head" else str(cue.get("anchor","body_center"))
             if not world.rigs[target_row.rig].get("pose_sockets",{}).has(anchor):anchor="body_center"
             received=pose_point(world,target_row,anchor)
         if not received.ready:return received
@@ -142,16 +160,25 @@ static func cast_point(world:Node,component:Dictionary,key:String,frame:int,view
     if not rig.clips.has(clip):return {"ready":false,"reason":"native_spell_cast_clip_missing"}
     var sockets:Dictionary=component.recipe.get("sourceSockets",component.recipe.get("sourceSocketsByRig",{}).get(row.rig,{}))
     var sources:Array=sockets.get("sources",[])
+    # A BodyUse selects the cast clip/release frame; its canonical cast hand
+    # is the rig's authored hand channel at that pose. Older spell recipes may
+    # instead register measured/multiple sockets and retain that exact choice.
+    # An explicit but incomplete registration must not silently select a hand.
+    if not component.recipe.has("sourceSockets") and not component.recipe.has("sourceSocketsByRig"):
+        sources=["hand"]
     var pixels:Array=[]
     if sources.is_empty():
         var choices:Variant=sockets.get(key,{}).get(view)
-        var point:Variant=choices[frame] if choices is Array and frame<choices.size() else choices if key=="release" else null
+        var point:Variant=null
+        if choices is Array:
+            if frame>=0 and frame<choices.size():point=choices[frame]
+        elif key=="release":point=choices
         if point==null:return {"ready":false,"reason":"native_spell_"+key+"_socket_missing"}
         pixels.append(point)
     else:
         for name in sources:
             var choices:Array=rig.get("pose_sockets",{}).get(name,{}).get(clip,{}).get(view,[])
-            if frame>=choices.size() or choices[frame]==null:return {"ready":false,"reason":"native_spell_"+key+"_socket_missing"}
+            if frame<0 or frame>=choices.size() or choices[frame]==null:return {"ready":false,"reason":"native_spell_"+key+"_socket_missing"}
             pixels.append(choices[frame])
     var position:=Vector3.ZERO
     var qualifications:Array=[]

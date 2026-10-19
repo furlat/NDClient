@@ -4,7 +4,8 @@ const CAPABILITIES=["Spells","Conditions","Actions","Characters","Environment","
 const INDEX="res://.runtime/studio-library/index.json"
 const SERVER_IDS="res://authoring/server_ids.json"
 const COVERAGE="res://build/presentation/coverage.json"
-const CATEGORY={"spell":"Spells","condition":"Conditions","action":"Actions","reaction":"Actions","trait":"Actions","creature":"Characters","environment_object":"Environment","boundary_structure":"Environment","connector":"Environment","battlefield":"Environment","spatial_effect":"Surfaces","residue":"Surfaces","item":"Items","interaction":"Interactions"}
+const ABILITIES="res://authoring/abilities.tres"
+const CATEGORY={"spell":"Spells","condition":"Conditions","action":"Actions","reaction":"Actions","trait":"Actions","class_feature":"Actions","feat":"Actions","creature":"Characters","environment_object":"Environment","boundary_structure":"Environment","connector":"Environment","battlefield":"Environment","spatial_effect":"Surfaces","residue":"Surfaces","item":"Items","interaction":"Interactions"}
 const REJECTED=["spell.aid","spell.bless","spell.false_life","spell.sacred_flame"]
 
 static func _read(path:String)->Dictionary:
@@ -41,7 +42,22 @@ static func _group(kind:String,id:String,definition:Variant)->String:
     var row:Dictionary=definition if definition is Dictionary else {}
     if kind=="spell":return "Level %d · %s"%[int(row.get("level",0)),str(row.get("school","Other")).capitalize()]
     return str(row.get("family",kind.replace("_"," "))).replace("_"," ").capitalize()
-static func build(snapshot:Dictionary,coverage:Dictionary,index:Dictionary,check_files:bool=true)->Dictionary:
+## The root lists source-owned capabilities without loading every entry. Class
+## grants can have typed sources while absent from the exported ID snapshot.
+static func declared(root:Resource)->Dictionary:
+    var inventory:Dictionary={}
+    for section in ["spells","conditions","actions"]:
+        for id in root.sections.get(section,{}):
+            var kind:String=str(id).get_slice(".",0)
+            var owner:String={"spell":"spells","condition":"conditions"}.get(kind,"actions")
+            # Retained aliases must not replace a current capability's own
+            # source, e.g. conditions/spell.false_life vs the actual spell.
+            if owner!=section and root.sections.get(owner,{}).has(id):continue
+            if not inventory.has(kind):inventory[kind]={}
+            inventory[kind][id]={"source_path":root.sections[section][id]}
+    return inventory
+
+static func build(snapshot:Dictionary,coverage:Dictionary,index:Dictionary,check_files:bool=true,source_inventory:Dictionary={})->Dictionary:
     var cases=records(index,snapshot,check_files);var entries:Array=[];var by_subject={};var by_key={};var categories={};var counts={}
     for record in cases:
         for kind in record.get("subjects",{}):
@@ -49,8 +65,17 @@ static func build(snapshot:Dictionary,coverage:Dictionary,index:Dictionary,check
                 var key=kind+":"+str(id)
                 if not by_subject.has(key):by_subject[key]=[]
                 by_subject[key].append(record)
-    for kind in snapshot.get("ids",{}):
-        var values:Variant=snapshot.ids[kind]
+    var inventory:Dictionary=snapshot.get("ids",{}).duplicate()
+    for kind in source_inventory:
+        var values:Variant=inventory.get(kind,{})
+        var merged:Dictionary=values.duplicate() if values is Dictionary else {}
+        if values is Array:
+            for id in values:merged[id]={}
+        for id in source_inventory[kind]:
+            if not merged.has(id):merged[id]={}
+        inventory[kind]=merged
+    for kind in inventory:
+        var values:Variant=inventory[kind]
         for id in values:
             var key=kind+":"+str(id);var definition:Variant=values[id] if values is Dictionary else {};var linked:Array=by_subject.get(key,[]);var scenario="missing"
             if linked.any(func(row):return row.ready):scenario="recorded"
@@ -63,6 +88,13 @@ static func build(snapshot:Dictionary,coverage:Dictionary,index:Dictionary,check
                 if reviews.has(id) and not id in REJECTED:approval=reviews[id]
             var art:String=coverage.get("coverage",coverage).get(kind,{}).get(id,"not_assessed")
             var entry={"key":key,"id":str(id),"kind":kind,"label":_label(str(id)),"category":category(kind),"group":_group(kind,str(id),definition),"definition":definition,"cases":linked,"source_status":art,"scenario_status":scenario,"presentation_status":provider,"approval_status":approval,"requirements":[],"scenarios":[]}
+            var listed:bool=id in snapshot.get("ids",{}).get(kind,{})
+            entry.inventory_origin="server_snapshot" if listed else "typed_source"
+            entry.engine_inventory="listed" if listed else "not_listed"
+            # Neither source presence nor catalogue membership proves that an
+            # actual actor is offered this action by the current server.
+            entry.runtime_availability="unknown"
+            entry.source_path=source_inventory.get(kind,{}).get(id,{}).get("source_path","")
             entries.append(entry);by_key[key]=entry
             if not categories.has(entry.category):categories[entry.category]=[]
             categories[entry.category].append(entry)
@@ -79,7 +111,9 @@ static func build(snapshot:Dictionary,coverage:Dictionary,index:Dictionary,check
         categories.Interactions.append(entry)
     entries.sort_custom(func(a,b):return a.label.naturalnocasecmp_to(b.label)<0 if a.category==b.category and a.group==b.group else (a.group.naturalnocasecmp_to(b.group)<0 if a.category==b.category else CAPABILITIES.find(a.category)<CAPABILITIES.find(b.category)))
     return {"entries":entries,"by_key":by_key,"categories":categories,"records":cases,"counts":counts,"engine":index.get("engine",{}),"expected_engine":snapshot.get("header",{})}
-static func catalog()->Dictionary:return build(_read(SERVER_IDS),_read(COVERAGE),_read(INDEX))
+static func catalog()->Dictionary:
+    var root:Resource=load(ABILITIES)
+    return build(_read(SERVER_IDS),_read(COVERAGE),_read(INDEX),true,declared(root) if root!=null else {})
 static func scenario(record:Dictionary)->Dictionary:
     return {"id":record.id,"label":record.label,"expectations":record.get("expectations",[]),"moments":record.get("moments",[]),"recordings":[{"available":record.ready,"record":record}]}
 

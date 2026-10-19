@@ -111,7 +111,11 @@ static func apply_player_fact(target:Dictionary,fact:Dictionary,source_cursor:Va
                 item.state=item.state.duplicate();item.state.charges=fact.charges_after;item.state.stack_count=fact.stack_count_after;target.items[fact.item_uuid]=item
         "attack":
             actor=_write_actor(target,fact.source_entity_uuid)
-            if actor!=null:actor.visual_loadout=actor.visual_loadout.duplicate();actor.visual_loadout.active_weapon_set=fact.weapon_set
+            if actor!=null:
+                # AttackFact.weapon_set is a Python property, not a wire field.
+                # Match that reference property on the actual declared source.
+                var stance:String="none" if fact.get("attack_source_kind","equipped")!="equipped" else "ranged" if fact.weapon_slot in ["RANGED_MAIN","RANGED_OFF"] else "melee"
+                actor.visual_loadout=actor.visual_loadout.duplicate();actor.visual_loadout.active_weapon_set=stance
         "damage","heal":
             if fact.kind=="damage" and fact.stage!="applied":return success(target)
             if fact.kind=="heal" and fact.get("was_blocked",false):return success(target)

@@ -1557,6 +1557,7 @@ static func _drawable(actor: Dictionary) -> bool:
 
 static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, errors: Array, looks:Dictionary={}) -> Dictionary:
     if not _drawable(actor): return {}
+    if Characters.effect_owned(actor,cache):return {}
     var wanted = clips.duplicate()
     var rigs: Dictionary = Characters.rigs(cache)
     var rig = Characters.rig_id(actor,cache)
@@ -1645,7 +1646,7 @@ static func _actor_selector(actor:Dictionary,cache:Dictionary={},looks:Dictionar
     # portrait and transform never distinguish a sheet or its optical metadata.
     var id:String=Characters.rig_id(actor,cache)
     var rigs:Dictionary=Characters.rigs(cache)
-    if not rigs.has(id):return [id,_drawable(actor)]
+    if not rigs.has(id):return [id,_drawable(actor),Characters.effect_owned(actor,cache)]
     var selected:Dictionary=Characters._select_layers(actor,rigs[id],id==Characters.BodySources.index(cache).root_rig,cache,looks)
     var references:Array=[]
     if selected.ok:

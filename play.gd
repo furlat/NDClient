@@ -293,6 +293,10 @@ func install_playback(value: RefCounted) -> void:
     timeline.replay_media_release = _release_replay_media
     timeline.world_ready = _world_ready
     timeline.world_published=_publish_source_cut
+    # A restored paused Timeline can prepare and publish its initial world
+    # before advance() asks for media. Retire the old component epoch now,
+    # before it can close the new world's already prepared residue fields.
+    _reset_playback_presentation()
     actor_revision = -1
     light_revision = -1
     wall_visibility_revision = -1
@@ -305,7 +309,6 @@ func try_reset_hidden_playback(value:RefCounted)->bool:
     if not timeline.paused or get_viewport().audio_listener_enable_3d:return false
     if not media_issue.is_empty() or not presentation_errors.is_empty():return false
     install_playback(value)
-    _reset_playback_presentation()
     # Keep old native membership until the existing full preparation can replace
     # it. An old worker remains owned until its normal epoch gate retires it.
     world_prepare_epoch=-1;world_revision=-1
@@ -537,22 +540,48 @@ func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
         return {"plan":native_startup_plan,"required":NativeStartup.requested(native_startup_plan,at_ms),
             "priority":NativeStartup.requested(native_startup_plan,at_ms,ComponentRenderer.NATIVE_PREFETCH_MS),"optional":optional}
     var selected:Dictionary=selection_media.get("value",{}).get("native_selection",{})
-    var owners:Array=[timeline.initialization_revision,timeline.current.get("id",""),timeline.queue.map(func(group):return group.id),selection_media.revision]
+    var owners:Array=[timeline.initialization_revision,timeline.resource_revision,NativeStartup.Effects.revision,timeline.current.get("id",""),timeline.queue.map(func(group):return group.id),selection_media.revision]
     if owners!=native_live_owners:
         native_live_owners=owners
         var clips:Array=NativeStartup.Authoring.effect_clips(selected)
+        clips.append_array(selection_media.get("value",{}).get("native_action_clips",[]))
+        var lifecycles:Array=[]
+        var due:Dictionary={}
+        # Only observed owners are mandatory now. A selected capability and
+        # received future cues prepare ahead without blocking unrelated motion.
+        for owner in timeline.condition_owners.values():
+            for lifecycle in Conditions.NativePersistent.lifecycles(owner.condition):
+                var clip:Dictionary=NativeStartup.Effects.clip(str(lifecycle.condition.phases.application))
+                if clip.is_empty():continue
+                lifecycles.append(clip);due[NativeStartup.Effects.key(clip)]=-INF
+        for owner in timeline.spatial_effect_owners.values():
+            for lifecycle in Conditions.NativePersistent.spatial_lifecycles(owner.effect):
+                var clip:Dictionary=NativeStartup.Effects.clip(str(lifecycle.condition.phases.application))
+                if not clip.is_empty():lifecycles.append(clip);due[NativeStartup.Effects.key(clip)]=-INF
+        for id in selected.get("lifecycle",{}).get("owner_ids",[])+selection_media.get("value",{}).get("native_action_conditions",[]):
+            for lifecycle in NativeStartup.Effects.conditions(str(id)):
+                var clip:Dictionary=NativeStartup.Effects.clip(str(lifecycle.condition.phases.application))
+                if not clip.is_empty():lifecycles.append(clip)
         var groups:Array=timeline.queue.duplicate()
         if not timeline.current.is_empty():groups.push_front(timeline.current)
+        var start:float=timeline.group_start_ms if not timeline.current.is_empty() else timeline.display_ms
         for group in groups:
             for component in group.get("components",[])+group.get("native_requirements",[]):
-                if component.get("native_spell",false) and component.get("status")!="missing":clips.append(component.native_clip)
-                elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":clips.append(component.native_hit.clip)
-        native_live_plan=NativeStartup.source_plan(clips,NativeStartup.Effects.lifecycle_clips())
-    # Live occurrence readiness belongs to ComponentRenderer's exact cue. This
-    # optional program interest cannot gate unrelated idle/movement or late cues.
-    # Every condition lifecycle the package has warms with the load (any
-    # condition can apply later; its first draw is too costly mid-play).
-    return {"plan":native_live_plan,"required":native_live_plan.filter(func(item):return item.lifecycle),"priority":native_live_plan,"optional":optional}
+                var clip:Dictionary={}
+                if component.get("native_spell",false) and component.get("status")!="missing":
+                    clip=component.native_clip.duplicate(false)
+                    if component.get("native_cue",{}).has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
+                    if component.has("lifecycle_phases"):lifecycles.append(clip)
+                elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":clip=component.native_hit.clip
+                if clip.is_empty():continue
+                clips.append(clip)
+                var key:String=NativeStartup.Effects.key(clip)
+                due[key]=minf(due.get(key,INF),start+float(component.get("preparation_at_ms",component.get("start_ms",0.0))))
+            start+=float(group.duration_ms)
+        native_live_plan=NativeStartup.source_plan(clips,lifecycles)
+        for item in native_live_plan:item.due_ms=due.get(item.key,INF)
+        native_live_plan.sort_custom(func(a,b):return a.due_ms<b.due_ms)
+    return {"plan":native_live_plan,"required":native_live_plan.filter(func(item):return float(item.due_ms)<=at_ms+.000001),"priority":native_live_plan,"optional":optional}
 
 func _step_native_startup(optional:bool=false)->void:
     if optional and not native_startup_background:return
@@ -3451,6 +3480,7 @@ func select_action(row: Dictionary) -> void:
     selected_mode = row.behavior_id
     target_selection = Interaction.selection(row,[])
     notice_text = ""
+    if hud!=null:hud.show_item_targets()
     if row.target_type == "self":
         target_selection.target_indices = [Choices.action_options(available_actions,row)[0].index]
         _request_selection(true)
@@ -3602,19 +3632,25 @@ func inventory_intent(intent: Dictionary) -> void:
     cancel_selection()
     _submit(intent)
 
-func choose_target(position: Array, actor_id: String = "") -> void:
-    if not command_ready(): return
+func choose_item_target(item_uuid:String)->bool:
+    if not command_ready() or not Interaction.owns_action(available_actions,selected_action):return false
+    if not Interaction.object_targeting(available_actions,selected_action,selection_preview):return false
+    return choose_target([],item_uuid,"object")
+
+func choose_target(position: Array, actor_id: String = "",subject_kind:String="") -> bool:
+    if not command_ready(): return false
     if not selected_action.is_empty():
+        if not Interaction.owns_action(available_actions,selected_action):return false
         var appended = Interaction.extend_selection(available_actions,selected_action,target_selection,selection_preview,
-            position,actor_id,not Input.is_physical_key_pressed(KEY_SHIFT),timeline.state)
-        if appended.is_empty(): notice_text = selection_preview.get("reason") if selection_preview.get("reason") != null else "Choose a highlighted legal target."; return
+            position,actor_id,not Input.is_physical_key_pressed(KEY_SHIFT),timeline.state,subject_kind)
+        if appended.is_empty(): notice_text = selection_preview.get("reason") if selection_preview.get("reason") != null else "Choose a highlighted legal target."; return false
         var extra = appended.selection.extra_target_positions.size()>target_selection.extra_target_positions.size()
         target_selection = appended.selection
         var position_spec: Variant = selected_action.get("position_selection")
         var explicit = extra or selected_action.target_type == "multi_entity" or (position_spec != null and position_spec.kind in ["path","entity_destination"])
-        if not explicit and _submit_ready_move(): return
+        if not explicit and _submit_ready_move(): return true
         _request_selection(not explicit)
-        return
+        return true
     var selected: Dictionary = {}
     var target: Dictionary = {}
     var behavior = "action.attack" if not actor_id.is_empty() and selected_mode == "action.move" else selected_mode
@@ -3622,13 +3658,14 @@ func choose_target(position: Array, actor_id: String = "") -> void:
         if action.behavior_id != behavior or not action.can_afford: continue
         for candidate in Choices.action_options(available_actions,action):
             var subject: Variant = Choices.binding_subject(available_actions,candidate)
-            if (not actor_id.is_empty() and subject != null and subject.uuid == actor_id) or (actor_id.is_empty() and Interaction.same_position(Choices.binding_position(available_actions,candidate),position)):
+            if (not actor_id.is_empty() and subject != null and subject.uuid == actor_id and (subject_kind.is_empty() or subject.kind==subject_kind)) or (actor_id.is_empty() and Interaction.same_position(Choices.binding_position(available_actions,candidate),position)):
                 selected = action
                 target = candidate
                 break
         if not target.is_empty(): break
-    if target.is_empty(): notice_text = "No disclosed legal target for this action."; return
+    if target.is_empty(): notice_text = "No disclosed legal target for this action."; return false
     _execute_admitted({"action":selected,"selection":Interaction.selection(selected,[target.index],not Input.is_physical_key_pressed(KEY_SHIFT))})
+    return true
 
 func end_turn() -> void:
     if not command_ready(): return
@@ -3679,7 +3716,9 @@ func _poll_actions() -> void:
             command_busy = false
             _refresh_selection_media()
             if pending_request.auto_confirm and preview.can_confirm: confirm_selection()
-            else: notice_text = preview.reason if preview.get("reason") != null else ""
+            else:
+                notice_text = preview.reason if preview.get("reason") != null else ""
+                if hud!=null:hud.show_item_targets()
         "command", "receipt":
             var receipt: Dictionary = response.normalized.receipt
             if receipt.kind == "pending":
@@ -3769,7 +3808,7 @@ func _identity_hit(id: String) -> Dictionary:
         var label: String = id
         if timeline.state.actors.has(id): label = timeline.state.actors[id].name
         elif timeline.state.objects.has(id): label = str(timeline.state.objects[id].item.get("name",timeline.state.objects[id].item.item_id))
-        return {"id":id,"kind":row.kind,"label":label,"position":row.position,"screen":camera.unproject_position(Placement.contact(row)+Vector3.UP*0.25)}
+        return {"id":id,"kind":row.kind,"subject_kind":"creature" if timeline.state.actors.has(id) else "object", "label":label,"position":row.position,"screen":camera.unproject_position(Placement.contact(row)+Vector3.UP*0.25)}
     return {}
 
 func world_labels() -> Array:
@@ -3786,7 +3825,7 @@ func _world_click(hit: Dictionary, alternative: bool = false) -> void:
     if not command_ready(): return
     hud.clear_hover_feedback()
     if not selected_action.is_empty():
-        choose_target(hit.get("position",[]),hit.get("id","")); return
+        choose_target(hit.get("position",[]),hit.get("id",""),Interaction.hit_subject_kind(hit)); return
     if hit.is_empty(): return
     var id: String = hit.get("id","")
     if alternative and hit.kind == "actor":
@@ -4022,7 +4061,7 @@ func _set_world_cursor(shape: int) -> void:
 func _hover_choice(hit: Dictionary, safe: bool) -> Dictionary:
     if not selected_action.is_empty():
         var appended = Interaction.extend_selection(available_actions,selected_action,target_selection,selection_preview,
-            hit.get("position",[]),hit.get("id",""),safe,timeline.state)
+            hit.get("position",[]),hit.get("id",""),safe,timeline.state,Interaction.hit_subject_kind(hit))
         return {"kind":"target","label":selected_action.display_name,"value":appended} if not appended.is_empty() else {}
     return Interaction.idle_intent(available_actions,timeline.state,hit,force_attack,attack_preference,selected_mode,safe)
 

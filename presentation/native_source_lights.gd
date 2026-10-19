@@ -21,6 +21,7 @@ func prepare_native_handles(handles:Dictionary,budget:Dictionary={})->bool:
     var retained:Dictionary={}
     var ready:bool=true
     for handle_id in handles:
+        if float(handles[handle_id].get("optical",{}).get("energy_multiplier",1.0))==0.0:continue
         var root:Node3D=handles[handle_id].get("root")
         if not is_instance_valid(root):continue
         var instance:int=root.get_instance_id();retained[instance]=true
@@ -75,6 +76,9 @@ func sample_handles(handles: Dictionary, support_y: float = 0.0, optical: Dictio
         var handle: Dictionary = handles[handle_id]
         var root: Node3D = handle.get("root")
         var occurrence_optical:Dictionary=handle.get("optical",optical)
+        # Zero authored emission contributes nothing, including donor lamps
+        # whose light type has no finite-radius 2D counterpart.
+        if float(occurrence_optical.get("energy_multiplier",1.0))==0.0:continue
         var occurrence_support:float=handle.get("support_y",support_y)
         if not is_instance_valid(root):
             _effect_issues.append("Native effect light root is unavailable: " + str(handle_id))

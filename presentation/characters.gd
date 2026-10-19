@@ -32,11 +32,16 @@ static func rigs(cache:Dictionary)->Dictionary:
     var admitted=BodySources.index(cache)
     return {} if admitted==null else admitted.rigs
 
+static func effect_owned(actor:Dictionary,cache:Dictionary)->bool:
+    var admitted=BodySources.index(cache)
+    return admitted!=null and admitted.effect_owned_creatures.has(content_id(actor.get("creature_content_ref")))
+
 static func resolve(actor: Dictionary, state: Dictionary, cache: Dictionary) -> Dictionary:
     if not actor.get("present", true) or actor.get("last_visual_position") == null \
         or actor.get("spatial_disposition", "present") != "present" \
         or actor.get("remains_disposition", "intact") == "disintegrated":
         return {"ok":true, "value":null}
+    if effect_owned(actor,cache):return {"ok":true,"value":null}
     var selected = structure(actor,cache,item_looks(actor,state))
     if not selected.ok:return selected
     var position: Array = actor.last_visual_position

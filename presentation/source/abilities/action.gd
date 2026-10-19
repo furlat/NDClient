@@ -40,6 +40,12 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## section, built from res://assets/native_effects) whose media ids its old
 ## media list names, e.g. class.rage.ground.
 @export var effect_sources: PackedStringArray = []
+## Factory package cues on this action's own authored body/event anchors.
+## Source media is migrated in the authored entry, never suppressed by name.
+@export var effects: Array[EffectUse] = []
+## Possible disclosed condition owners created by this action. Selection uses
+## this finite set only to prepare sources; actual rows own publication.
+@export var applies_conditions: PackedStringArray = []
 @export var feedback: Feedback
 @export var sounds: Array[SoundRef] = []
 

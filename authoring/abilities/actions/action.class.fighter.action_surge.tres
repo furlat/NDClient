@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_nli3s"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_nli3s"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_effect_use"]
+
 [sub_resource type="Resource" id="Resource_fh3h3"]
 script = ExtResource("1_0tl2a")
 role = "act"
@@ -18,21 +20,38 @@ hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_kyoi5"]
 script = ExtResource("2_nli3s")
-path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+path = "art/media/ui/icons/smooth48/action.action-surge.png"
 native_size = Vector2i(48, 48)
-reuses = "ui.filter-actions"
-status = "stand_in"
-source = "ui/resources.json icon:ui.filter-actions"
+reuses = ""
+status = "ready"
+source = "ui/resources.json icon:action.action-surge"
 
 [sub_resource type="Resource" id="Resource_3aihv"]
 script = ExtResource("3_nli3s")
 cue = "action_surge"
 at = "body.impact"
 
+[sub_resource type="Resource" id="NativeActionEffect_0"]
+script = ExtResource("native_effect_use")
+selection = "fighter_action_surge_native"
+at = "body.effect"
+delay = 0.2
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:fighter_action_surge_native"
+clip = "fighter_action_surge_native"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+source_end = 0.85
+duration_policy = "authored"
+follow = true
+
 [resource]
 script = ExtResource("2_m4xri")
 id = "action.class.fighter.action_surge"
 kind = "action"
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeActionEffect_0")])
 icon = SubResource("Resource_kyoi5")
 disposition = "authored"
 body = SubResource("Resource_fh3h3")
@@ -45,7 +64,9 @@ unported = {
 "media": []
 },
 "attackFeedback": null,
-"compatibleCueKinds": ["action"],
+"compatibleCueKinds": [
+"action"
+],
 "counterspellFeedback": null,
 "definitionRef": {
 "content_id": "action.class.fighter.action_surge",
@@ -54,23 +75,7 @@ unported = {
 "definition_kind": "action",
 "pack_id": "content.srd_5_1_cc"
 },
-"media": [{
-"alpha": 0.9,
-"assetId": "class.action_surge.burst-q0-back",
-"attachment": "source_ground",
-"depth": "behind_body",
-"id": "class.action_surge.burst-q0-back",
-"scale": 0.5,
-"startOffsetMs": 200.0
-}, {
-"alpha": 0.9,
-"assetId": "class.action_surge.burst-q0-front",
-"attachment": "source_ground",
-"depth": "front_body",
-"id": "class.action_surge.burst-q0-front",
-"scale": 0.5,
-"startOffsetMs": 200.0
-}],
+"media": [],
 "mediaFailurePolicy": "fail_transaction",
 "previewChildCueKinds": [],
 "projectile": null,

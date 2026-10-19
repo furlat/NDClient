@@ -22,10 +22,15 @@ static func selection(behavior_id:String,cache:Dictionary)->Dictionary:
 static func effect_clips(selected:Dictionary)->Array:
     var result:Array=[];var seen:Dictionary={}
     var cues:Array=selected.get("staging",{}).get("cues",[])
+    var persistent:Array=owned_cues(selected)
     for at in cues.size():
-        if at in selected.get("excluded_cue_indices",[]):continue
+        if at in selected.get("excluded_cue_indices",[]) or at in persistent:continue
+        if not cues[at].get("unbound_constructor_inputs",[]).is_empty():continue
         var clip:Dictionary=Effects.resolve(str(cues[at].clip),str(selected.get("id","")),str(cues[at].get("role","")))
-        if not clip.is_empty() and not seen.has(clip.id):seen[clip.id]=true;result.append(clip)
+        if not clip.is_empty() and not seen.has(clip.id):
+            clip=clip.duplicate()
+            if not cues[at].get("constructor_input",{}).is_empty():clip.requires_constructor_input=true
+            seen[clip.id]=true;result.append(clip)
     return result
 
 ## Staged cues an owner plays instead of the cast: a spatial owner's cue, and
@@ -63,6 +68,8 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
         return {"start_ms":launch_ms,"duration_ms":maxf(1.0,travel_ms),"status":"missing",
             "reason":"effect_not_in_package","native_cue":choice,"native_clip":{},
             "spell_id":selected.id,"source_id":choice.clip,"source":source}
+    if not choice.get("constructor_input",{}).is_empty():
+        clip=clip.duplicate();clip.requires_constructor_input=true
     var cue:Dictionary=choice.duplicate(true)
     var rate:float=float(cue.get("source_rate",1.0))
     var native_end:float=cue.get("source_end",clip.seconds)
@@ -114,6 +121,10 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
         "source_id":"spell."+selected.id+".native."+str(cue.role),"finish_profile":selected.palette,
         "optical":{"energy_multiplier":staging.get("decorative_light_multiplier",1.0)},"source":source}
     if staging.has("light_color"):row.optical.color=Color(staging.light_color)
+    var unbound:Array=cue.get("unbound_constructor_inputs",[])
+    if not unbound.is_empty():
+        row.status="missing";row.unbound_constructor_inputs=unbound
+        row.reason="native_constructor_inputs_unbound:"+",".join(unbound)
     return row
 
 static func retained_particle_tail(bounds:Dictionary,cue:Dictionary,at_seconds:float)->float:

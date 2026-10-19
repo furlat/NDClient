@@ -34,6 +34,17 @@ static func _actor(state: Dictionary, group: Dictionary, identity: Variant, node
     if state.actors.has(identity): return state.actors[identity]
     return group.staged_actors.get(identity, {})
 
+static func _spell_actor_inputs(node:Dictionary,captured:Dictionary,state:Dictionary,graph:Dictionary)->Dictionary:
+    if node.get("fact")==null or node.fact.kind!="spell":return captured
+    var source:Variant=Occurrences.spell(node,graph).get("source_entity_uuid")
+    if source==null or captured.has(source) or not state.actors.has(source):return captured
+    # A sparse native application inherits its source from the cast. Borrow
+    # only that actor at this pre-row cut, never the final operation state or
+    # the mutable future choreography position table.
+    var result:Dictionary=captured.duplicate()
+    result[source]=state.actors[source]
+    return result
+
 static func _track(group: Dictionary, node: Dictionary, actor: Dictionary, clip_name: String,
         start: float, speed: float, priority: int, cache: Dictionary, graph:Dictionary) -> Dictionary:
     var clip = Authoring.clip(actor, clip_name, cache)
@@ -227,7 +238,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 _held_contact(track,fact.source_entity_uuid,graph)
                 track.target_uuid = fact.target_entity_uuid
                 var target = _actor(state,group,fact.target_entity_uuid,node,graph)
-                track.target_position = fact.target_position if fact.target_position != null else graph.positions.get(fact.target_entity_uuid,target.get("last_visual_position"))
+                track.target_position = fact.target_position if fact.get("target_position") != null else graph.positions.get(fact.target_entity_uuid,target.get("last_visual_position"))
                 track.from_position = graph.positions.get(fact.source_entity_uuid,actor.get("last_visual_position"))
                 track.to_position = track.from_position
                 var clip = Authoring.clip(actor,recipe.actor.clip,cache)
@@ -372,7 +383,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             if child.get("fact")!=null and child.fact.kind=="spell" and Occurrences.application(child): has_applications=true
         var selected:Dictionary=sources.selection
         var selected_delivery:Dictionary={}
-        if not selected.is_empty():selected_delivery=SpellDelivery.selected_for(selected,fact)
+        if not selected.is_empty():selected_delivery=SpellDelivery.for_occurrence(SpellDelivery.selected_for(selected,fact),node,has_applications)
         var shared_area:bool=not selected_delivery.is_empty() and selected_delivery.get("delivery",{}).get("scope")=="area"
         if not selected_delivery.is_empty():
             if SpellDelivery.owns_delivery(node,graph,selected_delivery,has_applications):
@@ -380,7 +391,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 if not points.is_empty():
                     if application:contact+=float(Occurrences.application_index(node,graph))*recipe.get("projectile",{}).get("missileStaggerMs",0)
                     var travel=SpellDelivery.travel_ms(selected_delivery,recipe,points,cache)
-                    Components.native_spell(group,node,recipe,selected_delivery,contact,travel,points,cache,owner,fact,Occurrences.application_index(node,graph))
+                    Components.native_spell(group,node,recipe,selected_delivery,contact,travel,points,cache,owner,fact,Occurrences.application_index(node,graph),graph)
                     contact+=travel
             elif shared_area:
                 # The carrier already scheduled the single ground effect. Every
@@ -551,6 +562,7 @@ static func _actor_structure_inputs(actor:Dictionary,state:Dictionary,staged:boo
 
 static func _actor_structure_value(actor:Dictionary,loadouts:Dictionary,inputs:Array,cache:Dictionary)->Dictionary:
     if inputs.is_empty():return {}
+    if Authoring.Characters.effect_owned(actor,cache):return {}
     var selected=Authoring.Characters.structure(ActorConstruction.actor_with_loadout(actor,loadouts),cache,inputs[4])
     return selected.value if selected.ok else {"error":selected.error}
 
@@ -700,6 +712,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         var cursors:Dictionary=graph.version_index.events
         for node in lineage.events:graph.nodes[node.lineage_id]=node
         var applications:Dictionary={}
+        graph.application_results=Components.ApplicationResults.index(lineage.events)
         for node in lineage.events:
             var resolution:Dictionary=node.resolution_record
             if resolution.get("application_id")==null:continue
@@ -711,7 +724,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         for event_index in lineage.events.size():
             var node: Dictionary = lineage.events[event_index]
             var captured: Dictionary = recorded.events[event_index]
-            graph.actor_inputs[node.id]=captured.actor_inputs
+            graph.actor_inputs[node.id]=_spell_actor_inputs(node,captured.actor_inputs,target,graph)
             graph.item_inputs[node.id]=captured.item_inputs
             var cues:Array=[]
             for change in captured.get("condition_rows",[]):

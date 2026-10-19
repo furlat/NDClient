@@ -99,6 +99,9 @@ static func _document(path:String)->Variant:
     return parsed
 
 static func source_pointer(document: String, pointer: String, cache: Dictionary) -> String:
+    # Only these built tables carry field-to-Resource provenance. Other names
+    # are labels, not a request to load a retired JSON document from disk.
+    if document not in [NativeAuthoring.CONDITION_FILE,NativeAuthoring.ACTION_FILE]:return document+":/"+pointer.trim_prefix("/")
     return NativeAuthoring.source_pointer(document, pointer, read_file(document, cache))
 
 static func source_snapshot(cache: Dictionary) -> Dictionary:

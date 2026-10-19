@@ -75,6 +75,7 @@ static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cac
     for occurrences in witnesses.values():
         for witness in occurrences:
             var actor:Dictionary=witness.actor
+            if Characters.effect_owned(actor,cache):continue
             var id:String=Characters.rig_id(actor,cache)
             if not rigs.has(id):errors.append("No authored rig for admitted actor "+str(actor.uuid));continue
             var priority_clips:Array=_priority_clips(actor,rigs[id],index,cache)

@@ -14,6 +14,8 @@ func run()->void:
         report_path="res://.runtime/schema16-all-spells-studio.json";wanted=[]
         var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(CaseLibrary.SERVER_IDS))
         for id in inventory.ids.spell:wanted.append(id+"/baseline")
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--only-case="):wanted=[argument.trim_prefix("--only-case=")]
     var selected:Array=[]
     for id in wanted:
         var matching:Array=records.filter(func(row):return row.id==id)

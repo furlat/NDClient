@@ -4,18 +4,54 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_y3rjy"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_y3rjy"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_effect_use"]
+
 [sub_resource type="Resource" id="Resource_78aap"]
 script = ExtResource("1_y3rjy")
-path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+path = "art/media/ui/icons/smooth48/action.frenzied-strike.png"
 native_size = Vector2i(48, 48)
-reuses = "ui.filter-actions"
-status = "stand_in"
-source = "ui/resources.json icon:ui.filter-actions"
+reuses = ""
+status = "ready"
+source = "ui/resources.json icon:action.frenzied-strike"
+
+[sub_resource type="Resource" id="NativeActionEffect_0"]
+script = ExtResource("native_effect_use")
+selection = "barbarian_frenzied_strike_native"
+at = "body.action_start"
+delay = 0.0
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_frenzied_strike_native"
+clip = "barbarian_frenzied_strike_native"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+source_end = 1.0
+duration_policy = "authored"
+follow = true
+extra = {"entity_geometry": {"actor": "caster", "slots": ["weapon"]}, "live_endpoints": [{"actor": "caster", "socket": "hand"}]}
+
+[sub_resource type="Resource" id="NativeActionEffect_1"]
+script = ExtResource("native_effect_use")
+selection = "barbarian_frenzied_strike_native"
+at = "body.contact"
+delay = 0.0
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_frenzied_strike_native"
+clip = "class/frenzied_contact_native"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+source_end = 0.45
+duration_policy = "authored"
+extra = {"live_endpoints": [{"actor": "target", "socket": "body_center"}]}
 
 [resource]
 script = ExtResource("1_ile26")
 id = "action.class.barbarian.frenzied_strike"
 kind = "action"
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeActionEffect_0"), SubResource("NativeActionEffect_1")])
 icon = SubResource("Resource_78aap")
 effect_sources = PackedStringArray()
 status = "ready"

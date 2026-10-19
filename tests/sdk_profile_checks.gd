@@ -24,7 +24,7 @@ func records_for(rows: Array, request_id: int) -> Dictionary:
 func numeric_phases(value:Variant)->bool:
     if value is Dictionary:
         for key in value:
-            if not key is String or not numeric_phases(value[key]):return false
+            if typeof(key) not in [TYPE_STRING,TYPE_STRING_NAME] or not numeric_phases(value[key]):return false
         return true
     return typeof(value) in [TYPE_INT,TYPE_FLOAT,TYPE_BOOL]
 

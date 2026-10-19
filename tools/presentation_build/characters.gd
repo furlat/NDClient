@@ -35,6 +35,7 @@ static func build(source: Dictionary, out_dir: String, report: Dictionary) -> vo
     index.revision = "presentation"
     index.root_rig = bound.root
     index.creature_rigs = bound.creatures
+    index.effect_owned_creatures = bound.effects
     var runtime: Array = [bound.root]
     for rig in bound.creatures.values():
         if rig not in runtime:runtime.append(rig)
@@ -136,7 +137,7 @@ static func _check_rigs(state: Dictionary) -> void:
 ## The rigs the game binds: the player body's (root) and each creature's, by content id.
 static func _check_characters(state: Dictionary, characters: Dictionary) -> Dictionary:
     var report: Dictionary = state.report
-    var result := {"root": "", "creatures": {}}
+    var result := {"root": "", "creatures": {}, "effects":{}}
     var ids: Dictionary = Common.server_ids().get("ids", {}).get("creature", {})
     for id in characters:
         var entry: Resource = characters[id]
@@ -146,6 +147,9 @@ static func _check_characters(state: Dictionary, characters: Dictionary) -> Dict
         if id == "creature.player.humanoid_body":result.root = entry.rig;continue
         if not ids.has(id):Common.warn(report, where, "not a server creature id")
         Common.cover(report, "creature", id, entry.status)
+        if entry.body_policy=="effect":
+            result.effects[id]=true
+            continue
         if not entry.rig.is_empty() and entry.status != "missing":result.creatures[id] = entry.rig
     for id in ids:
         if not characters.has(id):Common.error(report, "characters", "no entry for server creature " + id)

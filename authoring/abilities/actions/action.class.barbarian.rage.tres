@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_s42gr"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_s42gr"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_effect_use"]
+
 [sub_resource type="Resource" id="Resource_u3wmm"]
 script = ExtResource("1_e2tth")
 role = "act"
@@ -18,19 +20,55 @@ hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_5v28k"]
 script = ExtResource("2_s42gr")
-path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+path = "art/media/ui/icons/smooth48/action.rage.png"
 native_size = Vector2i(48, 48)
-reuses = "ui.filter-actions"
-status = "stand_in"
-source = "ui/resources.json icon:ui.filter-actions"
+reuses = ""
+status = "ready"
+source = "ui/resources.json icon:action.rage"
+
+[sub_resource type="Resource" id="NativeActionEffect_0"]
+script = ExtResource("native_effect_use")
+selection = "barbarian_rage_native"
+at = "body.effect"
+delay = 0.1
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_rage_native"
+clip = "barbarian_rage_source_v176"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+source_end = 4.0
+duration_policy = "authored"
+follow = true
+extra = {"entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}
+
+[sub_resource type="Resource" id="NativeActionEffect_1"]
+script = ExtResource("native_effect_use")
+selection = "barbarian_rage_native"
+at = "body.effect"
+delay = 0.1
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_rage_native"
+clip = "barbarian_rage_onset_v191_pressure"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+source_end = 1.1
+duration_policy = "authored"
+follow = true
+extra = {"entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}
 
 [resource]
 script = ExtResource("2_ai7m5")
 id = "action.class.barbarian.rage"
 kind = "action"
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeActionEffect_0"), SubResource("NativeActionEffect_1")])
 icon = SubResource("Resource_5v28k")
 disposition = "authored"
 body = SubResource("Resource_u3wmm")
+applies_conditions = PackedStringArray("class_feature.barbarian.raging")
 effect_sources = PackedStringArray("class.rage.ground")
 status = "ready"
 unported = {
@@ -39,7 +77,9 @@ unported = {
 "media": []
 },
 "attackFeedback": null,
-"compatibleCueKinds": ["action"],
+"compatibleCueKinds": [
+"action"
+],
 "counterspellFeedback": null,
 "definitionRef": {
 "content_id": "action.class.barbarian.rage",
@@ -48,22 +88,11 @@ unported = {
 "definition_kind": "action",
 "pack_id": "content.srd_5_1_cc"
 },
-"media": [{
-"alpha": 0.4,
-"assetId": "class.rage.ground-q0-ground",
-"attachment": "source_ground",
-"depth": "ground",
-"durationMs": 950.0,
-"fadeCurve": "smoothstep",
-"fadeInMs": 180.0,
-"fadeOutMs": 350.0,
-"id": "class.rage.ground-q0-ground",
-"loop": true,
-"scale": 0.5,
-"startOffsetMs": 100.0
-}],
+"media": [],
 "mediaFailurePolicy": "fail_transaction",
-"previewChildCueKinds": ["condition"],
+"previewChildCueKinds": [
+"condition"
+],
 "projectile": null,
 "variants": []
 }

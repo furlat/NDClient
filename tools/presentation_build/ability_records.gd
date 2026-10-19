@@ -107,6 +107,7 @@ static func feedback_to(record: Dictionary, path: String, feedback: Feedback, ke
 const CUE_FIELDS := [
     ["clip", "clip", "string", true], ["role", "role", "string", true], ["scale", "scale", "float", true],
     ["at", "at", "string", false], ["delay_seconds", "delay", "float", false],
+    ["scope", "scope", "string", false], ["constructor_input", "constructor_input", "same", false],
     ["attachment", "attachment", "string", false], ["orientation", "orientation", "string", false],
     ["rotation_degrees", "rotation_degrees", "vec3", false],
     ["source_launch", "source_launch", "float", false], ["source_contact", "source_contact", "float", false],
@@ -121,6 +122,7 @@ const CUE_FIELDS := [
     ["origin_path", "origin_path", "string", false],
     ["opacity_keys", "opacity_keys", "vec2s", false], ["opacity_uniform", "opacity_uniform", "string", false],
     ["fade_in_seconds", "fade_in", "float", false], ["fade_out_seconds", "fade_out", "float", false],
+    ["unbound_constructor_inputs", "unbound_constructor_inputs", "strings", false],
 ]
 
 ## One staged cue -> an effect use; fields with no typed home stay in `extra`.

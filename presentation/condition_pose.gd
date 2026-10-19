@@ -11,7 +11,7 @@ static func select(actor: Dictionary, rig_id: String, activity: String, cache: D
     for condition in actor.get("conditions", []):
         var state: Variant = condition.get("state")
         if state != null and not state.get("suppression_provider_uuids", []).is_empty(): continue
-        var id: String = condition.get("behavior_id", "")
+        var id: String = str(condition.behavior_id) if condition.get("behavior_id")!=null else ""
         var config: Dictionary = recipes.get(id, {})
         if config.get("disposition") == "state_only": continue
         var persistent: Dictionary = config.get("persistent", {})

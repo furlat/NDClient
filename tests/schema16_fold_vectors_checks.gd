@@ -84,6 +84,15 @@ func transition_cases()->void:
     next.lineages[0].events[0].fact.actors.append({"actor_uuid":"not-held","rows":[]})
     var frozen=reduced.value.duplicate(true)
     check(not Reducer._reduce_operation_retained(reduced.value,next,true).ok and reduced.value==frozen,"Rejected multi-actor operation leaves committed state unchanged")
+func attack_source_cases()->void:
+    var document:Dictionary=_document("v1_a_first_record")
+    var state:Dictionary=fold(document.initial.duplicate(true),document.steps[0].input).value
+    var actor:String=state.actors.keys()[0]
+    for sample in [["equipped","MELEE_MAIN","melee"],["equipped","RANGED_OFF","ranged"],["natural","MELEE_MAIN","none"],["unarmed","MELEE_OFF","none"]]:
+        var fact:Dictionary={"kind":"attack","source_entity_uuid":actor,"target_entity_uuid":actor,"weapon_slot":sample[1],"attack_source_kind":sample[0]}
+        var result:Dictionary=Reducer.apply_player_fact(state,fact)
+        check(result.ok and result.value.actors[actor].visual_loadout.active_weapon_set==sample[2],"Actual AttackFact source selects reference stance without a synthetic weapon_set field: "+sample[0]+" "+sample[1])
+
 func run()->void:
     var index:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(ROOT+"index.json"));check(index.fixtures.size()==32,"All 32 reference vector files are included")
     for name in index.fixtures:
@@ -96,5 +105,5 @@ func run()->void:
             check(issue.is_empty(),name+" step "+str(i)+" "+issue)
             if step.input.has("group"):
                 var group:Dictionary=step.input.group;var branch=Reducer.lineage_branch(group,group.events[group.root]);check(branch.ok and branch.value.events.size()>0,name+" chronological branch preserved")
-    error_cases();transition_cases()
+    error_cases();transition_cases();attack_source_cases()
     var report={"passed":passed,"failures":failures,"vectors":index.fixtures.size()};print(JSON.stringify(report));quit(0 if failures.is_empty() else 1)

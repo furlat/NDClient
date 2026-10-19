@@ -54,7 +54,7 @@ static func replaced_media(condition_id:String,recipe:Dictionary)->Array:
 ## (start, duration up to its removal, age, removal age, initial).
 static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionary)->Array:
     var result:Array=[]
-    var spell:Dictionary=Spells.condition(str(common.condition.behavior_id),cache)
+    var spell:Dictionary=common.get("selected_spell",{}) if common.get("spatial_owner",false) else Spells.condition(str(common.condition.behavior_id),cache)
     for selection in selections:
         var lifecycle:Dictionary=selection.condition
         var phases:Dictionary={}
@@ -83,7 +83,7 @@ static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionar
         var row:Dictionary=common.duplicate()
         row.merge({"id":id,"kind":"native_effect","native_spell":true,"persistent_owner":true,"status":"available",
             "target_uuid":common.get("actor_uuid"),"cast_recipe":{"enabled":false},"from_position":[0,0],"to_position":common.get("position",[0,0]),
-            "from_elevation_feet":common.get("elevation_feet",0),"to_elevation_feet":common.get("elevation_feet",0),"ground_target":false,
+            "from_elevation_feet":common.get("elevation_feet",0),"to_elevation_feet":common.get("elevation_feet",0),"ground_target":common.get("spatial_owner",false),
             "native_cue":cue,"native_clip":phases.application,"lifecycle_phases":phases,"lifecycle_key":key,
             "lifecycle_marker":lifecycle.get("marker",{}),"lifecycle_visibility":lifecycle.get("visibility",{}),
             "spell_id":str(spell.get("id","")),"finish_profile":spell.get("palette",{}) if lifecycle.get("body_channel_included",false) else {},
@@ -137,8 +137,8 @@ static func select_lifecycles(rows:Array,at_ms:float,activities:Dictionary,invis
         result.append(groups[order[int(maxf(0,at_ms)/MARKER_TURN_MS)%order.size()]])
     return result
 
-## Spatial owners (Web's ground net) still hold their staged clip's pose:
-## the package has no spatial lifecycle yet.
+## Older spatial sources retain their explicit staged deployment/close window.
+## A delivered package lifecycle takes precedence when its exact owner exists.
 static func phase_samples(common:Dictionary,phases:Array)->Array:
     # Phase descriptions are owner-independent. Each output receives its own
     # cue before adding occurrence age/removal state; never mutate the input.
@@ -173,6 +173,11 @@ static func spatial_selection(effect:Dictionary,cache:Dictionary)->Dictionary:
         if identity in lifecycle.get("owner_ids",[]) or "spatial_effect."+identity in lifecycle.get("owner_ids",[]):return Spells.selection(spell_id,cache)
     return {}
 
+static func spatial_lifecycles(effect:Dictionary)->Array:
+    var identity:String=str(effect.get("content_ref",{}).get("content_id",""))
+    var selected:Array=Effects.conditions(identity)
+    return Effects.conditions("spatial_effect."+identity) if selected.is_empty() else selected
+
 static func observe_spatial(owners:Dictionary,effects:Dictionary,at_ms:float,initial:bool=false)->bool:
     var changed:bool=false
     for id in effects:
@@ -191,9 +196,11 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
     for id in owners.keys():
         var owner:Dictionary=owners[id]
         var selected=spatial_selection(owner.effect,cache)
-        if selected.is_empty():continue
-        if at_ms>=float(owner.end_ms)+fade_ms(selected):owners.erase(id);continue
         var effect:Dictionary=owner.effect
+        var lifecycles:Array=spatial_lifecycles(effect)
+        if selected.is_empty() and lifecycles.is_empty():continue
+        var close_ms:float=removal_ms(lifecycles) if not lifecycles.is_empty() else fade_ms(selected)
+        if at_ms>=float(owner.end_ms)+close_ms:owners.erase(id);continue
         var excluded:Dictionary={}
         for suppression in effect.get("suppressions",[]):
             for point in suppression.get("positions",[]):excluded["%d,%d"%point]=true
@@ -207,5 +214,8 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
             "removal_age_ms":null if is_inf(owner.end_ms) else maxf(0,at_ms-owner.end_ms),
             "position":anchor,"elevation_feet":float(effect.anchor_elevation_steps)*5.0 if effect.get("anchor_elevation_steps")!=null else 0.0,
             "resolved_area_positions":positions,"source_event_uuid":"","recipe":{}}
-        result.append_array(phase_samples(common,Spells.condition_phases(selected)))
+        if not lifecycles.is_empty():
+            common.selected_spell=selected
+            result.append_array(lifecycle_samples(common,lifecycles,cache))
+        else:result.append_array(phase_samples(common,Spells.condition_phases(selected)))
     return result

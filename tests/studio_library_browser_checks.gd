@@ -23,6 +23,15 @@ func run()->void:
     check(report.by_key["condition:condition.hidden"].scenario_status=="failed" and report.by_key["condition:condition.hidden"].source_status=="missing","Recorder and art failures remain separate")
     check(report.by_key["damage_type:Fire"].scenario_status=="missing","An ID without a case stays discoverable")
     check(fire.cases[0].perspectives.size()==2 and Library.scenario(fire.cases[0]).moments[0].occurrence==5,"Both original factions and native moments survive browser selection")
+    var sources={"spell":{"spell.fireball":{"source_path":"res://authoring/abilities/spells/spell.fireball.tres"}},
+        "action":{"action.class.fighter.action_surge":{"source_path":"res://authoring/abilities/actions/action.class.fighter.action_surge.tres"}},
+        "class_feature":{"class_feature.fighter.indomitable":{"source_path":"res://authoring/abilities/actions/class_feature.fighter.indomitable.tres"}}}
+    var joined=Library.build(snapshot,coverage,records,false,sources)
+    check(joined.entries.size()==7 and joined.by_key["spell:spell.fireball"].cases.size()==1,"Typed sources augment the inventory without duplicating listed IDs or their cases")
+    var source_only:Dictionary=joined.by_key["action:action.class.fighter.action_surge"]
+    check(source_only.inventory_origin=="typed_source" and source_only.engine_inventory=="not_listed" and source_only.runtime_availability=="unknown","A typed class action stays discoverable without claiming server availability or retirement")
+    check(source_only.scenario_status=="missing" and source_only.presentation_status=="not_assessed" and source_only.source_path==sources.action[source_only.id].source_path,"Source presence creates neither a recording nor render proof")
+    check(joined.by_key["class_feature:class_feature.fighter.indomitable"].category=="Actions","Class feature sources belong in the Actions browser")
     var event={"sequence":3,"event_uuid":"5","lineage_uuid":"2","versions":[{"occurrence":4}]}
     var moments=Library.resolve_moments({"rows":[{"id":"3:5","kind":"event","event":event,"start_ms":250}]},[{"sequence":3,"occurrence":5,"lineage":2},{"sequence":3,"occurrence":4,"lineage":2},{"sequence":4,"occurrence":5,"lineage":2},{"sequence":3,"occurrence":5,"lineage":9}])
     check(moments[0].available and moments[0].at_ms==250 and moments[0].row_id=="3:5","A native moment resolves its exact packet occurrence and lineage")
@@ -44,4 +53,7 @@ func run()->void:
     var actual=Library.catalog();var expected=0
     for kind in actual.counts:expected+=actual.counts[kind]
     check(actual.entries.size()>=expected and expected>1000,"Current official catalog is fully discoverable")
+    check(actual.by_key.has("action:action.class.fighter.action_surge") and actual.by_key["action:action.class.fighter.action_surge"].inventory_origin=="typed_source","Current dynamic Action Surge source is no longer hidden by snapshot-only discovery")
+    check(actual.by_key.has("class_feature:class_feature.fighter.indomitable"),"Current dynamic class-feature sources are discoverable")
+    check(actual.by_key["spell:spell.false_life"].source_path=="res://authoring/abilities/spells/spell.false_life.tres","A retained condition alias cannot replace the actual spell's browser source")
     print(JSON.stringify({"passed":passed,"failures":failures,"current_ids":expected,"current_cases":actual.records.size()}));quit(0 if failures.is_empty() else 1)

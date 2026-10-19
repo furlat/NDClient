@@ -248,7 +248,7 @@ def moments(journal, names=None):
     for sequence, lineage, offset, node in nodes(journal):
         base = {'sequence':sequence, 'occurrence':node['occurrence'], 'lineage':lineage, 'event_offset':offset}
         for attribution in node.get('content_attributions',[]):
-            if attribution.get('role')=='effective_handler':
+            if attribution.get('role')=='effective_handler' and attribution.get('outcome')!='no_effect':
                 rows.append({**base,'kind':'reaction_handler','label':attribution.get('handler_name') or attribution['behavior_id'],
                     'behavior_id':attribution['behavior_id'],'actor_uuid':attribution.get('source_entity_uuid'),
                     'triggering_occurrence':attribution.get('triggering_occurrence'),'triggering_lineage':attribution.get('triggering_lineage')})
@@ -274,7 +274,8 @@ def journal_summary(journal):
     known={};ended=set()
     for _, _, _, node in nodes(journal):
         fact=node.get('fact') or {}
-        identities={row['behavior_id'] for row in node.get('content_attributions',[]) if row.get('behavior_id')}
+        identities={row['behavior_id'] for row in node.get('content_attributions',[])
+            if row.get('role') in ('behavior','effective_handler') and row.get('outcome')!='no_effect' and row.get('behavior_id')}
         if fact.get('behavior_id'):identities.add(fact['behavior_id'])
         behaviors.update(identities)
         if not fact:continue

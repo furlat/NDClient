@@ -11,6 +11,7 @@ const Sockets=preload("res://presentation/spell_placement.gd")
 const Components=preload("res://presentation/components.gd")
 const Baked=preload("res://presentation/baked_effect.gd")
 const Persistent=preload("res://presentation/native_persistent.gd")
+const Inputs=preload("res://presentation/native_inputs.gd")
 const FIRST_BIT=1
 const LAST_BIT=12
 const HISTORY_STEP=1.0/60.0
@@ -37,6 +38,7 @@ var _queued_cache:Dictionary={}
 var _required_ids:Dictionary={}
 var _prepare_failures:Dictionary={}
 var _support_warm:bool=false
+var inputs:RefCounted=Inputs.new()
 
 func render_timings()->Dictionary:
     # Last completed native viewport timestamps can lag the sampled CPU frame.
@@ -160,6 +162,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
         for group in pair[0]:
             for component in group.get("components",[]):
                 if not accepts(component) or not component.get("spatial_owner",false) or component.get("status")=="missing":continue
+                if "admitted_cells" in component.native_clip.get("inputs",[]):continue
                 var positions:Array=component.get("resolved_area_positions",[])
                 if not mask_interests.has(component.id):mask_interests[component.id]=[]
                 if positions not in mask_interests[component.id]:mask_interests[component.id].append(positions)
@@ -178,11 +181,16 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     started=Time.get_ticks_usec()
     _image_requirements(world)
     FrameProfile.end_phase(world.profile,"native_prepare_images",started)
+    started=Time.get_ticks_usec()
+    inputs.prepare(world,wanted.values())
+    if allow_optional and (budget.is_empty() or budget.used_usec<budget.limit_usec):inputs.prepare(world,optional.values(),false)
+    FrameProfile.end_phase(world.profile,"native_prepare_optical_surfaces",started)
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     return result
 
 func _construct(component:Dictionary)->String:
     var clip:Dictionary=component.native_clip.duplicate(false)
+    if component.has("native_constructor_inputs"):clip.construction_inputs=component.native_constructor_inputs
     if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
     var seed:int=Components.effect_seed(component)
     var handle:Dictionary=Effects.make(_owner,clip,0,seed)
@@ -304,7 +312,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var points=Sockets.endpoints(world,component,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch))
         if not points.ready:
             handle.root.hide()
-            if points.get("unavailable",false):_pending(component,points.reason)
+            if points.get("unavailable",false):_unavailable(component,points.reason)
             elif points.get("pending",false):ready=false;_pending(component,points.reason)
             else:_missing(component,points.reason)
             continue
@@ -321,7 +329,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         Effects.set_layer(handle,int(groups[key].layer_mask))
         handle.group_key=key
         handle.optical=_optical(component.get("optical",{}))
-        if component.get("spatial_owner",false):
+        if component.get("spatial_owner",false) and "admitted_cells" not in handle.clip.get("inputs",[]):
             var mask=AreaMask.publish(handle,component.get("resolved_area_positions",[]))
             if not mask.ready:
                 handle.root.hide();ready=false;_missing(component,"; ".join(mask.errors));continue
@@ -335,13 +343,26 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
         var lifecycle:bool=component.has("lifecycle_phases")
         var opened:float=Persistent.application_end(component) if lifecycle else float(component.lifecycle.get("enter_end_seconds",0)) if component.get("persistent_owner",false) else INF
-        if float(handle.sample_time)>=opened:
+        if float(handle.sample_time)>=opened and handle.get("seekable",false):
             # Once the application is played, a sustained condition has no
             # unbounded history to replay: draw the actual owner age (its
             # geometry and materials seek; particles take one step).
             sample_time=age
         handle.root.show()
         Effects.place(handle,Playback.transform(cue,sample_time,points.hand,1.0))
+        var input_bindings:Dictionary={"supplied":[],"unavailable":{}}
+        if not handle.get("baked",false):
+            var input_started:int=Time.get_ticks_usec()
+            input_bindings=inputs.sync(world,handle,component,points)
+            FrameProfile.end_phase(world.profile,"native_input_bindings",input_started)
+            # A source may carry offline observations for authoring. They are
+            # never permission to display a successful gameplay outcome.
+            if not input_bindings.unavailable.is_empty():
+                handle.root.hide()
+                var reasons:PackedStringArray=[]
+                for channel in input_bindings.unavailable:reasons.append(str(channel)+"="+str(input_bindings.unavailable[channel]))
+                _unavailable(component,"native_input_unavailable:"+",".join(reasons),input_bindings)
+                continue
         if handle.get("baked",false) and not handle.has("emission_stop_set"):
             Baked.stop_emission(handle,_emission_stop(cue));handle.emission_stop_set=true
         if lifecycle:
@@ -373,9 +394,12 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var submitted_bounds:bool=submitted_geometry(handle,frustum,int(groups[key].layer_mask))
         diagnostics[id]={"id":id,"status":"rendered" if drawn else "prepared", "reason":"" if caught_up else "native_spell_history_preparing", "age_ms":sample_time*1000.0,"requested_age_ms":age*1000.0,"source_age":handle.age,"group":key,"layer":groups[key].layer_mask,"attachment_support":points.surfaces,"submitted_bounds":submitted_bounds,
             "effect_clip":str(component.lifecycle_phases[handle.lifecycle_phase].id) if lifecycle else str(handle.clip.get("id","")),"effect_kind":handle.effect_kind,"effect_fallback":handle.effect_reason,"missing_staged_paths":handle.missing_paths}
+        diagnostics[id].input_bindings=input_bindings
+        if not input_bindings.unavailable.is_empty():
+            diagnostics[id].status="partial";diagnostics[id].reason="native_input_unavailable"
         if lifecycle:diagnostics[id].lifecycle_phase=handle.lifecycle_phase
         if not caught_up:ready=false
-        if drawn and caught_up and submitted_bounds:witnesses.append({"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())})
+        if drawn and caught_up and submitted_bounds and input_bindings.unavailable.is_empty():witnesses.append({"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())})
         if float(handle.drawn_time)!=sample_time:
             var sampled_root:WeakRef=weakref(handle.root)
             RenderingServer.frame_post_draw.connect(func():
@@ -555,9 +579,20 @@ static func _retain_owned(owner_id:Variant,owners:Dictionary,remaining:Dictionar
     owners.erase(owner_id)
 
 func _missing(component:Dictionary,reason:String)->void:
-    diagnostics[component.id]={"id":component.id,"status":"missing","reason":reason}
+    _unavailable(component,reason)
+    # An authored gap is visible missing work, not a runtime program failure.
+    # Such cues never enter prepare/construction; unrelated available sources
+    # still report real construction/resource/sampling errors normally.
+    if component.get("status")=="missing" and not component.get("unbound_constructor_inputs",[]).is_empty():
+        diagnostics[component.id].unbound_constructor_inputs=component.unbound_constructor_inputs
+        return
     var issue=str(component.id)+": "+reason
     if issue not in issues:issues.append(issue)
+
+func _unavailable(component:Dictionary,reason:String,bindings:Dictionary={})->void:
+    diagnostics[component.id]={"id":component.id,"status":"missing","reason":reason}
+    if not bindings.is_empty():diagnostics[component.id].input_bindings=bindings
+    witnesses.append({"id":component.id,"source_event_uuid":component.get("source_event_uuid",""),"status":"missing","reason":reason})
 
 func _pending(component:Dictionary,reason:String)->void:
     diagnostics[component.id]={"id":component.id,"status":"pending","reason":reason}
@@ -578,20 +613,28 @@ func close(world:Node=null)->void:
         world.source_lighting.sample_handles({})
     _image_key=[];_path_requirements.clear();_queued_key=[];_queued_cache.clear()
     _epoch=-1;ready=true;_required_ids.clear();_prepare_failures.clear();preparation_revision+=1
+    inputs.clear()
 
 func _image_requirements(world:Node)->void:
     # Optical inputs depend on outfit paths and selected clips, not every source
     # occurrence. Gather each actor/clip once before resolving delivery metadata.
     var actor_clips:Dictionary={}
+    var geometry_actors:Dictionary={}
     for handle_id in _required_ids:
         var component:Dictionary=_required_ids[handle_id]
+        if Effects.choice(component.native_clip).kind!="recorded":
+            for request in Inputs.geometry_interests(component,world):
+                if not request.reason.is_empty() or request.actor.is_empty():continue
+                if not geometry_actors.has(request.actor):geometry_actors[request.actor]={}
+                for slot in request.slots:geometry_actors[request.actor][slot]=true
         for id in [component.actor_uuid,component.target_uuid]:
             if not actor_clips.has(id):actor_clips[id]={"Idle":true}
             if id==component.actor_uuid:actor_clips[id][component.cast_recipe.get("actionClip","")]=true
             var playback:Node=world.playbacks.get(id)
             if playback!=null:actor_clips[id][playback.clip]=true
-    var key:Array=[]
+    var key:Array=[world.character_light_profile,geometry_actors]
     var inputs:Dictionary={}
+    var optical_inputs:Dictionary={}
     if not _required_ids.is_empty():
         for id in world.visual_actors:
             var visual:Dictionary=world.visual_actors[id]
@@ -599,15 +642,19 @@ func _image_requirements(world:Node)->void:
                 if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
                 var slot:String=entry.actor_layer.slot
                 var path:String=entry.get("texture_path","")
+                if geometry_actors.get(id,{}).has(slot) and not path.is_empty():
+                    optical_inputs.merge(Inputs.Surface.required_paths(path,slot,world.catalog_cache,world.character_light_profile))
                 if not path.is_empty():inputs[[path,slot]]=inputs.get([path,slot],false)
                 for clip in actor_clips.get(id,{}):
                     path=entry.actor_layer.paths.get(clip,"")
                     if not path.is_empty():inputs[[path,slot]]=true
+                    if geometry_actors.get(id,{}).has(slot) and not path.is_empty():
+                        optical_inputs.merge(Inputs.Surface.required_paths(path,slot,world.catalog_cache,world.character_light_profile))
     for input in inputs:key.append([input[0],input[1],inputs[input],Support.socket_samples_ready(input[0],input[1],world.catalog_cache)])
     if key==_image_key:return
     _image_key=key
-    var wanted:Dictionary={}
-    var cpu:Dictionary={}
+    var wanted:Dictionary=optical_inputs.duplicate()
+    var cpu:Dictionary=optical_inputs.duplicate()
     for input in inputs:
         if not _path_requirements.has(input):_path_requirements[input]=Support.required_paths(input[0],input[1],world.catalog_cache)
         var paths:Dictionary=_path_requirements[input]

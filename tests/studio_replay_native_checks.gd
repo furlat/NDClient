@@ -11,6 +11,28 @@ func _initialize()->void:run.call_deferred()
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("REPLAY_NATIVE_FAIL ",label)
+func readiness_leaves(world:Node)->Dictionary:
+    var renderer=world.component_renderer
+    var blood_pending:Array=[]
+    for cell in renderer.blood.tiles:
+        if not renderer.blood.deposits.has(cell):
+            if blood_pending.size()<4:blood_pending.append(cell)
+    var spells:Array=[]
+    for row in renderer.native_spells.diagnostics.values():
+        if spells.size()>=6:break
+        spells.append({"id":row.get("id"),"status":row.get("status"),"reason":row.get("reason"),
+            "age_ms":row.get("age_ms"),"requested_age_ms":row.get("requested_age_ms")})
+    var support=renderer.native_spells._support
+    return {"display_ms":world.timeline.display_ms,"state":not world.timeline.state.is_empty(),
+        "world_epoch":world.world_prepare_epoch,"timeline_epoch":world.timeline.initialization_revision,
+        "world_revision":world.world_revision,"timeline_world_revision":world.timeline.world_revision,
+        "waiting_world":world.timeline.waiting_for_world,"component_ready":renderer.ready,
+        "blood_ready":renderer.blood.ready,"blood_unprepared_tiles":blood_pending,
+        "native_ready":renderer.native_spells.ready,"native_samples":spells,
+        "native_support_ready":support.ready if support!=null else true,
+        "native_support_issues":support.issues.slice(0,3) if support!=null else [],
+        "hits_ready":renderer.native_hits.ready,"hit_pending":renderer.native_hits.pending_occurrences.slice(0,3),
+        "media":world.media_gate,"errors":world.presentation_errors.slice(0,3)}
 func settle(studio:Control,requested_time:float=-1.0,requested_directory:String="")->bool:
     var diagnostic_at:int=Time.get_ticks_msec()+3000
     var diagnostic_emitted:bool=false
@@ -18,7 +40,7 @@ func settle(studio:Control,requested_time:float=-1.0,requested_directory:String=
     while (studio.index.is_empty() or studio.loader!=null or (not studio.preparing_loop and (studio.seeker!=null or studio.installing or studio.requested_seek>=0))) and Time.get_ticks_msec()<deadline:
         if not diagnostic_emitted and Time.get_ticks_msec()>=diagnostic_at:
             diagnostic_emitted=true
-            if studio.candidate_world!=null:print("STUDIO_WAIT_DIAGNOSTIC ",JSON.stringify({"requested_ms":requested_time,"candidate":studio.candidate_world._detailed_frame_context(false)}))
+            if studio.candidate_world!=null:print("STUDIO_WAIT_DIAGNOSTIC ",JSON.stringify({"requested_ms":requested_time,"candidate":readiness_leaves(studio.candidate_world)}))
         await process_frame
     var ready=not studio.index.is_empty() and studio.loader==null and (studio.preparing_loop or (studio.seeker==null and not studio.installing and studio.requested_seek<0))
     ready=ready and not studio.status.text.begins_with("Candidate rejected") and not studio.status.text.begins_with("Recording rejected")
@@ -28,7 +50,7 @@ func settle(studio:Control,requested_time:float=-1.0,requested_directory:String=
     if not ready:
         var details:Dictionary={"requested_ms":requested_time,"status":studio.status.text,"replay":studio.replay_diagnostics()}
         if studio.candidate_world!=null:
-            details.candidate=studio.candidate_world._detailed_frame_context(false)
+            details.candidate=readiness_leaves(studio.candidate_world)
         evidence.append({"installation_failure":details})
         print("STUDIO_INSTALLATION_DIAGNOSTIC ",JSON.stringify(details))
     check(ready,"Single preview installation ready: "+studio.status.text)
@@ -105,6 +127,7 @@ func save_capture(studio:Control,label:String)->void:
     studio.viewport.get_texture().get_image().save_png(path+"-primary.png")
     root.get_texture().get_image().save_png(path+"-studio.png")
 func play_once(studio:Control,label:String)->void:
+    var failures_before:int=failures.size()
     studio.loop_enabled=false;studio._play_study()
     if not await settle(studio):return
     var deadline=Time.get_ticks_msec()+45000
@@ -133,7 +156,7 @@ func play_once(studio:Control,label:String)->void:
             atomic_seen[index]=true
         if studio.world.timeline.display_ms>=next_sample:
             verify_prefix(studio,label+" playback "+str(studio.world.timeline.display_ms),true);next_sample=studio.world.timeline.display_ms+150.0
-        if not failures.is_empty():break
+        if failures.size()>failures_before:break
     if not studio.world.timeline.paused:
         var w=studio.world;var pw=w.pending_world
         print("PLAYBACK_STALL ",JSON.stringify({"display_ms":w.timeline.display_ms,"waiting_media":w.timeline.waiting_for_media,"busy":w.timeline.busy(),

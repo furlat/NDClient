@@ -1,4 +1,4 @@
-# Schema 16 — Unit A execution
+# Schema 16 — complete Factory migration progress
 
 19 October 2026. Implementation branch `codex/schema16-unit-a`, worktree
 `C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`, based on
@@ -12,10 +12,10 @@ explicit UI art coverage. Unit A is a checkpoint, not the end of that scope.
 |---|---|---|
 | 0 — frozen inputs | Passed | Official `event-native-deltas` at `211b71134`; executable export `/home/tommaso/.cache/ndclient/dnd_engine-211b71134`; protocol 1/schema 16. Current inventory and typed-source build regenerated, zero build errors. |
 | 1 — SDK/readers/equipment | Passed core/live gate | Reference fold/oracle and focused SDK checks pass. Native startup 5/5 in 5,480 ms on Forward+/5090. Five independent interaction sessions pass, ten equipment actions with zero world/media holds. Broader legacy test migration remains named below. |
-| 2a — first Studio cohort | Active | Fresh original two-seat Move, Haste lifecycle, Fire Bolt and Fireball journals compile/publish canonically. Current authoring-organized browser works. Native seek/loop/faction cohort and remaining choreographies pending. |
-| 2b — every current spell | Active | Serial 189-ID capture running. Recording, Studio and actual-player results are separate; failed setup/capture is not successful coverage. |
-| B — complete Factory package | Active | Whole sealed package staged privately; integration and native qualification pending. No Haste-only implementation. |
-| C — shared providers/full coverage/UI | Active | Full official-ID/input inventory and shipping UI art audit produced. Shared class/action cue integration and adaptive providers remain work; final performance qualification is not passed. |
+| 2a — first Studio cohort | Core native gate passed | All eight actual two-faction cases pass seeks, faction changes, looping and canonical-prefix checks: 10,866 assertions, zero script/resource errors. One RefCounted shutdown warning remains. |
+| 2b — every current spell | Full attempt coverage / eight red cases | 183 real baselines/366 journals pass recording safety. Actual GUI-command sweep covers all 189 IDs: 183 command successes, 181 runtime-safe; six server/setup/occurrence failures plus Flame Blade missing worn look and Guardian source error remain explicit. |
+| B — complete Factory package | Installed / native qualification active | Whole `conditions-candidate-7fab471588209a41` installed privately and package text committed separately. All 155 families /465 phase roles resolve. Surprise first-use/short-queue warm-draw proof remains unqualified. |
+| C — shared providers/full coverage/UI | Active | Complete 1,504-capability join, spell/condition ownership, 11 class-action bindings, optical surface/body/endpoint/spatial bridges and UI assignments implemented. Native output, missing public inputs, remaining providers and final performance stay explicit. |
 
 ## Inputs and ownership
 
@@ -27,8 +27,11 @@ launches use the official checkout.
 
 Only immutable `assets/art` and `assets/audio` are shared with the main client
 through Windows junctions. This worktree owns `assets/vfx`, `build`, `.godot` and
-`.runtime`. Installed VFX package remains `20261018-c3c616e88a6b725f`; the new
-condition package is not installed. No artwork is added to Git.
+`.runtime`. Installed VFX package is the whole closed `conditions-candidate-7fab471588209a41`
+delivery. Its 1,149 clips, 497 selections, 155 lifecycle families and 465 phase
+roles are installed privately; code/text/metadata is committed in `f917f382`.
+Binary resources and artwork remain ignored. Main checkout still needs the whole
+package and rebuilt native resources when this branch is published.
 
 Canonical SDK state is native schema 16. Transition records retain actual
 occurrence indices, ordered condition pre/after members and the small equipped
@@ -43,8 +46,8 @@ Studio indexing.
 ## Completed checks
 
 - Full canonical reference state after every step of all 32 vector files,
-  reference errors, COW and row transitions: 209 passing checks,
-  `.runtime/schema16-fold-vectors.log`.
+  reference errors, COW and row transitions: 213 passing checks,
+  `.runtime/schema16-fold-vectors-after-package.log` (includes exact native attack-slot property semantics).
 - Fresh two-seat Gallery Fireball spool against Python's canonical state after
   every record: six records pass, `.runtime/schema16-spool-oracle.log`.
 - Nine focused manifest gates: **0 failures, 0 script errors, 0 engine errors**,
@@ -58,7 +61,7 @@ Studio indexing.
   `.runtime/schema16-equipment-boundary.log`. Previous code failed eight checks;
   preparation now admits the same 1µs boundary as commits and adopts its exact
   earlier candidate. No clock hold is added.
-- Exact current outfit source closure: 14 passing checks,
+- Exact current outfit source closure: 16 passing checks,
   `.runtime/schema16-character-sources.log`. Required, selected, optional and
   construction paths consume actual item looks; unchanged physical sheets reuse
   their source closure.
@@ -76,17 +79,83 @@ Studio indexing.
   four source-wait frames on Unequip; including the finite authored equipment
   clip in each actual outfit's earlier source closure removes them. Authored
   animation durations, shaders and lighting are unchanged.
-- Shipping UI art: **1,948 checks pass**, zero errors/warnings. All 188 production
-  spell roots have assigned icons; Test Bless is an explicit developer fixture.
-  All 232 creature portraits and 432 selectable player portraits resolve. The
-  53 borrowed portraits remain stand-ins. See
-  [UI art coverage](UI_ART_COVERAGE_2026-10-19.md) for every remaining art gap.
-- First broad recording-state pass: all 115 ready baselines at its start pass
-  both factions (230 journals, 3,177 boundary restores/samples), zero reader,
-  script or engine errors. All 189 IDs are reported. The gate correctly fails
-  for 43 failed/unavailable recordings and 31 not yet recorded at that snapshot;
-  the producer continues repairing those cases. This is headless state/dispatch
-  proof, not native pixels or live input qualification.
+- Shipping UI art: **2,460 checks pass**, zero errors. All 188 production spell
+  roots have assigned icons; Test Bless is an explicit developer fixture. All
+  232 creature portraits and 432 selectable player portraits resolve. The 53
+  borrowed portraits, 63 stand-in bodies and remaining generic icons stay
+  explicitly unaccepted. [Full per-ID art report](UI_ART_COVERAGE_2026-10-19.md).
+- Current clean recording-state pass: 183/189 spell baselines, 366 original
+  faction journals, **12,787 checks**, zero reader, script/resource errors or
+  warnings. Overall inventory gate remains failed for six unavailable baselines.
+  Evidence: `.runtime/schema16-recording-safety-qualified/report.json` and
+  `godot.log`. An earlier 12,739-assertion run emitted script errors and is
+  disqualified, not cited as a passing gate.
+- Actual native Studio cohort: eight real cases (Move, Door, Attack/death, Fire
+  Bolt, Fireball, Shield, Haste, Hide), **10,866 assertions**, exit 0 with no
+  script/resource errors. Both original journals, seeks, loop and exact canonical
+  prefixes exercised. One RefCounted exit warning remains. Evidence:
+  `.runtime/schema16-studio-replay-qualified.log` and
+  `.runtime/schema16-studio-replay.json`. Capture/oracle timings are not live
+  performance measurements.
+- Full presentation build after package/source migration: zero build errors,
+  eight coverage warnings. `.runtime/factory-final-full-build.log`. No build
+  writes run concurrently with recording/native consumers.
+- Exact condition/cast handovers: 530 metadata checks, all 147 package condition
+  owners represented, 50 new spell handovers plus nine preserved; eight summon
+  sources retain their creation cues. Nineteen recipient-boundary gaps and two
+  shared-owner finish ambiguities remain explicit in
+  [condition handover report](CONDITION_HANDOVER_MIGRATION_2026-10-19.md).
+- Shared class/action cues: 94 checks; eleven class actions select fourteen exact
+  Factory cues through the existing action/body/effect path. Actual positive
+  self-healing and bounded condition lifetimes are observed, not invented.
+- Current private body-material/endpoint binding (**52 checks**) and optical-source
+  producer (**21 checks**) pass. The shared imported-cast socket gate adds
+  **27 checks** using actual shipping rig/frame/view and item-cue data. They prove source-sharing, actor/layer privacy, actual endpoint
+  role/arity, release/restoration and bounded worker work; native output across
+  every family is still a separate gate. Thirteen focused headless gates total
+  **3,506 checks**, zero script/resource errors;
+  `.runtime/schema16-checkpoint-headless.json` retains exact per-test logs/results.
+- Latest focused precommit batch: **22 tests, zero failures/script/resource errors**,
+  `.runtime/tests/20261019T163500Z/summary.json`. Includes the actual Circle
+  application constructor gate (**72 checks**), exact item/weapon provider
+  (**44 checks**), effect-body/zero-emission policy (**19 checks**) and UI/SDK gates.
+- Actual GUI all-spell attempt coverage is complete: **189 IDs**, **183 successful
+  commands**, **181 runtime-safe**. Eight red cases are not converted into missing
+  art or passes. `.runtime/schema16-native-gui-qualified/report.json` retains
+  original attempts and corrected retries through r9. Six current native-error
+  lines are three server connection errors and three Guardian source errors.
+- The public application construction seam uses explicit cast/application scope,
+  actual cast-lineage/application UUID joins, matching saves/applied damage and
+  private `phase.to_clip()` data before Factory `Source.make`. Circle now has one
+  area source and four real receivers; r8 observes **all five presented** without
+  script/resource errors. Event-time source borrowing fixes sparse native
+  application traces without borrowing future movement or disclosure. Other
+  construction cohorts remain unqualified. Evidence: `.runtime/schema16-application-constructor.log`
+  and `.runtime/schema16-live-constructor-r8/` (ObjectDB exit warning retained).
+- Exact weapon provider: **44 new + 52 existing checks**, clean logs; current
+  item UUID/holder/equipment/optical slots stay exact. Retired Antimagic fields do not block prepared effects.
+  Missing item-owner membership and legacy admission/constructor semantics remain explicit. See
+  [weapon cohort](WEAPON_PROVIDER_COHORT_2026-10-19.md).
+- Spatial Web lifecycle: nine headless checks use the actual spatial owner,
+  disclosed cells, removal and Studio rows. Visible native output and first-use
+  GPU readiness are not yet qualified.
+
+Latest native regression after the construction/item changes: **10,853 Studio
+checks** pass across the same eight cases, seeks, faction changes and loops;
+zero script/resource errors, one ObjectDB exit instance warning. Five independent
+live interaction sessions pass **170 checks**; all ten equip/unequip actions have
+zero world/media hold frames. Their exit warnings remain recorded. Evidence:
+`.runtime/schema16-studio-replay-post-construction.{json,log}` and
+`.runtime/schema16-equipment-post-construction/report.json`. The headless full
+recording sweep was also repeated: **183/189 baselines, 12,787 checks, no script/
+resource errors or warnings**, with the same six source/setup cases unavailable;
+`.runtime/schema16-recording-safety-post-construction/report.json`.
+
+The corrected prepared-weapon binding also has actual native command evidence:
+`.runtime/schema16-live-weapon-r9/` passes Divine Favor/Shillelagh without script/
+resource errors; the actual Shillelagh condition is observed presented. Divine
+Favor's baseline lacks its required currently displayed weapon and still reports
+that gap. Active Antimagic is retired in schema16 and is not a missing public field.
 
 ## Broader suite status
 
@@ -112,16 +181,47 @@ resource paths. The 155 families require owner/root, geometry, weapon, material,
 endpoint, history, appearance, spatial and event providers; copying the archive
 does not qualify those providers.
 
-Concrete old-package gap: Haste has cast artwork but no
-`condition.spell.haste` lifecycle. The complete delivery adds
-`condition_haste_persistent` with application/sustain/removal. The integration
-must connect all delivered bindings through the shared path, not patch Haste.
-Class/actions must use the existing `PresentationEffectUse` data and actual
-native action/reaction/handler attribution, never invented SpellFacts.
+The installed delivery now supplies Haste and every other matching owner via
+one manifest-driven lifecycle path. Haste has no dedicated renderer branch.
+Shared adapters interpret declared optical/body/endpoint/cell inputs; missing
+required operands hide and report the individual cue rather than using offline
+Factory fixture observations. Prepared source surfaces reuse equal physical
+sheet/pose measurements; each actor keeps its actual transform and materials.
+Class/actions use `PresentationEffectUse` and native action/reaction/handler
+attribution rather than invented SpellFacts.
+
+The complete up-to-date joined worklist and provider/public-input blockers are
+[Factory integration coverage](FACTORY_INTEGRATION_COVERAGE_2026-10-19.md) and
+[its generated per-ID report](../generated/reports/factory-integration-coverage.json).
+Source presence, recording, safe runtime execution and user approval are
+independent fields. Aid, Bless, False Life and Sacred Flame remain rejected.
+
+The user can forward [the Factory work request](FACTORY_PRODUCTION_BINDINGS_REQUEST_2026-10-19.md)
+immediately. It identifies canonical source edits, the reusable public construction
+API, Guardian's source error, divine/owner contracts, missing created-weapon art,
+user rejections and exact complete-package/handoff delivery paths. Client provider
+work continues independently; it does not require Factory to rewrite the client.
+
+## Concrete shared review findings still open
+
+- Required optical work is queued on the worker, but its pending readiness is
+  currently reported alongside unsupported input. A short cue can advance while
+  its first pose packet is not ready. This is not qualified by metadata tests;
+  the surprise-event/short-queue gate must prove early readiness. Do not add a
+  presentation hold or hide/drop a cue to claim the cost is solved.
+- Equal source poses and unchanged receiver uploads share correctly. Translating
+  actors still rebuild world-space point dictionaries in `entity_surface.sample`
+  because its packet key includes origin. The later relative upload cache avoids
+  the GPU upload, not this CPU walk. Counters/phase profiles already exist for
+  the next shared representation change; no claimed speedup is attached.
+- Twenty-three divine Factory study selections /46 unique clips still need
+  construction operands and real lease/event/attribution providers. Their exact
+  proposed native action/feature IDs and branches are in the coverage guide.
+  Source presence is not the eleven currently wired class actions.
 
 ## Named external failures and unqualified work
 
-- Branding Smite and Ensnaring Strike pass server Preview but the engine result
+- Branding Smite, Ensnaring Strike and Searing Smite pass server Preview but the engine result
   capture raises `ValueError: lineage requires terminal root and child facts`
   in `dnd/player/capture.py`. Original commands/config/journals/server logs are
   retained under their timestamped `.runtime/studio-library/cases/` directories.
@@ -135,7 +235,16 @@ native action/reaction/handler attribution, never invented SpellFacts.
   engine/SDK source is not patched. Godot Choices supports the native region.
 - Aid, Bless, False Life and Sacred Flame remain visually rejected. Successful
   recording or safety does not change that or qualify missing adaptive inputs.
-- All-spell native live/Studio and the complete first cohort are not yet passed.
+- Spare the Dying has no offered legal target in the recorded adjacent-dying-ally
+  setup; Hellish Rebuke consumes its real reaction resources without a matching
+  public occurrence. Full evidence and exact attempts are retained in
+  [recording gaps](SCHEMA16_RECORDING_GAPS_2026-10-19.md).
+- Flame Blade's real item cannot publish `weapon_melee_main`: its typed gear
+  explicitly has no worn look. Guardian of Faith's Factory source reads absent
+  `history_observation.source_frame` during its response. These keep two native
+  cases red; neither is hidden by a substitute weapon or removed assertion.
+- The eight-case native Studio cohort passes, while all-spell native live safety,
+  complete provider output and the surprise first-use timing gates remain active.
   No final 100+ FPS/no-spike claim is made by this migration.
 
 ## Commands
@@ -146,8 +255,8 @@ Run in this worktree. Frozen Python environment:
 export PYTHONPATH=/home/tommaso/.cache/ndclient/dnd_engine-211b71134:/home/tommaso/.cache/ndclient/dnd_engine-211b71134/sdk/python/src
 /home/tommaso/.cache/dnd-engine/venv/bin/python tools/play.py --scenario gallery_sorcerer
 python3 tools/run_tests.py --only sdk_protocol_checks,sdk_choices_checks,sdk_journal_checks,sdk_transport_checks,schema16_fold_vectors_checks,schema16_interaction_checks,schema16_owner_order_checks,schema16_presentation_checks,studio_library_browser_checks
-python3 tools/studio_cases/record.py --only cohort
-python3 tools/studio_cases/record.py --only spell
+/home/tommaso/.cache/dnd-engine/venv/bin/python tools/studio_cases/record.py --only cohort
+/home/tommaso/.cache/dnd-engine/venv/bin/python tools/studio_cases/record.py --only spell
 ```
 
 Windows interactive commands are `play.cmd --scenario gallery_sorcerer` and

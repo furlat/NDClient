@@ -24,11 +24,22 @@ static func inventory(abilities:Dictionary,characters:Dictionary,ids:Dictionary,
     var result:Dictionary={"icons":{},"portraits":{},"player_portraits":{},"summary":{"icons":{},"portraits":{}},"errors":[]}
     for kind in ICON_KINDS:
         var entries:Dictionary=characters.get("gear",{}) if kind=="item" else abilities.get("spells",{}) if kind=="spell" else abilities.get("conditions",{}) if kind=="condition" else abilities.get("actions",{})
-        var rows:Dictionary={};var counts:Dictionary={"total":0,"assigned":0,"shared":0,"placeholder":0,"missing":0,"built_mismatch":0,"stand_in":0}
-        for id in ids.get(kind,{}):
+        var rows:Dictionary={};var counts:Dictionary={"total":0,"server_ids":0,"typed_only":0,"assigned":0,"shared":0,"placeholder":0,"missing":0,"built_mismatch":0,"stand_in":0}
+        var members:Dictionary=ids.get(kind,{}).duplicate()
+        for id in entries:
+            # A historical lifecycle alias cannot become a second UI owner of
+            # spell/trait artwork. Actual class actions absent from the static
+            # server catalog still have an explicit typed UI requirement.
+            if kind in ["spell","condition","item"]:
+                if not str(id).begins_with(kind+"."):continue
+            elif entries[id].kind!=kind:continue
+            members[id]=true
+        for id in members:
             var entry:Resource=entries.get(id)
             var image:Resource=entry.icon if entry!=null else null
             var row:Dictionary=image_record(image,maps.icons.get(id,{}));row.authoring=entry.resource_path if entry!=null else "";row.owner_status=entry.status if entry!=null else "missing"
+            row.availability="server_id" if ids.get(kind,{}).has(id) else "typed_only"
+            counts.server_ids+=int(row.availability=="server_id");counts.typed_only+=int(row.availability=="typed_only")
             rows[id]=row;counts.total+=1;counts[row.art]+=1;counts.stand_in+=int(row.status=="stand_in");counts.built_mismatch+=int(not row.built_matches)
             if not row.exists:result.errors.append("No image for "+kind+":"+id)
             if not row.built_matches:result.errors.append("Built image differs from its typed owner: "+kind+":"+id)

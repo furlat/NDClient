@@ -45,6 +45,8 @@ static func build(source: Dictionary, out_dir: String, report: Dictionary) -> vo
     var entries: Dictionary = source.entries
     _validate(entries, report)
     var built: Dictionary = documents(entries, source.root.sections)
+    for owner in built.native.get("condition_conflicts",{}):
+        Common.warn(report,"abilities/conditions/"+str(owner),"spell finish ownership is unresolved: "+JSON.stringify(built.native.condition_conflicts[owner]))
     DirAccess.make_dir_recursive_absolute(out_dir)
     for path in built.docs:save_document(out_dir, path, built.docs[path], report)
     _save_native(out_dir, built.native, report)
@@ -137,6 +139,16 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
             if e.feedback != null and e.disposition.is_empty():binding.action_feedback = {"text": e.feedback.text, "color": F.to_legacy("colour", e.feedback.colour)}
             if not e.target.is_empty():binding.interaction_target = e.target
             bindings[id] = binding
+        if not e.effects.is_empty():
+            var binding: Dictionary = bindings.get(id, {})
+            binding.effect_cues = []
+            binding.source = str(paths.get("actions", {}).get(id, "")) + "::effects"
+            for i in e.effects.size():binding.effect_cues.append(action_cue(e.effects[i], i))
+            bindings[id] = binding
+        if not e.applies_conditions.is_empty():
+            var binding: Dictionary = bindings.get(id, {})
+            binding.applies_conditions = Array(e.applies_conditions)
+            bindings[id] = binding
         if not e.delivers_spell.is_empty():deliveries[id] = e.delivers_spell
     docs["catalog/body_action_recipes.json"] = _ordered(order, "catalog/body_action_recipes.json", bodies)
     docs["catalog/shove_recipes.json"] = _ordered(order, "catalog/shove_recipes.json", shoves)
@@ -168,7 +180,7 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
         if CONTEXT_DOCUMENTS.has(id):docs[CONTEXT_DOCUMENTS[id]] = _ordered(order, CONTEXT_DOCUMENTS[id], docs[CONTEXT_DOCUMENTS[id]])
     var sources := {}
     for id in _sorted(entries.get("sources", {})):sources[id] = F.plain(F.deep(entries.sources[id].record))
-    var native := native_records(spells, docs.get("sandbox/feedback.json", {}))
+    var native := native_records(spells, docs.get("sandbox/feedback.json", {}), conditions)
     var owners := {}
     for id in _sorted(native.records):
         var selection: Dictionary = native.records[id].selection
@@ -177,6 +189,17 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
     var movement: Resource = contexts.get("movement")
     docs["values.json"] = {"movement_reference_speed_feet": float(movement.values.get("reference_speed_feet", 30.0)) if movement != null else 30.0}
     return {"docs": docs, "native": native, "icons": icons(entries)}
+
+## Use the same EffectUse conversion as spells. These additional typed fields
+## belong to the individual action cue rather than a spell's staging record.
+static func action_cue(use: Resource, index: int) -> Dictionary:
+    var cue: Dictionary = R.cue_from_effect(use, index)
+    for field in [["selection", "selection", "string"], ["approach", "approach", "string"],
+        ["source_start", "source_start", "float"], ["offset", "offset", "vec3"],
+        ["follow_attachment", "follow", "bool"], ["light_color", "light_colour", "colour"]]:
+        F.emit(cue, field[0], use, field[1], field[2])
+    cue.light_multiplier = use.light_multiplier
+    return cue
 
 ## Old property paths of the retired .tres overlays -> the entry property
 ## that holds the value now (for the Studio inspector's source pointers).
@@ -209,8 +232,8 @@ static func raw_recipe(e: Resource) -> Dictionary:
 ## the staging selection, the recipe with the native hand/flash treatment
 ## (`policy`: hand glow categories and flash envelope), the hit material and
 ## the requirements; plus which spell owns each condition's lifecycle staging.
-static func native_records(spells: Dictionary, policy: Dictionary) -> Dictionary:
-    var result := {"records": {}, "conditions": {}}
+static func native_records(spells: Dictionary, policy: Dictionary, conditions:Dictionary={}) -> Dictionary:
+    var result := {"records": {}, "conditions": {}, "condition_conflicts":{}}
     for id in _sorted(spells):
         var e: Resource = spells[id]
         if not e.native_staging:continue
@@ -228,9 +251,30 @@ static func native_records(spells: Dictionary, policy: Dictionary) -> Dictionary
         spell.requirement_source = "spells/" + id + ".json:"
         spell.requirements = Requirements.recipe(spell.recipe, spell.requirement_source, ["spell"], {})
         result.records[id] = spell
-        if e.owner_kind == "condition":
-            for owner in e.owner_ids:
-                if not result.conditions.has(owner):result.conditions[owner] = id
+    var ownership:Dictionary=condition_owners(spells,conditions,result.records)
+    result.conditions=ownership.owners;result.condition_conflicts=ownership.conflicts
+    return result
+
+## A shared condition has no implicit first-spell palette/staged-cue owner.
+## Explicit condition authoring wins; otherwise only a unique native binding
+## can supply that finish. Package lifecycles still play without this optional
+## spell treatment, so an ambiguity cannot borrow another spell's appearance.
+static func condition_owners(spells:Dictionary,conditions:Dictionary,available:Dictionary)->Dictionary:
+    var candidates:Dictionary={};var result:Dictionary={"owners":{},"conflicts":{}}
+    for id in _sorted(spells):
+        var entry:Resource=spells[id]
+        if not available.has(id) or entry.owner_kind!="condition":continue
+        for owner in entry.owner_ids:
+            if not candidates.has(owner):candidates[owner]=[]
+            if id not in candidates[owner]:candidates[owner].append(id)
+    for owner in candidates:
+        var entry:Resource=conditions.get(owner)
+        var explicit:String=entry.owner_spell if entry!=null else ""
+        if not explicit.is_empty():
+            if explicit in candidates[owner]:result.owners[owner]=explicit
+            else:result.conflicts[owner]={"reason":"explicit_owner_not_available","explicit":explicit,"candidates":candidates[owner]}
+        elif candidates[owner].size()==1:result.owners[owner]=candidates[owner][0]
+        else:result.conflicts[owner]={"reason":"multiple_authored_spell_owners","candidates":candidates[owner]}
     return result
 
 ## Native spell records go to native_spells/<revision>/ with their index, and
@@ -284,7 +328,7 @@ static func icons(entries: Dictionary) -> Dictionary:
 static func _validate(entries: Dictionary, report: Dictionary) -> void:
     var package: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKAGE))
     var clips := {}
-    for clip in package.get("clips", []):clips[clip.clip_id] = true
+    for clip in package.get("clips", []):clips[clip.clip_id] = clip
     var cues: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(CUES)).get("cues", {})
     var bindings: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(BINDINGS))
     for section in entries:
@@ -302,11 +346,13 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
         var e: Resource = entries.spells[id]
         var where: String = "abilities/spells/" + id
         for use in e.effects:
+            _check_constructor(use,where,clips,report)
             if clips.has(use.clip):continue
             if e.native_staging:Common.warn(report, where, "staged clip resolves by role or rename, not by id: " + use.clip)
             elif use.staging_from.begins_with("factory"):Common.error(report, where, "imported clip not in the package: " + use.clip)
         for variant in e.variants:
             for use in variant.effects:
+                _check_constructor(use,where,clips,report)
                 if not clips.has(use.clip):Common.error(report, where, "variant " + variant.id + " clip not in the package: " + use.clip)
         for sound in e.sounds:_check_binding(report, where, bindings.get("spells", {}).get(id), sound)
     for id in entries.get("conditions", {}):
@@ -319,12 +365,34 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
         if not e.delivers_spell.is_empty() and not entries.get("spells", {}).has(e.delivers_spell):Common.error(report, where, "delivers a spell with no entry: " + e.delivers_spell)
         for source in e.effect_sources:
             if not entries.get("sources", {}).has(source):Common.error(report, where, "effect source has no entry: " + source)
+        for use in e.effects:
+            _check_constructor(use,where,clips,report)
+            if not clips.has(use.clip):Common.error(report, where, "action cue clip not in the package: " + use.clip)
         for sound in e.sounds:
             if sound.at != "effect":_check_binding(report, where, bindings.get("actions", {}).get(id), sound)
     for id in entries.get("damage_types", {}):
         for sound in entries.damage_types[id].sounds:_check_binding(report, "abilities/damage_types/" + id, bindings.get("damage_types", {}).get(id), sound)
     _validate_rigs(entries, report)
     for id in entries.get("conditions", {}):_validate_condition(entries.conditions[id], "abilities/conditions/" + id, report)
+
+static func _check_constructor(use:Resource,where:String,clips:Dictionary,report:Dictionary)->void:
+    var binding:Dictionary=use.constructor_input
+    if binding.is_empty():return
+    if binding.get("kind")!="application_result" or use.scope!="application":
+        Common.error(report,where,"constructor input needs the supported application_result projection and application scope");return
+    if binding.get("component_path",[]).is_empty() or str(binding.get("save_effect_id","")).is_empty() or str(binding.get("damage_type","")).is_empty():
+        Common.error(report,where,"constructor input lacks component path, save effect or damage type");return
+    var candidates:Array=clips.get(use.clip,{}).get("approaches",[]).filter(func(approach):return approach.has("source_phase"))
+    if candidates.is_empty():Common.error(report,where,"constructor input has no public source phase: "+use.clip);return
+    for approach in candidates:
+        var phase:Resource=load(approach.source_phase)
+        var components:Array=phase.to_clip().components
+        var input:Dictionary={}
+        for id in binding.component_path:
+            var selected:Array=components.filter(func(component):return component.id==id)
+            if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
+            input=selected[0].input;components=input.get("components",[])
+        if not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
 
 static func _in(value: float, low: float, high: float) -> bool:
     return is_finite(value) and value >= low and value <= high

@@ -3,6 +3,7 @@ extends Resource
 @export var revision: String = ""
 @export var root_rig: String = ""
 @export var creature_rigs: Dictionary = {}
+@export var effect_owned_creatures: Dictionary = {}
 @export var rigs: Dictionary = {}
 @export var layers: Dictionary = {}
 @export var source_owners: Dictionary = {}

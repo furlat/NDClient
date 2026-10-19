@@ -145,8 +145,8 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         selected_recipes[id]={}
         for sample in select_recipes(id,result):
             selected_owners[sample.condition_uuid]=true
-            selected_recipes[id][JSON.stringify(sample.recipe.definitionRef,"",false)]=true
-    result=result.filter(func(sample):return sample.kind=="condition" or not sample.has("condition_uuid") or selected_owners.has(sample.condition_uuid) or (sample.get("layer",{}).get("markerGroup")!=null and selected_recipes.get(sample.actor_uuid,{}).has(JSON.stringify(sample.recipe.definitionRef,"",false))))
+            selected_recipes[id][recipe_key(sample)]=true
+    result=result.filter(func(sample):return sample.kind=="condition" or not sample.has("condition_uuid") or selected_owners.has(sample.condition_uuid) or (sample.get("layer",{}).get("markerGroup")!=null and selected_recipes.get(sample.actor_uuid,{}).has(recipe_key(sample))))
     # Prepare every potentially selected native layer for these disclosed
     # owners. Activity, marker rotation, source offset and fades still select
     # the displayed rows below; preparation never runs their occurrence clocks.
@@ -239,11 +239,17 @@ static func material(actor_id: String, samples: Array) -> Dictionary:
             value.ramp=persistent.bodyRamp;value.time_ms=sample.age_ms;value.ramp_alpha=sample.alpha;value.ramp_initial=sample.initial
     return value
 
+static func recipe_key(sample:Dictionary)->String:
+    var reference:Variant=sample.recipe.get("definitionRef")
+    # Package-only owners have no legacy recipe. Their actual UUIDs remain
+    # independent; an empty legacy reference cannot collapse every family.
+    return str(sample.condition_uuid) if reference==null or (reference is Dictionary and reference.is_empty()) else JSON.stringify(reference,"",false)
+
 static func select_recipes(actor_id: String,samples: Array) -> Array:
     var distinct={}
     for sample in samples:
         if sample.get("actor_uuid")!=actor_id or sample.kind!="condition":continue
-        var key=JSON.stringify(sample.recipe.get("definitionRef",{}),"",false)
+        var key=recipe_key(sample)
         if not distinct.has(key) or sample.alpha>distinct[key].alpha:distinct[key]=sample
     var ordered: Array=distinct.values()
     ordered.sort_custom(func(a,b):
@@ -255,7 +261,7 @@ static func select_recipes(actor_id: String,samples: Array) -> Array:
         var group: String=composition.get("group","")
         var unique: Variant=composition.get("exclusiveGroup")
         if unique!=null and exclusive.has(unique):continue
-        if count.get(group,0)>=composition.get("maxLayers",3):continue
+        if composition.has("maxLayers") and count.get(group,0)>=composition.maxLayers:continue
         if unique!=null:exclusive[unique]=true
         count[group]=count.get(group,0)+1;result.append(sample)
     return result

@@ -1,6 +1,6 @@
 # Schema 16, native conditions and the complete Studio
 
-19 October 2026 — revised execution plan. **Unit A implementation active.** Requested branch: `codex-authoring-schemabump`; isolated implementation branch/worktree: `codex/schema16-unit-a` / `NDClientGodot-authoring-schema`, from committed plan `9b73f29a`. [Execution evidence and remaining gates](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md).
+19 October 2026 — revised execution plan. **Canonical base committed; complete Factory integration and shared-provider qualification active.** Requested branch: `codex-authoring-schemabump`; isolated implementation branch/worktree: `codex/schema16-unit-a` / `NDClientGodot-authoring-schema`, from committed plan `9b73f29a`. [Execution evidence and remaining gates](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md).
 
 Read the execution checklists first. The single appendix holds the design rationale, contracts and detailed acceptance rules. Phase numbers are unchanged so existing reviews remain traceable.
 
@@ -173,7 +173,7 @@ Implement one shared cohort at a time; wire its actual inputs, apply them to eve
 
 - During implementation, use **one bounded plan-adherence sub-agent per active execution chunk**, with a concrete deliverable/gate to track, then finish it. No standing polling/review loop or permanent four-agent team.
 - At phase boundaries use short read-only **anti-slop** and **correctness/anti-OOP** passes on the changed paths and evidence. Reuse reviewers; condition expertise is part of the relevant correctness pass. Do not re-audit the full repository after each small edit. Same-task agents only, no other-chat reads/messages.
-- A phase ledger row records `not started / active / passed / blocked`, commit, commands/report paths, gate results and next stop. The linked execution ledger records Unit A; B/C remain **not started**.
+- A phase ledger row records `not started / active / passed / blocked`, commit, commands/report paths, gate results and next stop. The linked execution ledger records the committed canonical base and active B/C integration. Checkpoints are not scope limits; every unsupported provider and unqualified output stays named.
 - Original read-only reviews found the ordered pre-row condition capture and authentic admission/departure seek requirements; both remain mandatory below. Short correctness/anti-OOP and anti-slop passes reviewed this revision on 19 October: **ready, no required changes**. These are planning reviews, not implementation/test results or visual approval.
 - **This planning change:** commit this file and the main handoff pointer together, with explicit paths. No application/asset changes or Godot runs belong to this revision.
 
@@ -193,7 +193,7 @@ Fold proof: all world w1–w14, sensory v1–v8, bodies v1–v9 and groups g1 ve
 
 ### B. Package, selection and actual providers
 
-Archive: `/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/condition-deliveries/conditions-candidate-7fab471588209a41/vfx-conditions-candidate-7fab471588209a41-complete.zip`. Current installed version is `20261018-c3c616e88a6b725f`; candidate has not been installed by this planning work. All runtime dependencies remain project-local; no Factory importer/baker or pinned fixture renderer.
+Archive: `/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/condition-deliveries/conditions-candidate-7fab471588209a41/vfx-conditions-candidate-7fab471588209a41-complete.zip`. The complete candidate is installed in the isolated implementation worktree; package code/text/metadata is committed in `f917f382`, and binary resources remain ignored. Main checkout publication requires the same whole-package installation, not a Git-only update. All runtime dependencies remain project-local; no Factory importer/baker or pinned fixture renderer.
 
 Candidate accounting: 155 lifecycle families (154 condition + one spatial Web), 465 application/hold/removal roles; 147 exact creature/item IDs, one spatial owner, nine canonical-child delegations, 32 internal/client/no-art records. The 46 deferred environment records (39 environment, five spatial leases, two Tile) are not completed body effects. There are 131 directly sampleable families and 24 requiring history/events (three history, 21 events). Factory's 6,258 passing checks/closed dependencies/isolated warm figures are delivery evidence, not production integration, crowded-map performance or user approval.
 

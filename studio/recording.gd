@@ -1020,10 +1020,12 @@ static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,
     for id in history:
         var owner:Dictionary=owners[id]
         var selected=NativePersistent.spatial_selection(owner.effect,index.cache)
-        if selected.is_empty():continue
-        var end=minf(index.presentation_end_ms,float(owner.end_ms)+NativePersistent.fade_ms(selected))
+        var lifecycles:Array=NativePersistent.spatial_lifecycles(owner.effect)
+        if selected.is_empty() and lifecycles.is_empty():continue
+        var close_ms:float=NativePersistent.removal_ms(lifecycles) if not lifecycles.is_empty() else NativePersistent.fade_ms(selected)
+        var end=minf(index.presentation_end_ms,float(owner.end_ms)+close_ms)
         var life={"id":"spatial:"+str(id),"parent":events.get(history[id].source_event_uuid,""),
-            "kind":"spatial_effect","label":str(owner.effect.get("name",selected.id)),
+            "kind":"spatial_effect","label":str(owner.effect.get("name",selected.get("id",owner.effect.get("content_ref",{}).get("content_id","")))),
             "start_ms":owner.start_ms,"end_ms":end,"owner":owner,
             "source":"PlayerState.senses.spatial_effects/"+str(id),"status":"available",
             "timing_source":"Actual disclosed spatial-effect membership and after-values"}

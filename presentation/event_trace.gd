@@ -415,10 +415,10 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
         for component in components.get(node.id,[]):
             row.components.append(_compiled_component(component,cache))
             for channel in NativeChannels.channels(component):row.components.append(_compiled_component(channel,cache))
-        var actor: Dictionary = graph.actor_inputs.get(node.id,{}).get(row.actor_uuid,{})
         if row.kind=="spell":
             var declared:Dictionary=Occurrences.spell(node,graph)
             row.behavior_id=declared.get("behavior_id");row.name=declared.get("name",row.name);row.actor_uuid=declared.get("source_entity_uuid")
+        var actor: Dictionary = graph.actor_inputs.get(node.id,{}).get(row.actor_uuid,{})
         _requirements(row,node,actor,cache,graph.recipes.get(node.id,{}),graph.get("spell_sources",{}),graph)
         for cue in graph.condition_cues.get(node.id,[]):
             var condition:Dictionary=cue.condition

@@ -3,6 +3,7 @@ extends RefCounted
 ## No synthetic facts, outcome prediction, scene creation or texture decoding.
 const Authoring = preload("res://presentation/authoring.gd")
 const NativeSpells = preload("res://presentation/native_spell_authoring.gd")
+const NativeActions = preload("res://presentation/native_action_authoring.gd")
 const Characters = preload("res://presentation/characters.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
@@ -155,7 +156,7 @@ static func close(data: Dictionary) -> void:
     data.disclosed_objects={};data.actor_sources={};data.object_sources={}
 
 static func _actor_paths(actor: Dictionary, clips: Array, result: Dictionary, cache: Dictionary, state:Dictionary={}) -> Dictionary:
-    if clips.is_empty(): return {}
+    if clips.is_empty() or Characters.effect_owned(actor,cache): return {}
     var sources=Characters.sheet_paths(actor,clips,cache,Characters.item_looks(actor,state))
     if not sources.ok: result.errors.append(sources.error.message);return {}
     var paths: Dictionary=sources.value.duplicate()
@@ -202,7 +203,7 @@ static func _break_banks(row: Dictionary, cache: Dictionary) -> Array:
 
 static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) -> Dictionary:
     var result={"paths":{},"cpu_required":{},"gpu_only":{},"environment":{},"source_sizes":{},"source_files":{},
-        "errors":[],"skipped":0,"bytes":0,"actors":[],"banks":[],"object_paths":{},"bank_paths":{},"onset_paths":{},"native_selection":{},"actor_sources":{},"object_sources":{},"normal_sets":{}}
+        "errors":[],"skipped":0,"bytes":0,"actors":[],"banks":[],"object_paths":{},"bank_paths":{},"onset_paths":{},"native_selection":{},"native_action_clips":[],"native_action_conditions":[],"actor_sources":{},"object_sources":{},"normal_sets":{}}
     var state: Dictionary=request.state
     var caster: Dictionary=state.actors.get(request.actor_uuid,{})
     if caster.is_empty() or _cancelled(control):return result
@@ -214,10 +215,15 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         var clips={}
         var behaviors: Array=request.get("behaviors",[])
         if behaviors.is_empty():behaviors=[request.behavior]
+        var native_clips:Dictionary={}
+        var native_conditions:Dictionary={}
+        var action_bindings:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)
         for behavior in behaviors:
+            for clip in NativeActions.effect_clips(behavior,cache):native_clips[clip.id]=clip
+            for id in action_bindings.get(behavior,{}).get("applies_conditions",[]):native_conditions[id]=true
             var body: Dictionary=Authoring.action({"kind":"action","behavior_id":behavior},cache,caster).get("actor",{})
             if body.get("enabled",true) and body.has("clip"):clips[body.clip]=true
-            if behavior=="action.move":
+            if behavior=="action.move" and not Characters.effect_owned(caster,cache):
                 # Locomotion is authored through movement/rig contexts rather
                 # than a body-action recipe. Reuse the encounter source owner's
                 # finite closure before the first click, including connectors
@@ -227,6 +233,8 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
                 for clip in EncounterMedia._priority_clips(caster,rig,index,cache):clips[clip]=true
                 var pose:Dictionary=Authoring.ConditionPose.select(caster,Characters.rig_id(caster,cache),"move",cache)
                 if not pose.is_empty():clips[pose.clip]=true
+        result.native_action_clips=native_clips.values()
+        result.native_action_conditions=native_conditions.keys()
         if not clips.is_empty():
             _actor_paths(caster,clips.keys(),result,cache,state)
             result.actors.append({"uuid":request.actor_uuid,"clips":clips.keys()})

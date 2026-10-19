@@ -117,11 +117,32 @@ static func same_position(a: Variant, b: Variant) -> bool:
     # Compare admitted coordinate values without rewriting the shared domains.
     return a != null and b != null and a.size() == 2 and b.size() == 2 and a[0] == b[0] and a[1] == b[1]
 
-static func target(domains: Dictionary, pool: Array, position: Array, identity: String = "") -> Dictionary:
+static func subject_targets(choices:Dictionary,action:Dictionary,preview:Dictionary={},kind:String="")->Dictionary:
+    if action.is_empty():return {}
+    var domains:Dictionary=choices if preview.is_empty() else preview
+    var pool:Array=Choices.action_options(choices,action) if preview.is_empty() else Choices.next_options(preview)
+    var result:Dictionary={}
+    for candidate in pool:
+        var subject:Variant=Choices.binding_subject(domains,candidate)
+        if subject!=null and (kind.is_empty() or subject.kind==kind):result[subject.uuid]=candidate
+    return result
+
+static func object_targeting(choices:Dictionary,action:Dictionary,preview:Dictionary={})->bool:
+    # Retain target mode after a completed prefix so an inventory click cannot
+    # silently become Equip/Use while confirmation is outstanding.
+    return not subject_targets(choices,action,preview,"object").is_empty() \
+        or not subject_targets(choices,action,{},"object").is_empty()
+
+static func hit_subject_kind(hit:Dictionary)->String:
+    if hit.has("subject_kind"):return str(hit.subject_kind)
+    if str(hit.get("id","")).is_empty():return ""
+    return "creature" if hit.get("kind")=="actor" else "object"
+
+static func target(domains: Dictionary, pool: Array, position: Array, identity: String = "",subject_kind:String="") -> Dictionary:
     if not identity.is_empty():
         for candidate in pool:
             var subject: Variant = Choices.binding_subject(domains,candidate)
-            if subject != null and subject.uuid == identity: return candidate
+            if subject != null and subject.uuid == identity and (subject_kind.is_empty() or subject.kind==subject_kind): return candidate
     for candidate in pool:
         if Choices.binding_subject(domains,candidate) == null and same_position(Choices.binding_position(domains,candidate),position): return candidate
     return {}
@@ -135,7 +156,7 @@ static func main_attack(choices: Dictionary, identity: String, preference: Strin
     return {}
 
 static func extend_selection(choices: Dictionary, action: Dictionary, prefix: Dictionary,
-        preview: Dictionary, position: Array, identity: String = "", safe: bool = true, state: Dictionary = {}) -> Dictionary:
+        preview: Dictionary, position: Array, identity: String = "", safe: bool = true, state: Dictionary = {},subject_kind:String="") -> Dictionary:
     # Only the current prefix's native continuation can authorize an append.
     # A computed empty continuation must never fall back to initial eligibility.
     var selected = prefix.duplicate(true)
@@ -145,7 +166,7 @@ static func extend_selection(choices: Dictionary, action: Dictionary, prefix: Di
         return {"selection":selected,"position":position}
     var domains = choices if preview.is_empty() else preview
     var options = Choices.action_options(choices,action) if preview.is_empty() else Choices.next_options(preview)
-    var candidate = target(domains,options,position,identity)
+    var candidate = target(domains,options,position,identity,subject_kind)
     if candidate.is_empty():
         # Only the first aim uses discovery's region. A subsequent vertex must
         # be admitted by this exact prefix's Preview continuation, even empty.

@@ -46,7 +46,8 @@ func _refresh(preferred:String="")->void:
         var group_key=entry.category+":"+entry.group
         if not groups.has(group_key):
             var heading=tree.create_item(categories[entry.category]);heading.set_text(0,entry.group);heading.set_selectable(0,false);heading.collapsed=query.is_empty() and entry.kind!="spell";groups[group_key]=heading
-        var item=tree.create_item(groups[group_key]);item.set_text(0,entry.label);item.set_text(1,entry.source_status.replace("_"," "));item.set_text(2,entry.scenario_status.replace("_"," "));item.set_tooltip_text(0,entry.id);item.set_metadata(0,{"capability":entry,"case":{}})
+        var item=tree.create_item(groups[group_key]);item.set_text(0,entry.label);item.set_text(1,entry.source_status.replace("_"," "));item.set_text(2,entry.scenario_status.replace("_"," "))
+        item.set_tooltip_text(0,entry.id+("\nTyped source; not listed in the server snapshot. Runtime availability unverified." if entry.get("inventory_origin")=="typed_source" else ""));item.set_metadata(0,{"capability":entry,"case":{}})
         item.collapsed=query.is_empty();count+=1
         if entry.scenario_status=="recorded":recorded+=1
         for record in entry.cases:

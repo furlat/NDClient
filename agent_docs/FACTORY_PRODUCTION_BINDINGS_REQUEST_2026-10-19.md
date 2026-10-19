@@ -35,9 +35,9 @@ Concrete delivered clip: `review/circle_of_death/whole/circle_of_death__whole.re
 
 The receiving constructor requires actual `application_id`, `target_actor`, `damage_applied`, `save_succeeded` and `damage_type` (`necrotic`). The real client Circle baseline contains **four** application/target UUID pairs, real saves and applied damage **31 / 15 / 31 / 31**. These facts are already available. There is no need to ask the engine for a new damage result.
 
-The package contains three review receiver templates (`caster`, `target`, `target2`); their component input data is equal after removing `application`. Export/document one reusable receiving template. Keep the ground effect once per cast, and construct one receiving instance for each admitted native application. The current client area binding emits the three review receivers **once**, not twelve times; the defect is their fixed construction identities and missing mixed cast/application scope.
+The package contains three review receiver templates (`caster`, `target`, `target2`); their component input data is equal after removing `application`. Export/document one reusable receiving template. Keep the ground effect once per cast, and construct one receiving instance for each admitted native application. The initial client area binding emitted the three review receivers once. It has now been replaced by one explicit cast-scoped ground cue and one application-scoped receiving template expanded for each real recipient; the initial fixed construction identities are no longer used for this case.
 
-Client evidence: `.runtime/studio-library/cases/spell.circle_of_death__baseline/20261019T142214.366493Z/amber/journal/0000000000000008.json`. The client currently marks the three known unusable receiver cues as missing constructor input `application`; it preserves the actual cast, damage flashes and final state. This is safe incomplete rendering, not completed Circle VFX. The client owns the actual event-to-constructor join.
+Client evidence: `.runtime/studio-library/cases/spell.circle_of_death__baseline/20261019T142214.366493Z/amber/journal/0000000000000008.json`. The initial safe migration marked the three unusable review receivers as missing. The continuing client work replaces those aliases with one explicit application-scoped template and projects real application/save/damage operands before public source construction. **72 focused checks pass** against that journal, including one ground effect/four receiver occurrences, private constructor data, real warm-plan operands, event-time actor contexts and unchanged canonical final state. Actual-command run `.runtime/schema16-live-constructor-r8/` observes all five effects presented without script/resource errors (ObjectDB exit warning retained). User approval and cold/short-queue first-use timing remain separate gates. The adapter is `presentation/native_constructed_occurrence.gd`; the factual join is `presentation/application_results.gd`. The client owns this work; Factory re-export is not a prerequisite for this case.
 
 ### Sweep the same boundary across the library
 
@@ -88,7 +88,7 @@ Relevant canonical Flame Blade sources:
 - `factory/packaging/fly_flame_solar/prepare_flame_blade.gd`
 - `authoring/bg3-36/flame_blade_native/`
 
-For Flaming Sphere / Spiritual Weapon, distinguish their actual effect-owned entity from an ordinary rigged creature. The client now has explicit effect-owned body authoring; do not provide a humanoid stand-in. Document the effect's actual entity anchor, motion, existence owner and teardown contract. The current Spiritual Weapon preparation stall is a client defect being investigated, not a request for fabricated Factory state.
+For Flaming Sphere / Spiritual Weapon, distinguish their actual effect-owned entity from an ordinary rigged creature. The client now has explicit effect-owned body authoring; do not provide a humanoid stand-in. Document the effect's actual entity anchor, motion, existence owner and teardown contract. The former Spiritual Weapon preparation stall was fixed by that client body policy and its actual-command run now passes; this is not a request for fabricated Factory state.
 
 ## 5. Artwork still awaiting user acceptance
 
@@ -109,6 +109,8 @@ Do not spend Factory time implementing a replacement for these providers:
 - Scope-aware expansion and construction operands from the canonical reducer's actual applications/results; independent world ownership, ordered publication, Studio tracks and missing-work reporting.
 
 Factory should state the precise public contracts those providers consume and keep examples clearly separate from production inputs. No need to recreate rules or access private engine state. The current client coverage report separates available source, missing provider, missing scenario, native evidence and user visual acceptance.
+
+The [client weapon-provider cohort](WEAPON_PROVIDER_COHORT_2026-10-19.md) now covers exact item/holder/slot/optical binding (44 new + 52 existing focused checks). For the supported schema16 contract, active Antimagic suppression was retired; prepared consumers use suppressed=false unless an explicit observation overrides it. Do not request that retired field as new server data. Legacy contribution/decoration initialization is a separate unresolved adapter, not a universal wire requirement. Frozen Magic Weapon/Sacred Weapon effects do not publish item membership through `snapshot_item_effect`; that is a server producer gap, not missing Factory art. Offhand registration and created-weapon worn looks remain separately named.
 
 ## Completion evidence
 

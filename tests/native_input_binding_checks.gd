@@ -1,0 +1,237 @@
+extends SceneTree
+## Actual delivered body setter and current private renderer materials.
+const Inputs=preload("res://presentation/native_inputs.gd")
+const Effects=preload("res://presentation/effect_package.gd")
+const Body=preload("res://modular.gdshader")
+class World extends Node3D:
+    var visual_actors:Dictionary={}
+    var rigs:Dictionary={"fixture":{"cell_width":128,"cell_height":128,"origin_y_from_ground":32,"facing_rows":{"SW":0},"clips":{"Idle":{"fps":1.0,"frames":1}},"body_anchor":Vector2(64,64),
+        "pose_sockets":{"head":{"Idle":{"SW":[Vector2(64,16)]}},"hand":{"Idle":{"SW":[Vector2(72,64)]}}}}}
+    var rig_config:Dictionary={"TILE_W":128,"FACING_CYCLE":["E","SE","S","SW","W","NW","N","NE"]}
+    var playbacks:Dictionary={}
+    var camera:Node3D
+    var quarter:int=0
+    var source_images:Dictionary={}
+    var catalog_cache:Dictionary={}
+class Receiver extends RefCounted:
+    var surface:Dictionary={}
+    var calls:int=0
+    var uploads:int=0
+    func update(value:Dictionary)->void:
+        calls+=1
+        if value.get("gpu_geometry_key",[])!=surface.get("gpu_geometry_key",[]):uploads+=1
+        surface=value
+class SurfaceProvider extends RefCounted:
+    var calls:int=0
+    var origin:Vector3=Vector3.ZERO
+    var selected:Array=[]
+    var prepared:Array=[]
+    func sample(_world:Node,actor:String,slots:Array=[])->Dictionary:
+        calls+=1
+        selected=[actor,slots]
+        return {"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"ready":true,"reason":"","points":[],"origin":origin,"gpu_geometry_key":["same-source-pose"]}
+    func prepare(_world:Node,actors:Array,slots:Array,priority:bool)->void:prepared.append([actors,slots,priority])
+    func clear()->void:pass
+class EndpointProbe extends Node3D:
+    var parameters:Dictionary={}
+    var endpoints:Array=[]
+    var admitted:Array=[]
+    var cells_calls:int=0
+    var accepts_cells:bool=true
+    var delivery:Vector2=Vector2.ZERO
+    func set_live_endpoints(value:Array)->void:endpoints=value
+    func set_admitted_cells(value:Array)->bool:
+        cells_calls+=1;admitted=value;return accepts_cells
+    func set_delivery_timing(launch:float,travel:float)->void:delivery=Vector2(launch,travel)
+class NullableCellProbe extends Node3D:
+    var calls:int=0
+    var last:Variant="not supplied"
+    func set_admitted_cells(value:Variant)->void:calls+=1;last=value
+var checks:int=0
+var failures:Array=[]
+func _initialize()->void:run.call_deferred()
+func check(ok:bool,label:String)->void:
+    checks+=1
+    if not ok:failures.append(label);printerr("NATIVE_INPUT_FAIL "+label)
+func actor(world:World,id:String)->Dictionary:
+    var node:MeshInstance3D=MeshInstance3D.new();node.mesh=QuadMesh.new();world.add_child(node)
+    var material:ShaderMaterial=ShaderMaterial.new();material.shader=Body;node.material_override=material
+    material.set_shader_parameter("frame_uv",Vector4(.25,0,.25,.125));material.set_shader_parameter("tint",Vector3(.6,.3,.2))
+    var entry:Dictionary={"id":id+":body","node":node,"material":material,"role":"body","actor_layer":{"slot":"body","effect":{},"paths":{}},"source_binding_revision":1,"source_version":1}
+    var row:Dictionary={"id":id,"rig":"fixture","position":[10,0] if id=="b" else [0,0],"base_height_steps":0,"scale":1.0,"facing":"SW"}
+    node.position=Inputs.Sockets.Placement.contact(row)
+    world.visual_actors[id]={"valid":true,"row":row,"entries":[entry]}
+    return entry
+func run()->void:
+    var world:World=World.new();root.add_child(world)
+    world.camera=Node3D.new();world.add_child(world.camera)
+    var a:Dictionary=actor(world,"a");var b:Dictionary=actor(world,"b")
+    var bridge:RefCounted=Inputs.new()
+    check(Inputs.recipient({"actor_uuid":"a","target_uuid":"b","native_cue":{"attachment":"recipient_ground"}})=="b","Explicit recipient does not select caster")
+    check(Inputs.recipient({"actor_uuid":"a","target_uuid":"","ground_target":true,"native_cue":{}}).is_empty(),"An aimed ground position cannot borrow caster body geometry")
+    check(Inputs.recipient({"actor_uuid":"a","target_uuid":null,"ground_target":true,"native_cue":{}}).is_empty(),"A native nullable target is absence, not a synthetic actor identifier")
+    check(Inputs.recipient({"actor_uuid":"a","target_uuid":"b","native_cue":{"attachment":"caster_hand"}})=="a","Caster attachment names the actual caster")
+    var phase:Script=load("res://assets/vfx/conditions/condition_stoneskin_persistent/application.gd")
+    Effects._ensure_clock()
+    var occurrence:Node3D=phase.make_component({"layer_mask":0});world.add_child(occurrence)
+    var handle:Dictionary={"clip":Effects.clip("conditions/continuation/condition_stoneskin_persistent/application"),"occurrence":occurrence}
+    var component:Dictionary={"actor_uuid":"a","target_uuid":"b","native_cue":{"attachment":"recipient_ground"},"lifecycle_phases":{},"condition":{"state":{}}}
+    var points:Dictionary={"hand":Vector3.ZERO,"to":Vector3.ONE}
+    var result:Dictionary=bridge.sync(world,handle,component,points)
+    check(result.unavailable.is_empty(),"Ordinary delivered body treatment needs no fabricated pose-capture provider")
+    check(a.material.shader==Body and b.material.shader!=Body,"Factory binds only the real recipient's private material")
+    check(b.material.get_shader_parameter("frame_uv")==Vector4(.25,0,.25,.125) and b.material.get_shader_parameter("tint")==Vector3(.6,.3,.2),"Binding retains actual frame and ordinary outfit tint")
+    check(occurrence.body_treatment.materials==[b.material],"Body program references the actual current renderer material")
+    var uploads:int=occurrence.body_treatment.uploads
+    bridge.sync(world,handle,component,points);bridge.sync(world,handle,component,points)
+    check(occurrence.body_treatment.uploads==uploads,"Unchanged layer identity performs no treatment rebinding")
+    var second:Node3D=phase.make_component({"layer_mask":0});world.add_child(second)
+    var other:Dictionary={"clip":handle.clip,"occurrence":second}
+    bridge.sync(world,other,component,points)
+    check(b.material.get_shader_parameter("factory_body_count")==2,"Independent owners compose on one recipient material")
+    occurrence.free()
+    check(b.material.shader!=Body and b.material.get_shader_parameter("factory_body_count")==1,"Removing one owner retains the other owner treatment")
+    second.free()
+    check(b.material.shader==Body and a.material.shader==Body,"Removing the final owner restores the original shader precisely")
+    check(b.material.get_shader_parameter("frame_uv")==Vector4(.25,0,.25,.125),"Restoration preserves the currently bound source frame")
+    var capture_phase:Script=load("res://assets/vfx/conditions/condition_petrified_body_persistent/application.gd")
+    var capture:Node3D=capture_phase.make_component({"layer_mask":0});world.add_child(capture)
+    var capture_handle:Dictionary={"clip":Effects.clip("conditions/continuation/condition_petrified_body_persistent/application"),"occurrence":capture}
+    var missing:Dictionary=bridge.sync(world,capture_handle,component,points)
+    check(missing.unavailable.get("pose_provider")=="provider_not_bound" and b.material.shader==Body,"A logical pose capture remains unavailable instead of displaying the live pose as petrified capture")
+    capture.free()
+
+    # Actual legacy package adapter: targets is forwarded to a source's
+    # set_live_endpoints. Finger of Death requires its target at index one.
+    var legacy:Node3D=load("res://assets/vfx/sources/6269f7f4cb5f43f5a59c/occurrence.gd").new()
+    var source:Node3D=Node3D.new();var endpoint_probe:EndpointProbe=EndpointProbe.new();source.add_child(endpoint_probe);legacy.handle={"root":source}
+    var legacy_handle:Dictionary={"clip":{"inputs":["targets"],"input_setters":{"targets":"set_targets"}},"occurrence":legacy,"root":world}
+    var aimed:Dictionary={"actor_uuid":"a","target_uuid":"b","native_cue":{"attachment":"recipient_ground"}}
+    var exact:Dictionary={"hand":Vector3(1,2,3),"to":Vector3(8,5,-4)}
+    result=bridge.sync(world,legacy_handle,aimed,exact)
+    check(endpoint_probe.endpoints.size()==2 and endpoint_probe.endpoints[0].point==exact.hand and endpoint_probe.endpoints[1].point==exact.to,"Actual legacy targets adapter receives source and recipient in its required order")
+    check(result.unavailable.is_empty() and not endpoint_probe.endpoints[0].has("surface"),"An endpoint-only target needs no optical image scan or invented source surface")
+
+    var prepared:Node3D=load("res://assets/vfx/conditions/runtime.gd").new();var receiving:Receiver=Receiver.new();prepared.receiving=receiving
+    var optical:SurfaceProvider=SurfaceProvider.new();bridge.surfaces=optical
+    var prepared_handle:Dictionary={"clip":{"inputs":["entity_geometry","targets","live_endpoints"],"input_setters":{"entity_geometry":"set_entity_geometry","targets":"set_targets","live_endpoints":"set_live_endpoints"}},"occurrence":prepared,"root":world}
+    result=bridge.sync(world,prepared_handle,aimed,exact)
+    check(result.unavailable.is_empty() and receiving.surface.actor=="b" and optical.calls==1,"Actual prepared adapter discovers the one exact recipient surface in the shared endpoint packet")
+    var calls:int=receiving.calls;var geometry_uploads:int=receiving.uploads
+    bridge.sync(world,prepared_handle,aimed,exact)
+    check(receiving.calls==calls,"Unchanged optical geometry and endpoint aliases perform no setter/tree/material traversal")
+    world.position+=Vector3(3,0,5);optical.origin+=Vector3(3,0,5)
+    exact.hand+=Vector3(3,0,5);exact.to+=Vector3(3,0,5)
+    bridge.sync(world,prepared_handle,aimed,exact)
+    check(receiving.uploads==geometry_uploads,"Co-moving recipient and effect retain their local optical upload key")
+    optical.origin+=Vector3.RIGHT
+    bridge.sync(world,prepared_handle,aimed,exact)
+    check(receiving.uploads==geometry_uploads+1,"A recipient moving relative to a fixed effect invalidates that receiver's optical key")
+    var prior_key:Array=receiving.surface.gpu_geometry_key
+    world.basis=Basis(Vector3.UP,.25)
+    bridge.sync(world,prepared_handle,aimed,exact)
+    check(receiving.surface.gpu_geometry_key!=prior_key,"Changed receiving rotation/scale cannot reuse world points in an old local basis")
+    aimed.native_cue.entity_geometry={"actor":"caster","slots":["weapon"]}
+    bridge.sync(world,prepared_handle,aimed,exact)
+    check(optical.selected==["a",["weapon"]],"Actual authored actor and weapon-only slot operands reach the optical provider unchanged")
+    aimed.native_cue.entity_geometry.actor="target2"
+    result=bridge.sync(world,prepared_handle,aimed,exact)
+    check(result.unavailable.get("entity_geometry")=="authored_actor_binding_not_bound:target2","An unbound second recipient cannot silently borrow the first recipient's body")
+
+    world.transform=Transform3D.IDENTITY
+    for socket in ["hand","cast_hand"]:
+        var hand_component:Dictionary={"actor_uuid":"a","target_uuid":"b","from_position":[0,0],"to_position":[0,0],"from_elevation_feet":0.0,"to_elevation_feet":0.0,"cast_recipe":{"enabled":false},
+            "native_cue":{"role":"attached","attachment":"caster_ground","live_endpoints":[{"actor":"caster","socket":socket}]}}
+        var hand_points:Dictionary=Inputs.Sockets.endpoints(world,hand_component)
+        check(hand_points.ready and hand_points.hand.y>hand_points.caster_ground.y,"Authored caster "+socket+" explicitly demands the real pose hand even for a ground-registered attached cue")
+    var authored:Dictionary={"actor_uuid":"a","target_uuid":"b","native_clip":legacy_handle.clip,"native_cue":{"live_endpoints":[{"actor":"target","socket":"head","view_basis":true}]}}
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.unavailable.is_empty() and endpoint_probe.endpoints.size()==1 and endpoint_probe.endpoints[0].actor_uuid=="b" and is_equal_approx(endpoint_probe.endpoints[0].point.x,10.0),"A one-row authored recipient head endpoint resolves the target's actual pose instead of caster/ground")
+    check(endpoint_probe.endpoints[0].view_basis==world.camera.global_basis,"Authored view_basis carries the actual displayed camera basis")
+    authored.native_cue.live_endpoints=[{"actor":"caster","socket":"cast_hand"},{"actor":"target","socket":"body_center","surface_slots":["body","chest"]},{"cue_point":"source"},{"actor":"target","socket":"ground"}]
+    exact.from=Vector3(4,6,8)
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.unavailable.is_empty() and endpoint_probe.endpoints.size()==4 and endpoint_probe.endpoints[0].point==exact.hand and endpoint_probe.endpoints[2].point==exact.from and endpoint_probe.endpoints[3].point==Vector3(10,0,0),"Authored four-row delivery preserves current hand, recipient, accepted source and ground roles/order")
+    check(optical.selected==["b",["body","chest"]] and endpoint_probe.endpoints[1].surface.actor=="b","Endpoint surface_slots requests the exact actor and slots without a body-wide substitute")
+    bridge.prepare(world,[authored],false)
+    check(optical.prepared.back()==[["b"],["body","chest"],false],"Early endpoint surface preparation shares the exact slot request and optional priority")
+    authored.native_cue.live_endpoints=[{"actor":"target2","socket":"ground"}]
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.unavailable.get("targets")=="authored_actor_binding_not_bound:target2" and endpoint_probe.endpoints.is_empty(),"Missing second-role binding clears the previous packet and is not marked supplied")
+    authored.native_actor_uuids={"target2":"a"}
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.unavailable.is_empty() and endpoint_probe.endpoints[0].actor_uuid=="a","An explicit actual second-role UUID can bind without inventing an entity")
+    authored.native_cue.live_endpoints=[{"point":[2,0,0]}]
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.unavailable.get("targets")=="review_endpoint_position_not_bound","Literal Factory review coordinates cannot become gameplay endpoints")
+    authored.native_cue.live_endpoints=[];authored.native_cue.review_trajectory={"points":[[1,0,0]]}
+    result=bridge.sync(world,legacy_handle,authored,exact)
+    check(result.unavailable.get("targets")=="review_trajectory_not_bound","A Factory review trajectory remains explicitly unavailable")
+
+    var cell_probe:EndpointProbe=EndpointProbe.new()
+    var cell_clip:Dictionary=Effects.clip("conditions/continuation/spatial_web_persistent/application").duplicate()
+    cell_clip.inputs=["admitted_cells","delivery_timing"];cell_clip.input_setters={"admitted_cells":"set_admitted_cells","delivery_timing":"set_delivery_timing"}
+    var cell_handle:Dictionary={"clip":cell_clip,"occurrence":cell_probe}
+    var area:Dictionary={"native_cue":{"launch":.25,"contact":.75},"resolved_area_positions":[[2,3],[5,7]],"to_elevation_feet":10.0}
+    result=bridge.sync(world,cell_handle,area,exact)
+    check(cell_probe.admitted==[{"centre":Vector3(2,2*Inputs.Sockets.Placement.HEIGHT_UNIT,3),"half_size":Vector2(.5,.5)},{"centre":Vector3(5,2*Inputs.Sockets.Placement.HEIGHT_UNIT,7),"half_size":Vector2(.5,.5)}],"Spatial membership passes only actual disclosed cells and their elevation")
+    check(cell_probe.delivery==Vector2(.25,.5),"Delivery timing uses the actual two-argument setter")
+    bridge.sync(world,cell_handle,area,exact)
+    check(cell_probe.cells_calls==1,"Unchanged footprint performs no cell conversion, setter or upload")
+    area.resolved_area_positions=[];bridge.sync(world,cell_handle,area,exact)
+    check(cell_probe.cells_calls==2 and cell_probe.admitted.is_empty(),"An empty authoritative footprint explicitly clears previous Factory membership")
+    area.resolved_area_positions=[[1,2]];cell_probe.accepts_cells=false
+    result=bridge.sync(world,cell_handle,area,exact)
+    check(result.unavailable.get("admitted_cells")=="admitted_cells_not_accepted","A rejected actual cell setter cannot create a successful provider witness")
+    area.resolved_area_positions=null
+    result=bridge.sync(world,cell_handle,area,exact)
+    check(cell_probe.admitted.is_empty() and result.unavailable.get("admitted_cells")=="admitted_cells_not_disclosed","A prepared mask clears prior membership when cells are unknown instead of reporting a supplied footprint")
+    var native_cells:Node3D=load("res://assets/vfx/clips/8b40e88ffc9f324db4a86ee7/construct.gd").new()
+    var cell_source:Node3D=Node3D.new();var nullable:NullableCellProbe=NullableCellProbe.new();cell_source.add_child(nullable)
+    # The actual native inner method asserts a nonempty pair array. It is not
+    # prepared/sampled here; the real adapter forwarding is the test boundary.
+    var acid:Node3D=load("res://assets/vfx/sources/cfd9b5e2882e480dfcd1/acid_arrow.gd").new();cell_source.add_child(acid)
+    native_cells.handle={"root":cell_source}
+    var native_clip:Dictionary=Effects.clip("bg3-36/acid-arrow/impact").duplicate();native_clip.inputs=["admitted_cells"]
+    var native_root:Node3D=Node3D.new();world.add_child(native_root);native_root.position=Vector3(2,1,3)
+    var native_handle:Dictionary={"clip":native_clip,"occurrence":native_cells,"root":native_root}
+    var native_area:Dictionary={"native_cue":{},"resolved_area_positions":null,"to_elevation_feet":10.0}
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.is_empty() and nullable.calls==0 and acid.admitted_cells.is_empty(),"Native null omits the inapplicable void setter instead of forwarding an invalid empty Array")
+    native_area.resolved_area_positions=[[2,3],[5,7]]
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.is_empty() and nullable.calls==1 and nullable.last==[[0.0,0.0],[3.0,4.0]],"A native void-return setter accepts actual local cell pairs without a false rejection")
+    check(acid.admitted_cells==nullable.last,"The actual delivered native adapter forwards pairs into its real source consumer")
+    bridge.sync(world,native_handle,native_area,exact)
+    check(nullable.calls==1,"An unchanged native footprint and root frame performs no new conversion or setter traversal")
+    native_root.position+=Vector3.RIGHT;bridge.sync(world,native_handle,native_area,exact)
+    check(nullable.calls==2 and nullable.last==[[-1.0,0.0],[2.0,4.0]],"A moved native root updates its local footprint exactly once")
+    native_root.basis=Basis(Vector3.UP,PI/4)
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.get("admitted_cells")=="native_admitted_cells_frame_not_grid_aligned" and nullable.calls==2,"An oblique local frame is not silently treated as square grid cells")
+    native_root.basis=Basis.IDENTITY.scaled(Vector3(2,1,2))
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.get("admitted_cells")=="native_admitted_cells_frame_not_grid_aligned" and nullable.calls==2,"A scaled native root cannot change authoritative cell size")
+    native_root.basis=Basis(Vector3.UP,PI/2)
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.is_empty() and nullable.calls==3,"A unit quarter-turn remains an exact square-grid frame")
+    native_area.resolved_area_positions=[]
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.get("admitted_cells")=="native_admitted_cells_empty" and nullable.calls==3,"An authoritative empty native footprint hides its owner without violating the source's nonempty setter")
+    native_area.resolved_area_positions=null
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.is_empty() and nullable.calls==3,"Native null stays distinct from an authoritative empty footprint")
+    native_area.spatial_owner=true
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.get("admitted_cells")=="admitted_cells_not_disclosed","An actual spatial owner cannot treat unknown membership as an optional non-area operand")
+    native_area.spatial_owner=false;native_area.resolved_area_positions=[[9,12]]
+    native_handle.clip.inputs=["admitted_cells","targets"]
+    native_area.actor_uuid="a";native_area.target_uuid="b"
+    native_area.native_cue.live_endpoints=[{"actor":"target","socket":"ground"}]
+    native_root.transform=Transform3D(Basis(Vector3.UP,PI/4),Vector3(20,0,30))
+    result=bridge.sync(world,native_handle,native_area,exact)
+    check(result.unavailable.is_empty() and nullable.last==[[-1.0,12.0]],"Native world-aligned surface topology uses the first actual authored endpoint, not its differently transformed wrapper root")
+    legacy.free();source.free();prepared.free();cell_probe.free();native_cells.free();cell_source.free();native_root.free()
+    bridge.clear();world.queue_free();await process_frame
+    print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Actual Factory setters/private ownership/restoration; native output and first-use pipeline timing are separate GPU gates"}))
+    quit(0 if failures.is_empty() else 1)

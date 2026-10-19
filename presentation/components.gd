@@ -1,6 +1,8 @@
 extends RefCounted
 const Occurrences=preload("res://presentation/occurrences.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
+const ApplicationResults=preload("res://presentation/application_results.gd")
+const NativeActions=preload("res://presentation/native_action_authoring.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
 const Authoring=preload("res://presentation/authoring.gd")
 const Palette=preload("res://presentation/palette.gd")
@@ -120,7 +122,7 @@ static func _source(group: Dictionary, node: Dictionary, source_id: String, star
     parameters.reason="" if not record.is_empty() else "native_source_not_imported"
     return add(group,node,"native_effect",start,record.get("duration",0)*1000,"native_effects/index.json:/sources/"+source_id,parameters)
 
-static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,selected:Dictionary,start:float,duration:float,points:Dictionary,cache:Dictionary,owner:Dictionary,fact:Dictionary,application_index:int=0)->void:
+static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,selected:Dictionary,start:float,duration:float,points:Dictionary,cache:Dictionary,owner:Dictionary,fact:Dictionary,application_index:int=0,graph:Dictionary={})->void:
     var cast:Dictionary=recipe.get("cast",{})
     var placement:Dictionary=recipe.get("projectile",{}).duplicate() if recipe.get("projectile")!=null else {}
     for key in ["sourceSockets","sourceSocketsByRig"]:
@@ -138,6 +140,44 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
         var parameters:Dictionary=common.duplicate()
         parameters.merge(phase,true)
         parameters.merge({"native_spell":true,"cast_recipe":cast,"native_cast_id":cast_id},true)
+        var constructor:Dictionary=phase.native_cue.get("constructor_input",{})
+        if not constructor.is_empty() and parameters.get("status")!="missing":
+            var observed:Dictionary=ApplicationResults.project(node,constructor,graph.get("application_results",{}))
+            if observed.ready:
+                parameters.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":constructor.input_field,"values":observed.values}]
+                parameters.native_constructor_evidence=observed.evidence
+            else:
+                parameters.status="missing";parameters.reason=observed.reason
+                parameters.unbound_constructor_inputs=[constructor.input_field]
+        add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+
+static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,recipe:Dictionary,track:Dictionary,markers:Dictionary,graph:Dictionary,cache:Dictionary,observations:Array=[])->void:
+    var fact:Dictionary=node.fact
+    var source:String=str(fact.get("source_entity_uuid",""))
+    var target:String=str(fact.get("target_entity_uuid","")) if fact.get("target_entity_uuid")!=null else ""
+    var from:Variant=graph.positions.get(source)
+    var to:Variant=graph.positions.get(target)
+    for phase in NativeActions.phases(binding,fact,recipe,track,markers,cache):
+        var parameters:Dictionary=phase.duplicate()
+        var observed:Dictionary=NativeActions.inputs(node,binding,phase,graph,observations)
+        parameters.native_inputs=observed.values
+        parameters.native_input_gaps=observed.gaps
+        parameters.native_input_evidence=observed.evidence
+        if not observed.gaps.is_empty() and parameters.get("status")!="missing":
+            parameters.status="missing";parameters.reason=observed.gaps[0]
+        var recipient:bool=str(phase.native_cue.get("attachment","")).begins_with("recipient")
+        var target_endpoint:bool=phase.native_cue.get("live_endpoints",[]).any(func(endpoint):return endpoint.get("actor")=="target")
+        var self_owned:bool=not recipient and not target_endpoint and to==null
+        parameters.merge({"native_spell":true,"actor_uuid":source,"target_uuid":target,
+            "from_position":from,"to_position":from if self_owned else to,
+            "from_elevation_feet":graph.contacts.get(source,{}).get("from_elevation_feet",0),
+            "to_elevation_feet":graph.contacts.get(source if self_owned else target,{}).get("from_elevation_feet",0),
+            "recipe":{},"cast_recipe":{"enabled":false}},true)
+        if self_owned:parameters.target_uuid=source
+        # Missing public placement is an unavailable cue, never an origin at
+        # the map centre or a substituted first actor.
+        if from==null or ((recipient or target_endpoint) and to==null):
+            parameters.status="missing";parameters.reason="native_action_position_unavailable"
         add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
 
 static func projectile(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,duration: float,source: Array,target: Array,contacts: Dictionary,cache: Dictionary,owner:Dictionary={},fact:Dictionary={},application_index:int=0) -> void:
@@ -232,6 +272,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
         if track.get("motion",false) and track_node.fact.kind=="step":
             _movement_audio(group,track_node,track,sounds,cache)
     var native_sources: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
+    var action_bindings:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)
     for node in lineage.events:
         if node.canceled or node.get("fact")==null: continue
         var fact: Dictionary=Occurrences.spell(node,graph) if node.fact.kind=="spell" else node.fact
@@ -254,6 +295,8 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                 if track.has("impact_ms"):audio_markers["body.impact"]=track.impact_ms
                 elif track.has("contact_ms"):audio_markers["body.impact"]=track.contact_ms
                 break
+        if action_bindings.has(fact.get("behavior_id","")) and action_bindings[fact.behavior_id].has("effect_cues"):
+            native_action(group,node,action_bindings[fact.behavior_id],recipe,audio_track,audio_markers,graph,cache,lineage.events)
         if fact.kind=="attack":
             var outcome: String={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.attack_outcome,"")
             var feedback: Variant=recipe.get("attackFeedback",{}).get(outcome) if recipe.get("attackFeedback")!=null else null

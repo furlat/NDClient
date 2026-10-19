@@ -422,6 +422,7 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
         if issue not in world.presentation_errors:world.presentation_errors.append(issue)
     for witness in native_spells.witnesses:
         if witness.status=="rendered":pending_evidence.append({"trace_track_id":witness.id,"display_ms":world.timeline.display_ms,"visible":true})
+        elif witness.status=="missing":pending_evidence.append({"trace_track_id":witness.id,"display_ms":world.timeline.display_ms,"reason":witness.reason})
     var live_media={}
     var sounds: Array=[]
     var alive={}

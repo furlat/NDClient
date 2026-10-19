@@ -6,6 +6,9 @@ extends Resource
 ## Server identity the binding was authored against (pack:creature:id@version), when known.
 @export var identity: String = ""
 @export var rig: String = ""
+## Spell constructs can be drawn by an effect rather than a sprite body.
+## This does not supply or qualify that effect's renderer.
+@export_enum("rig", "effect") var body_policy: String = "rig"
 ## Portrait id in the creature or player bank.
 @export var portrait: String = ""
 ## Status of this assignment, independently of the body's rig/artwork.

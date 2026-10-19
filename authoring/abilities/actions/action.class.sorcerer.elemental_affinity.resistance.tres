@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_oe3u1"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_oe3u1"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_effect_use"]
+
 [sub_resource type="Resource" id="Resource_180lw"]
 script = ExtResource("1_thgr6")
 role = "act"
@@ -18,19 +20,38 @@ hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_umawh"]
 script = ExtResource("2_oe3u1")
-path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+path = "art/media/ui/icons/smooth48/condition.dnd-classes-sorcerer-elementalaffinity.png"
 native_size = Vector2i(48, 48)
-reuses = "ui.filter-actions"
-status = "stand_in"
-source = "ui/resources.json icon:ui.filter-actions"
+reuses = "condition.dnd-classes-sorcerer-elementalaffinity"
+status = "ready"
+source = "ui/presentation.json direct_features/class_feature.sorcerer.elemental_affinity"
+
+[sub_resource type="Resource" id="NativeActionEffect_0"]
+script = ExtResource("native_effect_use")
+selection = "sorcerer_affinity_native"
+at = "body.effect"
+delay = 0.0
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:sorcerer_affinity_native"
+clip = "sorcerer_affinity_native"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+source_end = 1.3
+duration_policy = "authored"
+follow = true
+extra = {"entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}
 
 [resource]
 script = ExtResource("2_136lf")
 id = "action.class.sorcerer.elemental_affinity.resistance"
 kind = "action"
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeActionEffect_0")])
 icon = SubResource("Resource_umawh")
 disposition = "authored"
 body = SubResource("Resource_180lw")
+applies_conditions = PackedStringArray("class_feature.sorcerer.elemental_affinity.resistance")
 effect_sources = PackedStringArray()
 status = "ready"
 unported = {
@@ -39,7 +60,9 @@ unported = {
 "media": []
 },
 "attackFeedback": null,
-"compatibleCueKinds": ["action"],
+"compatibleCueKinds": [
+"action"
+],
 "counterspellFeedback": null,
 "definitionRef": {
 "content_id": "action.class.sorcerer.elemental_affinity.resistance",
@@ -49,7 +72,10 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 },
 "mediaFailurePolicy": "fail_transaction",
-"previewChildCueKinds": ["condition"],
+"previewChildCueKinds": [
+"condition"
+],
 "projectile": null,
-"variants": []
+"variants": [],
+"media": []
 }

@@ -162,6 +162,7 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
     _ensure_clock()
     var pending:int=0;var errors:Array=[];var paths:Dictionary={};var live:Array=[]
     for value in clips:
+        if value.get("requires_constructor_input",false) or value.has("construction_inputs"):paths["res://presentation/native_constructed_occurrence.gd"]=true
         var chosen:Dictionary=choice(value)
         if chosen.kind.is_empty():errors.append(chosen.reason);continue
         if chosen.kind=="recorded":
@@ -224,7 +225,11 @@ static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:
     var script:Script=ResourceLoader.load(approach.path)
     if script==null or not script.has_method("make_component"):
         handle.error="Missing package constructor: "+str(approach.path);return handle
-    var occurrence:Node3D=script.make_component({"layer_mask":layer_mask})
+    var occurrence:Node3D
+    if value.has("construction_inputs"):
+        var constructed:Script=load("res://presentation/native_constructed_occurrence.gd")
+        occurrence=constructed.make_component({"layer_mask":layer_mask,"phase":ResourceLoader.load(approach.source_phase),"operands":value.construction_inputs})
+    else:occurrence=script.make_component({"layer_mask":layer_mask})
     handle.occurrence=occurrence
     # The occurrence builds its source in _ready (some components create
     # layers there); its geometry starts on the caller's (hidden) layer.

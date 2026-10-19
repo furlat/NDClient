@@ -27,10 +27,11 @@ static func recording_plan(rows:Array)->Array:
         var clip:Dictionary={}
         if component.get("native_spell",false) and component.get("status")!="missing":
             clip=component.get("native_clip",{}).duplicate(false)
+            if component.has("native_constructor_inputs"):clip.construction_inputs=component.native_constructor_inputs
             if component.get("native_cue",{}).has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
         elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":
             clip=component.native_hit.get("clip",{}).duplicate(false)
-        if clip.is_empty():continue
+        if clip.is_empty() or (clip.get("requires_constructor_input",false) and not clip.has("construction_inputs")):continue
         var key:String=_key(clip)
         if not by_key.has(key):
             # A condition lifecycle warms with the load: its first draw compiles
@@ -45,7 +46,7 @@ static func recording_plan(rows:Array)->Array:
 static func source_plan(clips:Array,lifecycles:Array=[])->Array:
     var result:Array=[];var seen:Dictionary={}
     for clip in lifecycles+clips:
-        if clip.is_empty():continue
+        if clip.is_empty() or (clip.get("requires_constructor_input",false) and not clip.has("construction_inputs")):continue
         var key:String=_key(clip)
         if seen.has(key):continue
         seen[key]=true;result.append({"key":key,"clip":clip,"lifecycle":clip in lifecycles})
@@ -63,6 +64,7 @@ static func _plan(cache:Dictionary)->Array:
     var entries:Dictionary=index.spells
     for behavior in entries:
         for clip in Authoring.effect_clips(Authoring.selection(behavior,cache)):
+            if clip.get("requires_constructor_input",false):continue
             var identity:String=_key(clip)
             if not seen.has(identity):
                 seen[identity]=true;result.append({"key":identity,"clip":clip})

@@ -71,7 +71,10 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
     started = time.time()
     if row["mode"] == "live":
         environment = dict(os.environ, PYTHONPATH=f"{ENGINE}:{ENGINE}/sdk/python/src")
-        command = [PYTHON, "tools/play.py", "--engine", str(ENGINE), "--test-script", row["script"], *row.get("args", [])]
+        if row.get("runner")=="studio_spell_batch":
+            command=[PYTHON,"tools/studio_cases/live.py","--engine",str(ENGINE),"--out",str(report/"live-spells"),*row.get("args",[])]
+        else:
+            command = [PYTHON, "tools/play.py", "--engine", str(ENGINE), "--test-script", row["script"], *row.get("args", [])]
     else:
         command = [str(GODOT), *(["--headless"] if row["mode"] == "headless" else ["--rendering-method", "forward_plus", "--rendering-driver", "vulkan"]),
             "--path", worktree, "--script", row["script"], *(["--", *row["args"]] if row.get("args") else [])]
@@ -100,11 +103,16 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
     godot_log = text
     if row["mode"] == "live":
         found = re.findall(r"/[^ ]*\.runtime/player-runs/[0-9TZ.]+", text)
-        run = Path(found[0]) if found else None
+        run = report/"live-spells" if row.get("runner")=="studio_spell_batch" else (Path(found[0]) if found else None)
         if run is not None and (run / "godot.log").exists():
             godot_log = (run / "godot.log").read_text(encoding="utf-8", errors="replace")
         checks, failures = None, None
-        if run is not None and (run / "player-live-checks.json").exists():
+        if row.get("runner")=="studio_spell_batch" and run is not None and (run/"results.json").exists():
+            value=json.loads((run/"results.json").read_text(encoding="utf-8"))
+            checks=sum(case.get("checks",0) for case in value.get("cases",[]))
+            failures=sum(not case.get("ok",False) for case in value.get("cases",[]))+len(value.get("native_errors",[]))
+            if not value.get("ok",False):failures=max(1,failures)
+        elif run is not None and (run / "player-live-checks.json").exists():
             value = json.loads((run / "player-live-checks.json").read_text(encoding="utf-8"))
             checks, failures = value.get("checks"), len(value.get("failures", [])) if isinstance(value.get("failures"), list) else value.get("failures")
         if checks is None:

@@ -823,6 +823,34 @@ func toggle_inventory() -> void:
         if search.has_focus(): search.release_focus()
     _layout()
 
+func show_item_targets() -> void:
+    # Open the existing inventory only when its actual disclosed items are
+    # offered. A held item remains an item UUID, never its carrier's UUID/cell.
+    var targets:Dictionary=Interaction.subject_targets(world.available_actions,world.selected_action,world.selection_preview,"object")
+    var actor:Dictionary=_action_actor()
+    var owned:Array=UI.inventory(actor,"",world.timeline.state)+UI.equipped(actor,world.timeline.state).values()
+    if not owned.any(func(item):return targets.has(item.item_uuid)):return
+    inspected_actor_id=str(actor.get("uuid",""))
+    search.text=""
+    if get_viewport_rect().size.x<1260:world.close_storage()
+    _close_popup()
+    panel.show()
+    _refresh_inventory()
+    _layout()
+
+func _item_targeting() -> bool:
+    return Interaction.object_targeting(world.available_actions,world.selected_action,world.selection_preview)
+
+func _choose_inventory_item(item_uuid:String,slot:String="") -> void:
+    if _item_targeting():
+        if world.choose_item_target(item_uuid) and world.command_busy:
+            panel.hide()
+            if search.has_focus():search.release_focus()
+        return
+    selected_item=item_uuid;selected_slot=slot
+    if not slot.is_empty():_refresh_bag()
+    _refresh_details()
+
 func toggle_history() -> void:
     if settings_open(): return
     if history_panel.visible: history_panel.hide_panel()
@@ -888,11 +916,9 @@ func _slot_button(slot: String, item: Dictionary, state: Dictionary) -> Button:
     if not item.is_empty(): help += "\n"+UI.item_name(item,state,cache)
     var button = _icon_button(UI.item_key(item,state,cache),help)
     button.set_meta("slot",slot)
-    button.pressed.connect(func():
-        selected_slot = slot
-        selected_item = str(item.get("item_uuid",""))
-        _refresh_bag()
-        _refresh_details())
+    var identity:String=str(item.get("item_uuid",""))
+    button.set_meta("item_uuid",identity)
+    button.pressed.connect(func():_choose_inventory_item(identity,slot))
     button.mouse_entered.connect(func():_highlight_compatible("",slot))
     button.mouse_exited.connect(func():_highlight_compatible(selected_item,selected_slot))
     slot_buttons[slot] = button
@@ -912,10 +938,7 @@ func _refresh_bag() -> void:
         if item.get("description") != null: help += "\n"+str(item.description)
         var button = _icon_button(UI.item_key(item,world.timeline.state,cache),help,UI.item_name(item,world.timeline.state,cache))
         button.set_meta("item_uuid",item.item_uuid)
-        button.pressed.connect(func():
-            selected_item = item.item_uuid
-            selected_slot = ""
-            _refresh_details())
+        button.pressed.connect(func():_choose_inventory_item(item.item_uuid))
         button.mouse_entered.connect(func():_highlight_compatible(item.item_uuid,""))
         button.mouse_exited.connect(func():_highlight_compatible(selected_item,selected_slot))
         inventory_grid.add_child(button)
@@ -926,15 +949,26 @@ func _refresh_bag() -> void:
     _highlight_compatible(selected_item,selected_slot)
 
 func _highlight_compatible(item_uuid: String, slot: String) -> void:
+    if _item_targeting():
+        var targets:Dictionary=Interaction.subject_targets(world.available_actions,world.selected_action,world.selection_preview,"object")
+        for button in slot_buttons.values()+inventory_buttons.values():
+            var eligible:bool=targets.has(button.get_meta("item_uuid",""))
+            button.disabled=not world.command_ready() or not eligible
+            button.mouse_default_cursor_shape=Control.CURSOR_POINTING_HAND if eligible else Control.CURSOR_FORBIDDEN
+            button.remove_theme_stylebox_override("normal")
+            if eligible:button.add_theme_stylebox_override("normal",_style(Color("355748bd"),Color("a8d4ae")))
+        return
     var actor = _inspect_actor()
     var sheet = UI.sheet(world.timeline.state,str(actor.get("uuid","")))
     var compatible = UI.compatible_slots(sheet,item_uuid)
     for key in slot_buttons:
         var button: Button = slot_buttons[key]
+        button.disabled=false;button.mouse_default_cursor_shape=Control.CURSOR_ARROW
         button.remove_theme_stylebox_override("normal")
         if key in compatible or key == slot: button.add_theme_stylebox_override("normal",_style(Color("355748bd"),Color("a8d4ae")))
     for key in inventory_buttons:
         var button: Button = inventory_buttons[key]
+        button.disabled=false;button.mouse_default_cursor_shape=Control.CURSOR_ARROW
         button.remove_theme_stylebox_override("normal")
         if key == item_uuid or (not slot.is_empty() and slot in UI.compatible_slots(sheet,key)):
             button.add_theme_stylebox_override("normal",_style(Color("355748bd"),Color("a8d4ae")))
@@ -965,6 +999,9 @@ func _refresh_details() -> void:
             lines.append(str(effect.display_name)+( " (suppressed)" if not effect.get("suppression_provider_uuids",[]).is_empty() else ""))
         if not str(effect.get("description","")).is_empty(): lines.append(str(effect.description))
     item_details.text = "\n".join(lines)
+    if _item_targeting():
+        _highlight_compatible(selected_item,selected_slot)
+        return
     var item_uuid: String = selected_item
     var sheet = UI.sheet(world.timeline.state,str(actor.get("uuid","")))
     var equipped = UI.equipped(actor,world.timeline.state)
@@ -1100,6 +1137,7 @@ func _refresh_hover_feedback() -> void:
     _restore_object_highlights()
     if not ready or (not alt and subject.is_empty()): return
     var objects = {}
+    if not subject.is_empty() and world.scenery_visibility.has(subject):objects[subject]=true
     for row in world.world_labels():
         # Scenery sight is the displayed renderer's native disclosure set;
         # remembered map objects and force-picked hidden walls stay unmarked.
