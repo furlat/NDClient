@@ -311,7 +311,7 @@ These are rough implementation estimates, **not passed-gate percentages or visua
 | 1 — SDK / ordered reduction / publication | 90% | Canonical fold and live equip base pass; broader reader/fixture cleanup remains |
 | 2a — usable Studio cohort | 80% | Eight real native cases and controls qualify; new Fly/appearance slice extends them |
 | 2b — all-spell safety | 96% | 189 attempted, 181 runtime-safe; eight named red cases remain |
-| 3 — package migration / lifecycle handovers | 55% | Complete package selected; remaining handovers and first-use timing still open |
+| 3 — package migration / lifecycle handovers | 60% | Complete successor installed, public Circle and lifecycle repairs; remaining handovers and first-use timing stay open |
 | 4 — shared optical/material/appearance/history/event inputs | 35% | Appearance cohort implemented and tested; history, event and created-item gaps remain |
 | 5 — complete scenario / interaction depth | 35% | Complete capability inventory visible; 198 cases do not cover all required variants |
 | 6 — final live scale / performance | 10% | Functional regression evidence, not final frame/latency qualification |
@@ -338,3 +338,6 @@ The complete Factory package `production-bindings-2081189e43bf0443` is installed
 Current-package bounded gates: native8 **10,870checks**; seven headless gates **349checks**; two fresh complete Gallery UI runs **166checks**; fresh actual Circle and Guardian commands **22checks**. Total **11,407**, zero script/resource/engine errors. Native8 and live teardown retain ObjectDB warnings. The old all-spell safety sweep belongs to the prior package and does not qualify this successor; the full report now keeps that provenance separate. All four unaccepted art families remain unaccepted.
 
 Early live measurement caught **163/181ms Quickened/Twinned source construction** during door preparation, almost entirely source `_ready()`, with under0.1ms client adapter cost. [Focused Factory preparation request](FACTORY_CONSTRUCTION_READINESS_REQUEST_2026-10-19.md). The client also retains door preparation waits and about102–109ms movement packet-to-animation; no final performance pass. This is a measured migration checkpoint, not a new optimization detour. Package/handovers estimate moves from55%to60%; provider coverage remains35%and final performance10%. These are implementation estimates, not passed gates.
+
+
+Successor cohort **1a53fb4a** is published to main with the complete sealed package and matching build. Actual main195headless +83live Gallery UI checks pass, zero errors. Backup/receipt and warning details are in the intake. The main smoke does not close the measured construction/reveal/latency gaps. No owned test/preview/server is left open.
