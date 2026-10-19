@@ -93,3 +93,42 @@ under condition opacity; actual contact-driven weapon effects; context-qualified
 Studio thumbnail capture; actor history and remaining factual-input providers.
 All-spell safety counts from208 are not automatically requalified by this c494
 cohort. Preserve current per-package reports and named server failures.
+
+
+## Receiving checkout qualification
+
+Published as `247fdc76` on `codex-authoring-schemabump`, with whole matching
+characters/abilities build domains; prior outputs are recoverable under
+`.runtime/item-publication/`. Actual receiving eight focused gates pass664checks
+(`.runtime/tests/20261019T202812Z/`), including105owner/Studio,29native four-camera
+and32immutable-readiness checks. Actual receiving issued Continual Flame and
+Flame Blade commands pass17checks (`.runtime/item-publication-live/`); the new
+real Flame Blade item reaches first draw with175.405ms construction (175.352ms
+in Factory `_ready`). The recurring native live exit ObjectDB warning remains.
+
+The receiving Gallery profile is a separate, isolated83-check actual UI run:
+`.runtime/player-runs/20261019T202841.517063Z/`, decomposition in
+`.runtime/item-publication-gallery-profile.json`. No competing native process,
+resource build or test suite was running in that measured window.
+
+| Actual command | Packet→animation | Server dispatch | Peak command frame |
+|---|---:|---:|---:|
+| Door |84.068ms|32.059ms|16.585ms|
+| Movement |100.649ms|45.937ms|14.250ms|
+| Haste potion |74.987ms|11.185ms|15.516ms|
+| First Fireball |63.205ms|46.631ms|41.221ms|
+| Later Fireball |62.891ms|53.615ms|23.898ms|
+
+The41.221ms first-Fireball frame occurs in pre-submit targeting. Its inclusive
+player_process is6.888ms; optional preparation1.962ms, actor sampling1.084ms,
+draw order.968ms, native2D output.890ms. These nested CPU phases must not be
+summed, and the remaining frame interval is not proven to be CPU/GPU/test
+scheduling from this trace alone. Original full frames are retained; this spike
+is open, not credited as solved by a1–2ms function. No suspicious long server
+execution occurred in this bounded run (maximum57ms-class in nearby smokes,
+53.615ms here). Final scale/100+FPS qualification remains open.
+
+Both client checkouts have zero remaining owned Godot processes after these
+checks. No interactive preview was left open. All package binaries/art and built
+resources remain ignored; source/package text, code, tests and evidence notes
+are committed.
