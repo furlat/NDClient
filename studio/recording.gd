@@ -10,6 +10,7 @@ const ConditionPose = preload("res://presentation/condition_pose.gd")
 const World = preload("res://presentation/world.gd")
 const LightTracks = preload("res://studio/light_tracks.gd")
 const NativeChannels=preload("res://presentation/native_spell_channels.gd")
+const NativeItems=preload("res://presentation/native_items.gd")
 const NativePersistent=preload("res://presentation/native_persistent.gd")
 const ReplayComparison = preload("res://studio/replay_comparison.gd")
 const PREVIEW_LEAD_IN_MS = 500.0
@@ -82,6 +83,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     var condition_removals={}
     var light_history={}
     var spatial_history={}
+    var item_owners:Dictionary={};var item_history:Dictionary={};var item_spans:Array=[]
     var spatial_owners={}
     var condition_parents={}
     var condition_intervals={}
@@ -113,6 +115,8 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                 "events":Compiler.EventTrace.initialization(admitted.normalized.initialization)}
             _observe_condition_history(condition_history,condition_intervals,condition_parents,journal.state.actors,0.0,"",true)
             preview_state=journal.state.duplicate(true)
+            NativeItems.observe(item_owners,preview_state,0.0,[],result.cache)
+            _observe_item_history(item_history,item_spans,item_owners,preview_state,0.0,"",result.cache)
             _preview_states(preview_states,preview_state,preview_state.actors,condition_history,0.0,result.cache)
             LightTracks.observe(light_history,preview_state,0.0,"",0,result.cache)
             _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),0.0,"",true)
@@ -153,6 +157,9 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             for event in group.events:nodes[event.event_uuid]=event
             for commit in group.commits:
                 Compiler.apply_delta(preview_state,commit.delta)
+                if NativeItems.interested(item_owners,commit.get("item_appearance_origins",[]),commit.delta,result.cache):
+                    NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,commit.get("item_appearance_origins",[]),result.cache)
+                    _observe_item_history(item_history,item_spans,item_owners,preview_state,offset+commit.at_ms,"%s:%s"%[sequence,commit.get("event_uuid","")],result.cache)
                 LightTracks.observe(light_history,preview_state,offset+commit.at_ms,commit.get("event_uuid",""),sequence,result.cache)
                 _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),offset+commit.at_ms,commit.get("event_uuid",""))
                 if nodes.has(commit.get("event_uuid","")):
@@ -292,6 +299,13 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             result.rows.append(exit_row)
             _condition_rows(result.rows,exit_row,owner,[{"start_ms":owner.end_ms,"end_ms":owner.end_ms+fade,"suppressed":Timeline.Conditions.suppressed(owner.condition),"source_event":origin.get("removal_event","")}],preview_states.get(owner.actor_uuid,[]),result.cache,preview_tracks.get(owner.actor_uuid,[]),requirements)
         _condition_restoration_rows(result,owner,condition_removals.get(owner.id,{}),preview_states.get(owner.actor_uuid,[]),preview_tracks.get(owner.actor_uuid,[]))
+    for span in item_spans:
+        span.end_ms=minf(span.end_ms,result.presentation_end_ms)
+        var component:Dictionary=span.component
+        component=component.duplicate(false);component.duration_ms=span.end_ms-span.start_ms
+        span.component=component
+        span.erase("signature")
+        result.rows.append(span)
     result.rows.append_array(LightTracks.rows(light_history,result,preview_tracks))
     _spatial_rows(result,spatial_history,spatial_owners,occurrence_ids)
     for row in result.rows:
@@ -1194,3 +1208,27 @@ static func step_time(index: Dictionary, row: Dictionary, time_ms: float, direct
             if direction>0 and at>time_ms+.000001: result=minf(result,at)
             elif direction<0 and at<time_ms-.000001: result=maxf(result,at)
     return clampf(result,0,limit)
+
+## Exact item eligibility intervals; geometry is still sampled by production
+## NativeSpellRenderer from the restored canonical stream in the main preview.
+static func _observe_item_history(current:Dictionary,spans:Array,owners:Dictionary,state:Dictionary,at_ms:float,event_id:String,cache:Dictionary)->void:
+    var active:Dictionary={}
+    for sample in NativeItems.samples(owners,state,at_ms):
+        active[sample.item_owner_uuid]=sample
+    for id in current.keys():
+        if not active.has(id):
+            current[id].end_ms=at_ms;current.erase(id)
+    for id in active:
+        var component:Dictionary=active[id]
+        var location:Dictionary=NativeItems.membership(id,state)
+        var signature:Array=[component.status,component.get("reason",""),location.kind,location.get("holder_uuid",""),location.get("render_slot","")]
+        if current.has(id) and current[id].signature==signature:continue
+        if current.has(id):current[id].end_ms=at_ms
+        var origin:Dictionary=component.item_origin
+        var parent:String="%s:%s"%[origin.operation_sequence,origin.creation_occurrence] if origin.has("operation_sequence") else event_id
+        var row={"id":component.id+":span:"+str(spans.size()),"parent":parent,"kind":"native_effect","label":"Item appearance · "+str(component.item_origin.item_id).get_file().replace("weapon.","").capitalize(),
+            "start_ms":at_ms,"end_ms":INF,"source_start_ms":component.start_ms,"group_start_ms":component.start_ms,"group_id":"",
+            "source_event_uuid":component.source_event_uuid,"actor_uuid":component.actor_uuid,"component":component,
+            "source":component.source,"status":component.status,"reason":component.get("reason",""),"signature":signature,
+            "markers":[],"source_fps":0,"preview_scope":"actual_item_in_scene","coverage":{"implementation":"resolved","source":component.status,"prepared":"not_examined","rendered":"not_witnessed"}}
+        current[id]=row;spans.append(row)

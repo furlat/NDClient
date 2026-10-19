@@ -2,6 +2,7 @@ extends RefCounted
 ## Authored painted placement and measured optical socket registration.
 const Placement=preload("res://placement.gd")
 const Surfaces=preload("res://presentation/surface_sockets.gd")
+const NativeItems=preload("res://presentation/native_items.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
 
 static func facing(world:Node,row:Dictionary)->String:
@@ -76,7 +77,9 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
     var attachment:String=cue.get("attachment","")
     # These registrations need actual head/equipment ownership. Never fall
     # through to an unrelated ground/body point or a missing transform key.
-    if attachment=="item":return {"ready":false,"unavailable":true,"reason":"native_item_registration_not_bound"}
+    if attachment=="item":
+        if component.get("native_item",false):return item_endpoint(world,component)
+        return {"ready":false,"unavailable":true,"reason":"native_item_registration_not_bound"}
     if attachment=="recipient_weapon":
         var weapon:Dictionary=Weapons.resolve(world,component)
         if not weapon.ready:return {"ready":false,"unavailable":true,"reason":weapon.reason}
@@ -236,3 +239,33 @@ static func body_anchor(world:Node,row:Dictionary)->Dictionary:
         return {"ready":false,"pending":true,"reason":"native_spell_"+surface.reason}
     return {"ready":true,"point":surface.point,"surface":surface,"clip":"Idle","frame":0,"facing":view,
         "source":"catalog/rigs.json:/"+str(row.rig)+"/body_anchor","reference_pose":"Idle/frame0"}
+
+## Exact current hand/world registration. A missing authored offhand pose is a
+## named gap; it never borrows the other hand or a study's fixed transform.
+static func item_endpoint(world:Node,component:Dictionary)->Dictionary:
+    var location:Dictionary=NativeItems.membership(component.item_owner_uuid,world.timeline.state)
+    var transform:Transform3D
+    var ground:Vector3
+    var surfaces:Array=[]
+    if location.get("kind")=="held":
+        var visual:Dictionary=world.visual_actors.get(location.holder_uuid,{})
+        if not displayed(visual):return {"ready":false,"unavailable":true,"reason":"native_item_holder_not_displayed"}
+        if location.render_slot=="offhand":return {"ready":false,"unavailable":true,"reason":"native_item_offhand_socket_not_authored"}
+        if location.render_slot in world.displayed_samples.get(location.holder_uuid,{}).get("hidden_slots",[]):
+            return {"ready":false,"unavailable":true,"reason":"native_item_hidden_by_current_pose"}
+        var hand:Dictionary=pose_point(world,visual.row,"hand")
+        if not hand.ready:return hand
+        var body:Node3D=null
+        for entry in visual.entries:
+            if entry.role!="shadow" and entry.actor_layer.slot=="body":body=entry.node;break
+        if body==null:return {"ready":false,"unavailable":true,"reason":"native_item_body_basis_not_bound"}
+        transform=Transform3D(body.global_basis.orthonormalized(),hand.point)
+        ground=Placement.contact(visual.row);surfaces=[hand]
+    elif location.get("kind")=="ground":
+        var placement:Dictionary=location.object.placement
+        var point:Array=placement.position
+        ground=Vector3(float(point[0]),float(placement.base_height_steps)*Placement.HEIGHT_UNIT,float(point[1]))
+        transform=Transform3D(Basis.IDENTITY,ground)
+    else:return {"ready":false,"unavailable":true,"reason":"native_item_not_observed_at_renderable_location"}
+    return {"ready":true,"from":transform.origin,"hand":transform.origin,"to":transform.origin,"ground":ground,"caster_ground":ground,
+        "surfaces":surfaces,"fixed":{},"item_location":location,"item_transform":transform}

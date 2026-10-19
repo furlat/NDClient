@@ -363,3 +363,25 @@ Successor cohort **1a53fb4a** is published to main with the complete sealed pack
 The current package’s full recorded-spell sweep is now183safe available recordings/189inventory, six existing unavailable server cases, zero script/resource errors. Native issued-command sweep is separately tracked by its actual result artifact. Do not carry the earlier package’s all-spell qualification over implicitly. The latest live Gallery run passes83checks; door construction still peaks183ms and movement packet-to-animation is101ms. These are logged for the next performance pass rather than stopping the migration for each spike.
 
 Implementation estimates: schema base100%, SDK/ordering90%, Studio80%, spell safety96%, Factory migration/handovers65%, shared providers40%, scenario depth40%, final gameplay performance10%. These are estimates, not acceptance or full migration claims. Main publication and the final native sweep receipt are recorded in the provider cohort handoff.
+
+
+## Construction readiness and created-item continuation
+
+The complete c494 readiness handoff is integrated and published to the receiving
+branch; [integration and exact timings](FACTORY_READINESS_INTEGRATION_2026-10-19.md).
+Two private live Gallery runs reduce Quickened/Twinned construction from163/181ms
+to approximately1ms and the door peak frame from201ms to21.4–21.5ms. Remaining
+movement/Fireball latency and named source constructors remain open.
+
+[Created-item cohort](CREATED_ITEM_PROVIDER_COHORT_2026-10-19.md) adds typed native
+Gear appearances, actual private creation/lifetime ownership, same-clock equip
+preparation, current hand binding, live first-draw checks and independent Studio
+item intervals. Flame Blade’s actual player path now passes; Devotee’s Mace’s
+level10 creation fixture remains unavailable, and its visual qualification is not
+claimed. The Factory’s187–376ms Flame Blade source construction remains logged.
+
+Current rough implementation estimates: schema base100%, SDK/order90%, Studio82%,
+spell baseline safety96% (prior full208 run plus bounded current-package checks),
+Factory migration/handovers68%, shared providers43%, scenario depth42%, final
+performance10%. Package receipt is complete; the migration and user art acceptance
+are not. These estimates are not percentages of passed runtime/visual gates.

@@ -3,6 +3,7 @@ extends RefCounted
 ## instances, receiver depth and appearance passes; no rules or event scheduler.
 const AreaMask=preload("res://presentation/native_area_mask.gd")
 const FrameProfile=preload("res://frame_profile.gd")
+const NativeItems=preload("res://presentation/native_items.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Layer=preload("res://presentation/native_effect_layer.gd")
 const Support=preload("res://presentation/native_scene_support.gd")
@@ -281,6 +282,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if not accepts(component):continue
         active[component.id]=component
         if component.get("status")=="missing":
+            if handles.has(component.id):handles[component.id].root.hide()
             _missing(component,component.get("reason","native_spell_source_missing"));continue
         group_profiles[_profile_key(component.get("finish_profile",{}))]=component.get("finish_profile",{})
     # Publication activates prepared private passes. Recolouring/material and
@@ -553,6 +555,10 @@ func _queued_ids(world:Node)->Dictionary:
     var remaining:Dictionary={}
     for id in handles:
         var component:Dictionary=handles[id].component
+        if component.has("item_owner_uuid"):
+            var item:Dictionary=world.timeline.item_appearance_owners.get(component.item_owner_uuid,{})
+            if not item.is_empty() and NativeItems.active(item,world.timeline.state):
+                result[id]=true;continue
         var owner_id:Variant=component.get("condition_uuid",component.get("spatial_effect_uuid"))
         if world.timeline.condition_owners.has(owner_id) or world.timeline.spatial_effect_owners.has(owner_id):
             result[id]=true
@@ -575,7 +581,7 @@ func _queued_ids(world:Node)->Dictionary:
     for queued in [[world.timeline.current],world.timeline.queue]:
         for group in queued:
             if remaining.is_empty():break
-            for component in group.get("components",[]):
+            for component in group.get("components",[])+group.get("native_requirements",[]):
                 if remaining.has(component.id) and accepts(component):
                     result[component.id]=true;remaining.erase(component.id)
             if remaining.is_empty():break

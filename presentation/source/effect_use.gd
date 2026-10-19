@@ -57,6 +57,9 @@ const Look = preload("res://presentation/source/look.gd")
 @export var finish: Look
 ## recorded, gpu or native; empty means the client's default choice.
 @export var approach: String = ""
+## Qualified absolute material/geometry clocks have no particle history.
+## Empty preserves the delivered approach's simulation policy.
+@export var sampling: String = ""
 ## Required source-constructor operands which the client cannot yet supply.
 ## Keep the cue inspectable, but do not construct it with Factory fixture data.
 @export var unbound_constructor_inputs: PackedStringArray = []

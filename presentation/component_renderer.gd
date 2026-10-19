@@ -3,6 +3,7 @@ const NativePreview=preload("res://presentation/native_effect_preview.gd")
 const Placement=preload("res://placement.gd")
 const AudioPresenter=preload("res://presentation/audio_presenter.gd")
 const NativeSources=preload("res://presentation/native_effects.gd")
+const NativeItems=preload("res://presentation/native_items.gd")
 const Conditions=preload("res://presentation/conditions.gd")
 const Components=preload("res://presentation/components.gd")
 const ConditionOutline=preload("res://presentation/condition_outline.gd")
@@ -133,6 +134,9 @@ static func live_requirements(groups:Array,world:Node)->Array:
         start=maxf(start,float(group.get("preview_start_ms",start)))
         var at:float=start
         var stale:Callable=func(component):
+            if component.has("item_owner_uuid"):
+                var owner:Dictionary=world.timeline.item_appearance_owners.get(component.item_owner_uuid,{})
+                return component.has("preparation_key") and at+float(component.preparation_at_ms)<=world.timeline.display_ms and (owner.is_empty() or not NativeItems.active(owner,world.timeline.state))
             var id:Variant=component.get("condition_uuid",component.get("spatial_effect_uuid"))
             return component.has("preparation_key") and id!=null and at+float(component.preparation_at_ms)<=world.timeline.display_ms and not owners.has(id) and not areas.has(id)
         if group.get("components",[]).any(stale):
@@ -213,6 +217,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         # shells. Owner after-values and actual clocks remain Timeline-owned.
         var persistent:Array=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
         persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
+        persistent.append_array(NativeItems.samples(world.timeline.item_appearance_owners,world.timeline.state,world.timeline.display_ms))
         var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent),world)
         var required:Array=live_requirements(preparation_groups(required_groups,persistent),world)
         var due:Array=due_groups(required,world,through_ms)

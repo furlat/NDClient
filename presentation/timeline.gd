@@ -89,6 +89,8 @@ var retained_components: Array = []
 var retained_directions: Dictionary = {}
 var resolved_impacts: Dictionary = {}
 var condition_owners: Dictionary = {}
+var item_appearance_owners:Dictionary={}
+const NativeItems=preload("res://presentation/native_items.gd")
 var appearance_cache:Dictionary={}
 var spatial_effect_owners:Dictionary={}
 const NativePersistent=preload("res://presentation/native_persistent.gd")
@@ -116,12 +118,13 @@ func accept(message: Dictionary) -> void:
         if not current.is_empty(): previous.push_front(current)
         current = {}; commit_index = 0; group_start_ms = display_ms
         retained_components=[]; retained_directions={}; resolved_impacts={}
-        condition_owners={}; spatial_effect_owners={}; crossed_audio=[];component_sample_ms=-1.0
+        condition_owners={}; spatial_effect_owners={}; item_appearance_owners={};crossed_audio=[];component_sample_ms=-1.0
         waiting_for_media = false
         if retire_group.is_valid():
             for group in previous: retire_group.call(group)
         state = message.state
         Conditions.observe(condition_owners,state.actors,display_ms,true)
+        NativeItems.observe(item_appearance_owners,state,display_ms,[],appearance_cache)
         NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),display_ms,true)
         sequence = int(message.sequence)
         revision += 1
@@ -264,7 +267,7 @@ func _advance_immediate(delta_ms: float) -> void:
             var delta: Dictionary = commits[commit_index].delta
             _append_membership_order(world_changes.order,delta,state)
             Compiler.apply_delta(state,delta)
-            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]))
+            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),commits[commit_index].get("item_appearance_origins",[]))
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
@@ -289,10 +292,12 @@ func _advance_immediate(delta_ms: float) -> void:
 func _world_delta(delta: Dictionary) -> bool:
     return not delta.get("tiles_removed",[]).is_empty() or not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors")
 
-func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[])->void:
+func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],item_origins:Array=[])->void:
     # These existing owner updates report actual resource-input changes. HP,
     # logs and ordinary movement still commit without rebuilding presenters.
     var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows)
+    if NativeItems.interested(item_appearance_owners,item_origins,delta,appearance_cache):
+        changed=NativeItems.observe(item_appearance_owners,state,at_ms,item_origins,appearance_cache) or changed
     if delta.get("set",{}).has("senses"):
         var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),at_ms)
         changed=changed or spatial_changed
@@ -613,7 +618,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             Compiler.apply_delta(state,delta)
             FrameProfile.end_phase(profile,"timeline_apply_state",started)
             started=Time.get_ticks_usec()
-            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]))
+            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),commit.get("item_appearance_origins",[]))
             FrameProfile.end_phase(profile,"timeline_apply_owners",started)
             started=Time.get_ticks_usec()
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)
@@ -718,6 +723,7 @@ func component_samples(cache: Dictionary={}) -> Array:
     var condition_count:int=condition_owners.size();var spatial_count:int=spatial_effect_owners.size()
     result.append_array(Conditions.samples(condition_owners,display_ms,cache,activities))
     result.append_array(NativePersistent.spatial_samples(spatial_effect_owners,display_ms,cache))
+    result.append_array(NativeItems.samples(item_appearance_owners,state,display_ms))
     if condition_count!=condition_owners.size() or spatial_count!=spatial_effect_owners.size():resource_revision+=1
     return result
 

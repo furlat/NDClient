@@ -156,6 +156,7 @@ static func occurrence_clip(component:Dictionary)->Dictionary:
     if component.has("native_constructor_inputs"):
         result.construction_inputs=component.native_constructor_inputs
         result.preparation_owner=component.id
+    if component.get("native_cue",{}).get("sampling")=="absolute":result.absolute_sampling=true
     if component.get("native_cue",{}).has("opacity_uniform"):result.opacity_uniform=component.native_cue.opacity_uniform
     return result
 
@@ -276,7 +277,7 @@ static func make(parent:Node3D,value:Dictionary,layer_mask:int,seed:int=0)->Dict
 
 static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:int)->Dictionary:
     var handle={"root":null,"occurrence":null,"inner":{},"error":"","clip":value.duplicate(false),"layer_mask":layer_mask,"geometry":[],"emitters":[],
-        "light_units":{},"opacity_bindings":[],"players":[],"seekable":bool(approach.get("seekable",false)),"initialized":false,"age":0.0,"construction_phases":{}}
+        "light_units":{},"opacity_bindings":[],"players":[],"seekable":bool(value.get("absolute_sampling",approach.get("seekable",false))),"initialized":false,"age":0.0,"construction_phases":{}}
     var phase_started:int=Time.get_ticks_usec()
     if not Admission.begin_mutation():
         handle.error="Live effect construction admission is pending";return handle

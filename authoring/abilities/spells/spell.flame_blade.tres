@@ -408,7 +408,7 @@ id = "spell.flame_blade"
 icon = SubResource("Resource_cxfuv")
 delivery = "self"
 body = SubResource("Resource_au07k")
-effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_x68bp"), SubResource("Resource_ixmqg"), SubResource("Resource_hjtem"), SubResource("Resource_8ckic")])
+effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_x68bp")])
 native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
@@ -430,4 +430,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/flame_blade_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Cast preparation only. Actual created appearance is owned by the exact Gear item/lifetime provider. The delivered attack-hit and lifetime/transfer sources need their own real event/owner bindings; they are not replayed as a finite cast vignette."

@@ -13,6 +13,7 @@ const DamageTiming = preload("res://presentation/damage_timing.gd")
 const Conditions = preload("res://presentation/conditions.gd")
 const ActorConstruction = preload("res://presentation/actor_construction.gd")
 const WorldRows = preload("res://presentation/world.gd")
+const NativeItems=preload("res://presentation/native_items.gd")
 
 static func empty_delta() -> Dictionary:
     return Transitions.empty_delta()
@@ -480,6 +481,10 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
     # Commit clocks are known only after scheduling. Project persistent owners
     # once on this compiler worker; never replay these commits during readiness.
     var owners: Dictionary = {}; var areas: Dictionary = {}
+    var item_owners:Dictionary={}
+    var item_state:Dictionary={"actors":before.actors.duplicate(),"items":before.items.duplicate(),"objects":before.objects.duplicate(),
+        "object_members":before.get("object_members",{}),"senses":before.senses,"audience":before.audience}
+    NativeItems.observe(item_owners,item_state,0.0,[],cache)
     Conditions.observe(owners,before.actors,0.0,true)
     var condition_inputs:Dictionary={}
     for id in before.actors:
@@ -491,13 +496,19 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
     for group in groups:
         group.native_requirements = []
         var previous: Dictionary = {}
-        _native_requirement_cut(group,previous,owners,areas,start,0.0,cache)
+        _native_requirement_cut(group,previous,owners,areas,start,0.0,cache,item_owners,item_state)
         var sampled_at:float=start
         for commit in group.get("commits",[]):
             var delta: Dictionary = commit.delta
-            if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses"): continue
+            if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses") and delta.get("items",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("object_members"): continue
             var at: float = start+commit.at_ms
+            for field in ["actors","items","objects"]:item_state[field].merge(delta.get(field,{}),true)
+            for id in delta.get("objects_removed",[]):item_state.objects.erase(id)
+            for field in ["object_members","senses"]:
+                if delta.get("set",{}).has(field):item_state[field]=delta.set[field]
             var changed:bool=false
+            if NativeItems.interested(item_owners,commit.get("item_appearance_origins",[]),delta,cache):
+                changed=NativeItems.observe(item_owners,item_state,at,commit.get("item_appearance_origins",[]),cache) or changed
             for id in delta.get("actors",{}):
                 var actor:Dictionary=delta.actors[id]
                 var selected:Array=[actor.get("conditions",[]),actor.get("life_state","alive")]
@@ -513,14 +524,15 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
             # They change no persistent constructor operand. Keep all distinct
             # clocks and real condition/life/spatial changes, in source order.
             if not changed and at==sampled_at:continue
-            _native_requirement_cut(group,previous,owners,areas,at,commit.at_ms,cache)
+            _native_requirement_cut(group,previous,owners,areas,at,commit.at_ms,cache,item_owners,item_state)
             sampled_at=at
         start += float(group.duration_ms)
 
 static func _native_requirement_cut(group: Dictionary, previous: Dictionary, owners: Dictionary,
-        areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary) -> void:
+        areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary,item_owners:Dictionary={},item_state:Dictionary={}) -> void:
     var samples: Array = Conditions.samples(owners,at_ms,cache,{},false)
     samples.append_array(Conditions.NativePersistent.spatial_samples(areas,at_ms,cache))
+    samples.append_array(NativeItems.samples(item_owners,item_state,at_ms))
     var outlined:Dictionary={}
     var actor_ids:Dictionary={}
     for sample in samples:
@@ -529,6 +541,14 @@ static func _native_requirement_cut(group: Dictionary, previous: Dictionary, own
         for selected in Conditions.select_recipes(actor_id,samples):
             if selected.recipe.get("persistent",{}).has("bodyOutline"):outlined[selected.condition_uuid]=true
     for sample in samples:
+        if sample.get("native_item",false):
+            for event in group.events:
+                if event.event_uuid!=sample.source_event_uuid or event.components.any(func(component):return component.id==sample.id):continue
+                var tracked:Dictionary=sample.duplicate(false)
+                tracked.start_ms=local_ms
+                var component:Dictionary=EventTrace._compiled_component(tracked,cache)
+                component.persistent=true
+                event.components.append(component)
         # Only constructor/source/shape operands cross this boundary. Runtime
         # owner age, removal, initial state and material sampling stay private.
         var row: Dictionary = sample.duplicate()
@@ -753,6 +773,10 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.id,
                 "delta":captured.delta,"condition_rows":captured.get("condition_rows",[])})
         var trailing: Dictionary = recorded.trailing
+        var item_origins:Dictionary=NativeItems.origins(lineage.events,graph,before.items,cache)
+        for commit in group.commits:
+            commit.item_appearance_origins=item_origins.get(commit.event_uuid,[])
+            for origin in commit.item_appearance_origins:origin.operation_sequence=group.operation_sequence
         apply_delta(target,trailing)
         graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)
         if profile_enabled:stage_started=_profile_phase(compile_phases,"lineage_inputs",stage_started)
