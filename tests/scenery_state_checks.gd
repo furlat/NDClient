@@ -54,6 +54,12 @@ func _initialize() -> void:
     for mode in ["solid","translucent","hidden"]:
         check(Reveal.variants(source,{},mode,{"a":true,"b":false})=={"a":1.0,"b":1.0},"%s mixed-current corner uses exact separate originals"%mode)
         check(Reveal.variants(source,{},mode,{"a":false,"b":false})=={"joined":1.0},"%s equally remembered corner keeps exact joined original"%mode)
+    # The server's projector (dnd/player/projection.py _DELTAS) puts north at +y:
+    # a north boundary at (0,0) is also observed from (0,1), a south one from (0,-1).
+    var edges={"tiles":{},"actors":{},"audience":{"controlled":[]},"objects":{"north":object([0,0],"north"),"south":object([0,0],"south")},
+        "senses":{"visible":[[0,1]],"objects":{},"entities":{}}}
+    check(World.visibility(edges)=={"north":true,"south":false},"North boundary is observed from its +y incident cell, like the server's projector")
+    check(World.boundary_index(edges).get("0,1",[])==["north"] and World.boundary_index(edges).get("0,-1",[])==["south"],"Boundary incident cells follow the server's north = +y")
     # An engaged trap selects the server's "activated" state, which its owner has.
     var Catalog=load("res://source_catalog.gd");var cache={}
     var trap={"placement":{"position":[0,0],"base_height_steps":0,"kind":"center"},"item":{"item_id":"environment.trap.crusher.stone.workshop","is_engaged":true}}

@@ -424,13 +424,13 @@ static func update_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
 static func _boundary_cells(object: Dictionary) -> Array:
     var direction: Variant = object.placement.get("boundary_direction")
     if object.item.get("supported_by_uuid")!=null or object.item.get("boundary_structure")==null or direction==null: return []
-    var offset: Array = {"north":[0,-1],"south":[0,1],"east":[1,0],"west":[-1,0]}[direction]
+    var offset: Array = {"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}[direction]
     var position: Array = object.placement.position
     return [cell_key(position),cell_key([position[0]+offset[0],position[1]+offset[1]])]
 
 static func boundary_index(state: Dictionary) -> Dictionary:
     var result = {}
-    var directions = {"north":[0,-1],"south":[0,1],"east":[1,0],"west":[-1,0]}
+    var directions = {"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}
     for id in state.get("objects",{}):
         var object: Dictionary = state.objects[id]
         var direction: Variant = object.placement.get("boundary_direction")
@@ -511,7 +511,7 @@ static func visibility(state: Dictionary) -> Dictionary:
     var result = {}
     for tile in state.get("tiles",{}).values():
         result[tile.tile_uuid] = visible.has(cell_key(tile.position))
-    var directions = {"north":[0,-1],"south":[0,1],"east":[1,0],"west":[-1,0]}
+    var directions = {"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}
     for id in state.get("objects",{}):
         var object: Dictionary = state.objects[id]
         var current: bool = senses.get("objects",{}).get(id,{}).get("visual",false)
