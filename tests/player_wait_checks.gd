@@ -27,6 +27,9 @@ func _run() -> void:
         if scene.playbacks.has(actor): source_times[scene.playbacks[actor].sample_seconds]=true
         max_age=maxi(max_age,int(scene.session.diagnostics().network.get("oldest_request_ms",0)))
     var elapsed=Time.get_ticks_msec()-started_wait
+    # Without the launcher's --test-command-delay-ms the command returns in a
+    # few frames and nothing here measures a wait.
+    check(int(scene.game_config.test_command_delay_ms)>=1000,"Launcher injects a server-side delay of at least one second")
     check(elapsed>=int(scene.game_config.test_command_delay_ms)-100,"Actual command response experiences injected server-side wait")
     check(Engine.get_process_frames()-before_frame>20,"Scene frame callbacks continue while command awaits server")
     check(scene.camera.size<original_size,"Actual viewport wheel input changes camera while command is pending")
