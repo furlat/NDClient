@@ -371,7 +371,9 @@ func _run() -> void:
     root.push_input(event,true)
     check(scene.grid_visible!=grid_before,"G toggles live grid")
     event=event.duplicate();event.pressed=false;root.push_input(event,true)
-    await scene.presentation_updated
+    # The HUD is a child of the scene: it processes after the scene's
+    # presentation_updated in the same frame. Observe the drawn frame.
+    await RenderingServer.frame_post_draw
     check(scene.hud.grid_button.button_pressed==scene.grid_visible,"Grid button follows keyboard state")
     var click=InputEventMouseButton.new();click.position=scene.hud.grid_button.get_global_rect().get_center()
     click.global_position=click.position;click.button_index=MOUSE_BUTTON_LEFT;click.pressed=true

@@ -54,7 +54,7 @@ func select_position(behavior: String) -> Dictionary:
             if behavior == "action.move":
                 var screen = grid_screen(p)
                 scene.update_wall_visibility()
-                if not root.get_visible_rect().has_point(screen) or scene.pick_world(screen).get("kind") != "ground" or scene.pick_cell(screen).get("position") != p or scene.hud.pointer_over_controls(screen): continue
+                if not root.get_visible_rect().has_point(screen) or scene.pick_world(screen).get("kind") != "ground" or not scene.Interaction.same_position(scene.pick_cell(screen).get("position"),p) or scene.hud.pointer_over_controls(screen): continue
             var delta = absf(p[0]-current[0])+absf(p[1]-current[1])
             if delta > 0 and delta < distance:
                 best = {"action":action,"target":target}

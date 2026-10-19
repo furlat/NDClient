@@ -243,6 +243,7 @@ func run() -> void:
     root.remove_child(hud); hud.free()
     root.remove_child(world); world.free()
     await process_frame
+    DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://.runtime/ui"))
     var report = FileAccess.open("res://.runtime/ui/checks.json",FileAccess.WRITE)
     report.store_string(JSON.stringify({"kind":"named_ui_boundary_fixtures","checks":checks,"failures":failures,"ok":failures==0},"  ")); report.close()
     print("UI_BOUNDARY_CHECKS checks=",checks," failures=",failures)

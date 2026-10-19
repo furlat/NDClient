@@ -44,6 +44,8 @@ var notice = Label.new()
 var notice_row = HBoxContainer.new()
 var copy_notice = Button.new()
 var copied_notice = ""
+# Startup progress until the first playable frame, centred over the screen.
+var loading = Label.new()
 var metrics = Label.new()
 var bar = HBoxContainer.new()
 var end_button: Button
@@ -112,6 +114,18 @@ func _ready() -> void:
         label.add_theme_constant_override("shadow_offset_y",2)
     metrics.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
     add_child(metrics)
+    loading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    loading.add_theme_font_size_override("font_size",22)
+    var loading_style = _style(Color("080c12d9"),Color("5f665e"))
+    loading_style.content_margin_left = 28; loading_style.content_margin_right = 28
+    loading_style.content_margin_top = 14; loading_style.content_margin_bottom = 14
+    loading.add_theme_stylebox_override("normal",loading_style)
+    loading.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+    loading.grow_horizontal = Control.GROW_DIRECTION_BOTH
+    loading.grow_vertical = Control.GROW_DIRECTION_BOTH
+    # The scene's first frame draws before this HUD's first _process.
+    loading.text = "Starting the encounter…"
+    add_child(loading)
     bar.add_theme_constant_override("separation",12)
     bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
     add_child(bar)
@@ -124,11 +138,13 @@ func _ready() -> void:
     add_child(end_button)
     confirm_button.text = "Confirm"
     confirm_button.focus_mode = Control.FOCUS_NONE
+    confirm_button.hide()
     confirm_button.pressed.connect(func():
         if world.command_ready(): world.confirm_selection())
     add_child(confirm_button)
     cancel_button.text = "Cancel"
     cancel_button.focus_mode = Control.FOCUS_NONE
+    cancel_button.hide()
     cancel_button.pressed.connect(world.cancel_selection)
     add_child(cancel_button)
     hover_info.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -253,13 +269,10 @@ func _layout() -> void:
     last_viewport_size = viewport_size
     world.FrameProfile.end_phase(world.profile,"hud_layout",phase)
 
-func _current_actor() -> Dictionary:
-    return world.timeline.state.get("actors",{}).get(world.timeline.state.get("current_actor_uuid"),{})
-
 func _inspect_actor() -> Dictionary:
     var inspected: Dictionary = world.timeline.state.get("actors",{}).get(inspected_actor_id,{})
     if not inspected.is_empty(): return inspected
-    var current = _current_actor()
+    var current = _action_actor()
     if not current.is_empty() and current.get("controlled_items") != null: return current
     return world.timeline.state.get("actors",{}).get(world.timeline.state.get("observer_uuid"),{})
 
@@ -371,9 +384,10 @@ func _process(delta: float) -> void:
     world.FrameProfile.end_phase(world.profile,"hud_process",phase)
 
 func _refresh_status(actor: Dictionary) -> void:
-    var state: Dictionary = world.timeline.state
-    if inspected_actor_id.is_empty(): inspected_actor_id=str(actor.get("uuid",""))
-    actor_hud.sync(state,actor,inspected_actor_id,cache)
+    # Only a clicked portrait stays inspected; otherwise the acting actor is.
+    # Latching the first painted actor (the observer, before any choices)
+    # kept showing that actor's bag on every later party member's turn.
+    actor_hud.sync(world.timeline.state,actor,inspected_actor_id if not inspected_actor_id.is_empty() else str(actor.get("uuid","")),cache)
 
 func _rebuild_bar() -> void:
     var phase = Time.get_ticks_usec()
@@ -1156,7 +1170,12 @@ func _refresh_world_labels() -> void:
             hover_info.position.x = maxf(8.0,history_panel.get_global_rect().position.x-hover_info.get_combined_minimum_size().x-8.0)
 
 func _refresh_notice() -> void:
-    notice.text = world.notice_text
+    # A live game shows its startup progress in the centre until the first
+    # playable frame; failures stay in the corner row, with Copy.
+    var starting: bool = not world.game_config.is_empty() and not world.announced_ready and world.session.issue.is_empty() and world.media_issue.is_empty()
+    loading.visible = starting
+    if starting: loading.text = world.notice_text if not world.notice_text.is_empty() else "Starting the encounter…"
+    notice.text = "" if starting else world.notice_text
     notice_row.visible = not notice.text.is_empty()
     copy_notice.text = "Copied" if copied_notice==notice.text else "Copy"
 

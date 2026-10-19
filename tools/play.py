@@ -207,7 +207,7 @@ async def run(args: argparse.Namespace) -> Path:
                 native_args.extend(["--headless", "--max-fps", "60"])
             if args.quit_after:
                 native_args.extend(["--quit-after", str(args.quit_after)])
-            native_args.extend(["--script", args.test_script] if args.test_script else ["res://play.tscn"])
+            native_args.extend(["--script", args.test_script] if args.test_script else ["res://loading.tscn"])
             native_args.extend(["--", "--config", windows_path(client_config)])
             if args.live_fireball_ui:
                 native_args.append("--live-fireball-ui")

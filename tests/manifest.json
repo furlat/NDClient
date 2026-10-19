@@ -1,0 +1,4657 @@
+{
+ "version": 1,
+ "about": "Every tests/*.gd: mode (headless|gpu|live|none), exact args, timeout (s), tier (fast: headless before every commit; gate: GPU picture/order checks before every merge; live: real games through tools/play.py after every merge; none: helper scripts, not run). status: ok runs and gates; known-red, needs-args and owned-by-migration run only with --all-status and never gate. Run with tools/run_tests.sh.",
+ "allowed_errors": [
+  {
+   "pattern": "resources still in use at exit",
+   "reason": "Godot exit-time leak report seen in every live run and many scene tests; harmless at exit, not yet traced"
+  },
+  {
+   "pattern": "ObjectDB instances were leaked at exit",
+   "reason": "same exit-time leak report (a WARNING line, listed for clarity)"
+  }
+ ],
+ "tests": [
+  {
+   "name": "action_completion_checks",
+   "script": "res://tests/action_completion_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_hud_layout_checks",
+   "script": "res://tests/actor_hud_layout_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_layer_endpoint_checks",
+   "script": "res://tests/actor_layer_endpoint_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_layer_reuse_checks",
+   "script": "res://tests/actor_layer_reuse_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_lifetime_checks",
+   "script": "res://tests/actor_lifetime_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_material_payload_checks",
+   "script": "res://tests/actor_material_payload_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--actor-oracle",
+    "--conditions-oracle",
+    "--native",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "actor_material_preparation_checks",
+   "script": "res://tests/actor_material_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_preparation_checks",
+   "script": "res://tests/actor_preparation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_preparation_native_checks",
+   "script": "res://tests/actor_preparation_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_resource_preparation_checks",
+   "script": "res://tests/actor_resource_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "actor_structural_cut_checks",
+   "script": "res://tests/actor_structural_cut_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "animation_checks",
+   "script": "res://tests/animation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "architectural_lighting_checks",
+   "script": "res://tests/architectural_lighting_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "audio_contact_checks",
+   "script": "res://tests/audio_contact_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "audio_presenter_checks",
+   "script": "res://tests/audio_presenter_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<actual Studio journal> (argument not yet chosen)"
+  },
+  {
+   "name": "base_audio_checks",
+   "script": "res://tests/base_audio_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "base_audio_native_checks",
+   "script": "res://tests/base_audio_native_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "basic_condition_checks",
+   "script": "res://tests/basic_condition_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--cases"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "basic_condition_render_checks",
+   "script": "res://tests/basic_condition_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--cases"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_atlas_checks",
+   "script": "res://tests/blood_atlas_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_authority_checks",
+   "script": "res://tests/blood_authority_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--output",
+    "--recording",
+    "--sequence"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<real SDK journal> --sequence=<operation with body.blood> [--output=<report>] (argument not yet chosen)"
+  },
+  {
+   "name": "blood_kernel_cache_checks",
+   "script": "res://tests/blood_kernel_cache_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--candidate",
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_loading_checks",
+   "script": "res://tests/blood_loading_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_phase_preparation_checks",
+   "script": "res://tests/blood_phase_preparation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_residue_checks",
+   "script": "res://tests/blood_residue_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_resource_poll_checks",
+   "script": "res://tests/blood_resource_poll_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_shape_preparation_checks",
+   "script": "res://tests/blood_shape_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_tile_index_checks",
+   "script": "res://tests/blood_tile_index_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "blood_world_preparation_checks",
+   "script": "res://tests/blood_world_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "body_source_parity_checks",
+   "script": "res://tests/body_source_parity_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--characters-oracle",
+    "--encounter-oracle",
+    "--recording"
+   ],
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "camera_pan_checks",
+   "script": "res://tests/camera_pan_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "catalog_checks",
+   "script": "res://tests/catalog_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "character_companion_cache_checks",
+   "script": "res://tests/character_companion_cache_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "character_geometry_checks",
+   "script": "res://tests/character_geometry_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "character_geometry_render_checks",
+   "script": "res://tests/character_geometry_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "character_geometry_sampling_checks",
+   "script": "res://tests/character_geometry_sampling_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "character_geometry_scene_checks",
+   "script": "res://tests/character_geometry_scene_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "character_media_first_use_checks",
+   "script": "res://tests/character_media_first_use_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "chest_live_checks",
+   "script": "res://tests/chest_live_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "chest_render_checks",
+   "script": "res://tests/chest_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "combat_timing_checks",
+   "script": "res://tests/combat_timing_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "compact_interaction_checks",
+   "script": "res://tests/compact_interaction_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "compiler_join_parity_checks",
+   "script": "res://tests/compiler_join_parity_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--oracle",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "compiler_snapshot_checks",
+   "script": "res://tests/compiler_snapshot_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--oracle",
+    "--recording",
+    "--sequence"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "component_trace_checks",
+   "script": "res://tests/component_trace_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "composition_equivalence",
+   "script": "res://tests/composition_equivalence.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "comparison tool"
+  },
+  {
+   "name": "condition_coverage_checks",
+   "script": "res://tests/condition_coverage_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "condition_lifecycle_checks",
+   "script": "res://tests/condition_lifecycle_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "16 Factory defects; waits on the reauthored condition package"
+  },
+  {
+   "name": "condition_lifecycle_frames",
+   "script": "res://tests/condition_lifecycle_frames.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "frame capture tool for condition_lifecycle_checks"
+  },
+  {
+   "name": "condition_material_checks",
+   "script": "res://tests/condition_material_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--oracle",
+    "--output"
+   ],
+   "status": "needs-args",
+   "reason": "takes --output (argument not yet chosen)"
+  },
+  {
+   "name": "condition_native_resolution_checks",
+   "script": "res://tests/condition_native_resolution_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "condition_outline_preparation_checks",
+   "script": "res://tests/condition_outline_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "condition_pose_checks",
+   "script": "res://tests/condition_pose_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "condition_selection_checks",
+   "script": "res://tests/condition_selection_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "creature_geometry_checks",
+   "script": "res://tests/creature_geometry_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "creature_scene_checks",
+   "script": "res://tests/creature_scene_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "creature_shadow_checks",
+   "script": "res://tests/creature_shadow_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "creature_source_checks",
+   "script": "res://tests/creature_source_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "door_overlap_checks",
+   "script": "res://tests/door_overlap_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "door_state_checks",
+   "script": "res://tests/door_state_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "door_state_render_checks",
+   "script": "res://tests/door_state_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "draw_merge_checks",
+   "script": "res://tests/draw_merge_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "effect_package_checks",
+   "script": "res://tests/effect_package_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "emitter_placement_checks",
+   "script": "res://tests/emitter_placement_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "encounter_media_checks",
+   "script": "res://tests/encounter_media_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "environment_input_state_checks",
+   "script": "res://tests/environment_input_state_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "environment_media_delta_checks",
+   "script": "res://tests/environment_media_delta_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "environment_normal_delivery_checks",
+   "script": "res://tests/environment_normal_delivery_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "environment"
+  },
+  {
+   "name": "environment_owner_checks",
+   "script": "res://tests/environment_owner_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--environment-oracle",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "environment_selection_checks",
+   "script": "res://tests/environment_selection_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "environment_source_preparation_checks",
+   "script": "res://tests/environment_source_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "environment"
+  },
+  {
+   "name": "environment_streaming_checks",
+   "script": "res://tests/environment_streaming_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "environment_texture_layout_checks",
+   "script": "res://tests/environment_texture_layout_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "environment"
+  },
+  {
+   "name": "equipment_presentation_checks",
+   "script": "res://tests/equipment_presentation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "equipment_selection_checks",
+   "script": "res://tests/equipment_selection_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "event_trace_checks",
+   "script": "res://tests/event_trace_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--journal"
+   ],
+   "status": "known-red",
+   "reason": "red in the sweep; not investigated"
+  },
+  {
+   "name": "event_trace_isolation_checks",
+   "script": "res://tests/event_trace_isolation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording",
+    "--trace-oracle"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "exploration_checks",
+   "script": "res://tests/exploration_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "fireball_layer_ownership_checks",
+   "script": "res://tests/fireball_layer_ownership_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "fixture_light_checks",
+   "script": "res://tests/fixture_light_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "fixture_optical_facts_checks",
+   "script": "res://tests/fixture_optical_facts_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "frenzy_presentation_checks",
+   "script": "res://tests/frenzy_presentation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "frenzy_render_checks",
+   "script": "res://tests/frenzy_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "global_publication_checks",
+   "script": "res://tests/global_publication_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "grid_alpha_checks",
+   "script": "res://tests/grid_alpha_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "grid_order_checks",
+   "script": "res://tests/grid_order_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "grid_render_checks",
+   "script": "res://tests/grid_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ground_geometry_changes_checks",
+   "script": "res://tests/ground_geometry_changes_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ground_overlay_delta_checks",
+   "script": "res://tests/ground_overlay_delta_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--before"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ground_overlay_support_checks",
+   "script": "res://tests/ground_overlay_support_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ground_receiving_checks",
+   "script": "res://tests/ground_receiving_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ground_update_checks",
+   "script": "res://tests/ground_update_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ground_visibility_checks",
+   "script": "res://tests/ground_visibility_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "half_storage_checks",
+   "script": "res://tests/half_storage_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "hidden_corner_checks",
+   "script": "res://tests/hidden_corner_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "history_panel_ui_checks",
+   "script": "res://tests/history_panel_ui_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "history_view_checks",
+   "script": "res://tests/history_view_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "hover_feedback_checks",
+   "script": "res://tests/hover_feedback_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--background-check"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "hud_grid_checks",
+   "script": "res://tests/hud_grid_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--compare-before",
+    "--compare-before-route"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "hud_retention_checks",
+   "script": "res://tests/hud_retention_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--state"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --script res://tests/hud_retention_checks.gd -- --state=<recorded canonical state.json> (argument not yet chosen)"
+  },
+  {
+   "name": "impact_placement_checks",
+   "script": "res://tests/impact_placement_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--output",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --output, --recording (argument not yet chosen)"
+  },
+  {
+   "name": "input_walking_checks",
+   "script": "res://tests/input_walking_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "legacy_preparation_checks",
+   "script": "res://tests/legacy_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "red in the sweep"
+  },
+  {
+   "name": "light_cookie_generation_checks",
+   "script": "res://tests/light_cookie_generation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "light_preparation_ownership_checks",
+   "script": "res://tests/light_preparation_ownership_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "light_prepared_publication_checks",
+   "script": "res://tests/light_prepared_publication_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "light_projection_checks",
+   "script": "res://tests/light_projection_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "light_range_profile_checks",
+   "script": "res://tests/light_range_profile_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording",
+    "--sequence"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<real Hide/light journal> [--sequence=8] (argument not yet chosen)"
+  },
+  {
+   "name": "light_range_render_checks",
+   "script": "res://tests/light_range_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "light_table_checks",
+   "script": "res://tests/light_table_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "lighting_2d_checks",
+   "script": "res://tests/lighting_2d_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "lighting_checks",
+   "script": "res://tests/lighting_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "lighting_live_checks",
+   "script": "res://tests/lighting_live_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "lighting_render_checks",
+   "script": "res://tests/lighting_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--background-check"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "lit_shader_compile_checks",
+   "script": "res://tests/lit_shader_compile_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "live_chain_separation_checks",
+   "script": "res://tests/live_chain_separation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "live_environment_admission_checks",
+   "script": "res://tests/live_environment_admission_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "live_gallery_checks",
+   "script": "res://tests/live_gallery_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 900,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "live_idle_ui_checks",
+   "script": "res://tests/live_idle_ui_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "live_spell_checks",
+   "script": "res://tests/live_spell_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "gallery_sorcerer"
+   ],
+   "timeout": 900,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "log_publication_timing_checks",
+   "script": "res://tests/log_publication_timing_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "loot_live_checks",
+   "script": "res://tests/loot_live_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "map_benchmark",
+   "script": "res://tests/map_benchmark.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "benchmark"
+  },
+  {
+   "name": "media_completion_checks",
+   "script": "res://tests/media_completion_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--state"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --script res://tests/media_completion_checks.gd -- --state=<recorded canonical state.json> (argument not yet chosen)"
+  },
+  {
+   "name": "media_demand_checks",
+   "script": "res://tests/media_demand_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_demand_precompute_checks",
+   "script": "res://tests/media_demand_precompute_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_demand_reference",
+   "script": "res://tests/media_demand_reference.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "reference implementation preloaded by media demand tests"
+  },
+  {
+   "name": "media_handoff_checks",
+   "script": "res://tests/media_handoff_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--state"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --state=<recorded canonical state.json> (argument not yet chosen)"
+  },
+  {
+   "name": "media_latency_checks",
+   "script": "res://tests/media_latency_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--state"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --state=<recorded canonical state.json> (argument not yet chosen)"
+  },
+  {
+   "name": "media_optional_selection_checks",
+   "script": "res://tests/media_optional_selection_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_prune_pressure_checks",
+   "script": "res://tests/media_prune_pressure_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_publication_priority_checks",
+   "script": "res://tests/media_publication_priority_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_recorded_latency_checks",
+   "script": "res://tests/media_recorded_latency_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<current schema journal> (argument not yet chosen)"
+  },
+  {
+   "name": "media_recording_demand_checks",
+   "script": "res://tests/media_recording_demand_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_role_race_checks",
+   "script": "res://tests/media_role_race_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_shared_residency_checks",
+   "script": "res://tests/media_shared_residency_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--priority-only"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_source_delta_checks",
+   "script": "res://tests/media_source_delta_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_streaming_checks",
+   "script": "res://tests/media_streaming_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_texture_native_checks",
+   "script": "res://tests/media_texture_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "media_warmup_checks",
+   "script": "res://tests/media_warmup_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "modular_tint_checks",
+   "script": "res://tests/modular_tint_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "movement_reference_speed_checks",
+   "script": "res://tests/movement_reference_speed_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_2d_integration_checks",
+   "script": "res://tests/native_2d_integration_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_2d_source_checks",
+   "script": "res://tests/native_2d_source_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_area_mask_checks",
+   "script": "res://tests/native_area_mask_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_area_mask_ownership_checks",
+   "script": "res://tests/native_area_mask_ownership_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_assembled_demo_checks",
+   "script": "res://tests/native_assembled_demo_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_asset_admission_checks",
+   "script": "res://tests/native_asset_admission_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_atlas_publication_checks",
+   "script": "res://tests/native_atlas_publication_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording",
+    "--reveal-cap",
+    "--reveal-indices"
+   ],
+   "status": "known-red",
+   "reason": "needs a --recording argument; which recording is not recorded anywhere"
+  },
+  {
+   "name": "native_authoring_checks",
+   "script": "res://tests/native_authoring_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (authoring overlay)"
+  },
+  {
+   "name": "native_blood_partition_checks",
+   "script": "res://tests/native_blood_partition_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_choice_prefetch_checks",
+   "script": "res://tests/native_choice_prefetch_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_colour_transfer_checks",
+   "script": "res://tests/native_colour_transfer_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_condition_owner_index_checks",
+   "script": "res://tests/native_condition_owner_index_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_constant_resource_checks",
+   "script": "res://tests/native_constant_resource_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_demo_parity_checks",
+   "script": "res://tests/native_demo_parity_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_effect_motion_checks",
+   "script": "res://tests/native_effect_motion_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--fps"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_effect_particle_checks",
+   "script": "res://tests/native_effect_particle_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_effect_receiving_checks",
+   "script": "res://tests/native_effect_receiving_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_effect_render_checks",
+   "script": "res://tests/native_effect_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_effect_source_checks",
+   "script": "res://tests/native_effect_source_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_effect_table_receiving_checks",
+   "script": "res://tests/native_effect_table_receiving_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_floor_batch_checks",
+   "script": "res://tests/native_floor_batch_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_floor_lighting_checks",
+   "script": "res://tests/native_floor_lighting_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_ground_receiving_checks",
+   "script": "res://tests/native_ground_receiving_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_light_cap_checks",
+   "script": "res://tests/native_light_cap_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_light_cap_scene_checks",
+   "script": "res://tests/native_light_cap_scene_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--expect-carried-off"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_light_cookie_checks",
+   "script": "res://tests/native_light_cookie_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_light_output_checks",
+   "script": "res://tests/native_light_output_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_lighting_comparison",
+   "script": "res://tests/native_lighting_comparison.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "comparison capture tool"
+  },
+  {
+   "name": "native_optical_media_checks",
+   "script": "res://tests/native_optical_media_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_particle_units_checks",
+   "script": "res://tests/native_particle_units_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_persistent_studio_checks",
+   "script": "res://tests/native_persistent_studio_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_prefetch_ownership_checks",
+   "script": "res://tests/native_prefetch_ownership_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "times out"
+  },
+  {
+   "name": "native_preparation_cache_checks",
+   "script": "res://tests/native_preparation_cache_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "known-red",
+   "reason": "red in the sweep; not investigated"
+  },
+  {
+   "name": "native_requirement_templates_checks",
+   "script": "res://tests/native_requirement_templates_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_rig_admission_checks",
+   "script": "res://tests/native_rig_admission_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_scene_decal_checks",
+   "script": "res://tests/native_scene_decal_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_scene_support_checks",
+   "script": "res://tests/native_scene_support_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--actors",
+    "--before",
+    "--candidate"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_scene_support_reference",
+   "script": "res://tests/native_scene_support_reference.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "reference implementation preloaded by scene-support tests"
+  },
+  {
+   "name": "native_shared_mesh_checks",
+   "script": "res://tests/native_shared_mesh_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--spells"
+   ],
+   "status": "known-red",
+   "reason": "times out"
+  },
+  {
+   "name": "native_source_admission_checks",
+   "script": "res://tests/native_source_admission_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_source_noise_checks",
+   "script": "res://tests/native_source_noise_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--all-sources"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_source_reload_checks",
+   "script": "res://tests/native_source_reload_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_source_resources_checks",
+   "script": "res://tests/native_source_resources_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_source_startup_checks",
+   "script": "res://tests/native_source_startup_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--all-sources"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_source_variant_checks",
+   "script": "res://tests/native_source_variant_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--all-sources"
+   ],
+   "status": "owned-by-migration",
+   "reason": "spells and actions (source variants); 19,139 failures; owned by the spells migration"
+  },
+  {
+   "name": "native_source_variant_render_checks",
+   "script": "res://tests/native_source_variant_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (source variants)"
+  },
+  {
+   "name": "native_spell_admission_checks",
+   "script": "res://tests/native_spell_admission_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_spell_batch_authoring_checks",
+   "script": "res://tests/native_spell_batch_authoring_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (authoring overlay)"
+  },
+  {
+   "name": "native_spell_batch_render_checks",
+   "script": "res://tests/native_spell_batch_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--only",
+    "--sample-fraction"
+   ],
+   "status": "known-red",
+   "reason": "Web x4, Cure Wounds, Healing Word, Mage Armor exit, Shield of Faith 0 px, Thaumaturgy"
+  },
+  {
+   "name": "native_spell_channel_checks",
+   "script": "res://tests/native_spell_channel_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "known-red",
+   "reason": "red in the sweep; not investigated"
+  },
+  {
+   "name": "native_spell_event_checks",
+   "script": "res://tests/native_spell_event_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "known-red",
+   "reason": "1 failure in the sweep"
+  },
+  {
+   "name": "native_spell_feedback_checks",
+   "script": "res://tests/native_spell_feedback_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_spell_hits_checks",
+   "script": "res://tests/native_spell_hits_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_spell_library_checks",
+   "script": "res://tests/native_spell_library_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--only"
+   ],
+   "status": "known-red",
+   "reason": "red in the sweep"
+  },
+  {
+   "name": "native_spell_panes_checks",
+   "script": "res://tests/native_spell_panes_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "red in the sweep"
+  },
+  {
+   "name": "native_spell_playback_checks",
+   "script": "res://tests/native_spell_playback_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--case",
+    "--controls-only",
+    "--pause-stages"
+   ],
+   "status": "known-red",
+   "reason": "red in the sweep"
+  },
+  {
+   "name": "native_spell_retained_tail_checks",
+   "script": "res://tests/native_spell_retained_tail_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_spell_retention_checks",
+   "script": "res://tests/native_spell_retention_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_spell_studio_checks",
+   "script": "res://tests/native_spell_studio_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "red in the sweep"
+  },
+  {
+   "name": "native_spell_thumbnail_checks",
+   "script": "res://tests/native_spell_thumbnail_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "known-red",
+   "reason": "2 failures in the sweep"
+  },
+  {
+   "name": "native_spell_witness_checks",
+   "script": "res://tests/native_spell_witness_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_startup_lifecycle_failure_checks",
+   "script": "res://tests/native_startup_lifecycle_failure_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_surface_receiving_checks",
+   "script": "res://tests/native_surface_receiving_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--expect-carried-off"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "normal_profile_checks",
+   "script": "res://tests/normal_profile_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "normal_profile_media_checks",
+   "script": "res://tests/normal_profile_media_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "optical_light_source_checks",
+   "script": "res://tests/optical_light_source_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording-root"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "order_oracle_checks",
+   "script": "res://tests/order_oracle_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases",
+    "--explain",
+    "--gallery",
+    "--play-frames"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "packet_pipeline_equality_checks",
+   "script": "res://tests/packet_pipeline_equality_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--defaults",
+    "--dump",
+    "--recording",
+    "--reference",
+    "--report",
+    "--timings",
+    "--write-reference"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "palette_prepare_checks",
+   "script": "res://tests/palette_prepare_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "placement_checks",
+   "script": "res://tests/placement_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "player_defaults_checks",
+   "script": "res://tests/player_defaults_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "player_effect_picking_checks",
+   "script": "res://tests/player_effect_picking_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "player_interaction_checks",
+   "script": "res://tests/player_interaction_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "player_live_checks",
+   "script": "res://tests/player_live_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "player_profile",
+   "script": "res://tests/player_profile.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "profiler (journal replay timing), not a pass/fail test"
+  },
+  {
+   "name": "player_startup_checks",
+   "script": "res://tests/player_startup_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "player_view_checks",
+   "script": "res://tests/player_view_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "player_wait_checks",
+   "script": "res://tests/player_wait_checks.gd",
+   "mode": "live",
+   "tier": "live",
+   "args": [
+    "--scenario",
+    "crypt_gallery",
+    "--test-command-delay-ms",
+    "2000"
+   ],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "preload_priority_checks",
+   "script": "res://tests/preload_priority_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<actual current-schema journal> (argument not yet chosen)"
+  },
+  {
+   "name": "preparation_admission_checks",
+   "script": "res://tests/preparation_admission_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "prepared_admission_checks",
+   "script": "res://tests/prepared_admission_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "prepared_membership_checks",
+   "script": "res://tests/prepared_membership_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "presentation_capture",
+   "script": "res://tests/presentation_capture.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "capture tool"
+  },
+  {
+   "name": "presentation_character_checks",
+   "script": "res://tests/presentation_character_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--record"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "presentation_checks",
+   "script": "res://tests/presentation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--journal",
+    "--limit"
+   ],
+   "status": "needs-args",
+   "reason": "takes --journal (argument not yet chosen)"
+  },
+  {
+   "name": "presentation_identity_checks",
+   "script": "res://tests/presentation_identity_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "presentation_requirements_checks",
+   "script": "res://tests/presentation_requirements_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "presentation_resource_revision_checks",
+   "script": "res://tests/presentation_resource_revision_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "presentation_staging_checks",
+   "script": "res://tests/presentation_staging_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "presentation_worker_metadata_checks",
+   "script": "res://tests/presentation_worker_metadata_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--compiler-oracle",
+    "--environment-oracle",
+    "--media-oracle",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "producer_json_checks",
+   "script": "res://tests/producer_json_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--producer-oracle",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "profile_run",
+   "script": "res://tests/profile_run.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "profiler"
+  },
+  {
+   "name": "projectile_sandbox_checks",
+   "script": "res://tests/projectile_sandbox_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--spell"
+   ],
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "quarter_progress_checks",
+   "script": "res://tests/quarter_progress_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "receiver_bounds_checks",
+   "script": "res://tests/receiver_bounds_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "hung over 10 minutes in the sweep (GPU)"
+  },
+  {
+   "name": "recorded_lifecycle_checks",
+   "script": "res://tests/recorded_lifecycle_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--journal"
+   ],
+   "status": "needs-args",
+   "reason": "takes --journal (argument not yet chosen)"
+  },
+  {
+   "name": "recorded_media_completion_checks",
+   "script": "res://tests/recorded_media_completion_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--journal",
+    "--sequence"
+   ],
+   "status": "needs-args",
+   "reason": "takes --journal (argument not yet chosen)"
+  },
+  {
+   "name": "replay_cast_owner_checks",
+   "script": "res://tests/replay_cast_owner_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "replay_media_demand_checks",
+   "script": "res://tests/replay_media_demand_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "replay_retained_lighting_checks",
+   "script": "res://tests/replay_retained_lighting_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "required_actor_optics_checks",
+   "script": "res://tests/required_actor_optics_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--media-oracle",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "required_actor_reuse_checks",
+   "script": "res://tests/required_actor_reuse_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--media-oracle",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "reveal_preparation_overlap_checks",
+   "script": "res://tests/reveal_preparation_overlap_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "hung over 10 minutes in the sweep (GPU)"
+  },
+  {
+   "name": "reveal_scenery_publication_checks",
+   "script": "res://tests/reveal_scenery_publication_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "rotation_preparation_checks",
+   "script": "res://tests/rotation_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "runtime_retention_checks",
+   "script": "res://tests/runtime_retention_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sandbox_batch_checks",
+   "script": "res://tests/sandbox_batch_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--batch-one-view",
+    "--batch-phases-only",
+    "--batch-spells"
+   ],
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_body_surface_checks",
+   "script": "res://tests/sandbox_body_surface_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_casting_checks",
+   "script": "res://tests/sandbox_casting_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_casting_native_checks",
+   "script": "res://tests/sandbox_casting_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_chill_source_checks",
+   "script": "res://tests/sandbox_chill_source_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_choreography_checks",
+   "script": "res://tests/sandbox_choreography_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_colour_checks",
+   "script": "res://tests/sandbox_colour_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_feedback_checks",
+   "script": "res://tests/sandbox_feedback_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_flash_playback_checks",
+   "script": "res://tests/sandbox_flash_playback_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--all-capabilities"
+   ],
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_ice_web_checks",
+   "script": "res://tests/sandbox_ice_web_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_light_units_checks",
+   "script": "res://tests/sandbox_light_units_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_particle_clock_checks",
+   "script": "res://tests/sandbox_particle_clock_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_particle_scale_checks",
+   "script": "res://tests/sandbox_particle_scale_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_position_checks",
+   "script": "res://tests/sandbox_position_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_regression_checks",
+   "script": "res://tests/sandbox_regression_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_scene_integration_checks",
+   "script": "res://tests/sandbox_scene_integration_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_source_light_checks",
+   "script": "res://tests/sandbox_source_light_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox); hung over 10 minutes in the sweep (GPU)"
+  },
+  {
+   "name": "sandbox_support_authoring_checks",
+   "script": "res://tests/sandbox_support_authoring_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_support_feedback_checks",
+   "script": "res://tests/sandbox_support_feedback_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "sandbox_surface_socket_checks",
+   "script": "res://tests/sandbox_surface_socket_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--compact"
+   ],
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox); hung over 10 minutes in the sweep (GPU)"
+  },
+  {
+   "name": "sandbox_utility_feedback_checks",
+   "script": "res://tests/sandbox_utility_feedback_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--utility-one-view",
+    "--utility-spells"
+   ],
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "scale_profile",
+   "script": "res://tests/scale_profile.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "profiler"
+  },
+  {
+   "name": "scenery_render_checks",
+   "script": "res://tests/scenery_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "scenery_state_checks",
+   "script": "res://tests/scenery_state_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "scheduled_environment_checks",
+   "script": "res://tests/scheduled_environment_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_canonical_reuse_checks",
+   "script": "res://tests/sdk_canonical_reuse_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "sdk_cell_checks",
+   "script": "res://tests/sdk_cell_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --cases=<Python reducer oracle JSON> (argument not yet chosen)"
+  },
+  {
+   "name": "sdk_choices_checks",
+   "script": "res://tests/sdk_choices_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--choices"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_decimal_checks",
+   "script": "res://tests/sdk_decimal_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_journal_checks",
+   "script": "res://tests/sdk_journal_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_live_game",
+   "script": "res://tests/sdk_live_game.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "manual live SDK driver"
+  },
+  {
+   "name": "sdk_optical_sources_checks",
+   "script": "res://tests/sdk_optical_sources_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--legacy",
+    "--oracle",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "sdk_points_union_checks",
+   "script": "res://tests/sdk_points_union_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--journal"
+   ],
+   "status": "needs-args",
+   "reason": "takes --journal (argument not yet chosen)"
+  },
+  {
+   "name": "sdk_pool_checks",
+   "script": "res://tests/sdk_pool_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_profile_checks",
+   "script": "res://tests/sdk_profile_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_protocol_checks",
+   "script": "res://tests/sdk_protocol_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_protocol_parity",
+   "script": "res://tests/sdk_protocol_parity.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_reducer_checks",
+   "script": "res://tests/sdk_reducer_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_retained_transaction_checks",
+   "script": "res://tests/sdk_retained_transaction_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_sensory_context_checks",
+   "script": "res://tests/sdk_sensory_context_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_sensory_journal_checks",
+   "script": "res://tests/sdk_sensory_journal_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "sdk_single_audience_projection_checks",
+   "script": "res://tests/sdk_single_audience_projection_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_snapshot_checks",
+   "script": "res://tests/sdk_snapshot_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases",
+    "--recording",
+    "--sequence"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: Godot --headless --path <project> --script res://tests/sdk_snapshot_checks.gd -- --recording=<current SDK journal> --sequence=<sensory operation> [--cases=<reducer-oracle.json>] (argument not yet chosen)"
+  },
+  {
+   "name": "sdk_tile_field_checks",
+   "script": "res://tests/sdk_tile_field_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--cases"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --cases=<generated tile-field oracle JSON> is required (argument not yet chosen)"
+  },
+  {
+   "name": "sdk_transport_checks",
+   "script": "res://tests/sdk_transport_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--diagnostic"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sdk_transport_peer",
+   "script": "res://tests/sdk_transport_peer.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "transport peer process started by sdk_transport_checks"
+  },
+  {
+   "name": "selection_feedback_metadata_checks",
+   "script": "res://tests/selection_feedback_metadata_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording",
+    "--selection-oracle"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "selection_media_checks",
+   "script": "res://tests/selection_media_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--case",
+    "--gallery",
+    "--hover"
+   ],
+   "status": "needs-args",
+   "reason": "takes --case (argument not yet chosen)"
+  },
+  {
+   "name": "selection_source_handoff_checks",
+   "script": "res://tests/selection_source_handoff_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--run"
+   ],
+   "status": "needs-args",
+   "reason": "takes --run (argument not yet chosen)"
+  },
+  {
+   "name": "session_execution_checks",
+   "script": "res://tests/session_execution_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "session_record_retirement_checks",
+   "script": "res://tests/session_record_retirement_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "settings_checks",
+   "script": "res://tests/settings_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--state"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --state=<recorded canonical state.json> (argument not yet chosen)"
+  },
+  {
+   "name": "shadow_geometry_cache_checks",
+   "script": "res://tests/shadow_geometry_cache_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--oracle"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "shadow_idle_checks",
+   "script": "res://tests/shadow_idle_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "shadow_preparation_checks",
+   "script": "res://tests/shadow_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "shadow_scalar_checks",
+   "script": "res://tests/shadow_scalar_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "shadow_source_checks",
+   "script": "res://tests/shadow_source_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "sheet_prepack_checks",
+   "script": "res://tests/sheet_prepack_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--dir",
+    "--limit",
+    "--timing"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "shield_reaction_cast_checks",
+   "script": "res://tests/shield_reaction_cast_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "source_catalog_static_owner_checks",
+   "script": "res://tests/source_catalog_static_owner_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "source_index_owner_checks",
+   "script": "res://tests/source_index_owner_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "source_publication_progress_checks",
+   "script": "res://tests/source_publication_progress_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "source_requirement_publication_checks",
+   "script": "res://tests/source_requirement_publication_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "spell_sandbox_checks",
+   "script": "res://tests/spell_sandbox_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "owned-by-migration",
+   "reason": "spells and actions (sandbox)"
+  },
+  {
+   "name": "studio_audio_transport_checks",
+   "script": "res://tests/studio_audio_transport_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_authoring_audit_checks",
+   "script": "res://tests/studio_authoring_audit_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_blood_partition_checks",
+   "script": "res://tests/studio_blood_partition_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<real OA recording with blood and resumed recipient movement> (argument not yet chosen)"
+  },
+  {
+   "name": "studio_blood_residue_checks",
+   "script": "res://tests/studio_blood_residue_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<actual dash-seed3 Amber journal> (argument not yet chosen)"
+  },
+  {
+   "name": "studio_browser_checks",
+   "script": "res://tests/studio_browser_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<real SDK case journal> (argument not yet chosen)"
+  },
+  {
+   "name": "studio_capture",
+   "script": "res://tests/studio_capture.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "Studio capture tool"
+  },
+  {
+   "name": "studio_checkpoint_native_checks",
+   "script": "res://tests/studio_checkpoint_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "exits 2 in the sweep"
+  },
+  {
+   "name": "studio_clip_end_checks",
+   "script": "res://tests/studio_clip_end_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_combat_native_checks",
+   "script": "res://tests/studio_combat_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_combat_tracks_checks",
+   "script": "res://tests/studio_combat_tracks_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_condition_navigation_checks",
+   "script": "res://tests/studio_condition_navigation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_condition_preview_checks",
+   "script": "res://tests/studio_condition_preview_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<actual journal with an initially active authored condition> (argument not yet chosen)"
+  },
+  {
+   "name": "studio_condition_restore_checks",
+   "script": "res://tests/studio_condition_restore_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_condition_restore_native_checks",
+   "script": "res://tests/studio_condition_restore_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "studio_effect_version_checks",
+   "script": "res://tests/studio_effect_version_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--at",
+    "--captures",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "studio_faction_ui_checks",
+   "script": "res://tests/studio_faction_ui_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<actual Hide amber journal> (argument not yet chosen)"
+  },
+  {
+   "name": "studio_follow_checks",
+   "script": "res://tests/studio_follow_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_follow_publication_checks",
+   "script": "res://tests/studio_follow_publication_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_gallery_spell_checks",
+   "script": "res://tests/studio_gallery_spell_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--fireball-framing-only",
+    "--monument-only",
+    "--native",
+    "--startup-only"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_hide_render_checks",
+   "script": "res://tests/studio_hide_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording",
+    "--transition-only"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "studio_inventory_checks",
+   "script": "res://tests/studio_inventory_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_library_navigation_checks",
+   "script": "res://tests/studio_library_navigation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_light_calibration_checks",
+   "script": "res://tests/studio_light_calibration_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_light_levels_checks",
+   "script": "res://tests/studio_light_levels_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "studio_light_tracks_checks",
+   "script": "res://tests/studio_light_tracks_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_light_ui_checks",
+   "script": "res://tests/studio_light_ui_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "studio_material_method_checks",
+   "script": "res://tests/studio_material_method_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_missing_lanes_checks",
+   "script": "res://tests/studio_missing_lanes_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "known-red",
+   "reason": "red in the coordinator's sweep; not investigated"
+  },
+  {
+   "name": "studio_native_condition_checks",
+   "script": "res://tests/studio_native_condition_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<actual Hide amber journal> (argument not yet chosen)"
+  },
+  {
+   "name": "studio_native_preview_resource_checks",
+   "script": "res://tests/studio_native_preview_resource_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "known-red",
+   "reason": "red in the sweep; not investigated"
+  },
+  {
+   "name": "studio_native_startup_scope_checks",
+   "script": "res://tests/studio_native_startup_scope_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_optical_light_checks",
+   "script": "res://tests/studio_optical_light_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_perspective_checks",
+   "script": "res://tests/studio_perspective_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_provenance_checks",
+   "script": "res://tests/studio_provenance_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "studio_recording_media_checks",
+   "script": "res://tests/studio_recording_media_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<journal-directory> (repeat for additional real recordings) (argument not yet chosen)"
+  },
+  {
+   "name": "studio_render_preference_checks",
+   "script": "res://tests/studio_render_preference_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_replay_comparison_checks",
+   "script": "res://tests/studio_replay_comparison_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_replay_late_reaction_native_checks",
+   "script": "res://tests/studio_replay_late_reaction_native_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_replay_native_checks",
+   "script": "res://tests/studio_replay_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_replay_prefix_checks",
+   "script": "res://tests/studio_replay_prefix_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_replay_terminal_checks",
+   "script": "res://tests/studio_replay_terminal_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_seek_checks",
+   "script": "res://tests/studio_seek_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--output",
+    "--recording"
+   ],
+   "status": "known-red",
+   "reason": "one heading-96 failure, pre-existing since 7faf78f"
+  },
+  {
+   "name": "studio_session_checks",
+   "script": "res://tests/studio_session_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_single_view_checks",
+   "script": "res://tests/studio_single_view_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--native"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_slash_thumbnail_checks",
+   "script": "res://tests/studio_slash_thumbnail_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_spare_world_checks",
+   "script": "res://tests/studio_spare_world_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_spell_batch_checks",
+   "script": "res://tests/studio_spell_batch_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_startup_boundary_checks",
+   "script": "res://tests/studio_startup_boundary_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_study_catalog_checks",
+   "script": "res://tests/studio_study_catalog_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_study_library_checks",
+   "script": "res://tests/studio_study_library_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_thumbnail_batch_checks",
+   "script": "res://tests/studio_thumbnail_batch_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_thumbnail_cache_checks",
+   "script": "res://tests/studio_thumbnail_cache_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--native"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_timeline_layout_checks",
+   "script": "res://tests/studio_timeline_layout_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_timeline_preparation_checks",
+   "script": "res://tests/studio_timeline_preparation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_timeline_scrub_checks",
+   "script": "res://tests/studio_timeline_scrub_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_timing_checks",
+   "script": "res://tests/studio_timing_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "studio_transport_checks",
+   "script": "res://tests/studio_transport_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "studio_ui_checks",
+   "script": "res://tests/studio_ui_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<actual SDK journal> (argument not yet chosen)"
+  },
+  {
+   "name": "studio_viewport_layout_checks",
+   "script": "res://tests/studio_viewport_layout_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "surface_socket_bake_checks",
+   "script": "res://tests/surface_socket_bake_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--source-list"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "targeting_hover_checks",
+   "script": "res://tests/targeting_hover_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--case"
+   ],
+   "status": "needs-args",
+   "reason": "takes --case (argument not yet chosen)"
+  },
+  {
+   "name": "targeting_native_capture",
+   "script": "res://tests/targeting_native_capture.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "capture tool"
+  },
+  {
+   "name": "terminal_source_handoff_checks",
+   "script": "res://tests/terminal_source_handoff_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "thin_body_source_checks",
+   "script": "res://tests/thin_body_source_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--previous-index"
+   ],
+   "status": "owned-by-migration",
+   "reason": "characters"
+  },
+  {
+   "name": "tile_journal_checks",
+   "script": "res://tests/tile_journal_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--previous",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "timeline_readiness_checks",
+   "script": "res://tests/timeline_readiness_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<current-schema journal> [--recording=<another journal>] (argument not yet chosen)"
+  },
+  {
+   "name": "timeline_world_changes_checks",
+   "script": "res://tests/timeline_world_changes_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "torch_padding_checks",
+   "script": "res://tests/torch_padding_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "trusted_choices_checks",
+   "script": "res://tests/trusted_choices_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--choices"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --choices=<actual compact ChoicesResponse JSON> is required (argument not yet chosen)"
+  },
+  {
+   "name": "trusted_choices_peer",
+   "script": "res://tests/trusted_choices_peer.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "peer process started by trusted_choices_checks"
+  },
+  {
+   "name": "trusted_operations_checks",
+   "script": "res://tests/trusted_operations_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "Usage: --recording=<current server journal directory> (argument not yet chosen)"
+  },
+  {
+   "name": "ui_actor_portrait_checks",
+   "script": "res://tests/ui_actor_portrait_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ui_checks",
+   "script": "res://tests/ui_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--background-check",
+    "--screenshot"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "ui_fixture_world",
+   "script": "res://tests/ui_fixture_world.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "fixture world preloaded by HUD tests"
+  },
+  {
+   "name": "ui_recorded_checks",
+   "script": "res://tests/ui_recorded_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--background-check",
+    "--capture",
+    "--screenshot"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "unity_capture",
+   "script": "res://tests/unity_capture.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "Unity comparison capture"
+  },
+  {
+   "name": "unity_profile",
+   "script": "res://tests/unity_profile.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "Unity comparison profiler"
+  },
+  {
+   "name": "unity_roof_inspect",
+   "script": "res://tests/unity_roof_inspect.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "Unity comparison inspection"
+  },
+  {
+   "name": "unity_tour",
+   "script": "res://tests/unity_tour.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "Unity comparison tour"
+  },
+  {
+   "name": "unity_walk_checks",
+   "script": "res://tests/unity_walk_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "vfx_effect_hold_checks",
+   "script": "res://tests/vfx_effect_hold_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--captures",
+    "--recording",
+    "--report"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "view_publication",
+   "script": "res://tests/view_publication.gd",
+   "mode": "none",
+   "tier": "none",
+   "status": "helper",
+   "reason": "helper preloaded by interaction tests"
+  },
+  {
+   "name": "walking_checks",
+   "script": "res://tests/walking_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_compositing_checks",
+   "script": "res://tests/wall_compositing_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--background-check",
+    "--msaa-4x",
+    "--no-msaa"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_corner_checks",
+   "script": "res://tests/wall_corner_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--background-check",
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "wall_fragment_checks",
+   "script": "res://tests/wall_fragment_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_geometry_delta_checks",
+   "script": "res://tests/wall_geometry_delta_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_member_view_checks",
+   "script": "res://tests/wall_member_view_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--fixed-direct"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_mode_lifecycle_checks",
+   "script": "res://tests/wall_mode_lifecycle_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_preparation_checks",
+   "script": "res://tests/wall_preparation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_reveal_checks",
+   "script": "res://tests/wall_reveal_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "wall_visibility_checks",
+   "script": "res://tests/wall_visibility_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "water_render_checks",
+   "script": "res://tests/water_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "workshop_checks",
+   "script": "res://tests/workshop_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_authority_checks",
+   "script": "res://tests/world_authority_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--recording"
+   ],
+   "status": "needs-args",
+   "reason": "takes --recording (argument not yet chosen)"
+  },
+  {
+   "name": "world_boundary_rounding_checks",
+   "script": "res://tests/world_boundary_rounding_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_delta_checks",
+   "script": "res://tests/world_delta_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_gate_precision_checks",
+   "script": "res://tests/world_gate_precision_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_incremental_checks",
+   "script": "res://tests/world_incremental_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_preparation_gate_checks",
+   "script": "res://tests/world_preparation_gate_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_preparation_receiver_ownership_checks",
+   "script": "res://tests/world_preparation_receiver_ownership_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_preparation_render_checks",
+   "script": "res://tests/world_preparation_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "options": [
+    "--fixed-direct"
+   ],
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_preparation_sparse_checks",
+   "script": "res://tests/world_preparation_sparse_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_preview_checks",
+   "script": "res://tests/world_preview_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_projection_changes_checks",
+   "script": "res://tests/world_projection_changes_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_sparse_checks",
+   "script": "res://tests/world_sparse_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_static_forecast_checks",
+   "script": "res://tests/world_static_forecast_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "world_view_cache_checks",
+   "script": "res://tests/world_view_cache_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "zoom_checks",
+   "script": "res://tests/zoom_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  }
+ ]
+}

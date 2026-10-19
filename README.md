@@ -14,6 +14,23 @@ Expedition sorcerer against backend AI opponents. This opens the normal player;
 spell selection and movement are under your control. The automated spell
 profiling script remains a separate explicit launch option.
 
+## How to test
+
+`tools/run_tests.sh` runs the test set listed in `tests/manifest.json` (every
+`tests/*.gd` has a row: mode, exact arguments, timeout, tier, status) and prints
+one table: test, checks, failures, script errors, engine ERROR lines, seconds.
+
+- `tools/run_tests.sh` (or `--tier fast`): headless tests, before every commit.
+- `--tier gate`: GPU picture and order checks, before every merge.
+- `--tier live`: real games through `tools/play.py` against the pinned engine,
+  after every merge (`tools/live_suite.sh` is the same).
+- `--only name,...` runs named rows; `--all-status` adds the rows that do not
+  gate yet (`known-red`, `needs-args`, `owned-by-migration`, each with its reason).
+
+It exits non-zero on any failure, script error, unexpected `ERROR:` line or
+leftover Godot process of this worktree. Reports go to `.runtime/tests/<time>/`;
+tracked `generated/` files a test rewrites are restored after the run.
+
 The Windows project uses **Forward+ with Vulkan**, validated on the RTX 5090.
 Opening the project directly selects the same player scene; use the launcher to
 provide its backend connection. The 3D world still receives its painted lighting
@@ -340,7 +357,7 @@ all 200 mandatory sources were uploaded; 1,677 optional sources remained queued.
 The combined CPU/GPU estimate was 2.73 GB then, growing progressively within the
 same cache budget. This measures scene initialization through input readiness,
 excludes engine launch/import, and does not control operating-system file-cache
-warmth. See `generated/player_startup_checks.json`.
+warmth. `tests/player_startup_checks.gd` writes its report beside its run in `.runtime/player-runs/`.
 
 Original colour images retain their unchanged CPU alpha for picking until the
 whole source is evicted. Modular normal/depth/support/validity companions
