@@ -47,6 +47,7 @@ func run()->void:
             if not await settle(studio,-1.0,record.journals.amber):break
         await play_once(studio,record.id)
         check(studio.world.presentation_errors.is_empty(),record.id+": no native presentation error")
+        if not failures.is_empty():break
         print("SCHEMA16_STUDIO_CASE ",JSON.stringify({"id":record.id,"checks":checks,"failures":failures.size()}))
         if not all_spells:
             studio.loop_enabled=true;studio._play_study()

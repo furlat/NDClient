@@ -181,3 +181,9 @@ Circle now uses one ground cue and one recipient template. `application_results.
 Static selection loads dependencies/materials but skips fixture construction for an operand-requiring clip. Recording warm plans retain a real received operand packet. `unbound_constructor_inputs` remains available for genuinely missing construction evidence; the shared action/spell compiler keeps the source clock and missing reason, omits unusable warm candidates and lets authoritative state proceed. Its deliberately unbound source regression passes **12 checks**. Unexpected missing resources and errors from otherwise available sources stay real errors. Other constructor cohorts in the table above still need their own actual operand projection and native qualification.
 
 The [Factory work request](FACTORY_PRODUCTION_BINDINGS_REQUEST_2026-10-19.md) can run in parallel with client integration. It gives exact source/delivery paths and does not misclassify the client-owned construction seam as a compulsory art rewrite.
+
+## Prepared appearance cohort
+
+The [appearance provider](APPEARANCE_PROVIDER_COHORT_2026-10-19.md) now supplies the delivered `appearance_provider` contract through the current prepared modular outfit and a real per-condition Factory opacity lease. Fly uses existing Bag8 art and the body's actual clip/frame/facing, including current casting media and gear changes. Its ordered removal endpoint is prepared during idle too. Studio shows this physical operation and requires an actual visible lease witness; declaration alone is not rendering evidence.
+
+This qualifies the recorded modular Fly slice after its final regression, not every rig, appearance definition or created item. Flame Blade's missing real item art, history/capture and event providers remain explicit gaps. No additional artwork or lighting system was invented.

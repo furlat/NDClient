@@ -240,8 +240,13 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
             _require(entry,"persistent","bodyRamp",source+"/persistent/bodyRamp",supported,
                 "" if supported and present else ("body_ramp_mapping_not_implemented" if not supported else "body_ramp_texture_missing"),
                 "available" if present else "missing",{"mapping":ramp.get("mapping"),"texture_path":path})
-        for field in ["equipmentModifiers","appearanceLayers"]:
-            for n in persistent.get(field,[]).size():_require(entry,"persistent",field+":"+str(n),source+"/persistent/"+field+"/"+str(n),false,"condition_"+field+"_not_implemented")
+        for n in persistent.get("equipmentModifiers",[]).size():
+            _require(entry,"persistent","equipmentModifiers:"+str(n),source+"/persistent/equipmentModifiers/"+str(n),false,"condition_equipmentModifiers_not_implemented")
+        var appearance_bound:bool=Persistent.lifecycles({"behavior_id":entry.id}).any(func(selection):return "appearance_provider" in Effects.clip(selection.condition.phases.application).get("inputs",[]))
+        for n in persistent.get("appearanceLayers",[]).size():
+            _require(entry,"persistent","appearanceLayers:"+str(n),source+"/persistent/appearanceLayers/"+str(n),appearance_bound,
+                "" if appearance_bound else "condition_appearance_provider_not_authored","assigned",
+                {"layer":persistent.appearanceLayers[n],"renderer":"res://presentation/condition_appearance.gd","qualification":"Current modular outfit; native witness and compatible actual rig remain separate."})
         for field in ["bodyScale","bodyDistortion","liveCopies","absenceEcho"]:
             if persistent.get(field)!=null:_require(entry,"persistent",field,source+"/persistent/"+field,false,"condition_"+field+"_not_implemented")
         if persistent.get("liveCopies")!=null:

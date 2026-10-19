@@ -262,6 +262,7 @@ func _warm_passes()->void:
 func sample(world:Node,components:Array,frame_seconds:float)->void:
     var sample_started:int=Time.get_ticks_usec()
     ready=true;issues.clear();witnesses.clear()
+    inputs.appearances.begin_sample()
     if not is_instance_valid(_owner) or _epoch!=world.timeline.initialization_revision:
         for component in components:
             if accepts(component):ready=false;_pending(component,"native_spell_owner_not_prepared")
@@ -384,6 +385,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             var shift:Vector3=handle.root.global_position-placed
             var hand:Vector3=points.hand
             Baked.follow(handle,cue,sample_time,func(time:float)->Transform3D:return Playback.transform(cue,time,hand,1.0).translated(shift))
+        inputs.appearances.sampled(handle)
         handle.sample_time=sample_time;handle.requested_time=age;handle.started=true
         handle.attachment_support=points.surfaces
         handle.cue=cue
@@ -409,6 +411,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
                     if caught_up:
                         handles[id].rendered_once=true
                         handles[id].drawn_frame=Engine.get_process_frames(),CONNECT_ONE_SHOT)
+    inputs.appearances.sync(world)
+    witnesses.append_array(inputs.appearances.witnesses)
     FrameProfile.end_phase(world.profile,"native_sample_sources",sample_phase)
     sample_phase=Time.get_ticks_usec()
     # The existing native2D atlas owns all room/effect light accumulation.

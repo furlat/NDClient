@@ -89,8 +89,10 @@ var retained_components: Array = []
 var retained_directions: Dictionary = {}
 var resolved_impacts: Dictionary = {}
 var condition_owners: Dictionary = {}
+var appearance_cache:Dictionary={}
 var spatial_effect_owners:Dictionary={}
 const NativePersistent=preload("res://presentation/native_persistent.gd")
+const Appearance=preload("res://presentation/condition_appearance.gd")
 var crossed_audio: Array = []
 var component_sample_ms = -1.0
 var trace = EventTrace.create()
@@ -157,7 +159,9 @@ func replay_plan(target_ms: float) -> Dictionary:
     # tails. Per-group media admission belongs to live playback; a replay host
     # proves the received recording's complete source closure before publication.
     var target=maxf(display_ms,target_ms)
-    var plan={"segments":[],"groups":[],"display_ms":target,"boundary":false,"media_wait":false,"replay":true}
+    var retained_end:float=_appearance_end_between(display_ms,target)
+    if not is_inf(retained_end):target=retained_end
+    var plan={"segments":[],"groups":[],"display_ms":target,"boundary":not is_inf(retained_end),"media_wait":false,"replay":true}
     var cursor=display_ms
     var groups: Array=[]
     if not current.is_empty():groups.append(current)
@@ -372,10 +376,12 @@ func _plan_world_advance(target: float, ready_group: Dictionary = {}, ready_targ
     var cursor = display_ms
     var activate = false
     if group.is_empty():
-        if queue.is_empty(): return {"segments":[],"display_ms":target,"boundary":false,"media_wait":false}
+        if queue.is_empty(): return _plan_idle_advance(cursor,target)
         group = queue[0]
         start = maxf(cursor,float(group.get("preview_start_ms",cursor)))
-        if target < start: return {"segments":[],"display_ms":target,"boundary":false,"media_wait":false}
+        if target < start: return _plan_idle_advance(cursor,target)
+        var idle:Dictionary=_plan_idle_advance(cursor,start)
+        if idle.boundary:return idle
         cursor = start; first_commit = 0; activate = true
     # The live caller already checked this exact group and proposed clock.
     # This proof lasts only for this call; independent planners still check.
@@ -383,6 +389,20 @@ func _plan_world_advance(target: float, ready_group: Dictionary = {}, ready_targ
     if not ready_proved and media_ready.is_valid() and not media_ready.call(group):
         return {"segments":[],"display_ms":cursor,"boundary":false,"media_wait":true}
     return _plan_group_world(group,start,first_commit,cursor,target,activate,_group_stage_times(group))
+
+func _appearance_end_between(cursor:float,target:float)->float:
+    var next:float=INF
+    for owner in condition_owners.values():
+        if is_inf(owner.end_ms) or Appearance.declarations(owner.condition,appearance_cache).is_empty():continue
+        var end:float=float(owner.end_ms)+Appearance.removal_ms(owner.condition)
+        if end>cursor and end<=target:next=minf(next,end)
+    return next
+
+func _plan_idle_advance(cursor:float,target:float)->Dictionary:
+    # Retained visual membership lives on the display clock, including idle
+    # intervals after its authoritative operation. No synthetic group/commit.
+    var end:float=_appearance_end_between(cursor,target)
+    return {"segments":[],"display_ms":target if is_inf(end) else end,"boundary":not is_inf(end),"media_wait":false}
 
 func _plan_group_world(group: Dictionary, start: float, first_commit: int, cursor: float,
         target: float, activate: bool, stage_times: Array, stop_at_boundary: bool=true,source_cuts:bool=true) -> Dictionary:
@@ -409,6 +429,12 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
             if start+float(at)>target+0.000001:break
             if start+float(at)>cursor or (activate and at<=0.0):
                 boundary_at=minf(boundary_at,float(at));break
+    # A presentation removal can outlive the operation that removed its
+    # canonical condition. Later compiled operations cannot recover that old
+    # owner from their before-state; the displayed owner supplies this edge.
+    var appearance_edge:float=_appearance_end_between(cursor,minf(target,start+local))
+    var appearance_local:float=appearance_edge-start
+    if appearance_local>=0.0:boundary_at=minf(boundary_at,appearance_local)
     for at in stage_times:
         # Match staged_tiles()'s exact >= admission test. Commit tolerance must
         # not erase a nearby but still unadmitted support boundary.
@@ -432,7 +458,7 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
     var complete = local>=duration
     segments.append({"group":group,"start_ms":start,"first_commit":first_commit,"end_commit":end_commit,
         "local_ms":local,"activate":activate,"complete":complete})
-    cursor = start+local
+    cursor = appearance_edge if boundary and stop_at_boundary and boundary_at==appearance_local else start+local
     if boundary: return {"segments":segments,"display_ms":cursor,"boundary":true,"media_wait":false}
     if not complete: return {"segments":segments,"display_ms":target,"boundary":false,"media_wait":false}
     # Media ownership still names this group until its completion is
@@ -454,7 +480,7 @@ func preview_world(source_cuts:bool=true) -> Dictionary:
     var groups: Array = []
     if not current.is_empty(): groups.append(current)
     for i in range(mini(2-groups.size(),queue.size())): groups.append(queue[i])
-    var signature: Array = [initialization_revision,world_revision,_support_signature()]
+    var signature: Array = [initialization_revision,world_revision,resource_revision,_support_signature()]
     for group in groups: signature.append([group.operation_sequence,group.id])
     if source_cuts:
         if signature==_preview_signature:return _preview_world
@@ -468,6 +494,14 @@ func preview_world(source_cuts:bool=true) -> Dictionary:
         var active = is_same(group,current)
         var start = group_start_ms if active else maxf(cursor,float(group.get("preview_start_ms",cursor)))
         var first = commit_index if active else 0
+        if not active:
+            var idle:Dictionary=_plan_idle_advance(cursor,start)
+            if idle.boundary:
+                idle.segments=segments
+                var candidate:Dictionary=_world_candidate(idle)
+                if source_cuts:_preview_world=candidate
+                else:_static_preview_world=candidate
+                return candidate
         var times = {}
         for key in group.get("staged_tiles",{}):
             times[float(group.get("staged_tile_at_ms",{}).get(key,0.0))] = true
@@ -481,7 +515,19 @@ func preview_world(source_cuts:bool=true) -> Dictionary:
             else:_static_preview_world=candidate
             return candidate
         cursor = plan.display_ms
+    var idle:Dictionary=_plan_idle_advance(cursor,INF)
+    if idle.boundary:
+        idle.segments=segments
+        var candidate:Dictionary=_world_candidate(idle)
+        if source_cuts:_preview_world=candidate
+        else:_static_preview_world=candidate
+        return candidate
     return {}
+
+func _world_plan_tail(plan:Dictionary)->Dictionary:
+    if not plan.segments.is_empty():return plan.segments.back()
+    return {"group":current,"start_ms":group_start_ms,"end_commit":commit_index,
+        "local_ms":plan.display_ms-group_start_ms,"complete":current.is_empty()}
 
 func _previewed_candidate(plan: Dictionary) -> Dictionary:
     # The cached preview names the same boundary commit and clock, the same
@@ -489,11 +535,11 @@ func _previewed_candidate(plan: Dictionary) -> Dictionary:
     # would rebuild these exact values (the deltas applied since the preview are
     # already in its snapshot).
     if _preview_world.is_empty(): return {}
-    var last: Dictionary = plan.segments.back()
+    var last: Dictionary = _world_plan_tail(plan)
     var next_revision: int = revision
     for segment in plan.segments: next_revision += segment.end_commit-segment.first_commit
     if _preview_world.display_ms!=plan.display_ms or _preview_world.revision!=next_revision or _preview_world.get("resource_revision",-1)!=resource_revision: return {}
-    var key: Array = [initialization_revision,world_revision,_support_signature(),last.group.operation_sequence,last.group.id,last.end_commit,last.local_ms,last.complete]
+    var key: Array = [initialization_revision,world_revision,_support_signature(),last.group.get("operation_sequence",sequence),last.group.get("id",""),last.end_commit,last.local_ms,last.complete]
     return _preview_world if _preview_world.preparation_key==key else {}
 
 func _world_candidate(plan: Dictionary) -> Dictionary:
@@ -516,7 +562,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
             next_revision += 1
             if _world_delta(delta): next_world_revision += 1
         if segment.complete and segment.group.get("operation_end",false): next_sequence = int(segment.group.operation_sequence)
-    var last: Dictionary = plan.segments.back()
+    var last: Dictionary = _world_plan_tail(plan)
     var group: Dictionary = {} if last.complete else last.group
     var supports = _tiles_for(group,last.local_ms,snapshot)
     var previous = staged_tiles()
@@ -535,14 +581,20 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
     for segment in plan.segments:
         for component in segment.group.get("components",[]):
             if component.kind=="sprite_layer":layer_candidates.append({"component":component,"group_start_ms":segment.start_ms})
+    var appearance_owners:Dictionary=Appearance.copy_owners(condition_owners)
+    for segment in plan.segments:
+        for i in range(segment.first_commit,segment.end_commit):
+            var commit:Dictionary=segment.group.commits[i]
+            Conditions.observe(appearance_owners,commit.delta.get("actors",{}),segment.start_ms+commit.at_ms,false,commit.get("condition_rows",[]))
     var actor_layers:Array=_actor_layers_at(layer_candidates,plan.display_ms)
-    return {"key":[initialization_revision,revision,last.group.operation_sequence,last.group.id,last.start_ms,last.end_commit,last.local_ms,last.complete],
-        "preparation_key":[initialization_revision,world_revision,_support_signature(),last.group.operation_sequence,last.group.id,last.end_commit,last.local_ms,last.complete],
-        "source_group_id":last.group.id,"source_local_ms":last.local_ms,
+    actor_layers.append_array(Appearance.components(appearance_owners,plan.display_ms,appearance_cache))
+    return {"key":[initialization_revision,revision,last.group.get("operation_sequence",sequence),last.group.get("id",""),last.start_ms,last.end_commit,last.local_ms,last.complete],
+        "preparation_key":[initialization_revision,world_revision,_support_signature(),last.group.get("operation_sequence",sequence),last.group.get("id",""),last.end_commit,last.local_ms,last.complete],
+        "source_group_id":last.group.get("id",""),"source_local_ms":last.local_ms,"retained_boundary":plan.segments.is_empty(),
         "state":snapshot,"presentation_state":presented,"staged_tiles":supports,"staged_actors":_actors_for(group,last.local_ms),
         "actor_samples":Tracks.samples(group.get("actor_tracks",[]),last.local_ms),"actor_layers":actor_layers,
         "changes":changes,"display_ms":plan.display_ms,"revision":next_revision,"world_revision":next_world_revision,
-        "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.operation_sequence),
+        "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.get("operation_sequence",sequence)),
         "resource_revision":resource_revision}
 
 func _apply_world_plan(plan: Dictionary) -> void:
@@ -740,7 +792,12 @@ func actor_layer_samples()->Array:
     var candidates:Array=retained_components.duplicate()
     for component in current.get("components",[]):
         if component.kind=="sprite_layer":candidates.append({"component":component,"group_start_ms":group_start_ms})
-    return _actor_layers_at(candidates,display_ms)
+    var result:Array=_actor_layers_at(candidates,display_ms)
+    result.append_array(appearance_layer_samples())
+    return result
+
+func appearance_layer_samples(cache:Dictionary={})->Array:
+    return Appearance.components(condition_owners,display_ms,appearance_cache if cache.is_empty() else cache)
 
 func diagnostics() -> Dictionary:
     return {"display_ms":display_ms,"sequence":sequence,"queued_groups":queue.size(),"active_group":current.get("id",""),

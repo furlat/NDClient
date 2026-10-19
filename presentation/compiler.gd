@@ -1,4 +1,5 @@
 extends RefCounted
+const Appearance=preload("res://presentation/condition_appearance.gd")
 const Occurrences=preload("res://presentation/occurrences.gd")
 ## Passive presentation of admitted occurrences. The SDK reducer owns truth.
 const Tracks = preload("res://presentation/tracks.gd")
@@ -571,7 +572,7 @@ static func _actor_structure_value(actor:Dictionary,loadouts:Dictionary,inputs:A
 static func _effect_only_change(before:Dictionary,after:Dictionary)->bool:
     if before.is_empty() or after.is_empty() or before.has("error") or after.has("error"):return false
     if before.rig!=after.rig or before.appearance!=after.appearance:return false
-    var base:=func(layer):return layer.get("effect",{}).is_empty()
+    var base:=func(layer):return layer.get("effect",{}).is_empty() or layer.get("effect",{}).get("kind")=="condition_appearance"
     return before.equipment_layers.filter(base)==after.equipment_layers.filter(base)
 
 static func _actor_source_clip(actor:Dictionary,structure:Dictionary,sample:Dictionary,cache:Dictionary)->String:
@@ -589,6 +590,8 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
     var actors:Dictionary={}
     var state={"senses":before.senses,"audience":before.audience,"items":before.items.duplicate()}
     var retained:Array=[]
+    var appearance_owners:Dictionary={}
+    Conditions.observe(appearance_owners,before.actors,0.0,true)
     var start=0.0
     for group in groups:
         var duration:float=group.duration_ms
@@ -607,8 +610,14 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
         for id in group.get("staged_actors",{}):
             _actor_cut(cuts,float(group.get("staged_at_ms",{}).get(id,0.0)),id,duration)
             _actor_cut(cuts,duration,id,duration)
+        for owner in appearance_owners.values():
+            if not is_inf(owner.end_ms) and not Appearance.declarations(owner.condition,cache).is_empty():
+                _actor_cut(cuts,float(owner.end_ms)+Appearance.removal_ms(owner.condition)-start,owner.actor_uuid,duration)
         for commit in group.get("commits",[]):
             for id in commit.delta.get("actors",{}):_actor_cut(cuts,commit.at_ms,id,duration)
+            for change in commit.get("condition_rows",[]):
+                if change.after==null and change.before!=null and not Appearance.declarations(change.before,cache).is_empty():
+                    _actor_cut(cuts,float(commit.at_ms)+Appearance.removal_ms(change.before),change.actor_uuid,duration)
         for ids in cuts.values():affected.merge(ids)
         # Sensory cuts already require world publication. Updating these cached
         # signatures there keeps a later actor-only cut relative to that view.
@@ -617,6 +626,7 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                 for id in affected:_actor_cut(cuts,commit.at_ms,id,duration)
         var previous_inputs:Dictionary={};var previous:Dictionary={};var previous_clips:Dictionary={}
         var initial_layers:Array=retained.filter(func(item):return item.start_ms<=start and start<item.start_ms+item.component.duration_ms).map(func(item):return item.component)
+        initial_layers.append_array(Appearance.components(appearance_owners,start,cache))
         var initial_loadouts=ActorConstruction.loadouts({},initial_layers)
         for id in affected:
             var actor:Dictionary=actors.get(id,before.actors.get(id,{}))
@@ -631,11 +641,13 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                 for id in commit.delta.get("actors",{}):
                     var actor:Dictionary=commit.delta.actors[id]
                     actors[id]=actor
+                Conditions.observe(appearance_owners,commit.delta.get("actors",{}),start+commit.at_ms,false,commit.get("condition_rows",[]))
                 for id in commit.delta.get("items",{}):state.items[id]=commit.delta.items[id]
                 if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
                 cursor+=1
             var active_layers:Array=layers.filter(func(item):return item.start_ms<=start+at and start+at<item.start_ms+item.component.duration_ms).map(func(item):return item.component)
             var samples:Dictionary=Tracks.samples(group.get("actor_tracks",[]),at) if at<duration else {}
+            active_layers.append_array(Appearance.components(appearance_owners,start+at,cache))
             var loadouts=ActorConstruction.loadouts(samples,active_layers)
             for id in cuts[at]:
                 var staged:bool=at<duration and group.get("staged_actors",{}).has(id) and at>=float(group.get("staged_at_ms",{}).get(id,0.0))

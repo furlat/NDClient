@@ -5,6 +5,7 @@ const Compiler = preload("res://presentation/compiler.gd")
 const Timeline = preload("res://presentation/timeline.gd")
 const Characters = preload("res://presentation/characters.gd")
 const ConditionCoverage = preload("res://presentation/condition_coverage.gd")
+const Appearance=preload("res://presentation/condition_appearance.gd")
 const ConditionPose = preload("res://presentation/condition_pose.gd")
 const World = preload("res://presentation/world.gd")
 const LightTracks = preload("res://studio/light_tracks.gd")
@@ -948,6 +949,16 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                 "condition_phase":parent.kind,"interval_causes":spans[n].causes,
                 "source_start_ms":sample.get("absolute_start_ms",sample.start_ms)}
             if sample.kind=="condition":
+                for appearance in Appearance.components(sampled_owners,start,cache):
+                    if owner.id not in appearance.layer.condition_uuids:continue
+                    var source:String=Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json",owner.condition.behavior_id+"/persistent/appearanceLayers",cache)
+                    var component:Dictionary=appearance.merged({"id":"condition:"+owner.id+":appearance:"+str(appearance.layer.id),
+                        "source":source,"start_ms":owner.start_ms,"duration_ms":end-start,"status":"available"},true)
+                    rows.append(common.merged({"id":prefix+"appearance:"+str(appearance.layer.id),"kind":"condition_appearance",
+                        "label":"Appearance · "+str(appearance.layer.category),"component":component,
+                        "trace_track_id":component.id,"source":source,"recipient_uuid":owner.actor_uuid,
+                        "render_method":{"renderer":"res://presentation/condition_appearance.gd","surface":"actual outfit","pose":"current body clip/frame/facing","opacity":"Factory lifecycle lease"},
+                        "preview_scope":"appearance_asset_current_pose","diagnostic_scope":"condition_owner"},true))
                 var persistent:Dictionary=sample.recipe.get("persistent",{})
                 var operations={}
                 for field in ["bodyColor","bodyRamp","bodyOutline"]:

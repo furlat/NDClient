@@ -28,7 +28,7 @@ func run()->void:
             if e.icon!=null:row.icon={"path":e.icon.path,"status":e.icon.status,"reuses":e.icon.reuses,"source":e.icon.source}
             if section=="conditions":
                 row.merge({"play_package_lifecycle":e.play_package_lifecycle,"owner_spell":e.owner_spell,"surface":e.surface,
-                    "has_look":e.look!=null,"has_layers":not e.layers.is_empty(),"has_poses":not e.poses.is_empty(),"disposition":e.disposition})
+                    "has_look":e.look!=null,"appearance_layers":e.appearance_layers,"has_layers":not e.layers.is_empty(),"has_poses":not e.poses.is_empty(),"disposition":e.disposition})
             else:
                 row.effects=[]
                 for i in e.effects.size():row.effects.append(Build.action_cue(e.effects[i],i))

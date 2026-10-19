@@ -355,6 +355,7 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
                 _check_constructor(use,where,clips,report)
                 if not clips.has(use.clip):Common.error(report, where, "variant " + variant.id + " clip not in the package: " + use.clip)
         for sound in e.sounds:_check_binding(report, where, bindings.get("spells", {}).get(id), sound)
+    _check_appearance_definitions(entries.get("conditions",{}),report)
     for id in entries.get("conditions", {}):
         var e: Resource = entries.conditions[id]
         for phase in e.sounds:_check_binding(report, "abilities/conditions/" + id, bindings.get("conditions", {}).get(id, {}).get(phase), e.sounds[phase])
@@ -403,6 +404,17 @@ static func _colour(value: Color) -> bool:
 ## The ranges the old overlay enforced, now checked once at build time: body
 ## adjust (alpha 0-1, saturation and brightness 0-2), outline (alpha 0-1,
 ## onset up to 10 s, colours), feedback durations, pose speeds.
+static func _check_appearance_definitions(conditions:Dictionary,report:Dictionary)->void:
+    var definitions:Dictionary={}
+    for condition_id in conditions:
+        for layer in conditions[condition_id].appearance_layers:
+            var where:String="abilities/conditions/"+str(condition_id)
+            if str(layer.get("id","")).is_empty() or str(layer.get("slot","")).is_empty() or str(layer.get("category","")).is_empty():
+                Common.error(report,where,"appearance layer needs id, slot and category");continue
+            if definitions.has(layer.id) and definitions[layer.id]!=layer:
+                Common.error(report,where,"appearance id has distinct definitions: "+str(layer.id))
+            else:definitions[layer.id]=layer
+
 static func _validate_condition(e: Resource, where: String, report: Dictionary) -> void:
     if e.look != null:
         for step in e.look.steps:

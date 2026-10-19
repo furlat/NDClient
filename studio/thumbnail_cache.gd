@@ -198,7 +198,7 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         var flash=component.duplicate();flash.age_ms=age;conditions.append(flash)
     var material=Conditions.material(actor.id,conditions)
     var layers=Characters.layers(actor,rig,cache)
-    if row.kind=="sprite_layer":
+    if row.kind in ["sprite_layer","condition_appearance"]:
         var layer: Dictionary=component.layer
         var sheet: String=layer.get("sourceSheet",rig.clips[clip_name].sheets.get(layer.category,""))
         var path: String=Characters.BodySources.index(cache).sheets.get(sheet,{}).get("default","")

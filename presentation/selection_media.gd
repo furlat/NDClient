@@ -266,7 +266,7 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
             for field in ["weaponGlow","aura"]:
                 if cast.get(field)!=null:layers.append(cast[field])
             var casting: Dictionary=actor.duplicate()
-            casting.presentation_layers=actor.get("presentation_layers",[]).duplicate()
+            casting.presentation_layers=actor.get("presentation_layers",Characters.Appearance.actor_components(actor,cache).map(func(row):return row.layer)).duplicate()
             for layer in layers:
                 if layer.get("enabled",true) and not layer.get("hidden",false):casting.presentation_layers.append(layer)
             if cast.has("actionClip"):_actor_paths(casting,[cast.actionClip],result,cache,state)

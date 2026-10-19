@@ -70,6 +70,8 @@ def spell_baselines(inventory):
 def first_cohort():
     caster=actors(['spell.fire_bolt','spell.fireball','spell.haste'])
     caster[2]['at']=[9,7];caster[3]['at']=[9,8]
+    flyers=actors(['spell.fly']);flyers[0]['items']=[{'id':'apparel.cloak','slot':'Cloak'}]
+    flyers[2]['at']=[9,7];flyers[3]['at']=[9,8]
     walkers=actors();walkers[2]['at']=[9,7];walkers[3]['at']=[9,8]
     hidden=actors(['spell.fire_bolt']);hidden[0]['behaviors']=['action.hide']
     hidden[2]['at']=[9,7];hidden[3]['at']=[9,8]
@@ -93,6 +95,16 @@ def first_cohort():
          'steps':[{'do':'spell.haste','by':'caster','target':'self','track':True,'track_condition':'condition.spell.haste'},
                   {'do':'hold_walk','offset':[-1,0]}, {'do':'end_tracked','strategy':'concentration'},
                   {'do':'end_turn','by':'caster'}, {'do':'tail_walk','offset':[0,-1]}]},
+        {'id':'spell.fly/lifecycle', 'title':'Fly: wings, movement, equipment, removal and restoration', 'kind':'spell',
+         'subjects':subjects(['spell.fly'], ['action.move','action.drop_concentration'], ['condition.spell.fly']),
+         'actors':flyers, 'seed':2,
+         'steps':[{'do':'spell.fly','by':'caster','target':'self','track':True,'track_condition':'condition.spell.fly'},
+                  {'do':'hold_walk','offset':[-1,0]}, {'do':'unequip','by':'caster','slot':'Cloak'},
+                  {'do':'end_turn','by':'caster'}, {'do':'equip','by':'caster','slot':'Cloak','item':'apparel.cloak'},
+                  {'do':'hold_walk','offset':[0,-1]}, {'do':'end_tracked','strategy':'concentration'},
+                  {'do':'tail_walk','offset':[1,0]}],
+         'required_behaviors':['spell.fly'], 'required_conditions':['condition.spell.fly'],
+         'required_condition_ends':['condition.spell.fly']},
         {'id':'spell.fire_bolt/hit', 'title':'Fire Bolt: cast and actual recipient damage', 'kind':'spell',
          'subjects':subjects(['spell.fire_bolt']), 'actors':caster, 'seed':2,
          'steps':[{'do':'spell.fire_bolt','by':'caster','target':'target'}], 'required_behaviors':['spell.fire_bolt']},

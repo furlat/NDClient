@@ -418,6 +418,7 @@ static func condition_from_recipe(e: Resource, recipe: Dictionary) -> void:
         F.erase_path(raw, "persistent/activityPoses")
     raw = F.plain(raw)
     F.move(raw, "persistent/layers", e, "layers", "same", true)
+    F.move(raw, "persistent/appearanceLayers", e, "appearance_layers", "same", true)
     for phase in ["application", "removal"]:
         e.set(phase + "_text", feedback_from(raw, phase, CONDITION_TEXT))
         if F.value_at(raw, phase + "/bodyAnimation") is Dictionary:
@@ -476,6 +477,7 @@ static func condition_recipe(e: Resource) -> Dictionary:
             poses.append(row)
         F.put(record, "persistent/activityPoses", poses)
     F.emit(record, "persistent/layers", e, "layers", "same", F.has_path(record, "persistent"))
+    if not e.appearance_layers.is_empty():F.emit(record, "persistent/appearanceLayers", e, "appearance_layers", "same", true)
     for phase in ["application", "removal"]:
         feedback_to(record, phase, e.get(phase + "_text"), CONDITION_TEXT)
         var body: BodyUse = e.get(phase + "_body")

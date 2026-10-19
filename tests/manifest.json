@@ -527,6 +527,28 @@
    "reason": "comparison tool"
   },
   {
+   "name": "condition_appearance_checks",
+   "script": "res://tests/condition_appearance_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 90,
+   "status": "ok",
+   "reason": "Prepared native outfit/source/removal boundaries and actual Factory appearance lease ownership; native replay is a separate gate."
+  },
+  {
+   "name": "condition_appearance_native_checks",
+   "script": "res://tests/condition_appearance_native_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [
+    "--only-case=spell.fly/lifecycle"
+   ],
+   "timeout": 120,
+   "status": "ok",
+   "reason": "Real schema16 Fly lifecycle: current outfit/clip/frame, four cameras, gear changes, removal through idle, independent factions, seeking and looping."
+  },
+  {
    "name": "condition_coverage_checks",
    "script": "res://tests/condition_coverage_checks.gd",
    "mode": "gpu",
@@ -1450,8 +1472,8 @@
    "tier": "gate",
    "args": [],
    "timeout": 600,
-   "status": "ok",
-   "reason": ""
+   "status": "owned-by-migration",
+   "reason": "Pre-existing removed _capture_demand/_precompute_demand/adopt_encounter APIs; 20 parse errors in current baseline. Native metadata ownership has its own current schema16 gate."
   },
   {
    "name": "media_demand_reference",
@@ -4931,6 +4953,16 @@
    "timeout": 300,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "media_native_worker_checks",
+   "script": "res://tests/media_native_worker_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 30,
+   "status": "ok",
+   "reason": "Actual schema16 native Resource metadata: private Thread ownership, queued request order, completed and active close without stale task IDs."
   }
  ]
 }

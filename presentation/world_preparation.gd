@@ -184,7 +184,7 @@ func configure(owner:Node,candidate:Dictionary,first:bool=false,forecast:Diction
         "actor_state":candidate.state,"staged_actors":candidate.get("staged_actors",{}),
         "actor_samples":candidate.get("actor_samples",{}),
         "profile_actor_worker":bool(host.profile.get("recording",false)),
-        "layer_clips":candidate.get("actor_layers",[]).reduce(func(values,row):values[row.id]=row.get("clip","");return values,{}),
+        "layer_clips":candidate.get("actor_layers",[]).filter(func(row):return row.kind=="sprite_layer").reduce(func(values,row):values[row.id]=row.get("clip","");return values,{}),
         "source_options":{"depth":host.source_depth,"normals":host.source_normals,"profile":host.character_light_profile,"tile_width":host.rig_config.TILE_W},
         "actor_loadouts":ActorConstruction.loadouts(candidate.get("actor_samples",{}),candidate.get("actor_layers",[])),"existing_actors":existing_actors},true)
     if forecast.is_empty():task=WorkerThreadPool.add_task(_derive.bind(input),false,"Prepare displayed world")
@@ -618,7 +618,7 @@ static func _complete_actors(input:Dictionary,forecast:Dictionary)->Dictionary:
                 128.0/float(options.get("tile_width",128))*row.scale,row.get("scale_x",1.0))
             _record_actor_worker_phase(actor_profile,"binding_geometry",binding_started)
             if measured:actor_profile.bindings_prepared+=1
-            if layer.slot!="shadow" and layer.get("effect",{}).is_empty():
+            if layer.slot!="shadow" and (layer.get("effect",{}).is_empty() or layer.get("effect",{}).get("kind")=="condition_appearance"):
                 var optical_started:int=Time.get_ticks_usec() if measured else 0
                 var optical:Dictionary=ActorConstruction.CharacterGeometry.BodySources.descriptor(layer.paths[selected_clip],layer.slot,input.cache).get("optical_paths",{})
                 if not optical.is_empty():future_solid_paths[optical.solid]=true
@@ -1611,6 +1611,7 @@ func release_handles() -> Array:
     join()
     handles_released=true
     var held = entries.duplicate()
+    held.append_array(_unadopted_actor_layers())
     if blood_renderer!=null:held.append_array(blood_renderer.release_world(blood_preparation))
     blood_preparation={"handles":{},"retired":[]}
     for record in light_preparation.get("nodes",[]):held.append({"node":record.node,"retire_external":true})
@@ -1623,3 +1624,20 @@ func release_handles() -> Array:
     # large Dictionary/Array destruction cost.
     entries=[];native_receiver_boundary={}
     return held
+
+func _unadopted_actor_layers()->Array:
+    var result:Array=[]
+    for packets in actor_resource_output.get("rows",{}).values():
+        for packet in packets.values():
+            if not is_instance_valid(packet.entry.node):continue
+            var node:Node=packet.entry.node
+            if node.get_parent()==null:
+                result.append({"node":node,"retire_external":true})
+    return result
+
+func _exit_tree()->void:
+    join()
+    # Worker-built nodes remain outside the tree until adopted. Their private
+    # owner must free them on cancellation/shutdown; refcounting cannot do it.
+    for entry in _unadopted_actor_layers():entry.node.free()
+    actor_resource_output.clear()

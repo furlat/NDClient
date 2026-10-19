@@ -151,8 +151,13 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
     _lifecycle_components(row,condition,row.target_uuid,cache)
     # These authoring mechanisms remain separate requirements until a real
     # implementation emits their exact samples; a body or marker is insufficient.
-    for field in ["equipmentModifiers","appearanceLayers"]:
+    for field in ["equipmentModifiers"]:
         if not persistent.get(field,[]).is_empty():row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
+    for layer in persistent.get("appearanceLayers",[]):
+        var identity:String="condition:"+str(condition.condition_uuid)+":appearance:"+str(layer.id)
+        var component:Dictionary=_component("condition_appearance","appearance_not_observed",source+".appearanceLayers/"+str(layer.id))
+        component.merge({"id":identity,"trace_track_id":identity,"actor_uuid":row.actor_uuid,"status":"playing","persistent":true},true)
+        row.components.append(component)
     for field in ["bodyScale","bodyDistortion","liveCopies","absenceEcho"]:
         if persistent.get(field)!=null:row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
 

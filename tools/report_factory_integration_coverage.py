@@ -43,8 +43,10 @@ bridge = {
     'activation_projection': 'actual_action_and_observed_bounded_condition_only',
     'admitted_cells': 'prepared_world_rectangles_or_native_local_pairs_nullable_contract_partial_unqualified',
     'weapon_binding': 'exact_disclosed_item_holder_slot_and_optical_surface_partial_owner_and_legacy_gaps',
+    'appearance_provider': 'prepared_modular_outfit_exact_condition_uuid_sampled_frame_lease_fly_qualified',
 }
 provider_notes = {
+    'appearance_provider': 'Typed appearance definitions prepare actual outfit sheets before admission. Per-condition Factory leases control only opacity; layers follow the body clip/frame/facing. Actual Fly apply/move/view/gear/remove, independent factions, seeking and looping are qualified in agent_docs/APPEARANCE_PROVIDER_COHORT_2026-10-19.md. Unsupported fixed rigs and created-item art remain gaps; there is no new animation controller.',
     'geometry': 'Authored actor/slot lists select actual admitted optical sources. Body, head and weapon slots are not interchangeable. Source pose work is shared independently of translation; receiver-relative geometry keys avoid repeated co-moving uploads. Distinct outputs still need native qualification.',
     'endpoints': 'Authored live_endpoints preserve arity, order, actor roles, sockets and requested surface slots. Extra actors require actual native_actor_uuids. Literal review positions, review trajectories and absent roles remain explicit gaps; no fixture coordinates are copied.',
     'delivery_timing': 'Uses the selected cue launch and contact-minus-launch in the actual two-argument setter. This supplies timing, not evidence that its native visual release/socket is correct.',
@@ -305,7 +307,7 @@ report = {
     'handover': {'source': '.runtime/condition-handover-inventory.json', 'report': 'agent_docs/CONDITION_HANDOVER_MIGRATION_2026-10-19.md', 'errors': handover.get('errors', [])},
     'ui_summary': ui.get('summary', {}), 'ui_errors': ui.get('errors', []),
     'remaining_shared_gaps': {
-        'providers': ['weapon_binding_remaining_owner_and_legacy_contracts', 'appearance_provider', 'history_state', 'actor_context', 'pose_provider_capture', 'event_state', 'event_binding', 'created_item_identity'],
+        'providers': ['weapon_binding_remaining_owner_and_legacy_contracts', 'appearance_provider_other_rigs_and_definitions_unqualified', 'history_state', 'actor_context', 'pose_provider_capture', 'event_state', 'event_binding', 'created_item_identity'],
         'partial_spatial_provider': provider_notes['admitted_cells'] + ' Complete spatial lifecycle/output qualification is pending.',
         'public_selectors': public_gaps,
         'class_gates': ['Rage/Frenzy require a finite observed removal; held live owners have no such public value.',

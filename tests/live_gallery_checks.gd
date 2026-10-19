@@ -299,7 +299,7 @@ func issue(selected: Dictionary) -> bool:
         if not scene.profile.frames.is_empty():
             var sampled: Dictionary=scene.profile.frames[posmod(scene.profile.cursor-1,scene.profile.frames.size())]
             record.post_ready_frames.append({"frame":sampled.frame,"frame_ms":sampled.frame_ms,"cpu_ms":sampled.cpu_ms.duplicate(),
-                "state":phase_value(),"media_metadata_pending":scene.media_warmup.plan_task>=0,"hud_pending":hud_pending,"pipeline_compilations":FrameProfile.pipeline_compilations()})
+                "state":phase_value(),"media_metadata_pending":scene.media_warmup.plan_thread!=null,"hud_pending":hud_pending,"pipeline_compilations":FrameProfile.pipeline_compilations()})
     scene.profile.label="receipt_validation_%d" % number
     record.validation_start_us=Time.get_ticks_usec()
     record.frame_ms=FrameProfile.distribution(record.frame_intervals)

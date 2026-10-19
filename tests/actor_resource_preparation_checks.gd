@@ -3,6 +3,7 @@ extends SceneTree
 ## ordinary source constructor/binder. Sprites light themselves from the light
 ## table, so the oracle is the final lit framebuffer of two otherwise identical
 ## views: one adopting the worker's private layers, one built directly.
+const Preparation=preload("res://presentation/world_preparation.gd")
 const Construction=preload("res://presentation/actor_construction.gd")
 const Original=preload("res://presentation/actor_construction.gd")
 const Resources=preload("res://presentation/actor_resources.gd")
@@ -124,6 +125,10 @@ func cookie_texture()->ImageTexture:
     return ImageTexture.create_from_image(image)
 
 func first_draw(a:Dictionary,b:Dictionary,label:String)->void:
+    # Gameplay assigns explicit canonical draw order. Equal-depth transparent
+    # fixture layers need that same order, independent of worker allocation IDs.
+    for side in [a,b]:
+        for entry in side.owner.entries:entry.node.sorting_offset=float(entry.layer)*.01
     await process_frame;await RenderingServer.frame_post_draw
     await process_frame;await RenderingServer.frame_post_draw
     var image_a:Image=a.view.get_texture().get_image();var image_b:Image=b.view.get_texture().get_image()
@@ -185,7 +190,7 @@ func actor_case(cap:bool,normals:bool,late:bool,cookie:ImageTexture)->void:
     if DisplayServer.get_name()!="headless":await first_draw(a,b,label+"-current-hidden-uv")
     a.view.queue_free();b.view.queue_free();await process_frame
 
-func cancellation_case()->void:
+func cancellation_case()->WeakRef:
     var side:Dictionary=make_side(actor_image());var owner:ActorOwner=side.owner
     var inputs:Dictionary=source_inputs(owner);var output:Dictionary={}
     var task:int=WorkerThreadPool.add_task(Resources.build_private.bind(inputs,owner.textures.duplicate(),owner.resources.duplicate(),Construction.source_parameter_names(),output),false,"Canceled private actor resources")
@@ -198,15 +203,22 @@ func cancellation_case()->void:
     for value in output.rows["assembled-actor"].values():nodes.append(value.entry.node)
     check(source.get_ref()!=null and owner.entries.is_empty() and nodes.all(func(node):return not node.is_inside_tree()),
         "Canceled worker owns hidden resources without any attached actor Node")
-    # The canceling owner frees the detached worker nodes it never adopted.
-    packet={};output.clear();inputs.clear()
-    for node in nodes:node.free()
-    nodes.clear()
-    await process_frame
-    check(source.get_ref()==null,"Cancellation releases source material without a dictionary cycle")
+    var candidate:Node=Preparation.new();root.add_child(candidate)
+    candidate.actor_resource_output=output
+    var retained_node:Node=nodes[0];owner.add_child(retained_node)
+    var unadopted:Array=nodes.slice(1).map(func(node):return weakref(node))
+    var retired:Array=candidate.release_handles()
+    check(retired.size()==unadopted.size() and retired.all(func(entry):return entry.retire_external),
+        "Production retirement owns every unadopted worker node and never an adopted actor layer")
+    candidate.queue_free();await process_frame
+    check(unadopted.all(func(value):return value.get_ref()==null) and is_instance_valid(retained_node),
+        "Production owner teardown frees detached resources while the adopted outfit remains alive")
+    retained_node.free();packet={};output.clear();inputs.clear();retired.clear();nodes.clear()
+    await process_frame;await RenderingServer.frame_post_draw
     # Quads are shared by shape and stay cached for the next actor of that shape.
     check(mesh==QuadShapes.mesh(mesh.size,mesh.center_offset),"Canceled layer used the shared quad of its shape")
     side.view.queue_free();await process_frame
+    return source
 
 func run()->void:
     root.position=Vector2i(-16000,-16000);root.unfocusable=true
@@ -214,7 +226,9 @@ func run()->void:
     var cookie:ImageTexture=cookie_texture()
     for mode in [[false,false],[true,false],[true,true]]:
         for late in [false,true]:await actor_case(mode[0],mode[1],late,cookie)
-    await cancellation_case()
+    var canceled_source:WeakRef=await cancellation_case()
+    await process_frame
+    check(canceled_source.get_ref()==null,"Cancellation releases source material after the fixture relinquishes its borrowed packets")
     var report={"checks":checks,"failures":failures,"cases":cases,"renderer":RenderingServer.get_current_rendering_method(),
         "scope":"Assembled private actor resource packet versus ordinary constructor; worker-built detached layer nodes, first lit final framebuffer in LDR/capped/Normals, current Hidden+UV, late body/companion/noise closure and no-cycle cancellation. No gameplay latency claim."}
     FileAccess.open("res://generated/actor_resource_preparation_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

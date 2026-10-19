@@ -79,6 +79,7 @@ priority = 70.0
 max_layers = 1.0
 application_text = SubResource("Resource_hwq2r")
 removal_text = SubResource("Resource_ajcti")
+appearance_layers = [{"id": "fly-wings", "slot": "backpack", "category": "Bag8", "priority": 90.0}]
 unported = {
 "application": {
 "durationMs": 900.0,
@@ -103,15 +104,7 @@ unported = {
 "interceptionEffectsByDirection": {},
 "mediaFailurePolicy": "fail_transaction",
 "persistent": {
-"appearanceLayers": [{
-"anatomy": "wings",
-"category": "Bag8",
-"glowStrength": 0.15,
-"id": "fly-wings",
-"priority": 90.0,
-"slot": "backpack",
-"tint": 7456229.0
-}],
+
 "bodyColor": null,
 "equipmentModifiers": []
 },

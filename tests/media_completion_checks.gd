@@ -119,7 +119,7 @@ func run() -> void:
     for frame in 5:
         player.timeline.advance(1)
         check(player.command_ready() and not player.timeline.waiting_for_media,"Input stays ready on idle sample %d" % frame)
-    check(player.media_warmup.metadata_jobs==jobs and player.media_warmup.plan_task<0,"Completion needs no redundant idle metadata worker")
+    check(player.media_warmup.metadata_jobs==jobs and player.media_warmup.plan_thread==null,"Completion needs no redundant idle metadata worker")
     check(player.media_environment_required.has(environment_path) and player.media_plan.required.has(character_path),"Reused terminal demand retains character and environment sources")
     check(player.media_warmup.fixtures.has(environment_path) and player.media_warmup.resident[environment_path].fixture_ready,"Terminal demand retains fixture preprocessing roles")
     check(player.media_terminal_plan.is_empty(),"Consumed proof does not retain the completed group")
@@ -131,12 +131,12 @@ func run() -> void:
     player.timeline.media_ready = player._media_ready
     player.timeline.advance(10)
     player.timeline.advance(0)
-    check(player.command_ready() and player.media_warmup.plan_task<0,"First readiness capture midway subtracts already applied commits")
+    check(player.command_ready() and player.media_warmup.plan_thread==null,"First readiness capture midway subtracts already applied commits")
     dispose(player)
 
     player = fixture(group("zero-commit",[],0))
     player.timeline.advance(0); player.timeline.advance(0)
-    check(player.command_ready() and player.media_warmup.plan_task<0,"Zero-duration zero-commit completion keeps prepared readiness")
+    check(player.command_ready() and player.media_warmup.plan_thread==null,"Zero-duration zero-commit completion keeps prepared readiness")
     dispose(player)
 
     player = fixture(group("terminal-world-admission",[
@@ -148,7 +148,7 @@ func run() -> void:
         "Prepared terminal media does not bypass held world admission")
     world_gate.ready = true
     player.timeline.advance(0); player.timeline.advance(0)
-    check(player.command_ready() and player.media_warmup.plan_task<0 and player.timeline.state.tiles[disclosed_cell]==disclosed_tile,
+    check(player.command_ready() and player.media_warmup.plan_thread==null and player.timeline.state.tiles[disclosed_cell]==disclosed_tile,
         "World-prepared final commit preserves readiness without early tile publication")
     dispose(player)
 
@@ -163,7 +163,7 @@ func run() -> void:
             "completion-id": player.timeline.completed_groups[-1].id = "another-group"
         player.timeline.advance(0)
         check(not player.command_ready() and player.timeline.waiting_for_media,"Unproved "+mismatch+" boundary cannot reuse terminal readiness")
-        check(player.media_warmup.plan_task>=0,"Unproved "+mismatch+" boundary uses normal metadata preparation")
+        check(player.media_warmup.plan_thread!=null,"Unproved "+mismatch+" boundary uses normal metadata preparation")
         dispose(player)
 
     for missing in ["character","environment","fixture-metrics","failure"]:
@@ -177,7 +177,7 @@ func run() -> void:
             player.media_warmup.resident.erase(source); player.media_warmup.ready_paths.erase(source)
         player.timeline.advance(0)
         check(not player.command_ready() and player.timeline.waiting_for_media,"Valid terminal proof still blocks missing "+missing)
-        check(player.media_metadata_ready and player.media_warmup.plan_task<0,"Missing "+missing+" does not discard valid metadata")
+        check(player.media_metadata_ready and player.media_warmup.plan_thread==null,"Missing "+missing+" does not discard valid metadata")
         dispose(player)
 
     player = fixture(group("completed-before-new-group"))

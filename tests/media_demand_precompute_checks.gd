@@ -19,9 +19,9 @@ func optional_dispatch() -> void:
     fast.optional_pending={"key":[1,[],0],"state":{"actors":{}},"groups":[],
         "required":{"environment_required":{},"environment_upcoming":{},"required":{},"upcoming":{},"fixtures":{},"cpu_required":{},"gpu_only":{}}}
     Media._start_plan(fast)
-    check(fast.plan_task<0 and not fast.optional_pending.is_empty(),"Optional receipt waits for final exact scene demand")
+    check(fast.plan_thread==null and not fast.optional_pending.is_empty(),"Optional receipt waits for final exact scene demand")
     Media.demand(fast,{"b":"/test/b.png","a":"/test/a.png"})
-    check(fast.plan_task>=0 and fast.optional_pending.is_empty(),"Demand dispatches the existing optional worker after selecting new pins")
+    check(fast.plan_thread!=null and fast.optional_pending.is_empty(),"Demand dispatches the existing optional worker after selecting new pins")
     check(fast.metadata_phases.optional_capture.required==2,"Capture sees the newly selected demand, not previous group paths")
     var completed:Dictionary={};var deadline:int=Time.get_ticks_msec()+10000
     while completed.is_empty() and Time.get_ticks_msec()<deadline:
@@ -31,7 +31,7 @@ func optional_dispatch() -> void:
         "Optional worker completes normally and unknown exact paths retain strict fallback")
     fast.optional_pending={"key":[1,[],0]}
     Media.close(fast)
-    check(fast.optional_pending.is_empty() and fast.plan_task<0,"Close releases undispatched optional intent without spawning work")
+    check(fast.optional_pending.is_empty() and fast.plan_thread==null,"Close releases undispatched optional intent without spawning work")
 
 func stable_scene_dispatch() -> void:
     var player=Player.new()
@@ -42,7 +42,7 @@ func stable_scene_dispatch() -> void:
         "required":{"environment_required":{},"environment_upcoming":{},"required":{},"upcoming":{},"fixtures":{},"cpu_required":{},"gpu_only":{}}}
     var frozen:PackedByteArray=var_to_bytes(player.timeline.state)
     player._prepare_media()
-    check(player.media_warmup.plan_task>=0 and player.media_warmup.optional_pending.is_empty(),
+    check(player.media_warmup.plan_thread!=null and player.media_warmup.optional_pending.is_empty(),
         "Stable Play media key dispatches newer optional intent after an older task completed")
     check(var_to_bytes(player.timeline.state)==frozen and player.timeline.queue.is_empty(),
         "Stable-key optional dispatch publishes no gameplay state or events")
@@ -64,7 +64,8 @@ func contraction_deferral() -> void:
         Media.boot_ready(fast);Media.boot_ready(reference)
         demand(change+" contraction boot",old_paths)
         var entry:Semaphore=Semaphore.new();var release:Semaphore=Semaphore.new()
-        fast.plan_task=WorkerThreadPool.add_task(hold_metadata.bind(entry,release),false,"Held existing metadata boundary")
+        fast.plan_thread=Thread.new()
+        fast.plan_thread.start(hold_metadata.bind(entry,release))
         entry.wait()
         fast.optional_pending={"key":[1,[],0]}
         var next:Dictionary=paths.duplicate();var roles:Array=[{},{},{},{}]
@@ -97,7 +98,7 @@ func contraction_deferral() -> void:
             Media.demand(fast,next)
             check(fast.demand_counts.precomputed,"Equal-family expansion is adopted instead of hidden behind exact-demand no-op")
         fast.optional_pending={}
-        release.post();WorkerThreadPool.wait_for_task_completion(fast.plan_task);fast.plan_task=-1
+        release.post();fast.plan_thread.wait_to_finish();fast.plan_thread=null
         check(observable(fast)==observable(reference),change+": eventual queue, roles, budget and accounting equal frozen synchronous demand")
 
 func unrelated_headers() -> void:
@@ -162,7 +163,7 @@ func contraction_refill() -> void:
         demand(change+" refill boot",old_paths)
         var paths:Dictionary={"a":"/test/a.png"}
         Media.demand(fast,paths);Reference.demand(reference,paths)
-        check(fast.demand_counts.selection_deferred and fast.plan_task>=0,
+        check(fast.demand_counts.selection_deferred and fast.plan_thread!=null,
             change+": strict immutable contraction dispatches existing optional worker without source planning")
         check(Media.ready(fast,paths) and Media.diagnostics(fast).pinned_bytes<=32,
             change+": retained pins stay capped and exact received source is ready")
@@ -170,7 +171,7 @@ func contraction_refill() -> void:
             change+": first display does not fill optional remainder or replay family priority")
         if change=="close":
             Media.close(fast)
-            check(fast.plan_task<0 and fast.optional_pending.is_empty(),"Close joins pure selection worker and releases pending ownership")
+            check(fast.plan_thread==null and fast.optional_pending.is_empty(),"Close joins pure selection worker and releases pending ownership")
             continue
         var completed:Dictionary={}
         while completed.is_empty():
@@ -227,7 +228,7 @@ func contraction_refill() -> void:
         var roles:Array=[{},{},{},{}]
         if boundary=="role":roles[1]={"a":true}
         demand(boundary+" requeue retains synchronous fallback",paths,roles)
-        check(not fast.demand_counts.selection_deferred and fast.plan_task<0 and fast.optional_pending.is_empty(),
+        check(not fast.demand_counts.selection_deferred and fast.plan_thread==null and fast.optional_pending.is_empty(),
             boundary+": no worker or retained selection when immutable complete role proof is absent")
     reset(family(),32)
     var diagnostic:Dictionary={}
@@ -274,7 +275,7 @@ func failed_refill() -> void:
             failure+": optional failure does not replace required plans or block gameplay")
         if current:
             Media.demand(fast,paths)
-            check(not fast.demand_counts.noop and not fast.demand_counts.selection_deferred and fast.plan_task<0,
+            check(not fast.demand_counts.noop and not fast.demand_counts.selection_deferred and fast.plan_thread==null,
                 failure+": next demand performs original synchronous selection without another worker retry")
             var a:Dictionary=observable(fast);var b:Dictionary=observable(reference)
             for category in ["false","true"]:
@@ -347,7 +348,7 @@ func removed_role_contraction() -> void:
             role+": current exact readiness and pin cap stay correct before worker refill")
         check(fast.resident.b.environment==false and fast.resident.outside.environment==false and not Media._pinned(fast,"outside"),
             role+": current role categories update and removed unselected source unpins immediately")
-        if fast.plan_task<0:continue
+        if fast.plan_thread==null:continue
         var completed:Dictionary={}
         while completed.is_empty():
             completed=Media.poll_plan(fast)
@@ -399,7 +400,7 @@ func captured_superset() -> void:
         if accepted:
             check(fast.preload_selected==prepared.selected and fast.selection_required==input.paths and fast.selection_extra==prepared.extra,
                 change+": already-capped worker pins retain their true larger-demand provenance")
-            check(fast.plan_task>=0 and Media.diagnostics(fast).pinned_bytes<=fast.budget_bytes,
+            check(fast.plan_thread!=null and Media.diagnostics(fast).pinned_bytes<=fast.budget_bytes,
                 change+": existing pure worker refills only after immediate capped family adoption")
             if change=="consecutive":
                 current={"a":"/test/a.png"}
@@ -414,7 +415,7 @@ func captured_superset() -> void:
             fast.demand_precomputation=completed.value.demand_precomputation
             Media.demand(fast,current)
             if change=="consecutive":
-                check(not fast.demand_counts.precomputed and fast.plan_task>=0,
+                check(not fast.demand_counts.precomputed and fast.plan_thread!=null,
                     "Older refill cannot supersede the queued newer exact contraction")
                 completed={}
                 while completed.is_empty():

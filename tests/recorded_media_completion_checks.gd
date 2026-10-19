@@ -37,7 +37,7 @@ func run() -> void:
         player.timeline.current = groups[index]
         player.timeline.queue = groups.slice(index+1)
         player._prepare_media()
-        while not player.media_metadata_ready and player.media_warmup.plan_task>=0:
+        while not player.media_metadata_ready and player.media_warmup.plan_thread!=null:
             var result = await poll_plan(player.media_warmup)
             check(not result.has("error") and result.get("complete",false),"Live group %d worker publishes a successful result" % index)
             player._adopt_media_plan(result)

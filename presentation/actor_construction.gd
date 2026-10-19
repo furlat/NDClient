@@ -26,7 +26,7 @@ static func loadouts(samples:Dictionary,components:Array)->Dictionary:
     var result:Dictionary={}
     for id in samples:result[id]={"loadout":samples[id].get("visual_loadout"),"effects":[]}
     for component in components:
-        if component.kind!="sprite_layer":continue
+        if component.kind not in ["sprite_layer","appearance_layer"]:continue
         var id:String=component.actor_uuid
         if not result.has(id):result[id]={"loadout":null,"effects":[]}
         var effect:Dictionary=component.layer.duplicate();effect.component_id=component.id

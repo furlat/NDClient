@@ -1,6 +1,7 @@
 extends RefCounted
 const CharacterGeometry = preload("res://presentation/character_geometry.gd")
 const Catalog = preload("res://source_catalog.gd")
+const Appearance=preload("res://presentation/condition_appearance.gd")
 const BodySources=preload("res://presentation/body_sources.gd")
 # Passive adapter from canonical player data to the existing authoring owners.
 # The caller owns the cache; keep it on the same thread as its reader.
@@ -113,9 +114,11 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
                 value.equipment = true
                 value.item_uuid = item.item_uuid
                 selected[layer.render_layer] = value
-    for effect in actor.get("presentation_layers",[]):
+    var presentation_layers:Array=actor.presentation_layers if actor.has("presentation_layers") else Appearance.actor_components(actor,cache).map(func(row):return row.layer)
+    for effect in presentation_layers:
         var slot: String=effect.slot
-        var value=_layer(effect.category)
+        if effect.get("kind")=="condition_appearance" and (slot not in rig.slot_order or effect.category not in rig.slot_categories.get(slot,[])):continue
+        var value=_layer(effect.category,0xFFFFFF,float(effect.get("alpha",1.0)))
         value.effect=effect
         selected[slot]=value
     var result: Array = []
@@ -224,7 +227,7 @@ static func sheet_paths(actor:Dictionary,clips:Array,cache:Dictionary,looks:Dict
             paths[path]=true;colours[path]=true
             paths.merge(descriptor.companions);gpu_only.merge(descriptor.companions)
             normal_sets.merge(descriptor.normal_sets)
-            if effect.is_empty() and not descriptor.companions.is_empty():geometry_slots[path]=layer.slot
+            if (effect.is_empty() or effect.get("kind")=="condition_appearance") and not descriptor.companions.is_empty():geometry_slots[path]=layer.slot
     for path in colours:gpu_only.erase(path)
     normal_sets.make_read_only()
     for records in source_refs.values():records.make_read_only()

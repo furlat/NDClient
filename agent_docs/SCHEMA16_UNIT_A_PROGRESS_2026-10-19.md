@@ -296,5 +296,28 @@ python3 tools/run_tests.py --only sdk_protocol_checks,sdk_choices_checks,sdk_jou
 Windows interactive commands are `play.cmd --scenario gallery_sorcerer` and
 `studio.cmd`. Studio uses `.runtime/studio-library/index.json`; **Library** lists
 every current authoring ID with separate source/scenario/presentation/approval
-facts. These commands use this isolated implementation, not the still unchanged
-main client checkout. Tests own their processes and close them when finished.
+facts. The shell commands above use the isolated implementation worktree. The main
+checkout has the published schema16/Factory checkpoint documented earlier;
+subsequent cohort evidence names its actual checkout. Tests own their processes
+and close them when finished.
+
+## Current plan estimates — 19 October, appearance cohort
+
+These are rough implementation estimates, **not passed-gate percentages or visual acceptance**. Each phase retains its named failures; no repository-wide green claim is made.
+
+| Plan chunk | Estimate | Current position |
+|---|---:|---|
+| 0 — authoritative inputs / baseline | 100% | Frozen schema16 export and installed whole Factory package/build |
+| 1 — SDK / ordered reduction / publication | 90% | Canonical fold and live equip base pass; broader reader/fixture cleanup remains |
+| 2a — usable Studio cohort | 80% | Eight real native cases and controls qualify; new Fly/appearance slice extends them |
+| 2b — all-spell safety | 96% | 189 attempted, 181 runtime-safe; eight named red cases remain |
+| 3 — package migration / lifecycle handovers | 55% | Complete package selected; remaining handovers and first-use timing still open |
+| 4 — shared optical/material/appearance/history/event inputs | 35% | Appearance cohort implemented and tested; history, event and created-item gaps remain |
+| 5 — complete scenario / interaction depth | 35% | Complete capability inventory visible; 198 cases do not cover all required variants |
+| 6 — final live scale / performance | 10% | Functional regression evidence, not final frame/latency qualification |
+
+[Appearance cohort](APPEARANCE_PROVIDER_COHORT_2026-10-19.md) documents the actual delivered setter, typed Bag8 source, preparation/publication, native output and remaining limits. The real recording exposed application media, idle removal and worker-output ownership faults; each was fixed in its shared owner, without changes to approved graphics or authoritative event order.
+
+The appearance live gate also exposed native-resource metadata task ownership. One failing Pool ID was reproduced and retained; its exact invalidator is unresolved. The metadata lane now owns a Godot Thread directly, with actual ordered output, completed/active shutdown checks and no runtime validation/retry layer. [Cohort details and failed attempts](APPEARANCE_PROVIDER_COHORT_2026-10-19.md#metadata-worker-ownership-found-by-the-live-gate). New final live/native gates qualify the changed owner; earlier green runs do not.
+
+Final appearance/metadata code-freeze gates: **13,937 native/live checks pass, zero errors** (five actual player sessions / ten equip transitions / zero holds; native8 10,783; Fly 2,984), plus **19 selected headless tests pass** and actor-resource parity/cancellation 302 checks. Six existing ObjectDB warning lines remain; Fly itself is warning-free. Exact artifacts and failed attempts are in the [cohort ledger](APPEARANCE_PROVIDER_COHORT_2026-10-19.md#final-code-freeze-qualification). No final performance or all-provider completion claim.

@@ -884,7 +884,7 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
         "rotation_pending":rotation_pending(),"requested_quarter":requested_quarter,"cached_quarters":static_views.size(),"retiring_views":retiring_views.size(),"retiring_nodes":retiring_node_count,"world_generation":world_generation,"world_preparing":pending_world!=null,"world_prepare_phase":pending_world.phase if pending_world!=null else "idle","world_prepared_count":world_prepared_count,"actor_prepared_layers":actor_prepared_layers,"world_prepare_worker_ms":world_prepare_worker_ms,"world_waiting":timeline.waiting_for_world,"preparation_admission":preparation_admission.duplicate(true),"session_execution":session.diagnostics() if session != null else {},"displayed_sequence":timeline.sequence,"consumed_sequence":session.latest_sequence if session != null else -1,"queued_groups":timeline.queue.size(),
         "profile_stage":profile.label,"wall_mode":wall_mode,"wall_support_candidates":wall_support_candidates,"wall_max_member_candidates":wall_max_member_candidates,
         "wall_mask_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,
-        "wall_mask_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,"textures":textures.size(),"media_pending":media_warmup.pending.size(),"encounter_preload":MediaWarmup.preload_progress(media_warmup),"preload_ready":media_warmup.boot_complete,"character_media":MediaWarmup.diagnostics(media_warmup),"environment_media":MediaWarmup.diagnostics(media_warmup,true),"media_metadata_ms":media_metadata_ms,"media_metadata_pending":media_warmup.plan_task>=0,"media_waiting":timeline.waiting_for_media,"actors":actor_rows.size(),"placements":placements.size(),"draws":static_entries.size()+actor_entries.size()}
+        "wall_mask_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,"textures":textures.size(),"media_pending":media_warmup.pending.size(),"encounter_preload":MediaWarmup.preload_progress(media_warmup),"preload_ready":media_warmup.boot_complete,"character_media":MediaWarmup.diagnostics(media_warmup),"environment_media":MediaWarmup.diagnostics(media_warmup,true),"media_metadata_ms":media_metadata_ms,"media_metadata_pending":media_warmup.plan_thread!=null,"media_waiting":timeline.waiting_for_media,"actors":actor_rows.size(),"placements":placements.size(),"draws":static_entries.size()+actor_entries.size()}
 
 func _media_settle_diagnostics()->Dictionary:
     # Recording-only: why optional maintenance and due composition did or did
@@ -935,7 +935,7 @@ func _prepare_future_world() -> void:
     if candidate.is_empty(): return
     # Compiler delivery admits immutable authoring for passive projection.
     # Exact media still gates native construction and visible publication.
-    if not media_group_plans.has(candidate.source_group_id) and not is_same(
+    if not candidate.get("retained_boundary",false) and not media_group_plans.has(candidate.source_group_id) and not is_same(
             media_received_owners.get(candidate.source_group_id),_media_group_owner(candidate.source_group_id)):return
     if not static_forecast.is_empty() and static_forecast.task>=0 and static_forecast.boundary.preparation_key==candidate.preparation_key:return
     pending_world = WorldPreparation.new(); add_child(pending_world)
@@ -961,7 +961,7 @@ func _forecast_static_world()->void:
         or not pending_world.worker_finished() or not pending_world.result.get("source_only",false):return
     var candidate:Dictionary=timeline.preview_world(false)
     if candidate.is_empty() or candidate.preparation_key==pending_world.boundary.preparation_key:return
-    if not media_group_plans.has(candidate.source_group_id) and not is_same(
+    if not candidate.get("retained_boundary",false) and not media_group_plans.has(candidate.source_group_id) and not is_same(
             media_received_owners.get(candidate.source_group_id),_media_group_owner(candidate.source_group_id)):return
     var input:Dictionary=WorldPreparation.capture_static(self,candidate)
     var output:Dictionary={}
@@ -987,7 +987,7 @@ func _prepared_world_sources_ready(candidate: Dictionary) -> bool:
     # Retained environment resources keep their displayed leases. The matching
     # prepared owner proves every new/changed current-view constructor, including
     # CPU images and fixture facts; other camera views are a later consumer.
-    return not plan.is_empty() and plan.errors.is_empty() and pending_world!=null and pending_world.prepared \
+    return (candidate.get("retained_boundary",false) or (not plan.is_empty() and plan.errors.is_empty())) and pending_world!=null and pending_world.prepared \
         and pending_world.epoch==timeline.initialization_revision and pending_world.quarter==quarter \
         and pending_world.boundary.preparation_key==candidate.preparation_key \
         and MediaWarmup.ready(media_warmup,pending_world.result.get("environment_paths",{}))
@@ -1711,7 +1711,7 @@ func _sync_actor_membership() -> void:
     var group: String = timeline.current.get("id","")
     var staged: Dictionary = timeline.staged_actors()
     var rendered_state: Dictionary = timeline.presentation_state()
-    var loadouts:Dictionary=ActorConstruction.loadouts(displayed_samples,displayed_components)
+    var loadouts:Dictionary=ActorConstruction.loadouts(displayed_samples,displayed_components+timeline.appearance_layer_samples(catalog_cache))
     if actor_revision == timeline.revision and actor_group == group and sampled_loadouts == loadouts and sampled_staged_ids == staged.keys(): return
     sampled_loadouts = loadouts
     sampled_staged_ids = staged.keys()

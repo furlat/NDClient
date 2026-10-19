@@ -39,6 +39,8 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## native source naming them, e.g. Raging's mantle); their media rows are the
 ## shared condition_media context.
 @export var layers: Array = []
+## Prepared outfit layers driven by the package appearance-provider lease.
+@export var appearance_layers: Array = []
 
 @export_group("Stacking")
 @export var group: String = ""

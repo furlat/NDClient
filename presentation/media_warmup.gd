@@ -5,6 +5,8 @@ const EMPTY:Dictionary={}
 const Characters = preload("res://presentation/characters.gd")
 const Authoring = preload("res://presentation/authoring.gd")
 const Conditions = preload("res://presentation/conditions.gd")
+const Appearance=preload("res://presentation/condition_appearance.gd")
+const Tracks=preload("res://presentation/tracks.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const EncounterMedia = preload("res://presentation/encounter_media.gd")
@@ -38,7 +40,7 @@ static func create() -> Dictionary:
         "family_revision":0,"selected_family_revision":-1,"all_optional_selected":true,"changed_paths":{},"pending_paths":{},
         "optional_frame":-1,"optional_updates":0,"selection_publication":{},
         "selection_revision":0,"selection_task":-1,"selection_result":{},"selection_applied_revision":-1,"selection_jobs":0}
-    var data={"plan_task":-1,"plan_pending":{},"optional_pending":{},"plan_result":{},"plan_cache":{},
+    var data={"plan_thread":null,"plan_pending":{},"optional_pending":{},"plan_result":{},"plan_cache":{},
         "required_plan":false,"metadata_phases":{},"metadata_ms":0.0,"metadata_jobs":0,
         "wanted":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"budget_bytes":budget,
         "encounter":{},"encounter_override":{},"encounter_epoch":-1,"source_sizes":{},
@@ -530,7 +532,7 @@ static func receive_handoff(data: Dictionary, completed: Dictionary, key: Array)
     return result
 
 static func _start_plan(data: Dictionary, allow_optional:bool=false) -> void:
-    if data.plan_task >= 0: return
+    if data.plan_thread != null: return
     var request: Dictionary
     var optional = false
     if not data.plan_pending.is_empty():
@@ -545,7 +547,11 @@ static func _start_plan(data: Dictionary, allow_optional:bool=false) -> void:
     else: return
     data.plan_result = {}
     var work = _plan_optional.bind(request,data.plan_result,data.plan_cache) if optional else _plan_sources.bind(request,data.plan_result,data.plan_cache)
-    data.plan_task = WorkerThreadPool.add_task(work,false,"Optional authored families" if optional else "Required authored media")
+    # ResourceLoader can manage pool tasks while loading native Resources.
+    # This finite metadata job owns a Thread directly; no foreign pool ID can
+    # be consumed while its resource dependencies are being loaded.
+    data.plan_thread=Thread.new()
+    data.plan_thread.start(work)
 
 static func source_records(character:Dictionary,environment:Dictionary,groups:Array,cache:Dictionary,partial:bool=false)->Dictionary:
     var result:Dictionary={}
@@ -839,9 +845,14 @@ static func _plan_optional(request: Dictionary, result: Dictionary, cache: Dicti
     result.complete=true
 
 static func poll_plan(data: Dictionary) -> Dictionary:
-    if data.plan_task < 0 or not WorkerThreadPool.is_task_completed(data.plan_task): return {}
-    WorkerThreadPool.wait_for_task_completion(data.plan_task)
-    var completed: Dictionary = data.plan_result
+    var worker:Thread=data.plan_thread
+    if worker==null or worker.is_alive():return {}
+    # Take the completed owner before collecting it. No later poll/close can
+    # consume the same thread, and its result is the actual worker output.
+    data.plan_thread=null
+    var completed:Dictionary=data.plan_result
+    data.plan_result={}
+    worker.wait_to_finish()
     if not completed.get("complete",false):
         completed.error = "Authored media metadata preparation did not complete; inspect the source error log."
     if completed.has("optional_request"):
@@ -851,8 +862,6 @@ static func poll_plan(data: Dictionary) -> Dictionary:
     data.metadata_ms += completed.get("elapsed_ms",0.0)
     data.metadata_jobs += 1
     data.metadata_phases[completed.get("stage","required")] = completed.get("phases",{})
-    data.plan_result = {}
-    data.plan_task = -1
     _start_plan(data)
     return completed
 
@@ -1874,8 +1883,12 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
             items.merge(delta.get("items",{}),true)
             var changed_actors:Dictionary=delta.get("actors",{}).duplicate()
             for item_id in delta.get("items",{}):changed_actors.merge(item_actors.get(item_id,{}),false)
+            var appearance_changes:Dictionary={}
             for id in delta.get("actors",{}):
-                actors[id] = delta.actors[id]
+                var previous:Dictionary=actors.get(id,{})
+                var after:Dictionary=delta.actors[id]
+                if not is_same(previous.get("conditions"),after.get("conditions")) and Appearance.actor_components(previous,cache)!=Appearance.actor_components(after,cache):appearance_changes[id]=true
+                actors[id] = after
                 _index_actor_items(item_actors,actors[id])
             for id in changed_actors:
                 if actors.has(id):_witness(witnesses,id,actors[id],Characters.item_looks(actors[id],{"items":items}))
@@ -1884,9 +1897,19 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
             _visible_ids(visible,senses,audience)
             var after_visible:Dictionary={}
             _visible_ids(after_visible,senses,audience)
+            var appearance_samples:Dictionary=Tracks.samples(group.get("actor_tracks",[]),float(commit.at_ms)) if not appearance_changes.is_empty() else {}
             for id in after_visible:
                 if actors.has(id) and (not current_visible.has(id) or changed_actors.has(id)):
                     _actor_first_use(first_use,actors[id],[],float(commit.get("at_ms",0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times,Characters.item_looks(actors[id],{"items":items}))
+                    # A newly admitted outfit can begin midway through a cast.
+                    # Prepare that actual body clip at this cut as well as rest;
+                    # the pre-cast occurrence snapshot cannot select new wings.
+                    if appearance_changes.has(id) and appearance_samples.has(id):
+                        var shown:Dictionary=actors[id].duplicate(false)
+                        var sample:Dictionary=appearance_samples[id]
+                        shown.presentation_layers=Appearance.actor_components(shown,cache).map(func(row):return row.layer)+sample.get("effect_layers",[])
+                        if sample.has("visual_loadout"):shown.visual_loadout=sample.visual_loadout
+                        _actor_first_use(first_use,shown,[sample.clip],float(commit.at_ms),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times,Characters.item_looks(shown,{"items":items}))
             current_visible=after_visible
         # Union exact observed/committed outfits within this one group. This
         # conservative preparation changes no state and exposes no actor early.
@@ -1904,7 +1927,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
                 var actor:Dictionary=witness.actor
                 if Characters.rig_id(actor,cache)!=track.rig:continue
                 var shown:Dictionary=actor.duplicate()
-                shown.presentation_layers=track.get("effect_layers",[])
+                shown.presentation_layers=Appearance.actor_components(actor,cache).map(func(row):return row.layer)+track.get("effect_layers",[])
                 if track.has("visual_loadout"):shown.visual_loadout=track.visual_loadout
                 _actor_first_use(first_use,shown,[track.clip],float(track.start_ms),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times,witness.looks)
             var key: String = track.actor_uuid + ":" + track.rig + ":" + track.clip
@@ -1916,7 +1939,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
                 var actor:Dictionary=witness.actor
                 if Characters.rig_id(actor,cache) != track.rig: continue
                 var shown: Dictionary = actor.duplicate()
-                shown.presentation_layers=track.get("effect_layers",[])
+                shown.presentation_layers=Appearance.actor_components(actor,cache).map(func(row):return row.layer)+track.get("effect_layers",[])
                 if track.has("visual_loadout"):
                     shown.visual_loadout = track.visual_loadout
                 _add_actor_once(paths,shown,[track.clip],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,witness.looks)
@@ -1949,8 +1972,9 @@ static func close(data: Dictionary) -> void:
     if data.get("closed",false):return
     data.closed=true
     data.plan_pending={};data.optional_pending={}
-    if data.plan_task>=0:
-        WorkerThreadPool.wait_for_task_completion(data.plan_task);data.plan_task=-1
+    var worker:Thread=data.plan_thread
+    data.plan_thread=null
+    if worker!=null:worker.wait_to_finish()
     var owner=physical(data)
     _withdraw(data)
     if not owner.consumers.is_empty():return

@@ -91,7 +91,7 @@ func run()->void:
         while planned.is_empty() and Time.get_ticks_msec()<deadline:
             planned=Media.poll_plan(full)
             if planned.is_empty():await process_frame
-        check(not planned.is_empty() and full.plan_task<0 and full.optional_pending.is_empty(),name+" exact current-state metadata still completes without launching exhaustive optional rig-family work")
+        check(not planned.is_empty() and full.plan_thread==null and full.optional_pending.is_empty(),name+" exact current-state metadata still completes without launching exhaustive optional rig-family work")
         Media.close(full)
         var capped=Media.create();capped.budget_bytes=0
         Media.adopt_encounter(capped,actual,1)

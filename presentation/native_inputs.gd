@@ -6,6 +6,8 @@ const Surface=preload("res://presentation/entity_surface.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
+const Appearances=preload("res://presentation/condition_appearance.gd")
+var appearances:RefCounted=Appearances.new()
 var surfaces:RefCounted=Surface.new()
 
 static func recipient(component:Dictionary)->String:
@@ -71,7 +73,9 @@ static func actor_layers(world:Node,actor:String)->Dictionary:
     var visual:Dictionary=world.visual_actors.get(actor,{})
     var layers:Array=[];var revision:Array=[]
     for entry in visual.get("entries",[]):
-        if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
+        if entry.role=="shadow":continue
+        var effect:Dictionary=entry.actor_layer.get("effect",{})
+        if not effect.is_empty() and effect.get("kind")!="condition_appearance":continue
         if not entry.node.is_visible_in_tree():continue
         layers.append({"slot":entry.actor_layer.slot,"node":entry.node,"material":entry.material})
         revision.append([entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_binding_revision",0)])
@@ -286,6 +290,10 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
         var raw:Variant=component.get("condition",{}).get("state")
         var treatment:Dictionary=raw if raw is Dictionary else {}
         Effects.set_input(handle,"treatment_state",treatment);supplied.append("treatment_state")
+    if "appearance_provider" in requested:
+        var reason:String=appearances.bind(world,handle,component)
+        if reason.is_empty():supplied.append("appearance_provider")
+        else:unavailable.appearance_provider=reason
     if "pose_provider" in requested and not handle.occurrence.parameters.get("actor_operation",{}).get("capture_pose",false):
         supplied.append("pose_provider") # This operation does not request a capture.
     for name in component.get("native_inputs",{}):
@@ -303,3 +311,4 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
 
 func clear()->void:
     surfaces.clear()
+    appearances.clear()

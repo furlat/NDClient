@@ -30,7 +30,8 @@ func optional_interleaving(state: Dictionary, prepared: Dictionary, queued: bool
     var key_a := [1,["required-a"],0]
     var key_b := [1,["handoff-b"],0]
     var request := {"key":key_a,"state":Media._snapshot(state),"groups":[]}
-    data.plan_task = WorkerThreadPool.add_task(held_required.bind(request,data.plan_result,data.plan_cache,entered,release))
+    data.plan_thread=Thread.new()
+    data.plan_thread.start(held_required.bind(request,data.plan_result,data.plan_cache,entered,release))
     entered.wait()
     if queued: Media.request_plan(data,[1,["queued-required"],0],state,[])
     var received := Media.receive_handoff(data,prepared,key_b)
@@ -136,7 +137,7 @@ func run() -> void:
     # cannot overwrite latest required plans or the active group's ownership.
     var completions := 0
     var deadline := Time.get_ticks_msec()+30000
-    while (player.media_warmup.plan_task>=0 or not player.media_warmup.optional_pending.is_empty()) and Time.get_ticks_msec()<deadline:
+    while (player.media_warmup.plan_thread!=null or not player.media_warmup.optional_pending.is_empty()) and Time.get_ticks_msec()<deadline:
         var done := Media.poll_plan(player.media_warmup)
         if not done.is_empty():
             check(done.stage=="optional","Received metadata schedules only optional family work")
@@ -146,20 +147,20 @@ func run() -> void:
             completions += 1
         player._prepare_media()
         await process_frame
-    check(completions>0 and player.media_warmup.plan_task<0 and player.media_warmup.optional_pending.is_empty(),"Optional family queue completes through its existing worker")
+    check(completions>0 and player.media_warmup.plan_thread==null and player.media_warmup.optional_pending.is_empty(),"Optional family queue completes through its existing worker")
     check(var_to_bytes(prepared.source_files)==source_bytes,"Worker cache merge never mutates transferred source-file owners")
     check(not player.media_warmup.encounter.is_empty(),"Matching latest optional completion preserves encounter preload planning")
     player.timeline.current = first
     player.timeline.queue.erase(first)
     player._prepare_media()
     check(player.media_plan.required==active_character_paths(player.media_group_plans[first.id],player.character_light_profile) and player.media_plan.upcoming==active_character_paths(player.media_group_plans[second.id],player.character_light_profile),"First received group uses prepared exact current/upcoming owners")
-    check(player.media_warmup.plan_pending.is_empty() and player.media_warmup.plan_task<0,"First received activation needs no second required metadata task")
+    check(player.media_warmup.plan_pending.is_empty() and player.media_warmup.plan_thread==null,"First received activation needs no second required metadata task")
     check(not player.media_group_plans.has(old.id),"Retired nonreceived current plan is released")
     player.timeline.current = second
     player.timeline.queue.erase(second)
     player._prepare_media()
     check(not player.media_received_owners.has(first.id),"Retired received group releases its retained metadata owner")
-    check(player.media_requested_key[1]==[second.id,third.id] and player.media_warmup.plan_task>=0,"Groups beyond the first two retain the original required worker fallback")
+    check(player.media_requested_key[1]==[second.id,third.id] and player.media_warmup.plan_thread!=null,"Groups beyond the first two retain the original required worker fallback")
     var fallback := await poll_plan(player.media_warmup)
     check(not fallback.has("error") and fallback.get("complete",false),"Required fallback publishes successful completion instead of freezing live playback")
     player._adopt_media_plan(fallback)
@@ -175,7 +176,7 @@ func run() -> void:
     player._adopt_received_media(message)
     check(player.timeline.initialization_revision!=old_epoch and player.media_group_plans.is_empty() and player.media_received_owners.is_empty(),"Reset clears received metadata and rejects old accepted group owners")
     Media.close(player.media_warmup)
-    check(player.media_warmup.plan_task<0 and player.media_warmup.optional_pending.is_empty(),"Close joins owned optional/required work and clears unpublished requests")
+    check(player.media_warmup.plan_thread==null and player.media_warmup.optional_pending.is_empty(),"Close joins owned optional/required work and clears unpublished requests")
     # This metadata-only fixture never enters the tree; run its normal owner
     # teardown explicitly before freeing the detached scene.
     player._exit_tree()

@@ -141,7 +141,7 @@ func staged_metadata(state: Dictionary, expected_environment: Dictionary) -> voi
     check(not Media.ready(player.media_warmup,player.media_plan.required),"Required readiness still blocks missing resident bytes")
     Media._refresh_path(player.media_warmup,missing)
     var original = player.media_empty_plan
-    check(data.plan_task<0 and not data.optional_pending.is_empty(),"Required completion leaves optional dispatch pending until exact scene demand")
+    check(data.plan_thread==null and not data.optional_pending.is_empty(),"Required completion leaves optional dispatch pending until exact scene demand")
     Media.adopt_required(data,1)
     Media.demand(data,wanted,player.media_warmup.environment,player.media_warmup.fixtures,player.media_warmup.gpu_only,player.media_warmup.cpu_required)
     var optional = await poll_plan(data)
