@@ -40,6 +40,12 @@ def godot_processes(marker: str) -> list[dict]:
         for line in output.splitlines() if "\t" in line and line.split("\t", 1)[0].strip().isdigit()]
 
 
+def test_processes(rows: list[dict], scripts: set[str]) -> list[dict]:
+    # Another preview/reviewer can use this worktree while a headless suite
+    # finishes. Only the selected test scripts belong to this invocation.
+    return [row for row in rows if any(script in row["command"] for script in scripts)]
+
+
 def stop_processes(rows: list[dict]) -> None:
     if rows:
         ids = ",".join(str(row["pid"]) for row in rows)
@@ -97,7 +103,7 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
         code = process.wait()
     # The console launcher can leave its windowed child running: stop only this
     # worktree's processes for this script.
-    leftovers = [entry for entry in godot_processes(worktree) if row["script"] in entry["command"]]
+    leftovers = test_processes(godot_processes(worktree), {row["script"]})
     stop_processes(leftovers)
     text = log.read_text(encoding="utf-8", errors="replace")
     godot_log = text
@@ -167,7 +173,7 @@ def main() -> int:
     restored = sorted(changed_generated() - before)
     if restored:
         subprocess.run(["git", "checkout", "--", *restored], cwd=PROJECT, check=False)
-    left = godot_processes(worktree)
+    left = test_processes(godot_processes(worktree), {row["script"] for row in rows})
     stop_processes(left)
     order = {row["name"]: index for index, row in enumerate(rows)}
     results.sort(key=lambda value: order[value["name"]])
