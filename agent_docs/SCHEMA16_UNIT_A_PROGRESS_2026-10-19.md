@@ -3,6 +3,9 @@
 19 October 2026. Implementation branch `codex/schema16-unit-a`, worktree
 `C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`, based on
 the committed plan `9b73f29a` on requested branch `codex-authoring-schemabump`.
+Checkpoint `341237ad` is now published in main `NDClientGodot` together with
+the complete matching package, native build and original schema16 library.
+Publication receipt/backups: main `.runtime/schema16-publication/`.
 This ledger is evidence, not a completion or visual-approval claim. The user's
 later clarification authorizes the complete Factory migration and shared
 providers after this base, including every spell/condition/class ability and
@@ -12,9 +15,9 @@ explicit UI art coverage. Unit A is a checkpoint, not the end of that scope.
 |---|---|---|
 | 0 — frozen inputs | Passed | Official `event-native-deltas` at `211b71134`; executable export `/home/tommaso/.cache/ndclient/dnd_engine-211b71134`; protocol 1/schema 16. Current inventory and typed-source build regenerated, zero build errors. |
 | 1 — SDK/readers/equipment | Passed core/live gate | Reference fold/oracle and focused SDK checks pass. Native startup 5/5 in 5,480 ms on Forward+/5090. Five independent interaction sessions pass, ten equipment actions with zero world/media holds. Broader legacy test migration remains named below. |
-| 2a — first Studio cohort | Core native gate passed | All eight actual two-faction cases pass seeks, faction changes, looping and canonical-prefix checks: 10,866 assertions, zero script/resource errors. One RefCounted shutdown warning remains. |
+| 2a — first Studio cohort | Core native gate passed | All eight actual two-faction cases pass seeks, faction changes, looping and canonical-prefix checks: 10,853 assertions, zero script/resource errors. One RefCounted shutdown warning remains. |
 | 2b — every current spell | Full attempt coverage / eight red cases | 183 real baselines/366 journals pass recording safety. Actual GUI-command sweep covers all 189 IDs: 183 command successes, 181 runtime-safe; six server/setup/occurrence failures plus Flame Blade missing worn look and Guardian source error remain explicit. |
-| B — complete Factory package | Installed / native qualification active | Whole `conditions-candidate-7fab471588209a41` installed privately and package text committed separately. All 155 families /465 phase roles resolve. Surprise first-use/short-queue warm-draw proof remains unqualified. |
+| B — complete Factory package | Installed / native qualification active | Whole `conditions-candidate-7fab471588209a41` installed in both main and private checkouts; package text committed separately. All 155 families /465 phase roles resolve. Surprise first-use/short-queue warm-draw proof remains unqualified. |
 | C — shared providers/full coverage/UI | Active | Complete 1,504-capability join, spell/condition ownership, 11 class-action bindings, optical surface/body/endpoint/spatial bridges and UI assignments implemented. Native output, missing public inputs, remaining providers and final performance stay explicit. |
 
 ## Inputs and ownership
@@ -30,8 +33,13 @@ through Windows junctions. This worktree owns `assets/vfx`, `build`, `.godot` an
 `.runtime`. Installed VFX package is the whole closed `conditions-candidate-7fab471588209a41`
 delivery. Its 1,149 clips, 497 selections, 155 lifecycle families and 465 phase
 roles are installed privately; code/text/metadata is committed in `f917f382`.
-Binary resources and artwork remain ignored. Main checkout still needs the whole
-package and rebuilt native resources when this branch is published.
+Binary resources and artwork remain ignored. Main received the whole closed
+package, matching native resources and current original recordings together at
+16:55 UTC on 19 October; older package/build/library directories remain recoverable
+under main `.runtime/schema16-publication/backup/`. The old package
+metadata is recoverable from `9b73f29a`; its previous binaries are retained.
+Earlier regression paths in this ledger refer to the implementation worktree
+unless explicitly labeled as main-checkout publication checks.
 
 Canonical SDK state is native schema 16. Transition records retain actual
 occurrence indices, ordered condition pre/after members and the small equipped
@@ -156,6 +164,32 @@ The corrected prepared-weapon binding also has actual native command evidence:
 resource errors; the actual Shillelagh condition is observed presented. Divine
 Favor's baseline lacks its required currently displayed weapon and still reports
 that gap. Active Antimagic is retired in schema16 and is not a missing public field.
+
+## Main-checkout publication verification
+
+Checkpoint **341237ad** was fast-forwarded into requested main branch
+`codex-authoring-schemabump`; complete package/build/original library were installed
+at 16:55 UTC. The current library has 197 cases on frozen `211b71134`, schema16.
+No original journal was translated or rewritten. Previous directories are retained
+in main `.runtime/schema16-publication/backup/`.
+
+- Main native Haste lifecycle replay: **1,433 checks, no failures or script/resource
+  errors**, including seeking, independent faction changes and automatic looping.
+  One ObjectDB exit-instance warning remains. Main evidence:
+  `.runtime/schema16-publication/haste-native.log` and
+  `.runtime/schema16-studio-replay.json`.
+- Main live startup: **5 checks, zero failures/script/engine errors**,
+  `.runtime/tests/20261019T165607Z/summary.json`; driver 10.1 seconds. That duration
+  includes the test launcher/backend/cleanup and is not first-frame startup time
+  or a performance qualification.
+- Owned replay and live-test processes closed. The Factory's separate inspectors
+  were not touched. No approved lighting, normals, cap, colours or wall tuning
+  changed during publication.
+
+This resolves the stale main checkout, not every remaining provider, source or
+visual gap. In particular, native sample/presentation witnesses are not proof of
+nonzero final pixels or user approval. The short-queue first-use and final-scale
+performance gates remain open.
 
 ## Broader suite status
 
