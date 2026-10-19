@@ -385,3 +385,11 @@ spell baseline safety96% (prior full208 run plus bounded current-package checks)
 Factory migration/handovers68%, shared providers43%, scenario depth42%, final
 performance10%. Package receipt is complete; the migration and user art acceptance
 are not. These estimates are not percentages of passed runtime/visual gates.
+
+
+Readiness package/client and item continuation are now published to main
+`ae0261c7`/`fdaa8796`/`247fdc76`, with matching whole build domains. Actual main
+passes664focused checks plus83Gallery and17two-spell live checks. Its final
+isolated door peak16.585ms and move peak14.250ms are recorded alongside the
+unresolved41.221ms first-Fireball targeting frame; full decomposition/limits
+are in the item-cohort ledger. No owned Godot/test server preview remains open.
