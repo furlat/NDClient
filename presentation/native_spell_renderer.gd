@@ -90,7 +90,10 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
                 pair[1][component.id]=component
     for id in wanted:
         optional.erase(id)
-        if not handles.has(id):clips.append(wanted[id].native_clip)
+        if not handles.has(id):clips.append(Effects.occurrence_clip(wanted[id]))
+    var preparation_owners:Dictionary=wanted.duplicate()
+    preparation_owners.merge(optional);preparation_owners.merge(handles)
+    Effects.retain_preparation(_resource_cache,preparation_owners)
     var optical:Dictionary=wanted
     if not optical_groups.is_empty():
         optical={}
@@ -149,7 +152,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
             if handles.has(id) or _prepare_failures.has(id):continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             started=Time.get_ticks_usec()
-            var loading:Dictionary=Effects.prepare([optional[id].native_clip],_resource_cache,false)
+            var loading:Dictionary=Effects.prepare([Effects.occurrence_clip(optional[id])],_resource_cache,false)
             if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
             FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
             if not loading.errors.is_empty():_prepare_failures[id]=str(loading.errors);continue
@@ -193,9 +196,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     return result
 
 func _construct(component:Dictionary)->String:
-    var clip:Dictionary=component.native_clip.duplicate(false)
-    if component.has("native_constructor_inputs"):clip.construction_inputs=component.native_constructor_inputs
-    if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
+    var clip:Dictionary=Effects.occurrence_clip(component)
     var seed:int=Components.effect_seed(component)
     var handle:Dictionary=Effects.make(_owner,clip,0,seed)
     # Construction stages are measured where they run. Preserve that breakdown
@@ -615,6 +616,9 @@ func _pending(component:Dictionary,reason:String)->void:
     diagnostics[component.id]={"id":component.id,"status":"pending","reason":reason}
 
 func close(world:Node=null)->void:
+    # Immutable loaded Resources may survive a replay epoch; transient source
+    # discovery carries private occurrence operands and must end with it.
+    _resource_cache.erase("native_immutable_jobs")
     for handle in handles.values():Effects.close(handle)
     handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear();preparation_state.clear()
     for layer in groups.values():Layer.close(layer)

@@ -14,6 +14,7 @@ const INDEX:="res://assets/vfx/index.json"
 ## Conditions whose package lifecycle the client keeps from playing.
 const LIFECYCLES:="condition_lifecycles.json"
 const AbilityDocuments=preload("res://presentation/ability_documents.gd")
+const Constructed=preload("res://presentation/native_constructed_occurrence.gd")
 ## Played when a clip has it and no kind is requested: recorded, else gpu, else native.
 const KINDS:=["recorded","gpu","native"]
 const LABELS:={"recorded":"Recorded","gpu":"GPU","native":"Native"}
@@ -28,6 +29,7 @@ static var _selections:Dictionary={}
 static var _conditions:Dictionary={}
 static var _client:Dictionary={}
 static var _clock:Script
+static var _immutable_preparation:String=""
 static var _loaded:bool=false
 
 static func _launch_kind()->String:
@@ -45,7 +47,7 @@ static func set_requested(kind:String)->void:
 ## Reload: the next request reads the package index again.
 static func invalidate()->void:
     _mutex.lock()
-    _loaded=false;_clips={};_selections={};_conditions={};_client={}
+    _loaded=false;_clips={};_selections={};_conditions={};_client={};_immutable_preparation=""
     _mutex.unlock()
 
 static func _load()->void:
@@ -64,6 +66,7 @@ static func _load()->void:
             var listed:Variant=AbilityDocuments.read(LIFECYCLES)
             for id in (listed.get("suppressed",[]) if listed is Dictionary else []):_conditions.erase(id)
             _clock=load(index.get("runtime",{}).get("clock",""))
+            _immutable_preparation=str(index.get("runtime",{}).get("production_construction",{}).get("immutable_preparation",""))
         else:push_error("VFX package index cannot be read: "+INDEX)
     _mutex.unlock()
 
@@ -148,6 +151,14 @@ static func requires_construction(value:Dictionary)->bool:
 static func key(value:Dictionary)->String:
     return str(value.get("id",""))+"|"+str(choice(value).kind)+"|"+str(value.get("opacity_uniform",""))
 
+static func occurrence_clip(component:Dictionary)->Dictionary:
+    var result:Dictionary=component.native_clip.duplicate(false)
+    if component.has("native_constructor_inputs"):
+        result.construction_inputs=component.native_constructor_inputs
+        result.preparation_owner=component.id
+    if component.get("native_cue",{}).has("opacity_uniform"):result.opacity_uniform=component.native_cue.opacity_uniform
+    return result
+
 ## Files this clip's playing approach reads (Studio preview dependencies).
 static func resource_paths(value:Dictionary)->Array:
     var result:Array=[]
@@ -178,6 +189,7 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
         var approach:Dictionary=chosen.approaches[0]
         live.append(approach)
         for path in [approach.path,approach.source_phase]+approach.warm:paths[path]=true
+        if not _immutable_preparation.is_empty():paths[_immutable_preparation]=true
         var phase:Resource=cache.get(approach.source_phase)
         if phase!=null:
             if not cache.has("effect_package_phase_paths"):cache.effect_package_phase_paths={}
@@ -194,8 +206,45 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
                 for path in approach.warm:
                     if cache.get(path) is Material:materials.append(cache[path])
                 if not Admission.prepare_materials(cache[approach.path],materials,cache):pending+=1
+            if not _immutable_preparation.is_empty():
+                var prepared:Dictionary=_prepare_immutable(clips,cache)
+                pending+=prepared.pending;errors.append_array(prepared.errors)
         if not Admission.can_mutate():pending+=1
     return {"ready":pending==0 and errors.is_empty(),"pending":pending,"errors":errors}
+
+## Source-owned bounded resource discovery. This cache belongs to the existing
+## preparation consumer; completed jobs retain resource paths, never facts or
+## sampled prototypes. The Factory owns the shared immutable resource bank.
+static func _prepare_immutable(clips:Array,cache:Dictionary)->Dictionary:
+    if not cache.has("native_immutable_jobs"):cache.native_immutable_jobs={}
+    var jobs:Dictionary=cache.native_immutable_jobs
+    var pending:int=0;var errors:Array=[]
+    var stepped:bool=false
+    var preparation:Script=cache[_immutable_preparation]
+    for value in clips:
+        var selected:Dictionary=choice(value)
+        if selected.kind=="recorded" or selected.approaches.is_empty():continue
+        # Neutral construction templates can prepare ordinary dependencies,
+        # but must not discover or build a successful review occurrence.
+        if requires_construction(value) and not value.has("construction_inputs"):continue
+        var identity:String=key(value)+"|"+str(selected.approaches[0].path)+"|"+str(value.get("preparation_owner","source"))
+        if not jobs.has(identity):
+            var phase:Resource=cache[selected.approaches[0].source_phase]
+            var actual:Dictionary=Constructed.clip_with_inputs(phase,value.construction_inputs) if value.has("construction_inputs") else phase.to_clip()
+            jobs[identity]=preparation.begin(actual)
+            jobs[identity].preparation_owner=str(value.get("preparation_owner",""))
+        var job:Dictionary=jobs[identity]
+        if not job.complete and job.error.is_empty() and not stepped:
+            preparation.step(job);stepped=true
+        if not job.error.is_empty():errors.append(job.error)
+        elif not job.complete:pending+=1
+    return {"pending":pending,"errors":errors}
+
+static func retain_preparation(cache:Dictionary,owners:Dictionary)->void:
+    var jobs:Dictionary=cache.get("native_immutable_jobs",{})
+    for id in jobs.keys():
+        var owner:String=jobs[id].get("preparation_owner","")
+        if not owner.is_empty() and not owners.has(owner):jobs.erase(id)
 
 static func _resource_values(value:Variant,result:Dictionary)->void:
     if value is Dictionary:
