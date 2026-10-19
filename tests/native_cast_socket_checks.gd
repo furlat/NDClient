@@ -4,6 +4,7 @@ const Sockets=preload("res://presentation/spell_placement.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Native=preload("res://presentation/native_spell_renderer.gd")
+const Timeline=preload("res://presentation/timeline.gd")
 class Lighting extends RefCounted:
     var native_preparation_ready:bool=true
     func sample_handles(_handles:Dictionary)->void:pass
@@ -21,7 +22,7 @@ class World extends Node3D:
     var catalog_cache:Dictionary={}
     var character_light_profile:String="reference"
     var profile:Dictionary={"phases":{}}
-    var timeline:Dictionary={"initialization_revision":0,"revision":0,"current":{},"queue":[],"condition_owners":{},"spatial_effect_owners":{}}
+    var timeline:RefCounted=Timeline.new()
     var source_lighting:Lighting=Lighting.new()
     func _facing(_direction:Vector2)->String:return "SW"
 var checks:int=0

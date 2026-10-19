@@ -1,4 +1,5 @@
 extends "res://tests/ground_visibility_checks.gd"
+const Cells=preload("res://sdk/fold_cells.gd")
 # Named disclosed-tile after-values through the production world sync. Every
 # retained batch is compared to independent original single draws in old order.
 func _initialize()->void:run.call_deferred()
@@ -10,7 +11,7 @@ func run()->void:
     environment.environment.background_mode=Environment.BG_COLOR;environment.environment.background_color=Color.BLACK
     environment.environment.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR;environment.environment.ambient_light_color=Color.WHITE;environment.environment.ambient_light_energy=1
     scene.add_child(environment)
-    scene.timeline.state={"tiles":{},"objects":{},"actors":{},"audience":{"controlled":[]},"senses":{"visible":[],"objects":{}}}
+    scene.timeline.state={"tiles":{},"objects":{},"actors":{},"audience":{"controlled":[]},"senses":{"visible":Cells.mask([]),"objects":{}}}
     for quarter in range(4):
         scene.quarter=quarter;scene.position_camera()
         var tiles={}
@@ -39,7 +40,7 @@ func run()->void:
                 var same:Dictionary=tiles[id]
                 tiles.erase(id);tiles[id]=same
             scene.timeline.state.tiles=tiles.duplicate()
-            scene.timeline.state.senses.visible=tiles.values().filter(func(tile):return tile.position[0]<=0).map(func(tile):return tile.position)
+            scene.timeline.state.senses.visible=Cells.mask(tiles.values().filter(func(tile):return tile.position[0]<=0).map(func(tile):return tile.position))
             scene.timeline.world_revision+=1;scene.timeline.revision+=1
             var before:Dictionary=scene.timeline.state.duplicate(true)
             scene._sync_world();scene._sync_scenery(true);scene._sort_draws()

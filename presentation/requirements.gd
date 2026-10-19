@@ -218,7 +218,9 @@ static func _prepared_recipe(selected:Dictionary,source:String,kind:String,behav
 
 static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,cache:Dictionary)->Array:
     var kind:String=fact_value.get("kind","")
-    var result=_prepared_recipe(selected,source,kind,fact_value.get("behavior_id",""),cache)
+    # Native facts may deliberately omit their behavior identity to this seat.
+    var behavior:String="" if fact_value.get("behavior_id")==null else fact_value.behavior_id
+    var result=_prepared_recipe(selected,source,kind,behavior,cache)
     for i in result.size():
         var requirement:Dictionary=result[i]
         if requirement.status!="missing":continue
@@ -237,9 +239,9 @@ static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,c
         for binding in [["action_materials","action_material"],["action_intakes","action_intake"]]:
             var path="catalog/"+binding[0]+".json"
             var values=Authoring.load_data(path,cache)
-            var id:String=fact_value.get("behavior_id","")
+            var id:String=behavior
             if values.has(id):result.append(owner(binding[1],id,path+":/"+pointer(id),values[id]))
-    if fact_value.get("committed",true):
+    if fact_value.get("committed",true) and kind in ["portal_transfer","mechanism_activation"]:
         # Portals and finite world animations with old presentation, as the environment build lists them.
         var inspection:Dictionary=Authoring.Catalog.environment_index(cache).get("inspection",{})
         var bindings:Array=[]

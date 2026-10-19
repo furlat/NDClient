@@ -1,6 +1,13 @@
 extends SceneTree
 ## The real Studio must finish its authored tails, then stop or loop.
 const Studio=preload("res://studio/studio.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+class FixtureStudio extends Studio:
+    func _discover_cases()->void:
+        super._discover_cases()
+        # This transport contract is about one real movement clip, not which
+        # unrelated spell happens to be first in a developer's local library.
+        case_paths.assign([Fixtures.journal("move")])
 var checks=0
 var failures:Array=[]
 func check(ok:bool,label:String)->void:
@@ -16,7 +23,7 @@ func settle(studio:Control)->bool:
     return ready(studio)
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
-    var studio=Studio.new();root.add_child(studio)
+    var studio=FixtureStudio.new();root.add_child(studio)
     if not await settle(studio):await finish(studio);return
     studio.loop_enabled=false
     var end:float=studio.index.presentation_end_ms

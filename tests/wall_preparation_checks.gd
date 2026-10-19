@@ -4,6 +4,8 @@ extends SceneTree
 const Reveal=preload("res://presentation/wall_reveal.gd")
 const World=preload("res://presentation/world.gd")
 const Journal=preload("res://sdk/journal.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Catalog=preload("res://source_catalog.gd")
 var checks=0
 var failures=[]
 var cases=[]
@@ -48,6 +50,33 @@ func recording(path:String,sequence:int,label:String)->void:
     if not loaded.ok:return
     var derived=World.rows(journal.state,cache)
     check(derived.unresolved.is_empty(),label+" actual source rows resolve")
+    var physical={};var explicit_sources=0
+    for id in journal.state.objects:
+        var object:Dictionary=journal.state.objects[id]
+        var structure:Variant=object.item.get("boundary_structure")
+        if structure!=null and structure.structure in ["wall","retaining_wall","cliff","embankment"]:
+            physical[id]="cliff" if structure.structure in ["cliff","embankment"] else "wall"
+    check(not physical.is_empty(),label+" real recording contains disclosed wall/cliff structures")
+    var resolved={}
+    for row in derived.rows:
+        if not physical.has(row.id):continue
+        resolved[row.id]=true
+        var place:Dictionary=journal.state.objects[row.id].placement
+        check(row.kind==physical[row.id] and row.top_height_steps==place.top_height_steps,
+            label+" "+row.id+" physical member classification and top come from disclosed structure")
+        check(row.position==place.position and row.base_height_steps==place.base_height_steps,
+            label+" "+row.id+" physical classification preserves authored base contact")
+        if not row.has("source_kind"):continue
+        explicit_sources+=1
+        var previous:Dictionary=row.duplicate();previous.kind=row.source_kind;previous.erase("source_kind")
+        check(derived.visual_rows.any(func(visual):return visual.id==row.id and not visual.has("wall_members")),
+            label+" "+row.id+" explicit original source never becomes a generic corner")
+        for q in range(4):
+            for phase in [0,1,2]:
+                check(Catalog.environment(row,q,cache,phase,0.1)==Catalog.environment(previous,q,cache,phase,0.1),
+                    label+" "+row.id+" q%d phase%d exact original source/registration retained"%[q,phase])
+    check(resolved.size()==physical.size() and explicit_sources>0,
+        label+" every real physical structure resolves including supplied explicit source owners")
     verify(journal.state.tiles,derived.visual_rows,label)
 func typed_boundaries()->void:
     var tiles={}
@@ -71,10 +100,10 @@ func typed_boundaries()->void:
     verify(target_tiles,[shifted,cliff],"corner separates original member moves and other member removed")
     verify({},[],"initialization empty reset")
 func _initialize()->void:
-    recording("res://.runtime/player-runs/20261011T225557.695498Z/journal",0,"Crypt initial")
-    recording("res://.runtime/gallery-route/journal",101,"Gallery terminal")
+    recording(Fixtures.journal("door"),0,"Door initial")
+    recording(Fixtures.journal("gallery"),int(Fixtures.case_record("gallery").packets)-1,"Gallery terminal")
     typed_boundaries()
     var report={"checks":checks,"failures":failures,"cases":cases,
-        "scope":"Pure existing-worker wall preparation using actual disclosed Crypt/Gallery rows plus named finite cliff, joined-member and staged support after-values; exhaustive occludes oracle all four quarters, source immutability, no runtime opacity/visibility policy in worker."}
+        "scope":"Pure existing-worker wall preparation using actual disclosed Door/Gallery rows plus named finite cliff, joined-member and staged support after-values; exhaustive occludes oracle all four quarters, source immutability, no runtime opacity/visibility policy in worker."}
     FileAccess.open("res://generated/wall_preparation_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("WALL_PREPARATION_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

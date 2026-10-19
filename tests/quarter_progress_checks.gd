@@ -3,6 +3,7 @@ extends SceneTree
 # This headless fixture builds support geometry without artwork or pixel claims.
 const Quarter = preload("res://presentation/quarter_view.gd")
 const Placement = preload("res://placement.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 class Probe extends "res://play.gd":
     func _ready() -> void:
         set_process(false); set_process_unhandled_input(false); add_child(context_menu)
@@ -21,7 +22,7 @@ func run() -> void:
         "0,0":{"position":[0,0],"elevation_steps":0},
         "1,0":{"position":[1,0],"elevation_steps":1},
         "2,0":{"position":[2,0],"elevation_steps":-1}}
-    host.timeline.state={"tiles":tiles,"objects":{},"senses":{"visible":[[0,0],[1,0],[2,0]]}}
+    host.timeline.state={"tiles":tiles,"objects":{},"senses":{"visible":Cells.mask([[0,0],[1,0],[2,0]])}}
     host.world_generation=4; host.world_quarter=0
     host.scenery_visibility={"support0":true,"support1":true,"support2":true}
     var original: Dictionary=host.timeline.state.duplicate(true)

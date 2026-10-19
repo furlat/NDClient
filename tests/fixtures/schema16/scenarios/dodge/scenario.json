@@ -1,0 +1,65 @@
+{
+ "id": "test.dodge",
+ "title": "Dodge",
+ "kind": "interaction",
+ "seed": 3,
+ "subjects": {
+  "spell": [],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.dodge",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.attack",
+   "by": "target",
+   "target": "caster",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "target"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    4,
+    7
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "action.dodge"
+ ],
+ "required_conditions": [
+  "condition.dodging"
+ ],
+ "required_condition_ends": [
+  "condition.dodging"
+ ]
+}

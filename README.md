@@ -28,8 +28,11 @@ one table: test, checks, failures, script errors, engine ERROR lines, seconds.
   gate yet (`known-red`, `needs-args`, `owned-by-migration`, each with its reason).
 
 It exits non-zero on any failure, script error, unexpected `ERROR:` line or
-leftover Godot process of this worktree. Reports go to `.runtime/tests/<time>/`;
-tracked `generated/` files a test rewrites are restored after the run.
+leftover Godot process owned by that invocation. Reports go to
+`.runtime/tests/<time>/`; rewritten tracked `generated/` reports are retained
+for inspection. The runner never checks out a file another worker may have
+changed. Source-rebuild checks run exclusively before this invocation's readers;
+coordinate independent invocations before rebuilding shared source outputs.
 
 The Windows project uses **Forward+ with Vulkan**, validated on the RTX 5090.
 Opening the project directly selects the same player scene; use the launcher to

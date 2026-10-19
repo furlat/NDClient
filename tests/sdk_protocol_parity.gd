@@ -28,7 +28,7 @@ func mutate_collections(value: Variant) -> void:
 
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
-	var path := args[0] if not args.is_empty() else "res://generated/sdk_protocol_parity.jsonl"
+	var path := args[0] if not args.is_empty() else "res://tests/fixtures/schema16/protocol_parity.jsonl"
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		push_error("Cannot read protocol oracle cases: " + path)

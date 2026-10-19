@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Exact current residue versus real received future/overlapping release inputs.
 ## Filtering changes field invalidation only; the ordered kernel result is fixed.
 const Protocol=preload("res://sdk/protocol.gd")
@@ -14,14 +15,18 @@ func check(ok:bool,label:String)->void:
     if not ok:failures.append(label);printerr("BLOOD_PHASE_FAIL ",label)
 func _initialize()->void:run.call_deferred()
 func run()->void:
-    var directory="res://.runtime/player-runs/20261016T130629.163665Z/journal/"
+    var directory:String=Fixtures.journal("gallery")+"/"
     var protocol=Protocol.new();var cache:Dictionary={};var history:Dictionary={}
     var first:Dictionary=protocol.decode("InitializationResponse",FileAccess.get_file_as_bytes(directory+"0000000000000000.json"))
     check(first.ok,"Actual Gallery initialization admits")
     if not first.ok:quit(1);return
     var initial:Dictionary=protocol.normalize("InitializationResponse",first.value)
     var state:Dictionary=Reducer.reduce_initialization(initial.initialization,initial.content_additions).value
-    for sequence in range(1,7):
+    var sequences:Array=[]
+    for file in DirAccess.get_files_at(directory):
+        if file.ends_with(".json") and file.get_basename().length()==16 and file.get_basename().is_valid_int() and int(file.get_basename())>0:sequences.append(int(file.get_basename()))
+    sequences.sort()
+    for sequence in sequences:
         var decoded:Dictionary=protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(directory+"%016d.json"%sequence))
         check(decoded.ok,"Actual operation admits")
         if not decoded.ok:quit(1);return

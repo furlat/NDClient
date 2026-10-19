@@ -1,0 +1,47 @@
+{
+ "id": "test.oa-jump-lethal",
+ "title": "Oa Jump Lethal",
+ "kind": "interaction",
+ "seed": 5,
+ "subjects": {
+  "spell": [],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 1,
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "barbarian",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.jump",
+   "by": "caster",
+   "target": [
+    2,
+    6
+   ]
+  }
+ ],
+ "required_facts": [
+  "attack",
+  "damage",
+  "life"
+ ]
+}

@@ -7,13 +7,20 @@ No other-chat communication is authorized.
 
 ## Receiving state and confirmed improvement
 
-Both client checkouts consume the complete sealed
-`production-bindings-c494177f9ef03e3d` package. Receiving project:
-`C:\Users\tommaso\Documents\Dev\NDClientGodot`, branch
-`codex-authoring-schemabump`, checkpoint `c3be28cd`. Implementation:
-`C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`, branch
-`codex/schema16-unit-a`, checkpoint `826b9da0`. Engine remains frozen
-`211b71134`, protocol 1 / schema 16. Windows Godot 4.7.2 Forward+/Vulkan/RTX 5090.
+**20 October receiving authority:** The sole active client is
+`C:/Users/tommaso/Documents/Dev/NDClientGodot`, branch
+`codex-authoring-schemabump`, consolidated at `7ef2f3f8`. Historical secondary
+checkouts are inactive. It consumes the complete sealed
+`production-bindings-c494177f9ef03e3d` package. Engine remains frozen `211b71134`,
+protocol1/schema16; Windows Godot4.7.2 Forward+/Vulkan/RTX5090.
+
+The actor-context code is now merged under the user's single-main-client
+instruction. Its required GPU gate still fails with the two shader errors in
+section4; no correct-output claim follows from passing ownership assertions.
+The human requested continuing independent client work while Factory produces a
+complete successor. Loose source repairs are not a replacement sealed package.
+Current repeat: `.runtime/tests/20261019T231410.817195Z/`,34 assertions,
+zero script errors, **two shader errors / overall failed**.
 
 The client uses `index.runtime.production_construction.immutable_preparation`
 with the actual selected private clip/operands. The existing preparation queue
@@ -128,9 +135,9 @@ Original log, in the private client worktree:
 `.runtime/tests/20261019T212040Z/native_actor_context_render_checks.log`.
 Reproduce with `bash tools/run_tests.sh --only native_actor_context_render_checks`.
 Actual current fixture: `tests/fixtures/schema16/mirror-image/amber`.
-The candidate client provider code and test remain **private, not published to
-the receiving client** while these errors exist. The test is explicitly a
-migration-owned failed gate. Existing main client graphics remain unchanged.
+At that historical run the candidate was private. It is now merged in the
+main client at the user's request, and the test is a required `ok` native gate
+that fails on these shader errors. No invalid-shader output is qualified.
 
 The source's colour and depth shaders must compile in the actual closed
 consumer package, with all preprocessor/include dependencies resolved correctly
@@ -170,7 +177,7 @@ already active condition still allocates on its first sample; no readiness or
   including real receiving geometry, changing pose/layout and removal. Check
   owner/material/clock isolation and repeated create/seek/loop/teardown.
 - Continue writing canonical Factory sources/assets and evidence **inside
-  VFXFactory only**. Do not write either client, the backend or vendor sources.
+  VFXFactory only**. Do not write the client, the backend or vendor sources.
 - Seal one **new complete immutable package** under
   `VFXFactory/.runtime/condition-deliveries/<new-version>/`, with normal package
   index, dependency/license closure and updated readiness records. Preserve c494.

@@ -1,0 +1,85 @@
+{
+ "id": "test.hide-light",
+ "title": "Hide Light",
+ "kind": "interaction",
+ "seed": 3,
+ "subjects": {
+  "spell": [],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    12,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.item.torch.extinguish",
+   "by": "caster"
+  },
+  {
+   "do": "action.hide",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.item.torch.extinguish",
+   "by": "target"
+  },
+  {
+   "do": "action.item.torch.ignite",
+   "by": "target"
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    10,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "target"
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    7,
+    6
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    6,
+    6
+   ]
+  }
+ ],
+ "battlefield": "battlefield.open_floor_dark",
+ "required_conditions": [
+  "condition.hidden"
+ ],
+ "required_condition_ends": [
+  "condition.hidden"
+ ]
+}

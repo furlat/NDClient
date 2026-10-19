@@ -4,6 +4,7 @@ extends SceneTree
 ## reset keeps the same table rows and receiving surfaces; Normals is a global.
 const Play=preload("res://play.gd")
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks:int=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -23,9 +24,21 @@ func lighting(world:Node)->Dictionary:
     return {"lights":world.light_table.count,"light_ids":Array(world.light_table.ids),
         "receivers":receiving.size(),"nodes":receiving.map(func(entry):return entry.node.get_instance_id()),
         "errors":world.presentation_errors.duplicate()}
+func pending_draw_callbacks(world:Node)->Array:
+    var pending:Array=[]
+    var native:RefCounted=world.component_renderer.native_spells
+    for layer in native.groups.values()+native.spare_layers+native.prepared_layers.values():
+        if layer.has("warm_callback"):
+            pending.append({"signal":RenderingServer.frame_post_draw,"callback":layer.warm_callback})
+    var blood:RefCounted=world.component_renderer.blood
+    for handle in blood._draw_waits.values():
+        pending.append({"signal":RenderingServer.frame_post_draw,"callback":handle.draw_callback})
+    if blood._paint_callback.is_valid():
+        pending.append({"signal":RenderingServer.frame_pre_draw,"callback":blood._paint_callback})
+    return pending
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1440,430)
-    var index:Dictionary=Recording.read("res://.runtime/studio-cases/movement-oa/journal")
+    var index:Dictionary=Fixtures.read("oa-walk")
     check(index.ok,"Actual movement and opportunity-attack journal admitted")
     if not index.ok:finish();return
     var view=SubViewport.new();view.size=root.size;view.own_world_3d=true
@@ -71,7 +84,12 @@ func run()->void:
             evidence.append({"prefix":"normals toggle","lighting":toggled})
             world.set_normals_visible(not normals)
     else:evidence.append({"errors":world.presentation_errors.duplicate(),"media_issue":world.media_issue})
+    var callbacks:Array=pending_draw_callbacks(world)
+    evidence.append({"pending_draw_callbacks_before_close":callbacks.size()})
     view.queue_free();await process_frame;await process_frame
+    check(callbacks.all(func(wait):return not wait.signal.is_connected(wait.callback)),
+        "Retired renderer disconnects each of its own pending native draw witnesses")
+    callbacks.clear()
     finish()
 func finish()->void:
     var report={"checks":checks,"failures":failures,"evidence":evidence,

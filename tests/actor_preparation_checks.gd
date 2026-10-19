@@ -2,6 +2,7 @@ extends SceneTree
 ## Exact recorded candidate loadouts and real native actor construction ownership.
 ## Headless geometry/material checks are separate from framebuffer qualification.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Construction=preload("res://presentation/actor_construction.gd")
 const Preparation=preload("res://presentation/world_preparation.gd")
 const Characters=preload("res://presentation/characters.gd")
@@ -13,6 +14,7 @@ class Probe extends "res://play.gd":
     func _ready()->void:
         set_process(false);set_process_unhandled_input(false)
         camera=Camera3D.new();add_child(camera);add_child(context_menu)
+        generated_shadows.attach(self)
     func _process(_delta:float)->void:pass
 func check(value:bool,label:String)->void:
     checks+=1
@@ -69,8 +71,24 @@ func candidate_for(host:Probe,selected:Dictionary)->Node:
     candidate.camera=Camera3D.new();candidate.add_child(candidate.camera)
     var row:Dictionary=selected.row.duplicate(true)
     var id:String=row.id
-    candidate.result={"worker_ms":0.0,"actors":{id:{"row":row,"rig":selected.rig,
-        "layers":Characters.layers(row,selected.rig,host.catalog_cache),"entries":[],"new_entries":[],"playback":null,"reuse_actor":false,"retained_slots":{}}}}
+    var layers:Array=Characters.layers(row,selected.rig,host.catalog_cache)
+    var resting:Dictionary=Characters.rest_sample(selected.actor,selected.rig,host.catalog_cache)
+    var bindings:Dictionary={}
+    for layer in layers:
+        var path:String=layer.paths[resting.value.clip]
+        var binding:Dictionary=Construction.prepare_binding(selected.rig,layer,path,host.catalog_cache,
+            host.source_depth,host.source_normals,host.character_light_profile,128.0/host.rig_config.TILE_W*row.scale,row.get("scale_x",1.0))
+        bindings[layer.slot]=binding
+        for texture_path in [binding.path]+binding.geometry.textures.values():
+            if not host.textures.has(texture_path):
+                var image:Image=Image.load_from_file(texture_path)
+                check(image!=null and not image.is_empty(),"Actual raw source loads for prepared actor: "+texture_path)
+                if image==null or image.is_empty():candidate.queue_free();return null
+                host.textures[texture_path]=ImageTexture.create_from_image(image)
+        host.source_images[binding.path]=host.textures[binding.path].get_image()
+    candidate.result={"worker_ms":0.0,"worker_phases":{},"actor_members":{id:row},"actors":{id:{"row":row,"rig":selected.rig,
+        "layers":layers,"entries":[],"new_entries":[],"playback":null,"reuse_actor":false,"retained_slots":{},
+        "source_sample":resting.value,"source_bindings":bindings,"layer_clips":{},"source_ready":{},"source_cursor":0}}}
     candidate.actor_ids=[id]
     return candidate
 func drain(host:Probe)->void:
@@ -92,7 +110,7 @@ func worker_isolation(index:Dictionary)->void:
     var creature:String="content.neurodragon:creature:creature.goblin@1"
     var worker_cache:Dictionary=Construction.source_cache(host.catalog_cache)
     Characters._generated_creature_shadow({"creature_content_ref":creature},host.rigs[creatures[creature]],worker_cache)
-    check(worker_cache.__creature_shadow_rigs.has(creatures[creature]) and not host.catalog_cache.__creature_shadow_rigs.has(creatures[creature]),"Exact worker cache forks lazily-filled creature result while resolving delivered goblin source")
+    check(worker_cache.__creature_shadow_rigs=={"prior-immutable-result":true} and not is_same(worker_cache.__creature_shadow_rigs,host.catalog_cache.__creature_shadow_rigs),"Read-only built creature-shadow selection leaves the live owner unchanged and its worker shell private")
     check(is_same(worker_cache[catalog.rigs],host.catalog_cache[catalog.rigs]),"Worker still shares immutable rig/source data")
     check(host.entries.is_empty() and host.visual_actors.is_empty(),"Passive worker creates no native actors or live membership")
     host.pending_world=candidate;host._discard_world_preparation();await drain(host)
@@ -103,11 +121,13 @@ func construction_ownership(index:Dictionary)->void:
     if selection.is_empty():host.queue_free();return
     var id:String=selection.row.id
     var candidate=candidate_for(host,selection)
+    if candidate==null:host.queue_free();return
     candidate._prepare_actor()
     var graph_ref=weakref(candidate.native_actors[id].playback)
     check(host.entries.is_empty() and host.visual_actors.is_empty(),"Hidden graph construction cannot publish actor membership")
     check(candidate.take_actor(id,selection.row,selection.rig).is_empty(),"Partial graph without its authored layers cannot be adopted")
-    while candidate.actor_cursor<candidate.actor_ids.size():candidate._prepare_actor()
+    while candidate.actor_cursor<candidate.actor_ids.size() and candidate.media_issue.is_empty():
+        if not candidate._prepare_actor():await process_frame
     var prepared:Dictionary=candidate.native_actors[id]
     check(prepared.entries.all(func(entry):return not entry.node.is_visible_in_tree()),"Every staged real sprite layer is hidden before admission")
     check(host.entries.is_empty() and host.playbacks.is_empty(),"Complete hidden construction does not alter live graph/layer directories")
@@ -159,16 +179,17 @@ func construction_ownership(index:Dictionary)->void:
         var rejected=candidate_for(host,selection)
         rejected._prepare_actor()
         if not partial:
-            while rejected.actor_cursor<rejected.actor_ids.size():rejected._prepare_actor()
+            while rejected.actor_cursor<rejected.actor_ids.size() and rejected.media_issue.is_empty():
+                if not rejected._prepare_actor():await process_frame
         var private_graph=weakref(rejected.native_actors[id].playback)
         host.pending_world=rejected;host._discard_world_preparation();await drain(host)
         check(private_graph.get_ref()==null,"Cancelled "+("partial" if partial else "complete")+" candidate releases only its private graph")
         check(is_instance_valid(graph_ref.get_ref()),"Cancelling another candidate preserves the displayed actor")
     host.queue_free();await process_frame;await process_frame
 func run()->void:
-    var descriptor:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_gallery_spell_case.json"))
-    var bundle:Dictionary=Recording.compare_case(Recording.read_case(descriptor))
-    check(bundle.get("ok",false),"Actual Gallery recording admits")
+    var descriptor:Dictionary=Fixtures.case_record("gallery")
+    var bundle:Dictionary=Recording.read_case(descriptor)
+    check(bundle.get("ok",false),"Actual Gallery recording admits: "+str(bundle.get("error","")))
     if not bundle.get("ok",false):quit(1);return
     var index:Dictionary=Recording.view_index(bundle,"amber")
     var original:PackedByteArray=var_to_bytes([index.initialization,index.groups])

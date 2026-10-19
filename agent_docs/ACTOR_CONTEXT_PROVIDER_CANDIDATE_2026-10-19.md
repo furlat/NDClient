@@ -1,14 +1,23 @@
 # Actor-context candidate — 19 October 2026
 
-**Private implementation only. Do not publish its code into the receiving client
-until the Factory actor-echo source shaders compile and actual output qualifies.**
-The receiving client has only the [Factory follow-up handout](FACTORY_RUNTIME_FOLLOWUP_HANDOUT_2026-10-19.md).
-No approved graphics, Factory source/art, official engine or other chat was changed.
+**20 October authority update:** The user explicitly required all work in the
+main client. This cohort is merged at `7ef2f3f8` into
+`C:/Users/tommaso/Documents/Dev/NDClientGodot` /
+`codex-authoring-schemabump`, the sole active branch. The former implementation
+worktree is inactive. The private-publication restriction below is superseded;
+it must not be used to move current work away from main.
 
-Implementation worktree: `C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`,
-branch `codex/schema16-unit-a`. Receiving branch remains
-`NDClientGodot` / `codex-authoring-schemabump`. Package c494 and frozen engine
-211b71134/protocol1/schema16 remain unchanged.
+The complete installed package remains `production-bindings-c494177f9ef03e3d`
+and the frozen engine remains `211b71134` / protocol1 / schema16.
+`native_actor_context_render_checks` is now a required native gate:34 assertions
+pass, but two real Factory shader errors fail the gate. Output, colour parity
+and first-draw performance remain unqualified. The human deferred this Factory
+blocker and requested continuing independent client work. Do not patch sealed
+Factory shaders in the client. [Exact Factory follow-up](FACTORY_RUNTIME_FOLLOWUP_HANDOUT_2026-10-19.md).
+
+The sections below retain the original candidate's implementation and measurement
+history; references to private worktrees, deleted test APIs or migration-owned
+status describe the earlier run only.
 
 ## Existing shared seams changed
 

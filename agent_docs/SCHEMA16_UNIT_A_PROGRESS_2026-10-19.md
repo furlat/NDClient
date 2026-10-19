@@ -1,15 +1,22 @@
 # Schema 16 — complete Factory migration progress
 
-19 October 2026. Implementation branch `codex/schema16-unit-a`, worktree
-`C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`, based on
-the committed plan `9b73f29a` on requested branch `codex-authoring-schemabump`.
-Current sealed package is `production-bindings-c494177f9ef03e3d` in the private
-and receiving checkouts. The latest receiving qualification is recorded in
-[readiness integration](FACTORY_READINESS_INTEGRATION_2026-10-19.md). The logical
-capture and modular weapon authoring cohort below is still private; do not merge
-the failed actor-copy candidate with it. Main publication receipts/backups remain
-under `.runtime/schema16-publication/`. Official engine and Factory source remain
-read-only.
+**20 October — current implementation authority:**
+`C:/Users/tommaso/Documents/Dev/NDClientGodot`, sole active/local branch
+`codex-authoring-schemabump`, consolidation commit `7ef2f3f8`. Former private
+cohorts, including logical capture and modular weapon effects, are merged here;
+all secondary historical checkouts are inactive. Do not move implementation or
+qualification back to `codex/schema16-unit-a`.
+
+Current whole sealed package: `production-bindings-c494177f9ef03e3d`. Frozen
+engine: `211b71134`, protocol1/player schema16; official engine and Factory
+sources remain read-only. The required actor-context GPU gate fails with two
+Factory shader errors; the human deferred that blocker while independent client
+repair continues. No invalid-shader pixels or historical partial gates certify
+full coverage. [Current main suite repair and receipts](MAIN_CLIENT_SUITE_REPAIR_2026-10-20.md).
+
+The table below retains the19 October implementation estimates. It is not a
+fresh measured acceptance percentage; suite repair and provider qualification
+must be read from their exact later receipts, not inferred from these numbers.
 
 This ledger records successive cohorts. The current shared-provider implementation,
 exact native evidence, remaining gaps and live spike ledger are in
@@ -27,7 +34,7 @@ of that work. Estimates below measure implementation progress, not acceptance.
 | SDK, ordering, equipment publication | 90% | Core and repeated native equip gates pass; broader old test migration remains named below. |
 | Studio browser / replay / tracks | 80% | Native cohort, seek, independent factions, loops and actual missing-input tracks; complete scenario depth remains open. |
 | All-spell runtime safety | 96% | 183 available original baselines compile safely; six baseline failures. Complete current-package189-attempt native rerun:182 safe passes/seven explicit failures; overall gate remains red. |
-| Complete Factory intake / migration | 65% | Whole sealed208 package installed; typed held/class cues and shared actual-result construction added. Source presence is not final native coverage. |
+| Complete Factory intake / migration | 65% | Historical estimate; whole sealed c494 package now installed; typed held/class cues and shared actual-result construction added. Source presence is not final native coverage. |
 | Shared client providers | 40% | Geometry, endpoints, material, spatial, exact weapon and Fly appearance bridges; class owner/results cohort. Actor history, capture, event provenance and created-item publication remain. |
 | Scenario / native-output depth | 40% | 201 cases, including the new Second Wind recording; full class/condition outcomes and variants are incomplete. |
 | Final gameplay performance qualification | 10% | Repeated live Gallery door/move/Haste/two-Fireball profiles retained; native constructor and cold/restore waits remain explicit. |

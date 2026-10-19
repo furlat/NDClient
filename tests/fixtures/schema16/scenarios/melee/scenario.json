@@ -1,0 +1,43 @@
+{
+ "id": "test.melee",
+ "title": "Melee",
+ "kind": "interaction",
+ "seed": 3,
+ "subjects": {
+  "spell": [],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "required_facts": [
+  "attack",
+  "damage"
+ ]
+}

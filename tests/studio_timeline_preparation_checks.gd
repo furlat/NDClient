@@ -1,6 +1,7 @@
 extends SceneTree
 ## Real invisible TimelineView preparation, quarter retention and bounded demand.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const TimelineView=preload("res://studio/timeline_view.gd")
 var checks=0
 var failures:Array=[]
@@ -10,7 +11,7 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("TIMELINE_PREPARATION_FAIL ",label)
 func run()->void:
-    var index=Recording.read("res://.runtime/studio-cases/melee-seed3/amber/journal")
+    var index=Fixtures.read("melee")
     check(index.ok,"Actual melee recording indexes")
     if not index.ok:finish();return
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,720)

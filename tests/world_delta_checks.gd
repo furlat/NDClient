@@ -4,6 +4,7 @@ extends SceneTree
 const World = preload("res://presentation/world.gd")
 const Journal = preload("res://sdk/journal.gd")
 const Reducer = preload("res://sdk/reducer.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks = 0
 var failures = []
 var cache = {}
@@ -22,7 +23,7 @@ func compare(state:Dictionary,label:String)->void:
     check(state==before,label+" canonical after-values unchanged")
 func _initialize()->void:
     var journal=Journal.new()
-    var directory="res://.runtime/gallery-route/journal"
+    var directory:String=Fixtures.journal("gallery")
     var opened=journal.open(directory,true,false)
     check(opened.ok,"Original Gallery protocol selected explicitly")
     if not opened.ok:quit(1);return
@@ -44,7 +45,7 @@ func _initialize()->void:
         check(reduced.ok,"Real reducer prefix "+str(count))
         if not reduced.ok:break
         state=reduced.value;compare(state,"prefix "+str(count));count+=1
-    check(count==102,"Complete102packet original Gallery corpus")
+    check(count==int(Fixtures.case_record("gallery").packets),"Complete original Gallery corpus matches immutable recording metadata")
     # A removed boundary and newly disclosed support preserve total record count.
     var altered=state.duplicate();altered.tiles=state.tiles.duplicate();altered.objects=state.objects.duplicate()
     var removed=""

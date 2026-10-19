@@ -5,6 +5,7 @@ extends RefCounted
 ## Spells come from the abilities build (build/presentation/abilities); the
 ## passive environment metadata is owned by the environment build.
 const AbilityDocuments=preload("res://presentation/ability_documents.gd")
+const Metadata=preload("res://presentation/source_metadata.gd")
 const CACHE_KEY="__native_spell_admission"
 static var _current:Resource
 static var _attempted:bool=false
@@ -23,7 +24,7 @@ static func _current_index()->Resource:
     _admission_mutex.lock()
     if not _attempted:
         var selected:String=FileAccess.get_file_as_string(current()).strip_edges()
-        _current=ResourceLoader.load(selected,"",ResourceLoader.CACHE_MODE_REUSE)
+        _current=Metadata.read(selected,ResourceLoader.CACHE_MODE_REUSE)
         _attempted=true
     var result:Resource=_current
     _admission_mutex.unlock()
@@ -42,7 +43,7 @@ static func find(behavior_id:String,cache:Dictionary)->Resource:
     if not owner.loaded.has(behavior_id):
         var path:String=owner.index.spells[behavior_id]
         var loaded:Dictionary=owner.loaded.duplicate()
-        loaded[behavior_id]=load(path)
+        loaded[behavior_id]=Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
         cache[CACHE_KEY]=make_admission(owner.index,loaded)
         if loaded[behavior_id]==null:_load_error(cache,path)
         return loaded[behavior_id]

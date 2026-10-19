@@ -42,7 +42,7 @@ static func animation_pages(row: Dictionary, cache: Dictionary) -> Dictionary:
 static func row_paths(row: Dictionary, cache: Dictionary) -> Dictionary:
     # Live source selection depends on these authored selectors, not ID/contact.
     # Repeated tiles/walls in large rooms share a finite original source set.
-    var key = JSON.stringify([row.kind,row.get("material"),row.get("asset"),row.get("orientation"),
+    var key = JSON.stringify([row.kind,row.get("source_kind"),row.get("material"),row.get("asset"),row.get("orientation"),
         row.get("state"),row.get("boundaries",[]),row.get("views"),row.get("lit_animation"),
         row.get("destroyed",false),row.get("outcome")])
     if not cache.has("__live_media_sources"): cache.__live_media_sources = {}

@@ -28,6 +28,8 @@ func run()->void:
     var first:Dictionary=old[0].cache
     var old_spell:Resource=Spells.admission(first).index
     var old_body:Resource=Bodies.index(first)
+    var old_body_values:Dictionary=inst_to_dict(old_body)
+    var old_body_bytes:PackedByteArray=FileAccess.get_file_as_bytes(Bodies.INDEX)
     check(old_spell!=null and old_body!=null,"Concurrent first admission loads both real native indexes")
     for job in old:
         check(is_same(Spells.admission(job.cache).index,old_spell),"Preparation workers share admitted spell index")
@@ -44,7 +46,10 @@ func run()->void:
     check(next_spell!=null and next_body!=null,"Reload re-admits indexes while old holders remain alive")
     if next_spell==null or next_body==null:finish();return
     check(not is_same(next_spell,old_spell) and next_spell.revision!=old_spell.revision,"Explicit reload selects the newly built spell revision")
-    check(is_same(next_body,old_body),"Reload reuses the unchanged immutable body revision")
+    check(not is_same(next_body,old_body),"Explicit reload admits a fresh immutable body index while old holders remain alive")
+    check(inst_to_dict(next_body)==old_body_values and FileAccess.get_file_as_bytes(Bodies.INDEX)==old_body_bytes,
+        "Reload preserves every value of the unchanged body source bytes")
+    check(inst_to_dict(old_body)==old_body_values and is_same(Bodies.index(first),old_body),"Earlier body holders retain their untouched admitted revision")
     for job in revised:
         check(is_same(Spells.admission(job.cache).index,next_spell) and is_same(Bodies.index(job.cache),next_body),"Parallel reload workers share the new indexes")
     check(is_same(Spells.find("spell.fireball",before),old_fireball),"Previously admitted worker retains its old source")

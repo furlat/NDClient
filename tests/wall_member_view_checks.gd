@@ -3,6 +3,8 @@ const ViewPublication=preload("res://tests/view_publication.gd")
 # Whole recorded room: reconstruct all native wall artwork independently of the
 # runtime visibility selector. No neighboring wall is allowed to cancel its bug.
 const Player = preload("res://play.tscn")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 const BACK_FACES = [["west","south"],["west","north"],["east","north"],["east","south"]]
 var checks=0
 var failures: Array=[]
@@ -104,6 +106,9 @@ func run() -> void:
     if DisplayServer.get_name()=="headless": quit(2); return
     root.unfocusable=true; root.position=Vector2i(-16000,-16000)
     var scene=Player.instantiate(); scene.timeline.paused=true; root.add_child(scene)
+    var opened:Dictionary=scene.session.open_recording(Fixtures.journal("door"))
+    check(opened.ok,"Durable original schema16 Door recording opens")
+    if not opened.ok:scene.queue_free();await process_frame;quit(1);return
     var deadline=Time.get_ticks_msec()+120000
     while (not scene.session.recording_ready or not scene._environment_media_ready() or not scene.MediaWarmup.ready(scene.media_warmup,scene.media_plan.required)) and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
     scene.session.close(); await scene.presentation_updated; scene.set_process(false); scene.hud.hide()
@@ -115,7 +120,8 @@ func run() -> void:
     # Explicit rendering fixture: every disclosed support is currently visible.
     # All recorded walls stand on their own disclosed floor; expected front/back
     # choices therefore require no runtime overlap helper in this pixel oracle.
-    scene.timeline.state.senses.visible=scene.timeline.state.tiles.values().map(func(tile):return tile.position)
+    scene.timeline.state.senses.visible=Cells.mask(scene.timeline.state.tiles.values().map(func(tile):return tile.position))
+    check(scene.placements.any(func(row):return row.kind in ["wall","cliff"]),"Actual disclosed room has physical wall members for framebuffer and picking checks")
     for row in scene.placements:
         if row.kind not in ["wall","cliff"]: continue
         var tile: Dictionary=scene.timeline.state.tiles.get("%d,%d"%row.position,{})
@@ -137,7 +143,7 @@ func run() -> void:
             if mode=="hidden": picking(scene,quarter)
         press_z(); compare(await capture(),solid,"q%d solid restoration"%quarter)
         scene.wall_mode="hidden"; scene.update_wall_visibility()
-        scene.timeline.state.senses.visible=[]; scene.update_wall_visibility()
+        scene.timeline.state.senses.visible=Cells.mask([]); scene.update_wall_visibility()
         # Lost sight changes floor/member memory styling; compare the restored
         # originals at that same subjective state, not the earlier lit floor.
         var without_supports=await capture()

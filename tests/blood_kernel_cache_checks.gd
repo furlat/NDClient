@@ -1,5 +1,6 @@
 extends SceneTree
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var original:Script
 var candidate:Script
 const Profile=preload("res://frame_profile.gd")
@@ -17,7 +18,7 @@ func run()->void:
         elif argument.begins_with("--candidate="):selected=argument.trim_prefix("--candidate=")
     if oracle.is_empty():printerr("Provide saved pre-edit blood source with --oracle");quit(2);return
     original=load(oracle);candidate=load(selected)
-    var index=Recording.read("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal")
+    var index=Fixtures.read("gallery")
     check(index.ok,"Actual Gallery recording admits")
     if not index.ok:quit(1);return
     var source:Dictionary=original.asset(index.cache)

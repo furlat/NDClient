@@ -3,6 +3,8 @@ extends SceneTree
 # it is deliberately not native particle pixels or game-world composition proof.
 const Effects=preload("res://presentation/native_effects.gd")
 const Preview=preload("res://presentation/native_effect_preview.gd")
+const Package=preload("res://presentation/effect_package.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var passed=0
 var failures:Array=[]
 func check(value:bool,label:String)->void:
@@ -54,7 +56,7 @@ func run()->void:
         check(material.get_shader_parameter("palette_low")==Color("#1155aa") and material.get_shader_parameter("palette_middle")==Color("#33bb88") and material.get_shader_parameter("palette_high")==Color("#eeff66"),"Both source partitions use the recipe colors in their actual palette pass")
     check(weapon_source.palette.colors==source_colors and recipe_colors==[0x1155aa,0x33bb88,0xeeff66],"Palette override preserves cached source and caller recipe")
     tinted.close();tinted.free()
-    for id in ["blood.hit_a1","blood.hit_a2","blood.deposit_j1"]:
+    for id in ["blood.hit_a1","blood.hit_a2"]:
         var selected=Effects.source_record(id,cache)
         var immutable=selected.duplicate(true)
         var effect=Effects.make(parent,selected,17)
@@ -72,27 +74,42 @@ func run()->void:
         var enabled=true
         for track in animation.get_track_count():enabled=enabled and animation.track_is_enabled(track)
         check(enabled,id+" source animation tracks are not changed by instance sampling")
-        if id=="blood.deposit_j1":
-            Effects.sample(effect,2.0)
-            var first_value=effect.subject.get_node("mark2").material_override.get_shader_parameter("alpha_treshold")
-            Effects.sample(effect,5.0);Effects.sample(effect,2.0)
-            check(effect.subject.get_node("mark2").material_override.get_shader_parameter("alpha_treshold")==first_value,"Native deposit property seek restores exact source material value")
-            check("depth_receiver" in selected.requirements,"Depth-reading source exposes its actual unqualified receiver requirement")
-        else:
-            var unready=Effects.sample(effect,1.0,[Transform3D.IDENTITY])
-            check(not unready.ready and not unready.error.is_empty(),id+" rejects missing moving-emitter history instead of fabricating trail")
+        var unready=Effects.sample(effect,1.0,[Transform3D.IDENTITY])
+        check(not unready.ready and not unready.error.is_empty(),id+" rejects missing moving-emitter history instead of fabricating trail")
         check(selected==immutable,id+" source record stays unchanged")
         independent.free();Effects.release(effect)
-    for phase in ["travel","impact"]:
-        var id="spell.magic_missile."+phase
-        var selected=Effects.source_record(id,cache)
-        var effect=Effects.make(parent,selected,91)
-        check(effect.error.is_empty(),id+" exact selected donor constructs")
-        check(selected.phase==phase and selected.media_ids.size()==1,id+" explicit native source mapping retains phase and complete media ID")
-        check(effect.emitters.size()==selected.emitters.size(),id+" all original selected native emitters retained")
-        check(not effect.subject.get_node("OmniLight3D").visible,id+" donor light is not imported into production illumination")
-        check(selected.palette.operator=="factory_cie",id+" original full-composition palette remains selected")
-        Effects.release(effect)
+    # Spell phases now use the closed Factory package, shared with normal
+    # gameplay. The obsolete raw donor ids must not resurrect a second path.
+    Package.set_requested("gpu")
+    var journal:Dictionary=Fixtures.read("gallery")
+    check(journal.ok,"Original Gallery exposes current Magic Missile phases")
+    for phase in ["flight","impact"]:
+        var clip:Dictionary={}
+        for wrapped in journal.get("groups",[]):
+            for component in wrapped.group.components:
+                if component.get("spell_id")=="magic_missile" and component.get("native_cue",{}).get("role")==phase:
+                    clip=Package.occurrence_clip(component);break
+            if not clip.is_empty():break
+        check(not clip.is_empty(),"Actual Magic Missile "+phase+" retains its selected complete package clip")
+        if clip.is_empty():continue
+        var immutable=var_to_bytes(clip)
+        var deadline=Time.get_ticks_msec()+30000
+        var preparation:Dictionary=Package.prepare([clip],cache)
+        while not preparation.ready and preparation.errors.is_empty() and Time.get_ticks_msec()<deadline:
+            await process_frame;preparation=Package.prepare([clip],cache)
+        check(preparation.ready and preparation.errors.is_empty(),"Selected Factory phase prepares: "+phase)
+        if not preparation.ready:continue
+        var first_spell:Dictionary=Package.make(parent,clip,1,91)
+        var second_spell:Dictionary=Package.make(parent,clip,1,92)
+        check(first_spell.error.is_empty() and second_spell.error.is_empty(),"Selected Factory phase constructs: "+phase)
+        if first_spell.error.is_empty() and second_spell.error.is_empty():
+            check(first_spell.root!=second_spell.root and first_spell.get("occurrence",first_spell.root)!=second_spell.get("occurrence",second_spell.root),"Factory occurrences own separate scene and clock: "+phase)
+            Package.sample(first_spell,.1);Package.sample(second_spell,.2)
+            Package.sample(first_spell,.3);Package.sample(first_spell,.1)
+            check(is_equal_approx(first_spell.age,.1) and is_equal_approx(second_spell.age,.2),"Absolute source sampling preserves the other occurrence clock: "+phase)
+            check(var_to_bytes(clip)==immutable,"Factory construction/sampling preserves selected metadata: "+phase)
+        Package.close(first_spell);Package.close(second_spell)
+        check(Effects.source_record("spell.magic_missile."+("travel" if phase=="flight" else phase),cache).is_empty(),"No retired raw spell donor substitutes the Factory source")
     var impact=Effects.make(parent,Effects.source_record("class.martial.impact",cache))
     check(impact.error.is_empty() and impact.subject.kind=="impact" and impact.subject.shards.size()==18,"Martial impact keeps original plane and eighteen shards")
     Effects.sample(impact,.25)
@@ -130,16 +147,15 @@ func run()->void:
     Effects.sample(slash,.42,[],{"weapon_path":path,"weapon_path_fps":12.,"weapon_contact_seconds":.67})
     check(slash.subject.trail.visible,"Restoring a measured path at the same age restores its native smear")
     Effects.release(slash)
-    var ground_record=Effects.source_record("blood.deposit_a1",cache)
-    var ground_a=Effects.make(parent,ground_record);var ground_b=Effects.make(parent,ground_record)
-    Effects.sample(ground_a,1.0);Effects.sample(ground_b,2.0)
-    var resource_a=ground_a.subject.get_node("Blood_Animated_1").material_override.get_shader_parameter("Dissolver_Texture")
-    var resource_b=ground_b.subject.get_node("Blood_Animated_1").material_override.get_shader_parameter("Dissolver_Texture")
-    check(not is_same(resource_a,resource_b) and not is_same(resource_a.gradient,resource_b.gradient),"Ground occurrences isolate animated gradient texture and nested gradient")
-    var retained_fill=resource_b.fill_to;var retained_offsets=resource_b.gradient.offsets.duplicate()
-    Effects.sample(ground_a,3.0)
-    check(resource_b.fill_to==retained_fill and resource_b.gradient.offsets==retained_offsets,"Sampling one ground deposit preserves another instance's nested animation values")
-    Effects.release(ground_a);Effects.release(ground_b)
+    # Ground blood is now the authoritative field, not an independently
+    # animated decal inferred at every impact. Its before/landing/settled and
+    # reverse ownership/pixels are qualified by blood_kernel_cache_checks and
+    # blood_residue_checks using the real schema16 deposits.
+    for id in ["blood.deposit_a1","blood.deposit_j1"]:
+        var removed=Effects.source_record(id,cache)
+        var before=parent.get_child_count()
+        check(removed.is_empty(),id+" is absent from current typed authoring")
+        check(not Effects.make(parent,removed).error.is_empty() and parent.get_child_count()==before,"Retired client-invented deposit cannot attach an occurrence")
     var invalid=Effects.source_record("blood.hit_a1",cache).duplicate(true)
     invalid.node_properties={"missing_source_node":{"visible":false}}
     var owned_before=parent.get_child_count()

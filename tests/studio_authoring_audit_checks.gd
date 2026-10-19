@@ -22,9 +22,12 @@ func _initialize()->void:
             ids[row.id]=true
             check(not row.rendered and not row.source.is_empty() and not row.next_step.is_empty(),"Assignment is actionable without a false rendering witness")
     check(report.totals.backend_definitions==347,"Current backend definition denominator is independent of replay cases")
-    check(by_id.has("spell.aegis_spark") and by_id["spell.aegis_spark"].requirements[0].gap_kind=="authoring_review","A missing spell draft remains visible although it references no media")
+    check(by_id.has("spell.aegis_spark") and by_id["spell.aegis_spark"].requirements.any(func(row):return row.gap_kind=="authoring_review" and row.source=="res://authoring/abilities/spells/spell.aegis_spark.tres::status"),"An actual typed stand-in remains visible for review alongside its authored body")
+    var absent:Dictionary=cache.duplicate();absent["spells/spell.aegis_spark.json"]={}
+    var missing:Dictionary=Audit.build(absent).entries.filter(func(entry):return entry.id=="spell.aegis_spark")[0]
+    check(missing.requirements.any(func(row):return row.label=="No spell presentation assignment" and row.gap_kind=="authoring_review" and not row.rendered),"A missing spell draft remains visible although it references no media")
     check(by_id.has("action.environment.storage_chest.loot") and by_id["action.environment.storage_chest.loot"].requirements[0].gap_kind=="authoring_review","New backend action without a selected recipe remains in the authoring worklist")
-    check(by_id["action.move"].requirements[0].gap_kind=="unexercised" and by_id["action.move"].source=="catalog/movement_context.json:/walkClip","Existing shared movement context is not reported as an absent action recipe")
+    check(by_id["action.move"].requirements.any(func(row):return row.gap_kind=="unexercised") and by_id["action.move"].source=="catalog/movement_context.json:/walkClip","Existing shared movement context is not reported as an absent action recipe")
     check(not by_id.has("condition.hidden"),"Existing condition lifecycle inventory retains ownership, avoiding duplicate recipe reports")
     check(by_id.has("condition.consumable.weapon_coat.basic_poison"),"Unassigned backend condition appears without a fake authored condition")
     var missile:Dictionary=by_id["spell.magic_missile"]

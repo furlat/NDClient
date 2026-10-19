@@ -1,6 +1,7 @@
 extends SceneTree
 ## Ordered constructor boundaries through Timeline, and actual compiler inputs.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Timeline=preload("res://presentation/timeline.gd")
 var checks=0
 var failures:Array=[]
@@ -97,9 +98,7 @@ func recorded(index:Dictionary,primary:bool=true)->int:
             if end<=value.duration_ms:check(end in layer_cuts,"Actual authored sprite layer retires at its endpoint")
         var moves=0;var only_motion=true
         for commit in value.commits:
-            if commit.delta.get("set",{}).has("senses") and commit.delta.set.senses.get("light_sources",{})!=state.senses.get("light_sources",{}):
-                check(light_timeline.replay_plan(commit.at_ms).boundary,"Actual optical source change retains its prepared world boundary")
-                light_edges+=1
+            var previous_lights:Variant=state.get("light_sources",{})
             for id in commit.delta.get("actors",{}):
                 var old:Dictionary=state.actors.get(id,{})
                 var after:Dictionary=commit.delta.actors[id]
@@ -109,6 +108,9 @@ func recorded(index:Dictionary,primary:bool=true)->int:
                     if old.get("last_visual_position")==null or after.get("last_visual_position")==null:only_motion=false
                     else:moves+=1
             Timeline.Compiler.apply_delta(state,commit.delta)
+            if state.get("light_sources",{})!=previous_lights:
+                check(light_timeline.replay_plan(commit.at_ms).boundary,"Actual optical source change retains its prepared world boundary")
+                light_edges+=1
         if moves>0 and only_motion and value.staged_actors.is_empty() and not value.components.any(func(row):return row.kind=="sprite_layer") and not value.actor_tracks.any(func(row):return row.has("visual_loadout")):
             check(value.actor_structure_times.is_empty(),"Actual ordinary movement adds no actor construction boundary")
             ordinary_moves+=moves
@@ -118,12 +120,12 @@ func recorded(index:Dictionary,primary:bool=true)->int:
     print("ACTOR_STRUCTURE_RECORDING ",JSON.stringify({"sprite_edges":sprite_edges,"light_edges":light_edges,"ordinary_moves":ordinary_moves}))
     return light_edges
 func run()->void:
-    var index=Recording.read("res://.runtime/player-runs/20261015T213323.878907Z/journal")
+    var index=Fixtures.read("gallery")
     check(index.ok,"Current baseline recording admits")
     if not index.ok:quit(1);return
     var actor:Dictionary=index.initialization.state.actors[index.initialization.state.audience.controlled[0]]
     pending_state(index,actor);temporary_layers(index,actor);fractional_clock(index);staged_actor(index,actor);recorded(index)
-    var lights=Recording.read("res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal")
+    var lights=Fixtures.read("hide-light")
     check(lights.ok,"Actual light-source recording admits")
     if lights.ok:check(recorded(lights,false)>0,"Actual recording covers disclosed optical source changes")
     print("ACTOR_STRUCTURAL_CUTS ",JSON.stringify({"checks":checks,"failures":failures,"scope":"Private actor cut state, transient selectors, staged admission and cumulative replay; real compiler source edges and ordinary movement. No native graphics qualification."}))

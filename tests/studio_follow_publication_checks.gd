@@ -1,6 +1,7 @@
 extends SceneTree
 ## Real Gallery rows: pending source images cannot hold drawn or clickable rows.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Timeline=preload("res://studio/timeline_view.gd")
 var checks=0
 var failures:Array=[]
@@ -10,7 +11,7 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("FOLLOW_PUBLICATION_FAIL ",label)
 func run()->void:
-    var index=Recording.read("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal")
+    var index=Fixtures.read("gallery")
     check(index.ok,"Actual Gallery recording admits")
     if not index.ok:finish();return
     var view=Timeline.new();view.size=Vector2(1280,350);view.thumbnails.suspended=true
@@ -25,21 +26,24 @@ func run()->void:
     times.sort()
     var selected_ids={};var changed_y=false;var previous_y=-1.0
     for at in times:
+        view.playhead_ms=at
         var selected:String=view.follow_at(at)
         if selected.is_empty() or selected_ids.has(selected):continue
         selected_ids[selected]=true
         var prepared:Dictionary=view.prepare_visible()
         check(prepared.pending>0,"Actual followed source cells remain cold")
         check(view.published_layout.scroll_y==view.scroll_y,"Follow publishes current vertical position before previews complete")
-        var matches:Array=view.published_layout.visible_rows.filter(func(item):return item.row.id==selected)
+        var matches:Array=view.published_layout.visible_rows.filter(func(item):return item.row.id==view._display_id(selected))
         check(matches.size()==1,"Followed row is in actual published visible geometry")
         if not matches.is_empty():
             var item:Dictionary=matches[0]
-            check(item.y>=view.RULER and item.y+item.height<=view.size.y,"Followed row is fully inside the timeline")
-            var point=Vector2(70,clampf(item.y+item.height*.5,view.RULER+.1,view.size.y-.1))
-            check(view._get_tooltip(point).begins_with(view._label(item.row)),"Input resolves the same published followed row")
+            check(view.followed_visible(),"Followed source band is fully inside the timeline")
+            var height:float=view._band_height(item.row) if item.row.kind=="compact_lane" else item.height
+            var top:float=item.y+item.row.get("bands",{}).get(selected,0)*height
+            var point=Vector2(70,clampf(top+height*.5,view.RULER+.1,view.size.y-.1))
+            check(view._get_tooltip(point).begins_with(view._label(view.rows_by_id[selected])),"Input resolves the same published followed row")
             var click=InputEventMouseButton.new();click.button_index=MOUSE_BUTTON_LEFT;click.pressed=true
-            click.position=Vector2(view.gutter+90,point.y);view._gui_input(click)
+            click.position=point;view._gui_input(click)
             check(not clicks.is_empty() and clicks.back()==selected,"Pointer click selects the newly published followed row")
             click.pressed=false;view._gui_input(click)
             evidence.append({"at_ms":at,"row":selected,"scroll_y":view.scroll_y,"row_y":item.y,"pending":prepared.pending})
@@ -52,12 +56,12 @@ func run()->void:
     var scans:int=view.follow_scans
     var last_time:float=evidence.back().at_ms
     view.scroll_y=0;view.follow_at(last_time);view.prepare_visible()
-    var active:Array=view.published_layout.visible_rows.filter(func(item):return item.row.id==selected)
-    check(active.size()==1 and active[0].y>=view.RULER and active[0].y+active[0].height<=view.size.y,"Cached active lane returns onscreen after manual scroll")
+    var active:Array=view.published_layout.visible_rows.filter(func(item):return item.row.id==view._display_id(selected))
+    check(active.size()==1 and view.followed_visible(),"Cached active lane returns onscreen after manual scroll")
     check(view.follow_scans==scans,"Visibility correction does not rescan source intervals")
     view.size.y=140;view.follow_at(last_time);view.prepare_visible()
-    active=view.published_layout.visible_rows.filter(func(item):return item.row.id==selected)
-    check(active.size()==1 and active[0].y>=view.RULER and active[0].y+active[0].height<=view.size.y,"Cached active lane fits after divider shrinks the timeline")
+    active=view.published_layout.visible_rows.filter(func(item):return item.row.id==view._display_id(selected))
+    check(active.size()==1 and view.followed_visible(),"Cached active lane fits after divider shrinks the timeline")
     check(view.follow_scans==scans,"Resize visibility correction preserves interval cache")
     # Rotating uses only its actual foreground quarter. Other views are optional.
     for quarter in [1,3,0]:

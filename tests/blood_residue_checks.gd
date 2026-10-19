@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Compiler=preload("res://presentation/compiler.gd")
 const Blood=preload("res://presentation/blood.gd")
@@ -26,10 +27,10 @@ func compile_recording(path:String,sequence:int)->Dictionary:
     if not result.ok:return {}
     return {"result":result.value,"cache":cache}
 func run()->void:
-    var root="res://.runtime/studio-cases"
-    for argument in OS.get_cmdline_user_args():
-        if argument.begins_with("--cases="):root=argument.trim_prefix("--cases=")
-    var compiled=compile_recording(root.path_join("dash-seed3/amber/journal"),3)
+    var injuries:Array=Fixtures.fact_rows("dash","damage").filter(func(row):return row.fact.get("body_release")!=null)
+    check(injuries.size()==1,"Actual Dash reaction has one admitted injury result")
+    if injuries.is_empty():quit(1);return
+    var compiled=compile_recording(Fixtures.journal("dash"),injuries[0].sequence)
     if compiled.is_empty():quit(1);return
     var rows:Array=[]
     for group in compiled.result.groups:
@@ -73,7 +74,10 @@ func run()->void:
     check(Blood.kernels(twice,example.position,[addition],source)==Blood.kernels(example.after,example.position,[],source),"Second landing retains previous stain exactly before new droplets arrive")
     addition.age_seconds=10.
     check(Blood.kernels(twice,example.position,[addition],source)==Blood.kernels(twice,example.position,[],source),"Second landing resolves to authoritative accumulated amount")
-    var air=compile_recording(root.path_join("oa_jump_late_lethal-seed5-v2/amber/journal"),2)
+    var airborne:Array=Fixtures.fact_rows("oa-jump-late-lethal","damage").filter(func(row):return row.fact.get("body_release")!=null and row.fact.body_release.regions.is_empty())
+    check(not airborne.is_empty(),"Actual late lethal airborne injury has no receiving ground region")
+    if airborne.is_empty():quit(1);return
+    var air=compile_recording(Fixtures.journal("oa-jump-late-lethal"),airborne[0].sequence)
     if not air.is_empty():
         var effects:Array=[]
         for group in air.result.groups:
@@ -81,6 +85,6 @@ func run()->void:
                 if item.get("body_release",{}).get("release_id")=="body.blood":effects.append(item)
         check(not effects.is_empty(),"Actual late lethal airborne injury retains blood source")
         check(effects.all(func(item):return item.kind=="native_effect" and item.body_release.regions.is_empty() and not item.residue_deposition),"Actual airborne lethal injury never fabricates a floor deposit")
-    evidence.append({"recording":"dash-seed3/amber/journal","sequence":3,"event":component.source_event_uuid,"tiles":component.reveals.size(),"kernel_instances":total_kernels,"particle_counts":counts,"duration_ms":component.duration_ms})
+    evidence.append({"recording":Fixtures.journal("dash"),"sequence":injuries[0].sequence,"event":component.source_event_uuid,"tiles":component.reveals.size(),"kernel_instances":total_kernels,"particle_counts":counts,"duration_ms":component.duration_ms})
     FileAccess.open("res://generated/blood_residue_checks.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,"scope":"Real recorded ground and airborne injury, exact authority/clock/reverse/retained-field inputs; native framebuffer qualification separate."},"  "))
     print("BLOOD_RESIDUE_CHECKS ",JSON.stringify({"checks":checks,"failures":failures}));quit(0 if failures.is_empty() else 1)

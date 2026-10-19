@@ -1,0 +1,526 @@
+{
+ "move": {
+  "id": "action.move/ordinary",
+  "label": "Movement: idle, route, stop",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/move/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/move/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/move/scenario.json"
+ },
+ "haste": {
+  "id": "spell.haste/lifecycle",
+  "label": "Haste: apply, move, concentration ends, restored",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/haste/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/haste/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/haste/scenario.json"
+ },
+ "fire-bolt": {
+  "id": "spell.fire_bolt/hit",
+  "label": "Fire Bolt: cast and actual recipient damage",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/fire-bolt/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/fire-bolt/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/fire-bolt/scenario.json"
+ },
+ "fireball": {
+  "id": "spell.fireball/area",
+  "label": "Fireball: release, area and recipient outcomes",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/fireball/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/fireball/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/fireball/scenario.json"
+ },
+ "melee": {
+  "id": "test.melee",
+  "label": "Melee",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/melee/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/melee/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/melee/scenario.json"
+ },
+ "shield": {
+  "id": "spell.shield/reaction",
+  "label": "Shield reaction: actual Magic Missile interruption",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/shield/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/shield/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/shield/scenario.json"
+ },
+ "hide": {
+  "id": "action.hide/lifecycle",
+  "label": "Hide: crouch, movement, attack reveals",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/hide/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/hide/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/hide/scenario.json"
+ },
+ "door": {
+  "id": "interaction.door/entry",
+  "label": "Door: approach, open, cross into the room",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/door/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/door/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/door/scenario.json"
+ },
+ "fly": {
+  "id": "spell.fly/lifecycle",
+  "label": "Fly: wings, movement, equipment, removal and restoration",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/fly/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/fly/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/fly/scenario.json"
+ },
+ "rage": {
+  "id": "action.class.barbarian.frenzy/lifecycle",
+  "label": "Frenzy: real Rage owner, movement, attack and removal",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/rage/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/rage/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/rage/scenario.json"
+ },
+ "gallery": {
+  "id": "interaction.gallery/sorcerer",
+  "label": "Lantern Gallery: door, expedition, six spells and Shield",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/gallery/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/gallery/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/gallery/scenario.json",
+  "recording": "res://tests/fixtures/schema16/scenarios/gallery/recording.json",
+  "packets": 105,
+  "commands": 60,
+  "facts": {
+   "turn": 101,
+   "sensory": 37,
+   "spatial": 75,
+   "action": 2,
+   "step": 35,
+   "movement": 8,
+   "actor_change": 14,
+   "spell": 23,
+   "damage": 15,
+   "attack": 3,
+   "saving_throw": 3,
+   "object_destroyed": 4,
+   "object_damage": 4,
+   "area_reach": 1
+  }
+ },
+ "condition-owners": {
+  "id": "test.condition-owners",
+  "label": "Condition Owners",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/condition-owners/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/condition-owners/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/condition-owners/scenario.json"
+ },
+ "dash": {
+  "id": "test.dash",
+  "label": "Dash",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/dash/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/dash/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/dash/scenario.json"
+ },
+ "dodge": {
+  "id": "test.dodge",
+  "label": "Dodge",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/dodge/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/dodge/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/dodge/scenario.json"
+ },
+ "hide-light": {
+  "id": "test.hide-light",
+  "label": "Hide Light",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/hide-light/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/hide-light/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/hide-light/scenario.json"
+ },
+ "invisibility": {
+  "id": "test.invisibility",
+  "label": "Invisibility",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/invisibility/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/invisibility/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/invisibility/scenario.json"
+ },
+ "oa-jump": {
+  "id": "test.oa-jump",
+  "label": "Oa Jump",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-jump/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-jump/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/oa-jump/scenario.json"
+ },
+ "oa-jump-late-lethal": {
+  "id": "test.oa-jump-late-lethal",
+  "label": "Oa Jump Late Lethal",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/scenario.json"
+ },
+ "oa-jump-lethal": {
+  "id": "test.oa-jump-lethal",
+  "label": "Oa Jump Lethal",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-jump-lethal/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-jump-lethal/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/oa-jump-lethal/scenario.json"
+ },
+ "oa-walk": {
+  "id": "test.oa-walk",
+  "label": "Oa Walk",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-walk/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/oa-walk/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/oa-walk/scenario.json"
+ },
+ "web": {
+  "id": "spell.web/baseline",
+  "label": "Web: actual cast and restrained recipients",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/web/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/web/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/web/scenario.json",
+  "origin": ".runtime/studio-library/cases/spell.web__baseline/20261019T143922.769774Z"
+ }
+}

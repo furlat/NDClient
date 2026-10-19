@@ -1,0 +1,169 @@
+[
+ {
+  "request": {
+   "do": "action.dash",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.dash",
+   "display_name": "Dash",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8bb60e30-785a-4ad0-803d-d06809c1f2dd",
+   "state_revision": "c8771ae1-af63-472a-b581-07f3aea4db7b",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_test_dash",
+   "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+   "audience_id": "b5b59f17-9c55-4225-bc15-1bce37ca6a3f",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_test_dash",
+    "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+    "audience_id": "b5b59f17-9c55-4225-bc15-1bce37ca6a3f",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "8bb60e30-785a-4ad0-803d-d06809c1f2dd",
+   "state_revision": "6c767a40-a02e-4924-9cfb-24544fbfbde3",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_test_dash",
+   "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+   "audience_id": "b5b59f17-9c55-4225-bc15-1bce37ca6a3f",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_test_dash",
+    "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+    "audience_id": "b5b59f17-9c55-4225-bc15-1bce37ca6a3f",
+    "sequence": 3
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "8bb60e30-785a-4ad0-803d-d06809c1f2dd",
+   "state_revision": "60e61b09-e1e2-4b64-830b-39e6ef0ee1e7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_test_dash",
+   "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+   "audience_id": "b5b59f17-9c55-4225-bc15-1bce37ca6a3f",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_test_dash",
+    "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+    "audience_id": "b5b59f17-9c55-4225-bc15-1bce37ca6a3f",
+    "sequence": 4
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "target"
+  },
+  "previews": 0,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "cf60b398-b297-411c-9d96-58775fbdb30b",
+   "state_revision": "0072f3a8-c40e-4006-bdc5-3aff2d1ffc5a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_test_dash",
+   "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+   "audience_id": "7b4520cd-edf2-4750-a073-b63ab02aa6ae",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_test_dash",
+    "game_epoch": "66917927-35f7-496c-83ef-2d90002c8ccb",
+    "audience_id": "7b4520cd-edf2-4750-a073-b63ab02aa6ae",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ }
+]

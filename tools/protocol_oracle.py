@@ -50,6 +50,8 @@ def example(spec):
     if kind == "string":
         if spec.get("format") == "uuid":
             return UUID
+        if spec.get("format") == "base64url":
+            return "AA=="
         if spec.get("pattern") == "^[0-9a-f]{64}$":
             return "a" * 64
         if "pattern" in spec:
@@ -144,7 +146,13 @@ def build_cases():
         try:
             admitted = sdk.decode(root, raw)
             if mode == "identity":
-                sdk.check_protocol(admitted)
+                # Current envelopes omit fields whose JSON Schema defaults
+                # name the fixed protocol versions. The consumer resolves
+                # those scalars before the SDK's exact identity comparison.
+                defaults = {key: rule["default"] for key, rule in
+                            DEFS["ProtocolIdentity"]["properties"].items()
+                            if "default" in rule}
+                sdk.check_protocol({**defaults, **admitted})
             accepted, error = True, None
         except (sdk.ProtocolError, ValueError, UnicodeError) as failure:
             accepted, admitted, error = False, None, str(failure)

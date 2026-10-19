@@ -11,10 +11,10 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("REQUIREMENT_FAIL ",label)
 func trace(fact:Dictionary,recipe:Dictionary,components:Array=[],canceled:bool=false)->Dictionary:
-    var node={"uuid":"event","lineage_uuid":"lineage","parent_event":null,"parent_lineage":null,"fact":fact,"canceled":canceled,"combat_log":null,"children_lineages":[]}
-    var group={"operation_sequence":1,"id":"group","duration_ms":100.0,"actor_tracks":[],"components":components,"commits":[{"event_uuid":"event","at_ms":50.0}]}
-    var graph={"starts":{"event":0.0},"ends":{"event":100.0},"actor_inputs":{"event":{"actor":{"uuid":"actor","last_visual_position":[0,0]}}},"recipes":{"event":recipe}}
-    return Trace.compile_rows({"events":[node],"version_rows":[{"event_uuid":"event","lineage_uuid":"lineage","source_index":1}]},group,graph,cache)[0]
+    var node={"id":"1","lineage_id":"1","parent_event":null,"parent_lineage":null,"fact":fact,"canceled":canceled,"combat_log":null,"children_lineages":[]}
+    var group={"operation_sequence":1,"id":"group","duration_ms":100.0,"actor_tracks":[],"components":components,"commits":[{"event_uuid":"1","at_ms":50.0}]}
+    var graph={"starts":{"1":0.0},"ends":{"1":100.0},"actor_inputs":{"1":{"actor":{"uuid":"actor","last_visual_position":[0,0]}}},"recipes":{"1":recipe},"condition_cues":{}}
+    return Trace.compile_rows({"events":[node],"version_rows":{"occurrences":[1],"lineages":[1]}},group,graph,cache)[0]
 func _initialize()->void:
     var report=Audit.build(cache)
     var index={}
@@ -30,9 +30,12 @@ func _initialize()->void:
     for kind in ["world_animation","portal","device"]:
         check(not inspection[kind].is_empty(),"The environment build lists its "+kind+" owners")
         for id in inspection[kind]:check(index.has(kind+":"+id),"Selected owner remains visible without a recorded occurrence: "+kind+":"+id)
-    for pair in [["catalog/rigs.json","rig"],["catalog/creature_rigs.json","creature_rig"],["catalog/action_materials.json","action_material"],["catalog/action_intakes.json","action_intake"],["catalog/body_materials.json","body_material"],["catalog/item_attachments.json","item_attachment"]]:
+    for pair in [["catalog/action_materials.json","action_material"],["catalog/action_intakes.json","action_intake"],["catalog/body_materials.json","body_material"],["catalog/item_attachments.json","item_attachment"]]:
         var source:Dictionary=Authoring.load_data(pair[0],cache)
         for id in source:check(index.has(pair[1]+":"+id),"Selected owner remains visible without a recorded occurrence: "+pair[1]+":"+id)
+    var characters=load("res://authoring/characters.tres")
+    for section in [["rigs","rig"],["characters","creature_rig"]]:
+        for id in characters.sections[section[0]]:check(index.has(section[1]+":"+id),"Typed character owner remains visible without a recording: "+id)
     var blight:Dictionary=Authoring.load_data("spells/spell.blight.json",cache)
     var before=blight.duplicate(true)
     var event={"kind":"spell","behavior_id":"spell.blight","source_entity_uuid":"actor","application":null}
@@ -51,7 +54,7 @@ func _initialize()->void:
     check(Requirements.recipe(blight,"spells/spell.blight.json:").any(func(r):return r.kind=="contact_policy" and r.gap_kind=="unassessed"),"Authored non-projectile contact policy is not silently omitted")
     var mechanism_event=trace({"kind":"mechanism_activation","mechanism_content_id":"spatial_effect.environment.dart_launcher","committed":true},{})
     check(mechanism_event.components.any(func(c):return c.kind=="world_animation" and c.gap_kind=="renderer" and c.implementation=="missing"),"Static final sprites do not certify a selected finite dart-launcher sequence")
-    var unrelated={"id":"cast","kind":"native_effect","source_event_uuid":"event","start_ms":0.0,"duration_ms":100.0,"status":"available","source":"unrelated","source_id":"class.martial.burst"}
+    var unrelated={"id":"cast","kind":"native_effect","source_event_uuid":"1","start_ms":0.0,"duration_ms":100.0,"status":"available","source":"unrelated","source_id":"class.martial.burst"}
     check(trace(event,blight,[unrelated]).components.any(func(c):return c.kind=="bodyMaterials" and c.status=="missing"),"A compiled sibling does not erase an unimplemented material operation")
     check(trace(event,blight,[],true).components.is_empty(),"Canceled event produces no executed missing-component demand")
     check(blight==before,"Expectation projection never mutates admitted authoring")

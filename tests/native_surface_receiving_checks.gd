@@ -4,6 +4,7 @@ extends "res://tests/native_2d_integration_checks.gd"
 # final3D output. Sprites light themselves from the light table; the baseline
 # is reproduced on their own materials and receiving globals.
 const GroundReceiving=preload("res://presentation/ground_receiving.gd")
+const UI=preload("res://presentation/ui_catalog.gd")
 var baseline_normals:Dictionary={}
 
 func snapshot()->Image:
@@ -75,7 +76,7 @@ func lighting_receipt(scene:Node)->Dictionary:
     for id in scene.timeline.state.audience.controlled:
         var actor:Dictionary=scene.timeline.state.actors[id]
         var torches=[]
-        for item in actor.get("controlled_items",[]):
+        for item in UI.inventory(actor,"",scene.timeline.state):
             if item.get("item_id","")=="equipment.portable_torch":
                 torches.append({"id":item.item_uuid,"name":item.name,"is_lit":item.is_lit})
         actors.append({"id":id,"name":actor.name,"position":actor.last_visual_position,"torches":torches})
@@ -85,8 +86,8 @@ func lighting_receipt(scene:Node)->Dictionary:
     for source in scene.source_lighting.sources:
         var label=""
         if not source.actor_uuid.is_empty(): label=scene.timeline.state.actors[source.actor_uuid].name
-        elif scene.timeline.state.objects.has(source.item_uuid): label=scene.timeline.state.objects[source.item_uuid].item.name
-        lights.append({"id":source.item_uuid,"name":label,"actor_id":source.actor_uuid,"position":[source.position.x,source.position.y,source.position.z],"enabled":enabled.get(source.item_uuid,false)})
+        elif scene.timeline.state.objects.has(source.anchor_item_uuid): label=scene.timeline.state.objects[source.anchor_item_uuid].item.name
+        lights.append({"id":source.item_uuid,"anchor_item_uuid":source.anchor_item_uuid,"name":label,"actor_id":source.actor_uuid,"position":[source.position.x,source.position.y,source.position.z],"enabled":enabled.get(source.item_uuid,false)})
     return {"sequence":scene.timeline.sequence,"actors":actors,"resolved_sources":lights,"table_lights":scene.light_table.count,"light_strength":scene.source_lighting.light_strength,"source_override":false,"wall_mode":scene.wall_mode}
 
 func run()->void:

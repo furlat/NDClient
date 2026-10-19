@@ -1,5 +1,6 @@
 extends "res://tests/global_publication_checks.gd"
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 
 func prepare_cast(scene:Node)->void:
     var deadline:int=Time.get_ticks_msec()+30000
@@ -13,13 +14,14 @@ func prepare_cast(scene:Node)->void:
 func run()->void:
     if DisplayServer.get_name()=="headless":quit(2);return
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(960,640)
-    var index:Dictionary=Recording.read("res://.runtime/player-runs/20261015T225135.673056Z/journal")
+    var index:Dictionary=Fixtures.read("gallery")
     check(index.ok,"Actual live journal compiles")
     if not index.ok:quit(1);return
     var cast:Dictionary={}
     for item in index.groups:
-        if item.group.operation_sequence==6:cast=item;break
-    check(not cast.is_empty(),"Actual second Fireball exists")
+        if item.group.events.any(func(event):return event.get("kind")=="spell" and event.get("behavior_id")=="spell.fireball"):
+            cast=item;break
+    check(not cast.is_empty(),"Actual Gallery Fireball following four earlier spell casts exists")
     if cast.is_empty():quit(1);return
     var scene=Player.instantiate();scene.external_playback=true
     scene.native_startup_plan=scene.NativeStartup.recording_plan(index.rows)
@@ -84,7 +86,7 @@ func run()->void:
     await compare_full(scene,actual,"fireball-layer")
     check(var_to_bytes(scene.timeline.state)==state and scene.timeline.display_ms==clock,"Independent full construction changes neither actual event state nor its clock")
     check(scene.presentation_errors.is_empty() and scene.media_issue.is_empty(),"Actual cast leaves no presentation errors: "+str(scene.presentation_errors.slice(0,3))+" "+scene.media_issue)
-    var report={"checks":checks,"failures":failures,"comparisons":comparisons,"retained_layers":entries.size(),"scope":"Actual second Fireball onset; private cancellation and retained source/graph/shadow ownership; first framebuffer versus full actor construction at the same published clock."}
+    var report={"checks":checks,"failures":failures,"comparisons":comparisons,"retained_layers":entries.size(),"scope":"Actual Gallery Fireball following four earlier spell casts onset; private cancellation and retained source/graph/shadow ownership; first framebuffer versus full actor construction at the same published clock."}
     FileAccess.open("res://generated/fireball_layer_ownership_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("FIREBALL_LAYER_OWNERSHIP ",JSON.stringify(report))
     scene.queue_free();await process_frame;await process_frame

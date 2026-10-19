@@ -4,6 +4,7 @@ extends SceneTree
 const Preparation = preload("res://presentation/world_preparation.gd")
 const Order = preload("res://grid_order.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 class Probe extends "res://play.gd":
     func _ready() -> void:
         set_process(false); set_process_unhandled_input(false)
@@ -61,7 +62,7 @@ func run() -> void:
     scene.world_revision=7; scene.world_generation=3; scene.world_quarter=0; scene.quarter=0
     scene.ground_is_background=false
     scene.timeline.state={"tiles":{"0,0":{"tile_uuid":"a","position":[0,0],"elevation_steps":0},"1,0":{"tile_uuid":"b","position":[1,0],"elevation_steps":0}},
-        "objects":{},"senses":{"visible":[[1,0]],"objects":{}}}
+        "objects":{},"senses":{"visible":Cells.mask([[1,0]]),"objects":{}}}
     var canonical: Dictionary = scene.timeline.state.duplicate(true)
     scene.world_row_cache={"boundaries":{}}
     scene.static_entries=[entry(scene,"a",0),entry(scene,"b",1),entry(scene,"c",2)]

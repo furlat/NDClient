@@ -18,6 +18,7 @@ func run()->void:
     var expected:Dictionary=_built_form(Catalog.read_file("catalog/rigs.json",legacy))
     var resource_paths:Dictionary=Catalog.read_file("catalog/resources.json",legacy)
     var index=Sources.index(cache)
+    add_native_clips(expected,index.root_rig)
     var actual:Dictionary=Authoring.rigs(cache)
     var loaded:Dictionary=cache[Sources.KEY].loaded
     check(expected.size()==44 and actual.size()>=expected.size(),"All forty-four effective authored rigs are admitted (the wired roster rigs join them)")
@@ -67,3 +68,26 @@ func check_present(values:Dictionary,id:String)->bool:
     var present:bool=values.has(id)
     check(present,"Admitted rig exists: "+id)
     return present
+
+func add_native_clips(expected:Dictionary,root_id:String)->void:
+    # The retired JSON table cannot describe additions authored as Resources.
+    # Keep its complete parity oracle, then add exact native clip operands from
+    # their own rig and compatible source-part sheets.
+    var source:Resource=load("res://authoring/characters.tres")
+    var rig:Resource=load(source.sections.rigs[root_id])
+    var parts:Dictionary={}
+    for slot in rig.slot_order:
+        for category in rig.slot_categories.get(slot,[]):
+            if source.sections.parts.has(category) and not parts.has(category):parts[category]=load(source.sections.parts[category])
+    var additions:Array=[]
+    for clip in rig.clips:
+        if expected[root_id].clips.has(clip.name):continue
+        var sheets:Dictionary={}
+        for category in parts:
+            var part:Resource=parts[category]
+            if not part.actions.has(clip.source_clip):continue
+            if part.notes.begins_with("Effect or shadow") and category not in clip.effect_parts:continue
+            sheets[category]="/spritesheets/"+category+"/"+clip.source_clip+".png"
+        expected[root_id].clips[clip.name]={"source_clip":clip.source_clip,"frames":float(clip.frames),"fps":clip.fps,"loop":clip.loop=="loop","sheets":sheets}
+        additions.append(clip.name)
+    check("CrouchIdle" in additions and "CrouchRun" in additions,"Typed crouch source additions participate in complete exact rig/clock/sheet parity")

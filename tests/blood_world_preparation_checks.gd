@@ -6,6 +6,7 @@ const Preparation=preload("res://presentation/world_preparation.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Compiler=preload("res://presentation/compiler.gd")
 const Blood=preload("res://presentation/blood.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks:int=0
 var failures:Array=[]
 func check(value:bool,label:String)->void:
@@ -22,24 +23,54 @@ func prepare(renderer:RefCounted,world:Node,owner:Node,rows:Dictionary,packet:Di
 func dispose_packet(packet:Dictionary,renderer:RefCounted)->void:
     for held in renderer.release_world(packet):
         if is_instance_valid(held.node):held.node.queue_free()
+func select_overlap(journal:RefCounted,directory:String)->Dictionary:
+    var previous:Dictionary={};var cache:Dictionary={}
+    for row in Fixtures.fact_rows("gallery","damage"):
+        if row.fact.get("body_release")==null:continue
+        var release:Dictionary=row.fact.body_release
+        var sequence:int=int(row.sequence)
+        for region in release.get("regions",[]):
+            for point in region.positions:
+                var key:String=Blood.key(point)
+                if previous.has(key) and int(previous[key])<sequence:
+                    var restored:Dictionary=journal.replay(sequence-1)
+                    check(restored.ok,"Original canonical prefix before later blood release reduces")
+                    if not restored.ok:return {}
+                    var tile:Dictionary=journal.state.tiles.get(key,{})
+                    if Blood.residue(tile).is_empty() or journal.state.senses==null or not Journal.Reducer.Cells.contains(journal.state.senses.visible,point):continue
+                    var raw:PackedByteArray=FileAccess.get_file_as_bytes(directory.path_join("%016d.json"%sequence))
+                    var decoded:Dictionary=journal.protocol.decode("PlayerOperation",raw)
+                    check(decoded.ok,"Original later injury packet admits without wire translation")
+                    if not decoded.ok:return {}
+                    var compiled:Dictionary=Compiler.compile(journal.state,journal.protocol.normalize("PlayerOperation",decoded.value),cache)
+                    check(compiled.ok,"Actual later injury compiles before choosing its existing blood tile")
+                    if not compiled.ok:return {}
+                    for group in compiled.value.groups:
+                        for component in group.components:
+                            if component.kind=="residue_deposit" and component.start_ms>0 and component.reveals.any(func(reveal):return Blood.key(reveal.position)==key):
+                                return {"sequence":sequence,"key":key,"tile":tile,"state":journal.state,"cache":cache,
+                                    "earlier_sequence":int(previous[key]),"source_event_uuid":component.source_event_uuid}
+                previous[key]=sequence
+    return {}
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(384,256)
     create_timer(45).timeout.connect(func():printerr("Blood world preparation deadline");quit(2))
     var journal=Journal.new()
-    var directory:String="res://.runtime/player-runs/20261016T130629.163665Z/journal"
+    var directory:String=Fixtures.journal("gallery")
     var opened:Dictionary=journal.open(directory,true,false)
     check(opened.ok,"Actual Gallery journal opens")
     if not opened.ok:quit(1);return
-    check(journal.replay(5).ok,"Actual Fireball after-state reduces")
-    var tile:Dictionary={}
-    for candidate in journal.state.tiles.values():
-        if not Blood.residue(candidate).is_empty():tile=candidate;break
-    check(not tile.is_empty(),"Actual state supplies canonical persistent blood")
-    if tile.is_empty():quit(1);return
-    var key:String=Blood.key(tile.position)
-    var state={"tiles":{key:tile},"actors":{},"objects":{},"senses":{"visible":[tile.position],"objects":{},"light_sources":{}}}
+    var selected:Dictionary=select_overlap(journal,directory)
+    check(not selected.is_empty(),"Original Gallery contains persistent blood followed by a later actual overlapping release")
+    if selected.is_empty():quit(1);return
+    var tile:Dictionary=selected.tile;var key:String=selected.key
+    # Isolate the exact tile in a native swatch. Keep the actual canonical
+    # compact sensory mask and schema16 stores; the original journal is intact.
+    var state:Dictionary=selected.state.duplicate()
+    state.tiles={key:tile};state.actors={};state.objects={};state.object_members={};state.connectors={};state.light_sources={}
+    state.senses=state.senses.duplicate();state.senses.objects={};state.senses.entities={}
     var input={"state":state,"actor_state":state,"changes":{"full":true,"tiles":{},"objects":{},"senses":true,"order":[]},
-        "staged_actors":{},"actor_samples":{},"actor_loadouts":{},"existing_actors":{},"cache":{},"retained":{},"ground":{},
+        "staged_actors":{},"actor_samples":{},"actor_loadouts":{},"existing_actors":{},"cache":selected.cache,"retained":{},"ground":{},
         "quarter":0,"basis":Basis.IDENTITY,"background":true,"global_rows":true,"visibility":{},"visible_cells":{},"initial":true,"world_changed":true}
     var worker_owner=Preparation.new()
     var task:int=WorkerThreadPool.add_task(worker_owner._derive.bind(input));WorkerThreadPool.wait_for_task_completion(task)
@@ -67,11 +98,11 @@ func run()->void:
     check(world.renderer.last_allocations==0 and world.renderer.deposit_create_usec==created,"First actual field sample constructs no native nodes")
     check(world.renderer.field_uploads==uploads and is_same(handle.kernel_cache,rows[key].cache),"First settled sample reuses worker kernels and pre-drawn upload")
     check(world.renderer.ready and handle.entry.node.visible,"Initial actual residue is ready when revealed")
-    var decoded:Dictionary=journal.protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join("0000000000000006.json")))
-    check(decoded.ok,"Actual next Fireball operation admits")
+    var decoded:Dictionary=journal.protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join("%016d.json"%int(selected.sequence))))
+    check(decoded.ok,"Actual later overlapping injury operation admits")
     if not decoded.ok:worker_owner.free();world.close();quit(1);return
     var future:Dictionary=Compiler.compile(journal.state,journal.protocol.normalize("PlayerOperation",decoded.value),world.catalog_cache)
-    check(future.ok,"Actual next Fireball compiles its future blood releases")
+    check(future.ok,"Actual later injury compiles its future blood releases")
     if not future.ok:worker_owner.free();world.close();quit(1);return
     var next_group:Dictionary={}
     for group in future.value.groups:
@@ -125,6 +156,8 @@ func run()->void:
     check(world.renderer.deposits.is_empty() and world.actor_entries.is_empty() and world.renderer.last_allocations==0,"Removal publication removes field before sampling")
     dispose_packet(removal,world.renderer);dispose_packet(packet,world.renderer)
     worker_owner.free();world.close();viewport.queue_free();await frame();await frame()
-    var report={"checks":checks,"failures":failures,"scope":"Actual canonical no-event residue worker/native ownership, rotation, cancellation, source replacement and field removal. No whole-game performance claim."}
+    var report={"checks":checks,"failures":failures,"recording":directory,"earlier_sequence":selected.earlier_sequence,
+        "later_sequence":selected.sequence,"tile":tile.position,"source_event_uuid":selected.source_event_uuid,
+        "scope":"Actual canonical no-event residue worker/native ownership, late overlapping injury, unchanged native pixels, rotation, cancellation, source replacement and field removal. No whole-game performance claim."}
     FileAccess.open("res://.runtime/blood-world-preparation-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("BLOOD_WORLD_PREPARATION ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

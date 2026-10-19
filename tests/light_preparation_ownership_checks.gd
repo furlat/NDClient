@@ -1,5 +1,6 @@
 extends SceneTree
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Lighting=preload("res://presentation/lighting_2d.gd")
 const Preparation=preload("res://presentation/world_preparation.gd")
 class CountLighting extends "res://presentation/lighting_2d.gd":
@@ -25,7 +26,7 @@ func cancel(work:Dictionary)->Array:
     var held=owner.release_handles();owner.free()
     return held
 func run()->void:
-    var index=Recording.read("res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal")
+    var index=Fixtures.read("hide-light")
     check(index.ok,"Real optical-source recording admits")
     if not index.ok:quit(1);return
     var base=Lighting.resolve(index.initialization.state)

@@ -1,0 +1,85 @@
+{
+ "id": "test.invisibility",
+ "title": "Invisibility",
+ "kind": "interaction",
+ "seed": 3,
+ "subjects": {
+  "spell": [],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.invisibility"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.see_invisibility"
+   ],
+   "at": [
+    9,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.invisibility",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    4,
+    7
+   ]
+  },
+  {
+   "do": "spell.see_invisibility",
+   "by": "target",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    7
+   ]
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  }
+ ],
+ "required_behaviors": [
+  "spell.invisibility",
+  "spell.see_invisibility",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.invisibility"
+ ],
+ "required_condition_ends": [
+  "condition.spell.invisibility"
+ ]
+}

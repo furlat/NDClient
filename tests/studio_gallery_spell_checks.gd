@@ -9,13 +9,12 @@ const Conditions=preload("res://presentation/conditions.gd")
 const Persistent=preload("res://presentation/native_persistent.gd")
 const Studio=preload("res://studio/studio.gd")
 const Placement=preload("res://placement.gd")
-const CASE="res://generated/studio_gallery_spell_case.json"
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
+const Delivery=preload("res://presentation/spell_delivery.gd")
 const REPORT="res://.runtime/studio-gallery-spell-checks"
 const CAPTURES="res://.captures/studio-gallery-spells"
 const SPELLS=["magic_missile","ray_of_frost","scorching_ray","acid_splash","fireball","chill_touch"]
-const ROLES={"magic_missile":{"cast":2,"flight":6,"impact":6},"ray_of_frost":{"cast":1,"flight":2,"impact":1},
-    "scorching_ray":{"cast":1,"flight":3,"impact":1},"acid_splash":{"cast":1,"flight":1,"impact":1},
-    "fireball":{"cast":1,"flight":1,"area":1},"chill_touch":{"strike":1},"shield":{"attached":3}}
 var checks:int=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -34,29 +33,103 @@ func data(path:String)->Dictionary:return JSON.parse_string(FileAccess.get_file_
 
 func raw_events(path:String)->Dictionary:
     var result:Dictionary={}
-    for file in DirAccess.get_files_at(path):
+    var files:Array=Array(DirAccess.get_files_at(path));files.sort()
+    for file in files:
         if not file.ends_with(".json") or file.length()!=21:continue
         var packet:Dictionary=data(path.path_join(file))
         for lineage in packet.get("lineages",[]):
-            var nodes:Array=[lineage.root];nodes.append_array(lineage.events)
-            for event in nodes:result[event.uuid]=event
+            for actual in lineage.events:
+                var event:Dictionary=actual.duplicate(true)
+                event.canceled=event.get("canceled",false);event.fact=event.get("fact")
+                event.resolution_record=lineage.get("resolutions",[])[int(event.resolution)] if event.get("resolution")!=null else {}
+                event._sequence=int(packet.cursor.sequence)
+                result[str(int(event.occurrence))]=event
     return result
 
+func condition_edges(events:Dictionary)->Dictionary:
+    var result={}
+    for id in events:
+        var event:Dictionary=events[id]
+        if event.canceled or event.fact==null or event.fact.kind!="actor_change":continue
+        for actor in event.fact.actors:
+            for row in actor.rows:
+                if row.field!="condition":continue
+                var owner:String=row.condition_uuid
+                if row.get("member")!=null:
+                    result[owner]={"condition":row.member,"actor_uuid":actor.actor_uuid,"application":id}
+                elif result.has(owner):result[owner].removal=id
+    return result
+
+func bump(roles:Dictionary,spell:String,role:String)->void:
+    if not roles.has(spell):roles[spell]={}
+    roles[spell][role]=int(roles[spell].get(role,0))+1
+
+# Count disclosed deliveries from the original resolution/application records,
+# then read the selected typed cues. No historical art/phase-count constants.
+func expected_roles(events:Dictionary,owners:Dictionary,cache:Dictionary)->Dictionary:
+    var casts={};var expected={}
+    for id in events:
+        var event:Dictionary=events[id]
+        if event.canceled or event.fact==null or event.fact.kind!="spell":continue
+        var key:String="%d:%d"%[event._sequence,int(event.resolution_record.get("lineage",event.occurrence))]
+        if not casts.has(key):casts[key]={"events":[],"declaration":{}}
+        casts[key].events.append(event)
+        if event.fact.has("behavior_id"):casts[key].declaration=event.fact
+    for cast in casts.values():
+        var declaration:Dictionary=cast.declaration
+        check(not declaration.is_empty(),"Original spell applications retain their disclosed declaration")
+        if declaration.is_empty():continue
+        var selected:Dictionary=NativeSpells.selection(declaration.behavior_id,cache)
+        check(not selected.is_empty(),"Selected typed native cues exist for "+str(declaration.behavior_id))
+        if selected.is_empty():continue
+        var applications:bool=cast.events.any(func(event):return event.resolution_record.get("application_id")!=null)
+        var cast_counted=false
+        # Native arrays order applications before their completed declaration;
+        # cue cast de-duplication is per real cast regardless of that order.
+        for event in cast.events:
+            var fact:Dictionary=declaration.merged(event.fact,true)
+            var scoped:Dictionary=Delivery.for_occurrence(Delivery.selected_for(selected,fact),event,applications)
+            if not Delivery.owns_delivery(event,{},scoped,applications):continue
+            var persistent:Array=NativeSpells.owned_cues(scoped)
+            for cue in scoped.staging.cues:
+                var at:int=cue.source_index
+                if at in scoped.get("excluded_cue_indices",[]) or at in persistent:continue
+                if scoped.get("explicit_event_cues",false) and at not in scoped.event_cue_indices:continue
+                if cue.role=="cast" and cast_counted:continue
+                if cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
+                bump(expected,str(selected.id),str(cue.role))
+            if scoped.staging.cues.any(func(cue):return cue.role=="cast"):cast_counted=true
+    var shield:Dictionary=NativeSpells.condition("condition.spell.shield",cache)
+    for event in events.values():
+        var fact:Variant=event.fact
+        if fact==null:continue
+        var owner:Dictionary=owners.get(fact.get("intercepted_by_condition_uuid"),{})
+        if owner.get("condition",{}).get("behavior_id")!="condition.spell.shield":continue
+        for at in shield.get("lifecycle",{}).get("contact_cue_ids",[]):
+            bump(expected,str(shield.id),str(shield.staging.cues[int(at)].role))
+    return expected
+
 func qualify_fixture()->void:
-    fixture=data(CASE)
-    check(fixture.failures.is_empty(),"The captured Gallery commands and source qualification succeeded")
-    var capture:Dictionary=data(fixture.descriptor)
-    check(capture.ok and capture.commands.size()==60,"All60 original SDK commands completed")
-    check(capture.commands.all(func(command):return command.receipt.kind=="committed"),"Every recorded command has an authoritative committed receipt")
-    var config:Dictionary=data(fixture.descriptor.get_base_dir().path_join("server.json"))
-    var member:Dictionary=config.recipe.roster_slots[0].roster.members[0]
-    check(config.recipe.battlefield_id=="battlefield.lantern_gallery" and member.source.premade_id=="hero.sorcerer_l5_standard_torch","The fixture uses the existing Gallery and ordinary level5 sorcerer premade")
-    check(member.scenario_setup_effects.size()==1 and member.scenario_setup_effects[0].behavior_ref.content_id=="reaction.spell.shield","Shield is the explicit scenario reaction grant, not an invented client outcome")
-    var listed:Array=Library.read().filter(func(item):return item.id==fixture.id)
-    check(listed.size()==1 and listed[0].perspectives==fixture.perspectives,"Library exposes exactly this complete run and both original faction streams")
-    var scenarios:Array=data("res://authoring/studio/scenarios.json").scenarios
-    var studies:Array=scenarios.filter(func(item):return item.id=="gallery.sorcerer_expedition")
-    check(studies.size()==1 and studies[0].code=="GAL01" and studies[0].recordings[0].case_id==fixture.id,"GAL01 links the real Gallery recording to its capability study")
+    fixture=Fixtures.case_record("gallery").duplicate(true)
+    check(not fixture.is_empty(),"The stable schema16 Gallery fixture is indexed")
+    if fixture.is_empty():return
+    var capture:Dictionary=data(fixture.recording)
+    var scenario:Dictionary=data(fixture.scenario)
+    check(capture.ok and capture.failure==null and capture.commands==60 and capture.sequence.size()==60,"All 60 original SDK commands completed")
+    check(capture.engine==fixture.engine and int(fixture.engine.player_schema_version)==16,"Original capture and both journals use the declared schema16 engine")
+    check(scenario.battlefield=="battlefield.lantern_gallery","The fixture uses the existing large Gallery battlefield")
+    var caster:Array=scenario.actors.filter(func(actor):return actor.role=="caster")
+    check(caster.size()==1 and caster[0].premade=="sorcerer" and caster[0].behaviors==["reaction.spell.shield"],"The ordinary sorcerer has exactly the explicit scenario Shield reaction grant")
+    var matches:Array=capture.names.keys().filter(func(id):return capture.names[id]==capture.roles.caster)
+    check(matches.size()==1,"The original recorder identifies exactly one caster UUID")
+    if matches.size()!=1:return
+    fixture.caster_uuid=matches[0]
+    var record:Dictionary=scenario.merged({"status":"recorded","engine":fixture.engine,"journals":{}},true)
+    for side in fixture.perspectives:record.journals[side.id]=side.journal
+    var listed:Array=Library.records({"engine":fixture.engine,"cases":[record]},{"header":fixture.engine})
+    check(listed.size()==1 and listed[0].ready and listed[0].perspectives==fixture.perspectives,"The normal Library reader admits both original faction journals as one ready case")
+    if listed.size()==1:fixture.merge(listed[0],true)
+    check(scenario.required_behaviors.size()==SPELLS.size() and SPELLS.all(func(spell):return "spell."+spell in scenario.required_behaviors),"The actual choreography exercises all six declared spell capabilities")
 
 func qualify_stream(side:Dictionary)->void:
     var label:String="Gallery / "+side.id
@@ -70,20 +143,24 @@ func qualify_stream(side:Dictionary)->void:
     if not opened.ok:return
     canonical[side.id]=journal.state.duplicate(true)
     var events:Dictionary=raw_events(side.journal)
-    var facts:Dictionary={};var positive:Dictionary={};var blocked:Dictionary={};var shield:Dictionary={}
+    var facts:Dictionary={};var positive:Dictionary={};var blocked:Dictionary={}
+    var condition_owners:Dictionary=condition_edges(events)
+    var shield:Dictionary={}
+    for id in condition_owners:
+        if condition_owners[id].condition.behavior_id=="condition.spell.shield":shield[id]=condition_owners[id]
     for id in events:
         var event:Dictionary=events[id]
         if event.fact==null:continue
         var fact:Dictionary=event.fact
         facts[fact.kind]=int(facts.get(fact.kind,0))+1
         if fact.kind=="damage" and fact.get("stage")=="applied" and fact.get("applied_damage",0)>0 and not event.canceled:positive[id]=fact
-        if fact.get("intercepted_by_condition_uuid")!=null:blocked[id]=fact
-        if fact.kind=="condition" and fact.condition.behavior_id=="condition.spell.shield":shield[fact.event_type]=event
-    check(positive.size()==8 and blocked.size()==3,label+": recorded eight applied damage facts and three actual Shield interceptions")
+        if shield.has(fact.get("intercepted_by_condition_uuid")):blocked[id]=fact
+    check(positive.size()==7 and blocked.size()==5,label+": recorded seven positive applied damage facts and five actual Shield interceptions")
+    check(blocked.values().filter(func(fact):return fact.kind=="damage").size()==3 and blocked.values().filter(func(fact):return fact.kind=="attack").size()==2,label+": Shield intercepts three Magic Missiles and two real opportunity attacks")
     check(facts.get("step",0)==35 and facts.get("movement",0)==8 and facts.get("object_destroyed",0)==4,label+": long excursion and four actual environment destructions remain in the event stream")
-    check(shield.has("condition_application") and shield.has("condition_removal"),label+": actual Shield application and removal are disclosed")
-    var owner:String=shield.condition_application.fact.condition.condition_uuid
-    check(shield.condition_application.fact.target_entity_uuid==fixture.caster_uuid and shield.condition_removal.fact.target_entity_uuid==fixture.caster_uuid and shield.condition_removal.fact.condition.condition_uuid==owner,label+": the same Shield instance belongs to the sorcerer throughout")
+    check(shield.size()==3,label+": three actual Shield UUID lifetimes are disclosed")
+    for owner in shield:
+        check(shield[owner].has("application") and shield[owner].has("removal") and shield[owner].actor_uuid==fixture.caster_uuid,label+": each Shield instance has its actual application, removal and sorcerer owner")
     var state:Dictionary=index.initialization.state.duplicate(true)
     var owners:Dictionary={};Conditions.observe(owners,state.actors,0.0,true)
     var phase_counts:Dictionary={};var flashes:Dictionary={};var reactions:Dictionary={};var commits:Dictionary={};var native_ids:Dictionary={};var persistent_ids:Dictionary={};var damage_times:Dictionary={}
@@ -103,21 +180,20 @@ func qualify_stream(side:Dictionary)->void:
             previous=commit.at_ms;Compiler.apply_delta(state,commit.delta)
             var absolute:float=wrapped.start_ms+commit.at_ms
             if commit.has("event_uuid"):commits[commit.event_uuid]=absolute
-            Conditions.observe(owners,state.actors,absolute)
+            Conditions.observe(owners,state.actors,absolute,false,commit.get("condition_rows",[]))
             for sample in Conditions.samples(owners.duplicate(true),absolute+.001,index.cache):
-                if not sample.get("native_spell",false) or sample.spell_id!="shield":continue
+                if not sample.get("native_spell",false) or not shield.has(sample.get("condition_uuid","")):continue
                 persistent_ids[sample.id]=true
-                check(sample.persistent_owner and sample.condition_uuid==owner and sample.actor_uuid==fixture.caster_uuid,label+": native Shield samples follow the disclosed sorcerer condition owner")
+                check(sample.persistent_owner and shield.has(sample.condition_uuid) and sample.actor_uuid==fixture.caster_uuid,label+": native Shield samples follow the disclosed sorcerer condition owner")
         for component in group.components:
             if component.get("native_spell",false):
                 check(not native_ids.has(component.id),label+": native phase occurrence is unique")
                 native_ids[component.id]=true
                 check(events.has(component.source_event_uuid),label+": every native phase keeps original server-event provenance")
                 check(component.status=="available" and component.duration_ms>0 and is_finite(component.duration_ms),label+": authored native phase is finite and available")
-                if not phase_counts.has(component.spell_id):phase_counts[component.spell_id]={}
-                var roles:Dictionary=phase_counts[component.spell_id];roles[component.native_cue.role]=int(roles.get(component.native_cue.role,0))+1
-                if component.spell_id=="shield":
-                    check(blocked.has(component.source_event_uuid) and blocked[component.source_event_uuid].intercepted_by_condition_uuid==owner,label+": native Shield contact is driven by an actual intercepted delivery")
+                if not str(component.get("spell_id","")).is_empty():bump(phase_counts,component.spell_id,component.native_cue.role)
+                if component.get("spell_id")=="shield":
+                    check(blocked.has(component.source_event_uuid) and shield.has(blocked[component.source_event_uuid].intercepted_by_condition_uuid),label+": native Shield contact is driven by an actual intercepted delivery")
             if component.kind=="material_flash":
                 check(positive.has(component.source_event_uuid),label+": body flash belongs only to positive applied damage")
                 check(component.actor_uuid==positive.get(component.source_event_uuid,{}).get("target_entity_uuid") and component.duration_ms==150,label+": recipient and shared150ms flash follow the actual damage")
@@ -126,7 +202,8 @@ func qualify_stream(side:Dictionary)->void:
             if body.clip=="TakeDamage":
                 check(positive.has(body.source_event_uuid) and body.actor_uuid==positive.get(body.source_event_uuid,{}).get("target_entity_uuid"),label+": TakeDamage belongs to the actual damaged recipient")
                 reactions[body.source_event_uuid]=wrapped.start_ms+body.start_ms
-    check(phase_counts==ROLES,label+": actual deliveries and misses produce the expected native phase roles; "+JSON.stringify(phase_counts))
+    var expected:Dictionary=expected_roles(events,condition_owners,index.cache)
+    check(phase_counts==expected,label+": disclosed deliveries/misses and selected typed cues determine native phase counts; "+JSON.stringify({"actual":phase_counts,"expected":expected}))
     check(flashes.size()==positive.size() and reactions.size()==positive.size(),label+": every actual damage has both a body flash and TakeDamage track")
     for id in positive:
         check(flashes.has(id) and reactions.has(id) and commits.has(id),label+": damage has its own rendering and authoritative commit")
@@ -137,9 +214,12 @@ func qualify_stream(side:Dictionary)->void:
                 check(absf(flashes[id]-timing.flash)<.001 and absf(reactions[id]-timing.start)<.001,label+": body reaction and flash follow their independent authored source frames")
                 check(absf(commits[id]-timing.hp)<.001,label+": authoritative HP publishes at the authored HP marker; "+JSON.stringify({"event":id,"body":reactions[id],"flash":flashes[id],"hp_marker":timing.hp,"commit":commits[id]}))
     for id in blocked:check(not flashes.has(id) and not reactions.has(id),label+": intercepted damage produces no fabricated hurt/flash")
-    check(persistent_ids.size()==1,label+": native Shield uses one stable owner across all samples")
-    check(not Conditions.samples(owners.duplicate(true),index.presentation_end_ms+1000,index.cache).any(func(sample):return sample.get("native_spell",false) and sample.spell_id=="shield"),label+": Shield native source retires after actual removal and authored close")
+    check(persistent_ids.size()==shield.size(),label+": each actual Shield lifetime uses its own stable persistent source")
+    check(not Conditions.samples(owners.duplicate(true),index.presentation_end_ms+1000,index.cache).any(func(sample):return sample.get("native_spell",false) and shield.has(sample.get("condition_uuid",""))),label+": Shield native source retires after actual removal and authored close")
     check(state==journal.state,label+": complete Studio commits equal independent canonical SDK state")
+    var ended:RefCounted=Recording.restore(index,index.presentation_end_ms+1000)
+    check(ended.state==journal.state,label+": end restore equals independent canonical SDK state")
+    check(not ended.component_samples(index.cache).any(func(component):return native_ids.has(component.id)),label+": finite spell/contact sources all retire at the end of the recorded presentation")
     check(state.actors[fixture.caster_uuid].last_visual_position==[46,18],label+": sorcerer reaches the recorded Gallery centre")
     var missing:Dictionary={}
     for row in index.rows:
@@ -170,36 +250,13 @@ func settle_native(label:String)->bool:
     check(false,label+": Studio publishes within the finite readiness budget; "+studio.status.text)
     return false
 
-func find_study(item:TreeItem)->TreeItem:
-    if item==null:return null
-    var metadata=item.get_metadata(0)
-    if metadata is Dictionary and metadata.scenario.get("id")=="gallery.sorcerer_expedition":return item
-    for child in item.get_children():
-        var found:TreeItem=find_study(child)
-        if found!=null:return found
-    return null
-
 func open_gallery()->bool:
-    studio._show_study_library()
-    var panel:Window=studio.study_library
-    var deadline:int=Time.get_ticks_msec()+60000
-    while not panel.is_prepared() and Time.get_ticks_msec()<deadline:await process_frame
-    check(panel.is_prepared() and panel.error.is_empty(),"Actual capability Library is ready for GAL01")
-    if not panel.is_prepared():return false
-    var item:TreeItem=find_study(panel.tree.get_root())
-    check(item!=null,"Actual Library contains the GAL01 Gallery study")
-    if item==null:return false
-    var parent:TreeItem=item.get_parent()
-    while parent!=null:parent.collapsed=false;parent=parent.get_parent()
-    panel.tree.scroll_to_item(item,true);await process_frame
-    var rect:Rect2=panel.tree.get_item_area_rect(item,0)
-    var point:Vector2=panel.tree.global_position+rect.position+Vector2(minf(100,rect.size.x*.5),rect.size.y*.5)
-    for pressed in [true,false]:
-        var event=InputEventMouseButton.new();event.button_index=MOUSE_BUTTON_LEFT;event.pressed=pressed;event.position=point;event.global_position=point
-        panel.push_input(event,true)
-    await process_frame
-    if not await settle_native("Gallery Library selection"):return false
-    check(not panel.visible and studio.active_case.id==fixture.id and studio.study_scenario.id=="gallery.sorcerer_expedition","Library selection publishes the actual Gallery study and closes the browser")
+    # Discovery has a separate browser gate. Select this exact stable original
+    # recording through Studio's normal case/publication path, not runtime data.
+    studio.case_records.append(fixture)
+    studio.select_case(fixture)
+    if not await settle_native("Original Gallery case selection"):return false
+    check(studio.active_case.id==fixture.id,"Studio selects the original Gallery case")
     return studio.active_case.id==fixture.id
 
 func camera_observation()->Dictionary:
@@ -268,8 +325,10 @@ func native_run()->void:
         var presenter=studio.world.component_renderer.native_spells
         for component in studio.world.displayed_components:
             if not component.get("native_spell",false):continue
-            native_seen[component.id]=component.spell_id
-            if native_pixels.has(component.spell_id) or float(component.age_ms)<100:continue
+            var spell:String=str(component.get("spell_id",""))
+            if spell.is_empty():continue
+            native_seen[component.id]=spell
+            if native_pixels.has(spell) or float(component.age_ms)<100:continue
             var handle:Dictionary=presenter.handles.get(component.id,{})
             var group:Dictionary=presenter.groups.get(handle.get("group_key",""),{})
             if group.is_empty():continue
@@ -290,7 +349,7 @@ func native_run()->void:
     await frame();root.get_texture().get_image().save_png(CAPTURES.path_join("complete-studio.png"))
     native_evidence={"frames":samples,"elapsed_ms":Time.get_ticks_msec()-started,"end_ms":end,"native_pixels":native_pixels,"occurrences_seen":native_seen.size(),"camera_samples":camera_samples,"offscreen_samples":offscreen,"errors":errors.keys(),"paired":false}
     var rows:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false))
-    var selected:Array=rows.filter(func(row):return row.component.spell_id=="fireball" and row.component.native_cue.role=="area" and row.get("source_perspective",studio.active_perspective)==studio.active_perspective)
+    var selected:Array=rows.filter(func(row):return row.component.get("spell_id")=="fireball" and row.component.native_cue.role=="area" and row.get("source_perspective",studio.active_perspective)==studio.active_perspective)
     check(selected.size()==1,"Actual run exposes one Fireball area source row for seek/loop inspection")
     if not selected.is_empty():await qualify_transport(selected[0])
     await close_native()

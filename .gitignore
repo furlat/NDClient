@@ -48,6 +48,9 @@
 /generated/render_cache/
 /generated/receiving_normals/
 /generated/profiles/
+# New diagnostic reports are disposable; curated reference inputs live under
+# tests/fixtures/schema16. Existing versioned files remain tracked.
+/generated/
 # Former live-test reports; the tests now write them beside their run.
 /generated/player_startup_checks.json
 /generated/live_idle_ui_checks.json
@@ -58,3 +61,8 @@ __pycache__/
 
 # Presentation build output (tools/build_presentation.gd); rebuilt, never edited.
 /build/
+# Reproducible current-schema test inputs are source data. Other ad-hoc fixture
+# exports remain local; artwork/imports still obey the binary rules above.
+/tests/fixtures/*
+!/tests/fixtures/schema16/
+!/tests/fixtures/schema16/spool-oracle/canonical-states.zip

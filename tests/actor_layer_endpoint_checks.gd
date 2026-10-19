@@ -2,6 +2,7 @@ extends SceneTree
 ## Real authored constructor intervals must agree before and at a spell's
 ## complete cut, even when subtracting its start loses a floating-point bit.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Construction=preload("res://presentation/actor_construction.gd")
 const Characters=preload("res://presentation/characters.gd")
 var checks:int=0
@@ -59,7 +60,7 @@ func internal_edge(index:Dictionary,selected:Dictionary)->void:
     var gate:Dictionary={"ready":false,"calls":0,"candidate":{}}
     timeline.media_ready=func(_group):return true
     timeline.world_ready=func(candidate):gate.calls+=1;gate.candidate=candidate;return gate.ready
-    check(timeline.actor_layer_samples().size()==2,"Internal fixture starts with both real authored cast layers")
+    check(timeline.actor_layer_samples().size()==1,"Internal fixture starts with the actual hand-magic layer; caster aura is intentionally disabled")
     timeline.advance(endpoint-before)
     check(gate.calls==1 and timeline.waiting_for_world,"Exact internal endpoint requests constructor ownership before display")
     check(timeline.display_ms==before,"Unprepared internal endpoint retains previous displayed clock")
@@ -69,21 +70,27 @@ func internal_edge(index:Dictionary,selected:Dictionary)->void:
         check(timeline.display_ms==endpoint and timeline.actor_layer_samples().is_empty(),"Prepared internal endpoint publishes exact layer removal")
     evidence.append({"fixture":"internal recorded-layer endpoint with longer presentation tail","display_ms":endpoint,"gate_calls":gate.calls})
 func run()->void:
-    var index:Dictionary=Recording.read("res://.runtime/studio-cases/invisibility-seed3-v2/amber/journal")
+    var index:Dictionary=Fixtures.read("invisibility")
     check(index.ok,"Actual Invisibility/See Invisibility journal admitted")
     if index.ok:
         var selected:Dictionary={}
         for item in index.groups:
-            if int(item.group.operation_sequence)==6 and item.group.components.any(func(component):return component.kind=="sprite_layer"):selected=item;break
+            if item.group.events.any(func(event):return event.get("behavior_id")=="spell.see_invisibility") and item.group.components.any(func(component):return component.kind=="sprite_layer"):selected=item;break
         check(not selected.is_empty(),"Actual See Invisibility cast has authored transient layers")
         if not selected.is_empty():
             var actor_id:String=""
             for component in selected.group.components:
                 if component.kind=="sprite_layer":actor_id=component.actor_uuid;break
+            var baseline:Dictionary=Characters.structure(index.initialization.state.actors[actor_id],index.cache,
+                Characters.item_looks(index.initialization.state.actors[actor_id],index.initialization.state))
+            check(baseline.ok,"Original recorded caster outfit resolves independently of cast layers")
+            if not baseline.ok:quit(1);return
+            var base_count:int=baseline.value.equipment_layers.size()
+            check(selected.group.components.filter(func(component):return component.kind=="sprite_layer").size()==1,"See Invisibility uses its hand-magic layer; the user-disabled caster aura stays absent")
             var endpoint:float=selected.start_ms+selected.group.duration_ms
-            inspect(index,endpoint-1000.0/144.0,actor_id,9)
-            inspect(index,endpoint,actor_id,7)
-            inspect(index,endpoint+1000.0/144.0,actor_id,7)
+            inspect(index,endpoint-1000.0/144.0,actor_id,base_count+1)
+            inspect(index,endpoint,actor_id,base_count)
+            inspect(index,endpoint+1000.0/144.0,actor_id,base_count)
             internal_edge(index,selected)
     var report={"checks":checks,"failures":failures,"evidence":evidence,
         "scope":"Actual See Invisibility authored hand-layer start/end, cumulative reducer constructor candidate vs displayed membership and exact Recording.restore state. Native seek/playback covered separately."}

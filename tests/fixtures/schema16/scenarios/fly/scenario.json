@@ -1,0 +1,133 @@
+{
+ "id": "spell.fly/lifecycle",
+ "title": "Fly: wings, movement, equipment, removal and restoration",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.fly"
+  ],
+  "action": [
+   "action.move",
+   "action.drop_concentration"
+  ],
+  "condition": [
+   "condition.spell.fly"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.fly"
+   ],
+   "at": [
+    3,
+    7
+   ],
+   "items": [
+    {
+     "id": "apparel.cloak",
+     "slot": "Cloak"
+    }
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    8
+   ]
+  }
+ ],
+ "seed": 2,
+ "steps": [
+  {
+   "do": "spell.fly",
+   "by": "caster",
+   "target": "self",
+   "track": true,
+   "track_condition": "condition.spell.fly"
+  },
+  {
+   "do": "hold_walk",
+   "offset": [
+    -1,
+    0
+   ]
+  },
+  {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "Cloak"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "equip",
+   "by": "caster",
+   "slot": "Cloak",
+   "item": "apparel.cloak"
+  },
+  {
+   "do": "hold_walk",
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  {
+   "do": "end_tracked",
+   "strategy": "concentration"
+  },
+  {
+   "do": "tail_walk",
+   "offset": [
+    1,
+    0
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.fly"
+ ],
+ "required_conditions": [
+  "condition.spell.fly"
+ ],
+ "required_condition_ends": [
+  "condition.spell.fly"
+ ]
+}

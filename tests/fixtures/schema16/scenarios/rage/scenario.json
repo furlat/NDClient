@@ -1,0 +1,106 @@
+{
+ "id": "action.class.barbarian.frenzy/lifecycle",
+ "title": "Frenzy: real Rage owner, movement, attack and removal",
+ "kind": "action",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.class.barbarian.frenzy",
+   "action.move",
+   "action.attack",
+   "action.class.barbarian.end_rage"
+  ],
+  "condition": [
+   "class_feature.barbarian.raging",
+   "class_feature.barbarian.frenzied"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "barbarian",
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.knight",
+   "at": [
+    5,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    8
+   ]
+  }
+ ],
+ "seed": 2,
+ "steps": [
+  {
+   "do": "action.class.barbarian.frenzy",
+   "by": "caster",
+   "target": "self",
+   "track": true,
+   "track_condition": "class_feature.barbarian.raging"
+  },
+  {
+   "do": "hold_walk",
+   "offset": [
+    1,
+    0
+   ]
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.class.barbarian.end_rage",
+   "by": "caster",
+   "target": "self"
+  }
+ ],
+ "required_behaviors": [
+  "action.class.barbarian.frenzy",
+  "action.class.barbarian.end_rage"
+ ],
+ "required_conditions": [
+  "class_feature.barbarian.raging",
+  "class_feature.barbarian.frenzied"
+ ],
+ "required_condition_ends": [
+  "class_feature.barbarian.raging",
+  "class_feature.barbarian.frenzied"
+ ]
+}

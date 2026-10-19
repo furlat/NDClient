@@ -5,9 +5,10 @@ before every merge), live (real games through tools/play.py, after every merge).
 Only rows with status "ok" gate; --all-status also runs known-red, needs-args and
 owned-by-migration rows (reported, never gating). Headless rows run in parallel,
 GPU and live rows one at a time. Every Godot run gets the absolute project path,
-the manifest timeout, and afterwards its own leftover processes (matched by this
-worktree's path and the test script) are stopped. Reports go to .runtime/tests/;
-tracked generated/ files a test rewrites are restored afterwards.
+the manifest timeout, and afterwards its own leftover processes (matched by its
+unique engine log path; live runs use the test script) are stopped. Reports go to .runtime/tests/;
+tracked generated/ reports stay available for inspection; this runner never
+checks out files which a concurrent worker may have changed.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -83,7 +84,8 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
             command = [PYTHON, "tools/play.py", "--engine", str(ENGINE), "--test-script", row["script"], *row.get("args", [])]
     else:
         command = [str(GODOT), *(["--headless"] if row["mode"] == "headless" else ["--rendering-method", "forward_plus", "--rendering-driver", "vulkan"]),
-            "--path", worktree, "--script", row["script"], *(["--", *row["args"]] if row.get("args") else [])]
+            "--path", worktree, "--log-file", windows_path(report / (row["name"] + ".engine.log")),
+            "--script", row["script"], *(["--", *row["args"]] if row.get("args") else [])]
         environment = None
     timed_out = False
     fatal_log = False
@@ -101,9 +103,11 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
                     break
                 time.sleep(.05)
         code = process.wait()
-    # The console launcher can leave its windowed child running: stop only this
-    # worktree's processes for this script.
-    leftovers = test_processes(godot_processes(worktree), {row["script"]})
+    # The console launcher can leave its windowed child running. Non-live
+    # instances carry this invocation's unique engine log path, so another
+    # worker running the same script is never mistaken for our child.
+    marker = windows_path(report / (row["name"] + ".engine.log")) if row["mode"] != "live" else row["script"]
+    leftovers = test_processes(godot_processes(worktree), {marker})
     stop_processes(leftovers)
     text = log.read_text(encoding="utf-8", errors="replace")
     godot_log = text
@@ -128,7 +132,7 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
     errors = [line for line in godot_log.splitlines() if line.startswith("ERROR:")]
     unexpected = [line for line in errors if not any(pattern in line for pattern in allowed)]
     script_errors = sum(1 for line in godot_log.splitlines() if "SCRIPT ERROR" in line)
-    failed = bool(code != 0 or timed_out or fatal_log or script_errors or unexpected or (failures or 0) > 0)
+    failed = bool(code != 0 or timed_out or fatal_log or script_errors or unexpected or leftovers or (failures or 0) > 0)
     return {"name": row["name"], "mode": row["mode"], "status": row["status"], "exit": code, "timed_out": timed_out,
         "checks": checks, "failures": failures, "script_errors": script_errors, "fatal_log": fatal_log, "error_lines": len(errors),
         "unexpected_errors": unexpected[:5], "leftover_processes": len(leftovers), "seconds": round(time.time() - started, 1),
@@ -136,7 +140,7 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
 
 
 def changed_generated() -> set[str]:
-    output = subprocess.run(["git", "status", "--porcelain", "--", "generated"], cwd=PROJECT, capture_output=True, text=True).stdout
+    output = subprocess.run(["git", "--no-optional-locks", "status", "--porcelain", "--", "generated"], cwd=PROJECT, capture_output=True, text=True).stdout
     return {line[3:] for line in output.splitlines() if line[:2] in (" M", "M ", "MM")}
 
 
@@ -158,22 +162,26 @@ def main() -> int:
         rows = [row for row in rows if row["name"] in names]
     else:
         rows = [row for row in rows if (args.tier == "all" or row["tier"] == args.tier) and (args.all_status or row["status"] == "ok")]
-    report = PROJECT / ".runtime/tests" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    report = PROJECT / ".runtime/tests" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     report.mkdir(parents=True, exist_ok=True)
     worktree = windows_path(PROJECT)
     before = changed_generated()
     results = []
+    # A source rebuild changes shared on-disk inputs. Finish those checks
+    # before independent reader processes start; no locks or sleeps in game.
+    for row in rows:
+        if row.get("exclusive", False):
+            results.append(run_one(row, report, worktree, allowed))
     with ThreadPoolExecutor(max_workers=max(1, args.jobs)) as pool:
-        headless = [pool.submit(run_one, row, report, worktree, allowed) for row in rows if row["mode"] == "headless"]
+        headless = [pool.submit(run_one, row, report, worktree, allowed) for row in rows if row["mode"] == "headless" and not row.get("exclusive", False)]
         for row in rows:
-            if row["mode"] != "headless":
+            if row["mode"] != "headless" and not row.get("exclusive", False):
                 results.append(run_one(row, report, worktree, allowed))
                 print(f"  {row['name']}: {'FAIL' if results[-1]['failed'] else 'ok'}", flush=True)
         results.extend(future.result() for future in headless)
-    restored = sorted(changed_generated() - before)
-    if restored:
-        subprocess.run(["git", "checkout", "--", *restored], cwd=PROJECT, check=False)
-    left = test_processes(godot_processes(worktree), {row["script"] for row in rows})
+    changed_reports = sorted(changed_generated() - before)
+    markers = {windows_path(report / (row["name"] + ".engine.log")) if row["mode"] != "live" else row["script"] for row in rows}
+    left = test_processes(godot_processes(worktree), markers)
     stop_processes(left)
     order = {row["name"]: index for index, row in enumerate(rows)}
     results.sort(key=lambda value: order[value["name"]])
@@ -188,15 +196,15 @@ def main() -> int:
     gating = [value for value in results if value["status"] == "ok" or names]
     bad = [value for value in gating if value["failed"]]
     lines.append(f"{len(results)} run, {len(bad)} failed; reports in {report}")
-    if restored:
-        lines.append("restored tracked reports the tests rewrote: " + ", ".join(restored))
+    if changed_reports:
+        lines.append("tracked reports changed during this run (retained): " + ", ".join(changed_reports))
     if left:
         lines.append(f"stopped {len(left)} Godot process(es) of this worktree still running after the run")
     table = "\n".join(lines)
     print(table)
     (report / "table.txt").write_text(table + "\n", encoding="utf-8")
     (report / "summary.json").write_text(json.dumps({"tier": args.tier, "only": sorted(names), "results": results,
-        "restored_generated": restored, "leftover_processes": left}, indent=1), encoding="utf-8")
+        "changed_generated": changed_reports, "leftover_processes": left}, indent=1), encoding="utf-8")
     return 1 if bad or left else 0
 
 

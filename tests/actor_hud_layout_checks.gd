@@ -2,6 +2,7 @@ extends SceneTree
 # Native layout of an unchanged real Gallery snapshot. No new gameplay facts.
 const ActorHUD=preload("res://ui/actor_hud.gd")
 const Journal=preload("res://sdk/journal.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const UI=preload("res://presentation/ui_catalog.gd")
 var checks=0
 var failures:Array=[]
@@ -15,7 +16,7 @@ func settle()->void:
     await process_frame
 func _initialize()->void:run.call_deferred()
 func run()->void:
-    var source="res://.runtime/player-runs/20261015T112341.941408Z/journal"
+    var source=Fixtures.journal("gallery")
     var target="res://.runtime/actor-hud-layout/"+str(Time.get_ticks_usec())
     DirAccess.make_dir_recursive_absolute(target)
     FileAccess.open(target.path_join("0000000000000000.json"),FileAccess.WRITE).store_buffer(FileAccess.get_file_as_bytes(source.path_join("0000000000000000.json")))
@@ -23,7 +24,7 @@ func run()->void:
     var opened=journal.open(target,true,false)
     check(opened.ok,"Actual recorded initialization selects its SDK schema")
     if not opened.ok:quit(2);return
-    for index in range(3):
+    for index in range(10):
         var raw=FileAccess.get_file_as_bytes(source.path_join("%016d.json"%index))
         var decoded=journal.protocol.decode("InitializationResponse" if index==0 else "PlayerOperation",raw)
         check(decoded.ok,"Original Gallery packet parses")

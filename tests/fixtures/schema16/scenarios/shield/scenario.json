@@ -1,0 +1,89 @@
+{
+ "id": "spell.shield/reaction",
+ "title": "Shield reaction: actual Magic Missile interruption",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.shield",
+   "spell.magic_missile"
+  ],
+  "action": [],
+  "condition": [
+   "condition.spell.shield"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [],
+   "at": [
+    3,
+    7
+   ],
+   "behaviors": [
+    "reaction.spell.shield"
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ],
+   "spells": [
+    "spell.magic_missile"
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "seed": 2,
+ "steps": [
+  {
+   "do": "spell.magic_missile",
+   "by": "target",
+   "target": "caster",
+   "recipients": [
+    "caster",
+    "caster",
+    "caster"
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.magic_missile"
+ ],
+ "required_conditions": [
+  "condition.spell.shield"
+ ]
+}

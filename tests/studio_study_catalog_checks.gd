@@ -4,6 +4,7 @@ const Study=preload("res://studio/study_catalog.gd")
 const Cases=preload("res://studio/case_library.gd")
 const Audit=preload("res://studio/authoring_audit.gd")
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Movement=preload("res://presentation/movement_media.gd")
 const NATIVE_SPELLS=["acid_splash","chill_touch","eldritch_blast","fire_bolt","fireball","guiding_bolt","ice_knife","magic_missile","poison_spray","produce_flame","ray_of_frost","scorching_ray","sleep","web","bane","command","mage_armor","sanctuary","shield","shocking_grasp","burning_hands","thunderwave","cure_wounds","healing_word","guidance","resistance","light","thaumaturgy","shield_of_faith","true_strike"]
 var checks=0
@@ -42,26 +43,32 @@ func run()->void:
     for asset in migration.assets:check(index.has(asset.asset_id),"Unmapped VFX source remains visible: "+asset.asset_id)
     check(index.has("spell.aegis_spark") and index["spell.aegis_spark"].requirements.any(func(row):return row.status=="missing"),"Spell with missing draft is visible without a replay or render implementation")
     check(index["spell.aegis_spark"].scenarios.is_empty(),"No generic invented study fills an unauthored spell sequence")
+    # The active Studio library now joins schema16 capabilities and original
+    # current journals. Old generated native-spell-* IDs are not a second
+    # playback library and cannot authorize a recording fallback.
+    var current:Dictionary=Cases.catalog()
     for id in NATIVE_SPELLS:
-        var capability:Dictionary=index.get("spell."+id,{})
-        check(capability.get("kind")=="Spell","Native recording retains the actual spell capability: "+id)
-        var scenarios:Array=capability.get("scenarios",[]).filter(func(row):return row.id=="native-spell-"+id)
-        check(scenarios.size()==1,"Exactly one selected real spell sequence is discoverable: "+id)
-        if scenarios.size()!=1:continue
-        var scenario:Dictionary=scenarios[0]
-        check(scenario.source.begins_with(Study.SPELL_CASES+":/cases/"),"Recorded sequence has its actual capture inventory source: "+id)
-        check(scenario.recordings.size()==1 and scenario.recordings[0].available,"Spell study has an openable exact recording: "+id)
-        if scenario.recordings.size()==1 and scenario.recordings[0].available:
-            var record:Dictionary=scenario.recordings[0].record
-            check(record.id=="native-spell-"+id and record.spell_id==id,"Open recording cannot fall back to another spell: "+id)
-            check(record.perspectives.size()==2,"Both independently recorded factions are selectable: "+id)
-        check(scenario.coverage.native_render=="not_assessed_by_this_catalog","Recorded facts do not claim rendered qualification: "+id)
-    # Recorded lifecycles without native effect authoring (studio_spell_batch_checks
-    # asserts that flag); they are openable studies, not rendered qualification.
+        var key:String="spell:spell."+id
+        check(current.by_key.has(key),"Native recording retains the actual current spell capability: "+id)
+        if not current.by_key.has(key):continue
+        var capability:Dictionary=current.by_key[key]
+        var sequences:Array=capability.cases.filter(func(row):return "spell."+id in row.subjects.get("spell",[]) and row.ready)
+        check(not sequences.is_empty(),"Each previously selected spell retains an openable real current study: "+id)
+        var identities:Dictionary={}
+        for record in sequences:
+            check(not identities.has(record.id),"Real study identity appears once for its exact capability: "+id)
+            identities[record.id]=true
+            check(record.perspectives.size()==2,"Both independently recorded factions remain selectable: "+id)
+            for view in record.perspectives:
+                var packet:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(view.journal.path_join("0000000000000000.json")))
+                check(packet.protocol.player_schema_version==16,"Study uses an original schema16 initialization: "+id+" / "+view.id)
+        check(capability.scenario_status=="recorded","Real current spell study reports its scenario coverage: "+id)
+        if capability.cases.all(func(row):return row.get("presentation",{}).is_empty()):
+            check(capability.presentation_status=="not_assessed","A recording without render evidence cannot fabricate presentation coverage: "+id)
     for id in ["aid","bless","false_life","sacred_flame"]:
-        check(index.has("spell."+id),"Formerly deferred spell remains in the capability denominator: "+id)
-        var recorded:Array=index.get("spell."+id,{}).get("scenarios",[]).filter(func(row):return row.id=="native-spell-"+id)
-        check(recorded.size()==1 and recorded[0].recordings.size()==1 and recorded[0].recordings[0].available,"Formerly deferred spell has exactly one openable lifecycle study: "+id)
+        var capability:Dictionary=current.by_key.get("spell:spell."+id,{})
+        check(not capability.is_empty() and capability.scenario_status=="recorded","Formerly deferred spell remains recorded and discoverable: "+id)
+        check(capability.approval_status=="rejected","An available real recording cannot approve rejected spell art: "+id)
     var expected_fields={}
     for id in ["action.move","action.jump"]:
         for requirement in index[id].requirements:
@@ -78,7 +85,7 @@ func run()->void:
         check(selected.filter(func(row):return row.media.role=="takeoff").size()==(2 if phase.from==0 else 0),"Takeoff belongs only to first disclosed jump edge")
         check(selected.filter(func(row):return row.media.role=="landing").size()==(2 if phase.to==1 else 0),"Landing belongs only to final disclosed jump edge")
         check(selected.filter(func(row):return row.media.role=="source_vfx").size()==2,"Flight expectation remains during each admitted airborne edge")
-    var journal=Recording.read("res://.runtime/studio-cases/dash-seed3/amber/journal")
+    var journal=Fixtures.read("dash")
     check(journal.ok,"Actual server Dash journal still admits after tooling changes")
     var missing=[]
     if journal.ok:

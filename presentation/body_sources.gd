@@ -5,22 +5,26 @@ extends RefCounted
 const Index=preload("res://presentation/resources/body_source_index.gd")
 const Layer=preload("res://presentation/resources/body_source_layer.gd")
 const Clip=preload("res://presentation/resources/body_source_clip.gd")
+const Metadata=preload("res://presentation/source_metadata.gd")
 const INDEX="res://build/presentation/characters/body-sources/index.res"
 const KEY="__body_source_admission"
 static var _current:Index
 static var _current_path:String=""
 static var _attempted:bool=false
 static var _admission_mutex:Mutex=Mutex.new()
+# One physical metadata owner per admitted index. Worker cache shells borrow
+# these exact Resources; ending a short-lived preparation cannot unload them.
+static var _sources:Dictionary={}
 
 static func invalidate()->void:
     _admission_mutex.lock()
-    _current=null;_current_path="";_attempted=false
+    _current=null;_current_path="";_attempted=false;_sources={}
     _admission_mutex.unlock()
 
 static func _current_index(path:String)->Index:
     _admission_mutex.lock()
     if not _attempted or path!=_current_path:
-        _current=ResourceLoader.load(path,"",ResourceLoader.CACHE_MODE_REUSE) as Index if FileAccess.file_exists(path) else null
+        _current=Metadata.read(path,ResourceLoader.CACHE_MODE_IGNORE) as Index if FileAccess.file_exists(path) else null
         if _current==null:push_error("No built characters body sources at "+path+": run tools/build_presentation.gd -- --only=characters")
         _current_path=path;_attempted=true
     var result:Index=_current
@@ -69,21 +73,32 @@ static func _load(path:String,cache:Dictionary,kind:String)->Resource:
             var field:String=kind+"_cache_hits"
             admission_metrics[field]=int(admission_metrics.get(field,0))+1
         return current.loaded[path]
-    # Revision-specific paths are immutable. Share this physical metadata owner;
-    # no scene, Texture2D or mutable occurrence dependency is present here.
+    # Serialize cold admission, not preparation/sampling. Loaded metadata has
+    # one physical lifetime for this index, independent of any worker snapshot.
     var started:int=Time.get_ticks_usec() if measured else 0
-    var resource=ResourceLoader.load(path,"",ResourceLoader.CACHE_MODE_REUSE)
+    _admission_mutex.lock()
+    if not _sources.has(current.index):_sources[current.index]={}
+    var physical:Dictionary=_sources[current.index]
+    var resource:Resource=physical.get(path)
+    var physical_hit:bool=resource!=null
+    var read_profile:Dictionary={"measured":true} if measured else {}
+    if resource==null:
+        resource=Metadata.read(path,ResourceLoader.CACHE_MODE_IGNORE,read_profile)
+        if resource!=null:physical[path]=resource
+    _admission_mutex.unlock()
     if measured:
-        # Native CACHE_REUSE may return a previously loaded Resource or wait
-        # for another loader. This measures that call, not disk-cold I/O.
+        # Separate source decoding from OS thread startup/collection. The outer
+        # time also includes waiting for the one physical admission owner.
         var elapsed:int=Time.get_ticks_usec()-started
         var metrics:Dictionary=cache.__actor_source_profile
-        var prefix:String=kind+"_resource_load_"
+        var prefix:String=kind+("_physical_cache_" if physical_hit else "_resource_load_")
         metrics[prefix+"calls"]=int(metrics.get(prefix+"calls",0))+1
         metrics[prefix+"usec"]=int(metrics.get(prefix+"usec",0))+elapsed
         if not metrics.has(prefix+"paths"):metrics[prefix+"paths"]={}
         var row:Dictionary=metrics[prefix+"paths"].get(path,{"calls":0,"usec":0})
         row.calls+=1;row.usec+=elapsed
+        for field in ["native_read_usec","thread_start_usec","thread_total_usec"]:
+            if read_profile.has(field):row[field]=int(row.get(field,0))+read_profile[field]
         metrics[prefix+"paths"][path]=row
     if resource==null:return null
     var loaded:Dictionary=current.loaded.duplicate();loaded[path]=resource;loaded.make_read_only()

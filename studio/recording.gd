@@ -72,7 +72,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         if expression.search(filename) != null: files.append(filename)
     files.sort()
     if files.is_empty(): return {"ok":false,"error":"No SDK packets found in "+directory}
-    var result = {"ok":true,"directory":directory,"initialization":{},"groups":[],"rows":[],"duration_ms":0.0,"operations":0,"cache":{},"bytes":0,"compile_ms":0.0}
+    var result = {"ok":true,"directory":directory,"initialization":{},"groups":[],"rows":[],"duration_ms":0.0,"operations":0,"cache":{},"bytes":0,"compile_ms":0.0,"correspondence_candidates":{}}
     var read_profile={"decode_ms":0.0,"reduce_ms":0.0,"compile_ms":0.0,"index_ms":0.0,"packets":[]}
     result.cache=source_cache.duplicate()
     if not projection.is_empty():result.cache=projection.cache.duplicate()
@@ -103,6 +103,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         read_profile.decode_ms+=packet_profile.decode_ms
         if not decoded.ok: return decoded
         if int(decoded.value.cursor.sequence)!=sequence: return {"ok":false,"error":"Recording filename/cursor mismatch"}
+        result.correspondence_candidates.merge(ReplayComparison.packet_causes(decoded.value))
         var before: Dictionary = journal.state
         phase_started=Time.get_ticks_usec()
         var admitted = journal._consume_admitted(decoded.value,raw,true)
@@ -454,6 +455,8 @@ static func read_case(case_record: Dictionary, token: Dictionary={}) -> Dictiona
         result.views[perspective.id]=recorded
         if result.default_perspective_id.is_empty():result.default_perspective_id=perspective.id
     if result.views.is_empty():return {"ok":false,"error":"This capability has no recorded faction view yet"}
+    ReplayComparison.correspondence(result)
+    for view in result.views.values():_correspondence_rows(view)
     return result
 
 static func compare_case(bundle:Dictionary,token:Dictionary={})->Dictionary:
@@ -472,6 +475,9 @@ static func compare_case(bundle:Dictionary,token:Dictionary={})->Dictionary:
         var projected=read(bundle.views[id].directory,token,scheduled.views[id])
         if not projected.ok:return projected
         projected.perspective_id=id;projected.case_id=bundle.case_id
+        projected.correspondence=bundle.views[id].correspondence
+        projected.group_correspondence=bundle.views[id].group_correspondence
+        _correspondence_rows(projected)
         projected.comparison_mapping=scheduled.mappings[id]
         result.views[id]=projected
     result.comparison=true;result.schedule=scheduled.schedule;result.blocks=scheduled.blocks
@@ -512,6 +518,39 @@ static func _event_rows(index: Dictionary) -> Dictionary:
         if row.kind=="event":result[row.event.event_uuid]=row
     return result
 
+## Comparison metadata never replaces the seat's actual event/lineage fields.
+static func event_key(index:Dictionary,occurrence:String)->String:
+    if occurrence.is_empty():return ""
+    return ReplayComparison.event_key(index,str(index.get("perspective_id",index.directory)),occurrence)
+
+static func _group_key(index:Dictionary,id:String)->String:
+    return ReplayComparison.group_key(index,str(index.get("perspective_id",index.directory)),id)
+
+static func _clock_rows(index:Dictionary)->Dictionary:
+    var result:Dictionary={};var rows:Dictionary=_event_rows(index)
+    for occurrence in rows:result[event_key(index,str(occurrence))]=rows[occurrence]
+    return result
+
+static func _correspondence_rows(index:Dictionary)->void:
+    var by_id:Dictionary={}
+    for row in index.rows:by_id[row.id]=row
+    for row in index.rows:
+        var occurrence:String=_row_event(row)
+        var parent:String=row.parent
+        while occurrence.is_empty() and by_id.has(parent):
+            occurrence=_row_event(by_id[parent]);parent=by_id[parent].parent
+        row.correspondence_event_key=event_key(index,occurrence)
+        row.correspondence_view=str(index.perspective_id)
+        var causes:Array=[]
+        for cause in row.get("interval_causes",[]):
+            if str(cause).begins_with("event:"):causes.append("event:"+event_key(index,str(cause).trim_prefix("event:")))
+            elif str(cause).begins_with("track:"):causes.append("view:"+str(index.perspective_id)+":"+str(cause))
+            else:causes.append(cause)
+        row.correspondence_causes=causes
+
+static func _row_cause(row:Dictionary)->String:
+    return str(row.get("correspondence_event_key",_row_event(row)))
+
 static func _row_event(row: Dictionary) -> String:
     return str(row.get("event",{}).get("event_uuid",row.get("source_event_uuid",row.get("track",row.get("component",{})).get("source_event_uuid",row.get("owner",{}).get("condition",{}).get("event_uuid","")))))
 
@@ -520,7 +559,7 @@ static func navigation_anchor(index:Dictionary,at_ms:float,selected:Dictionary={
     # A collapsed (unseen) phase has no inverse timestamp. Preserve the causal
     # coordinate while the selected occurrence and displayed instant are held.
     if not previous.is_empty() and is_equal_approx(at_ms,previous.get("mapped_time_ms",-1.0)):
-        if key==previous.get("row_key","") or (not _row_event(selected).is_empty() and _row_event(selected)==previous.get("event_uuid","")):return previous.duplicate()
+        if key==previous.get("row_key","") or (not _row_cause(selected).is_empty() and _row_cause(selected)==previous.get("event_key","")):return previous.duplicate()
     var chosen=selected
     if chosen.is_empty() or at_ms<chosen.start_ms or at_ms>chosen.end_ms:
         chosen={}
@@ -538,11 +577,12 @@ static func navigation_anchor(index:Dictionary,at_ms:float,selected:Dictionary={
         if index.groups[n].group.id==group_id:group_position=n;break
     var boundaries=[]
     if group_position>=0:
-        for n in range(group_position,-1,-1):boundaries.append({"id":index.groups[n].group.id,"side":"start" if n==group_position else "end"})
-        for n in range(group_position+1,index.groups.size()):boundaries.append({"id":index.groups[n].group.id,"side":"start"})
+        for n in range(group_position,-1,-1):boundaries.append({"id":_group_key(index,str(index.groups[n].group.id)),"side":"start" if n==group_position else "end"})
+        for n in range(group_position+1,index.groups.size()):boundaries.append({"id":_group_key(index,str(index.groups[n].group.id)),"side":"start"})
     return {"row_key":key,"event_uuid":event_id,"phase":phase,"group_id":group_id,"boundaries":boundaries,
+        "event_key":_row_cause(chosen),
         "condition_uuid":chosen.get("owner",{}).get("id",""),"row_kind":chosen.get("source_kind",chosen.get("kind","")),
-        "interval_causes":chosen.get("interval_causes",[]),
+        "interval_causes":chosen.get("correspondence_causes",chosen.get("interval_causes",[])),
         "source_time_ms":at_ms,"mapped_time_ms":at_ms}
 
 static func anchor_time(index:Dictionary,anchor:Dictionary) -> float:
@@ -551,7 +591,7 @@ static func anchor_time(index:Dictionary,anchor:Dictionary) -> float:
         if not row.get("visible_here",true) or row.kind=="perspective":continue
         if _row_key(row)==anchor.row_key:
             return lerpf(row.start_ms,row.end_ms,anchor.phase)
-    var events=_event_rows(index)
+    var events=_clock_rows(index)
     # An absent span is not another span with the same material/layer name.
     # A shared recorded cause can still locate its actual commit boundary.
     for cause in anchor.get("interval_causes",[]):
@@ -562,11 +602,11 @@ static func anchor_time(index:Dictionary,anchor:Dictionary) -> float:
         for row in index.rows:
             if row.get("visible_here",true) and row.kind==anchor.row_kind and row.get("owner",{}).get("id")==anchor.condition_uuid:
                 return lerpf(row.start_ms,row.end_ms,anchor.phase)
-    if events.has(anchor.event_uuid):
-        var event:Dictionary=events[anchor.event_uuid]
+    if events.has(anchor.get("event_key","")):
+        var event:Dictionary=events[anchor.event_key]
         return lerpf(event.start_ms,event.end_ms,anchor.phase)
     var groups={}
-    for item in index.groups:groups[item.group.id]=item
+    for item in index.groups:groups[_group_key(index,str(item.group.id))]=item
     for boundary in anchor.boundaries:
         if groups.has(boundary.id):
             var item:Dictionary=groups[boundary.id]
@@ -582,29 +622,30 @@ static func switch_time(source: Dictionary, target: Dictionary, at_ms: float, se
     # assuming identical elapsed seconds represent the same cause.
     if not anchor.is_empty():return anchor_time(target,anchor)
     if not selected.is_empty():return anchor_time(target,navigation_anchor(source,at_ms,selected))
-    var source_events=_event_rows(source)
-    var target_events=_event_rows(target)
+    var source_events=_clock_rows(source)
+    var target_events=_clock_rows(target)
     var chosen:Dictionary={}
-    var selected_event=_row_event(selected)
+    var selected_event=_row_cause(selected)
     if source_events.has(selected_event) and target_events.has(selected_event):
         var event:Dictionary=source_events[selected_event]
         if at_ms>=event.start_ms and at_ms<=event.end_ms:chosen=event
     if chosen.is_empty():
         for event in source_events.values():
-            if not target_events.has(event.event.event_uuid):continue
+            if not target_events.has(_row_cause(event)):continue
             if event.end_ms<=event.start_ms or at_ms<event.start_ms or at_ms>=event.end_ms:continue
             if chosen.is_empty() or event.end_ms-event.start_ms<chosen.end_ms-chosen.start_ms:chosen=event
     if not chosen.is_empty():
-        var destination:Dictionary=target_events[chosen.event.event_uuid]
+        var destination:Dictionary=target_events[_row_cause(chosen)]
         var duration:float=chosen.end_ms-chosen.start_ms
         var phase=clampf((at_ms-chosen.start_ms)/duration,0,1) if duration>0 else 0.0
         return lerpf(destination.start_ms,destination.end_ms,phase)
     var target_groups={}
-    for item in target.groups:target_groups[item.group.id]=item
+    for item in target.groups:target_groups[_group_key(target,str(item.group.id))]=item
     var previous:Dictionary={}
     for item in source.groups:
-        if not target_groups.has(item.group.id):continue
-        var destination:Dictionary=target_groups[item.group.id]
+        var key:String=_group_key(source,str(item.group.id))
+        if not target_groups.has(key):continue
+        var destination:Dictionary=target_groups[key]
         if at_ms>=item.start_ms:
             previous={"source":item,"target":destination}
         if item.group.duration_ms>0 and at_ms>=item.start_ms and at_ms<item.start_ms+item.group.duration_ms:
@@ -615,14 +656,14 @@ static func switch_time(source: Dictionary, target: Dictionary, at_ms: float, se
     return clampf(at_ms,0,target.get("presentation_end_ms",target.duration_ms))
 
 static func _row_key(row: Dictionary) -> String:
-    if row.kind=="event":return "event:"+row.event.event_uuid
+    if row.kind=="event":return "event:"+_row_cause(row)
     if row.has("owner"):
         return "condition:%s:%s:%s:%s:%s:%s"%[row.owner.id,row.kind,row.get("source",""),row.label,
-            row.get("condition_phase",""),JSON.stringify(row.get("interval_causes",[]))]
-    if row.kind=="condition_state":return "condition_state:"+row.parent+":"+JSON.stringify(row.get("interval_causes",[]))
-    if _row_event(row).is_empty():return "row:"+row.id.substr(row.id.find(":")+1)
+            row.get("condition_phase",""),JSON.stringify(row.get("correspondence_causes",row.get("interval_causes",[])))]
+    if row.kind=="condition_state":return "condition_state:"+str(row.get("correspondence_view",""))+":"+row.parent+":"+JSON.stringify(row.get("correspondence_causes",row.get("interval_causes",[])))
+    if _row_cause(row).is_empty():return "row:"+str(row.get("correspondence_view",""))+":"+row.id
     var data:Dictionary=row.get("track",row.get("component",{}))
-    return "%s:%s:%s:%s:%s:%s"%[_row_event(row),row.kind,row.get("source",""),row.label,data.get("actor_uuid",""),row.get("slot","")]
+    return "%s:%s:%s:%s:%s:%s"%[_row_cause(row),row.kind,row.get("source",""),row.label,data.get("actor_uuid",""),row.get("slot","")]
 
 static func view_index(bundle: Dictionary, perspective_id: String) -> Dictionary:
     if not bundle.views.has(perspective_id):return {"ok":false,"error":"Unknown recorded faction: "+perspective_id}
@@ -633,7 +674,7 @@ static func view_index(bundle: Dictionary, perspective_id: String) -> Dictionary
     result.perspectives=bundle.perspectives
     result.clock_events=_event_rows(original)
     var keys={}
-    var selected_events=_event_rows(original)
+    var selected_events=_clock_rows(original)
     for row in original.rows:
         var shown:Dictionary=row.duplicate()
         shown.visible_here=true;shown.source_perspective=perspective_id
@@ -643,7 +684,7 @@ static func view_index(bundle: Dictionary, perspective_id: String) -> Dictionary
     for perspective in bundle.perspectives:
         if perspective.id==perspective_id:continue
         var other:Dictionary=bundle.views[perspective.id]
-        var other_events=_event_rows(other)
+        var other_events=_clock_rows(other)
         var by_id={}
         for source_row in other.rows:by_id[source_row.id]=source_row
         var id_map={}
@@ -679,7 +720,7 @@ static func view_index(bundle: Dictionary, perspective_id: String) -> Dictionary
             shown.source_row_key=_row_key(row)
             shown.source_interval={"start_ms":row.start_ms,"end_ms":row.end_ms}
             shown.label=row.label+" · "+perspective.label
-            var event_id=_row_event(row)
+            var event_id=_row_cause(row)
             var exact=selected_events.has(event_id) and other_events.has(event_id) and _same_clock(selected_events[event_id],other_events[event_id])
             if exact:
                 var shift:float=selected_events[event_id].start_ms-other_events[event_id].start_ms
@@ -699,14 +740,15 @@ static func _comparison_view_index(bundle:Dictionary,selected_id:String)->Dictio
     var result:Dictionary=bundle.views[selected_id].duplicate();result.rows=[]
     result.perspectives=bundle.perspectives;result.comparison=true
     result.clock_events=_event_rows(bundle.views[selected_id])
-    var events={};var signatures={};var owners={};var by_view={};var split={}
+    var events={};var signatures={};var owners={};var by_view={};var split={};var native_events={}
     for perspective in bundle.perspectives:
         var id:String=perspective.id;var view:Dictionary=bundle.views[id]
+        native_events[id]=_clock_rows(view)
         signatures[id]=_event_signatures(view);owners[id]=_row_owners(view);by_view[id]={}
         for row in view.rows:
             by_view[id][row.id]=row
             if row.kind!="event":continue
-            var uuid:String=row.event.event_uuid
+            var uuid:String=_row_cause(row)
             if not events.has(uuid) or (events[uuid].event.kind=="undisclosed" and row.event.kind!="undisclosed"):
                 var shown:Dictionary=row.duplicate();shown.id="comparison:event:"+uuid
                 shown.source_perspective=id;shown.source_row_id=row.id;shown.visible_here=true;events[uuid]=shown
@@ -720,13 +762,13 @@ static func _comparison_view_index(bundle:Dictionary,selected_id:String)->Dictio
         var row:Dictionary=events[uuid]
         var source:Dictionary=by_view[row.source_perspective]
         var parent:Dictionary=source.get(row.parent,{})
-        row.parent="comparison:event:"+parent.event.event_uuid if parent.get("kind")=="event" else ""
+        row.parent="comparison:event:"+_row_cause(parent) if parent.get("kind")=="event" else ""
         row.split_views=differs;result.rows.append(row)
     var mapped={};var shared={};var faction_rows={}
     for perspective in bundle.perspectives:
         var id:String=perspective.id;mapped[id]={}
         for row in bundle.views[id].rows:
-            if row.kind=="event":mapped[id][row.id]="comparison:event:"+row.event.event_uuid;continue
+            if row.kind=="event":mapped[id][row.id]="comparison:event:"+_row_cause(row);continue
             var uuid:String=owners[id].get(row.id,"")
             var differs:bool=split.get(uuid,true)
             var key:String=_row_key(row)
@@ -742,7 +784,7 @@ static func _comparison_view_index(bundle:Dictionary,selected_id:String)->Dictio
                 if not faction_rows.has(faction_id):
                     faction_rows[faction_id]={"id":faction_id,"parent":"comparison:event:"+uuid,"kind":"perspective","label":perspective.label,
                         "start_ms":events[uuid].start_ms,"end_ms":events[uuid].end_ms,"status":"state_only","source_perspective":id,
-                        "source_event_uuid":uuid,"visible_here":true,"disclosed":true,"comparison":true}
+                        "source_event_uuid":native_events[id].get(uuid,{}).get("event",{}).get("event_uuid",""),"correspondence_event_key":uuid,"visible_here":true,"disclosed":true,"comparison":true}
             result.rows.append(shown)
     for row in result.rows:
         if row.kind=="event":continue
@@ -760,7 +802,7 @@ static func _event_signatures(index:Dictionary)->Dictionary:
     for row in index.rows:by_id[row.id]=row
     for row in index.rows:
         if row.kind!="event":continue
-        result[row.event.event_uuid]={"kind":row.event.kind,"name":row.label,"perception":row.get("perception",{}),"components":[]}
+        result[_row_cause(row)]={"kind":row.event.kind,"name":row.label,"perception":row.get("perception",{}),"components":[]}
     for row in index.rows:
         if row.kind=="event":continue
         var parent:String=row.parent
@@ -769,7 +811,7 @@ static func _event_signatures(index:Dictionary)->Dictionary:
         var event:Dictionary=by_id[parent]
         # Only presentation/requirement differences split a shared event; local
         # sequence numbers, packet cursors and inspection row IDs do not.
-        result[event.event.event_uuid].components.append([row.kind,row.label,row.get("source",""),row.get("status",""),row.start_ms-event.start_ms,row.end_ms-row.start_ms])
+        result[_row_cause(event)].components.append([row.kind,row.label,row.get("source",""),row.get("status",""),row.start_ms-event.start_ms,row.end_ms-row.start_ms])
     return result
 
 static func _row_owners(index:Dictionary)->Dictionary:
@@ -779,18 +821,19 @@ static func _row_owners(index:Dictionary)->Dictionary:
         if row.kind=="event":continue
         var parent:String=row.parent
         while by_id.has(parent) and by_id[parent].kind!="event":parent=by_id[parent].parent
-        if by_id.has(parent):result[row.id]=by_id[parent].event.event_uuid
+        if by_id.has(parent):result[row.id]=_row_cause(by_id[parent])
     return result
 
 static func _split_views(index:Dictionary,bundle:Dictionary,selected_id:String)->void:
-    var signatures={}
-    for id in bundle.views:signatures[id]=_event_signatures(bundle.views[id])
+    var signatures={};var native_events={}
+    for id in bundle.views:
+        signatures[id]=_event_signatures(bundle.views[id]);native_events[id]=_clock_rows(bundle.views[id])
     var split_events={}
     var event_rows={}
     var additions=[]
     for row in index.rows:
         if row.kind!="event":continue
-        var event_id:String=row.event.event_uuid
+        var event_id:String=_row_cause(row)
         var first:Variant=null
         var differs=false
         for perspective in bundle.perspectives:
@@ -808,7 +851,7 @@ static func _split_views(index:Dictionary,bundle:Dictionary,selected_id:String)-
             additions.append({"id":row.id+":view:"+str(perspective.id),"parent":row.id,"kind":"perspective","label":label,
                 "start_ms":row.start_ms,"end_ms":row.end_ms,"status":"state_only","source_perspective":perspective.id,
                 "visible_here":perspective.id==selected_id,"perception":signature.get("perception",{}),
-                "source_event_uuid":event_id,"disclosed":disclosed,"reason":"Independent recorded view of this same occurrence"})
+                "source_event_uuid":native_events[perspective.id].get(event_id,{}).get("event",{}).get("event_uuid",""),"correspondence_event_key":event_id,"disclosed":disclosed,"reason":"Independent recorded view of this same disclosed cause"})
     for row in index.rows:
         if row.kind=="event" or not split_events.has(row.parent):continue
         row.parent=row.parent+":view:"+str(row.get("source_perspective",selected_id))

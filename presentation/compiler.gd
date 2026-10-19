@@ -164,9 +164,10 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
     if kind == "movement":
         if node.canceled: group.skipped.append({"occurrence":node.lineage_id,"kind":kind,"reason":"canceled_body"})
         var context = {"occurrence":node.lineage_id}
-        if fact.trajectory == "direct_arc" and not fact.path.is_empty():
+        var path:Array=fact.get("path",[])
+        if fact.trajectory == "direct_arc" and not path.is_empty():
             var motion = Authoring.load_data("catalog/movement_context.json",cache)
-            context = Tracks.jump_context(fact.path,motion,node.lineage_id)
+            context = Tracks.jump_context(path,motion,node.lineage_id)
         for child in children: finish = _schedule(child,finish,state,group,graph,cache,context)
     elif kind == "step":
         if fact.trajectory=="connector_transfer":

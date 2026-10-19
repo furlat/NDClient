@@ -1,0 +1,38 @@
+{
+ "ok": true,
+ "summary": {
+  "facts": {
+   "turn": 17,
+   "saving_throw": 4,
+   "actor_change": 14,
+   "spell": 3,
+   "action": 2
+  },
+  "behaviors": {
+   "spell.hold_person": 1,
+   "spell.hold_monster": 2,
+   "action.drop_concentration": 2
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.paralyzed",
+   "condition.spell.hold_monster",
+   "condition.spell.hold_person"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.paralyzed",
+   "condition.spell.hold_monster",
+   "condition.spell.hold_person"
+  ]
+ },
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 8,
+ "notes": []
+}

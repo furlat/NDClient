@@ -3,6 +3,7 @@ extends SceneTree
 ## resolved phase description supplies fade timing and occurrence construction.
 const Conditions=preload("res://presentation/conditions.gd")
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var cache:Dictionary={}
@@ -54,7 +55,7 @@ func phase_isolation(behavior:String)->void:
     check(Conditions.NativePersistent.lifecycle_state(first[0],.95).phase=="removal" and Conditions.NativePersistent.lifecycle_state(second[0],.4).phase=="sustain",behavior+" each owner's own clock selects its phase")
 
 func actual_shield()->void:
-    var index=Recording.read("res://.runtime/studio-spells-20261015/shield-seed3/blue/journal")
+    var index=Fixtures.read("shield","blue")
     check(index.ok,"Actual Blue Shield journal admits")
     if not index.ok:return
     var owners:Dictionary={}

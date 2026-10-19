@@ -1,4 +1,5 @@
 extends "res://tests/studio_replay_native_checks.gd"
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Unequal native Rolling durations must share the real reaction/landing cut.
 func run()->void:
     report_path="res://generated/studio_replay_late_reaction_native_checks.json"
@@ -6,8 +7,12 @@ func run()->void:
     DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://.captures/studio/replay-comparison"))
     var studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
     if not await settle(studio):await finish(studio);return
-    check(studio.active_directory=="res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal","Exact late lethal reaction recording loaded")
-    check(studio.case_bundle.views.size()==2,"Late lethal recording retains both independent body clocks")
+    var record:Dictionary=Fixtures.public_case("oa-jump-late-lethal")
+    studio.case_records.append(record)
+    studio.select_case(record)
+    if not await settle(studio):await finish(studio);return
+    check(studio.active_directory=="res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber","Exact late lethal reaction recording loaded")
+    check(studio.case_bundle.perspectives.size()==2,"Late lethal recording retains both independent original journals")
     verify_prefix(studio,"late lethal initial")
     await play_once(studio,"oa_jump_late_lethal-seed5-v2")
     await save_capture(studio,"late-lethal-end")

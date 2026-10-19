@@ -1,4 +1,6 @@
 extends "res://tests/native_2d_integration_checks.gd"
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+var selection_evidence:Dictionary={}
 # The user's recorded room and original idle/flame source frames, not a new
 # gameplay scenario. Only the paused visual clock advances after canonical drain.
 func run() -> void:
@@ -6,6 +8,9 @@ func run() -> void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,800)
     ProjectSettings.set_setting("source_data/encounter_cache_mib",0)
     var scene=Player.instantiate();scene.timeline.paused=true;root.add_child(scene)
+    var opened:Dictionary=scene.session.open_recording(Fixtures.journal("door"))
+    check(opened.get("ok",false),"Original schema16 door journal opens through the production session: "+str(opened))
+    if not opened.get("ok",false):await finish_local(scene);return
     var deadline=Time.get_ticks_msec()+240000
     while (not scene.session.recording_ready or not scene._media_ready({}) or scene.visual_actors.is_empty()) and scene.session.issue.is_empty() and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline:await process_frame
     check(scene.session.recording_ready and scene.media_initial_ready,"Actual user recording initializes through native media and world gates")
@@ -17,18 +22,21 @@ func run() -> void:
     scene.session.close();scene.hud.hide();scene.grid_visible=false
     var canonical=scene.timeline.state.duplicate(true)
     var trace=scene.timeline.trace.duplicate(true)
-    var actor_id=""
-    for id in scene.visual_actors:
-        if scene.visual_actors[id].row.position==[5,7]:actor_id=id;break
-    check(not actor_id.is_empty(),"Screenshot actor exists at actual recorded [5,7] contact")
+    var visual_origin_ms:float=scene.timeline.display_ms
+    check(not scene.fire_light_flicker and not scene.source_lighting.fire_light_flicker,"Static fire lighting is the current default")
+    # Discover the witness from actual disclosed contacts and actual authored
+    # flame samples. A retired screenshot coordinate is not a fixture identity.
+    # The independent old-policy control never changes the production sources.
+    var actor_id:String=await select_recorded_caster(scene,visual_origin_ms,deadline)
+    check(not actor_id.is_empty(),"Original door journal has an actual geometry caster under competing disclosed sources")
     if actor_id.is_empty():await finish_local(scene);return
+    scene.source_lighting.fire_light_flicker=false
     scene.camera_focus=scene.Placement.contact(scene.visual_actors[actor_id].row)
     scene.camera.size=6.0;scene.position_camera()
     DirAccess.make_dir_recursive_absolute("res://.captures/shadow-idle")
-    check(not scene.fire_light_flicker and not scene.source_lighting.fire_light_flicker,"Static fire lighting is the current default")
     var static_values=[]
     for frame in 16:
-        scene.timeline.display_ms=frame*100.0
+        scene.timeline.display_ms=visual_origin_ms+frame*100.0
         await scene.presentation_updated
         static_values.append(scene.source_lighting.sampled.duplicate(true))
     check(static_values.all(func(value):return value==static_values[0]),"Authored mean keeps receiving light position/brightness static across all16 flame frames")
@@ -41,7 +49,7 @@ func run() -> void:
         check(scene.quarter==quarter,"Quarter publishes before native shadow check")
         var stable={};var old={};var frames={};var energies={};var directions=[]
         for frame in 16:
-            scene.timeline.display_ms=frame*100.0
+            scene.timeline.display_ms=visual_origin_ms+frame*100.0
             await scene.presentation_updated
             await RenderingServer.frame_post_draw
             var diagnostics=scene.generated_shadows.diagnostics()
@@ -112,8 +120,52 @@ func run() -> void:
     check(scene.presentation_errors.is_empty() and scene.generated_shadows.issues.is_empty(),"No source/preparation/native shadow issues")
     receipts=all_rows
     await finish_local(scene)
+func select_recorded_caster(scene:Node,origin_ms:float,deadline:int)->String:
+    var candidates:Dictionary={}
+    var actual_sources:Array=[]
+    var fixed_sources:int=0
+    for source in scene.source_lighting.sources:
+        actual_sources.append({"id":source.item_uuid,"actor":source.actor_uuid,"position":str(source.position)})
+        if source.actor_uuid.is_empty():fixed_sources+=1
+    check(fixed_sources>0 and actual_sources.size()>1,"Original door journal discloses actual fixed flames and competing optical sources")
+    scene.source_lighting.fire_light_flicker=true
+    for quarter in 4:
+        scene.request_view(quarter)
+        while scene.rotation_pending() and Time.get_ticks_msec()<deadline:await scene.presentation_updated
+        for frame in 16:
+            scene.timeline.display_ms=origin_ms+frame*100.0
+            await scene.presentation_updated
+            var old_sources:Array=scene.source_lighting.canvas_sources().duplicate(true)
+            for light in old_sources:
+                light.erase("shadow_rank_position");light.erase("shadow_rank_energy")
+            var control=scene.GeneratedShadows.new()
+            control._cookie_images=scene.generated_shadows._cookie_images.duplicate()
+            var ready:bool=control._prepare_sources(old_sources)
+            for id in scene.visual_actors:
+                var actor:Dictionary=scene.visual_actors[id]
+                if not scene.generated_shadows.actors.has(id) or scene.generated_shadows._snapshots(actor.entries,scene.camera).is_empty():continue
+                if not candidates.has(id):candidates[id]={"position":actor.row.position.duplicate(),"quarters":{}}
+                if not candidates[id].quarters.has(quarter):candidates[id].quarters[quarter]={}
+                var selected:int=control._dominant(scene.camera.unproject_position(scene.Placement.contact(actor.row))) if ready else -1
+                var source:String=control._source_ids[selected] if selected>=0 else ""
+                candidates[id].quarters[quarter][source]=true
+            control.close()
+    var actor_id:String=""
+    var best:int=-1
+    var ids:Array=candidates.keys();ids.sort()
+    for id in ids:
+        var switches:int=0
+        for observed in candidates[id].quarters.values():
+            if observed.size()>1 and not observed.has(""):switches+=1
+        candidates[id]["switching_quarters"]=switches
+        if switches>best:best=switches;actor_id=id
+    selection_evidence={"recording":Fixtures.journal("door"),"sources":actual_sources,"candidates":candidates,"selected":actor_id}
+    # An absent reproducer stays an honest failure of the unchanged policy
+    # counterfactual below; never move an actor or manufacture a test light.
+    return actor_id
+
 func finish_local(scene:Node)->void:
-    var report={"checks":checks,"failures":failures,"frames":receipts,"scope":"Actual user recording canonical drain, stationary [5,7] actor, all4quarters/all16 authored flame frames; native shadow helper/source identity plus original-policy selection control; current colour/brightness/body frames remain animated."}
+    var report={"checks":checks,"failures":failures,"frames":receipts,"selection":selection_evidence,"scope":"Original schema16 door journal canonical drain, actual disclosed geometry caster selected by the independent source-switch control, all4quarters/all16 authored flame frames; native shadow helper/source identity plus original-policy selection control; current colour/brightness/body frames remain animated."}
     FileAccess.open("res://generated/shadow_idle_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SHADOW_IDLE_CHECKS ",JSON.stringify({"checks":checks,"failures":failures}))
     scene.queue_free();await process_frame;await process_frame;quit(0 if failures.is_empty() else 1)

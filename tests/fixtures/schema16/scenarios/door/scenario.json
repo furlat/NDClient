@@ -1,0 +1,116 @@
+{
+ "id": "interaction.door/entry",
+ "title": "Door: approach, open, cross into the room",
+ "kind": "interaction",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.move",
+   "action.environment.directional_door.open"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    6,
+    6
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "premade": "sorcerer",
+   "at": [
+    5,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.goblin",
+   "at": [
+    16,
+    6
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.goblin",
+   "at": [
+    18,
+    6
+   ]
+  }
+ ],
+ "battlefield": "battlefield.lantern_crypt",
+ "seed": 2,
+ "steps": [
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    7,
+    6
+   ]
+  },
+  {
+   "do": "action.environment.directional_door.open",
+   "by": "caster",
+   "target": {
+    "object": "Crypt passage"
+   }
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    10,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    11,
+    6
+   ]
+  },
+  {
+   "do": "action.environment.directional_door.open",
+   "by": "caster",
+   "target": {
+    "object": "Burial hall"
+   }
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    13,
+    6
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "action.environment.directional_door.open"
+ ],
+ "required_facts": [
+  "movement"
+ ]
+}

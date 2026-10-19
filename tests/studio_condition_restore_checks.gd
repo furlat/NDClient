@@ -1,6 +1,7 @@
 extends SceneTree
 ## Actual condition-removal facts -> explicit pose/material restoration inspection.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Conditions=preload("res://presentation/conditions.gd")
 const Pose=preload("res://presentation/condition_pose.gd")
 const Characters=preload("res://presentation/characters.gd")
@@ -26,10 +27,13 @@ func actual_pose(timeline:RefCounted,id:String,cache:Dictionary)->String:
     var rig_id=Characters.rig_id(actor,cache)
     var selected=Pose.select(actor,rig_id,"idle",cache)
     if not selected.is_empty():return selected.clip
-    return Characters.rest_sample(actor,cache["catalog/rigs.json"][rig_id],cache).value.clip
+    return Characters.rest_sample(actor,Characters.rigs(cache)[rig_id],cache).value.clip
 func run()->void:
-    for name in ["hide-seed3-v3","hide-light-schema9-seed3","dodge-seed3","invisibility-seed3-v2","rage-seed3-v3","condition_owners-seed4","condition_suppression-seed3-v2"]:
-        var index=Recording.read("res://.runtime/studio-cases/"+name+"/amber/journal")
+    # Active Antimagic suppression archives are retired by schema16. Actual
+    # concurrent Hold Person/Hold Monster owners preserve the no-premature-
+    # restoration requirement through supported overlapping rule ownership.
+    for name in ["hide","hide-light","dodge","invisibility","rage","condition-owners"]:
+        var index=Fixtures.read(name)
         check(index.ok,name+" actual journal admits")
         if not index.ok:continue
         var by_id={}
@@ -41,7 +45,7 @@ func run()->void:
             var removed:float=row.transition.condition_removed_ms
             var before=Recording.restore(index,maxf(0,removed-.001))
             var after=Recording.restore(index,row.start_ms)
-            check(by_id.has(row.parent) and by_id[row.parent].kind=="event" and by_id[row.parent].event.kind=="condition",label+" belongs to an actual condition occurrence")
+            check(by_id.has(row.parent) and by_id[row.parent].kind=="event" and by_id[row.parent].event.kind=="actor_change",label+" belongs to an actual condition occurrence")
             check(by_id[row.parent].markers.any(func(marker):return marker.kind=="commit" and is_equal_approx(marker.at_ms,removed)),label+" transition uses the actual removal commit")
             check(before.state.actors[row.actor_uuid].conditions.any(func(condition):return condition.condition_uuid==row.owner.id),label+" original owner exists before actual removal")
             check(not after.state.actors[row.actor_uuid].conditions.any(func(condition):return condition.condition_uuid==row.owner.id),label+" original owner is absent in authoritative after-state")

@@ -329,7 +329,7 @@ The user explicitly requires all work in the main client and a passing full
 suite regardless of when a failure arose. This supersedes private candidate
 publication/selected-only stopping rules above.
 
-- [ ] Consolidate committed implementation and check every secondary worktree for
+- [x] Consolidate committed implementation and check every secondary worktree for
   unique work. Keep one active branch, `codex-authoring-schemabump`, in
   `C:/Users/tommaso/Documents/Dev/NDClientGodot`. Preserve historical evidence;
   never blindly reintroduce obsolete APIs from an older branch.
@@ -351,3 +351,34 @@ consolidation, common production/Studio blockers and final serialized validation
 Initial evidence is the113-test fast run with57 failures; pre-existing status
 is not an exemption. Gate: zero failing executable tests, script/resource/engine
 errors, and working normal player/Studio smoke tests on the single main branch.
+
+20 October repair progress: consolidation committed at `7ef2f3f8`; one local
+branch and main checkout remain active. Authentic schema16 fixtures and independent
+SDK/pre-cache oracles replace retired wire assumptions. Native wall/source and
+private callback ownership defects are repaired. Shared passive metadata admission
+passes24 concurrent cold tasks and immutable fixed-path reload checks; no pool
+child wait, GPU readback or runtime validation is added. The full executable
+inventory is not yet qualified; final fast/native/live receipts and the deferred
+two-error Factory actor-history gate belong in
+[the current repair ledger](MAIN_CLIENT_SUITE_REPAIR_2026-10-20.md).
+
+## Parallel completion lanes — user direction,20 October
+
+After consolidation, keep functional integration moving independently of suite
+repair. Root owns shared production providers and integration; one worker owns
+compatible typed Factory bindings/per-ID gaps; one worker owns genuine original
+server scenarios/capability coverage. A bounded reviewer checks plan adherence,
+anti-slop/correctness and ownership at cohort boundaries. All edit disjoint files
+in the single main checkout/branch; root commits coherent checkpoints. No external
+chat or extra branch is necessary. Native GPU runs remain serialized.
+
+Next shared producer: actual committed-damage outcomes through the existing
+`ApplicationResults`→finite constructor/component/Studio path. Preserve actual
+source/recipient, positive applied amount/type and native occurrence/lineage;
+use declared damage-type filters and actual ancestry. For the finite divine
+consumer's opaque `damage_component_uuid`, the disclosed applied-result occurrence
+string is its exact identity, just as existing `event_uuid` uses native occurrence
+strings. This does not expose a new wire UUID or qualify passive/rider attribution.
+Gate: original two-seat damage recordings, canceled/request/zero/foreign-source
+controls, unchanged canonical rows, exact constructor operands and native source
+consumer when its legal case is available. No new scheduler or runtime validator.

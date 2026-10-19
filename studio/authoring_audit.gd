@@ -3,6 +3,8 @@ extends RefCounted
 ## declared source slots, never against the set of animations we can draw today.
 const Authoring=preload("res://presentation/authoring.gd")
 const Requirements=preload("res://presentation/requirements.gd")
+const Library=preload("res://studio/case_library.gd")
+const SourceRoot=preload("res://presentation/source/source_root.gd")
 const SNAPSHOT="res://generated/studio_content_catalog.json"
 
 static func _pointer(key:String)->String:
@@ -95,6 +97,9 @@ static func _owners(entries:Array,path:String,family:String,cache:Dictionary,sub
 
 static func build(cache:Dictionary={})->Dictionary:
     var entries:Array=[]
+    var abilities:SourceRoot=load(Library.ABILITIES)
+    var declared:Dictionary=Library.declared(abilities)
+    var coverage:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Library.COVERAGE)).get("coverage",{})
     var index=_read("catalog-index.json",cache)
     var conditions=_read("catalog/condition_recipes.json",cache)
     var snapshot:Dictionary={}
@@ -125,6 +130,12 @@ static func build(cache:Dictionary={})->Dictionary:
         if kind=="condition" and conditions.has(id):continue # detailed lifecycle inventory owns these
         var entry={"id":id,"label":definition.get("label",id),"group":"Spells" if kind=="spell" else ("Conditions" if kind=="condition" else "Actions"),
             "source":"","definition_ref":definition.get("definition_ref",{}),"requirements":[]}
+        var selected_source:String=declared.get(kind,{}).get(id,{}).get("source_path","")
+        var selected_status:String=coverage.get(kind,{}).get(id,"")
+        if selected_status in ["stand_in","partial","missing"]:
+            _require(entry,"Authored source needs review: "+selected_status,selected_source+"::status","authoring_review",
+                "The typed source explicitly declares "+selected_status+". Its current body/effect assignments remain inspectable, not visually accepted.",
+                "Review and complete this existing typed source; a stand-in is not an absent draft or approved art.")
         if kind=="condition":
             entry.source="catalog/condition_recipes.json:/"+_pointer(id)
             _require(entry,"No condition presentation decision",entry.source,"authoring_review",
@@ -140,7 +151,7 @@ static func build(cache:Dictionary={})->Dictionary:
                     "This backend spell has no selected draft at this path. A delegated reaction/child effect may own its presentation.",
                     "Add its draft or explicitly connect the existing presentation owner, including any state-only decision.")
             else:
-                if not drafts.has(id) and not drafts.has(spell_id):
+                if selected_source.is_empty() and not drafts.has(id) and not drafts.has(spell_id):
                     _require(entry,"Draft is not indexed","catalog-index.json:/drafts/"+_pointer(id),"authoring_assignment","The file exists but the authoring index does not select it.","Add the existing draft path to the authoring index.")
                 if recipe.get("cast",{}).is_empty():_require(entry,"No cast assignment",path+":/cast","authoring_review","The draft contains no casting presentation decision.","Select the cast presentation or document its actual reaction/child owner.")
                 _recipe(entry,recipe,path+":",cache)
@@ -159,6 +170,12 @@ static func build(cache:Dictionary={})->Dictionary:
                     "The backend action has no direct recipe or selected source recipe. Its children may have their own presentations.",
                     "Assign the action's presentation or explicitly declare its child/state-only behavior.")
         entries.append(entry)
+    var characters:SourceRoot=load("res://authoring/characters.tres")
+    for section in [["rigs","rig"],["characters","creature_rig"]]:
+        for id in characters.sections.get(section[0],{}):
+            var source:String=characters.sections[section[0]][id]
+            var owner:Dictionary=Requirements.owner(section[1],id,source,{})
+            entries.append({"id":section[1]+":"+id,"label":owner.label,"group":"Presentation owners · "+section[1].replace("_"," "),"source":source,"requirements":[owner]})
     # Existing context/world owners expose source slots even when no recording
     # has exercised them. Do not inventory sprite rigs or media storage twice.
     for key in index:

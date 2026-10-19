@@ -1,0 +1,62 @@
+{
+ "id": "test.dash",
+ "title": "Dash",
+ "kind": "interaction",
+ "seed": 3,
+ "subjects": {
+  "spell": [],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.dash",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "end_turn",
+   "by": "target"
+  }
+ ],
+ "required_behaviors": [
+  "action.dash",
+  "action.move"
+ ],
+ "required_facts": [
+  "attack",
+  "damage"
+ ]
+}

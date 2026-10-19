@@ -12,7 +12,7 @@ func check(value:bool,label:String)->void:
     if not value:failures.append(label);printerr(label)
 func _initialize()->void:run.call_deferred()
 func run()->void:
-    var path="res://.runtime/gallery-sorcerer-20261015-seed3-door/choices-00.json"
+    var path="res://tests/fixtures/schema16/scenarios/gallery/choices.json"
     var choices:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(path))
     var immutable=choices.duplicate(true)
     var world=World.new();var renderer=ChoiceResources.new()
@@ -30,13 +30,11 @@ func run()->void:
     check(not "native_spells" in renderer and not "native_hits" in renderer,"Capability warming owns no renderer, recipient or event instances")
     check(not renderer.choice_preparation.ready and renderer.choice_preparation.pending>0,"Unstarted optional resource work reports pending without claiming ready")
     check(choices==immutable,"Admitted choices remain byte-value equivalent after worker preparation")
-    var index:Dictionary=Catalog.read_file("native_effects/index.json",world.catalog_cache)
     var expected:Dictionary={}
     var behaviors:Dictionary={}
     for action in Choices.all_actions(choices):behaviors[action.behavior_id]=true
     # The package clips the disclosed spells' staged cues play.
     for behavior in behaviors:
-        if not index.spells.has(behavior):continue
         for clip in NativeAuthoring.effect_clips(NativeAuthoring.selection(behavior,world.catalog_cache)):expected[clip.id]=true
     var actual:Dictionary={}
     for clip in job.clips:actual[clip.id]=true

@@ -1,6 +1,7 @@
 extends SceneTree
 ## Actual journal rows and timeline input; transport restores are a separate owner.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Timeline=preload("res://studio/timeline_view.gd")
 var checks=0
 var failures:Array=[]
@@ -18,7 +19,7 @@ func motion(view:Control,at:Vector2)->void:
     var event=InputEventMouseMotion.new();event.position=at;event.button_mask=MOUSE_BUTTON_MASK_LEFT
     view._gui_input(event)
 func run()->void:
-    var index=Recording.read("res://.runtime/studio-cases/dash-seed3/amber/journal")
+    var index=Fixtures.read("dash")
     check(index.ok,"Actual server recording indexes")
     if not index.ok:finish();return
     var view=Timeline.new();view.size=Vector2(1280,540);view.thumbnails.suspended=true;root.add_child(view);view.set_index(index)
@@ -52,10 +53,11 @@ func run()->void:
     check(scrubs.size()==count and not view.drag_playhead and not view.drag_gutter,"Divider dragging does not enter scrubbing")
     var body:Dictionary=index.rows.filter(func(row):return row.kind=="body" and row.end_ms>row.start_ms)[0]
     view.reveal(body.id)
-    var y=view.RULER-view.scroll_y
-    for item in view.rows:
-        if item.row.id==body.id:break
-        y+=view._height(item.row)
+    view.prepare_visible()
+    var displayed:Array=view.published_layout.visible_rows.filter(func(item):return item.row.id==body.id)
+    check(displayed.size()==1,"Selected body label is in the actual published timeline geometry")
+    if displayed.is_empty():view.queue_free();await process_frame;finish();return
+    var y:float=displayed[0].y
     button(view,Vector2(view.gutter-20,y+20),true);button(view,Vector2(view.gutter-20,y+20),false)
     check(clips==[body.id] and scrubs.size()==count,"Clicking an actual animation label still selects and plays that clip")
     view.playhead_ms=end

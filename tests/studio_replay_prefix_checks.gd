@@ -2,6 +2,7 @@ extends SceneTree
 ## Both independent replay reducers publish every due real-journal prefix at one
 ## common clock. Readiness holds must publish neither clock, trace nor state.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Timeline=preload("res://presentation/timeline.gd")
 var checks=0
 var failures:Array=[]
@@ -26,9 +27,8 @@ func observable(timeline:RefCounted)->Dictionary:
         "crossed_audio":timeline.crossed_audio,
         "trace":timeline.trace.duplicate(true)}
 func read_case(name:String)->Dictionary:
-    var record={"id":name,"perspectives":[]}
-    for id in ["amber","blue"]:record.perspectives.append({"id":id,"label":id.capitalize(),"journal":"res://.runtime/studio-cases/"+name+"/"+id+"/journal"})
-    return Recording.compare_case(Recording.read_case(record))
+    return Recording.compare_case(Recording.read_case(Fixtures.case_record(name)))
+
 func points(bundle:Dictionary)->Array:
     var times={0.0:true,bundle.presentation_end_ms:true}
     for cut in bundle.schedule:
@@ -52,10 +52,10 @@ func verify_prefix(actual:RefCounted,index:Dictionary,time:float,label:String)->
     for field in a:
         check(a[field]==b[field],label+": exact common-cut "+field)
 func run()->void:
-    for name in ["hide-seed3-v3","invisibility-seed3-v2","oa_jump-seed3-v2","oa_jump_lethal-seed5-v2","oa_jump_late_lethal-seed5-v2"]:
+    for name in ["hide","invisibility","oa-jump","oa-jump-lethal","oa-jump-late-lethal"]:
         var bundle=read_case(name)
-        check(bundle.ok and bundle.comparison,name+": actual independent recordings and shared causal schedule")
-        if not bundle.ok or not bundle.comparison:continue
+        check(bundle.ok and bundle.get("comparison",false),name+": actual independent recordings and shared causal schedule: "+str(bundle.get("error","")))
+        if not bundle.ok or not bundle.get("comparison",false):continue
         var actors={};var max_segments=0;var zero_groups=0;var prepared_worlds=0
         for id in bundle.views:
             actors[id]=fresh(bundle.views[id])
@@ -104,7 +104,8 @@ func run()->void:
             check(jump.replay_prepare(plan) and jump.replay_publish(plan),name+" "+id+": multi-group jump publishes atomically")
             verify_prefix(jump,bundle.views[id],bundle.presentation_end_ms,name+" "+id+" terminal jump")
         evidence.append({"case":name,"common_cuts":times.size(),"zero_duration_groups":zero_groups,"max_groups_in_cut":max_segments,"world_candidates":prepared_worlds})
-    var bundle=read_case("hide-seed3-v3")
+    var bundle=read_case("hide")
+    if not bundle.ok or not bundle.get("comparison",false):finish();return
     var timeline=fresh(bundle.views.amber)
     var plan=timeline.replay_plan(bundle.presentation_end_ms)
     var calls={"live":0}
@@ -120,6 +121,8 @@ func run()->void:
     check(timeline.replay_prepare(plan),"Canceled plan can be explicitly prepared again while its prefix is current")
     timeline.accept(bundle.views.amber.initialization.duplicate(true))
     check(not timeline.replay_plan_current(plan) and not timeline.replay_publish(plan),"New initialization invalidates old prepared replay prefix")
+    finish()
+func finish()->void:
     var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Headless actual-journal paired cumulative planning, readiness holds and exact Recording.restore prefix parity; native host/media closure integration is separate."}
     FileAccess.open("res://generated/studio_replay_prefix_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_REPLAY_PREFIX ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

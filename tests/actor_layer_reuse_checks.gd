@@ -23,9 +23,9 @@ func descriptors(host:Probe)->Dictionary:
                 "cell":entry.cell,"pivot":entry.pivot,"scale":entry.scale,"shader":entry.material.shader})
     return result
 func run()->void:
-    var descriptor:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_gallery_spell_case.json"))
-    var bundle:Dictionary=Recording.compare_case(Recording.read_case(descriptor))
-    check(bundle.get("ok",false),"Actual spell recording admits")
+    var descriptor:Dictionary=Fixtures.case_record("gallery")
+    var bundle:Dictionary=Recording.read_case(descriptor)
+    check(bundle.get("ok",false),"Actual spell recording admits: "+str(bundle.get("error","")))
     if not bundle.get("ok",false):quit(1);return
     var index:Dictionary=Recording.view_index(bundle,"amber")
     var host=host_for(index);var reference=reference_for(index)
@@ -102,15 +102,18 @@ func run()->void:
     host.timeline.revision+=1;host._sync_source_lighting()
     check(lighting.syncs==before,"Actor-only revision preserves exact observed emitter owner")
     var state:Dictionary=host.timeline.state
-    if state.senses.get("light_sources",{}).size()>0:
-        var id=state.senses.light_sources.keys()[0]
-        state.senses.light_sources[id].bright_radius_feet+=5
+    if state.get("light_sources",{}).size()>0:
+        state.light_sources=state.light_sources.duplicate(true)
+        var id=state.light_sources.keys()[0]
+        state.light_sources[id].bright_radius_feet+=5
         host.timeline.revision+=1;host._sync_source_lighting()
-        check(lighting.syncs==before+1,"Changed optical value refreshes even an in-place fixture edit")
-    state.senses.erase("light_sources")
+        check(lighting.syncs==before+1,"Published replacement optical membership refreshes the retained receiving owner")
+    # Schema16 explicitly discloses empty optical membership; absence is not a
+    # valid request to revive legacy inferred lights.
+    state.light_sources={}
     host.timeline.revision+=1;host._sync_source_lighting();before=lighting.syncs
     host.timeline.revision+=1;host._sync_source_lighting()
-    check(lighting.syncs==before+1,"Legacy light inference preserves its existing revision refresh")
+    check(lighting.syncs==before,"Unchanged explicit empty optical membership preserves its owner across actor revisions")
     host.queue_free();reference.queue_free();await process_frame;await process_frame
     var report={"checks":checks,"failures":failures,"retained_nodes":retained_nodes,"shifted_nodes":shifted_nodes,"retained_graphs":retained_graphs,"scope":"Actual recorded hand-layer boundaries versus full reconstruction, source paths/attachments/order/material identity, rotation/epoch, exact light-input invalidation; headless ownership checks, no framebuffer/performance claim."}
     FileAccess.open("res://.runtime/actor-layer-reuse-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

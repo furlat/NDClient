@@ -1,6 +1,7 @@
 extends SceneTree
 ## Exact recorded terminal cuts must drain without advancing beyond the clip.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -13,7 +14,7 @@ func fresh(index:Dictionary)->RefCounted:
     timeline.world_ready=func(_candidate):return true
     return timeline
 func run()->void:
-    var index=Recording.read("res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal")
+    var index=Fixtures.read("move")
     check(index.ok,"Actual diagonal Move journal admitted")
     if index.ok:
         var end=float(index.presentation_end_ms)

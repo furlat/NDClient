@@ -66,7 +66,11 @@ static func warm(layer:Dictionary)->bool:
             layer.warm=3
             return true
     layer.warm=step+1;layer.warm_pending=true
-    RenderingServer.frame_post_draw.connect(func():layer.warm_pending=false,CONNECT_ONE_SHOT)
+    var completed:Callable=func():
+        layer.erase("warm_callback")
+        layer.warm_pending=false
+    layer.warm_callback=completed
+    RenderingServer.frame_post_draw.connect(completed,CONNECT_ONE_SHOT)
     return false
 
 static var _clear:ImageTexture
@@ -106,6 +110,10 @@ static func colours(layer: Dictionary,profile: Dictionary,enabled: bool) -> void
 
 static func close(layer:Dictionary)->void:
     if layer.is_empty():return
+    var completed:Callable=layer.get("warm_callback",Callable())
+    if completed.is_valid() and RenderingServer.frame_post_draw.is_connected(completed):
+        RenderingServer.frame_post_draw.disconnect(completed)
+    layer.erase("warm_callback")
     detach(layer)
     if is_instance_valid(layer.get("canvas")):layer.canvas.free()
     if is_instance_valid(layer.get("viewport")):layer.viewport.free()

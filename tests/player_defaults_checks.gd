@@ -5,6 +5,7 @@ const Session = preload("res://presentation/session.gd")
 const Peer = preload("res://tests/sdk_transport_peer.gd")
 const Player = preload("res://play.gd")
 const Timeline = preload("res://presentation/timeline.gd")
+const Fixtures = preload("res://tests/recording_fixtures.gd")
 var failures: Array = []
 var checks = 0
 func check(value: bool, label: String) -> void:
@@ -58,7 +59,7 @@ func run() -> void:
     DirAccess.make_dir_recursive_absolute(retained)
     for pair in [["initialization","0000000000000000"],["operation","0000000000000001"]]:
         var file = FileAccess.open(retained.path_join(pair[1]+".json"),FileAccess.WRITE)
-        file.store_buffer(FileAccess.get_file_as_bytes("res://tests/fixtures/player/"+pair[0]+".json")); file.close()
+        file.store_buffer(FileAccess.get_file_as_bytes(Fixtures.journal("move").path_join(pair[1]+".json"))); file.close()
     var restored = Session.new()
     check(restored.journal.open(retained,true).ok,"Restore a real two-packet retained journal")
     restored.protocol = restored.journal.protocol

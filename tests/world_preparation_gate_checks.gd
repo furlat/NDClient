@@ -5,6 +5,7 @@ const Timeline = preload("res://presentation/timeline.gd")
 const Compiler = preload("res://presentation/compiler.gd")
 const Journal = preload("res://sdk/journal.gd")
 const Reducer = preload("res://sdk/reducer.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures=[]
 var cache={}
@@ -63,10 +64,13 @@ func drain(actual:RefCounted,reference:RefCounted,gate:Gate,label:String)->void:
     check(not actual.busy() and not reference.busy(),label+" both timelines drain without missing commits")
     check(not gate.mismatch,label+" identical pending candidate reused across arbitrary waits")
 func _initialize()->void:run.call_deferred()
+func run_recordings()->void:
+    for id in ["gallery","oa-walk","oa-jump","oa-jump-late-lethal"]:
+        var directory:String=Fixtures.journal(id)
+        var expected:int=int(Fixtures.case_record(id).get("packets",Array(DirAccess.get_files_at(directory)).filter(func(file):return file.ends_with(".json") and file.length()==21).size()))
+        run_recording(directory,id,expected)
 func run()->void:
-    run_recording("res://.runtime/gallery-route/journal","gallery",102)
-    for name in ["oa-walk-3","oa-jump-hit","oa-jump-late-lethal"]:
-        run_recording("C:/Users/tommaso/AppData/Local/Temp/ndclient-presentation-"+name+"/amber/journal",name,3)
+    run_recordings()
     named_boundaries()
     check(evidence.oa>0 and evidence.uncommitted_steps>0 and evidence.direct_arc>0 and evidence.life>0,"Authentic reaction, interrupted movement, jump and life-state facts covered")
     var report={"checks":checks,"failures":failures,"recordings":records,"approved_boundaries":boundaries,
@@ -101,7 +105,7 @@ func run_recording(directory:String,label:String,expected:int)->void:
             if not compiled.ok:break
             for lineage in packet.lineages:
                 for node in lineage.events:
-                    if node.fact==null:continue
+                    if node.get("fact")==null:continue
                     var fact:Dictionary=node.fact
                     if fact.kind=="attack" and fact.get("behavior_id")=="reaction.opportunity_attack":evidence.oa+=1
                     if fact.kind=="step" and not fact.committed:evidence.uncommitted_steps+=1

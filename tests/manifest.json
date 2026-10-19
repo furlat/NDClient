@@ -59,11 +59,11 @@
    "tier": "gate",
    "args": [
     "--recording",
-    "res://tests/fixtures/schema16/fire-bolt"
+    "res://tests/fixtures/schema16/scenarios/door/amber"
    ],
    "timeout": 300,
    "status": "ok",
-   "reason": "Requires an actual native Play recording and media preparation; uses current schema16 Fire Bolt bytes."
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "actor_material_payload_checks",
@@ -146,10 +146,13 @@
    "script": "res://tests/architectural_lighting_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "audio_contact_checks",
@@ -256,7 +259,9 @@
    "script": "res://tests/blood_kernel_cache_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--oracle=res://tests/oracles/blood_before_cache.gd"
+   ],
    "timeout": 300,
    "options": [
     "--candidate",
@@ -355,6 +360,16 @@
    ],
    "status": "owned-by-migration",
    "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+  },
+  {
+   "name": "body_source_reload_checks",
+   "script": "res://tests/body_source_reload_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Explicit immutable body metadata reload with old preview Resources alive; shared current-revision worker admission."
   },
   {
    "name": "camera_pan_checks",
@@ -664,10 +679,13 @@
    "script": "res://tests/creature_scene_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "creature_shadow_checks",
@@ -747,10 +765,13 @@
    "script": "res://tests/emitter_placement_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "encounter_media_checks",
@@ -929,22 +950,25 @@
   {
    "name": "fireball_layer_ownership_checks",
    "script": "res://tests/fireball_layer_ownership_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "gpu",
+   "tier": "gate",
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Exercises native frame publication, framebuffer or window input; run with Forward+/Vulkan, not a headless renderer."
   },
   {
    "name": "fixture_light_checks",
    "script": "res://tests/fixture_light_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "fixture_optical_facts_checks",
@@ -987,10 +1011,13 @@
    "script": "res://tests/global_publication_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "grid_alpha_checks",
@@ -1068,12 +1095,12 @@
   {
    "name": "ground_update_checks",
    "script": "res://tests/ground_update_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "gpu",
+   "tier": "gate",
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Exercises native frame publication, framebuffer or window input; run with Forward+/Vulkan, not a headless renderer."
   },
   {
    "name": "ground_visibility_checks",
@@ -1120,10 +1147,13 @@
    "script": "res://tests/history_view_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "hover_feedback_checks",
@@ -1419,10 +1449,35 @@
    "script": "res://tests/log_publication_timing_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "res://tests/fixtures/schema16/scenarios/gallery/amber",
+    "res://tests/fixtures/schema16/scenarios/melee/amber",
+    "res://tests/fixtures/schema16/scenarios/door/amber",
+    "res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber"
+   ],
    "timeout": 300,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "logical_pose_capture_checks",
+   "script": "res://tests/logical_pose_capture_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original schema16 Flesh to Stone application, held pose reconstruction and Greater Restoration; non-idle timing is a separate pure contract test."
+  },
+  {
+   "name": "logical_pose_render_checks",
+   "script": "res://tests/logical_pose_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Actual schema16 completed Flesh to Stone, native captured body material, four views and real Greater Restoration restoration."
   },
   {
    "name": "loot_live_checks",
@@ -1508,6 +1563,16 @@
    ],
    "status": "needs-args",
    "reason": "Usage: --state=<recorded canonical state.json> (argument not yet chosen)"
+  },
+  {
+   "name": "media_native_worker_checks",
+   "script": "res://tests/media_native_worker_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 30,
+   "status": "ok",
+   "reason": "Actual schema16 native Resource metadata: private Thread ownership, queued request order, completed and active close without stale task IDs."
   },
   {
    "name": "media_optional_selection_checks",
@@ -1656,10 +1721,13 @@
    "script": "res://tests/native_2d_integration_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "native_2d_source_checks",
@@ -1680,6 +1748,16 @@
    "timeout": 60,
    "status": "ok",
    "reason": "Real Factory class/action cue ownership and source attribution; no synthetic action outcomes or native drawing."
+  },
+  {
+   "name": "native_actor_context_render_checks",
+   "script": "res://tests/native_actor_context_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Merged main-client actor-history provider: actual Mirror output is a required gate. Installed c494 source shader defects remain failures until a complete repaired delivery arrives."
   },
   {
    "name": "native_application_constructor_checks",
@@ -1787,6 +1865,16 @@
    "timeout": 300,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "native_class_projection_checks",
+   "script": "res://tests/native_class_projection_checks.gd",
+   "mode": "headless",
+   "tier": "gate",
+   "args": [],
+   "timeout": 120,
+   "status": "ok",
+   "reason": "Requires current original Frenzy lifecycle, Preserve Life recipient and Second Wind healing cases from tools/studio_cases/record.py --only cohort. Actual two-seat declaration/application, self-heal, outcome and parent-gap gate; native drawing separate."
   },
   {
    "name": "native_colour_transfer_checks",
@@ -1916,10 +2004,13 @@
    "script": "res://tests/native_floor_lighting_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "native_ground_receiving_checks",
@@ -1930,6 +2021,16 @@
    "timeout": 600,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "native_immutable_preparation_checks",
+   "script": "res://tests/native_immutable_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 90,
+   "status": "ok",
+   "reason": "Delivered selective immutable resource bank through production EffectPackage; actual native construction, private clocks and changed-pose material-discovery contract. Not a gameplay/FPS benchmark."
   },
   {
    "name": "native_input_binding_checks",
@@ -1956,13 +2057,16 @@
    "script": "res://tests/native_light_cap_scene_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "options": [
     "--expect-carried-off"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "native_light_cookie_checks",
@@ -2050,7 +2154,9 @@
    "script": "res://tests/native_requirement_templates_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--oracle=res://tests/oracles/requirements_before_cache.gd"
+   ],
    "timeout": 300,
    "options": [
     "--oracle"
@@ -2370,13 +2476,16 @@
    "script": "res://tests/native_surface_receiving_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "options": [
     "--expect-carried-off"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "native_weapon_input_checks",
@@ -2555,10 +2664,13 @@
    "script": "res://tests/player_view_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "player_wait_checks",
@@ -2792,14 +2904,24 @@
    "reason": "takes --journal (argument not yet chosen)"
   },
   {
+   "name": "recording_fixtures",
+   "script": "res://tests/recording_fixtures.gd",
+   "mode": "none",
+   "tier": "none",
+   "args": [],
+   "timeout": 300,
+   "status": "helper",
+   "reason": "Original schema16 journal helpers; executed by consumer gates."
+  },
+  {
    "name": "replay_cast_owner_checks",
    "script": "res://tests/replay_cast_owner_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "gpu",
+   "tier": "gate",
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Requires actual native startup frame_post_draw witness; retains original source readiness checks."
   },
   {
    "name": "replay_media_demand_checks",
@@ -2874,10 +2996,13 @@
    "script": "res://tests/rotation_preparation_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "runtime_retention_checks",
@@ -3127,10 +3252,13 @@
    "script": "res://tests/scenery_render_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "scenery_state_checks",
@@ -3269,12 +3397,10 @@
    "script": "res://tests/schema16_spool_oracle_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [
-    "--oracle=res://.runtime/schema16-oracle/expected"
-   ],
+   "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": "Requires current frozen-engine capture from tools/schema16_spool_oracle.py; missing evidence fails rather than skipping."
+   "reason": "Exact frozen Python SDK canonical states for every original Door and late lethal OA record, both independently reduced factions; durable checked-in oracle."
   },
   {
    "name": "schema16_studio_replay_checks",
@@ -3626,12 +3752,12 @@
   {
    "name": "shadow_idle_checks",
    "script": "res://tests/shadow_idle_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "gpu",
+   "tier": "gate",
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Exercises native frame publication, framebuffer or window input; run with Forward+/Vulkan, not a headless renderer."
   },
   {
    "name": "shadow_preparation_checks",
@@ -3706,7 +3832,8 @@
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "",
+   "exclusive": true
   },
   {
    "name": "source_publication_progress_checks",
@@ -3995,12 +4122,12 @@
   {
    "name": "studio_library_navigation_checks",
    "script": "res://tests/studio_library_navigation_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "gpu",
+   "tier": "gate",
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Exercises native frame publication, framebuffer or window input; run with Forward+/Vulkan, not a headless renderer."
   },
   {
    "name": "studio_light_calibration_checks",
@@ -4153,12 +4280,14 @@
   {
    "name": "studio_render_preference_checks",
    "script": "res://tests/studio_render_preference_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
-   "args": [],
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/move/amber"
+   ],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Exercises native frame publication, framebuffer or window input; run with Forward+/Vulkan, not a headless renderer."
   },
   {
    "name": "studio_replay_comparison_checks",
@@ -4173,12 +4302,14 @@
   {
    "name": "studio_replay_late_reaction_native_checks",
    "script": "res://tests/studio_replay_late_reaction_native_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
-   "args": [],
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber"
+   ],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Exercises native frame publication, framebuffer or window input; run with Forward+/Vulkan, not a headless renderer."
   },
   {
    "name": "studio_replay_native_checks",
@@ -4681,7 +4812,10 @@
    "script": "res://tests/wall_compositing_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "options": [
     "--background-check",
@@ -4689,7 +4823,7 @@
     "--no-msaa"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "wall_corner_checks",
@@ -4708,12 +4842,12 @@
   {
    "name": "wall_fragment_checks",
    "script": "res://tests/wall_fragment_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "gpu",
+   "tier": "gate",
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": ""
+   "reason": "Exercises native frame publication, framebuffer or window input; run with Forward+/Vulkan, not a headless renderer."
   },
   {
    "name": "wall_geometry_delta_checks",
@@ -4743,10 +4877,13 @@
    "script": "res://tests/wall_mode_lifecycle_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "wall_preparation_checks",
@@ -4773,10 +4910,13 @@
    "script": "res://tests/wall_visibility_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "water_render_checks",
@@ -4787,6 +4927,66 @@
    "timeout": 600,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "weapon_effect_support",
+   "script": "res://tests/weapon_effect_support.gd",
+   "mode": "none",
+   "tier": "none",
+   "args": [],
+   "timeout": 1,
+   "status": "ok",
+   "reason": "Test-only typed source cache helper; no backend facts or production assignment."
+  },
+  {
+   "name": "wielded_weapon_effect_checks",
+   "script": "res://tests/wielded_weapon_effect_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Actual two-faction item admission, independent attached-use tracks/clocks, seek/loop and membership contracts."
+  },
+  {
+   "name": "wielded_weapon_effect_render_checks",
+   "script": "res://tests/wielded_weapon_effect_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Actual original modular weapon with two test-authored delivered coatings, framebuffer pixels and seek/loop; not an art acceptance or FPS claim."
+  },
+  {
+   "name": "wielded_weapon_impact_checks",
+   "script": "res://tests/wielded_weapon_impact_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Original two-faction weapon hit and event-owned impact; finite contact/source/hierarchy/seek and miss/cancellation boundaries."
+  },
+  {
+   "name": "wielded_weapon_impact_render_checks",
+   "script": "res://tests/wielded_weapon_impact_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Original weapon contact through native rendering; actual pixels, Studio witness, preserved source sheets and finite seek/loop."
+  },
+  {
+   "name": "wielded_weapon_sheet_checks",
+   "script": "res://tests/wielded_weapon_sheet_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Typed attached effects preserve modular weapon sheets and original item identities; no native weapon-body substitution."
   },
   {
    "name": "workshop_checks",
@@ -4846,10 +5046,13 @@
    "script": "res://tests/world_incremental_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "world_preparation_gate_checks",
@@ -4876,13 +5079,16 @@
    "script": "res://tests/world_preparation_render_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "options": [
     "--fixed-direct"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "world_preparation_sparse_checks",
@@ -4939,10 +5145,13 @@
    "script": "res://tests/world_view_cache_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/door/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Explicit original schema16 recorded Lantern Crypt through native Play; no implicit encounter fallback."
   },
   {
    "name": "zoom_checks",
@@ -4955,124 +5164,24 @@
    "reason": ""
   },
   {
-   "name": "media_native_worker_checks",
-   "script": "res://tests/media_native_worker_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
-   "args": [],
-   "timeout": 30,
-   "status": "ok",
-   "reason": "Actual schema16 native Resource metadata: private Thread ownership, queued request order, completed and active close without stale task IDs."
-  },
-  {
-   "name": "native_class_projection_checks",
-   "script": "res://tests/native_class_projection_checks.gd",
-   "mode": "headless",
-   "tier": "gate",
-   "args": [],
-   "timeout": 120,
-   "status": "ok",
-   "reason": "Requires current original Frenzy lifecycle, Preserve Life recipient and Second Wind healing cases from tools/studio_cases/record.py --only cohort. Actual two-seat declaration/application, self-heal, outcome and parent-gap gate; native drawing separate."
-  },
-  {
-   "name": "native_immutable_preparation_checks",
-   "script": "res://tests/native_immutable_preparation_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
-   "args": [],
-   "timeout": 90,
-   "status": "ok",
-   "reason": "Delivered selective immutable resource bank through production EffectPackage; actual native construction, private clocks and changed-pose material-discovery contract. Not a gameplay/FPS benchmark."
-  },
-  {
-   "name": "native_actor_context_render_checks",
-   "script": "res://tests/native_actor_context_render_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
-   "args": [],
-   "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "c494 serialized actor echo colour/depth shaders fail GPU compilation on preprocessor directives. 33 ownership checks pass; source output/parity, count loss and first-draw readiness remain unqualified. Candidate provider not published to receiving."
-  },
-  {
-   "name": "logical_pose_capture_checks",
-   "script": "res://tests/logical_pose_capture_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
-   "args": [],
-   "timeout": 300,
-   "status": "ok",
-   "reason": "Original schema16 Flesh to Stone application, held pose reconstruction and Greater Restoration; non-idle timing is a separate pure contract test."
-  },
-  {
-   "name": "logical_pose_render_checks",
-   "script": "res://tests/logical_pose_render_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
-   "args": [],
-   "timeout": 300,
-   "status": "ok",
-   "reason": "Actual schema16 completed Flesh to Stone, native captured body material, four views and real Greater Restoration restoration."
-  },
-  {
-   "name": "wielded_weapon_sheet_checks",
-   "script": "res://tests/wielded_weapon_sheet_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
-   "args": [],
-   "timeout": 180,
-   "status": "ok",
-   "reason": "Typed attached effects preserve modular weapon sheets and original item identities; no native weapon-body substitution."
-  },
-  {
-   "name": "weapon_effect_support",
-   "script": "res://tests/weapon_effect_support.gd",
+   "name": "built_body_records",
+   "script": "res://tests/built_body_records.gd",
    "mode": "none",
    "tier": "none",
    "args": [],
-   "timeout": 1,
-   "status": "ok",
-   "reason": "Test-only typed source cache helper; no backend facts or production assignment."
+   "timeout": 0,
+   "status": "helper",
+   "reason": "Independent typed-source test records helper."
   },
   {
-   "name": "wielded_weapon_effect_checks",
-   "script": "res://tests/wielded_weapon_effect_checks.gd",
+   "name": "characters_source_checks",
+   "script": "res://tests/characters_source_checks.gd",
    "mode": "headless",
    "tier": "fast",
    "args": [],
-   "timeout": 180,
+   "timeout": 300,
    "status": "ok",
-   "reason": "Actual two-faction item admission, independent attached-use tracks/clocks, seek/loop and membership contracts."
-  },
-  {
-   "name": "wielded_weapon_effect_render_checks",
-   "script": "res://tests/wielded_weapon_effect_render_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
-   "args": [],
-   "timeout": 180,
-   "status": "ok",
-   "reason": "Actual original modular weapon with two test-authored delivered coatings, framebuffer pixels and seek/loop; not an art acceptance or FPS claim."
-  },
-  {
-   "name": "wielded_weapon_impact_checks",
-   "script": "res://tests/wielded_weapon_impact_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
-   "args": [],
-   "timeout": 180,
-   "status": "ok",
-   "reason": "Original two-faction weapon hit and event-owned impact; finite contact/source/hierarchy/seek and miss/cancellation boundaries."
-  },
-  {
-   "name": "wielded_weapon_impact_render_checks",
-   "script": "res://tests/wielded_weapon_impact_render_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
-   "args": [],
-   "timeout": 180,
-   "status": "ok",
-   "reason": "Original weapon contact through native rendering; actual pixels, Studio witness, preserved source sheets and finite seek/loop."
+   "reason": "Complete current typed character, gear, palette and UI source closure."
   }
  ]
 }

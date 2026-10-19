@@ -85,6 +85,19 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
         else:
             missing.append("object:"+item.item_id)
             continue
+        if item.get("boundary_structure")!=null:
+            var structure:Dictionary=item.boundary_structure
+            # Source ownership chooses the registered artwork; disclosed
+            # structure owns wall eligibility and height independently of it.
+            if row.kind=="prop" and structure.structure in ["wall","retaining_wall","door","fence","cliff","embankment"]:
+                row.source_kind=row.kind
+                row.kind="cliff" if structure.structure in ["cliff","embankment"] else "wall"
+                row.material=structure.material
+                row.top_height_steps=place.top_height_steps
+            if structure.structure in ["cliff","embankment"]:
+                # The upper rim sorts at the disclosed top; contact stays at base.
+                row.top_height_steps=place.top_height_steps
+                row.sort_height_steps=place.top_height_steps
         if item.get("integrity")=="destroyed" and row.kind in ["prop","wall"]:
             row.destroyed = true
             if item.get("destruction_outcome") != null: row.outcome = item.destruction_outcome
@@ -487,7 +500,7 @@ static func join_walls(rows: Array, world: Dictionary) -> Array:
     for row in rows:
         # A corner is one intact source. A destroyed edge must retain its own
         # authored endpoint instead of borrowing the other edge's state.
-        if row.kind != "wall" or row.get("destroyed",false): continue
+        if row.kind != "wall" or row.get("destroyed",false) or row.has("source_kind"): continue
         var key = JSON.stringify([row.position,row.material,row.base_height_steps,row.top_height_steps])
         if not cells.has(key): cells[key] = []
         cells[key].append(row)

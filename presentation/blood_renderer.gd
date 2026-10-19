@@ -57,6 +57,8 @@ var visible_fields:Dictionary={}
 var _tile_view:Array=[]
 var _tile_on_screen:Dictionary={}
 var ready=true
+var _draw_waits:Dictionary={}
+var _next_draw_wait:int=0
 var deposit_create_usec:int=0
 var sample_phases:Dictionary={}
 # Atlas pages and their shared stain materials; slot-indexed stain draws.
@@ -75,6 +77,7 @@ var _painters:Array=[]
 var _painter_kernels:Array=[]
 var _painter_copies:Array=[]
 var _painting:bool=false
+var _paint_callback:Callable
 var _paint_epoch:int=0
 var _painted:int=0
 var _shown_copies:Array=[]
@@ -166,7 +169,10 @@ func _paint(slot:int,kernels:Array)->void:
         for page in _page_clears.size():
             if not _page_clear_data[page].is_empty():_page_clear_data[page]=PackedFloat32Array();_page_clears[page].instance_count=0
         _shown_copies=[];_painted=0;_paint_epoch+=1;_painting=true
-        RenderingServer.frame_pre_draw.connect(func():_painting=false,CONNECT_ONE_SHOT)
+        _paint_callback=func():
+            _painting=false
+            _paint_callback=Callable()
+        RenderingServer.frame_pre_draw.connect(_paint_callback,CONNECT_ONE_SHOT)
     var painter:int=_slot_painter[slot] if _slot_epoch[slot]==_paint_epoch else -1
     if kernels.is_empty() and painter<0:
         # Zero texels with no painter; a later copy this frame still wins.
@@ -216,11 +222,30 @@ func _deposit(world:Node,key:String,tile:Dictionary,registered:bool=true)->Dicti
     _paint(slot,[])
     deposit_create_usec+=Time.get_ticks_usec()-phase
     var handle={"entry":entry,"slot":slot,"generation":_generation,"drawn":[],"value":{},"phase":[],"updates":0,"ready":false,"kernel_cache":{},"registered":registered,"world_users":0}
-    RenderingServer.frame_post_draw.connect(func():handle.ready=true,CONNECT_ONE_SHOT)
+    _await_draw(handle)
     return handle
+
+func _await_draw(handle:Dictionary)->void:
+    _cancel_draw(handle)
+    var id:int=_next_draw_wait;_next_draw_wait+=1
+    var completed:Callable=func():
+        _draw_waits.erase(id)
+        handle.erase("draw_callback");handle.erase("draw_wait")
+        handle.ready=true
+    handle.draw_callback=completed;handle.draw_wait=id
+    _draw_waits[id]=handle
+    RenderingServer.frame_post_draw.connect(completed,CONNECT_ONE_SHOT)
+
+func _cancel_draw(handle:Dictionary)->void:
+    var completed:Callable=handle.get("draw_callback",Callable())
+    if completed.is_valid() and RenderingServer.frame_post_draw.is_connected(completed):
+        RenderingServer.frame_post_draw.disconnect(completed)
+    if handle.has("draw_wait"):_draw_waits.erase(handle.draw_wait)
+    handle.erase("draw_callback");handle.erase("draw_wait")
 
 func _release(world:Node,handle:Dictionary)->void:
     # The slot and its hidden draw return to the pool; nothing is freed.
+    _cancel_draw(handle)
     if handle.get("slot",-1)<0 or handle.generation!=_generation:return
     if handle.registered and world!=null:world.actor_entries.erase(handle.entry);world.draw_order_dirty=true
     handle.registered=false;handle.entry.node.visible=false
@@ -258,7 +283,7 @@ func prepare_world(world:Node,owner:Node,rows:Dictionary,preparation:Dictionary,
             handle.kernel_cache=row.cache
             _upload(handle,row.kernels)
             handle.ready=false
-            RenderingServer.frame_post_draw.connect(func():handle.ready=true,CONNECT_ONE_SHOT)
+            _await_draw(handle)
             preparation.handles[key]={"handle":handle,"borrowed":borrowed}
             budget.used_usec+=Time.get_ticks_usec()-began
         complete=complete and preparation.handles[key].handle.ready
@@ -710,6 +735,10 @@ func _own(world:Node)->void:
     # Pools live under one world; a renderer reused for another drops them and
     # turns any handle still held elsewhere inert.
     if is_same(_pool_world,world):return
+    _cancel_pending_draws()
+    if is_instance_valid(_pool_world) and _pool_world.tree_exiting.is_connected(_cancel_pending_draws):
+        _pool_world.tree_exiting.disconnect(_cancel_pending_draws)
+    world.tree_exiting.connect(_cancel_pending_draws,CONNECT_ONE_SHOT)
     for entry in _flight_pool+_slot_entries:
         if is_instance_valid(entry.node):entry.node.queue_free()
     for page in _pages:
@@ -717,3 +746,15 @@ func _own(world:Node)->void:
     _flight_pool=[];_slot_entries=[];_pages=[];_page_materials=[];_page_clears=[];_page_clear_data=[];_painters=[];_painter_kernels=[];_painter_copies=[];_shown_copies=[]
     _free_slots=PackedInt32Array();_slot_painter=PackedInt32Array();_slot_epoch=PackedInt32Array();_generation+=1
     _droplet_material=null;_written_room=[];_pool_world=world
+
+func _cancel_paint()->void:
+    if _paint_callback.is_valid() and RenderingServer.frame_pre_draw.is_connected(_paint_callback):
+        RenderingServer.frame_pre_draw.disconnect(_paint_callback)
+    _paint_callback=Callable();_painting=false
+
+func _cancel_pending_draws()->void:
+    # These leases belong to the physical pool world, including private fields
+    # a new epoch has prepared. An ordinary epoch close preserves those fields;
+    # replacing or exiting their world retires every remaining draw lease.
+    _cancel_paint()
+    for handle in _draw_waits.values():_cancel_draw(handle)

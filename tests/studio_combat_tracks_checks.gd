@@ -3,6 +3,8 @@ extends SceneTree
 ## inspectable together beneath the same attack, with their actual owners and
 ## unchanged source clock. This checks UI projection, not render acceptance.
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Journal=preload("res://sdk/journal.gd")
 const TimelineView=preload("res://studio/timeline_view.gd")
 var checks=0
 var failures:Array=[]
@@ -12,8 +14,8 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("STUDIO_COMBAT_TRACKS_FAIL ",label)
 func run()->void:
-    for name in ["dash-seed3","melee-seed3"]:
-        var index=Recording.read("res://.runtime/studio-cases/"+name+"/amber/journal")
+    for name in ["dash","melee"]:
+        var index=Fixtures.read(name)
         check(index.ok,name+" real journal admits")
         if not index.ok:continue
         var before=index.groups.duplicate(true)
@@ -50,12 +52,13 @@ func run()->void:
             var key=str(allowance.operation_sequence)+":"+allowance.actor_uuid
             check(not unique.has(key),name+" resource annotation appears once per operation and actor")
             unique[key]=true
-            var hud:Dictionary=index.initialization.state.hud_snapshot
-            var previous:Dictionary=hud
-            for sequence in range(1,allowance.operation_sequence+1):
-                var packet:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(index.directory.path_join("%016d.json"%sequence)))
-                previous=hud
-                if packet.get("hud")!=null:hud=packet.hud
+            # Wire schema16 carries HUD column changes, not full sheets. Fold
+            # the original prefix to compare the two actual canonical values.
+            var journal=Journal.new();var opened:Dictionary=journal.open(index.directory,true,false)
+            check(opened.ok and journal.replay(allowance.operation_sequence-1).ok,name+" prior actual HUD prefix reduces")
+            var previous:Dictionary=journal.state.hud_snapshot
+            check(journal.replay(allowance.operation_sequence).ok,name+" current actual HUD prefix reduces")
+            var hud:Dictionary=journal.state.hud_snapshot
             var prior_resource:Dictionary={};var next_resource:Dictionary={}
             for sheet in previous.sheets:
                 if sheet.actor_uuid==allowance.actor_uuid:
@@ -69,7 +72,7 @@ func run()->void:
             if not prior_resource.is_empty() and not next_resource.is_empty():
                 check(allowance.before_feet==prior_resource.current and allowance.after_feet==next_resource.current,name+" annotation exactly matches recorded operation boundary HUD values")
             check(row.event.actor_uuid==allowance.actor_uuid and row.parent.is_empty(),name+" root occurrence owns its actual actor resource annotation")
-        if name=="dash-seed3":
+        if name=="dash":
             var dashes=allowances.filter(func(row):return row.event.behavior_id=="action.dash")
             check(dashes.size()==1 and dashes[0].movement_allowance.before_feet==30 and dashes[0].movement_allowance.after_feet==60,"Recorded Dash visibly adds its actual30ft allowance")
         var deposits=index.rows.filter(func(row):return row.kind=="residue_deposit")

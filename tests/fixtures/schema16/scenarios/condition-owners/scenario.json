@@ -1,0 +1,77 @@
+{
+ "id": "test.condition-owners",
+ "title": "Condition Owners",
+ "kind": "interaction",
+ "seed": 4,
+ "subjects": {
+  "spell": [],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.hold_person"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.hold_monster"
+   ],
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 1,
+   "at": [
+    9,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.hold_person",
+   "by": "caster",
+   "target": "target"
+  },
+  {
+   "do": "spell.hold_monster",
+   "by": "ally",
+   "target": "target"
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "ally",
+   "target": "self"
+  }
+ ],
+ "required_conditions": [
+  "condition.spell.hold_person",
+  "condition.spell.hold_monster"
+ ]
+}

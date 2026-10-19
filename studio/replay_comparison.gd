@@ -2,6 +2,70 @@ extends RefCounted
 ## Offline common clock. It joins recorded causes, never audience state or cursors.
 const EPS=0.00001
 
+static func _canonical(value:Variant)->Variant:
+    if value is Array:return value.map(func(item):return _canonical(item))
+    if not value is Dictionary:return value
+    var result:Dictionary={};var keys:Array=value.keys();keys.sort()
+    for key in keys:
+        # These are seat-local references, not factual correspondence operands.
+        if key in ["commit_occurrence","applied_source_event_cursor"]:continue
+        result[key]=_canonical(value[key])
+    return result
+
+static func _fact_operands(fact:Dictionary)->Dictionary:
+    if fact.kind!="actor_change":return fact
+    var actors:Array=[]
+    for actor in fact.actors:
+        var rows:Array=[]
+        for row in actor.rows:
+            if row.field!="condition":rows.append(row);continue
+            # The public owner UUID names the membership edge. A controlled
+            # seat may additionally know duration/private owner state; matching
+            # that edge does not disclose or merge those independent values.
+            rows.append({"field":"condition","condition_uuid":row.condition_uuid,
+                "member":null if row.get("member")==null else {"behavior_id":row.member.behavior_id}})
+        actors.append({"actor_uuid":actor.actor_uuid,"rows":rows})
+    return {"kind":"actor_change","actors":actors}
+
+## Read once from original packets, before presentation projection. A candidate
+## is evidence only when unique in each participating view; equal integers are
+## never a cross-audience identity. Sensory rows describe a specific observer.
+static func packet_causes(packet:Dictionary)->Dictionary:
+    var result:Dictionary={}
+    for group in packet.get("lineages",[]):
+        for node in group.get("events",[]):
+            var fact:Variant=node.get("fact")
+            if fact==null or node.get("canceled",false) or fact.kind=="sensory":continue
+            var application:Variant=null
+            if node.get("resolution")!=null:application=group.get("resolutions",[])[int(node.resolution)].get("application_id")
+            var execution:Variant=node.get("turn_execution_id")
+            if execution==null and application==null:continue
+            result[str(node.occurrence)]=JSON.stringify([execution,application,_canonical(_fact_operands(fact))])
+    return result
+
+static func correspondence(bundle:Dictionary)->void:
+    var candidates:Dictionary={}
+    for view in bundle.views:
+        var index:Dictionary=bundle.views[view]
+        index.correspondence={};index.group_correspondence={}
+        for occurrence in index.get("correspondence_candidates",{}):
+            var key:String=index.correspondence_candidates[occurrence]
+            if not candidates.has(key):candidates[key]={}
+            if not candidates[key].has(view):candidates[key][view]=[]
+            candidates[key][view].append(str(occurrence))
+    for key in candidates:
+        var matches:Dictionary=candidates[key]
+        if matches.size()<2 or matches.values().any(func(values):return values.size()!=1):continue
+        for view in matches:bundle.views[view].correspondence[matches[view][0]]="shared:"+key
+    # Packet cursors, command numbers, occurrences and lineages are all local
+    # to a seat. Groups without a proven shared fact keep private boundaries.
+
+static func event_key(index:Dictionary,view:String,occurrence:String)->String:
+    return index.get("correspondence",{}).get(occurrence,"view:"+view+":event:"+occurrence)
+
+static func group_key(index:Dictionary,view:String,group:String)->String:
+    return index.get("group_correspondence",{}).get(group,"view:"+view+":group:"+group)
+
 static func _node(graph:Dictionary,id:String)->String:
     if not graph.times.has(id):graph.times[id]=0.0
     return id
@@ -44,11 +108,9 @@ static func build(bundle:Dictionary)->Dictionary:
         for i in index.groups.size():
             var item:Dictionary=index.groups[i];var n=entries.size()
             entries.append({"view":view,"index":i,"item":item});parents.append(n);per_view[view].append(n)
-            var ids=[]
-            if not str(item.group.id).begins_with("operation:"):ids.append("lineage:"+str(item.group.id))
+            var ids=[group_key(index,str(view),str(item.group.id))]
             for event in item.group.get("events",[]):
-                ids.append("event:"+event.event_uuid)
-                ids.append("lineage:"+event.lineage_uuid)
+                ids.append(event_key(index,str(view),str(event.event_uuid)))
             for id in ids:
                 if identities.has(id):_union(parents,n,identities[id])
                 else:identities[id]=n
@@ -59,7 +121,7 @@ static func build(bundle:Dictionary)->Dictionary:
         var entry:Dictionary=entries[n]
         if blocks[key].members.has(entry.view):return _failure("One shared causal block spans several groups in "+str(entry.view)+"; explicit subdivision is required")
         blocks[key].members[entry.view]=n
-        for event in entry.item.group.get("events",[]):blocks[key].event_ids[event.event_uuid]=true
+        for event in entry.item.group.get("events",[]):blocks[key].event_ids[event_key(bundle.views[entry.view],str(entry.view),str(event.event_uuid))]=true
     var graph={"times":{},"edges":[]};_node(graph,"origin")
     var descriptors={}
     for view in per_view:
@@ -75,9 +137,10 @@ static func build(bundle:Dictionary)->Dictionary:
             for commit in group.commits:
                 if commit.has("event_uuid"):commits[commit.event_uuid]=commit
             for event in group.get("events",[]):
-                var commit:String="commit:"+event.event_uuid
-                var start:String="start:"+event.event_uuid if event.kind!="undisclosed" else commit
-                var finish:String="end:"+event.event_uuid if event.kind!="undisclosed" else commit
+                var identity:String=event_key(bundle.views[view],str(view),str(event.event_uuid))
+                var commit:String="commit:"+identity
+                var start:String="start:"+identity if event.kind!="undisclosed" else commit
+                var finish:String="end:"+identity if event.kind!="undisclosed" else commit
                 d.events[event.event_uuid]={"start":start,"end":finish,"commit":commit,"event":event}
                 _edge(graph,begin,start,event._start_ms)
                 if event.kind!="undisclosed":_edge(graph,start,finish,event._end_ms-event._start_ms)
@@ -96,7 +159,7 @@ static func build(bundle:Dictionary)->Dictionary:
             var prior=begin;var prior_at=0.0
             for i in group.commits.size():
                 var commit:Dictionary=group.commits[i]
-                var key:String="commit:"+str(commit.event_uuid) if commit.has("event_uuid") else end
+                var key:String="commit:"+event_key(bundle.views[view],str(view),str(commit.event_uuid)) if commit.has("event_uuid") else end
                 _edge(graph,prior,key,maxf(0,commit.at_ms-prior_at));_edge(graph,key,end,0)
                 d.commits.append(key);prior=key;prior_at=commit.at_ms
             for i in group.actor_tracks.size():
@@ -144,6 +207,7 @@ static func build(bundle:Dictionary)->Dictionary:
                 var commit:Dictionary=common.group.commits[i]
                 var cut={"view":view,"group_index":projected.groups.size()-1,"group_id":common.group.id,"commit_prefix":i+1,
                     "event_uuid":commit.get("event_uuid",""),"source_index":commit.source_index,
+                    "correspondence_key":event_key(original,str(view),str(commit.get("event_uuid",""))),
                     "local_ms":item.start_ms+item.group.commits[i].at_ms,"common_ms":common.start_ms+commit.at_ms}
                 result.schedule.append(cut);mapping[-1].commits.append(cut)
         projected.duration_ms=result.duration_ms
@@ -184,7 +248,7 @@ static func _retime(item:Dictionary,d:Dictionary,times:Dictionary)->Dictionary:
         var shift:float=event_shift.get(component.source_event_uuid,0.0)
         # Audio can begin before its visual contact. Choose its semantic timing
         # owner using the contact, then translate the whole unchanged clip.
-        var anchor:float=component.get("contact_ms",component.start_ms)
+        var anchor:float=component.get("impact_at_ms",component.get("contact_ms",component.start_ms))
         var body_id:String=component.get("body_track_id","")
         var source_track:Dictionary=component.get("source_track",{})
         if body_id.is_empty() and source_track.get("source_event_uuid")==component.source_event_uuid:body_id=source_track.get("trace_track_id","")
@@ -199,6 +263,7 @@ static func _retime(item:Dictionary,d:Dictionary,times:Dictionary)->Dictionary:
                         shift=tracks[old.trace_track_id].shift;break
         component.start_ms+=shift
         if component.has("contact_ms"):component.contact_ms+=shift
+        if component.has("impact_at_ms"):component.impact_at_ms+=shift
         if component.has("source_track"):
             var old_id:String=component.source_track.get("trace_track_id","")
             if tracks.has(old_id):component.source_track=tracks[old_id].track

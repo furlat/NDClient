@@ -6,8 +6,11 @@ const Preparation=preload("res://presentation/world_preparation.gd")
 const Catalog=preload("res://source_catalog.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Journal=preload("res://sdk/journal.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Sources=preload("res://presentation/body_sources.gd")
 var checks:int=0
 var failures:Array=[]
+var source_admission:Dictionary={}
 class Host extends Player:
     func _ready()->void:
         set_process(false);set_process_unhandled_input(false)
@@ -22,10 +25,11 @@ func finished(job:Node)->void:
     job.join()
 func run()->void:
     var journal=Journal.new()
-    var opened:Dictionary=journal.open("res://.runtime/player-runs/20261016T165408.501605Z/journal",true,false)
+    var opened:Dictionary=journal.open(Fixtures.journal("gallery"),true,false)
     check(opened.ok and journal.replay(1).ok,"Actual recorded pre-door state reduces")
-    if not opened.ok:finish();return
-    var host=Host.new();host.catalog_cache=Catalog.source_snapshot({})
+    if not opened.ok or journal.state.is_empty():finish();return
+    Sources.invalidate()
+    var host=Host.new();host.catalog_cache=Catalog.source_snapshot({});host.profile.recording=true
     var metadata:Dictionary=Catalog.read_file("catalog-index.json",host.catalog_cache)
     host.rig_config=Catalog.read_file(metadata.rig,host.catalog_cache)
     host.rigs=Characters.rigs(host.catalog_cache);root.add_child(host)
@@ -68,6 +72,20 @@ func run()->void:
     await finished(normal)
     check(normal.result.get("complete",false),"Independent ordinary projection completes the same cut")
     if promoted.result.get("complete",false) and normal.result.get("complete",false):
+        var cold:Dictionary=promoted.result.actor_worker_profile;var warm:Dictionary=normal.result.actor_worker_profile
+        source_admission={"cold_loads":int(cold.get("category_resource_load_calls",0))+int(cold.get("clip_resource_load_calls",0)),
+            "warm_loads":int(warm.get("category_resource_load_calls",0))+int(warm.get("clip_resource_load_calls",0)),
+            "warm_shared_hits":int(warm.get("category_physical_cache_calls",0))+int(warm.get("clip_physical_cache_calls",0)),
+            "cold_paths":{}}
+        for kind in ["category","clip"]:
+            source_admission.cold_paths.merge(cold.get(kind+"_resource_load_paths",{}))
+        check(source_admission.cold_loads>0 and source_admission.warm_loads==0 and source_admission.warm_shared_hits>0,
+            "Cold selected metadata loads on the worker; another snapshot borrows its physical Resources without reopening them")
+        var selected_sources:Dictionary=promoted.result.source_files[Sources.KEY].loaded
+        var ordinary_sources:Dictionary=normal.result.source_files[Sources.KEY].loaded
+        check(not selected_sources.is_empty() and selected_sources.size()==ordinary_sources.size(),"Independent jobs admit the same finite selected body source set")
+        for path in selected_sources:
+            check(is_same(selected_sources[path],ordinary_sources.get(path)),"Independent worker snapshots share the exact physical Resource: "+path)
         check(is_same(promoted.result.row_patch,forecast.static_result.row_patch)
             and is_same(promoted.result.ground_support,forecast.static_result.ground_support),
             "Promotion adopts original prepared static results without reconstructing them")
@@ -84,6 +102,6 @@ func run()->void:
     promoted.free();normal.free();host.queue_free();await process_frame;await process_frame
     finish()
 func finish()->void:
-    var report={"checks":checks,"failures":failures,"scope":"Actual recorded state: static forecast versus ordinary rows/support/sources/residue output; no native allocation during forecasting; exact prepared-result adoption and fresh Run actor clock/material inputs on promotion. No live latency or framebuffer claim."}
+    var report={"checks":checks,"failures":failures,"source_admission":source_admission,"scope":"Actual recorded state: static forecast versus ordinary rows/support/sources/residue output; no native allocation during forecasting; exact prepared-result adoption and fresh Run actor clock/material inputs on promotion. Cold/warm worker source admission and shared physical Resource identity. No live latency or framebuffer claim."}
     FileAccess.open("res://generated/world_static_forecast_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("WORLD_STATIC_FORECAST_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

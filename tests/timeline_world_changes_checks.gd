@@ -8,6 +8,8 @@ const Timeline = preload("res://presentation/timeline.gd")
 const World = preload("res://presentation/world.gd")
 const Catalog = preload("res://source_catalog.gd")
 const Probe = preload("res://tests/ground_visibility_checks.gd").Probe
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 var checks=0
 var failures=[]
 var cache={}
@@ -43,11 +45,11 @@ func group(commits:Array,duration:float=20)->Dictionary:
         "actor_tracks":[],"commits":commits,"staged_actors":{},"staged_tiles":{},"events":[]}
 func _initialize()->void:run.call_deferred()
 func run()->void:
-    var directory="res://.runtime/gallery-route/journal"
+    var directory:String=Fixtures.journal("gallery")
     var journal=Journal.new();var opened=journal.open(directory,true,false)
     check(opened.ok,"Authentic Gallery decoder selected")
     if not opened.ok:quit(1);return
-    var timeline=Timeline.new();var count=0;var groups=0
+    var timeline=Timeline.new();var count=0;var groups=0;var expected_groups=0
     var files=DirAccess.get_files_at(directory);files.sort()
     for file in files:
         if not file.ends_with(".json") or file.length()!=21:continue
@@ -62,6 +64,9 @@ func run()->void:
             timeline.accept({"kind":"initialization","state":initial.value,"sequence":0})
             compare(timeline,"initial")
         else:
+            # Each native lineage produces one group; a packet without one
+            # still has its independent ordered operation tail.
+            expected_groups+=maxi(1,packet.get("lineages",[]).size())
             var compiled=Compiler.compile(timeline.state,packet,cache)
             check(compiled.ok,"Real compiler "+str(count))
             if not compiled.ok:break
@@ -78,8 +83,8 @@ func run()->void:
                 groups+=1
             check(timeline.state==compiled.value.final_state,"Exact SDK final state after op"+str(count))
         count+=1
-    check(count==102,"All102 admitted packets")
-    check(groups>=122,"All real compiled lineages and operation tails")
+    check(count==int(Fixtures.case_record("gallery").packets),"All admitted packets match independent Gallery recording metadata")
+    check(groups==expected_groups,"All real native lineages and operation tails compile exactly once")
     # Identical final object value after remove/re-add still changes native order.
     var ids=timeline.state.objects.keys();var id:String=ids[0]
     var original:Dictionary=timeline.state.objects[id]
@@ -112,7 +117,7 @@ func run()->void:
     await scenery_case()
     var report={"checks":checks,"failures":failures,"packets":count,"groups":groups,"observed_boundaries":examined,
         "dirty_records_projected":dirty_records,"records_if_full_scanned":complete_records,
-        "scope":"Real102-packet compiler/Timeline staging and commits versus exhaustive ordered adapter; media hold, multi-advance remove/readd, reset, and no-force same-visible-ID floor material transfer."}
+        "scope":"Complete original Gallery compiler/Timeline staging and commits versus exhaustive ordered adapter; media hold, multi-advance remove/readd, reset, and no-force same-visible-ID floor material transfer."}
     var out=FileAccess.open("res://generated/timeline_world_changes_checks.json",FileAccess.WRITE);out.store_string(JSON.stringify(report,"  "));out.close()
     print("TIMELINE_WORLD_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 func scenery_case()->void:
@@ -122,7 +127,7 @@ func scenery_case()->void:
     var tiles={}
     for x in range(3):
         tiles["%d,0"%x]={"tile_uuid":"floor-%d"%x,"position":[x,0],"elevation_steps":0,"surface":{"base_material":materials[0] if x<2 else materials[1]}}
-    var state={"tiles":tiles,"objects":{},"actors":{},"audience":{"controlled":[]},"senses":{"visible":[[0,0],[1,0],[2,0]],"objects":{}}}
+    var state={"tiles":tiles,"objects":{},"actors":{},"audience":{"controlled":[]},"senses":{"visible":Cells.mask([[0,0],[1,0],[2,0]]),"objects":{}}}
     scene.timeline.accept({"kind":"initialization","state":state,"sequence":0})
     scene._sync_world();scene._sync_scenery()
     var target:Dictionary=scene.ground_groups[materials[1]].entries[0]

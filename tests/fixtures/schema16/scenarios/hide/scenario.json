@@ -1,0 +1,113 @@
+{
+ "id": "action.hide/lifecycle",
+ "title": "Hide: crouch, movement, attack reveals",
+ "kind": "action",
+ "subjects": {
+  "spell": [
+   "spell.fire_bolt"
+  ],
+  "action": [
+   "action.hide",
+   "action.move"
+  ],
+  "condition": [
+   "condition.hidden"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.fire_bolt"
+   ],
+   "at": [
+    3,
+    7
+   ],
+   "behaviors": [
+    "action.hide"
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    7
+   ],
+   "items": [
+    {
+     "id": "equipment.portable_torch",
+     "ignite": true
+    }
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    8
+   ]
+  }
+ ],
+ "battlefield": "battlefield.open_floor_dark",
+ "seed": 2,
+ "steps": [
+  {
+   "do": "action.hide",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    2,
+    7
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.fire_bolt",
+   "by": "caster",
+   "target": "target"
+  }
+ ],
+ "required_behaviors": [
+  "action.hide",
+  "spell.fire_bolt"
+ ],
+ "required_conditions": [
+  "condition.hidden"
+ ],
+ "required_condition_ends": [
+  "condition.hidden"
+ ]
+}

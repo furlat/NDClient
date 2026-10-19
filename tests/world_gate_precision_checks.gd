@@ -1,13 +1,14 @@
 extends SceneTree
 const Timeline=preload("res://presentation/timeline.gd")
 const Journal=preload("res://sdk/journal.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures=[]
 func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label)
 func _initialize()->void:
-    var journal=Journal.new();var opened=journal.open("res://.runtime/gallery-route/journal",true,false)
+    var journal=Journal.new();var opened=journal.open(Fixtures.journal("gallery"),true,false)
     if not opened.ok:print(opened);quit(1);return
     var loaded=journal.replay(0)
     if not loaded.ok:print(loaded);quit(1);return

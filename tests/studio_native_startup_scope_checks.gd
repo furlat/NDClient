@@ -3,6 +3,8 @@ extends SceneTree
 ## integrated Studio checkpoint; this fixture proves requested closure/ownership.
 const Startup=preload("res://presentation/native_source_startup.gd")
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 var checks:int=0
 var failures:Array=[]
 var recordings:Array=[]
@@ -14,10 +16,7 @@ func run()->void:
     Startup.reset()
     var empty=Startup.step(null,{}, {"plan":[],"required":[],"optional":false})
     check(empty.ready and empty.total==0 and Startup._state.is_empty(),"Empty Studio has no catalog warmup or native owner")
-    for path in ["res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal",
-            "res://.runtime/studio-spells-20261015/shield-seed3/blue/journal",
-            "res://.runtime/studio-spells-20261015/web-seed3/amber/journal"]:
-        if not DirAccess.dir_exists_absolute(path):continue
+    for path in [Fixtures.journal("gallery"), Fixtures.journal("shield","blue"), Fixtures.journal("web")]:
         var index:Dictionary=Recording.read(path)
         check(index.ok,"Real recording admits: "+path)
         if not index.ok:continue
@@ -34,12 +33,11 @@ func run()->void:
             var component:Dictionary=row.get("component",{})
             var clip:Dictionary={}
             if component.get("native_spell",false) and component.get("status")!="missing":
-                clip=component.native_clip.duplicate(true);native_rows+=1
+                clip=Effects.occurrence_clip(component);native_rows+=1
                 if component.get("persistent_owner",false):persistent+=1
-                if component.get("native_cue",{}).has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
             elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":
                 clip=component.native_hit.clip;hit+=1
-            if clip.is_empty() or row.end_ms<=row.start_ms:continue
+            if clip.is_empty() or component.get("native_item",false) or (Effects.requires_construction(clip) and not clip.has("construction_inputs")) or row.end_ms<=row.start_ms:continue
             var at=lerpf(row.start_ms,row.end_ms,.5)
             check(Startup.requested(plan,at).any(func(item):return item.clip==clip),"Exact active phase/hit source is required at its own actual row time")
         check(var_to_bytes(index.rows)==before,"Source plan does not mutate original rows, clips or clocks")

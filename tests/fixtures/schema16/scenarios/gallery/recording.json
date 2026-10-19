@@ -1,0 +1,1576 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 60,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "da383e2b-3ec0-4377-8c70-032925b9c948": "Amber caster",
+  "14d84c99-18fc-4df2-b279-1ca79bab7cee": "Blue sentry 1",
+  "2815be95-e904-48a8-abb0-e4bb73fe8d10": "Blue sentry 2",
+  "40bd45a9-367f-4cef-91ba-bb5c906cfa4c": "Blue sentry 4",
+  "989bf858-b13d-4448-a773-38b42e7c82cf": "Blue sentry 3",
+  "be596219-ea43-465e-84ce-5e77f594b5cc": "Blue arcanist"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "arcanist": "Blue arcanist",
+  "sentry_1": "Blue sentry 1",
+  "sentry_2": "Blue sentry 2",
+  "sentry_3": "Blue sentry 3",
+  "sentry_4": "Blue sentry 4"
+ },
+ "sequence": [
+  "action.environment.directional_door.open \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue sentry 4",
+  "spell.magic_missile \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue sentry 1",
+  "end_turn \u00b7 Blue sentry 3",
+  "end_turn \u00b7 Blue sentry 2",
+  "spell.ray_of_frost \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue sentry 4",
+  "end_turn \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue sentry 1",
+  "end_turn \u00b7 Blue sentry 3",
+  "end_turn \u00b7 Blue sentry 2",
+  "spell.scorching_ray \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue sentry 4",
+  "end_turn \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue sentry 1",
+  "end_turn \u00b7 Blue sentry 3",
+  "end_turn \u00b7 Blue sentry 2",
+  "spell.acid_splash \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue sentry 4",
+  "end_turn \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue sentry 1",
+  "end_turn \u00b7 Blue sentry 3",
+  "end_turn \u00b7 Blue sentry 2",
+  "spell.fireball \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue sentry 4",
+  "end_turn \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue sentry 1",
+  "end_turn \u00b7 Blue sentry 3",
+  "end_turn \u00b7 Blue sentry 2",
+  "spell.magic_missile \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue sentry 4",
+  "end_turn \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue sentry 1",
+  "end_turn \u00b7 Blue sentry 3",
+  "end_turn \u00b7 Blue sentry 2",
+  "spell.chill_touch \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue sentry 4",
+  "end_turn \u00b7 Blue arcanist",
+  "end_turn \u00b7 Blue sentry 1",
+  "end_turn \u00b7 Blue sentry 3",
+  "end_turn \u00b7 Blue sentry 2",
+  "action.move \u00b7 Amber caster",
+  "action.dash \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 101,
+   "sensory": 37,
+   "spatial": 75,
+   "action": 2,
+   "step": 35,
+   "movement": 8,
+   "actor_change": 14,
+   "spell": 23,
+   "damage": 15,
+   "attack": 3,
+   "saving_throw": 3,
+   "object_destroyed": 4,
+   "object_damage": 4,
+   "area_reach": 1
+  },
+  "behaviors": {
+   "action.environment.directional_door.open": 1,
+   "action.move": 8,
+   "spell.magic_missile": 8,
+   "spell.ray_of_frost": 1,
+   "spell.scorching_ray": 4,
+   "reaction.opportunity_attack": 3,
+   "spell.acid_splash": 2,
+   "reaction.spell.shield": 2,
+   "spell.fireball": 7,
+   "spell.chill_touch": 1,
+   "action.dash": 1
+  },
+  "conditions": [
+   "condition.dashing",
+   "condition.spell.ray_of_frost",
+   "condition.spell.shield"
+  ],
+  "ended_conditions": [
+   "condition.spell.ray_of_frost",
+   "condition.spell.shield"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 24,
+   "lineage": 16,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.environment.directional_door.open",
+   "faction": "amber"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 73,
+   "lineage": 25,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 100,
+   "lineage": 90,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1f608bb5-5fde-4c75-a24c-2e0816ab955c",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 103,
+   "lineage": 90,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 110,
+   "lineage": 90,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 117,
+   "lineage": 90,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 118,
+   "lineage": 90,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "amber"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 157,
+   "lineage": 152,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1f608bb5-5fde-4c75-a24c-2e0816ab955c",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 178,
+   "lineage": 160,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 179,
+   "lineage": 160,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 187,
+   "lineage": 160,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.ray_of_frost",
+   "kind": "actor_change",
+   "actor_uuid": "be596219-ea43-465e-84ce-5e77f594b5cc",
+   "condition_uuid": "49cc401e-13b7-42e1-9227-daea4033c1f6",
+   "condition_id": "condition.spell.ray_of_frost",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 188,
+   "lineage": 160,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.ray_of_frost",
+   "faction": "amber"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 252,
+   "lineage": 189,
+   "event_offset": 20,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 30,
+   "occurrence": 308,
+   "lineage": 302,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.ray_of_frost",
+   "kind": "actor_change",
+   "actor_uuid": "be596219-ea43-465e-84ce-5e77f594b5cc",
+   "condition_uuid": "49cc401e-13b7-42e1-9227-daea4033c1f6",
+   "condition_id": "condition.spell.ray_of_frost",
+   "faction": "amber"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 315,
+   "lineage": 310,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 318,
+   "lineage": 310,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 321,
+   "lineage": 310,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 322,
+   "lineage": 310,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.scorching_ray",
+   "faction": "amber"
+  },
+  {
+   "sequence": 32,
+   "occurrence": 362,
+   "lineage": 323,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 32,
+   "occurrence": 363,
+   "lineage": 323,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 32,
+   "occurrence": 365,
+   "lineage": 323,
+   "event_offset": 9,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 32,
+   "occurrence": 380,
+   "lineage": 323,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 441,
+   "lineage": 434,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 446,
+   "lineage": 434,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 447,
+   "lineage": 434,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 448,
+   "lineage": 434,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.acid_splash",
+   "faction": "amber"
+  },
+  {
+   "sequence": 46,
+   "occurrence": 505,
+   "lineage": 449,
+   "event_offset": 15,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1194ce01-4af9-4269-b896-c473239c8c80",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 46,
+   "occurrence": 508,
+   "lineage": 449,
+   "event_offset": 16,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "triggering_occurrence": 501,
+   "triggering_lineage": 498,
+   "faction": "amber"
+  },
+  {
+   "sequence": 46,
+   "occurrence": 508,
+   "lineage": 449,
+   "event_offset": 16,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 46,
+   "occurrence": 523,
+   "lineage": 449,
+   "event_offset": 22,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 578,
+   "lineage": 573,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1194ce01-4af9-4269-b896-c473239c8c80",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 591,
+   "lineage": 581,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 608,
+   "lineage": 581,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 609,
+   "lineage": 581,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 610,
+   "lineage": 581,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 632,
+   "lineage": 581,
+   "event_offset": 10,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 633,
+   "lineage": 581,
+   "event_offset": 11,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 634,
+   "lineage": 581,
+   "event_offset": 12,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 649,
+   "lineage": 581,
+   "event_offset": 16,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 650,
+   "lineage": 581,
+   "event_offset": 17,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 651,
+   "lineage": 581,
+   "event_offset": 18,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 673,
+   "lineage": 581,
+   "event_offset": 23,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 674,
+   "lineage": 581,
+   "event_offset": 24,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 675,
+   "lineage": 581,
+   "event_offset": 25,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 689,
+   "lineage": 581,
+   "event_offset": 28,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 690,
+   "lineage": 581,
+   "event_offset": 29,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 691,
+   "lineage": 581,
+   "event_offset": 30,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 696,
+   "lineage": 581,
+   "event_offset": 31,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 713,
+   "lineage": 581,
+   "event_offset": 34,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 714,
+   "lineage": 581,
+   "event_offset": 35,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 715,
+   "lineage": 581,
+   "event_offset": 36,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 720,
+   "lineage": 581,
+   "event_offset": 38,
+   "kind": "area_reach",
+   "label": "area_reach ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 730,
+   "lineage": 581,
+   "event_offset": 42,
+   "kind": "spell",
+   "label": "spell spell.fireball",
+   "faction": "amber"
+  },
+  {
+   "sequence": 60,
+   "occurrence": 809,
+   "lineage": 731,
+   "event_offset": 25,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 883,
+   "lineage": 863,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 884,
+   "lineage": 863,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 885,
+   "lineage": 863,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 899,
+   "lineage": 863,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 900,
+   "lineage": 863,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 901,
+   "lineage": 863,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 915,
+   "lineage": 863,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 916,
+   "lineage": 863,
+   "event_offset": 11,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 917,
+   "lineage": 863,
+   "event_offset": 12,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 73,
+   "occurrence": 918,
+   "lineage": 863,
+   "event_offset": 13,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "amber"
+  },
+  {
+   "sequence": 86,
+   "occurrence": 975,
+   "lineage": 972,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.chill_touch",
+   "faction": "amber"
+  },
+  {
+   "sequence": 87,
+   "occurrence": 1032,
+   "lineage": 976,
+   "event_offset": 15,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "9853ae93-478d-4d4c-a43d-7704e87443b4",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 87,
+   "occurrence": 1035,
+   "lineage": 976,
+   "event_offset": 16,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "triggering_occurrence": 1028,
+   "triggering_lineage": 1025,
+   "faction": "amber"
+  },
+  {
+   "sequence": 87,
+   "occurrence": 1035,
+   "lineage": 976,
+   "event_offset": 16,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 87,
+   "occurrence": 1065,
+   "lineage": 976,
+   "event_offset": 27,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 99,
+   "occurrence": 1120,
+   "lineage": 1115,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "9853ae93-478d-4d4c-a43d-7704e87443b4",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 100,
+   "occurrence": 1216,
+   "lineage": 1123,
+   "event_offset": 30,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 101,
+   "occurrence": 1222,
+   "lineage": 1217,
+   "event_offset": 0,
+   "label": "condition applied condition.dashing",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "10e95172-5a7b-4bad-beee-b1c347268148",
+   "condition_id": "condition.dashing",
+   "faction": "amber"
+  },
+  {
+   "sequence": 101,
+   "occurrence": 1224,
+   "lineage": 1217,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.dash",
+   "faction": "amber"
+  },
+  {
+   "sequence": 102,
+   "occurrence": 1318,
+   "lineage": 1225,
+   "event_offset": 30,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 1,
+   "occurrence": 49,
+   "lineage": 37,
+   "event_offset": 3,
+   "kind": "action",
+   "label": "action action.environment.directional_door.open",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 98,
+   "lineage": 50,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 125,
+   "lineage": 115,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1f608bb5-5fde-4c75-a24c-2e0816ab955c",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 128,
+   "lineage": 115,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 135,
+   "lineage": 115,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 142,
+   "lineage": 115,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 143,
+   "lineage": 115,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "blue"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 182,
+   "lineage": 177,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1f608bb5-5fde-4c75-a24c-2e0816ab955c",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 203,
+   "lineage": 185,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 204,
+   "lineage": 185,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 212,
+   "lineage": 185,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.ray_of_frost",
+   "kind": "actor_change",
+   "actor_uuid": "be596219-ea43-465e-84ce-5e77f594b5cc",
+   "condition_uuid": "49cc401e-13b7-42e1-9227-daea4033c1f6",
+   "condition_id": "condition.spell.ray_of_frost",
+   "faction": "blue"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 213,
+   "lineage": 185,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.ray_of_frost",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 277,
+   "lineage": 214,
+   "event_offset": 20,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 29,
+   "occurrence": 333,
+   "lineage": 327,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.ray_of_frost",
+   "kind": "actor_change",
+   "actor_uuid": "be596219-ea43-465e-84ce-5e77f594b5cc",
+   "condition_uuid": "49cc401e-13b7-42e1-9227-daea4033c1f6",
+   "condition_id": "condition.spell.ray_of_frost",
+   "faction": "blue"
+  },
+  {
+   "sequence": 30,
+   "occurrence": 340,
+   "lineage": 335,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 30,
+   "occurrence": 343,
+   "lineage": 335,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 30,
+   "occurrence": 346,
+   "lineage": 335,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 30,
+   "occurrence": 347,
+   "lineage": 335,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.scorching_ray",
+   "faction": "blue"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 387,
+   "lineage": 348,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 388,
+   "lineage": 348,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 390,
+   "lineage": 348,
+   "event_offset": 9,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 404,
+   "lineage": 348,
+   "event_offset": 14,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "be596219-ea43-465e-84ce-5e77f594b5cc",
+   "triggering_occurrence": 366,
+   "triggering_lineage": 366,
+   "faction": "blue"
+  },
+  {
+   "sequence": 31,
+   "occurrence": 405,
+   "lineage": 348,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 44,
+   "occurrence": 466,
+   "lineage": 459,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 44,
+   "occurrence": 471,
+   "lineage": 459,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 44,
+   "occurrence": 472,
+   "lineage": 459,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 44,
+   "occurrence": 473,
+   "lineage": 459,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.acid_splash",
+   "faction": "blue"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 530,
+   "lineage": 474,
+   "event_offset": 15,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1194ce01-4af9-4269-b896-c473239c8c80",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 533,
+   "lineage": 474,
+   "event_offset": 16,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "triggering_occurrence": 526,
+   "triggering_lineage": 523,
+   "faction": "blue"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 533,
+   "lineage": 474,
+   "event_offset": 16,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 547,
+   "lineage": 474,
+   "event_offset": 21,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "14d84c99-18fc-4df2-b279-1ca79bab7cee",
+   "triggering_occurrence": 522,
+   "triggering_lineage": 522,
+   "faction": "blue"
+  },
+  {
+   "sequence": 45,
+   "occurrence": 548,
+   "lineage": 474,
+   "event_offset": 22,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 57,
+   "occurrence": 603,
+   "lineage": 598,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "1194ce01-4af9-4269-b896-c473239c8c80",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 616,
+   "lineage": 606,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 633,
+   "lineage": 606,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 634,
+   "lineage": 606,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 635,
+   "lineage": 606,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 657,
+   "lineage": 606,
+   "event_offset": 10,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 658,
+   "lineage": 606,
+   "event_offset": 11,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 659,
+   "lineage": 606,
+   "event_offset": 12,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 674,
+   "lineage": 606,
+   "event_offset": 16,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 675,
+   "lineage": 606,
+   "event_offset": 17,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 676,
+   "lineage": 606,
+   "event_offset": 18,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 698,
+   "lineage": 606,
+   "event_offset": 23,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 699,
+   "lineage": 606,
+   "event_offset": 24,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 700,
+   "lineage": 606,
+   "event_offset": 25,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 714,
+   "lineage": 606,
+   "event_offset": 28,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 715,
+   "lineage": 606,
+   "event_offset": 29,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 716,
+   "lineage": 606,
+   "event_offset": 30,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 721,
+   "lineage": 606,
+   "event_offset": 31,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 738,
+   "lineage": 606,
+   "event_offset": 34,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 739,
+   "lineage": 606,
+   "event_offset": 35,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 740,
+   "lineage": 606,
+   "event_offset": 36,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 745,
+   "lineage": 606,
+   "event_offset": 38,
+   "kind": "area_reach",
+   "label": "area_reach ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 755,
+   "lineage": 606,
+   "event_offset": 42,
+   "kind": "spell",
+   "label": "spell spell.fireball",
+   "faction": "blue"
+  },
+  {
+   "sequence": 59,
+   "occurrence": 834,
+   "lineage": 756,
+   "event_offset": 25,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 908,
+   "lineage": 888,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 909,
+   "lineage": 888,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 910,
+   "lineage": 888,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 924,
+   "lineage": 888,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 925,
+   "lineage": 888,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 926,
+   "lineage": 888,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 940,
+   "lineage": 888,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 941,
+   "lineage": 888,
+   "event_offset": 11,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 942,
+   "lineage": 888,
+   "event_offset": 12,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 72,
+   "occurrence": 943,
+   "lineage": 888,
+   "event_offset": 13,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "blue"
+  },
+  {
+   "sequence": 85,
+   "occurrence": 1000,
+   "lineage": 997,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.chill_touch",
+   "faction": "blue"
+  },
+  {
+   "sequence": 86,
+   "occurrence": 1057,
+   "lineage": 1001,
+   "event_offset": 15,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "9853ae93-478d-4d4c-a43d-7704e87443b4",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 86,
+   "occurrence": 1060,
+   "lineage": 1001,
+   "event_offset": 16,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "triggering_occurrence": 1053,
+   "triggering_lineage": 1050,
+   "faction": "blue"
+  },
+  {
+   "sequence": 86,
+   "occurrence": 1060,
+   "lineage": 1001,
+   "event_offset": 16,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 86,
+   "occurrence": 1074,
+   "lineage": 1001,
+   "event_offset": 21,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "40bd45a9-367f-4cef-91ba-bb5c906cfa4c",
+   "triggering_occurrence": 1049,
+   "triggering_lineage": 1049,
+   "faction": "blue"
+  },
+  {
+   "sequence": 86,
+   "occurrence": 1090,
+   "lineage": 1001,
+   "event_offset": 27,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 98,
+   "occurrence": 1145,
+   "lineage": 1140,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "9853ae93-478d-4d4c-a43d-7704e87443b4",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 99,
+   "occurrence": 1241,
+   "lineage": 1148,
+   "event_offset": 30,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 100,
+   "occurrence": 1247,
+   "lineage": 1242,
+   "event_offset": 0,
+   "label": "condition applied condition.dashing",
+   "kind": "actor_change",
+   "actor_uuid": "da383e2b-3ec0-4377-8c70-032925b9c948",
+   "condition_uuid": "10e95172-5a7b-4bad-beee-b1c347268148",
+   "condition_id": "condition.dashing",
+   "faction": "blue"
+  },
+  {
+   "sequence": 100,
+   "occurrence": 1249,
+   "lineage": 1242,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.dash",
+   "faction": "blue"
+  },
+  {
+   "sequence": 101,
+   "occurrence": 1343,
+   "lineage": 1250,
+   "event_offset": 30,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

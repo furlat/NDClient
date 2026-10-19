@@ -19,6 +19,11 @@ func differences(a: Image,b: Image) -> int:
             var first = a.get_pixel(x,y); var second = b.get_pixel(x,y)
             if absf(first.r-second.r)+absf(first.g-second.g)+absf(first.b-second.b) > .02: count += 1
     return count
+func publish_lighting(scene:Node)->void:
+    scene.source_lighting.sync(scene.timeline.state)
+    scene.source_lighting.sample({},scene.fixture_energy,scene.fixture_heights,scene.fixture_shadow_heights)
+    scene._sync_native_lighting()
+
 func run() -> void:
     var scene = Player.instantiate()
     scene.timeline.paused = true
@@ -30,6 +35,8 @@ func run() -> void:
     await scene.presentation_updated
     scene.hud.hide()
     scene.set_process(false)
+    # Exercise flicker deliberately; never change the user's saved setting.
+    scene.fire_light_flicker=true;scene.source_lighting.fire_light_flicker=true
     check(scene.session.issue.is_empty() and not scene.timeline.state.is_empty(),"Real fixture recording admits")
     if scene.timeline.state.is_empty(): quit(1); return
     var original: Dictionary = scene.timeline.state.duplicate(true)
@@ -38,9 +45,12 @@ func run() -> void:
     var reference: Dictionary = assets.animations["torch.flame"]
     var strengths: Array = []
     var first: Image
+    DirAccess.make_dir_recursive_absolute("res://.captures/player")
     for i in range(reference.frames.size()):
         scene.timeline.display_ms = (float(i)+.25)/float(reference.fps)*1000.0
         scene._sample_fixtures()
+        scene.source_lighting.sample({},scene.fixture_energy,scene.fixture_heights,scene.fixture_shadow_heights)
+        scene._sync_native_lighting()
         for entry in scene.fixture_entries:
             check(entry.record.path==assets.resources[reference.frames[i]].path,"Native clock selects the original authored flame frame")
             check(entry.pivot==Vector2(128,209.92) and is_equal_approx(entry.scale,128.0/127.0),"Flame preserves original registration")
@@ -63,20 +73,30 @@ func run() -> void:
     scene._sample_fixtures()
     check(scene.fixture_energy==held,"Paused displayed time freezes both flame and light")
     check(scene.fixture_heights==held_heights,"Paused displayed time freezes original flame optical elevation")
+    # Named extinguished after-values include the independently disclosed optical set.
+    scene.timeline.state=original.duplicate(true)
+    var fixtures:Dictionary={}
+    for entry in scene.fixture_entries:fixtures[entry.placement.id]=true
+    for id in scene.timeline.state.light_sources.keys():
+        if fixtures.has(scene.timeline.state.light_sources[id].anchor_item_uuid):scene.timeline.state.light_sources.erase(id)
     for object in scene.timeline.state.objects.values():
         if object.item.item_id=="environment.wall_torch": object.item.is_lit = false
-    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws()
+    scene.timeline.world_revision+=1;scene.timeline.revision+=1
+    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws();publish_lighting(scene)
     check(scene.fixture_entries.is_empty() and scene.fixture_energy.is_empty(),"Displayed extinguishing removes flame and animated energy")
     check(scene.fixture_heights.is_empty(),"Extinguishing removes stale optical fixture elevations")
     scene.timeline.state = original.duplicate(true)
     scene.timeline.state.senses.objects.clear()
-    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws()
+    scene.timeline.world_revision+=1;scene.timeline.revision+=1
+    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws();publish_lighting(scene)
     check(scene.fixture_entries.is_empty(),"Remembered torch has no active flame without visual contact")
     scene.timeline.state = original
-    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws(); scene.update_wall_visibility()
+    scene.timeline.world_revision+=1;scene.timeline.revision+=1
+    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws(); scene.update_wall_visibility();publish_lighting(scene)
     check(scene.fixture_entries.size()==2,"Restoring disclosed lit fixtures restores both flame layers")
     var restored = await capture()
     restored.save_png("res://.captures/player/fixture-lights.png")
+    check(scene.timeline.state==original,"Fixture comparisons restore the original canonical snapshot")
     var report = {"checks":checks,"failures":failures,"frame_energy":strengths}
     var file = FileAccess.open("res://generated/fixture_light_checks.json",FileAccess.WRITE)
     file.store_string(JSON.stringify(report,"  ")); file.close()

@@ -1,10 +1,12 @@
 extends SceneTree
-# Real recorded Crypt, original authored door/corner packets, and an independent
+# Real recorded Door scenario, original authored door/corner packets, and an independent
 # full-rebuild/full-sort oracle. Presentation after-values exercise renderer
 # changes here; this is not a claim that commands were sent to the backend.
 const Player = preload("res://play.tscn")
 const WorldRows = preload("res://presentation/world.gd")
 const Order = preload("res://grid_order.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 var checks := 0
 var failures: Array = []
 var comparisons: Array = []
@@ -15,13 +17,22 @@ func _initialize() -> void: run.call_deferred()
 func capture() -> Image:
     await process_frame; await process_frame; await RenderingServer.frame_post_draw
     return root.get_texture().get_image()
+func open_fixture(scene:Node)->bool:
+    # play.gd consumes an explicit --recording argument during _ready. Direct
+    # execution uses the same durable original, without starting a second reader.
+    if scene.session.replay_thread!=null:return true
+    var opened:Dictionary=scene.session.open_recording(Fixtures.journal("door"))
+    check(opened.ok,"Durable original schema16 Door recording opens")
+    return opened.ok
 func set_door_fixture(scene: Node, id: String, is_open: bool, swing: String) -> void:
     # Native commits replace immutable after-value records. Match that ownership
     # here instead of mutating a record retained by the preparation worker.
     var changed: Dictionary = scene.timeline.state.objects[id].duplicate(true)
     changed.item.is_open = is_open
     changed.item.door_swing = swing
-    scene.timeline.state.objects[id] = changed
+    var state:Dictionary=scene.timeline.state.duplicate()
+    state.objects=state.objects.duplicate();state.objects[id]=changed
+    scene.timeline.state=state
     # This is an explicit renderer after-value, followed by prepare_fixture's
     # real media wait. A new world revision selects the supported complete
     # refresh fallback; it must not enqueue an unprepared gameplay occurrence.
@@ -99,10 +110,11 @@ func run() -> void:
     if DisplayServer.get_name()=="headless": print("WORLD_INCREMENTAL_CHECKS requires native graphics"); quit(2); return
     root.unfocusable = true; root.position = Vector2i(-16000,-16000); root.size = Vector2i(960,640)
     var scene = Player.instantiate(); scene.timeline.paused = true; root.add_child(scene)
+    if not open_fixture(scene):scene.queue_free();await process_frame;quit(1);return
     var deadline := Time.get_ticks_msec()+60000
     while (not scene.session.recording_ready or not scene.MediaWarmup.ready(scene.media_warmup,scene.media_plan.required) or not scene._environment_media_ready()) and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
     scene.session.close(); await scene.presentation_updated; scene.set_process(false); scene.hud.hide()
-    check(scene.session.issue.is_empty() and not scene.timeline.state.is_empty() and scene.MediaWarmup.ready(scene.media_warmup,scene.media_plan.required),"Actual recorded Crypt and exact visible actor sheets initialize")
+    check(scene.session.issue.is_empty() and not scene.timeline.state.is_empty() and scene.MediaWarmup.ready(scene.media_warmup,scene.media_plan.required),"Actual recorded Door scenario and exact visible actor sheets initialize")
     if scene.timeline.state.is_empty(): quit(1); return
     var canonical: Dictionary = scene.timeline.state.duplicate(true)
     var door := ""

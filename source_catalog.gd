@@ -4,6 +4,7 @@ const Placement = preload("res://placement.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
 const NativePresentationSources = preload("res://presentation/native_presentation_sources.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
+const Metadata = preload("res://presentation/source_metadata.gd")
 const AbilityDocuments = preload("res://presentation/ability_documents.gd")
 ## Environment runtime documents written by tools/build_presentation.gd from
 ## authoring/environment.tres. Each is cached in a catalog cache under its
@@ -28,7 +29,7 @@ static func media_path(path: String) -> String:
 
 static func environment_file(path: String, cache: Dictionary) -> Dictionary:
     if not cache.has(path):
-        var record: Resource = ResourceLoader.load(path)
+        var record: Resource = Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
         if record == null: push_error("Missing environment build output (run tools/build_presentation.gd): " + path)
         cache[path] = record.value if record != null else {}
     return cache[path]
@@ -47,18 +48,18 @@ static func environment_index(cache: Dictionary) -> Dictionary:
 
 ## Torch colour and item ids, optical lifts and the fallback cookie (no catalog cache: immutable).
 static func environment_lighting() -> Dictionary:
-    var record: Resource = ResourceLoader.load(ENVIRONMENT + "lighting.res")
+    var record: Resource = Metadata.read(ENVIRONMENT + "lighting.res",ResourceLoader.CACHE_MODE_REUSE)
     if record == null: push_error("Missing environment build output (run tools/build_presentation.gd): lighting.res")
     return record.value if record != null else {}
 
 static func light_ranges() -> Resource:
-    var ranges: Resource = ResourceLoader.load(ENVIRONMENT + "light_ranges.res")
+    var ranges: Resource = Metadata.read(ENVIRONMENT + "light_ranges.res",ResourceLoader.CACHE_MODE_REUSE)
     if ranges == null: push_error("Missing environment build output (run tools/build_presentation.gd): light_ranges.res")
     return ranges
 
 ## Measured energy and emission centre per flame frame, keyed by its image path.
 static func fixture_optics() -> Dictionary:
-    var facts: Resource = ResourceLoader.load(ENVIRONMENT + "fixture_optics.res")
+    var facts: Resource = Metadata.read(ENVIRONMENT + "fixture_optics.res",ResourceLoader.CACHE_MODE_REUSE)
     if facts == null: push_error("Missing environment build output (run tools/build_presentation.gd): fixture_optics.res")
     return facts.frames if facts != null else {}
 
@@ -67,7 +68,7 @@ static func fixture_optics() -> Dictionary:
 static func residue_asset(cache: Dictionary) -> Dictionary:
     var path := ENVIRONMENT + "residues/blood.res"
     if not cache.has(path):
-        var asset: Resource = ResourceLoader.load(path)
+        var asset: Resource = Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
         if asset == null: push_error("Missing environment build output (run tools/build_presentation.gd): " + path); return {}
         cache[path] = asset.value
     return cache[path]
@@ -141,7 +142,10 @@ static func adopt_snapshot(cache:Dictionary,offered:Dictionary)->void:
     for key in ["__body_source_admission",NativePresentationSources.CACHE_KEY]:
         if not offered.has(key) or not cache.has(key) or is_same(cache[key],offered[key]):continue
         var current:Dictionary=cache[key];var incoming:Dictionary=offered[key]
-        if current.index==null or incoming.index==null or current.index.revision!=incoming.index.revision:continue
+        if current.index==null or incoming.index==null:continue
+        if key==BodySources.KEY:
+            if not is_same(current.index,incoming.index):continue
+        elif current.index.revision!=incoming.index.revision:continue
         var loaded:Dictionary=current.loaded.duplicate()
         loaded.merge(incoming.loaded,false)
         cache[key]=NativePresentationSources.make_admission(current.index,loaded)
@@ -173,17 +177,18 @@ static func validate_native(cache: Dictionary) -> Array:
 static func bank_for(row: Dictionary, broken: bool, cache: Dictionary) -> String:
     var index = environment_index(cache)
     var state: String = row.get("state", "default")
-    if row.kind == "wall":
+    var source_kind:String=row.get("source_kind",row.kind)
+    if source_kind == "wall":
         return index.wall_destructions[row.material] if broken else ""
-    if row.kind not in ["prop", "door", "trap"]: return ""
-    var group: String = {"prop": "props", "door": "doors", "trap": "traps"}[row.kind]
+    if source_kind not in ["prop", "door", "trap"]: return ""
+    var group: String = {"prop": "props", "door": "doors", "trap": "traps"}[source_kind]
     var owner = index[group][row.asset]
-    if row.kind == "door":
+    if source_kind == "door":
         if broken: return owner.destructions[state + "." + row.get("outcome", "clear")]
         return owner.openings["inward" if state == "open.inward" else "outward"]
     if broken:
         return owner.destructions.get(state, "")
-    if row.kind == "trap": return owner.intact
+    if source_kind == "trap": return owner.intact
     return owner.intact.get(state, owner.intact.values()[0])
 
 static func bank_data(id: String, cache: Dictionary) -> Dictionary:
@@ -228,8 +233,9 @@ static func break_duration(row: Dictionary, cache: Dictionary) -> float:
     return duration(bank_data(bank,cache)) if not bank.is_empty() else 0.0
 
 static func owner_for(row: Dictionary, cache: Dictionary) -> Dictionary:
-    if row.kind not in ["prop","door","trap"]: return {}
-    return environment_index(cache)[{"prop":"props","door":"doors","trap":"traps"}[row.kind]][row.asset]
+    var source_kind:String=row.get("source_kind",row.kind)
+    if source_kind not in ["prop","door","trap"]: return {}
+    return environment_index(cache)[{"prop":"props","door":"doors","trap":"traps"}[source_kind]][row.asset]
 
 static func door_frame(row: Dictionary, quarter: int, cache: Dictionary) -> Dictionary:
     var owner = owner_for(row,cache)
@@ -329,6 +335,7 @@ static func texture_layout(record: Dictionary, cache: Dictionary) -> Dictionary:
 static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
     var world = environment_world(cache)
     var direction: String = row.get("orientation", "east")
+    var source_kind:String=row.get("source_kind",row.kind)
     var view = Placement.pose(direction, quarter)
     if row.kind == "resource": return environment_resources(cache).resources[row.asset]
     var bank_id = bank_for(row, phase > 0, cache)
@@ -336,7 +343,7 @@ static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary
         var bank = bank_data(bank_id, cache)
         view = pose_for(bank, direction, quarter)
         var index = environment_index(cache)
-        if phase == 0 and row.kind == "prop" and index.rests.has(bank_id):
+        if phase == 0 and source_kind == "prop" and index.rests.has(bank_id):
             # The rest pose shows the registered original art (the source's
             # rest_library); the reconstructed banks still play destruction.
             var library_id: String = index.rests[bank_id]

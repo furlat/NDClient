@@ -3,6 +3,10 @@ extends "res://tests/world_preparation_gate_checks.gd"
 var early_previews=0
 var matching_due=0
 var prepared={}
+func run_recording(directory:String,label:String,expected:int)->void:
+    # Preparation keys belong to one reducer/timeline epoch, not every replay.
+    prepared.clear()
+    super.run_recording(directory,label,expected)
 func drain(actual:RefCounted,reference:RefCounted,gate:Gate,label:String)->void:
     var attempts=0
     while actual.busy() and attempts<4000:
@@ -43,9 +47,7 @@ func drain(actual:RefCounted,reference:RefCounted,gate:Gate,label:String)->void:
     check(not actual.busy() and not reference.busy(),label+" timelines finish without lost commits")
     check(not gate.mismatch,label+" held due candidate remains immutable")
 func run()->void:
-    run_recording("res://.runtime/gallery-route/journal","gallery",102)
-    for name in ["oa-walk-3","oa-jump-hit","oa-jump-late-lethal"]:
-        run_recording("C:/Users/tommaso/AppData/Local/Temp/ndclient-presentation-"+name+"/amber/journal",name,3)
+    run_recordings()
     received_window()
     static_window()
     reset_epoch()

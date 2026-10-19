@@ -52,7 +52,8 @@ func run() -> void:
     # Change only target selection/projection while its sources are being built.
     scene.wall_mode="hidden"
     var senses:Dictionary=scene.timeline.state.senses.duplicate(true)
-    senses.visible=senses.visible.slice(0,maxi(1,senses.visible.size()-2))
+    var visible:Array=Cells.mask_points(senses.visible)
+    senses.visible=Cells.mask(visible.slice(0,maxi(1,visible.size()-2)))
     scene.timeline.state.senses=senses;scene.timeline.revision+=1;scene.timeline.world_revision+=1
     scene._sync_scenery();scene.update_wall_visibility()
     root.size=Vector2i(1000,680)

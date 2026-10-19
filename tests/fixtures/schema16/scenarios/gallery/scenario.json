@@ -1,0 +1,267 @@
+{
+ "id": "interaction.gallery/sorcerer",
+ "title": "Lantern Gallery: door, expedition, six spells and Shield",
+ "kind": "interaction",
+ "subjects": {
+  "spell": [
+   "spell.ray_of_frost",
+   "spell.scorching_ray",
+   "spell.acid_splash",
+   "spell.fireball",
+   "spell.magic_missile",
+   "spell.chill_touch"
+  ],
+  "action": [
+   "action.move",
+   "action.dash",
+   "action.environment.directional_door.open"
+  ],
+  "condition": [
+   "condition.spell.shield"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "battlefield": "battlefield.lantern_gallery",
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "sorcerer",
+   "at": [
+    23,
+    6
+   ],
+   "behaviors": [
+    "reaction.spell.shield"
+   ]
+  },
+  {
+   "role": "arcanist",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.magic_missile"
+   ],
+   "at": [
+    30,
+    6
+   ]
+  },
+  {
+   "role": "sentry_1",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    34,
+    6
+   ]
+  },
+  {
+   "role": "sentry_2",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    38,
+    10
+   ]
+  },
+  {
+   "role": "sentry_3",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    42,
+    10
+   ]
+  },
+  {
+   "role": "sentry_4",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    43,
+    6
+   ]
+  }
+ ],
+ "seed": 3,
+ "steps": [
+  {
+   "do": "action.environment.directional_door.open",
+   "by": "caster",
+   "target": {
+    "object": "Lantern gallery door"
+   }
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    26,
+    6
+   ]
+  },
+  {
+   "do": "spell.magic_missile",
+   "by": "arcanist",
+   "target": "caster",
+   "recipients": [
+    "caster",
+    "caster",
+    "caster"
+   ]
+  },
+  {
+   "do": "spell.ray_of_frost",
+   "by": "caster",
+   "target": "arcanist",
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    30,
+    5
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.scorching_ray",
+   "by": "caster",
+   "target": "sentry_1",
+   "recipients": [
+    "sentry_1",
+    "sentry_1",
+    "sentry_1"
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    32,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.acid_splash",
+   "by": "caster",
+   "target": "sentry_2"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    36,
+    7
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.fireball",
+   "by": "caster",
+   "target": [
+    42,
+    10
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    41,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.magic_missile",
+   "by": "caster",
+   "target": "sentry_4",
+   "recipients": [
+    "sentry_4",
+    "sentry_4",
+    "sentry_4"
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.chill_touch",
+   "by": "caster",
+   "target": "sentry_4"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    46,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    46,
+    12
+   ]
+  },
+  {
+   "do": "action.dash",
+   "by": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    46,
+    18
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  }
+ ],
+ "required_behaviors": [
+  "spell.ray_of_frost",
+  "spell.scorching_ray",
+  "spell.acid_splash",
+  "spell.fireball",
+  "spell.magic_missile",
+  "spell.chill_touch"
+ ],
+ "required_conditions": [
+  "condition.spell.shield"
+ ],
+ "required_condition_ends": [
+  "condition.spell.shield"
+ ]
+}
