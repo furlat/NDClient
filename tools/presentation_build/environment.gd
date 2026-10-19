@@ -317,7 +317,7 @@ static func _structures(context: Dictionary, world: Dictionary, index: Dictionar
         var faces := {}
         for view in structure.corner_faces: faces[view] = Array(structure.corner_faces[view])
         match structure.structure:
-            "wall", "retaining_wall":
+            "wall", "retaining_wall", "door", "fence":
                 var straight := _view_images(context, structure.straight, where)
                 var corner := _view_images(context, structure.corner, where)
                 var name: String = structure.material + "_wall_straight"
@@ -336,7 +336,6 @@ static func _structures(context: Dictionary, world: Dictionary, index: Dictionar
                 var cliff := {"straight": _view_images(context, structure.straight, where), "corner": _view_images(context, structure.corner, where), "corner_faces": faces}
                 if world.has("terrain_cliff") and world.terrain_cliff != cliff: Common.error(report, where, "the runtime draws one cliff set; this one differs")
                 world.terrain_cliff = cliff
-            _: Common.error(report, where, structure.structure + " has no runtime drawing yet")
     if wall_faces != null: world.wall_corner_faces = wall_faces
     for kind in kinds: Common.cover(report, "boundary_structure", kind, STATUSES[kinds[kind]])
 
@@ -374,6 +373,16 @@ static func _objects(context: Dictionary, world: Dictionary, index: Dictionary) 
             _:
                 if object.states.values()[0].bank.is_empty(): world.props[id] = _fixture(context, object, where)
                 else: index.props[id] = _prop(context, object, where)
+    # Objects with no art of their own are drawn, silently, by their stand-in's art.
+    for id in context.entries.objects:
+        var object: EnvironmentObject = context.entries.objects[id]
+        if object.stand_in.is_empty(): continue
+        var where: String = "environment/objects/" + id
+        if not object.states.is_empty(): Common.error(report, where, "has its own states and a stand-in"); continue
+        var drawn := false
+        for family in [index.doors, index.props, index.traps, world.props]:
+            if family.has(object.stand_in): family[id] = family[object.stand_in]; drawn = true
+        if not drawn: Common.error(report, where, "stand-in " + object.stand_in + " draws nothing")
 
 static func _door(context: Dictionary, object: EnvironmentObject, where: String) -> Dictionary:
     var closed = object.states.get("closed")

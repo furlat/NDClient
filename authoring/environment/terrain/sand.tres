@@ -21,7 +21,9 @@ notes = "Server surface_kind ramp with slope_axis; no art."
 [resource]
 script = ExtResource("2_keux6")
 material = "sand"
+floor = "terrain.earth"
 variants = PackedStringArray()
 footstep = SubResource("footstep")
 slopes = Array[ExtResource("3_38oh6")]([SubResource("slopes_0"), SubResource("slopes_1")])
-notes = "The server sends this material; no floor art is bound, so the game does not draw these tiles."
+status = "stand_in"
+notes = "No sand floor art: drawn with the earth floor."

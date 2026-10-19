@@ -21,7 +21,9 @@ notes = "Server surface_kind ramp with slope_axis; no art."
 [resource]
 script = ExtResource("2_t4jfi")
 material = "ice"
+floor = "terrain.stone"
 variants = PackedStringArray()
 footstep = SubResource("footstep")
 slopes = Array[ExtResource("3_vqjco")]([SubResource("slopes_0"), SubResource("slopes_1")])
-notes = "The server sends this material; no floor art is bound, so the game does not draw these tiles."
+status = "stand_in"
+notes = "No ice floor art: drawn with the stone floor."

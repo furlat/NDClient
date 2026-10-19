@@ -51,6 +51,8 @@ const Part = preload("res://presentation/source/environment/object_part.gd")
 @export var original: String = ""
 ## Delivery-only blocks kept as delivered (door assemblies, source records), res://assets/ relative.
 @export var measurements: String = ""
+## Where it has no art of its own: the object whose art draws it instead, silently (status stand_in).
+@export var stand_in: String = ""
 @export var icon: ImageRef
 @export_enum("ready", "partial", "stand_in", "missing", "internal") var status: String = "missing"
 @export_multiline var notes: String = ""

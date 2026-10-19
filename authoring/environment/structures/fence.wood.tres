@@ -6,4 +6,14 @@
 script = ExtResource("1_0gpge")
 structure = "fence"
 material = "wood"
-notes = "The game reports fence boundaries unresolved; environment.door.* objects draw doors."
+straight = "wood.wall.straight"
+corner = "wood.wall.corner"
+corner_faces = Dictionary[String, PackedStringArray]({
+"e": PackedStringArray("north", "east"),
+"n": PackedStringArray("west", "north"),
+"s": PackedStringArray("east", "south"),
+"w": PackedStringArray("south", "west")
+})
+destruction = "wall.fantasy.debris.wood_large"
+status = "stand_in"
+notes = "No fence boundary art: drawn with the wood wall pieces (environment.door.* objects draw doors)."

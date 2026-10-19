@@ -51,6 +51,22 @@ const QUALITY := "environment-normal-quality-2026-10-12"
 const VIEWS := ["e", "n", "s", "w"]
 const FACINGS := ["E", "SE", "S", "SW", "W", "NW", "N", "NE"]
 const STRUCTURES := ["cliff", "door", "embankment", "fence", "retaining_wall", "wall"]
+## Explicit stand-ins for ids with no art of their own (drawn silently, status stand_in).
+const TERRAIN_STAND_INS := {"sand": "earth", "metal": "stone", "fabric": "wood", "glass": "stone", "ice": "stone", "vegetation": "earth"}
+const OBJECT_STAND_INS := {
+    "environment.door.desert_a1": "environment.door.fantasy_a1", "environment.door.desert_c1": "environment.door.fantasy_c1",
+    "environment.door.desert_c3": "environment.door.fantasy_c3", "environment.door.desert_c5": "environment.door.fantasy_c5",
+    "environment.door.desert_c7": "environment.door.fantasy_c1", "environment.door.desert_c9": "environment.door.fantasy_c3",
+    "environment.trap.dart_emitter": "environment.furniture.loose_floorboards", "environment.trap.gas_vent": "environment.furniture.loose_floorboards",
+    "environment.trap.jaw": "environment.furniture.loose_floorboards", "environment.trap.portal_hatch": "environment.furniture.loose_floorboards",
+    "environment.trap.pressure_plate": "environment.furniture.loose_floorboards", "environment.trap.spikes": "environment.furniture.loose_floorboards",
+    "environment.trap.tripwire": "environment.furniture.loose_floorboards",
+    "environment.arcane_device": "environment.furniture.workshop_apparatus", "environment.arcane_machine_gun": "environment.furniture.workshop_apparatus",
+    "environment.fireball_cannon": "environment.furniture.workshop_apparatus", "environment.campfire": "environment.furniture.cold_fire_pit",
+    "environment.blocker.barricade": "environment.furniture.timber_pile", "environment.blocker.boulder": "environment.furniture.stone_pedestal",
+    "environment.cliff_face": "environment.wall.fantasy_d1", "environment.directional_wall": "environment.wall.fantasy_d1",
+    "environment.spell_object.heroes_feast": "environment.furniture.table",
+}
 ## The rest pose of these chest banks shows the original vendor art (the
 ## reconstructed rest rays disagree on north/south); was ORIGINAL_CHEST_RESTS
 ## in source_catalog.gd.
@@ -448,7 +464,9 @@ func _terrain() -> void:
             terrain.floor = _group_of(views.values())
             _status_note(terrain, "ready", "")
         else:
-            _status_note(terrain, "missing", "The server sends this material; no floor art is bound, so the game does not draw these tiles.")
+            var proxy: String = TERRAIN_STAND_INS[material]
+            terrain.floor = _group_of(world.terrain[proxy].values())
+            _status_note(terrain, "stand_in", "No " + material + " floor art: drawn with the " + proxy + " floor.")
         var stairs := Slope.new()
         stairs.kind = "stairs"
         if material == "earth":
@@ -495,7 +513,7 @@ func _structures() -> void:
                     structure.destruction = destructions.get(material, "")
                     _status_note(structure, "ready", "" if kind == "wall" else "Drawn with the " + material + " wall pieces.")
                 else:
-                    _status_note(structure, "missing", "No " + material + " wall art; the game reports these edges unresolved.")
+                    _wall_stand_in(structure, destructions, "No " + material + " wall art: drawn with the stone wall pieces.")
             elif kind in ["cliff", "embankment"]:
                 structure.straight = _group_of(cliff.straight.values())
                 structure.corner = _group_of(cliff.corner.values())
@@ -509,8 +527,16 @@ func _structures() -> void:
                 else:
                     _status_note(structure, "stand_in", "Drawn with the earth cliff pieces: the game ignores the server material for cliffs and embankments.")
             else:
-                _status_note(structure, "missing", "The game reports " + kind + " boundaries unresolved; environment.door.* objects draw doors.")
+                _wall_stand_in(structure, destructions, "No " + kind + " boundary art: drawn with the " + (material if world.has(material + "_wall_straight") else "stone") + " wall pieces (environment.door.* objects draw doors).")
             _entry("structures", kind + "/" + material, structure)
+
+func _wall_stand_in(structure: Structure, destructions: Dictionary, note: String) -> void:
+    var proxy: String = structure.material if world.has(structure.material + "_wall_straight") else "stone"
+    structure.straight = _group_of(world[proxy + "_wall_straight"].values())
+    structure.corner = _group_of(world[proxy + "_wall_corner"].values())
+    for view in world.wall_corner_faces: structure.corner_faces[view] = PackedStringArray(world.wall_corner_faces[view])
+    structure.destruction = destructions.get(proxy, "")
+    _status_note(structure, "stand_in", note)
 
 # --- objects ------------------------------------------------------------------
 
@@ -572,15 +598,17 @@ func _objects() -> void:
         elif sections.art.has("device." + id.trim_prefix("environment.")):
             object.art = PackedStringArray(["device." + id.trim_prefix("environment.")])
             object.views = PackedStringArray(FACINGS)
-            _status_note(object, "partial", "8-direction device banks with firing pitches and a destruction set (old catalog/devices.json); the game does not draw devices yet.")
+            object.stand_in = OBJECT_STAND_INS[id]
+            _status_note(object, "stand_in", "8-direction device banks with firing pitches and a destruction set (old catalog/devices.json) are in the source; the game does not draw devices yet, so " + object.stand_in + " stands in.")
         else:
-            _status_note(object, "missing", _missing_object_note(id))
+            object.stand_in = OBJECT_STAND_INS.get(id, "environment.blocker.crate")
+            _status_note(object, "stand_in", _missing_object_note(id) + " Drawn with " + object.stand_in + ".")
         _entry("objects", id, object)
 
 func _missing_object_note(id: String) -> String:
     if id.begins_with("environment.door.desert_"): return "Desert doors: the Desert family is excluded from the catalogue and the geometry deliveries."
-    if id.begins_with("environment.trap."): return "No object art. Its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section."
-    return "The server sends this object; no art is bound, so the game reports it unresolved."
+    if id.begins_with("environment.trap."): return "No object art; its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section."
+    return "No art of its own."
 
 func _door(object: EnvironmentObject, owner: Dictionary) -> void:
     object.select_field = "is_open"

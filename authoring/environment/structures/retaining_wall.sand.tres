@@ -6,4 +6,14 @@
 script = ExtResource("1_u7bac")
 structure = "retaining_wall"
 material = "sand"
-notes = "No sand wall art; the game reports these edges unresolved."
+straight = "stone.wall.straight"
+corner = "stone.wall.corner"
+corner_faces = Dictionary[String, PackedStringArray]({
+"e": PackedStringArray("north", "east"),
+"n": PackedStringArray("west", "north"),
+"s": PackedStringArray("east", "south"),
+"w": PackedStringArray("south", "west")
+})
+destruction = "wall.fantasy.debris.wood_stone"
+status = "stand_in"
+notes = "No sand wall art: drawn with the stone wall pieces."

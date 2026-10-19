@@ -48,7 +48,8 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
             row.merge({"kind":"trap","asset":item.item_id,"state":"active" if item.get("is_engaged",false) else "ready"})
         elif item.get("boundary_structure") != null:
             var structure: Dictionary = item.boundary_structure
-            if structure.structure in ["wall","retaining_wall"] and world.has(structure.material+"_wall_straight"):
+            # Doors and fences without art of their own draw the material's wall pieces (environment source stand-ins).
+            if structure.structure in ["wall","retaining_wall","door","fence"] and world.has(structure.material+"_wall_straight"):
                 row.merge({"kind":"wall","material":structure.material,"top_height_steps":place.top_height_steps})
             elif structure.structure in ["cliff","embankment"]:
                 row.merge({"kind":"cliff","material":structure.material,"top_height_steps":place.top_height_steps})

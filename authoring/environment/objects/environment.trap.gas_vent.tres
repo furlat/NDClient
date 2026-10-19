@@ -12,4 +12,6 @@ id = "environment.trap.gas_vent"
 kind = "trap"
 views = PackedStringArray()
 art = PackedStringArray()
-notes = "No object art. Its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section."
+stand_in = "environment.furniture.loose_floorboards"
+status = "stand_in"
+notes = "No object art; its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section. Drawn with environment.furniture.loose_floorboards."
