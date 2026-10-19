@@ -799,11 +799,11 @@ func _process(delta: float) -> void:
         var preparing: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
         if not preparing.is_empty(): timeline.record_preparation_issue(preparing.id,media_issue)
     if not native_startup.ready and native_startup.errors.is_empty():
-        notice_text = "Preparing spell sources: %d / %d" % [native_startup.completed,native_startup.total]
+        notice_text = "Preparing spell and condition effects: %d / %d" % [native_startup.completed,native_startup.total]
     elif media_metadata_ready and not MediaWarmup.boot_ready(media_warmup):
         var progress = MediaWarmup.preload_progress(media_warmup)
         notice_text = "Preparing visible assets: %d / %d" % [progress.startup_ready,progress.startup_required]
-    elif notice_text.begins_with("Preparing visible assets:") or notice_text.begins_with("Preparing spell sources:"): notice_text = ""
+    elif notice_text.begins_with("Preparing visible assets:") or notice_text.begins_with("Preparing spell and condition effects:"): notice_text = ""
     if session != null and not session.issue.is_empty(): notice_text = session.issue.message
     elif not media_issue.is_empty(): notice_text = media_issue
     elif session != null and not session.status_issue.is_empty(): notice_text = "Reconnecting to encounter status…"

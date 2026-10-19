@@ -18,6 +18,9 @@ var target_selection: Dictionary = {}
 var selection_preview: Dictionary = {}
 var notice_text = ""
 var media_issue = ""
+# No live connection: the HUD's startup progress never shows.
+var game_config: Dictionary = {}
+var announced_ready = false
 var light_strength = 1.0
 var fire_light_flicker = false
 var light_cap_enabled = true
