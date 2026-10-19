@@ -27,6 +27,11 @@ func _init() -> void:
 	check(typeof(normalized.sequence) == TYPE_INT, "normalize outbound integer")
 	var identity: Dictionary = p.identity.duplicate(true)
 	check(p.check_identity(identity).ok, "exact identity")
+	check(p.check_identity({"schema_digest":identity.schema_digest}).ok,"Current identity permits documented omitted constant defaults")
+	var packed={"x0":-1,"y0":2,"width":1,"height":1,"bits":"AQ=="}
+	check(p.validate("CellMask",packed).ok,"Current packed cells admit base64url")
+	packed.bits="!bad"
+	check(not p.validate("CellMask",packed).ok,"Public packed-cell format rejects invalid base64url")
 	identity.schema_digest = "f".repeat(64)
 	check(not p.check_identity(identity).ok, "wrong identity")
 	check(not p.validate("PlayerCursor", {"game_id":"x"}).ok, "required properties")

@@ -1,6 +1,6 @@
 # Schema 16, native conditions and the complete Studio
 
-19 October 2026 — revised execution plan. **Planning only; implementation has not started.** Branch: `codex-authoring-schemabump`, client base `1c4b9eb6`.
+19 October 2026 — revised execution plan. **Unit A implementation active.** Requested branch: `codex-authoring-schemabump`; isolated implementation branch/worktree: `codex/schema16-unit-a` / `NDClientGodot-authoring-schema`, from committed plan `9b73f29a`. [Execution evidence and remaining gates](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md).
 
 Read the execution checklists first. The single appendix holds the design rationale, contracts and detailed acceptance rules. Phase numbers are unchanged so existing reviews remain traceable.
 
@@ -14,13 +14,45 @@ Read the execution checklists first. The single appendix holds the design ration
 
 ## Execution units and stop points
 
+**Execution scope clarified by the user, 19 October (during implementation):**
+use the complete Factory handoff for **all spells, conditions, class abilities
+and actions**, identify every remaining gap, and cover every spell icon and
+character portrait. Haste is an example, never a special implementation branch.
+The units below remain reviewable checkpoints; **Stop A is no longer the end of
+the currently authorized work**. Continue from the canonical playable base into
+the closed-package integration and the shared providers that available delivered
+effects actually require. Keep unsupported public-input/art gaps explicit; never
+claim that package copying, a baseline cast or a placeholder completes a family.
+Server recording defects remain named failures while independent client work
+continues; they must not strand the Factory migration behind an unrelated gate.
+
 | Unit | Phases | Deliverable / stopping point |
 |---|---|---|
 | **A — first implementation unit** | 0–2 | **Stop A:** playable schema-16 client, usable Studio cohort and all-spell crash-safety report. Hand over launch commands, evidence and unresolved visual gaps. |
 | **B — package integration** | 3 | **Stop B:** closed new package, simple prepared lifecycles/new examples and measured surprise first-use readiness. Hand over again. |
-| **C — user-selected follow-ups** | 4–6 | Shared adaptive inputs, full capability/case coverage and final scale qualification, in separately selected bounded chunks. Do not automatically start all of these after A/B. |
+| **C — shared providers and complete coverage** | 4–6 | Shared adaptive inputs, full capability/case coverage and final scale qualification, implemented in bounded cohorts inside the now-authorized full migration. |
 
-The full roadmap stays intact. Unless the user requests a broader execution unit, implement A first. Phase 2a opens a useful preview before the complete safety sweep finishes; completion of A still requires Phase 2b. Phase 5 expands scenario/variant depth, not the first all-spell crash check.
+The full roadmap stays intact. Implement the canonical base first, then continue
+the full delivered-effect migration authorized above. Phase 2a opens a useful
+preview before the safety sweep finishes; completion of A still requires Phase
+2b. Phase 5 expands scenario/variant depth, not the first all-spell crash check.
+
+### Complete inventory, presentation and UI art coverage
+
+- [ ] Join **every current engine ID** with its typed presentation source,
+  Factory selection and declared inputs, supported renderer bindings, recorded
+  scenarios, runtime safety result and visual-review status. Include actions,
+  reactions, traits and class features; do not restrict the worklist to spells
+  or the first cohort. Derive it from the existing catalogs, not a second manual
+  registry. Every missing/partial input or source has its exact owner and reason.
+- [ ] Resolve every spell's icon and every character/creature's portrait from
+  the supplied UI deliveries and typed assignments. Include class/action icon
+  requirements in the same audit. Reuse actual existing resources; explicit
+  missing artwork and stand-ins remain gaps, not quietly accepted final art.
+- [ ] Keep the complete coverage visible in the same Studio browser, with real
+  case links and separate source/provider/scenario/approval facts. Qualify each
+  shared provider across compatible delivered families rather than adding
+  condition-specific code or manufacturing outcomes.
 
 ## Rules for every phase
 
@@ -93,13 +125,13 @@ The full roadmap stays intact. Unless the user requests a broader execution unit
 - [ ] Test cold capability residency separately from warm repeat. A hidden birth sample is not a warm witness; use meaningful actual application/hold geometry. Keep future authoritative state undisplayed during preparation.
 - [ ] If readiness misses the cue or compiles in play, change the bounded policy: warm the relevant shared pipeline/known rig inputs earlier or preconstruct the affected occurrence class. Re-measure the same surprise case and startup/memory cost. Do not insert holds, drop/delay the real effect or broaden to an unmeasured preload of everything.
 
-**Stop B gate:** closed-package provenance, correct simple lifecycle handover/removal/output, early new examples, zero safety regressions, and a timing report proving surprise first-use readiness (including the short-queue case) without visible compile/hold spikes. If not achieved, report the decomposed blocker; do not claim the warm policy works from constructor timings alone. Hand over and stop before Phase 4 unless the user chooses that follow-up.
+**Stop B gate:** closed-package provenance, correct simple lifecycle handover/removal/output, early new examples, zero safety regressions, and a timing report proving surprise first-use readiness (including the short-queue case) without visible compile/hold spikes. If not achieved, report the decomposed blocker; do not claim the warm policy works from constructor timings alone. Record the checkpoint and continue into the shared providers required by the complete handoff. Missing public inputs remain explicit gaps.
 
-## Phase 4 — selected shared input cohort, one at a time
+## Phase 4 — shared input cohorts, one at a time
 
 **Files:** existing actor sampling/material/outfit/media modules, `presentation/{surface_sockets,character_geometry,body_sources,spell_placement,native_persistent,native_spell_renderer,effect_package}.gd`, associated source/case/tests.
 
-Choose one row as the next bounded follow-up; wire the shared input, apply it to all compatible manifest families, add real tracks/cases and qualify it before choosing another. Do not implement a generic framework first.
+Implement one shared cohort at a time; wire its actual inputs, apply them to every compatible selected manifest family, add real tracks/cases and qualify it before the next cohort. All required rows are authorized. Do not implement a generic framework first.
 
 | Checklist / shared capability | First proof |
 |---|---|
@@ -111,12 +143,13 @@ Choose one row as the next bounded follow-up; wire the shared input, apply it to
 | [ ] Web spatial owner: actual admitted cells, suppression/disclosure, empty membership draws nothing; body Web separate | Cast/move/partial membership/caster hidden/removal |
 | [ ] Event inputs: exact observed condition/source/stream/occurrence-lineage mapping, monotonic revision, mouth/contact/item data | Positive committed Tenacity damage; inactive/stale/wrong-owner cases; readiness only with public evidence |
 
-**Gate per row:** actual application→hold→removal/restoration; concurrent owners/shared-rig actors; view/pose/outfit/equipment/suppression; seek/loop/teardown; native visible output, separate producer/setter/constructor/sample/first-draw cost, bounded cache bytes. Preserve all-spell safety and equip readiness. Missing public data blocks only its named variants. Follow the history/event contract in the appendix. Stop after the selected cohort and report its coverage delta.
+**Gate per row:** actual application→hold→removal/restoration; concurrent owners/shared-rig actors; view/pose/outfit/equipment/suppression; seek/loop/teardown; native visible output, separate producer/setter/constructor/sample/first-draw cost, bounded cache bytes. Preserve all-spell safety and equip readiness. Missing public data blocks only its named variants. Follow the history/event contract in the appendix. Record each cohort's coverage delta and continue to the next required shared provider.
 
-## Phase 5 — selected library-completion follow-up
+## Phase 5 — complete library and shared action/class dispatch
 
 **Files:** `tools/studio_cases/`, one generated index/browser, typed-source coverage joins, `studio/README.md`, browser/replay/native/live tests.
 
+- [ ] Extend action/class sources with the existing `PresentationEffectUse` resource list where needed. Build native package cues through one shared path with their actual action kind, actor/target/item ownership and authored action anchors. Never dispatch class actions as pretend spells or retain media-ID matching as the only package binding.
 - [ ] Derive the full ID/requirement inventory and link cases from every subject. Keep one entry per capability, organized by authoring; four separate coverage facts (appendix), compact search/filter/counts and explicit unsupported/stale/failure reasons.
 - [ ] Expand Phase 2 baseline spell cases to required outcomes/variants/upcasts, hold/removal/restoration and interactions. Cover action/class/item/environment/creature/surface families in the appendix; no generic “base actions” substitute.
 - [ ] Finish actual body/material/appearance/history/VFX/audio/item/spatial tracks; group movement/missiles and hide routine exploration detail behind inspection. Complete readable horizontal scale/thumbnails, scrub/loop/follow, compact navigation and input isolation. Preserve single-faction default.
@@ -125,9 +158,9 @@ Choose one row as the next bounded follow-up; wire the shared input, apply it to
 
 **Gate:** every current ID discoverable with truthful source/scenario/presentation/approval status; one-command reproducibility; all required supported cases checked; no crashes/missing-resource errors. Deferred artwork, missing renderer capabilities and absent public inputs remain named incomplete work. Stop with a usable complete review tool, not a claim that all art was accepted.
 
-## Phase 6 — selected final gameplay qualification follow-up
+## Phase 6 — final gameplay qualification
 
-**Files:** existing live route/profiling tools, current relevant manifest gates, one implementation evidence ledger and user launch handoff. Do not start another profiling framework.
+**Files:** existing live route/profiling tools, current relevant manifest gates, one implementation evidence ledger and user launch handoff. Use the existing profiling tools; do not start another profiling framework.
 
 - [ ] Run `gallery_sorcerer` with **actual issued player commands**: startup→move→door→big room→first/later Fireball→reaction/condition→move/view/equip/remove/loot→idle. Add Phase 4 selected capabilities. Compare normal game and Studio without split rendering.
 - [ ] Run three serialized comparable cold/warm trials, no competing GPU jobs; oracle dumps/readbacks outside the window. Emit exclusive client/server/transport stages, nested leaves and all long frames as specified below.
@@ -140,7 +173,7 @@ Choose one row as the next bounded follow-up; wire the shared input, apply it to
 
 - During implementation, use **one bounded plan-adherence sub-agent per active execution chunk**, with a concrete deliverable/gate to track, then finish it. No standing polling/review loop or permanent four-agent team.
 - At phase boundaries use short read-only **anti-slop** and **correctness/anti-OOP** passes on the changed paths and evidence. Reuse reviewers; condition expertise is part of the relevant correctness pass. Do not re-audit the full repository after each small edit. Same-task agents only, no other-chat reads/messages.
-- A phase ledger row records `not started / active / passed / blocked`, commit, commands/report paths, gate results and next stop. All implementation phases are currently **not started**.
+- A phase ledger row records `not started / active / passed / blocked`, commit, commands/report paths, gate results and next stop. The linked execution ledger records Unit A; B/C remain **not started**.
 - Original read-only reviews found the ordered pre-row condition capture and authentic admission/departure seek requirements; both remain mandatory below. Short correctness/anti-OOP and anti-slop passes reviewed this revision on 19 October: **ready, no required changes**. These are planning reviews, not implementation/test results or visual approval.
 - **This planning change:** commit this file and the main handoff pointer together, with explicit paths. No application/asset changes or Godot runs belong to this revision.
 

@@ -22,7 +22,7 @@ import time
 
 PROJECT = Path(__file__).resolve().parents[1]
 GODOT = PROJECT.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe"
-ENGINE = Path("/home/tommaso/.cache/ndclient/dnd_engine-229ce025f")
+ENGINE = Path("/home/tommaso/.cache/ndclient/dnd_engine-211b71134")
 PYTHON = "/home/tommaso/.cache/dnd-engine/venv/bin/python"
 
 
@@ -77,13 +77,21 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
             "--path", worktree, "--script", row["script"], *(["--", *row["args"]] if row.get("args") else [])]
         environment = None
     timed_out = False
+    fatal_log = False
     with log.open("w", encoding="utf-8", errors="replace") as stream:
         process = subprocess.Popen(command, cwd=PROJECT, env=environment, stdout=stream, stderr=subprocess.STDOUT, start_new_session=True)
-        try:
-            code = process.wait(timeout=row.get("timeout", 300))
-        except subprocess.TimeoutExpired:
-            timed_out = True
-            process.kill(); code = process.wait()
+        deadline = time.monotonic() + row.get("timeout", 300)
+        with log.open(encoding="utf-8", errors="replace") as observed:
+            tail = ""
+            while process.poll() is None:
+                tail = (tail[-256:] + observed.read(1024 * 1024))
+                fatal_log = any(marker in tail for marker in ("SCRIPT ERROR:", "Parse Error:", "Failed loading resource:", "Can't load script:"))
+                timed_out = time.monotonic() >= deadline
+                if fatal_log or timed_out:
+                    process.kill()
+                    break
+                time.sleep(.05)
+        code = process.wait()
     # The console launcher can leave its windowed child running: stop only this
     # worktree's processes for this script.
     leftovers = [entry for entry in godot_processes(worktree) if row["script"] in entry["command"]]
@@ -106,9 +114,9 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
     errors = [line for line in godot_log.splitlines() if line.startswith("ERROR:")]
     unexpected = [line for line in errors if not any(pattern in line for pattern in allowed)]
     script_errors = sum(1 for line in godot_log.splitlines() if "SCRIPT ERROR" in line)
-    failed = bool(code != 0 or timed_out or script_errors or unexpected or (failures or 0) > 0)
+    failed = bool(code != 0 or timed_out or fatal_log or script_errors or unexpected or (failures or 0) > 0)
     return {"name": row["name"], "mode": row["mode"], "status": row["status"], "exit": code, "timed_out": timed_out,
-        "checks": checks, "failures": failures, "script_errors": script_errors, "error_lines": len(errors),
+        "checks": checks, "failures": failures, "script_errors": script_errors, "fatal_log": fatal_log, "error_lines": len(errors),
         "unexpected_errors": unexpected[:5], "leftover_processes": len(leftovers), "seconds": round(time.time() - started, 1),
         "failed": failed, "log": str(log)}
 

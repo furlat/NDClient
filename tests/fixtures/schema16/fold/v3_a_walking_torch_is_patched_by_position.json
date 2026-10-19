@@ -1,0 +1,752 @@
+{
+ "name": "v3_a_walking_torch_is_patched_by_position",
+ "family": "sensory",
+ "initial": {
+  "generation": "00000000-0000-4000-8000-00000000f000",
+  "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+  "world": {
+   "battlefield_id": "vectors",
+   "battlefield_name": "Vectors",
+   "bounds": [
+    0,
+    0,
+    15,
+    15
+   ],
+   "width": 16,
+   "height": 16
+  },
+  "tiles": {},
+  "objects": {},
+  "object_members": {},
+  "connectors": {},
+  "static": {
+   "tiles": {},
+   "tile_looks": {},
+   "residues": {},
+   "object_looks": {},
+   "boundary_structures": {},
+   "visual_loadouts": {}
+  },
+  "senses": null,
+  "reducer_cursor": 0,
+  "spatial_commit_cursors": {},
+  "actors": {},
+  "spatial_content": {},
+  "items": {},
+  "current_actor_uuid": null,
+  "round_number": 0,
+  "hud_snapshot": null,
+  "audience": {
+   "controlled": [],
+   "observers": [
+    "00000000-0000-4000-8000-00000000000a",
+    "00000000-0000-4000-8000-00000000000b"
+   ],
+   "revision": 0
+  },
+  "content": [],
+  "combat_log_appends": [],
+  "entity_members": {},
+  "object_contact_members": {},
+  "effect_members": {},
+  "light_sources": {},
+  "remembered_effects": {}
+ },
+ "steps": [
+  {
+   "input": {
+    "sensory_rows": {
+     "uuids": [
+      "00000000-0000-4000-8000-000000001001",
+      "00000000-0000-4000-8000-000000004001"
+     ],
+     "contact_uuid_index": [
+      0
+     ],
+     "contact_positions": [
+      [
+       5,
+       5
+      ]
+     ],
+     "contact_visual": {
+      "start": 0,
+      "bits": "AQ=="
+     },
+     "contact_members": [
+      3
+     ],
+     "light_sources": [
+      {
+       "source": 1,
+       "position": [
+        5,
+        5
+       ],
+       "very_bright_radius_feet": 0,
+       "bright_radius_feet": 20,
+       "dim_radius_feet": 40,
+       "appearance": "torch",
+       "anchor_entity": 0
+      }
+     ],
+     "cells": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "light_levels": [
+      {
+       "cells": {
+        "x0": 5,
+        "y0": 5,
+        "width": 3,
+        "height": 1,
+        "bits": "Bw=="
+       },
+       "values": "AwMD"
+      }
+     ]
+    },
+    "fact": {
+     "kind": "sensory",
+     "initial": true,
+     "observer_position": [
+      4,
+      5
+     ],
+     "visible_cells_added": {
+      "start": 0,
+      "bits": "Bw=="
+     },
+     "effective_light_levels_changed": {
+      "start": 0,
+      "bits": "Bw=="
+     },
+     "entity_contacts_changed": [
+      0
+     ],
+     "sense_modes_changed": true,
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "passive_perception_changed": true,
+     "passive_perception": 12,
+     "visual_access_changed": true,
+     "visual_access": 1,
+     "light_sources_added": [
+      0
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {},
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {},
+     "tile_looks": {},
+     "residues": {},
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": {
+     "position": [
+      4,
+      5
+     ],
+     "visible": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "seen": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "entities": {
+      "00000000-0000-4000-8000-000000001001": {
+       "position": [
+        5,
+        5
+       ],
+       "visual": true,
+       "special_senses": []
+      }
+     },
+     "objects": {},
+     "effective_light_levels": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AwMD"
+     },
+     "paths_dirty": false,
+     "passive_perception": 12,
+     "sense_modes_key": [
+      [
+       "Darkvision",
+       60
+      ]
+     ],
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "visual_access": 1,
+     "hazardous_cells": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AAAA"
+     },
+     "spatial_effects": {},
+     "light_sources": {},
+     "light_source_removals": {}
+    },
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a",
+      "00000000-0000-4000-8000-00000000000b"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {
+     "00000000-0000-4000-8000-000000001001": 3
+    },
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {
+     "00000000-0000-4000-8000-000000004001": {
+      "source_uuid": "00000000-0000-4000-8000-000000004001",
+      "position": [
+       5,
+       5
+      ],
+      "base_height_steps": 0,
+      "very_bright_radius_feet": 0,
+      "bright_radius_feet": 20,
+      "dim_radius_feet": 40,
+      "appearance": "torch",
+      "actor_anchored": false,
+      "anchor_entity_uuid": "00000000-0000-4000-8000-000000001001",
+      "anchor_item_uuid": null
+     }
+    },
+    "remembered_effects": {}
+   }
+  },
+  {
+   "input": {
+    "sensory_rows": {
+     "uuids": [
+      "00000000-0000-4000-8000-000000001001",
+      "00000000-0000-4000-8000-000000004001"
+     ],
+     "contact_uuid_index": [
+      0
+     ],
+     "contact_positions": [
+      [
+       6,
+       5
+      ]
+     ],
+     "contact_visual": {
+      "start": 0,
+      "bits": "AQ=="
+     },
+     "contact_members": [
+      3
+     ],
+     "light_patches": [
+      {
+       "source": 1,
+       "changes": {
+        "position": [
+         6,
+         5
+        ]
+       }
+      }
+     ]
+    },
+    "fact": {
+     "kind": "sensory",
+     "entity_contacts_changed": [
+      0
+     ],
+     "light_sources_patched": [
+      0
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {},
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {},
+     "tile_looks": {},
+     "residues": {},
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": {
+     "position": [
+      4,
+      5
+     ],
+     "visible": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "seen": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "entities": {
+      "00000000-0000-4000-8000-000000001001": {
+       "position": [
+        6,
+        5
+       ],
+       "visual": true,
+       "special_senses": []
+      }
+     },
+     "objects": {},
+     "effective_light_levels": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AwMD"
+     },
+     "paths_dirty": false,
+     "passive_perception": 12,
+     "sense_modes_key": [
+      [
+       "Darkvision",
+       60
+      ]
+     ],
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "visual_access": 1,
+     "hazardous_cells": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AAAA"
+     },
+     "spatial_effects": {},
+     "light_sources": {},
+     "light_source_removals": {}
+    },
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a",
+      "00000000-0000-4000-8000-00000000000b"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {
+     "00000000-0000-4000-8000-000000001001": 3
+    },
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {
+     "00000000-0000-4000-8000-000000004001": {
+      "source_uuid": "00000000-0000-4000-8000-000000004001",
+      "position": [
+       6,
+       5
+      ],
+      "base_height_steps": 0,
+      "very_bright_radius_feet": 0,
+      "bright_radius_feet": 20,
+      "dim_radius_feet": 40,
+      "appearance": "torch",
+      "actor_anchored": false,
+      "anchor_entity_uuid": "00000000-0000-4000-8000-000000001001",
+      "anchor_item_uuid": null
+     }
+    },
+    "remembered_effects": {}
+   }
+  },
+  {
+   "input": {
+    "sensory_rows": {
+     "uuids": [
+      "00000000-0000-4000-8000-000000001001",
+      "00000000-0000-4000-8000-000000004001"
+     ],
+     "light_patches": [
+      {
+       "source": 1,
+       "changes": {
+        "anchor_entity": null
+       }
+      }
+     ]
+    },
+    "fact": {
+     "kind": "sensory",
+     "entity_contacts_removed": [
+      0
+     ],
+     "light_sources_patched": [
+      0
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {},
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {},
+     "tile_looks": {},
+     "residues": {},
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": {
+     "position": [
+      4,
+      5
+     ],
+     "visible": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "seen": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "entities": {},
+     "objects": {},
+     "effective_light_levels": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AwMD"
+     },
+     "paths_dirty": false,
+     "passive_perception": 12,
+     "sense_modes_key": [
+      [
+       "Darkvision",
+       60
+      ]
+     ],
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "visual_access": 1,
+     "hazardous_cells": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AAAA"
+     },
+     "spatial_effects": {},
+     "light_sources": {},
+     "light_source_removals": {}
+    },
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a",
+      "00000000-0000-4000-8000-00000000000b"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {
+     "00000000-0000-4000-8000-000000004001": {
+      "source_uuid": "00000000-0000-4000-8000-000000004001",
+      "position": [
+       6,
+       5
+      ],
+      "base_height_steps": 0,
+      "very_bright_radius_feet": 0,
+      "bright_radius_feet": 20,
+      "dim_radius_feet": 40,
+      "appearance": "torch",
+      "actor_anchored": false,
+      "anchor_entity_uuid": null,
+      "anchor_item_uuid": null
+     }
+    },
+    "remembered_effects": {}
+   }
+  },
+  {
+   "input": {
+    "sensory_rows": {
+     "uuids": [
+      "00000000-0000-4000-8000-000000004001"
+     ]
+    },
+    "fact": {
+     "kind": "sensory",
+     "light_sources_removed": [
+      0
+     ]
+    }
+   },
+   "expected": {
+    "generation": "00000000-0000-4000-8000-00000000f000",
+    "observer_uuid": "00000000-0000-4000-8000-00000000000a",
+    "world": {
+     "battlefield_id": "vectors",
+     "battlefield_name": "Vectors",
+     "bounds": [
+      0,
+      0,
+      15,
+      15
+     ],
+     "width": 16,
+     "height": 16
+    },
+    "tiles": {},
+    "objects": {},
+    "object_members": {},
+    "connectors": {},
+    "static": {
+     "tiles": {},
+     "tile_looks": {},
+     "residues": {},
+     "object_looks": {},
+     "boundary_structures": {},
+     "visual_loadouts": {}
+    },
+    "senses": {
+     "position": [
+      4,
+      5
+     ],
+     "visible": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "seen": {
+      "x0": 5,
+      "y0": 5,
+      "width": 3,
+      "height": 1,
+      "bits": "Bw=="
+     },
+     "entities": {},
+     "objects": {},
+     "effective_light_levels": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AwMD"
+     },
+     "paths_dirty": false,
+     "passive_perception": 12,
+     "sense_modes_key": [
+      [
+       "Darkvision",
+       60
+      ]
+     ],
+     "sense_modes": [
+      {
+       "sense_type": "Darkvision",
+       "range_feet": 60
+      }
+     ],
+     "visual_access": 1,
+     "hazardous_cells": {
+      "cells": {
+       "x0": 5,
+       "y0": 5,
+       "width": 3,
+       "height": 1,
+       "bits": "Bw=="
+      },
+      "values": "AAAA"
+     },
+     "spatial_effects": {},
+     "light_sources": {},
+     "light_source_removals": {}
+    },
+    "reducer_cursor": 0,
+    "spatial_commit_cursors": {},
+    "actors": {},
+    "spatial_content": {},
+    "items": {},
+    "current_actor_uuid": null,
+    "round_number": 0,
+    "hud_snapshot": null,
+    "audience": {
+     "controlled": [],
+     "observers": [
+      "00000000-0000-4000-8000-00000000000a",
+      "00000000-0000-4000-8000-00000000000b"
+     ],
+     "revision": 0
+    },
+    "content": [],
+    "combat_log_appends": [],
+    "entity_members": {},
+    "object_contact_members": {},
+    "effect_members": {},
+    "light_sources": {},
+    "remembered_effects": {}
+   }
+  }
+ ]
+}

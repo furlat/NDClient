@@ -303,7 +303,7 @@ func _process(delta: float) -> void:
     var id = str(actor.get("uuid",""))
     var changed = int(world.timeline.revision) != last_revision
     var generation = str(world.available_actions.get("discovery_generation",""))
-    var selection = "" if world.selected_action.is_empty() else str(world.selected_action.get("discovery_generation"))+":"+str(world.selected_action.get("discovery_index"))
+    var selection = "" if world.selected_action.is_empty() else str(world.selected_action.get("discovery_generation"))+":"+str(world.selected_action.get("discovery_index"))+":"+str(world.selected_action.get("cast_at_level"))
     var viewport_size = get_viewport_rect().size
     var resized = viewport_size != last_viewport_size
     var bar_changed = viewport_size.x != last_viewport_size.x
@@ -662,10 +662,11 @@ func _preferred(rows: Array) -> Dictionary:
 func _choices(rows: Array) -> Array:
     # Native resource alternatives of one gameplay choice remain one verb.
     var unique = {}
-    for row in rows:
-        var key = JSON.stringify([row.get("cast_at_level"),row.get("variant_facets",[]),row.get("target_type")])
-        if not unique.has(key): unique[key] = []
-        unique[key].append(row)
+    for native in rows:
+        for row in Interaction.level_rows(native):
+            var key = JSON.stringify([row.get("cast_at_level"),row.get("variant_facets",[]),row.get("target_type")])
+            if not unique.has(key): unique[key] = []
+            unique[key].append(row)
     var result: Array = []
     for values in unique.values():
         var ordinary = values.filter(func(row):return row.get("restricted_action_budget") == null)
@@ -870,7 +871,7 @@ func _refresh_inventory() -> void:
     centre.add_child(statistics)
     var right = VBoxContainer.new()
     body.add_child(right)
-    var equipped = UI.equipped(actor)
+    var equipped = UI.equipped(actor,world.timeline.state)
     for i in range(10):
         var slot: String = UI.SLOTS[i]
         var button = _slot_button(slot,equipped.get(slot,{}),state)
@@ -901,8 +902,8 @@ func _refresh_bag() -> void:
     _clear(inventory_grid)
     inventory_buttons.clear()
     var actor = _inspect_actor()
-    var items = UI.inventory(actor,search.text)
-    var equipped = UI.equipped(actor)
+    var items = UI.inventory(actor,search.text,world.timeline.state)
+    var equipped = UI.equipped(actor,world.timeline.state)
     var equipped_ids = {}
     for layer in equipped.values(): equipped_ids[layer.item_uuid] = true
     inventory_summary.text = "%d carried item%s" % [items.size(),"" if items.size()==1 else "s"] if actor.get("controlled_items") != null else "Inventory has not been disclosed."
@@ -942,10 +943,10 @@ func _refresh_details() -> void:
     _clear(item_commands)
     var actor = _inspect_actor()
     var item = {}
-    for candidate in UI.inventory(actor):
+    for candidate in UI.inventory(actor,"",world.timeline.state):
         if candidate.item_uuid == selected_item: item = candidate; break
     if item.is_empty():
-        for candidate in UI.equipped(actor).values():
+        for candidate in UI.equipped(actor,world.timeline.state).values():
             if candidate.item_uuid == selected_item: item = candidate; break
     if item.is_empty():
         item_details.text = "Select an item to inspect its disclosed details.\nHover an item or equipment slot to see native compatibility."
@@ -966,7 +967,7 @@ func _refresh_details() -> void:
     item_details.text = "\n".join(lines)
     var item_uuid: String = selected_item
     var sheet = UI.sheet(world.timeline.state,str(actor.get("uuid","")))
-    var equipped = UI.equipped(actor)
+    var equipped = UI.equipped(actor,world.timeline.state)
     for slot in UI.compatible_slots(sheet,selected_item):
         if equipped.get(slot,{}).get("item_uuid") == selected_item: continue
         _item_command("Equip · "+UI.slot_label(slot),func():world.inventory_intent(UI.equip_intent(item_uuid,slot)))
@@ -1237,7 +1238,7 @@ func _update_ground_preview() -> void:
     # The selected-prefix legal set does not move with the pointer. Reuse its
     # immutable styles while replacing only affected cells, actor and cursor.
     # Disclosed support/choice/prefix changes still invalidate that set.
-    var base_key = [world.timeline.world_revision,show_reachable]
+    var base_key = [world.timeline.world_revision,show_reachable,world.selected_action.get("discovery_index"),world.selected_action.get("cast_at_level")]
     if base_key!=ground_base_key or not is_same(eligibility,ground_base_eligibility) or not is_same(world.available_actions,ground_base_choices):
         ground_base_key = base_key
         ground_base_eligibility = eligibility
@@ -1251,6 +1252,9 @@ func _update_ground_preview() -> void:
                     var position = Choices.binding_position(world.available_actions,target)
                     if position!=null: _ground_mark(ground_base_marks,position,Color(0.45,0.83,0.76,0.24),1.0)
                 break
+        if not world.selected_action.is_empty() and world.target_selection.get("target_indices",[]).is_empty() and world.target_selection.get("extra_target_positions",[]).is_empty():
+            for position in Interaction.region_positions(world.available_actions,world.selected_action,world.timeline.state):
+                _ground_mark(ground_base_marks,position,Color(0.45,0.83,0.76,0.24))
         if not eligibility.is_empty():
             for target in Choices.next_options(eligibility):
                 var position = Choices.binding_position(eligibility,target)

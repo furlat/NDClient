@@ -245,7 +245,7 @@ async def run(args):
 if __name__ == '__main__':
     project = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--engine', type=Path, default=project.parent / 'dnd_engine')
+    parser.add_argument('--engine', type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-211b71134"))
     parser.add_argument('--output', type=Path, default=project / '.runtime/gallery-route')
     parser.add_argument('--action-timings', action='store_true', help='Use the isolated diagnostic worker timing hooks')
     asyncio.run(run(parser.parse_args()))

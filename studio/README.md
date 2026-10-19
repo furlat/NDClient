@@ -1,31 +1,30 @@
 # Neurodragon Studio
 
-Open `studio.cmd` from the project root. It opens existing recordings offline;
-it does not start a server. Open **Library** for the complete capability catalogue and named study sequences.
-Selecting a header capability or interaction opens its first available real
-recording and starts playback; the case selector chooses another recording in
-that interaction. In **Library**, click a capability to expand its studies, then
-click a recorded study to open it. Unrecorded studies keep their requirements
-visible without substituting a different recording. The same production reducer, compiler, authoring and renderer power the
-preview. Drag the divider to resize the preview and timeline.
+Open `studio.cmd` from the implementation worktree. Studio reads real schema-16
+journals from `.runtime/studio-library/index.json`; it does not start a server.
+**Library** is the one authoring-organized browser: spells by level/school,
+conditions and actions by family, characters, environment, surfaces, items and
+rules. Search by label or exact ID. Every current `authoring/server_ids.json` ID
+is listed, including capabilities that have no recording yet.
 
-The current delivery is the Studio workspace and the authoring worklist. Missing
-VFX remain visible work; they are not made complete by a working body animation.
+Select a capability or its case to open that exact current recording. The compact
+header selects another case in the same category. One faction is rendered;
+select another faction to load its own independently reduced original journal.
+Stale, failed and missing recordings never silently substitute another scenario.
+**Refresh** rereads the current recorder index. The recorder's command is
+`tools/studio_cases/record.py --engine <frozen-engine> [--only kind|id|case]`.
 
-## Study the renderer, including what is missing
+The browser keeps four separate facts: source/build coverage, scenario recording,
+actual presentation qualification, and visual approval. A recorded case is not
+proof that its VFX/provider works or that the user accepted it. Aid, Bless, False
+Life and Sacred Flame retain their rejected status. Current unqualified renderer
+inputs remain **not assessed**, rather than becoming green from a body animation.
 
-A study defines the behavior to observe before its visual model is finished.
-**Library** joins engine identities, canonical authoring, conditions, native VFX
-source inventory, and the specific scenarios in `authoring/studio/scenarios.json`.
-The human-readable base list is generated at
-`agent_docs/BASE_ACTION_SCENARIO_CATALOG_2026-10-14.md`.
-
-Choose a capability and interaction to inspect its ordered sequence, participants,
-expected presentation, source fields and actual recording coverage. A missing
-recording cannot open a related but unrelated example. Partial recordings retain
-explicit gaps. The **Study** button opens expectations beside the matching scene; the panel
-stays closed by default. Selection and scene publish together. A planned observation is not
-an invented timed event or a rendered-success claim.
+The same production reducer, compiler, authoring, renderer and audio power the
+preview. Drag the divider to resize the preview and timeline. The optional Study
+panel uses the selected case's explicit expectations; missing expectations are
+not invented as timed renderer work. Inspect retains detailed authored-source and
+rendering diagnostics without becoming a second recording browser.
 
 Click a track label to play and loop its real interval. Clicking an event includes
 its dependent reaction/effect tails. The disclosure triangle only expands rows.

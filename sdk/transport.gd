@@ -404,11 +404,11 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
             if _profile_enabled: _profile_job(job,"body_complete",{"bytes":job.raw.size(),"status":job.code})
             if job.code < 200 or job.code >= 300: return _api_error(job)
             var admission_started = Time.get_ticks_usec()
-            var trusted_choices: bool = _options.trusted_choices and job.root=="ChoicesResponse" and not _bootstrap.is_empty()
-            var admitted: Dictionary = _protocol.decode_server_choices(job.raw) if trusted_choices else _protocol.decode(job.root,job.raw)
+            var trusted_response: bool = _options.trusted_choices or _options.trusted_operations
+            var admitted: Dictionary = _protocol.decode_server(job.root,job.raw) if trusted_response else _protocol.decode(job.root,job.raw)
             _timings.admission_ms += (Time.get_ticks_usec()-admission_started)/1000.0
             if _profile_enabled: _profile_job(job,"http_admission",{"started_us":admission_started,"bytes":job.raw.size(),"ok":admitted.ok,
-                "validation":"server_choices_envelope" if trusted_choices else "full_schema"})
+                "validation":"current_server" if trusted_response else "full_schema"})
             if admitted.ok: admitted.raw = job.raw
             return admitted
     return {"pending":true}
@@ -510,7 +510,7 @@ func _check_reply(command: Dictionary, packet: Dictionary) -> Dictionary:
                 var echoed: Dictionary = _protocol.normalize("PreviewRequest",packet.request)
                 for field in ["actor_uuid","state_revision","discovery_generation","correlation_id"]:
                     if echoed[field] != body[field]: checked = failure("protocol","Preview correlation mismatch")
-                if packet.state_revision != body.state_revision or echoed.selection.action_index != body.selection.action_index or echoed.selection.target_indices != body.selection.target_indices or echoed.selection.get("extra_target_positions",[]) != body.selection.get("extra_target_positions",[]) or echoed.selection.get("prefer_safe",true) != body.selection.get("prefer_safe",true):
+                if packet.state_revision != body.state_revision or echoed.selection.action_index != body.selection.action_index or echoed.selection.target_indices != body.selection.target_indices or echoed.selection.get("extra_target_positions",[]) != body.selection.get("extra_target_positions",[]) or echoed.selection.get("prefer_safe",true) != body.selection.get("prefer_safe",true) or echoed.selection.get("cast_at_level") != body.selection.get("cast_at_level"):
                     checked = failure("protocol","Preview selection mismatch")
         "submit_command", "receipt":
             # Defaults select the admitted receipt variant for control flow;

@@ -7,14 +7,14 @@ const Catalog = preload("res://source_catalog.gd")
 static func _outfit(actor: Dictionary) -> Array:
     return [actor.get("creature_content_ref"),actor.get("appearance"),actor.get("visual_loadout"),actor.get("life_state")]
 
-static func _include(actors: Dictionary, actor: Dictionary) -> void:
+static func _include(actors: Dictionary, actor: Dictionary, looks:Dictionary) -> void:
     if actor.get("last_visual_position") == null: return
     var id: String = actor.uuid
     var signature = _outfit(actor)
     if not actors.has(id): actors[id] = []
     for prior in actors[id]:
-        if _outfit(prior)==signature: return
-    actors[id].append(actor)
+        if _outfit(prior.actor)==signature and prior.looks==looks:return
+    actors[id].append({"actor":actor,"looks":looks})
 
 static func _priority_clips(actor:Dictionary,rig:Dictionary,index:Dictionary,cache:Dictionary)->Array:
     var clips:Dictionary={}
@@ -46,24 +46,35 @@ static func _unselected_normals(descriptor:Dictionary,profile:String)->Dictionar
 static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cache:Dictionary,groups:Array=[],profile:String="")->Dictionary:
     var paths:Dictionary=environment.duplicate();var cpu_required:Dictionary=environment.duplicate()
     var gpu_only:Dictionary={};var priority:Dictionary={};var errors:Array=[];var witnesses:Dictionary={}
-    for actor in state.get("actors",{}).values():_include(witnesses,actor)
+    var items:Dictionary=state.get("items",{}).duplicate()
+    var actors:Dictionary=state.get("actors",{}).duplicate()
+    for actor in actors.values():_include(witnesses,actor,Characters.item_looks(actor,{"items":items}))
     for group in groups:
-        for actor in group.get("staged_actors",{}).values():_include(witnesses,actor)
+        var disclosed_items:Dictionary=items.duplicate()
+        for commit in group.get("commits",[]):disclosed_items.merge(commit.delta.get("items",{}),false)
+        for actor in group.get("staged_actors",{}).values():_include(witnesses,actor,Characters.item_looks(actor,{"items":disclosed_items}))
         for commit in group.get("commits",[]):
-            for actor in commit.delta.get("actors",{}).values():_include(witnesses,actor)
+            items.merge(commit.delta.get("items",{}),true)
+            actors.merge(commit.delta.get("actors",{}),true)
+            for actor in commit.delta.get("actors",{}).values():_include(witnesses,actor,Characters.item_looks(actor,{"items":items}))
+            if not commit.delta.get("items",{}).is_empty():
+                for actor in actors.values():
+                    if actor.visual_loadout.layers.any(func(layer):return commit.delta.items.has(layer.item_uuid)):_include(witnesses,actor,Characters.item_looks(actor,{"items":items}))
         for track in group.get("actor_tracks",[]):
             if not track.has("visual_loadout"):continue
-            for actor in witnesses.get(track.actor_uuid,[]).duplicate():
+            for witness in witnesses.get(track.actor_uuid,[]).duplicate():
+                var actor:Dictionary=witness.actor
                 var variant:Dictionary=actor.duplicate();variant.visual_loadout=track.visual_loadout
-                _include(witnesses,variant)
+                _include(witnesses,variant,track.get("presentation_item_looks",witness.looks))
     # Compose each actual immutable layer/slot once. Four actors in the same
     # outfit share these entries; neither actor nor equipped-item UUID keys a
     # family, and no actor×all-clips resource/geometry resolution is repeated.
     var selected_sources:Dictionary={}
     var index:Dictionary=Characters._read("catalog-index.json",cache)
     var rigs:Dictionary=Characters.rigs(cache)
-    for actors in witnesses.values():
-        for actor in actors:
+    for occurrences in witnesses.values():
+        for witness in occurrences:
+            var actor:Dictionary=witness.actor
             var id:String=Characters.rig_id(actor,cache)
             if not rigs.has(id):errors.append("No authored rig for admitted actor "+str(actor.uuid));continue
             var priority_clips:Array=_priority_clips(actor,rigs[id],index,cache)
@@ -73,7 +84,7 @@ static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cac
                     var variant:Dictionary=actor.duplicate();variant.visual_loadout=actor.visual_loadout.duplicate()
                     variant.visual_loadout.active_weapon_set=weapon_set;variants.append(variant)
             for variant in variants:
-                var selected:Dictionary=Characters._select_layers(variant,rigs[id],id==Characters.BodySources.index(cache).root_rig,cache)
+                var selected:Dictionary=Characters._select_layers(variant,rigs[id],id==Characters.BodySources.index(cache).root_rig,cache,witness.looks)
                 if not selected.ok:errors.append(selected.error.message);continue
                 for layer in selected.value:
                     var resource=Characters.BodySources.prepare_layer(layer.source_path,cache)

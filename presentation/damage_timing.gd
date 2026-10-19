@@ -20,9 +20,9 @@ static func _life(node:Dictionary,graph:Dictionary,target:String)->String:
         var current:Dictionary=pending.pop_back()
         if current.get("canceled",false):continue
         var fact:Variant=current.get("fact")
-        if current.uuid!=owner.uuid and fact!=null and fact.get("kind")=="damage" and fact.get("stage")=="taken":continue
+        if current.id!=owner.id and fact!=null and fact.get("kind")=="damage" and fact.get("stage")=="taken":continue
         if fact!=null and fact.get("kind")=="life" and fact.get("entity_uuid")==target:
-            var order:int=graph.first.get(current.lineage_uuid,-1)
+            var order:int=graph.first.get(current.lineage_id,-1)
             if order>=last:result=fact.new_state;last=order
         for identity in current.children_lineages:
             if graph.nodes.has(identity):pending.append(graph.nodes[identity])
@@ -33,7 +33,7 @@ static func resolve(node:Dictionary,graph:Dictionary,actor:Dictionary,contact:fl
     var override:Dictionary={}
     var parent:Dictionary=graph.nodes.get(node.get("parent_lineage"),{})
     while not parent.is_empty():
-        var recipe:Dictionary=graph.recipes.get(parent.uuid,{})
+        var recipe:Dictionary=graph.recipes.get(parent.id,{})
         if recipe.get("damage")!=null:override=recipe.damage;break
         parent=graph.nodes.get(parent.get("parent_lineage"),{})
     var body=Authoring.body("damage",actor,node.fact,cache)
@@ -52,12 +52,12 @@ static func resolve(node:Dictionary,graph:Dictionary,actor:Dictionary,contact:fl
         flash+=float(flash_recipe.get("frame",context.get("flashFrame",0)))*1000.0/fps
     return {"start":start,"hp":hp,"flash":flash,"number":hp,
         "body_enabled":enabled,"terminal":terminal,"lethal":lethal,
-        "request_lineage":request(node,graph).lineage_uuid,"actor_uuid":node.fact.target_entity_uuid,
+        "request_lineage":request(node,graph).lineage_id,"actor_uuid":node.fact.target_entity_uuid,
         "body":body,"clip":clip,"recipe":override}
 
 static func life_time(node:Dictionary,graph:Dictionary,fallback:float)->float:
     var owner=request(node,graph)
-    if owner.uuid==node.uuid:return fallback
+    if owner.id==node.id:return fallback
     for timing in graph.damage_timings.values():
-        if timing.request_lineage==owner.lineage_uuid and timing.actor_uuid==node.fact.entity_uuid:return timing.hp
+        if timing.request_lineage==owner.lineage_id and timing.actor_uuid==node.fact.entity_uuid:return timing.hp
     return fallback

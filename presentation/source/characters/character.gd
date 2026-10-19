@@ -8,6 +8,8 @@ extends Resource
 @export var rig: String = ""
 ## Portrait id in the creature or player bank.
 @export var portrait: String = ""
+## Status of this assignment, independently of the body's rig/artwork.
+@export_enum("ready", "shared", "stand_in", "missing") var portrait_status: String = "ready"
 ## Server size and the visual scale the art needs for it.
 @export var size: String = ""
 @export var scale: float = 1.0

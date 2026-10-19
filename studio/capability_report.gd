@@ -49,7 +49,7 @@ static func _body(row:Dictionary,cache:Dictionary)->Dictionary:
     value.source_paths=[];value.missing_paths=[]
     value.valid_clip=not clip.is_empty() and clip.get("frames",0)>0 and clip.get("fps",0)>0
     if value.valid_clip:
-        var paths=Characters.sheet_paths(track.presentation_actor,[track.clip],cache)
+        var paths=Characters.sheet_paths(track.presentation_actor,[track.clip],cache,track.get("presentation_item_looks",{}))
         value.source_lookup_ok=paths.ok
         if paths.ok:
             for path in paths.value:

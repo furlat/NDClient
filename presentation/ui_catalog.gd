@@ -80,18 +80,17 @@ static func action_key(row: Dictionary, state: Dictionary, cache: Dictionary, va
     if actor_id==null: actor_id=state.get("current_actor_uuid")
     var actor: Dictionary = state.get("actors",{}).get(actor_id,{})
     if row.get("source_item_uuid") != null:
-        for item in inventory(actor):
+        for item in inventory(actor,"",state):
             if item.item_uuid == row.source_item_uuid: return item_key(item,state,cache)
-        for item in equipped(actor).values():
+        for item in equipped(actor,state).values():
             if item.item_uuid == row.source_item_uuid: return item_key(item,state,cache)
     if row.get("action_category") == "attack" and row.get("weapon_slot") != null:
-        var weapon: Dictionary = equipped(actor).get(row.weapon_slot,{})
+        var weapon: Dictionary = equipped(actor,state).get(row.weapon_slot,{})
         if not weapon.is_empty(): return item_key(weapon,state,cache)
     # The client's own binding by server id: the action's content id, a variant
     # facet of it, or the feature that provides it.
-    var configured = row.get("configured_action_ref")
-    var entry = descriptor(state,str(row.get("behavior_id","")),configured)
-    var owner = entry.get("ref") if configured == null else configured
+    var entry = descriptor(state,str(row.get("behavior_id","")))
+    var owner = entry.get("ref")
     var icons: Dictionary = authored(cache).maps.icons
     var id: String = str(owner.get("content_id","")) if owner is Dictionary else str(row.get("behavior_id",""))
     if variant:
@@ -185,13 +184,13 @@ static func available(row: Dictionary) -> bool:
     return row.get("availability_status","") == "available" and row.get("can_afford",false)
 
 static func family_key(row: Dictionary) -> String:
-    return JSON.stringify([row.get("behavior_id"),row.get("configured_action_ref"),row.get("source_item_uuid"),row.get("weapon_slot")])
+    return JSON.stringify([row.get("behavior_id"),row.get("variant_facets",[]),row.get("source_item_uuid"),row.get("weapon_slot")])
 
 static func families(discovery: Dictionary, actor: Dictionary) -> Dictionary:
     var groups = {"Base":[],"Class":[],"Spells":[],"Items":[]}
     var indexed = {}
     var owned = {}
-    for item in actor.get("controlled_items",[]) if actor.get("controlled_items") != null else []: owned[item.item_uuid] = true
+    for item in actor.get("controlled_items",[]) if actor.get("controlled_items") != null else []: owned[item] = true
     for row in rows(discovery):
         if row.get("interaction_affordance",{}).get("surface","action_bar") != "action_bar": continue
         if row.get("behavior_id") in ["action.move","action.swim","action.core.drop","action.pick_up"]: continue
@@ -228,16 +227,28 @@ static func compatible_slots(sheet_value: Dictionary, item_uuid: String) -> Arra
         if pair[0] == item_uuid: return pair[1]
     return []
 
-static func inventory(actor: Dictionary, query: String = "") -> Array:
-    var result: Array = []
-    for item in actor.get("controlled_items",[]) if actor.get("controlled_items") != null else []:
-        var text = str(item.get("name","")) + " " + str(item.get("description","")) + " " + " ".join(item.get("tags",[]))
-        if query.strip_edges().is_empty() or query.to_lower() in text.to_lower(): result.append(item)
+## A small UI item reader; canonical inventory remains UUIDs in state.items.
+static func item(identity:String,state:Dictionary)->Dictionary:
+    var value:Dictionary=state.get("items",{}).get(identity,{})
+    if value.is_empty():return {}
+    var result:Dictionary={"item_uuid":identity}
+    for field in ["look","profile","state"]:
+        if value.get(field)!=null:result.merge(value[field],true)
+    result.item_effects=value.get("effects",[])
     return result
 
-static func equipped(actor: Dictionary) -> Dictionary:
-    var result = {}
-    for layer in actor.get("visual_loadout",{}).get("layers",[]): result[layer.slot] = layer
+static func inventory(actor:Dictionary,query:String="",state:Dictionary={})->Array:
+    var result:Array=[]
+    for identity in actor.get("controlled_items",[]) if actor.get("controlled_items")!=null else []:
+        var value:Dictionary=item(identity,state)
+        if not value.is_empty() and (query.is_empty() or query.to_lower() in str(value.get("name",value.get("visual_item_name",""))).to_lower()):result.append(value)
+    return result
+
+static func equipped(actor:Dictionary,state:Dictionary={})->Dictionary:
+    var result:Dictionary={}
+    for layer in actor.get("visual_loadout",{}).get("layers",[]):
+        var value:Dictionary=item(layer.item_uuid,state)
+        value.merge(layer,true);result[layer.slot]=value
     return result
 
 static func item_name(item: Dictionary, state: Dictionary, cache: Dictionary) -> String:
@@ -262,6 +273,7 @@ static func action_text(row: Dictionary) -> String:
     var parts: Array[String] = [str(row.get("display_name","Action"))]
     if row.get("weapon_slot") != null: parts.append(slot_label(row.weapon_slot) + (" · " + str(row.weapon_name) if row.get("weapon_name") != null else ""))
     if row.get("cast_at_level") != null: parts.append("Level " + str(row.cast_at_level))
+    elif not row.get("cast_levels",[]).is_empty():parts.append("Levels " + ", ".join(row.cast_levels.map(func(level):return str(level))))
     for facet in row.get("variant_facets",[]): parts.append(str(facet.get("label",facet.value)))
     if row.get("restricted_action_budget") != null: parts.append(str(row.restricted_action_budget))
     var cost = cost_text(row)

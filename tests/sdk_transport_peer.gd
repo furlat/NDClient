@@ -31,9 +31,9 @@ func status(final: int = -1) -> Dictionary:
     value.merge({"boundary":state,"published_cursor":cursor(maxi(0,final)),"final_cursor":null if final<0 else cursor(final),"attachment_epoch":UUID,"catch_up_cursor":cursor(0),"acknowledged_cursor":null,"next_command_number":1,"pending_command_numbers":[]})
     return value
 func initial() -> Dictionary:
-    return {"kind":"initialization","protocol":protocol,"cursor":cursor(1 if mode=="bad_init" else 0),"content_revision":"r","content_additions":[],"initialization":{"generation":UUID,"observer_uuid":UUID,"world":{"battlefield_id":"test","battlefield_name":"é","bounds":[-1,-1,1,1],"width":3,"height":3},"nodes":[],"version_rows":[],"end_cursor":0,"observations":[],"world_updates":[]}}
+    return {"kind":"initialization","protocol":protocol,"cursor":cursor(1 if mode=="bad_init" else 0),"content_revision":"r","content_additions":[],"initialization":{"generation":UUID,"observer_uuid":UUID,"world":{"battlefield_id":"test","battlefield_name":"é","bounds":[-1,-1,1,1],"width":3,"height":3},"nodes":[],"version_rows":{"occurrences":[],"lineages":[]},"end_cursor":0,"world_updates":[]}}
 func operation(sequence: int) -> Dictionary:
-    return {"kind":"operation","protocol":protocol,"cursor":cursor(sequence),"state_revision":"r","command_number":null,"boundary":boundary(),"audience":{"controlled":[UUID],"observers":[UUID]},"lineages":[],"hud":null,"combat_log_appends":[],"content_additions":[]}
+    return {"kind":"operation","protocol":protocol,"cursor":cursor(sequence),"generation":UUID,"observer_uuid":UUID,"state_revision":"r","command_number":null,"boundary":boundary(),"lineages":[],"hud":null,"combat_log_appends":[],"content_additions":[]}
 func event(name: String, value: Dictionary, sequence: int = -1) -> String:
     return "event: "+name+"\n"+("id: "+str(sequence)+"\n" if sequence>=0 else "")+"data: "+JSON.stringify(value)+"\n\n"
 func ready(final: int, after: int) -> String:

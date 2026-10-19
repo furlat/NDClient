@@ -31,12 +31,14 @@ func numeric_phases(value:Variant)->bool:
 func profile_privacy(rows: Array) -> void:
     var allowed=["stage","time_us","started_us","http_id","request_id","operation","purpose","schema","bytes","request_bytes","declared_bytes","status","ok","sequence","frame_id","event","records","packet_started_us","compile_started_us","end_us","from_disk","compile_ended_us","required_media_ms","framing_started_us","phases","phases_ms","reused_connected","native_error","validation","transport_reason","failure_kind","connection_replaced","native_state","sent","request_attempted","phase","reason"]
     var safe=true
+    var bad_fields:Array=[]
     for row in rows:
         for key in row:
             if key in ["phases","phases_ms"]:
-                if not numeric_phases(row[key]):safe=false
-            elif not key in allowed or typeof(row[key]) in [TYPE_DICTIONARY,TYPE_ARRAY,TYPE_PACKED_BYTE_ARRAY]:safe=false
+                if not numeric_phases(row[key]):safe=false;bad_fields.append(str(row.stage)+":"+str(key)+":non_numeric")
+            elif not key in allowed or typeof(row[key]) in [TYPE_DICTIONARY,TYPE_ARRAY,TYPE_PACKED_BYTE_ARRAY]:safe=false;bad_fields.append(str(row.stage)+":"+str(key)+":"+type_string(typeof(row[key])))
     var text=JSON.stringify(rows)
+    if not bad_fields.is_empty():print("SDK_PROFILE_UNSAFE_FIELDS ",JSON.stringify(bad_fields))
     check(safe and not "PROFILE_SECRET_TOKEN" in text and not Peer.UUID in text and not "http://" in text,"Profile exports only flat timing/size/label fields, no credentials, URLs, IDs from payload or source bodies")
 
 func _run() -> void:

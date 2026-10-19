@@ -126,6 +126,6 @@ static func equipment(item:Dictionary,slot:String,cache:Dictionary)->Dictionary:
     var selected:Index=index(cache)
     if selected==null:return {"ok":false,"error":{"kind":"authoring","message":"Body source index has not been built"}}
     var gear:Array=selected.gear.get(str(item.get("item_id","")),[])
-    var key:Array=["" if gear.is_empty() else gear[0],item.visual_variant_id,slot]
+    var key:Array=["" if gear.is_empty() else gear[0],item.get("visual_variant_id"),slot]
     if selected.equipment.has(key):return {"ok":true,"value":selected.equipment[key]}
-    return {"ok":false,"error":{"kind":"authoring","message":selected.equipment_errors.get(key,"No built item visual: "+str([item.get("item_id"),item.visual_variant_id,slot]))}}
+    return {"ok":false,"error":{"kind":"authoring","message":selected.equipment_errors.get(key,"No built item visual: "+str([item.get("item_id"),item.get("visual_variant_id"),slot]))}}

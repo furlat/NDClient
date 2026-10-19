@@ -15,18 +15,19 @@ static func create() -> Dictionary:
     return {"task":-1,"pending":{},"result":{},"control":{},"cache":{},"key":[],
         "value":{},"revision":0,"closed":false,"jobs":0,"discarded":0,
         "object_rows":{},"object_contacts":{},"object_cells":{},"disclosed_objects":{},
-        "owner_preview":{},"owner_result":{},"owner_rows":{},"owner_contacts":{},
+        "owner_preview":{},"owner_result":{},"owner_rows":{},"owner_contacts":{},"owner_items":{},
         "actor_sources":{},"object_sources":{},"source_revision":0,"owner_source_revision":-1}
 
-static func _outfit(actor: Dictionary) -> Array:
-    return [actor.get("creature_content_ref"),actor.get("appearance"),actor.get("visual_loadout"),actor.get("presentation_layers"),actor.get("life_state")]
+static func _outfit(actor: Dictionary, state:Dictionary={}) -> Array:
+    return [actor.get("creature_content_ref"),actor.get("appearance"),actor.get("visual_loadout"),actor.get("presentation_layers"),actor.get("life_state"),Characters.item_looks(actor,state)]
 
 static func owners(data: Dictionary, state: Dictionary, preview: Dictionary) -> Dictionary:
     var rows: Dictionary=state.get("objects",{})
     var senses: Dictionary=state.get("senses",{}) if state.get("senses")!=null else {}
     var contacts: Dictionary=senses.get("objects",{})
     var changed=not is_same(rows,data.object_rows) or not is_same(contacts,data.object_contacts)
-    if is_same(rows,data.owner_rows) and is_same(contacts,data.owner_contacts) and is_same(preview,data.owner_preview) and data.owner_source_revision==data.source_revision and not data.owner_result.is_empty():return data.owner_result
+    var items:Dictionary=state.get("items",{})
+    if is_same(rows,data.owner_rows) and is_same(contacts,data.owner_contacts) and is_same(items,data.owner_items) and is_same(preview,data.owner_preview) and data.owner_source_revision==data.source_revision and not data.owner_result.is_empty():return data.owner_result
     if changed:
         data.object_rows=rows;data.object_contacts=contacts;data.object_cells={};data.disclosed_objects={}
         for id in rows:
@@ -57,10 +58,10 @@ static func owners(data: Dictionary, state: Dictionary, preview: Dictionary) -> 
         var actor: Dictionary=state.get("actors",{}).get(id,{})
         if actor.is_empty():continue
         var known: Dictionary=data.actor_sources.get(id,{})
-        families["family:"+str(known.family) if known.get("signature")==_outfit(actor) else "actor:"+id]=true
+        families["family:"+str(known.family) if known.get("signature")==_outfit(actor,state) else "actor:"+id]=true
     var object_resources: Array=banks.keys();object_resources.sort()
     var response_resources: Array=families.keys();response_resources.sort()
-    data.owner_rows=rows;data.owner_contacts=contacts
+    data.owner_rows=rows;data.owner_contacts=contacts;data.owner_items=items
     data.owner_source_revision=data.source_revision
     data.owner_preview=preview;data.owner_result={"objects":object_ids,"recipients":recipient_ids,
         "object_resources":object_resources,"response_resources":response_resources,
@@ -118,7 +119,7 @@ static func request(data: Dictionary, key: Array, actor_uuid: String, behavior: 
     var recipients: Array=hints.recipients
     for id in hints.objects:objects[id]=state.objects[id]
     data.pending={"key":data.key.duplicate(true),"actor_uuid":actor_uuid,"behavior":behavior,
-        "state":{"actors":actors,"objects":objects,"tiles":{},"senses":senses},
+        "state":{"actors":actors,"items":state.get("items",{}).duplicate(),"objects":objects,"tiles":{},"senses":senses},
         "budget_bytes":budget_bytes,"source_files":source_files.duplicate(),"recipients":recipients,"eligible":eligible.duplicate(),"exact_recipients":hints.exact,
         "disclosed_objects":data.disclosed_objects.duplicate(),"profile":profile,"behaviors":behaviors.duplicate()}
     _start(data)
@@ -150,12 +151,12 @@ static func close(data: Dictionary) -> void:
     if data.task>=0: WorkerThreadPool.wait_for_task_completion(data.task)
     data.task=-1;data.result={};data.cache.clear();data.control={}
     data.object_rows={};data.object_contacts={};data.object_cells={};data.owner_preview={};data.owner_result={}
-    data.owner_rows={};data.owner_contacts={}
+    data.owner_rows={};data.owner_contacts={};data.owner_items={}
     data.disclosed_objects={};data.actor_sources={};data.object_sources={}
 
-static func _actor_paths(actor: Dictionary, clips: Array, result: Dictionary, cache: Dictionary) -> Dictionary:
+static func _actor_paths(actor: Dictionary, clips: Array, result: Dictionary, cache: Dictionary, state:Dictionary={}) -> Dictionary:
     if clips.is_empty(): return {}
-    var sources=Characters.sheet_paths(actor,clips,cache)
+    var sources=Characters.sheet_paths(actor,clips,cache,Characters.item_looks(actor,state))
     if not sources.ok: result.errors.append(sources.error.message);return {}
     var paths: Dictionary=sources.value.duplicate()
     result.paths.merge(sources.value);result.cpu_required.merge(sources.cpu_required);result.gpu_only.merge(sources.gpu_only)
@@ -169,18 +170,18 @@ static func _actor_paths(actor: Dictionary, clips: Array, result: Dictionary, ca
             elif not result.cpu_required.has(optical):result.gpu_only[optical]=true
     return paths
 
-static func _responses(actor: Dictionary, result: Dictionary, cache: Dictionary) -> void:
+static func _responses(actor: Dictionary, result: Dictionary, cache: Dictionary, state:Dictionary={}) -> void:
     if actor.get("life_state")=="dead":return
     var rig: Dictionary=Authoring.rigs(cache).get(Characters.rig_id(actor,cache),{})
     var clips=[]
     for role in ["damage","death"]:
         var body: Dictionary=Authoring.body(role,actor,{},cache).get("actor",{})
         if body.get("enabled",true) and body.has("clip") and rig.get("clips",{}).has(body.clip):clips.append(body.clip)
-    var paths: Dictionary=_actor_paths(actor,clips,result,cache)
+    var paths: Dictionary=_actor_paths(actor,clips,result,cache,state)
     var key: Array=paths.keys();key.sort();key.make_read_only()
     if not cache.has("__selection_response_families"):cache.__selection_response_families={}
     if not cache.__selection_response_families.has(key):cache.__selection_response_families[key]=cache.__selection_response_families.size()
-    result.actor_sources[actor.uuid]={"signature":_outfit(actor),"family":cache.__selection_response_families[key]}
+    result.actor_sources[actor.uuid]={"signature":_outfit(actor,state),"family":cache.__selection_response_families[key]}
 
 static func _break_banks(row: Dictionary, cache: Dictionary) -> Array:
     # Enumerate actual registered alternatives, without choosing a destruction
@@ -227,7 +228,7 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
                 var pose:Dictionary=Authoring.ConditionPose.select(caster,Characters.rig_id(caster,cache),"move",cache)
                 if not pose.is_empty():clips[pose.clip]=true
         if not clips.is_empty():
-            _actor_paths(caster,clips.keys(),result,cache)
+            _actor_paths(caster,clips.keys(),result,cache,state)
             result.actors.append({"uuid":request.actor_uuid,"clips":clips.keys()})
             result.onset_paths=result.paths.duplicate()
         return _finish_plan(request,result,{},cache,control)
@@ -260,16 +261,16 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
             casting.presentation_layers=actor.get("presentation_layers",[]).duplicate()
             for layer in layers:
                 if layer.get("enabled",true) and not layer.get("hidden",false):casting.presentation_layers.append(layer)
-            if cast.has("actionClip"):_actor_paths(casting,[cast.actionClip],result,cache)
+            if cast.has("actionClip"):_actor_paths(casting,[cast.actionClip],result,cache,state)
         var available: Array=clips.keys().filter(func(clip):return rig.clips.has(clip))
-        _actor_paths(actor,available,result,cache)
+        _actor_paths(actor,available,result,cache,state)
         result.actors.append({"uuid":id,"clips":available})
     # These sources are needed for the opening cast and current occluders.
     # Response/death/destruction candidates below remain useful later work.
     result.onset_paths=result.paths.duplicate()
     for id in request.get("recipients",[]):
         if _cancelled(control):return result
-        if recipe.get("damage")!=null and state.actors.has(id):_responses(state.actors[id],result,cache)
+        if recipe.get("damage")!=null and state.actors.has(id):_responses(state.actors[id],result,cache,state)
     var disclosed: Dictionary=state.duplicate()
     disclosed.objects=request.get("disclosed_objects",state.objects)
     var rows=WorldRows.rows(disclosed,cache)
@@ -302,7 +303,7 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
     for id in state.actors:
         if _cancelled(control):return result
         if recipe.get("damage")!=null and not request.get("exact_recipients",false) and id not in request.get("recipients",[]) and (request.get("eligible",[]).is_empty() or id in request.eligible):
-            _responses(state.actors[id],result,cache)
+            _responses(state.actors[id],result,cache,state)
     return _finish_plan(request,result,bank_paths,cache,control)
 
 static func _finish_plan(request: Dictionary, result: Dictionary, bank_paths: Dictionary, cache: Dictionary, control: Dictionary) -> Dictionary:

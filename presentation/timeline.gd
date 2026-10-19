@@ -260,7 +260,7 @@ func _advance_immediate(delta_ms: float) -> void:
             var delta: Dictionary = commits[commit_index].delta
             _append_membership_order(world_changes.order,delta,state)
             Compiler.apply_delta(state,delta)
-            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms)
+            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]))
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
@@ -283,12 +283,12 @@ func _advance_immediate(delta_ms: float) -> void:
         current = {}
 
 func _world_delta(delta: Dictionary) -> bool:
-    return not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors")
+    return not delta.get("tiles_removed",[]).is_empty() or not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors")
 
-func _observe_resource_owners(delta:Dictionary,at_ms:float)->void:
+func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[])->void:
     # These existing owner updates report actual resource-input changes. HP,
     # logs and ordinary movement still commit without rebuilding presenters.
-    var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms)
+    var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows)
     if delta.get("set",{}).has("senses"):
         var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),at_ms)
         changed=changed or spatial_changed
@@ -403,7 +403,10 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
         for at in cuts:
             # Source changes use the existing private preparation owner too;
             # no geometry rebuild or world revision is implied by a new clip.
-            if start+float(at)>target:break
+            # Commits below use a one-microsecond admission window. A structure
+            # edge must use that same window, or a fractional cue can publish
+            # equipment before the exact already-prepared world is admitted.
+            if start+float(at)>target+0.000001:break
             if start+float(at)>cursor or (activate and at<=0.0):
                 boundary_at=minf(boundary_at,float(at));break
     for at in stage_times:
@@ -497,7 +500,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
     var snapshot = state.duplicate()
     # These are the collections Compiler.apply_delta mutates. Their immutable
     # after-values remain shared; collection ownership never aliases live state.
-    for field in ["actors","tiles","objects","spatial_commit_cursors","combat_log_appends"]:
+    for field in ["actors","items","tiles","objects","spatial_commit_cursors","combat_log_appends"]:
         if state.has(field): snapshot[field] = state[field].duplicate()
     var changes = {"full":false,"tiles":{},"objects":{},"senses":false,"order":[]}
     var next_revision = revision; var next_world_revision = world_revision; var next_sequence = sequence
@@ -558,7 +561,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             Compiler.apply_delta(state,delta)
             FrameProfile.end_phase(profile,"timeline_apply_state",started)
             started=Time.get_ticks_usec()
-            _observe_resource_owners(delta,group_start_ms+commit.at_ms)
+            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]))
             FrameProfile.end_phase(profile,"timeline_apply_owners",started)
             started=Time.get_ticks_usec()
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)

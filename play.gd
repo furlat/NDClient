@@ -753,7 +753,7 @@ func _process(delta: float) -> void:
             initial_focus = true
         if wall_visibility_revision != timeline.revision:
             var senses: Variant = timeline.state.get("senses")
-            var visible_cells: Array = senses.get("visible",[]) if senses != null else []
+            var visible_cells: Array = WorldRows.visible_positions(timeline.state)
             if wall_visibility_revision < 0 or visible_cells != wall_visible_cells:
                 update_wall_visibility(false,false)
             wall_visibility_revision = timeline.revision
@@ -964,7 +964,7 @@ func _prepared_world_sources_ready(candidate: Dictionary) -> bool:
         and MediaWarmup.ready(media_warmup,pending_world.result.get("environment_paths",{}))
 
 func _world_preparation_due(advance_ms:float)->bool:
-    return pending_world!=null and (pending_world.initial or float(pending_world.boundary.display_ms)<=timeline.display_ms+maxf(0,advance_ms))
+    return pending_world!=null and (pending_world.initial or float(pending_world.boundary.display_ms)<=timeline.display_ms+maxf(0,advance_ms)+0.000001)
 
 func _step_world_preparation(poll_only:bool=false) -> void:
     if pending_world==null: return
@@ -1094,7 +1094,7 @@ func _sync_world() -> void:
         ground_supports_revision=world_revision
         source_lighting.publish_prepared(pending_world.light_preparation)
         var senses:Variant=timeline.state.get("senses")
-        var inputs:Variant=senses.get("light_sources") if senses!=null else null
+        var inputs:Variant=timeline.state.get("light_sources",{})
         light_source_inputs=inputs
         light_source_epoch=timeline.initialization_revision
         light_revision=timeline.revision
@@ -1623,7 +1623,7 @@ func _sync_actors() -> void:
 
 func _sync_source_lighting() -> void:
     var senses:Variant=timeline.state.get("senses")
-    var sources:Variant=senses.get("light_sources") if senses!=null else null
+    var sources:Variant=timeline.state.get("light_sources",{})
     # New-schema emitters fully describe source membership and optical values.
     # Legacy inventory-derived sources retain their existing revision refresh.
     if light_revision<0 or light_source_epoch!=timeline.initialization_revision or sources==null or sources!=light_source_inputs:
@@ -3454,7 +3454,7 @@ func select_action(row: Dictionary) -> void:
     if row.target_type == "self":
         target_selection.target_indices = [Choices.action_options(available_actions,row)[0].index]
         _request_selection(true)
-    else: _request_selection(false)
+    elif row.get("position_region")==null: _request_selection(false)
 
 func _request_selection(auto_confirm: bool) -> void:
     if action_request >= 0 or selected_action.is_empty(): return
@@ -3473,6 +3473,7 @@ func _request_selection(auto_confirm: bool) -> void:
     _refresh_selection_media()
 
 func _execute_admitted(value: Dictionary, keep_approach: bool = false) -> void:
+    if value.get("needs_aim",false):select_action(value.action);return
     if not command_ready() or not Interaction.owns_action(available_actions,value.action): return
     cancel_selection(not keep_approach)
     selected_action = value.action
@@ -3605,7 +3606,7 @@ func choose_target(position: Array, actor_id: String = "") -> void:
     if not command_ready(): return
     if not selected_action.is_empty():
         var appended = Interaction.extend_selection(available_actions,selected_action,target_selection,selection_preview,
-            position,actor_id,not Input.is_physical_key_pressed(KEY_SHIFT))
+            position,actor_id,not Input.is_physical_key_pressed(KEY_SHIFT),timeline.state)
         if appended.is_empty(): notice_text = selection_preview.get("reason") if selection_preview.get("reason") != null else "Choose a highlighted legal target."; return
         var extra = appended.selection.extra_target_positions.size()>target_selection.extra_target_positions.size()
         target_selection = appended.selection
@@ -3895,7 +3896,7 @@ func update_wall_visibility(refresh_sight: bool = true, finish_draw_order: bool 
             SourceMaterial.set_parameter(entry,"wall_mask_enabled",masked)
     FrameProfile.end_phase(profile,"wall_candidates",candidates_started)
     wall_visibility_revision = timeline.revision
-    wall_visible_cells = senses.get("visible",[]).duplicate(true) if senses != null else []
+    wall_visible_cells = WorldRows.visible_positions(timeline.state)
     # Production finalizes painter order once, after sampling native shadows.
     # Direct input/inspection callers retain immediate order and mask updates.
     if finish_draw_order: _sort_draws()
@@ -4021,7 +4022,7 @@ func _set_world_cursor(shape: int) -> void:
 func _hover_choice(hit: Dictionary, safe: bool) -> Dictionary:
     if not selected_action.is_empty():
         var appended = Interaction.extend_selection(available_actions,selected_action,target_selection,selection_preview,
-            hit.get("position",[]),hit.get("id",""),safe)
+            hit.get("position",[]),hit.get("id",""),safe,timeline.state)
         return {"kind":"target","label":selected_action.display_name,"value":appended} if not appended.is_empty() else {}
     return Interaction.idle_intent(available_actions,timeline.state,hit,force_attack,attack_preference,selected_mode,safe)
 

@@ -1,5 +1,5 @@
 extends RefCounted
-## Admission for the unchanged player schema. No defaults mutate wire packets.
+## Current schema-16 admission. Trusted server packets stay sparse and borrowed.
 
 const MAX_BYTES := 64 * 1024 * 1024
 const SAFE_INTEGER := 9007199254740991
@@ -10,8 +10,6 @@ var schema: Dictionary
 var identity: Dictionary
 var setup_error := ""
 var _patterns: Dictionary = {}
-var _server_choices_envelope: Dictionary = {}
-var _server_operation_envelope: Dictionary = {}
 var _current_server_contract := false
 var _producer_json: RefCounted
 # The shipped schema and identity are parsed once per path pair per process
@@ -126,61 +124,34 @@ func _decode_framed_event(root_name: String, raw: PackedByteArray, profile: bool
 	return result
 
 func _validate_server_operation(value: Variant) -> Dictionary:
-	# Only the explicitly selected current server's canonical model_dump_json
-	# output has this guarantee. A merely schema-conforming public/offline value
-	# can omit defaults or use uppercase UUIDs and must retain ordinary admission.
-	if not setup_error.is_empty(): return failure(setup_error)
+	# The connected current producer owns typed nested values. Cursor order,
+	# scope and exact raw bytes are checked by transport/journal, not rewalked.
+	if not value is Dictionary: return failure("Server operation must be an object")
 	if not _current_server_contract: return failure("Trusted operations require the current shipped server contract")
-	if _server_operation_envelope.is_empty():
-		_server_operation_envelope = schema["$defs"].PlayerOperation.duplicate(true)
-		# These five typed bodies are owned by the current producer. Retain their
-		# outer shapes, without interpreting or cloning each nested after-value.
-		_server_operation_envelope.properties.audience = {"type":"object"}
-		for field in ["lineages", "combat_log_appends", "content_additions"]:
-			_server_operation_envelope.properties[field] = {"type":"array"}
-		_server_operation_envelope.properties.hud = {"anyOf":[{"type":"object"},{"type":"null"}]}
-		# Canonical server serialization supplies even the defaulted discriminator.
-		_server_operation_envelope.required = _server_operation_envelope.properties.keys()
-	var issue := _check(_server_operation_envelope, value, "$", 0)
-	if not issue.is_empty(): return failure("Server operation: " + issue)
-	if value.cursor.sequence < 1: return failure("Operation sequence must be positive")
-	var checked := check_identity(value.protocol)
-	if not checked.ok: return checked
-	return {"ok":true,"value":value}
+	if int(value.get("cursor",{}).get("sequence",0)) < 1: return failure("Operation sequence must be positive")
+	var checked := check_identity(value.get("protocol",{}))
+	return {"ok":true,"value":value} if checked.ok else checked
+
+func decode_server(root_name: String, raw: PackedByteArray) -> Dictionary:
+	# Current-server HTTP boundary. Parse once without recursive schema checks
+	# or materializing defaults across shared choices, bodies and world columns.
+	if not setup_error.is_empty(): return failure(setup_error)
+	if not _current_server_contract: return failure("Trusted responses require the current shipped server contract")
+	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
+	if raw.has(0): return failure("Godot strings cannot represent NUL characters")
+	if _producer_json == null: _producer_json = ProducerJSON.new()
+	var parsed:Dictionary=_producer_json.parse(raw.get_string_from_utf8().trim_prefix(char(0xfeff)))
+	if not parsed.ok: return parsed
+	if not parsed.value is Dictionary: return failure("Server response must be an object")
+	if root_name in ["InitializationResponse","BootstrapResponse"]:
+		var checked := check_identity(parsed.value.get("protocol",{}))
+		if not checked.ok:return checked
+	if root_name=="InitializationResponse" and int(parsed.value.get("cursor",{}).get("sequence",-1))!=0:
+		return failure("Initialization sequence must be zero")
+	return parsed
 
 func decode_server_choices(raw: PackedByteArray) -> Dictionary:
-	# Explicit live-query trust boundary. The connected, identity-checked server
-	# owns the nested action data. Public decode stays strict; event admission has
-	# its own independent current-producer option and always uses exact numbers.
-	if not setup_error.is_empty(): return failure(setup_error)
-	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
-	var text_value := utf8(raw)
-	if not text_value.ok: return text_value
-	var parser := JSON.new()
-	if parser.parse(String(text_value.value).trim_prefix(char(0xfeff))) != OK:
-		return failure("Invalid server choices JSON: " + parser.get_error_message())
-	if _server_choices_envelope.is_empty():
-		_server_choices_envelope = schema["$defs"].ChoicesResponse.duplicate(true)
-		var choices := _ref(_server_choices_envelope.properties.choices).duplicate(true)
-		# Shared domains retain full structural checks once. Action metadata is
-		# trusted server output, but fields consumed by reference admission retain
-		# their exact shipped scalar shape and requiredness.
-		if schema["$defs"].has("PlayerChoices"):
-			var action := _ref(choices.properties.entity_actions.items)
-			var row := {"type":"object","properties":{},"required":[]}
-			for field in ["target_set","discovery_index","discovery_generation","availability_status","can_afford"]:
-				row.properties[field] = action.properties[field]
-				if field in action.get("required",[]): row.required.append(field)
-			for family in Choices.FAMILIES: choices.properties[family].items = row
-			for family in ["world_interactions","handler_details"]: choices.properties[family].items = true
-		else:
-			for rule in choices.properties.values():
-				if rule.get("type") == "array": rule.items = true
-		_server_choices_envelope.properties.choices = choices
-	var issue := _check(_server_choices_envelope, parser.data, "$", 0)
-	if issue.is_empty() and schema["$defs"].has("PlayerChoices"):
-		issue = Choices.check_choices(parser.data.choices,true)
-	return {"ok":true,"value":parser.data} if issue.is_empty() else failure("Server choices: " + issue)
+	return decode_server("ChoicesResponse",raw)
 
 func validate(root_name: String, value: Variant) -> Dictionary:
 	var json_issue := _json_value(value, 0)
@@ -202,9 +173,10 @@ func _validate_schema(root_name: String, value: Variant) -> Dictionary:
 	return {"ok": true, "value": value} if issue.is_empty() else failure(root_name + ": " + issue)
 
 func check_identity(value: Dictionary) -> Dictionary:
-	var checked := validate("ProtocolIdentity", value)
-	if not checked.ok: return checked
-	if not _equal(value, identity): return failure("Protocol identity mismatch")
+	# Identity defaults may be omitted by valid current envelopes. Compare the
+	# three scalar contract fields once, without a schema/default tree walk.
+	if value.get("protocol_version",1)!=identity.protocol_version or value.get("player_schema_version",16)!=identity.player_schema_version or value.get("schema_digest")!=identity.schema_digest:
+		return failure("Protocol identity mismatch")
 	return {"ok": true, "value": value}
 
 static func _json_value(value: Variant, depth: int) -> String:
@@ -298,6 +270,7 @@ func _check(original: Variant, value: Variant, path: String, depth: int) -> Stri
 	if value is String:
 		if value.length() < spec.get("minLength", 0) or value.length() > spec.get("maxLength", 9223372036854775807): return path + " has invalid length"
 		if spec.has("pattern") and not _pattern(spec.pattern, value): return path + " violates pattern"
+		if spec.get("format")=="base64url" and (value.length()%4!=0 or not _pattern("^[A-Za-z0-9_-]*={0,2}$",value)): return path+" is not base64url"
 		if spec.get("format") == "uuid" and (value.length() != 36 or not _pattern("^(?i:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$", value)): return path + " is not UUID"
 	if value is Array:
 		if value.size() < spec.get("minItems", 0) or value.size() > spec.get("maxItems", 9223372036854775807): return path + " has invalid item count"
@@ -378,7 +351,7 @@ func _vocabulary(spec: Variant) -> String:
 	for key in spec:
 		if key not in ALLOWED: return "Unsupported schema keyword " + key
 		if key == "$ref" and (not String(spec[key]).begins_with("#/$defs/") or not schema["$defs"].has(String(spec[key]).get_slice("/", 2))): return "Unresolved schema reference"
-		if key == "format" and spec[key] != "uuid": return "Unsupported schema format"
+		if key == "format" and spec[key] not in ["uuid","base64url"]: return "Unsupported schema format"
 		var children: Array = []
 		if key in ["$defs", "properties"]: children = spec[key].values()
 		elif key in ["anyOf", "oneOf", "prefixItems"]: children = spec[key]

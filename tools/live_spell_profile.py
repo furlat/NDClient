@@ -11,8 +11,9 @@ from time import perf_counter_ns
 from uuid import uuid4
 
 from dnd_player import (Follower, acknowledge, action_options, all_actions, attach,
-    binding_subject, choices, connect, follow, next_options, preview, receipt,
+    binding_subject, connect, follow, next_options, preview, receipt,
     selection_for, status, submit_command, wait_for_cursor)
+from studio_cases.adapter import choices
 
 
 def save(path: Path, value: dict | list) -> None:
@@ -45,10 +46,12 @@ async def drive_blue(url: str, token: str, output: Path) -> None:
             if path.exists() and path.read_bytes() != raw:
                 raise RuntimeError('Blue follower changed original packet bytes')
             path.write_bytes(raw)
-            if packet['kind'] == 'initialization':
+            if packet['cursor']['sequence']==0:
                 controlled.update(packet['initialization']['audience']['controlled'])
-                names.update({row['actor']['uuid']: row['actor']['name']
-                    for row in packet['initialization']['observations']})
+                groups=[packet['initialization']]
+            else:groups=packet.get('lineages',[])
+            for group in groups:
+                names.update({row['actor_uuid']:row['birth']['name'] for row in group.get('bodies',[]) if row.get('birth') is not None})
 
         follower = Follower(connection, consume)
         follow_task = asyncio.create_task(follow(follower))

@@ -12,8 +12,8 @@ var _sensory_context: Dictionary = {}
 # Optional payload-free timing for the transport owner; no work history retained.
 var profile_enabled := false
 var last_profile: Dictionary = {}
-# A historical reader opened without replay: open() already parsed packet 0
-# to select its protocol. decode_record() admits that parse instead of a second.
+# An offline reader opened without replay: open() already parsed packet 0
+# and checked its current protocol. decode_record() admits that parse instead of a second.
 var _opened_initialization: Array = []
 
 func open(path: String, historical_recording: bool = false, replay_existing: bool = true) -> Dictionary:
@@ -21,23 +21,12 @@ func open(path: String, historical_recording: bool = false, replay_existing: boo
 	var code := DirAccess.make_dir_recursive_absolute(path)
 	if code != OK: return _failure("Cannot create journal: " + error_string(code))
 	directory = path
-	# Explicit offline-only compatibility. Never change packet identities or
-	# let a live connection silently accept a different protocol.
+	# A replay uses the same current wire contract as live play. Historical
+	# wire-schema-9 journals must be re-recorded; container version is separate.
 	if historical_recording and FileAccess.file_exists(_file(0)):
 		var raw := FileAccess.get_file_as_bytes(_file(0))
-		var first := Protocol.parse_json(raw)
+		var first := protocol.decode_server("InitializationResponse",raw)
 		if not first.ok: return first
-		if not first.value is Dictionary: return _failure("Invalid recording initialization")
-		if not protocol.check_identity(first.value.get("protocol",{})).ok:
-			var matched := false
-			for version in ["pre-optical-sources", "pre-compact-choices", "pre-tile-fields", "pre-source-lighting", "pre-container-loot"]:
-				var base: String = "res://sdk/recordings/" + str(version) + "/"
-				var archived := Protocol.new(base + "player-api-v1.schema.json", base + "protocol-identity.json")
-				if archived.check_identity(first.value.get("protocol",{})).ok:
-					protocol = archived
-					matched = true
-					break
-			if not matched: return _failure("Unsupported recording protocol")
 		if not replay_existing: _opened_initialization = [raw, first.value]
 	return replay() if replay_existing else {"ok":true,"value":null}
 
@@ -47,8 +36,8 @@ func decode_record(sequence: int, raw: PackedByteArray) -> Dictionary:
 	if sequence == 0 and not _opened_initialization.is_empty():
 		var opened: Array = _opened_initialization
 		_opened_initialization = []
-		if opened[0] == raw: return protocol._validate_schema("InitializationResponse", opened[1])
-	return protocol.decode("InitializationResponse" if sequence == 0 else "PlayerOperation", raw)
+		if opened[0] == raw: return {"ok":true,"value":opened[1]}
+	return protocol.decode_server("InitializationResponse" if sequence == 0 else "PlayerOperation", raw)
 
 func consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	if directory.is_empty(): return _failure("Journal is not open")
@@ -79,7 +68,7 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transiti
 	if profile_enabled: _profile_elapsed("stage", started)
 	if not saved.ok: return saved
 	started = Time.get_ticks_usec() if profile_enabled else 0
-	var normalized: Dictionary = packet if canonical_server_operation and next.sequence > 0 else protocol._normalize_admitted("InitializationResponse" if next.sequence == 0 else "PlayerOperation", packet)
+	var normalized: Dictionary = packet
 	if profile_enabled: _profile_elapsed("normalize", started)
 	started = Time.get_ticks_usec() if profile_enabled else 0
 	var reduced := _reduced_state(normalized, record_transitions)
@@ -117,7 +106,7 @@ func replay(through_sequence: int = -1) -> Dictionary:
 		var sequence := filename.trim_suffix(".json").to_int()
 		if through_sequence >= 0 and sequence > through_sequence: break
 		var raw := FileAccess.get_file_as_bytes(directory.path_join(filename))
-		var result := protocol.decode("InitializationResponse" if sequence == 0 else "PlayerOperation", raw)
+		var result := decode_record(sequence,raw)
 		if result.ok and int(result.value.cursor.sequence) != sequence: result = _failure("Journal filename/cursor mismatch")
 		if result.ok: result = _consume_admitted(result.value, raw)
 		if not result.ok:
@@ -138,7 +127,7 @@ func snapshot() -> Dictionary:
 func _reduced_state(packet: Dictionary, record_transitions: bool = false) -> Dictionary:
 	var result: Dictionary
 	if packet.cursor.sequence == 0:
-		result = Reducer.reduce_initialization(packet.initialization, packet.content_additions)
+		result = Reducer.reduce_initialization(packet.initialization, packet.get("content_additions",[]))
 	else:
 		result = Reducer._reduce_operation_retained(state, packet, record_transitions, last_profile.reducer_ms if profile_enabled else null, _sensory_context)
 	return result

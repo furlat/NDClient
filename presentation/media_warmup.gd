@@ -3,6 +3,7 @@ extends RefCounted
 # Workers own unpublished images/textures. Only scene publication makes them ready.
 const EMPTY:Dictionary={}
 const Characters = preload("res://presentation/characters.gd")
+const Authoring = preload("res://presentation/authoring.gd")
 const Conditions = preload("res://presentation/conditions.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
@@ -447,7 +448,7 @@ static func _snapshot(state: Dictionary) -> Dictionary:
     # records themselves are immutable, so copy only these small map indexes.
     var snapshot = {}
     if not state.is_empty():
-        for field in ["actors","tiles","objects"]: snapshot[field] = state[field].duplicate()
+        for field in ["actors","tiles","objects","items"]: snapshot[field] = state.get(field,{}).duplicate()
         snapshot.senses = state.senses
         snapshot.audience = state.audience
     return snapshot
@@ -1554,7 +1555,7 @@ static func _drawable(actor: Dictionary) -> bool:
     return actor.get("present",true) and actor.get("last_visual_position") != null \
         and actor.get("spatial_disposition","present") == "present" and actor.get("remains_disposition","intact") != "disintegrated"
 
-static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, errors: Array) -> Dictionary:
+static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, errors: Array, looks:Dictionary={}) -> Dictionary:
     if not _drawable(actor): return {}
     var wanted = clips.duplicate()
     var rigs: Dictionary = Characters.rigs(cache)
@@ -1565,13 +1566,19 @@ static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, erro
     var rest = Characters.rest_sample(actor,rigs[rig],cache)
     if not rest.ok: errors.append(rest.error.message); return {}
     if rest.value.clip not in wanted: wanted.append(rest.value.clip)
+    # Equipment controls can be used immediately after input readiness. Their
+    # one authored rig clip belongs to this outfit's required closure, including
+    # received post-equip outfits, rather than the optional whole clip family.
+    if actor.get("life_state")=="alive":
+        var equipment:Dictionary=Authoring.body("equipment",actor,{},cache).get("actor",{})
+        if equipment.get("enabled",false) and rigs[rig].clips.has(equipment.get("clip","")) and equipment.clip not in wanted:wanted.append(equipment.clip)
     # An admitted condition may select both resting and locomotion sources.
     # Prepare that finite closure together, before its first movement; actor
     # tracks still name the exact clip for attack/jump/hit/death independently.
     for activity in ["idle","move"]:
         var pose=Conditions.ConditionPose.select(actor,rig,activity,cache)
         if not pose.is_empty() and pose.clip not in wanted: wanted.append(pose.clip)
-    var resolved = Characters.sheet_paths(actor,wanted,cache)
+    var resolved = Characters.sheet_paths(actor,wanted,cache,looks)
     if not resolved.ok: errors.append(resolved.error.message); return {}
     var effects:Dictionary=Conditions.paths(actor,cache)
     # This finite result selects artwork independently of native optical CPU
@@ -1613,27 +1620,33 @@ static func _add_actor_base(paths: Dictionary, base: Dictionary, cache: Dictiona
                 elif not cpu_required.has(optical_path):gpu_only[optical_path]=true
     paths.merge(base.effects);cpu_required.merge(base.effects)
 
-static func _add_actor(paths: Dictionary, actor: Dictionary, clips: Array, cache: Dictionary, errors: Array, gpu_only: Dictionary, cpu_required: Dictionary, native_optics:bool=false, optical_candidates:Dictionary={}, normal_sets:Dictionary={}) -> void:
-    _add_actor_base(paths,_actor_base(actor,clips,cache,errors),cache,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets)
+static func _add_actor(paths: Dictionary, actor: Dictionary, clips: Array, cache: Dictionary, errors: Array, gpu_only: Dictionary, cpu_required: Dictionary, native_optics:bool=false, optical_candidates:Dictionary={}, normal_sets:Dictionary={}, looks:Dictionary={}) -> void:
+    _add_actor_base(paths,_actor_base(actor,clips,cache,errors,looks),cache,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets)
 
-static func _witness(witnesses: Dictionary, id: String, actor: Dictionary) -> void:
+static func _witness(witnesses: Dictionary, id: String, actor: Dictionary, looks:Dictionary) -> void:
     if not witnesses.has(id): witnesses[id] = []
     # A long movement lineage can have one full actor after-value per cell.
     # Position/HP changes do not create new outfits; never cross-product all
     # those occurrences with every track just to request the same Run PNG.
-    for prior in witnesses[id]:
+    for witness in witnesses[id]:
+        var prior:Dictionary=witness.actor
         if prior.get("creature_content_ref") == actor.get("creature_content_ref") \
             and prior.appearance == actor.appearance and prior.visual_loadout == actor.visual_loadout \
-            and prior.life_state == actor.life_state and prior.get("conditions",[])==actor.get("conditions",[]) and _drawable(prior) == _drawable(actor): return
-    witnesses[id].append(actor)
+            and prior.life_state == actor.life_state and prior.get("conditions",[])==actor.get("conditions",[]) and _drawable(prior) == _drawable(actor) and witness.looks==looks:return
+    witnesses[id].append({"actor":actor,"looks":looks})
 
-static func _actor_selector(actor:Dictionary,cache:Dictionary={})->Array:
+static func _index_actor_items(owners:Dictionary,actor:Dictionary)->void:
+    for layer in actor.get("visual_loadout",{}).get("layers",[]):
+        if not owners.has(layer.item_uuid):owners[layer.item_uuid]={}
+        owners[layer.item_uuid][actor.uuid]=true
+
+static func _actor_selector(actor:Dictionary,cache:Dictionary={},looks:Dictionary={})->Array:
     # Physical source identity belongs to admitted layer Resources. UUID, tint,
     # portrait and transform never distinguish a sheet or its optical metadata.
     var id:String=Characters.rig_id(actor,cache)
     var rigs:Dictionary=Characters.rigs(cache)
     if not rigs.has(id):return [id,_drawable(actor)]
-    var selected:Dictionary=Characters._select_layers(actor,rigs[id],id==Characters.BodySources.index(cache).root_rig,cache)
+    var selected:Dictionary=Characters._select_layers(actor,rigs[id],id==Characters.BodySources.index(cache).root_rig,cache,looks)
     var references:Array=[]
     if selected.ok:
         for layer in selected.value:
@@ -1698,16 +1711,16 @@ static func _retain_actor_closures(cache:Dictionary,reuse:Dictionary)->void:
 
 static func _add_actor_once(paths: Dictionary, actor: Dictionary, clips: Array, cache: Dictionary,
         errors: Array, gpu_only: Dictionary, cpu_required: Dictionary, native_optics: bool,
-        optical_candidates: Dictionary, normal_sets: Dictionary, requested: Array, reuse: Dictionary = {}) -> void:
+        optical_candidates: Dictionary, normal_sets: Dictionary, requested: Array, reuse: Dictionary = {}, looks:Dictionary={}) -> void:
     var selector:Array=[]
     for prior in requested:
-        if not is_same(prior.actor,actor):continue
+        if not is_same(prior.actor,actor) or prior.looks!=looks:continue
         if is_same(prior.paths,paths) and prior.clips==clips:return
         selector=prior.get("selector",[])
     if selector.is_empty():
         var prior:Dictionary=reuse.get("selected_actors",{}).get(actor.uuid,reuse.get("selectors",{}).get(actor.uuid,{}))
-        selector=prior.selector if _same_actor_source_inputs(prior.get("actor",{}),actor) else _actor_selector(actor,cache)
-    if not reuse.is_empty():reuse.selected_actors[actor.uuid]={"actor":actor,"selector":selector}
+        selector=prior.selector if _same_actor_source_inputs(prior.get("actor",{}),actor) and prior.get("looks",{})==looks else _actor_selector(actor,cache,looks)
+    if not reuse.is_empty():reuse.selected_actors[actor.uuid]={"actor":actor,"looks":looks,"selector":selector}
     var packet = {}
     var base:Dictionary={}
     for entries in [reuse.get("current",[]),reuse.get("previous",[])]:
@@ -1721,7 +1734,7 @@ static func _add_actor_once(paths: Dictionary, actor: Dictionary, clips: Array, 
         packet={"id":actor.uuid,"selector":selector,"clips":clips.duplicate(),"native_optics":native_optics,
             "paths":{},"gpu_only":{},"cpu_required":{},"optical_candidates":{},"normal_sets":{}}
         var previous_errors=errors.size()
-        if base.is_empty():base=_actor_base(actor,clips,cache,errors)
+        if base.is_empty():base=_actor_base(actor,clips,cache,errors,looks)
         elif not reuse.is_empty():reuse.promotions=int(reuse.get("promotions",0))+1
         _add_actor_base(packet.paths,base,cache,packet.gpu_only,packet.cpu_required,native_optics,packet.optical_candidates,packet.normal_sets)
         var size_paths:Dictionary=packet.paths.duplicate();size_paths.merge(packet.optical_candidates)
@@ -1747,7 +1760,7 @@ static func _add_actor_once(paths: Dictionary, actor: Dictionary, clips: Array, 
     elif not reuse.is_empty(): reuse.hits+=1
     paths.merge(packet.paths);gpu_only.merge(packet.gpu_only);cpu_required.merge(packet.cpu_required)
     optical_candidates.merge(packet.optical_candidates);normal_sets.merge(packet.normal_sets)
-    requested.append({"paths":paths,"actor":actor,"clips":clips.duplicate(),"packet":packet,"selector":selector})
+    requested.append({"paths":paths,"actor":actor,"looks":looks,"clips":clips.duplicate(),"packet":packet,"selector":selector})
     if not reuse.is_empty() and not reuse.current.any(func(entry):return is_same(entry,packet)): reuse.current.append(packet)
 
 static func _visible_ids(visible: Dictionary, senses: Variant, audience: Dictionary) -> void:
@@ -1777,13 +1790,13 @@ static func errors_at(plan:Dictionary,local_ms:float)->Array:
 
 static func _actor_first_use(times:Dictionary,actor:Dictionary,clips:Array,at_ms:float,
         cache:Dictionary,errors:Array,gpu_only:Dictionary,cpu_required:Dictionary,native_optics:bool,
-        optical_candidates:Dictionary,normal_sets:Dictionary,requested:Array,reuse:Dictionary,error_times:Dictionary={})->void:
+        optical_candidates:Dictionary,normal_sets:Dictionary,requested:Array,reuse:Dictionary,error_times:Dictionary={},looks:Dictionary={})->void:
     # This exact source occurrence was already selected earlier in the same
     # plan. Its role projections are already composed; first-use needs only
     # its immutable path owner, not another set of scratch role/path maps.
     var borrowed:Dictionary={}
     for request in requested:
-        if is_same(request.actor,actor) and request.clips==clips and request.packet.native_optics==native_optics:
+        if is_same(request.actor,actor) and request.looks==looks and request.clips==clips and request.packet.native_optics==native_optics:
             borrowed=request;break
     if not borrowed.is_empty():
         var occurrence:Dictionary=borrowed.duplicate();occurrence.paths={}
@@ -1792,7 +1805,7 @@ static func _actor_first_use(times:Dictionary,actor:Dictionary,clips:Array,at_ms
         return
     var paths:Dictionary={}
     var before:int=errors.size()
-    _add_actor_once(paths,actor,clips,cache,errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested,reuse)
+    _add_actor_once(paths,actor,clips,cache,errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested,reuse,looks)
     for index in range(before,errors.size()):error_times[errors[index]]=minf(float(error_times.get(errors[index],at_ms)),at_ms)
     EnvironmentMedia._first_use({},times,paths,at_ms)
 
@@ -1817,12 +1830,15 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
     var actor_reuse = _actor_reuse(cache)
     if state.is_empty(): return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required,"normal_sets":normal_sets,"character_timeline":character_timeline}
     var actors: Dictionary = state.actors.duplicate()
+    var items:Dictionary=state.get("items",{}).duplicate()
+    var item_actors:Dictionary={}
+    for actor in actors.values():_index_actor_items(item_actors,actor)
     var senses: Variant = state.senses
     var audience: Dictionary = state.audience
     var optical_candidates={}
     var native_optics=not groups.is_empty() and _native_optics(groups[0])
     for actor in actors.values():
-        if WorldRows.visible_actor(actor,state): _add_actor_once(required,actor,[],cache,errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
+        if WorldRows.visible_actor(actor,state): _add_actor_once(required,actor,[],cache,errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,Characters.item_looks(actor,{"items":items}))
     for group_index in range(groups.size()):
         var group: Dictionary = groups[group_index]
         var first_request:int=0 if group_index==0 else requested_sources.size()
@@ -1836,59 +1852,73 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
         var current_visible:Dictionary={}
         _visible_ids(current_visible,senses,audience)
         for id in current_visible:
-            if actors.has(id):_actor_first_use(first_use,actors[id],[],0.0,cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
+            if actors.has(id):_actor_first_use(first_use,actors[id],[],0.0,cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times,Characters.item_looks(actors[id],{"items":items}))
         var witnesses = {}
         var visible = {}
-        for id in actors: _witness(witnesses,id,actors[id])
+        for id in actors: _witness(witnesses,id,actors[id],Characters.item_looks(actors[id],{"items":items}))
+        # First-disclosed actors can precede their canonical commit. Borrow only
+        # absent item looks for passive source preparation; known variants keep
+        # their own authored occurrence until that item's actual after-value.
+        var disclosed_items:Dictionary=items.duplicate()
+        for commit in group.get("commits",[]):disclosed_items.merge(commit.delta.get("items",{}),false)
         for id in group.get("staged_actors",{}):
-            _witness(witnesses,id,group.staged_actors[id])
+            var looks:Dictionary=Characters.item_looks(group.staged_actors[id],{"items":disclosed_items})
+            _witness(witnesses,id,group.staged_actors[id],looks)
+            _index_actor_items(item_actors,group.staged_actors[id])
             visible[id] = true
-            _actor_first_use(first_use,group.staged_actors[id],[],float(group.get("staged_at_ms",{}).get(id,0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
+            _actor_first_use(first_use,group.staged_actors[id],[],float(group.get("staged_at_ms",{}).get(id,0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times,looks)
         _visible_ids(visible,senses,audience)
         for commit in group.get("commits",[]):
             var delta: Dictionary = commit.delta
+            items.merge(delta.get("items",{}),true)
+            var changed_actors:Dictionary=delta.get("actors",{}).duplicate()
+            for item_id in delta.get("items",{}):changed_actors.merge(item_actors.get(item_id,{}),false)
             for id in delta.get("actors",{}):
-                _witness(witnesses,id,delta.actors[id])
                 actors[id] = delta.actors[id]
+                _index_actor_items(item_actors,actors[id])
+            for id in changed_actors:
+                if actors.has(id):_witness(witnesses,id,actors[id],Characters.item_looks(actors[id],{"items":items}))
             senses = delta.get("set",{}).get("senses",senses)
             audience = delta.get("set",{}).get("audience",audience)
             _visible_ids(visible,senses,audience)
             var after_visible:Dictionary={}
             _visible_ids(after_visible,senses,audience)
             for id in after_visible:
-                if actors.has(id) and (not current_visible.has(id) or delta.get("actors",{}).has(id)):
-                    _actor_first_use(first_use,actors[id],[],float(commit.get("at_ms",0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
+                if actors.has(id) and (not current_visible.has(id) or changed_actors.has(id)):
+                    _actor_first_use(first_use,actors[id],[],float(commit.get("at_ms",0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times,Characters.item_looks(actors[id],{"items":items}))
             current_visible=after_visible
         # Union exact observed/committed outfits within this one group. This
         # conservative preparation changes no state and exposes no actor early.
         for id in witnesses:
             if not visible.has(id): continue
-            for actor in witnesses[id]: _add_actor_once(paths,actor,[],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
+            for witness in witnesses[id]:_add_actor_once(paths,witness.actor,[],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,witness.looks)
         var requested = {}
         for track in group.get("actor_tracks",[]):
             # This track's source outfit was captured by the compiler at its
             # occurrence. Later damage/death/outfit witnesses are demanded
             # ahead below, but cannot block this earlier authored source cue.
             var exact:Dictionary=track.get("presentation_actor",{})
-            var track_actors:Array=[exact] if not exact.is_empty() else witnesses.get(track.actor_uuid,[])
-            for actor in track_actors:
+            var track_actors:Array=[{"actor":exact,"looks":track.get("presentation_item_looks",Characters.item_looks(exact,{"items":disclosed_items}))}] if not exact.is_empty() else witnesses.get(track.actor_uuid,[])
+            for witness in track_actors:
+                var actor:Dictionary=witness.actor
                 if Characters.rig_id(actor,cache)!=track.rig:continue
                 var shown:Dictionary=actor.duplicate()
                 shown.presentation_layers=track.get("effect_layers",[])
                 if track.has("visual_loadout"):shown.visual_loadout=track.visual_loadout
-                _actor_first_use(first_use,shown,[track.clip],float(track.start_ms),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
+                _actor_first_use(first_use,shown,[track.clip],float(track.start_ms),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times,witness.looks)
             var key: String = track.actor_uuid + ":" + track.rig + ":" + track.clip
             if not requested.has(key): requested[key] = []
             var loadout: Variant = [track.get("visual_loadout"),track.get("effect_layers",[])]
             if loadout in requested[key]: continue
             requested[key].append(loadout)
-            for actor in witnesses.get(track.actor_uuid,[]):
+            for witness in witnesses.get(track.actor_uuid,[]):
+                var actor:Dictionary=witness.actor
                 if Characters.rig_id(actor,cache) != track.rig: continue
                 var shown: Dictionary = actor.duplicate()
                 shown.presentation_layers=track.get("effect_layers",[])
                 if track.has("visual_loadout"):
                     shown.visual_loadout = track.visual_loadout
-                _add_actor_once(paths,shown,[track.clip],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
+                _add_actor_once(paths,shown,[track.clip],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,witness.looks)
         if group.has("id"):
             character_timeline[group.id]=EnvironmentMedia._timeline({},first_use)
             var error_rows:Array=[]

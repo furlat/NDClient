@@ -1,4 +1,17 @@
-# Selected UI artwork and assignments
+# UI artwork intake reference
+
+The production source is now the typed `authoring/abilities/` ImageRefs and
+`authoring/characters/` portrait banks and character assignments, assembled by
+the three `.tres` roots. The ordinary presentation build emits the HUD's icon
+maps from those owners. These JSON files preserve the earlier intake and its
+source artwork assignments; they are not a second runtime UI catalog.
+
+Current exhaustive coverage and named remaining art gaps are recorded in
+`agent_docs/UI_ART_COVERAGE_2026-10-19.md`. The 18 October delivery supplied the
+previously missing Unarmed icon and additional creature portraits; the old gaps
+and counts below describe the earlier intake, not the present production state.
+
+## Historical intake
 
 This is the editable client copy of the existing UI presentation data. It uses
 the installed **smooth48 icons and 192×256 portraits**. No artwork was copied,

@@ -519,7 +519,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--case', choices=CASES, required=True); parser.add_argument('--seed', type=int, default=3)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--engine', type=Path, default=Path(__file__).resolve().parents[1].parent/'dnd_engine')
+    parser.add_argument('--engine', type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-211b71134"))
     sys.exit(asyncio.run(run(parser.parse_args())))
 
 

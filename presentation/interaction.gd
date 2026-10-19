@@ -1,6 +1,7 @@
 extends RefCounted
 # Native selection over borrowed, response-local compact domains.
 const Choices = preload("res://sdk/choices.gd")
+const Cells = preload("res://sdk/fold_cells.gd")
 
 static func actions(choices: Dictionary) -> Array:
     return Choices.all_actions(choices)
@@ -8,13 +9,49 @@ static func actions(choices: Dictionary) -> Array:
 static func owns_action(choices: Dictionary, row: Dictionary) -> bool:
     # Gesture-time ownership: optional actor metadata cannot identify the response
     # that supplied a row. Do not search/expand its potentially large target set.
+    var native:Dictionary=row.get("_native_action",row)
     for family in Choices.FAMILIES:
         for current in choices.get(family,[]):
-            if is_same(current,row): return true
+            if is_same(current,native): return true
     return false
 
 static func selection(row: Dictionary, indices: Array, safe: bool = true) -> Dictionary:
-    return {"action_index":row.get("discovery_index",0),"target_indices":indices.duplicate(),"extra_target_positions":[],"prefer_safe":safe}
+    var result={"action_index":row.get("discovery_index",0),"target_indices":indices.duplicate(),"extra_target_positions":[],"prefer_safe":safe}
+    if row.get("cast_at_level")!=null:result.cast_at_level=int(row.cast_at_level)
+    return result
+
+static func level_rows(row:Dictionary)->Array:
+    # UI-only, bounded metadata views. Large shared target domains stay borrowed.
+    var levels:Array=row.get("cast_levels",[])
+    if levels.is_empty():return [row]
+    var result:Array=[]
+    for level in levels:
+        var view:Dictionary=row.duplicate();view._native_action=row.get("_native_action",row);view.cast_at_level=int(level);result.append(view)
+    return result
+
+static func region_origin(choices:Dictionary,row:Dictionary,state:Dictionary)->Variant:
+    if row.get("range_origin")!=null:return row.range_origin
+    return state.get("actors",{}).get(choices.get("entity_uuid"),{}).get("last_visual_position")
+
+static func region_allows(choices:Dictionary,row:Dictionary,position:Array,state:Dictionary={})->bool:
+    var region:Variant=row.get("position_region")
+    if region==null or position.size()!=2:return false
+    var origin:Variant=region_origin(choices,row,state)
+    if origin==null:return true # Preview resolves an undisclosed origin; never guess another actor.
+    var dx=int(position[0]-origin[0]);var dy=int(position[1]-origin[1])
+    if region.get("exclude_source_position",true) and dx==0 and dy==0:return false
+    if region.get("range_feet")!=null and floor(sqrt(float(dx*dx+dy*dy)))*5>float(region.range_feet):return false
+    if region.get("requires_axis_or_diagonal_alignment",false) and dx!=0 and dy!=0 and absi(dx)!=absi(dy):return false
+    # Seat cells are composed, not a member's visibility/occupancy proof. The
+    # exact visible/reachable/walkable/unoccupied checks belong to real Preview.
+    return true
+
+static func region_positions(choices:Dictionary,row:Dictionary,state:Dictionary)->Array:
+    var result:Array=[];var senses:Variant=state.get("senses")
+    if senses==null or row.get("position_region")==null:return result
+    for position in Cells.mask_points(senses.visible):
+        if region_allows(choices,row,position,state):result.append(position)
+    return result
 
 static func world_options(choices: Dictionary, identity: String) -> Array:
     var result: Array = choices.get("world_interactions",[]).filter(func(option):return option.subject_uuid == identity)
@@ -33,7 +70,7 @@ static func same_option(a: Dictionary,b: Dictionary) -> bool:
     for field in ["subject_uuid","behavior_id","template_name","connector_uuid","variant_facets"]:
         var fallback: Variant = [] if field == "variant_facets" else null
         if a.get(field,fallback) != b.get(field,fallback): return false
-    return same_content_ref(a.get("configured_action_ref"),b.get("configured_action_ref"))
+    return true
 
 static func admitted(choices: Dictionary, option: Dictionary) -> Array:
     var result: Array = []
@@ -41,8 +78,10 @@ static func admitted(choices: Dictionary, option: Dictionary) -> Array:
         var affordance: Dictionary = row.get("interaction_affordance",{})
         if affordance.get("surface","action_bar") != "world" or row.behavior_id != option.behavior_id: continue
         if option.get("template_name") != null and row.template_name != option.template_name: continue
-        if not same_content_ref(row.get("configured_action_ref"),option.get("configured_action_ref")) or row.get("variant_facets",[]) != option.get("variant_facets",[]): continue
+        if row.get("variant_facets",[]) != option.get("variant_facets",[]): continue
         if not row.can_afford: continue
+        if row.get("position_region")!=null and affordance.get("binding","target")=="source_item" and row.get("source_item_uuid")==option.subject_uuid and row.get("availability_status")=="available":
+            result.append({"action":row,"target":{},"selection":selection(row,[]),"needs_aim":true});continue
         for target in Choices.action_options(choices,row):
             if option.get("connector_uuid") != null:
                 var connector: Variant = row.get("connector_traversal")
@@ -96,7 +135,7 @@ static func main_attack(choices: Dictionary, identity: String, preference: Strin
     return {}
 
 static func extend_selection(choices: Dictionary, action: Dictionary, prefix: Dictionary,
-        preview: Dictionary, position: Array, identity: String = "", safe: bool = true) -> Dictionary:
+        preview: Dictionary, position: Array, identity: String = "", safe: bool = true, state: Dictionary = {}) -> Dictionary:
     # Only the current prefix's native continuation can authorize an append.
     # A computed empty continuation must never fall back to initial eligibility.
     var selected = prefix.duplicate(true)
@@ -107,7 +146,13 @@ static func extend_selection(choices: Dictionary, action: Dictionary, prefix: Di
     var domains = choices if preview.is_empty() else preview
     var options = Choices.action_options(choices,action) if preview.is_empty() else Choices.next_options(preview)
     var candidate = target(domains,options,position,identity)
-    if candidate.is_empty(): return {}
+    if candidate.is_empty():
+        # Only the first aim uses discovery's region. A subsequent vertex must
+        # be admitted by this exact prefix's Preview continuation, even empty.
+        if prefix.get("target_indices",[]).is_empty() and prefix.get("extra_target_positions",[]).is_empty() and region_allows(choices,action,position,state):
+            selected.extra_target_positions.append(position.duplicate())
+            return {"selection":selected,"position":position}
+        return {}
     selected.target_indices.append(candidate.index)
     return {"selection":selected,"target":candidate,"position":Choices.binding_position(domains,candidate)}
 

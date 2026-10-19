@@ -20,7 +20,7 @@ import subprocess
 import sys
 import uuid
 
-DEFAULT_ENGINE = "/home/tommaso/.codex/worktrees/remaining-npc-authoring/dnd_engine"
+DEFAULT_ENGINE = "/home/tommaso/.cache/ndclient/dnd_engine-211b71134"
 DEFAULT_PYTHON = "/home/tommaso/.cache/dnd-engine/npc-mechanics-venv/bin/python"
 DEFAULT_OUTPUT = "authoring/server_ids.json"
 
@@ -460,10 +460,15 @@ def extract(engine):
     ids["battlefield"] = {key: {"title": spec.title} for key, spec in BATTLEFIELDS_BY_ID.items()}
     with open(os.path.join(engine, "sdk", "protocol", "protocol-identity.json"), encoding="utf-8") as handle:
         identity = json.load(handle)
+    provenance_path = os.path.join(engine, ".source.json")
+    provenance = {}
+    if os.path.isfile(provenance_path):
+        with open(provenance_path, encoding="utf-8") as provenance_file:
+            provenance = json.load(provenance_file)
     header = {
         "engine": engine,
-        "commit": git(engine, "rev-parse", "HEAD"),
-        "branch": git(engine, "rev-parse", "--abbrev-ref", "HEAD"),
+        "commit": git(engine, "rev-parse", "HEAD") or provenance.get("commit", ""),
+        "branch": git(engine, "rev-parse", "--abbrev-ref", "HEAD") or provenance.get("branch", ""),
         "uncommitted_paths": len([line for line in git(engine, "status", "--porcelain").splitlines() if line]),
         "protocol_version": identity["protocol_version"],
         "player_schema_version": identity["player_schema_version"],

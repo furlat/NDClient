@@ -1,87 +1,108 @@
 extends RefCounted
-## Browse the plan's case families using the existing qualified capture inventory.
-const CAPABILITIES=["Move","Dash","Dodge","Disengage","Hide","Jump","Traverse window","Attack","Opportunity attack","Shove","Damage / life","Action economy","Conditions","Spell composition","Combined regression"]
-const CASES={
-    "gallery_sorcerer":["Spell composition","Large-map expedition","Sorcerer expedition · Lantern Gallery"],
-    "movement-oa":["Opportunity attack","Movement interruption","Movement with opportunity attacks"],
-    "walk":["Move","Cardinal route","Ordinary movement"],
-    "walk_diagonal":["Move","Cardinal / diagonal","Diagonal route"],
-    "elevation":["Move","Elevation / connectors","Raised support route"],
-    "jump":["Jump","Takeoff / landing","Uninterrupted jump"],
-    "oa_jump":["Jump","Opportunity attack","Jump with reaction"],
-    "oa_jump_lethal":["Jump","Lethal interruption","Lethal reaction during jump"],
-    "oa_jump_late_lethal":["Jump","Lethal interruption","Late lethal reaction"],
-    "window":["Traverse window","Cleared aperture","Crossing both directions"],
-    "window_break":["Traverse window","Blocked → cleared","Break window, then cross"],
-    "melee":["Attack","Melee","Melee attack"],
-    "ranged":["Attack","Ranged","Ranged attack"],
-    "dying":["Damage / life","Dying / death saves","Damage → Dying → failed death saves → Dead"],
-    "shove":["Shove","Push / refusal","Shove"],
-    "dash":["Dash","Opportunity-attack interaction","Dash movement provoking an attack"],
-    "dash_comparison":["Dash","Movement allowance comparison","Ordinary movement → Dash → equal-distance movement"],
-    "dodge":["Dodge","Avoidance / expiry","Dodge, actual miss and expiry"],
-    "disengage":["Disengage","Reaction suppression","Move without opportunity attack"],
-    "hide":["Hide","Apply / move / attack","Hide and subsequent attack"],
-    "hide_light":["Hide","Illumination / reveal","Torch: dim → bright → reveal"],
-    "action_economy":["Action economy","Extra Attack / Action Surge","Four attacks across Action Surge"],
-    "poisoned":["Conditions","Initialization / removal","Poisoned, then restored"],
-    "prone":["Shove","Prone / stand","Initially prone, then stand"],
-    "rage":["Conditions","Persistent material / movement","Frenzy and movement"],
-    "invisibility":["Conditions","Perception","Invisibility → unseen movement → See Invisibility"],
-    "condition_suppression":["Conditions","Suppression / restoration","Antimagic suppression lifecycle"],
-    "condition_owners":["Conditions","Multiple owners","Shared paralysis, individual removal"],
-    "magic_missile":["Spell composition","Repeated recipients","Magic Missile A → B → A"],
-    "hold_person":["Spell composition","Persistent attached effect","Hold Person lifecycle"]}
+## One authoring-organized library. Record availability, art, render proof and approval are separate facts.
+const CAPABILITIES=["Spells","Conditions","Actions","Characters","Environment","Surfaces","Items","Interactions","Rules"]
+const INDEX="res://.runtime/studio-library/index.json"
+const SERVER_IDS="res://authoring/server_ids.json"
+const COVERAGE="res://build/presentation/coverage.json"
+const CATEGORY={"spell":"Spells","condition":"Conditions","action":"Actions","reaction":"Actions","trait":"Actions","creature":"Characters","environment_object":"Environment","boundary_structure":"Environment","connector":"Environment","battlefield":"Environment","spatial_effect":"Surfaces","residue":"Surfaces","item":"Items","interaction":"Interactions"}
+const REJECTED=["spell.aid","spell.bless","spell.false_life","spell.sacred_flame"]
 
-static func read()->Array:
-    var path="res://generated/studio_case_inventory.json"
-    if not FileAccess.file_exists(path):return _spell_cases()
-    var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(path))
-    var result:Array=[]
-    for item in inventory.get("cases",[]):
-        var descriptor_path:String=item.descriptor
-        if not descriptor_path.begins_with("res://"):descriptor_path="res://"+descriptor_path
-        if not FileAccess.file_exists(descriptor_path):continue
-        var descriptor:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(descriptor_path))
-        var kind:String=descriptor.get("case","")
-        if kind.is_empty() and item.name=="movement-oa":kind="movement-oa"
-        if not CASES.has(kind):continue
-        var fields:Array=CASES[kind]
-        var label:String=fields[2]
-        var outcomes:Dictionary=item.get("attack_outcomes",{})
-        if kind in ["melee","ranged"] and not outcomes.is_empty():label+=" · "+" / ".join(outcomes.keys())
-        if kind=="shove":label+=" · "+("push" if item.get("facts",{}).get("forced_movement",0)>0 else "refused")
-        var journal:String=item.journal
-        var base=journal.get_base_dir()
-        var perspectives:Array=[]
-        if base.get_file() in ["amber","blue"]:
-            var owner=base.get_base_dir()
-            for audience in ["amber","blue"]:
-                var candidate=owner.path_join(audience).path_join("journal")
-                if FileAccess.file_exists(candidate.path_join("0000000000000000.json")):
-                    perspectives.append({"id":audience,"label":audience.capitalize(),"journal":candidate})
-        else:perspectives.append({"id":"recorded","label":"Recorded audience","journal":journal})
-        if perspectives.is_empty():continue
-        result.append({"id":item.name,"capability":fields[0],"interaction":fields[1],"label":label,
-            "perspectives":perspectives,"interval":item.get("interval",{}),"descriptor":descriptor_path,
-            "qualification":descriptor.get("qualification",""),"checks":item.get("checks",0)})
-    result.append_array(_spell_cases())
+static func _read(path:String)->Dictionary:
+    if not FileAccess.file_exists(path):return {}
+    var value=JSON.parse_string(FileAccess.get_file_as_string(path));return value if value is Dictionary else {}
+static func category(kind:String)->String:return CATEGORY.get(kind,"Rules")
+static func _label(id:String)->String:return id.get_slice("@",0).get_slice(":",0).get_file().get_slice("/",0).split(".")[-1].replace("_"," ").capitalize()
+static func _same_engine(expected:Dictionary,actual:Dictionary)->bool:
+    for field in ["commit","protocol_version","player_schema_version","schema_digest"]:
+        if expected.get(field)!=actual.get(field):return false
+    return true
+static func _record(original:Dictionary,engine:Dictionary,expected:Dictionary,check_files:bool)->Dictionary:
+    var result=original.duplicate();var kind:String=result.get("kind","interaction");result.capability=category(kind)
+    result.label=result.get("title",result.get("label",result.id));result.interaction=str(result.get("family",kind.capitalize()));result.perspectives=[]
+    for faction in result.get("journals",{}):
+        var journal:String=result.journals[faction]
+        if not check_files or FileAccess.file_exists(journal.path_join("0000000000000000.json")):result.perspectives.append({"id":faction,"label":str(faction).capitalize(),"journal":journal})
+    result.perspectives.sort_custom(func(a,b):return a.id<b.id)
+    var state:String=result.get("status","failed")
+    if not _same_engine(expected,result.get("engine",engine)):state="stale"
+    elif not result.get("errors",[]).is_empty():state="failed"
+    elif state=="recorded" and result.perspectives.is_empty():state="missing_journal"
+    result.scenario_status=state;result.ready=state=="recorded" and not result.perspectives.is_empty()
+    result.interval=result.get("interval",{});result.descriptor=result.get("scenario","");result.qualification="studio_checked" if result.get("studio_checked",false) else "not_checked";result.checks=result.get("checks",0)
     return result
 
-static func _spell_cases()->Array:
-    var path="res://generated/studio_spell_case_inventory.json"
-    if not FileAccess.file_exists(path):return []
-    var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(path))
+static func records(index:Dictionary,snapshot:Dictionary,check_files:bool=true)->Array:
     var result:Array=[]
-    for item in inventory.get("cases",[]):
-        if not item.get("failures",[]).is_empty():continue
-        var perspectives:Array=[]
-        for perspective in item.get("perspectives",[]):
-            if FileAccess.file_exists(str(perspective.journal).path_join("0000000000000000.json")):
-                perspectives.append(perspective)
-        if perspectives.is_empty():continue
-        result.append({"id":item.id,"spell_id":item.spell_id,
-            "capability":item.capability,"interaction":item.interaction,"label":item.label,
-            "perspectives":perspectives,"interval":item.get("interval",{}),"descriptor":item.descriptor,
-            "qualification":item.qualification,"checks":item.get("checks",0),"inventory":path})
+    for row in index.get("cases",[]):result.append(_record(row,index.get("engine",{}),snapshot.get("header",{}),check_files))
+    return result
+static func read()->Array:
+    return records(_read(INDEX),_read(SERVER_IDS))
+static func _group(kind:String,id:String,definition:Variant)->String:
+    var row:Dictionary=definition if definition is Dictionary else {}
+    if kind=="spell":return "Level %d · %s"%[int(row.get("level",0)),str(row.get("school","Other")).capitalize()]
+    return str(row.get("family",kind.replace("_"," "))).replace("_"," ").capitalize()
+static func build(snapshot:Dictionary,coverage:Dictionary,index:Dictionary,check_files:bool=true)->Dictionary:
+    var cases=records(index,snapshot,check_files);var entries:Array=[];var by_subject={};var by_key={};var categories={};var counts={}
+    for record in cases:
+        for kind in record.get("subjects",{}):
+            for id in record.subjects[kind]:
+                var key=kind+":"+str(id)
+                if not by_subject.has(key):by_subject[key]=[]
+                by_subject[key].append(record)
+    for kind in snapshot.get("ids",{}):
+        var values:Variant=snapshot.ids[kind]
+        for id in values:
+            var key=kind+":"+str(id);var definition:Variant=values[id] if values is Dictionary else {};var linked:Array=by_subject.get(key,[]);var scenario="missing"
+            if linked.any(func(row):return row.ready):scenario="recorded"
+            elif not linked.is_empty():scenario=linked[0].scenario_status
+            var provider="not_assessed";var approval="rejected" if id in REJECTED else "needs_review"
+            for record in linked:
+                var qualified:Dictionary=record.get("presentation",{}).get(str(id),{})
+                if not qualified.is_empty():provider=qualified.get("status",provider)
+                var reviews:Dictionary=record.get("visual_review",{})
+                if reviews.has(id) and not id in REJECTED:approval=reviews[id]
+            var art:String=coverage.get("coverage",coverage).get(kind,{}).get(id,"not_assessed")
+            var entry={"key":key,"id":str(id),"kind":kind,"label":_label(str(id)),"category":category(kind),"group":_group(kind,str(id),definition),"definition":definition,"cases":linked,"source_status":art,"scenario_status":scenario,"presentation_status":provider,"approval_status":approval,"requirements":[],"scenarios":[]}
+            entries.append(entry);by_key[key]=entry
+            if not categories.has(entry.category):categories[entry.category]=[]
+            categories[entry.category].append(entry)
+            if not counts.has(kind):counts[kind]=0
+            counts[kind]+=1
+    # Interactions are scenario capabilities rather than additional server IDs.
+    for record in cases:
+        if record.get("kind")!="interaction":continue
+        var key="interaction:"+record.id
+        if by_key.has(key):continue
+        var entry={"key":key,"id":record.id,"kind":"interaction","label":record.label,"category":"Interactions","group":record.interaction,"definition":{},"cases":[record],"source_status":"not_assessed","scenario_status":record.scenario_status,"presentation_status":"not_assessed","approval_status":"needs_review","requirements":[],"scenarios":[]}
+        entries.append(entry);by_key[key]=entry
+        if not categories.has("Interactions"):categories.Interactions=[]
+        categories.Interactions.append(entry)
+    entries.sort_custom(func(a,b):return a.label.naturalnocasecmp_to(b.label)<0 if a.category==b.category and a.group==b.group else (a.group.naturalnocasecmp_to(b.group)<0 if a.category==b.category else CAPABILITIES.find(a.category)<CAPABILITIES.find(b.category)))
+    return {"entries":entries,"by_key":by_key,"categories":categories,"records":cases,"counts":counts,"engine":index.get("engine",{}),"expected_engine":snapshot.get("header",{})}
+static func catalog()->Dictionary:return build(_read(SERVER_IDS),_read(COVERAGE),_read(INDEX))
+static func scenario(record:Dictionary)->Dictionary:
+    return {"id":record.id,"label":record.label,"expectations":record.get("expectations",[]),"moments":record.get("moments",[]),"recordings":[{"available":record.ready,"record":record}]}
+
+static func resolve_moments(index:Dictionary,moments:Array,perspective_id:String="")->Array:
+    # Occurrences are native packet-local facts. A hidden or absent fact is
+    # unavailable in this view; it must never jump to an unrelated event.
+    var observed={};var result:Array=[]
+    for row in index.get("rows",[]):
+        if row.get("kind")!="event":continue
+        var event:Dictionary=row.event
+        var key="%d:%d"%[int(event.sequence),int(event.event_uuid)]
+        observed[key]=row
+        for version in event.get("versions",[]):
+            observed["%d:%d"%[int(event.sequence),int(version.occurrence)]]=row
+    for original in moments:
+        if not perspective_id.is_empty() and str(original.get("faction","amber"))!=perspective_id:continue
+        var moment:Dictionary=original.duplicate()
+        var key="%d:%d"%[int(moment.get("sequence",-1)),int(moment.get("occurrence",-1))]
+        var row:Dictionary=observed.get(key,{})
+        var lineage=str(int(moment.lineage)) if moment.has("lineage") else ""
+        moment.available=not row.is_empty() and (lineage.is_empty() or lineage==str(row.event.lineage_uuid))
+        if moment.available:
+            moment.at_ms=row.start_ms;moment.row_id=row.id
+        else:moment.reason="Not observed in this recorded faction"
+        result.append(moment)
     return result

@@ -1,4 +1,5 @@
 extends Control
+const World=preload("res://presentation/world.gd")
 ## Supplied server light observations, projected over the displayed Studio view.
 ## This diagnostic never computes light, darkvision, visibility or gameplay state.
 const Placement=preload("res://placement.gd")
@@ -36,7 +37,7 @@ func refresh(state:Dictionary,state_key:Array,camera:Camera3D,target_size:Vector
     var screen_scale=target_size/source_size
     var screen_rect=Rect2(Vector2.ZERO,target_size)
     var senses:Dictionary=state.get("senses",{}) if state.get("senses")!=null else {}
-    for position in senses.get("visible",[]):
+    for position in World.visible_positions(state):
         var cell="%d,%d"%[position[0],position[1]]
         var tile:Dictionary=state.get("tiles",{}).get(cell,{})
         if tile.is_empty():continue

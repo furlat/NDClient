@@ -40,13 +40,11 @@ func apply(material: ShaderMaterial) -> void:
     material.set_shader_parameter("authored_base_light",0.0)
 
 static func resolve(state: Dictionary) -> Dictionary:
-    var senses: Dictionary = state.get("senses",{}) if state.get("senses") != null else {}
-    # New recordings explicitly publish optical emitters. An empty observation
-    # means no current source; remembered inventory must not resurrect one.
-    if not senses.has("light_sources"): return ExistingLighting.resolve(state)
+    # Optical emitters are canonical top-level state, including an observed empty set.
+    var optical:Dictionary=state.get("light_sources",{})
     var output: Array = []
-    for id in senses.light_sources:
-        var observed: Dictionary = senses.light_sources[id]
+    for id in optical:
+        var observed: Dictionary = optical[id]
         var actor = str(observed.anchor_entity_uuid) if observed.anchor_entity_uuid != null else ""
         var item = str(observed.anchor_item_uuid) if observed.anchor_item_uuid != null else ""
         var lift = ExistingLighting.CARRIED_OPTICAL_LIFT_STEPS if observed.actor_anchored else ExistingLighting.UNREGISTERED_OPTICAL_LIFT_STEPS

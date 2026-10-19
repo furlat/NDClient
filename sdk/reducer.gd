@@ -1,541 +1,356 @@
 extends RefCounted
-# Port of dnd/player/reduction.py. Inputs are decoded public after-values.
-const Audience = preload("res://sdk/audience.gd")
-const Transitions = preload("res://sdk/transitions.gd")
-const STATE_PRESENTATION_KINDS = ["temporary_hit_points", "spatial", "turn", "sensory", "item_charge", "faction"]
-
-static func success(value: Variant) -> Dictionary:
-    return Audience.success(value)
-
-static func failure(message: String) -> Dictionary:
-    return Audience.failure(message)
-
-static func content_key(descriptor: Dictionary) -> String:
-    var ref: Dictionary = descriptor.ref
-    return "%s:%s:%s@%d" % [ref.pack_id, ref.definition_kind, ref.content_id, ref.content_version]
-
-static func resolution_key(reference: Dictionary) -> String:
-    return reference.kind + "," + reference.lineage_uuid + ("," + reference.application_id if reference.kind == "application" else "")
-
-static func copy_target(target: Dictionary) -> Dictionary:
-    # Received dictionaries are mutable in Godot; detach before every transaction.
-    return target.duplicate(true)
-
-static func _retained_target(target: Dictionary) -> Dictionary:
-    # Journal-only transaction: previous published states/captures are read-only.
-    # Collection shells are private; an actor/senses record forks only at its
-    # actual write. Installed record leaves are immutable or copied at insertion.
-    # Public reducer calls still deep-detach.
-    var result: Dictionary = target.duplicate()
-    for key in ["actors", "tiles", "objects", "spatial_commit_cursors"]:
-        result[key] = target[key].duplicate()
+## Reference schema-16 fold. Native occurrence order and after-values own state.
+const Audience=preload("res://sdk/audience.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
+const World=preload("res://sdk/fold_world.gd")
+const Bodies=preload("res://sdk/fold_bodies.gd")
+const Transitions=preload("res://sdk/transitions.gd")
+const STATE_PRESENTATION_KINDS=["temporary_hit_points","spatial","turn","sensory","item_charge","faction"]
+static func success(value:Variant)->Dictionary:return Audience.success(value)
+static func failure(message:String)->Dictionary:return Audience.failure(message)
+static func content_key(descriptor:Dictionary)->String:
+    var ref:Dictionary=descriptor.ref;return "%s:%s:%s@%d"%[ref.pack_id,ref.definition_kind,ref.content_id,ref.content_version]
+static func resolution_key(reference:Dictionary)->String:
+    return str(reference.lineage)+(","+str(reference.application_id) if reference.get("application_id")!=null else "")
+static func empty_state(generation:String,observer:String,world:Dictionary={},audience:Variant=null)->Dictionary:
+    return {"generation":generation,"observer_uuid":observer,"world":world,"tiles":{},"objects":{},"object_members":{},"connectors":{},"static":{"tiles":{},"tile_looks":{},"residues":{},"object_looks":{},"boundary_structures":{},"visual_loadouts":{}},"senses":null,"reducer_cursor":0,"spatial_commit_cursors":{},"actors":{},"items":{},"spatial_content":{},"current_actor_uuid":null,"round_number":0,"hud_snapshot":null,"audience":Audience.resolve(observer,audience).value,"content":[],"combat_log_appends":[],"entity_members":{},"object_contact_members":{},"effect_members":{},"light_sources":{},"remembered_effects":{}}
+static func copy_target(target:Dictionary)->Dictionary:return target.duplicate(true)
+static func _retained_target(target:Dictionary)->Dictionary:
+    var result=target.duplicate()
+    for field in ["tiles","objects","object_members","connectors","actors","items","spatial_content","spatial_commit_cursors","entity_members","object_contact_members","effect_members","light_sources","remembered_effects"]:result[field]=target[field].duplicate()
+    result.static=target.static.duplicate()
+    for field in target.static:result.static[field]=target.static[field].duplicate()
     return result
-
-static func _actor_for_write(target:Dictionary,identity:Variant,retained:bool,loadout:bool=false)->Variant:
-    var actor:Variant=target.actors.get(identity)
-    if actor==null or not retained:return actor
-    actor=actor.duplicate()
-    if loadout:actor.visual_loadout=actor.visual_loadout.duplicate()
-    target.actors[identity]=actor
-    return actor
-
-static func _senses_for_write(target:Dictionary,cells:Dictionary)->void:
-    if target.senses==null:return
-    var previous:Dictionary=target.senses
-    target.senses=Transitions.snapshot_senses(previous)
-    # Spatial/contact writes do not edit cell arrays. Keep the private derived
-    # cell owner bound to the replacement shell instead of rebuilding its sets.
-    if cells.has("view") and is_same(cells.view.source,previous):cells.view.source=target.senses
-
-static func _ordered_rows(rows: Array, cursors: Dictionary, identity_field: String) -> Array:
-    # Python's sort is stable; Godot's is not. Equal cursors retain wire order.
-    var order: Array = range(rows.size())
-    order.sort_custom(func(a, b):
-        var first: int = cursors[rows[a][identity_field]]
-        var second: int = cursors[rows[b][identity_field]]
-        return a < b if first == second else first < second)
-    var result: Array = []
-    for index in order: result.append(rows[index])
-    return result
-
-static func apply_world_update(target: Dictionary, update: Dictionary, disclosed: Dictionary = {}) -> Dictionary:
-    # Each row is keyed and detached once. The fold's captures and the
-    # compiler's staged supports reuse this record: first copy per key, in
-    # wire order, and the keys of the field changes below.
-    var tiles: Dictionary = {}
-    for row in update.tiles:
-        var key: String = Audience.point_key(row.position)
-        var tile: Dictionary = row.duplicate(true)
-        target.tiles[key] = tile
-        if not tiles.has(key): tiles[key] = tile
-    var changes: Array = []
-    # Each row is an after-value at this event, including explicit clears. Never
-    # mutate a tile held by an earlier event or use a future discovery as its base.
-    for row in update.get("tile_changes",[]):
-        var key = Audience.point_key(row.position)
-        if not target.tiles.has(key): return failure("Tile field update requires an already known tile")
-        var tile: Dictionary = target.tiles[key].duplicate()
-        tile.merge(row.changes.duplicate(true),true)
-        target.tiles[key] = tile
-        changes.append(key)
-    for identity in update.objects_removed: target.objects.erase(identity)
-    for row in update.objects: target.objects[row.item.item_uuid] = row.duplicate(true)
-    target.connectors = update.connectors.duplicate(true)
-    disclosed.tiles = tiles; disclosed.changes = changes
-    return success(target)
-
-static func _observe(target: Dictionary, observation: Dictionary, retained:bool=false,cells:Dictionary={}) -> void:
-    var identity: String = observation.actor.uuid
-    if target.actors.has(identity) and not target.actors[identity].present: return
-    target.actors[identity] = observation.actor.duplicate(true)
-    if observation.contact != null and target.senses != null:
-        if retained:_senses_for_write(target,cells)
-        target.senses.entities[identity] = observation.contact.duplicate(true)
-
-static func stage_actors(target: Dictionary, observations: Array) -> Dictionary:
-    var result = copy_target(target)
-    for observation in observations:
-        if not result.actors.has(observation.actor.uuid): _observe(result, observation)
+static func enter_body(target:Dictionary,record:Dictionary)->Dictionary:return Bodies.enter_body(target,record)
+static func enter_item(target:Dictionary,record:Dictionary)->Dictionary:return Bodies.enter_item(target,record)
+static func apply_actor_change_fact(target:Dictionary,fact:Dictionary,condition_rows:Array=[])->Dictionary:return Bodies.actor_change(target,fact,condition_rows)
+static func clear_unseen_positions(target:Dictionary)->void:Audience.clear_unseen_positions(target)
+static func apply_world_update(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->Dictionary:
+    var prior_tiles:Dictionary=target.tiles.duplicate();var prior_objects:Dictionary=target.objects.duplicate();var result=World.fold(target,update)
+    if not result.ok:return result
+    disclosed.tiles={};disclosed.tiles_removed=[];disclosed.objects={};disclosed.objects_removed=[]
+    for key in target.tiles:
+        if not prior_tiles.has(key) or not is_same(prior_tiles[key],target.tiles[key]):disclosed.tiles[key]=target.tiles[key]
+    for key in prior_tiles:
+        if not target.tiles.has(key):disclosed.tiles_removed.append(key)
+    for key in target.objects:
+        if not prior_objects.has(key) or not is_same(prior_objects[key],target.objects[key]):disclosed.objects[key]=target.objects[key]
+    for key in prior_objects:
+        if not target.objects.has(key):disclosed.objects_removed.append(key)
+    disclosed.changes=disclosed.tiles.keys();return result
+static func stage_actors(target:Dictionary,bodies:Array)->Dictionary:
+    var result=_retained_target(target)
+    for record in bodies:
+        if not result.actors.has(record.actor_uuid):
+            var entered=Bodies.enter_body(result,record)
+            if not entered.ok:return entered
+    return success(result)
+static func observe_actors(target:Dictionary,bodies:Array)->Dictionary:
+    var result=_retained_target(target)
+    for record in bodies:
+        var entered=Bodies.enter_body(result,record)
+        if not entered.ok:return entered
+    return success(result)
+static func stage_lineage(target:Dictionary,lineage:Dictionary)->Dictionary:
+    var staged=stage_actors(target,lineage.get("bodies",[]))
+    if not staged.ok:return staged
+    var result:Dictionary=staged.value
+    for update in lineage.get("world_updates",[]):
+        var status=World.static_rows(result,update)
+        if not status.ok:return status
+        var tiles=World.tile_columns(update.get("tile_columns"),result.static.tiles,result.static.tile_looks)
+        if not tiles.ok:return tiles
+        for key in tiles.value:
+            if not result.tiles.has(key):result.tiles[key]=tiles.value[key]
+        var rows=World.object_rows(update.get("objects"))
+        if not rows.ok:return rows
+        for row in rows.value:
+            if row.placement!=null and not result.objects.has(row.item_uuid):
+                var placed=World.placement(row.item_uuid,row.placement,result.static.tiles);var item=World.floor_item(result.static.object_looks[row.item_uuid],row.state,result.static.boundary_structures)
+                if not placed.ok:return placed
+                if not item.ok:return item
+                result.objects[row.item_uuid]={"placement":placed.value,"item":item.value,"contained_items":null}
+        for row in update.get("connectors",[]):
+            if not result.connectors.has(row.connector_uuid):result.connectors[row.connector_uuid]=row
     return success(result)
 
-static func observe_actors(target: Dictionary, observations: Array) -> Dictionary:
-    var result = copy_target(target)
-    for observation in observations: _observe(result, observation)
-    return success(result)
-
-static func _lineage_audience(target: Dictionary, lineage: Dictionary) -> Dictionary:
-    var supplied = Audience.resolve(lineage.observer_uuid, lineage.audience)
-    if not supplied.ok: return supplied
-    var current = Audience.resolve(target.observer_uuid, target.audience)
-    if not current.ok: return current
-    if target.generation != lineage.generation or target.observer_uuid != lineage.observer_uuid or current.value != supplied.value:
-        return failure("player lineage belongs to a different observer or generation")
-    return success(current.value)
-
-static func stage_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary:
-    var checked = _lineage_audience(target, lineage)
-    if not checked.ok: return checked
-    var staged = stage_actors(target, lineage.observations)
-    var result: Dictionary = staged.value
-    var connectors = {}
-    for row in result.connectors: connectors[row.connector_uuid] = row
-    for update in lineage.world_updates:
-        for tile in update.tiles:
-            var key = Audience.point_key(tile.position)
-            if not result.tiles.has(key): result.tiles[key] = tile.duplicate(true)
-        for object in update.objects:
-            if not result.objects.has(object.item.item_uuid): result.objects[object.item.item_uuid] = object.duplicate(true)
-        for connector in update.connectors:
-            if not connectors.has(connector.connector_uuid): connectors[connector.connector_uuid] = connector.duplicate(true)
-    result.connectors = connectors.values()
-    return success(result)
-
-static func apply_player_fact(target: Dictionary, fact: Dictionary, source_cursor: Variant = null) -> Dictionary:
-    return _apply_player_fact_owned(target, fact, source_cursor, false)
-
-static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: Variant, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={},retained:bool=false) -> Dictionary:
-    var identity: Variant
-    var actor: Variant
+static func _write_actor(target:Dictionary,identity:Variant)->Variant:
+    if not target.actors.has(identity):return null
+    var actor:Dictionary=target.actors[identity].duplicate();target.actors[identity]=actor;return actor
+static func apply_player_fact(target:Dictionary,fact:Dictionary,source_cursor:Variant=null,values:Dictionary={},condition_rows:Array=[])->Dictionary:
+    var identity:Variant;var actor:Variant
     match fact.kind:
+        "sensory":
+            if values.is_empty():return failure("A sensory fact requires its group's rows")
+            return Audience.fold(target,fact,values)
+        "actor_change":return Bodies.actor_change(target,fact,condition_rows)
         "faction":
-            actor_snapshots.clear()
-            actor=_actor_for_write(target,fact.entity_uuid,retained)
+            actor=_write_actor(target,fact.entity_uuid)
             if actor!=null:actor.faction=fact.faction_after
         "spatial":
-            actor_snapshots.clear()
-            identity = fact.entity_uuid
-            actor = _actor_for_write(target,identity,retained)
-            if fact.terminal_departure and actor != null:
-                actor.present = false; actor.last_visual_position = null; actor.occupancy_layer = null
-                if target.senses != null:
-                    if retained:_senses_for_write(target,cells)
-                    target.senses.entities.erase(identity)
+            identity=fact.get("entity_uuid");actor=_write_actor(target,identity)
+            if fact.get("terminal_departure",false) and actor!=null:
+                actor.present=false;actor.last_visual_position=null;actor.occupancy_layer=null
+                if target.senses!=null:
+                    target.senses=target.senses.duplicate();target.senses.entities=target.senses.entities.duplicate();target.senses.entities.erase(identity);target.entity_members.erase(identity)
                 return success(target)
-            if actor != null and fact.change_type == "entity_entered": actor.spatial_disposition = "present"
-            if actor != null and fact.occupancy_layer != null: actor.occupancy_layer = fact.occupancy_layer
-            var audience = Audience.resolve(target.observer_uuid, target.audience)
-            if not audience.ok: return audience
-            if identity in audience.value.controlled and fact.change_type == "entity_entered":
-                if target.senses != null and identity == target.observer_uuid:
-                    if retained:_senses_for_write(target,cells)
-                    target.senses.position = fact.position.duplicate()
-                if actor != null: actor.last_visual_position = fact.position.duplicate()
+            if actor!=null and fact.change_type=="entity_entered":actor.spatial_disposition="present"
+            if actor!=null and fact.get("occupancy_layer")!=null:actor.occupancy_layer=fact.occupancy_layer
+            if identity in target.audience.controlled and fact.change_type=="entity_entered":
+                if actor!=null:actor.last_visual_position=fact.position
+                if target.senses!=null and identity==target.observer_uuid:target.senses=target.senses.duplicate();target.senses.position=fact.position
         "item_charge":
-            actor_snapshots.clear()
-            identity = fact.source_entity_uuid
-            if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            actor = _actor_for_write(target,identity,retained,true)
-            var audience = Audience.resolve(target.observer_uuid, target.audience)
-            if not audience.ok: return audience
-            if actor.controlled_items == null or identity not in audience.value.controlled:
-                return failure("item charges require the controlled actor's inventory")
-            var items: Array = []
-            for item in actor.controlled_items:
-                if fact.item_destroyed and item.item_uuid == fact.item_uuid: continue
-                if item.item_uuid == fact.item_uuid:
-                    if retained:item=item.duplicate()
-                    item.charges = fact.charges_after; item.stack_count = fact.stack_count_after
-                items.append(item)
-            actor.controlled_items = items
-            var layers: Array = []
-            for layer in actor.visual_loadout.layers:
-                if not (fact.item_destroyed and layer.item_uuid == fact.item_uuid): layers.append(layer)
-            actor.visual_loadout.layers = layers
-        "sensory":
-            actor_snapshots.clear()
-            var audience = Audience.resolve(target.observer_uuid, target.audience)
-            if not audience.ok: return audience
-            var observed = Audience._observe_retained(target.perception, audience.value, fact, int(target.reducer_cursor if source_cursor == null else source_cursor), cells)
-            if not observed.ok: return observed
-            target.perception = observed.value
-            target.senses = Audience._view_after(target.perception, target.observer_uuid, target.senses, fact, cells,retained,observed.wire_cells) if composed_senses else Audience._view_retained(target.perception, target.observer_uuid)
-            if fact.observer_position_changed and target.actors.has(fact.observer_uuid):
-                actor=_actor_for_write(target,fact.observer_uuid,retained)
-                actor.last_visual_position = fact.observer_position.duplicate()
-            for member in fact.entity_contacts_changed:
-                var contact: Dictionary = fact.entity_contacts_changed[member]
-                if contact.visual and target.actors.has(member) and target.actors[member].present:
-                    if target.actors[member].last_visual_position!=contact.position:
-                        actor=_actor_for_write(target,member,retained)
-                        actor.last_visual_position = contact.position.duplicate()
+            identity=fact.source_entity_uuid;actor=_write_actor(target,identity)
+            if actor==null:return failure("Missing actor: "+str(identity))
+            if actor.controlled_items==null or not identity in target.audience.controlled:return failure("item charges require the controlled actor's inventory")
+            if fact.item_destroyed:
+                actor.controlled_items=Bodies.remove(actor.controlled_items,"",fact.item_uuid);actor.visual_loadout=actor.visual_loadout.duplicate();actor.visual_loadout.layers=Bodies.remove(actor.visual_loadout.layers,"item_uuid",fact.item_uuid)
+            elif fact.item_uuid in actor.controlled_items:
+                var item:Dictionary=target.items[fact.item_uuid].duplicate()
+                if item.state==null:return failure("item charges require the controlled item's state")
+                item.state=item.state.duplicate();item.state.charges=fact.charges_after;item.state.stack_count=fact.stack_count_after;target.items[fact.item_uuid]=item
         "attack":
-            actor_snapshots.clear()
-            if target.actors.has(fact.source_entity_uuid):
-                var stance = "none" if fact.attack_source_kind != "equipped" else ("ranged" if fact.weapon_slot in ["RANGED_MAIN", "RANGED_OFF"] else "melee")
-                actor=_actor_for_write(target,fact.source_entity_uuid,retained,true)
-                actor.visual_loadout.active_weapon_set = stance
-        "damage", "heal":
-            if fact.kind == "damage" and fact.stage != "applied": return success(target)
-            if fact.kind == "heal" and fact.was_blocked: return success(target)
-            actor_snapshots.clear()
-            identity = fact.target_entity_uuid
-            if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            if fact.resulting_normal_hp == null or fact.resulting_temporary_hp == null:
-                return failure("applied damage requires exact committed HP" if fact.kind == "damage" else "healing requires exact committed HP")
-            actor = _actor_for_write(target,identity,retained)
-            actor.normal_hp = fact.resulting_normal_hp; actor.temporary_hp = fact.resulting_temporary_hp
-            if fact.resulting_temporary_hp <= 0: actor.temporary_hp_grant = null
+            actor=_write_actor(target,fact.source_entity_uuid)
+            if actor!=null:actor.visual_loadout=actor.visual_loadout.duplicate();actor.visual_loadout.active_weapon_set=fact.weapon_set
+        "damage","heal":
+            if fact.kind=="damage" and fact.stage!="applied":return success(target)
+            if fact.kind=="heal" and fact.get("was_blocked",false):return success(target)
+            if fact.get("resulting_normal_hp")==null or fact.get("resulting_temporary_hp")==null:return failure("applied damage/healing requires exact committed HP")
+            actor=_write_actor(target,fact.target_entity_uuid)
+            if actor==null:return failure("Missing actor: "+str(fact.target_entity_uuid))
+            actor.normal_hp=fact.resulting_normal_hp;actor.temporary_hp=fact.resulting_temporary_hp
+            if actor.temporary_hp<=0:actor.temporary_hp_grant=null
         "temporary_hit_points":
-            actor_snapshots.clear()
-            identity = fact.entity_uuid
-            if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            actor=_actor_for_write(target,identity,retained)
-            actor.temporary_hp = fact.resulting_temporary_hp
-            actor.temporary_hp_grant = fact.grant.duplicate(true) if fact.grant != null else null
+            actor=_write_actor(target,fact.entity_uuid)
+            if actor==null:return failure("Missing actor: "+str(fact.entity_uuid))
+            actor.temporary_hp=fact.resulting_temporary_hp;actor.temporary_hp_grant=fact.get("grant")
         "life":
-            actor_snapshots.clear()
-            identity = fact.entity_uuid
-            if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            actor = _actor_for_write(target,identity,retained)
-            actor.life_state = fact.new_state; actor.normal_hp = fact.normal_hit_points
-            actor.remains_disposition = fact.remains_disposition
-        "equipment":
-            actor_snapshots.clear()
-            actor = _actor_for_write(target,fact.source_entity_uuid,retained)
-            if actor != null:
-                actor.visual_loadout = fact.visual_loadout.duplicate(true)
-                actor.armor_class = fact.armor_class
-                actor.controlled_items = fact.controlled_items.duplicate(true) if fact.controlled_items != null else null
-        "condition":
-            actor_snapshots.clear()
-            identity = fact.target_entity_uuid
-            if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            actor = _actor_for_write(target,identity,retained)
-            var condition: Dictionary = fact.condition
-            var members = {}
-            for row in actor.conditions: members[row.condition_uuid] = row
-            if fact.event_type == "condition_removal": members.erase(condition.condition_uuid)
-            elif condition.category != "internal": members[condition.condition_uuid] = condition.duplicate(true)
-            actor.conditions = members.values()
-            var stats: Variant = condition.resulting_stats
-            if stats != null:
-                actor.spatial_disposition = stats.spatial_disposition
-                actor.normal_hp = stats.normal_hp
-                actor.maximum_hp = stats.maximum_hp
-                actor.armor_class = stats.armor_class
-                if stats.resolved_size != null: actor.resolved_size = stats.resolved_size
-            else:
-                if condition.resulting_max_hp != null: actor.maximum_hp = condition.resulting_max_hp
-                if condition.resulting_ac != null: actor.armor_class = condition.resulting_ac
+            actor=_write_actor(target,fact.entity_uuid)
+            if actor==null:return failure("Missing actor: "+str(fact.entity_uuid))
+            actor.life_state=fact.new_state;actor.normal_hp=fact.normal_hit_points;actor.remains_disposition=fact.get("remains_disposition","intact")
         "turn":
-            if fact.round_number != null: target.round_number = fact.round_number
-            if fact.event_type in ["turn_start", "turn_end", "encounter_end"]:
-                target.current_actor_uuid = fact.entity_uuid if fact.event_type == "turn_start" else null
+            if fact.get("round_number")!=null:target.round_number=fact.round_number
+            if fact.event_type in ["turn_start","turn_end","encounter_end"]:target.current_actor_uuid=fact.entity_uuid if fact.event_type=="turn_start" else null
     return success(target)
+static func apply_committed_player_fact(target:Dictionary,fact:Dictionary,source_cursor:int,occurrences:Variant,values:Dictionary={},condition_rows:Array=[])->Dictionary:
+    if fact.kind=="spatial" and fact.get("entity_uuid")!=null and fact.change_type in ["entity_entered","entity_left"]:
+        var committed:Variant=fact.get("commit_occurrence")
+        if committed==null or not committed in occurrences:return failure("Spatial change at cursor %d lacks its recorded commit version"%source_cursor)
+        if committed<int(target.spatial_commit_cursors.get(fact.entity_uuid,-1)) and int(target.spatial_commit_cursors.get(fact.entity_uuid,-1))<source_cursor:return success(target)
+        target.spatial_commit_cursors[fact.entity_uuid]=committed
+    return apply_player_fact(target,fact,source_cursor,values,condition_rows)
 
-static func apply_committed_player_fact(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary) -> Dictionary:
-    return _apply_committed_player_fact_owned(target, fact, source_cursor, version_cursors, false)
-
-static func _apply_committed_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={},retained:bool=false) -> Dictionary:
-    if fact.kind == "spatial" and fact.entity_uuid != null and fact.change_type in ["entity_entered", "entity_left"]:
-        if fact.commit_event_uuid == null or not version_cursors.has(fact.commit_event_uuid):
-            return failure("Spatial change at cursor %d lacks its recorded commit version" % source_cursor)
-        var committed_at: int = version_cursors[fact.commit_event_uuid]
-        var previous: int = target.spatial_commit_cursors.get(fact.entity_uuid, -1)
-        if committed_at < previous and previous < source_cursor: return success(target)
-        target.spatial_commit_cursors[fact.entity_uuid] = committed_at
-    return _apply_player_fact_owned(target, fact, source_cursor, composed_senses, cells, actor_snapshots,retained)
-
-static func reduce_nodes(target: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array) -> Dictionary:
-    return _reduce_nodes_owned(copy_target(target), nodes, versions, observations, updates)
-
-# Only a private transaction enters this fold. Intermediate failures discard
-# its mutable containers without touching a previously published state.
-static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {},retained:bool=false) -> Dictionary:
-    # Arbitrary public inputs first compose exhaustively. Only a context bound
-    # to this exact committed state can carry that proof across operations.
-    var composed_senses: bool = cells.get("composed",false)
-    # A fold-local snapshot can serve adjacent event inputs/deltas until a
-    # fact or observation edits actors. Mutation branches invalidate it before
-    # writing; no snapshots or readiness survive this transaction boundary.
-    var actor_snapshots:Dictionary={}
-    var indexes = {}
-    for row in versions: indexes[row.event_uuid] = row.source_index
-    for observation in observations:
-        if not indexes.has(observation.event_uuid): return failure("Observation has no recorded version")
-    var pending = _ordered_rows(observations, indexes, "event_uuid")
-    var next = 0
-    var world_updates = {}
-    for row in updates: world_updates[row.event_uuid] = row
+static func node_lineages(nodes:Array,versions:Dictionary)->Array:
+    var owners={}
+    for i in range(versions.get("occurrences",[]).size()):owners[int(versions.occurrences[i])]=int(versions.lineages[i])
+    var result:Array=[]
+    for node in nodes:result.append(owners[int(node.occurrence)])
+    return result
+static func parent_lineages(nodes:Array,versions:Dictionary)->Dictionary:
+    var owners=node_lineages(nodes,versions);var result={}
+    for i in range(nodes.size()):
+        for child in nodes[i].get("children_lineages",[]):
+            if not result.has(int(child)):result[int(child)]=owners[i]
+    for i in range(nodes.size()):
+        if nodes[i].get("parent_lineage")!=null and not result.has(owners[i]):result[owners[i]]=int(nodes[i].parent_lineage)
+    return result
+static func check_spell_declarations(nodes:Array,versions:Dictionary,resolutions:Array)->Dictionary:
+    var owners=node_lineages(nodes,versions);var declared={}
+    for i in range(nodes.size()):
+        var fact:Variant=nodes[i].get("fact")
+        if fact!=null and fact.kind=="spell" and fact.get("source_entity_uuid")!=null:declared[owners[i]]=true
     for node in nodes:
-        if not indexes.has(node.uuid): return failure("Node has no recorded version")
-        var admitted: Array = []
-        while next < pending.size() and indexes[pending[next].event_uuid] <= indexes[node.uuid]:
-            actor_snapshots.clear()
-            _observe(result, pending[next],retained,cells)
-            if recorded != null: admitted.append(pending[next])
-            next += 1
-        var started: int = Time.get_ticks_usec() if profile != null else 0
-        var inputs: Dictionary = Transitions.actor_inputs(result,node,actor_snapshots,retained) if recorded != null else {}
-        if profile != null: _profile_elapsed(profile, "actor_inputs", started)
-        started = Time.get_ticks_usec() if profile != null else 0
-        var update: Variant = world_updates.get(node.uuid)
-        var disclosed: Dictionary = {}
-        if update != null:
-            var updated = apply_world_update(result, update, disclosed)
-            if not updated.ok: return updated
-            if recorded != null: recorded.world[node.uuid] = disclosed
-        if profile != null: _profile_elapsed(profile, "world", started)
-        started = Time.get_ticks_usec() if profile != null else 0
-        if not node.canceled and node.fact != null:
-            var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells, actor_snapshots,retained)
-            if not folded.ok: return folded
-            if node.fact.kind == "sensory":
-                composed_senses = true
-                cells.composed = true
-        if profile != null:
-            _profile_elapsed(profile, "facts", started)
-            if not node.canceled and node.fact != null: _profile_elapsed(profile, "fact_" + str(node.fact.kind), started)
-        started = Time.get_ticks_usec() if profile != null else 0
-        if recorded != null:
-            recorded.events.append({"event_uuid":node.uuid, "source_index":indexes[node.uuid],
-                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update,actor_snapshots,retained,disclosed)})
-        if profile != null: _profile_elapsed(profile, "captures", started)
-    while next < pending.size():
-        var observation: Dictionary = pending[next]
-        _observe(result, observation,retained,cells)
-        if recorded != null:
-            recorded.trailing.actors[observation.actor.uuid] = result.actors[observation.actor.uuid] if retained else Transitions.snapshot_actor(result.actors[observation.actor.uuid])
-            if observation.contact != null: recorded.trailing.set.senses = result.senses if retained else Transitions.snapshot_senses(result.senses)
-        next += 1
+        var fact:Variant=node.get("fact");var reference:Variant=node.get("resolution")
+        if fact!=null and fact.kind=="spell" and fact.get("source_entity_uuid")==null and reference!=null and resolutions[reference].get("application_id")!=null and not declared.has(int(resolutions[reference].lineage)):return failure("A spell application's group carries its cast's declaration")
+    return success(null)
+static func reduce_nodes(target:Dictionary,nodes:Array,versions:Dictionary,bodies:Array,updates:Array,rows:Dictionary={})->Dictionary:
+    return _reduce_nodes_owned(copy_target(target),nodes,versions,bodies,updates,rows)
+static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionary,bodies:Array,updates:Array,rows:Dictionary={},recorded:Variant=null,profile:Variant=null,resolutions:Array=[])->Dictionary:
+    var composed=Audience.composed_values(rows)
+    if not composed.ok:return composed
+    var owners=node_lineages(nodes,versions);var casts={}
+    for i in range(nodes.size()):
+        var declared:Variant=nodes[i].get("fact")
+        if declared!=null and declared.kind=="spell" and declared.get("source_entity_uuid")!=null:casts[owners[i]]=declared.source_entity_uuid
+    var order:Array=range(bodies.size());order.sort_custom(func(a,b):return a<b if bodies[a].occurrence==bodies[b].occurrence else bodies[a].occurrence<bodies[b].occurrence)
+    var pending:Array=[]
+    for index in order:pending.append(bodies[index])
+    var next=0;var world_updates={}
+    for update in updates:world_updates[int(update.occurrence)]=update
+    for node in nodes:
+        var admitted:Array=[];var changed_items={};var changed_actors={};var items_before:Dictionary=result.items.duplicate();var actors_before:Dictionary=result.actors.duplicate()
+        while next<pending.size() and pending[next].occurrence<=node.occurrence:
+            var entered=Bodies.enter_body(result,pending[next])
+            if not entered.ok:return entered
+            admitted.append(pending[next]);next+=1
+        var started:int=Time.get_ticks_usec() if profile!=null else 0;var inputs=Transitions.actor_inputs(result,node);var update:Variant=world_updates.get(int(node.occurrence));var disclosed={}
+        if node.get("resolution")!=null and not resolutions.is_empty():
+            var source:Variant=casts.get(int(resolutions[node.resolution].lineage))
+            if source!=null and result.actors.has(source):inputs[source]=result.actors[source]
+        var item_inputs:Dictionary=Transitions.item_inputs(result,inputs) if recorded!=null else {}
+        if update!=null:
+            var folded=apply_world_update(result,update,disclosed)
+            if not folded.ok:return folded
+            if recorded!=null:recorded.world[int(node.occurrence)]=disclosed
+        if profile!=null:_profile_elapsed(profile,"world",started)
+        var condition_rows:Array=[];started=Time.get_ticks_usec() if profile!=null else 0
+        if not node.get("canceled",false) and node.get("fact")!=null:
+            var folded=apply_committed_player_fact(result,node.fact,int(node.occurrence),versions.get("occurrences",[]),composed.value,condition_rows)
+            if not folded.ok:return folded
+        if profile!=null:_profile_elapsed(profile,"facts",started)
+        if recorded!=null:
+            for identity in result.actors:
+                if not actors_before.has(identity) or not is_same(actors_before[identity],result.actors[identity]):changed_actors[identity]=true
+            for identity in result.items:
+                if not items_before.has(identity) or not is_same(items_before[identity],result.items[identity]):changed_items[identity]=true
+            recorded.events.append({"event_uuid":int(node.occurrence),"occurrence":int(node.occurrence),"source_index":int(node.occurrence),"actor_inputs":inputs,"item_inputs":item_inputs,"condition_rows":condition_rows,"delta":Transitions.capture_delta(result,node,admitted,update,{},true,disclosed,changed_actors,changed_items)})
+    while next<pending.size():
+        var entered=Bodies.enter_body(result,pending[next])
+        if not entered.ok:return entered
+        if recorded!=null:
+            recorded.trailing.set.static=result.static.duplicate()
+            recorded.trailing.actors[pending[next].actor_uuid]=result.actors[pending[next].actor_uuid]
+            for record in pending[next].get("items",[]):recorded.trailing.items[record.item_uuid]=result.items[record.item_uuid]
+        next+=1
     return success(result)
 
-static func reduce_initialization(initialization: Dictionary, content_additions: Array = []) -> Dictionary:
-    var audience = Audience.resolve(initialization.observer_uuid, initialization.audience)
-    if not audience.ok: return audience
-    var target = {"generation": initialization.generation, "observer_uuid": initialization.observer_uuid,
-        "world": initialization.world.duplicate(true), "tiles": {}, "objects": {}, "connectors": [],
-        "senses": null, "reducer_cursor": 0, "spatial_commit_cursors": {}, "actors": {},
-        "current_actor_uuid": null, "round_number": 0, "hud_snapshot": null, "audience": audience.value,
-        "perception": {"members": {}, "contact_cursors": {}, "effect_cursors": {}, "effect_absences": {}},
-        "content": [], "combat_log_appends": []}
-    var folded = _reduce_nodes_owned(target, initialization.nodes, initialization.version_rows, initialization.observations, initialization.world_updates)
-    if not folded.ok: return folded
-    target = folded.value
-    target.reducer_cursor = initialization.end_cursor
-    var hud: Variant = initialization.hud_snapshot
-    if hud != null and (hud.generation != target.generation or hud.observer_uuid != target.observer_uuid or hud.revision > initialization.end_cursor):
-        return failure("HUD facts belong to a different or future boundary")
-    target.hud_snapshot = hud.duplicate(true) if hud != null else null
-    target.content = content_additions.duplicate(true)
-    target.content.sort_custom(func(a, b): return content_key(a) < content_key(b))
+static func apply_hud(target:Dictionary,patch:Dictionary)->Dictionary:
+    var prior:Variant=target.hud_snapshot;var sheets={}
+    if prior!=null:
+        for row in prior.sheets:sheets[row.actor_uuid]=row
+    for row in patch.get("sheets",[]):
+        var next:Dictionary=sheets.get(row.actor_uuid,{"actor_uuid":row.actor_uuid}).duplicate();next.merge(row.changes,true)
+        var values={}
+        for value in row.get("resource_values",[]):values[value.key]=value
+        if not values.is_empty():
+            if not next.has("resources"):return failure("Resource values require the sheet's resources")
+            var resources:Array=[]
+            for resource in next.resources:
+                var replacement:Dictionary=resource
+                if values.has(resource.key):replacement=resource.duplicate();replacement.current=values[resource.key].current;replacement.maximum=values[resource.key].maximum;values.erase(resource.key)
+                resources.append(replacement)
+            if not values.is_empty():return failure("Resource values name a row the sheet does not hold")
+            next.resources=resources
+        sheets[row.actor_uuid]=next
+    var initiative:Variant=patch.get("initiative") if patch.get("initiative")!=null else (prior.initiative if prior!=null else null)
+    if initiative==null:return failure("A first HUD requires its initiative")
+    target.hud_snapshot={"initiative":initiative,"sheets":sheets.values()};return success(target)
+static func displayed_initiative(target:Dictionary)->Array:
+    if target.hud_snapshot==null:return []
+    var result:Array=[]
+    for identity in target.hud_snapshot.initiative:
+        if identity in target.audience.controlled or (target.senses!=null and target.senses.entities.has(identity)):result.append(identity)
+    return result
+static func reduce_initialization(initialization:Dictionary,content_additions:Array=[])->Dictionary:
+    var target=empty_state(initialization.generation,initialization.observer_uuid,initialization.world,initialization.get("audience"));var checked=check_spell_declarations(initialization.nodes,initialization.version_rows,initialization.get("resolutions",[]))
+    if not checked.ok:return checked
+    var folded=_reduce_nodes_owned(target,initialization.nodes,initialization.version_rows,initialization.get("bodies",[]),initialization.get("world_updates",[]),initialization.get("sensory_rows",{}),null,null,initialization.get("resolutions",[]))
+    if not folded.ok:return folded
+    target.reducer_cursor=initialization.end_cursor
+    if initialization.get("hud")!=null:
+        var status=apply_hud(target,initialization.hud)
+        if not status.ok:return status
+    target.content=content_additions.duplicate();target.content.sort_custom(func(a,b):return content_key(a)<content_key(b));return success(target)
+static func reduce_lineage(target:Dictionary,lineage:Dictionary)->Dictionary:return _reduce_lineage_owned(copy_target(target),lineage)
+static func _reduce_lineage_owned(target:Dictionary,lineage:Dictionary,recorded:Variant=null,profile:Variant=null)->Dictionary:
+    if lineage.end_cursor<=target.reducer_cursor:return failure("player lineage precedes this reduction position")
+    var folded=_reduce_nodes_owned(target,lineage.events,lineage.version_rows,lineage.get("bodies",[]),lineage.get("world_updates",[]),lineage.get("sensory_rows",{}),recorded,profile,lineage.get("resolutions",[]))
+    if not folded.ok:return folded
+    target.reducer_cursor=lineage.end_cursor
+    if recorded!=null:recorded.trailing.set.reducer_cursor=target.reducer_cursor
     return success(target)
-
-static func reduce_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary:
-    return _reduce_lineage_owned(copy_target(target), lineage)
-
-static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {},retained:bool=false) -> Dictionary:
-    var audience = _lineage_audience(target, lineage)
-    if not audience.ok: return audience
-    if lineage.end_cursor <= target.reducer_cursor:
-        return failure("player lineage precedes this reduction position")
-    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded, profile, cells,retained)
-    if not folded.ok: return folded
-    var result: Dictionary = folded.value
-    result.reducer_cursor = lineage.end_cursor
-    var hud: Variant = lineage.hud_snapshot
-    if hud != null:
-        if hud.generation != result.generation or hud.observer_uuid != result.observer_uuid or hud.revision > lineage.end_cursor or (result.hud_snapshot != null and hud.revision < result.hud_snapshot.revision):
-            return failure("HUD facts belong to a different observer or generation")
-        result.hud_snapshot = hud.duplicate(true)
-    if recorded != null:
-        recorded.trailing.set.reducer_cursor = result.reducer_cursor
-        if hud != null: recorded.trailing.set.hud_snapshot = hud.duplicate(true)
-    return success(result)
-
-static func reduce_operation(target: Dictionary, update: Dictionary) -> Dictionary:
-    return _reduce_operation(target, update, false)
-
-# Internal bounded handoff: callers retain these owned, read-only event records
-# only after successful reduction (and journal commit when consuming live bytes).
-static func _reduce_operation_recorded(target: Dictionary, update: Dictionary, profile: Variant = null) -> Dictionary:
-    return _reduce_operation(target, update, true, profile)
-
-# Only Journal uses retained canonical inputs. Callers that may mutate arbitrary
-# public results use the detached entrypoints above.
-static func _reduce_operation_retained(target: Dictionary, update: Dictionary, record_events: bool = false, profile: Variant = null, sensory_context: Dictionary = {}) -> Dictionary:
-    return _reduce_operation(target, update, record_events, profile, true, sensory_context)
-
-static func _reduce_operation(target: Dictionary, update: Dictionary, record_events: bool, profile: Variant = null, retained: bool = false, sensory_context: Dictionary = {}) -> Dictionary:
-    var records = {"lineages":[]} if record_events else {}
-    var audience = Audience.resolve(target.observer_uuid, target.audience)
-    if not audience.ok: return audience
-    if update.audience != audience.value:
-        return failure("An operation cannot change its authorized audience")
-    var started: int = Time.get_ticks_usec() if profile != null else 0
-    var result = _retained_target(target) if retained else copy_target(target)
-    var cells = {}
-    if retained and is_same(sensory_context.get("state"),target) and is_same(sensory_context.get("perception"),target.perception) and is_same(sensory_context.get("senses"),target.senses):
-        cells = Audience._fork_cells(sensory_context.get("cells",{}))
-    if profile != null: _profile_elapsed(profile, "copy", started)
-    if not update.content_additions.is_empty():
-        var content = {}
-        for row in result.content: content[content_key(row)] = row
+static func reduce_operation(target:Dictionary,update:Dictionary)->Dictionary:return _reduce_operation(target,update,false)
+static func _reduce_operation_recorded(target:Dictionary,update:Dictionary,profile:Variant=null)->Dictionary:return _reduce_operation(target,update,true,profile)
+static func _reduce_operation_retained(target:Dictionary,update:Dictionary,record_events:bool=false,profile:Variant=null,_sensory_context:Dictionary={})->Dictionary:return _reduce_operation(target,update,record_events,profile,true)
+static func _reduce_operation(target:Dictionary,update:Dictionary,record_events:bool,profile:Variant=null,retained:bool=false)->Dictionary:
+    if update.generation!=target.generation or update.observer_uuid!=target.observer_uuid:return failure("An operation belongs to another observer or generation")
+    var result=_retained_target(target) if retained else copy_target(target);var records={"lineages":[]};var content={}
+    if not update.get("content_additions",[]).is_empty():
+        for descriptor in result.content:content[content_key(descriptor)]=descriptor
         for descriptor in update.content_additions:
-            var key = content_key(descriptor)
-            if content.has(key) and content[key] != descriptor:
-                return failure("An admitted content identity changed its definition")
-            content[key] = descriptor.duplicate(true)
-        var identities: Array = content.keys()
-        identities.sort(); result.content = []
-        for key in identities: result.content.append(content[key])
-    for lineage in update.lineages:
-        if lineage.start_cursor != result.reducer_cursor:
-            return failure("Operation occurrence sequence has a gap")
-        var recorded: Variant = {"lineage_uuid":lineage.lineage_uuid, "start_cursor":lineage.start_cursor,
-            "end_cursor":lineage.end_cursor, "events":[], "trailing":Transitions.empty_delta(), "world":{}} if record_events else null
-        var folded = _reduce_lineage_owned(result, lineage, recorded, profile, cells if retained else {},retained)
-        if not folded.ok: return folded
-        result = folded.value
-        if record_events: records.lineages.append(recorded)
-    started = Time.get_ticks_usec() if profile != null else 0
-    var hud: Variant = update.hud
-    if hud != null:
-        if hud.generation != result.generation or hud.observer_uuid != result.observer_uuid or hud.revision > result.reducer_cursor or (result.hud_snapshot != null and hud.revision < result.hud_snapshot.revision):
-            return failure("HUD belongs to a different or future operation")
-        result.hud_snapshot = hud.duplicate(true)
-    var first: int = result.combat_log_appends.size()
-    for i in range(update.combat_log_appends.size()):
-        var row: Dictionary = update.combat_log_appends[i]
-        if row.generation != result.generation or row.observer_uuid != result.observer_uuid or row.operation_end_cursor > result.reducer_cursor or row.encounter_log_index != first + i:
-            return failure("Standalone log append is out of order or belongs to another audience")
-    if not update.combat_log_appends.is_empty():
-        if retained:result.combat_log_appends=result.combat_log_appends.duplicate()
-        result.combat_log_appends.append_array(update.combat_log_appends.duplicate(true))
-    var accepted = success(result)
-    if record_events: accepted.transitions = records
-    if retained:
-        # Only a multi-member projection needs a second composed cell index.
-        # A retained one-member view borrows its member's canonical collections.
-        if cells.get("composed",false) and result.senses != null and result.perception.members.size()!=1:
-            if not cells.has("view") or not is_same(cells.view.source,result.senses):
-                cells.view = Audience._indexed_senses(result.senses)
-        accepted.sensory_context = {"state":result, "perception":result.perception,
-            "senses":result.senses, "cells":cells}
-    if profile != null: _profile_elapsed(profile, "finalize", started)
+            var key=content_key(descriptor)
+            if content.has(key) and content[key]!=descriptor:return failure("An admitted content identity changed its definition")
+            content[key]=descriptor
+        var keys=content.keys();keys.sort();result.content=[]
+        for key in keys:result.content.append(content[key])
+    for lineage in update.get("lineages",[]):
+        if lineage.start_cursor!=result.reducer_cursor:return failure("Operation occurrence sequence has a gap")
+        var checked=check_spell_declarations(lineage.events,lineage.version_rows,lineage.get("resolutions",[]))
+        if not checked.ok:return checked
+        var recorded:Variant={"lineage":int(lineage.lineage),"lineage_uuid":int(lineage.lineage),"start_cursor":lineage.start_cursor,"end_cursor":lineage.end_cursor,"events":[],"trailing":Transitions.empty_delta(),"world":{}} if record_events else null
+        var folded=_reduce_lineage_owned(result,lineage,recorded,profile)
+        if not folded.ok:return folded
+        if record_events:records.lineages.append(recorded)
+    if update.get("hud")!=null:
+        var applied=apply_hud(result,update.hud)
+        if not applied.ok:return applied
+    var first:int=result.combat_log_appends.size()
+    for i in range(update.get("combat_log_appends",[]).size()):
+        var row:Dictionary=update.combat_log_appends[i]
+        if row.generation!=result.generation or row.observer_uuid!=result.observer_uuid or row.operation_end_cursor>result.reducer_cursor or row.encounter_log_index!=first+i:return failure("Standalone log append is out of order or belongs to another audience")
+    if not update.get("combat_log_appends",[]).is_empty():result.combat_log_appends=result.combat_log_appends.duplicate();result.combat_log_appends.append_array(update.combat_log_appends)
+    var accepted=success(result)
+    if record_events:accepted.transitions=records
+    if retained:accepted.sensory_context={}
     return accepted
 
-static func state_before_event(before: Dictionary, lineage: Dictionary, event: Dictionary) -> Dictionary:
-    var first: Variant = null
-    for row in lineage.version_rows:
-        if row.lineage_uuid == event.lineage_uuid:
-            if first == null or row.source_index < first: first = row.source_index
-    if first == null: return failure("Event lineage has no recorded versions")
-    var completed = {}
-    for row in lineage.version_rows:
-        if row.source_index < first: completed[row.event_uuid] = true
-    var events: Array = []
-    for row in lineage.events:
-        if completed.has(row.uuid): events.append(row)
-    if events.is_empty(): return success(copy_target(before))
-    var part: Dictionary = lineage.duplicate(true)
-    part.events = events; part.end_cursor = first
-    part.observations = lineage.observations.filter(func(row): return completed.has(row.event_uuid))
-    part.world_updates = lineage.world_updates.filter(func(row): return completed.has(row.event_uuid))
-    return reduce_lineage(before, part)
-
-static func lineage_branch(lineage: Dictionary, root: Dictionary) -> Dictionary:
-    var by_lineage = {}; var intervals = {}
-    for node in lineage.events: by_lineage[node.lineage_uuid] = node
-    for row in lineage.version_rows:
-        var prior: Array = intervals.get(row.lineage_uuid, [row.source_index, row.source_index])
-        intervals[row.lineage_uuid] = [mini(prior[0], row.source_index), maxi(prior[1], row.source_index)]
-    if not intervals.has(root.lineage_uuid): return failure("Root lineage has no recorded versions")
-    var bounds: Array = intervals[root.lineage_uuid]
-    var pending: Array = [root.lineage_uuid]
-    for node in lineage.events:
-        if not intervals.has(node.lineage_uuid): return failure("Node lineage has no recorded versions")
-        var interval: Array = intervals[node.lineage_uuid]
-        if node.parent_lineage == null and bounds[0] <= interval[0] and interval[1] <= bounds[1]: pending.append(node.lineage_uuid)
-    var selected = {}
+static func state_before_event(before:Dictionary,lineage:Dictionary,event:Dictionary)->Dictionary:
+    var owners=node_lineages([event],lineage.version_rows);var first:int=9223372036854775807
+    for i in range(lineage.version_rows.occurrences.size()):
+        if int(lineage.version_rows.lineages[i])==owners[0]:first=mini(first,int(lineage.version_rows.occurrences[i]))
+    var part=lineage.duplicate();part.events=lineage.events.filter(func(row):return row.occurrence<first)
+    if part.events.is_empty():return success(_retained_target(before))
+    part.end_cursor=first;part.bodies=lineage.get("bodies",[]).filter(func(row):return row.occurrence<first);part.world_updates=lineage.get("world_updates",[]).filter(func(row):return row.occurrence<first)
+    var result=_retained_target(before)
+    for update in lineage.get("world_updates",[]):
+        var status=World.static_rows(result,update)
+        if not status.ok:return status
+    return _reduce_lineage_owned(result,part)
+static func lineage_branch(lineage:Dictionary,root:Dictionary)->Dictionary:
+    var owners=node_lineages(lineage.events,lineage.version_rows);var parents=parent_lineages(lineage.events,lineage.version_rows);var children={};var intervals={}
+    for i in range(lineage.events.size()):
+        var identity=owners[i]
+        if not children.has(identity):children[identity]=[]
+        children[identity].append_array(lineage.events[i].get("children_lineages",[]))
+    for i in range(lineage.version_rows.occurrences.size()):
+        var identity=int(lineage.version_rows.lineages[i]);var occurrence=int(lineage.version_rows.occurrences[i]);var interval:Array=intervals.get(identity,[occurrence,occurrence]);intervals[identity]=[mini(interval[0],occurrence),maxi(interval[1],occurrence)]
+    var root_owner=node_lineages([root],lineage.version_rows)[0];var bounds:Array=intervals[root_owner];var pending:Array=[root_owner];var selected={}
+    for identity in owners:
+        if not parents.has(identity) and bounds[0]<=intervals[identity][0] and intervals[identity][1]<=bounds[1]:pending.append(identity)
     while not pending.is_empty():
-        var identity: String = pending.pop_back()
-        if selected.has(identity): continue
-        if not by_lineage.has(identity): return failure("Child lineage has no disclosed node")
-        selected[identity] = true
-        pending.append_array(by_lineage[identity].children_lineages)
-    var result: Dictionary = lineage.duplicate(true)
-    result.root = root.duplicate(true)
-    result.events = lineage.events.filter(func(node): return selected.has(node.lineage_uuid))
-    result.version_rows = lineage.version_rows.filter(func(row): return selected.has(row.lineage_uuid))
-    var identities = {}
-    for row in result.version_rows: identities[row.event_uuid] = true
-    result.start_cursor = result.version_rows[0].source_index
-    result.end_cursor = result.version_rows[-1].source_index + 1
-    result.observations = lineage.observations.filter(func(row): return identities.has(row.event_uuid))
-    result.world_updates = lineage.world_updates.filter(func(row): return identities.has(row.event_uuid))
-    result.hud_snapshot = null
-    return success(result)
-
-static func index_player_lineage(lineage: Dictionary) -> Dictionary:
-    var result = {"by_lineage": {}, "by_uuid": {}, "source_order": {}, "owned": {}, "results": {}, "damage_requests": {}}
-    for row in lineage.version_rows: result.source_order[row.event_uuid] = row.source_index
-    for node in lineage.events:
-        result.by_lineage[node.lineage_uuid] = node.duplicate(true)
-        result.by_uuid[node.uuid] = node.duplicate(true)
-    for node in lineage.events:
-        var ancestors: Array = []
-        var current: Dictionary = node
-        while current.lineage_uuid not in ancestors:
-            ancestors.append(current.lineage_uuid)
-            var request: Variant = current.lineage_uuid if current.fact != null and current.fact.kind == "damage" and current.fact.stage == "taken" else result.damage_requests.get(current.lineage_uuid)
-            if request != null:
-                for identity in ancestors: result.damage_requests[identity] = request
+        var identity=int(pending.pop_back())
+        if selected.has(identity):continue
+        selected[identity]=true;pending.append_array(children.get(identity,[]))
+    var result=lineage.duplicate();result.events=[];var occurrences:Array=[];var lineages:Array=[];var identities={}
+    for i in range(lineage.events.size()):
+        if selected.has(owners[i]):
+            if lineage.events[i].occurrence==root.occurrence:result.root=result.events.size()
+            result.events.append(lineage.events[i])
+    for i in range(lineage.version_rows.occurrences.size()):
+        if selected.has(int(lineage.version_rows.lineages[i])):
+            var occurrence=int(lineage.version_rows.occurrences[i]);occurrences.append(occurrence);lineages.append(int(lineage.version_rows.lineages[i]));identities[occurrence]=true
+    result.version_rows={"occurrences":occurrences,"lineages":lineages};result.start_cursor=occurrences[0];result.end_cursor=occurrences[-1]+1
+    result.bodies=lineage.get("bodies",[]).filter(func(row):return identities.has(int(row.occurrence)));result.world_updates=lineage.get("world_updates",[]).filter(func(row):return identities.has(int(row.occurrence)));return success(result)
+static func index_player_lineage(lineage:Dictionary)->Dictionary:
+    var result={"by_lineage":{},"by_uuid":{},"source_order":{},"owned":{},"results":{},"damage_requests":{},"parents":parent_lineages(lineage.events,lineage.version_rows)};var owners=node_lineages(lineage.events,lineage.version_rows)
+    for i in range(lineage.events.size()):
+        var node:Dictionary=lineage.events[i];result.by_lineage[owners[i]]=node;result.by_uuid[int(node.occurrence)]=node;result.source_order[int(node.occurrence)]=int(node.occurrence)
+        if node.get("resolution")!=null:
+            var key=resolution_key(lineage.resolutions[node.resolution])
+            if not result.owned.has(key):result.owned[key]=[]
+            result.owned[key].append(node)
+            var fact:Variant=node.get("fact")
+            if not node.get("canceled",false) and fact!=null and (fact.kind=="object_damage" or (fact.kind=="damage" and fact.stage=="applied")):
+                if not result.results.has(key):result.results[key]=[]
+                result.results[key].append(node)
+    for i in range(lineage.events.size()):
+        var current:int=owners[i];var ancestors:Array=[]
+        while not current in ancestors and result.by_lineage.has(current):
+            ancestors.append(current);var fact:Variant=result.by_lineage[current].get("fact")
+            if fact!=null and fact.kind=="damage" and fact.stage=="taken":
+                for identity in ancestors:result.damage_requests[identity]=current
                 break
-            if current.parent_lineage == null or not result.by_lineage.has(current.parent_lineage): break
-            current = result.by_lineage[current.parent_lineage]
-    for node in lineage.events:
-        if not result.source_order.has(node.uuid): return failure("Node has no recorded version")
-    var ordered = _ordered_rows(lineage.events.duplicate(true), result.source_order, "uuid")
-    for node in ordered:
-        if node.resolution_ref == null: continue
-        var key = resolution_key(node.resolution_ref)
-        if not result.owned.has(key): result.owned[key] = []
-        result.owned[key].append(node)
-        if not node.canceled and node.fact != null and (node.fact.kind == "object_damage" or (node.fact.kind == "damage" and node.fact.stage == "applied")):
-            if not result.results.has(key): result.results[key] = []
-            result.results[key].append(node)
+            if not result.parents.has(current):break
+            current=int(result.parents[current])
     return success(result)
-
-static func _profile_elapsed(profile: Dictionary, phase: String, started: int) -> void:
-    profile[phase] = float(profile.get(phase, 0.0)) + (Time.get_ticks_usec() - started) / 1000.0
+static func _profile_elapsed(profile:Dictionary,phase:String,started:int)->void:profile[phase]=float(profile.get(phase,0.0))+(Time.get_ticks_usec()-started)/1000.0

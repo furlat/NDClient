@@ -170,7 +170,7 @@ async def run(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--engine', type=Path, default=PROJECT.parent/'dnd_engine')
+    parser.add_argument('--engine', type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-211b71134"))
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--seed', type=int, default=3)
     raise SystemExit(asyncio.run(run(parser.parse_args())))

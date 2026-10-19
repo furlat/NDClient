@@ -100,7 +100,7 @@ func rows() -> Array:
     var result = []
     for family in ["entity_actions","position_actions","self_actions","object_actions"]:
         for row in scene.available_actions.get(family,[]):
-            if row.can_afford and not Choices.action_options(scene.available_actions,row).is_empty(): result.append(row)
+            if row.can_afford and (not Choices.action_options(scene.available_actions,row).is_empty() or row.get("position_region")!=null):result.append_array(scene.Interaction.level_rows(row))
     return result
 
 func toward(available: Array, origin: Array, destinations: Array) -> Dictionary:
@@ -172,6 +172,11 @@ func _subject_uuid(owner:Dictionary,option:Dictionary)->String:
 func _issue_input(selected:Dictionary,record:Dictionary)->void:
     if selected.is_empty():scene.end_turn()
     else:
+        if selected.has("position") and selected.action.get("position_region")!=null:
+            scene.select_action(selected.action)
+            scene.choose_target(selected.position)
+            record.input="admitted_free_aim"
+            return
         var target: Variant=Choices.binding_position(scene.available_actions,selected.target)
         var click=false
         if record.behavior=="action.move" and target!=null:

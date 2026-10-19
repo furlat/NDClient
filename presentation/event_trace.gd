@@ -1,4 +1,5 @@
 extends RefCounted
+const Occurrences=preload("res://presentation/occurrences.gd")
 ## Passive, bounded diagnostics. No canonical snapshots or packets are retained.
 const Authoring = preload("res://presentation/authoring.gd")
 const MovementMedia = preload("res://presentation/movement_media.gd")
@@ -19,24 +20,24 @@ static func _component(kind: String, reason: String, source: String = "") -> Dic
         "sample_count":0,"first_sample_ms":null,"last_sample_ms":null,
         "timing":{"resolved":false,"reason":"authored_timing_not_resolved"}}
 
-static func _version_index(versions: Array) -> Dictionary:
-    var lineages = {}; var events = {};var first={}
-    for version in versions:
-        if not lineages.has(version.lineage_uuid): lineages[version.lineage_uuid] = []
-        lineages[version.lineage_uuid].append(version)
-        events[version.event_uuid] = int(version.source_index)
-        first[version.lineage_uuid]=mini(first.get(version.lineage_uuid,version.source_index),version.source_index)
+static func _version_index(versions:Dictionary)->Dictionary:
+    var lineages:Dictionary={};var events:Dictionary={};var first:Dictionary={}
+    for index in versions.get("occurrences",[]).size():
+        var occurrence:int=int(versions.occurrences[index]);var lineage:String=str(versions.lineages[index])
+        if not lineages.has(lineage):lineages[lineage]=[]
+        lineages[lineage].append({"occurrence":occurrence,"lineage":int(versions.lineages[index]),"source_index":occurrence})
+        events[str(occurrence)]=occurrence;first[lineage]=mini(first.get(lineage,occurrence),occurrence)
     return {"lineages":lineages,"events":events,"first":first}
 
 static func _base(node: Dictionary, sequence: int, group: String, versions: Dictionary) -> Dictionary:
     var fact: Dictionary = node.fact if node.get("fact") != null else {}
     # Accepted history is passive. Runtime owns the event/status shell; public
     # snapshots detach the complete history before exposing it to a caller.
-    var history: Array = versions.lineages.get(node.lineage_uuid,[])
-    var index: int = versions.events.get(node.uuid,-1)
-    return {"id":"%s:%s" % [sequence,node.uuid],"sequence":sequence,"group_id":group,
-        "event_uuid":node.uuid,"lineage_uuid":node.lineage_uuid,"source_index":index,
-        "parent_event":node.get("parent_event"),"parent_lineage":node.get("parent_lineage"),
+    var history: Array = versions.lineages.get(node.lineage_id,[])
+    var index: int = versions.events.get(node.id,-1)
+    return {"id":"%s:%s" % [sequence,node.id],"sequence":sequence,"group_id":group,
+        "event_uuid":node.id,"lineage_uuid":node.lineage_id,"source_index":index,
+        "parent_event":node.get("parent_event"),"parent_lineage":node.get("parent_lineage"),"child_order":node.get("child_order"),
         "kind":fact.get("kind","undisclosed"),"phase":node.get("phase",""),
         "name":fact.get("name",fact.get("behavior_id",fact.get("kind","undisclosed"))),
         "behavior_id":fact.get("behavior_id"),
@@ -50,7 +51,7 @@ static func initialization(initial: Dictionary) -> Array:
     var result: Array = []
     var native_logs:Dictionary=_log_index(_node_logs(initial.nodes))
     var versions = _version_index(initial.version_rows)
-    for node in initial.nodes:
+    for node in Occurrences.group(initial,true).events:
         var row = _base(node,0,"initialization",versions)
         row._display_log = _unique_children_indexed(row._log,native_logs,{}) if row._log != null else null
         row.reasons = ["initial_snapshot_no_animation_claim"]
@@ -198,8 +199,8 @@ static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dic
     elif component.has("asset_id"):row.asset_ids=[component.asset_id]
     return row
 
-static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, cache: Dictionary, resolved_recipe: Dictionary, spell_sources: Dictionary = {}) -> void:
-    var fact: Dictionary = node.fact if node.get("fact") != null else {}
+static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, cache: Dictionary, resolved_recipe: Dictionary, spell_sources: Dictionary = {},graph:Dictionary={}) -> void:
+    var fact:Dictionary=Occurrences.spell(node,graph) if node.get("fact")!=null and node.fact.kind=="spell" else (node.fact if node.get("fact")!=null else {})
     if node.get("canceled",false):
         # Canceling the hostile outcome does not cancel the condition response
         # which actually intercepted it. Preserve only that compiled evidence.
@@ -306,29 +307,6 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
             var key="criticalSuccess" if fact.natural_roll==20 else ("criticalFailure" if fact.natural_roll==1 else ("success" if fact.succeeded else "failure"))
             var feedback: Dictionary=Authoring.load_data("catalog/death_save_context.json",cache).get(key,{})
             if feedback.get("enabled",false):_need(row,"feedback_text","authored_death_save_feedback_not_implemented","catalog/death_save_context.json:/"+key,"text",feedback.get("text",""))
-        "condition":
-            var key: String = str(fact.condition.get("behavior_id",""))
-            row.behavior_id = key
-            row.name = fact.condition.get("name",key)
-            var recipe: Dictionary = resolved_recipe
-            if fact.event_type not in ["condition_application","condition_removal"]:
-                row.reasons=["condition_state_change_no_application_replay"]
-            else:
-                var phase = "removal" if fact.event_type == "condition_removal" else "application"
-                var change: Dictionary = recipe.get(phase,{})
-                var source="catalog/condition_recipes.json:"+key+"."+phase
-                if change.get("feedbackEnabled",false):
-                    _need(row,"feedback_text","authored_condition_feedback_not_implemented",
-                        Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+phase+"/feedbackEnabled",cache))
-                var replaced:Array=NativePersistent.replaced_media(key,recipe)
-                _media_needed(row,change.get("effects",[]),source+".effects",row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+phase+"/effects",replaced)
-                if phase=="application":_persistent_condition(row,fact.condition,recipe.get("persistent",{}),cache,Authoring.rig_id(actor,cache))
-                if phase=="application" and recipe.get("reactionCastBinding")!=null:
-                    var binding:String=recipe.reactionCastBinding
-                    var cast_recipe:Dictionary=spell_sources[binding].recipe if spell_sources.has(binding) else NativeSpells.recipe({"behavior_id":binding},cache)
-                    var pointer=Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/reactionCastBinding",cache)
-                    if cast_recipe.is_empty():_need(row,"body","condition_reaction_binding_recipe_missing",pointer)
-                    else:_cast_requirements(row,cast_recipe.get("cast",{}),pointer,binding)
         "action", "shove":
             var file = "catalog/shove_recipes.json" if row.kind == "shove" else "catalog/body_action_recipes.json"
             var recipe_id: String = str(fact.get("behavior_id",""))
@@ -341,12 +319,12 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
             else:
                 var source="spells/"+str(fact.behavior_id)+".json"
                 var cast:Dictionary=recipe.get("cast",{})
-                if row.get("cast_owner_event",node.uuid)==node.uuid and not cast.is_empty() and cast.get("enabled",true):
+                if row.get("cast_owner_event",node.id)==node.id and not cast.is_empty() and cast.get("enabled",true):
                     _cast_requirements(row,cast,source+".cast")
                 var behavior:String=str(fact.behavior_id)
                 var selected:Dictionary=spell_sources[behavior].selection if spell_sources.has(behavior) else NativeSpells.selection(behavior,cache)
                 var shared_area:bool=not selected.is_empty() and SpellDelivery.selected_for(selected,fact).get("delivery",{}).get("scope")=="area"
-                if fact.get("application")!=null and not shared_area and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
+                if Occurrences.application(node) and not shared_area and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
                     row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))
     _operation_requirements(row,node,resolved_recipe,cache)
     if row.components.is_empty() and row.reasons.is_empty():
@@ -375,7 +353,7 @@ static func _operation_requirements(row:Dictionary,node:Dictionary,recipe:Dictio
     for expected in expectations:
         if expected.status!="missing":continue
         # A shared cast's equipment/recovery belongs only to the cast owner.
-        if expected.participant=="caster" and row.get("cast_owner_event",node.uuid)!=node.uuid:continue
+        if expected.participant=="caster" and row.get("cast_owner_event",node.id)!=node.id:continue
         var matched:bool=tracked.has([expected.source,expected.kind])
         var authored:Variant=expected.get("authored_id","")
         if not str(authored).is_empty():
@@ -407,21 +385,21 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
     for node in lineage.events:
         var row = _base(node,int(group.operation_sequence),group.id,versions)
         row._display_log = _unique_children_indexed(row._log,native_logs,{}) if row._log != null else null
-        row._end_ms = graph.ends.get(node.uuid,0.0)
-        row._start_ms = graph.starts.get(node.uuid,0.0)
+        row._end_ms = graph.ends.get(node.id,0.0)
+        row._start_ms = graph.starts.get(node.id,0.0)
         row._group_duration_ms = group.duration_ms
-        row._admit_ms = commits.get(node.uuid,group.duration_ms)
+        row._admit_ms = commits.get(node.id,group.duration_ms)
         row._commit_ms = row._admit_ms
-        if graph.get("damage_timings",{}).has(node.uuid):
-            var timing:Dictionary=graph.damage_timings[node.uuid]
+        if graph.get("damage_timings",{}).has(node.id):
+            var timing:Dictionary=graph.damage_timings[node.id]
             row.damage_timing={}
             for field in ["start","hp","flash","number","body_enabled","terminal","lethal"]:
                 row.damage_timing[field]=timing[field]
         if row.kind=="spell":
             var cast_key:String=SpellDelivery.cast_key(node,graph)
-            row.cast_owner_event=graph.get("casts",{}).get(cast_key,{}).get("source_event_uuid",node.uuid)
+            row.cast_owner_event=graph.get("casts",{}).get(cast_key,{}).get("source_event_uuid",node.id)
         if row.kind in ["damage","condition","heal","forced_movement"]: row.actor_uuid = row.target_uuid
-        for track in tracks.get(node.uuid,[]):
+        for track in tracks.get(node.id,[]):
             row._admit_ms = minf(row._admit_ms,float(track.start_ms))
             var component = _component("body","", "catalog/rigs.json:"+track.rig+".clips."+track.clip)
             component.merge({"id":track.trace_track_id,"trace_track_id":track.trace_track_id,"actor_uuid":track.actor_uuid,
@@ -434,12 +412,28 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
                 component.source=track.source
                 component.condition_uuid=track.condition_uuid
             row.components.append(component)
-        for component in components.get(node.uuid,[]):
+        for component in components.get(node.id,[]):
             row.components.append(_compiled_component(component,cache))
             for channel in NativeChannels.channels(component):row.components.append(_compiled_component(channel,cache))
-        var actor: Dictionary = graph.actor_inputs.get(node.uuid,{}).get(row.actor_uuid,{})
-        _requirements(row,node,actor,cache,graph.recipes.get(node.uuid,{}),graph.get("spell_sources",{}))
-        if row.components.is_empty(): row._admit_ms = commits.get(node.uuid,group.duration_ms)
+        var actor: Dictionary = graph.actor_inputs.get(node.id,{}).get(row.actor_uuid,{})
+        if row.kind=="spell":
+            var declared:Dictionary=Occurrences.spell(node,graph)
+            row.behavior_id=declared.get("behavior_id");row.name=declared.get("name",row.name);row.actor_uuid=declared.get("source_entity_uuid")
+        _requirements(row,node,actor,cache,graph.recipes.get(node.id,{}),graph.get("spell_sources",{}),graph)
+        for cue in graph.condition_cues.get(node.id,[]):
+            var condition:Dictionary=cue.condition
+            var key:String=str(condition.get("behavior_id",""));var recipe:Dictionary=cue.recipe
+            var change:Dictionary=recipe.get(cue.phase,{})
+            if change.get("feedbackEnabled",false):_need(row,"feedback_text","authored_condition_feedback_not_implemented",Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+cue.phase+"/feedbackEnabled",cache))
+            var replaced:Array=NativePersistent.replaced_media(key,recipe)
+            _media_needed(row,change.get("effects",[]),"catalog/condition_recipes.json:"+key+"."+cue.phase,row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+cue.phase+"/effects",replaced)
+            if cue.phase=="application":
+                var owner:Dictionary=graph.actor_inputs.get(node.id,{}).get(cue.actor_uuid,{})
+                var original_target:Variant=row.target_uuid
+                row.target_uuid=cue.actor_uuid
+                _persistent_condition(row,condition,recipe.get("persistent",{}),cache,Authoring.rig_id(owner,cache))
+                row.target_uuid=original_target
+        if row.components.is_empty(): row._admit_ms = commits.get(node.id,group.duration_ms)
         result.append(row)
     result.sort_custom(func(a,b): return a.source_index < b.source_index)
     _bind_parents(result)
@@ -649,7 +643,7 @@ static func _bind_parents(rows: Array) -> void:
     for row in rows:
         by_lineage[row.lineage_uuid] = row
         by_event[row.event_uuid] = row
-        for version in row.versions: by_event[version.event_uuid] = row
+        for version in row.versions: by_event[str(version.occurrence)] = row
     for row in rows:
         var parent: Dictionary = by_lineage.get(row.parent_lineage,by_event.get(row.parent_event,{}))
         row.parent_id = parent.get("id","")
@@ -681,6 +675,7 @@ static func _hierarchy(admitted: Dictionary, retained: Dictionary) -> Array:
     for siblings in children.values():
         siblings.sort_custom(func(a,b):
             if a.sequence != b.sequence: return a.sequence < b.sequence
+            if a.get("child_order")!=null and b.get("child_order")!=null and a.child_order!=b.child_order:return a.child_order<b.child_order
             var ai = a.get("first_source_index",a.source_index)
             var bi = b.get("first_source_index",b.source_index)
             return ai < bi if ai != bi else a.id < b.id)
@@ -722,7 +717,7 @@ static func operation_logs(packet: Dictionary) -> Array:
     var available: Array = []
     for lineage in packet.lineages:
         for node in lineage.events:
-            if node.combat_log != null: available.append(node.combat_log)
+            if node.get("combat_log") != null: available.append(node.combat_log)
     var native_logs:Dictionary=_log_index(available)
     var consumed:Dictionary={}
     var result: Array = []

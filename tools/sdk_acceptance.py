@@ -71,7 +71,7 @@ async def run(args):
 def main():
     project = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--engine", type=Path, default=project.parent / "dnd_engine")
+    parser.add_argument("--engine", type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-211b71134"))
     parser.add_argument("--godot", type=Path, default=project.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--case", choices=("ranged", "magic_missile", "fireball_six_goblins"), default="ranged")

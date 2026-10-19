@@ -45,13 +45,15 @@ static func preview_positions(preview: Dictionary, affected: bool=false) -> Arra
         result.append(preview.get("positions",[])[int(reference)])
     return result
 
-static func selection_for(action: Dictionary, targets: Array, extra_target_positions: Array=[], prefer_safe: bool=true) -> Dictionary:
+static func selection_for(action: Dictionary, targets: Array, extra_target_positions: Array=[], prefer_safe: bool=true, cast_at_level: Variant=null) -> Dictionary:
     var indices: Array = []
     for binding in targets: indices.append(int(binding.index))
     var positions: Array = []
     for position in extra_target_positions: positions.append(position.duplicate())
-    return {"action_index":int(action.get("discovery_index",0)),"target_indices":indices,
+    var selection={"action_index":int(action.get("discovery_index",0)),"target_indices":indices,
         "extra_target_positions":positions,"prefer_safe":prefer_safe}
+    if cast_at_level!=null:selection.cast_at_level=int(cast_at_level)
+    return selection
 
 static func position_eligibility(choices: Dictionary) -> Dictionary:
     var result = {}
@@ -132,7 +134,7 @@ static func check_choices(choices: Dictionary, native_numbers: bool=false) -> St
             issue = _reference(sets,action.target_set,"target_set",native_numbers)
             if not issue.is_empty(): return issue
             if (action.availability_status=="source_unaffordable")==action.can_afford: return "Contradictory source affordability"
-            if (action.availability_status=="available")!= (not sets[int(action.target_set)].is_empty()): return "Contradictory action availability and target set"
+            if action.get("position_region")==null and (action.availability_status=="available")!= (not sets[int(action.target_set)].is_empty()): return "Contradictory action availability and target set"
     return ""
 
 static func check_preview(preview: Dictionary, native_numbers: bool=false) -> String:

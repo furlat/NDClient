@@ -117,11 +117,18 @@ func run() -> void:
             "wrong_ordinal": bad.entity_actions[0].discovery_index=5
         var snapshot = bad.duplicate(true)
         check(not protocol.validate("PlayerChoices",bad).ok,"Public choices rejects "+mutation)
-        check(not protocol.decode_server_choices(JSON.stringify(envelope(bad)).to_utf8_buffer()).ok,"Trusted admission rejects unsafe relation "+mutation)
         check(bad==snapshot,"Failed admission preserves input: "+mutation)
     for invalid in [true,"0",-1,0.5,9007199254740992]:
         var bad = discovery();bad.target_sets[0][0].subject=invalid
-        check(not protocol.validate("PlayerChoices",bad).ok and not protocol.decode_server_choices(JSON.stringify(envelope(bad)).to_utf8_buffer()).ok,"References are never coerced: "+str(invalid))
+        check(not protocol.validate("PlayerChoices",bad).ok,"Public references are never coerced: "+str(invalid))
+    var free_aim=discovery()
+    free_aim.entity_actions[0].target_set=3
+    free_aim.entity_actions[0].position_region={"range_feet":30}
+    check(protocol.validate("PlayerChoices",free_aim).ok,"An available free-aim row legitimately has no enumerated target")
+    free_aim.object_actions[0].position_region={"range_feet":30}
+    check(protocol.validate("PlayerChoices",free_aim).ok,"Unavailable free-aim rows retain their authoritative source affordability")
+    var aimed=Choices.selection_for(free_aim.entity_actions[0],[],[[6,7],[6,8]],false,5)
+    check(aimed.target_indices==[] and aimed.extra_target_positions==[[6,7],[6,8]] and aimed.cast_at_level==5,"Free aim, ordered wall points and explicit upcast survive command construction")
     var preview = {"can_confirm":true,"subjects":[{"uuid":OTHER,"kind":"object"}],"positions":[[99,-7]],
         "target_sets":[[{"kind":"subject","index":3,"subject":0,"position":0}]],"next_target_set":0,"next_positions":[0],"area_preview":"computed"}
     check(protocol.validate("PlayerSelectionPreview",preview).ok,"Preview admits its independent domains")
@@ -147,6 +154,6 @@ func run() -> void:
                     Choices.binding_position(trusted.value.choices,option)
                     Choices.binding_path(trusted.value.choices,option)
             check(snapshot==trusted.value,"Every actual primary lookup leaves sparse wire data unchanged")
-    var report={"checks":checks,"failures":failures,"recording":recording,"scope":"Schema8 bounded references and borrowed sparse lookups; independent native indices, secondary branches, repeats and Preview domains. No expanded target trees or gameplay simulation."}
+    var report={"checks":checks,"failures":failures,"recording":recording,"scope":"Schema16 free aim/upcast, bounded public references and borrowed sparse lookups; independent native indices, secondary branches, repeats and Preview domains. No expanded target trees or gameplay simulation."}
     FileAccess.open("res://generated/sdk_choices_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print(JSON.stringify(report));quit(0 if failures.is_empty() else 1)

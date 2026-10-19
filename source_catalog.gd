@@ -98,14 +98,6 @@ static func _document(path:String)->Variant:
     _documents_mutex.lock();_documents[path]=[raw,parsed];_documents_mutex.unlock()
     return parsed
 
-static func asset(asset_id:String,cache:Dictionary)->Dictionary:
-    var selected:Resource=NativePresentationSources.asset(asset_id,cache)
-    return {} if selected==null else selected.value
-
-static func prepared_asset(asset_id:String,cache:Dictionary)->Dictionary:
-    var selected:Resource=NativePresentationSources.prepared_asset(asset_id,cache)
-    return {} if selected==null else selected.value
-
 static func source_pointer(document: String, pointer: String, cache: Dictionary) -> String:
     return NativeAuthoring.source_pointer(document, pointer, read_file(document, cache))
 

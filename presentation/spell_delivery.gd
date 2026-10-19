@@ -1,4 +1,5 @@
 extends RefCounted
+const Occurrences=preload("res://presentation/occurrences.gd")
 ## Select a visual delivery from a real spell occurrence. Geometry and recipient
 ## counts come from facts; the catalog only selects which source roles display.
 const Authoring=preload("res://presentation/authoring.gd")
@@ -11,12 +12,9 @@ static func ancestor(node:Dictionary,graph:Dictionary)->Dictionary:
         parent=candidate.get("parent_lineage")
     return {}
 
-static func cast_key(node:Dictionary,graph:Dictionary)->String:
-    var fact:Dictionary=node.fact
-    var parent=ancestor(node,graph)
-    if not parent.is_empty() and parent.fact.behavior_id==fact.behavior_id:
-        return cast_key(parent,graph)
-    return str(fact.application.lineage_uuid) if fact.get("application")!=null else str(node.lineage_uuid)
+static func cast_key(node:Dictionary,_graph:Dictionary)->String:
+    var resolution:Dictionary=node.get("resolution_record",{})
+    return str(resolution.lineage) if resolution.get("lineage")!=null else node.lineage_id
 
 static func selected_for(selected:Dictionary,fact:Dictionary)->Dictionary:
     var result=selected.duplicate()
@@ -32,8 +30,8 @@ static func selected_for(selected:Dictionary,fact:Dictionary)->Dictionary:
 static func owns_delivery(node:Dictionary,graph:Dictionary,selection:Dictionary,has_applications:bool)->bool:
     var fact:Dictionary=node.fact
     var scope:String=selection.get("delivery",{}).get("scope","application")
-    if scope=="area":return fact.get("application")==null
-    return fact.get("application")!=null or not has_applications
+    if scope=="area":return not Occurrences.application(node)
+    return Occurrences.application(node) or not has_applications
 
 static func aim_position(fact:Dictionary,graph:Dictionary)->Variant:
     var geometry:Dictionary=fact.get("area_geometry",{}) if fact.get("area_geometry")!=null else {}

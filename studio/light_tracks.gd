@@ -25,7 +25,7 @@ static func observe(history:Dictionary,state:Dictionary,at_ms:float,event_uuid:S
         present[id]=true
         # Keep only the optical fields consumed by the native light path. Tile
         # footprints remain authoritative reducer data, not duplicated per key.
-        var observation:Dictionary=senses.get("light_sources",{}).get(id,{})
+        var observation:Dictionary=state.get("light_sources",{}).get(id,{})
         var observed={}
         for field in ["position","base_height_steps","very_bright_radius_feet","bright_radius_feet","dim_radius_feet","appearance","actor_anchored","anchor_entity_uuid","anchor_item_uuid"]:
             if observation.has(field):observed[field]=observation[field]
@@ -35,18 +35,10 @@ static func observe(history:Dictionary,state:Dictionary,at_ms:float,event_uuid:S
         var fixture=""
         if object.get("item",{}).get("is_lit")==true and senses.get("objects",{}).get(anchor,{}).get("visual",false):
             fixture=Catalog.environment_world(cache).get("props",{}).get(object.item.item_id,{}).get("lit_animation","")
-        var pointer="PlayerState.senses.light_sources/"+id if senses.has("light_sources") else _legacy_pointer(state,source)
+        var pointer="PlayerState.light_sources/"+id
         var fields={}
         for field in ["position","base_height_steps","very_bright_radius_feet","bright_radius_feet","dim_radius_feet"]:fields[field]=pointer+"/"+field
         fields.enabled=pointer+" (source-set membership)"
-        if not senses.has("light_sources"):
-            fields.enabled=pointer+"/is_lit + res://presentation/lighting.gd::resolve visibility selection"
-            if source.actor_uuid.is_empty():
-                fields.position="PlayerState.objects/"+id+"/placement/position"
-                fields.base_height_steps="PlayerState.objects/"+id+"/placement/base_height_steps"
-            else:
-                fields.position="PlayerState.actors/"+source.actor_uuid+"/last_visual_position"
-                fields.base_height_steps="PlayerState.tiles/"+"%d,%d"%[source.position.x,source.position.z]+"/elevation_steps"
         var value={"enabled":true,"source":source,"observed":observed,"actor_name":actor_name,"fixture_animation":fixture,"source_pointer":pointer,"source_fields":fields}
         if not history.has(id):history[id]={"id":id,"keys":[],"last":{},"source":pointer}
         var held:Dictionary=history[id]
@@ -59,18 +51,8 @@ static func observe(history:Dictionary,state:Dictionary,at_ms:float,event_uuid:S
         if present.has(id) or not held.last.get("enabled",false):continue
         held.last={"enabled":false}
         held.keys.append({"at_ms":at_ms,"enabled":false,"source_event_uuid":event_uuid,"operation_sequence":sequence,
-            "source_pointer":"PlayerState.senses.light_sources" if senses.has("light_sources") else "res://presentation/lighting.gd::resolve",
+            "source_pointer":"PlayerState.light_sources",
             "reason":"Emitter no longer in the disclosed native source set; this does not infer a private item switch."})
-
-static func _legacy_pointer(state:Dictionary,source:Dictionary)->String:
-    if source.actor_uuid.is_empty():return "PlayerState.objects/"+source.item_uuid+"/item"
-    var actor:Dictionary=state.actors.get(source.actor_uuid,{})
-    var controlled:bool=source.actor_uuid in state.get("audience",{}).get("controlled",[])
-    var field="controlled_items" if controlled and actor.get("controlled_items")!=null else "visual_loadout/layers"
-    var items:Array=actor.get("controlled_items",[]) if field=="controlled_items" else actor.get("visual_loadout",{}).get("layers",[])
-    for n in items.size():
-        if items[n].item_uuid==source.item_uuid:return "PlayerState.actors/"+source.actor_uuid+"/"+field+"/"+str(n)
-    return "res://presentation/lighting.gd::resolve"
 
 static func rows(history:Dictionary,index:Dictionary,motion:Dictionary)->Array:
     var output:Array=[]

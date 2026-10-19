@@ -45,7 +45,7 @@ static func reveals(group:Dictionary,node:Dictionary,initial:Dictionary,previous
     for commit in group.commits:
         for cell in commit.delta.get("tiles",{}):
             if initial.has(cell):current[cell]=commit.delta.tiles[cell]
-        if commit.event_uuid==node.uuid:break
+        if commit.event_uuid==node.id:break
     var result:Array=[]
     for region in node.fact.body_release.regions:
         for point in region.positions:

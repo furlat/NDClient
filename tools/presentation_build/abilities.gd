@@ -267,6 +267,10 @@ static func icons(entries: Dictionary) -> Dictionary:
     var result := {}
     for section in ["spells", "conditions", "actions"]:
         for id in _sorted(entries.get(section, {})):
+            # Old condition recipes retain feature/spell keys. Those records
+            # describe a lifecycle; they cannot replace its typed UI owner.
+            var owner:String="spells" if str(id).begins_with("spell.") else "conditions" if str(id).begins_with("condition.") else "actions"
+            if section!=owner and entries.get(owner,{}).has(id):continue
             var icon: Resource = entries[section][id].icon
             if icon == null or icon.path.is_empty():continue
             var row := {"path": icon.path, "status": icon.status}

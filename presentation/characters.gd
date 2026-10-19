@@ -37,7 +37,7 @@ static func resolve(actor: Dictionary, state: Dictionary, cache: Dictionary) -> 
         or actor.get("spatial_disposition", "present") != "present" \
         or actor.get("remains_disposition", "intact") == "disintegrated":
         return {"ok":true, "value":null}
-    var selected = structure(actor,cache)
+    var selected = structure(actor,cache,item_looks(actor,state))
     if not selected.ok:return selected
     var position: Array = actor.last_visual_position
     var tile_key = "%d,%d" % [position[0], position[1]]
@@ -50,20 +50,26 @@ static func resolve(actor: Dictionary, state: Dictionary, cache: Dictionary) -> 
         "appearance":appearance.duplicate(true), "equipment_layers":selected.value.equipment_layers,
         "facing":"SW", "life_state":actor.life_state}}
 
-static func structure(actor:Dictionary,cache:Dictionary)->Dictionary:
+static func item_looks(actor:Dictionary,state:Dictionary)->Dictionary:
+    var result:Dictionary={}
+    for layer in actor.get("visual_loadout",{}).get("layers",[]):
+        result[layer.item_uuid]=state.get("items",{}).get(layer.item_uuid,{}).get("look",{})
+    return result
+
+static func structure(actor:Dictionary,cache:Dictionary,looks:Dictionary={})->Dictionary:
     # The compiler compares these same constructor operands without inventing
     # a support tile or resolving position on every ordinary actor after-value.
     var id=rig_id(actor,cache)
     var available:Dictionary=rigs(cache)
     if id.is_empty() or not available.has(id):return _error("No authored rig for actor "+str(actor.get("uuid")))
-    var selected=_select_layers(actor,available[id],id==BodySources.index(cache).root_rig,cache)
+    var selected=_select_layers(actor,available[id],id==BodySources.index(cache).root_rig,cache,looks)
     if not selected.ok:return selected
     return {"ok":true,"value":{"rig":id,"appearance":actor.appearance,"equipment_layers":selected.value}}
 
 static func _layer(category: String, tint: int = 0xFFFFFF, alpha: float = 1.0) -> Dictionary:
     return {"category":category, "tint":tint, "alpha":alpha}
 
-static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, cache: Dictionary) -> Dictionary:
+static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, cache: Dictionary, looks:Dictionary={}) -> Dictionary:
     var selected: Dictionary = {}
     if not modular:
         var generated_shadow = _generated_creature_shadow(actor,rig,cache)
@@ -88,10 +94,12 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
         if appearance.head_category != null: selected.head = _layer(appearance.head_category, int(appearance.hair_tint))
         if appearance.has_beard: selected.beard = _layer(mapping.flag_parts.has_beard, int(appearance.beard_tint))
         var loadout: Dictionary = actor.visual_loadout
-        for item in loadout.layers:
+        for equipped_layer in loadout.layers:
+            var item:Dictionary=equipped_layer.duplicate()
+            item.merge(looks.get(equipped_layer.item_uuid,{}),true)
             if not visual_slots.has(item.slot): continue
             if weapon_sets.has(item.slot) and weapon_sets[item.slot] != loadout.active_weapon_set: continue
-            if item.equipped_visual_policy == "hidden": continue
+            if item.get("equipped_visual_policy") == "hidden": continue
             var authored = BodySources.equipment(item,visual_slots[item.slot],cache)
             if not authored.ok: return authored
             for layer in authored.value:
@@ -159,12 +167,12 @@ static func layers(row:Dictionary,rig:Dictionary,cache:Dictionary)->Array:
     if not prepared.ok:push_error(prepared.error.message);return []
     return prepared.value
 
-static func sheet_paths(actor:Dictionary,clips:Array,cache:Dictionary)->Dictionary:
+static func sheet_paths(actor:Dictionary,clips:Array,cache:Dictionary,looks:Dictionary={})->Dictionary:
     var id:String=rig_id(actor,cache)
     var available:Dictionary=rigs(cache)
     if not available.has(id):return _error("No authored rig for actor "+str(actor.get("uuid")))
     var rig:Dictionary=available[id]
-    var selected:Dictionary=_select_layers(actor,rig,id==BodySources.index(cache).root_rig,cache)
+    var selected:Dictionary=_select_layers(actor,rig,id==BodySources.index(cache).root_rig,cache,looks)
     if not selected.ok:return selected
     for layer in selected.value:
         layer.source_ref=BodySources.prepare_layer(layer.source_path,cache)

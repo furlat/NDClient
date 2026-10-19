@@ -7,8 +7,22 @@ const AudioCues=preload("res://presentation/audio_cues.gd")
 const ConditionPose=preload("res://presentation/condition_pose.gd")
 const BodySurfaces=preload("res://presentation/body_surfaces.gd")
 
-static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false) -> bool:
+static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false, rows:Array=[]) -> bool:
     var changed:bool=false
+    # These are the native event's ordered immutable row captures, not a fold
+    # over invented facts or a diff of final snapshots.
+    for change in rows:
+        if change.row.get("field")!="condition":continue
+        var member:Variant=change.after if change.after!=null else change.before
+        if member==null:continue
+        var identity:String=member.condition_uuid
+        if change.after==null:
+            if owners.has(identity):
+                owners[identity].end_ms=at_ms;owners[identity].consumed=change.row.get("consumed",false);changed=true
+        elif change.before==null:
+            owners[identity]={"id":identity,"actor_uuid":change.actor_uuid,"start_ms":at_ms,"initial":false,"condition":change.after,"end_ms":INF,
+                "life_state":actors.get(change.actor_uuid,{}).get("life_state","alive")}
+            changed=true
     for actor_id in actors:
         var actor: Dictionary=actors[actor_id]
         var live={}
@@ -20,6 +34,7 @@ static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initia
                 changed=true
             else:
                 changed=changed or not is_same(owners[id].condition,condition) or not is_inf(owners[id].end_ms)
+                if not is_inf(owners[id].end_ms):owners[id].start_ms=at_ms;owners[id].initial=initial
                 owners[id].condition=condition
                 owners[id].end_ms=INF
             changed=changed or owners[id].get("life_state")!=actor.get("life_state","alive")

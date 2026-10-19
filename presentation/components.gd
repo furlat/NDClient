@@ -1,4 +1,5 @@
 extends RefCounted
+const Occurrences=preload("res://presentation/occurrences.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
 const Authoring=preload("res://presentation/authoring.gd")
@@ -17,7 +18,7 @@ static func effect_seed(component:Dictionary)->int:
         if prefix.is_valid_int() and occurrence.contains(":"):occurrence=occurrence.substr(prefix.length()+1)
     return absi(hash([occurrence,component.get("kind",""),component.get("source_id",""),component.get("source",""),
         component.get("attachment",""),component.get("actor_uuid",""),component.get("target_uuid",""),
-        component.get("condition_uuid",""),component.get("layer",{}).get("id",""),component.get("application",{}).get("index",0)]))
+        component.get("condition_uuid",""),component.get("layer",{}).get("id",""),component.get("application_index",0)]))
 
 static func weapon_trail(recipe: Dictionary,fact: Dictionary,actor: Dictionary,cache: Dictionary) -> Dictionary:
     var trail: Dictionary=recipe.get("weaponTrail",{}) if recipe.get("weaponTrail")!=null else {}
@@ -102,9 +103,9 @@ static func cast_layers(cast: Dictionary, actor: Dictionary, cache: Dictionary) 
     return layers.map(func(layer): return Palette.prepare(layer,rig,cast.actionClip,cache))
 
 static func add(group: Dictionary, node: Dictionary, kind: String, start: float, duration: float, source: String, parameters: Dictionary) -> Dictionary:
-    var row={"id":"%s:%s:%s:%d" % [group.operation_sequence,node.uuid,kind,group.components.size()],
-        "kind":kind,"source_event_uuid":node.uuid,"source_lineage":node.lineage_uuid,
-        "parent_id":"%s:%s" % [group.operation_sequence,node.uuid],"start_ms":start,"duration_ms":duration,
+    var row={"id":"%s:%s:%s:%d" % [group.operation_sequence,node.id,kind,group.components.size()],
+        "kind":kind,"source_event_uuid":node.id,"source_lineage":node.lineage_id,
+        "parent_id":"%s:%s" % [group.operation_sequence,node.id],"start_ms":start,"duration_ms":duration,
         "source":source,"status":"available","sample_hz":60.0}
     row.merge(parameters,true); group.components.append(row)
     return row
@@ -119,8 +120,7 @@ static func _source(group: Dictionary, node: Dictionary, source_id: String, star
     parameters.reason="" if not record.is_empty() else "native_source_not_imported"
     return add(group,node,"native_effect",start,record.get("duration",0)*1000,"native_effects/index.json:/sources/"+source_id,parameters)
 
-static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,selected:Dictionary,start:float,duration:float,points:Dictionary,cache:Dictionary,owner:Dictionary)->void:
-    var fact:Dictionary=node.fact
+static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,selected:Dictionary,start:float,duration:float,points:Dictionary,cache:Dictionary,owner:Dictionary,fact:Dictionary,application_index:int=0)->void:
     var cast:Dictionary=recipe.get("cast",{})
     var placement:Dictionary=recipe.get("projectile",{}).duplicate() if recipe.get("projectile")!=null else {}
     for key in ["sourceSockets","sourceSocketsByRig"]:
@@ -128,10 +128,11 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
     var common={"actor_uuid":fact.source_entity_uuid,"target_uuid":fact.get("target_entity_uuid"),
         "attachment":"projectile","recipe":placement,"scale":placement.get("scale",1.0)}
     common.merge(points,true)
-    if fact.get("application")!=null:common.application=fact.application
-    var cast_id:String=owner.get("source_event_uuid",node.uuid)
+    if Occurrences.application(node):
+        common.application_id=node.resolution_record.application_id;common.cast_lineage=str(node.resolution_record.lineage);common.application_index=application_index
+    var cast_id:String=owner.get("source_event_uuid",node.id)
     var include_cast=not group.components.any(func(row):return row.get("native_cast_id")==cast_id and row.get("native_cue",{}).get("role")=="cast")
-    var index:int=fact.application.index if fact.get("application")!=null else 0
+    var index:int=application_index
     for phase in NativeSpells.phases(selected,owner,start,duration,index,include_cast):
         if phase.native_cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
         var parameters:Dictionary=common.duplicate()
@@ -139,18 +140,18 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
         parameters.merge({"native_spell":true,"cast_recipe":cast,"native_cast_id":cast_id},true)
         add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
 
-static func projectile(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,duration: float,source: Array,target: Array,contacts: Dictionary,cache: Dictionary,owner:Dictionary={}) -> void:
-    var fact: Dictionary=node.fact
+static func projectile(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,duration: float,source: Array,target: Array,contacts: Dictionary,cache: Dictionary,owner:Dictionary={},fact:Dictionary={},application_index:int=0) -> void:
     var common={"actor_uuid":fact.source_entity_uuid,"target_uuid":fact.target_entity_uuid,
         "from_position":source,"to_position":target,"from_elevation_feet":contacts.get(fact.source_entity_uuid,{}).get("from_elevation_feet",0),
         "to_elevation_feet":contacts.get(fact.target_entity_uuid,{}).get("from_elevation_feet",0),
         "attachment":"projectile","recipe":recipe.projectile,"scale":recipe.projectile.scale}
-    if fact.get("application")!=null:common.application=fact.application
+    if Occurrences.application(node):
+        common.application_id=node.resolution_record.application_id;common.cast_lineage=str(node.resolution_record.lineage);common.application_index=application_index
     var selected:=NativeSpells.selection(fact.behavior_id,cache)
     if not selected.is_empty():
-        var cast_id:String=owner.get("source_event_uuid",node.uuid)
+        var cast_id:String=owner.get("source_event_uuid",node.id)
         var include_cast=not group.components.any(func(row):return row.get("native_cast_id")==cast_id and row.get("native_cue",{}).get("role")=="cast")
-        var index:int=fact.application.index if fact.get("application")!=null else 0
+        var index:int=application_index
         for phase in NativeSpells.phases(selected,owner,start,duration,index,include_cast):
             if phase.native_cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
             var parameters:Dictionary=common.duplicate()
@@ -178,23 +179,23 @@ static func _native_interceptions(group:Dictionary,lineage:Dictionary,graph:Dict
         var parent:Dictionary=graph.nodes.get(node.get("parent_lineage"),{})
         if parent.get("fact")!=null and parent.fact.get("intercepted_by_condition_uuid")==id:continue
         var condition:Dictionary={}
-        for actor in graph.actor_inputs.get(node.uuid,{}).values():
+        for actor in graph.actor_inputs.get(node.id,{}).values():
             for candidate in actor.get("conditions",[]):
                 if candidate.condition_uuid==id:condition=candidate;break
         if condition.is_empty():
-            for event in lineage.events:
-                var value:Variant=event.get("fact")
-                if value!=null and value.kind=="condition" and value.condition.condition_uuid==id:condition=value.condition;break
+            for cues in graph.condition_cues.values():
+                for cue in cues:
+                    if cue.condition.condition_uuid==id:condition=cue.condition;break
         var selected=NativeSpells.condition(str(condition.get("behavior_id","")),cache)
         if selected.is_empty():continue
         var target:String=fact.target_entity_uuid
         var position:Variant=graph.positions.get(target)
         if position==null:continue
-        var at:float=graph.starts.get(node.uuid,0.0)
+        var at:float=graph.starts.get(node.id,0.0)
         # The interception lands when the attack does: a projectile's arrival,
         # not the bow release (melee impact equals its contact).
         for track in group.actor_tracks:
-            if track.source_event_uuid==node.uuid:at=track.get("impact_ms",track.get("contact_ms",at))
+            if track.source_event_uuid==node.id:at=track.get("impact_ms",track.get("contact_ms",at))
         for phase in NativeSpells.contact_phases(selected):
             var parameters=phase.duplicate()
             parameters.merge({"native_spell":true,"intercepted_by_condition_uuid":id,"actor_uuid":target,"target_uuid":target,
@@ -208,7 +209,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
     var sounds: Dictionary=Authoring.load_data("audio/bindings.json",cache)
     var nodes: Dictionary={}
     var blood_previous:Dictionary={}
-    for node in lineage.events: nodes[node.uuid]=node
+    for node in lineage.events: nodes[node.id]=node
     for track in group.actor_tracks:
         for layer in track.get("effect_layers",[]):
             var source:String=track.get("cast_source","")
@@ -233,16 +234,16 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
     var native_sources: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
     for node in lineage.events:
         if node.canceled or node.get("fact")==null: continue
-        var fact: Dictionary=node.fact
-        var start: float=graph.starts.get(node.uuid,0)
-        var recipe: Dictionary=graph.recipes.get(node.uuid,{})
+        var fact: Dictionary=Occurrences.spell(node,graph) if node.fact.kind=="spell" else node.fact
+        var start: float=graph.starts.get(node.id,0)
+        var recipe: Dictionary=graph.recipes.get(node.id,{})
         var contact=start
         var release_time=start
         var body_end=start
         var audio_track:Dictionary={}
         var audio_markers={"event.start":start}
         for track in group.actor_tracks:
-            if track.source_event_uuid==node.uuid:
+            if track.source_event_uuid==node.id:
                 release_time=track.get("contact_ms",start)
                 contact=track.get("impact_ms",release_time)
                 body_end=track.start_ms+track.duration_ms
@@ -281,7 +282,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
             var feedback: Dictionary=Authoring.load_data("catalog/death_save_context.json",cache).get(key,{})
             if feedback.get("enabled",false):_feedback(group,node,feedback,start,fact.entity_uuid,"catalog/death_save_context.json:/"+key,cache)
         elif fact.kind=="object_damage" and fact.applied_damage>0 and fact.resulting_hp>0:
-            var object: Dictionary=graph.object_inputs.get(node.uuid,{})
+            var object: Dictionary=graph.object_inputs.get(node.id,{})
             var binding: Dictionary=sounds.objects.get(object.get("item",{}).get("item_id"),{})
             if binding.has("impact"):
                 _bound_audio(group,node,binding,"impact",audio_markers,"","objects/"+object.item.item_id,cache)
@@ -327,11 +328,11 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
             var damage_recipe: Dictionary={}
             var spell_behavior:=""
             while not parent.is_empty():
-                if spell_behavior.is_empty() and parent.get("fact")!=null and parent.fact.kind=="spell":spell_behavior=parent.fact.behavior_id
-                if graph.recipes.has(parent.uuid) and graph.recipes[parent.uuid].has("damage"):
-                    damage_recipe=graph.recipes[parent.uuid].damage; break
+                if spell_behavior.is_empty() and parent.get("fact")!=null and parent.fact.kind=="spell":spell_behavior=Occurrences.spell(parent,graph).get("behavior_id","")
+                if graph.recipes.has(parent.id) and graph.recipes[parent.id].has("damage"):
+                    damage_recipe=graph.recipes[parent.id].damage; break
                 parent=graph.nodes.get(parent.get("parent_lineage"),{})
-            var timing: Dictionary=graph.get("damage_timings",{}).get(node.uuid,{})
+            var timing: Dictionary=graph.get("damage_timings",{}).get(node.id,{})
             var flash: Dictionary=damage_recipe.get("hitFlash",{})
             if flash.get("enabled",context.get("flashEnabled",false)):
                 var colors: Array=flash.get("palette",{}).get("colors",[])
@@ -357,13 +358,13 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
             # artwork uses the same server ellipse and allowed-cell list as the
             # persistent after-values; air-only releases retain native spray.
             if release.get("release_id")=="body.blood":
-                var blood_start:float=graph.get("damage_timings",{}).get(node.uuid,{}).get("hp",start)
+                var blood_start:float=graph.get("damage_timings",{}).get(node.id,{}).get("hp",start)
                 if not release.get("regions",[]).is_empty() and release.get("pattern")!=null:
                     var blood_asset=Blood.asset(cache)
                     if blood_asset.is_empty():
                         return {"ok":false,"error":{"kind":"authoring","message":"Cannot load selected asset metadata: particles.region.blood","retryable":false}}
                     var revealed=Blood.reveals(group,node,graph.get("initial_tiles",{}),blood_previous)
-                    var blood_contact:Dictionary=graph.impact_contacts.get(node.uuid,{})
+                    var blood_contact:Dictionary=graph.impact_contacts.get(node.id,{})
                     var source_height:Variant=blood_contact.get("from_elevation_feet")
                     if source_height!=null:source_height=float(source_height)/5.0
                     else:
@@ -379,27 +380,27 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                 else:
                     var selection: Dictionary=Authoring.load_data("native_effects/responses.json",cache)
                     var source_id: String=selection.damage_types.get(str(release.get("primary_damage_type")),selection.default)
-                    var actors: Dictionary=graph.actor_inputs.get(node.uuid,{})
-                    var impact=ImpactPlacement.prepare(actors.get(fact.target_entity_uuid,{}),group.actor_tracks,blood_start,graph.impact_contacts.get(node.uuid,{}),cache)
+                    var actors: Dictionary=graph.actor_inputs.get(node.id,{})
+                    var impact=ImpactPlacement.prepare(actors.get(fact.target_entity_uuid,{}),group.actor_tracks,blood_start,graph.impact_contacts.get(node.id,{}),cache)
                     var common={"actor_uuid":fact.target_entity_uuid,"source_actor_uuid":fact.get("source_entity_uuid"),"attachment":"impact","impact":impact,"scale":selection.scale,
                         "body_release":release.duplicate(true),"residue_deposition":false,
                         "direction_from":actors.get(fact.get("source_entity_uuid"),{}).get("last_visual_position"),"direction_to":actors.get(fact.target_entity_uuid,{}).get("last_visual_position")}
                     var spray=_source(group,node,source_id,blood_start,common,cache)
                     if impact.status=="missing":spray.status="missing";spray.reason=impact.reason
-        elif fact.kind=="condition" and fact.event_type in ["condition_application","condition_removal"]:
-            var phase="removal" if fact.event_type=="condition_removal" else "application"
-            var binding: Dictionary=sounds.conditions.get(fact.condition.behavior_id,{})
-            _bound_audio(group,node,binding,phase,audio_markers,fact.target_entity_uuid,"conditions/"+fact.condition.behavior_id,cache,audio_track)
-            var feedback: Dictionary=recipe.get(phase,{})
-            if feedback.get("feedbackEnabled",false):
+        elif fact.kind=="actor_change":
+            if group.actor_tracks.any(func(track):return track.source_event_uuid==node.id and track.get("equipment_change",false)):
+                _bound_audio(group,node,sounds.get("equipment",{}),"change",audio_markers,group.actor_tracks.filter(func(track):return track.source_event_uuid==node.id)[0].actor_uuid,"equipment",cache,audio_track)
+            for cue in graph.condition_cues.get(node.id,[]):
+                var condition:Dictionary=cue.condition
+                var binding:Dictionary=sounds.get("conditions",{}).get(str(condition.behavior_id),{})
+                _bound_audio(group,node,binding,cue.phase,audio_markers,cue.actor_uuid,"conditions/"+str(condition.behavior_id),cache,audio_track)
+                var feedback:Dictionary=cue.recipe.get(cue.phase,{})
+                if not feedback.get("feedbackEnabled",false):continue
                 var style=Authoring.load_data("catalog/badge_style.json",cache)
-                var prefix:String=feedback.get("feedbackPrefix","−" if phase=="removal" else "+")
-                var text:String=prefix+str(fact.condition.get("name",recipe.get("label",fact.condition.behavior_id)))
-                var pointer=str(fact.condition.behavior_id)+"/"+phase+"/feedbackEnabled"
-                _feedback(group,node,{"text":text,"color":feedback.feedbackColor,
-                    "durationMs":feedback.get("feedbackDurationMs",style.durationMs)},start,fact.target_entity_uuid,
-                    Authoring.Catalog.source_pointer("catalog/condition_recipes.json",pointer,cache),cache)
-                group.components.back().legacy_source="catalog/condition_recipes.json:/"+pointer
+                var prefix:String=feedback.get("feedbackPrefix","−" if cue.phase=="removal" else "+")
+                var text:String=prefix+str(condition.get("name",cue.recipe.get("label",condition.behavior_id)))
+                var pointer:String=str(condition.behavior_id)+"/"+cue.phase+"/feedbackEnabled"
+                _feedback(group,node,{"text":text,"color":feedback.feedbackColor,"durationMs":feedback.get("feedbackDurationMs",style.durationMs)},start,cue.actor_uuid,Authoring.Catalog.source_pointer("catalog/condition_recipes.json",pointer,cache),cache)
     var projectiles={}
     for component in group.components:
         var actor: Dictionary=graph.actor_inputs.get(component.source_event_uuid,{}).get(component.get("actor_uuid"),{})
@@ -410,12 +411,12 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
             for track in group.actor_tracks:
                 if track.actor_uuid==component.get("actor_uuid") and track.start_ms<=component.start_ms and (track.start_ms+track.duration_ms>component.start_ms or track.get("holding_pose",false)):
                     if not component.has("source_track") or component.source_track.priority<=track.priority:component.source_track=track
-        if component.get("attachment")=="projectile" and component.has("application") and (not component.get("native_spell",false) or component.native_cue.role=="flight"):
-            var key=str(component.application.lineage_uuid)+":"+str(component.target_uuid)
+        if component.get("attachment")=="projectile" and component.has("application_id") and (not component.get("native_spell",false) or component.native_cue.role=="flight"):
+            var key=str(component.cast_lineage)+":"+str(component.target_uuid)
             if not projectiles.has(key):projectiles[key]=[]
             projectiles[key].append(component)
     for family in projectiles.values():
-        family.sort_custom(func(a,b):return a.application.index<b.application.index)
+        family.sort_custom(func(a,b):return a.application_index<b.application_index)
         for i in family.size():family[i].same_target_index=i;family[i].same_target_count=family.size()
     return {"ok":true}
 
@@ -463,9 +464,9 @@ static func _bound_audio(group:Dictionary,node:Dictionary,bindings:Dictionary,ke
     return row
 
 static func _audio(group:Dictionary,node:Dictionary,cue:String,start:float,actor_id:String,cache:Dictionary,assignment:Dictionary={})->Dictionary:
-    var parameters={"actor_uuid":actor_id,"parent_id":str(group.operation_sequence)+":"+node.uuid,"source_event_uuid":node.uuid,"source_lineage":node.lineage_uuid}
+    var parameters={"actor_uuid":actor_id,"parent_id":str(group.operation_sequence)+":"+node.id,"source_event_uuid":node.id,"source_lineage":node.lineage_id}
     parameters.merge(assignment,true)
-    var row=AudioCues.resolve(cue,str(group.operation_sequence)+":"+node.uuid,group.components.size(),start,-1,
+    var row=AudioCues.resolve(cue,str(group.operation_sequence)+":"+node.id,group.components.size(),start,-1,
         parameters,cache)
     group.components.append(row)
     return row

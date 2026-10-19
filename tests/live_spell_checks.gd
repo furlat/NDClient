@@ -56,12 +56,12 @@ func _issue_input(selected:Dictionary,record:Dictionary)->void:
         var level:Button
         for button in scene.hud.popup_rows:
             var row:Dictionary=button.get_meta("native_row",{})
-            if row.get("discovery_index")==selected.action.discovery_index:level=button;break
+            if row.get("discovery_index")==selected.action.discovery_index and row.get("cast_at_level")==selected.action.get("cast_at_level"):level=button;break
         check(level!=null and not level.disabled,"Actual level popup offers requested native Fireball row")
         if level==null:return
         record.ui_markers.append({"kind":"level_click","time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames()})
         _ui_click(level.get_global_rect().get_center())
-    if not await until(func():return scene.action_request<0 and not scene.selection_preview.is_empty(),"Actual selected Fireball prefix preview arrives"):return
+    if not await until(func():return scene.action_request<0 and not scene.selected_action.is_empty() and (scene.selected_action.get("position_region")!=null or not scene.selection_preview.is_empty()),"Actual selected Fireball aim is ready"):return
     # The native bar may choose the available restricted-budget representative
     # of the same level/variant verb. Record that real row, never override it.
     var actual:Dictionary=scene.selected_action
@@ -70,11 +70,11 @@ func _issue_input(selected:Dictionary,record:Dictionary)->void:
     record.selected_native_row={"discovery_index":actual.get("discovery_index"),"cast_at_level":actual.get("cast_at_level"),"restricted_action_budget":actual.get("restricted_action_budget")}
     if not matches:return
     selected.action=actual
-    var target:Array=Choices.binding_position(scene.available_actions,selected.target)
+    var target:Array=selected.position if selected.has("position") else Choices.binding_position(scene.available_actions,selected.target)
     var sweep:Array=[]
     for offset in [[-1,0],[0,-1],[1,0],[0,1],[0,0]]:
         var cell:Array=[target[0]+offset[0],target[1]+offset[1]]
-        if Choices.action_options(scene.available_actions,selected.action).any(func(option):return Choices.binding_position(scene.available_actions,option)==cell):
+        if scene.Interaction.region_allows(scene.available_actions,selected.action,cell,scene.timeline.state) if selected.action.get("position_region")!=null else Choices.action_options(scene.available_actions,selected.action).any(func(option):return Choices.binding_position(scene.available_actions,option)==cell):
             var point=grid_screen(cell)
             if root.get_visible_rect().has_point(point) and not scene.hud.pointer_over_controls(point) and scene.Interaction.same_position(scene.pick_cell(point).get("position"),cell):sweep.append(cell)
     check(sweep.size()>1,"Fireball sweep uses multiple actually offered and pickable neighboring cells")
@@ -109,6 +109,8 @@ func _selected_step(step:Dictionary)->Dictionary:
         var bb:int=0 if b.get("cast_at_level")==null else b.cast_at_level
         return aa<bb if aa!=bb else a.discovery_index<b.discovery_index)
     for action in offered:
+        if action.get("position_region")!=null and step.has("position"):
+            return {"action":action,"position":step.position,"recipient_uuid":""}
         var targets:Array=Choices.action_options(scene.available_actions,action)
         if step.has("position"):
             targets=targets.filter(func(target):return Choices.binding_position(scene.available_actions,target)==step.position)

@@ -8,6 +8,39 @@ func capture(name: String, value: Variant) -> void:
     var file = FileAccess.open(scene.game_config.test_result.get_base_dir().path_join(name+".json"),FileAccess.WRITE)
     file.store_string(JSON.stringify(value,"  ")); file.close()
 
+func until(predicate:Callable,label:String,timeout:int=30000)->bool:
+    var ok:bool=await super.until(predicate,label,timeout)
+    if not ok:
+        var diagnostic:Dictionary=scene.presentation_diagnostics()
+        diagnostic.media_gate=scene.media_gate;diagnostic.native_startup=scene.native_startup
+        diagnostic.world_prepare_phase=scene.pending_world.phase if scene.pending_world!=null else "idle"
+        diagnostic.blocked_actor=scene.pending_world.blocked_actor if scene.pending_world!=null else {}
+        diagnostic.blocked_source=scene.pending_world.blocked_source if scene.pending_world!=null else {}
+        capture("interaction-failure",diagnostic)
+    return ok
+
+func equipment_until(predicate:Callable,label:String)->bool:
+    var began:int=Time.get_ticks_usec()
+    var sample:Dictionary={"world_hold_frames":0,"media_hold_frames":0,"frames":0,"last_frame":-1,"holds":[]}
+    var ok:bool=await until(func():
+        var frame:int=Engine.get_process_frames()
+        if frame!=sample.last_frame:
+            sample.last_frame=frame;sample.frames+=1
+            sample.world_hold_frames+=int(scene.timeline.waiting_for_world)
+            sample.media_hold_frames+=int(scene.timeline.waiting_for_media)
+            if scene.timeline.waiting_for_world or scene.timeline.waiting_for_media:
+                var gates:Dictionary={}
+                for field in ["native","sources","environment","metadata","boot","admitted_world_pending"]:gates[field]=scene.media_gate.get(field)
+                sample.holds.append({"frame":frame,"at_ms":(Time.get_ticks_usec()-began)/1000.0,"busy":scene.timeline.busy(),"current":scene.timeline.current.get("id"),"queued":scene.timeline.queue.size(),"display_ms":scene.timeline.display_ms,
+                    "target_ms":scene.timeline.media_target_ms,"gates":gates,"world_phase":scene.pending_world.phase if scene.pending_world!=null else "idle","native_pending":scene.native_startup.get("pending",0)})
+        return predicate.call(),label)
+    sample.label=label;sample.elapsed_ms=(Time.get_ticks_usec()-began)/1000.0
+    sample.erase("last_frame")
+    if not evidence.has("equipment"):evidence.equipment=[]
+    evidence.equipment.append(sample)
+    check(sample.world_hold_frames==0 and sample.media_hold_frames==0,"Equipment playback crosses every world/media boundary without a hold")
+    return ok
+
 func click_at(point: Vector2, button: int = MOUSE_BUTTON_LEFT) -> void:
     var event = InputEventMouseButton.new()
     event.position = point; event.global_position = point
@@ -53,13 +86,13 @@ func _run() -> void:
     if not await until(ready,"Fresh non-forced choices after GUI focus transfer"): await finish(); return
     # Equip/unequip uses HUD controls and waits for authoritative after-values.
     var actor: String = scene.available_actions.entity_uuid
-    var equipped: Dictionary = UI.equipped(scene.timeline.state.actors[actor])
+    var equipped: Dictionary = UI.equipped(scene.timeline.state.actors[actor],scene.timeline.state)
     if equipped.has("MELEE_MAIN"):
         var item: String = equipped.MELEE_MAIN.item_uuid
         scene.inventory_intent({"kind":"unequip","item":{"slot":"MELEE_MAIN"}})
-        if not await until(func():return ready() and not UI.equipped(scene.timeline.state.actors[actor]).has("MELEE_MAIN"),"Unequip appears only after native publication"): await finish(); return
+        if not await equipment_until(func():return ready() and not UI.equipped(scene.timeline.state.actors[actor],scene.timeline.state).has("MELEE_MAIN"),"Unequip appears only after native publication"): await finish(); return
         scene.inventory_intent({"kind":"equip","item":{"item_uuid":item,"slot":"MELEE_MAIN"}})
-        if not await until(func():return ready() and UI.equipped(scene.timeline.state.actors[actor]).get("MELEE_MAIN",{}).get("item_uuid")==item,"Equip restores exact item through native command"): await finish(); return
+        if not await equipment_until(func():return ready() and UI.equipped(scene.timeline.state.actors[actor],scene.timeline.state).get("MELEE_MAIN",{}).get("item_uuid")==item,"Equip restores exact item through native command"): await finish(); return
     else: check(false,"Crypt controlled actor has equipped melee weapon")
     var option = {}
     for candidate in scene.available_actions.world_interactions:

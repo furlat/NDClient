@@ -518,7 +518,7 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
     var light_state:Dictionary=input.light_state if input.has("light_state") else input.actor_state
     var light_resolution:Dictionary={}
     var senses:Variant=light_state.get("senses")
-    var optical:Variant=senses.get("light_sources") if senses!=null else null
+    var optical:Variant=light_state.get("light_sources",{})
     if optical!=null and input.get("light_inputs")!=null and optical==input.light_inputs:
         light_resolution=input.light_resolution
     else:light_resolution=SourceLighting.resolve(light_state)

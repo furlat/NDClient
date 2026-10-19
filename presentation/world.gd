@@ -1,6 +1,27 @@
 extends RefCounted
 # Adapter from disclosed SDK geometry into existing authored placement rows.
 const Catalog = preload("res://source_catalog.gd")
+const Cells = preload("res://sdk/fold_cells.gd")
+
+# The few current immutable sensory masks are shared by world/camera readers.
+# This bounded cache is optical derived data, never a second canonical state.
+static var _mask_views:Array=[]
+static var _mask_mutex:=Mutex.new()
+static func visible_positions(state:Dictionary)->Array:
+    var senses:Variant=state.get("senses")
+    if senses==null:return []
+    var mask:Dictionary=senses.get("visible",{})
+    _mask_mutex.lock()
+    for entry in _mask_views:
+        if is_same(entry.mask,mask):
+            var points:Array=entry.points
+            _mask_mutex.unlock();return points
+    var points:Array=Cells.mask_points(mask)
+    points.make_read_only()
+    _mask_views.append({"mask":mask,"points":points})
+    if _mask_views.size()>4:_mask_views.pop_front()
+    _mask_mutex.unlock()
+    return points
 
 static func cell_key(position: Array) -> String:
     return "%d,%d" % [position[0],position[1]]
@@ -448,7 +469,7 @@ static func current_ids(state: Dictionary, boundaries: Dictionary, visible_cells
     var senses: Dictionary = state.get("senses",{}) if state.get("senses")!=null else {}
     var result = {}
     visible_cells.clear()
-    for position in senses.get("visible",[]):
+    for position in visible_positions(state):
         var cell = cell_key(position)
         visible_cells[cell] = true
         if state.tiles.has(cell): result[state.tiles[cell].tile_uuid] = true
@@ -507,7 +528,7 @@ static func visibility(state: Dictionary) -> Dictionary:
     # from `seen`, a light radius, or an object's remembered activation state.
     var senses: Dictionary = state.get("senses",{}) if state.get("senses") != null else {}
     var visible = {}
-    for position in senses.get("visible",[]): visible[cell_key(position)] = true
+    for position in visible_positions(state): visible[cell_key(position)] = true
     var result = {}
     for tile in state.get("tiles",{}).values():
         result[tile.tile_uuid] = visible.has(cell_key(tile.position))

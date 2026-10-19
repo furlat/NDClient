@@ -98,7 +98,7 @@ func begin_style() -> void:
     current_visibility = host.scenery_visibility.duplicate()
     visible_cells = {}
     var senses: Variant = host.timeline.state.get("senses")
-    for position in senses.get("visible",[]) if senses != null else []: visible_cells[WorldRows.cell_key(position)] = true
+    for position in WorldRows.visible_positions(host.timeline.state): visible_cells[WorldRows.cell_key(position)] = true
     style_key = [wall_mode,current_visibility,visible_cells]
     set_target_camera()
     if completed_style == style_key:
@@ -121,7 +121,7 @@ func style_is_current() -> bool:
     if style_key.is_empty(): return true
     if wall_mode != host.wall_mode or current_visibility != host.scenery_visibility: return false
     var senses: Variant = host.timeline.state.get("senses")
-    var positions: Array = senses.get("visible",[]) if senses != null else []
+    var positions: Array = WorldRows.visible_positions(host.timeline.state)
     if positions.size() != visible_cells.size(): return false
     for position in positions:
         if not visible_cells.has(WorldRows.cell_key(position)): return false

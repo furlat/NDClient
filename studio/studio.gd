@@ -146,7 +146,7 @@ func _ready() -> void:
     var backdrop = ColorRect.new(); backdrop.color=Color("101722"); backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(backdrop)
     var layout = VBoxContainer.new(); layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); layout.add_theme_constant_override("separation",2); add_child(layout)
     var header = HBoxContainer.new(); layout.add_child(header)
-    _button(header,"Library",_show_study_library).tooltip_text="All capabilities, study sequences, recordings and authoring requirements"
+    _button(header,"Library",_show_study_library).tooltip_text="Authored capabilities, current cases and presentation gaps"
     capability_picker=_picker(header,"Capability",160);capability_picker.item_selected.connect(_choose_capability)
     interaction_picker=_picker(header,"Interaction",150);interaction_picker.item_selected.connect(_choose_interaction)
     case_picker=_picker(header,"Recorded case",150);case_picker.size_flags_horizontal=Control.SIZE_EXPAND_FILL;case_picker.item_selected.connect(_choose_case)
@@ -318,11 +318,18 @@ func _stage_tracks(source:Dictionary)->void:
         if row.id==pending_selected_id:candidate_tracks.reveal(row.id);break
     _connect_tracks(candidate_tracks)
 
+var _light_marker_input:Dictionary={}
+var _light_marker_values:Dictionary={}
+
 func _light_marker_level(_tile:Dictionary,cell:String,state:Dictionary)->Variant:
     # The SDK supplies the current faction aggregate, including darkvision.
     # Tile.resolved_light may be an older observation; never substitute it.
     var senses:Dictionary=state.get("senses",{}) if state.get("senses")!=null else {}
-    return senses.get("effective_light_levels",{}).get(cell)
+    var values:Dictionary=senses.get("effective_light_levels",{})
+    if not is_same(values,_light_marker_input):
+        _light_marker_input=values
+        _light_marker_values=preload("res://sdk/fold_cells.gd").values_map(values)
+    return _light_marker_values.get(cell)
 
 func _button(parent: Node, label: String, action: Callable) -> Button:
     var button=Button.new(); button.text=label; button.pressed.connect(action); parent.add_child(button); return button
@@ -365,8 +372,16 @@ func _open_study_recording(capability:Dictionary,scenario:Dictionary,record:Dict
 
 func _show_study_expectations()->void:
     study_tree.clear();var root_item=study_tree.create_item()
-    study_button.disabled=study_scenario.is_empty();study_panel.hide()
+    var moments:Array=index.get("moments",[])
+    study_button.disabled=study_scenario.is_empty() and moments.is_empty();study_panel.hide()
     study_title.text=study_scenario.get("label","");study_title.tooltip_text=study_title.text
+    if not moments.is_empty():
+        var group=study_tree.create_item(root_item);group.set_text(0,"Recorded moments");group.set_selectable(0,false)
+        for moment in moments:
+            if not moment.get("available",false):continue
+            var item=study_tree.create_item(group);item.set_text(0,str(moment.get("label",moment.get("kind","Event"))))
+            item.set_selectable(0,moment.get("available",false));item.set_tooltip_text(0,moment.get("reason","Jump to the actual recorded event"))
+            var metadata:Dictionary=moment.duplicate();metadata.recorded_moment=true;item.set_metadata(0,metadata)
     var phases={}
     for expected in study_scenario.get("expectations",[]):
         var phase:String=expected.get("phase","")
@@ -380,6 +395,9 @@ func _inspect_study_expectation()->void:
     var item=study_tree.get_selected()
     if item==null:return
     var expected:Dictionary=item.get_metadata(0)
+    if expected.get("recorded_moment",false):
+        if expected.get("available",false):_seek(expected.at_ms);tracks.reveal(expected.row_id)
+        return
     inspector_mode="study"
     inspector.title="Study expectation · "+str(expected.label)
     var lines:Array[String]=[str(expected.label),"Phase: "+str(expected.get("phase","")),"Participants: "+", ".join(expected.get("participants",[])),"", "This is an expected observation. Recording presence, authoring assignment and rendered qualification are separate.",""]
@@ -504,6 +522,7 @@ func _picker(parent:Node,hint:String,width:float)->OptionButton:
 func _discover_cases() -> void:
     case_records=CaseLibrary.read();case_paths.clear()
     for row in case_records:
+        if not row.get("ready",false):continue
         for perspective in row.perspectives:case_paths.append(perspective.journal)
     for capability in CaseLibrary.CAPABILITIES:
         var present=case_records.any(func(row):return row.capability==capability)
@@ -523,13 +542,13 @@ func _populate_capability(choice:int)->void:
     if interaction_picker.item_count==0:
         interaction_picker.add_item("No recorded interaction");interaction_picker.disabled=true
     else:interaction_picker.disabled=false
-    interaction_picker.add_item("Authoring / missing sources…");interaction_picker.set_item_metadata(interaction_picker.item_count-1,"inventory")
+    interaction_picker.add_item("Browse authoring…");interaction_picker.set_item_metadata(interaction_picker.item_count-1,"library")
     interaction_picker.disabled=false
     _populate_interaction(0)
 
 func _choose_interaction(choice:int)->void:
-    if interaction_picker.get_item_metadata(choice)=="inventory":
-        _show_source_inventory();return
+    if interaction_picker.get_item_metadata(choice)=="library":
+        _show_study_library();return
     interaction_picker.select(choice)
     _populate_interaction(choice)
     _open_browser_selection()
@@ -542,15 +561,15 @@ func _populate_interaction(choice:int)->void:
         if row.capability==capability and row.interaction==interaction:browser_cases.append(row)
     case_picker.add_item("Choose case…" if not browser_cases.is_empty() else "Required · not recorded")
     case_picker.set_item_disabled(0,true)
-    for row in browser_cases:case_picker.add_item(row.label)
+    for row in browser_cases:
+        case_picker.add_item(row.label+(" · "+row.scenario_status.replace("_"," ") if not row.ready else ""))
+        case_picker.set_item_disabled(case_picker.item_count-1,not row.ready)
     case_picker.disabled=browser_cases.is_empty()
 
 func _open_browser_selection()->void:
-    if browser_cases.is_empty():
-        _cancel_case_selection()
-        return
-    case_picker.select(1)
-    select_case(browser_cases[0])
+    for i in range(browser_cases.size()):
+        if browser_cases[i].get("ready",false):case_picker.select(i+1);select_case(browser_cases[i]);return
+    _cancel_case_selection()
 
 func _cancel_case_selection()->void:
     # An unavailable study is still the latest navigation intent. Never let a
@@ -569,6 +588,7 @@ func _choose_case(choice: int) -> void:
     if choice>0 and choice<=browser_cases.size():select_case(browser_cases[choice-1])
 
 func select_case(record:Dictionary,perspective_id:String="",study:Dictionary={})->void:
+    if not record.get("ready",false) or record.get("perspectives",[]).is_empty():_cancel_case_selection();return
     if perspective_id.is_empty():perspective_id=str(record.perspectives[0].id)
     for perspective in record.perspectives:
         if str(perspective.id)==perspective_id:
@@ -662,6 +682,7 @@ static func _read_selection(directory:String,record:Dictionary,perspective_id:St
     var selected=Recording.read(directory,token)
     var stages={"selected_read_ms":(Time.get_ticks_usec()-started)/1000.0,"audiences_read":1,"comparison_ms":0.0}
     if not selected.get("ok",false):return selected
+    selected.moments=CaseLibrary.resolve_moments(selected,record.get("moments",[]),perspective_id)
     var native_started=Time.get_ticks_usec()
     selected.native_startup_plan=Play.NativeStartup.recording_plan(selected.rows)
     stages.native_plan_ms=(Time.get_ticks_usec()-native_started)/1000.0
@@ -861,7 +882,7 @@ func _publish_candidate()->void:
     index=candidate_index;candidate_index={};pending_index={};active_directory=index.directory
     if not pending_study_selection.is_empty():
         study_capability=pending_study_selection.capability;study_scenario=pending_study_selection.scenario;pending_study_selection={}
-        _show_study_expectations()
+    _show_study_expectations()
     if changed:
         var previous_tracks=tracks
         tracks=candidate_tracks;candidate_tracks=null
