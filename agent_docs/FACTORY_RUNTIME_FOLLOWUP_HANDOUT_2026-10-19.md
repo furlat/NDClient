@@ -83,6 +83,34 @@ because later setters are cheap. Preserve the existing actual-layer output and
 history/departure semantics. We will report any concrete API gap discovered
 while implementing this provider; no speculative new packet fields requested.
 
+### 3. Concrete actor-history source colour compatibility gap
+
+The next provider review found a specific integration mismatch, not just an
+unbound packet. Your installed `assets/vfx/conditions/actor_history.gd` routes
+colour through its packaged `source_shader`. Its canonical
+`factory/authoring/shaders/actor_echo_source.gdshader` computes
+`modular_source_colour` and optionally the former `canvas_capped_modular`
+received atlas. The current approved client `modular.gdshader` instead applies
+`lit_received`, then `apply_body_surface`, then `native_body_colour`. The old
+`received_material` path is not this renderer's complete colour path.
+
+Please close the source capture parity seam against **the actual current
+receiving shader/material path**, read-only under NDClientGodot. Relevant files:
+`modular.gdshader`, `presentation/lit_receiving.gdshaderinc`,
+`source_colour_modular.gdshaderinc`, `character_material.gdshaderinc`,
+`body_surface.gdshaderinc` and `native_body_material.gdshaderinc` (all under
+`presentation/` except the root modular shader).
+
+Reusing the actual current layer material/shader in the colour capture is
+preferable to recreating its lighting equations. If a public packet extension
+is needed, document that proposal explicitly in the successor; the client has
+not agreed to an invented field yet. Do not forge the old shader path or switch
+the game back to legacy lighting. Validate neutral assembled colour before
+Mirror Image's intentional spectral treatment/opacity, with light on/off,
+non-white tint and one body material/impact treatment. This source-review
+finding needs actual pixel comparison; it is not yet a measured visual failure.
+The client continues actual owner/context/history preparation independently.
+
 ## Delivery and qualification
 
 - Keep your existing1–2ms constructor allowance (aim below1ms) and<=250µs
