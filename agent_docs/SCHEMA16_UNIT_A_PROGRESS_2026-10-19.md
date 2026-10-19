@@ -3,24 +3,37 @@
 19 October 2026. Implementation branch `codex/schema16-unit-a`, worktree
 `C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`, based on
 the committed plan `9b73f29a` on requested branch `codex-authoring-schemabump`.
-Checkpoint `341237ad` is now published in main `NDClientGodot` together with
-the complete matching package, native build and original schema16 library.
-Publication receipt/backups: main `.runtime/schema16-publication/`.
-This ledger is evidence, not a completion or visual-approval claim. The user's
-later clarification authorizes the complete Factory migration and shared
-providers after this base, including every spell/condition/class ability and
-explicit UI art coverage. Unit A is a checkpoint, not the end of that scope.
+Current code checkpoint `0022d050` is published in main `NDClientGodot` as
+`556dc0cd`, with the matching abilities build and original two-faction class
+recordings. Main publication receipts/backups remain under
+`.runtime/schema16-publication/`. Current package is the complete sealed
+`production-bindings-2081189e43bf0443`: 1,159 clips, 504 selections, 155 condition
+families and 465 lifecycle roles. No official engine or Factory source was edited.
 
-| Phase | State | Evidence / remaining gate |
-|---|---|---|
-| 0 — frozen inputs | Passed | Official `event-native-deltas` at `211b71134`; executable export `/home/tommaso/.cache/ndclient/dnd_engine-211b71134`; protocol 1/schema 16. Current inventory and typed-source build regenerated, zero build errors. |
-| 1 — SDK/readers/equipment | Passed core/live gate | Reference fold/oracle and focused SDK checks pass. Native startup 5/5 in 5,480 ms on Forward+/5090. Five independent interaction sessions pass, ten equipment actions with zero world/media holds. Broader legacy test migration remains named below. |
-| 2a — first Studio cohort | Core native gate passed | All eight actual two-faction cases pass seeks, faction changes, looping and canonical-prefix checks: 10,853 assertions, zero script/resource errors. One RefCounted shutdown warning remains. |
-| 2b — every current spell | Full attempt coverage / eight red cases | 183 real baselines/366 journals pass recording safety. Actual GUI-command sweep covers all 189 IDs: 183 command successes, 181 runtime-safe; six server/setup/occurrence failures plus Flame Blade missing worn look and Guardian source error remain explicit. |
-| B — complete Factory package | Installed / native qualification active | Whole `conditions-candidate-7fab471588209a41` installed in both main and private checkouts; package text committed separately. All 155 families /465 phase roles resolve. Surprise first-use/short-queue warm-draw proof remains unqualified. |
-| C — shared providers/full coverage/UI | Active | Complete 1,504-capability join, spell/condition ownership, 11 class-action bindings, optical surface/body/endpoint/spatial bridges and UI assignments implemented. Native output, missing public inputs, remaining providers and final performance stay explicit. |
+This ledger records successive cohorts. The current shared-provider implementation,
+exact native evidence, remaining gaps and live spike ledger are in
+[the current cohort](CLIENT_SHARED_PROVIDER_COHORT_2026-10-19.md). Older counts,
+package names and failures below are historical evidence at their named checkpoints;
+they do not override the current package or imply final visual approval.
 
-## Inputs and ownership
+The user's clarified scope includes every spell, condition and class ability,
+shared providers and explicit UI art coverage. Unit A is a checkpoint, not the end
+of that work. Estimates below measure implementation progress, not acceptance.
+
+| Chunk | Estimate | Current state / open gate |
+|---|---:|---|
+| Frozen schema / canonical state | 100% | Engine export `211b71134`, protocol1/schema16; reference fold/oracle passes. |
+| SDK, ordering, equipment publication | 90% | Core and repeated native equip gates pass; broader old test migration remains named below. |
+| Studio browser / replay / tracks | 80% | Native cohort, seek, independent factions, loops and actual missing-input tracks; complete scenario depth remains open. |
+| All-spell runtime safety | 96% | 183 available original baselines compile safely; six baseline failures. Full current-package issued-command rerun is recorded separately, never inferred from partial results. |
+| Complete Factory intake / migration | 65% | Whole sealed208 package installed; typed held/class cues and shared actual-result construction added. Source presence is not final native coverage. |
+| Shared client providers | 40% | Geometry, endpoints, material, spatial, exact weapon and Fly appearance bridges; class owner/results cohort. Actor history, capture, event provenance and created-item publication remain. |
+| Scenario / native-output depth | 40% | 201 cases, including the new Second Wind recording; full class/condition outcomes and variants are incomplete. |
+| Final gameplay performance qualification | 10% | Repeated live Gallery door/move/Haste/two-Fireball profiles retained; native constructor and cold/restore waits remain explicit. |
+
+## Historical baseline and subsequent cohorts
+
+### Original Unit A inputs and ownership
 
 The promoted official engine checkout was read only. The executable export is
 from its committed HEAD, so concurrent production edits were not incorporated.

@@ -20,9 +20,10 @@ Artifacts below are worktree-relative, under ignored `.runtime/`.
 | Gate | Result / artifact |
 |---|---|
 | Abilities build | Zero errors, seven existing warnings; `shared-providers-build-final.log` |
-| Five focused headless gates | 425 checks; all pass; `tests/20261019T191959Z/summary.json` |
-| Original class journals | Both factions: one Preserve Life declaration, three applications, two positive heals, exactly one invocation/two receiving cues; real Frenzy application/move/attack/voluntary removal and explicit parent gap. Included in the184-check native class projection gate. |
+| Five focused headless gates | 498 checks after Second Wind; all pass; `tests/20261019T193941Z/summary.json` |
+| Original class journals | Both factions: one Preserve Life declaration, three applications, two positive heals, exactly one invocation/two receiving cues; real Frenzy application/move/attack/voluntary removal and explicit parent gap. Preserve Life/Frenzy passed184 actual-journal checks; adding Second Wind raises the same gate to257 checks. |
 | Preserve Life native Studio | 619 checks, zero failures; actual invocation plus both receiving draw witnesses; seek/faction switch/play/loop; `shared-providers-preserve-native-qualified.{json,log}` |
+| Second Wind original journals | Actual wounded level-five fighter, positive self-heal and movement, both factions; `shared-providers-second-wind-record.log`, `tests/20261019T193510Z/`. Native output remains a separate gate. |
 | Frenzy native Studio | 1778 checks, zero failures; missing-parent indication preserved through playback/seek/loop, no substitute mantle; `shared-providers-frenzy-native-qualified.json`, `shared-providers-frenzy-native-final.log` |
 | Current package recording sweep | 183 available spell recordings compile/fold safely; six unavailable server baselines remain. No script/resource errors. `shared-provider-recording-safety-final/report.json` |
 | Actual Gallery player actions | Two83-check runs, zero failures: open door → enter room → Haste potion → Fireball twice. Last run `player-runs/20261019T192000.172347Z/`; `shared-provider-gallery-profile-final.json` |
@@ -60,3 +61,30 @@ New class Studio preparation also has visible cold/restore waits (about0.5–0.8
 - Full source/provider/scenario/native-output/visual-review coverage and surprise first-use readiness. Factory package installation and a safe baseline cast do not finish these rows.
 
 Aid, Bless, False Life and Sacred Flame remain **not user accepted**. No approved lighting/colour/shadow/depth/sorting/body/audio timing was retuned. Assets and binary builds remain ignored.
+
+## Created-item blocker isolated by the current native sweep
+
+Flame Blade is an actual functional failure, not just absent artwork: its real
+command creates/equips the item, but the sprite-only outfit selector reports
+`No built item visual` and prevents sequence8 from publishing after sequence7.
+Original evidence: `shared-providers-live-spells/spell.flame_blade__baseline/`.
+The complete sealed208 package already contains both exact native created-item
+appearances. No replacement sword or inventory icon was added to hide the gap.
+
+The bounded next shared cohort is an optional existing EffectUse on typed Gear,
+compiled native-only equipment admission, and one passive item-owner table in
+the existing Timeline. Prepare the item occurrence using the existing constructor
+path before its actual ordered equipment/world cut. Retain it through normal
+requirements/retirement; sample current actual main/off/ground membership and
+the existing authored hand point/body sprite basis. No new scheduler or manager.
+
+Observed cast history can supply exact Flame Blade item/caster/lifetime identities:
+the failed Amber run has declaration51/cast lineage41, condition48/lineage44,
+inventory49/lineage49 and equipped MELEE_MAIN row50. Initial history and Blue's
+undisclosed private inventory branch cannot be filled by same-name owner searches
+or Amber data. Cached `state.items` membership alone does not prove current
+existence. Missing offhand sockets, unknown creation provenance and optical
+registration stay explicit gaps. The source templates are nonseekable and need
+real long-age replay qualification. Their art remains unaccepted; Factory's later
+visual repair is separate from this sealed delivery. This analysis does not claim
+the created-item provider is implemented.

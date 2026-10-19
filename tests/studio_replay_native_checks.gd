@@ -149,8 +149,9 @@ func play_once(studio:Control,label:String)->void:
         for witness in native.witnesses:
             if witness.status!="rendered" or observed_native.has(witness.id) or not native.handles.has(witness.id):continue
             var component:Dictionary=native.handles[witness.id].component
-            if not component.has("native_constructor_evidence"):continue
-            observed_native[witness.id]={"clip":component.native_clip.id,"evidence":component.native_constructor_evidence}
+            var actual:Dictionary=component.get("native_constructor_evidence",component.get("native_input_evidence",{}))
+            if actual.is_empty():continue
+            observed_native[witness.id]={"clip":component.native_clip.id,"evidence":actual}
         # A cut is observed on a frame displaying its exact clock with nothing
         # playing. Zero-time groups at that same instant may already have been
         # applied in that frame (nothing to prepare means no frame between).

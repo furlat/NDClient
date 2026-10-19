@@ -91,7 +91,15 @@ def first_cohort():
     healers[1]={'role':'ally','side':'amber','creature':'creature.knight','at':[4,7],'damage':38}
     healers[2]={'role':'target','side':'blue','creature':'creature.knight','at':[9,7]}
     healers[3]={'role':'second_target','side':'amber','creature':'creature.knight','at':[4,8],'damage':39}
+    recovering=actors();recovering[0]={'role':'caster','side':'amber','premade':'fighter','at':[3,7],'damage':20}
+    recovering[2]['at']=[9,7];recovering[3]['at']=[9,8]
     return [
+        {'id':'action.class.fighter.second_wind/healing','title':'Second Wind: wounded fighter and actual self-healing','kind':'action',
+         'subjects':subjects(actions=['action.class.fighter.second_wind','action.move']),
+         'actors':recovering,'seed':2,
+         'steps':[{'do':'action.class.fighter.second_wind','by':'caster','target':'self'},
+                  {'do':'action.move','by':'caster','target':[2,7]}],
+         'required_behaviors':['action.class.fighter.second_wind'],'required_facts':['heal']},
         {'id':'action.class.cleric.preserve_life/recipients','title':'Preserve Life: one invocation and actual recipient healing','kind':'action',
          'subjects':subjects(actions=['action.class.cleric.preserve_life']), 'actors':healers,'seed':2,
          'steps':[{'do':'action.class.cleric.preserve_life','by':'caster','target':'self'}],

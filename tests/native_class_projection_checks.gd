@@ -12,7 +12,7 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr("CLASS_PROJECTION_FAIL "+label)
 func run()->void:
-    for id in ["action.class.cleric.preserve_life/recipients","action.class.barbarian.frenzy/lifecycle"]:
+    for id in ["action.class.cleric.preserve_life/recipients","action.class.barbarian.frenzy/lifecycle","action.class.fighter.second_wind/healing"]:
         var matching:Array=Library.read().filter(func(row):return row.id==id and row.ready)
         check(matching.size()==1,"Actual recorded case available: "+id)
         if matching.size()!=1:continue
@@ -52,7 +52,7 @@ func inspect_journal(id:String,seat:String,directory:String)->void:
         if not compiled.ok:break
         for group in compiled.value.groups:
             for row in group.components:
-                if row.get("ability_id")=="action.class.cleric.preserve_life":components.append(row)
+                if row.get("ability_id")==id.get_slice("/",0):components.append(row)
             for row in group.get("native_requirements",[]):
                 if row.get("source_id")=="barbarian_frenzy_source_v176" and row.get("status")=="missing" and row.get("unbound_constructor_inputs",[])==["condition_parent_uuid"]:missing_parent=true
     if id.begins_with("action.class.cleric.preserve_life/"):
@@ -70,6 +70,19 @@ func inspect_journal(id:String,seat:String,directory:String)->void:
             check(row.target_uuid==positive[occurrence].target and row.native_inputs.event_input.actual_healing==positive[occurrence].amount,id+" "+seat+": exact recipient and amount")
             check(row.native_constructor_inputs[0].values.recipient_entity_uuid==row.target_uuid,id+" "+seat+": actual recipient is present before construction")
         evidence.append({"case":id,"seat":seat,"declarations":declarations,"applications":applications,"positive_heals":positive,"source_cues":source.size(),"receiving_cues":recipients.size()})
+    elif id.begins_with("action.class.fighter.second_wind/"):
+        check(positive.size()==1,id+" "+seat+": one actual positive self-heal")
+        check(components.size()==1,id+" "+seat+": one native action cue")
+        for row in components:
+            var projection:Dictionary=row.get("native_inputs",{}).get("owner_projection",{})
+            var healing:Dictionary=projection.get("healing",{})
+            var occurrence:String=str(healing.get("event_uuid",""))
+            check(positive.has(occurrence),id+" "+seat+": projection names the actual committed heal")
+            if not positive.has(occurrence):continue
+            check(projection.actor_uuid==row.actor_uuid and positive[occurrence].target==row.actor_uuid,id+" "+seat+": exact wounded fighter, no recipient substitution")
+            check(healing.actual_healing==positive[occurrence].amount and healing.was_blocked==false,id+" "+seat+": exact observed amount and block result")
+            check(healing.parent_event_uuid==projection.action_uuid,id+" "+seat+": original native action parent is preserved")
+        evidence.append({"case":id,"seat":seat,"positive_heals":positive,"native_cues":components.size()})
     else:
         check(missing_parent,id+" "+seat+": real Frenzy keeps its exact missing-parent gap")
         evidence.append({"case":id,"seat":seat,"frenzy_parent_gap":missing_parent})
