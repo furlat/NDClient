@@ -61,3 +61,7 @@ Native Resource metadata now runs on one explicitly owned Godot `Thread` per med
 Six ObjectDB warning lines remain: one instance in native8 and 100/98/101/93/94 instances in the five live exits. Fly has no exit warnings. These are not suppressed or presented as a wholly leak-free application. All owned launchers, backends and Godot test processes closed.
 
 These are functional gates; their timings include test assertions/captures and do not qualify steady game/Studio FPS, first-use latency or every spell/condition provider. The full old fast-suite migration failures remain documented in the main ledger.
+
+## Main publication
+
+Implementation `04b35df8` is published on main `codex-authoring-schemabump` with the matching abilities build and original Fly case/index (198 cases). Main actual qualification is 3,033 native/headless checks plus 34 real live player checks, zero errors; equipment crosses both boundaries with zero holds. Main artifacts are `.runtime/tests/20261019T175055Z/` and `.runtime/tests/20261019T175218Z/`. The live ObjectDB exit warning remains; the native Fly gate is warning-free. Recoverable prior build/index and receipt are in `.runtime/schema16-publication/appearance-20261019/`. All owned tests/backend processes closed.
