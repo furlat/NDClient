@@ -38,10 +38,10 @@ The first Fireball has an additional43.187ms frame during UI preparation in run4
 
 - Created Flame Blade/Mace appearance still needs exact item/holder/grip/optical publication in the client; their new art is candidate art. No offhand socket is invented.
 - Guardian's source invalidation repair is installed and its actual baseline command now passes, but authentic rolling rig/frame history, seek reconstruction and event-specific strikes remain a separate shared-provider cohort.
-- Factory now supports Rage/Frenzy with no known removal. The client native action projection still requires an observed finite removal; that restriction is a **remaining client join**, not missing Factory artwork. Frenzy parent UUID, paladin aura mode, draconic lineage/mode and replay-safe Lay on Hands chosen form remain separate missing public selectors.
+- Factory now supports Rage/Frenzy with no known removal. The subsequent [shared-provider cohort](CLIENT_SHARED_PROVIDER_COHORT_2026-10-19.md) removes the old finite-removal restriction and retains the actual condition UUID clock; unknown removal uses the source's negative sentinel. Initial unobserved applications and ordinary Rage native output remain unqualified. Frenzy parent UUID, paladin aura mode, draconic lineage/mode and replay-safe Lay on Hands chosen form remain separate missing public selectors.
 - Frozen Magic Weapon/Sacred Weapon item-effect membership is a producer gap. Supported suppression is false unless actually observed; retired Antimagic data is not requested.
 - Generic recipient geometry still triggers repeated material-graph discovery in the delivered occurrence. Its total live cost is unmeasured; the source request separates this from the confirmed constructor spikes.
-- Prepared spatial sources with source-only `admitted_cells` setters still need the explicit constructed forwarding route in that specialized adapter. Circle does not use that channel.
+- The subsequent shared-provider cohort forwards native source-only `admitted_cells` through the existing public construction adapter. Exact empty/unknown/topology contracts remain distinct; Circle does not use that channel. Complete native spatial output qualification remains open.
 
 A source, a scenario, a successful native call and user visual acceptance remain separate coverage facts. Package copying does not complete all spells/conditions.
 

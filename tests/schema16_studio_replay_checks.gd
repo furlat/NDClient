@@ -50,6 +50,10 @@ func run()->void:
             var observed:Dictionary=evidence.back().get("observed_native",{})
             check(observed.values().filter(func(row):return row.evidence.get("outcome")=="cast").size()==1,"Preserve Life: one native source has a submitted draw witness")
             check(observed.values().filter(func(row):return row.evidence.get("outcome")=="heal").size()==2,"Preserve Life: both actual receiving results have submitted native draw witnesses")
+        if record.id=="action.class.fighter.second_wind/healing":
+            var observed:Dictionary=evidence.back().get("observed_native",{})
+            var heals:Array=observed.values().filter(func(row):return row.clip=="fighter_second_wind_source_v190" and row.evidence.has("heal_occurrence"))
+            check(heals.size()==1,"Second Wind: actual observed self-heal has one submitted native draw witness")
         check(studio.world.presentation_errors.is_empty(),record.id+": no native presentation error")
         if not failures.is_empty():break
         print("SCHEMA16_STUDIO_CASE ",JSON.stringify({"id":record.id,"checks":checks,"failures":failures.size()}))
