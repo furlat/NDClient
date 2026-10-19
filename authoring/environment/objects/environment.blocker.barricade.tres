@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_w4cuc"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_1agtn"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_lqr6f"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_6a6ls"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_0nqff"]
+
+[resource]
+script = ExtResource("3_lqr6f")
+id = "environment.blocker.barricade"
+kind = "blocker"
+views = PackedStringArray()
+art = PackedStringArray()
+stand_in = "environment.furniture.timber_pile"
+status = "stand_in"
+notes = "No art of its own. Drawn with environment.furniture.timber_pile."

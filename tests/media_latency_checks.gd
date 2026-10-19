@@ -72,7 +72,7 @@ func source_cases(state: Dictionary) -> Dictionary:
     var moved: Dictionary = state.tiles[key].duplicate(true)
     moved.position = [1000,-1000]; moved.elevation_steps = -4
     var material = moved.surface.base_material
-    var world = Catalog.read_file("world.json",cache)
+    var world = Catalog.environment_world(cache)
     for candidate in world.terrain:
         if candidate!=material: material=candidate; break
     var different = moved.duplicate(true); different.surface.base_material = material
@@ -112,7 +112,7 @@ func staged_metadata(state: Dictionary, expected_environment: Dictionary) -> voi
     check(required.get("stage")=="required" and not required.value.has("encounter"),"Required source packet publishes independently of optional family estimates")
     check(required.value.required==expected.required and required.value.environment_required==expected_environment.required,
         "First required packet preserves original source selection and snapshot membership")
-    check(required.source_files.has("catalog-index.json") and required.source_files.has("environment/index.json"),"Required source JSON is available before scene binding")
+    check(required.source_files.has("catalog-index.json") and required.source_files.has("res://build/presentation/environment/index.res"),"Required source JSON is available before scene binding")
     var required_paths:Dictionary=required.value.required.duplicate()
     for paths in [required.value.upcoming,required.value.environment_required,required.value.environment_upcoming,required.value.optical_candidates]:required_paths.merge(paths)
     check(required_paths.keys().all(func(path):return required.value.source_sizes.get(path,0)>0),

@@ -168,29 +168,38 @@ static func build(cache:Dictionary={})->Dictionary:
         _slots(entry,_read(path,cache),path+":")
         entry.requirements.append_array(Requirements.context(_read(path,cache),path+":",key))
         if not entry.requirements.is_empty():entries.append(entry)
-    var world=_read("world.json",cache)
-    for field in ["spatial_media","concentration_media","construction_media","deposit_media"]:
-        for id in world.get(field,{}):
-            var pointer="world.json:/"+field+"/"+_pointer(id)
-            var entry={"id":field+":"+id,"label":id,"group":"World effects · "+field.replace("_media",""),"source":pointer,"requirements":[]}
-            _slots(entry,world[field][id],pointer)
-            entry.requirements.append(Requirements.owner(field,id,pointer,world[field][id]))
-            if field=="spatial_media":
-                for trigger in world[field][id].get("contactMedia",{}):
-                    entry.requirements.append(Requirements.owner("contact_media",id+"/"+trigger,pointer+"/contactMedia/"+_pointer(trigger),world[field][id].contactMedia[trigger]))
-            entries.append(entry)
+    # The environment source's surfaces keep the old spatial media as delivered;
+    # the build lists them with the objects, banks, wrecks, portals and devices.
+    var environment:Dictionary=Authoring.Catalog.environment_index(cache)
+    for id in environment.get("spatial_media",{}):
+        var media:Dictionary=environment.spatial_media[id]
+        var pointer=Requirements.environment_source(id)+"::legacy/spatial_media"
+        var entry={"id":"spatial_media:"+id,"label":id,"group":"World effects · spatial","source":pointer,"requirements":[]}
+        _slots(entry,media,pointer)
+        entry.requirements.append(Requirements.owner("spatial_media",id,pointer,media))
+        for trigger in media.get("contactMedia",{}):
+            entry.requirements.append(Requirements.owner("contact_media",id+"/"+trigger,pointer+"/contactMedia/"+_pointer(trigger),media.contactMedia[trigger]))
+        entries.append(entry)
     # Selected owners from the original passive presentation_inventory. Each
     # owner is a worklist entry even if it has no external sprite identity.
+    for kind in ["world_animation","portal","device"]:
+        for id in environment.get("inspection",{}).get(kind,{}):
+            var source:String=Requirements.environment_source(id)
+            var owner_row=Requirements.owner(kind,id,source,environment.inspection[kind][id])
+            entries.append({"id":kind+":"+id,"label":owner_row.label,"group":"Presentation owners · "+kind.replace("_"," "),"source":source,"requirements":[owner_row]})
     for definition in [
-        ["world_animations","world_animation"],["devices","device"],["device_wrecks","device_wreck"],
-        ["portals","portal"],
         ["body_materials","body_material"],["action_materials","action_material"],["action_intakes","action_intake"],
         ["condition_media","condition_media"],["item_attachments","item_attachment"]]:
         if index.get(definition[0]) is String:_owners(entries,index[definition[0]],definition[1],cache)
     for field in ["banks","doors","traps","props","wrecks"]:
-        _owners(entries,"environment/index.json","environment_"+{"banks":"bank","doors":"door","traps":"trap","props":"prop","wrecks":"wreck"}[field],cache,field)
-    for field in ["treatments","spatial_effects","residue_wall_faces","residue_particles","residue_ground","residue_surfaces","liquid_surfaces","lighting"]:
-        _owners(entries,"world.json","world_"+field,cache,field)
+        var family:String="environment_"+{"banks":"bank","doors":"door","traps":"trap","props":"prop","wrecks":"wreck"}[field]
+        for id in environment.get(field,{}):
+            var value:Variant=environment[field][id]
+            var source:String="authoring/environment/art/"+id+".tres" if field=="banks" else Requirements.environment_source(value.source_item_id if field=="wrecks" else id)
+            var owner_row=Requirements.owner(family,id,source,value)
+            var entry={"id":family+":"+id,"label":owner_row.label,"group":"Presentation owners · "+family.replace("_"," "),"source":source,"requirements":[owner_row]}
+            _slots(entry,value,source)
+            entries.append(entry)
     for key in ["forced_movement_profile","shove_feedback","number_style","badge_style","dart_style","bolt_style","action_playback_rates","relocation_actions"]:
         if not index.get(key) is String:continue
         var path:String=index[key]

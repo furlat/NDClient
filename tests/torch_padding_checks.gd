@@ -36,7 +36,7 @@ func run() -> void:
     white=ImageTexture.create_from_image(one)
     var probe=SourceProbe.new();root.add_child(probe);probe.hide()
     probe.camera=Camera3D.new();probe.add_child(probe.camera)
-    var assets: Dictionary=Catalog.read_file("assets.json",probe.catalog_cache)
+    var assets: Dictionary=Catalog.environment_resources(probe.catalog_cache)
     var authored: Dictionary=assets.animations["torch.flame"]
     check(authored.frames.size()==16 and float(authored.fps)==10,"Original torch has16 authored frames at10FPS")
     for frame in authored.frames:

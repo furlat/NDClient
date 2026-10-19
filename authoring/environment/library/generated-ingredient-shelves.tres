@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_a2ugs"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_nybwo"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_i31da"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_0b673"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_76h58"]
+
+[resource]
+script = ExtResource("3_i31da")
+id = "generated-ingredient-shelves"
+kind = "interiors"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("generated-ingredient-shelves")
+catalogue_group = "C"
+label = "Generated ingredient-shelves"
+status = "partial"
+notes = "Catalogue status: Reviewed artwork. Animated. Native ids: environment.furniture.ingredient_shelves. Art and geometry are in the source; no server id uses it yet."

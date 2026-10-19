@@ -95,7 +95,7 @@ func run()->void:
     check(activity.size()==recipes["condition.hidden"].persistent.activityPoses.size() and not activity.is_empty(),"Every native activity-specific crouch assignment is inventoried")
     check(activity.all(func(row):return row.source.begins_with("res://") and ".tres::" in row.source and row.legacy_source.begins_with("catalog/condition_recipes.json:/condition.hidden/persistent/activityPoses/")),"Crouch requirements expose native properties, never fictitious JSON assignments")
     check(hidden.requirements.filter(func(row):return row.phase in ["application","removal"]).all(func(row):return row.mechanism!="material_flash"),"Condition phase badges cannot be mislabeled as material flashes")
-    check(entries["condition.spell.darkness.zone"].indicator_assignments.size()==1 and entries["condition.spell.darkness.zone"].indicator_assignments[0].source=="world.json:/spatial_media/spatial_effect.spell.darkness","Cleansing Daylight trigger cannot count as Darkness indicator assignment")
+    check(entries["condition.spell.darkness.zone"].indicator_assignments.size()==1 and entries["condition.spell.darkness.zone"].indicator_assignments[0].source=="authoring/environment/surfaces/spatial_effect.spell.darkness.tres::legacy/spatial_media","Cleansing Daylight trigger cannot count as Darkness indicator assignment")
     _assignment_boundaries(cache,recipes)
     check(entries["condition.spell.mirror_image"].requirements.any(func(row):return row.mechanism=="liveCopies" and row.status=="missing"),"Lifecycle capture does not pretend Mirror Image copies are implemented")
     check(entries["condition.blinded"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup") and row.implementation=="implemented"),"Original shared grouping policy is supported without inventing render evidence")
@@ -145,11 +145,11 @@ func _assignment_boundaries(cache:Dictionary,recipes:Dictionary)->void:
     var local=cache.duplicate();local["catalog/condition_recipes.json"]={"condition.spell.fog_cloud.zone":zone}
     var row=Coverage.build(local).entries[0]
     var unresolved=row.requirements.filter(func(value):return value.get("gap_kind")=="authoring_review")
-    check(unresolved.size()==1 and unresolved[0].availability=="unresolved" and unresolved[0].related_source=="world.json:/spatial_media","Unknown ground ownership requests review instead of inventing an absent VFX")
+    check(unresolved.size()==1 and unresolved[0].availability=="unresolved" and unresolved[0].related_source=="authoring/environment/surfaces","Unknown ground ownership requests review instead of inventing an absent VFX")
     check(not row.requirements.any(func(value):return value.get("gap_kind")=="authoring_assignment"),"Unresolved ground binding is separate from proven empty actor assignment")
-    var world=Authoring.load_data("world.json",cache).duplicate()
-    world.spatial_media=world.spatial_media.duplicate()
-    world.spatial_media["spatial_effect.spell.unassigned_fixture"]={"variants":[{"layers":[{"assetId":"declared-ground-source"}]}]}
-    local["world.json"]=world
+    var environment:Dictionary=Authoring.Catalog.environment_index(cache).duplicate()
+    environment.spatial_media=environment.spatial_media.duplicate()
+    environment.spatial_media["spatial_effect.spell.unassigned_fixture"]={"variants":[{"layers":[{"assetId":"declared-ground-source"}]}]}
+    local[Authoring.Catalog.ENVIRONMENT+"index.res"]=environment
     row=Coverage.build(local).entries[0]
     check(not row.indicator_assignments.is_empty() and not row.requirements.any(func(value):return value.get("gap_kind") in ["authoring_review","authoring_assignment"]),"Explicit variant-owned ground source is an assignment without a render claim")

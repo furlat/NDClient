@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_tfd3e"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_w7ks1"]
+
+[resource]
+script = ExtResource("2_w7ks1")
+id = "spatial_effect.environment.portal"
+layer = "field"
+art = PackedStringArray("portal.environment.portal")
+status = "partial"
+notes = "Art or a Factory scenario exists; the game does not draw it."

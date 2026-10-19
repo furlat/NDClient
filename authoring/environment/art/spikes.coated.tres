@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_nf8fo"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_25go4"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_lmwlr"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_25go4")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_nf8fo")
+container = "atlas"
+files = PackedStringArray("art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png", "art/media/environment/fixtures/spikes-coated/atlas/256x256-000.png")
+cell = Vector2i(256, 256)
+frames = 7
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/spikes.coated.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_lmwlr")
+id = "spikes.coated"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("spikes.coated.e.0", "spikes.coated.e.1", "spikes.coated.e.2", "spikes.coated.e.3", "spikes.coated.e.4", "spikes.coated.e.5", "spikes.coated.e.6", "spikes.coated.n.0", "spikes.coated.n.1", "spikes.coated.n.2", "spikes.coated.n.3", "spikes.coated.n.4", "spikes.coated.n.5", "spikes.coated.n.6", "spikes.coated.s.0", "spikes.coated.s.1", "spikes.coated.s.2", "spikes.coated.s.3", "spikes.coated.s.4", "spikes.coated.s.5", "spikes.coated.s.6", "spikes.coated.w.0", "spikes.coated.w.1", "spikes.coated.w.2", "spikes.coated.w.3", "spikes.coated.w.4", "spikes.coated.w.5", "spikes.coated.w.6")

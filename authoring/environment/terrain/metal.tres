@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PresentationTerrain" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="1_06p1q"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain.gd" id="2_v20fh"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain_slope.gd" id="3_dups6"]
+
+[sub_resource type="Resource" id="footstep"]
+script = ExtResource("1_06p1q")
+cue = "footstep"
+at = "body.source_frame"
+
+[sub_resource type="Resource" id="slopes_0"]
+script = ExtResource("3_dups6")
+notes = "Server surface_kind stairs with slope_axis; no art for this material."
+
+[sub_resource type="Resource" id="slopes_1"]
+script = ExtResource("3_dups6")
+kind = "ramp"
+notes = "Server surface_kind ramp with slope_axis; no art."
+
+[resource]
+script = ExtResource("2_v20fh")
+material = "metal"
+floor = "terrain.stone"
+variants = PackedStringArray()
+footstep = SubResource("footstep")
+slopes = Array[ExtResource("3_dups6")]([SubResource("slopes_0"), SubResource("slopes_1")])
+status = "stand_in"
+notes = "No metal floor art: drawn with the stone floor."

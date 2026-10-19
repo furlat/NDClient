@@ -224,7 +224,7 @@ func black_fixture()->Dictionary:
     return {"id":"typed-black-and-dark-source","family":"modular","colour":colour,"normals":normal,"material":material,"tint":Color.WHITE,"visible":1.0,"mirror":false,"basis":Basis.IDENTITY}
 
 func bypass_cases(wall:Dictionary)->void:
-    var assets:Dictionary=Catalog.read_file("assets.json",cache)
+    var assets:Dictionary=Catalog.environment_resources(cache)
     var source_path:String=assets.resources[assets.animations["torch.flame"].frames[0]].path
     var source=Image.load_from_file(Catalog.media_path(source_path))
     var array=Texture2DArray.new();var frames:Array[Image]=[source];array.create_from_images(frames)

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7qa4o"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_6wf0d"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_bhubu"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_lvnu3"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_gaaco"]
+
+[resource]
+script = ExtResource("3_bhubu")
+id = "environment.campfire"
+kind = "campfire"
+views = PackedStringArray()
+art = PackedStringArray()
+stand_in = "environment.furniture.cold_fire_pit"
+status = "stand_in"
+notes = "No art of its own. Drawn with environment.furniture.cold_fire_pit."

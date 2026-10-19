@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_alet2"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_18c5p"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_eyhk2"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_3wrap"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_afwem"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_3wrap")
+bank = "wall.fantasy.d1.intact"
+
+[resource]
+script = ExtResource("3_eyhk2")
+id = "environment.wall.fantasy_d1"
+kind = "wall"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_3wrap")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "wall.fantasy.debris.wood_stone"
+})
+occludes_actor_face = true
+art = PackedStringArray()
+status = "ready"

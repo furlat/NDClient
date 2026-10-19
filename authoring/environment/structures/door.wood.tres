@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationStructure" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/structure.gd" id="1_cphwh"]
+
+[resource]
+script = ExtResource("1_cphwh")
+structure = "door"
+material = "wood"
+straight = "wood.wall.straight"
+corner = "wood.wall.corner"
+corner_faces = Dictionary[String, PackedStringArray]({
+"e": PackedStringArray("north", "east"),
+"n": PackedStringArray("west", "north"),
+"s": PackedStringArray("east", "south"),
+"w": PackedStringArray("south", "west")
+})
+destruction = "wall.fantasy.debris.wood_large"
+status = "stand_in"
+notes = "No door boundary art: drawn with the wood wall pieces (environment.door.* objects draw doors)."

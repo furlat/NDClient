@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_35u21"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_3rkkl"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_q3t18"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_sgoxm"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_fmt7v"]
+
+[resource]
+script = ExtResource("3_q3t18")
+id = "created.trap.blade-fortress"
+kind = "traps"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("created.trap.blade-fortress")
+catalogue_group = "C"
+label = "blade fortress"
+status = "partial"
+notes = "Catalogue status: Historical authored candidate; variant review and current bindings recorded separately. Animated. Native ids: environment.trap.swinging_blade.stone.fortress. Art and geometry are in the source; no server id uses it yet."

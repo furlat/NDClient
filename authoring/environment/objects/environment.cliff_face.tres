@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_texpc"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_s6g0o"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_548m3"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_6im68"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_f06td"]
+
+[resource]
+script = ExtResource("3_548m3")
+id = "environment.cliff_face"
+kind = "cliff"
+views = PackedStringArray()
+art = PackedStringArray()
+stand_in = "environment.wall.fantasy_d1"
+status = "stand_in"
+notes = "No art of its own. Drawn with environment.wall.fantasy_d1."

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_dev07"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_ir1b8"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_8tfp7"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_oiiut"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_fyhdo"]
+
+[resource]
+script = ExtResource("3_8tfp7")
+id = "environment.door.desert_c9"
+kind = "door"
+views = PackedStringArray()
+art = PackedStringArray()
+stand_in = "environment.door.fantasy_c3"
+status = "stand_in"
+notes = "Desert doors: the Desert family is excluded from the catalogue and the geometry deliveries. Drawn with environment.door.fantasy_c3."

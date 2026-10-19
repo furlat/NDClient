@@ -1,0 +1,84 @@
+{
+  "spatial_media": {
+      "layers": [
+        {
+          "assetId": "persistent.grease.hold",
+          "applicationAssetId": "persistent.grease.apply",
+          "removalAssetId": "persistent.grease.clear",
+          "composition": "floor",
+          "offsetCells": [
+            -0.5,
+            -0.5
+          ]
+        }
+      ],
+      "holdStartFrame": 0,
+      "holdFrames": 64,
+      "fps": 32.0,
+      "scale": 0.5,
+      "contactMedia": {
+        "ground_entry": {
+          "id": "grease.contact",
+          "assetId": "persistent.grease_contact.contact",
+          "attachment": "target_ground",
+          "fps": 32.0,
+          "scale": 0.5,
+          "depth": "ground",
+          "viewFacing": "E"
+        }
+      }
+    },
+  "deposit_media": {
+      "radiusCells": 1,
+      "variants": [
+        {
+          "layers": [
+            {
+              "assetId": "liquid.grease.s0.floor.sustain",
+              "applicationAssetId": "liquid.grease.s0.floor.application"
+            },
+            {
+              "assetId": "liquid.grease.s0.air.sustain",
+              "applicationAssetId": "liquid.grease.s0.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 64,
+          "fps": 32.0,
+          "scale": 1.0
+        },
+        {
+          "layers": [
+            {
+              "assetId": "liquid.grease.s1.floor.sustain",
+              "applicationAssetId": "liquid.grease.s1.floor.application"
+            },
+            {
+              "assetId": "liquid.grease.s1.air.sustain",
+              "applicationAssetId": "liquid.grease.s1.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 64,
+          "fps": 32.0,
+          "scale": 1.0
+        },
+        {
+          "layers": [
+            {
+              "assetId": "liquid.grease.s2.floor.sustain",
+              "applicationAssetId": "liquid.grease.s2.floor.application"
+            },
+            {
+              "assetId": "liquid.grease.s2.air.sustain",
+              "applicationAssetId": "liquid.grease.s2.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 64,
+          "fps": 32.0,
+          "scale": 1.0
+        }
+      ]
+    }
+}

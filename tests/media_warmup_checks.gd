@@ -148,7 +148,7 @@ func run() -> void:
     if not metadata_result.is_empty():
         var published_files: Dictionary = metadata_result.source_files
         var body_sources:Dictionary=published_files.get(Characters.BodySources.KEY,{})
-        check(published_files.has("catalog-index.json") and published_files.has("environment/index.json")
+        check(published_files.has("catalog-index.json") and published_files.has("res://build/presentation/environment/index.res")
             and body_sources.get("index")!=null and not body_sources.get("loaded",{}).is_empty(),
             "Completed worker publishes original documents and admitted native body geometry before scene binding")
         check(published_files.keys().all(func(path):return ((path is String and path.ends_with(".json") and not path.begins_with("__"))

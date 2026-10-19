@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_5k4g3"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_hdu0b"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_g4fy6"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_kkh6s"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_5qm2m"]
+
+[resource]
+script = ExtResource("3_g4fy6")
+id = "fantasy.wall.d8"
+kind = "wall"
+views = PackedStringArray("e", "n", "s", "w")
+art = PackedStringArray("fantasy.wall.d8")
+catalogue_group = "A"
+label = "Wall D8"
+status = "partial"
+notes = "Catalogue status: Vendor original. Art and geometry are in the source; no server id uses it yet."

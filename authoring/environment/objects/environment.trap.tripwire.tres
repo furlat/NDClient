@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_um4mb"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_p51lf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_kmeho"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_mrqc7"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_43x6p"]
+
+[resource]
+script = ExtResource("3_kmeho")
+id = "environment.trap.tripwire"
+kind = "trap"
+views = PackedStringArray()
+art = PackedStringArray()
+stand_in = "environment.furniture.loose_floorboards"
+status = "stand_in"
+notes = "No object art; its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section. Drawn with environment.furniture.loose_floorboards."

@@ -1,0 +1,67 @@
+{
+  "liquid_surfaces": {
+      "asset_id": "particles.region.water",
+      "ellipse": {
+        "center": [
+          0.0,
+          0.0
+        ],
+        "radius_x": 0.75,
+        "radius_y": 0.65
+      },
+      "opacity": 0.66
+    },
+  "deposit_media": {
+      "radiusCells": 1,
+      "variants": [
+        {
+          "layers": [
+            {
+              "assetId": "liquid.water.s0.floor.sustain",
+              "applicationAssetId": "liquid.water.s0.floor.application"
+            },
+            {
+              "assetId": "liquid.water.s0.air.sustain",
+              "applicationAssetId": "liquid.water.s0.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 288,
+          "fps": 144.0,
+          "scale": 1.0
+        },
+        {
+          "layers": [
+            {
+              "assetId": "liquid.water.s1.floor.sustain",
+              "applicationAssetId": "liquid.water.s1.floor.application"
+            },
+            {
+              "assetId": "liquid.water.s1.air.sustain",
+              "applicationAssetId": "liquid.water.s1.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 288,
+          "fps": 144.0,
+          "scale": 1.0
+        },
+        {
+          "layers": [
+            {
+              "assetId": "liquid.water.s2.floor.sustain",
+              "applicationAssetId": "liquid.water.s2.floor.application"
+            },
+            {
+              "assetId": "liquid.water.s2.air.sustain",
+              "applicationAssetId": "liquid.water.s2.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 288,
+          "fps": 144.0,
+          "scale": 1.0
+        }
+      ]
+    }
+}

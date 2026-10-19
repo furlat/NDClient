@@ -1,0 +1,111 @@
+{
+  "section": "decal",
+  "record": {
+    "catalog_id": "created.decal.moss-damp",
+    "intended_role": "Decorative moss damp on floor",
+    "material_description": "Muted olive-brown moss and damp mottling with scattered wisps",
+    "mounting": {
+      "receiver": "floor",
+      "anchor_px": [
+        64,
+        64
+      ],
+      "anchor_uv": [
+        0.5,
+        0.5
+      ],
+      "anchor_meaning": "centre of the mottled patch",
+      "receiver_contact": "Align this UV point to the selected receiver contact, project onto that receiver plane and clip to its alpha/geometry.",
+      "normal": "receiver normal; floor +Z, wall outward normal",
+      "orientation": "Floor receiver tangent axes; place near a damp wall base, seam or corner. Rotation stays within the floor plane.",
+      "scale": {
+        "native_image_px": [
+          128,
+          128
+        ],
+        "proposed_application_extent": [
+          0.8,
+          0.8
+        ],
+        "extent_units": "floor [local X cells, local Y cells]",
+        "proposed_extent_ft": [
+          4.0,
+          4.0
+        ],
+        "basis": "New authoring proposal based on visible mark type; native resolution does not establish a physical size. Keep image UVs/anchor and receiver orientation stable when authoring a different extent.",
+        "logical_pixel_scale": 2,
+        "logical_pixel_scale_source": "Existing package_decals.py downsamples source crop to64px then nearest doubles to128px."
+      }
+    },
+    "contact_by_pose": {
+      "receiver_uv": {
+        "image_path": "c-new-props/room-dressing/decals/moss-damp.png",
+        "image_dimensions_px": [
+          128,
+          128
+        ],
+        "anchor_px": [
+          64,
+          64
+        ],
+        "provenance": "New reviewed authoring anchor in existing decal texture. Single UV artwork projects through every wall/floor camera; no invented four-view raster exports."
+      }
+    },
+    "footprint": {
+      "surface_extent_only": true,
+      "filled_physical_footprint": []
+    },
+    "height": {
+      "physical_height_steps": 0,
+      "thickness_policy": "Painted surface/material detail only, no raised solid volume."
+    },
+    "blocking": {
+      "physical_solids": [],
+      "gameplay_effects": []
+    },
+    "sources": [
+      {
+        "path": "c-new-props/room-dressing/decals/moss-damp.png",
+        "sha256": "285cb4955cac29961b3ea69d16fe4d17c9e7c9a6b149f23c292dc5d255c1e087",
+        "kind": "existing_decal_art"
+      },
+      {
+        "path": "c-new-props/room-dressing/decals.json",
+        "sha256": "3944285ed551d223513f149a451d9f70f84a01318b95f1f7e1977716f35edf1d",
+        "kind": "existing_receiver_material_registration"
+      }
+    ],
+    "preserved_metadata": {
+      "path": "c-new-props/room-dressing/decals.json#moss-damp",
+      "receiver": "floor",
+      "opacity_baked": 0.6,
+      "material_compatibility": [
+        "wood",
+        "stone",
+        "plaster"
+      ],
+      "projection": "flat UV decal; project onto receiver plane then clip to receiver alpha",
+      "navigation_effect": false
+    },
+    "evidence": {
+      "pixels_inspected": true,
+      "alpha_bbox_px": [
+        18,
+        24,
+        108,
+        120
+      ],
+      "view_sheet": "data-authoring-2026-10-09/evidence/decals-existing-art.png",
+      "receiver_confidence": "high, exact existing decals.json receiver",
+      "material_confidence": "medium, visible colour/shape and existing naming",
+      "anchor_and_extent_confidence": "medium, explicit new content proposals, not vendor measurements"
+    },
+    "notes": [
+      "Baked source alpha already incorporates 0.6 opacity; preserve RGBA. No movement, damage, slippery surface, moss growth, structural crack or light behaviour is authored."
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/room-dressing/decals/moss-damp.png": "art/media/environment/library/props/room-dressing/decals/moss-damp.png"
+  }
+}

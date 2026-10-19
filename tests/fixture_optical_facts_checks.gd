@@ -7,8 +7,8 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr(label)
 func _initialize()->void:
-    var saved:Resource=ResourceLoader.load("res://generated/fixture_optical_facts.res","",ResourceLoader.CACHE_MODE_IGNORE)
-    var assets:Dictionary=Catalog.read_file("assets.json",{})
+    var saved:Resource=ResourceLoader.load("res://build/presentation/environment/fixture_optics.res","",ResourceLoader.CACHE_MODE_IGNORE)
+    var assets:Dictionary=Catalog.environment_resources({})
     var animation:Dictionary=assets.animations["torch.flame"]
     var energies:Array=[];var saved_energies:Array=[];var heights:Array=[];var saved_heights:Array=[]
     for id in animation.frames:

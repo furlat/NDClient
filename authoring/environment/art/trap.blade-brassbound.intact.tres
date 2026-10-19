@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_80mk5"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_jsxf4"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_m424d"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_jsxf4")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_80mk5")
+container = "atlas"
+files = PackedStringArray("art/media/environment/traps/blade-brassbound/intact/atlas/color-000.png")
+cell = Vector2i(256, 256)
+frames = 12
+fps = 12.0
+directions = "camera4"
+direction_order = PackedStringArray("e", "s", "w", "n")
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/trap.blade-brassbound.intact.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_m424d")
+id = "trap.blade-brassbound.intact"
+kind = "bank"
+art = SubResource("art")
+images = PackedStringArray()

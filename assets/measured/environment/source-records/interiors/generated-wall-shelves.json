@@ -1,0 +1,782 @@
+{
+  "section": "interior",
+  "record": {
+    "catalog_id": "generated-wall-shelves",
+    "intended_role": "Two horizontal shelves on a wall",
+    "description": "Two wood shelves and a mounting board. Source rear shelf edges share the mounting plane; the board is recessed 0.06 source units from that plane.",
+    "mounting": {
+      "receiver": "wall",
+      "anchor_source_xyz": [
+        0,
+        0.2,
+        0.9
+      ],
+      "anchor_local_east_xy_z_steps": [
+        0.0,
+        -0.101811,
+        0.561114
+      ],
+      "align": "Align placement_contact_px in chosen native view to the projected receiver contact; source pivot remains the art registration.",
+      "floor_contact": null,
+      "default_source_mount_height_steps": 0.561114,
+      "default_source_mount_height_status": "measured source embedding, not a separate room-height choice",
+      "world_geometry_transform": "worldPoint = receiverAnchor + T(sourcePoint - anchor_source_xyz), T recorded under units.source_model_conversion. Footprints/heights/solid_parts use source geometric origin; subtract anchor offset for placement.",
+      "sprite_alignment": "screenPoint(u) = project(receiverAnchor) + pixelScale*(u - placement_contact_px); with preserved pivot p, sprite.position = project(receiverAnchor) + pixelScale*(p - placement_contact_px).",
+      "height_interval_relative_to_mount_steps": [
+        -0.180803,
+        0.180804
+      ],
+      "receiver_plane_source_y": 0.2,
+      "receiver_normal_local_east_xyz": [
+        0,
+        1,
+        0
+      ],
+      "plane_definition": "Rear face of mounting board/plate; wall-shelves uses rear edges of both shelves.",
+      "floor_base_contact_source_xyz": [
+        0,
+        0.2,
+        0
+      ],
+      "floor_navigation_footprint": [],
+      "contact_policy": "Object is suspended from this wall plane; empty floor space below it is not filled by its 2D sprite.",
+      "embedded_height_range_steps": [
+        0.380311,
+        0.741918
+      ]
+    },
+    "contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/decor/native-breakables/wall-shelves/sheet-e.png",
+        "image_dimensions_px": [
+          5376,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          198.465012,
+          233.136749
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            198.465012,
+            233.136749
+          ],
+          "wall_base": [
+            198.465012,
+            268.767498
+          ],
+          "lower_shelf_support": [
+            192.000046,
+            244.683083
+          ],
+          "upper_shelf_support": [
+            192.000046,
+            224.888214
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "s": {
+        "image_path": "c-new-props/decor/native-breakables/wall-shelves/sheet-s.png",
+        "image_dimensions_px": [
+          5376,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          185.534981,
+          233.136749
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            185.534981,
+            233.136749
+          ],
+          "wall_base": [
+            185.534988,
+            268.767498
+          ],
+          "lower_shelf_support": [
+            191.999962,
+            244.683083
+          ],
+          "upper_shelf_support": [
+            191.999962,
+            224.888214
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "w": {
+        "image_path": "c-new-props/decor/native-breakables/wall-shelves/sheet-w.png",
+        "image_dimensions_px": [
+          5376,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          185.535034,
+          239.601677
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            185.535034,
+            239.601677
+          ],
+          "wall_base": [
+            185.535034,
+            275.232426
+          ],
+          "lower_shelf_support": [
+            192.000015,
+            244.683029
+          ],
+          "upper_shelf_support": [
+            192.000015,
+            224.888161
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "n": {
+        "image_path": "c-new-props/decor/native-breakables/wall-shelves/sheet-n.png",
+        "image_dimensions_px": [
+          5376,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          198.464966,
+          239.601677
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            198.464966,
+            239.601677
+          ],
+          "wall_base": [
+            198.464966,
+            275.232426
+          ],
+          "lower_shelf_support": [
+            191.999992,
+            244.683029
+          ],
+          "upper_shelf_support": [
+            191.999992,
+            224.888161
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      }
+    },
+    "static_contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/generated-interiors/wall-shelves/e.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            134.465012,
+            169.136749
+          ],
+          "wall_base": [
+            134.465012,
+            204.767498
+          ],
+          "lower_shelf_support": [
+            128.000046,
+            180.683083
+          ],
+          "upper_shelf_support": [
+            128.000046,
+            160.888214
+          ]
+        }
+      },
+      "s": {
+        "image_path": "c-new-props/generated-interiors/wall-shelves/s.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            121.534981,
+            169.136749
+          ],
+          "wall_base": [
+            121.534988,
+            204.767498
+          ],
+          "lower_shelf_support": [
+            127.999962,
+            180.683083
+          ],
+          "upper_shelf_support": [
+            127.999962,
+            160.888214
+          ]
+        }
+      },
+      "w": {
+        "image_path": "c-new-props/generated-interiors/wall-shelves/w.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            121.535034,
+            175.601677
+          ],
+          "wall_base": [
+            121.535034,
+            211.232426
+          ],
+          "lower_shelf_support": [
+            128.000015,
+            180.683029
+          ],
+          "upper_shelf_support": [
+            128.000015,
+            160.888161
+          ]
+        }
+      },
+      "n": {
+        "image_path": "c-new-props/generated-interiors/wall-shelves/n.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            134.464966,
+            175.601677
+          ],
+          "wall_base": [
+            134.464966,
+            211.232426
+          ],
+          "lower_shelf_support": [
+            127.999992,
+            180.683029
+          ],
+          "upper_shelf_support": [
+            127.999992,
+            160.888161
+          ]
+        }
+      }
+    },
+    "footprint": {
+      "coordinate_origin": "Preserved source geometric origin (0,0,0); mounting anchor has separate XYZ below. Rotate footprint with family orientation, never camera pose.",
+      "bounds_xy_cells": {
+        "min": [
+          -0.305432,
+          -0.101811
+        ],
+        "max": [
+          0.305432,
+          0.101811
+        ]
+      },
+      "dimensions_xy_cells": [
+        0.610864,
+        0.203622
+      ],
+      "polygon_xy_cells": [
+        [
+          -0.305432,
+          0.101811
+        ],
+        [
+          0.305432,
+          0.101811
+        ],
+        [
+          0.305432,
+          -0.101811
+        ],
+        [
+          -0.305432,
+          -0.101811
+        ]
+      ],
+      "meaning": "Convex enclosure of actual rest-mesh XY projection, for extent/placement fit only. Blocking uses component solids; this enclosure is not automatically a filled collision region.",
+      "provenance": "measured preserved source meshes, converted by recorded camera registration"
+    },
+    "height": {
+      "coordinate_origin": "All heights below are relative to preserved source geometric origin, before placement; mounting includes its own source anchor height to subtract when attached elsewhere.",
+      "base_z_steps": 0.380311,
+      "top_z_steps": 0.741918,
+      "span_steps": 0.361607,
+      "top_height_ft_from_source_origin": 3.70959,
+      "provenance": "measured source rest-model bounds, render-equivalent registration conversion"
+    },
+    "blocking": {
+      "coordinate_origin": "Component XY polygons and Z intervals use the source geometric origin; apply the same mounting.world_geometry_transform to every component.",
+      "physical_solids": "Individual wooden/iron/ceramic components at their actual heights; water is excluded.",
+      "blocks_floor_as_filled_cell": false,
+      "floor_footprint_policy": "none: suspended or carrier-local dressing",
+      "solid_parts": [
+        {
+          "source_mesh": "mounting board",
+          "materials": [
+            "darkwood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.305432,
+              -0.030543
+            ],
+            [
+              0.305432,
+              -0.030543
+            ],
+            [
+              0.305432,
+              -0.071267
+            ],
+            [
+              -0.305432,
+              -0.071267
+            ]
+          ],
+          "z_interval_steps": [
+            0.592287,
+            0.716979
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/wall-shelves/wall-shelves.blend#mounting board",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "wall shelf",
+          "materials": [
+            "wood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.305432,
+              0.101811
+            ],
+            [
+              0.305432,
+              0.101811
+            ],
+            [
+              0.305432,
+              -0.101811
+            ],
+            [
+              -0.305432,
+              -0.101811
+            ]
+          ],
+          "z_interval_steps": [
+            0.380311,
+            0.430188
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/wall-shelves/wall-shelves.blend#wall shelf",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "wall shelf.001",
+          "materials": [
+            "wood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.305432,
+              0.101811
+            ],
+            [
+              0.305432,
+              0.101811
+            ],
+            [
+              0.305432,
+              -0.101811
+            ],
+            [
+              -0.305432,
+              -0.101811
+            ]
+          ],
+          "z_interval_steps": [
+            0.692041,
+            0.741918
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/wall-shelves/wall-shelves.blend#wall shelf.001",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        }
+      ],
+      "status": "authored physical interpretation using measured component bounds; runtime collision/navigation selection is separate"
+    },
+    "sources": [
+      {
+        "path": "c-new-props/generated-interiors/wall-shelves/wall-shelves.blend",
+        "sha256": "21424d43ff002da955efb60f163acaa1d1f61249e8cb95a4b21eee2e589e7849",
+        "kind": "preserved_Blender_rest_geometry"
+      },
+      {
+        "path": "c-new-props/generated-interiors/manifest.json",
+        "sha256": "428ba878ff9a848f0b7884db32c52b411bb2cf19ccb1b989b4bd9c681ee2ee5b",
+        "kind": "existing_static_registration"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-shelves/metadata.json",
+        "sha256": "4b4eb87fcf3b77f53fb218ecd903607f2ff87cb8bf547fb5dcd55b9b50652d05",
+        "kind": "existing_animation_metadata"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-shelves/sheet-e.png",
+        "sha256": "bed3aa81789492507cbb7757de5d75b3d8d6ca7d0be14dcfeb9ed2dee031b622",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-shelves/e.png",
+        "sha256": "c6f88e42c2d4f487ae5785a110c0d746fbccea91aa9149275033edce286f7a89",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-shelves/sheet-s.png",
+        "sha256": "105c283cc64a8795ace51cfef9dd36998eee7d4d838a7ce0a7a4c6756dc40180",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-shelves/s.png",
+        "sha256": "29ac64245058370d9e3acbba2727ed563d43236db0e5f841f698c7defe8db8a0",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-shelves/sheet-w.png",
+        "sha256": "c0bdbfbd398f06f47087cc888d962411ce391cdddc7bbc8b0ce730acbb5b8e41",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-shelves/w.png",
+        "sha256": "bbc042a05df3cb8166aebbe0dbf81c502a3e0def0db890cb84be2daeda2e36f5",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-shelves/sheet-n.png",
+        "sha256": "36a9951986a9d35854be1a1db0f5e7c078c524b6f4486941402e754000a41aff",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-shelves/n.png",
+        "sha256": "648ade4b1359e812f75024495ab842fa9a99fea2fa77c934b8699566659cf04a",
+        "kind": "existing_static_art"
+      }
+    ],
+    "preserved_metadata": {
+      "static_manifest": "c-new-props/generated-interiors/manifest.json#wall-shelves",
+      "source_static_pivot_px": [
+        128,
+        208
+      ],
+      "catalog_metadata_path": "c-new-props/decor/native-breakables/wall-shelves/metadata.json",
+      "catalog_pivot_px": [
+        192,
+        272
+      ],
+      "first_frame_audit": "provenance/first-frame-audit.json",
+      "animation_scope": "Existing clocks, rows, pivots, source frames, candidate/destruction status and bindings remain owned by these existing records."
+    },
+    "evidence": {
+      "geometry": "data-authoring-2026-10-09/evidence/interior-source-geometry.json#wall-shelves",
+      "all_four_views_inspected": true,
+      "view_sheet": "data-authoring-2026-10-09/evidence/generated-interiors-four-views.png",
+      "alpha_bbox_measurements": {
+        "e": {
+          "static_alpha_bbox_px": [
+            102,
+            148,
+            154,
+            196
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            166,
+            212,
+            218,
+            260
+          ]
+        },
+        "s": {
+          "static_alpha_bbox_px": [
+            102,
+            148,
+            154,
+            196
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            166,
+            212,
+            218,
+            260
+          ]
+        },
+        "w": {
+          "static_alpha_bbox_px": [
+            102,
+            148,
+            154,
+            196
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            166,
+            212,
+            218,
+            260
+          ]
+        },
+        "n": {
+          "static_alpha_bbox_px": [
+            102,
+            148,
+            154,
+            196
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            166,
+            212,
+            218,
+            260
+          ]
+        }
+      },
+      "source_manifest_receiver": "wall",
+      "source_manifest_footprint_tiles": [
+        1,
+        1
+      ],
+      "source_manifest_footprint_status": "Existing packaging placeholders; concrete measured footprint supplied here.",
+      "camera_basis_static_px": {
+        "e": {
+          "X": [
+            32.324874,
+            16.162452
+          ],
+          "Y": [
+            32.32489,
+            -16.162442
+          ],
+          "Z": [
+            1.5e-05,
+            -39.589726
+          ]
+        },
+        "s": {
+          "X": [
+            32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324883,
+            -16.162442
+          ],
+          "Z": [
+            0.0,
+            -39.589726
+          ]
+        },
+        "w": {
+          "X": [
+            -32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324882,
+            16.162449
+          ],
+          "Z": [
+            0.0,
+            -39.589725
+          ]
+        },
+        "n": {
+          "X": [
+            -32.324883,
+            16.162447
+          ],
+          "Y": [
+            32.32489,
+            16.162449
+          ],
+          "Z": [
+            7e-06,
+            -39.589725
+          ]
+        }
+      },
+      "source_pose_to_engine_geometric_quadrant": {
+        "e": 0,
+        "s": 3,
+        "w": 2,
+        "n": 1
+      },
+      "geometry_confidence": "high for preserved source mesh and source camera registration; this does not certify exact frame0-rest pixel equality.",
+      "semantic_confidence": "medium, artwork/source naming support the authored role.",
+      "blocking_confidence": "medium; basin cavity thickness low/estimated."
+    },
+    "notes": [
+      "Native generated camera labels map geometrically to engine quarters e=0,s=3,w=2,n=1 for the declared local-east XYZ conversion. Direct e/s/w/n to engine quarter0/1/2/3 swaps the two side views. Source rows and current selected bindings are preserved; consumers must use the measured crosswalk for these new profiles.",
+      "Rear shelf plane is source Y=0.20; mounting-board rear is Y=0.14, leaving 0.06 source units (~0.031 cells) between board and receiver. Alignment at shelf rear edges preserves the existing art."
+    ],
+    "support_surfaces": [
+      {
+        "role": "lower_shelf_support",
+        "source_xyz": [
+          0,
+          0,
+          0.69
+        ],
+        "local_xyz": [
+          0.0,
+          0.0,
+          0.430188
+        ],
+        "support_polygon_xy_cells": [
+          [
+            -0.305432,
+            0.101811
+          ],
+          [
+            0.305432,
+            0.101811
+          ],
+          [
+            0.305432,
+            -0.101811
+          ],
+          [
+            -0.305432,
+            -0.101811
+          ]
+        ],
+        "contact_px_key": "lower_shelf_support"
+      },
+      {
+        "role": "upper_shelf_support",
+        "source_xyz": [
+          0,
+          0,
+          1.19
+        ],
+        "local_xyz": [
+          0.0,
+          0.0,
+          0.741918
+        ],
+        "support_polygon_xy_cells": [
+          [
+            -0.305432,
+            0.101811
+          ],
+          [
+            0.305432,
+            0.101811
+          ],
+          [
+            0.305432,
+            -0.101811
+          ],
+          [
+            -0.305432,
+            -0.101811
+          ]
+        ],
+        "contact_px_key": "upper_shelf_support"
+      }
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/decor/native-breakables/wall-shelves/sheet-e.png": "art/media/environment/library/props/decor/native-breakables/wall-shelves/sheet-e.png",
+    "c-new-props/decor/native-breakables/wall-shelves/sheet-n.png": "art/media/environment/library/props/decor/native-breakables/wall-shelves/sheet-n.png",
+    "c-new-props/decor/native-breakables/wall-shelves/sheet-s.png": "art/media/environment/library/props/decor/native-breakables/wall-shelves/sheet-s.png",
+    "c-new-props/decor/native-breakables/wall-shelves/sheet-w.png": "art/media/environment/library/props/decor/native-breakables/wall-shelves/sheet-w.png",
+    "c-new-props/decor/native-breakables/wall-shelves/sheet.png": "art/media/environment/library/props/decor/native-breakables/wall-shelves/sheet.png"
+  }
+}

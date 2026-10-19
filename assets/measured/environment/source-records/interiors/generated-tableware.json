@@ -1,0 +1,776 @@
+{
+  "section": "interior",
+  "record": {
+    "catalog_id": "generated-tableware",
+    "intended_role": "Two place settings on a dining surface",
+    "description": "Two pale plates with two small clay cups. The carrier table is a separate asset; this family contributes only dishes.",
+    "mounting": {
+      "receiver": "surface",
+      "anchor_source_xyz": [
+        0,
+        0,
+        0
+      ],
+      "anchor_local_east_xy_z_steps": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "align": "Align placement_contact_px in chosen native view to the projected receiver contact; source pivot remains the art registration.",
+      "floor_contact": null,
+      "default_source_mount_height_steps": 0.0,
+      "default_source_mount_height_status": "measured source embedding, not a separate room-height choice",
+      "world_geometry_transform": "worldPoint = receiverAnchor + T(sourcePoint - anchor_source_xyz), T recorded under units.source_model_conversion. Footprints/heights/solid_parts use source geometric origin; subtract anchor offset for placement.",
+      "sprite_alignment": "screenPoint(u) = project(receiverAnchor) + pixelScale*(u - placement_contact_px); with preserved pivot p, sprite.position = project(receiverAnchor) + pixelScale*(p - placement_contact_px).",
+      "height_interval_relative_to_mount_steps": [
+        0.006235,
+        0.099754
+      ],
+      "receiver_normal_local_east_xyz": [
+        0,
+        0,
+        1
+      ],
+      "receiver_height": "Use the actual carrier top height, then apply local source offsets.",
+      "floor_navigation_footprint": [],
+      "source_mesh_minimum_clearance_steps": 0.006235
+    },
+    "contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/decor/native-breakables/tableware/sheet-e.png",
+        "image_dimensions_px": [
+          4992,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          192.000031,
+          271.999989
+        ],
+        "contacts_px": {
+          "support": [
+            192.000031,
+            271.999989
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "s": {
+        "image_path": "c-new-props/decor/native-breakables/tableware/sheet-s.png",
+        "image_dimensions_px": [
+          4992,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          191.999962,
+          271.999989
+        ],
+        "contacts_px": {
+          "support": [
+            191.999962,
+            271.999989
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "w": {
+        "image_path": "c-new-props/decor/native-breakables/tableware/sheet-w.png",
+        "image_dimensions_px": [
+          4992,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          192.000015,
+          271.999935
+        ],
+        "contacts_px": {
+          "support": [
+            192.000015,
+            271.999935
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "n": {
+        "image_path": "c-new-props/decor/native-breakables/tableware/sheet-n.png",
+        "image_dimensions_px": [
+          4992,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          191.999985,
+          271.999935
+        ],
+        "contacts_px": {
+          "support": [
+            191.999985,
+            271.999935
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      }
+    },
+    "static_contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/generated-interiors/tableware/e.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            128.000031,
+            207.999989
+          ]
+        }
+      },
+      "s": {
+        "image_path": "c-new-props/generated-interiors/tableware/s.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            127.999962,
+            207.999989
+          ]
+        }
+      },
+      "w": {
+        "image_path": "c-new-props/generated-interiors/tableware/w.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            128.000015,
+            207.999935
+          ]
+        }
+      },
+      "n": {
+        "image_path": "c-new-props/generated-interiors/tableware/n.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            127.999985,
+            207.999935
+          ]
+        }
+      }
+    },
+    "footprint": {
+      "coordinate_origin": "Preserved source geometric origin (0,0,0); mounting anchor has separate XYZ below. Rotate footprint with family orientation, never camera pose.",
+      "bounds_xy_cells": {
+        "min": [
+          -0.184114,
+          -0.129809
+        ],
+        "max": [
+          0.184114,
+          0.086539
+        ]
+      },
+      "dimensions_xy_cells": [
+        0.368228,
+        0.216348
+      ],
+      "polygon_xy_cells": [
+        [
+          -0.184114,
+          0.026742
+        ],
+        [
+          -0.152677,
+          0.070012
+        ],
+        [
+          -0.101811,
+          0.086539
+        ],
+        [
+          0.101811,
+          0.086539
+        ],
+        [
+          0.152677,
+          0.070012
+        ],
+        [
+          0.184114,
+          0.026742
+        ],
+        [
+          0.184114,
+          -0.026742
+        ],
+        [
+          0.128438,
+          -0.110462
+        ],
+        [
+          0.118267,
+          -0.124461
+        ],
+        [
+          0.101811,
+          -0.129809
+        ],
+        [
+          -0.101811,
+          -0.129809
+        ],
+        [
+          -0.118267,
+          -0.124461
+        ],
+        [
+          -0.128438,
+          -0.110462
+        ],
+        [
+          -0.184114,
+          -0.026742
+        ]
+      ],
+      "meaning": "Convex enclosure of actual rest-mesh XY projection, for extent/placement fit only. Blocking uses component solids; this enclosure is not automatically a filled collision region.",
+      "provenance": "measured preserved source meshes, converted by recorded camera registration"
+    },
+    "height": {
+      "coordinate_origin": "All heights below are relative to preserved source geometric origin, before placement; mounting includes its own source anchor height to subtract when attached elsewhere.",
+      "base_z_steps": 0.006235,
+      "top_z_steps": 0.099754,
+      "span_steps": 0.093519,
+      "top_height_ft_from_source_origin": 0.49877,
+      "provenance": "measured source rest-model bounds, render-equivalent registration conversion"
+    },
+    "blocking": {
+      "coordinate_origin": "Component XY polygons and Z intervals use the source geometric origin; apply the same mounting.world_geometry_transform to every component.",
+      "physical_solids": "Individual wooden/iron/ceramic components at their actual heights; water is excluded.",
+      "blocks_floor_as_filled_cell": false,
+      "floor_footprint_policy": "none: suspended or carrier-local dressing",
+      "solid_parts": [
+        {
+          "source_mesh": "plate",
+          "materials": [
+            "linen"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.184114,
+              0.026742
+            ],
+            [
+              -0.152677,
+              0.070012
+            ],
+            [
+              -0.101811,
+              0.086539
+            ],
+            [
+              -0.050944,
+              0.070012
+            ],
+            [
+              -0.019507,
+              0.026742
+            ],
+            [
+              -0.019507,
+              -0.026742
+            ],
+            [
+              -0.050944,
+              -0.070012
+            ],
+            [
+              -0.101811,
+              -0.086539
+            ],
+            [
+              -0.152677,
+              -0.070012
+            ],
+            [
+              -0.184114,
+              -0.026742
+            ]
+          ],
+          "z_interval_steps": [
+            0.007793,
+            0.02338
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/tableware/tableware.blend#plate",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "cup",
+          "materials": [
+            "clay"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.128438,
+              -0.093159
+            ],
+            [
+              -0.118267,
+              -0.07916
+            ],
+            [
+              -0.101811,
+              -0.073813
+            ],
+            [
+              -0.085354,
+              -0.07916
+            ],
+            [
+              -0.075183,
+              -0.093159
+            ],
+            [
+              -0.075183,
+              -0.110462
+            ],
+            [
+              -0.085354,
+              -0.124461
+            ],
+            [
+              -0.101811,
+              -0.129809
+            ],
+            [
+              -0.118267,
+              -0.124461
+            ],
+            [
+              -0.128438,
+              -0.110462
+            ]
+          ],
+          "z_interval_steps": [
+            0.006235,
+            0.099754
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/tableware/tableware.blend#cup",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "plate.001",
+          "materials": [
+            "linen"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.019507,
+              0.026742
+            ],
+            [
+              0.050944,
+              0.070012
+            ],
+            [
+              0.101811,
+              0.086539
+            ],
+            [
+              0.152677,
+              0.070012
+            ],
+            [
+              0.184114,
+              0.026742
+            ],
+            [
+              0.184114,
+              -0.026742
+            ],
+            [
+              0.152677,
+              -0.070012
+            ],
+            [
+              0.101811,
+              -0.086539
+            ],
+            [
+              0.050944,
+              -0.070012
+            ],
+            [
+              0.019507,
+              -0.026742
+            ]
+          ],
+          "z_interval_steps": [
+            0.007793,
+            0.02338
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/tableware/tableware.blend#plate.001",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "cup.001",
+          "materials": [
+            "clay"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.075183,
+              -0.093159
+            ],
+            [
+              0.085354,
+              -0.07916
+            ],
+            [
+              0.101811,
+              -0.073813
+            ],
+            [
+              0.118267,
+              -0.07916
+            ],
+            [
+              0.128438,
+              -0.093159
+            ],
+            [
+              0.128438,
+              -0.110462
+            ],
+            [
+              0.118267,
+              -0.124461
+            ],
+            [
+              0.101811,
+              -0.129809
+            ],
+            [
+              0.085354,
+              -0.124461
+            ],
+            [
+              0.075183,
+              -0.110462
+            ]
+          ],
+          "z_interval_steps": [
+            0.006235,
+            0.099754
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/tableware/tableware.blend#cup.001",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        }
+      ],
+      "status": "authored physical interpretation using measured component bounds; runtime collision/navigation selection is separate",
+      "dressing_contact": "Plates/cups occupy only their separate support-local surfaces, with no separate floor cell obstruction."
+    },
+    "sources": [
+      {
+        "path": "c-new-props/generated-interiors/tableware/tableware.blend",
+        "sha256": "220d7d6b42d509b92c760eebc2a6494b94c8f8ae9643559087c63391cb5060d4",
+        "kind": "preserved_Blender_rest_geometry"
+      },
+      {
+        "path": "c-new-props/generated-interiors/manifest.json",
+        "sha256": "428ba878ff9a848f0b7884db32c52b411bb2cf19ccb1b989b4bd9c681ee2ee5b",
+        "kind": "existing_static_registration"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/tableware/metadata.json",
+        "sha256": "7aa92faf5d96576b89d2c566a7e964bdc3fb3669f6ad3957ea00a4407805f9aa",
+        "kind": "existing_animation_metadata"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/tableware/sheet-e.png",
+        "sha256": "b08124ed845e52884441675fe4e548701881cc33ecb477a5678aa737fa71b63a",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/tableware/e.png",
+        "sha256": "3c6d346d8b04b2872ce8dac958dcb051fde90f1458e80c0d04aefb4d6000b4a9",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/tableware/sheet-s.png",
+        "sha256": "584e41dfcdcbed0c6b094c7d8e213bb3125af0bc94f1e201556c922a22a4ed20",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/tableware/s.png",
+        "sha256": "0befcd70a9f653269c3f9d60bc778751dfebab308eb1dd870618e6e438d2d6d6",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/tableware/sheet-w.png",
+        "sha256": "380e731f2491739e6ce583c36ad59356d216d67e0d5ed684bf0ad9fab1cfe961",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/tableware/w.png",
+        "sha256": "7407d31e585cc686f15f9eeebe3e3c47544be09c2f69b74a0b3a9e7bda8fcd10",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/tableware/sheet-n.png",
+        "sha256": "d8b7706e753b5cc1c0dd82b251d8a0e7f068f68ed4ab6f507c05263d1484b204",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/tableware/n.png",
+        "sha256": "bd64010270b309db10df2af0e59b481412e269b928129343157529730304735d",
+        "kind": "existing_static_art"
+      }
+    ],
+    "preserved_metadata": {
+      "static_manifest": "c-new-props/generated-interiors/manifest.json#tableware",
+      "source_static_pivot_px": [
+        128,
+        208
+      ],
+      "catalog_metadata_path": "c-new-props/decor/native-breakables/tableware/metadata.json",
+      "catalog_pivot_px": [
+        192,
+        272
+      ],
+      "first_frame_audit": "provenance/first-frame-audit.json",
+      "animation_scope": "Existing clocks, rows, pivots, source frames, candidate/destruction status and bindings remain owned by these existing records."
+    },
+    "evidence": {
+      "geometry": "data-authoring-2026-10-09/evidence/interior-source-geometry.json#tableware",
+      "all_four_views_inspected": true,
+      "view_sheet": "data-authoring-2026-10-09/evidence/generated-interiors-four-views.png",
+      "alpha_bbox_measurements": {
+        "e": {
+          "static_alpha_bbox_px": [
+            114,
+            194,
+            144,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            258,
+            208,
+            278
+          ]
+        },
+        "s": {
+          "static_alpha_bbox_px": [
+            112,
+            194,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            176,
+            258,
+            206,
+            278
+          ]
+        },
+        "w": {
+          "static_alpha_bbox_px": [
+            112,
+            200,
+            142,
+            216
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            176,
+            264,
+            206,
+            280
+          ]
+        },
+        "n": {
+          "static_alpha_bbox_px": [
+            114,
+            200,
+            144,
+            216
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            264,
+            208,
+            280
+          ]
+        }
+      },
+      "source_manifest_receiver": "surface",
+      "source_manifest_footprint_tiles": [
+        1,
+        1
+      ],
+      "source_manifest_footprint_status": "Existing packaging placeholders; concrete measured footprint supplied here.",
+      "camera_basis_static_px": {
+        "e": {
+          "X": [
+            32.324874,
+            16.162452
+          ],
+          "Y": [
+            32.32489,
+            -16.162442
+          ],
+          "Z": [
+            1.5e-05,
+            -39.589726
+          ]
+        },
+        "s": {
+          "X": [
+            32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324883,
+            -16.162442
+          ],
+          "Z": [
+            0.0,
+            -39.589726
+          ]
+        },
+        "w": {
+          "X": [
+            -32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324882,
+            16.162449
+          ],
+          "Z": [
+            0.0,
+            -39.589725
+          ]
+        },
+        "n": {
+          "X": [
+            -32.324883,
+            16.162447
+          ],
+          "Y": [
+            32.32489,
+            16.162449
+          ],
+          "Z": [
+            7e-06,
+            -39.589725
+          ]
+        }
+      },
+      "source_pose_to_engine_geometric_quadrant": {
+        "e": 0,
+        "s": 3,
+        "w": 2,
+        "n": 1
+      },
+      "geometry_confidence": "high for preserved source mesh and source camera registration; this does not certify exact frame0-rest pixel equality.",
+      "semantic_confidence": "medium, artwork/source naming support the authored role.",
+      "blocking_confidence": "medium; basin cavity thickness low/estimated."
+    },
+    "notes": [
+      "Native generated camera labels map geometrically to engine quarters e=0,s=3,w=2,n=1 for the declared local-east XYZ conversion. Direct e/s/w/n to engine quarter0/1/2/3 swaps the two side views. Source rows and current selected bindings are preserved; consumers must use the measured crosswalk for these new profiles."
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/decor/native-breakables/tableware/sheet-e.png": "art/media/environment/library/props/decor/native-breakables/tableware/sheet-e.png",
+    "c-new-props/decor/native-breakables/tableware/sheet-n.png": "art/media/environment/library/props/decor/native-breakables/tableware/sheet-n.png",
+    "c-new-props/decor/native-breakables/tableware/sheet-s.png": "art/media/environment/library/props/decor/native-breakables/tableware/sheet-s.png",
+    "c-new-props/decor/native-breakables/tableware/sheet-w.png": "art/media/environment/library/props/decor/native-breakables/tableware/sheet-w.png",
+    "c-new-props/decor/native-breakables/tableware/sheet.png": "art/media/environment/library/props/decor/native-breakables/tableware/sheet.png"
+  }
+}

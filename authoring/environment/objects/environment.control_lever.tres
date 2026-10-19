@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_h1fj2"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_l8mnu"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_towrw"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_0isvj"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_ofjui"]
+
+[sub_resource type="Resource" id="states_false"]
+script = ExtResource("4_0isvj")
+images = Dictionary[String, String]({
+"e": "lever.e.0",
+"n": "lever.n.0",
+"s": "lever.s.0",
+"w": "lever.w.0"
+})
+
+[sub_resource type="Resource" id="states_true"]
+script = ExtResource("4_0isvj")
+images = Dictionary[String, String]({
+"e": "lever.e.6",
+"n": "lever.n.6",
+"s": "lever.s.6",
+"w": "lever.w.6"
+})
+
+[sub_resource type="Resource" id="transitions_0"]
+script = ExtResource("5_ofjui")
+from = "false"
+to = "true"
+images = Dictionary[String, PackedStringArray]({
+"e": PackedStringArray("lever.e.0", "lever.e.1", "lever.e.2", "lever.e.3", "lever.e.4", "lever.e.5", "lever.e.6"),
+"n": PackedStringArray("lever.n.0", "lever.n.1", "lever.n.2", "lever.n.3", "lever.n.4", "lever.n.5", "lever.n.6"),
+"s": PackedStringArray("lever.s.0", "lever.s.1", "lever.s.2", "lever.s.3", "lever.s.4", "lever.s.5", "lever.s.6"),
+"w": PackedStringArray("lever.w.0", "lever.w.1", "lever.w.2", "lever.w.3", "lever.w.4", "lever.w.5", "lever.w.6")
+})
+fps = 24.0
+
+[sub_resource type="Resource" id="transitions_1"]
+script = ExtResource("5_ofjui")
+from = "true"
+to = "false"
+images = Dictionary[String, PackedStringArray]({
+"e": PackedStringArray("lever.e.0", "lever.e.1", "lever.e.2", "lever.e.3", "lever.e.4", "lever.e.5", "lever.e.6"),
+"n": PackedStringArray("lever.n.0", "lever.n.1", "lever.n.2", "lever.n.3", "lever.n.4", "lever.n.5", "lever.n.6"),
+"s": PackedStringArray("lever.s.0", "lever.s.1", "lever.s.2", "lever.s.3", "lever.s.4", "lever.s.5", "lever.s.6"),
+"w": PackedStringArray("lever.w.0", "lever.w.1", "lever.w.2", "lever.w.3", "lever.w.4", "lever.w.5", "lever.w.6")
+})
+fps = 24.0
+reversed = true
+
+[resource]
+script = ExtResource("3_towrw")
+id = "environment.control_lever"
+kind = "lever"
+views = PackedStringArray("e", "n", "s", "w")
+select_field = "is_engaged"
+states = Dictionary[String, ExtResource("4_0isvj")]({
+"false": SubResource("states_false"),
+"true": SubResource("states_true")
+})
+transitions = Array[ExtResource("5_ofjui")]([SubResource("transitions_0"), SubResource("transitions_1")])
+art = PackedStringArray()
+status = "ready"
+notes = "The lever snaps between its poses; the 24 fps transition is data only (also duplicated in the old catalog/world_animations.json)."

@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_rig56"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_odq1g"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_dwl70"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_m7r1b"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_n3jte"]
+
+[sub_resource type="Resource" id="states_false"]
+script = ExtResource("4_m7r1b")
+bank = "prop.chest-a1.intact"
+
+[sub_resource type="Resource" id="states_true"]
+script = ExtResource("4_m7r1b")
+bank = "prop.chest-a2.intact"
+
+[resource]
+script = ExtResource("3_dwl70")
+id = "environment.chest.fantasy_a1"
+kind = "chest"
+views = PackedStringArray("e", "s", "w", "n")
+select_field = "is_open"
+states = Dictionary[String, ExtResource("4_m7r1b")]({
+"false": SubResource("states_false"),
+"true": SubResource("states_true")
+})
+destructions = Dictionary[String, String]({
+"false": "prop.chest-a1.break",
+"true": "prop.chest-a2.break"
+})
+art = PackedStringArray()
+status = "ready"

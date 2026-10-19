@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_nouoi"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_sb8bf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_g3s1y"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_k1kqf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_yslip"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_k1kqf")
+bank = "prop.content-loose-straw-2.intact"
+
+[resource]
+script = ExtResource("3_g3s1y")
+id = "environment.furniture.loose_straw_2"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_k1kqf")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-loose-straw-2.break"
+})
+flat_ground = true
+art = PackedStringArray()
+status = "ready"
+notes = "flat_ground is authored but the draw order does not use it."

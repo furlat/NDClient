@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_68di4"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_f5xqg"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_2xvmo"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_nsl42"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_e3cdg"]
+
+[sub_resource type="Resource" id="states_ready"]
+script = ExtResource("4_nsl42")
+bank = "trap.blade-fortress.intact"
+
+[sub_resource type="Resource" id="states_activated"]
+script = ExtResource("4_nsl42")
+bank = "trap.blade-fortress.intact"
+frame = 5
+
+[sub_resource type="Resource" id="states_deactivated"]
+script = ExtResource("4_nsl42")
+bank = "trap.blade-fortress.intact"
+
+[resource]
+script = ExtResource("3_2xvmo")
+id = "environment.trap.swinging_blade.stone.fortress"
+kind = "trap"
+views = PackedStringArray("e", "s", "w", "n")
+select_field = "is_engaged"
+states = Dictionary[String, ExtResource("4_nsl42")]({
+"activated": SubResource("states_activated"),
+"deactivated": SubResource("states_deactivated"),
+"ready": SubResource("states_ready")
+})
+destructions = Dictionary[String, String]({
+"activated": "trap.blade-fortress.destruction.active",
+"deactivated": "trap.blade-fortress.destruction.ready",
+"ready": "trap.blade-fortress.destruction.ready"
+})
+wrecks = Dictionary[String, String]({
+"environment.trap.swinging_blade.stone.fortress.wreck": ""
+})
+art = PackedStringArray()
+status = "ready"
+notes = "The game asks for state \"active\" when the trap is engaged, but the states are ready/activated/deactivated (world.gd)."

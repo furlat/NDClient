@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_bnxr3"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_axose"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_kau2q"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_axose")
+failed_frames = PackedInt32Array()
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_bnxr3")
+container = "views_as_files"
+files = PackedStringArray("art/media/environment/water/normal.png")
+cell = Vector2i(512, 512)
+frames = 1
+directions = "single"
+direction_order = PackedStringArray()
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/water.normal.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_kau2q")
+id = "water.normal"
+art = SubResource("art")
+images = PackedStringArray("water.normal")

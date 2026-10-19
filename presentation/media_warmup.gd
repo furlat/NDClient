@@ -9,7 +9,6 @@ const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const EncounterMedia = preload("res://presentation/encounter_media.gd")
 const NativeSupport = preload("res://presentation/native_scene_support.gd")
 const CharacterGeometry = preload("res://presentation/character_geometry.gd")
-const FIXTURE_OPTICS=preload("res://generated/fixture_optical_facts.res")
 const BUDGET_BYTES = 16 * 1024 * 1024 * 1024
 const EVICTIONS_PER_FRAME = 2
 const CPU_RELEASES_PER_FRAME = 2
@@ -1333,7 +1332,7 @@ static func poll_sources(data: Dictionary, required_only: bool = false, publish:
             data.pending.pop_front();request.pending=false
             request.maximum_texture_size=data.maximum_texture_size
             request.dispatched_us=Time.get_ticks_usec()
-            if request.fixture:request.fixture_facts=FIXTURE_OPTICS.frames.get(request.path,{})
+            if request.fixture:request.fixture_facts=Characters.Catalog.fixture_optics().get(request.path,{})
             request.worker_upload=data.worker_upload and not data.resident.has(request.path)
             requests.append(request)
             if batch_priority==2:break

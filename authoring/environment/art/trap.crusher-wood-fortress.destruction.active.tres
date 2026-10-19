@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_yq7b2"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_541hs"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_5iwhd"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_541hs")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_yq7b2")
+container = "atlas"
+files = PackedStringArray("art/media/environment/traps/crusher-wood-fortress/destruction.active/atlas/color-000.png")
+cell = Vector2i(256, 256)
+frames = 14
+directions = "camera4"
+direction_order = PackedStringArray("e", "s", "w", "n")
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/trap.crusher-wood-fortress.destruction.active.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Also carries the legacy RG16 little-endian painter depth (actor_depth) that splits door leaves against their frame."
+
+[resource]
+script = ExtResource("3_5iwhd")
+id = "trap.crusher-wood-fortress.destruction.active"
+kind = "bank"
+art = SubResource("art")
+images = PackedStringArray()

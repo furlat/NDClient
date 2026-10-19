@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_etonu"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="2_pqueq"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="3_n7q6w"]
+
+[sub_resource type="Resource" id="operations_0_transition"]
+script = ExtResource("2_pqueq")
+clip = "surface_water_freeze_thaw"
+selection = "surface_water_freeze_thaw"
+role = "transition"
+at = "state_change"
+attachment = "area"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="operations_0"]
+script = ExtResource("1_etonu")
+operation = "freeze"
+transition = SubResource("operations_0_transition")
+becomes = "spatial_effect.material.ice"
+
+[sub_resource type="Resource" id="operations_1"]
+script = ExtResource("1_etonu")
+operation = "electrify"
+becomes = "spatial_effect.material.electrified_water"
+
+[sub_resource type="Resource" id="operations_2_transition"]
+script = ExtResource("2_pqueq")
+clip = "water-secondary-source"
+selection = "water_vaporize_steam_owner"
+role = "transition"
+at = "state_change"
+attachment = "area"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="operations_2"]
+script = ExtResource("1_etonu")
+operation = "vaporize"
+transition = SubResource("operations_2_transition")
+also_creates = "spatial_effect.material.steam"
+
+[sub_resource type="Resource" id="operations_3"]
+script = ExtResource("1_etonu")
+operation = "dry"
+
+[resource]
+script = ExtResource("3_n7q6w")
+id = "spatial_effect.material.water_surface"
+operations = Array[ExtResource("1_etonu")]([SubResource("operations_0"), SubResource("operations_1"), SubResource("operations_2"), SubResource("operations_3")])
+art = PackedStringArray()
+legacy = "measured/environment/surfaces/spatial_effect.material.water_surface.json"
+status = "partial"
+notes = "Art or a Factory scenario exists; the game does not draw it."

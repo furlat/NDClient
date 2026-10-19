@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ebx47"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_0mkcn"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_6peqb"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_ap2hp"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_6o7f8"]
+
+[resource]
+script = ExtResource("3_6peqb")
+id = "environment.trap.dart_emitter"
+kind = "trap"
+views = PackedStringArray()
+art = PackedStringArray()
+stand_in = "environment.furniture.loose_floorboards"
+status = "stand_in"
+notes = "No object art; its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section. Drawn with environment.furniture.loose_floorboards."

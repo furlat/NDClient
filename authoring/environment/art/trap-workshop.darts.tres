@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_8t6nk"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_y01im"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_n4cja"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_y01im")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_8t6nk")
+container = "atlas"
+files = PackedStringArray("art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/darts/256x256-000.png")
+cell = Vector2i(256, 256)
+frames = 12
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/trap-workshop.darts.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_n4cja")
+id = "trap-workshop.darts"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("trap-workshop.darts.e.0", "trap-workshop.darts.e.1", "trap-workshop.darts.e.10", "trap-workshop.darts.e.11", "trap-workshop.darts.e.2", "trap-workshop.darts.e.3", "trap-workshop.darts.e.4", "trap-workshop.darts.e.5", "trap-workshop.darts.e.6", "trap-workshop.darts.e.7", "trap-workshop.darts.e.8", "trap-workshop.darts.e.9", "trap-workshop.darts.n.0", "trap-workshop.darts.n.1", "trap-workshop.darts.n.10", "trap-workshop.darts.n.11", "trap-workshop.darts.n.2", "trap-workshop.darts.n.3", "trap-workshop.darts.n.4", "trap-workshop.darts.n.5", "trap-workshop.darts.n.6", "trap-workshop.darts.n.7", "trap-workshop.darts.n.8", "trap-workshop.darts.n.9", "trap-workshop.darts.s.0", "trap-workshop.darts.s.1", "trap-workshop.darts.s.10", "trap-workshop.darts.s.11", "trap-workshop.darts.s.2", "trap-workshop.darts.s.3", "trap-workshop.darts.s.4", "trap-workshop.darts.s.5", "trap-workshop.darts.s.6", "trap-workshop.darts.s.7", "trap-workshop.darts.s.8", "trap-workshop.darts.s.9", "trap-workshop.darts.w.0", "trap-workshop.darts.w.1", "trap-workshop.darts.w.10", "trap-workshop.darts.w.11", "trap-workshop.darts.w.2", "trap-workshop.darts.w.3", "trap-workshop.darts.w.4", "trap-workshop.darts.w.5", "trap-workshop.darts.w.6", "trap-workshop.darts.w.7", "trap-workshop.darts.w.8", "trap-workshop.darts.w.9")

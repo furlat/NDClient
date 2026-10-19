@@ -379,7 +379,7 @@ func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
         prepare_usec+=Time.get_ticks_usec()-began
         if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-began-(budget.used_usec-charged_before))
         return false
-    if source.is_empty():source=Blood.Catalog.prepared_asset("particles.region.blood",world.catalog_cache)
+    if source.is_empty():source=Blood.Catalog.prepared_residue_asset(world.catalog_cache)
     if source.is_empty():
         # A real release carries its worker-admitted source. No source loading
         # may be hidden in the scene preparation or sampling path.
@@ -482,7 +482,7 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
     sample_phases={}
     var stage_started:int=began
     ready=true;last_allocations=0
-    if source.is_empty():source=Blood.Catalog.prepared_asset("particles.region.blood",world.catalog_cache)
+    if source.is_empty():source=Blood.Catalog.prepared_residue_asset(world.catalog_cache)
     _prune_pending(world)
     _phase("pending",stage_started);stage_started=Time.get_ticks_usec()
     var state:Dictionary=world.timeline.state

@@ -1,0 +1,111 @@
+{
+  "section": "decal",
+  "record": {
+    "catalog_id": "created.decal.dirt-scuff",
+    "intended_role": "Decorative dirt scuff on floor",
+    "material_description": "Sparse brown dirt scratches and small earth flecks",
+    "mounting": {
+      "receiver": "floor",
+      "anchor_px": [
+        64,
+        64
+      ],
+      "anchor_uv": [
+        0.5,
+        0.5
+      ],
+      "anchor_meaning": "centre of the scuff cluster",
+      "receiver_contact": "Align this UV point to the selected receiver contact, project onto that receiver plane and clip to its alpha/geometry.",
+      "normal": "receiver normal; floor +Z, wall outward normal",
+      "orientation": "Image right follows the principal scuff/traffic direction on the floor; rotate within the receiving floor plane.",
+      "scale": {
+        "native_image_px": [
+          128,
+          128
+        ],
+        "proposed_application_extent": [
+          0.8,
+          0.6
+        ],
+        "extent_units": "floor [local X cells, local Y cells]",
+        "proposed_extent_ft": [
+          4.0,
+          3.0
+        ],
+        "basis": "New authoring proposal based on visible mark type; native resolution does not establish a physical size. Keep image UVs/anchor and receiver orientation stable when authoring a different extent.",
+        "logical_pixel_scale": 2,
+        "logical_pixel_scale_source": "Existing package_decals.py downsamples source crop to64px then nearest doubles to128px."
+      }
+    },
+    "contact_by_pose": {
+      "receiver_uv": {
+        "image_path": "c-new-props/room-dressing/decals/dirt-scuff.png",
+        "image_dimensions_px": [
+          128,
+          128
+        ],
+        "anchor_px": [
+          64,
+          64
+        ],
+        "provenance": "New reviewed authoring anchor in existing decal texture. Single UV artwork projects through every wall/floor camera; no invented four-view raster exports."
+      }
+    },
+    "footprint": {
+      "surface_extent_only": true,
+      "filled_physical_footprint": []
+    },
+    "height": {
+      "physical_height_steps": 0,
+      "thickness_policy": "Painted surface/material detail only, no raised solid volume."
+    },
+    "blocking": {
+      "physical_solids": [],
+      "gameplay_effects": []
+    },
+    "sources": [
+      {
+        "path": "c-new-props/room-dressing/decals/dirt-scuff.png",
+        "sha256": "8eedc967d8f6e74e012a3f1173e4b5d40ee7ccf4dd0ff98a8f80b30fb672dd17",
+        "kind": "existing_decal_art"
+      },
+      {
+        "path": "c-new-props/room-dressing/decals.json",
+        "sha256": "3944285ed551d223513f149a451d9f70f84a01318b95f1f7e1977716f35edf1d",
+        "kind": "existing_receiver_material_registration"
+      }
+    ],
+    "preserved_metadata": {
+      "path": "c-new-props/room-dressing/decals.json#dirt-scuff",
+      "receiver": "floor",
+      "opacity_baked": 0.6,
+      "material_compatibility": [
+        "wood",
+        "stone",
+        "plaster"
+      ],
+      "projection": "flat UV decal; project onto receiver plane then clip to receiver alpha",
+      "navigation_effect": false
+    },
+    "evidence": {
+      "pixels_inspected": true,
+      "alpha_bbox_px": [
+        12,
+        32,
+        118,
+        112
+      ],
+      "view_sheet": "data-authoring-2026-10-09/evidence/decals-existing-art.png",
+      "receiver_confidence": "high, exact existing decals.json receiver",
+      "material_confidence": "medium, visible colour/shape and existing naming",
+      "anchor_and_extent_confidence": "medium, explicit new content proposals, not vendor measurements"
+    },
+    "notes": [
+      "Baked source alpha already incorporates 0.6 opacity; preserve RGBA. No movement, damage, slippery surface, moss growth, structural crack or light behaviour is authored."
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/room-dressing/decals/dirt-scuff.png": "art/media/environment/library/props/room-dressing/decals/dirt-scuff.png"
+  }
+}

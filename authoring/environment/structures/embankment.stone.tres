@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationStructure" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/structure.gd" id="1_8563b"]
+
+[resource]
+script = ExtResource("1_8563b")
+structure = "embankment"
+material = "stone"
+straight = "terrain.cliff"
+corner = "terrain.cliff.corner"
+corner_faces = Dictionary[String, PackedStringArray]({
+"e": PackedStringArray("east", "south"),
+"n": PackedStringArray("south", "west"),
+"s": PackedStringArray("north", "east"),
+"w": PackedStringArray("west", "north")
+})
+corner_turn = "with_quarter"
+height_steps = 2
+cutaway = false
+two_sided_light = false
+status = "stand_in"
+notes = "Drawn with the earth cliff pieces: the game ignores the server material for cliffs and embankments."

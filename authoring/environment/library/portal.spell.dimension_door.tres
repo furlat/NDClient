@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_cloo2"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_t7efu"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_bxt35"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_vkbe0"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_gj5eq"]
+
+[resource]
+script = ExtResource("3_bxt35")
+id = "portal.spell.dimension_door"
+kind = "portal"
+views = PackedStringArray()
+art = PackedStringArray("portal.spell.dimension_door")
+status = "partial"
+notes = "Dimension Door's back/front portal pages (old catalog/portals.json); for the abilities source to use. Not drawn."

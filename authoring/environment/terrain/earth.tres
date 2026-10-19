@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="PresentationTerrain" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="1_fmtgk"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain.gd" id="2_ppy1m"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain_slope.gd" id="3_i37ht"]
+
+[sub_resource type="Resource" id="footstep"]
+script = ExtResource("1_fmtgk")
+cue = "footstep"
+at = "body.source_frame"
+
+[sub_resource type="Resource" id="slopes_0"]
+script = ExtResource("3_i37ht")
+art = "terrain.stairs"
+rise_steps = 2
+contacts = Dictionary[String, PackedVector2Array]({
+"e": PackedVector2Array(160, 224, 96, 128, 32, 32),
+"n": PackedVector2Array(160, 192, 96, 160, 32, 128),
+"s": PackedVector2Array(96, 224, 160, 128, 224, 32),
+"w": PackedVector2Array(96, 192, 160, 160, 224, 128)
+})
+support_offsets = Array[Vector3i]([Vector3i(0, 0, 0), Vector3i(-1, 0, 1), Vector3i(-2, 0, 2)])
+status = "partial"
+notes = "Earth stairs art (ground-g17) from the old terrain_stairs block; only the workshop draws it. The game maps no server surface_kind to it yet."
+
+[sub_resource type="Resource" id="slopes_1"]
+script = ExtResource("3_i37ht")
+kind = "ramp"
+notes = "Server surface_kind ramp with slope_axis; no art."
+
+[resource]
+script = ExtResource("2_ppy1m")
+material = "earth"
+floor = "terrain.earth"
+variants = PackedStringArray()
+footstep = SubResource("footstep")
+slopes = Array[ExtResource("3_i37ht")]([SubResource("slopes_0"), SubResource("slopes_1")])
+status = "ready"

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7jhcv"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_3620h"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_i6s4m"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_fffxp"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_5dsjr"]
+
+[resource]
+script = ExtResource("3_i6s4m")
+id = "modified.recovered.fireplace"
+kind = "fireplace"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("modified.recovered.fireplace")
+catalogue_group = "B"
+label = "FirePlace"
+status = "partial"
+notes = "Catalogue status: Reviewed artwork. Animated. Native ids: environment.furniture.cold_fire_pit. Art and geometry are in the source; no server id uses it yet."

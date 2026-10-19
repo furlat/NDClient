@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_241lu"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_a3n0m"]
+
+[resource]
+script = ExtResource("2_a3n0m")
+id = "created.decal.wall-crack"
+source_kind = "decal"
+coverage = "footprint"
+art = PackedStringArray("created.decal.wall-crack")
+legacy = "measured/environment/source-records/decals/created.decal.wall-crack.json"
+status = "partial"
+notes = "Decal art on the parent surface's depth and normals; the game does not draw decals."

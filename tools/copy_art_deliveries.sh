@@ -46,6 +46,8 @@ copy "$CAT/authored-creature-geometry-2026-10-12/authoring" "$ART/geometry/creat
 # Environment receiving normals (quality pass) and the light cookie.
 copy "$CAT/environment-normal-quality-2026-10-12/source-render" "$ART/geometry/environment-quality/source-render"
 copy "$CAT/environment-normal-quality-2026-10-12" "$ART/geometry/environment-quality" quality.json /LEV:1
+# The inferred receiving packets the selection also names (stone and wood floors among them).
+copy "$CAT/environment-normal-quality-2026-10-12/inferred" "$ART/geometry/environment-quality/inferred" "quality-*.png"
 copy "$DOCS/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures" "$ART/lighting" T_basic1_vfx.PNG /LEV:1
 
 # Icons and portraits delivered on 18 October. The delivery ships its runtime

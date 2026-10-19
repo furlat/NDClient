@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_wlem5"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_wf4ux"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_6ysu5"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_gmqaf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_exbyf"]
+
+[sub_resource type="Resource" id="hit_masks_e"]
+script = ExtResource("1_wlem5")
+path = "art/media/environment/windows/window.a5.insert.selection.png"
+rect = Rect2i(0, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="hit_masks_s"]
+script = ExtResource("1_wlem5")
+path = "art/media/environment/windows/window.a5.insert.selection.png"
+rect = Rect2i(320, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="hit_masks_w"]
+script = ExtResource("1_wlem5")
+path = "art/media/environment/windows/window.a5.insert.selection.png"
+rect = Rect2i(640, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="hit_masks_n"]
+script = ExtResource("1_wlem5")
+path = "art/media/environment/windows/window.a5.insert.selection.png"
+rect = Rect2i(960, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="parts_0"]
+script = ExtResource("2_wf4ux")
+role = "wall"
+other = "environment.window.fantasy_a5.wall"
+omit_with_destroyed_parent = true
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_gmqaf")
+bank = "window.a5.insert.intact"
+
+[resource]
+script = ExtResource("3_6ysu5")
+id = "environment.window.fantasy_a5.insert"
+kind = "window_insert"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_gmqaf")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "window.a5.insert.break"
+})
+parts = Array[ExtResource("2_wf4ux")]([SubResource("parts_0")])
+hit_masks = Dictionary[String, ExtResource("1_wlem5")]({
+"e": SubResource("hit_masks_e"),
+"n": SubResource("hit_masks_n"),
+"s": SubResource("hit_masks_s"),
+"w": SubResource("hit_masks_w")
+})
+art = PackedStringArray()
+status = "ready"

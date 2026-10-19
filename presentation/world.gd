@@ -6,8 +6,8 @@ static func cell_key(position: Array) -> String:
     return "%d,%d" % [position[0],position[1]]
 
 static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
-    var world = Catalog.read_file("world.json",cache)
-    var index = Catalog.read_file("environment/index.json",cache)
+    var world = Catalog.environment_world(cache)
+    var index = Catalog.environment_index(cache)
     var senses: Dictionary = state.get("senses",{}) if state.get("senses") != null else {}
     var result: Array = []
     var missing: Array = []
@@ -36,7 +36,7 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
                 row.outcome = item.destruction_outcome
             row.merge({"kind":"door","asset":item.item_id,"state":"open."+swing if opened else "closed"})
         elif index.props.has(item.item_id):
-            var owner = Catalog.read_file(index.props[item.item_id],cache)
+            var owner = index.props[item.item_id]
             # Prop owners name the backend field and use its JSON value as the
             # bank key (for example is_open -> "false" / "true" for chests).
             var mode := "default"
@@ -45,10 +45,11 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
                 if value != null: mode = JSON.stringify(value) if value is bool else str(value)
             row.merge({"kind":"prop","asset":item.item_id,"state":mode})
         elif index.traps.has(item.item_id):
-            row.merge({"kind":"trap","asset":item.item_id,"state":"active" if item.get("is_engaged",false) else "ready"})
+            row.merge({"kind":"trap","asset":item.item_id,"state":"activated" if item.get("is_engaged",false) else "ready"})
         elif item.get("boundary_structure") != null:
             var structure: Dictionary = item.boundary_structure
-            if structure.structure in ["wall","retaining_wall"] and world.has(structure.material+"_wall_straight"):
+            # Doors and fences without art of their own draw the material's wall pieces (environment source stand-ins).
+            if structure.structure in ["wall","retaining_wall","door","fence"] and world.has(structure.material+"_wall_straight"):
                 row.merge({"kind":"wall","material":structure.material,"top_height_steps":place.top_height_steps})
             elif structure.structure in ["cliff","embankment"]:
                 row.merge({"kind":"cliff","material":structure.material,"top_height_steps":place.top_height_steps})
@@ -109,7 +110,7 @@ static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
     retained.ids = ids
     if changed or not retained.has("result"):
         if retained.get("walls",[])!=walls:
-            var joined = join_walls(walls,Catalog.read_file("world.json",cache))
+            var joined = join_walls(walls,Catalog.environment_world(cache))
             var assembly = {}
             for row in walls: assembly[row.id] = {}
             for row in joined: assembly[row.id] = row
@@ -186,7 +187,7 @@ static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictiona
         for id in base.lit_candidates:
             if bool(base.lit_candidates[id])!=bool(senses.get("objects",{}).get(id,{}).get("visual",false)):
                 object_keys[id] = true
-    var world: Dictionary = Catalog.read_file("world.json",cache)
+    var world: Dictionary = Catalog.environment_world(cache)
     var affected_walls = {}; var affected_boundaries = {}; var visual_objects = {}
     for key in tile_keys:
         var old: Dictionary = {} if full else base.tile_rows.get(key,{})
@@ -423,13 +424,13 @@ static func update_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
 static func _boundary_cells(object: Dictionary) -> Array:
     var direction: Variant = object.placement.get("boundary_direction")
     if object.item.get("supported_by_uuid")!=null or object.item.get("boundary_structure")==null or direction==null: return []
-    var offset: Array = {"north":[0,-1],"south":[0,1],"east":[1,0],"west":[-1,0]}[direction]
+    var offset: Array = {"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}[direction]
     var position: Array = object.placement.position
     return [cell_key(position),cell_key([position[0]+offset[0],position[1]+offset[1]])]
 
 static func boundary_index(state: Dictionary) -> Dictionary:
     var result = {}
-    var directions = {"north":[0,-1],"south":[0,1],"east":[1,0],"west":[-1,0]}
+    var directions = {"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}
     for id in state.get("objects",{}):
         var object: Dictionary = state.objects[id]
         var direction: Variant = object.placement.get("boundary_direction")
@@ -510,7 +511,7 @@ static func visibility(state: Dictionary) -> Dictionary:
     var result = {}
     for tile in state.get("tiles",{}).values():
         result[tile.tile_uuid] = visible.has(cell_key(tile.position))
-    var directions = {"north":[0,-1],"south":[0,1],"east":[1,0],"west":[-1,0]}
+    var directions = {"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}
     for id in state.get("objects",{}):
         var object: Dictionary = state.objects[id]
         var current: bool = senses.get("objects",{}).get(id,{}).get("visual",false)

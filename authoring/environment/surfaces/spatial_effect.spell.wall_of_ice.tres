@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_6cw5m"]
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="2_l7bgo"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="3_xeiec"]
+
+[sub_resource type="Resource" id="lasting"]
+script = ExtResource("1_6cw5m")
+clip = "wall-native/ice_dome_surface_breakup_native/lifecycle"
+selection = "ice_dome_native"
+role = "sustain"
+at = "owner_start"
+attachment = "area"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[resource]
+script = ExtResource("3_xeiec")
+id = "spatial_effect.spell.wall_of_ice"
+layer = "field"
+lasting = SubResource("lasting")
+art = PackedStringArray()
+status = "partial"
+notes = "Art or a Factory scenario exists; the game does not draw it."

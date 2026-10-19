@@ -112,9 +112,7 @@ static func row_packet(row:Dictionary,quarter:int,camera_basis:Basis,cache:Dicti
         var variant:Dictionary=variants[index]
         var record:Dictionary=records[index]
         var role:String=variant.get("sort_role",variant.kind if variant.kind in ["terrain","wall","cliff"] else "body")
-        var shadow:bool=not variant.has("source_sprite")
-        if variant.has("source_sprite"):
-            shadow=record.get("roles",[]).any(func(part):return part.role=="ground_shadow") or Catalog.break_duration(variant,cache)>0
+        var shadow:=true
         var layers:Array=[];var base:int=int(variant.get("layer",0))*10
         if shadow:layers.append(["shadow",base,0])
         if variant.kind=="door":layers.append([role,base,3]);layers.append([role,base+1,2])
@@ -123,7 +121,7 @@ static func row_packet(row:Dictionary,quarter:int,camera_basis:Basis,cache:Dicti
             var selected:Dictionary=frames[index] if layer[2]==2 else record
             var descriptor:Dictionary=describe(variant,selected,layer[2],quarter,camera_basis,source_depth,source_normals)
             var entry:Dictionary={"id":variant.id+":"+str(layer[1])+":"+layer[0],"placement":variant,"role":layer[0],
-                "layer":layer[1],"source_role":layer[2],"mobile":variant.has("break_owner"),"descriptor":descriptor}
+                "layer":layer[1],"source_role":layer[2],"mobile":false,"descriptor":descriptor}
             if variant.kind in ["wall","cliff"]:
                 entry.wall_source=source;entry.wall_variant="joined" if variant.has("wall_members") else variant.id
                 entry.wall_source_visible=descriptor.visible;entry.id+=":"+entry.wall_variant

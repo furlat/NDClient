@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_d0rw6"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_0cd3g"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_5h14t"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_uj5cm"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_hmj6g"]
+
+[resource]
+script = ExtResource("3_5h14t")
+id = "fantasy.roof.c1"
+kind = "roof"
+views = PackedStringArray("e", "n", "s", "w")
+art = PackedStringArray("fantasy.roof.c1")
+catalogue_group = "A"
+label = "Roof C1"
+status = "partial"
+notes = "Catalogue status: Vendor original. Art and geometry are in the source; no server id uses it yet."

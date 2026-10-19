@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_5s3lh"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_ve2xp"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_8inil"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_ve2xp")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_5s3lh")
+container = "atlas"
+files = PackedStringArray("art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/tripwire/256x256-000.png")
+cell = Vector2i(256, 256)
+frames = 12
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/trap-workshop.tripwire.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_8inil")
+id = "trap-workshop.tripwire"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("trap-workshop.tripwire.e.0", "trap-workshop.tripwire.e.1", "trap-workshop.tripwire.e.10", "trap-workshop.tripwire.e.11", "trap-workshop.tripwire.e.2", "trap-workshop.tripwire.e.3", "trap-workshop.tripwire.e.4", "trap-workshop.tripwire.e.5", "trap-workshop.tripwire.e.6", "trap-workshop.tripwire.e.7", "trap-workshop.tripwire.e.8", "trap-workshop.tripwire.e.9", "trap-workshop.tripwire.n.0", "trap-workshop.tripwire.n.1", "trap-workshop.tripwire.n.10", "trap-workshop.tripwire.n.11", "trap-workshop.tripwire.n.2", "trap-workshop.tripwire.n.3", "trap-workshop.tripwire.n.4", "trap-workshop.tripwire.n.5", "trap-workshop.tripwire.n.6", "trap-workshop.tripwire.n.7", "trap-workshop.tripwire.n.8", "trap-workshop.tripwire.n.9", "trap-workshop.tripwire.s.0", "trap-workshop.tripwire.s.1", "trap-workshop.tripwire.s.10", "trap-workshop.tripwire.s.11", "trap-workshop.tripwire.s.2", "trap-workshop.tripwire.s.3", "trap-workshop.tripwire.s.4", "trap-workshop.tripwire.s.5", "trap-workshop.tripwire.s.6", "trap-workshop.tripwire.s.7", "trap-workshop.tripwire.s.8", "trap-workshop.tripwire.s.9", "trap-workshop.tripwire.w.0", "trap-workshop.tripwire.w.1", "trap-workshop.tripwire.w.10", "trap-workshop.tripwire.w.11", "trap-workshop.tripwire.w.2", "trap-workshop.tripwire.w.3", "trap-workshop.tripwire.w.4", "trap-workshop.tripwire.w.5", "trap-workshop.tripwire.w.6", "trap-workshop.tripwire.w.7", "trap-workshop.tripwire.w.8", "trap-workshop.tripwire.w.9")

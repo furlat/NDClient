@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationStructure" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/structure.gd" id="1_p51j3"]
+
+[resource]
+script = ExtResource("1_p51j3")
+structure = "retaining_wall"
+material = "metal"
+straight = "stone.wall.straight"
+corner = "stone.wall.corner"
+corner_faces = Dictionary[String, PackedStringArray]({
+"e": PackedStringArray("north", "east"),
+"n": PackedStringArray("west", "north"),
+"s": PackedStringArray("east", "south"),
+"w": PackedStringArray("south", "west")
+})
+destruction = "wall.fantasy.debris.wood_stone"
+status = "stand_in"
+notes = "No metal wall art: drawn with the stone wall pieces."

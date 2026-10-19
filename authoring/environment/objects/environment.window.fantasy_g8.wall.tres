@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_g3elv"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_5rfmm"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_v7q3w"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_n8or0"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_8dsj1"]
+
+[sub_resource type="Resource" id="aperture_masks_e"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.aperture.png"
+rect = Rect2i(0, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="aperture_masks_s"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.aperture.png"
+rect = Rect2i(320, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="aperture_masks_w"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.aperture.png"
+rect = Rect2i(640, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="aperture_masks_n"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.aperture.png"
+rect = Rect2i(960, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="hit_masks_e"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.wall.selection.png"
+rect = Rect2i(0, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="hit_masks_s"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.wall.selection.png"
+rect = Rect2i(320, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="hit_masks_w"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.wall.selection.png"
+rect = Rect2i(640, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="hit_masks_n"]
+script = ExtResource("1_g3elv")
+path = "art/media/environment/windows/window.g8.wall.selection.png"
+rect = Rect2i(960, 0, 320, 320)
+native_size = Vector2i(320, 320)
+
+[sub_resource type="Resource" id="parts_0"]
+script = ExtResource("2_5rfmm")
+role = "insert"
+other = "environment.window.fantasy_g8.insert"
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_n8or0")
+bank = "window.g8.wall.intact"
+
+[resource]
+script = ExtResource("3_v7q3w")
+id = "environment.window.fantasy_g8.wall"
+kind = "window"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_n8or0")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "window.g8.wall.break"
+})
+destructions_without_attachments = Dictionary[String, String]({
+"default": "window.g8.wall.after_insert"
+})
+parts = Array[ExtResource("2_5rfmm")]([SubResource("parts_0")])
+hit_masks = Dictionary[String, ExtResource("1_g3elv")]({
+"e": SubResource("hit_masks_e"),
+"n": SubResource("hit_masks_n"),
+"s": SubResource("hit_masks_s"),
+"w": SubResource("hit_masks_w")
+})
+aperture_masks = Dictionary[String, ExtResource("1_g3elv")]({
+"e": SubResource("aperture_masks_e"),
+"n": SubResource("aperture_masks_n"),
+"s": SubResource("aperture_masks_s"),
+"w": SubResource("aperture_masks_w")
+})
+occludes_actor_face = true
+passage_point = Vector3(0.45, 0, 0.9609)
+art = PackedStringArray()
+status = "ready"

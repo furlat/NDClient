@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ma3ko"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_ljthv"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_yqxwb"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_1211m"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_c1usx"]
+
+[resource]
+script = ExtResource("3_yqxwb")
+id = "generated-wall-shelves"
+kind = "interiors"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("generated-wall-shelves")
+catalogue_group = "C"
+label = "Generated wall-shelves"
+status = "partial"
+notes = "Catalogue status: Reviewed artwork. Animated. Art and geometry are in the source; no server id uses it yet."

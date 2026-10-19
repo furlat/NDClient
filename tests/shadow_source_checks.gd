@@ -31,7 +31,7 @@ func run()->void:
     var cookie=Image.load_from_file(Lighting.DEFAULT_COOKIE)
     lighting.cookie=ImageTexture.create_from_image(cookie)
     lighting.cookie.set_meta(&"cookie_image",cookie)
-    var assets=Catalog.read_file("assets.json",cache)
+    var assets=Catalog.environment_resources(cache)
     var total=0.0
     for frame in assets.animations["torch.flame"].frames:
         var resource:Dictionary=assets.resources[frame]

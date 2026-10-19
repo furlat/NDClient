@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_827it"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_3j22k"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_h8cv7"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_xhnss"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_keaj4"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_xhnss")
+images = Dictionary[String, String]({
+"e": "torch.body",
+"n": "torch.body",
+"s": "torch.body",
+"w": "torch.body"
+})
+
+[resource]
+script = ExtResource("3_h8cv7")
+id = "environment.standing_torch"
+kind = "torch"
+views = PackedStringArray("e", "n", "s", "w")
+states = Dictionary[String, ExtResource("4_xhnss")]({
+"default": SubResource("states_default")
+})
+light = "torch"
+flame = "torch.flame"
+art = PackedStringArray()
+status = "ready"

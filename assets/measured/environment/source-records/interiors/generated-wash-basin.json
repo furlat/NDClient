@@ -1,0 +1,784 @@
+{
+  "section": "interior",
+  "record": {
+    "catalog_id": "generated-wash-basin",
+    "intended_role": "Small floor wash bowl",
+    "description": "Clay basin with a blue-grey water surface. Existing source manifest explicitly uses floor placement; countertop placement is not assumed.",
+    "mounting": {
+      "receiver": "floor",
+      "anchor_source_xyz": [
+        0,
+        0,
+        0
+      ],
+      "anchor_local_east_xy_z_steps": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "align": "Align placement_contact_px in chosen native view to the projected receiver contact; source pivot remains the art registration.",
+      "floor_contact": "source origin floor plane; geometric mesh clearance is retained below",
+      "default_source_mount_height_steps": 0.0,
+      "default_source_mount_height_status": "measured source embedding, not a separate room-height choice",
+      "world_geometry_transform": "worldPoint = receiverAnchor + T(sourcePoint - anchor_source_xyz), T recorded under units.source_model_conversion. Footprints/heights/solid_parts use source geometric origin; subtract anchor offset for placement.",
+      "sprite_alignment": "screenPoint(u) = project(receiverAnchor) + pixelScale*(u - placement_contact_px); with preserved pivot p, sprite.position = project(receiverAnchor) + pixelScale*(p - placement_contact_px).",
+      "height_interval_relative_to_mount_steps": [
+        0.018704,
+        0.215717
+      ],
+      "source_mesh_minimum_clearance_steps": 0.018704
+    },
+    "contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-e.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          192.000031,
+          271.999989
+        ],
+        "contacts_px": {
+          "ground": [
+            192.000031,
+            271.999989
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "s": {
+        "image_path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-s.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          191.999962,
+          271.999989
+        ],
+        "contacts_px": {
+          "ground": [
+            191.999962,
+            271.999989
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "w": {
+        "image_path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-w.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          192.000015,
+          271.999935
+        ],
+        "contacts_px": {
+          "ground": [
+            192.000015,
+            271.999935
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "n": {
+        "image_path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-n.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          191.999985,
+          271.999935
+        ],
+        "contacts_px": {
+          "ground": [
+            191.999985,
+            271.999935
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      }
+    },
+    "static_contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/generated-interiors/wash-basin/e.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            128.000031,
+            207.999989
+          ]
+        }
+      },
+      "s": {
+        "image_path": "c-new-props/generated-interiors/wash-basin/s.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            127.999962,
+            207.999989
+          ]
+        }
+      },
+      "w": {
+        "image_path": "c-new-props/generated-interiors/wash-basin/w.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            128.000015,
+            207.999935
+          ]
+        }
+      },
+      "n": {
+        "image_path": "c-new-props/generated-interiors/wash-basin/n.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            127.999985,
+            207.999935
+          ]
+        }
+      }
+    },
+    "footprint": {
+      "coordinate_origin": "Preserved source geometric origin (0,0,0); mounting anchor has separate XYZ below. Rotate footprint with family orientation, never camera pose.",
+      "bounds_xy_cells": {
+        "min": [
+          -0.154924,
+          -0.162897
+        ],
+        "max": [
+          0.154924,
+          0.162897
+        ]
+      },
+      "dimensions_xy_cells": [
+        0.309848,
+        0.325794
+      ],
+      "polygon_xy_cells": [
+        [
+          -0.154924,
+          0.050338
+        ],
+        [
+          -0.095748,
+          0.131786
+        ],
+        [
+          0.0,
+          0.162897
+        ],
+        [
+          0.095748,
+          0.131786
+        ],
+        [
+          0.154924,
+          0.050338
+        ],
+        [
+          0.154924,
+          -0.050338
+        ],
+        [
+          0.095748,
+          -0.131786
+        ],
+        [
+          0.0,
+          -0.162897
+        ],
+        [
+          -0.095748,
+          -0.131786
+        ],
+        [
+          -0.154924,
+          -0.050338
+        ]
+      ],
+      "meaning": "Convex enclosure of actual rest-mesh XY projection, for extent/placement fit only. Blocking uses component solids; this enclosure is not automatically a filled collision region.",
+      "provenance": "measured preserved source meshes, converted by recorded camera registration"
+    },
+    "height": {
+      "coordinate_origin": "All heights below are relative to preserved source geometric origin, before placement; mounting includes its own source anchor height to subtract when attached elsewhere.",
+      "base_z_steps": 0.018704,
+      "top_z_steps": 0.215717,
+      "span_steps": 0.197013,
+      "top_height_ft_from_source_origin": 1.078585,
+      "provenance": "measured source rest-model bounds, render-equivalent registration conversion"
+    },
+    "blocking": {
+      "coordinate_origin": "Component XY polygons and Z intervals use the source geometric origin; apply the same mounting.world_geometry_transform to every component.",
+      "physical_solids": "Individual wooden/iron/ceramic components at their actual heights; water is excluded.",
+      "blocks_floor_as_filled_cell": false,
+      "floor_footprint_policy": "continuous occupied solids, not a full-cell assignment",
+      "solid_parts": [
+        {
+          "source_mesh": "basin",
+          "materials": [
+            "clay"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.154924,
+              0.050338
+            ],
+            [
+              -0.095748,
+              0.131786
+            ],
+            [
+              0.0,
+              0.162897
+            ],
+            [
+              0.095748,
+              0.131786
+            ],
+            [
+              0.154924,
+              0.050338
+            ],
+            [
+              0.154924,
+              -0.050338
+            ],
+            [
+              0.095748,
+              -0.131786
+            ],
+            [
+              0.0,
+              -0.162897
+            ],
+            [
+              -0.095748,
+              -0.131786
+            ],
+            [
+              -0.154924,
+              -0.050338
+            ]
+          ],
+          "z_interval_steps": [
+            0.018704,
+            0.205742
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/wash-basin/wash-basin.blend#basin",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        }
+      ],
+      "status": "authored physical interpretation using measured component bounds; runtime collision/navigation selection is separate",
+      "basin_interpretation": "Thin ceramic/clay shell intended by basin role; original static Blender uses a capped cylindrical proxy. Exterior dimensions are measured, interior cavity/solid-shell thickness is an estimate and must not be inferred from water pixels.",
+      "solid_shell_estimate": {
+        "wall_thickness_cells": 0.02,
+        "bottom_thickness_steps": 0.02,
+        "confidence": "low, new physical content estimate; no source mesh modification"
+      },
+      "floor_contact_polygons_xy_cells": [
+        [
+          [
+            -0.154924,
+            0.050338
+          ],
+          [
+            -0.095748,
+            0.131786
+          ],
+          [
+            0.0,
+            0.162897
+          ],
+          [
+            0.095748,
+            0.131786
+          ],
+          [
+            0.154924,
+            0.050338
+          ],
+          [
+            0.154924,
+            -0.050338
+          ],
+          [
+            0.095748,
+            -0.131786
+          ],
+          [
+            0.0,
+            -0.162897
+          ],
+          [
+            -0.095748,
+            -0.131786
+          ],
+          [
+            -0.154924,
+            -0.050338
+          ]
+        ]
+      ]
+    },
+    "sources": [
+      {
+        "path": "c-new-props/generated-interiors/wash-basin/wash-basin.blend",
+        "sha256": "dc6b5b14d64d757fc5ba703e07a87f9568e3550160d5c29f6a44325a371e1cd2",
+        "kind": "preserved_Blender_rest_geometry"
+      },
+      {
+        "path": "c-new-props/generated-interiors/manifest.json",
+        "sha256": "428ba878ff9a848f0b7884db32c52b411bb2cf19ccb1b989b4bd9c681ee2ee5b",
+        "kind": "existing_static_registration"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/wash-basin/metadata.json",
+        "sha256": "0d7059aa2dd7a535e3f90a0876d9f8b5c22becd5e63ec1dbeee6bf20db7f5dae",
+        "kind": "existing_animation_metadata"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-e.png",
+        "sha256": "e8fd73a9b06a4d1a811408e93df5714de51593686b38cf09e64ec00548942f7a",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wash-basin/e.png",
+        "sha256": "4081a8a57a0bcf56c67bab9b86be4d6cd025428eee30deb0e6ac2749869f0986",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-s.png",
+        "sha256": "e66e485bce7aa25f1b180474f57c29cd69671837b3416a7a619a57385c973977",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wash-basin/s.png",
+        "sha256": "4d1059fca56ea9df13172445de76ce635cbad0c000193eca04810016207eb549",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-w.png",
+        "sha256": "e82806465348469e974a1f2e593e3d6c4683f5c996f903c4298154dcf101b2a4",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wash-basin/w.png",
+        "sha256": "4081a8a57a0bcf56c67bab9b86be4d6cd025428eee30deb0e6ac2749869f0986",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/wash-basin/sheet-n.png",
+        "sha256": "b34c183bd36e31289bc292d02a886dfc9e07f1412eea911af2a9ee1e4dfa6135",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wash-basin/n.png",
+        "sha256": "4d1059fca56ea9df13172445de76ce635cbad0c000193eca04810016207eb549",
+        "kind": "existing_static_art"
+      }
+    ],
+    "preserved_metadata": {
+      "static_manifest": "c-new-props/generated-interiors/manifest.json#wash-basin",
+      "source_static_pivot_px": [
+        128,
+        208
+      ],
+      "catalog_metadata_path": "c-new-props/decor/native-candidates-v5/wash-basin/metadata.json",
+      "catalog_pivot_px": [
+        192,
+        272
+      ],
+      "first_frame_audit": "provenance/first-frame-audit.json",
+      "animation_scope": "Existing clocks, rows, pivots, source frames, candidate/destruction status and bindings remain owned by these existing records."
+    },
+    "evidence": {
+      "geometry": "data-authoring-2026-10-09/evidence/interior-source-geometry.json#wash-basin",
+      "all_four_views_inspected": true,
+      "view_sheet": "data-authoring-2026-10-09/evidence/generated-interiors-four-views.png",
+      "alpha_bbox_measurements": {
+        "e": {
+          "static_alpha_bbox_px": [
+            114,
+            188,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            252,
+            206,
+            278
+          ]
+        },
+        "s": {
+          "static_alpha_bbox_px": [
+            114,
+            188,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            252,
+            206,
+            278
+          ]
+        },
+        "w": {
+          "static_alpha_bbox_px": [
+            114,
+            188,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            252,
+            206,
+            278
+          ]
+        },
+        "n": {
+          "static_alpha_bbox_px": [
+            114,
+            188,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            252,
+            206,
+            278
+          ]
+        }
+      },
+      "source_manifest_receiver": "floor",
+      "source_manifest_footprint_tiles": [
+        1,
+        1
+      ],
+      "source_manifest_footprint_status": "Existing packaging placeholders; concrete measured footprint supplied here.",
+      "camera_basis_static_px": {
+        "e": {
+          "X": [
+            32.324874,
+            16.162452
+          ],
+          "Y": [
+            32.32489,
+            -16.162442
+          ],
+          "Z": [
+            1.5e-05,
+            -39.589726
+          ]
+        },
+        "s": {
+          "X": [
+            32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324883,
+            -16.162442
+          ],
+          "Z": [
+            0.0,
+            -39.589726
+          ]
+        },
+        "w": {
+          "X": [
+            -32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324882,
+            16.162449
+          ],
+          "Z": [
+            0.0,
+            -39.589725
+          ]
+        },
+        "n": {
+          "X": [
+            -32.324883,
+            16.162447
+          ],
+          "Y": [
+            32.32489,
+            16.162449
+          ],
+          "Z": [
+            7e-06,
+            -39.589725
+          ]
+        }
+      },
+      "source_pose_to_engine_geometric_quadrant": {
+        "e": 0,
+        "s": 3,
+        "w": 2,
+        "n": 1
+      },
+      "geometry_confidence": "high for preserved source mesh and source camera registration; this does not certify exact frame0-rest pixel equality.",
+      "semantic_confidence": "medium, artwork/source naming support the authored role.",
+      "blocking_confidence": "medium; basin cavity thickness low/estimated."
+    },
+    "notes": [
+      "Native generated camera labels map geometrically to engine quarters e=0,s=3,w=2,n=1 for the declared local-east XYZ conversion. Direct e/s/w/n to engine quarter0/1/2/3 swaps the two side views. Source rows and current selected bindings are preserved; consumers must use the measured crosswalk for these new profiles."
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-0-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-0.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-0.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-1-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-1.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-1.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-10-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-10.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-10.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-11-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-11.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-11.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-12-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-12.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-12.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-13-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-13.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-13.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-14-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-14.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-14.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-15-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-15.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-15.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-16-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-16.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-16.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-17-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-17.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-17.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-2-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-2.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-2.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-3-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-3.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-3.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-4-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-4.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-4.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-5-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-5.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-5.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-6-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-6.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-6.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-7-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-7.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-7.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-8-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-8.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-8.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-9-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/e-9.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/e-9.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-0-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-0.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-0.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-1-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-1.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-1.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-10-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-10.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-10.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-11-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-11.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-11.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-12-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-12.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-12.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-13-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-13.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-13.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-14-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-14.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-14.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-15-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-15.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-15.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-16-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-16.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-16.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-17-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-17.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-17.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-2-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-2.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-2.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-3-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-3.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-3.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-4-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-4.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-4.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-5-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-5.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-5.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-6-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-6.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-6.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-7-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-7.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-7.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-8-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-8.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-8.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-9-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/n-9.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/n-9.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-0-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-0.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-0.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-1-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-1.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-1.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-10-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-10.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-10.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-11-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-11.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-11.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-12-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-12.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-12.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-13-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-13.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-13.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-14-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-14.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-14.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-15-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-15.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-15.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-16-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-16.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-16.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-17-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-17.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-17.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-2-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-2.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-2.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-3-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-3.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-3.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-4-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-4.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-4.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-5-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-5.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-5.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-6-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-6.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-6.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-7-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-7.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-7.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-8-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-8.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-8.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-9-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/s-9.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/s-9.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/sheet-e.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/sheet-e.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/sheet-n.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/sheet-n.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/sheet-s.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/sheet-s.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/sheet-w.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/sheet-w.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/spritesheet.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/spritesheet.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-0-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-0.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-0.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-1-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-1.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-1.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-10-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-10.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-10.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-11-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-11.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-11.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-12-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-12.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-12.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-13-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-13.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-13.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-14-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-14.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-14.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-15-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-15.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-15.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-16-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-16.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-16.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-17-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-17.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-17.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-2-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-2.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-2.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-3-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-3.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-3.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-4-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-4.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-4.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-5-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-5.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-5.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-6-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-6.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-6.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-7-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-7.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-7.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-8-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-8.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-8.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-9-raw.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/wash-basin/w-9.png": "art/media/environment/library/props/decor/native-candidates-v5/wash-basin/w-9.png"
+  }
+}

@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="PresentationTerrain" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="1_ds04a"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain.gd" id="2_drnim"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain_slope.gd" id="3_dpwlh"]
+
+[sub_resource type="Resource" id="footstep"]
+script = ExtResource("1_ds04a")
+cue = "footstep"
+at = "body.source_frame"
+
+[sub_resource type="Resource" id="slopes_0"]
+script = ExtResource("3_dpwlh")
+notes = "Server surface_kind stairs with slope_axis; no art for this material."
+
+[sub_resource type="Resource" id="slopes_1"]
+script = ExtResource("3_dpwlh")
+kind = "ramp"
+notes = "Server surface_kind ramp with slope_axis; no art."
+
+[resource]
+script = ExtResource("2_drnim")
+material = "water"
+floor = "water.mask"
+variants = PackedStringArray()
+receiving = "flat_plane"
+shader = "water"
+water_look = {
+"alpha_cutoff": 0.493,
+"alpha_depth_strength": 0.222,
+"blend": "one_one_minus_src_alpha",
+"deep_color": [0.07058824, 0.4039216, 0.5921569, 0.5529412],
+"depth_blend_strength": 1.554,
+"detail_influence": 0.648,
+"detail_pan": [0.005, 0.004],
+"normal_pan_a": [0.1, 0.1],
+"normal_pan_b": [1.0, -0.1],
+"normal_scale": 2.0,
+"normal_tiling_multiplier": 1.0,
+"overall_alpha": 0.812,
+"premultiply_output": false,
+"ripple_amount": 0.2,
+"ripple_pan": [0.1, 0.1],
+"ripple_tiling_multiplier": 1.0,
+"shallow_color": [0.06878672, 0.40544975, 0.59119487, 0.6666667],
+"sheen_sharpness": 3.46,
+"sheen_strength": 0.158,
+"tint": [1.0, 1.0, 1.0, 1.0],
+"uv_scale": 1.37,
+"uv_wobble_amount": 0.1
+}
+water_images = Dictionary[String, String]({
+"normal": "water.normal",
+"ripple": "water.ripple"
+})
+footstep = SubResource("footstep")
+slopes = Array[ExtResource("3_dpwlh")]([SubResource("slopes_0"), SubResource("slopes_1")])
+status = "ready"
+notes = "Animated water shader over the mask image. The old world.json terrain value (\"water.unity\") was never read. Dead look values kept for completeness: detail_pan, detail_influence, uv_wobble_amount, normal_pan_a/b, normal_tiling_multiplier, normal_scale, premultiply_output, blend, and the normal image."

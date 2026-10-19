@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ng61a"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_2tr2y"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_aw2fx"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_xj6ur"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_l2vvf"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_xj6ur")
+bank = "prop.content-alchemy-bench.intact"
+
+[resource]
+script = ExtResource("3_aw2fx")
+id = "environment.furniture.alchemy_bench"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_xj6ur")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-alchemy-bench.break"
+})
+art = PackedStringArray()
+status = "ready"

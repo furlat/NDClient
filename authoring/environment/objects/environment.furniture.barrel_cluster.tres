@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_y4lug"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_k8cvi"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_3tywa"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_ehelt"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_1weo5"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_ehelt")
+bank = "prop.interior-barrel-cluster.intact"
+
+[resource]
+script = ExtResource("3_3tywa")
+id = "environment.furniture.barrel_cluster"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_ehelt")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.interior-barrel-cluster.break"
+})
+art = PackedStringArray()
+status = "ready"

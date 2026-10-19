@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_h6w4n"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_pn3a8"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_v3oq4"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_pn3a8")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_h6w4n")
+path = "art/media/environment/props/interior-pottery-jar/intact.png"
+files = PackedStringArray()
+cell = Vector2i(384, 384)
+frames = 1
+fps = 12.0
+directions = "camera4"
+direction_order = PackedStringArray("e", "s", "w", "n")
+scale = 1.0078740157480317
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/prop.interior-pottery-jar.intact.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_v3oq4")
+id = "prop.interior-pottery-jar.intact"
+kind = "bank"
+art = SubResource("art")
+images = PackedStringArray()

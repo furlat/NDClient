@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_fmuyy"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_m83c1"]
+
+[sub_resource type="Resource" id="operations_0"]
+script = ExtResource("1_fmuyy")
+operation = "dry"
+
+[resource]
+script = ExtResource("2_m83c1")
+id = "spatial_effect.spell.simple_toxin"
+operations = Array[ExtResource("1_fmuyy")]([SubResource("operations_0")])
+art = PackedStringArray()
+notes = "No art and no Factory scenario."

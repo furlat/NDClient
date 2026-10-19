@@ -4,9 +4,9 @@ extends SceneTree
 const World = preload("res://presentation/world.gd")
 var checks = 0
 var failures: Array = []
-var cache = {"world.json":{"terrain":{"stone":{},"grass":{}},"props":{},"stone_wall_straight":{},"stone_wall_corner":{},
+var cache = {"res://build/presentation/environment/world.res":{"terrain":{"stone":{},"grass":{}},"props":{},"stone_wall_straight":{},"stone_wall_corner":{},
     "wall_corner_faces":{"ne":["north","east"],"nw":["north","west"],"se":["south","east"],"sw":["south","west"]}},
-    "environment/index.json":{"doors":{},"props":{},"traps":{}}}
+    "res://build/presentation/environment/index.res":{"doors":{},"props":{},"traps":{}}}
 func check(ok: bool, label: String) -> void:
     checks += 1
     if not ok: failures.append(label); print("WORLD_PROJECTION_FAIL ",label)

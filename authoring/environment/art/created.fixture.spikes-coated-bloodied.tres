@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_gloiw"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="2_mg3uh"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_gloiw")
+container = "frames_as_files"
+files = PackedStringArray()
+directions = "camera4"
+direction_order = PackedStringArray()
+measurements = "measured/environment/art/created.fixture.spikes-coated-bloodied.json"
+source = "environment-geometry-production-2026-10-09"
+
+[resource]
+script = ExtResource("2_mg3uh")
+id = "created.fixture.spikes-coated-bloodied"
+kind = "samples"
+art = SubResource("art")
+images = PackedStringArray()

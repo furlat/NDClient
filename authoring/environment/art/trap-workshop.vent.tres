@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_b085w"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_4l43f"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_bjvqi"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_4l43f")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_b085w")
+container = "atlas"
+files = PackedStringArray("art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/vent/256x256-000.png")
+cell = Vector2i(256, 256)
+frames = 12
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/trap-workshop.vent.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_bjvqi")
+id = "trap-workshop.vent"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("trap-workshop.vent.e.0", "trap-workshop.vent.e.1", "trap-workshop.vent.e.10", "trap-workshop.vent.e.11", "trap-workshop.vent.e.2", "trap-workshop.vent.e.3", "trap-workshop.vent.e.4", "trap-workshop.vent.e.5", "trap-workshop.vent.e.6", "trap-workshop.vent.e.7", "trap-workshop.vent.e.8", "trap-workshop.vent.e.9", "trap-workshop.vent.n.0", "trap-workshop.vent.n.1", "trap-workshop.vent.n.10", "trap-workshop.vent.n.11", "trap-workshop.vent.n.2", "trap-workshop.vent.n.3", "trap-workshop.vent.n.4", "trap-workshop.vent.n.5", "trap-workshop.vent.n.6", "trap-workshop.vent.n.7", "trap-workshop.vent.n.8", "trap-workshop.vent.n.9", "trap-workshop.vent.s.0", "trap-workshop.vent.s.1", "trap-workshop.vent.s.10", "trap-workshop.vent.s.11", "trap-workshop.vent.s.2", "trap-workshop.vent.s.3", "trap-workshop.vent.s.4", "trap-workshop.vent.s.5", "trap-workshop.vent.s.6", "trap-workshop.vent.s.7", "trap-workshop.vent.s.8", "trap-workshop.vent.s.9", "trap-workshop.vent.w.0", "trap-workshop.vent.w.1", "trap-workshop.vent.w.10", "trap-workshop.vent.w.11", "trap-workshop.vent.w.2", "trap-workshop.vent.w.3", "trap-workshop.vent.w.4", "trap-workshop.vent.w.5", "trap-workshop.vent.w.6", "trap-workshop.vent.w.7", "trap-workshop.vent.w.8", "trap-workshop.vent.w.9")

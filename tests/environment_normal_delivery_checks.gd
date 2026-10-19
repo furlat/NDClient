@@ -2,7 +2,10 @@ extends "res://tests/native_light_output_checks.gd"
 # Original source registration through Catalog, SpriteSources and the production
 # lit environment sprite (light table receiving, spatial output). The expected
 # path comes directly from the delivery, independently of the normalized manifest.
-const DELIVERY="C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/environment-normal-quality-2026-10-12"
+## The delivery's own selection (the project's copy), keyed by its absolute delivery paths.
+const DELIVERY="res://assets/art/geometry/environment-quality"
+const DELIVERED_MEDIA="C:/Users/tommaso/Documents/Dev/NDClientData/.media/"
+const DELIVERED_QUALITY="C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/environment-normal-quality-2026-10-12/"
 const CAPTURES="res://.captures/environment-normal-delivery"
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 var selection:Dictionary={}
@@ -19,15 +22,15 @@ func prop(asset:String,state:String="default")->Dictionary:
     return {"id":asset,"kind":"prop","asset":asset,"state":state,"position":[0,0],
         "base_height_steps":0,"layer":1,"orientation":"east"}
 
-func library(asset:String)->Dictionary:
-    return {"id":asset,"kind":"library","asset":asset,"position":[0,0],
-        "base_height_steps":0,"layer":0,"orientation":"east","sequence":0}
+func terrain(material:String)->Dictionary:
+    return {"id":material,"kind":"terrain","material":material,"position":[0,0],
+        "base_height_steps":0,"layer":0,"orientation":"east","boundaries":[]}
 
 func fixture(spec:Dictionary,quarter:int)->Dictionary:
     var row:Dictionary=spec.row
     var phase:int=spec.get("phase",0)
     var original:Dictionary=Catalog._environment_source(row,quarter,cache,phase,0.0)
-    var chosen:Dictionary=selection.get(Catalog.media_path(original.normal.region.path),{})
+    var chosen:Dictionary=selection.get(original.normal.region.path,{})
     var expected_path:String=chosen.get("path",original.normal.region.path)
     var probe=SourceProbe.new();root.add_child(probe);probe.hide()
     probe.catalog_cache=cache
@@ -74,7 +77,7 @@ func fixture(spec:Dictionary,quarter:int)->Dictionary:
     var result={"id":label,"material":material,"colour":colour,"visible":1.0,"basis":probe.camera.basis,"mirror":false,"family":"environment",
         "normal_changes":normal_changes,"expected_path":expected_path,"original_path":original.normal.region.path,
         "selected":not chosen.is_empty(),"retained":spec.retained}
-    var asset_key:String="library/"+row.asset if row.kind=="library" else "bank/"+original.bank
+    var asset_key:String="terrain/"+row.material if row.kind=="terrain" else "bank/"+original.bank
     var disposition:Dictionary=dispositions.get(asset_key,{})
     source_rows.append({"id":label,"selected_path":expected_path,"original_path":original.normal.region.path,
         "label":chosen.get("label","retained original"),"qualification":chosen.get("qualification",disposition.get("reason","")),
@@ -124,16 +127,18 @@ func unlit_case(value:Dictionary)->void:
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     var delivery:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(DELIVERY+"/quality.json"))
-    selection=delivery.normals;dispositions=delivery.assets
+    dispositions=delivery.assets
+    for key in delivery.normals:
+        var choice:Dictionary=delivery.normals[key].duplicate()
+        choice.path=DELIVERY+"/"+choice.path.trim_prefix(DELIVERED_QUALITY)
+        selection["res://assets/art/media/"+key.trim_prefix(DELIVERED_MEDIA)]=choice
     var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE)
     white=ImageTexture.create_from_image(one);cookie=light_cookie()
     DirAccess.make_dir_recursive_absolute(CAPTURES)
     var specs:Array=[
         {"id":"desk","row":prop("environment.furniture.writing_desk"),"retained":false},
-        {"id":"inferred-a2","row":library("fantasy.ground.a2"),"retained":false},
-        {"id":"soil-a1","row":library("fantasy.ground.a1"),"retained":true},
-        {"id":"ramp-g17","row":library("fantasy.ground.g17"),"retained":true},
-        {"id":"cracks-i5","row":library("fantasy.ground.i5"),"retained":true},
+        {"id":"inferred-stone","row":terrain("stone"),"retained":false},
+        {"id":"inferred-wood","row":terrain("wood"),"retained":false},
         {"id":"chest-original","row":prop("environment.storage_chest","false"),"retained":true},
         {"id":"crate-break-first-retained","row":prop("environment.blocker.crate"),"phase":1,"retained":true},
         {"id":"desk-break-first","row":prop("environment.furniture.writing_desk"),"phase":1,"retained":false},

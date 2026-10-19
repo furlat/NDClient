@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_bb5q0"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_kl7qo"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_8qs3w"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_q4s47"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_tkytl"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_q4s47")
+bank = "prop.content-unlit-candlesticks.intact"
+
+[resource]
+script = ExtResource("3_8qs3w")
+id = "environment.furniture.unlit_candlesticks"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_q4s47")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-unlit-candlesticks.break"
+})
+art = PackedStringArray()
+status = "ready"

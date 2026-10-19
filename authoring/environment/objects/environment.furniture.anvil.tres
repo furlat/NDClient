@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_6rw46"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_yndk4"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_3i6pr"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_lkcao"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_87p8k"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_lkcao")
+bank = "prop.content-anvil.intact"
+
+[resource]
+script = ExtResource("3_3i6pr")
+id = "environment.furniture.anvil"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_lkcao")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-anvil.break"
+})
+art = PackedStringArray()
+status = "ready"

@@ -76,12 +76,7 @@ func v4(values: Array) -> Vector4:
 
 func add_environment_entries(row: Dictionary) -> void:
     var role: String = row.get("sort_role", row.kind if row.kind in ["terrain", "wall", "cliff"] else "body")
-    var separate_shadow = not row.has("source_sprite")
-    if row.has("source_sprite"):
-        var record = record_for(row)
-        separate_shadow = record.get("roles",[]).any(func(part):return part.role=="ground_shadow") or Catalog.break_duration(row,catalog_cache)>0
-    if separate_shadow:
-        add_entry(row, "shadow", int(row.get("layer", 0)) * 10, ENVIRONMENT_SHADER, 0)
+    add_entry(row, "shadow", int(row.get("layer", 0)) * 10, ENVIRONMENT_SHADER, 0)
     if row.kind == "door":
         add_entry(row,role,int(row.get("layer",0))*10,ENVIRONMENT_SHADER,3)
         add_entry(row,role,int(row.get("layer",0))*10+1,ENVIRONMENT_SHADER,2)
@@ -94,13 +89,7 @@ func record_for(row: Dictionary) -> Dictionary:
         var playback: Node = destruction[row.id]
         phase = playback.phase
         time = playback.sample_seconds
-    var source_row = row
-    if row.get("attachment_absent",false): source_row = row
-    var record = Catalog.environment(source_row, quarter, catalog_cache, phase, time)
-    if row.has("parent_id") and destruction.has(row.parent_id) and Catalog.owner_for(row,catalog_cache).get("omit_with_destroyed_parent",false):
-        record = record.duplicate()
-        record.hidden = true
-    return record
+    return Catalog.environment(row, quarter, catalog_cache, phase, time)
 
 ## The shader a sprite of this kind uses here. The workshop substitutes its
 ## 3D-lit variants; the game uses the light-table shaders as given.
@@ -119,7 +108,7 @@ func add_entry(row: Dictionary, role: String, layer: int, shader: Shader, source
     (sprite_parent if sprite_parent != null and row.kind != "actor" else self).add_child(node)
     entries.append({"id": row.id + ":" + str(layer) + ":" + role, "placement": row, "role": role,
         "layer": layer, "source_role": source_role, "node": node, "material": material, "screen_rect": Rect2(),
-        "mobile":row.kind=="actor" or row.has("break_owner")})
+        "mobile":row.kind=="actor"})
     SourceMaterial.initialize(entries.back())
     if row.kind == "actor": actor_entries.append(entries.back())
 
@@ -188,7 +177,7 @@ func set_environment(entry: Dictionary, _rotation: Basis) -> void:
     var record = Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role == 2 else record_for(row)
     if record.is_empty(): entry.node.visible = false; return
     if row.get("water_surface",false):
-        record=record.duplicate();record.water=Catalog.read_file("assets.json",catalog_cache).water
+        record=record.duplicate();record.water=Catalog.environment_resources(catalog_cache).water
     if not record.has("water"):
         _apply_environment_descriptor(entry,EnvironmentSource.describe(row,record,entry.source_role,quarter,camera.basis,source_depth,source_normals))
         return
@@ -216,7 +205,7 @@ func set_environment(entry: Dictionary, _rotation: Basis) -> void:
                 water_bounds = water_bounds.expand(entry.node.basis.inverse()*receiver)
         entry.node.custom_aabb = water_bounds
         SourceMaterial.set_parameter(entry,"mask_texture",texture(record.path))
-        SourceMaterial.set_parameter(entry,"ripple_texture",texture(Catalog.read_file("assets.json",catalog_cache).resources[water.ripple].path))
+        SourceMaterial.set_parameter(entry,"ripple_texture",texture(Catalog.environment_resources(catalog_cache).resources[water.ripple].path))
         SourceMaterial.set_parameter(entry,"origin",Placement.project(v2(row.position),row.base_height_steps,quarter)-v2(record.pivot)*record.scale)
         SourceMaterial.set_parameter(entry,"placement_origin",Placement.contact(row))
         SourceMaterial.set_parameter(entry,"camera_quarter",quarter)
@@ -464,7 +453,7 @@ func _environment_row(row: Dictionary) -> void:
 
 func _add_fixture_flame(row: Dictionary) -> void:
     var name: String = row.lit_animation
-    var assets = Catalog.read_file("assets.json",catalog_cache)
+    var assets = Catalog.environment_resources(catalog_cache)
     if not fixture_clips.has(name):
         var authored: Dictionary = assets.animations[name]
         var images: Array[Image] = []

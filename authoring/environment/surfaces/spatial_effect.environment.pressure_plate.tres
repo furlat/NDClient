@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_rx1cr"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_phoe5"]
+
+[resource]
+script = ExtResource("2_phoe5")
+id = "spatial_effect.environment.pressure_plate"
+layer = "field"
+art = PackedStringArray("trap-workshop.plate")
+legacy = "measured/environment/surfaces/spatial_effect.environment.pressure_plate.json"
+status = "partial"
+notes = "Art or a Factory scenario exists; the game does not draw it."

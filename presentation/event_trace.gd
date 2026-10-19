@@ -271,7 +271,7 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 if context.get(field,false):_need(row,"material_flash" if field=="flashEnabled" else "damage_number","authored_damage_feedback_not_implemented","catalog/damage_context.json."+field)
             var release:Dictionary=fact.get("body_release",{}) if fact.get("body_release")!=null else {}
             if release.get("release_id")=="body.blood" and not release.get("regions",[]).is_empty() and not _has(row,"residue_deposit"):
-                var residue=_component("residue_deposit","authoritative_residue_renderer_not_implemented","world.json:/residue_ground/residue.blood")
+                var residue=_component("residue_deposit","authoritative_residue_renderer_not_implemented","authoring/environment/surfaces/residue.blood.tres")
                 residue.source_pointer=residue.source
                 residue.actor_uuid=fact.target_entity_uuid
                 residue.gap_kind="renderer"

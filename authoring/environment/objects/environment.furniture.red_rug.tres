@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_u1n42"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_jvfqy"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_r0ocl"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_nkqje"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_0k6wm"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_nkqje")
+bank = "prop.content-red-rug.intact"
+
+[resource]
+script = ExtResource("3_r0ocl")
+id = "environment.furniture.red_rug"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_nkqje")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-red-rug.break"
+})
+flat_ground = true
+art = PackedStringArray()
+status = "ready"
+notes = "flat_ground is authored but the draw order does not use it."

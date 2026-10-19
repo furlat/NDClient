@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_rd2q0"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="2_r43hj"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_rd2q0")
+container = "atlas"
+files = PackedStringArray()
+directions = "camera4"
+direction_order = PackedStringArray()
+measurements = "measured/environment/art/portal.environment.portal.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("2_r43hj")
+id = "portal.environment.portal"
+kind = "portal"
+art = SubResource("art")
+images = PackedStringArray()

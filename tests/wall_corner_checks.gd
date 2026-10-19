@@ -22,7 +22,7 @@ func run() -> void:
     if "--background-check" in OS.get_cmdline_user_args():
         root.unfocusable = true; root.position = Vector2i(-16000,-16000)
     var cache = {}
-    var authored = Catalog.read_file("world.json",cache)
+    var authored = Catalog.environment_world(cache)
     for facing in ["e","s","w","n"]:
         var faces: Array = authored.wall_corner_faces[facing]
         var state = {"tiles":{},"senses":{},"objects":{"first":edge("first",faces[0]),"second":edge("second",faces[1])}}
@@ -36,7 +36,7 @@ func run() -> void:
             for quarter in range(4):
                 var record = Catalog.environment(visual[0],quarter,cache)
                 var pose: String = EXPECTED_VIEWS[facing][quarter]
-                var expected: Dictionary = Catalog.read_file("assets.json",cache).resources[authored.stone_wall_corner[pose]]
+                var expected: Dictionary = Catalog.environment_resources(cache).resources[authored.stone_wall_corner[pose]]
                 check(record==expected,"Exact corner colour/normal/depth/pivot/scale in view "+pose)
         check(state==before,"Visual corner does not mutate the backend state")
         state.objects.erase("second")

@@ -185,13 +185,13 @@ static func _responses(actor: Dictionary, result: Dictionary, cache: Dictionary)
 static func _break_banks(row: Dictionary, cache: Dictionary) -> Array:
     # Enumerate actual registered alternatives, without choosing a destruction
     # outcome or altering the disclosed object. Some banks are state-specific.
-    var index: Dictionary=Catalog.read_file("environment/index.json",cache)
+    var index: Dictionary=Catalog.environment_index(cache)
     if row.kind=="wall":
-        var walls: Dictionary=Catalog.read_file(index.wall_destructions,cache)
+        var walls: Dictionary=index.wall_destructions
         return [walls[row.material]] if walls.has(row.material) else []
     if row.kind not in ["prop","door","trap"]:return []
     var group: String={"prop":"props","door":"doors","trap":"traps"}[row.kind]
-    var owner: Dictionary=Catalog.read_file(index[group][row.asset],cache)
+    var owner: Dictionary=index[group][row.asset]
     var banks={}
     for field in ["destructions","destructions_without_attachments"]:
         for state in owner.get(field,{}):
@@ -233,7 +233,7 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         return _finish_plan(request,result,{},cache,control)
     # Admit only the selected passive feedback operand. Its actual release
     # remains exclusively driven by a received authoritative damage fact.
-    if recipe.get("damage")!=null and Catalog.asset("particles.region.blood",cache).is_empty():
+    if recipe.get("damage")!=null and Catalog.residue_asset(cache).is_empty():
         result.errors.append("Cannot load selected asset metadata: particles.region.blood")
     result.native_selection=NativeSpells.selection(request.behavior,cache)
     var rigs: Dictionary=Authoring.rigs(cache)

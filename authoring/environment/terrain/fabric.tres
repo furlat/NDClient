@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PresentationTerrain" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="1_0dlgf"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain.gd" id="2_gqv0v"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain_slope.gd" id="3_0v4ih"]
+
+[sub_resource type="Resource" id="footstep"]
+script = ExtResource("1_0dlgf")
+cue = "footstep"
+at = "body.source_frame"
+
+[sub_resource type="Resource" id="slopes_0"]
+script = ExtResource("3_0v4ih")
+notes = "Server surface_kind stairs with slope_axis; no art for this material."
+
+[sub_resource type="Resource" id="slopes_1"]
+script = ExtResource("3_0v4ih")
+kind = "ramp"
+notes = "Server surface_kind ramp with slope_axis; no art."
+
+[resource]
+script = ExtResource("2_gqv0v")
+material = "fabric"
+floor = "terrain.wood"
+variants = PackedStringArray()
+footstep = SubResource("footstep")
+slopes = Array[ExtResource("3_0v4ih")]([SubResource("slopes_0"), SubResource("slopes_1")])
+status = "stand_in"
+notes = "No fabric floor art: drawn with the wood floor."

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_gjbmc"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_fi68h"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_6r3i2"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_fi68h")
+failed_frames = PackedInt32Array()
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_gjbmc")
+container = "views_as_files"
+files = PackedStringArray("art/media/vfx/conditions/web/web_bound_back/E.png", "art/media/vfx/conditions/web/web_bound_back/N.png", "art/media/vfx/conditions/web/web_bound_back/NE.png", "art/media/vfx/conditions/web/web_bound_back/NW.png", "art/media/vfx/conditions/web/web_bound_back/S.png", "art/media/vfx/conditions/web/web_bound_back/SE.png", "art/media/vfx/conditions/web/web_bound_back/SW.png", "art/media/vfx/conditions/web/web_bound_back/W.png")
+frames = 1
+direction_order = PackedStringArray("E", "N", "NE", "NW", "S", "SE", "SW", "W")
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/web_bound_back.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_6r3i2")
+id = "web_bound_back"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("web_bound_back.E", "web_bound_back.N", "web_bound_back.NE", "web_bound_back.NW", "web_bound_back.S", "web_bound_back.SE", "web_bound_back.SW", "web_bound_back.W")

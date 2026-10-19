@@ -1,0 +1,91 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_0kesy"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_im82x"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_ubchm"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_xl2jo"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_tqe2g"]
+
+[sub_resource type="Resource" id="parts_0"]
+script = ExtResource("2_im82x")
+depth_split = true
+
+[sub_resource type="Resource" id="parts_1"]
+script = ExtResource("2_im82x")
+role = "frame"
+images = Dictionary[String, String]({
+"e": "stone.door.frame.e",
+"n": "stone.door.frame.n",
+"s": "stone.door.frame.s",
+"w": "stone.door.frame.w"
+})
+
+[sub_resource type="Resource" id="states_closed"]
+script = ExtResource("4_xl2jo")
+bank = "door.fantasy-a1.outward"
+
+[sub_resource type="Resource" id="states_open_outward"]
+script = ExtResource("4_xl2jo")
+bank = "door.fantasy-a1.outward"
+frame = -1
+
+[sub_resource type="Resource" id="states_open_inward"]
+script = ExtResource("4_xl2jo")
+bank = "door.fantasy-a1.inward"
+frame = -1
+
+[sub_resource type="Resource" id="transitions_0"]
+script = ExtResource("5_tqe2g")
+from = "closed"
+to = "open.outward"
+bank = "door.fantasy-a1.outward"
+
+[sub_resource type="Resource" id="transitions_1"]
+script = ExtResource("5_tqe2g")
+from = "open.outward"
+to = "closed"
+bank = "door.fantasy-a1.outward"
+reversed = true
+
+[sub_resource type="Resource" id="transitions_2"]
+script = ExtResource("5_tqe2g")
+from = "closed"
+to = "open.inward"
+bank = "door.fantasy-a1.inward"
+
+[sub_resource type="Resource" id="transitions_3"]
+script = ExtResource("5_tqe2g")
+from = "open.inward"
+to = "closed"
+bank = "door.fantasy-a1.inward"
+reversed = true
+
+[resource]
+script = ExtResource("3_ubchm")
+id = "environment.directional_door"
+kind = "door"
+views = PackedStringArray("e", "s", "w", "n")
+select_field = "is_open"
+states = Dictionary[String, ExtResource("4_xl2jo")]({
+"closed": SubResource("states_closed"),
+"open.inward": SubResource("states_open_inward"),
+"open.outward": SubResource("states_open_outward")
+})
+destructions = Dictionary[String, String]({
+"closed.clear": "door.fantasy-a1.debris",
+"closed.jammed": "door.fantasy-a1.wedged",
+"open.inward.clear": "door.fantasy-a1.destruction.open.inward.clear",
+"open.inward.jammed": "door.fantasy-a1.destruction.open.inward.jammed",
+"open.outward.clear": "door.fantasy-a1.destruction.open.outward.clear",
+"open.outward.jammed": "door.fantasy-a1.destruction.open.outward.jammed"
+})
+wrecks = Dictionary[String, String]({
+"environment.directional_door.wreck.clear": "clear",
+"environment.directional_door.wreck.jammed": "jammed"
+})
+transitions = Array[ExtResource("5_tqe2g")]([SubResource("transitions_0"), SubResource("transitions_1"), SubResource("transitions_2"), SubResource("transitions_3")])
+parts = Array[ExtResource("2_im82x")]([SubResource("parts_0"), SubResource("parts_1")])
+art = PackedStringArray()
+measurements = "measured/environment/objects/environment.directional_door.json"
+status = "ready"
+notes = "Open and closed snap to the end poses; the transitions are data only. pose_offset, assembly_variants and the source record are kept as delivered in its measurements."

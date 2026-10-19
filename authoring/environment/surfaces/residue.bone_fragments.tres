@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_l4ejr"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_vgrrp"]
+
+[resource]
+script = ExtResource("2_vgrrp")
+id = "residue.bone_fragments"
+source_kind = "residue"
+coverage = "per_cell"
+max_amount = 1
+region_asset = "particles.region.bone"
+art = PackedStringArray("residue.bone_fragments")
+legacy = "measured/environment/surfaces/residue.bone_fragments.json"
+status = "partial"
+notes = "Region particles particles.region.bone are an asset of catalog/action_media_assets.json (abilities source). Wall-face residue profiles: measured/environment/legacy/residue_wall_faces.json. Art or a Factory scenario exists; the game does not draw it."
