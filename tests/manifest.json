@@ -5053,6 +5053,26 @@
    "timeout": 180,
    "status": "ok",
    "reason": "Actual original modular weapon with two test-authored delivered coatings, framebuffer pixels and seek/loop; not an art acceptance or FPS claim."
+  },
+  {
+   "name": "wielded_weapon_impact_checks",
+   "script": "res://tests/wielded_weapon_impact_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Original two-faction weapon hit and event-owned impact; finite contact/source/hierarchy/seek and miss/cancellation boundaries."
+  },
+  {
+   "name": "wielded_weapon_impact_render_checks",
+   "script": "res://tests/wielded_weapon_impact_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Original weapon contact through native rendering; actual pixels, Studio witness, preserved source sheets and finite seek/loop."
   }
  ]
 }

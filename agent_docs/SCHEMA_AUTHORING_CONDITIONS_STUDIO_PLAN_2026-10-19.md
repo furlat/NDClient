@@ -291,3 +291,33 @@ Nine affected gates passed, then the actual-draw child-witness regression passed
 full transfer and final performance remain explicit gaps; the checked cohort
 means the structure/render/Studio contract is ready, not that those variants or
 all art are complete.
+
+
+## Weapon on-impact arm — user addition, 20 October
+
+- [x] Add `Gear.impact_effects: Array[EffectUse]` beside sustained `effects`.
+  Keep one compiled body index and all existing weapon sheets.
+- [x] Emit each authored impact once from the actual Hit/Crit AttackFact with
+  exact source_item_uuid/item_id, source/target and attack occurrence/lineage.
+  Use the existing track impact marker (melee contact/projectile arrival), not
+  every damage packet. Zero-damage contacts remain hits; no damage is invented.
+- [x] Reuse native finite phase compilation, component preparation, rendering,
+  event hierarchy and Studio rows. No persistent item clock or second scheduler.
+  Creature body placement first; missing object/contact/result inputs stay named.
+- [x] Verify real two-faction attack recordings, miss/cancel/unknown-item
+  boundaries, finite timing, Studio parent/source and native pixels/seek/loop.
+- [x] Update the same Factory handoff and executable Resource example with the
+  split sustained/impact fields and actual event packet. Keep source admission,
+  art approval, backend rules and native lights separate.
+
+A short plan-adherence/antislop/antiOOP review owns this bounded addition. No
+engine/Factory writes or new damage logic. Temporary condition/rider attribution
+and hit material/audio specializations remain separate, not fabricated inputs.
+
+Cohort evidence: the seven affected gates pass 226 assertions with no
+script/resource/engine errors (`.runtime/tests/20261019T222437Z/`). The real Amber
+killing hit proves detached contact retention after visual retirement; Blue is
+independently reduced. The bounded plan/antislop/antiOOP review found no remaining
+material blocker. Test-only fire artwork is not a production assignment or visual
+approval. Details and Factory delivery instructions remain in the same modular
+weapon handoff.

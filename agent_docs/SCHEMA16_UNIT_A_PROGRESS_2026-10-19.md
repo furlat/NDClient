@@ -436,3 +436,40 @@ features with nine honest generic placeholders; 3,153 headless checks pass. Nati
 actor-copy shader blockers, source construction costs, missing public operands,
 new-package complete safety/live gates and final performance remain open. Neither
 this note nor a passing bounded cohort claims the full migration complete.
+
+
+## Weapon on-impact authoring — 20 October
+
+The same [Factory weapon handoff](MODULAR_WEAPON_EFFECTS_FACTORY_HANDOFF_2026-10-20.md)
+now includes typed `Gear.impact_effects` beside sustained `Gear.effects`, its
+executable Resource example and actual attack/item/recipient input packet. The
+existing finite compiler/renderer and Studio expose one authored use per real
+Hit/Crit at melee contact or projectile arrival, independently of damage packets.
+No new weapon body, damage, condition owner or persistent clock is invented.
+
+The original two-faction killing-hit recording caught and fixed contact retirement
+before final AttackFact completion. The impact now retains a same-attack disclosed
+contact cut and contact-time facing/source placement; later bodies, nested attacks
+and later-only disclosure cannot move or invent that anchor. Seven affected gates
+pass 226 assertions, including 15 native impact assertions, pixels and seek/loop;
+`.runtime/tests/20261019T222437Z/`. The finite fire burst is test-only source proof,
+not accepted art. Object impacts/result-dependent constructors, temporary rider
+attribution and other explicit weapon/provider gaps remain open. This private
+cohort is not published to the receiving checkout through the failed actor-context
+candidate, and it does not close the full migration/performance gates.
+
+The final narrower contact-marker/source check passes another 189 assertions
+(`.runtime/tests/20261019T222604Z/`). The required broader default fast run is
+recorded honestly: **113 tests, 56 pass, 57 fail**,
+`.runtime/tests/20261019T222459Z/summary.json`. It does not qualify the whole client.
+Examples: missing/unavailable original recording prefixes in actor preparation,
+replay/Studio and blood checks; old fake-world fields missing in
+`native_cast_socket_checks` (`resource_revision`),
+`environment_media_delta_checks` (`__environment_demand_index`) and several
+world/UI checks; the changed catalog's old expectation in
+`studio_authoring_audit_checks`. Full failed names and exact logs are in that
+summary. No unchanged-HEAD baseline run was made for all 57, so this receipt does
+not assert they have all been individually proven pre-existing. The new impact,
+existing weapon, logical pose and native action checks pass. These unrelated
+suite/fixture repairs are not folded into this bounded authoring task. The runner
+restored tracked generated reports and cleaned up owned test processes.

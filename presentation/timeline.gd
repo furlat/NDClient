@@ -694,8 +694,8 @@ func actor_directions() -> Dictionary:
 
 static func component_direction(group: Dictionary,component: Dictionary,previous: Dictionary) -> Array:
     var directions=previous.duplicate()
-    _directions(group.get("actor_tracks",[]),component.start_ms,directions)
-    return directions.get(component.get("actor_uuid"),[])
+    _directions(group.get("actor_tracks",[]),component.get("impact_at_ms",component.start_ms),directions)
+    return directions.get(component.get("impact_actor_uuid",component.get("actor_uuid")),[])
 
 func _retain_completed_presentation() -> void:
     for component in current.get("components",[]):

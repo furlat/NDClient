@@ -191,6 +191,19 @@ static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
                 if slot not in ["weapon","offhand"]:Common.error(report,where,"item decoration needs a separate modular weapon/offhand receiver: "+slot)
             for slot in use.extra.get("equipment_slots",[]):
                 if slot not in GEAR_SLOTS:Common.error(report,where,"unknown item decoration equipment slot "+str(slot))
+        for use in entry.impact_effects:
+            if use==null:Common.error(report,where,"null weapon impact");continue
+            if clips.is_empty():
+                var package:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
+                for clip in package.clips:clips[clip.clip_id]=clip
+            if not clips.has(use.clip):Common.error(report,where,"weapon impact clip is not delivered: "+use.clip)
+            elif "created_item_binding" in clips[use.clip].get("inputs",[]):Common.error(report,where,"native weapon body cannot be an impact")
+            if use.role!="impact" or use.at not in ["","body.impact"] or use.attachment!="recipient_body":
+                Common.error(report,where,"weapon impact requires impact/body.impact/recipient_body staging")
+            if not use.constructor_input.is_empty():Common.error(report,where,"weapon impact constructor result projection is not authored; use public weapon_impact input")
+            if use.follow:Common.error(report,where,"weapon impacts retain the actual contact; following body effects belong to conditions")
+            if use.delay<0 or use.source_rate<=0 or not is_zero_approx(use.source_start) or not use.lifecycle.is_empty():
+                Common.error(report,where,"weapon impacts require nonnegative contact delay, positive source rate and an ordinary finite source window")
         var looks: Array = []
         for slot in entry.slots:
             if slot not in GEAR_SLOTS:Common.error(report, where, "unknown visual slot " + slot)
@@ -473,17 +486,21 @@ static func _equipment(state: Dictionary, gear: Dictionary) -> void:
     var index: Index = state.index
     for id in gear:
         var entry: Resource = gear[id]
-        if not entry.effects.is_empty():
+        for field in ["effects","impact_effects"]:
+            var uses:Array=entry.effects if field=="effects" else entry.impact_effects
+            if uses.is_empty():continue
             var effects:Array=[]
-            for ordinal in entry.effects.size():
-                var cue:Dictionary=Records.cue_from_effect(entry.effects[ordinal],ordinal)
-                cue.source=entry.resource_path+"::effects/"+str(ordinal)
-                Records.F.emit(cue,"selection",entry.effects[ordinal],"selection","string")
-                Records.F.emit(cue,"offset",entry.effects[ordinal],"offset","vec3")
-                if not entry.effects[ordinal].recipient_slots.is_empty():
-                    cue.entity_geometry={"actor":"recipient","slots":Array(entry.effects[ordinal].recipient_slots)}
+            for ordinal in uses.size():
+                var cue:Dictionary=Records.cue_from_effect(uses[ordinal],ordinal)
+                cue.source=entry.resource_path+"::"+field+"/"+str(ordinal)
+                Records.F.emit(cue,"selection",uses[ordinal],"selection","string")
+                Records.F.emit(cue,"offset",uses[ordinal],"offset","vec3")
+                if not uses[ordinal].recipient_slots.is_empty():
+                    cue.entity_geometry={"actor":"recipient","slots":Array(uses[ordinal].recipient_slots)}
+                if field=="impact_effects":cue.at="body.impact"
                 effects.append(cue)
-            index.item_effects[id]=effects
+            if field=="effects":index.item_effects[id]=effects
+            else:index.item_impact_effects[id]=effects
         if not entry.family.is_empty():index.gear[id] = [entry.family, entry.visual_variant_id]
         if entry.slots.is_empty() and entry.hands.is_empty():continue
         index.gear[id] = [id, ""]

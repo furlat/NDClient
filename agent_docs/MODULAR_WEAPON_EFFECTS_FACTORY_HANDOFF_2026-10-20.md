@@ -20,11 +20,12 @@ family. Their old native-body assignments/suppression and creation-ancestry rend
 were removed. Existing Factory native blade/mace sources remain unmodified but are
 not selected. Do not relabel those whole-body sources as coatings.
 
-## Three authoring homes
+## Authoring homes
 
 | Home | Owns | Existing implementation |
 | --- | --- | --- |
 | `PresentationGear.effects: Array[PresentationEffectUse]` | Intrinsic sustained item decorations, independent of the sprite body | New compiled `BodySourceIndex.item_effects`; common NativeItems → Timeline → NativeSpellRenderer → Studio path |
+| `PresentationGear.impact_effects: Array[PresentationEffectUse]` | Finite hit-contact VFX authored on the weapon | Actual attack occurrence → common finite phase compiler → native renderer/Studio; no persistent item clock |
 | Condition Resource effects/lifecycles | Temporary item enchantments and actor-owned buffs | Existing actual condition UUID, application/sustain/removal and exact affected/current item provider |
 | Spell/action Resource effects | Finite cast, release, swing/contact, impact, audio | Existing ordered event component/marker clocks; do not put these cues on intrinsic item membership |
 
@@ -108,8 +109,93 @@ light/material channels are inspection children of that same component, not
 another scheduler. Seeking/looping reconstructs actual ordered membership.
 
 Do not paint a trail, hit flash, sound or light on the timeline unless its actual
-rendered event/resource owns it. Finite attack/contact accents must use actual
-server event/result evidence and remain a later event-owned authoring step.
+rendered event/resource owns it. Weapon on-hit accents use the finite arm below. Damage-attribution-dependent
+riders, hit material choices and audio specializations remain separate; no
+additional damage/result is invented from the VFX.
+
+## Weapon impacts — additional user requirement
+
+Weapons may author a finite **on-impact effect** beside their sustained coating.
+A flaming/icy weapon can therefore carry both a lasting fire/ice treatment on its
+sheet and a separately staged flame/frost contact burst at the recipient.
+
+The typed field is `PresentationGear.impact_effects: Array[PresentationEffectUse]`.
+An executable test-only example is `tests/fixtures/wielded_weapon_impact.tres`:
+
+```gdscript
+# One use in Gear.impact_effects; the existing weapon sprite remains unchanged.
+clip = "spells/fire_bolt/default/impact" # existing test source; Factory may supply a dedicated weapon impact
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+follow = false
+# Optional delay is relative to the attack impact marker, never its receipt time.
+```
+
+This arm is event-owned, distinct from `Gear.effects`:
+
+- Select from the actual AttackFact's **source_item_uuid + source_item_id** and
+  actual source/target, not a weapon that happens to be equipped when rendering.
+- Emit each authored use once per actual **Hit/Crit attack occurrence**. Misses,
+  unresolved/cancelled, unarmed/natural or absent exact item identity emit nothing.
+  Opportunity attacks and extra attacks remain separate actual attack occurrences.
+- Use the existing attack track's `impact_ms`: melee contact or projectile arrival.
+  Each native source plays its own finite authored span. Received packet time and
+  persistent coating age are not the impact clock.
+- Do not dispatch from every damage packet: physical and elemental packets or
+  damage/life descendants must not duplicate the burst. A zero-damage successful
+  contact may still display its hit VFX; immunity does not erase the hit. The fire
+  artwork does **not** assert that fire damage occurred.
+- First placement is a creature's existing authored body contact/anchor with its
+  observed position/elevation. The protocol does not claim a physical hit point.
+  Object contact and damage-attribution-dependent source constructors remain named
+  unsupported inputs, not guessed targets or manufactured damage.
+
+The impact retains a small contact receipt rather than following the recipient's
+later body. A killing hit can remove a faction's visual contact before the final
+AttackFact arrives. The compiler selects that same attack's latest genuinely
+disclosed recipient cut at contact, excluding nested attacks and later-only
+disclosures, and samples its actual body track. Source position/elevation also
+come from the attack track. An authored delay cannot substitute a later facing
+or move the impact; seek/loop reconstruct the same receipt. Missing attack contact
+markers remain missing. No other faction's state or surviving fake actor is used.
+This first arm requires `follow = false`; sustained recipient treatments belong
+to their actual condition, not an impact that follows a later body.
+
+A Factory source may declare public input `weapon_impact`; the common native
+setter bridge passes the actual packet:
+
+```gdscript
+{
+    "operation_sequence": <actual operation sequence>,
+    "occurrence": "<actual attack occurrence index>",
+    "lineage": "<actual attack lineage index>",
+    "source_item_uuid": "<actual item UUID>",
+    "source_item_id": "<actual content ID>",
+    "weapon_slot": "MELEE_MAIN", # actual slot, not a default
+    "source_entity_uuid": "<actual attacker UUID>",
+    "target_entity_uuid": "<actual recipient UUID>",
+    "attack_outcome": "Hit" # actual Hit or Crit
+}
+```
+
+There is no fake spell cast, persistent condition owner or fabricated elemental
+DamageResult in that packet. Source preparation still runs through the existing
+common group/resource path before ordered display. Effect-only programs can use
+ordinary root/target inputs and the public packet; this first arm does not project
+special result-dependent constructor values. Those must be reported unsupported.
+
+Studio's `Weapon impact` row is nested under the actual attack and retains its
+exact `<gear Resource path>::impact_effects/<ordinal>`, source item, event packet,
+finite source span and shared renderer diagnostics. It is independent of the
+persistent coating row. Use the same native source/channel inspection and replay
+seek/loop path rather than a separate weapon timeline.
+
+The Factory delivery should identify **both** sustained and impact clips/Resource
+uses for each weapon treatment, their finite spans and declared inputs, keeping
+those phases independent. Initial client proof uses an existing fire impact as
+test-only staging; it is not approval of a production flame/ice impact's art or
+permission to rescale spell explosions into weapon impacts indiscriminately.
 
 ## Delivering Factory work
 
@@ -139,14 +225,15 @@ remain in their existing authoring folders; acceptance of new artwork is separat
 - Contribution winner semantics, some rider/contact attribution and spell-created
   item public lifetime links need separate backend evidence/fixes. Do not add
   fixture UUIDs or assume that source presence supplies those facts.
-- Compatibility/conflicting appearance composition, attack trails/contact accents
-  and final performance/visual qualification remain separate work. Two concurrent
+- Compatibility/conflicting appearance composition, attack trails, attributed rider
+  accents and final performance/visual qualification remain separate work. Two concurrent
   coating occurrences prove the framework, not every artistic combination.
 
 ## Reproduce the client proof
 
 ```sh
 bash tools/run_tests.sh --only wielded_weapon_sheet_checks,wielded_weapon_effect_checks,wielded_weapon_effect_render_checks,native_weapon_input_checks --jobs 2
+bash tools/run_tests.sh --only wielded_weapon_impact_checks,wielded_weapon_impact_render_checks --jobs 2
 ```
 
 The GPU proof uses the actual original Amber journal and current Windows
@@ -167,3 +254,39 @@ Final bounded evidence: nine affected gates pass (3,386 counted assertions),
 and corrected sensory-only admission, per-use Studio identity, actual draw
 witness propagation and the supported source-clock boundary. No owned Godot or
 backend process remains open after these finite tests.
+
+### On-impact evidence, 20 October
+
+The original, unchanged Amber and Blue attack/death journals both pass through
+the production fold/compiler/Studio path. The new checks verify one impact per
+real attack, exact item/recipient/occurrence, actual melee contact, native source
+span, correct event parent/Resource, finite seeking/looping and killing-contact
+retention. Separate value contracts check misses, cancellation, absent identity,
+zero-damage Hit/Crit, newer pre-contact appearance, nested attacks, later-only
+disclosure and delayed facing.
+
+The focused seven-gate batch passes **226 assertions**: 49 new impact assertions,
+15 native impact assertions and the existing sheet/coating/input/order checks.
+There are zero script/resource/engine errors. Report:
+`.runtime/tests/20261019T222437Z/`. The native test contributes 111,622 changed
+framebuffer pixels while the real Melee2 sword sheet remains rendered, with a
+2.944 ms isolated source construction. Its contact is 1,166.67 ms and its finite
+tail ends at 1,416.67 ms on the replay clock. This large spell-impact source is
+**test-only**, proving dispatch and pixels rather than accepted weapon-burst art,
+production scale or gameplay performance.
+
+Captures/report: `.captures/weapon-impact/{impact,plain}.png` and
+`.runtime/weapon-impact-render-checks.json`. The authoring, shared runtime path and
+Studio track are implemented in the private worktree; no new production coating
+or weapon-impact assignment has been installed. The full migration, the separate
+actor-copy shader blocker and the explicit gaps above remain open.
+
+Final contact-marker/authoring checks also pass: 189 assertions across
+`native_action_cue_checks`, `wielded_weapon_impact_checks` and its native render
+check, `.runtime/tests/20261019T222604Z/`. The broader default fast suite is **not
+green**: 56 of 113 tests pass and 57 fail, recorded in
+`.runtime/tests/20261019T222459Z/summary.json`. Failures include old/missing
+recording inputs and stale fake-world/test contracts; this bounded weapon cohort
+does not qualify or repair that whole suite. The progress ledger records the
+examples; all new weapon checks pass. Test-written tracked reports were restored
+and no owned test process remains open.

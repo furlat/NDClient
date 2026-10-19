@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationGear" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="gear"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="Impact"]
+script = ExtResource("effect")
+clip = "spells/fire_bolt/default/impact"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+follow = false
+light_multiplier = 0.0
+staging_from = "Test-only real delivered impact on a recorded longsword hit, not fire damage or production art."
+
+[resource]
+script = ExtResource("gear")
+id = "weapon.longsword"
+kind = "weapon"
+impact_effects = Array[ExtResource("effect")]([SubResource("Impact")])
+status = "partial"
+notes = "Test-only effect augmentation. The original built Longsword sheet body remains unchanged."

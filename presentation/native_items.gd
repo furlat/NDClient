@@ -93,3 +93,14 @@ static func samples(owners:Dictionary,_state:Dictionary,at_ms:float)->Array:
             "trace_keys":[owner.id],"source_event_uuid":owner.source_event_uuid}
         result.append(row)
     return result
+
+
+## Selection is from the actual attack, never the weapon currently held later.
+## Default semantics are hit-contact, not an inferred positive damage rider.
+static func impact_binding(fact:Dictionary,cache:Dictionary)->Dictionary:
+    if fact.get("attack_source_kind")!="equipped" or fact.get("attack_outcome") not in ["Hit","Crit"]:return {}
+    if fact.get("source_item_uuid")==null or fact.get("source_item_id")==null:return {}
+    var index:Resource=Bodies.index(cache)
+    var cues:Array=[] if index==null else index.item_impact_effects.get(fact.source_item_id,[])
+    if cues.is_empty():return {}
+    return {"effect_cues":cues,"source":str(cues[0].source).get_base_dir()}

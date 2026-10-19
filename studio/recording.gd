@@ -234,7 +234,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     for body_row in result.rows:
                         if body_row.id==component.body_track_id:actor=body_row.actor;source_track=body_row.track;break
                 result.rows.append({"id":component.id,"parent":component.parent_id,"kind":component.kind,
-                    "label":str(component.native_cue.role).capitalize() if component.get("native_spell",false) else str(component.get("text")) if component.kind=="feedback_text" else str(component.get("cue_id",component.get("source_id",component.kind))),"depth":1,
+                    "label":"Weapon impact" if component.get("native_weapon_impact",false) else str(component.native_cue.role).capitalize() if component.get("native_spell",false) else str(component.get("text")) if component.kind=="feedback_text" else str(component.get("cue_id",component.get("source_id",component.kind))),"depth":1,
                     "start_ms":offset+component.start_ms,"end_ms":offset+component.start_ms+component.duration_ms,
                     "component":component,"group_start_ms":offset,"group_id":group.id,
                     "source_event_uuid":component.source_event_uuid,"source":component.get("source",""),

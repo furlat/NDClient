@@ -22,6 +22,8 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 ## its sprite body and use the actual modular weapon layer/slot as receiver.
 ## Temporary enhancements belong to their observed Condition instead.
 @export var effects: Array[EffectUse] = []
+## Finite effects on an actual successful attack with this exact item.
+@export var impact_effects: Array[EffectUse] = []
 @export var icon: ImageRef
 ## Natural, summoned and internal items draw no layers.
 @export var natural: bool = false

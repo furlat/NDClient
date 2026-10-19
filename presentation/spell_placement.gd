@@ -74,6 +74,12 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
     var target:Dictionary=world.visual_actors.get(component.get("target_uuid"),{})
     var role:String=cue.role
     var attachment:String=cue.get("attachment","")
+    if component.get("native_weapon_impact",false) and component.has("impact"):
+        var receipt:Dictionary=component.impact
+        if receipt.status!="available":return {"ready":false,"unavailable":true,"reason":receipt.get("reason","weapon_impact_contact_not_resolved")}
+        var from:Vector3=Vector3(component.from_position[0],float(component.from_elevation_feet)/5.0*Placement.HEIGHT_UNIT,component.from_position[1])
+        var ground:Vector3=Vector3(receipt.position[0],float(receipt.elevation_feet)/5.0*Placement.HEIGHT_UNIT,receipt.position[1])
+        return {"ready":true,"from":from,"hand":from,"to":receipt.world_anchor,"ground":ground,"caster_ground":from,"fixed":{},"surfaces":[]}
     # These registrations need actual head/equipment ownership. Never fall
     # through to an unrelated ground/body point or a missing transform key.
     if attachment=="item":
