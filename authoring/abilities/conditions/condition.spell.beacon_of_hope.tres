@@ -1,0 +1,128 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_rp77k"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_0bg1u"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ibsfd"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ibsfd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_4lil3"]
+
+[sub_resource type="Resource" id="Resource_hh24l"]
+script = ExtResource("1_rp77k")
+enabled = false
+colour = Color(0.89411765, 0.34509805, 0.70980394, 1)
+
+[sub_resource type="Resource" id="Resource_4lil3"]
+script = ExtResource("2_ibsfd")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-beaconofhopeeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-beaconofhopeeffect"
+
+[sub_resource type="Resource" id="Resource_qypa8"]
+script = ExtResource("3_ibsfd")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_eiw26"]
+script = ExtResource("2_0bg1u")
+steps = Array[ExtResource("3_ibsfd")]([SubResource("Resource_qypa8")])
+
+[sub_resource type="Resource" id="Resource_aas6t"]
+script = ExtResource("1_rp77k")
+enabled = false
+colour = Color(0.80784315, 0.15294118, 0.23921569, 1)
+
+[resource]
+script = ExtResource("4_4lil3")
+id = "condition.spell.beacon_of_hope"
+label = "Beacon of Hope"
+icon = SubResource("Resource_4lil3")
+disposition = "authored"
+look = SubResource("Resource_eiw26")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "divine.beacon_of_hope.back",
+"attachment": "body",
+"category": "beacon_of_hope",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "divine.beacon_of_hope.back",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "divine.beacon_of_hope.front",
+"attachment": "body",
+"category": "beacon_of_hope",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "divine.beacon_of_hope.front",
+"priority": 30.0
+}]
+group = "divine.beacon_of_hope"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_hh24l")
+removal_text = SubResource("Resource_aas6t")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "divine.beacon_of_hope",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.beacon_of_hope",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=each_affected_entity; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.beacon_of_hope",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 600.0,
+"effects": []
+}
+}

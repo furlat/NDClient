@@ -1,0 +1,238 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_844ki"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_c35qg"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_yxq5l"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_c35qg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_kes1s"]
+
+[sub_resource type="Resource" id="Resource_vnq80"]
+script = ExtResource("1_844ki")
+colour = Color(0.89411765, 0.34509805, 0.4745098, 1)
+
+[sub_resource type="Resource" id="Resource_kes1s"]
+script = ExtResource("2_c35qg")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-commandhalteffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-commandhalteffect"
+
+[sub_resource type="Resource" id="Resource_80qnh"]
+script = ExtResource("3_c35qg")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vxi6r"]
+script = ExtResource("2_yxq5l")
+steps = Array[ExtResource("3_c35qg")]([SubResource("Resource_80qnh")])
+
+[sub_resource type="Resource" id="Resource_dvv7t"]
+script = ExtResource("1_844ki")
+colour = Color(0.80784315, 0.34901962, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_kes1s")
+id = "condition.spell.command.halt"
+label = "Command: Halt"
+icon = SubResource("Resource_kes1s")
+disposition = "authored"
+look = SubResource("Resource_vxi6r")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "control.command.sustain.back",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "control.command.sustain.back",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0,
+"startOffsetMs": 500.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "control.command.sustain.front",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "control.command.sustain.front",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0,
+"startOffsetMs": 500.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.commanded.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.commanded.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "commanded",
+"priority": 30.0
+}]
+group = "control.command"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_vnq80")
+removal_text = SubResource("Resource_dvv7t")
+unported = {
+"activation": {
+"effects": [{
+"animation": "finite",
+"assetId": "control.command.execute.back",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1402.7777777777778,
+"id": "control.command.execute.back",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0
+}, {
+"animation": "finite",
+"assetId": "control.command.execute.front",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1402.7777777777778,
+"id": "control.command.execute.front",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0
+}],
+"trigger": "owner_turn_start"
+},
+"application": {
+"durationMs": 220.0,
+"effects": [{
+"animation": "finite",
+"assetId": "control.command.application.back",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 500.0,
+"id": "control.command.application.back",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0
+}, {
+"animation": "finite",
+"assetId": "control.command.application.front",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 500.0,
+"id": "control.command.application.front",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0
+}]
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "control.command",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.command.halt",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=halt; effect=condition.command.halt; disposition=harmful; target=selected_target; gates=saving_throw:wisdom:failed:actor_spell_save_dc+configuration:command=halt",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.command",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": [{
+"animation": "finite",
+"assetId": "control.command.removal.back",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 597.2222222222222,
+"id": "control.command.removal.back",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0
+}, {
+"animation": "finite",
+"assetId": "control.command.removal.front",
+"attachment": "body",
+"category": "command",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 597.2222222222222,
+"id": "control.command.removal.front",
+"lifeStates": ["alive", "dying", "stable"],
+"priority": 30.0
+}]
+}
+}

@@ -19,7 +19,7 @@ func _initialize()->void:
     for row in index.rows:
         var key=""
         if row.kind=="event" and row.event.get("behavior_id")=="action.hide":key="event"
-        elif row.kind=="body" and row.track.get("source")=="res://authoring/presentation/actions/hide.tres::clip":key="body"
+        elif row.kind=="body" and row.track.get("source")=="res://authoring/abilities/actions/action.hide.tres::body/clip":key="body"
         elif row.get("component",{}).get("cue_id")=="hide_transition":key="audio"
         elif row.get("component",{}).has("body_release"):key="air"
         elif row.get("requirement",{}).get("authority_source")=="DamageResultFact.body_release.regions":key="residue"
@@ -33,8 +33,8 @@ func _initialize()->void:
             check(text.begins_with("Origin: recorded server event") and text.contains(row.event.event_uuid),"Real Hide event is identified by its actual server UUID")
         elif key in ["body","audio","air"]:
             check(text.begins_with("Origin: authored presentation") and text.contains("server does not select"),"Authored visual is not mislabeled as a server-selected appearance: "+key)
-        if key=="body":check(text.contains("hide.tres::clip"),"Action body exposes editable assignment")
-        elif key=="audio":check(text.contains("hide.tres::effect_audio_cue") and text.contains("audio/cues.json:"),"Audio exposes both authored assignment and selected cue source")
+        if key=="body":check(text.contains("action.hide.tres::body/clip"),"Action body exposes editable assignment")
+        elif key=="audio":check(text.contains("action.hide.tres::sounds/0/cue") and text.contains("audio/cues.json:"),"Audio exposes both authored assignment and selected cue source")
         elif key=="air":check(text.contains("DamageResultFact.body_release (body.blood)") and text.contains("creates no ground residue"),"Real release authority is separate from the selected airborne effect")
         elif key=="residue":
             check(text.contains("disclosed server state needs a renderer") and text.contains("DamageResultFact.body_release.regions"),"Residue work is anchored to an actual disclosed server field")

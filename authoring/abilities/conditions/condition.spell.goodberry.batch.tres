@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_fdicb"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_m5yri"]
+
+[sub_resource type="Resource" id="Resource_eubab"]
+script = ExtResource("1_m5yri")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.goodberry.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.goodberry"
+status = "stand_in"
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("1_fdicb")
+id = "condition.spell.goodberry.batch"
+icon = SubResource("Resource_eubab")

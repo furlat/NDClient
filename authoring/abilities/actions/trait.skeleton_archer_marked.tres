@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_jxa3d"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_tllgm"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_jxa3d"]
+
+[sub_resource type="Resource" id="Resource_frxal"]
+script = ExtResource("1_jxa3d")
+path = "art/media/ui/icons/smooth48/ui.filter-all.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-all"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-all"
+
+[resource]
+script = ExtResource("1_tllgm")
+id = "trait.skeleton_archer_marked"
+kind = "trait"
+family = "trait"
+icon = SubResource("Resource_frxal")
+effect_sources = PackedStringArray()
+status = "internal"

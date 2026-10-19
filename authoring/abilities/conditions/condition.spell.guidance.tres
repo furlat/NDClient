@@ -1,0 +1,127 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_vvwty"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_7qtsw"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_dwwbf"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_dwwbf"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_2iil4"]
+
+[sub_resource type="Resource" id="Resource_ll8ct"]
+script = ExtResource("1_vvwty")
+colour = Color(0.78431374, 0.5803922, 0.25882354, 1)
+
+[sub_resource type="Resource" id="Resource_2iil4"]
+script = ExtResource("2_dwwbf")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-divination-guidanceeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-divination-guidanceeffect"
+
+[sub_resource type="Resource" id="Resource_ww5pt"]
+script = ExtResource("3_dwwbf")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t336c"]
+script = ExtResource("2_7qtsw")
+steps = Array[ExtResource("3_dwwbf")]([SubResource("Resource_ww5pt")])
+
+[sub_resource type="Resource" id="Resource_wpi5i"]
+script = ExtResource("1_vvwty")
+colour = Color(0.78431374, 0.5803922, 0.25882354, 1)
+
+[resource]
+script = ExtResource("4_2iil4")
+id = "condition.spell.guidance"
+label = "Guidance"
+icon = SubResource("Resource_2iil4")
+disposition = "authored"
+owner_spell = "spell.guidance"
+look = SubResource("Resource_t336c")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "static",
+"assetId": "support.guidance.back",
+"attachment": "body",
+"category": "guidance",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 1.0,
+"id": "support.guidance.back",
+"priority": 40.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "static",
+"assetId": "support.guidance.front",
+"attachment": "body",
+"category": "guidance",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 1.0,
+"id": "support.guidance.front",
+"priority": 40.0
+}]
+group = "body"
+priority = 40.0
+max_layers = 3.0
+application_text = SubResource("Resource_ll8ct")
+removal_text = SubResource("Resource_wpi5i")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.guidance",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.guidance",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.guidance",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

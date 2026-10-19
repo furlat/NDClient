@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_jvin6"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ceahd"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_mw25h"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ceahd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_xaw0t"]
+
+[sub_resource type="Resource" id="Resource_nnqdw"]
+script = ExtResource("1_jvin6")
+enabled = false
+colour = Color(0.69411767, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_xaw0t"]
+script = ExtResource("2_ceahd")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-necromancy-nohealing.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-necromancy-nohealing"
+
+[sub_resource type="Resource" id="Resource_wqbeq"]
+script = ExtResource("3_ceahd")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4o442"]
+script = ExtResource("2_mw25h")
+steps = Array[ExtResource("3_ceahd")]([SubResource("Resource_wqbeq")])
+
+[sub_resource type="Resource" id="Resource_1mu2i"]
+script = ExtResource("1_jvin6")
+enabled = false
+colour = Color(0.21960784, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_xaw0t")
+id = "condition.spell.no_healing"
+label = "Healing blocked"
+icon = SubResource("Resource_xaw0t")
+disposition = "authored"
+look = SubResource("Resource_4o442")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.mark.anti_heal",
+"attachment": "head",
+"category": "anti_heal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "condition.mark.anti_heal",
+"lifeStates": ["alive"],
+"markerGroup": "condition.mark.anti_heal",
+"offsetY": -12.0,
+"priority": 35.0
+}]
+group = "marker.condition.spell.no_healing"
+priority = 35.0
+max_layers = 1.0
+application_text = SubResource("Resource_nnqdw")
+removal_text = SubResource("Resource_1mu2i")
+unported = {
+"application": {
+"durationMs": 200.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "condition.mark.anti_heal",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.no_healing",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hit; effect=condition.no_healing; disposition=harmful; target=selected_target; gates=attack_outcome:hit,critical",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.chill_touch",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

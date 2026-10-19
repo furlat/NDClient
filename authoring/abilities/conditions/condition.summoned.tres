@@ -1,0 +1,82 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ntk3c"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_2rd7b"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ewovj"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_2rd7b"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_gbhmt"]
+
+[sub_resource type="Resource" id="Resource_e6t4n"]
+script = ExtResource("1_ntk3c")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_gbhmt"]
+script = ExtResource("2_2rd7b")
+path = "art/media/ui/icons/smooth48/spell.conjure_animals.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.summoned"
+
+[sub_resource type="Resource" id="Resource_thjls"]
+script = ExtResource("3_2rd7b")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3x4rx"]
+script = ExtResource("2_ewovj")
+steps = Array[ExtResource("3_2rd7b")]([SubResource("Resource_thjls")])
+
+[sub_resource type="Resource" id="Resource_v5tpb"]
+script = ExtResource("1_ntk3c")
+enabled = false
+
+[resource]
+script = ExtResource("4_gbhmt")
+id = "condition.summoned"
+label = "Summoned"
+icon = SubResource("Resource_gbhmt")
+disposition = "state_only"
+look = SubResource("Resource_3x4rx")
+group = "summoning"
+max_layers = 1.0
+application_text = SubResource("Resource_e6t4n")
+removal_text = SubResource("Resource_v5tpb")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "summoning.membership",
+"visualIntensity": "state_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.summoned",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.neurodragon"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

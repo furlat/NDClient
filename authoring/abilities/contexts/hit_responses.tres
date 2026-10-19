@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_caief"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_aasle"]
+
+[resource]
+script = ExtResource("1_caief")
+id = "hit_responses"
+unported = {
+"default": "blood.hit_a1",
+"scale": 0.5
+}
+notes = "Per damage type responses are the damage_types entries; deposits belong to the environment's residues."

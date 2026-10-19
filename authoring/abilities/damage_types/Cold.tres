@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PresentationDamageType" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="1_njoiq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/damage_type.gd" id="2_dfea1"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_cj78j"]
+
+[sub_resource type="Resource" id="Resource_5kqcg"]
+script = ExtResource("1_njoiq")
+id = "damage.cold"
+roles = Dictionary[String, Color]({
+"primary": Color(0.26666668, 0.6509804, 1, 1),
+"secondary": Color(0.13333334, 0.4, 0.8, 1),
+"tertiary": Color(0.53333336, 0.8, 0.8117647, 1)
+})
+ramp = PackedColorArray()
+
+[resource]
+script = ExtResource("2_dfea1")
+id = "Cold"
+label = "Cold"
+palette = SubResource("Resource_5kqcg")
+impact_colour = "#44a6ff"
+status = "ready"

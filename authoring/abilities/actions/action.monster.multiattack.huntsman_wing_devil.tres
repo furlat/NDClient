@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_3pknb"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_vvpy5"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_q6xyq"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_v0pnd"]
+
+[sub_resource type="Resource" id="Resource_4j0qp"]
+script = ExtResource("1_vvpy5")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pjndp"]
+script = ExtResource("2_q6xyq")
+path = "art/media/ui/icons/smooth48/ui.filter-attacks.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-attacks"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-attacks"
+
+[resource]
+script = ExtResource("1_3pknb")
+id = "action.monster.multiattack.huntsman_wing_devil"
+kind = "action"
+family = "monster"
+icon = SubResource("Resource_pjndp")
+body = SubResource("Resource_4j0qp")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (multiattack); the rig resolves it to a clip once roles are built (coverage fill)."

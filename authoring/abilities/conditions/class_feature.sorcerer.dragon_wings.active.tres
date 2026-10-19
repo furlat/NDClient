@@ -1,0 +1,120 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_v4j2j"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_6q0ca"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_7ik75"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_7ik75"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_0h2fl"]
+
+[sub_resource type="Resource" id="Resource_0x88x"]
+script = ExtResource("1_v4j2j")
+enabled = false
+colour = Color(0.6392157, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_0h2fl"]
+script = ExtResource("2_7ik75")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_ih1fy"]
+script = ExtResource("3_7ik75")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ac655"]
+script = ExtResource("2_6q0ca")
+steps = Array[ExtResource("3_7ik75")]([SubResource("Resource_ih1fy")])
+
+[sub_resource type="Resource" id="Resource_3b5ij"]
+script = ExtResource("1_v4j2j")
+enabled = false
+colour = Color(0.80784315, 0.15294118, 0.7647059, 1)
+
+[resource]
+script = ExtResource("4_0h2fl")
+id = "class_feature.sorcerer.dragon_wings.active"
+label = "Dragon Wings"
+icon = SubResource("Resource_0h2fl")
+disposition = "authored"
+look = SubResource("Resource_ac655")
+group = "back-adornment"
+exclusive_group = "back-adornment"
+priority = 80.0
+max_layers = 1.0
+application_text = SubResource("Resource_0x88x")
+removal_text = SubResource("Resource_3b5ij")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["equipment_weapon"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "flight.manifested-wings",
+"visualIntensity": "ambient_passive"
+},
+"composition": {},
+"definitionRef": {
+"content_id": "class_feature.sorcerer.dragon_wings.active",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [{
+"anatomy": "wings",
+"category": "Bag8",
+"id": "manifested-flight-wings",
+"priority": 100.0,
+"slot": "backpack",
+"tint": 16777215.0
+}],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=manifest; effect=condition.dragon_wings; disposition=beneficial; target=actor; gates=configuration:toggle=manifest",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.sorcerer.dragon_wings.toggle",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "branch=dismiss; effect=condition.dragon_wings.remove; disposition=neutral; target=actor; gates=configuration:toggle=dismiss",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.sorcerer.dragon_wings.toggle",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

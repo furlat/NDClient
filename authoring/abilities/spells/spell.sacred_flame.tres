@@ -1,0 +1,192 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_fotk4"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_lu6nq"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_tidk0"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_mlfr7"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_0dw6h"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_lau1h"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_tx53c"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_essgq"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_nohjo"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_e7dcg"]
+
+[sub_resource type="Resource" id="Resource_b0e2t"]
+script = ExtResource("1_fotk4")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_ru4cb"]
+script = ExtResource("2_lu6nq")
+roles = Dictionary[String, Color]({
+"primary": Color(0.7882353, 0.6627451, 0.30980393, 1),
+"secondary": Color(1, 1, 0.972549, 1),
+"tertiary": Color(0.5568628, 0.45882353, 0.19607843, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_l0xkl"]
+script = ExtResource("3_tidk0")
+clip = "spells/sacred_flame/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.12
+orientation = "world"
+source_end = 5.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"delay_seconds": 0.0,
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_ffgkb"]
+script = ExtResource("5_0dw6h")
+kind = "palette_ramp"
+colours = PackedColorArray(0.06666667, 0.043137256, 0.003921569, 1, 0.19607843, 0.14901961, 0.03137255, 1, 0.2784314, 0.22352941, 0.078431375, 1, 0.32156864, 0.25882354, 0.09803922, 1, 0.36078432, 0.29411766, 0.11764706, 1, 0.40392157, 0.32941177, 0.13725491, 1, 0.4627451, 0.38039216, 0.16470589, 1, 0.5137255, 0.43137255, 0.21568628, 1, 0.5568628, 0.45882353, 0.19607843, 1, 0.6156863, 0.50980395, 0.23137255, 1, 0.67058825, 0.5647059, 0.2901961, 1, 0.7254902, 0.59607846, 0.23921569, 1, 0.7882353, 0.6627451, 0.30980393, 1, 0.88235295, 0.74509805, 0.3529412, 1, 0.96862745, 0.827451, 0.4, 1, 1, 0.9254902, 0.40784314, 1, 1, 1, 0.37254903, 1, 1, 1, 0.47058824, 1, 1, 1, 0.54509807, 1, 1, 1, 0.627451, 1, 1, 1, 0.68235296, 1, 1, 1, 0.7058824, 1, 1, 1, 0.78039217, 1, 1, 1, 0.972549, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5xt24"]
+script = ExtResource("4_mlfr7")
+steps = Array[ExtResource("5_0dw6h")]([SubResource("Resource_ffgkb")])
+
+[sub_resource type="Resource" id="Resource_2lm3b"]
+script = ExtResource("5_0dw6h")
+kind = "palette_ramp"
+colours = PackedColorArray(0.5568628, 0.45882353, 0.19607843, 1, 0.7882353, 0.6627451, 0.30980393, 1, 1, 1, 0.972549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qb0vd"]
+script = ExtResource("4_mlfr7")
+steps = Array[ExtResource("5_0dw6h")]([SubResource("Resource_2lm3b")])
+
+[sub_resource type="Resource" id="Resource_hkxup"]
+script = ExtResource("6_lau1h")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_qb0vd")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13216079.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_p7wke"]
+script = ExtResource("7_tx53c")
+path = "art/media/ui/icons/smooth48/spell.sacred-flame.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.sacred-flame"
+
+[resource]
+script = ExtResource("8_essgq")
+id = "spell.sacred_flame"
+icon = SubResource("Resource_p7wke")
+delivery = "projectile"
+body = SubResource("Resource_b0e2t")
+hand_layers = Array[ExtResource("6_lau1h")]([SubResource("Resource_hkxup")])
+sockets = "measured/abilities/spells/spell.sacred_flame.sockets.json"
+effects = Array[ExtResource("3_tidk0")]([SubResource("Resource_l0xkl")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_5xt24")
+number_frame = 7.0
+number_duration = 1.0
+colours = SubResource("Resource_ru4cb")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "partial"
+staging_unported = {
+"source": "sandbox/batches/combat.json:/spells/sacred_flame/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 13216079.0,
+"enabled": true,
+"label": "Radiant"
+},
+"hitFlash": {
+"color": 13216079.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.sacred_flame",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "cantrip.sacred_flame.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "effect",
+"label": "Sacred Flame"
+},
+"fps": 32.0,
+"id": "back",
+"scale": 0.5,
+"startOffsetMs": -303.57142857142856
+}, {
+"assetId": "cantrip.sacred_flame.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "effect",
+"label": "Sacred Flame"
+},
+"fps": 32.0,
+"id": "front",
+"scale": 0.5,
+"startOffsetMs": -303.57142857142856
+}]
+}

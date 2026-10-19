@@ -1,0 +1,196 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_37nb2"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_i5llk"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_2tj7a"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_ftyhm"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_0oejj"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_hkjdc"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_tafba"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_40nwm"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_dlbbj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_1isbk"]
+
+[sub_resource type="Resource" id="Resource_ssubr"]
+script = ExtResource("1_37nb2")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_l0485"]
+script = ExtResource("2_i5llk")
+roles = Dictionary[String, Color]({
+"primary": Color(0.4117647, 0.73333335, 0.7764706, 1),
+"secondary": Color(0.81960785, 0.9490196, 0.9372549, 1),
+"tertiary": Color(0.16078432, 0.2627451, 0.3254902, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_v4kw3"]
+script = ExtResource("3_2tj7a")
+clip = "review/prayer_of_healing/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_0ods5"]
+script = ExtResource("6_hkjdc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.16078432, 0.2627451, 0.3254902, 1, 0.4117647, 0.73333335, 0.7764706, 1, 0.81960785, 0.9490196, 0.9372549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vis2j"]
+script = ExtResource("5_0oejj")
+steps = Array[ExtResource("6_hkjdc")]([SubResource("Resource_0ods5")])
+
+[sub_resource type="Resource" id="Resource_mcpx4"]
+script = ExtResource("4_ftyhm")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_vis2j")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6929350.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_28gl5"]
+script = ExtResource("6_hkjdc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.16078432, 0.2627451, 0.3254902, 1, 0.4117647, 0.73333335, 0.7764706, 1, 0.81960785, 0.9490196, 0.9372549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kbpk4"]
+script = ExtResource("5_0oejj")
+steps = Array[ExtResource("6_hkjdc")]([SubResource("Resource_28gl5")])
+
+[sub_resource type="Resource" id="Resource_bhry6"]
+script = ExtResource("4_ftyhm")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Special1.png"
+look = SubResource("Resource_kbpk4")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6929350.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_1lvlk"]
+script = ExtResource("7_tafba")
+path = "art/media/ui/icons/smooth48/spell.prayer-of-healing.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.prayer-of-healing"
+
+[resource]
+script = ExtResource("8_40nwm")
+id = "spell.prayer_of_healing"
+icon = SubResource("Resource_1lvlk")
+delivery = "targeted"
+body = SubResource("Resource_ssubr")
+hand_layers = Array[ExtResource("4_ftyhm")]([SubResource("Resource_mcpx4"), SubResource("Resource_bhry6")])
+sockets = "measured/abilities/spells/spell.prayer_of_healing.sockets.json"
+effects = Array[ExtResource("3_2tj7a")]([SubResource("Resource_v4kw3")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_l0485")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "prayer_of_healing__back",
+"source": "assets/vfx/index.json:/selections/prayer_of_healing__back/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.prayer_of_healing",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "support.prayer_of_healing.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 3000.0,
+"effectGroup": {
+"id": "effect",
+"label": "Prayer Of Healing"
+},
+"fps": 32.0,
+"id": "back",
+"scale": 0.5,
+"startOffsetMs": -500.0
+}, {
+"assetId": "support.prayer_of_healing.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 3000.0,
+"effectGroup": {
+"id": "effect",
+"label": "Prayer Of Healing"
+},
+"fps": 32.0,
+"id": "front",
+"scale": 0.5,
+"startOffsetMs": -500.0
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

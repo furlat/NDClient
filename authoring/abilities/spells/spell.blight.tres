@@ -1,0 +1,308 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_gtmh3"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_s6gek"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_84jvs"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_u5g6h"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_4aqth"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_wwn7y"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_mrqvx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_0ixj1"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_5twts"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_g00m3"]
+
+[sub_resource type="Resource" id="Resource_bmblq"]
+script = ExtResource("1_gtmh3")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_um73j"]
+script = ExtResource("2_s6gek")
+roles = Dictionary[String, Color]({
+"primary": Color(0.827451, 0.7176471, 0.9843137, 1),
+"secondary": Color(0.59607846, 0.6156863, 0.6862745, 1),
+"tertiary": Color(0.27450982, 0.07450981, 0.5294118, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_g4ye4"]
+script = ExtResource("3_84jvs")
+clip = "review/blight/back/impact"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.530330085889911
+orientation = "world"
+source_end = 1.625
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_yrm1f"]
+script = ExtResource("6_wwn7y")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.07450981, 0.5294118, 1, 0.827451, 0.7176471, 0.9843137, 1, 0.59607846, 0.6156863, 0.6862745, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_yxupj"]
+script = ExtResource("5_4aqth")
+steps = Array[ExtResource("6_wwn7y")]([SubResource("Resource_yrm1f")])
+
+[sub_resource type="Resource" id="Resource_1nc2r"]
+script = ExtResource("4_u5g6h")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_yxupj")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13875195.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_58rsh"]
+script = ExtResource("6_wwn7y")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.07450981, 0.5294118, 1, 0.827451, 0.7176471, 0.9843137, 1, 0.59607846, 0.6156863, 0.6862745, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2w02s"]
+script = ExtResource("5_4aqth")
+steps = Array[ExtResource("6_wwn7y")]([SubResource("Resource_58rsh")])
+
+[sub_resource type="Resource" id="Resource_2vmp3"]
+script = ExtResource("4_u5g6h")
+place = "effect"
+category = "Effect3"
+sheet = "/spritesheets/Effect3/Attack5.png"
+look = SubResource("Resource_2w02s")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13875195.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_ifbte"]
+script = ExtResource("7_mrqvx")
+path = "art/media/ui/icons/smooth48/spell.blight.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.blight"
+
+[resource]
+script = ExtResource("8_0ixj1")
+id = "spell.blight"
+icon = SubResource("Resource_ifbte")
+delivery = "ray"
+body = SubResource("Resource_bmblq")
+hand_layers = Array[ExtResource("4_u5g6h")]([SubResource("Resource_1nc2r"), SubResource("Resource_2vmp3")])
+sockets = "measured/abilities/spells/spell.blight.sockets.json"
+effects = Array[ExtResource("3_84jvs")]([SubResource("Resource_g4ye4")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_um73j")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "blight__back",
+"source": "assets/vfx/index.json:/selections/blight__back/staging"
+}
+unported = {
+"bodyMaterials": [{
+"id": "blight.wither.False",
+"material": {
+"colors": [2239282.0, 7106168.0, 12860731.0, 16762786.0],
+"mapping": "wither_texture",
+"texture": "/necrotic/blight-noise.png"
+},
+"points": [{
+"elapsedMs": 0.0,
+"strength": 0.0
+}, {
+"elapsedMs": 35.0,
+"pulse": 1.0,
+"strength": 0.0
+}, {
+"elapsedMs": 180.0,
+"pulse": 1.0,
+"strength": 0.7
+}, {
+"elapsedMs": 300.0,
+"pulse": 0.05,
+"strength": 1.0
+}, {
+"elapsedMs": 320.0,
+"strength": 1.0
+}, {
+"elapsedMs": 780.0,
+"strength": 1.0
+}, {
+"elapsedMs": 1480.0,
+"strength": 0.0
+}],
+"requireDamageApplied": true,
+"requiredSaveSuccess": false,
+"startOffsetMs": 120.0
+}, {
+"id": "blight.wither.True",
+"material": {
+"colors": [2239282.0, 7106168.0, 12860731.0, 16762786.0],
+"mapping": "wither_texture",
+"texture": "/necrotic/blight-noise.png"
+},
+"points": [{
+"elapsedMs": 0.0,
+"strength": 0.0
+}, {
+"elapsedMs": 35.0,
+"pulse": 0.5,
+"strength": 0.0
+}, {
+"elapsedMs": 180.0,
+"pulse": 0.5,
+"strength": 0.35
+}, {
+"elapsedMs": 300.0,
+"pulse": 0.025,
+"strength": 0.5
+}, {
+"elapsedMs": 320.0,
+"strength": 0.5
+}, {
+"elapsedMs": 780.0,
+"strength": 0.5
+}, {
+"elapsedMs": 1480.0,
+"strength": 0.0
+}],
+"requireDamageApplied": true,
+"requiredSaveSuccess": true,
+"startOffsetMs": 120.0
+}],
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 120.0
+},
+"definitionRef": {
+"content_id": "spell.blight",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "necrotic.blight.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "blight.False",
+"label": "Blight · Blight false"
+},
+"fps": 32.0,
+"id": "blight.back.False",
+"requireDamageApplied": true,
+"requiredSaveSuccess": false,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 120.0
+}, {
+"assetId": "necrotic.blight.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "blight.False",
+"label": "Blight · Blight false"
+},
+"fps": 32.0,
+"id": "blight.front.False",
+"requireDamageApplied": true,
+"requiredSaveSuccess": false,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 120.0
+}, {
+"alpha": 0.55,
+"assetId": "necrotic.blight.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "blight.True",
+"label": "Blight · Blight true"
+},
+"fps": 32.0,
+"id": "blight.back.True",
+"requireDamageApplied": true,
+"requiredSaveSuccess": true,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 120.0
+}, {
+"alpha": 0.55,
+"assetId": "necrotic.blight.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "blight.True",
+"label": "Blight · Blight true"
+},
+"fps": 32.0,
+"id": "blight.front.True",
+"requireDamageApplied": true,
+"requiredSaveSuccess": true,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 120.0
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

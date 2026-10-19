@@ -1,0 +1,109 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_eqxq1"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_dq5hs"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_xwx1p"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_xwx1p"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_mokam"]
+
+[sub_resource type="Resource" id="Resource_m3hpr"]
+script = ExtResource("1_eqxq1")
+colour = Color(0.89411765, 0.50980395, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_mokam"]
+script = ExtResource("2_xwx1p")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-necromancy-blindnessdeafnesseffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-necromancy-blindnessdeafnesseffect"
+
+[sub_resource type="Resource" id="Resource_egmmv"]
+script = ExtResource("3_xwx1p")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_20upj"]
+script = ExtResource("2_dq5hs")
+steps = Array[ExtResource("3_xwx1p")]([SubResource("Resource_egmmv")])
+
+[sub_resource type="Resource" id="Resource_b566r"]
+script = ExtResource("1_eqxq1")
+colour = Color(0.80784315, 0.69803923, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_mokam")
+id = "condition.spell.blindness_deafness"
+label = "Blindness/Deafness"
+icon = SubResource("Resource_mokam")
+disposition = "authored"
+look = SubResource("Resource_20upj")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_m3hpr")
+removal_text = SubResource("Resource_b566r")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.blindness_deafness",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.blindness_deafness",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=blinded; effect=condition.blindness_deafness.blinded; disposition=harmful; target=each_affected_entity; gates=saving_throw:constitution:failed:actor_spell_save_dc+configuration:affliction=blinded",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.blindness_deafness",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=deafened; effect=condition.blindness_deafness.deafened; disposition=harmful; target=each_affected_entity; gates=saving_throw:constitution:failed:actor_spell_save_dc+configuration:affliction=deafened",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.blindness_deafness",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

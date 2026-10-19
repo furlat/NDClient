@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7rteh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_ob2d6"]
+
+[sub_resource type="Resource" id="Resource_3hdpx"]
+script = ExtResource("1_7rteh")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.starry_wisp.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.starry_wisp"
+status = "stand_in"
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("1_ob2d6")
+id = "condition.spell.starry_wisp"
+icon = SubResource("Resource_3hdpx")

@@ -1,0 +1,191 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_gkul4"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_8wwwb"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_xo8cd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_cna2f"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_wejt2"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_s8dei"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_yb1ny"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_t4qqd"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_pbndx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_l2deu"]
+
+[sub_resource type="Resource" id="Resource_kh6g7"]
+script = ExtResource("1_gkul4")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_4pjp0"]
+script = ExtResource("2_8wwwb")
+roles = Dictionary[String, Color]({
+"primary": Color(0.80784315, 0.9843137, 0.8235294, 1),
+"secondary": Color(0.4509804, 0.87058824, 0.5647059, 1),
+"tertiary": Color(0.1254902, 0.28235295, 0.16862746, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_apeb8"]
+script = ExtResource("3_xo8cd")
+clip = "remaining/disintegrate_native/lifecycle"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 2.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_4h48d"]
+script = ExtResource("6_s8dei")
+kind = "palette_ramp"
+colours = PackedColorArray(0.1254902, 0.28235295, 0.16862746, 1, 0.80784315, 0.9843137, 0.8235294, 1, 0.4509804, 0.87058824, 0.5647059, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8gvyj"]
+script = ExtResource("5_wejt2")
+steps = Array[ExtResource("6_s8dei")]([SubResource("Resource_4h48d")])
+
+[sub_resource type="Resource" id="Resource_o0o64"]
+script = ExtResource("4_cna2f")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_8gvyj")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13564882.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_ofq8e"]
+script = ExtResource("6_s8dei")
+kind = "palette_ramp"
+colours = PackedColorArray(0.1254902, 0.28235295, 0.16862746, 1, 0.80784315, 0.9843137, 0.8235294, 1, 0.4509804, 0.87058824, 0.5647059, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qcxg3"]
+script = ExtResource("5_wejt2")
+steps = Array[ExtResource("6_s8dei")]([SubResource("Resource_ofq8e")])
+
+[sub_resource type="Resource" id="Resource_qhbrt"]
+script = ExtResource("4_cna2f")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_qcxg3")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13564882.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_sf420"]
+script = ExtResource("7_yb1ny")
+path = "art/media/ui/icons/smooth48/spell.disintegrate.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.disintegrate"
+
+[resource]
+script = ExtResource("8_t4qqd")
+id = "spell.disintegrate"
+icon = SubResource("Resource_sf420")
+delivery = "ray"
+body = SubResource("Resource_kh6g7")
+hand_layers = Array[ExtResource("4_cna2f")]([SubResource("Resource_o0o64"), SubResource("Resource_qhbrt")])
+sockets = "measured/abilities/spells/spell.disintegrate.sockets.json"
+effects = Array[ExtResource("3_xo8cd")]([SubResource("Resource_apeb8")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_4pjp0")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "disintegrate_native",
+"source": "assets/vfx/index.json:/selections/disintegrate_native/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"speedTilesPerSecond": 5.2631578947368425
+},
+"definitionRef": {
+"content_id": "spell.disintegrate",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"directed": {
+"contactFadeMs": 1200.0,
+"material": "plasma_trail",
+"nativeUnitsPerCell": 2.121320344,
+"noiseTexture": "/necrotic/plasma/noise.png",
+"palette": [1456469.0, 3170957.0, 6331856.0, 10933748.0, 14872831.0, 2115627.0, 4229708.0, 6797430.0, 7593616.0, 13564882.0, 6445127.0, 10128754.0],
+"particles": "/necrotic/plasma/plasma-particles.json",
+"sourcePlaneHeightCells": 0.8660254037844386,
+"sourceSocket": "hand",
+"sphere": "/necrotic/plasma/sphere.json",
+"targetPlaneHeightCells": 1.0392304845413265,
+"trailTexture": "/necrotic/plasma/trail.jpg",
+"verticalScale": 1.224744871391589
+}
+}
+notes = "Plays its imported Factory staging (coverage fill)."

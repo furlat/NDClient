@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_6a0fa"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_ieelg"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_6a0fa"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_i5swv"]
+
+[sub_resource type="Resource" id="Resource_i5swv"]
+script = ExtResource("1_6a0fa")
+role = "cast_alt"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8a6kb"]
+script = ExtResource("2_i5swv")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("1_ieelg")
+id = "action.class.cleric.preserve_life"
+kind = "action"
+family = "class"
+icon = SubResource("Resource_8a6kb")
+body = SubResource("Resource_i5swv")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."

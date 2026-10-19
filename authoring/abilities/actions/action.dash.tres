@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_4fcv8"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_4w8cs"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_lxh2g"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_ma7sp"]
+
+[sub_resource type="Resource" id="Resource_nj8tt"]
+script = ExtResource("1_4fcv8")
+role = "act"
+clip = "Idle"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 0.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bjtqa"]
+script = ExtResource("2_4w8cs")
+path = "art/media/ui/icons/smooth48/action.dash.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.dash"
+
+[sub_resource type="Resource" id="Resource_v0l54"]
+script = ExtResource("4_ma7sp")
+cue = "stance_transition"
+at = "event.start"
+
+[resource]
+script = ExtResource("3_lxh2g")
+id = "action.dash"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_bjtqa")
+disposition = "authored"
+body = SubResource("Resource_nj8tt")
+effect_sources = PackedStringArray()
+sounds = Array[ExtResource("4_ma7sp")]([SubResource("Resource_v0l54")])
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.dash",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

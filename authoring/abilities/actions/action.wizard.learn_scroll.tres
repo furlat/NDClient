@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_djlgj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_rrrvm"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_mmts5"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_rrrvm"]
+
+[sub_resource type="Resource" id="Resource_mmts5"]
+script = ExtResource("1_rrrvm")
+role = "act"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fw8eo"]
+script = ExtResource("2_mmts5")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("1_djlgj")
+id = "action.wizard.learn_scroll"
+kind = "action"
+family = "class"
+icon = SubResource("Resource_fw8eo")
+body = SubResource("Resource_mmts5")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (use_item); the rig resolves it to a clip once roles are built (coverage fill)."

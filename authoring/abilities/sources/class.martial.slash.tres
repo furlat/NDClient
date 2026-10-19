@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="PresentationNativeSource" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/native_source.gd" id="1_v0gy0"]
+
+[resource]
+script = ExtResource("1_v0gy0")
+id = "class.martial.slash"
+kind = "authored_script"
+record = {
+"camera_relative": true,
+"camera_target": [0.0, 0.734846922834953, 0.0],
+"canvas": [384.0, 384.0],
+"duration": 1.0,
+"id": "class.martial.slash",
+"kind": "authored_script",
+"loop": false,
+"media_ids": ["class.martial.melee1.attack1"],
+"palette": {
+"colors": ["#642b2b", "#bf5745", "#e4ccb1"],
+"operator": "class_neutral"
+},
+"pivot": [192.0, 249.6],
+"pixels_per_unit": 90.5096679918781,
+"preload_paths": ["res://assets/native_effects/class_actions/Strike.gd", "res://assets/native_effects/class_actions/Strike.gdshader", "res://assets/native_effects/class_actions/strike_hit.png"],
+"properties": {
+"heading": 0.0,
+"kind": "slash"
+},
+"requirements": ["production_painter_integration"],
+"sample_hz": 32.0,
+"script": "res://assets/native_effects/class_actions/Strike.gd",
+"weapon_path": true
+}

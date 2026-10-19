@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_sqj25"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_xrtni"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_1ld4n"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_wqv2k"]
+
+[sub_resource type="Resource" id="Resource_6q8po"]
+script = ExtResource("1_xrtni")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xbucf"]
+script = ExtResource("2_wqv2k")
+path = "art/media/ui/icons/smooth48/ui.filter-attacks.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-attacks"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-attacks"
+
+[resource]
+script = ExtResource("1_sqj25")
+id = "action.monster.multiattack.bow_harrier_devil"
+kind = "action"
+family = "monster"
+icon = SubResource("Resource_xbucf")
+body = SubResource("Resource_6q8po")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (multiattack); the rig resolves it to a clip once roles are built (coverage fill)."

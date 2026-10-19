@@ -1,0 +1,336 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ymr55"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_mly64"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_d0l0v"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_vyyoi"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_nt753"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_i4hd4"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_cp46f"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_boi6k"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_1ov2g"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_8gvh3"]
+
+[sub_resource type="Resource" id="Resource_pm23o"]
+script = ExtResource("1_ymr55")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_s1p6h"]
+script = ExtResource("2_mly64")
+roles = Dictionary[String, Color]({
+"primary": Color(0.8352941, 0.69411767, 0.9411765, 1),
+"secondary": Color(0.49411765, 0.27450982, 0.6509804, 1),
+"tertiary": Color(0.39607844, 0.24313726, 0.5137255, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_gyai6"]
+script = ExtResource("3_d0l0v")
+clip = "spells/thunderwave_production_xyz/whole/lifecycle"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+scale = 0.5
+rotation_degrees = Vector3(0, 90, 0)
+source_end = 1.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"delay_seconds": 0.0,
+"orientation": "facing",
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_r64kd"]
+script = ExtResource("5_nt753")
+kind = "palette_ramp"
+colours = PackedColorArray(0.011764706, 0.007843138, 0.019607844, 1, 0.12156863, 0.08235294, 0.18039216, 1, 0.25882354, 0.13333334, 0.35686275, 1, 0.3019608, 0.15686275, 0.4117647, 1, 0.31764707, 0.17254902, 0.42745098, 1, 0.34509805, 0.18039216, 0.46666667, 1, 0.3647059, 0.2, 0.4862745, 1, 0.34901962, 0.24313726, 0.43529412, 1, 0.39607844, 0.24313726, 0.5137255, 1, 0.44705883, 0.24313726, 0.59607846, 1, 0.4627451, 0.26666668, 0.6117647, 1, 0.41960785, 0.30588236, 0.5137255, 1, 0.49411765, 0.27450982, 0.6509804, 1, 0.4392157, 0.3372549, 0.52156866, 1, 0.5294118, 0.3137255, 0.6862745, 1, 0.46666667, 0.37254903, 0.5411765, 1, 0.5137255, 0.3882353, 0.6117647, 1, 0.5686275, 0.3882353, 0.70980394, 1, 0.5686275, 0.44705883, 0.6666667, 1, 0.63529414, 0.4862745, 0.75686276, 1, 0.6627451, 0.5372549, 0.7607843, 1, 0.70980394, 0.5647059, 0.8235294, 1, 0.75686276, 0.61960787, 0.8627451, 1, 0.8352941, 0.69411767, 0.9411765, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ydquh"]
+script = ExtResource("4_vyyoi")
+steps = Array[ExtResource("5_nt753")]([SubResource("Resource_r64kd")])
+
+[sub_resource type="Resource" id="Resource_arbsq"]
+script = ExtResource("5_nt753")
+kind = "palette_ramp"
+colours = PackedColorArray(0.39607844, 0.24313726, 0.5137255, 1, 0.8352941, 0.69411767, 0.9411765, 1, 0.49411765, 0.27450982, 0.6509804, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_oci6n"]
+script = ExtResource("4_vyyoi")
+steps = Array[ExtResource("5_nt753")]([SubResource("Resource_arbsq")])
+
+[sub_resource type="Resource" id="Resource_ih6vq"]
+script = ExtResource("6_i4hd4")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_oci6n")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 14004720.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_0ev6p"]
+script = ExtResource("5_nt753")
+kind = "palette_ramp"
+colours = PackedColorArray(0.39607844, 0.24313726, 0.5137255, 1, 0.8352941, 0.69411767, 0.9411765, 1, 0.49411765, 0.27450982, 0.6509804, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m4gb5"]
+script = ExtResource("4_vyyoi")
+steps = Array[ExtResource("5_nt753")]([SubResource("Resource_0ev6p")])
+
+[sub_resource type="Resource" id="Resource_wtrej"]
+script = ExtResource("6_i4hd4")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Special1.png"
+look = SubResource("Resource_m4gb5")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 14004720.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_iwiyx"]
+script = ExtResource("7_cp46f")
+path = "art/media/ui/icons/smooth48/spell.thunderwave.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.thunderwave"
+
+[resource]
+script = ExtResource("8_boi6k")
+id = "spell.thunderwave"
+icon = SubResource("Resource_iwiyx")
+delivery = "sphere"
+body = SubResource("Resource_pm23o")
+hand_layers = Array[ExtResource("6_i4hd4")]([SubResource("Resource_ih6vq"), SubResource("Resource_wtrej")])
+sockets = "measured/abilities/spells/spell.thunderwave.sockets.json"
+effects = Array[ExtResource("3_d0l0v")]([SubResource("Resource_gyai6")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_ydquh")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/thunderwave_production_xyz/whole/lifecycle",
+"clock_parameter": "source_clock",
+"node": "effect/Donor/AuthoredWaveDerivative",
+"parameter_overrides": {},
+"status": "available",
+"surface": 0.0
+}
+colours = SubResource("Resource_s1p6h")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.prone")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.thunderwave.bounds.json"
+staging_unported = {
+"source": "sandbox/batches/combat.json:/spells/thunderwave/staging"
+}
+unported = {
+"area": {
+"geometry": {
+"depthMode": "ground",
+"enabled": false,
+"endScale": 1.0,
+"fillAlphaEnd": 0.0,
+"fillAlphaStart": 0.0,
+"renderer": "geometry_area",
+"startScale": 1.0,
+"strokeAlphaEnd": 0.0,
+"strokeAlphaStart": 0.0,
+"strokeWidth": 0.0
+},
+"phases": {
+"explosion": {
+"durationMs": 0.0,
+"effectProgress": 0.0,
+"enabled": false,
+"endScale": 1.0,
+"fillAlphaEnd": 0.0,
+"startScale": 1.0,
+"strokeAlphaEnd": 0.0
+},
+"shape": {
+"durationMs": 0.0,
+"effectProgress": 0.0,
+"enabled": true
+}
+},
+"shapeSource": "authoritative_cue",
+"sprite": null
+},
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": {
+"E": {
+"0_-1": 27.777777777777775,
+"0_0": 20.833333333333332,
+"0_1": 27.777777777777775,
+"1_-1": 222.2222222222222,
+"1_0": 201.38888888888889,
+"1_1": 194.44444444444449,
+"2_-1": 416.6666666666667,
+"2_0": 416.6666666666667,
+"2_1": 416.6666666666667
+},
+"N": {
+"-1_-1": 256.9444444444444,
+"-1_0": 263.8888888888889,
+"-1_1": 187.5,
+"-2_-1": 416.6666666666667,
+"-2_0": 451.3888888888889,
+"-2_1": 368.0555555555556,
+"0_-1": 27.777777777777775,
+"0_0": 20.833333333333332,
+"0_1": 20.833333333333332
+},
+"NE": {
+"-1_-1": 90.27777777777776,
+"-1_-2": 368.0555555555556,
+"-1_0": 27.777777777777775,
+"0_-1": 256.9444444444444,
+"0_-2": 423.6111111111111,
+"0_0": 20.833333333333332,
+"1_-1": 208.33333333333337,
+"1_-2": 375.0,
+"1_0": 20.833333333333332
+},
+"NW": {
+"-1_-1": 256.9444444444444,
+"-1_0": 263.8888888888889,
+"-1_1": 187.5,
+"-2_-1": 416.6666666666667,
+"-2_0": 451.3888888888889,
+"-2_1": 368.0555555555556,
+"0_-1": 27.777777777777775,
+"0_0": 20.833333333333332,
+"0_1": 20.833333333333332
+},
+"S": {
+"0_-1": 27.777777777777775,
+"0_0": 20.833333333333332,
+"0_1": 27.777777777777775,
+"1_-1": 222.2222222222222,
+"1_0": 201.38888888888889,
+"1_1": 194.44444444444449,
+"2_-1": 416.6666666666667,
+"2_0": 416.6666666666667,
+"2_1": 416.6666666666667
+},
+"SE": {
+"0_-1": 27.777777777777775,
+"0_0": 20.833333333333332,
+"0_1": 27.777777777777775,
+"1_-1": 222.2222222222222,
+"1_0": 201.38888888888889,
+"1_1": 194.44444444444449,
+"2_-1": 416.6666666666667,
+"2_0": 416.6666666666667,
+"2_1": 416.6666666666667
+},
+"SW": {
+"-1_0": 27.777777777777775,
+"-1_1": 215.2777777777778,
+"-1_2": 416.6666666666667,
+"0_0": 27.777777777777775,
+"0_1": 236.11111111111111,
+"0_2": 423.6111111111111,
+"1_0": 27.777777777777775,
+"1_1": 166.66666666666666,
+"1_2": 416.6666666666667
+},
+"W": {
+"-1_-1": 256.9444444444444,
+"-1_0": 263.8888888888889,
+"-1_1": 187.5,
+"-2_-1": 416.6666666666667,
+"-2_0": 451.3888888888889,
+"-2_1": 368.0555555555556,
+"0_-1": 27.777777777777775,
+"0_0": 20.833333333333332,
+"0_1": 20.833333333333332
+}
+}
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 14004720.0,
+"enabled": true,
+"label": "Thunder"
+},
+"hitFlash": {
+"color": 14004720.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.thunderwave",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "area.thunderwave.surface",
+"attachment": "source_ground",
+"composition": "paired_depth",
+"fps": 32.0,
+"id": "crest"
+}]
+}

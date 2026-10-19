@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PresentationDamageType" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="1_t40bu"]
+[ext_resource type="Script" path="res://presentation/source/abilities/damage_type.gd" id="2_jpbyb"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_3ul2o"]
+
+[sub_resource type="Resource" id="Resource_boli1"]
+script = ExtResource("1_t40bu")
+id = "damage.thunder"
+roles = Dictionary[String, Color]({
+"primary": Color(0.53333336, 0.53333336, 1, 1),
+"secondary": Color(0.26666668, 0.2509804, 0.8, 1),
+"tertiary": Color(0.73333335, 0.5921569, 1, 1)
+})
+ramp = PackedColorArray()
+
+[resource]
+script = ExtResource("2_jpbyb")
+id = "Thunder"
+label = "Thunder"
+palette = SubResource("Resource_boli1")
+impact_colour = "#8888ff"
+status = "ready"

@@ -1,0 +1,236 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_gnudg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_fvu6q"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_hpsky"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_fvu6q"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_e1msm"]
+
+[sub_resource type="Resource" id="Resource_50758"]
+script = ExtResource("1_gnudg")
+enabled = false
+colour = Color(0.89411765, 0.3647059, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_e1msm"]
+script = ExtResource("2_fvu6q")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-deafened.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-deafened"
+
+[sub_resource type="Resource" id="Resource_nnho3"]
+script = ExtResource("3_fvu6q")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lldmw"]
+script = ExtResource("2_hpsky")
+steps = Array[ExtResource("3_fvu6q")]([SubResource("Resource_nnho3")])
+
+[sub_resource type="Resource" id="Resource_gxfhl"]
+script = ExtResource("1_gnudg")
+enabled = false
+colour = Color(0.80784315, 0.52156866, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_e1msm")
+id = "condition.deafened"
+label = "Deafened"
+icon = SubResource("Resource_e1msm")
+disposition = "authored"
+look = SubResource("Resource_lldmw")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "divine.deafened.back",
+"attachment": "head",
+"category": "deafened",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "divine.deafened.back",
+"markerGroup": "deafened",
+"offsetY": -11.5,
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "divine.deafened.front",
+"attachment": "head",
+"category": "deafened",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "divine.deafened.front",
+"markerGroup": "deafened",
+"offsetY": -11.5,
+"priority": 30.0
+}]
+group = "marker.condition.deafened"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_50758")
+removal_text = SubResource("Resource_gxfhl")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "divine.deafened",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.deafened",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hp-21-30; effect=condition.hp_21_30.condition.deafened; disposition=harmful; target=actor; gates=configuration:target_hp_band=21_30",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.divine_word",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hp-31-40; effect=condition.hp_31_40.condition.deafened; disposition=harmful; target=actor; gates=configuration:target_hp_band=31_40",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.divine_word",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hp-41-50; effect=condition.hp_41_50.deafened; disposition=harmful; target=actor; gates=configuration:target_hp_band=41_50",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.divine_word",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.silence.deafened",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=deafened; effect=condition.deafened; disposition=harmful; target=actor; gates=configuration:affliction=deafened",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.blindness_deafness",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=exact-condition-cleanse; effect=cleanse.condition.deafened; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.lesser_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=exact-condition-cleanse; effect=cleanse.condition.deafened; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.greater_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=condition-cleanse; effect=cleanse.deafened; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.heal",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=condition-cleanse; effect=cleanse.deafened; disposition=beneficial; target=each_affected_entity; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.mass_heal",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 600.0,
+"effects": []
+}
+}

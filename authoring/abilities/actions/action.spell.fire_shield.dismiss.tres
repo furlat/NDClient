@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ph6jj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_g6sjq"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_qky6i"]
+
+[sub_resource type="Resource" id="Resource_iw34j"]
+script = ExtResource("1_ph6jj")
+path = "art/media/ui/icons/smooth48/action.spell.fire_shield.dismiss.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.spell.fire_shield.dismiss"
+
+[resource]
+script = ExtResource("2_g6sjq")
+id = "action.spell.fire_shield.dismiss"
+kind = "action"
+family = "spell"
+icon = SubResource("Resource_iw34j")
+effect_sources = PackedStringArray()

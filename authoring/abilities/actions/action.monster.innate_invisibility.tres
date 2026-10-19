@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2xeq7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_m11ys"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_m11ys"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_72tk0"]
+
+[sub_resource type="Resource" id="Resource_72tk0"]
+script = ExtResource("1_m11ys")
+role = "cast_alt"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_y50df"]
+script = ExtResource("1_2xeq7")
+path = "art/media/ui/icons/smooth48/action.monster.innate_invisibility.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.monster.innate_invisibility"
+
+[resource]
+script = ExtResource("2_m11ys")
+id = "action.monster.innate_invisibility"
+kind = "action"
+family = "monster"
+icon = SubResource("Resource_y50df")
+body = SubResource("Resource_72tk0")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."

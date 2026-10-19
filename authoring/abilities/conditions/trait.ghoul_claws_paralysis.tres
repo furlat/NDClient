@@ -1,0 +1,87 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_c33ql"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_gwmsg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_i7rwi"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_i7rwi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_q7247"]
+
+[sub_resource type="Resource" id="Resource_hiyxk"]
+script = ExtResource("1_c33ql")
+enabled = false
+colour = Color(0.34509805, 0.89411765, 0.8039216, 1)
+
+[sub_resource type="Resource" id="Resource_q7247"]
+script = ExtResource("2_i7rwi")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_8etye"]
+script = ExtResource("3_i7rwi")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ij8g5"]
+script = ExtResource("2_gwmsg")
+steps = Array[ExtResource("3_i7rwi")]([SubResource("Resource_8etye")])
+
+[sub_resource type="Resource" id="Resource_5ij3k"]
+script = ExtResource("1_c33ql")
+enabled = false
+colour = Color(0.15294118, 0.5686275, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_q7247")
+id = "trait.ghoul_claws_paralysis"
+label = "Ghoul Claws Paralysis"
+icon = SubResource("Resource_q7247")
+disposition = "state_only"
+look = SubResource("Resource_ij8g5")
+group = "body"
+max_layers = 3.0
+application_text = SubResource("Resource_hiyxk")
+removal_text = SubResource("Resource_5ij3k")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "passive_unlock",
+"visualFamily": "catalog.trait.ghoul_claws_paralysis",
+"visualIntensity": "icon_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "trait.ghoul_claws_paralysis",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

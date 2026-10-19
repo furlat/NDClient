@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_4qa07"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_wrw74"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_mbohw"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_qx01o"]
+
+[sub_resource type="Resource" id="Resource_bnc7t"]
+script = ExtResource("1_4qa07")
+role = "act"
+clip = "Idle"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 0.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dadkk"]
+script = ExtResource("2_wrw74")
+path = "art/media/ui/icons/smooth48/action.shake-awake.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.shake-awake"
+
+[resource]
+script = ExtResource("3_mbohw")
+id = "action.shake_awake"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_dadkk")
+disposition = "authored"
+body = SubResource("Resource_bnc7t")
+effect_sources = PackedStringArray()
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.shake_awake",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

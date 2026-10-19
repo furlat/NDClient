@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_3f3mb"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_g1472"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_g1472"]
+
+[sub_resource type="Resource" id="Resource_vai3y"]
+script = ExtResource("1_g1472")
+path = "art/media/ui/icons/smooth48/ui.filter-all.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-all"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-all"
+
+[resource]
+script = ExtResource("1_3f3mb")
+id = "trait.rampage_available"
+kind = "trait"
+family = "trait"
+icon = SubResource("Resource_vai3y")
+effect_sources = PackedStringArray()
+status = "internal"

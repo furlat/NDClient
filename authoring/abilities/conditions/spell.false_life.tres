@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_c3cg0"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_7m5qw"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_efe84"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_efe84"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_f07hf"]
+
+[sub_resource type="Resource" id="Resource_ii6hr"]
+script = ExtResource("1_c3cg0")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_f07hf"]
+script = ExtResource("2_efe84")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_m2n7c"]
+script = ExtResource("3_efe84")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_im1vp"]
+script = ExtResource("2_7m5qw")
+steps = Array[ExtResource("3_efe84")]([SubResource("Resource_m2n7c")])
+
+[sub_resource type="Resource" id="Resource_vnkoy"]
+script = ExtResource("1_c3cg0")
+enabled = false
+
+[resource]
+script = ExtResource("4_f07hf")
+id = "spell.false_life"
+label = "False Life temporary HP"
+icon = SubResource("Resource_f07hf")
+disposition = "authored"
+look = SubResource("Resource_im1vp")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.false_life.back",
+"attachment": "body",
+"category": "false_life",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "pending.false_life.back",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.false_life.front",
+"attachment": "body",
+"category": "false_life",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "pending.false_life.front",
+"priority": 30.0
+}]
+group = "temporary_hp"
+priority = 30.0
+max_layers = 1.0
+application_text = SubResource("Resource_ii6hr")
+removal_text = SubResource("Resource_vnkoy")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "vitality.temporary_hp",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "spell.false_life",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

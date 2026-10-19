@@ -1,0 +1,143 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_nlhvy"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_3qou8"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_cfeoj"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_cfeoj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_nceoy"]
+
+[sub_resource type="Resource" id="Resource_pqk8a"]
+script = ExtResource("1_nlhvy")
+prefix = "+"
+duration = 1.4
+
+[sub_resource type="Resource" id="Resource_nceoy"]
+script = ExtResource("2_cfeoj")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-hidden.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-hidden"
+
+[sub_resource type="Resource" id="Resource_w74sh"]
+script = ExtResource("3_cfeoj")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+alpha = 0.55
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wysm7"]
+script = ExtResource("2_3qou8")
+steps = Array[ExtResource("3_cfeoj")]([SubResource("Resource_w74sh")])
+
+[sub_resource type="Resource" id="Resource_wl42a"]
+script = ExtResource("1_nlhvy")
+prefix = "−"
+duration = 1.4
+
+[resource]
+script = ExtResource("4_nceoy")
+id = "condition.hidden"
+label = "Hidden"
+icon = SubResource("Resource_nceoy")
+disposition = "authored"
+look = SubResource("Resource_wysm7")
+poses = [{
+"activity": "idle",
+"clip": "CrouchIdle",
+"frame": 0,
+"playback_speed": 1.0,
+"rig": "neuroclient.modular",
+"sampling": "loop"
+}, {
+"activity": "move",
+"clip": "CrouchRun",
+"frame": 0,
+"playback_speed": 1.0,
+"rig": "neuroclient.modular",
+"sampling": "loop"
+}]
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_pqk8a")
+removal_text = SubResource("Resource_wl42a")
+unported = {
+"_legacy_source": "catalog/condition_recipes.json:/condition.hidden",
+"_resource_source": "res://authoring/presentation/conditions/hidden.tres",
+"_source_fields": {
+"application/feedbackColor": "res://authoring/presentation/conditions/hidden.tres::application_feedback/color",
+"application/feedbackDurationMs": "res://authoring/presentation/conditions/hidden.tres::application_feedback/duration_ms",
+"application/feedbackEnabled": "res://authoring/presentation/conditions/hidden.tres::application_feedback/enabled",
+"application/feedbackPrefix": "res://authoring/presentation/conditions/hidden.tres::application_feedback/prefix",
+"persistent/activityPoses": "res://authoring/presentation/conditions/hidden.tres::activity_poses",
+"persistent/activityPoses/0/activity": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0/activity",
+"persistent/activityPoses/0/clip": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0/clip",
+"persistent/activityPoses/0/frame": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0/frame",
+"persistent/activityPoses/0/playbackSpeed": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0/playback_speed",
+"persistent/activityPoses/0/rigId": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0/rig_id",
+"persistent/activityPoses/0/sampling": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0/sampling",
+"persistent/activityPoses/1/activity": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1/activity",
+"persistent/activityPoses/1/clip": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1/clip",
+"persistent/activityPoses/1/frame": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1/frame",
+"persistent/activityPoses/1/playbackSpeed": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1/playback_speed",
+"persistent/activityPoses/1/rigId": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1/rig_id",
+"persistent/activityPoses/1/sampling": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1/sampling",
+"persistent/alphaMultiplier": "res://authoring/presentation/conditions/hidden.tres::body_filter/opacity",
+"persistent/bodyColor": "res://authoring/presentation/conditions/hidden.tres::body_filter",
+"removal/feedbackColor": "res://authoring/presentation/conditions/hidden.tres::removal_feedback/color",
+"removal/feedbackDurationMs": "res://authoring/presentation/conditions/hidden.tres::removal_feedback/duration_ms",
+"removal/feedbackEnabled": "res://authoring/presentation/conditions/hidden.tres::removal_feedback/enabled",
+"removal/feedbackPrefix": "res://authoring/presentation/conditions/hidden.tres::removal_feedback/prefix"
+},
+"application": {
+"durationMs": 220.0,
+"effects": [],
+"feedbackColor": 14964959
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.hidden",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.hidden",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.hide",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": [],
+"feedbackColor": 13510511
+}
+}

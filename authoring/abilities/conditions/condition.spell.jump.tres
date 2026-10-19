@@ -1,0 +1,126 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_wr00h"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_0ycx4"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ceglv"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ceglv"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_e7yad"]
+
+[sub_resource type="Resource" id="Resource_jgiem"]
+script = ExtResource("1_wr00h")
+colour = Color(0.89411765, 0.54509807, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_e7yad"]
+script = ExtResource("2_ceglv")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-transmutation-jumpeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-transmutation-jumpeffect"
+
+[sub_resource type="Resource" id="Resource_acyf7"]
+script = ExtResource("3_ceglv")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5ym7d"]
+script = ExtResource("2_0ycx4")
+steps = Array[ExtResource("3_ceglv")]([SubResource("Resource_acyf7")])
+
+[sub_resource type="Resource" id="Resource_evxph"]
+script = ExtResource("1_wr00h")
+colour = Color(0.80784315, 0.7411765, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_e7yad")
+id = "condition.spell.jump"
+label = "Jump"
+icon = SubResource("Resource_e7yad")
+disposition = "authored"
+look = SubResource("Resource_5ym7d")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.jump.back",
+"attachment": "body",
+"category": "jump",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "pending.jump.back",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.jump.front",
+"attachment": "body",
+"category": "jump",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "pending.jump.front",
+"priority": 30.0
+}]
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_jgiem")
+removal_text = SubResource("Resource_evxph")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.jump",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.jump",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.jump",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

@@ -1,0 +1,196 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_xd4ra"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_27ae4"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_ocrn7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_ccyxp"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_dwpio"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_n1xss"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_vstuc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_yij3d"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_8drev"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_3475p"]
+
+[sub_resource type="Resource" id="Resource_iqlwd"]
+script = ExtResource("1_xd4ra")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_2fjcq"]
+script = ExtResource("2_27ae4")
+roles = Dictionary[String, Color]({
+"primary": Color(0.5254902, 0.41568628, 0.27450982, 1),
+"secondary": Color(0.7254902, 0.60784316, 0.41960785, 1),
+"tertiary": Color(0.26666668, 0.21568628, 0.17254902, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_0x570"]
+script = ExtResource("3_ocrn7")
+clip = "review/stoneskin/back/stone_cast"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_1tir8"]
+script = ExtResource("3_ocrn7")
+clip = "original-repairs/stoneskin/body-window"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.3
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes", "hair", "head"]
+},
+"follow_attachment": true,
+"id": "original-repairs-stoneskin-body-window",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_fyqhf"]
+script = ExtResource("6_n1xss")
+kind = "palette_ramp"
+colours = PackedColorArray(0.26666668, 0.21568628, 0.17254902, 1, 0.5254902, 0.41568628, 0.27450982, 1, 0.7254902, 0.60784316, 0.41960785, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3k71m"]
+script = ExtResource("5_dwpio")
+steps = Array[ExtResource("6_n1xss")]([SubResource("Resource_fyqhf")])
+
+[sub_resource type="Resource" id="Resource_pv4xt"]
+script = ExtResource("4_ccyxp")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_3k71m")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8809030.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_p2i4l"]
+script = ExtResource("6_n1xss")
+kind = "palette_ramp"
+colours = PackedColorArray(0.26666668, 0.21568628, 0.17254902, 1, 0.5254902, 0.41568628, 0.27450982, 1, 0.7254902, 0.60784316, 0.41960785, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ox1j5"]
+script = ExtResource("5_dwpio")
+steps = Array[ExtResource("6_n1xss")]([SubResource("Resource_p2i4l")])
+
+[sub_resource type="Resource" id="Resource_anlj3"]
+script = ExtResource("4_ccyxp")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_ox1j5")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8809030.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_lej8n"]
+script = ExtResource("7_vstuc")
+path = "art/media/ui/icons/smooth48/spell.stoneskin.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.stoneskin"
+
+[resource]
+script = ExtResource("8_yij3d")
+id = "spell.stoneskin"
+icon = SubResource("Resource_lej8n")
+delivery = "touch"
+body = SubResource("Resource_iqlwd")
+hand_layers = Array[ExtResource("4_ccyxp")]([SubResource("Resource_pv4xt"), SubResource("Resource_anlj3")])
+sockets = "measured/abilities/spells/spell.stoneskin.sockets.json"
+effects = Array[ExtResource("3_ocrn7")]([SubResource("Resource_0x570"), SubResource("Resource_1tir8")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_2fjcq")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.stoneskin")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "stoneskin__back",
+"source": "assets/vfx/index.json:/selections/stoneskin__back/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.stoneskin",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}
+notes = "Plays its imported Factory staging (coverage fill)."

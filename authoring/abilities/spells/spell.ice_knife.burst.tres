@@ -1,0 +1,211 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_d52kb"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_gbwdf"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_0ehrk"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_dfg0t"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_vwmvr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_djjy1"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="7_6g7kt"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_gbwdf"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="8_hlljj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="9_627pj"]
+
+[sub_resource type="Resource" id="Resource_7pq82"]
+script = ExtResource("1_d52kb")
+role = "cast"
+clip = "Attack5"
+enabled = false
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_psbvu"]
+script = ExtResource("2_gbwdf")
+roles = Dictionary[String, Color]({
+"primary": Color(0.5294118, 0.8156863, 1, 1),
+"secondary": Color(0.54509807, 0.70980394, 0.92156863, 1),
+"tertiary": Color(0.6627451, 0.91764706, 1, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_31xra"]
+script = ExtResource("5_vwmvr")
+kind = "palette_ramp"
+colours = PackedColorArray(0.047058824, 0.08627451, 0.16470589, 1, 0.12941177, 0.20784314, 0.34117648, 1, 0.18431373, 0.32156864, 0.64705884, 1, 0.2509804, 0.4, 0.6862745, 1, 0.32156864, 0.47843137, 0.7372549, 1, 0.33333334, 0.53333336, 0.84705883, 1, 0.4509804, 0.5686275, 0.7490196, 1, 0.32156864, 0.6117647, 0.9647059, 1, 0.4392157, 0.63529414, 0.8784314, 1, 0.5176471, 0.6392157, 0.827451, 1, 0.40784314, 0.69803923, 0.96862745, 1, 0.54509807, 0.70980394, 0.92156863, 1, 0.4509804, 0.75686276, 1, 1, 0.4, 0.77254903, 1, 1, 0.4392157, 0.79607844, 1, 1, 0.5529412, 0.7764706, 0.99215686, 1, 0.5019608, 0.8, 1, 1, 0.5686275, 0.8, 1, 1, 0.5294118, 0.8156863, 1, 1, 0.6, 0.8, 1, 1, 0.6627451, 0.8039216, 0.9411765, 1, 0.56078434, 0.87058824, 1, 1, 0.6627451, 0.91764706, 1, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4bncw"]
+script = ExtResource("4_dfg0t")
+steps = Array[ExtResource("5_vwmvr")]([SubResource("Resource_31xra")])
+
+[sub_resource type="Resource" id="Resource_0ehrk"]
+script = ExtResource("7_gbwdf")
+path = "art/media/ui/icons/smooth48/ui.filter-spells.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-spells"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-spells"
+
+[resource]
+script = ExtResource("7_6g7kt")
+id = "spell.ice_knife.burst"
+icon = SubResource("Resource_0ehrk")
+body = SubResource("Resource_7pq82")
+sockets = "measured/abilities/spells/spell.ice_knife.burst.sockets.json"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+flight_tiles_per_second = 5.625
+minimum_travel_seconds = 0.15
+stagger_seconds = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_4bncw")
+number_frame = 7.0
+number_duration = 1.0
+colours = SubResource("Resource_psbvu")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+status = "partial"
+unported = {
+"area": {
+"geometry": {
+"depthMode": "ground",
+"enabled": false,
+"endScale": 1.0,
+"fillAlphaEnd": 0.105,
+"fillAlphaStart": 0.35,
+"renderer": "geometry_area",
+"startScale": 0.2,
+"strokeAlphaEnd": 0.3,
+"strokeAlphaStart": 1.0,
+"strokeWidth": 3.0
+},
+"phases": {
+"explosion": {
+"durationMs": 180.0,
+"effectProgress": 0.0,
+"enabled": false,
+"endScale": 1.15,
+"fillAlphaEnd": 0.0,
+"startScale": 1.0,
+"strokeAlphaEnd": 0.0
+},
+"shape": {
+"durationMs": 500.0,
+"effectProgress": 0.0,
+"enabled": true
+}
+},
+"shapeSource": "authoritative_cue",
+"sprite": null
+},
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 15610692.0,
+"enabled": true,
+"label": "Cold"
+},
+"hitFlash": {
+"color": 15610692.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.ice_knife",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.neurodragon"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 32.0,
+"geometry": {
+"enabled": false,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetId": "ice.v8.ice_knife.impact",
+"assetPhase": "impact",
+"composition": "paired_depth",
+"enabled": true,
+"fps": 32.0,
+"scale": 1.0,
+"viewFacing": "SE"
+},
+"orientation": {
+"directionSource": "target_vector",
+"fineRotation": "none",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetPhase": "cast",
+"enabled": false
+},
+"scale": 0.5,
+"sourceAnchor": {
+"axisPx": 24.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "ice.v8.ice_knife.impact",
+"blendMode": "normal",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": 0.0,
+"liftY": 0.0
+},
+"targetLocal": {},
+"trajectory": {
+"sameTargetSpread": true,
+"type": "straight"
+},
+"travel": {
+"assetId": "ice.v8.ice_knife.travel",
+"assetPhase": "travel",
+"enabled": false,
+"fps": 32.0,
+"overlapContactMs": 13.888888888888888
+}
+}
+}

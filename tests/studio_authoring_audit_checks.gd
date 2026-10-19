@@ -33,9 +33,9 @@ func _initialize()->void:
     check(by_id["spell.fog_cloud"].requirements.any(func(row):return row.source=="spells/spell.fog_cloud.json:/cast/actionClip" and row.gap_kind=="unexercised"),"Active Fog Cloud casting is visible even with recovery explicitly disabled")
     var hide:Dictionary=by_id["action.hide"]
     check(hide.requirements.any(func(row):return row.source=="catalog/body_action_recipes.json:/action.hide/previewChildCueKinds/0" and row.gap_kind=="unexercised"),"Native Hide preserves the inherited child condition's actual JSON provenance")
-    check(hide.source=="res://authoring/presentation/actions/hide.tres" and hide.legacy_source=="catalog/body_action_recipes.json:/action.hide","Worklist identifies selected native action and preserved migration reference")
-    check(hide.requirements.any(func(row):return row.source=="res://authoring/presentation/actions/hide.tres::clip" and row.legacy_source=="catalog/body_action_recipes.json:/action.hide/actor/clip"),"Body assignment points to the editable native property")
-    check(hide.requirements.any(func(row):return row.source=="res://authoring/presentation/actions/hide.tres::effect_audio_cue" and row.label=="Effect audio cue: hide_transition"),"Audio assignment remains distinct from selected sound media and audible qualification")
+    check(hide.source=="res://authoring/abilities/actions/action.hide.tres" and hide.legacy_source=="catalog/body_action_recipes.json:/action.hide","Worklist identifies selected native action and preserved migration reference")
+    check(hide.requirements.any(func(row):return row.source=="res://authoring/abilities/actions/action.hide.tres::body/clip" and row.legacy_source=="catalog/body_action_recipes.json:/action.hide/actor/clip"),"Body assignment points to the editable native property")
+    check(hide.requirements.any(func(row):return row.source=="res://authoring/abilities/actions/action.hide.tres::sounds/0/cue" and row.label=="Effect audio cue: hide_transition"),"Audio assignment remains distinct from selected sound media and audible qualification")
     var aliases=Authoring.load_data("catalog/body_action_bindings.json",cache)
     var actions=Authoring.load_data("catalog/body_action_recipes.json",cache)
     for id in aliases:

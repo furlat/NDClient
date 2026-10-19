@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_631qe"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_t4ngi"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_w1yjd"]
+
+[sub_resource type="Resource" id="Resource_bx5q0"]
+script = ExtResource("1_631qe")
+path = "art/media/ui/icons/smooth48/action.summon.dismiss.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.summon.dismiss"
+
+[resource]
+script = ExtResource("2_t4ngi")
+id = "action.summon.dismiss"
+kind = "action"
+family = "summon"
+icon = SubResource("Resource_bx5q0")
+plays = "reaction.spell.counterspell"
+effect_sources = PackedStringArray()
+status = "ready"

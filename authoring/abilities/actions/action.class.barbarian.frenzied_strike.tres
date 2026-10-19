@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_ile26"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_y3rjy"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_y3rjy"]
+
+[sub_resource type="Resource" id="Resource_78aap"]
+script = ExtResource("1_y3rjy")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("1_ile26")
+id = "action.class.barbarian.frenzied_strike"
+kind = "action"
+icon = SubResource("Resource_78aap")
+effect_sources = PackedStringArray()
+status = "ready"
+notes = "Presented by the attacks section (attacks/action.class.barbarian.frenzied_strike)."

@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_88ew7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_dfguw"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ytmxi"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_ytmxi"]
+
+[sub_resource type="Resource" id="Resource_6h1li"]
+script = ExtResource("1_88ew7")
+role = "act"
+clip = "Idle4"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_egurr"]
+script = ExtResource("2_ytmxi")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("2_dfguw")
+id = "action.class.barbarian.end_rage"
+kind = "action"
+icon = SubResource("Resource_egurr")
+disposition = "authored"
+body = SubResource("Resource_6h1li")
+effect_sources = PackedStringArray()
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.class.barbarian.end_rage",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

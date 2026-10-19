@@ -1,0 +1,193 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_p4ioq"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ige4o"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_wycao"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_wycao"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_kwgnu"]
+
+[sub_resource type="Resource" id="Resource_klkta"]
+script = ExtResource("1_p4ioq")
+colour = Color(0.9372549, 0.26666668, 0.26666668, 1)
+
+[sub_resource type="Resource" id="Resource_kwgnu"]
+script = ExtResource("2_wycao")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_bh0ox"]
+script = ExtResource("3_wycao")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+rgb = Color(1, 0.6039216, 0.47058824, 1)
+saturation = 1.25
+brightness = 1.04
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rn3u6"]
+script = ExtResource("3_wycao")
+kind = "body_film"
+colours = PackedColorArray(0.48235294, 0.14901961, 0.16078432, 1, 0.78039217, 0.26666668, 0.22352941, 1, 0.9254902, 0.5294118, 0.3882353, 1, 1, 0.6039216, 0.47058824, 1)
+replace_from = PackedColorArray()
+texture = "class.material.film"
+texture_frames = 64
+gain = 0.34
+weight = 0.4
+mapping = "flowing_film"
+hide = PackedStringArray()
+fade_in = 0.18
+fade_out = 0.35
+
+[sub_resource type="Resource" id="Resource_osl64"]
+script = ExtResource("2_ige4o")
+steps = Array[ExtResource("3_wycao")]([SubResource("Resource_bh0ox"), SubResource("Resource_rn3u6")])
+
+[sub_resource type="Resource" id="Resource_th2wo"]
+script = ExtResource("1_p4ioq")
+colour = Color(0.9882353, 0.64705884, 0.64705884, 1)
+
+[resource]
+script = ExtResource("4_kwgnu")
+id = "class_feature.barbarian.raging"
+label = "Raging"
+icon = SubResource("Resource_kwgnu")
+disposition = "authored"
+look = SubResource("Resource_osl64")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.rage.mantle-q0-back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fadeInMs": 180.0,
+"fps": 32.0,
+"id": "class.rage.mantle-q0-back",
+"opacity": 0.52,
+"priority": 50.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.rage.mantle-q0-front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 180.0,
+"fps": 32.0,
+"id": "class.rage.mantle-q0-front",
+"opacity": 0.52,
+"priority": 50.0
+}]
+group = "class-rage"
+exclusive_group = "class-rage"
+priority = 60.0
+max_layers = 1.0
+application_text = SubResource("Resource_klkta")
+removal_text = SubResource("Resource_th2wo")
+unported = {
+"application": {
+"durationMs": 240.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body_overlay"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "barbarian.raging",
+"visualIntensity": "ambient_passive"
+},
+"composition": {},
+"definitionRef": {
+"content_id": "class_feature.barbarian.raging",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": {},
+"bodyRamp": {},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "remove",
+"evidence": "branch=end-rage; effect=condition.raging.remove; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.barbarian.end_rage",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=frenzy; effect=condition.raging; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.barbarian.frenzy",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.barbarian.rage",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "Turn-start inactivity, heavy-armor equip, and death handlers remove Raging.",
+"evidenceStatus": "verified_source",
+"sourceRef": null,
+"triggerType": "engine_event"
+}],
+"relatedStates": [{
+"evidenceStatus": "verified_source",
+"relation": "may_parent",
+"targetRef": {
+"content_id": "class_feature.barbarian.frenzied",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+}
+}]
+},
+"removal": {
+"durationMs": 300.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_revgq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_td0c1"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_td0c1"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_vcbpy"]
+
+[sub_resource type="Resource" id="Resource_vcbpy"]
+script = ExtResource("1_td0c1")
+role = "cast"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5qlyw"]
+script = ExtResource("2_vcbpy")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.healing_vapours.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.creature_action.healing_vapours"
+
+[resource]
+script = ExtResource("1_revgq")
+id = "action.water_myrmidon.healing_vapours"
+kind = "action"
+family = "summon_form"
+icon = SubResource("Resource_5qlyw")
+body = SubResource("Resource_vcbpy")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."

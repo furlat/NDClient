@@ -1,0 +1,76 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_eff0k"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_r1eyi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_stypl"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_r1eyi"]
+
+[sub_resource type="Resource" id="Resource_rntaj"]
+script = ExtResource("1_eff0k")
+role = "act"
+clip = "Idle4"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_n8ev0"]
+script = ExtResource("2_r1eyi")
+path = "art/media/ui/icons/smooth48/ui.filter-all.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-all"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-all"
+
+[resource]
+script = ExtResource("2_stypl")
+id = "class_feature.barbarian.relentless_rage"
+kind = "class_feature"
+icon = SubResource("Resource_n8ev0")
+disposition = "authored"
+body = SubResource("Resource_rntaj")
+effect_sources = PackedStringArray()
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "class_feature.barbarian.relentless_rage",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+},
+"handlerResponse": true,
+"media": [{
+"alpha": 0.8,
+"assetId": "class.relentless.burst-q0-back",
+"attachment": "source_ground",
+"depth": "behind_body",
+"id": "class.relentless.burst-q0-back",
+"requiredSaveSuccess": true,
+"scale": 0.425,
+"startOffsetMs": 600.0
+}, {
+"alpha": 0.8,
+"assetId": "class.relentless.burst-q0-front",
+"attachment": "source_ground",
+"depth": "front_body",
+"id": "class.relentless.burst-q0-front",
+"requiredSaveSuccess": true,
+"scale": 0.425,
+"startOffsetMs": 600.0
+}],
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

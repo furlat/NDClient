@@ -1,0 +1,199 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_hgrhw"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_thdwr"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_rcwho"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_xh55k"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_b3w00"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_d6q7j"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_jdabj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_bkg4p"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_iv4ve"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_b7743"]
+
+[sub_resource type="Resource" id="Resource_xaajm"]
+script = ExtResource("1_hgrhw")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_xnxqc"]
+script = ExtResource("2_thdwr")
+roles = Dictionary[String, Color]({
+"primary": Color(0.9137255, 0.54901963, 0.6666667, 1),
+"secondary": Color(1, 0.92941177, 0.8392157, 1),
+"tertiary": Color(0.7882353, 0.53333336, 0.22352941, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_sq3qo"]
+script = ExtResource("3_rcwho")
+clip = "assembled/hypnotic_pattern_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 4.04
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.55
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_teffb"]
+script = ExtResource("3_rcwho")
+clip = "condition_incapacitated_native"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"id": "hypnotic-supplied-incapacitated",
+"live_endpoints": [{
+"actor": "target",
+"socket": "head"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ubbuj"]
+script = ExtResource("6_d6q7j")
+kind = "palette_ramp"
+colours = PackedColorArray(0.7882353, 0.53333336, 0.22352941, 1, 0.9137255, 0.54901963, 0.6666667, 1, 1, 0.92941177, 0.8392157, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xnmlf"]
+script = ExtResource("5_b3w00")
+steps = Array[ExtResource("6_d6q7j")]([SubResource("Resource_ubbuj")])
+
+[sub_resource type="Resource" id="Resource_umtd3"]
+script = ExtResource("4_xh55k")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_xnmlf")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 15305898.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_7y0gx"]
+script = ExtResource("6_d6q7j")
+kind = "palette_ramp"
+colours = PackedColorArray(0.7882353, 0.53333336, 0.22352941, 1, 0.9137255, 0.54901963, 0.6666667, 1, 1, 0.92941177, 0.8392157, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gmfcf"]
+script = ExtResource("5_b3w00")
+steps = Array[ExtResource("6_d6q7j")]([SubResource("Resource_7y0gx")])
+
+[sub_resource type="Resource" id="Resource_g71do"]
+script = ExtResource("4_xh55k")
+place = "aura"
+category = "Effect4"
+sheet = "/spritesheets/Effect4/Attack5.png"
+look = SubResource("Resource_gmfcf")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 15305898.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_rp7gm"]
+script = ExtResource("7_jdabj")
+path = "art/media/ui/icons/smooth48/spell.hypnotic-pattern.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.hypnotic-pattern"
+
+[resource]
+script = ExtResource("8_bkg4p")
+id = "spell.hypnotic_pattern"
+icon = SubResource("Resource_rp7gm")
+delivery = "projectile"
+body = SubResource("Resource_xaajm")
+hand_layers = Array[ExtResource("4_xh55k")]([SubResource("Resource_umtd3"), SubResource("Resource_g71do")])
+sockets = "measured/abilities/spells/spell.hypnotic_pattern.sockets.json"
+effects = Array[ExtResource("3_rcwho")]([SubResource("Resource_sq3qo"), SubResource("Resource_teffb")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_xnxqc")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.charmed", "condition.spell.hypnotic_pattern")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "hypnotic_pattern_native",
+"source": "assets/vfx/index.json:/selections/hypnotic_pattern_native/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.hypnotic_pattern",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "control.hypnotic_rosette.finite.back",
+"attachment": "area_ground",
+"depth": "behind_body",
+"fps": 32.0,
+"id": "hypnotic.rosette",
+"scale": 0.5
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

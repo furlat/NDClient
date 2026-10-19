@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_s55kg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_j0tfg"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ws8pv"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_j0tfg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_m1mxy"]
+
+[sub_resource type="Resource" id="Resource_nqm0q"]
+script = ExtResource("1_s55kg")
+colour = Color(0.89411765, 0.34509805, 0.6392157, 1)
+
+[sub_resource type="Resource" id="Resource_m1mxy"]
+script = ExtResource("2_j0tfg")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-restrained.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-restrained"
+
+[sub_resource type="Resource" id="Resource_iqpo3"]
+script = ExtResource("3_j0tfg")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qxdlh"]
+script = ExtResource("2_ws8pv")
+steps = Array[ExtResource("3_j0tfg")]([SubResource("Resource_iqpo3")])
+
+[sub_resource type="Resource" id="Resource_0s5g5"]
+script = ExtResource("1_s55kg")
+colour = Color(0.80784315, 0.15294118, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_m1mxy")
+id = "condition.spell.prismatic_spray.restrained"
+label = "Prismatic Restrained"
+icon = SubResource("Resource_m1mxy")
+disposition = "authored"
+look = SubResource("Resource_qxdlh")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_nqm0q")
+removal_text = SubResource("Resource_0s5g5")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.prismatic_spray.restrained",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.prismatic_spray.restrained",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=indigo; effect=condition.prismatic_restrained; disposition=harmful; target=each_affected_entity; gates=saving_throw:dexterity:failed:actor_spell_save_dc+configuration:prismatic_roll=7",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.prismatic_spray",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

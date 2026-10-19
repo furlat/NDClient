@@ -1,0 +1,87 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ajr3s"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_3mphn"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_x5tlo"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_3mphn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_2kpih"]
+
+[sub_resource type="Resource" id="Resource_vsnli"]
+script = ExtResource("1_ajr3s")
+enabled = false
+colour = Color(0.34509805, 0.89411765, 0.654902, 1)
+
+[sub_resource type="Resource" id="Resource_2kpih"]
+script = ExtResource("2_3mphn")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_q843y"]
+script = ExtResource("3_3mphn")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_egkos"]
+script = ExtResource("2_x5tlo")
+steps = Array[ExtResource("3_3mphn")]([SubResource("Resource_q843y")])
+
+[sub_resource type="Resource" id="Resource_3sgip"]
+script = ExtResource("1_ajr3s")
+enabled = false
+colour = Color(0.15294118, 0.7411765, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_2kpih")
+id = "trait.wolf_bite_prone"
+label = "Bite Prone Rider"
+icon = SubResource("Resource_2kpih")
+disposition = "state_only"
+look = SubResource("Resource_egkos")
+group = "body"
+max_layers = 3.0
+application_text = SubResource("Resource_vsnli")
+removal_text = SubResource("Resource_3sgip")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "passive_unlock",
+"visualFamily": "catalog.trait.wolf_bite_prone",
+"visualIntensity": "icon_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "trait.wolf_bite_prone",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

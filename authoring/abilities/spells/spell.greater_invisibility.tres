@@ -1,0 +1,177 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_37k3m"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_nql7h"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_la13f"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_134hj"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_nq1h0"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_dgehe"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_qa8m4"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_m4r7i"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_jh0lq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_omxt0"]
+
+[sub_resource type="Resource" id="Resource_o1q4f"]
+script = ExtResource("1_37k3m")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_547nu"]
+script = ExtResource("2_nql7h")
+roles = Dictionary[String, Color]({
+"primary": Color(0.6666667, 0.73333335, 0.8666667, 1),
+"secondary": Color(0.53333336, 0.5372549, 0.8, 1),
+"tertiary": Color(0.8, 0.8666667, 1, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_1dvjd"]
+script = ExtResource("3_la13f")
+clip = "greater_invisibility_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_1kotw"]
+script = ExtResource("3_la13f")
+clip = "greater_invisibility_native/application"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_b4suu"]
+script = ExtResource("6_dgehe")
+kind = "palette_ramp"
+colours = PackedColorArray(0.8, 0.8666667, 1, 1, 0.6666667, 0.73333335, 0.8666667, 1, 0.53333336, 0.5372549, 0.8, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fhemu"]
+script = ExtResource("5_nq1h0")
+steps = Array[ExtResource("6_dgehe")]([SubResource("Resource_b4suu")])
+
+[sub_resource type="Resource" id="Resource_ddwdu"]
+script = ExtResource("4_134hj")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_fhemu")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 11189213.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_fk7gv"]
+script = ExtResource("6_dgehe")
+kind = "palette_ramp"
+colours = PackedColorArray(0.8, 0.8666667, 1, 1, 0.6666667, 0.73333335, 0.8666667, 1, 0.53333336, 0.5372549, 0.8, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_seeor"]
+script = ExtResource("5_nq1h0")
+steps = Array[ExtResource("6_dgehe")]([SubResource("Resource_fk7gv")])
+
+[sub_resource type="Resource" id="Resource_ptbrr"]
+script = ExtResource("4_134hj")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_seeor")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 11189213.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_w7fo8"]
+script = ExtResource("7_qa8m4")
+path = "art/media/ui/icons/smooth48/spell.greater-invisibility.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.greater-invisibility"
+
+[resource]
+script = ExtResource("8_m4r7i")
+id = "spell.greater_invisibility"
+icon = SubResource("Resource_w7fo8")
+delivery = "touch"
+body = SubResource("Resource_o1q4f")
+hand_layers = Array[ExtResource("4_134hj")]([SubResource("Resource_ddwdu"), SubResource("Resource_ptbrr")])
+sockets = "measured/abilities/spells/spell.greater_invisibility.sockets.json"
+effects = Array[ExtResource("3_la13f")]([SubResource("Resource_1dvjd"), SubResource("Resource_1kotw")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_547nu")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.greater_invisibility")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "greater_invisibility_native",
+"source": "assets/vfx/index.json:/selections/greater_invisibility_native/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"definitionRef": {
+"content_id": "spell.greater_invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}
+notes = "Plays its imported Factory staging (coverage fill)."

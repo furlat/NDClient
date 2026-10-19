@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_j3kqb"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_wgtkn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_j3kqb"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_jlpij"]
+
+[sub_resource type="Resource" id="Resource_jlpij"]
+script = ExtResource("1_j3kqb")
+role = "act"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kvsyt"]
+script = ExtResource("1_wgtkn")
+path = "art/ui-delivery-20261018/runtime/smooth48/action.ally_help.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("2_j3kqb")
+id = "action.ally_help"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_kvsyt")
+body = SubResource("Resource_jlpij")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (assist); the rig resolves it to a clip once roles are built (coverage fill)."

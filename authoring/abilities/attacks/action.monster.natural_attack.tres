@@ -1,0 +1,72 @@
+[gd_resource type="Resource" script_class="PresentationAttack" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_bkgwx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_6okoj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack.gd" id="3_ti2xi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack_variant.gd" id="4_ow4kj"]
+
+[sub_resource type="Resource" id="Resource_mgx5x"]
+script = ExtResource("1_bkgwx")
+role = "attack"
+clip = "Attack2"
+playback_speed = 1.05
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fp7w4"]
+script = ExtResource("2_6okoj")
+text = "Critical!!"
+colour = Color(1, 0.8, 0, 1)
+
+[sub_resource type="Resource" id="Resource_ptss3"]
+script = ExtResource("2_6okoj")
+text = "Critical miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="Resource" id="Resource_yrxmd"]
+script = ExtResource("2_6okoj")
+text = "Miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[resource]
+script = ExtResource("3_ti2xi")
+id = "action.monster.natural_attack"
+body = SubResource("Resource_mgx5x")
+outcome_texts = Dictionary[String, ExtResource("2_6okoj")]({
+"critical": SubResource("Resource_fp7w4"),
+"critical_miss": SubResource("Resource_ptss3"),
+"miss": SubResource("Resource_yrxmd")
+})
+trail_palette = PackedStringArray()
+trail_outcomes = PackedStringArray()
+trail_behaviours = PackedStringArray()
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": {
+"critical": {},
+"critical_miss": {},
+"hit": null,
+"miss": {}
+},
+"compatibleCueKinds": ["attack"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.monster.natural_attack",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"disposition": "authored",
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["damage"],
+"projectile": null,
+"variants": []
+}

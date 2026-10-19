@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_1ffhj"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_6583n"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_6583n"]
+
+[sub_resource type="Resource" id="Resource_qjq5l"]
+script = ExtResource("1_6583n")
+path = "art/media/ui/icons/smooth48/ui.filter-all.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-all"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-all"
+
+[resource]
+script = ExtResource("1_1ffhj")
+id = "class_feature.barbarian.reckless_attacking"
+kind = "class_feature"
+family = "class_feature"
+icon = SubResource("Resource_qjq5l")
+effect_sources = PackedStringArray()
+status = "internal"

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_30kej"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_y461c"]
+
+[sub_resource type="Resource" id="Resource_1p0ol"]
+script = ExtResource("1_y461c")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.arcane_sword.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.arcane_sword"
+status = "stand_in"
+source = "ui-delivery-20261018 srd22.spell.arcane_sword"
+
+[resource]
+script = ExtResource("1_30kej")
+id = "condition.spell.arcane_sword"
+icon = SubResource("Resource_1p0ol")

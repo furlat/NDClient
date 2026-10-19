@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ab3ii"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_pla8y"]
+
+[sub_resource type="Resource" id="Resource_k4wt2"]
+script = ExtResource("1_ab3ii")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-conjuration-webzone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-conjuration-webzone"
+
+[resource]
+script = ExtResource("1_pla8y")
+id = "condition.spell.web.zone"
+icon = SubResource("Resource_k4wt2")
+surface = "spatial_effect.spell.web"

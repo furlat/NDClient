@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_bjocy"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_hen5u"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_bjocy"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_r1ydr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_k57e3"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_ww3ie"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_q5m06"]
+
+[sub_resource type="Resource" id="Resource_r1ydr"]
+script = ExtResource("1_bjocy")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_l2ce6"]
+script = ExtResource("1_hen5u")
+clip = "bg3-36/plant-growth/plant_growth_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"review_stationary_ground": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_xlw3m"]
+script = ExtResource("3_r1ydr")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.plant_growth.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_b1r5n"]
+script = ExtResource("1_hen5u")
+clip = "bg3-36/plant-growth/plant_growth_partial_burn_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"review_stationary_ground": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_5ks36"]
+script = ExtResource("6_q5m06")
+id = "plant_growth_partial_burn_native"
+kind = "form"
+selection = "plant_growth_partial_burn_native"
+effects = Array[ExtResource("1_hen5u")]([SubResource("Resource_b1r5n")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_k57e3")
+id = "spell.plant_growth"
+icon = SubResource("Resource_xlw3m")
+delivery = "zone"
+body = SubResource("Resource_r1ydr")
+effects = Array[ExtResource("1_hen5u")]([SubResource("Resource_l2ce6")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_q5m06")]([SubResource("Resource_5ks36")])
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray("spatial_effect.spell.plant_growth")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "plant_growth_native",
+"source": "assets/vfx/index.json:/selections/plant_growth_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

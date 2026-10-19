@@ -1,0 +1,187 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_njwiq"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_ax8yi"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_m6wp6"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_qwn6j"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_qvcg6"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_jiipd"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_tjldd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_cm1ow"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_ugkb3"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_5eejv"]
+
+[sub_resource type="Resource" id="Resource_78k84"]
+script = ExtResource("1_njwiq")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_cs3mg"]
+script = ExtResource("2_ax8yi")
+roles = Dictionary[String, Color]({
+"primary": Color(0.6, 0.7529412, 0.78039217, 1),
+"secondary": Color(0.8862745, 0.93333334, 0.92156863, 1),
+"tertiary": Color(0.27450982, 0.3882353, 0.4509804, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_mkgtx"]
+script = ExtResource("3_m6wp6")
+clip = "review/expeditious_retreat/back/retreat"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.00694444444444
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.5
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_4p1ld"]
+script = ExtResource("3_m6wp6")
+clip = "review/expeditious_retreat/back/dash_retreat"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.5
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_d728m"]
+script = ExtResource("6_jiipd")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.3882353, 0.4509804, 1, 0.6, 0.7529412, 0.78039217, 1, 0.8862745, 0.93333334, 0.92156863, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nod2j"]
+script = ExtResource("5_qvcg6")
+steps = Array[ExtResource("6_jiipd")]([SubResource("Resource_d728m")])
+
+[sub_resource type="Resource" id="Resource_ul8nd"]
+script = ExtResource("4_qwn6j")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_nod2j")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 10076359.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_4oa24"]
+script = ExtResource("6_jiipd")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.3882353, 0.4509804, 1, 0.6, 0.7529412, 0.78039217, 1, 0.8862745, 0.93333334, 0.92156863, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_a1k0c"]
+script = ExtResource("5_qvcg6")
+steps = Array[ExtResource("6_jiipd")]([SubResource("Resource_4oa24")])
+
+[sub_resource type="Resource" id="Resource_526yf"]
+script = ExtResource("4_qwn6j")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Special1.png"
+look = SubResource("Resource_a1k0c")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 10076359.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_daant"]
+script = ExtResource("7_tjldd")
+path = "art/media/ui/icons/smooth48/spell.expeditious-retreat.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.expeditious-retreat"
+
+[resource]
+script = ExtResource("8_cm1ow")
+id = "spell.expeditious_retreat"
+icon = SubResource("Resource_daant")
+delivery = "self"
+body = SubResource("Resource_78k84")
+hand_layers = Array[ExtResource("4_qwn6j")]([SubResource("Resource_ul8nd"), SubResource("Resource_526yf")])
+sockets = "measured/abilities/spells/spell.expeditious_retreat.sockets.json"
+effects = Array[ExtResource("3_m6wp6")]([SubResource("Resource_mkgtx"), SubResource("Resource_4p1ld")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_cs3mg")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.dashing", "condition.spell.expeditious_retreat")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "expeditious_retreat__back",
+"source": "assets/vfx/index.json:/selections/expeditious_retreat__back/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"definitionRef": {
+"content_id": "spell.expeditious_retreat",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}
+notes = "Plays its imported Factory staging (coverage fill)."

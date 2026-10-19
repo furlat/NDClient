@@ -1,0 +1,110 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_5yy3w"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ioc2p"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_nooql"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ioc2p"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_873dy"]
+
+[sub_resource type="Resource" id="Resource_4vnlb"]
+script = ExtResource("1_5yy3w")
+colour = Color(0.34509805, 0.89411765, 0.52156866, 1)
+
+[sub_resource type="Resource" id="Resource_873dy"]
+script = ExtResource("2_ioc2p")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-powerwordstuneffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-powerwordstuneffect"
+
+[sub_resource type="Resource" id="Resource_tfbsk"]
+script = ExtResource("3_ioc2p")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+saturation = 0.35
+brightness = 0.86
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_j2otc"]
+script = ExtResource("2_nooql")
+steps = Array[ExtResource("3_ioc2p")]([SubResource("Resource_tfbsk")])
+
+[sub_resource type="Resource" id="Resource_1itn1"]
+script = ExtResource("1_5yy3w")
+colour = Color(0.15294118, 0.80784315, 0.70980394, 1)
+
+[resource]
+script = ExtResource("4_873dy")
+id = "condition.spell.power_word_stun"
+label = "Power Word Stun"
+icon = SubResource("Resource_873dy")
+disposition = "authored"
+look = SubResource("Resource_j2otc")
+group = "body"
+priority = 60.0
+max_layers = 3.0
+application_text = SubResource("Resource_4vnlb")
+removal_text = SubResource("Resource_1itn1")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body", "pose_movement"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "control.stunned",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.power_word_stun",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": {
+"tintRgb": null
+},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hp-threshold; effect=condition.power_word_stun; disposition=harmful; target=selected_target; gates=action_outcome:succeeded",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.power_word_stun",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": [{
+"evidenceStatus": "authored_visual_relation",
+"relation": "shares_persistent_profile_with",
+"targetRef": {
+"content_id": "condition.stunned",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+}
+}]
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

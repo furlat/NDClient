@@ -1,0 +1,260 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_od202"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_ntlhj"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_bekld"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_e8jr6"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_r26bd"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_pky5s"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_1qktg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_0jday"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_plqbf"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_dvb4h"]
+
+[sub_resource type="Resource" id="Resource_o1y35"]
+script = ExtResource("1_od202")
+role = "cast"
+clip = "Attack4"
+markers = Dictionary[String, float]({
+"release": 9.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_1kqug"]
+script = ExtResource("2_ntlhj")
+roles = Dictionary[String, Color]({
+"primary": Color(0.65882355, 0.76862746, 0.8392157, 1),
+"secondary": Color(0.9019608, 0.9490196, 0.98039216, 1),
+"tertiary": Color(0.50980395, 0.59607846, 0.6745098, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_1mb1e"]
+script = ExtResource("3_bekld")
+clip = "wall-native/ice_wall_assembly_breakup_native/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 7.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"review_stationary_ground": [1.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_q0onw"]
+script = ExtResource("6_pky5s")
+kind = "palette_ramp"
+colours = PackedColorArray(0.50980395, 0.59607846, 0.6745098, 1, 0.65882355, 0.76862746, 0.8392157, 1, 0.9019608, 0.9490196, 0.98039216, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7e6i1"]
+script = ExtResource("5_r26bd")
+steps = Array[ExtResource("6_pky5s")]([SubResource("Resource_q0onw")])
+
+[sub_resource type="Resource" id="Resource_exnl2"]
+script = ExtResource("4_e8jr6")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack4.png"
+look = SubResource("Resource_7e6i1")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 11060438.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_6vptt"]
+script = ExtResource("6_pky5s")
+kind = "palette_ramp"
+colours = PackedColorArray(0.50980395, 0.59607846, 0.6745098, 1, 0.65882355, 0.76862746, 0.8392157, 1, 0.9019608, 0.9490196, 0.98039216, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lwuyj"]
+script = ExtResource("5_r26bd")
+steps = Array[ExtResource("6_pky5s")]([SubResource("Resource_6vptt")])
+
+[sub_resource type="Resource" id="Resource_oko3d"]
+script = ExtResource("4_e8jr6")
+place = "effect"
+category = "Effect3"
+sheet = "/spritesheets/Effect3/Attack4.png"
+look = SubResource("Resource_lwuyj")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 11060438.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_dpf4c"]
+script = ExtResource("7_1qktg")
+path = "art/media/ui/icons/smooth48/spell.wall_of_ice.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.wall_of_ice"
+
+[sub_resource type="Resource" id="Resource_3vc16"]
+script = ExtResource("3_bekld")
+clip = "wall-native/wall_of_ice_corner_back_native/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 7.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"review_stationary_ground": [1.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_ulti4"]
+script = ExtResource("10_dvb4h")
+id = "wall_of_ice_corner_back_native"
+kind = "form"
+selection = "wall_of_ice_corner_back_native"
+effects = Array[ExtResource("3_bekld")]([SubResource("Resource_3vc16")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_74nw3"]
+script = ExtResource("3_bekld")
+clip = "wall-native/ice_dome_surface_breakup_native/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 8.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"review_stationary_ground": [1.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_383bh"]
+script = ExtResource("10_dvb4h")
+id = "ice_dome_native"
+kind = "form"
+selection = "ice_dome_native"
+effects = Array[ExtResource("3_bekld")]([SubResource("Resource_74nw3")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_fnm4h"]
+script = ExtResource("3_bekld")
+clip = "native/frigid_air/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 7.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true
+}
+
+[sub_resource type="Resource" id="Resource_b8njf"]
+script = ExtResource("10_dvb4h")
+id = "wall_of_ice_frigid_air_native"
+kind = "form"
+selection = "wall_of_ice_frigid_air_native"
+effects = Array[ExtResource("3_bekld")]([SubResource("Resource_fnm4h")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_0jday")
+id = "spell.wall_of_ice"
+icon = SubResource("Resource_dpf4c")
+delivery = "wall"
+body = SubResource("Resource_o1y35")
+hand_layers = Array[ExtResource("4_e8jr6")]([SubResource("Resource_exnl2"), SubResource("Resource_oko3d")])
+sockets = "measured/abilities/spells/spell.wall_of_ice.sockets.json"
+effects = Array[ExtResource("3_bekld")]([SubResource("Resource_1mb1e")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_1kqug")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_dvb4h")]([SubResource("Resource_ulti4"), SubResource("Resource_383bh"), SubResource("Resource_b8njf")])
+applies_conditions = PackedStringArray("condition.prone", "condition.spell.wall_of_force.zone", "condition.spell.wall_of_ice.frigid_air", "condition.spell.wall_of_ice.zone", "condition.spell.wall_of_stone.zone")
+applies_surfaces = PackedStringArray("spatial_effect.spell.frigid_air", "spatial_effect.spell.wall_of_force", "spatial_effect.spell.wall_of_ice", "spatial_effect.spell.wall_of_stone")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "wall_of_ice_straight_back_native",
+"source": "assets/vfx/index.json:/selections/wall_of_ice_straight_back_native/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 1000.0
+},
+"definitionRef": {
+"content_id": "spell.wall_of_ice",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}
+notes = "Plays its imported Factory staging (coverage fill)."

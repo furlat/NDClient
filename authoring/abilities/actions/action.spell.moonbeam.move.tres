@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_i8w23"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_xmgsj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_xmgsj"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_ef38o"]
+
+[sub_resource type="Resource" id="Resource_ef38o"]
+script = ExtResource("1_xmgsj")
+role = "cast"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8ojf6"]
+script = ExtResource("1_i8w23")
+path = "art/ui-delivery-20261018/runtime/smooth48/action.spell.moonbeam.move.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("2_xmgsj")
+id = "action.spell.moonbeam.move"
+kind = "action"
+family = "spell"
+icon = SubResource("Resource_8ojf6")
+body = SubResource("Resource_ef38o")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."

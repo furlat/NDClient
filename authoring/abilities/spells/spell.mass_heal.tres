@@ -1,0 +1,226 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mmeqh"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_pilvm"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_phfmv"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_o316v"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_uey11"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_p6t4l"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_4m8gi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_er0yg"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_4ode1"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_6kvgm"]
+
+[sub_resource type="Resource" id="Resource_7hbhv"]
+script = ExtResource("1_mmeqh")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_a7bgv"]
+script = ExtResource("2_pilvm")
+roles = Dictionary[String, Color]({
+"primary": Color(0.54901963, 0.8666667, 0.8980392, 1),
+"secondary": Color(0.8862745, 0.9647059, 0.8627451, 1),
+"tertiary": Color(0.17254902, 0.2509804, 0.3647059, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_clohr"]
+script = ExtResource("3_phfmv")
+clip = "review/mass_heal/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 4.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"id": "review/mass_heal/back/lifecycle/recipient/target",
+"opacity_keys": [[0.0, 0.0], [0.12, 1.0], [0.5, 1.0], [1.2, 0.6], [1.95, 0.0], [4.0, 0.0]],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_027qp"]
+script = ExtResource("3_phfmv")
+clip = "review/mass_heal/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 4.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"id": "review/mass_heal/back/lifecycle/recipient/target2",
+"opacity_keys": [[0.0, 0.0], [0.12, 1.0], [0.5, 1.0], [1.2, 0.6], [1.95, 0.0], [4.0, 0.0]],
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_1i2cn"]
+script = ExtResource("6_p6t4l")
+kind = "palette_ramp"
+colours = PackedColorArray(0.17254902, 0.2509804, 0.3647059, 1, 0.54901963, 0.8666667, 0.8980392, 1, 0.8862745, 0.9647059, 0.8627451, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gbt58"]
+script = ExtResource("5_uey11")
+steps = Array[ExtResource("6_p6t4l")]([SubResource("Resource_1i2cn")])
+
+[sub_resource type="Resource" id="Resource_o6dsj"]
+script = ExtResource("4_o316v")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_gbt58")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9231845.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_eodu6"]
+script = ExtResource("6_p6t4l")
+kind = "palette_ramp"
+colours = PackedColorArray(0.17254902, 0.2509804, 0.3647059, 1, 0.54901963, 0.8666667, 0.8980392, 1, 0.8862745, 0.9647059, 0.8627451, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mynb8"]
+script = ExtResource("5_uey11")
+steps = Array[ExtResource("6_p6t4l")]([SubResource("Resource_eodu6")])
+
+[sub_resource type="Resource" id="Resource_qjfov"]
+script = ExtResource("4_o316v")
+place = "effect"
+category = "Effect3"
+sheet = "/spritesheets/Effect3/Special1.png"
+look = SubResource("Resource_mynb8")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9231845.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_2fvk4"]
+script = ExtResource("7_4m8gi")
+path = "art/media/ui/icons/smooth48/spell.mass-heal.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.mass-heal"
+
+[resource]
+script = ExtResource("8_er0yg")
+id = "spell.mass_heal"
+icon = SubResource("Resource_2fvk4")
+delivery = "targeted"
+body = SubResource("Resource_7hbhv")
+hand_layers = Array[ExtResource("4_o316v")]([SubResource("Resource_o6dsj"), SubResource("Resource_qjfov")])
+sockets = "measured/abilities/spells/spell.mass_heal.sockets.json"
+effects = Array[ExtResource("3_phfmv")]([SubResource("Resource_clohr"), SubResource("Resource_027qp")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_a7bgv")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "mass_heal__back",
+"source": "assets/vfx/index.json:/selections/mass_heal__back/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 500.0
+},
+"definitionRef": {
+"content_id": "spell.mass_heal",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "healing.mass_heal.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "effect",
+"label": "Mass Heal"
+},
+"fps": 32.0,
+"id": "back",
+"scale": 0.5,
+"scaleWithActor": true,
+"viewFacing": "E"
+}, {
+"assetId": "healing.mass_heal.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "effect",
+"label": "Mass Heal"
+},
+"fps": 32.0,
+"id": "front",
+"scale": 0.5,
+"scaleWithActor": true,
+"viewFacing": "E"
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

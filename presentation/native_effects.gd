@@ -2,7 +2,9 @@ extends RefCounted
 ## Native source resources and sampling only. Occurrence timing/placement belongs
 ## to the production compiler/sampler; this helper never advances that clock.
 const Admission=preload("res://presentation/native_source_admission.gd")
-const INDEX = "res://authoring/native_effects/index.json"
+## Class-action and hit sources: the abilities build's native_effects table.
+const INDEX = "native_effects/index.json"
+const AbilityDocuments = preload("res://presentation/ability_documents.gd")
 const ClassPalette = preload("res://presentation/native_effect_palette.gdshader")
 const Receiving = preload("res://presentation/native_effect_receiving.gd")
 
@@ -34,7 +36,7 @@ static func weapon_context(component:Dictionary,actor:Dictionary,rig:Dictionary,
 
 static func source_record(id: String, cache: Dictionary = {}) -> Dictionary:
     if not cache.has(INDEX):
-        var parsed = JSON.parse_string(FileAccess.get_file_as_string(INDEX))
+        var parsed = AbilityDocuments.read(INDEX)
         if not parsed is Dictionary: return {}
         cache[INDEX] = parsed
     return cache[INDEX].get("sources", {}).get(id, {})

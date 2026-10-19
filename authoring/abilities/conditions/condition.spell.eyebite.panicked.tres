@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_cby5b"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_msqtl"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_uieo1"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_uieo1"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_j1w7q"]
+
+[sub_resource type="Resource" id="Resource_eka71"]
+script = ExtResource("1_cby5b")
+enabled = false
+colour = Color(0.8392157, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_j1w7q"]
+script = ExtResource("2_uieo1")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-necromancy-eyebitepanickedeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-necromancy-eyebitepanickedeffect"
+
+[sub_resource type="Resource" id="Resource_wjvs7"]
+script = ExtResource("3_uieo1")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kdpw3"]
+script = ExtResource("2_msqtl")
+steps = Array[ExtResource("3_uieo1")]([SubResource("Resource_wjvs7")])
+
+[sub_resource type="Resource" id="Resource_ywefc"]
+script = ExtResource("1_cby5b")
+enabled = false
+colour = Color(0.39215687, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_j1w7q")
+id = "condition.spell.eyebite.panicked"
+label = "Panicked"
+icon = SubResource("Resource_j1w7q")
+disposition = "authored"
+look = SubResource("Resource_kdpw3")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.frightened.back",
+"attachment": "ground",
+"category": "Frightened",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "frightened.back",
+"phaseOffsetMs": 220.0,
+"priority": 70.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.frightened.front",
+"attachment": "ground",
+"category": "Frightened",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "frightened.front",
+"phaseOffsetMs": 220.0,
+"priority": 70.0
+}]
+group = "control.frightened"
+exclusive_group = "control.frightened"
+priority = 71.0
+max_layers = 1.0
+application_text = SubResource("Resource_eka71")
+removal_text = SubResource("Resource_ywefc")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.frightened",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {},
+"definitionRef": {
+"content_id": "condition.spell.eyebite.panicked",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

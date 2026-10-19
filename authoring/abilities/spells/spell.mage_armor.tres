@@ -1,0 +1,202 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ejd5d"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_0n60u"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_qc0g5"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_grao1"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_s68qq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_mek1e"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_xg8aa"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_r3vy5"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_3y6ct"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_0oxrl"]
+
+[sub_resource type="Resource" id="Resource_x0p7y"]
+script = ExtResource("1_ejd5d")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_6tdnm"]
+script = ExtResource("2_0n60u")
+roles = Dictionary[String, Color]({
+"primary": Color(0.52156866, 0.92156863, 1, 1),
+"secondary": Color(0.13333334, 0.47843137, 0.87058824, 1),
+"tertiary": Color(0.03529412, 0.09411765, 0.21176471, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_cd1iv"]
+script = ExtResource("3_qc0g5")
+clip = "spells/mage_armor/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.5
+orientation = "world"
+source_end = 7.2
+duration_policy = "authored"
+emission_seconds = 5.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "vfx_alpha"
+fade_out = 0.35
+staging_from = "client"
+extra = {
+"delay_seconds": 0.0,
+"opacity_keys": [[0.0, 0.65], [0.4, 0.65], [1.2, 0.16], [7.2, 0.16]],
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_kwtc8"]
+script = ExtResource("5_s68qq")
+kind = "palette_ramp"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ac2fv"]
+script = ExtResource("4_grao1")
+steps = Array[ExtResource("5_s68qq")]([SubResource("Resource_kwtc8")])
+
+[sub_resource type="Resource" id="Resource_50qw8"]
+script = ExtResource("5_s68qq")
+kind = "palette_ramp"
+colours = PackedColorArray(0.03529412, 0.09411765, 0.21176471, 1, 0.52156866, 0.92156863, 1, 1, 0.13333334, 0.47843137, 0.87058824, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lcp48"]
+script = ExtResource("4_grao1")
+steps = Array[ExtResource("5_s68qq")]([SubResource("Resource_50qw8")])
+
+[sub_resource type="Resource" id="Resource_3dufd"]
+script = ExtResource("6_mek1e")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_lcp48")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8776703.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_7g7qb"]
+script = ExtResource("5_s68qq")
+kind = "palette_ramp"
+colours = PackedColorArray(0.03529412, 0.09411765, 0.21176471, 1, 0.52156866, 0.92156863, 1, 1, 0.13333334, 0.47843137, 0.87058824, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_w8w2f"]
+script = ExtResource("4_grao1")
+steps = Array[ExtResource("5_s68qq")]([SubResource("Resource_7g7qb")])
+
+[sub_resource type="Resource" id="Resource_6jwoc"]
+script = ExtResource("6_mek1e")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_w8w2f")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8776703.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_r2266"]
+script = ExtResource("7_xg8aa")
+path = "art/media/ui/icons/smooth48/spell.mage-armor.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.mage-armor"
+
+[resource]
+script = ExtResource("8_r3vy5")
+id = "spell.mage_armor"
+icon = SubResource("Resource_r2266")
+delivery = "touch"
+body = SubResource("Resource_x0p7y")
+hand_layers = Array[ExtResource("6_mek1e")]([SubResource("Resource_3dufd"), SubResource("Resource_6jwoc")])
+sockets = "measured/abilities/spells/spell.mage_armor.sockets.json"
+effects = Array[ExtResource("3_qc0g5")]([SubResource("Resource_cd1iv")])
+native_staging = true
+effect_scope = "application"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_kind = "condition"
+owner_ids = PackedStringArray("condition.spell.mage_armor")
+owner_cues = PackedInt32Array(0)
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_6tdnm")
+finish = SubResource("Resource_ac2fv")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.mage_armor")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.mage_armor.bounds.json"
+staging_unported = {
+"palette": {
+"palette": ["000000", "030710", "060e1f", "091836", "0c2658", "103a84", "1656b2", "227ade", "38a4f6", "56cdff", "85ebff", "cafaff", "ffffff", "062030", "0c4052", "14677a", "2392a0", "47bec7", "7ce2e7", "14141c", "2c303e", "4a5669", "7d94aa", "bedaeb"],
+"parameters": {
+"alpha_luma_ceiling": 0.055,
+"alpha_luma_floor": 0.006,
+"color_boost": 1.08,
+"glass_alpha_ceiling": 0.4,
+"glass_alpha_floor": 0.12,
+"glass_alpha_strength": 0.95,
+"output_opacity": 1.0,
+"pixel_size_px": 2.0
+},
+"shader": "res://assets/native_effects/sandbox/projectiles/factory/shaders/glass_palette_v1.gdshader",
+"uniform_tracks": {
+"output_opacity": {
+"interpolation": "smoothstep",
+"keys": [[0.0, 1.0], [2.0, 1.0], [2.8, 0.22]]
+}
+}
+},
+"source": "sandbox/batches/combat.json:/spells/mage_armor/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"definitionRef": {
+"content_id": "spell.mage_armor",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}

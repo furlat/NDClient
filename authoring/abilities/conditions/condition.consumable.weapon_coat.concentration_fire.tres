@@ -1,0 +1,106 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_b8ie0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_rb6cy"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_skuy4"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_rb6cy"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_4uadl"]
+
+[sub_resource type="Resource" id="Resource_bhsdo"]
+script = ExtResource("1_b8ie0")
+colour = Color(0.50980395, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_4uadl"]
+script = ExtResource("2_rb6cy")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_35lcn"]
+script = ExtResource("3_rb6cy")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ajqk3"]
+script = ExtResource("2_skuy4")
+steps = Array[ExtResource("3_rb6cy")]([SubResource("Resource_35lcn")])
+
+[sub_resource type="Resource" id="Resource_acaqq"]
+script = ExtResource("1_b8ie0")
+colour = Color(0.15294118, 0.80784315, 0.30588236, 1)
+
+[resource]
+script = ExtResource("4_4uadl")
+id = "condition.consumable.weapon_coat.concentration_fire"
+label = "Flaming Coat"
+icon = SubResource("Resource_4uadl")
+disposition = "authored"
+look = SubResource("Resource_ajqk3")
+group = "equipment_weapon"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_bhsdo")
+removal_text = SubResource("Resource_acaqq")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["equipment_weapon"],
+"runtimeRole": "equipment_or_weapon_state",
+"visualFamily": "catalog.condition.consumable.weapon_coat.concentration_fire",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.consumable.weapon_coat.concentration_fire",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.neurodragon"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": [{
+"alphaMultiplier": 1.0,
+"brightness": 1.12,
+"id": "coated-weapon",
+"priority": 80.0,
+"saturation": 1.35,
+"slots": ["weapon", "offhand"],
+"tintRgb": 16739125.0
+}]
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration_fire; effect=condition.weapon_coat.concentration_fire; disposition=beneficial; target=equipped_item; gates=origin_root:content.neurodragon:item:consumable.weapon_coat.concentration_fire@1",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.item.weapon_coat.apply",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

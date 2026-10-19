@@ -1,0 +1,301 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_g1se7"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_enske"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_oonxm"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_i5eeb"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_vje58"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_388tp"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_pcv0m"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_lbro5"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_lwvjm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_4hxvk"]
+
+[sub_resource type="Resource" id="Resource_hvfeg"]
+script = ExtResource("1_g1se7")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"holdReleaseForVolley": true,
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_vs5hl"]
+script = ExtResource("2_enske")
+roles = Dictionary[String, Color]({
+"primary": Color(0.5372549, 0.77254903, 1, 1),
+"secondary": Color(0.21568628, 0.47843137, 0.74509805, 1),
+"tertiary": Color(0.8392157, 0.94509804, 1, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_r1h7u"]
+script = ExtResource("3_oonxm")
+clip = "spells/eldritch_blast/default/travel"
+role = "flight"
+scale = 0.35
+source_launch = 0.3
+source_contact = 0.8
+source_end = 1.0
+charge_seconds = 0.3
+stop_emission_at_contact = true
+hide_at_contact = PackedStringArray("travel/Donor/external_head", "travel/Donor/inner_head", "travel/Donor/MCrossed1", "travel/Donor/MBall", "travel/Donor/Contour")
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+origin_path = "travel/Donor/MBall"
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_j3q63"]
+script = ExtResource("3_oonxm")
+clip = "spells/eldritch_blast/default/cast"
+role = "cast"
+scale = 0.25
+source_end = 0.8
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+origin_path = "cast/Donor/Flare"
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"before_release": 0.5,
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_6a8k0"]
+script = ExtResource("3_oonxm")
+clip = "spells/eldritch_blast/default/impact"
+role = "impact"
+scale = 0.18
+source_end = 1.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_h7jfe"]
+script = ExtResource("5_vje58")
+kind = "palette_ramp"
+colours = PackedColorArray(0.039215688, 0.09411765, 0.12156863, 1, 0.047058824, 0.11764706, 0.26666668, 1, 0.10980392, 0.13725491, 0.17254902, 1, 0.06666667, 0.16470589, 0.20392157, 1, 0.05882353, 0.21568628, 0.4862745, 1, 0.09411765, 0.25490198, 0.29803923, 1, 0.25882354, 0.30588236, 0.35686275, 1, 0.12156863, 0.35686275, 0.4117647, 1, 0.08627451, 0.35686275, 0.72156864, 1, 0.15686275, 0.46666667, 0.5254902, 1, 0.1764706, 0.53333336, 0.8784314, 1, 0.4392157, 0.50980395, 0.5686275, 1, 0.21960784, 0.58431375, 0.627451, 1, 0.27450982, 0.6392157, 0.9019608, 1, 0.29803923, 0.7019608, 0.7372549, 1, 0.32941177, 0.74509805, 0.87058824, 1, 0.3764706, 0.74509805, 0.9647059, 1, 0.39607844, 0.8039216, 0.827451, 1, 0.40784314, 0.8039216, 0.9411765, 1, 0.46666667, 0.8156863, 0.9882353, 1, 0.49411765, 0.84705883, 0.98039216, 1, 0.5882353, 0.8784314, 1, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rigrj"]
+script = ExtResource("4_i5eeb")
+steps = Array[ExtResource("5_vje58")]([SubResource("Resource_h7jfe")])
+
+[sub_resource type="Resource" id="Resource_6gcna"]
+script = ExtResource("5_vje58")
+kind = "palette_ramp"
+colours = PackedColorArray(0.8392157, 0.94509804, 1, 1, 0.5372549, 0.77254903, 1, 1, 0.21568628, 0.47843137, 0.74509805, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_btd1w"]
+script = ExtResource("4_i5eeb")
+steps = Array[ExtResource("5_vje58")]([SubResource("Resource_6gcna")])
+
+[sub_resource type="Resource" id="Resource_8hj5q"]
+script = ExtResource("6_388tp")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_btd1w")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9029119.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_vvalm"]
+script = ExtResource("5_vje58")
+kind = "palette_ramp"
+colours = PackedColorArray(0.8392157, 0.94509804, 1, 1, 0.5372549, 0.77254903, 1, 1, 0.21568628, 0.47843137, 0.74509805, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5jj41"]
+script = ExtResource("4_i5eeb")
+steps = Array[ExtResource("5_vje58")]([SubResource("Resource_vvalm")])
+
+[sub_resource type="Resource" id="Resource_fv7n8"]
+script = ExtResource("6_388tp")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_5jj41")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9029119.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_kmq2r"]
+script = ExtResource("7_pcv0m")
+path = "art/media/ui/icons/smooth48/spell.eldritch-blast.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.eldritch-blast"
+
+[resource]
+script = ExtResource("8_lbro5")
+id = "spell.eldritch_blast"
+icon = SubResource("Resource_kmq2r")
+delivery = "projectile_volley"
+body = SubResource("Resource_hvfeg")
+hand_layers = Array[ExtResource("6_388tp")]([SubResource("Resource_8hj5q"), SubResource("Resource_fv7n8")])
+sockets = "measured/abilities/spells/spell.eldritch_blast.sockets.json"
+effects = Array[ExtResource("3_oonxm")]([SubResource("Resource_r1h7u"), SubResource("Resource_j3q63"), SubResource("Resource_6a8k0")])
+native_staging = true
+effect_scope = "application"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+flight_tiles_per_second = 2.8125
+minimum_travel_seconds = 0.15
+stagger_seconds = 0.16
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_rigrj")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/eldritch_blast/default/travel",
+"clock_parameter": "source_clock",
+"node": "travel/Donor/MCrossed1",
+"parameter_overrides": {},
+"status": "available",
+"surface": 0.0
+}
+colours = SubResource("Resource_vs5hl")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.eldritch_blast.bounds.json"
+staging_unported = {
+"source": "sandbox/staging.json:/spells/eldritch_blast"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 15610692.0,
+"enabled": true,
+"label": "Force"
+},
+"hitFlash": {
+"color": 15610692.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.eldritch_blast",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 32.0,
+"geometry": {
+"enabled": false,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetId": "recovered.eldritch_blast.dense.v1",
+"assetPhase": "impact",
+"enabled": true,
+"fps": 32.0
+},
+"orientation": {
+"directionSource": "target_vector",
+"fineRotation": "isometricHybrid",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetId": "recovered.eldritch_blast.dense.v1",
+"assetPhase": "cast",
+"durationMs": 500.0,
+"enabled": true,
+"fps": 32.0,
+"overlapRelease": true,
+"startFrame": 4.0
+},
+"scale": 0.5,
+"sourceAnchor": {
+"axisPx": 24.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "recovered.eldritch_blast.dense.v1",
+"blendMode": "add",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": 0.0,
+"liftY": 0.0
+},
+"trajectory": {
+"sameTargetSpread": true,
+"type": "straight"
+},
+"travel": {
+"assetId": "recovered.eldritch_blast.dense.v1",
+"assetPhase": "travel",
+"enabled": true,
+"fps": 32.0
+}
+}
+}

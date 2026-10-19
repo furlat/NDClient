@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_udfqc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_8xq08"]
+
+[resource]
+script = ExtResource("1_udfqc")
+id = "hit_flash"
+unported = {
+"cast_categories": ["Magic1", "Magic2", "Magic3"],
+"hit_flash": {
+"blendMode": "screen",
+"durationMs": 150.0,
+"envelope": "hold_fade",
+"holdMs": 50.0,
+"inherit_hand_material": true
+}
+}

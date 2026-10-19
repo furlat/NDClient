@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PresentationDamageType" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="1_vq8of"]
+[ext_resource type="Script" path="res://presentation/source/abilities/damage_type.gd" id="2_noged"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_bpcoi"]
+
+[sub_resource type="Resource" id="Resource_r4vdm"]
+script = ExtResource("1_vq8of")
+id = "damage.fire"
+roles = Dictionary[String, Color]({
+"primary": Color(1, 0.4, 0, 1),
+"secondary": Color(1, 0.11764706, 0, 1),
+"tertiary": Color(1, 0.8, 0, 1)
+})
+ramp = PackedColorArray()
+
+[resource]
+script = ExtResource("2_noged")
+id = "Fire"
+label = "Fire"
+palette = SubResource("Resource_r4vdm")
+impact_colour = "#ff4000"
+status = "ready"

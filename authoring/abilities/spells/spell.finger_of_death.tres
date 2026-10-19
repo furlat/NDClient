@@ -1,0 +1,428 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_d6btv"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_rsd6s"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_tp0bh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_x7ido"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_q5lky"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_mh45j"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_iukpt"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_40hig"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_y2gbn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_jc61o"]
+
+[sub_resource type="Resource" id="Resource_coq5h"]
+script = ExtResource("1_d6btv")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"holdUntilContact": true,
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_y5mh7"]
+script = ExtResource("2_rsd6s")
+roles = Dictionary[String, Color]({
+"primary": Color(0.84705883, 0.79607844, 0.6666667, 1),
+"secondary": Color(0.5176471, 0.44313726, 0.33333334, 1),
+"tertiary": Color(0.14901961, 0.13333334, 0.11372549, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_sxk7o"]
+script = ExtResource("3_tp0bh")
+clip = "review/finger_of_death/normal_back/lifecycle"
+role = "attached"
+at = "release"
+delay = -0.183333333333333
+attachment = "caster_ground"
+rotation_degrees = Vector3(0, 180, 0)
+source_end = 3.25
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"aim_from_ground": true,
+"delivery_timing": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"orientation": "facing",
+"source_launch_local": 1.1
+}
+
+[sub_resource type="Resource" id="Resource_i1yfr"]
+script = ExtResource("3_tp0bh")
+clip = "native/finger_of_death/impact"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+scale = 0.565685424949238
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.15
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_cugnn"]
+script = ExtResource("6_mh45j")
+kind = "palette_ramp"
+colours = PackedColorArray(0.14901961, 0.13333334, 0.11372549, 1, 0.84705883, 0.79607844, 0.6666667, 1, 0.5176471, 0.44313726, 0.33333334, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_y14v4"]
+script = ExtResource("5_q5lky")
+steps = Array[ExtResource("6_mh45j")]([SubResource("Resource_cugnn")])
+
+[sub_resource type="Resource" id="Resource_i7nnl"]
+script = ExtResource("4_x7ido")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_y14v4")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 14207914.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_itmic"]
+script = ExtResource("6_mh45j")
+kind = "palette_ramp"
+colours = PackedColorArray(0.14901961, 0.13333334, 0.11372549, 1, 0.84705883, 0.79607844, 0.6666667, 1, 0.5176471, 0.44313726, 0.33333334, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5akdj"]
+script = ExtResource("5_q5lky")
+steps = Array[ExtResource("6_mh45j")]([SubResource("Resource_itmic")])
+
+[sub_resource type="Resource" id="Resource_isbor"]
+script = ExtResource("4_x7ido")
+place = "aura"
+category = "Effect4"
+sheet = "/spritesheets/Effect4/Attack5.png"
+look = SubResource("Resource_5akdj")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 14207914.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_ekhp1"]
+script = ExtResource("7_iukpt")
+path = "art/media/ui/icons/smooth48/spell.finger-of-death.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.finger-of-death"
+
+[sub_resource type="Resource" id="Resource_yj1q1"]
+script = ExtResource("3_tp0bh")
+clip = "private/finger-counterspell-v193/full_sequence"
+role = "attached"
+at = "release"
+delay = -0.183333333333333
+attachment = "caster_ground"
+rotation_degrees = Vector3(0, 180, 0)
+source_end = 3.25
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"aim_from_ground": true,
+"delivery_timing": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"orientation": "facing",
+"source_launch_local": 1.1
+}
+
+[sub_resource type="Resource" id="Resource_2puci"]
+script = ExtResource("10_jc61o")
+id = "finger_of_death__counterspell_back"
+kind = "form"
+selection = "finger_of_death__counterspell_back"
+effects = Array[ExtResource("3_tp0bh")]([SubResource("Resource_yj1q1")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_40hig")
+id = "spell.finger_of_death"
+icon = SubResource("Resource_ekhp1")
+delivery = "ray"
+body = SubResource("Resource_coq5h")
+hand_layers = Array[ExtResource("4_x7ido")]([SubResource("Resource_i7nnl"), SubResource("Resource_isbor")])
+sockets = "measured/abilities/spells/spell.finger_of_death.sockets.json"
+effects = Array[ExtResource("3_tp0bh")]([SubResource("Resource_sxk7o"), SubResource("Resource_i1yfr")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_y5mh7")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_jc61o")]([SubResource("Resource_2puci")])
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "finger_of_death__normal_back",
+"source": "assets/vfx/index.json:/selections/finger_of_death__normal_back/staging"
+}
+unported = {
+"cancellationMedia": {
+"cutoffOffsetMs": 691.6666666666666,
+"media": [{
+"assetId": "finger.hand.cameo.back.q0",
+"assetIdsByCamera": ["finger.hand.cameo.back.q0", "finger.hand.cameo.back.q1", "finger.hand.cameo.back.q2", "finger.hand.cameo.back.q3"],
+"attachment": "source_ground",
+"depth": "behind_body",
+"durationMs": 2375.0,
+"fps": 32.0,
+"id": "finger.cameo.back",
+"scale": 0.75,
+"timeMap": [{
+"elapsedMs": 0.0,
+"sourceFrame": 28.0
+}, {
+"elapsedMs": 2375.0,
+"sourceFrame": 104.0
+}]
+}, {
+"assetId": "finger.hand.cameo.front.q0",
+"assetIdsByCamera": ["finger.hand.cameo.front.q0", "finger.hand.cameo.front.q1", "finger.hand.cameo.front.q2", "finger.hand.cameo.front.q3"],
+"attachment": "source_ground",
+"depth": "front_body",
+"durationMs": 2375.0,
+"fps": 32.0,
+"id": "finger.cameo.front",
+"scale": 0.75,
+"timeMap": [{
+"elapsedMs": 0.0,
+"sourceFrame": 28.0
+}, {
+"elapsedMs": 2375.0,
+"sourceFrame": 104.0
+}]
+}],
+"outcomeCode": "spell.counterspell.interrupted",
+"reactionId": "reaction.spell.counterspell",
+"reactionOffsetsByFacing": {
+"E": [0.8441839356697289, -1.0026095566285185, 1.4122265214263277],
+"N": [-1.0026095566285185, -0.8441839356697287, 1.4122265214263277],
+"NE": [-0.1120238308936499, -1.3058802018552766, 1.4122265214263277],
+"NW": [-1.3058802018552766, 0.1120238308936498, 1.4122265214263277],
+"S": [1.0026095566285185, 0.8441839356697289, 1.4122265214263277],
+"SE": [1.3058802018552766, -0.11202383089364966, 1.4122265214263277],
+"SW": [0.11202383089364974, 1.3058802018552766, 1.4122265214263277],
+"W": [-0.8441839356697287, 1.0026095566285185, 1.4122265214263277]
+},
+"reactionScale": 0.5625,
+"successByCamera": ["finger.counterspell.front.q0", "finger.counterspell.front.q1", "finger.counterspell.front.q2", "finger.counterspell.front.q3"]
+},
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"launchDelayMs": 916.6666666666666,
+"speedTilesPerSecond": 6.153846153846153
+},
+"definitionRef": {
+"content_id": "spell.finger_of_death",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"directed": {
+"contactFadeMs": 90.0,
+"geometry": "/finger/darkness-mesh.json",
+"material": "darkness_mesh",
+"nativeUnitsPerCell": 1.885618083,
+"palette": [1841176.0, 4401450.0, 7617589.0, 11495506.0, 14266248.0, 16246725.0],
+"sourceOffsetNativeXYZ": [0.2105243369936943, 2.062067713588476, 2.4470988512039185],
+"targetPlaneHeightCells": 0.6625094339527613,
+"verticalScale": 1.224744871391589
+},
+"media": [{
+"assetId": "finger.hand.normal.back.q0",
+"assetIdsByCamera": ["finger.hand.normal.back.q0", "finger.hand.normal.back.q1", "finger.hand.normal.back.q2", "finger.hand.normal.back.q3"],
+"attachment": "source_ground",
+"depth": "behind_body",
+"durationMs": 3250.0,
+"effectGroup": {
+"id": "finger.hand",
+"label": "Finger Of Death · Finger hand"
+},
+"fps": 32.0,
+"id": "finger.hand.back",
+"scale": 0.75,
+"startOffsetMs": -183.33333333333337
+}, {
+"assetId": "finger.hand.normal.front.q0",
+"assetIdsByCamera": ["finger.hand.normal.front.q0", "finger.hand.normal.front.q1", "finger.hand.normal.front.q2", "finger.hand.normal.front.q3"],
+"attachment": "source_ground",
+"depth": "front_body",
+"durationMs": 3250.0,
+"effectGroup": {
+"id": "finger.hand",
+"label": "Finger Of Death · Finger hand"
+},
+"fps": 32.0,
+"id": "finger.hand.front",
+"scale": 0.75,
+"startOffsetMs": -183.33333333333337
+}, {
+"assetId": "finger.contact.back.q0",
+"assetIdsByCamera": ["finger.contact.back.q0", "finger.contact.back.q1", "finger.contact.back.q2", "finger.contact.back.q3"],
+"attachment": "target_body",
+"clock": "contact",
+"depth": "behind_body",
+"durationMs": 2000.0,
+"effectGroup": {
+"id": "finger.contact",
+"label": "Finger Of Death · Finger contact"
+},
+"emissionPointByFacing": {
+"E": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"N": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"NE": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"NW": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"S": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"SE": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"SW": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"W": {
+"x": 0.0,
+"y": -44.340500673536
+}
+},
+"fps": 32.0,
+"id": "finger.contact.back",
+"requireDamageApplied": true,
+"scale": 0.46875
+}, {
+"assetId": "finger.contact.front.q0",
+"assetIdsByCamera": ["finger.contact.front.q0", "finger.contact.front.q1", "finger.contact.front.q2", "finger.contact.front.q3"],
+"attachment": "target_body",
+"clock": "contact",
+"depth": "front_body",
+"durationMs": 2000.0,
+"effectGroup": {
+"id": "finger.contact",
+"label": "Finger Of Death · Finger contact"
+},
+"emissionPointByFacing": {
+"E": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"N": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"NE": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"NW": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"S": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"SE": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"SW": {
+"x": 0.0,
+"y": -44.340500673536
+},
+"W": {
+"x": 0.0,
+"y": -44.340500673536
+}
+},
+"fps": 32.0,
+"id": "finger.contact.front",
+"requireDamageApplied": true,
+"scale": 0.46875
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

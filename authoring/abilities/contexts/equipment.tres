@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_e43nd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="2_xsbmx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="3_j275f"]
+
+[sub_resource type="Resource" id="Resource_vk0fd"]
+script = ExtResource("1_e43nd")
+role = "equipment"
+clip = "Taunt"
+playback_speed = 3.0
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_xsbmx")
+id = "equipment"
+body = SubResource("Resource_vk0fd")
+unported = {
+"commitFrame": 4.0,
+"media": []
+}

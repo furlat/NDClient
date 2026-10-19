@@ -1,0 +1,109 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ovydx"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_s3u5u"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_ovydx"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_vef25"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_yoqfm"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_3ul52"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_d10mm"]
+
+[sub_resource type="Resource" id="Resource_vef25"]
+script = ExtResource("1_ovydx")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_mdv3v"]
+script = ExtResource("1_s3u5u")
+clip = "bg3-36/revivify/application/source-8d90ebdda130325c"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.25
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "legs", "shoes", "chest", "head", "helmet", "cloak"]
+},
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_jnd7h"]
+script = ExtResource("3_vef25")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.revivify.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_630kg"]
+script = ExtResource("1_s3u5u")
+clip = "bg3-36/revivify/application/source-2b7d3749fbb41b6f"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.25
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "legs", "shoes", "chest", "head", "helmet", "cloak"]
+},
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_wjg71"]
+script = ExtResource("6_d10mm")
+id = "revivify_relocate_native"
+kind = "form"
+selection = "revivify_relocate_native"
+effects = Array[ExtResource("1_s3u5u")]([SubResource("Resource_630kg")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_yoqfm")
+id = "spell.revivify"
+icon = SubResource("Resource_jnd7h")
+delivery = "targeted"
+body = SubResource("Resource_vef25")
+effects = Array[ExtResource("1_s3u5u")]([SubResource("Resource_mdv3v")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_d10mm")]([SubResource("Resource_wjg71")])
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "revivify_in_place_native",
+"source": "assets/vfx/index.json:/selections/revivify_in_place_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

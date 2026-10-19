@@ -1,0 +1,149 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_55nxk"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_yt4ax"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_yt4ax"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_jn5r0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="4_jn5r0"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_wrjpf"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_6kn6u"]
+
+[sub_resource type="Resource" id="Resource_jn5r0"]
+script = ExtResource("1_yt4ax")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_6wwh4"]
+script = ExtResource("1_55nxk")
+clip = "high-level-22/charm-monster/application"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "charm_monster-application-caster-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_2mmvs"]
+script = ExtResource("1_55nxk")
+clip = "high-level-22/charm-monster/application"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "charm_monster-application-target-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_ubiqo"]
+script = ExtResource("1_55nxk")
+clip = "original-repairs/charmed/monster-owner"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes", "hair", "head"]
+},
+"follow_attachment": true,
+"id": "original-repairs-charmed-monster-owner",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_wrjpf"]
+script = ExtResource("4_jn5r0")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.charm_monster.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.spell.charm_monster"
+
+[resource]
+script = ExtResource("3_jn5r0")
+id = "spell.charm_monster"
+icon = SubResource("Resource_wrjpf")
+delivery = "condition_only"
+body = SubResource("Resource_jn5r0")
+effects = Array[ExtResource("1_55nxk")]([SubResource("Resource_6wwh4"), SubResource("Resource_2mmvs"), SubResource("Resource_ubiqo")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.charm_monster")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "charm_monster_identity_native",
+"source": "assets/vfx/index.json:/selections/charm_monster_identity_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

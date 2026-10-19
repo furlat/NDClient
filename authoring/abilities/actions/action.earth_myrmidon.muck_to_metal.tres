@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_quasq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_uqn35"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_gal17"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_uqn35"]
+
+[sub_resource type="Resource" id="Resource_gal17"]
+script = ExtResource("1_uqn35")
+role = "cast_alt"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mpnff"]
+script = ExtResource("2_gal17")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.muck_to_metal.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.creature_action.muck_to_metal"
+
+[resource]
+script = ExtResource("1_quasq")
+id = "action.earth_myrmidon.muck_to_metal"
+kind = "action"
+family = "summon_form"
+icon = SubResource("Resource_mpnff")
+body = SubResource("Resource_gal17")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."

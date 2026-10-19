@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_8rr8f"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_se3b3"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_ssvqh"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_se3b3"]
+
+[sub_resource type="Resource" id="Resource_8m4js"]
+script = ExtResource("1_8rr8f")
+role = "act"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_s8s1a"]
+script = ExtResource("2_se3b3")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("2_ssvqh")
+id = "action.class.sorcerer.quickened_spell"
+kind = "action"
+icon = SubResource("Resource_s8s1a")
+disposition = "authored"
+body = SubResource("Resource_8m4js")
+effect_sources = PackedStringArray()
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.class.sorcerer.quickened_spell",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"alpha": 0.95,
+"assetId": "class.quickened.quickened-q0-all",
+"attachment": "source_ground",
+"id": "class.quickened.quickened-q0-all",
+"poseSocket": "hand",
+"scale": 0.5
+}],
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

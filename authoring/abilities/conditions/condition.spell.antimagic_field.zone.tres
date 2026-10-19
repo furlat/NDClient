@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_dtnja"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_4oofs"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_m5t55"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_4oofs"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_717tb"]
+
+[sub_resource type="Resource" id="Resource_a4b7g"]
+script = ExtResource("1_dtnja")
+colour = Color(0.89411765, 0.7647059, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_717tb"]
+script = ExtResource("2_4oofs")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-antimagicfieldzone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-antimagicfieldzone"
+
+[sub_resource type="Resource" id="Resource_kv8s8"]
+script = ExtResource("3_4oofs")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7dmda"]
+script = ExtResource("2_m5t55")
+steps = Array[ExtResource("3_4oofs")]([SubResource("Resource_kv8s8")])
+
+[sub_resource type="Resource" id="Resource_yno6t"]
+script = ExtResource("1_dtnja")
+colour = Color(0.6117647, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_717tb")
+id = "condition.spell.antimagic_field.zone"
+label = "Antimagic Field Zone"
+icon = SubResource("Resource_717tb")
+disposition = "authored"
+look = SubResource("Resource_7dmda")
+group = "ground_zone"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_a4b7g")
+removal_text = SubResource("Resource_yno6t")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["ground_zone"],
+"runtimeRole": "zone_or_tile_state",
+"visualFamily": "catalog.condition.spell.antimagic_field.zone",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.antimagic_field.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=neutral; target=world_position; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.antimagic_field",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

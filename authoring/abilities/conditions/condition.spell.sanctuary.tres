@@ -1,0 +1,129 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_kqak3"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_36nab"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_vbt8s"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_36nab"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_arspq"]
+
+[sub_resource type="Resource" id="Resource_gk3fl"]
+script = ExtResource("1_kqak3")
+enabled = false
+colour = Color(1, 0.95686275, 0.8666667, 1)
+
+[sub_resource type="Resource" id="Resource_arspq"]
+script = ExtResource("2_36nab")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-sanctuaryeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-sanctuaryeffect"
+
+[sub_resource type="Resource" id="Resource_wo2od"]
+script = ExtResource("3_36nab")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5mcsq"]
+script = ExtResource("2_vbt8s")
+steps = Array[ExtResource("3_36nab")]([SubResource("Resource_wo2od")])
+
+[sub_resource type="Resource" id="Resource_jmpef"]
+script = ExtResource("1_kqak3")
+enabled = false
+colour = Color(1, 0.95686275, 0.8666667, 1)
+
+[resource]
+script = ExtResource("4_arspq")
+id = "condition.spell.sanctuary"
+label = "Sanctuary"
+icon = SubResource("Resource_arspq")
+disposition = "authored"
+owner_spell = "spell.sanctuary"
+look = SubResource("Resource_5mcsq")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.sanctuary.back",
+"attachment": "ground",
+"category": "sanctuary",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.sanctuary.back",
+"priority": 35.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.sanctuary.front",
+"attachment": "body",
+"category": "sanctuary",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.sanctuary.front",
+"priority": 35.0
+}]
+group = "protection"
+priority = 35.0
+max_layers = 3.0
+application_text = SubResource("Resource_gk3fl")
+removal_text = SubResource("Resource_jmpef")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "persistent.sanctuary",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.sanctuary",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.sanctuary",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_vaqml"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_7ff3m"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_alibl"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_7ff3m"]
+
+[sub_resource type="Resource" id="Resource_cijfx"]
+script = ExtResource("1_vaqml")
+role = "act"
+clip = "Idle"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 0.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fr2js"]
+script = ExtResource("2_7ff3m")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[sub_resource type="Resource" id="Resource_lfbmm"]
+script = ExtResource("3_7ff3m")
+cue = "door_open"
+at = "event.start"
+
+[resource]
+script = ExtResource("2_alibl")
+id = "action.environment.directional_door.open"
+kind = "action"
+family = "environment"
+icon = SubResource("Resource_fr2js")
+disposition = "authored"
+body = SubResource("Resource_cijfx")
+plays = "action.environment.trap_lever.pull"
+target = "source_item"
+effect_sources = PackedStringArray()
+sounds = Array[ExtResource("3_7ff3m")]([SubResource("Resource_lfbmm")])
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.environment.directional_door.open",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

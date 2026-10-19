@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_wrqu5"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_yp6lv"]
+
+[sub_resource type="Resource" id="Resource_8in0l"]
+script = ExtResource("1_wrqu5")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-poisoned.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.consumable.weapon_coat.basic_poison"
+
+[resource]
+script = ExtResource("1_yp6lv")
+id = "condition.consumable.weapon_coat.basic_poison"
+icon = SubResource("Resource_8in0l")

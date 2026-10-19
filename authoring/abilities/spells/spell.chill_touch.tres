@@ -1,0 +1,281 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_vv43n"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_5gnys"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_4b0sh"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_riq8g"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_skfdj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_wjyam"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_1jt6j"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_gd7et"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_emkbr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_uvdcc"]
+
+[sub_resource type="Resource" id="Resource_atxg1"]
+script = ExtResource("1_vv43n")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_ic14o"]
+script = ExtResource("2_5gnys")
+roles = Dictionary[String, Color]({
+"primary": Color(0.53333336, 1, 0.3647059, 1),
+"secondary": Color(0.14117648, 0.47058824, 0.05882353, 1),
+"tertiary": Color(0.9764706, 1, 0.85882354, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_gr4q5"]
+script = ExtResource("3_4b0sh")
+clip = "spells/chill_touch/impact/impact"
+role = "strike"
+scale = 0.06
+rotation_degrees = Vector3(90, 0, 0)
+source_contact = 1.6388888888888888
+source_end = 7.93333339691162
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_j5as1"]
+script = ExtResource("5_skfdj")
+kind = "palette_ramp"
+colours = PackedColorArray(0, 0, 0, 1, 0, 0.003921569, 0, 1, 0.015686275, 0.007843138, 0.011764706, 1, 0.003921569, 0.050980393, 0, 1, 0.019607844, 0.1254902, 0.007843138, 1, 0.03137255, 0.17254902, 0.011764706, 1, 0.05490196, 0.23921569, 0.015686275, 1, 0.05882353, 0.31764707, 0.019607844, 1, 0.09411765, 0.32941177, 0.03137255, 1, 0.09019608, 0.42352942, 0.03137255, 1, 0.11372549, 0.4509804, 0.03529412, 1, 0.14117648, 0.47058824, 0.05882353, 1, 0.13333334, 0.5686275, 0.039215688, 1, 0.18039216, 0.6039216, 0.09019608, 1, 0.1882353, 0.7019608, 0.06666667, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+gamma = 1.1
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vbwkb"]
+script = ExtResource("4_riq8g")
+steps = Array[ExtResource("5_skfdj")]([SubResource("Resource_j5as1")])
+
+[sub_resource type="Resource" id="Resource_yardv"]
+script = ExtResource("5_skfdj")
+kind = "palette_ramp"
+colours = PackedColorArray(0.9764706, 1, 0.85882354, 1, 0.53333336, 1, 0.3647059, 1, 0.14117648, 0.47058824, 0.05882353, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_iqn0k"]
+script = ExtResource("4_riq8g")
+steps = Array[ExtResource("5_skfdj")]([SubResource("Resource_yardv")])
+
+[sub_resource type="Resource" id="Resource_ipkin"]
+script = ExtResource("6_wjyam")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_iqn0k")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8978269.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_dpfrx"]
+script = ExtResource("5_skfdj")
+kind = "palette_ramp"
+colours = PackedColorArray(0.9764706, 1, 0.85882354, 1, 0.53333336, 1, 0.3647059, 1, 0.14117648, 0.47058824, 0.05882353, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_saj0c"]
+script = ExtResource("4_riq8g")
+steps = Array[ExtResource("5_skfdj")]([SubResource("Resource_dpfrx")])
+
+[sub_resource type="Resource" id="Resource_i5fte"]
+script = ExtResource("6_wjyam")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_saj0c")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8978269.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_m5ywl"]
+script = ExtResource("7_1jt6j")
+path = "art/media/ui/icons/smooth48/spell.chill-touch.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.chill-touch"
+
+[resource]
+script = ExtResource("8_gd7et")
+id = "spell.chill_touch"
+icon = SubResource("Resource_m5ywl")
+delivery = "projectile"
+body = SubResource("Resource_atxg1")
+hand_layers = Array[ExtResource("6_wjyam")]([SubResource("Resource_ipkin"), SubResource("Resource_i5fte")])
+sockets = "measured/abilities/spells/spell.chill_touch.sockets.json"
+effects = Array[ExtResource("3_4b0sh")]([SubResource("Resource_gr4q5")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+flight_tiles_per_second = 6.5625
+minimum_travel_seconds = 0.15
+stagger_seconds = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_vbwkb")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/chill_touch/impact/impact",
+"clock_parameter": "",
+"node": "effect/Donor/punch/Skeleton3D/demonhand",
+"parameter_overrides": {},
+"reason": "The necrotic hand material is present, but its fragment uses the native world cutplane, rim distance and view-normal Fresnel. It has no cutplane disable switch. A flat unregistered quad would not faithfully preserve its current source inputs; keep colour treatment until an explicit body-compatible native binding is authored.",
+"status": "unsupported",
+"surface": 0.0
+}
+colours = SubResource("Resource_ic14o")
+feedback_ramp = PackedStringArray("041402", "53e036", "69e051")
+applies_conditions = PackedStringArray("condition.spell.chill_touch")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.chill_touch.bounds.json"
+staging_unported = {
+"source": "sandbox/staging.json:/spells/chill_touch"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 15610692.0,
+"enabled": true,
+"label": "Necrotic"
+},
+"hitFlash": {
+"color": 15610692.0,
+"enabled": true,
+"palette": {
+"untinted": true
+}
+}
+},
+"definitionRef": {
+"content_id": "spell.chill_touch",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 144.0,
+"geometry": {
+"enabled": false,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetId": "ice.v8.chill_touch.impact",
+"assetPhase": "impact",
+"enabled": true,
+"fps": 32.0,
+"timeMap": [{
+"elapsedMs": 0.0,
+"sourceFrame": 0.0
+}, {
+"elapsedMs": 416.6666666666667,
+"sourceFrame": 45.77777777777778
+}, {
+"elapsedMs": 3986.111111111111,
+"sourceFrame": 160.0
+}]
+},
+"orientation": {
+"directionSource": "target_vector",
+"fineRotation": "none",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetPhase": "cast",
+"enabled": false,
+"startFrame": 4.0
+},
+"scale": 0.5,
+"sourceAnchor": {
+"axisPx": 24.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "ice.v8.chill_touch.impact",
+"blendMode": "normal",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": -6.0,
+"liftY": -5.0
+},
+"targetLocal": {
+"approachOffsetTiles": 0.12,
+"approachUntilFrame": 53.333333333333336,
+"contactAfterReleaseMs": 41.666666666666664
+},
+"trajectory": {
+"sameTargetSpread": true,
+"type": "straight"
+},
+"travel": {
+"assetPhase": "travel",
+"enabled": false,
+"fps": 144.0
+}
+}
+}

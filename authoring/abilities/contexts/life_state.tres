@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_cw2n6"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_x45d3"]
+
+[sub_resource type="Resource" id="Resource_f4usi"]
+script = ExtResource("2_x45d3")
+text = "Dying"
+colour = Color(0.89411765, 0.49019608, 0.49019608, 1)
+
+[sub_resource type="Resource" id="Resource_fltoy"]
+script = ExtResource("2_x45d3")
+text = "Stable"
+colour = Color(0.45882353, 0.8392157, 0.6117647, 1)
+
+[sub_resource type="Resource" id="Resource_d7c65"]
+script = ExtResource("2_x45d3")
+text = "Revived"
+colour = Color(0.45882353, 0.8392157, 0.6117647, 1)
+
+[resource]
+script = ExtResource("1_cw2n6")
+id = "life_state"
+texts = Dictionary[String, ExtResource("2_x45d3")]({
+"dying": SubResource("Resource_f4usi"),
+"revived": SubResource("Resource_d7c65"),
+"stable": SubResource("Resource_fltoy")
+})
+unported = {
+"bodyPoses": {
+"dying": {
+"applicationBody": {
+"bodyClip": "Die"
+},
+"bodyPose": "Die",
+"removalBody": {
+"bodyClip": "Die",
+"reversed": true
+}
+},
+"stable": {
+"applicationBody": {
+"bodyClip": "Die"
+},
+"bodyPose": "Die",
+"removalBody": {
+"bodyClip": "Die",
+"reversed": true
+}
+}
+},
+"dying": {},
+"revived": {},
+"stable": {}
+}

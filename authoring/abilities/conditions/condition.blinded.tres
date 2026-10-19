@@ -1,0 +1,262 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_nf56s"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_2mvp8"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_i6au5"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_i6au5"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_xcare"]
+
+[sub_resource type="Resource" id="Resource_51rnj"]
+script = ExtResource("1_nf56s")
+enabled = false
+colour = Color(0.54509807, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_xcare"]
+script = ExtResource("2_i6au5")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-blinded.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.sunbeam.blinded"
+
+[sub_resource type="Resource" id="Resource_wnjcs"]
+script = ExtResource("3_i6au5")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pm513"]
+script = ExtResource("2_2mvp8")
+steps = Array[ExtResource("3_i6au5")]([SubResource("Resource_wnjcs")])
+
+[sub_resource type="Resource" id="Resource_h6ift"]
+script = ExtResource("1_nf56s")
+enabled = false
+colour = Color(0.15294118, 0.80784315, 0.2627451, 1)
+
+[resource]
+script = ExtResource("4_xcare")
+id = "condition.blinded"
+label = "Blinded"
+icon = SubResource("Resource_xcare")
+disposition = "authored"
+look = SubResource("Resource_pm513")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "divine.blinded.back",
+"attachment": "head",
+"category": "blinded",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "divine.blinded.back",
+"markerGroup": "blinded",
+"offsetY": -4.0,
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "divine.blinded.front",
+"attachment": "head",
+"category": "blinded",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "divine.blinded.front",
+"markerGroup": "blinded",
+"offsetY": -4.0,
+"priority": 30.0
+}]
+group = "marker.condition.blinded"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_51rnj")
+removal_text = SubResource("Resource_h6ift")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "divine.blinded",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.blinded",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=saving_throw:constitution:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.spell.sunbeam.strike",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hp-21-30; effect=condition.hp_21_30.condition.blinded; disposition=harmful; target=actor; gates=configuration:target_hp_band=21_30",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.divine_word",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hp-31-40; effect=condition.hp_31_40.condition.blinded; disposition=harmful; target=actor; gates=configuration:target_hp_band=31_40",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.divine_word",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.sunburst.blinded",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.color_spray",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=blinded; effect=condition.blinded; disposition=harmful; target=actor; gates=configuration:affliction=blinded",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.blindness_deafness",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=exact-condition-cleanse; effect=cleanse.condition.blinded; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.lesser_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=exact-condition-cleanse; effect=cleanse.condition.blinded; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.greater_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=condition-cleanse; effect=cleanse.blinded; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.heal",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=violet; effect=condition.blinded; disposition=harmful; target=each_affected_entity; gates=saving_throw:dexterity:failed:actor_spell_save_dc+configuration:prismatic_roll=8",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.prismatic_spray",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=condition-cleanse; effect=cleanse.blinded; disposition=beneficial; target=each_affected_entity; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.mass_heal",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 600.0,
+"effects": []
+}
+}

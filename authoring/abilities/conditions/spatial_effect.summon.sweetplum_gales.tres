@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_af2yx"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_e6xhh"]
+
+[sub_resource type="Resource" id="Resource_sfc3e"]
+script = ExtResource("1_e6xhh")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[resource]
+script = ExtResource("1_af2yx")
+id = "spatial_effect.summon.sweetplum_gales"
+icon = SubResource("Resource_sfc3e")

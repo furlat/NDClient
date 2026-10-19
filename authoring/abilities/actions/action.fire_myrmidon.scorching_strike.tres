@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_aw2po"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_vw7hv"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_8racy"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_aw2po"]
+
+[sub_resource type="Resource" id="Resource_8racy"]
+script = ExtResource("1_aw2po")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qxmhm"]
+script = ExtResource("2_8racy")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.scorching_strike.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.creature_action.scorching_strike"
+
+[resource]
+script = ExtResource("1_vw7hv")
+id = "action.fire_myrmidon.scorching_strike"
+kind = "action"
+family = "summon_form"
+icon = SubResource("Resource_qxmhm")
+body = SubResource("Resource_8racy")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (attack); the rig resolves it to a clip once roles are built (coverage fill)."

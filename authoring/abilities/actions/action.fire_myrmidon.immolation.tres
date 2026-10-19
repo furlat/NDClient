@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_dvhrm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_qfqqt"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_dvhrm"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_igg1f"]
+
+[sub_resource type="Resource" id="Resource_igg1f"]
+script = ExtResource("1_dvhrm")
+role = "cast_alt"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_p3ll1"]
+script = ExtResource("2_igg1f")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.immolation.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.creature_action.immolation"
+
+[resource]
+script = ExtResource("1_qfqqt")
+id = "action.fire_myrmidon.immolation"
+kind = "action"
+family = "summon_form"
+icon = SubResource("Resource_p3ll1")
+body = SubResource("Resource_igg1f")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."

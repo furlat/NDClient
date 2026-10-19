@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_5jsu2"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_lp3bl"]
+
+[sub_resource type="Resource" id="Resource_x00u2"]
+script = ExtResource("1_lp3bl")
+path = "art/ui-delivery-20261018/runtime/smooth48/condition.spell.acid_surface.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 condition.spell.acid_surface"
+
+[resource]
+script = ExtResource("1_5jsu2")
+id = "condition.spell.acid_surface"
+icon = SubResource("Resource_x00u2")

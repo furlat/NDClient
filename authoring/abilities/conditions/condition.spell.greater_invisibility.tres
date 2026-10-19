@@ -1,0 +1,129 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_rwoqg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_bsv6p"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_wosu6"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_bsv6p"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_u7vmk"]
+
+[sub_resource type="Resource" id="Resource_ogno0"]
+script = ExtResource("1_rwoqg")
+colour = Color(0.6666667, 0.8, 1, 1)
+
+[sub_resource type="Resource" id="Resource_u7vmk"]
+script = ExtResource("2_bsv6p")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-greaterinvisibilityeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-greaterinvisibilityeffect"
+
+[sub_resource type="Resource" id="Resource_x5wh1"]
+script = ExtResource("3_bsv6p")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+rgb = Color(0.7176471, 0.78039217, 1, 1)
+saturation = 0.62
+brightness = 0.96
+alpha = 0.5
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jao5r"]
+script = ExtResource("2_wosu6")
+steps = Array[ExtResource("3_bsv6p")]([SubResource("Resource_x5wh1")])
+
+[sub_resource type="Resource" id="Resource_1jomr"]
+script = ExtResource("1_rwoqg")
+colour = Color(0.8745098, 0.8745098, 1, 1)
+
+[resource]
+script = ExtResource("4_u7vmk")
+id = "condition.spell.greater_invisibility"
+label = "Greater Invisibility"
+icon = SubResource("Resource_u7vmk")
+disposition = "authored"
+look = SubResource("Resource_jao5r")
+group = "visibility"
+exclusive_group = "invisibility"
+priority = 110.0
+max_layers = 1.0
+application_text = SubResource("Resource_ogno0")
+removal_text = SubResource("Resource_1jomr")
+unported = {
+"application": {
+"durationMs": 240.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["perception_visibility", "body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "visibility.invisible",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {},
+"definitionRef": {
+"content_id": "condition.spell.greater_invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": {},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.item.potion_greater_invisibility.drink",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.greater_invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": false,
+"effect": "remove",
+"evidence": "dnd/conditions.py: GreaterInvisibilityEffect performs its maintained Stealth check after attack/cast and removes on failure.",
+"evidenceStatus": "verified_source",
+"sourceRef": null,
+"triggerType": "attack_or_spell_event"
+}],
+"relatedStates": [{
+"evidenceStatus": "authored_visual_relation",
+"relation": "variant_of",
+"targetRef": {
+"content_id": "condition.invisible",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+}
+}]
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

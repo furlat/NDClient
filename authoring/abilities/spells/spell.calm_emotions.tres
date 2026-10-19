@@ -1,0 +1,282 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mppvg"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_u522c"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_mppvg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_xjcig"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_58agw"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_ncaae"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_xifts"]
+
+[sub_resource type="Resource" id="Resource_xjcig"]
+script = ExtResource("1_mppvg")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_34k8l"]
+script = ExtResource("1_u522c")
+clip = "bg3-36/calm-emotions/apply"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.95
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "calm_emotions-apply-caster",
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_b47rs"]
+script = ExtResource("1_u522c")
+clip = "bg3-36/calm-emotions/hold"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "calm_emotions-hold-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_1vo77"]
+script = ExtResource("1_u522c")
+clip = "condition_frightened_native"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.11666666666667
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.2
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "head", "helmet", "shoes"]
+},
+"follow_attachment": true,
+"id": "condition_frightened_native-before-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_oavuh"]
+script = ExtResource("3_xjcig")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.calm_emotions.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_tf8dg"]
+script = ExtResource("1_u522c")
+clip = "bg3-36/calm-emotions/apply"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.95
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "calm_emotions-apply-caster",
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_oi71r"]
+script = ExtResource("1_u522c")
+clip = "bg3-36/calm-emotions/hold"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "calm_emotions-hold-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_jmaa1"]
+script = ExtResource("1_u522c")
+clip = "bg3-36/calm-emotions/hold"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "calm_emotions-hold-target2",
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_mkkbo"]
+script = ExtResource("1_u522c")
+clip = "condition_frightened_native"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.11666666666667
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.2
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "head", "helmet", "shoes"]
+},
+"follow_attachment": true,
+"id": "condition_frightened_native-before-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_tksat"]
+script = ExtResource("1_u522c")
+clip = "barbarian_rage_native"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.11666666666667
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.2
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "cloak", "legs", "head", "helmet", "shoes"]
+},
+"follow_attachment": true,
+"id": "barbarian_rage_native-before-target2",
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_gpw4r"]
+script = ExtResource("6_xifts")
+id = "calm_emotions_members_native"
+kind = "form"
+selection = "calm_emotions_members_native"
+effects = Array[ExtResource("1_u522c")]([SubResource("Resource_tf8dg"), SubResource("Resource_oi71r"), SubResource("Resource_jmaa1"), SubResource("Resource_mkkbo"), SubResource("Resource_tksat")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_58agw")
+id = "spell.calm_emotions"
+icon = SubResource("Resource_oavuh")
+delivery = "sphere"
+body = SubResource("Resource_xjcig")
+effects = Array[ExtResource("1_u522c")]([SubResource("Resource_34k8l"), SubResource("Resource_b47rs"), SubResource("Resource_1vo77")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_xifts")]([SubResource("Resource_gpw4r")])
+applies_conditions = PackedStringArray("condition.spell.calm_emotions")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "calm_emotions_native",
+"source": "assets/vfx/index.json:/selections/calm_emotions_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

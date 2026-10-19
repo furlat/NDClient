@@ -1,0 +1,1542 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_wll5w"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_wn0r8"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_wn0r8"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_106og"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_7cege"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_neryu"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_5cfrs"]
+
+[sub_resource type="Resource" id="Resource_106og"]
+script = ExtResource("1_wn0r8")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_cice0"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/thunder/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_lkxql"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/thunder/impact"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "hands", "head", "legs", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_xa7qw"]
+script = ExtResource("3_106og")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.chromatic_orb.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_aby5u"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_jmt7j"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/impact"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "hands", "head", "legs", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_mxpj5"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_bggss"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_acid_native"
+kind = "element"
+value = "acid"
+selection = "chromatic_orb_acid_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_aby5u"), SubResource("Resource_jmt7j"), SubResource("Resource_mxpj5")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_asivx"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/miss-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_iy8bn"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/miss-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_705fa"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_3iryo"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_acid_miss_native"
+kind = "outcome"
+selection = "chromatic_orb_acid_miss_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_asivx"), SubResource("Resource_iy8bn"), SubResource("Resource_705fa")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_fhtxi"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/ground-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_rjtfj"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/ground-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_6g8ux"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/acid/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 1.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_dbwdr"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_acid_ground_native"
+kind = "outcome"
+selection = "chromatic_orb_acid_ground_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_fhtxi"), SubResource("Resource_rjtfj"), SubResource("Resource_6g8ux")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_xwlaa"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_arkei"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/impact"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "hands", "head", "legs", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_2hg2p"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_s2hl4"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_cold_native"
+kind = "element"
+value = "cold"
+selection = "chromatic_orb_cold_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_xwlaa"), SubResource("Resource_arkei"), SubResource("Resource_2hg2p")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_4ax74"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/miss-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_8ki2k"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/miss-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_56jur"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_pug0f"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_cold_miss_native"
+kind = "outcome"
+selection = "chromatic_orb_cold_miss_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_4ax74"), SubResource("Resource_8ki2k"), SubResource("Resource_56jur")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_nbg7c"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/ground-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_3sadk"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/ground-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_b8f5u"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/cold/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 1.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_arx4u"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_cold_ground_native"
+kind = "outcome"
+selection = "chromatic_orb_cold_ground_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_nbg7c"), SubResource("Resource_3sadk"), SubResource("Resource_b8f5u")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_6ru1t"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_k35lt"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/impact"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "hands", "head", "legs", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_cxaar"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_r2l8r"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_fire_native"
+kind = "element"
+value = "fire"
+selection = "chromatic_orb_fire_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_6ru1t"), SubResource("Resource_k35lt"), SubResource("Resource_cxaar")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_u2vbe"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/miss-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_jau60"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/miss-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_m762f"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_q0oti"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_fire_miss_native"
+kind = "outcome"
+selection = "chromatic_orb_fire_miss_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_u2vbe"), SubResource("Resource_jau60"), SubResource("Resource_m762f")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_k6ah6"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/ground-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_kc84k"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/ground-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_58y4v"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/fire/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 1.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_oeij6"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_fire_ground_native"
+kind = "outcome"
+selection = "chromatic_orb_fire_ground_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_k6ah6"), SubResource("Resource_kc84k"), SubResource("Resource_58y4v")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_hxtye"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_po7k6"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/impact"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "hands", "head", "legs", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fmy18"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_hy284"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_lightning_native"
+kind = "element"
+value = "lightning"
+selection = "chromatic_orb_lightning_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_hxtye"), SubResource("Resource_po7k6"), SubResource("Resource_fmy18")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_7w7if"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/miss-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_v7fee"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/miss-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_8i2og"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_giiw3"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_lightning_miss_native"
+kind = "outcome"
+selection = "chromatic_orb_lightning_miss_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_7w7if"), SubResource("Resource_v7fee"), SubResource("Resource_8i2og")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_yluod"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/ground-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_jpa4y"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/ground-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_aoxwe"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/lightning/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 1.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_it7ey"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_lightning_ground_native"
+kind = "outcome"
+selection = "chromatic_orb_lightning_ground_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_yluod"), SubResource("Resource_jpa4y"), SubResource("Resource_aoxwe")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_k7uoy"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_17gge"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/impact"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "hands", "head", "legs", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ouc3v"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_geosa"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_poison_native"
+kind = "element"
+value = "poison"
+selection = "chromatic_orb_poison_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_k7uoy"), SubResource("Resource_17gge"), SubResource("Resource_ouc3v")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_fq5p3"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/miss-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_my4na"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/miss-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_i7yn2"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_3dhnw"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_poison_miss_native"
+kind = "outcome"
+selection = "chromatic_orb_poison_miss_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_fq5p3"), SubResource("Resource_my4na"), SubResource("Resource_i7yn2")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_aovqw"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/ground-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_cp8lk"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/ground-splash"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_f4eyg"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/poison/observed-surface"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 1.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_cjjch"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_poison_ground_native"
+kind = "outcome"
+selection = "chromatic_orb_poison_ground_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_aovqw"), SubResource("Resource_cp8lk"), SubResource("Resource_f4eyg")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_clts4"]
+script = ExtResource("1_wll5w")
+clip = "bg3-36/chromatic-orb/thunder/miss-delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.94
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.12, 0.65]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_cr6t5"]
+script = ExtResource("6_5cfrs")
+id = "chromatic_orb_thunder_miss_native"
+kind = "outcome"
+selection = "chromatic_orb_thunder_miss_native"
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_clts4")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_7cege")
+id = "spell.chromatic_orb"
+icon = SubResource("Resource_xa7qw")
+delivery = "projectile"
+body = SubResource("Resource_106og")
+effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_cice0"), SubResource("Resource_lkxql")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_5cfrs")]([SubResource("Resource_bggss"), SubResource("Resource_3iryo"), SubResource("Resource_dbwdr"), SubResource("Resource_s2hl4"), SubResource("Resource_pug0f"), SubResource("Resource_arx4u"), SubResource("Resource_r2l8r"), SubResource("Resource_q0oti"), SubResource("Resource_oeij6"), SubResource("Resource_hy284"), SubResource("Resource_giiw3"), SubResource("Resource_it7ey"), SubResource("Resource_geosa"), SubResource("Resource_3dhnw"), SubResource("Resource_cjjch"), SubResource("Resource_cr6t5")])
+applies_conditions = PackedStringArray("condition.prone", "condition.spell.acid_surface", "condition.spell.acid_surface.membership", "condition.spell.simple_toxin")
+applies_surfaces = PackedStringArray("spatial_effect.material.electrified_water", "spatial_effect.material.fire", "spatial_effect.material.ice", "spatial_effect.spell.acid_surface", "spatial_effect.spell.simple_toxin")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "chromatic_orb_native",
+"source": "assets/vfx/index.json:/selections/chromatic_orb_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

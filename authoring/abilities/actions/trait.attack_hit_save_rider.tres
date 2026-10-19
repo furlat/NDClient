@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_wdeu1"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_13prb"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_8brt2"]
+
+[sub_resource type="Resource" id="Resource_yfr6c"]
+script = ExtResource("1_wdeu1")
+path = "art/media/ui/icons/smooth48/trait.attack_hit_save_rider.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:trait.attack_hit_save_rider"
+
+[resource]
+script = ExtResource("2_13prb")
+id = "trait.attack_hit_save_rider"
+kind = "trait"
+family = "trait"
+icon = SubResource("Resource_yfr6c")
+effect_sources = PackedStringArray()
+status = "internal"

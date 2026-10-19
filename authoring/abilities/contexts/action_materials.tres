@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_lej8c"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_qaj8o"]
+
+[resource]
+script = ExtResource("1_lej8c")
+id = "action_materials"
+unported = {
+"action.environment.heroes_feast.eat": {
+"id": "feast-blessing",
+"material": {
+"colors": [4036734.0, 10739640.0],
+"mapping": "rising_bands"
+},
+"motes": {
+"alpha": 0.7,
+"blendMode": "screen",
+"brightEvery": 4.0,
+"count": 21.0,
+"depthRatio": 0.5,
+"heightCells": 1.9,
+"palette": [9359544.0, 15595721.0],
+"radialGrowthCells": 0.3,
+"radiusCells": 0.18,
+"sizePixels": [2.0, 3.0]
+},
+"points": [{
+"elapsedMs": 0.0,
+"strength": 0.0
+}, {
+"elapsedMs": 80.0,
+"strength": 0.38
+}, {
+"elapsedMs": 672.0,
+"strength": 0.38
+}, {
+"elapsedMs": 1600.0,
+"strength": 0.0
+}]
+}
+}

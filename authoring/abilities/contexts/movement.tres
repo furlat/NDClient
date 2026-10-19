@@ -1,0 +1,296 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_oq7a0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="2_dtudn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="3_dgp6r"]
+
+[sub_resource type="Resource" id="Resource_yvx3d"]
+script = ExtResource("1_oq7a0")
+role = "movement"
+clip = "Run"
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_dtudn")
+id = "movement"
+body = SubResource("Resource_yvx3d")
+values = {
+"reference_speed_feet": 30.0,
+"walk_step_duration": 0.4166666666666667
+}
+unported = {
+"connectorProfiles": {
+"window": {
+"animationId": "CrawlThroughWindow",
+"arcHeightPx": 28.0,
+"bodyClip": "Rolling",
+"bodyFrameKeys": [[0.0, 0.0], [0.28, 2.0], [0.48, 3.0], [0.52, 3.0], [0.72, 2.0], [1.0, 0.0]],
+"durationMs": 450.0,
+"passageBodyHeightPx": 12.0,
+"passageHoldFraction": 0.12,
+"passageScale": [0.6, 0.8],
+"passageSocket": "body_center"
+}
+},
+"flight": {
+"body": {
+"actor": {
+"clip": "AttackRun",
+"enabled": true,
+"hiddenSlots": [],
+"media": [],
+"playbackSpeed": 1.0
+},
+"frameKeys": [[0.0, 7.0], [1.0, 7.0]]
+},
+"clearancePx": 24.0,
+"landingFraction": 0.2,
+"takeoffFraction": 0.2
+},
+"jumpArcBasePx": 24.0,
+"jumpArcMaxPx": 56.0,
+"jumpArcPerCellPx": 8.0,
+"jumpBaseDurationMs": 650.0,
+"jumpBodyFrames": 15.0,
+"jumpClip": "Rolling",
+"jumpMaxDurationMs": 3000.0,
+"jumpMedia": [{
+"assetId": "pending.takeoff.back",
+"attachment": "ground",
+"contactFrame": 8.88888888888889,
+"depth": "behind_body",
+"fps": 32.0,
+"id": "takeoff.back",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "takeoff",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.spell.jump"]
+}, {
+"assetId": "pending.takeoff.front",
+"attachment": "ground",
+"contactFrame": 8.88888888888889,
+"depth": "front_body",
+"fps": 32.0,
+"id": "takeoff.front",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "takeoff",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.spell.jump"]
+}, {
+"assetId": "pending.flight.back",
+"attachment": "body",
+"depth": "behind_body",
+"fitToMotion": true,
+"fps": 32.0,
+"id": "flight.back",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "source_vfx",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.spell.jump"]
+}, {
+"assetId": "pending.flight.front",
+"attachment": "body",
+"depth": "front_body",
+"fitToMotion": true,
+"fps": 32.0,
+"id": "flight.front",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "source_vfx",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.spell.jump"]
+}, {
+"assetId": "pending.takeoff.back",
+"attachment": "ground",
+"contactFrame": 8.88888888888889,
+"depth": "behind_body",
+"fps": 32.0,
+"id": "landing.back",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "landing",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.spell.jump"]
+}, {
+"assetId": "pending.takeoff.front",
+"attachment": "ground",
+"contactFrame": 8.88888888888889,
+"depth": "front_body",
+"fps": 32.0,
+"id": "landing.front",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "landing",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.spell.jump"]
+}],
+"jumpMinDurationMs": 700.0,
+"jumpPerCellDurationMs": 100.0,
+"jumpRecovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false,
+"media": []
+},
+"jumpSourceFps": 12.0,
+"walkMedia": [{
+"alpha": 0.5,
+"assetId": "pending.dash_retreat.back",
+"attachment": "ground",
+"depth": "behind_body",
+"emitIntervalMs": 180.0,
+"fps": 32.0,
+"id": "dash.back",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "trail",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"unlessConditions": ["condition.spell.haste", "condition.spell.expeditious_retreat"],
+"viewFacing": "SE",
+"whenConditions": ["condition.dashing"]
+}, {
+"alpha": 0.5,
+"assetId": "pending.dash_retreat.front",
+"attachment": "ground",
+"depth": "front_body",
+"emitIntervalMs": 180.0,
+"fps": 32.0,
+"id": "dash.front",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "trail",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"unlessConditions": ["condition.spell.haste", "condition.spell.expeditious_retreat"],
+"viewFacing": "SE",
+"whenConditions": ["condition.dashing"]
+}, {
+"assetId": "pending.dash_retreat.back",
+"attachment": "ground",
+"depth": "behind_body",
+"emitIntervalMs": 180.0,
+"fps": 32.0,
+"id": "retreat-dash.back",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "trail",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"unlessConditions": ["condition.spell.haste"],
+"viewFacing": "SE",
+"whenConditions": ["condition.dashing", "condition.spell.expeditious_retreat"]
+}, {
+"assetId": "pending.dash_retreat.front",
+"attachment": "ground",
+"depth": "front_body",
+"emitIntervalMs": 180.0,
+"fps": 32.0,
+"id": "retreat-dash.front",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "trail",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"unlessConditions": ["condition.spell.haste"],
+"viewFacing": "SE",
+"whenConditions": ["condition.dashing", "condition.spell.expeditious_retreat"]
+}, {
+"assetId": "pending.dash_haste.back",
+"attachment": "ground",
+"depth": "behind_body",
+"emitIntervalMs": 180.0,
+"fps": 32.0,
+"id": "haste-dash.back",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "trail",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.dashing", "condition.spell.haste"]
+}, {
+"assetId": "pending.dash_haste.front",
+"attachment": "ground",
+"depth": "front_body",
+"emitIntervalMs": 180.0,
+"fps": 32.0,
+"id": "haste-dash.front",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": 0.0,
+"reversed": false,
+"role": "trail",
+"scale": 0.5,
+"startFrame": 0.0,
+"tint": 16777215.0,
+"tint2": null,
+"viewFacing": "SE",
+"whenConditions": ["condition.dashing", "condition.spell.haste"]
+}],
+"walkRecovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false,
+"media": []
+}
+}

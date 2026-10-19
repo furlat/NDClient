@@ -1,0 +1,138 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_73fsj"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_dywr0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_xyb4a"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_xyb4a"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_w4qni"]
+
+[sub_resource type="Resource" id="Resource_myx0m"]
+script = ExtResource("1_73fsj")
+enabled = false
+colour = Color(0.89411765, 0.34509805, 0.41960785, 1)
+
+[sub_resource type="Resource" id="Resource_w4qni"]
+script = ExtResource("2_xyb4a")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-holdpersoneffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-holdpersoneffect"
+
+[sub_resource type="Resource" id="Resource_qq6sb"]
+script = ExtResource("3_xyb4a")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nkh8o"]
+script = ExtResource("2_dywr0")
+steps = Array[ExtResource("3_xyb4a")]([SubResource("Resource_qq6sb")])
+
+[sub_resource type="Resource" id="Resource_83cbq"]
+script = ExtResource("1_73fsj")
+enabled = false
+colour = Color(0.80784315, 0.41568628, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_w4qni")
+id = "condition.spell.hold_person"
+label = "Hold Person"
+icon = SubResource("Resource_w4qni")
+disposition = "authored"
+look = SubResource("Resource_nkh8o")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.hold_human.back",
+"attachment": "body",
+"category": "Hold human",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 80.0,
+"id": "control.hold_human.back",
+"priority": 75.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.hold_human.front",
+"attachment": "body",
+"category": "Hold human",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 80.0,
+"id": "control.hold_human.front",
+"priority": 75.0
+}]
+group = "control.hold_human"
+priority = 75.0
+max_layers = 3.0
+application_text = SubResource("Resource_myx0m")
+removal_text = SubResource("Resource_83cbq")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "control.hold_human",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.hold_person",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=failed-save; effect=condition.hold_person; disposition=harmful; target=selected_target; gates=saving_throw:wisdom:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.hold_person",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": [{
+"evidenceStatus": "authored_visual_relation",
+"relation": "shares_persistent_profile_with",
+"targetRef": {
+"content_id": "condition.paralyzed",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+}
+}]
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

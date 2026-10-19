@@ -1,0 +1,124 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_aqnoa"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_kt7b5"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_wouji"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_kt7b5"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_vobvd"]
+
+[sub_resource type="Resource" id="Resource_xbiu0"]
+script = ExtResource("1_aqnoa")
+colour = Color(0.4, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_vobvd"]
+script = ExtResource("2_kt7b5")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-disengaging.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-disengaging"
+
+[sub_resource type="Resource" id="Resource_fj5iq"]
+script = ExtResource("3_kt7b5")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_egy4q"]
+script = ExtResource("3_kt7b5")
+kind = "outline"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+alpha = 0.35
+hide = PackedStringArray()
+fade_in = 0.3
+
+[sub_resource type="Resource" id="Resource_dkj62"]
+script = ExtResource("2_wouji")
+steps = Array[ExtResource("3_kt7b5")]([SubResource("Resource_fj5iq"), SubResource("Resource_egy4q")])
+
+[sub_resource type="Resource" id="Resource_aiysi"]
+script = ExtResource("1_aqnoa")
+colour = Color(0.5686275, 0.15294118, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_vobvd")
+id = "condition.disengaging"
+label = "Disengaging"
+icon = SubResource("Resource_vobvd")
+disposition = "authored"
+look = SubResource("Resource_dkj62")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_xbiu0")
+removal_text = SubResource("Resource_aiysi")
+unported = {
+"_legacy_source": "catalog/condition_recipes.json:/condition.disengaging",
+"_resource_source": "res://authoring/presentation/conditions/disengaging.tres",
+"_source_fields": {
+"persistent/bodyOutline": "res://authoring/presentation/conditions/disengaging.tres::body_outline",
+"persistent/bodyOutline/alphaThreshold": "res://authoring/presentation/conditions/disengaging.tres::body_outline/alpha_threshold",
+"persistent/bodyOutline/color": "res://authoring/presentation/conditions/disengaging.tres::body_outline/color",
+"persistent/bodyOutline/onsetMs": "res://authoring/presentation/conditions/disengaging.tres::body_outline/onset_ms",
+"persistent/bodyOutline/opacity": "res://authoring/presentation/conditions/disengaging.tres::body_outline/opacity",
+"persistent/bodyOutline/periodMs": "res://authoring/presentation/conditions/disengaging.tres::body_outline/period_ms",
+"persistent/bodyOutline/pulseColor": "res://authoring/presentation/conditions/disengaging.tres::body_outline/pulse_color",
+"persistent/bodyOutline/pulseOpacity": "res://authoring/presentation/conditions/disengaging.tres::body_outline/pulse_opacity"
+},
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.disengaging",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.disengaging",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"bodyOutline": {
+"alphaThreshold": 100,
+"color": 6707428,
+"periodMs": 1400.0,
+"pulseColor": 6707428,
+"pulseOpacity": 0.0
+},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.disengage",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_k6hb5"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_r4f4w"]
+
+[sub_resource type="Resource" id="Resource_4ku31"]
+script = ExtResource("1_r4f4w")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.resilient_sphere.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.resilient_sphere"
+status = "stand_in"
+source = "ui-delivery-20261018 srd22.spell.resilient_sphere"
+
+[resource]
+script = ExtResource("1_k6hb5")
+id = "condition.spell.resilient_sphere"
+icon = SubResource("Resource_4ku31")

@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_x7ops"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_dl7ye"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_qfkv6"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_dl7ye"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_3mhuq"]
+
+[sub_resource type="Resource" id="Resource_sl84d"]
+script = ExtResource("1_x7ops")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_3mhuq"]
+script = ExtResource("2_dl7ye")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-divination-seeinvisibilityeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-divination-seeinvisibilityeffect"
+
+[sub_resource type="Resource" id="Resource_li1q4"]
+script = ExtResource("3_dl7ye")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_px0xi"]
+script = ExtResource("2_qfkv6")
+steps = Array[ExtResource("3_dl7ye")]([SubResource("Resource_li1q4")])
+
+[sub_resource type="Resource" id="Resource_kwwb7"]
+script = ExtResource("1_x7ops")
+enabled = false
+
+[resource]
+script = ExtResource("4_3mhuq")
+id = "condition.spell.see_invisibility"
+label = "See Invisibility"
+icon = SubResource("Resource_3mhuq")
+disposition = "authored"
+look = SubResource("Resource_px0xi")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "sensory.see_invisibility.back",
+"attachment": "head",
+"category": "see_invisibility",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "sensory.see_invisibility.back",
+"lifeStates": ["alive"],
+"offsetY": 38.55751709338339,
+"priority": 50.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "sensory.see_invisibility.front",
+"attachment": "head",
+"category": "see_invisibility",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "sensory.see_invisibility.front",
+"lifeStates": ["alive"],
+"offsetY": 38.55751709338339,
+"priority": 50.0
+}]
+group = "sensory"
+priority = 50.0
+max_layers = 3.0
+application_text = SubResource("Resource_sl84d")
+removal_text = SubResource("Resource_kwwb7")
+unported = {
+"application": {
+"durationMs": 4000.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "sensory.eye",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.see_invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 600.0,
+"effects": []
+}
+}

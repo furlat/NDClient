@@ -1,0 +1,245 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_nohki"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_7ut6h"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_mhb8x"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_mhb8x"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_5jjdi"]
+
+[sub_resource type="Resource" id="Resource_saqno"]
+script = ExtResource("1_nohki")
+enabled = false
+colour = Color(0.34509805, 0.6745098, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_5jjdi"]
+script = ExtResource("2_mhb8x")
+path = "art/media/ui/icons/smooth48/spell.bestow-curse.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.bestow_curse"
+status = "stand_in"
+source = "ui/resources.json icon:spell.bestow-curse"
+
+[sub_resource type="Resource" id="Resource_0ts1i"]
+script = ExtResource("3_mhb8x")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_p22wf"]
+script = ExtResource("2_7ut6h")
+steps = Array[ExtResource("3_mhb8x")]([SubResource("Resource_0ts1i")])
+
+[sub_resource type="Resource" id="Resource_bo0gl"]
+script = ExtResource("1_nohki")
+enabled = false
+colour = Color(0.15294118, 0.19607843, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_5jjdi")
+id = "condition.spell.bestow_curse.ability"
+label = "Bestow Curse"
+icon = SubResource("Resource_5jjdi")
+disposition = "authored"
+look = SubResource("Resource_p22wf")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "curse.ability.rings.back",
+"attachment": "ground",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "curse.ability.rings.back",
+"offsetY": 16.0,
+"priority": 60.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "curse.ability.rings.front",
+"attachment": "ground",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "curse.ability.rings.front",
+"offsetY": 16.0,
+"priority": 60.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "curse.ability.mark.back",
+"attachment": "head",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "curse.ability.mark.back",
+"markerGroup": "cursed",
+"priority": 60.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "curse.ability.mark.front",
+"attachment": "head",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "curse.ability.mark.front",
+"markerGroup": "cursed",
+"priority": 60.0
+}]
+group = "curse.ability"
+priority = 60.0
+max_layers = 1.0
+application_text = SubResource("Resource_saqno")
+removal_text = SubResource("Resource_bo0gl")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body", "head"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "control.bestow_curse.ability",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.bestow_curse.ability",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": false,
+"effect": "cleanse",
+"evidence": "branch=curse-cleanse; effect=cleanse.curse; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.remove_curse",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=ability; effect=condition.bestow_curse.ability; disposition=harmful; target=selected_target; gates=saving_throw:wisdom:failed:actor_spell_save_dc+configuration:curse_option=ability",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.bestow_curse",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": false,
+"effect": "cleanse",
+"evidence": "branch=curse-cleanse; effect=cleanse.curse; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.greater_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 1750.0,
+"effects": [{
+"animation": "finite",
+"assetId": "curse.ability.rings.back.removal",
+"attachment": "ground",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1750.0,
+"id": "curse.ability.rings.back.removal",
+"offsetY": 16.0,
+"priority": 60.0
+}, {
+"animation": "finite",
+"assetId": "curse.ability.rings.front.removal",
+"attachment": "ground",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1750.0,
+"id": "curse.ability.rings.front.removal",
+"offsetY": 16.0,
+"priority": 60.0
+}, {
+"animation": "finite",
+"assetId": "curse.ability.mark.back.removal",
+"attachment": "head",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1750.0,
+"id": "curse.ability.mark.back.removal",
+"priority": 60.0
+}, {
+"animation": "finite",
+"assetId": "curse.ability.mark.front.removal",
+"attachment": "head",
+"category": "bestow_curse",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1750.0,
+"id": "curse.ability.mark.front.removal",
+"priority": 60.0
+}]
+}
+}

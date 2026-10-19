@@ -371,8 +371,8 @@ Edit the selected `.tres` in Godot, then use Studio **Reload**:
 | Native source | Authored data |
 | --- | --- |
 | `authoring/presentation/catalog.tres` | Selected action/condition recipes and additional body clips |
-| `authoring/presentation/actions/hide.tres` | Event-owned action clip, playback rate, effect frame and effect audio cue |
-| `authoring/presentation/conditions/hidden.tres` | Shared body filter, idle/move pose selections and +/- text feedback |
+| `authoring/abilities/actions/action.hide.tres` | Event-owned action clip, playback rate, effect frame and effect audio cue (abilities source) |
+| `authoring/abilities/conditions/condition.hidden.tres` | Shared body look, idle/move pose selections and +/- text feedback (abilities source) |
 | `authoring/presentation/clips/modular_crouch_idle.tres` | Existing CrouchIdle sheet registration and explicit source clock |
 | `authoring/presentation/clips/modular_crouch_run.tres` | Existing CrouchRun sheet registration and explicit source clock |
 

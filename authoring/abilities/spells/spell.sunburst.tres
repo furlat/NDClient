@@ -1,0 +1,231 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ed6v7"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_182xf"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_26d7a"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_swkrm"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_skjxc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_mu204"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_f162o"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_4l0lg"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_aqmve"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_gdobr"]
+
+[sub_resource type="Resource" id="Resource_a7ayg"]
+script = ExtResource("1_ed6v7")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_bh04a"]
+script = ExtResource("2_182xf")
+roles = Dictionary[String, Color]({
+"primary": Color(0.7882353, 0.6627451, 0.30980393, 1),
+"secondary": Color(1, 1, 0.972549, 1),
+"tertiary": Color(0.5568628, 0.45882353, 0.19607843, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_suyjf"]
+script = ExtResource("3_26d7a")
+clip = "remaining/sunburst_native/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true
+}
+
+[sub_resource type="Resource" id="Resource_k1hk7"]
+script = ExtResource("5_skjxc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.06666667, 0.043137256, 0.003921569, 1, 0.19607843, 0.14901961, 0.03137255, 1, 0.2784314, 0.22352941, 0.078431375, 1, 0.32156864, 0.25882354, 0.09803922, 1, 0.36078432, 0.29411766, 0.11764706, 1, 0.40392157, 0.32941177, 0.13725491, 1, 0.4627451, 0.38039216, 0.16470589, 1, 0.5137255, 0.43137255, 0.21568628, 1, 0.5568628, 0.45882353, 0.19607843, 1, 0.6156863, 0.50980395, 0.23137255, 1, 0.67058825, 0.5647059, 0.2901961, 1, 0.7254902, 0.59607846, 0.23921569, 1, 0.7882353, 0.6627451, 0.30980393, 1, 0.88235295, 0.74509805, 0.3529412, 1, 0.96862745, 0.827451, 0.4, 1, 1, 0.9254902, 0.40784314, 1, 1, 1, 0.37254903, 1, 1, 1, 0.47058824, 1, 1, 1, 0.54509807, 1, 1, 1, 0.627451, 1, 1, 1, 0.68235296, 1, 1, 1, 0.7058824, 1, 1, 1, 0.78039217, 1, 1, 1, 0.972549, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rsdwx"]
+script = ExtResource("4_swkrm")
+steps = Array[ExtResource("5_skjxc")]([SubResource("Resource_k1hk7")])
+
+[sub_resource type="Resource" id="Resource_pi2xi"]
+script = ExtResource("5_skjxc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.5568628, 0.45882353, 0.19607843, 1, 0.7882353, 0.6627451, 0.30980393, 1, 1, 1, 0.972549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m121p"]
+script = ExtResource("4_swkrm")
+steps = Array[ExtResource("5_skjxc")]([SubResource("Resource_pi2xi")])
+
+[sub_resource type="Resource" id="Resource_lpkky"]
+script = ExtResource("6_mu204")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_m121p")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13216079.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_r0hox"]
+script = ExtResource("5_skjxc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.5568628, 0.45882353, 0.19607843, 1, 0.7882353, 0.6627451, 0.30980393, 1, 1, 1, 0.972549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5yu1s"]
+script = ExtResource("4_swkrm")
+steps = Array[ExtResource("5_skjxc")]([SubResource("Resource_r0hox")])
+
+[sub_resource type="Resource" id="Resource_eyhl4"]
+script = ExtResource("6_mu204")
+place = "aura"
+category = "Effect4"
+sheet = "/spritesheets/Effect4/Special1.png"
+look = SubResource("Resource_5yu1s")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13216079.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_hofn0"]
+script = ExtResource("7_f162o")
+path = "art/media/ui/icons/smooth48/spell.sunburst.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.sunburst"
+
+[resource]
+script = ExtResource("8_4l0lg")
+id = "spell.sunburst"
+icon = SubResource("Resource_hofn0")
+delivery = "sphere"
+body = SubResource("Resource_a7ayg")
+hand_layers = Array[ExtResource("6_mu204")]([SubResource("Resource_lpkky"), SubResource("Resource_eyhl4")])
+sockets = "measured/abilities/spells/spell.sunburst.sockets.json"
+effects = Array[ExtResource("3_26d7a")]([SubResource("Resource_suyjf")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_rsdwx")
+number_frame = 7.0
+number_duration = 1.0
+colours = SubResource("Resource_bh04a")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.blinded", "condition.spell.sunburst.blinded")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "sunburst_native",
+"source": "assets/vfx/index.json:/selections/sunburst_native/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 750.0
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 13216079.0,
+"enabled": true,
+"label": "Radiant"
+},
+"hitFlash": {
+"color": 13216079.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.sunburst",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "solar.sunburst.back.surface",
+"attachment": "area_ground",
+"composition": "paired_depth",
+"effectGroup": {
+"id": "shell",
+"label": "Sunburst · Shell"
+},
+"fps": 32.0,
+"id": "shell-back",
+"viewFacing": "E"
+}, {
+"assetId": "solar.sunburst.front.surface",
+"attachment": "area_ground",
+"composition": "paired_depth",
+"effectGroup": {
+"id": "shell",
+"label": "Sunburst · Shell"
+},
+"fps": 32.0,
+"id": "shell-front",
+"viewFacing": "E"
+}, {
+"assetId": "holy.contact.radiant",
+"attachment": "target_ground",
+"depth": "front_body",
+"id": "recipient-radiant",
+"scale": 0.876812408671319,
+"startOffsetMs": 750.0
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

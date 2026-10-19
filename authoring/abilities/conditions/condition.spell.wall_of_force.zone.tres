@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_6plan"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_hmgtu"]
+
+[sub_resource type="Resource" id="Resource_d4dje"]
+script = ExtResource("1_hmgtu")
+path = "art/media/ui/icons/smooth48/spell.wall_of_force.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.wall_of_force.zone"
+
+[resource]
+script = ExtResource("1_6plan")
+id = "condition.spell.wall_of_force.zone"
+icon = SubResource("Resource_d4dje")
+surface = "spatial_effect.spell.wall_of_force"

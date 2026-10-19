@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_styne"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_b6ngn"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_mcxai"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_mcxai"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_2g0d2"]
+
+[sub_resource type="Resource" id="Resource_syq21"]
+script = ExtResource("1_styne")
+colour = Color(0.6666667, 0.8, 1, 1)
+
+[sub_resource type="Resource" id="Resource_2g0d2"]
+script = ExtResource("2_mcxai")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-invisibilityeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-invisibilityeffect"
+
+[sub_resource type="Resource" id="Resource_psb6v"]
+script = ExtResource("3_mcxai")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+rgb = Color(0.7176471, 0.78039217, 1, 1)
+saturation = 0.62
+brightness = 0.96
+alpha = 0.5
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qcrov"]
+script = ExtResource("2_b6ngn")
+steps = Array[ExtResource("3_mcxai")]([SubResource("Resource_psb6v")])
+
+[sub_resource type="Resource" id="Resource_8cjdw"]
+script = ExtResource("1_styne")
+colour = Color(0.8745098, 0.8745098, 1, 1)
+
+[resource]
+script = ExtResource("4_2g0d2")
+id = "condition.spell.invisibility"
+label = "Invisibility"
+icon = SubResource("Resource_2g0d2")
+disposition = "authored"
+look = SubResource("Resource_qcrov")
+group = "visibility"
+exclusive_group = "invisibility"
+priority = 100.0
+max_layers = 1.0
+application_text = SubResource("Resource_syq21")
+removal_text = SubResource("Resource_8cjdw")
+unported = {
+"application": {
+"durationMs": 240.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["perception_visibility", "body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "visibility.invisible",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {},
+"definitionRef": {
+"content_id": "condition.spell.invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": {},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "dnd/conditions.py: InvisibilityEffect breaks on attack/cast and concentration cleanup.",
+"evidenceStatus": "verified_source",
+"sourceRef": null,
+"triggerType": "attack_or_spell_event"
+}],
+"relatedStates": [{
+"evidenceStatus": "authored_visual_relation",
+"relation": "variant_of",
+"targetRef": {
+"content_id": "condition.invisible",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+}
+}]
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_gbowg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_jpq6h"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_doohe"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_gbowg"]
+
+[sub_resource type="Resource" id="Resource_doohe"]
+script = ExtResource("1_gbowg")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2dtvx"]
+script = ExtResource("2_doohe")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.explosive_icicle.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.creature_action.explosive_icicle"
+
+[resource]
+script = ExtResource("1_jpq6h")
+id = "action.water_myrmidon.explosive_icicle"
+kind = "action"
+family = "summon_form"
+icon = SubResource("Resource_2dtvx")
+body = SubResource("Resource_doohe")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (area_attack); the rig resolves it to a clip once roles are built (coverage fill)."

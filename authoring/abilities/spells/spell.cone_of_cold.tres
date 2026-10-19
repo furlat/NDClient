@@ -1,0 +1,276 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_31ks8"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_dhtvy"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_r8j7e"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_kuk1e"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_3tt27"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_it46u"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_0kv06"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_butvw"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_i5vfy"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_kighw"]
+
+[sub_resource type="Resource" id="Resource_qrrbf"]
+script = ExtResource("1_31ks8")
+role = "cast"
+clip = "Attack6"
+markers = Dictionary[String, float]({
+"release": 6.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"holdUntilContact": true,
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_jnvnj"]
+script = ExtResource("2_dhtvy")
+roles = Dictionary[String, Color]({
+"primary": Color(0.3764706, 0.61960787, 0.72156864, 1),
+"secondary": Color(0.7529412, 0.8627451, 0.8862745, 1),
+"tertiary": Color(0.1764706, 0.3254902, 0.43137255, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_syxpd"]
+script = ExtResource("3_r8j7e")
+clip = "assembled/cone_of_cold_native"
+role = "attached"
+at = "release"
+attachment = "caster_hand"
+rotation_degrees = Vector3(0, 90, 0)
+orientation = "aim"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_pqi6h"]
+script = ExtResource("6_it46u")
+kind = "palette_ramp"
+colours = PackedColorArray(0.1764706, 0.3254902, 0.43137255, 1, 0.3764706, 0.61960787, 0.72156864, 1, 0.7529412, 0.8627451, 0.8862745, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mb4ha"]
+script = ExtResource("5_3tt27")
+steps = Array[ExtResource("6_it46u")]([SubResource("Resource_pqi6h")])
+
+[sub_resource type="Resource" id="Resource_p8rtl"]
+script = ExtResource("4_kuk1e")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack6.png"
+look = SubResource("Resource_mb4ha")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6332088.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_v2yqy"]
+script = ExtResource("6_it46u")
+kind = "palette_ramp"
+colours = PackedColorArray(0.1764706, 0.3254902, 0.43137255, 1, 0.3764706, 0.61960787, 0.72156864, 1, 0.7529412, 0.8627451, 0.8862745, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qyo77"]
+script = ExtResource("5_3tt27")
+steps = Array[ExtResource("6_it46u")]([SubResource("Resource_v2yqy")])
+
+[sub_resource type="Resource" id="Resource_dt8ss"]
+script = ExtResource("4_kuk1e")
+place = "aura"
+category = "Effect4"
+sheet = "/spritesheets/Effect4/Attack6.png"
+look = SubResource("Resource_qyo77")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6332088.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_nv7vj"]
+script = ExtResource("7_0kv06")
+path = "art/media/ui/icons/smooth48/spell.cone-of-cold.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.cone-of-cold"
+
+[resource]
+script = ExtResource("8_butvw")
+id = "spell.cone_of_cold"
+icon = SubResource("Resource_nv7vj")
+delivery = "cone"
+body = SubResource("Resource_qrrbf")
+hand_layers = Array[ExtResource("4_kuk1e")]([SubResource("Resource_p8rtl"), SubResource("Resource_dt8ss")])
+sockets = "measured/abilities/spells/spell.cone_of_cold.sockets.json"
+effects = Array[ExtResource("3_r8j7e")]([SubResource("Resource_syxpd")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_jnvnj")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "cone_of_cold_native",
+"source": "assets/vfx/index.json:/selections/cone_of_cold_native/staging"
+}
+unported = {
+"bodyMaterials": [{
+"clock": "contact",
+"id": "cone.chilled",
+"material": {
+"colors": [7178902.0, 12644095.0],
+"mapping": "frost_texture",
+"normalTexture": "/cold/freeze-normal.webp",
+"texture": "/cold/freeze-noise.png"
+},
+"points": [{
+"elapsedMs": 0.0,
+"strength": 0.0
+}, {
+"elapsedMs": 60.0,
+"strength": 0.33
+}, {
+"elapsedMs": 280.0,
+"strength": 0.33
+}, {
+"elapsedMs": 750.0,
+"strength": 0.0
+}],
+"requireDamageApplied": true
+}],
+"contact": {
+"cellsByFacing": null,
+"delayMs": 100.0,
+"speedTilesPerSecond": 22.0
+},
+"definitionRef": {
+"content_id": "spell.cone_of_cold",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "weather.cone.ground",
+"attachment": "source_ground",
+"depth": "ground",
+"fps": 32.0,
+"id": "cone.ground",
+"orientation": "target_vector",
+"scale": 0.7462686567164178
+}, {
+"assetId": "weather.cone.near",
+"attachment": "source_ground",
+"fps": 32.0,
+"id": "cone.near",
+"orientation": "target_vector",
+"scale": 0.7462686567164178,
+"sortDepthByFacing": {
+"E": -5.048151990408858,
+"N": -14.142135623730953,
+"NE": -13.411321747118338,
+"NW": -13.411321747118338,
+"S": 2.82842712474619,
+"SE": 2.25,
+"SW": 2.25,
+"W": -5.048151990408858
+}
+}, {
+"assetId": "weather.cone.middle",
+"attachment": "source_ground",
+"fps": 32.0,
+"id": "cone.middle",
+"orientation": "target_vector",
+"scale": 0.7462686567164178,
+"sortDepthByFacing": {
+"E": -3.996803e-15,
+"N": -8.485281374238571,
+"NE": -8.046793048271002,
+"NW": -8.046793048271002,
+"S": 8.48528137423857,
+"SE": 6.75,
+"SW": 6.75,
+"W": 1.3322676e-15
+}
+}, {
+"assetId": "weather.cone.far",
+"attachment": "source_ground",
+"fps": 32.0,
+"id": "cone.far",
+"orientation": "target_vector",
+"scale": 0.7462686567164178,
+"sortDepthByFacing": {
+"E": 5.048151990408849,
+"N": -2.8284271247461907,
+"NE": -2.682264349423668,
+"NW": -2.682264349423668,
+"S": 14.14213562373095,
+"SE": 12.0,
+"SW": 12.546793048271002,
+"W": 5.04815199040886
+}
+}, {
+"assetId": "weather.cone.contact.back",
+"attachment": "target_ground",
+"clock": "contact",
+"depth": "behind_body",
+"effectGroup": {
+"id": "cone.contact",
+"label": "Cone Of Cold · Cone contact"
+},
+"fps": 32.0,
+"id": "cone.contact.back",
+"requireDamageApplied": true,
+"scale": 0.5882352941176471,
+"viewFacing": "E"
+}, {
+"assetId": "weather.cone.contact.front",
+"attachment": "target_ground",
+"clock": "contact",
+"depth": "front_body",
+"effectGroup": {
+"id": "cone.contact",
+"label": "Cone Of Cold · Cone contact"
+},
+"fps": 32.0,
+"id": "cone.contact.front",
+"requireDamageApplied": true,
+"scale": 0.5882352941176471,
+"viewFacing": "E"
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -1,0 +1,83 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_rwc5x"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_2j1g0"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_83pju"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_2j1g0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_c1xlg"]
+
+[sub_resource type="Resource" id="Resource_c362o"]
+script = ExtResource("1_rwc5x")
+colour = Color(0.78431374, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_c1xlg"]
+script = ExtResource("2_2j1g0")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-underwater.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-underwater"
+
+[sub_resource type="Resource" id="Resource_bvm3y"]
+script = ExtResource("3_2j1g0")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7elfg"]
+script = ExtResource("2_83pju")
+steps = Array[ExtResource("3_2j1g0")]([SubResource("Resource_bvm3y")])
+
+[sub_resource type="Resource" id="Resource_41mhk"]
+script = ExtResource("1_rwc5x")
+colour = Color(0.80784315, 0.15294118, 0.5882353, 1)
+
+[resource]
+script = ExtResource("4_c1xlg")
+id = "condition.underwater"
+label = "Underwater"
+icon = SubResource("Resource_c1xlg")
+disposition = "authored"
+look = SubResource("Resource_7elfg")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_c362o")
+removal_text = SubResource("Resource_41mhk")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.underwater",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.underwater",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

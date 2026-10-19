@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_pmh8b"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_f3bns"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_rqhq4"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_rqhq4"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_jasgs"]
+
+[sub_resource type="Resource" id="Resource_2gcpt"]
+script = ExtResource("1_pmh8b")
+enabled = false
+colour = Color(0.89411765, 0.34509805, 0.3647059, 1)
+
+[sub_resource type="Resource" id="Resource_jasgs"]
+script = ExtResource("2_rqhq4")
+path = "art/media/ui/icons/smooth48/condition.dnd-extensions-field-focus-fieldfocus.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-extensions-field-focus-fieldfocus"
+
+[sub_resource type="Resource" id="Resource_acwjn"]
+script = ExtResource("3_rqhq4")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_a0u41"]
+script = ExtResource("2_f3bns")
+steps = Array[ExtResource("3_rqhq4")]([SubResource("Resource_acwjn")])
+
+[sub_resource type="Resource" id="Resource_8egna"]
+script = ExtResource("1_pmh8b")
+enabled = false
+colour = Color(0.80784315, 0.47843137, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_jasgs")
+id = "condition.field_focus"
+label = "Field Focus"
+icon = SubResource("Resource_jasgs")
+disposition = "authored"
+look = SubResource("Resource_a0u41")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.mark.field_focus",
+"attachment": "head",
+"category": "field_focus",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "condition.mark.field_focus",
+"lifeStates": ["alive"],
+"markerGroup": "condition.mark.field_focus",
+"offsetY": -12.0,
+"priority": 35.0
+}]
+group = "marker.condition.field_focus"
+priority = 35.0
+max_layers = 1.0
+application_text = SubResource("Resource_2gcpt")
+removal_text = SubResource("Resource_8egna")
+unported = {
+"application": {
+"durationMs": 200.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "condition.mark.field_focus",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.field_focus",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.neurodragon"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=neutral; target=source_item; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.item.field_kit.deploy",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

@@ -4,6 +4,7 @@ const Placement = preload("res://placement.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
 const NativePresentationSources = preload("res://presentation/native_presentation_sources.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
+const AbilityDocuments = preload("res://presentation/ability_documents.gd")
 const UNITY_SOURCES="res://generated/unity_sources.json"
 const LIBRARY_SEQUENCES="res://generated/library_sequences.json"
 const IMPORTED_RECORDS="__imported_source_records"
@@ -35,8 +36,17 @@ static func media_path(path: String) -> String:
 
 static func read_file(relative_path: String, cache: Dictionary) -> Variant:
     if not cache.has(relative_path):
-        var root: String = ProjectSettings.get_setting("source_data/authoring_root")
-        cache[relative_path] = NativeAuthoring.overlay(relative_path, _document(root.path_join(relative_path)), cache)
+        # Spells, conditions, actions, attacks and their contexts come from the
+        # abilities build under the same document names.
+        if AbilityDocuments.owns(relative_path):
+            var owned: Variant = AbilityDocuments.read(relative_path)
+            if owned == null:
+                NativeAuthoring._error(cache, "Abilities build has no record table: " + AbilityDocuments.file(relative_path))
+                owned = {}
+            cache[relative_path] = owned
+        else:
+            var root: String = ProjectSettings.get_setting("source_data/authoring_root")
+            cache[relative_path] = NativeAuthoring.overlay(relative_path, _document(root.path_join(relative_path)), cache)
     return cache[relative_path]
 
 static func _document(path:String)->Variant:
@@ -125,6 +135,7 @@ static func source_snapshot(cache: Dictionary) -> Dictionary:
 
 static func invalidate_source_indexes()->void:
     NativePresentationSources.invalidate()
+    AbilityDocuments.invalidate()
     BodySources.invalidate()
     _documents_mutex.lock();_documents={};_documents_mutex.unlock()
 

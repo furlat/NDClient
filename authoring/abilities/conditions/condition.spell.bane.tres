@@ -1,0 +1,157 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0s6o5"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_g6rkl"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_hqkk0"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_g6rkl"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ekp7j"]
+
+[sub_resource type="Resource" id="Resource_2pyor"]
+script = ExtResource("1_0s6o5")
+colour = Color(0.89411765, 0.7294118, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_ekp7j"]
+script = ExtResource("2_g6rkl")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-baneeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-baneeffect"
+
+[sub_resource type="Resource" id="Resource_mjk1i"]
+script = ExtResource("3_g6rkl")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nwfcb"]
+script = ExtResource("2_hqkk0")
+steps = Array[ExtResource("3_g6rkl")]([SubResource("Resource_mjk1i")])
+
+[sub_resource type="Resource" id="Resource_eu887"]
+script = ExtResource("1_0s6o5")
+colour = Color(0.654902, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_ekp7j")
+id = "condition.spell.bane"
+label = "Bane"
+icon = SubResource("Resource_ekp7j")
+disposition = "authored"
+owner_spell = "spell.bane"
+look = SubResource("Resource_nwfcb")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.bane.back",
+"attachment": "body",
+"category": "bane",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "pending.bane.back",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.bane.front",
+"attachment": "body",
+"category": "bane",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "pending.bane.front",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.bane.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.bane.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "bane",
+"priority": 30.0
+}]
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_2pyor")
+removal_text = SubResource("Resource_eu887")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.bane",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.bane",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=each_affected_entity; gates=saving_throw:charisma:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.bane",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=living; effect=condition.bane; disposition=harmful; target=each_affected_entity; gates=saving_throw:charisma:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.necrotic_bless",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.neurodragon"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

@@ -1,0 +1,102 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0e0br"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_s7dhk"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_spldh"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_spldh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_vrkxs"]
+
+[sub_resource type="Resource" id="Resource_e4gjq"]
+script = ExtResource("1_0e0br")
+enabled = false
+colour = Color(0.89411765, 0.34509805, 0.41960785, 1)
+
+[sub_resource type="Resource" id="Resource_vrkxs"]
+script = ExtResource("2_spldh")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-incapacitated.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-incapacitated"
+
+[sub_resource type="Resource" id="Resource_dr4jp"]
+script = ExtResource("3_spldh")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3u86e"]
+script = ExtResource("2_s7dhk")
+steps = Array[ExtResource("3_spldh")]([SubResource("Resource_dr4jp")])
+
+[sub_resource type="Resource" id="Resource_laq3g"]
+script = ExtResource("1_0e0br")
+enabled = false
+colour = Color(0.80784315, 0.41568628, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_vrkxs")
+id = "condition.incapacitated"
+label = "Incapacitated"
+icon = SubResource("Resource_vrkxs")
+disposition = "authored"
+look = SubResource("Resource_3u86e")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.incapacitated.front",
+"attachment": "head",
+"category": "incapacitated",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "control.incapacitated.front",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "incapacitated",
+"priority": 30.0
+}]
+group = "marker.condition.incapacitated"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_e4gjq")
+removal_text = SubResource("Resource_laq3g")
+unported = {
+"application": {
+"durationMs": 312.5,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "shared.condition.incapacitated",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.incapacitated",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 400.0,
+"effects": []
+}
+}

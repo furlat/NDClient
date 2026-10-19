@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ofly6"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_gjc4n"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_c3h40"]
+
+[sub_resource type="Resource" id="Resource_nk5b4"]
+script = ExtResource("1_ofly6")
+path = "art/media/ui/icons/smooth48/action.monster.multiattack.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.monster.multiattack"
+
+[resource]
+script = ExtResource("2_gjc4n")
+id = "action.monster.multiattack"
+kind = "action"
+family = "monster"
+icon = SubResource("Resource_nk5b4")
+plays = "action.monster.multiattack.knight"
+effect_sources = PackedStringArray()
+status = "ready"

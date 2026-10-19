@@ -158,7 +158,8 @@ func run()->void:
     # owner's spare surfaces, released when the owner closes.
     var parked:Array=world.get_children().filter(func(node):return node is SubViewport)
     check(parked.all(func(view):return view.render_target_update_mode==SubViewport.UPDATE_DISABLED) and parked.size()==service.spare_surfaces.size(),"Expired admitted and active occurrences park their native viewports")
-    var definitions=JSON.parse_string(FileAccess.get_file_as_string("res://authoring/sandbox/body_materials.json")).spells
+    var definitions:={}
+    for id in ["burning_hands","chill_touch","poison_spray","shocking_grasp"]:definitions[id]=load("res://authoring/abilities/spells/spell."+id+".tres").body_material
     var unsupported:Array=[]
     for id in ["burning_hands","chill_touch","poison_spray","shocking_grasp"]:
         unsupported.append(component(id,"recipient-a",{"spell_id":id,"definition":definitions[id]},25))

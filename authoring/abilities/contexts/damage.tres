@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_3ig87"]
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="2_ed0bn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="3_7v5fd"]
+
+[sub_resource type="Resource" id="Resource_goq31"]
+script = ExtResource("1_3ig87")
+role = "damage"
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_ed0bn")
+id = "damage"
+body = SubResource("Resource_goq31")
+values = {
+"flash_duration": 0.15,
+"impact_delay": 0.0
+}
+unported = {
+"conditionFrame": 2.0,
+"criticalFlashColor": 16777215.0,
+"deathFrame": 14.0,
+"flashColor": 16711680.0,
+"flashColorMode": "damage_type",
+"flashEnabled": true,
+"flashFrame": 0.0,
+"numberDurationMs": 900.0,
+"numberEnabled": true,
+"numberFrame": 0.0,
+"palette": {
+"untyped": {
+"elementColors": {
+"primary": 15610692.0,
+"secondary": 11145506.0,
+"tertiary": 16746666.0
+},
+"impactColor": 16729156.0,
+"label": "Damage"
+}
+}
+}
+notes = "Each damage type's palette is its damage_types entry."

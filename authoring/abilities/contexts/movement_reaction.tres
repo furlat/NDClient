@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_l52of"]
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="2_35o7j"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="3_f7bky"]
+
+[sub_resource type="Resource" id="Resource_8saym"]
+script = ExtResource("1_l52of")
+role = "movement_reaction"
+clip = "Special1"
+enabled = false
+playback_speed = 4.0
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_q7bvl"]
+script = ExtResource("3_f7bky")
+text = "Reaction"
+colour = Color(0.98039216, 0.8, 0.08235294, 1)
+
+[resource]
+script = ExtResource("2_35o7j")
+id = "movement_reaction"
+body = SubResource("Resource_8saym")
+texts = Dictionary[String, ExtResource("3_f7bky")]({
+"reaction": SubResource("Resource_q7bvl")
+})
+unported = {
+"media": [],
+"movementLeadInMs": 140.0,
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 2.0,
+"enabled": false,
+"media": []
+}
+}

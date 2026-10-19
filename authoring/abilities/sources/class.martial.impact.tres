@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="PresentationNativeSource" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/native_source.gd" id="1_rgwe8"]
+
+[resource]
+script = ExtResource("1_rgwe8")
+id = "class.martial.impact"
+kind = "authored_script"
+record = {
+"camera_target": [0.0, 0.734846922834953, 0.0],
+"canvas": [256.0, 256.0],
+"duration": 0.75,
+"id": "class.martial.impact",
+"kind": "authored_script",
+"loop": false,
+"media_ids": ["class.martial.impact"],
+"palette": {
+"colors": ["#642b2b", "#bf5745", "#e4ccb1"],
+"operator": "class_neutral"
+},
+"pivot": [128.0, 185.6],
+"pixels_per_unit": 90.5096679918781,
+"preload_paths": ["res://assets/native_effects/class_actions/Strike.gd", "res://assets/native_effects/class_actions/Strike.gdshader", "res://assets/native_effects/class_actions/strike_hit.png"],
+"properties": {
+"heading": 0.0,
+"kind": "impact"
+},
+"requirements": ["production_painter_integration"],
+"sample_hz": 32.0,
+"script": "res://assets/native_effects/class_actions/Strike.gd"
+}

@@ -1,0 +1,213 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_q5d5o"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_s1dhe"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_s1dhe"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_x2mas"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_ipjsa"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_657pi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_yrg4p"]
+
+[sub_resource type="Resource" id="Resource_x2mas"]
+script = ExtResource("1_s1dhe")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_wyktx"]
+script = ExtResource("1_q5d5o")
+clip = "bg3-36/vampiric-touch/vampiric_touch_native/windup"
+role = "attached"
+at = "release"
+delay = -0.72
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.72
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_tggx5"]
+script = ExtResource("1_q5d5o")
+clip = "bg3-36/vampiric-touch/vampiric_touch_native/impact"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.44
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_jpoi6"]
+script = ExtResource("1_q5d5o")
+clip = "bg3-36/vampiric-touch/vampiric_touch_native/healing"
+role = "attached"
+at = "release"
+delay = 0.28
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_6cdpq"]
+script = ExtResource("1_q5d5o")
+clip = "bg3-36/vampiric-touch/vampiric_touch_native/condition"
+role = "attached"
+at = "release"
+delay = 0.62
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.31
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_6d33v"]
+script = ExtResource("1_q5d5o")
+clip = "bg3-36/vampiric-touch/vampiric_touch_native/retire"
+role = "attached"
+at = "release"
+delay = 2.78
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.42
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_jfl6m"]
+script = ExtResource("3_x2mas")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.vampiric_touch.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("4_ipjsa")
+id = "spell.vampiric_touch"
+icon = SubResource("Resource_jfl6m")
+delivery = "melee_spell_attack"
+body = SubResource("Resource_x2mas")
+effects = Array[ExtResource("1_q5d5o")]([SubResource("Resource_wyktx"), SubResource("Resource_tggx5"), SubResource("Resource_jpoi6"), SubResource("Resource_6cdpq"), SubResource("Resource_6d33v")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.vampiric_touch")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "vampiric_touch_native",
+"source": "assets/vfx/index.json:/selections/vampiric_touch_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

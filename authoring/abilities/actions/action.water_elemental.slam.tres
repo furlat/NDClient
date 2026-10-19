@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_spl2q"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_u7yah"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_6mpaa"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_u7yah"]
+
+[sub_resource type="Resource" id="Resource_6mpaa"]
+script = ExtResource("1_u7yah")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ngd1s"]
+script = ExtResource("2_6mpaa")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("1_spl2q")
+id = "action.water_elemental.slam"
+kind = "action"
+family = "summon_form"
+icon = SubResource("Resource_ngd1s")
+body = SubResource("Resource_6mpaa")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (area_attack); the rig resolves it to a clip once roles are built (coverage fill)."

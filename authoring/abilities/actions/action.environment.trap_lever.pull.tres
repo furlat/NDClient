@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mljx6"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_a56pg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_kh1os"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_a56pg"]
+
+[sub_resource type="Resource" id="Resource_dfwrp"]
+script = ExtResource("1_mljx6")
+role = "act"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 3.0,
+"effect": 3.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray("weapon", "weaponGlow", "offhand")
+
+[sub_resource type="Resource" id="Resource_g7wej"]
+script = ExtResource("2_a56pg")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("2_kh1os")
+id = "action.environment.trap_lever.pull"
+kind = "action"
+family = "environment"
+icon = SubResource("Resource_g7wej")
+disposition = "authored"
+body = SubResource("Resource_dfwrp")
+plays = "action.environment.trap_lever.pull"
+target = "source_item"
+effect_sources = PackedStringArray()
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.environment.trap_lever.pull",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

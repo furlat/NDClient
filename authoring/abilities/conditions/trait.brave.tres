@@ -1,0 +1,87 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_6i2et"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_2o61k"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_55jfd"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_55jfd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_treby"]
+
+[sub_resource type="Resource" id="Resource_dhgq0"]
+script = ExtResource("1_6i2et")
+enabled = false
+colour = Color(0.7647059, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_treby"]
+script = ExtResource("2_55jfd")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_1idh5"]
+script = ExtResource("3_55jfd")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_p3cmg"]
+script = ExtResource("2_2o61k")
+steps = Array[ExtResource("3_55jfd")]([SubResource("Resource_1idh5")])
+
+[sub_resource type="Resource" id="Resource_vmtdb"]
+script = ExtResource("1_6i2et")
+enabled = false
+colour = Color(0.30588236, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_treby")
+id = "trait.brave"
+label = "Brave"
+icon = SubResource("Resource_treby")
+disposition = "state_only"
+look = SubResource("Resource_p3cmg")
+group = "body"
+max_layers = 3.0
+application_text = SubResource("Resource_dhgq0")
+removal_text = SubResource("Resource_vmtdb")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "passive_unlock",
+"visualFamily": "catalog.trait.brave",
+"visualIntensity": "icon_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "trait.brave",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

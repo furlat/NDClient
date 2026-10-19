@@ -1,0 +1,314 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_rywyt"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_08m1u"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_w7kod"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_e4iga"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_ay34d"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_fb7m7"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_1ae5n"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_t82dv"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_aj4vx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_o3kcs"]
+
+[sub_resource type="Resource" id="Resource_mcga0"]
+script = ExtResource("1_rywyt")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_5237q"]
+script = ExtResource("2_08m1u")
+roles = Dictionary[String, Color]({
+"primary": Color(1, 0.4, 0, 1),
+"secondary": Color(1, 0.11764706, 0, 1),
+"tertiary": Color(1, 0.8, 0, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_hmix7"]
+script = ExtResource("3_w7kod")
+clip = "original-repairs/fire-shield-contact/warm/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.9
+orientation = "world"
+source_end = 4.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true,
+"opacity_keys": [[0.0, 1.0], [0.35, 1.0], [0.9, 0.18], [4.0, 0.18]]
+}
+
+[sub_resource type="Resource" id="Resource_1e3su"]
+script = ExtResource("3_w7kod")
+clip = "original-repairs/fire-shield-contact/warm/contact"
+role = "attached"
+at = "release"
+delay = 2.0
+attachment = "recipient_ground"
+scale = 0.9
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_me3nr"]
+script = ExtResource("3_w7kod")
+clip = "original-repairs/fire-shield-contact/warm/reaction"
+role = "attached"
+at = "release"
+delay = 2.22
+attachment = "recipient_ground"
+scale = 0.9
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_gc3ec"]
+script = ExtResource("6_fb7m7")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.8, 0, 1, 1, 0.4, 0, 1, 1, 0.11764706, 0, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pkd4n"]
+script = ExtResource("5_ay34d")
+steps = Array[ExtResource("6_fb7m7")]([SubResource("Resource_gc3ec")])
+
+[sub_resource type="Resource" id="Resource_vur62"]
+script = ExtResource("4_e4iga")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_pkd4n")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16737792.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_mmpvb"]
+script = ExtResource("6_fb7m7")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.8, 0, 1, 1, 0.4, 0, 1, 1, 0.11764706, 0, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ir4wl"]
+script = ExtResource("5_ay34d")
+steps = Array[ExtResource("6_fb7m7")]([SubResource("Resource_mmpvb")])
+
+[sub_resource type="Resource" id="Resource_j5qc5"]
+script = ExtResource("4_e4iga")
+place = "aura"
+category = "Effect4"
+sheet = "/spritesheets/Effect4/Special1.png"
+look = SubResource("Resource_ir4wl")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16737792.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_68sns"]
+script = ExtResource("7_1ae5n")
+path = "art/media/ui/icons/smooth48/spell.fire_shield.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.fire_shield"
+
+[sub_resource type="Resource" id="Resource_0fp6o"]
+script = ExtResource("3_w7kod")
+clip = "original-repairs/fire-shield-contact/chill/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.9
+orientation = "world"
+source_end = 4.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true,
+"opacity_keys": [[0.0, 1.0], [0.35, 1.0], [0.9, 0.18], [4.0, 0.18]]
+}
+
+[sub_resource type="Resource" id="Resource_463pf"]
+script = ExtResource("3_w7kod")
+clip = "original-repairs/fire-shield-contact/chill/contact"
+role = "attached"
+at = "release"
+delay = 2.0
+attachment = "recipient_ground"
+scale = 0.9
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_ewedh"]
+script = ExtResource("3_w7kod")
+clip = "original-repairs/fire-shield-contact/chill/reaction"
+role = "attached"
+at = "release"
+delay = 2.22
+attachment = "recipient_ground"
+scale = 0.9
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_hwlqm"]
+script = ExtResource("10_o3kcs")
+id = "fire_shield__chill_back"
+kind = "element"
+value = "chill"
+selection = "fire_shield__chill_back"
+effects = Array[ExtResource("3_w7kod")]([SubResource("Resource_0fp6o"), SubResource("Resource_463pf"), SubResource("Resource_ewedh")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_t82dv")
+id = "spell.fire_shield"
+icon = SubResource("Resource_68sns")
+delivery = "self"
+body = SubResource("Resource_mcga0")
+hand_layers = Array[ExtResource("4_e4iga")]([SubResource("Resource_vur62"), SubResource("Resource_j5qc5")])
+sockets = "measured/abilities/spells/spell.fire_shield.sockets.json"
+effects = Array[ExtResource("3_w7kod")]([SubResource("Resource_hmix7"), SubResource("Resource_1e3su"), SubResource("Resource_me3nr")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_5237q")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_o3kcs")]([SubResource("Resource_hwlqm")])
+applies_conditions = PackedStringArray("condition.spell.fire_shield")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "fire_shield__warm_back",
+"source": "assets/vfx/index.json:/selections/fire_shield__warm_back/staging"
+}
+unported = {
+"castPalettes": [{
+"colors": {
+"primary": 16737792.0,
+"secondary": 16719360.0,
+"tertiary": 16763904.0
+},
+"conditionId": "condition.spell.fire_shield",
+"whenEnergyType": "Fire"
+}, {
+"colors": {
+"primary": 9096447.0,
+"secondary": 5862535.0,
+"tertiary": 11267838.0
+},
+"conditionId": "condition.spell.fire_shield",
+"whenEnergyType": "Cold"
+}],
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.fire_shield",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}
+notes = "Plays its imported Factory staging (coverage fill)."

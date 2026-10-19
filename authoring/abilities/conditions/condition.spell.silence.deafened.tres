@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_16apw"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_m8bsg"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_uqayi"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_m8bsg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_e8g0t"]
+
+[sub_resource type="Resource" id="Resource_5n3ld"]
+script = ExtResource("1_16apw")
+colour = Color(0.49411765, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_e8g0t"]
+script = ExtResource("2_m8bsg")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-deafened.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-deafened"
+
+[sub_resource type="Resource" id="Resource_a7mdn"]
+script = ExtResource("3_m8bsg")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fchey"]
+script = ExtResource("2_uqayi")
+steps = Array[ExtResource("3_m8bsg")]([SubResource("Resource_a7mdn")])
+
+[sub_resource type="Resource" id="Resource_vbb6k"]
+script = ExtResource("1_16apw")
+colour = Color(0.6745098, 0.15294118, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_e8g0t")
+id = "condition.spell.silence.deafened"
+label = "Silence Deafened"
+icon = SubResource("Resource_e8g0t")
+disposition = "authored"
+look = SubResource("Resource_fchey")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_5n3ld")
+removal_text = SubResource("Resource_vbb6k")
+status = "internal"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.silence.deafened",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.silence.deafened",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=each_affected_entity; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.silence.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

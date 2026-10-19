@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_52gs7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ca3jt"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_2lgs0"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_ca3jt"]
+
+[sub_resource type="Resource" id="Resource_2lgs0"]
+script = ExtResource("1_ca3jt")
+role = "cast_alt"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m6ep2"]
+script = ExtResource("2_2lgs0")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("1_52gs7")
+id = "action.class.wizard.arcane_recovery"
+kind = "action"
+family = "class"
+icon = SubResource("Resource_m6ep2")
+body = SubResource("Resource_2lgs0")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."

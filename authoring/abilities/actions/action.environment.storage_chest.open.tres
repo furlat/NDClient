@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7ebqa"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_4igog"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_qxldv"]
+
+[sub_resource type="Resource" id="Resource_lh5ln"]
+script = ExtResource("1_7ebqa")
+path = "art/media/ui/icons/smooth48/object.chest.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.environment.storage_chest.open"
+
+[resource]
+script = ExtResource("2_4igog")
+id = "action.environment.storage_chest.open"
+kind = "action"
+family = "environment"
+icon = SubResource("Resource_lh5ln")
+plays = "action.environment.trap_lever.pull"
+target = "source_item"
+effect_sources = PackedStringArray()
+status = "ready"

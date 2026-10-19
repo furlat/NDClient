@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_lm4wg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ojxdy"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_lm4wg"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_vbmlg"]
+
+[sub_resource type="Resource" id="Resource_vbmlg"]
+script = ExtResource("1_lm4wg")
+role = "walk"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_karlr"]
+script = ExtResource("1_ojxdy")
+path = "art/media/ui/icons/smooth48/action.traverse_connector.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.traverse_connector"
+
+[resource]
+script = ExtResource("2_lm4wg")
+id = "action.traverse_connector"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_karlr")
+body = SubResource("Resource_vbmlg")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (traverse); the rig resolves it to a clip once roles are built (coverage fill)."

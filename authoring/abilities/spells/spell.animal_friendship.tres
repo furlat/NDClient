@@ -1,0 +1,143 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_1nkoj"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_5y65b"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_1nkoj"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_mlyxx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_wt31k"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_wh8qk"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_s8f3f"]
+
+[sub_resource type="Resource" id="Resource_mlyxx"]
+script = ExtResource("1_1nkoj")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_te6fg"]
+script = ExtResource("1_5y65b")
+clip = "bg3-36/animal-friendship/application"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "animal_friendship-application-caster",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_vsm6e"]
+script = ExtResource("1_5y65b")
+clip = "bg3-36/animal-friendship/application"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body"]
+},
+"follow_attachment": true,
+"id": "animal_friendship-application-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_klfbh"]
+script = ExtResource("1_5y65b")
+clip = "review/charm_person/back/lifecycle"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "support_envelope"
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"id": "admitted-original-charmed-owner",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_l1kiq"]
+script = ExtResource("3_mlyxx")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.animal_friendship.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("4_wt31k")
+id = "spell.animal_friendship"
+icon = SubResource("Resource_l1kiq")
+delivery = "condition_only"
+body = SubResource("Resource_mlyxx")
+effects = Array[ExtResource("1_5y65b")]([SubResource("Resource_te6fg"), SubResource("Resource_vsm6e"), SubResource("Resource_klfbh")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.animal_friendship")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "animal_friendship_native",
+"source": "assets/vfx/index.json:/selections/animal_friendship_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

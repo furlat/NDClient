@@ -62,11 +62,11 @@ func run()->void:
             evidence.append({"activity":row.activity,"source":row.source,"clip":jobs[0].clip,"frame":jobs[0].frame,"at_ms":at,"owner_start_ms":row.owner.start_ms})
     check(observed.has("idle") and observed.has("move"),"Actual recording exercises idle and movement crouch")
     var materials=index.rows.filter(func(row):return row.kind=="condition_material" and row.owner.condition.behavior_id=="condition.hidden")
-    check(not materials.is_empty() and materials.all(func(row):return row.operations.get("alphaMultiplier")==.55 and row.source_fields.alphaMultiplier.ends_with("hidden.tres::body_filter/opacity")),"Partial opacity is an exact native body filter, not magical invisibility")
+    check(not materials.is_empty() and materials.all(func(row):return row.operations.get("alphaMultiplier")==.55 and row.source_fields.alphaMultiplier.ends_with("condition.hidden.tres::look/steps/0/alpha")),"Partial opacity is an exact native body filter, not magical invisibility")
     var badges=index.rows.filter(func(row):return row.kind=="feedback_text" and row.component.get("legacy_source","").begins_with("catalog/condition_recipes.json:/condition.hidden/"))
     check(not badges.is_empty(),"Recorded condition transition emits actual feedback-text badge rows")
     for row in badges:
-        check(row.source.ends_with("_feedback/enabled") and row.component.text.contains("Hidden") and row.label==row.component.text,"Badge retains its Resource field and authored text")
+        check(row.source.ends_with("_text/enabled") and row.component.text.contains("Hidden") and row.label==row.component.text,"Badge retains its Resource field and authored text")
         var key=thumbnails.request(row,(row.start_ms+row.end_ms)*.5,0)
         check(thumbnails.pending.any(func(job):return job.key==key and job.component.kind=="feedback_text"),"Badge queues the existing native text preview, never an empty material pose")
     var report=Coverage.build(index.cache,index.rows,{"condition.hidden":true})

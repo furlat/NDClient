@@ -1,0 +1,328 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_1bj6d"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_3tbx4"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_py85j"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_s1503"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_c7sd5"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_c5u27"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_3svgq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_jj5ve"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_kag8g"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_elbov"]
+
+[sub_resource type="Resource" id="Resource_nk080"]
+script = ExtResource("1_1bj6d")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_5hdst"]
+script = ExtResource("2_3tbx4")
+roles = Dictionary[String, Color]({
+"primary": Color(0.26666668, 1, 0.26666668, 1),
+"secondary": Color(0.13333334, 0.6666667, 0.13333334, 1),
+"tertiary": Color(0.53333336, 1, 0.4, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_xnbi4"]
+script = ExtResource("3_py85j")
+clip = "spells/acid_splash/default/travel"
+role = "flight"
+scale = 0.18
+rotation_degrees = Vector3(0, 90, 0)
+source_launch = 0.5
+source_contact = 0.85
+source_end = 1.1
+charge_seconds = 0.5
+stop_emission_at_contact = true
+hide_at_contact = PackedStringArray("travel/Donor/Flames_01", "travel/Donor/Flames_02", "travel/Donor/Tail", "travel/Donor/Streaks")
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_o4dey"]
+script = ExtResource("3_py85j")
+clip = "spells/acid_splash/default/impact"
+role = "impact"
+scale = 0.18
+source_end = 1.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_hf07u"]
+script = ExtResource("3_py85j")
+clip = "projectile-windups/acid_splash/default/cast/windup"
+role = "cast"
+scale = 0.18
+source_end = 0.46
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"before_release": 0.5,
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_ps15p"]
+script = ExtResource("5_c7sd5")
+kind = "palette_ramp"
+colours = PackedColorArray(0, 0, 0, 1, 0.011764706, 0.047058824, 0.015686275, 1, 0.019607844, 0.10980392, 0.02745098, 1, 0.03529412, 0.2, 0.039215688, 1, 0.050980393, 0.30588236, 0.047058824, 1, 0.078431375, 0.43529412, 0.05882353, 1, 0.12156863, 0.5803922, 0.078431375, 1, 0.18431373, 0.7372549, 0.105882354, 1, 0.29411766, 0.8784314, 0.14901961, 1, 0.49411765, 0.9843137, 0.20784314, 1, 0.7058824, 1, 0.29411766, 1, 0.8862745, 1, 0.4627451, 1, 0.96862745, 1, 0.70980394, 1, 0.05490196, 0.13333334, 0.09411765, 1, 0.08627451, 0.23921569, 0.13725491, 1, 0.13333334, 0.36078432, 0.1882353, 1, 0.19607843, 0.49803922, 0.24313726, 1, 0.28627452, 0.64705884, 0.30980393, 1, 0.4117647, 0.8, 0.3882353, 1, 0.59607846, 0.9411765, 0.50980395, 1, 0.023529412, 0.14901961, 0.16470589, 1, 0.039215688, 0.27450982, 0.27058825, 1, 0.08627451, 0.43529412, 0.3647059, 1, 0.22745098, 0.6392157, 0.47058824, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7cuf2"]
+script = ExtResource("4_s1503")
+steps = Array[ExtResource("5_c7sd5")]([SubResource("Resource_ps15p")])
+
+[sub_resource type="Resource" id="Resource_kh8sf"]
+script = ExtResource("5_c7sd5")
+kind = "palette_ramp"
+colours = PackedColorArray(0.019607844, 0.10980392, 0.02745098, 1, 0.05490196, 0.13333334, 0.09411765, 1, 0.023529412, 0.14901961, 0.16470589, 1, 0.03529412, 0.2, 0.039215688, 1, 0.08627451, 0.23921569, 0.13725491, 1, 0.039215688, 0.27450982, 0.27058825, 1, 0.050980393, 0.30588236, 0.047058824, 1, 0.13333334, 0.36078432, 0.1882353, 1, 0.078431375, 0.43529412, 0.05882353, 1, 0.08627451, 0.43529412, 0.3647059, 1, 0.19607843, 0.49803922, 0.24313726, 1, 0.12156863, 0.5803922, 0.078431375, 1, 0.22745098, 0.6392157, 0.47058824, 1, 0.28627452, 0.64705884, 0.30980393, 1, 0.18431373, 0.7372549, 0.105882354, 1, 0.4117647, 0.8, 0.3882353, 1, 0.29411766, 0.8784314, 0.14901961, 1, 0.49411765, 0.9843137, 0.20784314, 1, 0.59607846, 0.9411765, 0.50980395, 1, 0.7058824, 1, 0.29411766, 1, 0.8862745, 1, 0.4627451, 1, 0.96862745, 1, 0.70980394, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_i8gek"]
+script = ExtResource("4_s1503")
+steps = Array[ExtResource("5_c7sd5")]([SubResource("Resource_kh8sf")])
+
+[sub_resource type="Resource" id="Resource_1isov"]
+script = ExtResource("5_c7sd5")
+kind = "palette_ramp"
+colours = PackedColorArray(0.53333336, 1, 0.4, 1, 0.26666668, 1, 0.26666668, 1, 0.13333334, 0.6666667, 0.13333334, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gjqk8"]
+script = ExtResource("4_s1503")
+steps = Array[ExtResource("5_c7sd5")]([SubResource("Resource_1isov")])
+
+[sub_resource type="Resource" id="Resource_h67x5"]
+script = ExtResource("6_c5u27")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_gjqk8")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 4521796.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_h54ky"]
+script = ExtResource("5_c7sd5")
+kind = "palette_ramp"
+colours = PackedColorArray(0.53333336, 1, 0.4, 1, 0.26666668, 1, 0.26666668, 1, 0.13333334, 0.6666667, 0.13333334, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1be5r"]
+script = ExtResource("4_s1503")
+steps = Array[ExtResource("5_c7sd5")]([SubResource("Resource_h54ky")])
+
+[sub_resource type="Resource" id="Resource_mt3rc"]
+script = ExtResource("6_c5u27")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_1be5r")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 4521796.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_v83up"]
+script = ExtResource("7_3svgq")
+path = "art/media/ui/icons/smooth48/spell.acid-splash.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.acid-splash"
+
+[resource]
+script = ExtResource("8_jj5ve")
+id = "spell.acid_splash"
+icon = SubResource("Resource_v83up")
+delivery = "projectile_volley"
+body = SubResource("Resource_nk080")
+hand_layers = Array[ExtResource("6_c5u27")]([SubResource("Resource_h67x5"), SubResource("Resource_mt3rc")])
+sockets = "measured/abilities/spells/spell.acid_splash.sockets.json"
+effects = Array[ExtResource("3_py85j")]([SubResource("Resource_xnbi4"), SubResource("Resource_o4dey"), SubResource("Resource_hf07u")])
+native_staging = true
+effect_scope = "application"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_colour = "4be026"
+flight_tiles_per_second = 5.0
+minimum_travel_seconds = 0.15
+stagger_seconds = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_i8gek")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/acid_splash/default/travel",
+"clock_parameter": "source_clock",
+"node": "travel/Donor/Tail",
+"parameter_overrides": {
+"grow_amount": 1.0
+},
+"status": "available",
+"surface": 0.0
+}
+colours = SubResource("Resource_5hdst")
+finish = SubResource("Resource_7cuf2")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.acid_splash.bounds.json"
+staging_unported = {
+"palette": {
+"palette": ["000000", "030c04", "051c07", "09330a", "0d4e0c", "146f0f", "1f9414", "2fbc1b", "4be026", "7efb35", "b4ff4b", "e2ff76", "f7ffb5", "0e2218", "163d23", "225c30", "327f3e", "49a54f", "69cc63", "98f082", "06262a", "0a4645", "166f5d", "3aa378"],
+"parameters": {
+"alpha_cutoff": 0.22,
+"color_boost": 1.08,
+"energy_ceiling": 0.74,
+"energy_floor": 0.32,
+"palette_energy_floor": 0.0,
+"palette_luma_floor": 0.0,
+"ramp_ceiling": 1.0,
+"ramp_floor": 0.0,
+"ramp_uses_luma": true,
+"rgb_block_pixels": 8.0
+},
+"shader": "res://assets/native_effects/sandbox/projectiles/factory/shaders/energy_palette_v1.gdshader"
+},
+"source": "sandbox/staging.json:/spells/acid_splash"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 15610692.0,
+"enabled": true,
+"label": "Acid"
+},
+"hitFlash": {
+"color": 15610692.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.acid_splash",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 24.0,
+"geometry": {
+"enabled": false,
+"primitive": "orb",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetId": "recovered.acid_splash.dense.v1",
+"assetPhase": "impact",
+"enabled": true,
+"fps": 32.0
+},
+"orientation": {
+"directionSource": "target_vector",
+"fineRotation": "isometricHybrid",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetId": "recovered.acid_splash.dense.v1",
+"assetPhase": "cast",
+"enabled": false,
+"fps": 24.0,
+"startFrame": 4.0
+},
+"scale": 0.5,
+"sourceAnchor": {
+"axisPx": 16.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "recovered.acid_splash.dense.v1",
+"blendMode": "add",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": 0.0,
+"liftY": 0.0
+},
+"trajectory": {
+"sameTargetSpread": true,
+"type": "straight"
+},
+"travel": {
+"assetId": "recovered.acid_splash.dense.v1",
+"assetPhase": "travel",
+"enabled": true,
+"fps": 24.0
+}
+}
+}

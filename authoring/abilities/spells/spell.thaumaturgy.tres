@@ -1,0 +1,176 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_apnmu"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_6sgpe"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_7qo50"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_alu8x"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_e6bn7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_wun72"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_wn1mr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_n55kx"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_36xsm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_4i2dr"]
+
+[sub_resource type="Resource" id="Resource_qsnar"]
+script = ExtResource("1_apnmu")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_h57nq"]
+script = ExtResource("2_6sgpe")
+roles = Dictionary[String, Color]({
+"primary": Color(0.70980394, 0.54901963, 0.4392157, 1),
+"secondary": Color(0.9529412, 0.84705883, 0.7411765, 1),
+"tertiary": Color(0.22352941, 0.1882353, 0.27058825, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_uh7l1"]
+script = ExtResource("3_7qo50")
+clip = "spells/thaumaturgy/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+scale = 0.55
+orientation = "world"
+source_end = 2.35
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"delay_seconds": 0.0,
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_sxp36"]
+script = ExtResource("5_e6bn7")
+kind = "palette_ramp"
+colours = PackedColorArray(0.22352941, 0.1882353, 0.27058825, 1, 0.4, 0.3254902, 0.42745098, 1, 0.5686275, 0.44313726, 0.41960785, 1, 0.70980394, 0.54901963, 0.4392157, 1, 0.8509804, 0.70980394, 0.59607846, 1, 0.9529412, 0.84705883, 0.7411765, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_aijd5"]
+script = ExtResource("4_alu8x")
+steps = Array[ExtResource("5_e6bn7")]([SubResource("Resource_sxp36")])
+
+[sub_resource type="Resource" id="Resource_natcx"]
+script = ExtResource("5_e6bn7")
+kind = "palette_ramp"
+colours = PackedColorArray(0.22352941, 0.1882353, 0.27058825, 1, 0.70980394, 0.54901963, 0.4392157, 1, 0.9529412, 0.84705883, 0.7411765, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_spwy3"]
+script = ExtResource("4_alu8x")
+steps = Array[ExtResource("5_e6bn7")]([SubResource("Resource_natcx")])
+
+[sub_resource type="Resource" id="Resource_3n1i8"]
+script = ExtResource("6_wun72")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_spwy3")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 11897968.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_7gwyh"]
+script = ExtResource("7_wn1mr")
+path = "art/media/ui/icons/smooth48/spell.thaumaturgy.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.thaumaturgy"
+
+[resource]
+script = ExtResource("8_n55kx")
+id = "spell.thaumaturgy"
+icon = SubResource("Resource_7gwyh")
+delivery = "point"
+body = SubResource("Resource_qsnar")
+hand_layers = Array[ExtResource("6_wun72")]([SubResource("Resource_3n1i8")])
+sockets = "measured/abilities/spells/spell.thaumaturgy.sockets.json"
+effects = Array[ExtResource("3_7qo50")]([SubResource("Resource_uh7l1")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_colour = "b58c70"
+light_multiplier = 0.0
+colours = SubResource("Resource_h57nq")
+finish = SubResource("Resource_aijd5")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.thaumaturgy.bounds.json"
+staging_unported = {
+"source": "sandbox/batches/support.json:/spells/thaumaturgy/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.thaumaturgy",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "support.thaumaturgy.back",
+"attachment": "source_ground",
+"depth": "behind_body",
+"durationMs": 1000.0,
+"effectGroup": {
+"id": "effect",
+"label": "Thaumaturgy"
+},
+"fps": 32.0,
+"id": "back",
+"scale": 0.5
+}, {
+"assetId": "support.thaumaturgy.front",
+"attachment": "source_ground",
+"depth": "front_body",
+"durationMs": 1000.0,
+"effectGroup": {
+"id": "effect",
+"label": "Thaumaturgy"
+},
+"fps": 32.0,
+"id": "front",
+"scale": 0.5
+}]
+}

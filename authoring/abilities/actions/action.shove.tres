@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ss4bi"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_b57ec"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_yp2od"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_8i4ob"]
+
+[sub_resource type="Resource" id="Resource_hsoj1"]
+script = ExtResource("1_ss4bi")
+role = "act"
+clip = "Kick"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"prepare": 3.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nrjm3"]
+script = ExtResource("2_b57ec")
+path = "art/media/ui/icons/smooth48/action.shove.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.shove"
+
+[sub_resource type="Resource" id="Resource_g4y14"]
+script = ExtResource("4_8i4ob")
+cue = "stance_transition"
+at = "body.impact"
+
+[resource]
+script = ExtResource("3_yp2od")
+id = "action.shove"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_nrjm3")
+disposition = "authored"
+body = SubResource("Resource_hsoj1")
+shove = true
+effect_sources = PackedStringArray()
+sounds = Array[ExtResource("4_8i4ob")]([SubResource("Resource_g4y14")])
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["shove"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.shove",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["forced_movement", "condition"],
+"projectile": null,
+"variants": []
+}

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_re3ap"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_ujbuh"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_re3ap"]
+
+[sub_resource type="Resource" id="Resource_n4smp"]
+script = ExtResource("1_re3ap")
+path = "art/media/ui/icons/smooth48/ui.filter-all.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-all"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-all"
+
+[resource]
+script = ExtResource("1_ujbuh")
+id = "trait.sunlight_sensitivity"
+kind = "trait"
+family = "trait"
+icon = SubResource("Resource_n4smp")
+effect_sources = PackedStringArray()
+status = "internal"

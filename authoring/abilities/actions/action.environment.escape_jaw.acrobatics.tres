@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_nbspo"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_5ls87"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_0etq2"]
+
+[sub_resource type="Resource" id="Resource_ygf5w"]
+script = ExtResource("1_nbspo")
+path = "art/media/ui/icons/smooth48/action.environment.escape_jaw.acrobatics.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.environment.escape_jaw.acrobatics"
+
+[resource]
+script = ExtResource("2_5ls87")
+id = "action.environment.escape_jaw.acrobatics"
+kind = "action"
+family = "environment"
+icon = SubResource("Resource_ygf5w")
+plays = "action.spell.web.escape"
+effect_sources = PackedStringArray()
+status = "ready"

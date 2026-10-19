@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_06uat"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_kt7s0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_iwgbs"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_kt7s0"]
+
+[sub_resource type="Resource" id="Resource_iwgbs"]
+script = ExtResource("1_kt7s0")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qrgsb"]
+script = ExtResource("2_iwgbs")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.soil_clogged_slam.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.creature_action.soil_clogged_slam"
+
+[resource]
+script = ExtResource("1_06uat")
+id = "action.earth_elemental.soil_clogged_slam"
+kind = "action"
+family = "summon_form"
+icon = SubResource("Resource_qrgsb")
+body = SubResource("Resource_iwgbs")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (area_attack); the rig resolves it to a clip once roles are built (coverage fill)."

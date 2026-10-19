@@ -3,6 +3,7 @@ const Catalog = preload("res://source_catalog.gd")
 const Characters = preload("res://presentation/characters.gd")
 const ConditionPose = preload("res://presentation/condition_pose.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
+const AbilityDocuments = preload("res://presentation/ability_documents.gd")
 
 static func load_data(path: String, cache: Dictionary) -> Dictionary:
     return Catalog.read_file(path, cache)
@@ -19,8 +20,8 @@ static func clip(actor: Dictionary, name: String, cache: Dictionary) -> Dictiona
 
 static func movement_reference_speed(cache: Dictionary) -> float:
     # The exported catalog relies on this field's supplied schema default,
-    # carried by the native presentation catalog.
-    return NativeAuthoring._catalog(cache).movement_reference_speed_feet
+    # carried by the abilities source's movement context.
+    return float(load_data("values.json", cache).get("movement_reference_speed_feet", 30.0))
 
 static func playback_rate(actor: Dictionary, cache: Dictionary) -> float:
     var rates = load_data("catalog/action_playback_rates.json", cache)
@@ -49,8 +50,7 @@ static func recipe_source(recipe:Dictionary,field:String,cache:Dictionary)->Stri
 static func spell(fact: Dictionary, cache: Dictionary) -> Dictionary:
     var path = "spells/"+str(fact.get("behavior_id",""))+".json"
     if cache.has(path): return cache[path]
-    var root: String = ProjectSettings.get_setting("source_data/authoring_root")
-    if not FileAccess.file_exists(root.path_join(path)): return {}
+    if not AbilityDocuments.exists(path): return {}
     return load_data(path,cache)
 
 static func attack(fact: Dictionary, actor: Dictionary, cache: Dictionary) -> Dictionary:

@@ -1,0 +1,496 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_x5yyg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_2xl6c"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_tif8x"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_2xl6c"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_cmp16"]
+
+[sub_resource type="Resource" id="Resource_h6a5o"]
+script = ExtResource("1_x5yyg")
+enabled = false
+colour = Color(0.54509807, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_cmp16"]
+script = ExtResource("2_2xl6c")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="Resource_j6svl"]
+script = ExtResource("3_2xl6c")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_exqs5"]
+script = ExtResource("2_tif8x")
+steps = Array[ExtResource("3_2xl6c")]([SubResource("Resource_j6svl")])
+
+[sub_resource type="Resource" id="Resource_jstmc"]
+script = ExtResource("1_x5yyg")
+enabled = false
+colour = Color(0.15294118, 0.80784315, 0.2627451, 1)
+
+[resource]
+script = ExtResource("4_cmp16")
+id = "class_feature.sorcerer.elemental_affinity.resistance"
+label = "Elemental Affinity Resistance"
+icon = SubResource("Resource_cmp16")
+disposition = "authored"
+look = SubResource("Resource_exqs5")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.marker.affinity.fire",
+"attachment": "head",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "class.marker.affinity.fire",
+"opacity": 0.55,
+"priority": 50.0,
+"whenEnergyType": "Fire"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.marker.affinity.cold",
+"attachment": "head",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "class.marker.affinity.cold",
+"opacity": 0.55,
+"priority": 50.0,
+"whenEnergyType": "Cold"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.marker.affinity.lightning",
+"attachment": "head",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "class.marker.affinity.lightning",
+"opacity": 0.55,
+"priority": 50.0,
+"whenEnergyType": "Lightning"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.marker.affinity.acid",
+"attachment": "head",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "class.marker.affinity.acid",
+"opacity": 0.55,
+"priority": 50.0,
+"whenEnergyType": "Acid"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.marker.affinity.poison",
+"attachment": "head",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "class.marker.affinity.poison",
+"opacity": 0.55,
+"priority": 50.0,
+"whenEnergyType": "Poison"
+}]
+group = "class-class_feature.sorcerer.elemental_affinity.resistance"
+priority = 50.0
+max_layers = 3.0
+application_text = SubResource("Resource_h6a5o")
+removal_text = SubResource("Resource_jstmc")
+unported = {
+"application": {
+"durationMs": 1250.0,
+"effects": [{
+"animation": "original",
+"assetId": "class.affinity.fire.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.fire.back",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Fire"
+}, {
+"animation": "original",
+"assetId": "class.affinity.fire.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.fire.front",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Fire"
+}, {
+"animation": "original",
+"assetId": "class.affinity.cold.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.cold.back",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Cold"
+}, {
+"animation": "original",
+"assetId": "class.affinity.cold.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.cold.front",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Cold"
+}, {
+"animation": "original",
+"assetId": "class.affinity.lightning.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.lightning.back",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Lightning"
+}, {
+"animation": "original",
+"assetId": "class.affinity.lightning.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.lightning.front",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Lightning"
+}, {
+"animation": "original",
+"assetId": "class.affinity.acid.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.acid.back",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Acid"
+}, {
+"animation": "original",
+"assetId": "class.affinity.acid.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.acid.front",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Acid"
+}, {
+"animation": "original",
+"assetId": "class.affinity.poison.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.poison.back",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Poison"
+}, {
+"animation": "original",
+"assetId": "class.affinity.poison.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.poison.front",
+"opacity": 0.78,
+"priority": 50.0,
+"whenEnergyType": "Poison"
+}]
+},
+"classification": {
+"presentationDomains": ["body_overlay"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.class_feature.sorcerer.elemental_affinity.resistance",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "class_feature.sorcerer.elemental_affinity.resistance",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.sorcerer.elemental_affinity.resistance",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+},
+"responses": [{
+"effects": [{
+"animation": "original",
+"assetId": "class.affinity.fire.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.fire.back",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Fire"
+}, {
+"animation": "original",
+"assetId": "class.affinity.fire.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.fire.front",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Fire"
+}, {
+"animation": "original",
+"assetId": "class.affinity.cold.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.cold.back",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Cold"
+}, {
+"animation": "original",
+"assetId": "class.affinity.cold.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.cold.front",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Cold"
+}, {
+"animation": "original",
+"assetId": "class.affinity.lightning.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.lightning.back",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Lightning"
+}, {
+"animation": "original",
+"assetId": "class.affinity.lightning.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.lightning.front",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Lightning"
+}, {
+"animation": "original",
+"assetId": "class.affinity.acid.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.acid.back",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Acid"
+}, {
+"animation": "original",
+"assetId": "class.affinity.acid.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.acid.front",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Acid"
+}, {
+"animation": "original",
+"assetId": "class.affinity.poison.back",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1250.0,
+"id": "class.affinity.poison.back",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Poison"
+}, {
+"animation": "original",
+"assetId": "class.affinity.poison.front",
+"attachment": "body",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1250.0,
+"id": "class.affinity.poison.front",
+"opacity": 0.95,
+"priority": 50.0,
+"whenEnergyType": "Poison"
+}],
+"trigger": "damage_received"
+}]
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

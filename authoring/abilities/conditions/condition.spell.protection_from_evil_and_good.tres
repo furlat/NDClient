@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_1dx58"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_b3m7o"]
+
+[sub_resource type="Resource" id="Resource_6r0u1"]
+script = ExtResource("1_b3m7o")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.protection_from_evil_and_good.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.protection_from_evil_and_good"
+status = "stand_in"
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("1_1dx58")
+id = "condition.spell.protection_from_evil_and_good"
+icon = SubResource("Resource_6r0u1")

@@ -1,0 +1,4799 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_6oyni"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_i8ge6"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_b485e"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_02uky"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_n5juj"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_4s2kk"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_o4xjo"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_u3fxt"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_r33do"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_y0n24"]
+
+[sub_resource type="Resource" id="Resource_jycpk"]
+script = ExtResource("1_6oyni")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_47xsf"]
+script = ExtResource("2_i8ge6")
+roles = Dictionary[String, Color]({
+"primary": Color(0.5254902, 0.7411765, 0.83137256, 1),
+"secondary": Color(0.3372549, 0.5254902, 0.62352943, 1),
+"tertiary": Color(0.18039216, 0.3137255, 0.40392157, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_54a4d"]
+script = ExtResource("3_b485e")
+clip = "assembled/ice_storm_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_hhdts"]
+script = ExtResource("6_4s2kk")
+kind = "palette_ramp"
+colours = PackedColorArray(0.18039216, 0.3137255, 0.40392157, 1, 0.5254902, 0.7411765, 0.83137256, 1, 0.3372549, 0.5254902, 0.62352943, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4issp"]
+script = ExtResource("5_n5juj")
+steps = Array[ExtResource("6_4s2kk")]([SubResource("Resource_hhdts")])
+
+[sub_resource type="Resource" id="Resource_7q47k"]
+script = ExtResource("4_02uky")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_4issp")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8830420.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_5a3lu"]
+script = ExtResource("6_4s2kk")
+kind = "palette_ramp"
+colours = PackedColorArray(0.18039216, 0.3137255, 0.40392157, 1, 0.5254902, 0.7411765, 0.83137256, 1, 0.3372549, 0.5254902, 0.62352943, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2as7d"]
+script = ExtResource("5_n5juj")
+steps = Array[ExtResource("6_4s2kk")]([SubResource("Resource_5a3lu")])
+
+[sub_resource type="Resource" id="Resource_b3luo"]
+script = ExtResource("4_02uky")
+place = "aura"
+category = "Effect4"
+sheet = "/spritesheets/Effect4/Special1.png"
+look = SubResource("Resource_2as7d")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 8830420.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_igyka"]
+script = ExtResource("7_o4xjo")
+path = "art/media/ui/icons/smooth48/spell.ice-storm.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.ice-storm"
+
+[resource]
+script = ExtResource("8_u3fxt")
+id = "spell.ice_storm"
+icon = SubResource("Resource_igyka")
+delivery = "zone"
+body = SubResource("Resource_jycpk")
+hand_layers = Array[ExtResource("4_02uky")]([SubResource("Resource_7q47k"), SubResource("Resource_b3luo")])
+sockets = "measured/abilities/spells/spell.ice_storm.sockets.json"
+effects = Array[ExtResource("3_b485e")]([SubResource("Resource_54a4d")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_47xsf")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.ice_storm.terrain")
+applies_surfaces = PackedStringArray("spatial_effect.spell.ice_storm")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "ready"
+staging_unported = {
+"selection": "ice_storm_native",
+"source": "assets/vfx/index.json:/selections/ice_storm_native/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 1011.93576093647
+},
+"definitionRef": {
+"content_id": "spell.ice_storm",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-4",
+"label": "Ice Storm · Ground 4"
+},
+"fps": 32.0,
+"id": "ground-4-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 604.6448497090751,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -3.328145117436725,
+"y": -0.503617294702417
+},
+"N": {
+"x": -0.503617294702417,
+"y": 3.328145117436725
+},
+"NE": {
+"x": -0.503617294702417,
+"y": 3.328145117436725
+},
+"NW": {
+"x": 3.328145117436725,
+"y": 0.503617294702417
+},
+"S": {
+"x": 0.503617294702417,
+"y": -3.328145117436725
+},
+"SE": {
+"x": -3.328145117436725,
+"y": -0.503617294702417
+},
+"SW": {
+"x": 0.503617294702417,
+"y": -3.328145117436725
+},
+"W": {
+"x": 3.328145117436725,
+"y": 0.503617294702417
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-4",
+"label": "Ice Storm · Ground 4"
+},
+"fps": 32.0,
+"id": "ground-4-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 604.6448497090751,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -3.328145117436725,
+"y": -0.503617294702417
+},
+"N": {
+"x": -0.503617294702417,
+"y": 3.328145117436725
+},
+"NE": {
+"x": -0.503617294702417,
+"y": 3.328145117436725
+},
+"NW": {
+"x": 3.328145117436725,
+"y": 0.503617294702417
+},
+"S": {
+"x": 0.503617294702417,
+"y": -3.328145117436725
+},
+"SE": {
+"x": -3.328145117436725,
+"y": -0.503617294702417
+},
+"SW": {
+"x": 0.503617294702417,
+"y": -3.328145117436725
+},
+"W": {
+"x": 3.328145117436725,
+"y": 0.503617294702417
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-5",
+"label": "Ice Storm · Ground 5"
+},
+"fps": 32.0,
+"id": "ground-5-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 145.00468694677693,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -3.6609963773218626,
+"y": 0.530610968693145
+},
+"N": {
+"x": 0.530610968693145,
+"y": 3.6609963773218626
+},
+"NE": {
+"x": 0.530610968693145,
+"y": 3.6609963773218626
+},
+"NW": {
+"x": 3.6609963773218626,
+"y": -0.530610968693145
+},
+"S": {
+"x": -0.530610968693145,
+"y": -3.6609963773218626
+},
+"SE": {
+"x": -3.6609963773218626,
+"y": 0.530610968693145
+},
+"SW": {
+"x": -0.530610968693145,
+"y": -3.6609963773218626
+},
+"W": {
+"x": 3.6609963773218626,
+"y": -0.530610968693145
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-5",
+"label": "Ice Storm · Ground 5"
+},
+"fps": 32.0,
+"id": "ground-5-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 145.00468694677693,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -3.6609963773218626,
+"y": 0.530610968693145
+},
+"N": {
+"x": 0.530610968693145,
+"y": 3.6609963773218626
+},
+"NE": {
+"x": 0.530610968693145,
+"y": 3.6609963773218626
+},
+"NW": {
+"x": 3.6609963773218626,
+"y": -0.530610968693145
+},
+"S": {
+"x": -0.530610968693145,
+"y": -3.6609963773218626
+},
+"SE": {
+"x": -3.6609963773218626,
+"y": 0.530610968693145
+},
+"SW": {
+"x": -0.530610968693145,
+"y": -3.6609963773218626
+},
+"W": {
+"x": 3.6609963773218626,
+"y": -0.530610968693145
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-10",
+"label": "Ice Storm · Ground 10"
+},
+"fps": 32.0,
+"id": "ground-10-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 406.7324072673273,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.387497077676426,
+"y": -2.5199179242582432
+},
+"N": {
+"x": -2.5199179242582432,
+"y": 2.387497077676426
+},
+"NE": {
+"x": -2.5199179242582432,
+"y": 2.387497077676426
+},
+"NW": {
+"x": 2.387497077676426,
+"y": 2.5199179242582432
+},
+"S": {
+"x": 2.5199179242582432,
+"y": -2.387497077676426
+},
+"SE": {
+"x": -2.387497077676426,
+"y": -2.5199179242582432
+},
+"SW": {
+"x": 2.5199179242582432,
+"y": -2.387497077676426
+},
+"W": {
+"x": 2.387497077676426,
+"y": 2.5199179242582432
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-10",
+"label": "Ice Storm · Ground 10"
+},
+"fps": 32.0,
+"id": "ground-10-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 406.7324072673273,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.387497077676426,
+"y": -2.5199179242582432
+},
+"N": {
+"x": -2.5199179242582432,
+"y": 2.387497077676426
+},
+"NE": {
+"x": -2.5199179242582432,
+"y": 2.387497077676426
+},
+"NW": {
+"x": 2.387497077676426,
+"y": 2.5199179242582432
+},
+"S": {
+"x": 2.5199179242582432,
+"y": -2.387497077676426
+},
+"SE": {
+"x": -2.387497077676426,
+"y": -2.5199179242582432
+},
+"SW": {
+"x": 2.5199179242582432,
+"y": -2.387497077676426
+},
+"W": {
+"x": 2.387497077676426,
+"y": 2.5199179242582432
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-11",
+"label": "Ice Storm · Ground 11"
+},
+"fps": 32.0,
+"id": "ground-11-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 844.5881675106648,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.439646481948148,
+"y": -1.4347664726712537
+},
+"N": {
+"x": -1.4347664726712537,
+"y": 2.439646481948148
+},
+"NE": {
+"x": -1.4347664726712537,
+"y": 2.439646481948148
+},
+"NW": {
+"x": 2.439646481948148,
+"y": 1.4347664726712537
+},
+"S": {
+"x": 1.4347664726712537,
+"y": -2.439646481948148
+},
+"SE": {
+"x": -2.439646481948148,
+"y": -1.4347664726712537
+},
+"SW": {
+"x": 1.4347664726712537,
+"y": -2.439646481948148
+},
+"W": {
+"x": 2.439646481948148,
+"y": 1.4347664726712537
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-11",
+"label": "Ice Storm · Ground 11"
+},
+"fps": 32.0,
+"id": "ground-11-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 844.5881675106648,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.439646481948148,
+"y": -1.4347664726712537
+},
+"N": {
+"x": -1.4347664726712537,
+"y": 2.439646481948148
+},
+"NE": {
+"x": -1.4347664726712537,
+"y": 2.439646481948148
+},
+"NW": {
+"x": 2.439646481948148,
+"y": 1.4347664726712537
+},
+"S": {
+"x": 1.4347664726712537,
+"y": -2.439646481948148
+},
+"SE": {
+"x": -2.439646481948148,
+"y": -1.4347664726712537
+},
+"SW": {
+"x": 1.4347664726712537,
+"y": -2.439646481948148
+},
+"W": {
+"x": 2.439646481948148,
+"y": 1.4347664726712537
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-12",
+"label": "Ice Storm · Ground 12"
+},
+"fps": 32.0,
+"id": "ground-12-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 123.34197615018638,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.4549561947669645,
+"y": -0.5002248236465675
+},
+"N": {
+"x": -0.5002248236465675,
+"y": 2.4549561947669645
+},
+"NE": {
+"x": -0.5002248236465675,
+"y": 2.4549561947669645
+},
+"NW": {
+"x": 2.4549561947669645,
+"y": 0.5002248236465675
+},
+"S": {
+"x": 0.5002248236465675,
+"y": -2.4549561947669645
+},
+"SE": {
+"x": -2.4549561947669645,
+"y": -0.5002248236465675
+},
+"SW": {
+"x": 0.5002248236465675,
+"y": -2.4549561947669645
+},
+"W": {
+"x": 2.4549561947669645,
+"y": 0.5002248236465675
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-12",
+"label": "Ice Storm · Ground 12"
+},
+"fps": 32.0,
+"id": "ground-12-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 123.34197615018638,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.4549561947669645,
+"y": -0.5002248236465675
+},
+"N": {
+"x": -0.5002248236465675,
+"y": 2.4549561947669645
+},
+"NE": {
+"x": -0.5002248236465675,
+"y": 2.4549561947669645
+},
+"NW": {
+"x": 2.4549561947669645,
+"y": 0.5002248236465675
+},
+"S": {
+"x": 0.5002248236465675,
+"y": -2.4549561947669645
+},
+"SE": {
+"x": -2.4549561947669645,
+"y": -0.5002248236465675
+},
+"SW": {
+"x": 0.5002248236465675,
+"y": -2.4549561947669645
+},
+"W": {
+"x": 2.4549561947669645,
+"y": 0.5002248236465675
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-13",
+"label": "Ice Storm · Ground 13"
+},
+"fps": 32.0,
+"id": "ground-13-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1096.6023073342512,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.5904433138224703,
+"y": 0.4775254274023609
+},
+"N": {
+"x": 0.4775254274023609,
+"y": 2.5904433138224703
+},
+"NE": {
+"x": 0.4775254274023609,
+"y": 2.5904433138224703
+},
+"NW": {
+"x": 2.5904433138224703,
+"y": -0.4775254274023609
+},
+"S": {
+"x": -0.4775254274023609,
+"y": -2.5904433138224703
+},
+"SE": {
+"x": -2.5904433138224703,
+"y": 0.4775254274023609
+},
+"SW": {
+"x": -0.4775254274023609,
+"y": -2.5904433138224703
+},
+"W": {
+"x": 2.5904433138224703,
+"y": -0.4775254274023609
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-13",
+"label": "Ice Storm · Ground 13"
+},
+"fps": 32.0,
+"id": "ground-13-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1096.6023073342512,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.5904433138224703,
+"y": 0.4775254274023609
+},
+"N": {
+"x": 0.4775254274023609,
+"y": 2.5904433138224703
+},
+"NE": {
+"x": 0.4775254274023609,
+"y": 2.5904433138224703
+},
+"NW": {
+"x": 2.5904433138224703,
+"y": -0.4775254274023609
+},
+"S": {
+"x": -0.4775254274023609,
+"y": -2.5904433138224703
+},
+"SE": {
+"x": -2.5904433138224703,
+"y": 0.4775254274023609
+},
+"SW": {
+"x": -0.4775254274023609,
+"y": -2.5904433138224703
+},
+"W": {
+"x": 2.5904433138224703,
+"y": -0.4775254274023609
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-14",
+"label": "Ice Storm · Ground 14"
+},
+"fps": 32.0,
+"id": "ground-14-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1233.4850983552317,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.559415280146822,
+"y": 1.5692591407911096
+},
+"N": {
+"x": 1.5692591407911096,
+"y": 2.559415280146822
+},
+"NE": {
+"x": 1.5692591407911096,
+"y": 2.559415280146822
+},
+"NW": {
+"x": 2.559415280146822,
+"y": -1.5692591407911096
+},
+"S": {
+"x": -1.5692591407911096,
+"y": -2.559415280146822
+},
+"SE": {
+"x": -2.559415280146822,
+"y": 1.5692591407911096
+},
+"SW": {
+"x": -1.5692591407911096,
+"y": -2.559415280146822
+},
+"W": {
+"x": 2.559415280146822,
+"y": -1.5692591407911096
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-14",
+"label": "Ice Storm · Ground 14"
+},
+"fps": 32.0,
+"id": "ground-14-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1233.4850983552317,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.559415280146822,
+"y": 1.5692591407911096
+},
+"N": {
+"x": 1.5692591407911096,
+"y": 2.559415280146822
+},
+"NE": {
+"x": 1.5692591407911096,
+"y": 2.559415280146822
+},
+"NW": {
+"x": 2.559415280146822,
+"y": -1.5692591407911096
+},
+"S": {
+"x": -1.5692591407911096,
+"y": -2.559415280146822
+},
+"SE": {
+"x": -2.559415280146822,
+"y": 1.5692591407911096
+},
+"SW": {
+"x": -1.5692591407911096,
+"y": -2.559415280146822
+},
+"W": {
+"x": 2.559415280146822,
+"y": -1.5692591407911096
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-15",
+"label": "Ice Storm · Ground 15"
+},
+"fps": 32.0,
+"id": "ground-15-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 186.1216090901507,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.3559171875578615,
+"y": 2.556938520894255
+},
+"N": {
+"x": 2.556938520894255,
+"y": 2.3559171875578615
+},
+"NE": {
+"x": 2.556938520894255,
+"y": 2.3559171875578615
+},
+"NW": {
+"x": 2.3559171875578615,
+"y": -2.556938520894255
+},
+"S": {
+"x": -2.556938520894255,
+"y": -2.3559171875578615
+},
+"SE": {
+"x": -2.3559171875578615,
+"y": 2.556938520894255
+},
+"SW": {
+"x": -2.556938520894255,
+"y": -2.3559171875578615
+},
+"W": {
+"x": 2.3559171875578615,
+"y": -2.556938520894255
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-15",
+"label": "Ice Storm · Ground 15"
+},
+"fps": 32.0,
+"id": "ground-15-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 186.1216090901507,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -2.3559171875578615,
+"y": 2.556938520894255
+},
+"N": {
+"x": 2.556938520894255,
+"y": 2.3559171875578615
+},
+"NE": {
+"x": 2.556938520894255,
+"y": 2.3559171875578615
+},
+"NW": {
+"x": 2.3559171875578615,
+"y": -2.556938520894255
+},
+"S": {
+"x": -2.556938520894255,
+"y": -2.3559171875578615
+},
+"SE": {
+"x": -2.3559171875578615,
+"y": 2.556938520894255
+},
+"SW": {
+"x": -2.556938520894255,
+"y": -2.3559171875578615
+},
+"W": {
+"x": 2.3559171875578615,
+"y": -2.556938520894255
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-18",
+"label": "Ice Storm · Ground 18"
+},
+"fps": 32.0,
+"id": "ground-18-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 141.39053047074412,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.500932992424714,
+"y": -2.3682667288097945
+},
+"N": {
+"x": -2.3682667288097945,
+"y": 1.500932992424714
+},
+"NE": {
+"x": -2.3682667288097945,
+"y": 1.500932992424714
+},
+"NW": {
+"x": 1.500932992424714,
+"y": 2.3682667288097945
+},
+"S": {
+"x": 2.3682667288097945,
+"y": -1.500932992424714
+},
+"SE": {
+"x": -1.500932992424714,
+"y": -2.3682667288097945
+},
+"SW": {
+"x": 2.3682667288097945,
+"y": -1.500932992424714
+},
+"W": {
+"x": 1.500932992424714,
+"y": 2.3682667288097945
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-18",
+"label": "Ice Storm · Ground 18"
+},
+"fps": 32.0,
+"id": "ground-18-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 141.39053047074412,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.500932992424714,
+"y": -2.3682667288097945
+},
+"N": {
+"x": -2.3682667288097945,
+"y": 1.500932992424714
+},
+"NE": {
+"x": -2.3682667288097945,
+"y": 1.500932992424714
+},
+"NW": {
+"x": 1.500932992424714,
+"y": 2.3682667288097945
+},
+"S": {
+"x": 2.3682667288097945,
+"y": -1.500932992424714
+},
+"SE": {
+"x": -1.500932992424714,
+"y": -2.3682667288097945
+},
+"SW": {
+"x": 2.3682667288097945,
+"y": -1.500932992424714
+},
+"W": {
+"x": 1.500932992424714,
+"y": 2.3682667288097945
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-19",
+"label": "Ice Storm · Ground 19"
+},
+"fps": 32.0,
+"id": "ground-19-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1005.7446818245808,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.492014562787699,
+"y": -1.4151008692999312
+},
+"N": {
+"x": -1.4151008692999312,
+"y": 1.492014562787699
+},
+"NE": {
+"x": -1.4151008692999312,
+"y": 1.492014562787699
+},
+"NW": {
+"x": 1.492014562787699,
+"y": 1.4151008692999312
+},
+"S": {
+"x": 1.4151008692999312,
+"y": -1.492014562787699
+},
+"SE": {
+"x": -1.492014562787699,
+"y": -1.4151008692999312
+},
+"SW": {
+"x": 1.4151008692999312,
+"y": -1.492014562787699
+},
+"W": {
+"x": 1.492014562787699,
+"y": 1.4151008692999312
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-19",
+"label": "Ice Storm · Ground 19"
+},
+"fps": 32.0,
+"id": "ground-19-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1005.7446818245808,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.492014562787699,
+"y": -1.4151008692999312
+},
+"N": {
+"x": -1.4151008692999312,
+"y": 1.492014562787699
+},
+"NE": {
+"x": -1.4151008692999312,
+"y": 1.492014562787699
+},
+"NW": {
+"x": 1.492014562787699,
+"y": 1.4151008692999312
+},
+"S": {
+"x": 1.4151008692999312,
+"y": -1.492014562787699
+},
+"SE": {
+"x": -1.492014562787699,
+"y": -1.4151008692999312
+},
+"SW": {
+"x": 1.4151008692999312,
+"y": -1.492014562787699
+},
+"W": {
+"x": 1.492014562787699,
+"y": 1.4151008692999312
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-20",
+"label": "Ice Storm · Ground 20"
+},
+"fps": 32.0,
+"id": "ground-20-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 593.5342159045831,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.5805603487802729,
+"y": -0.5775064263001696
+},
+"N": {
+"x": -0.5775064263001696,
+"y": 1.5805603487802729
+},
+"NE": {
+"x": -0.5775064263001696,
+"y": 1.5805603487802729
+},
+"NW": {
+"x": 1.5805603487802729,
+"y": 0.5775064263001696
+},
+"S": {
+"x": 0.5775064263001696,
+"y": -1.5805603487802729
+},
+"SE": {
+"x": -1.5805603487802729,
+"y": -0.5775064263001696
+},
+"SW": {
+"x": 0.5775064263001696,
+"y": -1.5805603487802729
+},
+"W": {
+"x": 1.5805603487802729,
+"y": 0.5775064263001696
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-20",
+"label": "Ice Storm · Ground 20"
+},
+"fps": 32.0,
+"id": "ground-20-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 593.5342159045831,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.5805603487802729,
+"y": -0.5775064263001696
+},
+"N": {
+"x": -0.5775064263001696,
+"y": 1.5805603487802729
+},
+"NE": {
+"x": -0.5775064263001696,
+"y": 1.5805603487802729
+},
+"NW": {
+"x": 1.5805603487802729,
+"y": 0.5775064263001696
+},
+"S": {
+"x": 0.5775064263001696,
+"y": -1.5805603487802729
+},
+"SE": {
+"x": -1.5805603487802729,
+"y": -0.5775064263001696
+},
+"SW": {
+"x": 0.5775064263001696,
+"y": -1.5805603487802729
+},
+"W": {
+"x": 1.5805603487802729,
+"y": 0.5775064263001696
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-21",
+"label": "Ice Storm · Ground 21"
+},
+"fps": 32.0,
+"id": "ground-21-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1222.7594958062582,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.326740731982221,
+"y": 0.38180693397225696
+},
+"N": {
+"x": 0.38180693397225696,
+"y": 1.326740731982221
+},
+"NE": {
+"x": 0.38180693397225696,
+"y": 1.326740731982221
+},
+"NW": {
+"x": 1.326740731982221,
+"y": -0.38180693397225696
+},
+"S": {
+"x": -0.38180693397225696,
+"y": -1.326740731982221
+},
+"SE": {
+"x": -1.326740731982221,
+"y": 0.38180693397225696
+},
+"SW": {
+"x": -0.38180693397225696,
+"y": -1.326740731982221
+},
+"W": {
+"x": 1.326740731982221,
+"y": -0.38180693397225696
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-21",
+"label": "Ice Storm · Ground 21"
+},
+"fps": 32.0,
+"id": "ground-21-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1222.7594958062582,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.326740731982221,
+"y": 0.38180693397225696
+},
+"N": {
+"x": 0.38180693397225696,
+"y": 1.326740731982221
+},
+"NE": {
+"x": 0.38180693397225696,
+"y": 1.326740731982221
+},
+"NW": {
+"x": 1.326740731982221,
+"y": -0.38180693397225696
+},
+"S": {
+"x": -0.38180693397225696,
+"y": -1.326740731982221
+},
+"SE": {
+"x": -1.326740731982221,
+"y": 0.38180693397225696
+},
+"SW": {
+"x": -0.38180693397225696,
+"y": -1.326740731982221
+},
+"W": {
+"x": 1.326740731982221,
+"y": -0.38180693397225696
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-22",
+"label": "Ice Storm · Ground 22"
+},
+"fps": 32.0,
+"id": "ground-22-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 951.3816986600432,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.382056061201365,
+"y": 1.3922943068795577
+},
+"N": {
+"x": 1.3922943068795577,
+"y": 1.382056061201365
+},
+"NE": {
+"x": 1.3922943068795577,
+"y": 1.382056061201365
+},
+"NW": {
+"x": 1.382056061201365,
+"y": -1.3922943068795577
+},
+"S": {
+"x": -1.3922943068795577,
+"y": -1.382056061201365
+},
+"SE": {
+"x": -1.382056061201365,
+"y": 1.3922943068795577
+},
+"SW": {
+"x": -1.3922943068795577,
+"y": -1.382056061201365
+},
+"W": {
+"x": 1.382056061201365,
+"y": -1.3922943068795577
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-22",
+"label": "Ice Storm · Ground 22"
+},
+"fps": 32.0,
+"id": "ground-22-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 951.3816986600432,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.382056061201365,
+"y": 1.3922943068795577
+},
+"N": {
+"x": 1.3922943068795577,
+"y": 1.382056061201365
+},
+"NE": {
+"x": 1.3922943068795577,
+"y": 1.382056061201365
+},
+"NW": {
+"x": 1.382056061201365,
+"y": -1.3922943068795577
+},
+"S": {
+"x": -1.3922943068795577,
+"y": -1.382056061201365
+},
+"SE": {
+"x": -1.382056061201365,
+"y": 1.3922943068795577
+},
+"SW": {
+"x": -1.3922943068795577,
+"y": -1.382056061201365
+},
+"W": {
+"x": 1.382056061201365,
+"y": -1.3922943068795577
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-23",
+"label": "Ice Storm · Ground 23"
+},
+"fps": 32.0,
+"id": "ground-23-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 973.468762158518,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.5430303762571385,
+"y": 2.6446856476002267
+},
+"N": {
+"x": 2.6446856476002267,
+"y": 1.5430303762571385
+},
+"NE": {
+"x": 2.6446856476002267,
+"y": 1.5430303762571385
+},
+"NW": {
+"x": 1.5430303762571385,
+"y": -2.6446856476002267
+},
+"S": {
+"x": -2.6446856476002267,
+"y": -1.5430303762571385
+},
+"SE": {
+"x": -1.5430303762571385,
+"y": 2.6446856476002267
+},
+"SW": {
+"x": -2.6446856476002267,
+"y": -1.5430303762571385
+},
+"W": {
+"x": 1.5430303762571385,
+"y": -2.6446856476002267
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-23",
+"label": "Ice Storm · Ground 23"
+},
+"fps": 32.0,
+"id": "ground-23-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 973.468762158518,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -1.5430303762571385,
+"y": 2.6446856476002267
+},
+"N": {
+"x": 2.6446856476002267,
+"y": 1.5430303762571385
+},
+"NE": {
+"x": 2.6446856476002267,
+"y": 1.5430303762571385
+},
+"NW": {
+"x": 1.5430303762571385,
+"y": -2.6446856476002267
+},
+"S": {
+"x": -2.6446856476002267,
+"y": -1.5430303762571385
+},
+"SE": {
+"x": -1.5430303762571385,
+"y": 2.6446856476002267
+},
+"SW": {
+"x": -2.6446856476002267,
+"y": -1.5430303762571385
+},
+"W": {
+"x": 1.5430303762571385,
+"y": -2.6446856476002267
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-25",
+"label": "Ice Storm · Ground 25"
+},
+"fps": 32.0,
+"id": "ground-25-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 860.2529145946392,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.46938903130685505,
+"y": -3.3778787016483873
+},
+"N": {
+"x": -3.3778787016483873,
+"y": 0.46938903130685505
+},
+"NE": {
+"x": -3.3778787016483873,
+"y": 0.46938903130685505
+},
+"NW": {
+"x": 0.46938903130685505,
+"y": 3.3778787016483873
+},
+"S": {
+"x": 3.3778787016483873,
+"y": -0.46938903130685505
+},
+"SE": {
+"x": -0.46938903130685505,
+"y": -3.3778787016483873
+},
+"SW": {
+"x": 3.3778787016483873,
+"y": -0.46938903130685505
+},
+"W": {
+"x": 0.46938903130685505,
+"y": 3.3778787016483873
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-25",
+"label": "Ice Storm · Ground 25"
+},
+"fps": 32.0,
+"id": "ground-25-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 860.2529145946392,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.46938903130685505,
+"y": -3.3778787016483873
+},
+"N": {
+"x": -3.3778787016483873,
+"y": 0.46938903130685505
+},
+"NE": {
+"x": -3.3778787016483873,
+"y": 0.46938903130685505
+},
+"NW": {
+"x": 0.46938903130685505,
+"y": 3.3778787016483873
+},
+"S": {
+"x": 3.3778787016483873,
+"y": -0.46938903130685505
+},
+"SE": {
+"x": -0.46938903130685505,
+"y": -3.3778787016483873
+},
+"SW": {
+"x": 3.3778787016483873,
+"y": -0.46938903130685505
+},
+"W": {
+"x": 0.46938903130685505,
+"y": 3.3778787016483873
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-26",
+"label": "Ice Storm · Ground 26"
+},
+"fps": 32.0,
+"id": "ground-26-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 712.4198302744844,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.4786229406247003,
+"y": -2.602387734009244
+},
+"N": {
+"x": -2.602387734009244,
+"y": 0.4786229406247003
+},
+"NE": {
+"x": -2.602387734009244,
+"y": 0.4786229406247003
+},
+"NW": {
+"x": 0.4786229406247003,
+"y": 2.602387734009244
+},
+"S": {
+"x": 2.602387734009244,
+"y": -0.4786229406247003
+},
+"SE": {
+"x": -0.4786229406247003,
+"y": -2.602387734009244
+},
+"SW": {
+"x": 2.602387734009244,
+"y": -0.4786229406247003
+},
+"W": {
+"x": 0.4786229406247003,
+"y": 2.602387734009244
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-26",
+"label": "Ice Storm · Ground 26"
+},
+"fps": 32.0,
+"id": "ground-26-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 712.4198302744844,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.4786229406247003,
+"y": -2.602387734009244
+},
+"N": {
+"x": -2.602387734009244,
+"y": 0.4786229406247003
+},
+"NE": {
+"x": -2.602387734009244,
+"y": 0.4786229406247003
+},
+"NW": {
+"x": 0.4786229406247003,
+"y": 2.602387734009244
+},
+"S": {
+"x": 2.602387734009244,
+"y": -0.4786229406247003
+},
+"SE": {
+"x": -0.4786229406247003,
+"y": -2.602387734009244
+},
+"SW": {
+"x": 2.602387734009244,
+"y": -0.4786229406247003
+},
+"W": {
+"x": 0.4786229406247003,
+"y": 2.602387734009244
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-27",
+"label": "Ice Storm · Ground 27"
+},
+"fps": 32.0,
+"id": "ground-27-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 900.8556107892218,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.4859069514232033,
+"y": -1.364815685790927
+},
+"N": {
+"x": -1.364815685790927,
+"y": 0.4859069514232033
+},
+"NE": {
+"x": -1.364815685790927,
+"y": 0.4859069514232033
+},
+"NW": {
+"x": 0.4859069514232033,
+"y": 1.364815685790927
+},
+"S": {
+"x": 1.364815685790927,
+"y": -0.4859069514232033
+},
+"SE": {
+"x": -0.4859069514232033,
+"y": -1.364815685790927
+},
+"SW": {
+"x": 1.364815685790927,
+"y": -0.4859069514232033
+},
+"W": {
+"x": 0.4859069514232033,
+"y": 1.364815685790927
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-27",
+"label": "Ice Storm · Ground 27"
+},
+"fps": 32.0,
+"id": "ground-27-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 900.8556107892218,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.4859069514232033,
+"y": -1.364815685790927
+},
+"N": {
+"x": -1.364815685790927,
+"y": 0.4859069514232033
+},
+"NE": {
+"x": -1.364815685790927,
+"y": 0.4859069514232033
+},
+"NW": {
+"x": 0.4859069514232033,
+"y": 1.364815685790927
+},
+"S": {
+"x": 1.364815685790927,
+"y": -0.4859069514232033
+},
+"SE": {
+"x": -0.4859069514232033,
+"y": -1.364815685790927
+},
+"SW": {
+"x": 1.364815685790927,
+"y": -0.4859069514232033
+},
+"W": {
+"x": 0.4859069514232033,
+"y": 1.364815685790927
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-28",
+"label": "Ice Storm · Ground 28"
+},
+"fps": 32.0,
+"id": "ground-28-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 162.7524942796299,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.6424549053950613,
+"y": -0.6016752705756516
+},
+"N": {
+"x": -0.6016752705756516,
+"y": 0.6424549053950613
+},
+"NE": {
+"x": -0.6016752705756516,
+"y": 0.6424549053950613
+},
+"NW": {
+"x": 0.6424549053950613,
+"y": 0.6016752705756516
+},
+"S": {
+"x": 0.6016752705756516,
+"y": -0.6424549053950613
+},
+"SE": {
+"x": -0.6424549053950613,
+"y": -0.6016752705756516
+},
+"SW": {
+"x": 0.6016752705756516,
+"y": -0.6424549053950613
+},
+"W": {
+"x": 0.6424549053950613,
+"y": 0.6016752705756516
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-28",
+"label": "Ice Storm · Ground 28"
+},
+"fps": 32.0,
+"id": "ground-28-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 162.7524942796299,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.6424549053950613,
+"y": -0.6016752705756516
+},
+"N": {
+"x": -0.6016752705756516,
+"y": 0.6424549053950613
+},
+"NE": {
+"x": -0.6016752705756516,
+"y": 0.6424549053950613
+},
+"NW": {
+"x": 0.6424549053950613,
+"y": 0.6016752705756516
+},
+"S": {
+"x": 0.6016752705756516,
+"y": -0.6424549053950613
+},
+"SE": {
+"x": -0.6424549053950613,
+"y": -0.6016752705756516
+},
+"SW": {
+"x": 0.6016752705756516,
+"y": -0.6424549053950613
+},
+"W": {
+"x": 0.6424549053950613,
+"y": 0.6016752705756516
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-29",
+"label": "Ice Storm · Ground 29"
+},
+"fps": 32.0,
+"id": "ground-29-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 924.3541190608084,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.4498896259090543,
+"y": 0.5728852411788466
+},
+"N": {
+"x": 0.5728852411788466,
+"y": 0.4498896259090543
+},
+"NE": {
+"x": 0.5728852411788466,
+"y": 0.4498896259090543
+},
+"NW": {
+"x": 0.4498896259090543,
+"y": -0.5728852411788466
+},
+"S": {
+"x": -0.5728852411788466,
+"y": -0.4498896259090543
+},
+"SE": {
+"x": -0.4498896259090543,
+"y": 0.5728852411788466
+},
+"SW": {
+"x": -0.5728852411788466,
+"y": -0.4498896259090543
+},
+"W": {
+"x": 0.4498896259090543,
+"y": -0.5728852411788466
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-29",
+"label": "Ice Storm · Ground 29"
+},
+"fps": 32.0,
+"id": "ground-29-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 924.3541190608084,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.4498896259090543,
+"y": 0.5728852411788466
+},
+"N": {
+"x": 0.5728852411788466,
+"y": 0.4498896259090543
+},
+"NE": {
+"x": 0.5728852411788466,
+"y": 0.4498896259090543
+},
+"NW": {
+"x": 0.4498896259090543,
+"y": -0.5728852411788466
+},
+"S": {
+"x": -0.5728852411788466,
+"y": -0.4498896259090543
+},
+"SE": {
+"x": -0.4498896259090543,
+"y": 0.5728852411788466
+},
+"SW": {
+"x": -0.5728852411788466,
+"y": -0.4498896259090543
+},
+"W": {
+"x": 0.4498896259090543,
+"y": -0.5728852411788466
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-30",
+"label": "Ice Storm · Ground 30"
+},
+"fps": 32.0,
+"id": "ground-30-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 975.7304975505576,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.5199179242582431,
+"y": 1.360638548843235
+},
+"N": {
+"x": 1.360638548843235,
+"y": 0.5199179242582431
+},
+"NE": {
+"x": 1.360638548843235,
+"y": 0.5199179242582431
+},
+"NW": {
+"x": 0.5199179242582431,
+"y": -1.360638548843235
+},
+"S": {
+"x": -1.360638548843235,
+"y": -0.5199179242582431
+},
+"SE": {
+"x": -0.5199179242582431,
+"y": 1.360638548843235
+},
+"SW": {
+"x": -1.360638548843235,
+"y": -0.5199179242582431
+},
+"W": {
+"x": 0.5199179242582431,
+"y": -1.360638548843235
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-30",
+"label": "Ice Storm · Ground 30"
+},
+"fps": 32.0,
+"id": "ground-30-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 975.7304975505576,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.5199179242582431,
+"y": 1.360638548843235
+},
+"N": {
+"x": 1.360638548843235,
+"y": 0.5199179242582431
+},
+"NE": {
+"x": 1.360638548843235,
+"y": 0.5199179242582431
+},
+"NW": {
+"x": 0.5199179242582431,
+"y": -1.360638548843235
+},
+"S": {
+"x": -1.360638548843235,
+"y": -0.5199179242582431
+},
+"SE": {
+"x": -0.5199179242582431,
+"y": 1.360638548843235
+},
+"SW": {
+"x": -1.360638548843235,
+"y": -0.5199179242582431
+},
+"W": {
+"x": 0.5199179242582431,
+"y": -1.360638548843235
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-31",
+"label": "Ice Storm · Ground 31"
+},
+"fps": 32.0,
+"id": "ground-31-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1229.764510972018,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.43476647267125373,
+"y": 2.471541207363771
+},
+"N": {
+"x": 2.471541207363771,
+"y": 0.43476647267125373
+},
+"NE": {
+"x": 2.471541207363771,
+"y": 0.43476647267125373
+},
+"NW": {
+"x": 0.43476647267125373,
+"y": -2.471541207363771
+},
+"S": {
+"x": -2.471541207363771,
+"y": -0.43476647267125373
+},
+"SE": {
+"x": -0.43476647267125373,
+"y": 2.471541207363771
+},
+"SW": {
+"x": -2.471541207363771,
+"y": -0.43476647267125373
+},
+"W": {
+"x": 0.43476647267125373,
+"y": -2.471541207363771
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-31",
+"label": "Ice Storm · Ground 31"
+},
+"fps": 32.0,
+"id": "ground-31-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1229.764510972018,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.43476647267125373,
+"y": 2.471541207363771
+},
+"N": {
+"x": 2.471541207363771,
+"y": 0.43476647267125373
+},
+"NE": {
+"x": 2.471541207363771,
+"y": 0.43476647267125373
+},
+"NW": {
+"x": 0.43476647267125373,
+"y": -2.471541207363771
+},
+"S": {
+"x": -2.471541207363771,
+"y": -0.43476647267125373
+},
+"SE": {
+"x": -0.43476647267125373,
+"y": 2.471541207363771
+},
+"SW": {
+"x": -2.471541207363771,
+"y": -0.43476647267125373
+},
+"W": {
+"x": 0.43476647267125373,
+"y": -2.471541207363771
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-32",
+"label": "Ice Storm · Ground 32"
+},
+"fps": 32.0,
+"id": "ground-32-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 893.0391923091463,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.5002248236465675,
+"y": 3.4589155123678212
+},
+"N": {
+"x": 3.4589155123678212,
+"y": 0.5002248236465675
+},
+"NE": {
+"x": 3.4589155123678212,
+"y": 0.5002248236465675
+},
+"NW": {
+"x": 0.5002248236465675,
+"y": -3.4589155123678212
+},
+"S": {
+"x": -3.4589155123678212,
+"y": -0.5002248236465675
+},
+"SE": {
+"x": -0.5002248236465675,
+"y": 3.4589155123678212
+},
+"SW": {
+"x": -3.4589155123678212,
+"y": -0.5002248236465675
+},
+"W": {
+"x": 0.5002248236465675,
+"y": -3.4589155123678212
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-32",
+"label": "Ice Storm · Ground 32"
+},
+"fps": 32.0,
+"id": "ground-32-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 893.0391923091463,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": -0.5002248236465675,
+"y": 3.4589155123678212
+},
+"N": {
+"x": 3.4589155123678212,
+"y": 0.5002248236465675
+},
+"NE": {
+"x": 3.4589155123678212,
+"y": 0.5002248236465675
+},
+"NW": {
+"x": 0.5002248236465675,
+"y": -3.4589155123678212
+},
+"S": {
+"x": -3.4589155123678212,
+"y": -0.5002248236465675
+},
+"SE": {
+"x": -0.5002248236465675,
+"y": 3.4589155123678212
+},
+"SW": {
+"x": -3.4589155123678212,
+"y": -0.5002248236465675
+},
+"W": {
+"x": 0.5002248236465675,
+"y": -3.4589155123678212
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-33",
+"label": "Ice Storm · Ground 33"
+},
+"fps": 32.0,
+"id": "ground-33-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 507.5244759154885,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.4775254274023609,
+"y": -3.446662039980583
+},
+"N": {
+"x": -3.446662039980583,
+"y": -0.4775254274023609
+},
+"NE": {
+"x": -3.446662039980583,
+"y": -0.4775254274023609
+},
+"NW": {
+"x": -0.4775254274023609,
+"y": 3.446662039980583
+},
+"S": {
+"x": 3.446662039980583,
+"y": 0.4775254274023609
+},
+"SE": {
+"x": 0.4775254274023609,
+"y": -3.446662039980583
+},
+"SW": {
+"x": 3.446662039980583,
+"y": 0.4775254274023609
+},
+"W": {
+"x": -0.4775254274023609,
+"y": 3.446662039980583
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-33",
+"label": "Ice Storm · Ground 33"
+},
+"fps": 32.0,
+"id": "ground-33-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 507.5244759154885,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.4775254274023609,
+"y": -3.446662039980583
+},
+"N": {
+"x": -3.446662039980583,
+"y": -0.4775254274023609
+},
+"NE": {
+"x": -3.446662039980583,
+"y": -0.4775254274023609
+},
+"NW": {
+"x": -0.4775254274023609,
+"y": 3.446662039980583
+},
+"S": {
+"x": 3.446662039980583,
+"y": 0.4775254274023609
+},
+"SE": {
+"x": 0.4775254274023609,
+"y": -3.446662039980583
+},
+"SW": {
+"x": 3.446662039980583,
+"y": 0.4775254274023609
+},
+"W": {
+"x": -0.4775254274023609,
+"y": 3.446662039980583
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-34",
+"label": "Ice Storm · Ground 34"
+},
+"fps": 32.0,
+"id": "ground-34-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 562.9928021085107,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5692591407911095,
+"y": -2.4016315970574396
+},
+"N": {
+"x": -2.4016315970574396,
+"y": -0.5692591407911095
+},
+"NE": {
+"x": -2.4016315970574396,
+"y": -0.5692591407911095
+},
+"NW": {
+"x": -0.5692591407911095,
+"y": 2.4016315970574396
+},
+"S": {
+"x": 2.4016315970574396,
+"y": 0.5692591407911095
+},
+"SE": {
+"x": 0.5692591407911095,
+"y": -2.4016315970574396
+},
+"SW": {
+"x": 2.4016315970574396,
+"y": 0.5692591407911095
+},
+"W": {
+"x": -0.5692591407911095,
+"y": 2.4016315970574396
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-34",
+"label": "Ice Storm · Ground 34"
+},
+"fps": 32.0,
+"id": "ground-34-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 562.9928021085107,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5692591407911095,
+"y": -2.4016315970574396
+},
+"N": {
+"x": -2.4016315970574396,
+"y": -0.5692591407911095
+},
+"NE": {
+"x": -2.4016315970574396,
+"y": -0.5692591407911095
+},
+"NW": {
+"x": -0.5692591407911095,
+"y": 2.4016315970574396
+},
+"S": {
+"x": 2.4016315970574396,
+"y": 0.5692591407911095
+},
+"SE": {
+"x": 0.5692591407911095,
+"y": -2.4016315970574396
+},
+"SW": {
+"x": 2.4016315970574396,
+"y": 0.5692591407911095
+},
+"W": {
+"x": -0.5692591407911095,
+"y": 2.4016315970574396
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-35",
+"label": "Ice Storm · Ground 35"
+},
+"fps": 32.0,
+"id": "ground-35-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 363.6355859362084,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5569385208942549,
+"y": -1.4553659378358137
+},
+"N": {
+"x": -1.4553659378358137,
+"y": -0.5569385208942549
+},
+"NE": {
+"x": -1.4553659378358137,
+"y": -0.5569385208942549
+},
+"NW": {
+"x": -0.5569385208942549,
+"y": 1.4553659378358137
+},
+"S": {
+"x": 1.4553659378358137,
+"y": 0.5569385208942549
+},
+"SE": {
+"x": 0.5569385208942549,
+"y": -1.4553659378358137
+},
+"SW": {
+"x": 1.4553659378358137,
+"y": 0.5569385208942549
+},
+"W": {
+"x": -0.5569385208942549,
+"y": 1.4553659378358137
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-35",
+"label": "Ice Storm · Ground 35"
+},
+"fps": 32.0,
+"id": "ground-35-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 363.6355859362084,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5569385208942549,
+"y": -1.4553659378358137
+},
+"N": {
+"x": -1.4553659378358137,
+"y": -0.5569385208942549
+},
+"NE": {
+"x": -1.4553659378358137,
+"y": -0.5569385208942549
+},
+"NW": {
+"x": -0.5569385208942549,
+"y": 1.4553659378358137
+},
+"S": {
+"x": 1.4553659378358137,
+"y": 0.5569385208942549
+},
+"SE": {
+"x": 0.5569385208942549,
+"y": -1.4553659378358137
+},
+"SW": {
+"x": 1.4553659378358137,
+"y": 0.5569385208942549
+},
+"W": {
+"x": -0.5569385208942549,
+"y": 1.4553659378358137
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-36",
+"label": "Ice Storm · Ground 36"
+},
+"fps": 32.0,
+"id": "ground-36-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 982.1261488195888,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5671054072236075,
+"y": -0.3741179426269952
+},
+"N": {
+"x": -0.3741179426269952,
+"y": -0.5671054072236075
+},
+"NE": {
+"x": -0.3741179426269952,
+"y": -0.5671054072236075
+},
+"NW": {
+"x": -0.5671054072236075,
+"y": 0.3741179426269952
+},
+"S": {
+"x": 0.3741179426269952,
+"y": 0.5671054072236075
+},
+"SE": {
+"x": 0.5671054072236075,
+"y": -0.3741179426269952
+},
+"SW": {
+"x": 0.3741179426269952,
+"y": 0.5671054072236075
+},
+"W": {
+"x": -0.5671054072236075,
+"y": 0.3741179426269952
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-36",
+"label": "Ice Storm · Ground 36"
+},
+"fps": 32.0,
+"id": "ground-36-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 982.1261488195888,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5671054072236075,
+"y": -0.3741179426269952
+},
+"N": {
+"x": -0.3741179426269952,
+"y": -0.5671054072236075
+},
+"NE": {
+"x": -0.3741179426269952,
+"y": -0.5671054072236075
+},
+"NW": {
+"x": -0.5671054072236075,
+"y": 0.3741179426269952
+},
+"S": {
+"x": 0.3741179426269952,
+"y": 0.5671054072236075
+},
+"SE": {
+"x": 0.5671054072236075,
+"y": -0.3741179426269952
+},
+"SW": {
+"x": 0.3741179426269952,
+"y": 0.5671054072236075
+},
+"W": {
+"x": -0.5671054072236075,
+"y": 0.3741179426269952
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-37",
+"label": "Ice Storm · Ground 37"
+},
+"fps": 32.0,
+"id": "ground-37-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 663.9318570159958,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.4511921853660169,
+"y": 0.367741346006369
+},
+"N": {
+"x": 0.367741346006369,
+"y": -0.4511921853660169
+},
+"NE": {
+"x": 0.367741346006369,
+"y": -0.4511921853660169
+},
+"NW": {
+"x": -0.4511921853660169,
+"y": -0.367741346006369
+},
+"S": {
+"x": -0.367741346006369,
+"y": 0.4511921853660169
+},
+"SE": {
+"x": 0.4511921853660169,
+"y": 0.367741346006369
+},
+"SW": {
+"x": -0.367741346006369,
+"y": 0.4511921853660169
+},
+"W": {
+"x": -0.4511921853660169,
+"y": -0.367741346006369
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-37",
+"label": "Ice Storm · Ground 37"
+},
+"fps": 32.0,
+"id": "ground-37-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 663.9318570159958,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.4511921853660169,
+"y": 0.367741346006369
+},
+"N": {
+"x": 0.367741346006369,
+"y": -0.4511921853660169
+},
+"NE": {
+"x": 0.367741346006369,
+"y": -0.4511921853660169
+},
+"NW": {
+"x": -0.4511921853660169,
+"y": -0.367741346006369
+},
+"S": {
+"x": -0.367741346006369,
+"y": 0.4511921853660169
+},
+"SE": {
+"x": 0.4511921853660169,
+"y": 0.367741346006369
+},
+"SW": {
+"x": -0.367741346006369,
+"y": 0.4511921853660169
+},
+"W": {
+"x": -0.4511921853660169,
+"y": -0.367741346006369
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-38",
+"label": "Ice Storm · Ground 38"
+},
+"fps": 32.0,
+"id": "ground-38-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 328.0409041690291,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.6317332711902054,
+"y": 1.421200732287525
+},
+"N": {
+"x": 1.421200732287525,
+"y": -0.6317332711902054
+},
+"NE": {
+"x": 1.421200732287525,
+"y": -0.6317332711902054
+},
+"NW": {
+"x": -0.6317332711902054,
+"y": -1.421200732287525
+},
+"S": {
+"x": -1.421200732287525,
+"y": 0.6317332711902054
+},
+"SE": {
+"x": 0.6317332711902054,
+"y": 1.421200732287525
+},
+"SW": {
+"x": -1.421200732287525,
+"y": 0.6317332711902054
+},
+"W": {
+"x": -0.6317332711902054,
+"y": -1.421200732287525
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-38",
+"label": "Ice Storm · Ground 38"
+},
+"fps": 32.0,
+"id": "ground-38-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 328.0409041690291,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.6317332711902054,
+"y": 1.421200732287525
+},
+"N": {
+"x": 1.421200732287525,
+"y": -0.6317332711902054
+},
+"NE": {
+"x": 1.421200732287525,
+"y": -0.6317332711902054
+},
+"NW": {
+"x": -0.6317332711902054,
+"y": -1.421200732287525
+},
+"S": {
+"x": -1.421200732287525,
+"y": 0.6317332711902054
+},
+"SE": {
+"x": 0.6317332711902054,
+"y": 1.421200732287525
+},
+"SW": {
+"x": -1.421200732287525,
+"y": 0.6317332711902054
+},
+"W": {
+"x": -0.6317332711902054,
+"y": -1.421200732287525
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-39",
+"label": "Ice Storm · Ground 39"
+},
+"fps": 32.0,
+"id": "ground-39-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 360.5555316198661,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5848991307000688,
+"y": 2.4483493040952453
+},
+"N": {
+"x": 2.4483493040952453,
+"y": -0.5848991307000688
+},
+"NE": {
+"x": 2.4483493040952453,
+"y": -0.5848991307000688
+},
+"NW": {
+"x": -0.5848991307000688,
+"y": -2.4483493040952453
+},
+"S": {
+"x": -2.4483493040952453,
+"y": 0.5848991307000688
+},
+"SE": {
+"x": 0.5848991307000688,
+"y": 2.4483493040952453
+},
+"SW": {
+"x": -2.4483493040952453,
+"y": 0.5848991307000688
+},
+"W": {
+"x": -0.5848991307000688,
+"y": -2.4483493040952453
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-39",
+"label": "Ice Storm · Ground 39"
+},
+"fps": 32.0,
+"id": "ground-39-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 360.5555316198661,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.5848991307000688,
+"y": 2.4483493040952453
+},
+"N": {
+"x": 2.4483493040952453,
+"y": -0.5848991307000688
+},
+"NE": {
+"x": 2.4483493040952453,
+"y": -0.5848991307000688
+},
+"NW": {
+"x": -0.5848991307000688,
+"y": -2.4483493040952453
+},
+"S": {
+"x": -2.4483493040952453,
+"y": 0.5848991307000688
+},
+"SE": {
+"x": 0.5848991307000688,
+"y": 2.4483493040952453
+},
+"SW": {
+"x": -2.4483493040952453,
+"y": 0.5848991307000688
+},
+"W": {
+"x": -0.5848991307000688,
+"y": -2.4483493040952453
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-40",
+"label": "Ice Storm · Ground 40"
+},
+"fps": 32.0,
+"id": "ground-40-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 869.9674574563687,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.4224935736998304,
+"y": 3.482286414507871
+},
+"N": {
+"x": 3.482286414507871,
+"y": -0.4224935736998304
+},
+"NE": {
+"x": 3.482286414507871,
+"y": -0.4224935736998304
+},
+"NW": {
+"x": -0.4224935736998304,
+"y": -3.482286414507871
+},
+"S": {
+"x": -3.482286414507871,
+"y": 0.4224935736998304
+},
+"SE": {
+"x": 0.4224935736998304,
+"y": 3.482286414507871
+},
+"SW": {
+"x": -3.482286414507871,
+"y": 0.4224935736998304
+},
+"W": {
+"x": -0.4224935736998304,
+"y": -3.482286414507871
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-40",
+"label": "Ice Storm · Ground 40"
+},
+"fps": 32.0,
+"id": "ground-40-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 869.9674574563687,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 0.4224935736998304,
+"y": 3.482286414507871
+},
+"N": {
+"x": 3.482286414507871,
+"y": -0.4224935736998304
+},
+"NE": {
+"x": 3.482286414507871,
+"y": -0.4224935736998304
+},
+"NW": {
+"x": -0.4224935736998304,
+"y": -3.482286414507871
+},
+"S": {
+"x": -3.482286414507871,
+"y": 0.4224935736998304
+},
+"SE": {
+"x": 0.4224935736998304,
+"y": 3.482286414507871
+},
+"SW": {
+"x": -3.482286414507871,
+"y": 0.4224935736998304
+},
+"W": {
+"x": -0.4224935736998304,
+"y": -3.482286414507871
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-41",
+"label": "Ice Storm · Ground 41"
+},
+"fps": 32.0,
+"id": "ground-41-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 869.5699382201383,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.381806933972257,
+"y": -3.445940565159981
+},
+"N": {
+"x": -3.445940565159981,
+"y": -1.381806933972257
+},
+"NE": {
+"x": -3.445940565159981,
+"y": -1.381806933972257
+},
+"NW": {
+"x": -1.381806933972257,
+"y": 3.445940565159981
+},
+"S": {
+"x": 3.445940565159981,
+"y": 1.381806933972257
+},
+"SE": {
+"x": 1.381806933972257,
+"y": -3.445940565159981
+},
+"SW": {
+"x": 3.445940565159981,
+"y": 1.381806933972257
+},
+"W": {
+"x": -1.381806933972257,
+"y": 3.445940565159981
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-41",
+"label": "Ice Storm · Ground 41"
+},
+"fps": 32.0,
+"id": "ground-41-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 869.5699382201383,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.381806933972257,
+"y": -3.445940565159981
+},
+"N": {
+"x": -3.445940565159981,
+"y": -1.381806933972257
+},
+"NE": {
+"x": -3.445940565159981,
+"y": -1.381806933972257
+},
+"NW": {
+"x": -1.381806933972257,
+"y": 3.445940565159981
+},
+"S": {
+"x": 3.445940565159981,
+"y": 1.381806933972257
+},
+"SE": {
+"x": 1.381806933972257,
+"y": -3.445940565159981
+},
+"SW": {
+"x": 3.445940565159981,
+"y": 1.381806933972257
+},
+"W": {
+"x": -1.381806933972257,
+"y": 3.445940565159981
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-42",
+"label": "Ice Storm · Ground 42"
+},
+"fps": 32.0,
+"id": "ground-42-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 955.570029827868,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.3922943068795577,
+"y": -2.6632750125389064
+},
+"N": {
+"x": -2.6632750125389064,
+"y": -1.3922943068795577
+},
+"NE": {
+"x": -2.6632750125389064,
+"y": -1.3922943068795577
+},
+"NW": {
+"x": -1.3922943068795577,
+"y": 2.6632750125389064
+},
+"S": {
+"x": 2.6632750125389064,
+"y": 1.3922943068795577
+},
+"SE": {
+"x": 1.3922943068795577,
+"y": -2.6632750125389064
+},
+"SW": {
+"x": 2.6632750125389064,
+"y": 1.3922943068795577
+},
+"W": {
+"x": -1.3922943068795577,
+"y": 2.6632750125389064
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-42",
+"label": "Ice Storm · Ground 42"
+},
+"fps": 32.0,
+"id": "ground-42-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 955.570029827868,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.3922943068795577,
+"y": -2.6632750125389064
+},
+"N": {
+"x": -2.6632750125389064,
+"y": -1.3922943068795577
+},
+"NE": {
+"x": -2.6632750125389064,
+"y": -1.3922943068795577
+},
+"NW": {
+"x": -1.3922943068795577,
+"y": 2.6632750125389064
+},
+"S": {
+"x": 2.6632750125389064,
+"y": 1.3922943068795577
+},
+"SE": {
+"x": 1.3922943068795577,
+"y": -2.6632750125389064
+},
+"SW": {
+"x": 2.6632750125389064,
+"y": 1.3922943068795577
+},
+"W": {
+"x": -1.3922943068795577,
+"y": 2.6632750125389064
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-43",
+"label": "Ice Storm · Ground 43"
+},
+"fps": 32.0,
+"id": "ground-43-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 506.5562479012442,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.6446856476002267,
+"y": -1.505699442081459
+},
+"N": {
+"x": -1.505699442081459,
+"y": -1.6446856476002267
+},
+"NE": {
+"x": -1.505699442081459,
+"y": -1.6446856476002267
+},
+"NW": {
+"x": -1.6446856476002267,
+"y": 1.505699442081459
+},
+"S": {
+"x": 1.505699442081459,
+"y": 1.6446856476002267
+},
+"SE": {
+"x": 1.6446856476002267,
+"y": -1.505699442081459
+},
+"SW": {
+"x": 1.505699442081459,
+"y": 1.6446856476002267
+},
+"W": {
+"x": -1.6446856476002267,
+"y": 1.505699442081459
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-43",
+"label": "Ice Storm · Ground 43"
+},
+"fps": 32.0,
+"id": "ground-43-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 506.5562479012442,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.6446856476002267,
+"y": -1.505699442081459
+},
+"N": {
+"x": -1.505699442081459,
+"y": -1.6446856476002267
+},
+"NE": {
+"x": -1.505699442081459,
+"y": -1.6446856476002267
+},
+"NW": {
+"x": -1.6446856476002267,
+"y": 1.505699442081459
+},
+"S": {
+"x": 1.505699442081459,
+"y": 1.6446856476002267
+},
+"SE": {
+"x": 1.6446856476002267,
+"y": -1.505699442081459
+},
+"SW": {
+"x": 1.505699442081459,
+"y": 1.6446856476002267
+},
+"W": {
+"x": -1.6446856476002267,
+"y": 1.505699442081459
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-44",
+"label": "Ice Storm · Ground 44"
+},
+"fps": 32.0,
+"id": "ground-44-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 882.5028228966403,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.6543942538894043,
+"y": -0.6343986876549025
+},
+"N": {
+"x": -0.6343986876549025,
+"y": -1.6543942538894043
+},
+"NE": {
+"x": -0.6343986876549025,
+"y": -1.6543942538894043
+},
+"NW": {
+"x": -1.6543942538894043,
+"y": 0.6343986876549025
+},
+"S": {
+"x": 0.6343986876549025,
+"y": 1.6543942538894043
+},
+"SE": {
+"x": 1.6543942538894043,
+"y": -0.6343986876549025
+},
+"SW": {
+"x": 0.6343986876549025,
+"y": 1.6543942538894043
+},
+"W": {
+"x": -1.6543942538894043,
+"y": 0.6343986876549025
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-44",
+"label": "Ice Storm · Ground 44"
+},
+"fps": 32.0,
+"id": "ground-44-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 882.5028228966403,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.6543942538894043,
+"y": -0.6343986876549025
+},
+"N": {
+"x": -0.6343986876549025,
+"y": -1.6543942538894043
+},
+"NE": {
+"x": -0.6343986876549025,
+"y": -1.6543942538894043
+},
+"NW": {
+"x": -1.6543942538894043,
+"y": 0.6343986876549025
+},
+"S": {
+"x": 0.6343986876549025,
+"y": 1.6543942538894043
+},
+"SE": {
+"x": 1.6543942538894043,
+"y": -0.6343986876549025
+},
+"SW": {
+"x": 0.6343986876549025,
+"y": 1.6543942538894043
+},
+"W": {
+"x": -1.6543942538894043,
+"y": 0.6343986876549025
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-45",
+"label": "Ice Storm · Ground 45"
+},
+"fps": 32.0,
+"id": "ground-45-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 955.9337871417029,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.6221212983516125,
+"y": 0.6386361793776814
+},
+"N": {
+"x": 0.6386361793776814,
+"y": -1.6221212983516125
+},
+"NE": {
+"x": 0.6386361793776814,
+"y": -1.6221212983516125
+},
+"NW": {
+"x": -1.6221212983516125,
+"y": -0.6386361793776814
+},
+"S": {
+"x": -0.6386361793776814,
+"y": 1.6221212983516125
+},
+"SE": {
+"x": 1.6221212983516125,
+"y": 0.6386361793776814
+},
+"SW": {
+"x": -0.6386361793776814,
+"y": 1.6221212983516125
+},
+"W": {
+"x": -1.6221212983516125,
+"y": -0.6386361793776814
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-45",
+"label": "Ice Storm · Ground 45"
+},
+"fps": 32.0,
+"id": "ground-45-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 955.9337871417029,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.6221212983516125,
+"y": 0.6386361793776814
+},
+"N": {
+"x": 0.6386361793776814,
+"y": -1.6221212983516125
+},
+"NE": {
+"x": 0.6386361793776814,
+"y": -1.6221212983516125
+},
+"NW": {
+"x": -1.6221212983516125,
+"y": -0.6386361793776814
+},
+"S": {
+"x": -0.6386361793776814,
+"y": 1.6221212983516125
+},
+"SE": {
+"x": 1.6221212983516125,
+"y": 0.6386361793776814
+},
+"SW": {
+"x": -0.6386361793776814,
+"y": 1.6221212983516125
+},
+"W": {
+"x": -1.6221212983516125,
+"y": -0.6386361793776814
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-46",
+"label": "Ice Storm · Ground 46"
+},
+"fps": 32.0,
+"id": "ground-46-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 807.544718227291,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.397612265990756,
+"y": 1.406381319992215
+},
+"N": {
+"x": 1.406381319992215,
+"y": -1.397612265990756
+},
+"NE": {
+"x": 1.406381319992215,
+"y": -1.397612265990756
+},
+"NW": {
+"x": -1.397612265990756,
+"y": -1.406381319992215
+},
+"S": {
+"x": -1.406381319992215,
+"y": 1.397612265990756
+},
+"SE": {
+"x": 1.397612265990756,
+"y": 1.406381319992215
+},
+"SW": {
+"x": -1.406381319992215,
+"y": 1.397612265990756
+},
+"W": {
+"x": -1.397612265990756,
+"y": -1.406381319992215
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-46",
+"label": "Ice Storm · Ground 46"
+},
+"fps": 32.0,
+"id": "ground-46-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 807.544718227291,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.397612265990756,
+"y": 1.406381319992215
+},
+"N": {
+"x": 1.406381319992215,
+"y": -1.397612265990756
+},
+"NE": {
+"x": 1.406381319992215,
+"y": -1.397612265990756
+},
+"NW": {
+"x": -1.397612265990756,
+"y": -1.406381319992215
+},
+"S": {
+"x": -1.406381319992215,
+"y": 1.397612265990756
+},
+"SE": {
+"x": 1.397612265990756,
+"y": 1.406381319992215
+},
+"SW": {
+"x": -1.406381319992215,
+"y": 1.397612265990756
+},
+"W": {
+"x": -1.397612265990756,
+"y": -1.406381319992215
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-47",
+"label": "Ice Storm · Ground 47"
+},
+"fps": 32.0,
+"id": "ground-47-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1188.1526237903015,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.635184314209073,
+"y": 2.672682457722317
+},
+"N": {
+"x": 2.672682457722317,
+"y": -1.635184314209073
+},
+"NE": {
+"x": 2.672682457722317,
+"y": -1.635184314209073
+},
+"NW": {
+"x": -1.635184314209073,
+"y": -2.672682457722317
+},
+"S": {
+"x": -2.672682457722317,
+"y": 1.635184314209073
+},
+"SE": {
+"x": 1.635184314209073,
+"y": 2.672682457722317
+},
+"SW": {
+"x": -2.672682457722317,
+"y": 1.635184314209073
+},
+"W": {
+"x": -1.635184314209073,
+"y": -2.672682457722317
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-47",
+"label": "Ice Storm · Ground 47"
+},
+"fps": 32.0,
+"id": "ground-47-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1188.1526237903015,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.635184314209073,
+"y": 2.672682457722317
+},
+"N": {
+"x": 2.672682457722317,
+"y": -1.635184314209073
+},
+"NE": {
+"x": 2.672682457722317,
+"y": -1.635184314209073
+},
+"NW": {
+"x": -1.635184314209073,
+"y": -2.672682457722317
+},
+"S": {
+"x": -2.672682457722317,
+"y": 1.635184314209073
+},
+"SE": {
+"x": 1.635184314209073,
+"y": 2.672682457722317
+},
+"SW": {
+"x": -2.672682457722317,
+"y": 1.635184314209073
+},
+"W": {
+"x": -1.635184314209073,
+"y": -2.672682457722317
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-48",
+"label": "Ice Storm · Ground 48"
+},
+"fps": 32.0,
+"id": "ground-48-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 694.9492737294349,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.3983247294243484,
+"y": 3.351184188893967
+},
+"N": {
+"x": 3.351184188893967,
+"y": -1.3983247294243484
+},
+"NE": {
+"x": 3.351184188893967,
+"y": -1.3983247294243484
+},
+"NW": {
+"x": -1.3983247294243484,
+"y": -3.351184188893967
+},
+"S": {
+"x": -3.351184188893967,
+"y": 1.3983247294243484
+},
+"SE": {
+"x": 1.3983247294243484,
+"y": 3.351184188893967
+},
+"SW": {
+"x": -3.351184188893967,
+"y": 1.3983247294243484
+},
+"W": {
+"x": -1.3983247294243484,
+"y": -3.351184188893967
+}
+}
+}, {
+"assetId": "weather.ice.ground0.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-48",
+"label": "Ice Storm · Ground 48"
+},
+"fps": 32.0,
+"id": "ground-48-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 694.9492737294349,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 1.3983247294243484,
+"y": 3.351184188893967
+},
+"N": {
+"x": 3.351184188893967,
+"y": -1.3983247294243484
+},
+"NE": {
+"x": 3.351184188893967,
+"y": -1.3983247294243484
+},
+"NW": {
+"x": -1.3983247294243484,
+"y": -3.351184188893967
+},
+"S": {
+"x": -3.351184188893967,
+"y": 1.3983247294243484
+},
+"SE": {
+"x": 1.3983247294243484,
+"y": 3.351184188893967
+},
+"SW": {
+"x": -3.351184188893967,
+"y": 1.3983247294243484
+},
+"W": {
+"x": -1.3983247294243484,
+"y": -3.351184188893967
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-50",
+"label": "Ice Storm · Ground 50"
+},
+"fps": 32.0,
+"id": "ground-50-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 267.0998320354556,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.360638548843235,
+"y": -2.438515313097014
+},
+"N": {
+"x": -2.438515313097014,
+"y": -2.360638548843235
+},
+"NE": {
+"x": -2.438515313097014,
+"y": -2.360638548843235
+},
+"NW": {
+"x": -2.360638548843235,
+"y": 2.438515313097014
+},
+"S": {
+"x": 2.438515313097014,
+"y": 2.360638548843235
+},
+"SE": {
+"x": 2.360638548843235,
+"y": -2.438515313097014
+},
+"SW": {
+"x": 2.438515313097014,
+"y": 2.360638548843235
+},
+"W": {
+"x": -2.360638548843235,
+"y": 2.438515313097014
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-50",
+"label": "Ice Storm · Ground 50"
+},
+"fps": 32.0,
+"id": "ground-50-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 267.0998320354556,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.360638548843235,
+"y": -2.438515313097014
+},
+"N": {
+"x": -2.438515313097014,
+"y": -2.360638548843235
+},
+"NE": {
+"x": -2.438515313097014,
+"y": -2.360638548843235
+},
+"NW": {
+"x": -2.360638548843235,
+"y": 2.438515313097014
+},
+"S": {
+"x": 2.438515313097014,
+"y": 2.360638548843235
+},
+"SE": {
+"x": 2.360638548843235,
+"y": -2.438515313097014
+},
+"SW": {
+"x": 2.438515313097014,
+"y": 2.360638548843235
+},
+"W": {
+"x": -2.360638548843235,
+"y": 2.438515313097014
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-51",
+"label": "Ice Storm · Ground 51"
+},
+"fps": 32.0,
+"id": "ground-51-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 374.6029031208309,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.471541207363771,
+"y": -1.6404642466779478
+},
+"N": {
+"x": -1.6404642466779478,
+"y": -2.471541207363771
+},
+"NE": {
+"x": -1.6404642466779478,
+"y": -2.471541207363771
+},
+"NW": {
+"x": -2.471541207363771,
+"y": 1.6404642466779478
+},
+"S": {
+"x": 1.6404642466779478,
+"y": 2.471541207363771
+},
+"SE": {
+"x": 2.471541207363771,
+"y": -1.6404642466779478
+},
+"SW": {
+"x": 1.6404642466779478,
+"y": 2.471541207363771
+},
+"W": {
+"x": -2.471541207363771,
+"y": 1.6404642466779478
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-51",
+"label": "Ice Storm · Ground 51"
+},
+"fps": 32.0,
+"id": "ground-51-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 374.6029031208309,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.471541207363771,
+"y": -1.6404642466779478
+},
+"N": {
+"x": -1.6404642466779478,
+"y": -2.471541207363771
+},
+"NE": {
+"x": -1.6404642466779478,
+"y": -2.471541207363771
+},
+"NW": {
+"x": -2.471541207363771,
+"y": 1.6404642466779478
+},
+"S": {
+"x": 1.6404642466779478,
+"y": 2.471541207363771
+},
+"SE": {
+"x": 2.471541207363771,
+"y": -1.6404642466779478
+},
+"SW": {
+"x": 1.6404642466779478,
+"y": 2.471541207363771
+},
+"W": {
+"x": -2.471541207363771,
+"y": 1.6404642466779478
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-52",
+"label": "Ice Storm · Ground 52"
+},
+"fps": 32.0,
+"id": "ground-52-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 141.77615762946516,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.4589155123678212,
+"y": -0.36795135394640965
+},
+"N": {
+"x": -0.36795135394640965,
+"y": -2.4589155123678212
+},
+"NE": {
+"x": -0.36795135394640965,
+"y": -2.4589155123678212
+},
+"NW": {
+"x": -2.4589155123678212,
+"y": 0.36795135394640965
+},
+"S": {
+"x": 0.36795135394640965,
+"y": 2.4589155123678212
+},
+"SE": {
+"x": 2.4589155123678212,
+"y": -0.36795135394640965
+},
+"SW": {
+"x": 0.36795135394640965,
+"y": 2.4589155123678212
+},
+"W": {
+"x": -2.4589155123678212,
+"y": 0.36795135394640965
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-52",
+"label": "Ice Storm · Ground 52"
+},
+"fps": 32.0,
+"id": "ground-52-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 141.77615762946516,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.4589155123678212,
+"y": -0.36795135394640965
+},
+"N": {
+"x": -0.36795135394640965,
+"y": -2.4589155123678212
+},
+"NE": {
+"x": -0.36795135394640965,
+"y": -2.4589155123678212
+},
+"NW": {
+"x": -2.4589155123678212,
+"y": 0.36795135394640965
+},
+"S": {
+"x": 0.36795135394640965,
+"y": 2.4589155123678212
+},
+"SE": {
+"x": 2.4589155123678212,
+"y": -0.36795135394640965
+},
+"SW": {
+"x": 0.36795135394640965,
+"y": 2.4589155123678212
+},
+"W": {
+"x": -2.4589155123678212,
+"y": 0.36795135394640965
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-53",
+"label": "Ice Storm · Ground 53"
+},
+"fps": 32.0,
+"id": "ground-53-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 89.96406558253511,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.553337960019417,
+"y": 0.6703758275394648
+},
+"N": {
+"x": 0.6703758275394648,
+"y": -2.553337960019417
+},
+"NE": {
+"x": 0.6703758275394648,
+"y": -2.553337960019417
+},
+"NW": {
+"x": -2.553337960019417,
+"y": -0.6703758275394648
+},
+"S": {
+"x": -0.6703758275394648,
+"y": 2.553337960019417
+},
+"SE": {
+"x": 2.553337960019417,
+"y": 0.6703758275394648
+},
+"SW": {
+"x": -0.6703758275394648,
+"y": 2.553337960019417
+},
+"W": {
+"x": -2.553337960019417,
+"y": -0.6703758275394648
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-53",
+"label": "Ice Storm · Ground 53"
+},
+"fps": 32.0,
+"id": "ground-53-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 89.96406558253511,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.553337960019417,
+"y": 0.6703758275394648
+},
+"N": {
+"x": 0.6703758275394648,
+"y": -2.553337960019417
+},
+"NE": {
+"x": 0.6703758275394648,
+"y": -2.553337960019417
+},
+"NW": {
+"x": -2.553337960019417,
+"y": -0.6703758275394648
+},
+"S": {
+"x": -0.6703758275394648,
+"y": 2.553337960019417
+},
+"SE": {
+"x": 2.553337960019417,
+"y": 0.6703758275394648
+},
+"SW": {
+"x": -0.6703758275394648,
+"y": 2.553337960019417
+},
+"W": {
+"x": -2.553337960019417,
+"y": -0.6703758275394648
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-54",
+"label": "Ice Storm · Ground 54"
+},
+"fps": 32.0,
+"id": "ground-54-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1086.6209654182055,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.5983684029425604,
+"y": 1.3771140505452422
+},
+"N": {
+"x": 1.3771140505452422,
+"y": -2.5983684029425604
+},
+"NE": {
+"x": 1.3771140505452422,
+"y": -2.5983684029425604
+},
+"NW": {
+"x": -2.5983684029425604,
+"y": -1.3771140505452422
+},
+"S": {
+"x": -1.3771140505452422,
+"y": 2.5983684029425604
+},
+"SE": {
+"x": 2.5983684029425604,
+"y": 1.3771140505452422
+},
+"SW": {
+"x": -1.3771140505452422,
+"y": 2.5983684029425604
+},
+"W": {
+"x": -2.5983684029425604,
+"y": -1.3771140505452422
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-54",
+"label": "Ice Storm · Ground 54"
+},
+"fps": 32.0,
+"id": "ground-54-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 1086.6209654182055,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.5983684029425604,
+"y": 1.3771140505452422
+},
+"N": {
+"x": 1.3771140505452422,
+"y": -2.5983684029425604
+},
+"NE": {
+"x": 1.3771140505452422,
+"y": -2.5983684029425604
+},
+"NW": {
+"x": -2.5983684029425604,
+"y": -1.3771140505452422
+},
+"S": {
+"x": -1.3771140505452422,
+"y": 2.5983684029425604
+},
+"SE": {
+"x": 2.5983684029425604,
+"y": 1.3771140505452422
+},
+"SW": {
+"x": -1.3771140505452422,
+"y": 2.5983684029425604
+},
+"W": {
+"x": -2.5983684029425604,
+"y": -1.3771140505452422
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-55",
+"label": "Ice Storm · Ground 55"
+},
+"fps": 32.0,
+"id": "ground-55-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 21.302869163264404,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.5446340621641865,
+"y": 2.453095625214337
+},
+"N": {
+"x": 2.453095625214337,
+"y": -2.5446340621641865
+},
+"NE": {
+"x": 2.453095625214337,
+"y": -2.5446340621641865
+},
+"NW": {
+"x": -2.5446340621641865,
+"y": -2.453095625214337
+},
+"S": {
+"x": -2.453095625214337,
+"y": 2.5446340621641865
+},
+"SE": {
+"x": 2.5446340621641865,
+"y": 2.453095625214337
+},
+"SW": {
+"x": -2.453095625214337,
+"y": 2.5446340621641865
+},
+"W": {
+"x": -2.5446340621641865,
+"y": -2.453095625214337
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-55",
+"label": "Ice Storm · Ground 55"
+},
+"fps": 32.0,
+"id": "ground-55-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 21.302869163264404,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 2.5446340621641865,
+"y": 2.453095625214337
+},
+"N": {
+"x": 2.453095625214337,
+"y": -2.5446340621641865
+},
+"NE": {
+"x": 2.453095625214337,
+"y": -2.5446340621641865
+},
+"NW": {
+"x": -2.5446340621641865,
+"y": -2.453095625214337
+},
+"S": {
+"x": -2.453095625214337,
+"y": 2.5446340621641865
+},
+"SE": {
+"x": 2.5446340621641865,
+"y": 2.453095625214337
+},
+"SW": {
+"x": -2.453095625214337,
+"y": 2.5446340621641865
+},
+"W": {
+"x": -2.5446340621641865,
+"y": -2.453095625214337
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-59",
+"label": "Ice Storm · Ground 59"
+},
+"fps": 32.0,
+"id": "ground-59-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 997.6475036364718,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.4483493040952453,
+"y": -1.508810419546717
+},
+"N": {
+"x": -1.508810419546717,
+"y": -3.4483493040952453
+},
+"NE": {
+"x": -1.508810419546717,
+"y": -3.4483493040952453
+},
+"NW": {
+"x": -3.4483493040952453,
+"y": 1.508810419546717
+},
+"S": {
+"x": 1.508810419546717,
+"y": 3.4483493040952453
+},
+"SE": {
+"x": 3.4483493040952453,
+"y": -1.508810419546717
+},
+"SW": {
+"x": 1.508810419546717,
+"y": 3.4483493040952453
+},
+"W": {
+"x": -3.4483493040952453,
+"y": 1.508810419546717
+}
+}
+}, {
+"assetId": "weather.ice.ground1.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-59",
+"label": "Ice Storm · Ground 59"
+},
+"fps": 32.0,
+"id": "ground-59-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 997.6475036364718,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.4483493040952453,
+"y": -1.508810419546717
+},
+"N": {
+"x": -1.508810419546717,
+"y": -3.4483493040952453
+},
+"NE": {
+"x": -1.508810419546717,
+"y": -3.4483493040952453
+},
+"NW": {
+"x": -3.4483493040952453,
+"y": 1.508810419546717
+},
+"S": {
+"x": 1.508810419546717,
+"y": 3.4483493040952453
+},
+"SE": {
+"x": 3.4483493040952453,
+"y": -1.508810419546717
+},
+"SW": {
+"x": 1.508810419546717,
+"y": 3.4483493040952453
+},
+"W": {
+"x": -3.4483493040952453,
+"y": 1.508810419546717
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-60",
+"label": "Ice Storm · Ground 60"
+},
+"fps": 32.0,
+"id": "ground-60-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 332.77629796884867,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.482286414507871,
+"y": -0.33262734117424775
+},
+"N": {
+"x": -0.33262734117424775,
+"y": -3.482286414507871
+},
+"NE": {
+"x": -0.33262734117424775,
+"y": -3.482286414507871
+},
+"NW": {
+"x": -3.482286414507871,
+"y": 0.33262734117424775
+},
+"S": {
+"x": 0.33262734117424775,
+"y": 3.482286414507871
+},
+"SE": {
+"x": 3.482286414507871,
+"y": -0.33262734117424775
+},
+"SW": {
+"x": 0.33262734117424775,
+"y": 3.482286414507871
+},
+"W": {
+"x": -3.482286414507871,
+"y": 0.33262734117424775
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-60",
+"label": "Ice Storm · Ground 60"
+},
+"fps": 32.0,
+"id": "ground-60-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 332.77629796884867,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.482286414507871,
+"y": -0.33262734117424775
+},
+"N": {
+"x": -0.33262734117424775,
+"y": -3.482286414507871
+},
+"NE": {
+"x": -0.33262734117424775,
+"y": -3.482286414507871
+},
+"NW": {
+"x": -3.482286414507871,
+"y": 0.33262734117424775
+},
+"S": {
+"x": 0.33262734117424775,
+"y": 3.482286414507871
+},
+"SE": {
+"x": 3.482286414507871,
+"y": -0.33262734117424775
+},
+"SW": {
+"x": 0.33262734117424775,
+"y": 3.482286414507871
+},
+"W": {
+"x": -3.482286414507871,
+"y": 0.33262734117424775
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-61",
+"label": "Ice Storm · Ground 61"
+},
+"fps": 32.0,
+"id": "ground-61-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 390.7766707652627,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.554059434840019,
+"y": 0.5913868756248121
+},
+"N": {
+"x": 0.5913868756248121,
+"y": -3.554059434840019
+},
+"NE": {
+"x": 0.5913868756248121,
+"y": -3.554059434840019
+},
+"NW": {
+"x": -3.554059434840019,
+"y": -0.5913868756248121
+},
+"S": {
+"x": -0.5913868756248121,
+"y": 3.554059434840019
+},
+"SE": {
+"x": 3.554059434840019,
+"y": 0.5913868756248121
+},
+"SW": {
+"x": -0.5913868756248121,
+"y": 3.554059434840019
+},
+"W": {
+"x": -3.554059434840019,
+"y": -0.5913868756248121
+}
+}
+}, {
+"assetId": "weather.ice.ground2.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-61",
+"label": "Ice Storm · Ground 61"
+},
+"fps": 32.0,
+"id": "ground-61-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 390.7766707652627,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.554059434840019,
+"y": 0.5913868756248121
+},
+"N": {
+"x": 0.5913868756248121,
+"y": -3.554059434840019
+},
+"NE": {
+"x": 0.5913868756248121,
+"y": -3.554059434840019
+},
+"NW": {
+"x": -3.554059434840019,
+"y": -0.5913868756248121
+},
+"S": {
+"x": -0.5913868756248121,
+"y": 3.554059434840019
+},
+"SE": {
+"x": 3.554059434840019,
+"y": 0.5913868756248121
+},
+"SW": {
+"x": -0.5913868756248121,
+"y": 3.554059434840019
+},
+"W": {
+"x": -3.554059434840019,
+"y": -0.5913868756248121
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.back",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "behind_body",
+"effectGroup": {
+"id": "ground-62",
+"label": "Ice Storm · Ground 62"
+},
+"fps": 32.0,
+"id": "ground-62-back",
+"scale": 0.7692307692307692,
+"startOffsetMs": 287.5807216423709,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.3367249874610936,
+"y": 1.597571253404385
+},
+"N": {
+"x": 1.597571253404385,
+"y": -3.3367249874610936
+},
+"NE": {
+"x": 1.597571253404385,
+"y": -3.3367249874610936
+},
+"NW": {
+"x": -3.3367249874610936,
+"y": -1.597571253404385
+},
+"S": {
+"x": -1.597571253404385,
+"y": 3.3367249874610936
+},
+"SE": {
+"x": 3.3367249874610936,
+"y": 1.597571253404385
+},
+"SW": {
+"x": -1.597571253404385,
+"y": 3.3367249874610936
+},
+"W": {
+"x": -3.3367249874610936,
+"y": -1.597571253404385
+}
+}
+}, {
+"assetId": "weather.ice.ground3.fall.front",
+"attachment": "area_ground",
+"composition": "clump",
+"depth": "front_body",
+"effectGroup": {
+"id": "ground-62",
+"label": "Ice Storm · Ground 62"
+},
+"fps": 32.0,
+"id": "ground-62-front",
+"scale": 0.7692307692307692,
+"startOffsetMs": 287.5807216423709,
+"viewFacing": "E",
+"worldOffsetsByFacing": {
+"E": {
+"x": 3.3367249874610936,
+"y": 1.597571253404385
+},
+"N": {
+"x": 1.597571253404385,
+"y": -3.3367249874610936
+},
+"NE": {
+"x": 1.597571253404385,
+"y": -3.3367249874610936
+},
+"NW": {
+"x": -3.3367249874610936,
+"y": -1.597571253404385
+},
+"S": {
+"x": -1.597571253404385,
+"y": 3.3367249874610936
+},
+"SE": {
+"x": 3.3367249874610936,
+"y": 1.597571253404385
+},
+"SW": {
+"x": -1.597571253404385,
+"y": 3.3367249874610936
+},
+"W": {
+"x": -3.3367249874610936,
+"y": -1.597571253404385
+}
+}
+}, {
+"assetId": "weather.ice.contact0.fall.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "recipient",
+"label": "Ice Storm · Recipient"
+},
+"fps": 32.0,
+"id": "recipient-back",
+"scale": 0.7692307692307692,
+"viewFacing": "E"
+}, {
+"assetId": "weather.ice.contact0.fall.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "recipient",
+"label": "Ice Storm · Recipient"
+},
+"fps": 32.0,
+"id": "recipient-front",
+"scale": 0.7692307692307692,
+"viewFacing": "E"
+}]
+}
+notes = "Plays its imported Factory staging (coverage fill)."

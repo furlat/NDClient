@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_crv2w"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_cyud1"]
+
+[sub_resource type="Resource" id="Resource_tx7lr"]
+script = ExtResource("1_cyud1")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.status.transmuted_to_steel.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.status.transmuted_to_steel"
+
+[resource]
+script = ExtResource("1_crv2w")
+id = "condition.summon.transmuted_to_steel"
+icon = SubResource("Resource_tx7lr")

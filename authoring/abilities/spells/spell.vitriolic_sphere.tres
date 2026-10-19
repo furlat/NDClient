@@ -1,0 +1,274 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_2ul3h"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_w15hn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_w15hn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_8kpp6"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="4_8kpp6"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_efucs"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_s8cyn"]
+
+[sub_resource type="Resource" id="Resource_8kpp6"]
+script = ExtResource("1_w15hn")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_auh8c"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/native_delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_27s2m"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/native_initial_blast"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_pp0rf"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/native_target_initial"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_3mi0v"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/native_target_residue"
+role = "attached"
+at = "release"
+delay = 0.7
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.65
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fki0e"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/target_native_next_end_packet"
+role = "attached"
+at = "release"
+delay = 2.05
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_k3spf"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/native_target2_initial"
+role = "attached"
+at = "release"
+delay = 0.52
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_7q7ti"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/native_target2_residue"
+role = "attached"
+at = "release"
+delay = 0.7
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.65
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_6clr5"]
+script = ExtResource("1_2ul3h")
+clip = "high-level-22/vitriolic-sphere/target2_native_next_end_packet"
+role = "attached"
+at = "release"
+delay = 2.05
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_efucs"]
+script = ExtResource("4_8kpp6")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.vitriolic_sphere.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.spell.vitriolic_sphere"
+
+[resource]
+script = ExtResource("3_8kpp6")
+id = "spell.vitriolic_sphere"
+icon = SubResource("Resource_efucs")
+delivery = "sphere"
+body = SubResource("Resource_8kpp6")
+effects = Array[ExtResource("1_2ul3h")]([SubResource("Resource_auh8c"), SubResource("Resource_27s2m"), SubResource("Resource_pp0rf"), SubResource("Resource_3mi0v"), SubResource("Resource_fki0e"), SubResource("Resource_k3spf"), SubResource("Resource_7q7ti"), SubResource("Resource_6clr5")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.vitriolic_sphere.residue")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "vitriolic_sphere_native",
+"source": "assets/vfx/index.json:/selections/vitriolic_sphere_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

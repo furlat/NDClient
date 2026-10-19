@@ -1,0 +1,149 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_teegh"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_1by0r"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_l4sc0"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_l4sc0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_mxf07"]
+
+[sub_resource type="Resource" id="Resource_4qw75"]
+script = ExtResource("1_teegh")
+enabled = false
+colour = Color(0.69411767, 0.30588236, 0.3137255, 1)
+
+[sub_resource type="Resource" id="Resource_mxf07"]
+script = ExtResource("2_l4sc0")
+path = "art/media/ui/icons/smooth48/spell.slow.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.slow"
+status = "stand_in"
+source = "ui/resources.json icon:spell.slow"
+
+[sub_resource type="Resource" id="Resource_u33ha"]
+script = ExtResource("3_l4sc0")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gd6mc"]
+script = ExtResource("2_1by0r")
+steps = Array[ExtResource("3_l4sc0")]([SubResource("Resource_u33ha")])
+
+[sub_resource type="Resource" id="Resource_h7d3p"]
+script = ExtResource("1_teegh")
+enabled = false
+colour = Color(0.69411767, 0.30588236, 0.3137255, 1)
+
+[resource]
+script = ExtResource("4_mxf07")
+id = "condition.spell.slow"
+label = "Slow"
+icon = SubResource("Resource_mxf07")
+disposition = "authored"
+look = SubResource("Resource_gd6mc")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "sustain",
+"assetId": "control.slow.back",
+"attachment": "body",
+"category": "Slow",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fadeInMs": 150.0,
+"fps": 32.0,
+"id": "control.slow.back",
+"priority": 70.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "sustain",
+"assetId": "control.slow.front",
+"attachment": "body",
+"category": "Slow",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 150.0,
+"fps": 32.0,
+"id": "control.slow.front",
+"priority": 70.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.slow.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.slow.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "slow",
+"priority": 30.0
+}]
+group = "control.slow"
+priority = 70.0
+max_layers = 3.0
+application_text = SubResource("Resource_4qw75")
+removal_text = SubResource("Resource_h7d3p")
+unported = {
+"application": {
+"durationMs": 150.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "control.slow",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.slow",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=each_affected_entity; gates=saving_throw:wisdom:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.slow",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 550.0,
+"effects": []
+}
+}

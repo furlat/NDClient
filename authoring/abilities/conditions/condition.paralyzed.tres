@@ -1,0 +1,200 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_71fji"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_atca4"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_b6tnv"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_atca4"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_u5hqw"]
+
+[sub_resource type="Resource" id="Resource_sjuel"]
+script = ExtResource("1_71fji")
+enabled = false
+colour = Color(0.84705883, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_u5hqw"]
+script = ExtResource("2_atca4")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-paralyzed.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-paralyzed"
+
+[sub_resource type="Resource" id="Resource_2nwsf"]
+script = ExtResource("3_atca4")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_eb767"]
+script = ExtResource("3_atca4")
+kind = "outline"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+rgb = Color(1, 0.7607843, 0.28627452, 1)
+pulse_colour = Color(1, 0.83137256, 0.4862745, 1)
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lymgn"]
+script = ExtResource("3_atca4")
+kind = "pose"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+pose_role = "frozen"
+pose_clip = "Idle"
+pose_frame = 0
+
+[sub_resource type="Resource" id="Resource_yvqjs"]
+script = ExtResource("2_b6tnv")
+steps = Array[ExtResource("3_atca4")]([SubResource("Resource_2nwsf"), SubResource("Resource_eb767"), SubResource("Resource_lymgn")])
+
+[sub_resource type="Resource" id="Resource_03rec"]
+script = ExtResource("1_71fji")
+enabled = false
+colour = Color(0.80784315, 0.15294118, 0.5137255, 1)
+
+[resource]
+script = ExtResource("4_u5hqw")
+id = "condition.paralyzed"
+label = "Paralyzed"
+icon = SubResource("Resource_u5hqw")
+disposition = "authored"
+look = SubResource("Resource_yvqjs")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.paralyzed.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.paralyzed.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "paralyzed",
+"priority": 50.0
+}]
+group = "marker.condition.paralyzed"
+priority = 60.0
+max_layers = 3.0
+application_text = SubResource("Resource_sjuel")
+removal_text = SubResource("Resource_03rec")
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "paralysis.alpha-contour",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.paralyzed",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"bodyOutline": {},
+"equipmentModifiers": [],
+"frozenPose": {
+"framesByRig": {
+"neuroclient.modular": 3.0
+}
+}
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.hold_monster",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.hold_person",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "trait.ghoul_paralysis",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "trait"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=exact-condition-cleanse; effect=cleanse.condition.paralyzed; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.lesser_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=exact-condition-cleanse; effect=cleanse.condition.paralyzed; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.greater_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "Core Paralyzed is registered; specific spell/trait implementations often use their own exact condition refs.",
+"evidenceStatus": "verified_backend_inventory",
+"sourceRef": null,
+"triggerType": "initialization_or_rules_effect"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

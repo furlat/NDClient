@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_fhoe3"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_5gr2w"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_of7ax"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_dhgqx"]
+
+[sub_resource type="Resource" id="Resource_3m5j8"]
+script = ExtResource("1_fhoe3")
+role = "act"
+clip = "Idle"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 0.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_c1pkv"]
+script = ExtResource("2_5gr2w")
+path = "art/media/ui/icons/smooth48/action.pick-up.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.pick-up"
+
+[resource]
+script = ExtResource("3_of7ax")
+id = "action.pick_up"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_c1pkv")
+disposition = "authored"
+body = SubResource("Resource_3m5j8")
+effect_sources = PackedStringArray()
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.pick_up",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

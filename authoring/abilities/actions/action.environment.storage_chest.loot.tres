@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_kehwe"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_rw07e"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_l3aea"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_rw07e"]
+
+[sub_resource type="Resource" id="Resource_l3aea"]
+script = ExtResource("1_rw07e")
+role = "act"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_u7oms"]
+script = ExtResource("2_l3aea")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
+[resource]
+script = ExtResource("1_kehwe")
+id = "action.environment.storage_chest.loot"
+kind = "action"
+family = "environment"
+icon = SubResource("Resource_u7oms")
+body = SubResource("Resource_l3aea")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (interact); the rig resolves it to a clip once roles are built (coverage fill)."

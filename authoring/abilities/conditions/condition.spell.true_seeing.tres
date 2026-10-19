@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_mogyc"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_325nu"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_uedit"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_325nu"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_bnshj"]
+
+[sub_resource type="Resource" id="Resource_5d7qa"]
+script = ExtResource("1_mogyc")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_bnshj"]
+script = ExtResource("2_325nu")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-divination-trueseeingeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-divination-trueseeingeffect"
+
+[sub_resource type="Resource" id="Resource_vikke"]
+script = ExtResource("3_325nu")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_y03gs"]
+script = ExtResource("2_uedit")
+steps = Array[ExtResource("3_325nu")]([SubResource("Resource_vikke")])
+
+[sub_resource type="Resource" id="Resource_7ppkw"]
+script = ExtResource("1_mogyc")
+enabled = false
+
+[resource]
+script = ExtResource("4_bnshj")
+id = "condition.spell.true_seeing"
+label = "True Seeing"
+icon = SubResource("Resource_bnshj")
+disposition = "authored"
+look = SubResource("Resource_y03gs")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "sensory.true_seeing.back",
+"attachment": "head",
+"category": "true_seeing",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "sensory.true_seeing.back",
+"lifeStates": ["alive"],
+"offsetY": 38.55751709338339,
+"priority": 50.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "sensory.true_seeing.front",
+"attachment": "head",
+"category": "true_seeing",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "sensory.true_seeing.front",
+"lifeStates": ["alive"],
+"offsetY": 38.55751709338339,
+"priority": 50.0
+}]
+group = "sensory"
+priority = 50.0
+max_layers = 3.0
+application_text = SubResource("Resource_5d7qa")
+removal_text = SubResource("Resource_7ppkw")
+unported = {
+"application": {
+"durationMs": 4000.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "sensory.eye",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.true_seeing",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 600.0,
+"effects": []
+}
+}

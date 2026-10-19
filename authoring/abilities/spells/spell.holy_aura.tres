@@ -1,0 +1,243 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_komog"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_ypc2g"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_komog"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_jh8t0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="4_jh8t0"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_py4ry"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_yuscx"]
+
+[sub_resource type="Resource" id="Resource_jh8t0"]
+script = ExtResource("1_komog")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+
+[sub_resource type="Resource" id="Resource_s43g5"]
+script = ExtResource("1_ypc2g")
+clip = "high-level-22/holy-aura/application"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/holy-aura/application-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_8p0u3"]
+script = ExtResource("1_ypc2g")
+clip = "high-level-22/holy-aura/recipient_ward"
+role = "attached"
+at = "contact"
+delay = 0.35
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/holy-aura/recipient_ward-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_frqkp"]
+script = ExtResource("1_ypc2g")
+clip = "high-level-22/holy-aura/second_fixed_ward"
+role = "attached"
+at = "contact"
+delay = 0.35
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/holy-aura/second_fixed_ward-caster",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_jkijt"]
+script = ExtResource("1_ypc2g")
+clip = "high-level-22/holy-aura/broken_sun_stamp"
+role = "attached"
+at = "contact"
+delay = 0.35
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/holy-aura/broken_sun_stamp-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_32txy"]
+script = ExtResource("1_ypc2g")
+clip = "high-level-22/holy-aura/qualified_blindness"
+role = "attached"
+at = "contact"
+delay = 2.0
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/holy-aura/qualified_blindness-target2",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target2",
+"socket": "body_center"
+}],
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_py4ry"]
+script = ExtResource("4_jh8t0")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.holy_aura.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.spell.holy_aura"
+
+[resource]
+script = ExtResource("3_jh8t0")
+id = "spell.holy_aura"
+icon = SubResource("Resource_py4ry")
+delivery = "condition_only"
+body = SubResource("Resource_jh8t0")
+effects = Array[ExtResource("1_ypc2g")]([SubResource("Resource_s43g5"), SubResource("Resource_8p0u3"), SubResource("Resource_frqkp"), SubResource("Resource_jkijt"), SubResource("Resource_32txy")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.holy_aura", "condition.spell.holy_aura.blindness")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "holy_aura_native",
+"source": "assets/vfx/index.json:/selections/holy_aura_native/staging"
+}
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

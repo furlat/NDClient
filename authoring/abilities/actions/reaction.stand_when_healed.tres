@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_8ao8a"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_so3m4"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_8ao8a"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_a6vfa"]
+
+[sub_resource type="Resource" id="Resource_a6vfa"]
+script = ExtResource("1_8ao8a")
+role = "stand_up"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nmomy"]
+script = ExtResource("2_a6vfa")
+path = "art/media/ui/icons/smooth48/ui.filter-reactions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-reactions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-reactions"
+
+[resource]
+script = ExtResource("1_so3m4")
+id = "reaction.stand_when_healed"
+kind = "reaction"
+family = "reaction"
+icon = SubResource("Resource_nmomy")
+body = SubResource("Resource_a6vfa")
+effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (stand); the rig resolves it to a clip once roles are built (coverage fill)."
