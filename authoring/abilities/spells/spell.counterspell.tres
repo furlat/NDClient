@@ -26,6 +26,7 @@ attachment = "caster_ground"
 orientation = "world"
 source_end = 1.8
 duration_policy = "authored"
+unbound_constructor_inputs = PackedStringArray("reaction_occurrence_not_a_spell_declaration")
 hide_at_contact = PackedStringArray()
 hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
@@ -62,6 +63,7 @@ attachment = "caster_ground"
 orientation = "world"
 source_end = 1.8
 duration_policy = "authored"
+unbound_constructor_inputs = PackedStringArray("reaction_occurrence_not_a_spell_declaration")
 hide_at_contact = PackedStringArray()
 hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
@@ -120,4 +122,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/counterspell_success_native_study/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual native Counterspell completes as ActionFact.reaction, whose owned source selects the observed outcome. These spell-owned references remain review data and are not constructed with Factory fixture identities or its saved Fireball path."

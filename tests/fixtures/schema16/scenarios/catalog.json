@@ -522,5 +522,50 @@
   },
   "scenario": "res://tests/fixtures/schema16/scenarios/web/scenario.json",
   "origin": ".runtime/studio-library/cases/spell.web__baseline/20261019T143922.769774Z"
+ },
+ "divine-sunder": {
+  "id": "action.class.cleric.divine_intervention.sunder_heretical/direct_character",
+  "label": "Divine Intervention: actual level10 Sunder, radiant recipient damage and death",
+  "perspectives": [
+   {
+    "id": "party",
+    "label": "Party",
+    "journal": "res://tests/fixtures/schema16/scenarios/divine-sunder/party"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/divine-sunder/scenario.json",
+  "origin": ".runtime/scenario-expansion-20261020/cases/action.class.cleric.divine_intervention.sunder_heretical__direct_character/20261019T234649.511861Z",
+  "scope": "Actual lawful direct character encounter; single party stream, no counterfeit second faction."
+ },
+ "counterspell": {
+  "id": "spell.counterspell/baseline",
+  "label": "Counterspell: actual successful reaction and interrupted cast",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/counterspell/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/counterspell/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/counterspell/scenario.json"
  }
 }

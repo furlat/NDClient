@@ -386,8 +386,11 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
     var binding:Dictionary=use.constructor_input
     if binding.is_empty():return
     if binding.get("kind")=="observed_event":
-        if binding.get("outcome") not in ["cast","heal","removal","revival"] or use.scope not in ["source","recipient"] or binding.get("geometry_actor") not in ["caster","target"]:
+        if binding.get("outcome") not in ["cast","heal","damage","removal","revival"] or use.scope not in ["source","recipient"] or binding.get("geometry_actor") not in ["caster","target"]:
             Common.error(report,where,"observed event needs an outcome, source/recipient scope and actual geometry role");return
+    elif binding.get("kind")=="reaction_observation":
+        if use.scope!="source" or binding.get("trigger_kind")!="spell" or not binding.get("succeeded") is bool or binding.get("input_field")!="observation":
+            Common.error(report,where,"reaction observation needs source scope, spell trigger, observed outcome and observation member");return
     elif binding.get("kind")=="application_result" and use.scope=="application":
         if str(binding.get("save_effect_id","")).is_empty() or str(binding.get("damage_type","")).is_empty():
             Common.error(report,where,"application result lacks save effect or damage type");return
@@ -404,7 +407,7 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             var selected:Array=components.filter(func(component):return component.id==id)
             if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
             input=selected[0].input;components=input.get("components",[])
-        if binding.get("kind")=="application_result" and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
+        if binding.get("kind") in ["application_result","reaction_observation"] and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
 
 static func _in(value: float, low: float, high: float) -> bool:
     return is_finite(value) and value >= low and value <= high

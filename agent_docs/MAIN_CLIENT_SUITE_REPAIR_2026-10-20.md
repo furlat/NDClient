@@ -140,3 +140,27 @@ source-switch counterfactual at the new actual contacts. Do not claim it passes
 or relax that control. Further native lighting migration also exposes a missing
 directional contribution in the current point-source receiving table; no3D light
 or approved shader retune was introduced to hide that gap.
+
+### Provider checkpoint after f489896f
+
+- Complete fast109:108 pass, one UI-art failure exposed four new passive sources
+  lacking an image. Those now explicitly reuse the existing category glyph with
+  `status=stand_in`; dedicated feature art stays incomplete. A focused rerun
+  qualifies that fix; it is not a claim that stand-ins are approved artwork.
+- Positive applied damage projection:439 checks; actual Sunder native output:18
+  checks, exact result admission and1,878 changed pixels/four views. Original
+  single-party lawful level10 recording is committed test input.
+- Actual Counterspell semantics:113 checks across both original faction journals.
+  Exact earlier trigger version is retained separately from the canceled terminal
+  occurrence. The installed incoming-source geometry/clock remains unqualified;
+  no donor Fireball fixture is constructed and no gameplay state is held.
+- Complete offline Factory join now includes423 default cues. These are provider
+  channel classifications, never a substitute for actual output qualification.
+- The next parallel cohorts are exact effective-handler/result attribution and
+  persistent spatial-owner membership. Scenario expansion has42 successes
+  (39 independent two-seat, three honest party-only), with six actual recipe
+  failures retained in its separate worklist.
+
+Receipts: `.runtime/tests/20261019T235454.505846Z/` (108/109),
+`.runtime/tests/20261019T235732.695429Z/` (production Sunder native18/18),
+`.runtime/consolidation/provider-checkpoint-checks.log` (focused follow-up).

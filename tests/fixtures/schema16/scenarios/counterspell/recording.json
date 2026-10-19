@@ -1,0 +1,52 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "2bb07aa7-b530-4ea5-a417-0f679db962a2": "Amber caster",
+  "f31316e5-34b0-41fe-ad63-0a5e7c9dbc7d": "Amber ally",
+  "045d132c-2559-4f9f-8df0-c469e28bd791": "Blue second target",
+  "d10ca3da-9f55-4039-a95e-5c3e2b84c4a3": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.fire_bolt \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "action": 1
+  },
+  "behaviors": {
+   "reaction.spell.counterspell": 1
+  },
+  "conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 38,
+   "lineage": 33,
+   "event_offset": 0,
+   "kind": "action",
+   "label": "action reaction.spell.counterspell"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

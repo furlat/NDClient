@@ -46,6 +46,14 @@ static func observed_index(events:Array,graph:Dictionary)->Dictionary:
         if fact.kind=="heal" and int(fact.actual_healing)>0 and not fact.was_blocked:
             rows.append({"kind":"heal","target_uuid":str(fact.target_entity_uuid),"node":node,
                 "event":{"actual_healing":fact.actual_healing,"blocked":fact.was_blocked}})
+        if fact.kind=="damage" and fact.get("stage")=="applied" and int(fact.applied_damage)>0:
+            # The finite Factory outcome uses an opaque damage-component key.
+            # One disclosed applied-result occurrence is that exact component;
+            # this is not a wire UUID, roll identity or inferred passive rider.
+            rows.append({"kind":"damage","target_uuid":str(fact.target_entity_uuid),"node":node,
+                "event":{"actual_damage":fact.applied_damage,"damage_type":fact.damage_type,
+                    "damage_component_uuid":str(node.id),"source_condition_uuid":fact.get("source_condition_uuid"),
+                    "effect_id":fact.get("effect_id")}})
         if fact.kind=="life" and fact.previous_state=="dead" and fact.new_state=="alive":
             rows.append({"kind":"revival","target_uuid":str(fact.entity_uuid),"node":node,
                 "event":{"revival_observed":true,"life_before":fact.previous_state,"life_after":fact.new_state,
@@ -78,9 +86,10 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
     var result:Array=[]
     for row in rows:
         if row.target_uuid in revived:continue
-        # A heal explicitly names its source. A LifeFact/removal is linked by
+        # A damage/heal explicitly names its source. A LifeFact/removal is linked by
         # the native parent lineage instead; it has no invented source fact.
-        if kind=="heal" and row.node.fact.get("source_entity_uuid")!=source:continue
+        if kind in ["heal","damage"] and row.node.fact.get("source_entity_uuid")!=source:continue
+        if kind=="damage" and descriptor.has("damage_type") and row.node.fact.damage_type!=descriptor.damage_type:continue
         var target:String=str(row.target_uuid)
         var event:Dictionary=row.event.merged({"uuid":str(row.node.id),"source_entity_uuid":source,
             "target_entity_uuid":target,"canceled":false,"effect_admitted":true},true)
@@ -88,7 +97,11 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
         var values={"source_entity_uuid":source,"recipient_entity_uuid":target,"owner_uuid":str(node.id),"event_uuid":str(row.node.id),
             "actor_roles":roles,"geometry_actor":roles[str(descriptor.geometry_actor)],"lease":{},"event":{},"plan_only":false,
             "native_behavior_id":str(node.fact.behavior_id)}
-        result.append({"node":row.node,"target_uuid":target,"values":values,"event":event,
-            "evidence":{"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),
-                "result_occurrence":str(row.node.id),"result_lineage":str(row.node.lineage_id),"target_uuid":target,"outcome":kind}})
+        var evidence:Dictionary={"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),
+            "result_occurrence":str(row.node.id),"result_lineage":str(row.node.lineage_id),"target_uuid":target,"outcome":kind}
+        if kind=="damage":
+            evidence.merge({"damage_component_identity":"native_applied_result_occurrence","applied_damage":row.node.fact.applied_damage,
+                "damage_type":row.node.fact.damage_type,"source_condition_uuid":row.node.fact.get("source_condition_uuid"),
+                "effect_id":row.node.fact.get("effect_id")})
+        result.append({"node":row.node,"target_uuid":target,"values":values,"event":event,"evidence":evidence})
     return result

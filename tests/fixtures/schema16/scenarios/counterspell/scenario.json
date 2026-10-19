@@ -1,0 +1,82 @@
+{
+ "id": "spell.counterspell/baseline",
+ "title": "Counterspell: legal baseline",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.counterspell"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [
+   "creature.generic_caster"
+  ],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [],
+   "at": [
+    3,
+    7
+   ],
+   "behaviors": [
+    "reaction.spell.counterspell"
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ],
+   "spells": [
+    "spell.fire_bolt"
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.fire_bolt",
+   "by": "target",
+   "target": "caster",
+   "recipients": []
+  }
+ ],
+ "seed": 2,
+ "required_behaviors": [
+  "reaction.spell.counterspell"
+ ],
+ "purpose": "Current-engine baseline cast/reaction safety; visual/lifecycle qualification is separate."
+}

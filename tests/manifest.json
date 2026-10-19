@@ -5182,6 +5182,36 @@
    "timeout": 300,
    "status": "ok",
    "reason": "Complete current typed character, gear, palette and UI source closure."
+  },
+  {
+   "name": "observed_damage_inputs_checks",
+   "script": "res://tests/observed_damage_inputs_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original two-faction applied-damage outcomes, native ancestry, source/type filters and exact constructor packets."
+  },
+  {
+   "name": "native_observed_damage_render_checks",
+   "script": "res://tests/native_observed_damage_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Actual lawful level10 single-party Sunder, positive result inputs, native pixels/ownership and four prepared views."
+  },
+  {
+   "name": "reaction_input_checks",
+   "script": "res://tests/reaction_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
   }
  ]
 }

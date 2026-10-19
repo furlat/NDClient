@@ -1,0 +1,40 @@
+{
+ "id": "action.class.cleric.divine_intervention.sunder_heretical/direct_character",
+ "title": "Divine Intervention: actual level10 Sunder, radiant recipient damage and death",
+ "kind": "action",
+ "seed": 2,
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.class.cleric.divine_intervention.sunder_heretical"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "party"
+  }
+ ],
+ "player_builds_source": "tools/studio_cases/scenarios/cleric_level10_builds.json",
+ "purpose": "Real level10 class grant and native AI skirmish; one actual party perspective only.",
+ "steps": [
+  {
+   "do": "action.class.cleric.divine_intervention.sunder_heretical",
+   "by": "caster",
+   "target": "self"
+  }
+ ],
+ "required_behaviors": [
+  "action.class.cleric.divine_intervention.sunder_heretical"
+ ],
+ "required_facts": [
+  "damage",
+  "life"
+ ]
+}

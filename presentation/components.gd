@@ -3,6 +3,7 @@ const Occurrences=preload("res://presentation/occurrences.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const ApplicationResults=preload("res://presentation/application_results.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
+const ReactionInputs=preload("res://presentation/reaction_inputs.gd")
 const NativeItems=preload("res://presentation/native_items.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
 const Authoring=preload("res://presentation/authoring.gd")
@@ -155,7 +156,17 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
 static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,recipe:Dictionary,track:Dictionary,markers:Dictionary,graph:Dictionary,cache:Dictionary,observations:Array=[])->void:
     for phase in NativeActions.phases(binding,node.fact,recipe,track,markers,cache):
         var descriptor:Dictionary=phase.native_cue.get("constructor_input",{})
-        if descriptor.get("kind")=="observed_event":
+        if descriptor.get("kind")=="reaction_observation":
+            var projected:Dictionary=ReactionInputs.project(node,descriptor,graph)
+            if not projected.applies:continue
+            var actual:Dictionary=phase.duplicate()
+            if projected.ready:
+                actual.native_reaction_observation=projected.observation
+                actual.native_constructor_inputs=[{"component_path":descriptor.component_path,
+                    "input_field":descriptor.input_field,"values":projected.observation}]
+                actual.native_constructor_evidence=projected.evidence
+            _native_action_component(group,node,node,actual,ReactionInputs.inputs(projected),graph)
+        elif descriptor.get("kind")=="observed_event":
             if Occurrences.application(node):continue
             for projected in ApplicationResults.observed(node,descriptor,graph):
                 var actual:Dictionary=phase.duplicate()

@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_3joks"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_o2sl4"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="factory_effect_use"]
+
 [sub_resource type="Resource" id="Resource_o2sl4"]
 script = ExtResource("1_3joks")
 role = "cast_alt"
@@ -19,6 +21,122 @@ reuses = "ui.filter-actions"
 status = "stand_in"
 source = "ui/resources.json icon:ui.filter-actions"
 
+[sub_resource type="Resource" id="FactoryInvocation"]
+script = ExtResource("factory_effect_use")
+clip = "divine-class-study/divine_intervention_arm_admission_study/0-invocation"
+selection = "divine_intervention_arm_admission_study"
+role = "attached"
+scope = "source"
+constructor_input = {
+ "component_path": [
+  "divine_art"
+ ],
+ "geometry_actor": "caster",
+ "kind": "observed_event",
+ "living_only": false,
+ "outcome": "cast"
+}
+endpoint_actor_uuids = true
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+fade_out = 0.18
+light_multiplier = 0.0
+unbound_constructor_inputs = PackedStringArray()
+staging_from = "factory@production-bindings-c494177f9ef03e3d selection:divine_intervention_arm_admission_study"
+extra = {
+ "dynamic_geometry": true,
+ "entity_geometry": {
+  "actor": "caster",
+  "slots": [
+   "body",
+   "chest",
+   "legs",
+   "head",
+   "helmet",
+   "boots",
+   "gauntlets",
+   "belt",
+   "cloak"
+  ]
+ },
+ "follow_attachment": true,
+ "live_endpoints": [
+  {
+   "actor": "caster",
+   "socket": "cast_hand"
+  },
+  {
+   "actor": "caster",
+   "socket": "face",
+   "pose_socket": "head"
+  },
+  {
+   "actor": "target",
+   "socket": "body_center"
+  }
+ ],
+ "to_actor": "caster",
+ "selection": "divine_intervention_arm_admission_study"
+}
+
+[sub_resource type="Resource" id="FactoryObservedResult"]
+script = ExtResource("factory_effect_use")
+clip = "divine-class-study/divine_intervention_arm_admission_study/1-arm"
+selection = "divine_intervention_arm_admission_study"
+role = "attached"
+scope = "recipient"
+constructor_input = {}
+endpoint_actor_uuids = true
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+fade_out = 0.18
+light_multiplier = 0.0
+unbound_constructor_inputs = PackedStringArray("event_input.ordinary_item_admitted", "event_input.item_uuid", "event_input.creation_position_cells")
+staging_from = "factory@production-bindings-c494177f9ef03e3d selection:divine_intervention_arm_admission_study"
+extra = {
+ "dynamic_geometry": true,
+ "entity_geometry": {
+  "actor": "target",
+  "slots": [
+   "body",
+   "chest",
+   "legs",
+   "head",
+   "helmet",
+   "boots",
+   "gauntlets",
+   "belt",
+   "cloak"
+  ]
+ },
+ "follow_attachment": true,
+ "live_endpoints": [
+  {
+   "actor": "caster",
+   "socket": "cast_hand"
+  },
+  {
+   "actor": "caster",
+   "socket": "face",
+   "pose_socket": "head"
+  },
+  {
+   "actor": "target",
+   "socket": "body_center"
+  }
+ ],
+ "to_actor": "target",
+ "selection": "divine_intervention_arm_admission_study",
+ "required_native_outcome": "created_item_admission"
+}
+delay = 0.65
+
 [resource]
 script = ExtResource("1_jayk8")
 id = "action.class.cleric.divine_intervention.arm_thy_servant"
@@ -27,4 +145,6 @@ family = "class"
 icon = SubResource("Resource_ol0iu")
 body = SubResource("Resource_o2sl4")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+effects = Array[ExtResource("factory_effect_use")]([SubResource("FactoryInvocation"), SubResource("FactoryObservedResult")])
+status = "partial"
+notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill). Exact Factory source invocation is bound to the disclosed action. Recipient output stays an explicit created_item_admission gap; no sample damage, item UUID, creation position or visual approval is inferred."

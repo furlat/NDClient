@@ -1,0 +1,86 @@
+[
+ {
+  "seat": "amber",
+  "actor": "Amber ally",
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "f31316e5-34b0-41fe-ad63-0a5e7c9dbc7d",
+   "state_revision": "7397c96f-39a4-4dbc-aada-78914dea8067",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_counterspell_baseline",
+   "game_epoch": "c9a78cea-155d-4311-9dd5-649b658d7323",
+   "audience_id": "0a94bbf5-54f7-4faf-8236-4dcc0c57b205",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_counterspell_baseline",
+    "game_epoch": "c9a78cea-155d-4311-9dd5-649b658d7323",
+    "audience_id": "0a94bbf5-54f7-4faf-8236-4dcc0c57b205",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "seat": "blue",
+  "actor": "Blue second target",
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "045d132c-2559-4f9f-8df0-c469e28bd791",
+   "state_revision": "911df089-aa0e-489a-9446-6c226dd311fb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_counterspell_baseline",
+   "game_epoch": "c9a78cea-155d-4311-9dd5-649b658d7323",
+   "audience_id": "04975cf4-b85c-44c1-a357-70c4571df8c1",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_counterspell_baseline",
+    "game_epoch": "c9a78cea-155d-4311-9dd5-649b658d7323",
+    "audience_id": "04975cf4-b85c-44c1-a357-70c4571df8c1",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "seat": "blue",
+  "actor": "Blue target",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "d10ca3da-9f55-4039-a95e-5c3e2b84c4a3",
+   "state_revision": "f207c0d8-e394-426b-ac1a-05e5ed5d65e5",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 5,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_counterspell_baseline",
+   "game_epoch": "c9a78cea-155d-4311-9dd5-649b658d7323",
+   "audience_id": "04975cf4-b85c-44c1-a357-70c4571df8c1",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_counterspell_baseline",
+    "game_epoch": "c9a78cea-155d-4311-9dd5-649b658d7323",
+    "audience_id": "04975cf4-b85c-44c1-a357-70c4571df8c1",
+    "sequence": 6
+   }
+  }
+ }
+]
