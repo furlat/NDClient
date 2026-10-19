@@ -14,7 +14,9 @@ static func effect_clips(behavior:String,cache:Dictionary)->Array:
     for cue in binding.get("effect_cues",[]):
         if not cue.get("unbound_constructor_inputs",[]).is_empty():continue
         var clip:Dictionary=Effects.resolve(str(cue.clip),str(cue.get("selection","")),str(cue.role))
-        if not clip.is_empty() and not seen.has(clip.id):seen[clip.id]=true;result.append(clip)
+        if not clip.is_empty() and not seen.has(clip.id):
+            if not cue.get("constructor_input",{}).is_empty():clip=clip.duplicate();clip.requires_constructor_input=true
+            seen[clip.id]=true;result.append(clip)
     return result
 
 static func descendant(candidate:Dictionary,owner:Dictionary,graph:Dictionary)->bool:
@@ -75,17 +77,17 @@ static func inputs(node:Dictionary,binding:Dictionary,phase:Dictionary,graph:Dic
         var removed:Dictionary={}
         for candidate in removals.get(condition.condition_uuid,[]):
             if candidate.order>application.order:removed=candidate.node;break
+        result.values.owner_projection={"actor_id":actor,"actor_uuid":actor,"owner_uuid":condition.condition_uuid,
+            "behavior_id":condition.behavior_id,"admitted":true,"suppressed":false,"begin_seconds":0.0,
+            "removed_seconds":-1.0}
         if not removed.is_empty() and graph.get("starts",{}).has(removed.id):
-            result.values.owner_projection={"actor_id":actor,"actor_uuid":actor,"owner_uuid":condition.condition_uuid,
-                "behavior_id":condition.behavior_id,"admitted":true,"begin_seconds":0.0,
-                "removed_seconds":maxf(0.0,(float(graph.starts[removed.id])-float(phase.start_ms))/1000.0)}
-            if "activation_projection" in required:
-                result.values.activation_projection={"actor_id":actor,"action_uuid":str(node.id),"behavior_id":node.fact.behavior_id,
-                    "admitted":true,"parent_owner_uuid":condition.condition_uuid,"begin_seconds":0.0}
+            result.values.owner_projection.removed_seconds=maxf(0.0,(float(graph.starts[removed.id])-float(phase.start_ms))/1000.0)
             result.evidence.removal_occurrence=str(removed.id)
-        else:
-            # A clip duration or remaining rounds is not an observed removal.
-            result.gaps.append("native_owner_projection_removal_not_observed")
+        # -1 is the delivered class source's explicit unknown-removal sentinel,
+        # including the finite activation adapter. No clip/round expiry is inferred.
+        if "activation_projection" in required:
+            result.values.activation_projection={"actor_id":actor,"action_uuid":str(node.id),"behavior_id":node.fact.behavior_id,
+                "admitted":true,"parent_owner_uuid":condition.condition_uuid,"begin_seconds":0.0}
     elif applications.size()>1:result.gaps.append("native_condition_parent_link_unavailable")
     else:result.gaps.append("native_owner_projection_observation_unavailable")
     for input in ["owner_projection","activation_projection"]:

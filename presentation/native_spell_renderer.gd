@@ -26,6 +26,7 @@ var issues:Array=[]
 var witnesses:Array=[]
 var required_images:Dictionary={}
 var required_cpu_images:Dictionary={}
+var preparation_state:Dictionary={}
 var _owner:Node3D
 var _support:RefCounted
 var _epoch:int=-1
@@ -112,6 +113,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     # Epoch reset owns all resources/instances, including required-image pins.
     _required_ids=optical
+    var resources_ready:bool=result.ready
     var appearance:Dictionary=_prepare_layers(world,wanted,budget,optional,allow_optional)
     _warm_passes()
     result.ready=result.ready and appearance.ready
@@ -139,6 +141,8 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     result.pending=wanted.keys().filter(func(id):return not handles.has(id)).size()
     var prepared_optics:bool=world.source_lighting.prepare_native_handles(handles,budget)
     var support_images:Dictionary=_support.adopt(world) if not wanted.is_empty() or not groups.is_empty() else {"ready":true}
+    preparation_state={"resources_ready":resources_ready,"appearance_ready":appearance.ready,"receivers_ready":receivers.ready,
+        "optics_ready":prepared_optics,"support_images_ready":support_images.ready,"pending_instances":result.pending,"wanted_ids":wanted.keys()}
     result.ready=result.ready and result.pending==0 and result.errors.is_empty() and appearance.ready and receivers.ready and prepared_optics and support_images.ready
     if allow_optional and result.ready:
         for id in optional:
@@ -540,7 +544,7 @@ func _queued_ids(world:Node)->Dictionary:
     # any native instance exists, world commits cannot require a retention scan
     # of every future group and its disclosed condition/area after-values.
     if handles.is_empty():return {}
-    var key:Array=[world.timeline.revision,world.timeline.current.get("id",""),world.timeline.queue.size(),world.timeline.condition_owners.keys(),world.timeline.spatial_effect_owners.keys(),handles.keys()]
+    var key:Array=[world.timeline.revision,world.timeline.resource_revision,world.timeline.current.get("id",""),world.timeline.queue.size(),world.timeline.condition_owners.keys(),world.timeline.spatial_effect_owners.keys(),handles.keys()]
     if key==_queued_key:return _queued_cache.duplicate()
     _queued_key=key
     var result:Dictionary={}
@@ -556,6 +560,14 @@ func _queued_ids(world:Node)->Dictionary:
         if owner_id!=null:
             if not owners.has(owner_id):owners[owner_id]=[]
             owners[owner_id].append(id)
+    # A zero-time operation can already be complete while its delayed source
+    # and tail still belong to Timeline. Keep prepared instances before their
+    # first sample too; otherwise a finite budget constructs/frees the same
+    # receiver every frame and can never admit the rest of the occurrence.
+    for item in world.timeline.retained_components:
+        var component:Dictionary=item.component
+        if remaining.has(component.id) and accepts(component):
+            result[component.id]=true;remaining.erase(component.id)
     # Retention only decides the fate of constructed instances. Most are in
     # the current/nearby groups, so stop when each has an actual owner. A stale
     # instance still requires the complete future scan before it may be freed.
@@ -587,8 +599,9 @@ func _missing(component:Dictionary,reason:String)->void:
     # An authored gap is visible missing work, not a runtime program failure.
     # Such cues never enter prepare/construction; unrelated available sources
     # still report real construction/resource/sampling errors normally.
-    if component.get("status")=="missing" and not component.get("unbound_constructor_inputs",[]).is_empty():
-        diagnostics[component.id].unbound_constructor_inputs=component.unbound_constructor_inputs
+    if component.get("status")=="missing" and (not component.get("unbound_constructor_inputs",[]).is_empty() or not component.get("native_input_gaps",[]).is_empty()):
+        for field in ["unbound_constructor_inputs","native_input_gaps"]:
+            if component.has(field):diagnostics[component.id][field]=component[field]
         return
     var issue=str(component.id)+": "+reason
     if issue not in issues:issues.append(issue)
@@ -603,7 +616,7 @@ func _pending(component:Dictionary,reason:String)->void:
 
 func close(world:Node=null)->void:
     for handle in handles.values():Effects.close(handle)
-    handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear()
+    handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear();preparation_state.clear()
     for layer in groups.values():Layer.close(layer)
     for layer in spare_layers:Layer.close(layer)
     for layer in prepared_layers.values():Layer.close(layer)

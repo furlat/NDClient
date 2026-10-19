@@ -341,3 +341,12 @@ Early live measurement caught **163/181ms Quickened/Twinned source construction*
 
 
 Successor cohort **1a53fb4a** is published to main with the complete sealed package and matching build. Actual main195headless +83live Gallery UI checks pass, zero errors. Backup/receipt and warning details are in the intake. The main smoke does not close the measured construction/reveal/latency gaps. No owned test/preview/server is left open.
+
+
+## Shared owner and factual-input cohort — 19 October, after publication
+
+[Provider cohort, gates and live spike ledger](CLIENT_SHARED_PROVIDER_COHORT_2026-10-19.md). Typed condition-native uses now share actual UUID ownership with the existing lifecycle path; finite onsets stay on actions. Five divine actions/eleven cues now use actual declaration/result inputs and private construction identities. Real Preserve Life native Studio619checks and Frenzy native Studio1778checks pass; Frenzy’s parent remains an explicit missing input. The zero-time-operation delayed-instance construct/free loop is fixed through the existing Timeline retention owner. Bounded antiOOP/correctness findings (unrelated media suppression, infinite fade math) were fixed and regression tested.
+
+The current package’s full recorded-spell sweep is now183safe available recordings/189inventory, six existing unavailable server cases, zero script/resource errors. Native issued-command sweep is separately tracked by its actual result artifact. Do not carry the earlier package’s all-spell qualification over implicitly. The latest live Gallery run passes83checks; door construction still peaks183ms and movement packet-to-animation is101ms. These are logged for the next performance pass rather than stopping the migration for each spike.
+
+Implementation estimates: schema base100%, SDK/ordering90%, Studio80%, spell safety96%, Factory migration/handovers65%, shared providers40%, scenario depth40%, final gameplay performance10%. These are estimates, not acceptance or full migration claims. Main publication and the final native sweep receipt are recorded in the provider cohort handoff.

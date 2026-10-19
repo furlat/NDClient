@@ -108,6 +108,7 @@ const CUE_FIELDS := [
     ["clip", "clip", "string", true], ["role", "role", "string", true], ["scale", "scale", "float", true],
     ["at", "at", "string", false], ["delay_seconds", "delay", "float", false],
     ["scope", "scope", "string", false], ["constructor_input", "constructor_input", "same", false],
+    ["endpoint_actor_uuids", "endpoint_actor_uuids", "bool", false],
     ["attachment", "attachment", "string", false], ["orientation", "orientation", "string", false],
     ["rotation_degrees", "rotation_degrees", "vec3", false],
     ["source_launch", "source_launch", "float", false], ["source_contact", "source_contact", "float", false],
@@ -478,6 +479,10 @@ static func condition_recipe(e: Resource) -> Dictionary:
         F.put(record, "persistent/activityPoses", poses)
     F.emit(record, "persistent/layers", e, "layers", "same", F.has_path(record, "persistent"))
     if not e.appearance_layers.is_empty():F.emit(record, "persistent/appearanceLayers", e, "appearance_layers", "same", true)
+    if not e.effects.is_empty():
+        var effects:Array=[]
+        for index in e.effects.size():effects.append(cue_from_effect(e.effects[index],index))
+        F.put(record,"persistent/nativeEffects",effects)
     for phase in ["application", "removal"]:
         feedback_to(record, phase, e.get(phase + "_text"), CONDITION_TEXT)
         var body: BodyUse = e.get(phase + "_body")

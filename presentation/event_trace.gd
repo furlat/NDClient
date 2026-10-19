@@ -163,9 +163,13 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
 
 ## The package lifecycles this applied condition plays (one occurrence each).
 static func _lifecycle_components(row:Dictionary,condition:Dictionary,actor_uuid:Variant,cache:Dictionary)->void:
+    var config:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).get(str(condition.behavior_id),{})
     var common:Dictionary={"id":"condition:"+str(condition.condition_uuid),"condition_uuid":condition.condition_uuid,"actor_uuid":actor_uuid,"condition":condition,
-        "start_ms":row.get("_commit_ms",row._admit_ms),"absolute_start_ms":row.get("_commit_ms",row._admit_ms),"duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false}
-    for sample in NativePersistent.lifecycle_samples(common,NativePersistent.lifecycles(condition),cache):
+        "start_ms":row.get("_commit_ms",row._admit_ms),"absolute_start_ms":row.get("_commit_ms",row._admit_ms),"duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false,
+        "recipe":config,"source":"catalog/condition_recipes.json:/"+str(condition.behavior_id)}
+    var samples:Array=NativePersistent.lifecycle_samples(common,NativePersistent.lifecycles(condition),cache)
+    samples.append_array(NativePersistent.authored_samples(common,cache))
+    for sample in samples:
         var component=_compiled_component(sample,cache)
         component.persistent=true
         row.components.append(component)

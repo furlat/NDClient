@@ -47,6 +47,11 @@ class NullableCellProbe extends Node3D:
     var calls:int=0
     var last:Variant="not supplied"
     func set_admitted_cells(value:Variant)->void:calls+=1;last=value
+class ProjectionProbe extends Node3D:
+    var parameters:Dictionary={}
+    var calls:int=0
+    var packet:Dictionary={}
+    func set_owner_projection(value:Dictionary)->void:calls+=1;packet=value
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -231,6 +236,36 @@ func run()->void:
     native_root.transform=Transform3D(Basis(Vector3.UP,PI/4),Vector3(20,0,30))
     result=bridge.sync(world,native_handle,native_area,exact)
     check(result.unavailable.is_empty() and nullable.last==[[-1.0,12.0]],"Native world-aligned surface topology uses the first actual authored endpoint, not its differently transformed wrapper root")
+    var generic:Node3D=load("res://presentation/native_constructed_occurrence.gd").new()
+    var generic_source:Node3D=Node3D.new();var generic_cells:NullableCellProbe=NullableCellProbe.new();generic_source.add_child(generic_cells)
+    generic.handle={"root":generic_source}
+    var generic_clip:Dictionary=native_clip.duplicate();generic_clip.construction_inputs=[]
+    var generic_handle={"clip":generic_clip,"occurrence":generic,"root":native_root}
+    native_area.resolved_area_positions=[[9,12]]
+    result=bridge.sync(world,generic_handle,native_area,exact)
+    check(result.unavailable.is_empty() and generic_cells.calls==1 and generic_cells.last==[[-1.0,12.0]],"A publicly constructed occurrence forwards authoritative cells to its actual child source")
+    bridge.sync(world,generic_handle,native_area,exact)
+    check(generic_cells.calls==1,"Unchanged constructed cell membership is not forwarded again")
+    var projection_probe:ProjectionProbe=ProjectionProbe.new()
+    var projection_handle={"clip":{"inputs":["owner_projection"],"input_setters":{"owner_projection":"set_owner_projection"}},"occurrence":projection_probe}
+    var projection_component={"actor_uuid":"a","native_cue":{},"native_inputs":{"owner_projection":{"actor_uuid":"a","owner_uuid":"actual"}}}
+    bridge.sync(world,projection_handle,projection_component,exact);bridge.sync(world,projection_handle,projection_component,exact)
+    check(projection_probe.calls==1,"An unchanged immutable event packet reaches a rebuilding source setter only once")
+    projection_component.native_inputs={"owner_projection":{"actor_uuid":"a","owner_uuid":"next"}}
+    bridge.sync(world,projection_handle,projection_component,exact)
+    check(projection_probe.calls==2 and projection_probe.packet.owner_uuid=="next","A changed observed packet still updates the source")
+    projection_component.native_inputs.owner_projection.owner_uuid="removed"
+    bridge.sync(world,projection_handle,projection_component,exact)
+    check(projection_probe.calls==3 and projection_probe.packet.owner_uuid=="removed","The setter witness owns its small snapshot, so an in-place packet update is not mistaken for the previous value")
+    projection_component={"actor_uuid":"a","native_cue":{},"persistent_owner":true,"initial":false,"duration_ms":INF,
+        "condition":{"condition_uuid":"held","behavior_id":"class_feature.barbarian.raging"}}
+    result=bridge.sync(world,projection_handle,projection_component,exact)
+    check(result.unavailable.is_empty() and projection_probe.packet.removed_seconds==-1.0 and projection_probe.packet.owner_uuid=="held","A held condition projects the actual owner with no invented removal")
+    projection_component.duration_ms=5000.0;bridge.sync(world,projection_handle,projection_component,exact)
+    check(projection_probe.packet.removed_seconds==5.0,"A real observed end updates the same source owner")
+    projection_component.initial=true;result=bridge.sync(world,projection_handle,projection_component,exact)
+    check(result.unavailable.get("owner_projection")=="condition_application_not_observed","A pre-existing owner never borrows a fabricated application history")
+    projection_probe.free();generic.free();generic_source.free()
     legacy.free();source.free();prepared.free();cell_probe.free();native_cells.free();cell_source.free();native_root.free()
     bridge.clear();world.queue_free();await process_frame
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Actual Factory setters/private ownership/restoration; native output and first-use pipeline timing are separate GPU gates"}))

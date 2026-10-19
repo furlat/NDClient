@@ -11,7 +11,11 @@ catalog = read('.runtime/factory-catalog-join-input.json')
 factory = read('assets/vfx/index.json')
 inventory = read('generated/factory_input_inventory_2026-10-19.json')
 ui = read('generated/reports/ui-art-coverage.json')
-safety_source = ('.runtime/schema16-recording-safety-post-construction/report.json'
+safety_source = ('.runtime/shared-provider-recording-safety-final/report.json'
+                 if (ROOT / '.runtime/shared-provider-recording-safety-final/report.json').exists()
+                 else '.runtime/shared-provider-recording-safety/report.json'
+                 if (ROOT / '.runtime/shared-provider-recording-safety/report.json').exists()
+                 else '.runtime/schema16-recording-safety-post-construction/report.json'
                  if (ROOT / '.runtime/schema16-recording-safety-post-construction/report.json').exists()
                  else '.runtime/schema16-recording-safety-qualified/report.json'
                  if (ROOT / '.runtime/schema16-recording-safety-qualified/report.json').exists()
@@ -39,8 +43,11 @@ bridge = {
     'delivery_timing': 'authored_launch_and_flight_two_argument_adapter_partial_unqualified',
     'actor_layers': 'visible_private_body_material_revision_bridge_partial_unqualified',
     'treatment_state': 'disclosed_condition_state_bridge_partial_unqualified',
-    'owner_projection': 'actual_positive_self_heal_or_observed_bounded_condition_only',
-    'activation_projection': 'actual_action_and_observed_bounded_condition_only',
+    'owner_projection': 'actual_positive_self_heal_or_observed_condition_uuid_clock_unknown_end_allowed',
+    'activation_projection': 'actual_action_and_observed_condition_only_missing_frenzy_parent',
+    'event_input': 'authored_observed_event_construction_cast_positive_heal_removal_revival_partial_unqualified',
+    'lease_input': 'finite_observed_event_empty_lease_only_persistent_source_provenance_still_required',
+    'owner_visibility': 'actual_displayed_actor_and_authored_owner_alpha_partial_unqualified',
     'admitted_cells': 'prepared_world_rectangles_or_native_local_pairs_nullable_contract_partial_unqualified',
     'weapon_binding': 'exact_disclosed_item_holder_slot_and_optical_surface_partial_owner_and_legacy_gaps',
     'appearance_provider': 'prepared_modular_outfit_exact_condition_uuid_sampled_frame_lease_fly_qualified',
@@ -89,11 +96,11 @@ selected_clip_ids = set()
 for section, rows in catalog['typed'].items():
     for subject, original in rows.items():
         row = dict(original, source_section=section)
-        if section != 'conditions':
+        if section in ['spells', 'actions', 'conditions']:
             cues = []
             for cue in row.get('effects', []):
                 i = int(cue['source_index'])
-                dispatch = 'event_cue'
+                dispatch = 'condition_owner' if section == 'conditions' else 'event_cue'
                 if section == 'spells':
                     if not row['native_staging']:
                         dispatch = 'authored_disabled'
@@ -106,7 +113,7 @@ for section, rows in catalog['typed'].items():
                         dispatch = 'owner_handover'
                     elif row['explicit_event_cues'] and i not in row['event_cues']:
                         dispatch = 'not_selected_for_event'
-                if dispatch == 'event_cue' and cue.get('unbound_constructor_inputs'):
+                if dispatch in ['event_cue', 'condition_owner'] and cue.get('unbound_constructor_inputs'):
                     dispatch = 'unbound_constructor_inputs'
                 resolved = resolve(cue, subject)
                 cues.append({'constructor_input_gaps': cue.get('unbound_constructor_inputs', []),
@@ -114,7 +121,7 @@ for section, rows in catalog['typed'].items():
                              'constructor_input': cue.get('constructor_input'),
                              'at': cue.get('at'), 'selection': cue.get('selection', ''),
                              'dispatch': dispatch, 'contract': contract(resolved)})
-                if dispatch in ['event_cue', 'owner_handover']:
+                if dispatch in ['event_cue', 'condition_owner', 'owner_handover']:
                     selected_clip_ids.add(resolved)
             row['default_cues'] = cues
             for variant in row.get('variants', []):
@@ -202,7 +209,8 @@ def native_evidence():
 
 def live_evidence():
     combined = '.runtime/schema16-native-gui-qualified/report.json'
-    relative = combined if (ROOT / combined).exists() else '.runtime/schema16-live-all-spells-final-r3/results.json'
+    current = '.runtime/shared-providers-live-spells/results.json'
+    relative = current if (ROOT / current).exists() else combined if (ROOT / combined).exists() else '.runtime/schema16-live-all-spells-final-r3/results.json'
     if not (ROOT / relative).exists():return {'status': 'not_available', 'report': relative}
     result = read(relative)
     rows = []
@@ -225,11 +233,12 @@ def live_evidence():
                      'native_components': native,
                      'native_render_scope': 'Production component witnesses only. no_rendered_sample means not observed, not proof of missing artwork; tail completion and nonzero final fragments are not inferred.'})
     complete = result.get('complete', False) and result.get('expected_cases') == len(rows) == result.get('completed_cases')
-    log_path = '.runtime/schema16-live-all-spells-final-r3/godot.log' if relative != combined else None
+    log_path = '.runtime/shared-providers-live-spells/godot.log' if relative == current else '.runtime/schema16-live-all-spells-final-r3/godot.log' if relative != combined else None
     lines = (ROOT / log_path).read_text().splitlines() if log_path and (ROOT / log_path).exists() else []
+    version = read('.runtime/shared-providers-live-spells/package-input.json')['factory_version'] if relative == current else 'conditions-candidate-7fab471588209a41'
     return {'status': 'complete_command_sweep' if complete else 'snapshot_only_completion_not_inferred', 'report': relative,
-            'factory_version': 'conditions-candidate-7fab471588209a41',
-            'current_package_requalified': factory['version'] == 'conditions-candidate-7fab471588209a41',
+            'factory_version': version,
+            'current_package_requalified': factory['version'] == version and complete and result.get('ok', False),
             'expected_cases': result.get('expected_cases'), 'completed_cases': result.get('completed_cases'),
             'complete': complete, 'native_exit': result.get('native_exit'), 'log': log_path,
             'artifact_provenance': result.get('artifact_provenance', result.get('sources', [])),
@@ -267,7 +276,7 @@ channel_families = defaultdict(set)
 for owner, rows in typed_by_id.items():
     for row in rows:
         active_clips = {cue['contract'] for cue in row.get('default_cues', [])
-                        if cue['dispatch'] in ['event_cue', 'owner_handover']}
+                        if cue['dispatch'] in ['event_cue', 'condition_owner', 'owner_handover']}
         for lifecycle in row.get('condition_lifecycles', []):
             if lifecycle['dispatch'] == 'authored_suppressed':continue
             active_clips.update(lifecycle['phases'].values())
@@ -295,8 +304,8 @@ report = {
                       'reader_inventory_qualified': safety.get('qualified'),
                       'reader_log_validation': safety.get('log_validation', {'status': 'not_available'}),
                       'reader_does_not_qualify': safety.get('does_not_qualify'),
-                      'reader_factory_version': 'conditions-candidate-7fab471588209a41',
-                      'safety_history': 'The full safety sweep belongs to the previous package. Current native cohort, targeted live commands and performance evidence are separate; old passing statuses do not requalify this release.',
+                      'reader_factory_version': safety.get('factory_version', 'conditions-candidate-7fab471588209a41'),
+                      'safety_history': 'Recording safety, native issued-command witnesses and visual approval are distinct. Each report retains its package identity and completeness; an older passing report does not requalify a successor.',
                       'ui_report_source': 'generated/reports/ui-art-coverage.json'},
     'entries': entries,
     'case_records': case_records,

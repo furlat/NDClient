@@ -39,15 +39,58 @@ static func removal_ms(selections:Array)->float:
 ## spell's body visual the others. Those sprites are neither drawn nor required.
 static func replaced_media(condition_id:String,recipe:Dictionary)->Array:
     var selections:Array=Effects.conditions(condition_id)
-    if selections.is_empty():return []
     var markers:bool=selections.any(func(selection):return not selection.condition.get("marker",{}).is_empty())
     var body:bool=selections.any(func(selection):return selection.condition.get("body_channel_included",false))
     var result:Array=[]
+    for cue in recipe.get("persistent",{}).get("nativeEffects",[]):result.append_array(cue.get("replaces_media",[]))
+    if selections.is_empty():return result
     for layer in recipe.get("persistent",{}).get("layers",[]):
         if (markers if layer.get("markerGroup")!=null else body):result.append(str(layer.get("assetId","")))
     for phase in ["application","removal"]:
         var change:Variant=recipe.get(phase)
         if change is Dictionary:result.append_array(change.get("effects",[]).map(func(effect):return str(effect.get("assetId",""))))
+    return result
+
+## An explicitly authored native hold uses the same UUID owner as package
+## lifecycles. Cache only its immutable phase; the owner clock remains private.
+static func authored_samples(common:Dictionary,cache:Dictionary)->Array:
+    var config:Dictionary=common.recipe
+    var key:String="condition-native:"+str(common.condition.behavior_id)
+    if not cache.has(key):
+        var phases:Array=[]
+        for original in config.get("persistent",{}).get("nativeEffects",[]):
+            var cue:Dictionary=original.duplicate()
+            cue.authored_at=cue.get("at","owner_start");cue.at="release"
+            var selected={"id":str(cue.get("selection","")),"source":str(config.get("_resource_source",common.source))+"::effects",
+                "source_bounds":{},"palette":{},"staging":{"decorative_light_multiplier":float(cue.get("light_multiplier",0.0))}}
+            var phase:Dictionary=Spells._phase(selected,cue,{"prepare":0.0},0.0,0.0,0)
+            phase.erase("spell_id")
+            phase.condition_authored=true
+            phase.source=str(config.get("_resource_source",common.source))+"::effects/"+str(cue.source_index)
+            phase.lifecycle={}
+            phase.native_cue=phase.native_cue.duplicate()
+            phase.native_cue.begin=0.0;phase.native_cue.end=INF
+            # The source's observed owner projection owns its return. Generic
+            # finite-clip fading would evaluate smoothstep(INF, INF, age).
+            phase.native_cue.erase("fade_out_seconds")
+            phase.source_id=str(cue.clip)
+            phases.append(phase)
+        cache[key]=phases
+    var result:Array=[]
+    for phase in cache[key]:
+        var row:Dictionary=common.merged(phase,true)
+        row.merge({"id":str(common.id)+":authored:"+str(phase.native_cue.source_index),"kind":"native_effect","native_spell":true,
+            "persistent_owner":true,"target_uuid":common.actor_uuid,"cast_recipe":{"enabled":false},
+            "start_ms":common.start_ms,"absolute_start_ms":common.absolute_start_ms,"duration_ms":common.duration_ms,
+            "from_position":[0,0],"to_position":[0,0],"from_elevation_feet":0.0,"to_elevation_feet":0.0,
+            "ground_target":false,"sample_hz":60.0},true)
+        row.trace_keys=[row.id]
+        result.append(row)
+    return result
+
+static func authored_removal_ms(config:Dictionary)->float:
+    var result:float=0.0
+    for cue in config.get("persistent",{}).get("nativeEffects",[]):result=maxf(result,float(cue.get("fade_out_seconds",0.0))*1000.0)
     return result
 
 ## Lifecycle occurrences of one owner. `common` carries the owner's clock

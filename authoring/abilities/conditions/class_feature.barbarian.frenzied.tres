@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_6l8s0"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_2fk5c"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_effect_use"]
+
 [sub_resource type="Resource" id="Resource_mx6sa"]
 script = ExtResource("1_bt6a3")
 colour = Color(0.9843137, 0.57254905, 0.23529412, 1)
@@ -50,9 +52,29 @@ steps = Array[ExtResource("3_6l8s0")]([SubResource("Resource_3kflf"), SubResourc
 script = ExtResource("1_bt6a3")
 colour = Color(0.9882353, 0.64705884, 0.64705884, 1)
 
+[sub_resource type="Resource" id="NativeConditionEffect_0"]
+script = ExtResource("native_effect_use")
+selection = "barbarian_frenzy_native"
+at = "owner_start"
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_frenzy_native"
+clip = "barbarian_frenzy_source_v176"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+fade_out = 0.35
+duration_policy = "authored"
+follow = true
+extra = {"replaces_media": ["class.frenzy.mantle-q0-back", "class.frenzy.mantle-q0-front"], "entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}
+
+unbound_constructor_inputs = PackedStringArray("condition_parent_uuid")
+
+
 [resource]
 script = ExtResource("4_2fk5c")
 id = "class_feature.barbarian.frenzied"
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeConditionEffect_0")])
 label = "Frenzied"
 icon = SubResource("Resource_2fk5c")
 disposition = "authored"

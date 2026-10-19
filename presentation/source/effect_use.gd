@@ -15,6 +15,8 @@ const Look = preload("res://presentation/source/look.gd")
 ## Finite native result projection: kind, component_path, input_field,
 ## save_effect_id and damage_type. Static source/art settings stay in Factory.
 @export var constructor_input: Dictionary = {}
+## Sources with actual role mapping consume entity UUIDs in endpoint.actor.
+@export var endpoint_actor_uuids: bool = false
 ## When it starts (cast_start, release, contact, application, removal,
 ## state_change, owner_start) and the delay after that.
 @export var at: String = ""

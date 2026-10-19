@@ -25,13 +25,13 @@ func run()->void:
             var path:String=root.sections[section][id]
             var e:Resource=load(path)
             var row={"source":path,"status":e.status,"notes":e.notes,"icon":{}}
+            row.effects=[]
+            for i in e.effects.size():row.effects.append(Build.action_cue(e.effects[i],i))
             if e.icon!=null:row.icon={"path":e.icon.path,"status":e.icon.status,"reuses":e.icon.reuses,"source":e.icon.source}
             if section=="conditions":
                 row.merge({"play_package_lifecycle":e.play_package_lifecycle,"owner_spell":e.owner_spell,"surface":e.surface,
                     "has_look":e.look!=null,"appearance_layers":e.appearance_layers,"has_layers":not e.layers.is_empty(),"has_poses":not e.poses.is_empty(),"disposition":e.disposition})
             else:
-                row.effects=[]
-                for i in e.effects.size():row.effects.append(Build.action_cue(e.effects[i],i))
                 row.body={"clip":e.body.clip,"markers":e.body.markers} if e.body!=null else {}
                 if section=="spells":
                     row.merge({"native_staging":e.native_staging,"owner_kind":e.owner_kind,"owner_ids":Array(e.owner_ids),"owner_cues":Array(e.owner_cues),

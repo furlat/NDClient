@@ -66,6 +66,7 @@ def main():
     parser.add_argument('--timeout', type=int, default=300)
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
+    factory_version = json.loads((PROJECT / 'assets/vfx/index.json').read_text())['version']
     log_path = args.out / 'godot.log'
     REPORT.unlink(missing_ok=True)
     with log_path.open('w') as log:
@@ -81,6 +82,7 @@ def main():
             native_exit = 124
     report = json.loads(REPORT.read_text()) if REPORT.exists() else {'complete': False, 'failures': ['Recording sweep produced no report'], 'spells': []}
     report = qualify(report, log_path.read_text(errors='replace'), native_exit)
+    report['factory_version'] = factory_version
     report['log_validation']['log'] = str(log_path.resolve())
     output = json.dumps(report, indent=1) + '\n'
     REPORT.write_text(output)

@@ -28,7 +28,7 @@ func readiness_leaves(world:Node)->Dictionary:
         "world_revision":world.world_revision,"timeline_world_revision":world.timeline.world_revision,
         "waiting_world":world.timeline.waiting_for_world,"component_ready":renderer.ready,
         "blood_ready":renderer.blood.ready,"blood_unprepared_tiles":blood_pending,
-        "native_ready":renderer.native_spells.ready,"native_samples":spells,
+        "native_ready":renderer.native_spells.ready,"native_samples":spells,"native_preparation":renderer.native_spells.preparation_state,
         "native_support_ready":support.ready if support!=null else true,
         "native_support_issues":support.issues.slice(0,3) if support!=null else [],
         "hits_ready":renderer.native_hits.ready,"hit_pending":renderer.native_hits.pending_occurrences.slice(0,3),
@@ -132,6 +132,7 @@ func play_once(studio:Control,label:String)->void:
     if not await settle(studio):return
     var deadline=Time.get_ticks_msec()+45000
     var next_sample=0.0;var frames=0;var longest=0.0;var last=Time.get_ticks_usec()
+    var observed_native:Dictionary={}
     var atomic_targets:Dictionary={};var atomic_seen:Dictionary={}
     if label=="hide-light-schema9-seed3":
         for i in range(studio.index.groups.size()-1):
@@ -144,6 +145,12 @@ func play_once(studio:Control,label:String)->void:
         await process_frame
         var now=Time.get_ticks_usec();longest=maxf(longest,(now-last)/1000.0);last=now;frames+=1
         var timeline=studio.world.timeline
+        var native=studio.world.component_renderer.native_spells
+        for witness in native.witnesses:
+            if witness.status!="rendered" or observed_native.has(witness.id) or not native.handles.has(witness.id):continue
+            var component:Dictionary=native.handles[witness.id].component
+            if not component.has("native_constructor_evidence"):continue
+            observed_native[witness.id]={"clip":component.native_clip.id,"evidence":component.native_constructor_evidence}
         # A cut is observed on a frame displaying its exact clock with nothing
         # playing. Zero-time groups at that same instant may already have been
         # applied in that frame (nothing to prepare means no frame between).
@@ -168,7 +175,7 @@ func play_once(studio:Control,label:String)->void:
     check(is_equal_approx(studio.world.timeline.display_ms,studio.index.presentation_end_ms),label+": reaches actual recorded endpoint")
     verify_prefix(studio,label+" terminal")
     check(not studio.world.timeline.busy(),label+": selected terminal prefix drained")
-    evidence.append({"case":label,"frames":frames,"functional_max_frame_ms_including_oracle":longest,"diagnostics":studio.replay_diagnostics(),"audio_primary":studio.world.component_renderer.audio.diagnostics()})
+    evidence.append({"case":label,"frames":frames,"functional_max_frame_ms_including_oracle":longest,"diagnostics":studio.replay_diagnostics(),"audio_primary":studio.world.component_renderer.audio.diagnostics(),"observed_native":observed_native})
 func measure_single(studio:Control)->void:
     studio.loop_enabled=false;studio._play_study()
     if not await settle(studio):return

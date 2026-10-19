@@ -118,7 +118,10 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
     var suppressed: Array = []
     for id in _sorted(conditions):
         var e: Resource = conditions[id]
-        if not e.disposition.is_empty():recipes[id] = provenance(R.condition_recipe(e), paths.get("conditions", {}).get(id, ""))
+        if not e.disposition.is_empty():
+            var record:Dictionary=R.condition_recipe(e)
+            if not e.effects.is_empty():record._resource_source=paths.get("conditions",{}).get(id,"")
+            recipes[id] = provenance(record, paths.get("conditions", {}).get(id, ""))
         if e.playback_rate != 0.0:rates[id] = e.playback_rate
         if not e.play_package_lifecycle:suppressed.append(id)
     docs["catalog/condition_recipes.json"] = _ordered(order, "catalog/condition_recipes.json", recipes)
@@ -358,6 +361,9 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
     _check_appearance_definitions(entries.get("conditions",{}),report)
     for id in entries.get("conditions", {}):
         var e: Resource = entries.conditions[id]
+        for use in e.effects:
+            _check_constructor(use,"abilities/conditions/"+id,clips,report)
+            if not clips.has(use.clip):Common.error(report,"abilities/conditions/"+id,"condition cue clip not in the package: "+use.clip)
         for phase in e.sounds:_check_binding(report, "abilities/conditions/" + id, bindings.get("conditions", {}).get(id, {}).get(phase), e.sounds[phase])
     for id in entries.get("actions", {}):
         var e: Resource = entries.actions[id]
@@ -379,10 +385,15 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
 static func _check_constructor(use:Resource,where:String,clips:Dictionary,report:Dictionary)->void:
     var binding:Dictionary=use.constructor_input
     if binding.is_empty():return
-    if binding.get("kind")!="application_result" or use.scope!="application":
-        Common.error(report,where,"constructor input needs the supported application_result projection and application scope");return
-    if binding.get("component_path",[]).is_empty() or str(binding.get("save_effect_id","")).is_empty() or str(binding.get("damage_type","")).is_empty():
-        Common.error(report,where,"constructor input lacks component path, save effect or damage type");return
+    if binding.get("kind")=="observed_event":
+        if binding.get("outcome") not in ["cast","heal","removal","revival"] or use.scope not in ["source","recipient"] or binding.get("geometry_actor") not in ["caster","target"]:
+            Common.error(report,where,"observed event needs an outcome, source/recipient scope and actual geometry role");return
+    elif binding.get("kind")=="application_result" and use.scope=="application":
+        if str(binding.get("save_effect_id","")).is_empty() or str(binding.get("damage_type","")).is_empty():
+            Common.error(report,where,"application result lacks save effect or damage type");return
+    else:
+        Common.error(report,where,"constructor input projection or scope is unsupported");return
+    if binding.get("component_path",[]).is_empty():Common.error(report,where,"constructor input lacks component path");return
     var candidates:Array=clips.get(use.clip,{}).get("approaches",[]).filter(func(approach):return approach.has("source_phase"))
     if candidates.is_empty():Common.error(report,where,"constructor input has no public source phase: "+use.clip);return
     for approach in candidates:
@@ -393,7 +404,7 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             var selected:Array=components.filter(func(component):return component.id==id)
             if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
             input=selected[0].input;components=input.get("components",[])
-        if not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
+        if binding.get("kind")=="application_result" and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
 
 static func _in(value: float, low: float, high: float) -> bool:
     return is_finite(value) and value >= low and value <= high

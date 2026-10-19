@@ -114,11 +114,12 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
         var visual:Dictionary=world.visual_actors.get(actor,{})
         if not Sockets.displayed(visual):return {"rows":[],"reason":"native_spell_endpoint_actor_not_displayed"}
         var socket:String=str(authored.get("socket",""));var resolved:Dictionary={"ready":true}
+        var pose_socket:String=str(authored.get("pose_socket",socket))
         if socket=="ground":resolved.point=Sockets.Placement.contact(visual.row)
         elif selector=="caster" and socket in ["cast_hand","hand"]:resolved.point=points.hand
-        else:resolved=Sockets.pose_point(world,visual.row,socket)
+        else:resolved=Sockets.pose_point(world,visual.row,pose_socket)
         if not resolved.ready:return {"rows":[],"reason":resolved.reason}
-        var endpoint:Dictionary={"actor":selector,"actor_uuid":actor,"socket":socket,"point":resolved.point}
+        var endpoint:Dictionary={"actor":actor if cue.get("endpoint_actor_uuids",false) else selector,"actor_uuid":actor,"socket":socket,"point":resolved.point}
         if authored.get("view_basis",false):endpoint.view_basis=world.camera.global_basis
         if authored.has("surface_slots"):
             var slots:Array=Array(authored.surface_slots)
@@ -192,7 +193,7 @@ static func cell_membership(handle:Dictionary,component:Dictionary,endpoints:Arr
                 var point:Vector3=inverse*Vector3(position[0],elevation/5.0*Sockets.Placement.HEIGHT_UNIT,position[1])
                 local.append([point.x,point.z])
             # The declared native adapter returns void; null is not rejection.
-            handle.occurrence.call(handle.clip.input_setters.admitted_cells,local)
+            Effects.set_input(handle,"admitted_cells",local)
     return handle.cell_input_reason
 
 func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->Dictionary:
@@ -206,6 +207,11 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
     var weapon:Dictionary={}
     var weapon_gaps:Array=[]
     var weapon_surface:Dictionary={}
+    if "owner_visibility" in requested:
+        var visibility:float=float(component.get("alpha",1.0)) if Sockets.displayed(world.visual_actors.get(actor,{})) else 0.0
+        if visibility!=float(handle.get("owner_visibility_input",-1.0)):
+            Effects.set_input(handle,"owner_visibility",visibility);handle.owner_visibility_input=visibility
+        supplied.append("owner_visibility")
     if "weapon_binding" in requested:
         weapon=Weapons.resolve(world,component)
         var hand:Dictionary={"ready":false,"reason":weapon.reason}
@@ -296,10 +302,24 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
         else:unavailable.appearance_provider=reason
     if "pose_provider" in requested and not handle.occurrence.parameters.get("actor_operation",{}).get("capture_pose",false):
         supplied.append("pose_provider") # This operation does not request a capture.
+    if "owner_projection" in requested and component.get("persistent_owner",false) and component.has("condition"):
+        if component.get("initial",false):unavailable.owner_projection="condition_application_not_observed"
+        else:
+            var projection={"actor_id":actor,"actor_uuid":actor,"owner_uuid":component.condition.condition_uuid,
+                "behavior_id":component.condition.behavior_id,"admitted":true,"suppressed":false,"begin_seconds":0.0,
+                "removed_seconds":-1.0 if is_inf(float(component.duration_ms)) else float(component.duration_ms)/1000.0}
+            if projection!=handle.get("owner_projection_input",{}):
+                Effects.set_input(handle,"owner_projection",projection);handle.owner_projection_input=projection
+            supplied.append("owner_projection")
+    var packets:Dictionary=handle.get("native_input_packets",{})
     for name in component.get("native_inputs",{}):
         if name=="weapon_binding":continue # Exact item provider owns the complete packet.
         if name in requested:
-            Effects.set_input(handle,name,component.native_inputs[name]);supplied.append(name)
+            if not packets.has(name) or packets[name]!=component.native_inputs[name]:
+                Effects.set_input(handle,name,component.native_inputs[name])
+                packets[name]={name:component.native_inputs[name]}.duplicate(true)[name]
+            supplied.append(name)
+    handle.native_input_packets=packets
     # Selector values are copied only from actual disclosed ConditionState.
     # Other channels need a provider; their names alone do not supply evidence.
     var state:Dictionary=component.get("condition",{}).get("state",{}) if component.get("condition",{}).get("state") is Dictionary else {}

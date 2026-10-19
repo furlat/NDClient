@@ -85,7 +85,27 @@ def first_cohort():
            {'role':'target','side':'blue','creature':'creature.goblin','at':[16,6]},
            {'role':'second_target','side':'blue','creature':'creature.goblin','at':[18,6]}]
     shield=actors();shield[0]['behaviors']=['reaction.spell.shield'];shield[2]['spells']=['spell.magic_missile']
+    raging=actors();raging[0]={'role':'caster','side':'amber','premade':'barbarian','at':[3,7]}
+    raging[2]={'role':'target','side':'blue','creature':'creature.knight','at':[5,7]};raging[3]['at']=[9,8]
+    healers=actors();healers[0]={'role':'caster','side':'amber','premade':'cleric','at':[3,7]}
+    healers[1]={'role':'ally','side':'amber','creature':'creature.knight','at':[4,7],'damage':38}
+    healers[2]={'role':'target','side':'blue','creature':'creature.knight','at':[9,7]}
+    healers[3]={'role':'second_target','side':'amber','creature':'creature.knight','at':[4,8],'damage':39}
     return [
+        {'id':'action.class.cleric.preserve_life/recipients','title':'Preserve Life: one invocation and actual recipient healing','kind':'action',
+         'subjects':subjects(actions=['action.class.cleric.preserve_life']), 'actors':healers,'seed':2,
+         'steps':[{'do':'action.class.cleric.preserve_life','by':'caster','target':'self'}],
+         'required_behaviors':['action.class.cleric.preserve_life'],'required_facts':['heal']},
+        {'id':'action.class.barbarian.frenzy/lifecycle','title':'Frenzy: real Rage owner, movement, attack and removal','kind':'action',
+         'subjects':subjects(actions=['action.class.barbarian.frenzy','action.move','action.attack','action.class.barbarian.end_rage'],
+                             conditions=['class_feature.barbarian.raging','class_feature.barbarian.frenzied']),
+         'actors':raging,'seed':2,
+         'steps':[{'do':'action.class.barbarian.frenzy','by':'caster','target':'self','track':True,'track_condition':'class_feature.barbarian.raging'},
+                  {'do':'hold_walk','offset':[1,0]}, {'do':'action.attack','by':'caster','target':'target'},
+                  {'do':'end_turn','by':'caster'}, {'do':'action.class.barbarian.end_rage','by':'caster','target':'self'}],
+         'required_behaviors':['action.class.barbarian.frenzy','action.class.barbarian.end_rage'],
+         'required_conditions':['class_feature.barbarian.raging','class_feature.barbarian.frenzied'],
+         'required_condition_ends':['class_feature.barbarian.raging','class_feature.barbarian.frenzied']},
         {'id':'action.move/ordinary', 'title':'Movement: idle, route, stop', 'kind':'action',
          'subjects':subjects(actions=['action.move']), 'actors':walkers, 'seed':2,
          'steps':[{'do':'action.move','by':'caster','target':[2,7]}]},

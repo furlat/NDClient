@@ -17,7 +17,7 @@ static func clip_with_inputs(phase:Resource,operands:Array)->Dictionary:
             var selected:Dictionary=components.filter(func(component):return component.id==id)[0]
             input=selected.input
             components=input.get("components",[])
-        var values:Dictionary=input[operand.input_field]
+        var values:Dictionary=input if str(operand.get("input_field","" )).is_empty() else input[operand.input_field]
         values.merge(operand.values,true)
     return clip
 
