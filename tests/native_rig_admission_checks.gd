@@ -20,7 +20,7 @@ func run()->void:
     var index=Sources.index(cache)
     var actual:Dictionary=Authoring.rigs(cache)
     var loaded:Dictionary=cache[Sources.KEY].loaded
-    check(expected.size()==44 and actual.size()==expected.size(),"All forty-four effective authored rigs are admitted")
+    check(expected.size()==44 and actual.size()>=expected.size(),"All forty-four effective authored rigs are admitted (the wired roster rigs join them)")
     check(is_same(actual,index.rigs),"Rig lookup borrows its existing admitted index reference")
     var clips:int=0;var sheets:int=0
     for id in expected:
