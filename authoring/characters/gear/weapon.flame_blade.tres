@@ -3,11 +3,27 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_olx2d"]
 [ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_jayge"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_item_use"]
+
 [sub_resource type="Resource" id="Resource_26ro0"]
 script = ExtResource("1_olx2d")
 path = "art/ui-delivery-20261018/runtime/smooth48/item.bg3_36.flame_blade.png"
 native_size = Vector2i(48, 48)
 source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="NativeItemAppearance"]
+script = ExtResource("native_item_use")
+clip = "items/created/flame_blade/appearance"
+selection = "created_item_flame_blade_appearance"
+role = "attached"
+sampling = "absolute"
+attachment = "item"
+orientation = "world"
+scale = 1.0
+light_multiplier = 0.0
+constructor_input = {"kind": "created_item", "component_path": ["appearance"], "creation_behaviors": ["spell.flame_blade"], "lifetime_condition": "condition.spell.flame_blade"}
+extra = {"equipment_slots": ["weapon_melee_main", "weapon_melee_off"]}
+staging_from = "factory production created-item public contract; candidate art not user accepted"
 
 [resource]
 script = ExtResource("2_jayge")
@@ -15,4 +31,5 @@ id = "weapon.flame_blade"
 kind = "weapon"
 icon = SubResource("Resource_26ro0")
 status = "partial"
-notes = "No worn look authored."
+native_appearance = SubResource("NativeItemAppearance")
+notes = "Native created-item appearance candidate; exact observed construction provenance required. No borrowed sprite look."

@@ -1,5 +1,6 @@
 extends SceneTree
 ## One native process, fresh real Play/session per authored case; no replayed commands.
+const NativeItems=preload("res://presentation/native_items.gd")
 const Play=preload("res://play.gd")
 const Choices=preload("res://sdk/choices.gd")
 const Placement=preload("res://placement.gd")
@@ -181,6 +182,15 @@ func case_run(request:Dictionary)->Dictionary:
         if other:
             if not await opponent(step,names):break
         elif not await execute(step,names):break
+    report.native_items=[]
+    if healthy():
+        for owner in scene.timeline.item_appearance_owners.values():
+            if not owner.reason.is_empty() or not NativeItems.active(owner,scene.timeline.state):continue
+            var id:String="item:"+owner.item_uuid+":appearance"
+            var drawn:bool=await until(func():return scene.component_renderer.native_spells.diagnostics.get(id,{}).get("status")=="rendered","Actual native item reaches first draw",30000)
+            if drawn:
+                var handle:Dictionary=scene.component_renderer.native_spells.handles[id]
+                report.native_items.append({"id":id,"item_uuid":owner.item_uuid,"inputs":handle.created_item_input,"construction_ms":handle.construction_phases})
     report.merge({"checks":checks,"failures":failures,"ok":failures.is_empty(),"issue":scene.session.issue,"presentation_errors":scene.presentation_errors,
         "render_trace":scene.timeline.event_trace(2000)})
     if not failures.is_empty():

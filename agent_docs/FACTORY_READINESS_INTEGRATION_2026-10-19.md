@@ -32,3 +32,17 @@ Original runs `.runtime/player-runs/20261019T200121.161137Z/` and `20261019T2002
 - Factory reports eleven source-owned native construction outliers, including walls/volumes, Cone of Cold and created Flame Blade. They are not qualified for synchronous1–2ms gameplay construction. This integration does not silently drop them or change approach policy. Created-item functional publication work continues separately.
 - Source rendering regressions and private clocks are qualified by the delivery's18 identical RGBA samples and source checks; client native output and user art approval stay separate. Aid/Bless/False Life/Sacred Flame remain unaccepted.
 - All-spell189-attempt evidence in the previous cohort belongs to208, not an automatic requalification of c494. Current package gates above are bounded; later provider changes receive their own exact tests.
+
+
+## Receiving checkout publication
+
+Main `codex-authoring-schemabump` received package `ae0261c7` and client
+`fdaa8796`, whole sealed c494 directory and matching abilities build. The prior
+whole208 package is recoverable in `.runtime/condition-packages/`.
+Actual-main six focused gates pass530checks (`.runtime/tests/20261019T201324Z/`),
+plus83actual Gallery UI command checks (`.runtime/player-runs/20261019T201342.413037Z/`).
+Its door maximum is20.668ms; first/later Fireball maximum41.954/22.706ms and
+packet→animation73.656/72.644ms. A private character build overlapped this
+receiving smoke's CPU window, so this is functional publication evidence,
+not a replacement for the two isolated preparation measurements above.
+No source/graphics tuning was introduced to obtain these values.

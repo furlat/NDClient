@@ -4983,6 +4983,26 @@
    "timeout": 90,
    "status": "ok",
    "reason": "Delivered selective immutable resource bank through production EffectPackage; actual native construction, private clocks and changed-pose material-discovery contract. Not a gameplay/FPS benchmark."
+  },
+  {
+   "name": "native_item_owner_checks",
+   "script": "res://tests/native_item_owner_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Actual two-seat Flame Blade creation/equip journal and item membership/lifetime cuts."
+  },
+  {
+   "name": "native_item_render_checks",
+   "script": "res://tests/native_item_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Actual Flame Blade creation/equip, current native hand binding, framebuffer contribution, absolute clocks and reverse replay."
   }
  ]
 }

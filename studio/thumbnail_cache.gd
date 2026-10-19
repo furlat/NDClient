@@ -103,6 +103,10 @@ func seed_source_images(sources:Dictionary)->bool:
 
 func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=true) -> String:
     var component: Dictionary=row.get("component",{})
+    # These appearances require the actual restored hand/item membership.
+    # Their main viewport is authoritative; an unbound source-only swatch
+    # would silently hide the source or manufacture a study attachment.
+    if component.get("native_item",false):return ""
     if row.get("visible_here",true)==false or row.kind in ["other_view","perspective"] or row.get("status")=="missing":return ""
     var state: Dictionary={}
     for candidate in row.get("preview_states",[]):
@@ -458,7 +462,7 @@ func _prepare_spares()->void:
 func prepare_descriptors(rows:Array)->void:
     for row in rows:
         var component:Dictionary=row.get("component",{})
-        if row.get("kind")!="native_effect" or not component.get("native_spell",false) or row.get("status")=="missing":continue
+        if row.get("kind")!="native_effect" or not component.get("native_spell",false) or component.get("native_item",false) or row.get("status")=="missing":continue
         var hz=float(row.get("source_fps",component.get("sample_hz",32)))
         var descriptor_key:String=str(row.id)+":"+str(hz)
         if not native_descriptors.has(descriptor_key):native_descriptors[descriptor_key]=native_store.descriptor(component,maxf(1,hz))

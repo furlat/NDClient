@@ -4,6 +4,7 @@ extends Resource
 ## visual slot; other ids of the same look name it as their family and the
 ## visual variant they stand for. Layers are {slot, part, tint "#rrggbb"}.
 const ImageRef = preload("res://presentation/source/image_ref.gd")
+const EffectUse = preload("res://presentation/source/effect_use.gd")
 @export var id: String = ""
 ## Server item kind (weapon, armor, shield, usable, item).
 @export var kind: String = ""
@@ -17,6 +18,8 @@ const ImageRef = preload("res://presentation/source/image_ref.gd")
 @export var hands: Dictionary[String, Dictionary] = {}
 ## How the item looks dropped: [{variant, part, clip, frame, rows_by_camera, pivots_by_camera, scale, tint, shadow_part, shadow_scale}].
 @export var ground: Array[Dictionary] = []
+## An owned native item body, separate from sprite layers and enchantments.
+@export var native_appearance: EffectUse
 @export var icon: ImageRef
 ## Natural, summoned and internal items draw no layers.
 @export var natural: bool = false

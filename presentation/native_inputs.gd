@@ -5,6 +5,7 @@ const Effects=preload("res://presentation/effect_package.gd")
 const Surface=preload("res://presentation/entity_surface.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
+const NativeItems=preload("res://presentation/native_items.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
 const Appearances=preload("res://presentation/condition_appearance.gd")
 var appearances:RefCounted=Appearances.new()
@@ -207,6 +208,13 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
     var weapon:Dictionary={}
     var weapon_gaps:Array=[]
     var weapon_surface:Dictionary={}
+    if "created_item_binding" in requested:
+        if component.get("native_item",false):
+            var packet:Dictionary=created_item_binding(component,world.timeline.state,points)
+            if packet!=handle.get("created_item_input",{}):
+                Effects.set_input(handle,"created_item_binding",packet);handle.created_item_input=packet
+            supplied.append("created_item_binding")
+        else:unavailable.created_item_binding="created_item_appearance_owner_not_bound"
     if "owner_visibility" in requested:
         var visibility:float=float(component.get("alpha",1.0)) if Sockets.displayed(world.visual_actors.get(actor,{})) else 0.0
         if visibility!=float(handle.get("owner_visibility_input",-1.0)):
@@ -332,3 +340,22 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
 func clear()->void:
     surfaces.clear()
     appearances.clear()
+
+static func created_item_binding(component:Dictionary,state:Dictionary,points:Dictionary)->Dictionary:
+    var owner:Dictionary=component.item_origin
+    var location:Dictionary=points.item_location
+    var held:bool=location.kind=="held"
+    var packet={"item_uuid":owner.item_uuid,"item_id":owner.item_id,"present":true,"observed":true,"suppressed":false,
+        "item_exists":true,"equipped":held,"location_kind":location.kind,"holder_uuid":location.get("holder_uuid","") if held else "",
+        "render_slot":location.get("render_slot","") if held else "","hand":"off" if held and location.render_slot=="offhand" else "main" if held else "",
+        "visibility":component.get("alpha",1.0)}
+    packet["hand_transform" if held else "world_transform"]=points.item_transform
+    if owner.lifetime_condition_uuid.is_empty():packet.creator_uuid=owner.creator_uuid
+    else:
+        var creator:Dictionary=state.actors.get(owner.creator_uuid,{})
+        var holdings:Variant=creator.get("controlled_items")
+        var held_by_caster:bool=held and location.holder_uuid==owner.creator_uuid
+        packet.merge({"caster_uuid":owner.creator_uuid,"lifetime_condition_uuid":owner.lifetime_condition_uuid,
+            "lifetime_present":NativeItems.lifetime_present(owner,state),
+            "item_in_caster_holdings":held_by_caster or holdings!=null and owner.item_uuid in holdings})
+    return packet

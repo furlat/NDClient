@@ -9,6 +9,7 @@ extends Resource
 @export var source_owners: Dictionary = {}
 @export var equipment: Dictionary = {}
 @export var equipment_errors: Dictionary = {}
+@export var native_item_appearances: Dictionary = {}
 @export var sheets: Dictionary = {}
 ## Server item id -> [family item id whose looks it wears, visual variant it stands for].
 @export var gear: Dictionary = {}

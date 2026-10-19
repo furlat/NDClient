@@ -11,6 +11,7 @@ const Common = preload("res://tools/presentation_build/common.gd")
 const Index = preload("res://presentation/resources/body_source_index.gd")
 const Layer = preload("res://presentation/resources/body_source_layer.gd")
 const Clip = preload("res://presentation/resources/body_source_clip.gd")
+const Records = preload("res://tools/presentation_build/ability_records.gd")
 const PROFILES := ["original", "gentle", "reference"]
 const GEAR_SLOTS := ["weapon_melee_main", "weapon_melee_off", "weapon_ranged_main", "weapon_ranged_off", "helmet", "body_armor", "gauntlets", "boots", "cloak", "backpack"]
 ## Effect slots the runtime keeps out of gear (presentation/characters.gd EFFECT_SLOTS).
@@ -169,6 +170,16 @@ static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
         if entry.id != id:Common.error(report, where, "id differs from its key: " + entry.id)
         if not entry.family.is_empty() and not gear.has(entry.family):Common.error(report, where, "family missing: " + entry.family)
         if entry.icon != null and entry.icon.status != "missing":Common.asset(report, where, entry.icon.path)
+        if entry.native_appearance!=null:
+            var use:Resource=entry.native_appearance
+            var package:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
+            var matches:Array=package.clips.filter(func(clip):return clip.clip_id==use.clip)
+            if matches.size()!=1:Common.error(report,where,"native appearance needs one delivered clip")
+            elif "created_item_binding" not in matches[0].inputs:Common.error(report,where,"native item clip lacks exact item binding")
+            if use.attachment!="item" or use.constructor_input.get("kind")!="created_item" or use.constructor_input.get("creation_behaviors",[]).is_empty():
+                Common.error(report,where,"native item requires item registration and exact creation behaviors")
+            for slot in use.extra.get("equipment_slots",[]):
+                if slot not in GEAR_SLOTS:Common.error(report,where,"unknown native equipment slot "+str(slot))
         var looks: Array = []
         for slot in entry.slots:
             if slot not in GEAR_SLOTS:Common.error(report, where, "unknown visual slot " + slot)
@@ -451,6 +462,10 @@ static func _equipment(state: Dictionary, gear: Dictionary) -> void:
     var index: Index = state.index
     for id in gear:
         var entry: Resource = gear[id]
+        if entry.native_appearance!=null:
+            var cue:Dictionary=Records.cue_from_effect(entry.native_appearance,0)
+            cue.source=entry.resource_path+"::native_appearance"
+            index.native_item_appearances[id]=cue
         if not entry.family.is_empty():index.gear[id] = [entry.family, entry.visual_variant_id]
         if entry.slots.is_empty() and entry.hands.is_empty():continue
         index.gear[id] = [id, ""]

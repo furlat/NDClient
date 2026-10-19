@@ -29,6 +29,10 @@ static func recording_plan(rows:Array)->Array:
             clip=Effects.occurrence_clip(component)
         elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":
             clip=component.native_hit.get("clip",{}).duplicate(false)
+        # An item source is hidden until its exact current holder packet is
+        # supplied by the production renderer. An unbound private draw cannot
+        # qualify its pipeline, so do not record a false startup witness.
+        if component.get("native_item",false):continue
         if clip.is_empty() or (Effects.requires_construction(clip) and not clip.has("construction_inputs")):continue
         var key:String=_key(clip)
         if not by_key.has(key):
