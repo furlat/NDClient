@@ -31,7 +31,6 @@ func run() -> void:
         "notes":"Real live initialization through first playable choices. Engine launch/import excluded; operating-system file-cache warmth is uncontrolled. This is startup evidence, not an isolated gameplay GPU benchmark."}
     scene.set_process(false)
     FileAccess.open(scene.game_config.test_result,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
-    FileAccess.open("res://generated/player_startup_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PLAYER_STARTUP_CHECKS ",JSON.stringify(report))
     scene.queue_free()
     await process_frame
