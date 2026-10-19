@@ -25,7 +25,7 @@ of that work. Estimates below measure implementation progress, not acceptance.
 | Frozen schema / canonical state | 100% | Engine export `211b71134`, protocol1/schema16; reference fold/oracle passes. |
 | SDK, ordering, equipment publication | 90% | Core and repeated native equip gates pass; broader old test migration remains named below. |
 | Studio browser / replay / tracks | 80% | Native cohort, seek, independent factions, loops and actual missing-input tracks; complete scenario depth remains open. |
-| All-spell runtime safety | 96% | 183 available original baselines compile safely; six baseline failures. Full current-package issued-command rerun is recorded separately, never inferred from partial results. |
+| All-spell runtime safety | 96% | 183 available original baselines compile safely; six baseline failures. Complete current-package189-attempt native rerun:182 safe passes/seven explicit failures; overall gate remains red. |
 | Complete Factory intake / migration | 65% | Whole sealed208 package installed; typed held/class cues and shared actual-result construction added. Source presence is not final native coverage. |
 | Shared client providers | 40% | Geometry, endpoints, material, spatial, exact weapon and Fly appearance bridges; class owner/results cohort. Actor history, capture, event provenance and created-item publication remain. |
 | Scenario / native-output depth | 40% | 201 cases, including the new Second Wind recording; full class/condition outcomes and variants are incomplete. |
