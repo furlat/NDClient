@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "field"
+constructor_script = "res://assets/vfx/sources/c325232daadfb6ce2819/recipient_sphere.gd"
+input = {"owner_uuid": "fixture-resilient_sphere-A", "state": {"owner_uuid": "fixture-resilient_sphere-A", "present": true, "observed": true, "suppressed": false}, "material": {"resource": "res://assets/vfx/sources/5b5a61351d0f2a4281e3/m_basic_blueshield1.tres", "uniforms": {"Size_Sphere": 0.0, "Gradient_Line": 1.0, "darkness": 0.5, "Proximity_light": 0.0, "Overlay_Texture": {"type": "Resource", "path": "res://assets/vfx/sources/929cd4ab89324bd78094/texture.res"}, "Overlay_Power": 2.0, "Overlay_Scale": {"type": "Vector2", "value": [2.0, 2.0]}, "Overlay_Velocity": {"type": "Vector2", "value": [0.015, 0.03]}, "Line_Gradient": {"type": "GradientTexture1D", "colors": ["000000", "000000"], "offsets": [0.0, 1.0]}}, "palette": ["132a46", "1d4a78", "3e7fad", "89b8d0"], "cull_back": true, "approved_force_surface": true, "world_ground_clip": true}, "apply_seconds": 0.45, "retire_seconds": 0.32, "opacity": 0.85, "phase_offset_seconds": 0.0, "review_states": [{"seconds": 3.4, "state": {"ending_started_at": 3.4}}], "clearance_cells": 0.12}
+options = {}
+provenance = "Pinned native selection; docs/HIGH_LEVEL_22_NATIVE_ARTWORK_PLAN_2026-10-15.md"
+
+[resource]
+script = ExtResource("script")
+clip_id = "conditions/continuation/condition_resilient_sphere_persistent/application"
+label = "resilient_sphere · admitted"
+phase = "application"
+variant = "admitted"
+source_recipe = "docs/HIGH_LEVEL_22_NATIVE_ARTWORK_PLAN_2026-10-15.md"
+bindings = [{"component": "field", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.9
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "field_opacity"}

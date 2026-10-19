@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/sources/fcd9acfd29de09c82b27/receiving_curves.gd"
+input = {"profile": "crest", "mode": "hold", "seconds": 3.2, "layers": [{"scene": "res://assets/vfx/sources/6127982409e0b8718186/VFX_Protection_4_Shield.tscn", "node": "external_base_ring", "alpha": 0.8, "alpha_power": 0.7, "uniforms": {"Enable_Proximity_Fade": false, "Enable_Fresnel": false, "Opacity": 0.85, "Texture2_Scale": {"type": "Vector2", "value": [1.0, 1.0]}, "Dissolver_Scale2": {"type": "Vector2", "value": [1.5, 0.7]}, "Speed_texture": {"type": "Vector2", "value": [0.14, 0.2]}, "Speed_disolver": {"type": "Vector2", "value": [0.08, -0.11]}}}], "count": 2, "width_cells": 0.045, "camber_cells": 0.025, "motion_rate": 1.5, "colour": "82b4cc", "source_alpha": 0.2, "apply_seconds": 0.14, "retire_seconds": 0.28, "phase_offset_seconds": 0.0}
+provenance = "Exact original native material mechanisms on measured open 3D receiving geometry; evidence/parallel-ward-trace-phantasm-v79/REPORT.md."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_protection_from_evil_and_good_persistent/application"
+label = "protection_from_evil_and_good · hold"
+phase = "application"
+variant = "hold"
+source_recipe = "evidence/parallel-ward-trace-phantasm-v79/REPORT.md"
+seconds = 3.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "receiving_opacity", "source_revision": "gpu-ward-v383-20261018"}

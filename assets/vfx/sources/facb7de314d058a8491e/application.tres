@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "psychic"
+constructor_script = "res://assets/vfx/sources/d7989287f3e6aecf6110/head_accent.gd"
+input = {"shape": "echoes", "mode": "impact", "count": 4, "seconds": 1.1, "width_cells": 0.036, "intensity": 1, "layers": [{"scene": "res://assets/vfx/sources/3d58e2f85565c4b2b53e/VFX_AirFlow.tscn", "node": "windflowz3", "alpha": 0.8, "uniforms": {"speed": {"type": "Vector2", "value": [-0.35, 0]}, "wind_2_speed": {"type": "Vector2", "value": [-0.22, -0.38]}}}, {"scene": "res://assets/vfx/sources/3d58e2f85565c4b2b53e/VFX_AirFlow.tscn", "node": "windflowz4", "alpha": 0.45, "uniforms": {"speed": {"type": "Vector2", "value": [-0.22, 0]}, "wind_2_speed": {"type": "Vector2", "value": [-0.18, 0.13]}}}], "apply_seconds": 0.06, "retire_seconds": 0.28, "colour": "7195a0", "source_alpha": 0.8}
+provenance = "Native source extraction and live receiving support; evidence/parallel-psychic-v53/REPORT.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_dissonant_whispers_persistent/application"
+label = "dissonant_whispers · impact"
+phase = "application"
+variant = "impact"
+source_recipe = "evidence/parallel-psychic-v53/REPORT.md"
+seconds = 1.1
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"psychic","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "psychic_opacity", "source_revision": "gpu-cached-v382-20261018"}

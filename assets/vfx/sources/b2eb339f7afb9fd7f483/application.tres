@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="part"]
+script=ExtResource("component")
+component_id="coating"
+constructor_script="res://assets/vfx/sources/9fbd37a52534154b7b82/condition_coating.gd"
+input={"material_kind": "weapon_material", "material": {"shader": "res://assets/vfx/sources/95d9c64322a82e35653e/s_magic_aura.tres", "texture": "res://assets/vfx/sources/fde8093965021852e1b3/texture.res", "colour": "78904b", "divide": [0.8, 0.7], "speed": [0.015, -0.035], "power": 1.0, "palette": ["27351e", "485d31", "78904b", "afbd70"]}}
+[resource]
+script=ExtResource("phase")
+clip_id="conditions/new/coating_poison"
+label="Current item native poison coating"
+phase="sustain"
+seconds=2.0
+simulation_hz=0.0
+components=Array[Resource]([SubResource("part")])
+bindings=[{"component":"coating","kind":"sample","rate":1.0,"offset_seconds":0.0}]

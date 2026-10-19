@@ -17,6 +17,11 @@ func run() -> void:
 		for approach in clip.approaches:
 			pending.append(approach.path)
 			pending.append_array(approach.warm)
+			if approach.has("source_phase"):
+				pending.append(approach.source_phase)
+	for selection in index.selections:
+		if not str(selection.get("resource", "")).is_empty():
+			pending.append(selection.resource)
 	var seen := {}
 	var failures := []
 	var resource_paths := RegEx.new()
@@ -46,6 +51,11 @@ func run() -> void:
 				var literal: String = match_value.get_string()
 				if not literal.begins_with("res://assets/vfx/"):
 					failures.append({"path": path, "error": "external resource literal", "literal": literal})
+				elif FileAccess.file_exists(literal):
+					# Constructor parameters can name a prepared PackedScene or
+					# a native data resource through a string. Godot does not list
+					# these as script dependencies, but they are real runtime reads.
+					pending.append(literal)
 		if path.get_extension() in ["json", "gdshaderinc"]:
 			continue
 		if not path.get_extension() in ["res", "scn", "tres", "tscn", "gdshader", "gd"]:

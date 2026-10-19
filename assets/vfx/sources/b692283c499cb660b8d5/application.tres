@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/8da6a47161b56211f477/poison.gd", "input": {"scene": "res://assets/vfx/sources/5f9edd98b59025fb4607/VFX_Protection_Bubble.tscn", "settings": {"id": "protection_from_poison", "title": "Protection from Poison", "name": "VFX_Protection_Bubble", "pack": "lelu-godot-healing-protection-premium", "animation": "Start", "scale": 0.85, "height": 0, "frames": 1152, "close": 1008, "palette": ["2e5b43", "3c7650", "51905d", "6eaa70", "8bc584", "a9d895", "c5e6ad"], "level": 2, "alphaGain": 1, "mode": "single", "cell": 512, "anchor": "target_ground", "note": "Original LeLu ground effect and surrounding particles during casting; only particles persist and follow the recipient. Sphere removed from this spell; source preserved for later use. Local review, not production integration."}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "poison", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "refresh_animation_caches": true}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/protection_from_poison.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "conditions/continuation/condition_dragon_resistance_poison_persistent/application"
+label = "Protection From Poison"
+phase = "application"
+variant = "back"
+source_recipe = "recipes/spells/protection_from_poison.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 8.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

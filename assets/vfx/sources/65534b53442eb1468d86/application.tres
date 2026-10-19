@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "interval"
+constructor_script = "res://assets/vfx/sources/7ba5fd40e010d019813f/equipped_enchantment.gd"
+input = {"actor": "caster", "slot": "weapon", "duration_seconds": 4.6, "fade_in_seconds": 0.3, "fade_out_seconds": 0.4, "clearance_cells": 0.008, "enchantment": {"actor": "caster", "present": true, "observed": true, "equipped": true, "suppressed": false}, "material": {"scene": "res://assets/vfx/sources/5122f3721c1db292c7dc/VFX_Nature_Vines_Trap.tscn", "node": "SmVinesTrap001", "material_property": "material_override", "palette": ["283719", "53652f", "7b9848", "acbd73", "d5dca5"], "energy_exposure": 1.2, "unshaded_output": true, "uniforms": {"Intensity": 3.5, "DisolverColorEnergy": 0, "DisolverSTEP": -0.2, "DisolverDetails": 0.2, "IsInvertFresnel": true, "FresnelPower": 0.6, "AlphaScissorThreshold": 0, "VertexIntensity": 0, "SwayAmplitude": 0, "VineTextureScale": [1, 2], "NoiseScale": [1, 2], "NoiseSpeed": [0.12, -0.6]}}}
+options = {}
+provenance = "Pinned native selection; recipes/runtime_spells/shillelagh.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "conditions/continuation/condition_shillelagh_persistent/application"
+label = "Renderer-owned actor/equipment treatment"
+phase = "application"
+variant = "shillelagh"
+source_recipe = "recipes/runtime_spells/shillelagh.json"
+bindings = [{"component": "interval", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.6
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-cached-v382-20261018"}

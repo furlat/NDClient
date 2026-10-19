@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/ed7fc22f644ee87c9dd5/steady_marker.gd"
+input = {"material": {"shader": "res://assets/vfx/sources/89910c630651ca5636b4/remaining_glyph_source.gdshader", "parameters": {"Alpha_Texture": {"type": "PNGTexture", "path": "res://assets/vfx/sources/89eb704936ef7fc914f3/texture.res"}, "Texture_Disolver": {"type": "PNGTexture", "path": "res://assets/vfx/sources/8b50d862e875547c4693/texture.res"}, "Color_1D_gradient": {"type": "GradientTexture1D", "offsets": [0, 0.12, 0.3, 0.68, 1], "colors": ["00000000", "121a1fa6", "538a9b", "538a9b", "b8dece"]}, "Color_Intensity": 1.2, "Vanishing": 0.001, "glyph_clock": 0.0}}, "size_cells": [0.36, 0.36], "clock_parameter": "glyph_clock", "durations": {"application": 0.16, "sustain": 2.0, "removal": 0.25}, "steady_source_clock": 0.0, "clearance_cells": 0.16, "application_seconds": 0.16, "loop_seconds": 2.0, "revision": "conditions-v366-20261017", "phase": "sustain", "phase_seconds": 2.0}
+options = {}
+provenance = "Explicit retained native material derivative; recipes/conditions/remaining_art_delta.json"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_field_focus_persistent/application"
+label = "field_focus"
+phase = "application"
+source_recipe = "recipes/conditions/remaining_art_delta.json"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 4.0
+options = {"qualification": "source candidate; GPU and actual-recipient visual checks pending"}

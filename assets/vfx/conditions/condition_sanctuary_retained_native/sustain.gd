@@ -1,0 +1,7 @@
+extends "res://assets/vfx/conditions/runtime.gd"
+
+static func make_component(input: Dictionary) -> Node3D:
+	var instance: Node3D = load("res://assets/vfx/conditions/condition_sanctuary_retained_native/sustain.gd").new()
+	instance.parameters = {"scene": "res://assets/vfx/conditions/condition_sanctuary_retained_native/prepared.scn", "geometry": ["effect/Retained/Donor/Small Sparks", "effect/Retained/Donor/Small Sparks2", "effect/Retained/Donor/YingYang_Base_Circle", "effect/Retained/Donor/YingYang_Kar", "effect/Retained/Donor/torus2white", "effect/Retained/Donor/torus3black", "effect/Retained/Donor/SanctuaryMark", "effect/Retained/Donor/Small SparksLoopHalf", "effect/Retained/Donor/Small Sparks2LoopHalf", "effect/Retained/Donor/YingYang_Base_CircleLoopHalf", "effect/Retained/Donor/torus2whiteLoopHalf", "effect/Retained/Donor/torus3blackLoopHalf"], "emitters": ["effect/Retained/Donor/Small Sparks", "effect/Retained/Donor/Small Sparks2", "effect/Retained/Donor/YingYang_Base_Circle", "effect/Retained/Donor/torus2white", "effect/Retained/Donor/torus3black", "effect/Retained/Donor/Small SparksLoopHalf", "effect/Retained/Donor/Small Sparks2LoopHalf", "effect/Retained/Donor/YingYang_Base_CircleLoopHalf", "effect/Retained/Donor/torus2whiteLoopHalf", "effect/Retained/Donor/torus3blackLoopHalf"], "application_seconds": 0.5, "removal_seconds": 0.65, "loop_seconds": 2.0, "sustain_gain": 1.0, "phase": "sustain"}
+	instance.parameters.merge(input, true)
+	return instance

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="part"]
+script=ExtResource("component")
+component_id="effect"
+constructor_script="res://assets/vfx/sources/9f0a428375cc7d1e9528/fly_wind.gd"
+input={"components": [{"id": "wind_0", "input": {"animation_missing_policy": "first_available", "scene": "res://assets/vfx/sources/eacac555d4b66c15cf87/VFX_WindExtras_2.tscn", "seed": 47291, "settings": {"animation": "", "id": "longstrider", "kind": "loop", "name": "VFX_WindExtras_2", "palette": ["283d49", "466373", "6e96a4", "99c0c7", "c1dadd", "e2eeeb"], "scale": 0.4}, "side": "full", "simulation_hz": 144}, "rotation_degrees": [0, 0, 0], "script": "res://assets/vfx/sources/2df94cf76d6f9f33bf21/movement_wind.gd"}, {"id": "wind_1", "input": {"animation_missing_policy": "first_available", "scene": "res://assets/vfx/sources/eacac555d4b66c15cf87/VFX_WindExtras_2.tscn", "seed": 47291, "settings": {"animation": "", "id": "longstrider", "kind": "loop", "name": "VFX_WindExtras_2", "palette": ["283d49", "466373", "6e96a4", "99c0c7", "c1dadd", "e2eeeb"], "scale": 0.4}, "side": "full", "simulation_hz": 144}, "rotation_degrees": [0, 0, 0], "script": "res://assets/vfx/sources/2df94cf76d6f9f33bf21/movement_wind.gd"}], "bindings": [{"component": "wind_0", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}, {"component": "wind_1", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+[resource]
+script=ExtResource("phase")
+clip_id="conditions/new/fly_wind"
+label="Fly selected source wind"
+phase="sustain"
+seconds=2.0
+simulation_hz=0.0
+components=Array[Resource]([SubResource("part")])
+bindings=[{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]

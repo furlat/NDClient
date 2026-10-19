@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/252cd8e8f22d0dd016b3/curse_brand.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"mode": "binding", "pack": "binbun-statusfxfull", "name": "vfx_status_dark", "adapter": "BestowCurseVariantsCaptureV12.gd", "curseMode": "loop", "cell": 384, "ortho": 8, "targetY": 1, "frames": 96, "animation": "", "palette": ["141c24", "293540", "63212c", "b92e38", "fa6755", "eb8674"], "id": "curse_action_denial_loop_source_v12", "cameraQuarter": 0, "aura_scene": "res://assets/vfx/sources/f87bd2df04923a0732d5/vfx_status_dark.tscn", "shadow_scene": "res://assets/vfx/sources/6053c7112539ebb3da8d/VFX_Dark_ShadowRing.tscn", "smoke_texture": "res://assets/vfx/sources/8b50d862e875547c4693/texture.res", "smoke_geometry": "res://assets/vfx/sources/7d31a60b2cc9541142c7/lelu_smoke_triangles.json", "clip_vector": "vec3(0.70710678,0.0,0.70710678)", "curseOption": 3, "glyphSegments": [[-0.32, 0, 0.01, 0], [0.17, -0.23, 0.36, 0], [0.36, 0, 0.17, 0.23], [-0.24, -0.09, -0.24, 0.09]], "headTop": 1.72, "alphaAwareBlocks": true, "native_curse_finish": true, "receiving_actor": "target"}, "side": "full", "simulation_hz": 144, "seed": 73217}, "id": "brand_effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "brand_effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spell.bestow_curse.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "conditions/continuation/condition_bestow_curse_inaction_persistent/application"
+label = "Whole native assembly"
+phase = "application"
+variant = "bestow_curse_action_denial_native"
+source_recipe = "recipes/spell.bestow_curse.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.5
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}
