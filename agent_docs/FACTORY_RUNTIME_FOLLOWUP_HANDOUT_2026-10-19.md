@@ -13,7 +13,7 @@ Both client checkouts consume the complete sealed
 `codex-authoring-schemabump`, checkpoint `c3be28cd`. Implementation:
 `C:\Users\tommaso\Documents\Dev\NDClientGodot-authoring-schema`, branch
 `codex/schema16-unit-a`, checkpoint `826b9da0`. Engine remains frozen
-`211b71134`, protocol1/schema16. Windows Godot4.7.2 Forward+/Vulkan/RTX5090.
+`211b71134`, protocol 1 / schema 16. Windows Godot 4.7.2 Forward+/Vulkan/RTX 5090.
 
 The client uses `index.runtime.production_construction.immutable_preparation`
 with the actual selected private clip/operands. The existing preparation queue
@@ -21,16 +21,16 @@ steps source resource discovery before constructing occurrences. Immutable
 Resources share; per-owner facts, nodes, materials, clocks and sampled history
 do not. Abandoned transient jobs are pruned and completed jobs discard operands.
 
-Actual Gallery Quickened/Twinned construction is now about1ms versus163/181ms.
-Door peak frames fell from201ms to21.4/21.5ms in two private live runs and16.6ms
+Actual Gallery Quickened/Twinned construction is now about 1 ms versus 163/181 ms.
+Door peak frames fell from 201 ms to 21.4/21.5 ms in two private live runs and 16.6 ms
 in the final receiving run. This part works: preserve its public API and pixels.
 
 ## Priority work for the Factory
 
 ### 1. All costly supported paths under the existing repair plan
 
-Your newer full timing scan is read and acknowledged: all1,891approaches were
-attempted,643 repeated constructors exceed16.667ms, and several adaptive
+Your newer full timing scan is read and acknowledged: all 1,891 approaches were
+attempted, 643 repeated constructors exceed 16.667 ms, and several adaptive
 setter-plus-sample paths are also expensive. The earlier eleven-row audit was
 representative, not the complete queue. Continue your existing family-based
 repair work; do not restrict the successor to the handful named here.
@@ -39,16 +39,16 @@ Production's strongest additional direct witness is **created Flame Blade**:
 
 | Run | Constructor total | Source `_ready` | All other stages combined |
 |---|---:|---:|---:|
-| Private actual issued command |187.030ms|186.975ms|.055ms|
-| Receiving actual issued command |175.405ms|175.352ms|.053ms|
-| First isolated native replay |375.854ms|375.736ms|.118ms|
+| Private actual issued command |187.030 ms|186.975 ms|0.055 ms|
+| Receiving actual issued command |175.405 ms|175.352 ms|0.053 ms|
+| First isolated native replay |375.854 ms|375.736 ms|0.118 ms|
 
 Source: `items/created/flame_blade/appearance`; actual item/caster/lifetime
 operands are supplied before source construction. The delivered native blade
 is admitted, follows the current authored hand/body frame, contributes actual
 framebuffer pixels and works through four camera views and reverse replay.
 Thus this is a cost of admitted real art, not an empty/unbound fixture. The
-Factory's direct-API188.617ms result independently identifies the same source
+Factory's direct-API 188.617 ms result independently identifies the same source
 cost; replacing the client's thin constructor wrapper cannot remove it.
 
 Prepare/share immutable blade meshes, native flame programs/textures and static
@@ -104,7 +104,7 @@ receiving shader/material path**, read-only under NDClientGodot. Relevant files:
 Reusing the actual current layer material/shader in the colour capture is
 preferable to recreating its lighting equations. If a public packet extension
 is needed, document that proposal explicitly in the successor; the client has
-not agreed to an invented field yet. Do not forge the old shader path or switch
+not added a new packet field for this work. Do not forge the old shader path or switch
 the game back to legacy lighting. Validate neutral assembled colour before
 Mirror Image's intentional spectral treatment/opacity, with light on/off,
 non-white tint and one body material/impact treatment. This source-review
@@ -113,7 +113,7 @@ The client continues actual owner/context/history preparation independently.
 
 ### 4. Blocking actual consumer shader compilation failure
 
-The first real schema16 Mirror Image replay, with actual native actor layers,
+The first real schema 16 Mirror Image replay, with actual native actor layers,
 exposed **two shader compilation errors** in the sealed c494 package:
 
 - `assets/vfx/shared/resources/e7ee404afa25f1a82e67ee0e853f083d0e72c1c568063acea0d3b2074d02f6bb.res`
@@ -146,17 +146,17 @@ Latest repeat: `.runtime/tests/20261019T212433Z/` plays the real recording
 forward from ordinary initial state. It passes **34 assertions**, has zero script
 errors, and still fails with the same **two shader errors**. Compositor object
 allocation occurs in existing optional preparation before the application cue.
-At640×480, constructor total9.045ms (`_ready`8.966ms), maximum inclusive
-`native_prepare_actor_context`6.318ms, `native_input_bindings`.093ms and
-`native_spell_sample`5.087ms. These intervals overlap other work and must not be
+At 640×480, constructor total 9.045 ms (`_ready` 8.966 ms), maximum inclusive
+`native_prepare_actor_context` 6.318 ms, `native_input_bindings` 0.093 ms and
+`native_spell_sample` 5.087 ms. These intervals overlap other work and must not be
 summed into a fabricated exclusive total. With failed shaders these numbers do
 not qualify GPU performance, colour or first draw. An immediate restore into an
 already active condition still allocates on its first sample; no readiness or
-100+FPS claim is made for that case.
+100+ FPS claim is made for that case.
 
 ## Delivery and qualification
 
-- Keep your existing1–2ms constructor allowance (aim below1ms) and<=250µs
+- Keep your existing 1–2 ms constructor allowance (aim below 1 ms) and ≤250 µs
   steady/changed-input-plus-next-sample targets; report exact expensive remaining
   stages instead of a green aggregate. Source CPU, worker resource loading,
   GPU/pipeline first draw, memory/residency and teardown are separate evidence.
@@ -186,8 +186,8 @@ already active condition still allocates on its first sample; no readiness or
 Client `agent_docs/FACTORY_READINESS_INTEGRATION_2026-10-19.md` and
 `agent_docs/CREATED_ITEM_PROVIDER_COHORT_2026-10-19.md` contain original run
 locations, full decomposition, native/live gates and known limits. Current
-receiving focused gates664checks plus Gallery83 and two issued spells17 pass.
-A separate41.221ms first-Fireball **pre-submit targeting** frame remains a
+receiving focused gates: 664 checks plus Gallery: 83 and two issued spells: 17 pass.
+A separate 41.221 ms first-Fireball **pre-submit targeting** frame remains a
 client investigation; this handout does not falsely attribute it to Factory.
 Devotee's Mace creation/ground/transfer and some public selectors remain
 unqualified consumer/fixture gaps, not missing artwork requests.
