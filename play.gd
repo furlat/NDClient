@@ -404,7 +404,7 @@ func _ready() -> void:
     # Retained terrain/objects are last-known data; ambient is not a FOW mask.
     environment.environment = PLAYER_ENVIRONMENT.duplicate()
     add_child(environment)
-    source_lighting.set_directionals(Catalog.read_file("world.json",catalog_cache).lighting)
+    source_lighting.set_directionals(Catalog.environment_world(catalog_cache).lighting)
     presentation_errors.append_array(source_lighting.issues)
     # Every worker uses the host's admitted authoring revision. A Studio seek
     # reuses its indexed snapshot; Reload supplies a new source owner.
@@ -1443,7 +1443,7 @@ func _sample_fixtures() -> void:
     fixture_heights.clear()
     fixture_shadow_heights.clear()
     if fixture_entries.is_empty(): return
-    var assets = Catalog.read_file("assets.json",catalog_cache)
+    var assets = Catalog.environment_resources(catalog_cache)
     for name in fixture_clips:
         var clip: Dictionary = fixture_clips[name]
         Graphs.sample(clip.clock,"Idle",timeline.display_ms/1000.0,name)

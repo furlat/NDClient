@@ -7,11 +7,11 @@ const BloodRenderer=preload("res://presentation/blood_renderer.gd")
 const NativeSources = preload("res://presentation/native_presentation_sources.gd")
 var checks = 0
 var failures: Array = []
-var cache = {"world.json":{"terrain":{"stone":{"n":"fixture","e":"fixture","s":"fixture","w":"fixture"}},"props":{},
+var cache = {"res://build/presentation/environment/world.res":{"terrain":{"stone":{"n":"fixture","e":"fixture","s":"fixture","w":"fixture"}},"props":{},
         "stone_wall_straight":{"n":"fixture","e":"fixture","s":"fixture","w":"fixture"},"wall_corner_faces":{}},
-    "assets.json":{"resources":{"fixture":{"path":"/fixture/stone.png","native_size":[2,2],"pivot":[1,2],"scale":1.0}}},
-    "res://generated/environment_texture_layouts.json":{"layouts":{}},
-    "environment/index.json":{"doors":{},"props":{},"traps":{}}}
+    "res://build/presentation/environment/resources.res":{"resources":{"fixture":{"path":"/fixture/stone.png","native_size":[2,2],"pivot":[1,2],"scale":1.0}}},
+    "res://build/presentation/environment/texture_layouts.res":{"layouts":{}},
+    "res://build/presentation/environment/index.res":{"doors":{},"props":{},"traps":{}}}
 func check(ok: bool, label: String) -> void:
     checks += 1
     if not ok: failures.append(label); print("WORLD_PREPARATION_SPARSE_FAIL ",label)
@@ -78,7 +78,7 @@ func actual_initial_residues()->void:
     check(state.tiles.values().any(func(tile):return tile.get("residues",[]).any(func(value):return value.residue_id=="residue.blood")),
         "Actual Gallery after-state includes persistent blood without a new presentation component")
     var sources:Dictionary=Preparation.Catalog.source_snapshot({})
-    check(Preparation.Catalog.prepared_asset("particles.region.blood",sources).is_empty(),"Fresh source owner has not admitted the blood asset")
+    check(Preparation.Catalog.prepared_residue_asset(sources).is_empty(),"Fresh source owner has not admitted the blood asset")
     var input={"state":state,"changes":{"full":true,"tiles":{},"objects":{},"senses":true,"order":[]},
         "actor_state":state,"staged_actors":{},"actor_samples":{},"actor_loadouts":{},"existing_actors":{},
         "cache":sources,"retained":{},"ground":{},"quarter":0,"basis":Basis.IDENTITY,
@@ -89,8 +89,8 @@ func actual_initial_residues()->void:
     WorkerThreadPool.wait_for_task_completion(worker)
     check(task.result.get("complete",false),"Actual initial world finishes with its persistent residue source")
     if task.result.get("complete",false):
-        var admitted:Dictionary=Preparation.Catalog.prepared_asset("particles.region.blood",task.result.source_files)
-        check(not admitted.is_empty() and is_same(admitted,Preparation.Catalog.prepared_asset("particles.region.blood",sources)),
+        var admitted:Dictionary=Preparation.Catalog.prepared_residue_asset(task.result.source_files)
+        check(not admitted.is_empty() and is_same(admitted,Preparation.Catalog.prepared_residue_asset(sources)),
             "Existing world projection hands off the exact admitted blood source before any sampling")
         check(not task.result.source_files.has("catalog/action_media_assets.json"),"Initial residue preparation does not parse the full legacy media catalog")
         var actual_count:int=state.tiles.values().filter(func(tile):return not Preparation.Blood.residue(tile).is_empty()).size()
@@ -121,9 +121,7 @@ func actual_initial_residues()->void:
                 and prepared_blood.kernels==Preparation.Blood.kernels(prepared_blood.value,prepared_blood.tile.position,[],prepared_blood.source,prepared_blood.cache),
                 "Persistent field worker owns exact canonical kernels before native construction")
         var source_files:Dictionary=Preparation.Catalog.source_snapshot(task.result.source_files)
-        var owner:Dictionary=source_files[NativeSources.CACHE_KEY]
-        var selected:Dictionary=owner.loaded.duplicate();selected.erase("asset:particles.region.blood")
-        source_files[NativeSources.CACHE_KEY]=NativeSources.make_admission(owner.index,selected)
+        source_files.erase(Preparation.Catalog.ENVIRONMENT+"residues/blood.res")
         var base:Dictionary={};World.update_rows(state,source_files,base,{"full":true})
         var dirty:String=""
         for key in state.tiles:
@@ -136,14 +134,14 @@ func actual_initial_residues()->void:
         worker=WorkerThreadPool.add_task(unchanged._derive.bind(input));WorkerThreadPool.wait_for_task_completion(worker)
         check(unchanged.result.get("complete",false) and unchanged.result.row_patch.visual_changes.is_empty(),
             "Actual blood tile requires no terrain projection change")
-        check(not Preparation.Catalog.prepared_asset("particles.region.blood",unchanged.result.get("source_files",{})).is_empty(),
+        check(not Preparation.Catalog.prepared_residue_asset(unchanged.result.get("source_files",{})).is_empty(),
             "Dirty authoritative tile admits its residue source even with unchanged terrain geometry and no injury component")
         check(unchanged.result.blood_rows.has(dirty),"Dirty residue without injury component has prepared field operands")
         check(not unchanged.result.blood_index.full and unchanged.result.blood_index.updates.keys()==[dirty],"Sparse worker classifies only the actual dirty canonical tile")
         var displayed_index:Dictionary=renderer.tiles
         renderer.publish_tile_index(state.tiles,2,unchanged.result.blood_index)
         check(is_same(renderer.tiles,displayed_index) and renderer.tiles==expected_index,"Sparse publication preserves index ownership and exact exhaustive classification")
-        input.blood_existing={dirty:{"value":Preparation.Blood.residue(state.tiles[dirty]),"source":Preparation.Catalog.prepared_asset("particles.region.blood",unchanged.result.source_files)}}
+        input.blood_existing={dirty:{"value":Preparation.Blood.residue(state.tiles[dirty]),"source":Preparation.Catalog.prepared_residue_asset(unchanged.result.source_files)}}
         var retained=Preparation.new();worker=WorkerThreadPool.add_task(retained._derive.bind(input));WorkerThreadPool.wait_for_task_completion(worker)
         check(retained.result.blood_rows.is_empty(),"Same canonical residue and source do not rerun worker kernels")
         var removed_input:Dictionary=input.duplicate();removed_input.state=state.duplicate();removed_input.state.tiles=state.tiles.duplicate();removed_input.state.tiles.erase(dirty)

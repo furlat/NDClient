@@ -117,7 +117,7 @@ func run()->void:
     print("TIMELINE_WORLD_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 func scenery_case()->void:
     var scene=Probe.new();root.add_child(scene)
-    var materials=Catalog.read_file("world.json",cache).terrain.keys().filter(func(value):return value!="water")
+    var materials=Catalog.environment_world(cache).terrain.keys().filter(func(value):return value!="water")
     check(materials.size()>1,"Two actual authored floor materials available")
     var tiles={}
     for x in range(3):

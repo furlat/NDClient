@@ -21,7 +21,7 @@ func _initialize()->void:
     var support=Ground.heights([{"placement":row,"batch_rows":[row,water,tile(0,1)]}])
     check(Ground.mask(row,support)==2,"Transparent water does not turn a shoreline into a joined floor")
     var cache={}
-    var selection:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/environment_receiving_normals.json")).normals
+    var selection:Dictionary=ResourceLoader.load("res://build/presentation/environment/receiving_normals.res").value.normals
     var desk={"id":"desk","kind":"prop","asset":"environment.furniture.writing_desk","position":[0,0],"base_height_steps":0,"orientation":"east","state":"default"}
     for quarter in 4:
         var source=Catalog._environment_source(desk,quarter,cache)

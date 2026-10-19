@@ -25,7 +25,7 @@ func run()->void:
     var binding=PlayerScript.new()
     var row={"id":"water","kind":"terrain","material":"water","position":[0,0],"base_height_steps":0,"orientation":"east","boundaries":[],"layer":0}
     var record=Catalog.environment(row,0,binding.catalog_cache)
-    var assets=Catalog.read_file("assets.json",binding.catalog_cache)
+    var assets=Catalog.environment_resources(binding.catalog_cache)
     check(record.has("water"),"Actual authored water terrain owns its original graph")
     if not record.has("water"):binding.free();quit(1);return
     for path in [record.path,assets.resources[record.water.ripple].path]:

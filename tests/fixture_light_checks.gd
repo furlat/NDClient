@@ -34,7 +34,7 @@ func run() -> void:
     if scene.timeline.state.is_empty(): quit(1); return
     var original: Dictionary = scene.timeline.state.duplicate(true)
     check(scene.fixture_entries.size()==2,"Both disclosed lit wall torches display their authored flame")
-    var assets = scene.Catalog.read_file("assets.json",scene.catalog_cache)
+    var assets = scene.Catalog.environment_resources(scene.catalog_cache)
     var reference: Dictionary = assets.animations["torch.flame"]
     var strengths: Array = []
     var first: Image

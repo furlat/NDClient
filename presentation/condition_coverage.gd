@@ -45,7 +45,7 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
         if not persistent.get(field,[]).is_empty():return
     if not entry.get("indicator_assignments",[]).is_empty():return
     if "ground_zone" in domains:
-        var spatial:Dictionary=Authoring.load_data("world.json",cache).get("spatial_media",{})
+        var spatial:Dictionary=Catalog.environment_index(cache).get("spatial_media",{})
         var triggers:Array=recipe.get("relationships",{}).get("incomingTriggers",[])
         var assignments:Array=[]
         for i in triggers.size():
@@ -55,7 +55,7 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
             if not spatial.has(effect_id):continue
             var media:Dictionary=spatial[effect_id]
             if media.get("layers",[]).is_empty() and media.get("variants",[]).is_empty():continue
-            assignments.append({"kind":"spatial_media","source":"world.json:/spatial_media/"+effect_id,
+            assignments.append({"kind":"spatial_media","source":"authoring/environment/surfaces/"+effect_id+".tres::legacy/spatial_media",
                 "trigger_source":entry.source+"/relationships/incomingTriggers/"+str(i)+"/sourceRef",
                 "source_ref":ref.duplicate(true),"qualification":"Existing world assignment for the declared trigger; no renderer or recorded execution claim."})
         entry.indicator_assignments=assignments
@@ -63,7 +63,7 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
         _require(entry,"persistent","persistent_indicator",entry.source+"/persistent",false,
             "indicator_ownership_unresolved","unresolved",{
                 "gap_kind":"authoring_review","implementation":"not_applicable","presentation_domains":domains,
-                "expected_source":entry.source+"/persistent","related_source":"world.json:/spatial_media",
+                "expected_source":entry.source+"/persistent","related_source":"authoring/environment/surfaces",
                 "note":"Indicator ownership unresolved between this ground condition and world spatial media. Review authoring; this is not evidence of absent VFX."})
         return
     _require(entry,"persistent","persistent_indicator",entry.source+"/persistent",false,

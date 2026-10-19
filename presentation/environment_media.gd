@@ -15,7 +15,7 @@ static func record_paths(record: Dictionary, paths: Dictionary, cache: Dictionar
     for role in record.get("roles",[]):
         if role.selection.kind == "mask": paths[role.selection.mask.region.path] = true
     if record.has("water"):
-        paths[Catalog.read_file("assets.json",cache).resources[record.water.ripple].path] = true
+        paths[Catalog.environment_resources(cache).resources[record.water.ripple].path] = true
 
 static func animation_pages(row: Dictionary, cache: Dictionary) -> Dictionary:
     # Only the explicit finite workshop destruction bank needs its entire page
@@ -56,7 +56,7 @@ static func row_paths(row: Dictionary, cache: Dictionary) -> Dictionary:
         record_paths(Catalog.environment(source,quarter,cache),paths,cache)
         if row.kind == "door": record_paths(Catalog.door_frame(source,quarter,cache),paths,cache)
     if row.has("lit_animation"):
-        var assets = Catalog.read_file("assets.json",cache)
+        var assets = Catalog.environment_resources(cache)
         if not cache.has("__live_fixture_frames"): cache.__live_fixture_frames = {}
         for frame in assets.animations[row.lit_animation].frames:
             var path: String = assets.resources[frame].path

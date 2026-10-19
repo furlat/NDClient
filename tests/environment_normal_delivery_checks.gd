@@ -2,7 +2,10 @@ extends "res://tests/native_light_output_checks.gd"
 # Original source registration through Catalog, SpriteSources and the production
 # lit environment sprite (light table receiving, spatial output). The expected
 # path comes directly from the delivery, independently of the normalized manifest.
-const DELIVERY="C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/environment-normal-quality-2026-10-12"
+## The delivery's own selection (the project's copy), keyed by its absolute delivery paths.
+const DELIVERY="res://assets/art/geometry/environment-quality"
+const DELIVERED_MEDIA="C:/Users/tommaso/Documents/Dev/NDClientData/.media/"
+const DELIVERED_QUALITY="C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/environment-normal-quality-2026-10-12/"
 const CAPTURES="res://.captures/environment-normal-delivery"
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 var selection:Dictionary={}
@@ -27,7 +30,7 @@ func fixture(spec:Dictionary,quarter:int)->Dictionary:
     var row:Dictionary=spec.row
     var phase:int=spec.get("phase",0)
     var original:Dictionary=Catalog._environment_source(row,quarter,cache,phase,0.0)
-    var chosen:Dictionary=selection.get(Catalog.media_path(original.normal.region.path),{})
+    var chosen:Dictionary=selection.get(original.normal.region.path,{})
     var expected_path:String=chosen.get("path",original.normal.region.path)
     var probe=SourceProbe.new();root.add_child(probe);probe.hide()
     probe.catalog_cache=cache
@@ -124,7 +127,11 @@ func unlit_case(value:Dictionary)->void:
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     var delivery:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(DELIVERY+"/quality.json"))
-    selection=delivery.normals;dispositions=delivery.assets
+    dispositions=delivery.assets
+    for key in delivery.normals:
+        var choice:Dictionary=delivery.normals[key].duplicate()
+        choice.path=DELIVERY+"/"+choice.path.trim_prefix(DELIVERED_QUALITY)
+        selection["res://assets/art/media/"+key.trim_prefix(DELIVERED_MEDIA)]=choice
     var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE)
     white=ImageTexture.create_from_image(one);cookie=light_cookie()
     DirAccess.make_dir_recursive_absolute(CAPTURES)

@@ -38,7 +38,7 @@ func base_scene() -> Node:
     scene.ground_is_background=true
     # Empty canonical fallback needs no art. Named projected entries below
     # deliberately test native ownership rather than authored source selection.
-    scene.catalog_cache={"world.json":{"terrain":{},"props":{}},"environment/index.json":{"doors":{},"props":{},"traps":{}}}
+    scene.catalog_cache={"res://build/presentation/environment/world.res":{"terrain":{},"props":{}},"res://build/presentation/environment/index.res":{"doors":{},"props":{},"traps":{}}}
     scene.world_row_cache={}
     WorldRows.apply_changes(scene.world_row_cache,WorldRows.prepare_changes(scene.timeline.state,scene.catalog_cache,scene.world_row_cache,{"full":true}))
     return scene

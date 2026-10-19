@@ -6,8 +6,8 @@ static func cell_key(position: Array) -> String:
     return "%d,%d" % [position[0],position[1]]
 
 static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
-    var world = Catalog.read_file("world.json",cache)
-    var index = Catalog.read_file("environment/index.json",cache)
+    var world = Catalog.environment_world(cache)
+    var index = Catalog.environment_index(cache)
     var senses: Dictionary = state.get("senses",{}) if state.get("senses") != null else {}
     var result: Array = []
     var missing: Array = []
@@ -36,7 +36,7 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
                 row.outcome = item.destruction_outcome
             row.merge({"kind":"door","asset":item.item_id,"state":"open."+swing if opened else "closed"})
         elif index.props.has(item.item_id):
-            var owner = Catalog.read_file(index.props[item.item_id],cache)
+            var owner = index.props[item.item_id]
             # Prop owners name the backend field and use its JSON value as the
             # bank key (for example is_open -> "false" / "true" for chests).
             var mode := "default"
@@ -109,7 +109,7 @@ static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
     retained.ids = ids
     if changed or not retained.has("result"):
         if retained.get("walls",[])!=walls:
-            var joined = join_walls(walls,Catalog.read_file("world.json",cache))
+            var joined = join_walls(walls,Catalog.environment_world(cache))
             var assembly = {}
             for row in walls: assembly[row.id] = {}
             for row in joined: assembly[row.id] = row
@@ -186,7 +186,7 @@ static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictiona
         for id in base.lit_candidates:
             if bool(base.lit_candidates[id])!=bool(senses.get("objects",{}).get(id,{}).get("visual",false)):
                 object_keys[id] = true
-    var world: Dictionary = Catalog.read_file("world.json",cache)
+    var world: Dictionary = Catalog.environment_world(cache)
     var affected_walls = {}; var affected_boundaries = {}; var visual_objects = {}
     for key in tile_keys:
         var old: Dictionary = {} if full else base.tile_rows.get(key,{})

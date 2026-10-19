@@ -5,13 +5,16 @@ const ExistingLighting = preload("res://presentation/lighting.gd")
 const Placement = preload("res://placement.gd")
 const OPTICAL_ENERGY = ExistingLighting.OPTICAL_ENERGY
 const NORMAL_HEIGHT_SOURCE_PIXELS := 56.0
-const TORCH_COLOUR := Color(0.809372,0.429306,0.269121,1.0)
-const TORCH_ITEM_IDS = ["equipment.portable_torch","environment.wall_torch"]
-const DEFAULT_COOKIE = "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG"
+const Catalog = preload("res://source_catalog.gd")
 const RangeProfile = preload("res://presentation/resources/light_range_profile.gd")
 const LightCookies = preload("res://presentation/light_cookies.gd")
-var range_profile: RangeProfile = preload("res://authoring/presentation/light_ranges.tres")
-var cookie_path: String = ProjectSettings.get_setting("source_data/light_cookie",DEFAULT_COOKIE)
+## The torch appearance's colour and the items that show it, and the cookie
+## used without a range profile (environment source lighting entries).
+static var TORCH_COLOUR: Color = Catalog.environment_lighting().get("torch_colour", Color.WHITE)
+static var TORCH_ITEM_IDS: Array = Catalog.environment_lighting().get("torch_item_ids", [])
+static var DEFAULT_COOKIE: String = Catalog.environment_lighting().get("fallback_cookie", "")
+var range_profile: RangeProfile = Catalog.light_ranges()
+var cookie_path: String = DEFAULT_COOKIE
 var sources: Array = []
 var issues: Array = []
 var nodes: Dictionary = {} # First page, keyed by original item UUID.

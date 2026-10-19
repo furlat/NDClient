@@ -3,8 +3,10 @@ extends RefCounted
 const Placement = preload("res://placement.gd")
 # Inventory-only portable lights have no authored hand/equipment binding. Keep
 # their backend XY and radius, with an explicit above-avatar optical elevation.
-const CARRIED_OPTICAL_LIFT_STEPS := 2.5
-const UNREGISTERED_OPTICAL_LIFT_STEPS := 1.0
+const Catalog = preload("res://source_catalog.gd")
+## Optical lifts of carried and unregistered sources (environment source lighting entries).
+static var CARRIED_OPTICAL_LIFT_STEPS: float = Catalog.environment_lighting().get("carried_lift_steps", 0.0)
+static var UNREGISTERED_OPTICAL_LIFT_STEPS: float = Catalog.environment_lighting().get("unregistered_lift_steps", 0.0)
 var carried_optical_lift_steps := CARRIED_OPTICAL_LIFT_STEPS
 var sources: Array = []
 var issues: Array = []

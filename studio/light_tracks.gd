@@ -34,7 +34,7 @@ static func observe(history:Dictionary,state:Dictionary,at_ms:float,event_uuid:S
         var object:Dictionary=state.objects.get(anchor,{})
         var fixture=""
         if object.get("item",{}).get("is_lit")==true and senses.get("objects",{}).get(anchor,{}).get("visual",false):
-            fixture=Catalog.read_file("world.json",cache).get("props",{}).get(object.item.item_id,{}).get("lit_animation","")
+            fixture=Catalog.environment_world(cache).get("props",{}).get(object.item.item_id,{}).get("lit_animation","")
         var pointer="PlayerState.senses.light_sources/"+id if senses.has("light_sources") else _legacy_pointer(state,source)
         var fields={}
         for field in ["position","base_height_steps","very_bright_radius_feet","bright_radius_feet","dim_radius_feet"]:fields[field]=pointer+"/"+field
@@ -90,9 +90,9 @@ static func rows(history:Dictionary,index:Dictionary,motion:Dictionary)->Array:
         for actor_id in actors:tracks.append_array(motion.get(actor_id,[]))
         var fields:Dictionary=first.source_fields.duplicate()
         fields.energy="res://presentation/lighting.gd::OPTICAL_ENERGY × user://rendering_settings.cfg::rendering/light_strength"
-        fields.color="res://presentation/lighting_2d.gd::TORCH_COLOUR or Color.WHITE, selected by disclosed appearance"
+        fields.color="res://authoring/environment/lighting/torch.tres::colour or Color.WHITE, selected by disclosed appearance"
         fields.normal_height="res://presentation/lighting_2d.gd::NORMAL_HEIGHT_SOURCE_PIXELS"
-        fields.falloff="res://authoring/presentation/light_ranges.tres"
+        fields.falloff="res://authoring/environment/lighting/lighting.tres::very_bright_edge/bright_edge"
         fields.position_sample="res://presentation/tracks.gd::samples → res://presentation/lighting.gd::sample"
         fields.fixture_height="res://presentation/sprite_sources.gd::_add_fixture_flame → res://play.gd::_sample_fixtures"
         output.append({"id":"light:"+held.id,"parent":parent,"kind":"light","label":"Torch light" if source.item_id in Lighting.TORCH_ITEM_IDS else "Optical light",

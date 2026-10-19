@@ -4,18 +4,13 @@ const Placement = preload("res://placement.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
 const NativePresentationSources = preload("res://presentation/native_presentation_sources.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
+## Environment runtime documents written by tools/build_presentation.gd from
+## authoring/environment.tres. Each is cached in a catalog cache under its
+## res:// path, so source_snapshot publishes it with the admitted documents.
+const ENVIRONMENT := "res://build/presentation/environment/"
 const UNITY_SOURCES="res://generated/unity_sources.json"
 const LIBRARY_SEQUENCES="res://generated/library_sequences.json"
 const IMPORTED_RECORDS="__imported_source_records"
-# Client original-rest selection policy, reusing the explicit chest pairs in
-# tools/build_unity_map.py. Source owner JSON binds reconstructed destruction
-# rests; retain those banks for destruction, and use the registered originals
-# for intact display. This is not a new source-authoring binding.
-const ORIGINAL_CHEST_RESTS = {
-    "prop.chest-a1.intact":"fantasy.chest.a1", "prop.chest-a2.intact":"fantasy.chest.a2",
-    "prop.chest-a3.intact":"fantasy.chest.a3", "prop.chest-a4.intact":"fantasy.chest.a4",
-    "prop.chest-b1.intact":"fantasy.chest.b1", "prop.chest-b2.intact":"fantasy.chest.b2",
-}
 # Parsed authoring documents, shared by every catalog cache in the process
 # (documents are immutable after admission; see source_snapshot). A document
 # is reused only while its file holds the same bytes it was parsed from.
@@ -31,6 +26,52 @@ static func media_path(path: String) -> String:
     if OS.get_name()=="Windows" and absolute.begins_with("//") and not absolute.begins_with("//?/"):
         return "//?/UNC/"+absolute.trim_prefix("//")
     return absolute
+
+static func environment_file(path: String, cache: Dictionary) -> Dictionary:
+    if not cache.has(path):
+        var record: Resource = ResourceLoader.load(path)
+        if record == null: push_error("Missing environment build output (run tools/build_presentation.gd): " + path)
+        cache[path] = record.value if record != null else {}
+    return cache[path]
+
+## Terrain views, wall and cliff pieces, stairs, fixtures and directional light.
+static func environment_world(cache: Dictionary) -> Dictionary:
+    return environment_file(ENVIRONMENT + "world.res", cache)
+
+## Every single image the world draws by id, the flame animation and the water look.
+static func environment_resources(cache: Dictionary) -> Dictionary:
+    return environment_file(ENVIRONMENT + "resources.res", cache)
+
+## Door, prop and trap owners, bank and library paths, wall destructions, chest rests.
+static func environment_index(cache: Dictionary) -> Dictionary:
+    return environment_file(ENVIRONMENT + "index.res", cache)
+
+## Torch colour and item ids, optical lifts and the fallback cookie (no catalog cache: immutable).
+static func environment_lighting() -> Dictionary:
+    var record: Resource = ResourceLoader.load(ENVIRONMENT + "lighting.res")
+    if record == null: push_error("Missing environment build output (run tools/build_presentation.gd): lighting.res")
+    return record.value if record != null else {}
+
+static func light_ranges() -> Resource:
+    return ResourceLoader.load(ENVIRONMENT + "light_ranges.res")
+
+## Measured energy and emission centre per flame frame, keyed by its image path.
+static func fixture_optics() -> Dictionary:
+    var facts: Resource = ResourceLoader.load(ENVIRONMENT + "fixture_optics.res")
+    return facts.frames if facts != null else {}
+
+## The blood residue's region particles (residue.blood). Preparation loads it;
+## sampling only reads what preparation admitted.
+static func residue_asset(cache: Dictionary) -> Dictionary:
+    var path := ENVIRONMENT + "residues/blood.res"
+    if not cache.has(path):
+        var asset: Resource = ResourceLoader.load(path)
+        if asset == null: return {}
+        cache[path] = asset.value
+    return cache[path]
+
+static func prepared_residue_asset(cache: Dictionary) -> Dictionary:
+    return cache.get(ENVIRONMENT + "residues/blood.res", {})
 
 static func read_file(relative_path: String, cache: Dictionary) -> Variant:
     if not cache.has(relative_path):
@@ -107,7 +148,7 @@ static func source_snapshot(cache: Dictionary) -> Dictionary:
     seal_environment_sources(cache)
     var snapshot = {}
     for path in cache:
-        if path is String and path.ends_with(".json") and not path.begins_with("__"):
+        if path is String and (path.ends_with(".json") or path.begins_with(ENVIRONMENT)) and not path.begins_with("__"):
             snapshot[path] = cache[path]
     if cache.has(NativePresentationSources.CACHE_KEY):
         snapshot[NativePresentationSources.CACHE_KEY]=NativePresentationSources.snapshot(cache[NativePresentationSources.CACHE_KEY])
@@ -179,14 +220,14 @@ static func validate_native(cache: Dictionary) -> Array:
     return cache.get("native_authoring_errors", [])
 
 static func bank_for(row: Dictionary, broken: bool, cache: Dictionary) -> String:
-    var index = read_file("environment/index.json", cache)
+    var index = environment_index(cache)
     var state: String = row.get("state", "default")
     if row.kind == "wall":
-        return read_file(index.wall_destructions, cache)[row.material] if broken else ""
+        return index.wall_destructions[row.material] if broken else ""
     if row.kind not in ["prop", "door", "trap", "bank"]: return ""
     if row.kind == "bank": return row.asset
     var group: String = {"prop": "props", "door": "doors", "trap": "traps"}[row.kind]
-    var owner = read_file(index[group][row.asset], cache)
+    var owner = index[group][row.asset]
     if row.kind == "door":
         if broken: return owner.destructions[state + "." + row.get("outcome", "clear")]
         return owner.openings["inward" if state == "open.inward" else "outward"]
@@ -198,8 +239,7 @@ static func bank_for(row: Dictionary, broken: bool, cache: Dictionary) -> String
     return owner.intact.get(state, owner.intact.values()[0])
 
 static func bank_data(id: String, cache: Dictionary) -> Dictionary:
-    var index = read_file("environment/index.json", cache)
-    return read_file(index.banks[id], cache)
+    return environment_file(environment_index(cache).banks[id], cache)
 
 static func frame_at(bank: Dictionary, time: float) -> int:
     if bank.has("sample_times_ms"):
@@ -263,8 +303,7 @@ static func break_duration(row: Dictionary, cache: Dictionary) -> float:
     return duration(bank_data(bank,cache)) if not bank.is_empty() else 0.0
 
 static func library_record(row: Dictionary, quarter: int, cache: Dictionary, phase: int, time: float) -> Dictionary:
-    var index = read_file("environment/index.json", cache)
-    var library = read_file(index.library[row.asset], cache)
+    var library = environment_file(environment_index(cache).library[row.asset], cache)
     var options = sequences(row,cache)
     var selected_sequence = library_sequence(row,cache,phase > 0)
     if selected_sequence < 0: selected_sequence = int(row.get("sequence",0))
@@ -316,14 +355,13 @@ static func library_record(row: Dictionary, quarter: int, cache: Dictionary, pha
 
 static func owner_for(row: Dictionary, cache: Dictionary) -> Dictionary:
     if row.kind not in ["prop","door","trap"]: return {}
-    var index = read_file("environment/index.json",cache)
-    return read_file(index[{"prop":"props","door":"doors","trap":"traps"}[row.kind]][row.asset],cache)
+    return environment_index(cache)[{"prop":"props","door":"doors","trap":"traps"}[row.kind]][row.asset]
 
 static func door_frame(row: Dictionary, quarter: int, cache: Dictionary) -> Dictionary:
     var owner = owner_for(row,cache)
     var boundary = Placement.pose(row.orientation,quarter)
     if not owner.frame_resource_by_pose.is_empty():
-        return read_file("assets.json",cache).resources[owner.frame_resource_by_pose[boundary]]
+        return environment_resources(cache).resources[owner.frame_resource_by_pose[boundary]]
     var bank = bank_data(bank_for(row,false,cache),cache)
     var pose = pose_for(bank,row.orientation,quarter)
     if not bank.has("frame_regions_by_pose"): return {}
@@ -351,8 +389,7 @@ static func imported_record(row: Dictionary, quarter: int, cache: Dictionary, ph
         var field:String="imported_record_hits" if records_owner.records.has(key) else "imported_record_builds"
         metrics[field]=int(metrics.get(field,0))+1
     if not records_owner.records.has(key):
-        var index = read_file("environment/index.json",cache)
-        var owner = read_file(index.library[source.asset],cache)
+        var owner = environment_file(environment_index(cache).library[source.asset],cache)
         var sample: Dictionary = owner.samples[int(source.samples[quarter])]
         var result: Dictionary = sample.surface.duplicate(true)
         var rect: Array = sample.colour.rect
@@ -368,12 +405,10 @@ static func receiving_normal(record: Dictionary, cache: Dictionary) -> Dictionar
     # Delivery-selected receiving detail, never depth/support or paint alpha.
     # This raw file key lets media preparation publish the lookup to the scene
     # cache before first use, like the other immutable source documents.
-    var key = "res://generated/environment_receiving_normals.json"
-    if not cache.has(key):
-        cache[key] = JSON.parse_string(FileAccess.get_file_as_string(key))
+    var normals: Dictionary = environment_file(ENVIRONMENT + "receiving_normals.res", cache).normals
     var original_path: String = record.normal.region.path
-    if not cache[key].normals.has(original_path): return record
-    var selected: Dictionary = cache[key].normals[original_path]
+    if not normals.has(original_path): return record
+    var selected: Dictionary = normals[original_path]
     var result = record.duplicate()
     result.normal = record.normal.duplicate()
     result.normal.region = record.normal.region.duplicate()
@@ -422,9 +457,7 @@ static func _layout_region(region: Dictionary, layouts: Dictionary) -> Dictionar
 static func texture_layouts(cache: Dictionary) -> Dictionary:
     # Immutable source document owned by this catalog cache. A fresh catalog on
     # explicit Reload reads the new manifest; an existing world keeps its own.
-    var key = "res://generated/environment_texture_layouts.json"
-    if not cache.has(key): cache[key] = JSON.parse_string(FileAccess.get_file_as_string(key))
-    return cache[key].layouts
+    return environment_file(ENVIRONMENT + "texture_layouts.res", cache).layouts
 
 static func texture_layout(record: Dictionary, cache: Dictionary) -> Dictionary:
     if record.is_empty(): return record
@@ -450,19 +483,21 @@ static func texture_layout(record: Dictionary, cache: Dictionary) -> Dictionary:
 
 static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
     if row.has("source_sprite"): return imported_record(row,quarter,cache,phase,time)
-    var world = read_file("world.json", cache)
+    var world = environment_world(cache)
     var direction: String = row.get("orientation", "east")
     var view = Placement.pose(direction, quarter)
     if row.kind == "library": return library_record(row, quarter, cache, phase, time)
-    if row.kind == "resource": return read_file("assets.json", cache).resources[row.asset]
+    if row.kind == "resource": return environment_resources(cache).resources[row.asset]
     var bank_id = bank_for(row, phase > 0, cache)
     if not bank_id.is_empty():
         var bank = bank_data(bank_id, cache)
         view = pose_for(bank, direction, quarter)
-        if phase == 0 and row.kind == "prop" and ORIGINAL_CHEST_RESTS.has(bank_id):
-            var library_id: String = ORIGINAL_CHEST_RESTS[bank_id]
-            var index = read_file("environment/index.json",cache)
-            var library = read_file(index.library[library_id],cache)
+        var index = environment_index(cache)
+        if phase == 0 and row.kind == "prop" and index.rests.has(bank_id):
+            # The rest pose shows the registered original art (the source's
+            # rest_library); the reconstructed banks still play destruction.
+            var library_id: String = index.rests[bank_id]
+            var library = environment_file(index.library[library_id],cache)
             # Original sprite facing follows the existing Unity registration.
             # Reconstructed closed/open bank rays disagree on north/south and
             # must not select the original artwork's viewpoint.
@@ -505,7 +540,7 @@ static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary
     match row.kind:
         "terrain":
             if row.material == "water":
-                var water = read_file("assets.json",cache)
+                var water = environment_resources(cache)
                 var result: Dictionary = water.resources[water.water.mask].duplicate(true)
                 result.water = water.water
                 return result
@@ -531,7 +566,7 @@ static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary
                         view = Placement.POSES[posmod(Placement.POSES.find(candidate) + quarter, 4)]
                 views = world.terrain_cliff.corner
         "stairs": views = world.terrain_stairs.poses
-    var result: Dictionary = read_file("assets.json", cache).resources[views[view]]
+    var result: Dictionary = environment_resources(cache).resources[views[view]]
     if row.kind == "stairs":
         result = result.duplicate(true)
         result.pivot = world.terrain_stairs.contacts_px[view][0]

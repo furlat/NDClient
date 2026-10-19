@@ -188,7 +188,7 @@ func set_environment(entry: Dictionary, _rotation: Basis) -> void:
     var record = Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role == 2 else record_for(row)
     if record.is_empty(): entry.node.visible = false; return
     if row.get("water_surface",false):
-        record=record.duplicate();record.water=Catalog.read_file("assets.json",catalog_cache).water
+        record=record.duplicate();record.water=Catalog.environment_resources(catalog_cache).water
     if not record.has("water"):
         _apply_environment_descriptor(entry,EnvironmentSource.describe(row,record,entry.source_role,quarter,camera.basis,source_depth,source_normals))
         return
@@ -216,7 +216,7 @@ func set_environment(entry: Dictionary, _rotation: Basis) -> void:
                 water_bounds = water_bounds.expand(entry.node.basis.inverse()*receiver)
         entry.node.custom_aabb = water_bounds
         SourceMaterial.set_parameter(entry,"mask_texture",texture(record.path))
-        SourceMaterial.set_parameter(entry,"ripple_texture",texture(Catalog.read_file("assets.json",catalog_cache).resources[water.ripple].path))
+        SourceMaterial.set_parameter(entry,"ripple_texture",texture(Catalog.environment_resources(catalog_cache).resources[water.ripple].path))
         SourceMaterial.set_parameter(entry,"origin",Placement.project(v2(row.position),row.base_height_steps,quarter)-v2(record.pivot)*record.scale)
         SourceMaterial.set_parameter(entry,"placement_origin",Placement.contact(row))
         SourceMaterial.set_parameter(entry,"camera_quarter",quarter)
@@ -464,7 +464,7 @@ func _environment_row(row: Dictionary) -> void:
 
 func _add_fixture_flame(row: Dictionary) -> void:
     var name: String = row.lit_animation
-    var assets = Catalog.read_file("assets.json",catalog_cache)
+    var assets = Catalog.environment_resources(catalog_cache)
     if not fixture_clips.has(name):
         var authored: Dictionary = assets.animations[name]
         var images: Array[Image] = []

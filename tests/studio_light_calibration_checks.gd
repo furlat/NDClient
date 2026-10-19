@@ -2,7 +2,7 @@ extends SceneTree
 ## Matched production captures: existing native radial profile and ambient calibration.
 const Studio=preload("res://studio/studio.gd")
 const RangeProfile=preload("res://presentation/resources/light_range_profile.gd")
-const Calibrated=preload("res://authoring/presentation/light_ranges.tres")
+const Calibrated=preload("res://build/presentation/environment/light_ranges.res")
 const DIRECTORY="res://.captures/studio/light-calibration"
 var checks=0
 var failures:Array=[]

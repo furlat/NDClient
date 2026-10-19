@@ -371,7 +371,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                             for point in region.positions:
                                 if Blood.key(point)==Blood.key(release.position):source_height=region.elevation_steps
                     add(group,node,"residue_deposit",blood_start,Blood.duration(release,blood_asset),
-                        "catalog/action_media_assets.json:/particles.region.blood",
+                        "authoring/environment/surfaces/residue.blood.tres::region_particles",
                         {"actor_uuid":fact.target_entity_uuid,"attachment":"ground","position":release.position,"asset_metadata":blood_asset,
                         "elevation_steps":source_height,"flight_enabled":source_height!=null,
                         "body_release":release.duplicate(true),"reveals":revealed,"residue_deposition":true,

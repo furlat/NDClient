@@ -6,7 +6,7 @@ const Catalog=preload("res://source_catalog.gd")
 const Placement=preload("res://placement.gd")
 
 static func asset(cache:Dictionary)->Dictionary:
-    return Catalog.asset("particles.region.blood",cache)
+    return Catalog.residue_asset(cache)
 
 static func key(point:Array)->String:return "%d,%d"%point
 

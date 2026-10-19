@@ -21,7 +21,7 @@ static func create(world: Node) -> Dictionary:
     material.set_shader_parameter("numeric",load(ROOT+"numeric.res"))
     material.set_shader_parameter("metadata",load(ROOT+"metadata.res"))
     material.set_shader_parameter("placement_state",state.state_texture)
-    var assets=Catalog.read_file("assets.json",world.catalog_cache)
+    var assets=Catalog.environment_resources(world.catalog_cache)
     var water: Dictionary=assets.water
     material.set_shader_parameter("ripple_texture",world.texture(assets.resources[water.ripple].path))
     material.set_shader_parameter("ripple_pan",world.v2(water.ripplePan))

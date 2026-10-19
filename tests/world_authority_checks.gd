@@ -60,7 +60,7 @@ func _initialize()->void:
     var a=wall.duplicate(true);var b=wall.duplicate(true)
     a.id="junction-a";a.orientation="east";a.boundaries=["east"];a.erase("destroyed")
     b.id="junction-b";b.orientation="north";b.boundaries=["north"]
-    var joined=World.join_walls([a,b],Catalog.read_file("world.json",cache))
+    var joined=World.join_walls([a,b],Catalog.environment_world(cache))
     check(joined.size()==2 and not joined[0].has("wall_members"),"One broken edge cannot erase or destroy the adjacent intact wall through corner assembly")
     var report={"checks":checks,"failures":failures,"recording":recording.get_file(),"scope":"Actual five recorded destruction after-values; existing sources for four (two walls, door, table), cached/sparse projection, four source views, source immutability and mixed-state corner separation. Source metadata only, no rendered-pixel proof. Torch remnant authoring and spatial trap-state projection remain explicit separate gaps."}
     FileAccess.open("res://generated/world_authority_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

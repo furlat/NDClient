@@ -73,7 +73,7 @@ func run() -> void:
             check(Catalog.bank_for(row,true,cache)==owner.destructions[key],"Destruction bank remains authored")
             for quarter in range(4):
                 var record = Catalog.environment(row,quarter,cache)
-                check(record.get("original_library")==Catalog.ORIGINAL_CHEST_RESTS[owner.intact[key]],"All chest families select existing original rest")
+                check(record.get("original_library")==Catalog.environment_index(cache).rests[owner.intact[key]],"All chest families select existing original rest")
                 check(Catalog.environment(row,quarter,cache,1,0).bank==owner.destructions[key],"Destruction frame still uses original authored bank")
     for opened in [false,true]:
         var row = source_row("environment.storage_chest",opened)
@@ -87,7 +87,7 @@ func run() -> void:
             check(original != null and selected != null and original.get_data()==selected.get_data(),"Selected colour is byte-exact Unity original")
             seen_views[record.path] = true
             check(Vector2(record.native_size[0],record.native_size[1])==Vector2(256,256) and Vector2(record.pivot[0],record.pivot[1])==Vector2(128,208) and record.scale==1,"Original registered canvas/pivot/scale are preserved")
-            var library = Catalog.read_file(Catalog.read_file("environment/index.json",cache).library[record.original_library],cache)
+            var library = Catalog.environment_file(Catalog.environment_index(cache).library[record.original_library],cache)
             var matching = library.samples.filter(func(sample):return sample.colour.path==record.path)[0]
             check(record.geometry==matching.surface.geometry and record.normal==matching.surface.normal,"Original colour uses its matching registered depth and normal")
             check(matching.source_view==Placement.pose(row.orientation,quarter),"Open and closed states retain the same original camera facing")

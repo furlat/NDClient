@@ -269,10 +269,10 @@ static func _row_sources(row:Dictionary,quarter:int,cache:Dictionary)->Dictionar
         EnvironmentMedia.record_paths(Catalog.environment(source,quarter,cache),paths,cache)
         if source.kind=="door":EnvironmentMedia.record_paths(Catalog.door_frame(source,quarter,cache),paths,cache)
         if source.get("water_surface",false):
-            var assets:Dictionary=Catalog.read_file("assets.json",cache)
+            var assets:Dictionary=Catalog.environment_resources(cache)
             paths[assets.resources[assets.water.ripple].path]=true
     if row.has("lit_animation"):
-        var assets:Dictionary=Catalog.read_file("assets.json",cache)
+        var assets:Dictionary=Catalog.environment_resources(cache)
         for frame in assets.animations[row.lit_animation].frames:
             var path:String=assets.resources[frame].path
             paths[path]=true;fixtures[path]=true
@@ -387,7 +387,7 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
     var ground = {}; var wanted = {}; var packets = {}; var supports = {}
     var ground_changes = {}; var ground_removed = {}; var removed_wanted: Array = []
     var rows_to_route: Array = all_rows if full_membership else patch.visual_changes.values()
-    var residue_source_admitted:bool=not Catalog.prepared_asset("particles.region.blood",input.cache).is_empty()
+    var residue_source_admitted:bool=not Catalog.prepared_residue_asset(input.cache).is_empty()
     var residue_source_needed:bool=false
     if not full_membership and not residue_source_admitted:
         for key in input.changes.get("tiles",{}):
@@ -428,7 +428,7 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
                 if GroundReceiving.eligible(tile): supports[point] = float(tile.base_height_steps)
     # A disclosed residue can change without changing its terrain geometry or
     # disclosing an injury event. Its server tile after-value owns this source.
-    if residue_source_needed and Catalog.asset("particles.region.blood",input.cache).is_empty():
+    if residue_source_needed and Catalog.residue_asset(input.cache).is_empty():
         WorkerThreadPool.wait_for_task_completion(side_task)
         output.merge({"complete":false,"error":"Cannot load selected asset metadata: particles.region.blood","worker_ms":(Time.get_ticks_usec()-started)/1000.0})
         return
@@ -507,7 +507,7 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
         if residue.is_empty():
             if input.get("blood_existing",{}).has(key):blood_rows[key]={"removed":true}
             continue
-        var source:Dictionary=Catalog.asset("particles.region.blood",input.cache)
+        var source:Dictionary=Catalog.residue_asset(input.cache)
         if source.is_empty():output.merge({"complete":false,"error":"Cannot prepare persistent blood source"});return
         var prior:Dictionary=input.get("blood_existing",{}).get(key,{})
         if is_same(prior.get("value"),residue) and is_same(prior.get("source"),source):continue

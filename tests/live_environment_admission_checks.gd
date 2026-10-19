@@ -34,11 +34,11 @@ func resource(path:String)->Dictionary:
 func source_cache(fixture:bool)->Dictionary:
     var prop={"body_by_pose":{"n":"other","e":"current","s":"other","w":"other"}}
     if fixture:prop.lit_animation="test.flame"
-    return {"world.json":{"terrain":{},"props":{"test.prop":prop},"wall_corner_faces":{}},
-        "environment/index.json":{"doors":{},"props":{},"traps":{}},
-        "assets.json":{"resources":{"current":resource(CURRENT),"other":resource(OTHER),"flame":resource(FLAME)},
+    return {"res://build/presentation/environment/world.res":{"terrain":{},"props":{"test.prop":prop},"wall_corner_faces":{}},
+        "res://build/presentation/environment/index.res":{"doors":{},"props":{},"traps":{}},
+        "res://build/presentation/environment/resources.res":{"resources":{"current":resource(CURRENT),"other":resource(OTHER),"flame":resource(FLAME)},
             "animations":{"test.flame":{"frames":["flame"],"fps":1.0}}},
-        "res://generated/environment_texture_layouts.json":{"layouts":{}}}
+        "res://build/presentation/environment/texture_layouts.res":{"layouts":{}}}
 
 func state_before()->Dictionary:
     return {"actors":{},"tiles":{},"objects":{},"spatial_commit_cursors":{},"combat_log_appends":[],

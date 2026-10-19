@@ -44,11 +44,11 @@ func run() -> void:
         broken.append({"name":object.item.name,"item_id":object.item.item_id,"kind":result.rows[0].kind if not result.rows.is_empty() else "unresolved",
             "projected_destroyed":result.rows[0].get("destroyed",false) if not result.rows.is_empty() else false})
     var traps=[]
-    var index=Catalog.read_file("environment/index.json",cache)
+    var index=Catalog.environment_index(cache)
     for id in index.traps:
         var object={"placement":{"position":[0,0],"base_height_steps":0,"kind":"prop"},"item":{"item_id":id,"is_engaged":true}}
         var row:Dictionary=WorldRows.rows({"tiles":{},"objects":{"trap":object}},cache).rows[0]
-        var owner=Catalog.read_file(index.traps[id],cache)
+        var owner=index.traps[id]
         traps.append({"id":id,"projected_state":row.state,"authored_states":owner.state_frames.keys(),"resolves":owner.state_frames.has(row.state)})
     var api={}
     for cls in ["AnimationPlayer","AnimationMixer","GPUParticles3D","GPUParticles2D"]:

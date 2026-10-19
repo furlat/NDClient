@@ -26,7 +26,11 @@ func _initialize()->void:
     check(Requirements.fact("future_visual_fact").gap_kind=="unassessed","An unknown future fact cannot silently become state-only")
     check(Requirements.fact("item_charge").gap_kind=="explicit_none","Explicit reducer-only item accounting stays nonvisual")
     check(Requirements.fact("sensory").gap_kind=="explicit_none","Sensory publication does not invent independent effects or duplicate light lanes")
-    for pair in [["catalog/world_animations.json","world_animation"],["catalog/devices.json","device"],["catalog/device_wrecks.json","device_wreck"],["catalog/portals.json","portal"],["catalog/rigs.json","rig"],["catalog/creature_rigs.json","creature_rig"],["catalog/action_materials.json","action_material"],["catalog/action_intakes.json","action_intake"],["catalog/body_materials.json","body_material"],["catalog/item_attachments.json","item_attachment"]]:
+    var inspection:Dictionary=Authoring.Catalog.environment_index(cache).inspection
+    for kind in ["world_animation","portal","device"]:
+        check(not inspection[kind].is_empty(),"The environment build lists its "+kind+" owners")
+        for id in inspection[kind]:check(index.has(kind+":"+id),"Selected owner remains visible without a recorded occurrence: "+kind+":"+id)
+    for pair in [["catalog/rigs.json","rig"],["catalog/creature_rigs.json","creature_rig"],["catalog/action_materials.json","action_material"],["catalog/action_intakes.json","action_intake"],["catalog/body_materials.json","body_material"],["catalog/item_attachments.json","item_attachment"]]:
         var source:Dictionary=Authoring.load_data(pair[0],cache)
         for id in source:check(index.has(pair[1]+":"+id),"Selected owner remains visible without a recorded occurrence: "+pair[1]+":"+id)
     var blight:Dictionary=Authoring.load_data("spells/spell.blight.json",cache)
@@ -55,7 +59,7 @@ func _initialize()->void:
     var appearance=equipment.components.filter(func(c):return c.kind=="fact:equipment")
     check(appearance.size()==1 and appearance[0].gap_kind=="inspection" and appearance[0].implementation=="implemented","Equipment appearance is an inspection gap, not an invented missing renderer")
     var portal=trace({"kind":"portal_transfer","portal_content_id":"spatial_effect.environment.portal","committed":true},{})
-    check(portal.components.any(func(c):return c.source=="catalog/portals.json:/spatial_effect.environment.portal"),"Actual portal identity resolves its selected owner source")
+    check(portal.components.any(func(c):return c.source=="authoring/environment/surfaces/spatial_effect.environment.portal.tres"),"Actual portal identity resolves its selected owner source")
     check(not "state_only_no_animation_claim" in portal.reasons,"Portal transfer no longer silently falls through as nonvisual")
     var feast_id="action.environment.heroes_feast.eat"
     var feast=trace({"kind":"action","behavior_id":feast_id,"source_entity_uuid":"actor"},Authoring.load_data("catalog/body_action_recipes.json",cache).get(feast_id,{}))
@@ -64,7 +68,7 @@ func _initialize()->void:
     var bone=trace({"kind":"damage","stage":"applied","applied_damage":2,"target_entity_uuid":"actor","body_release":{"release_id":"body.bone"}},{})
     check(bone.components.any(func(c):return c.kind=="body_release" and c.source=="catalog/body_release_media.json:/body.bone"),"Blood implementation cannot hide another authoritative release family")
     var destroyed=trace({"kind":"object_destroyed","item_id":"environment.storage_chest"},{})
-    check(destroyed.components.any(func(c):return c.source=="environment/index.json:/props/environment.storage_chest" and c.gap_kind=="inspection"),"Working object endpoint keeps exact authored transition inspection gap")
+    check(destroyed.components.any(func(c):return c.source=="authoring/environment/objects/environment.storage_chest.tres" and c.gap_kind=="inspection"),"Working object endpoint keeps exact authored transition inspection gap")
     for path in ["spells/spell.blight.json","spells/spell.chain_lightning.json","spells/spell.disintegrate.json","spells/spell.true_strike.json"]:
         var recipe:Dictionary=Authoring.load_data(path,cache)
         var expectations=Requirements.recipe(recipe,path+":",["spell"],cache)

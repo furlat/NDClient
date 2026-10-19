@@ -18,7 +18,7 @@ func traverse(actor: Dictionary, destination: Vector2, cells: Dictionary, defini
         actor.support_id = support.id
     return true
 func _initialize() -> void:
-    var definition = Catalog.read_file("world.json",{}).terrain_stairs
+    var definition = Catalog.environment_world({}).terrain_stairs
     for direction in ["east","north","west","south"]:
         for height in [-2.0,0.0,4.0]:
             var stairs = {"id":"flight","kind":"stairs","position":[0,0],"base_height_steps":height,"orientation":direction}

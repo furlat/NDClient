@@ -67,7 +67,7 @@ func check_bank(bank_id:String,asset:String,layouts:Dictionary)->void:
         check(last.frame==int(bank.frame_count)-1 and final_paths.has(last.geometry_region.path) and final_paths.has(last.normal.region.path),"Settled complete selected-page readiness q%d: %s"%[quarter,bank_id])
     images.clear()
 func run()->void:
-    var document:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/environment_texture_layouts.json"))
+    var document:Dictionary=ResourceLoader.load("res://build/presentation/environment/texture_layouts.res").value
     check(document.version==2,"Version-two bounded pages published")
     if document.version!=2:quit(1);return
     var layouts:Dictionary=document.layouts
@@ -102,17 +102,17 @@ func run()->void:
         check(Catalog._layout_region({"path":path,"rect":[source_size.x,0,1,1]},layouts).is_empty(),"Out-of-source region cannot address padded cells")
         images.clear()
     for bank_id in CASES:check_bank(bank_id,CASES[bank_id],layouts)
-    var source="/media/environment/props/content-slender-monument/break/geometry/geometry-native.png"
+    var source="res://assets/art/media/environment/props/content-slender-monument/break/geometry/geometry-native.png"
     var legacy={"path":"res://old-monolith.png","source_size":[37632,1536],"size":[5376,10752],"cell":[384,384],"source_columns":98,"columns":14}
     var original={"path":source,"rect":[97*384,3*384,384,384]}
     var legacy_selected=Catalog._layout_region(original,{source:legacy})
     check(legacy_selected=={"path":"res://old-monolith.png","rect":[13*384,27*384,384,384]},"Legacy monolithic final-cell addressing unchanged")
-    var old_cache={"res://generated/environment_texture_layouts.json":{"version":1,"layouts":{source:legacy}}}
-    var fresh_cache={"res://generated/environment_texture_layouts.json":document}
+    var old_cache={"res://build/presentation/environment/texture_layouts.res":{"version":1,"layouts":{source:legacy}}}
+    var fresh_cache={"res://build/presentation/environment/texture_layouts.res":document}
     var selected_record={"geometry_region":original}
     check(Catalog.texture_layout(selected_record,old_cache).geometry_region==legacy_selected,"Existing cache retains admitted monolith")
     check(Catalog.texture_layout(selected_record,fresh_cache).geometry_region.path!=legacy_selected.path,"Fresh cache selects new pages")
-    check(selected_record.geometry_region==original and old_cache["res://generated/environment_texture_layouts.json"].version==1,"Source/prior cache immutable")
+    check(selected_record.geometry_region==original and old_cache["res://build/presentation/environment/texture_layouts.res"].version==1,"Source/prior cache immutable")
     images.clear()
     var result={"checks":checks,"failures":failures,"source_cells_compared":inspected,"catalog_samples":catalog_samples,"page_count":total_pages,"max_page_bytes":4718592,"scope":"Exact saved numeric cells/corners, actual four-view/all-frame Catalog selection, finite animation and settled closures, partial final-page and legacy-cache addressing. No GPU/upload-time claim."}
     FileAccess.open("res://.runtime/environment-texture-layout-checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))

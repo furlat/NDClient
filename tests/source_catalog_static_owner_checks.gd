@@ -9,8 +9,7 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr("SOURCE_CATALOG_OWNER_FAIL ",label)
 func expected_record(source:Dictionary,quarter:int,cache:Dictionary)->Dictionary:
-    var index:Dictionary=Catalog.read_file("environment/index.json",cache)
-    var library:Dictionary=Catalog.read_file(index.library[source.asset],cache)
+    var library:Dictionary=Catalog.environment_file(Catalog.environment_index(cache).library[source.asset],cache)
     var sample:Dictionary=library.samples[int(source.samples[quarter])]
     var value:Dictionary=sample.surface.duplicate(true);var rect:Array=sample.colour.rect
     value.merge({"path":sample.colour.path,"rect":rect,"native_size":[rect[2],rect[3]],

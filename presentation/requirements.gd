@@ -188,6 +188,10 @@ static func context(value:Dictionary,source:String,key:String)->Array:
         _add(result,value[field],fields[field],field.capitalize(),source+"/"+field,implementation)
     return result
 
+## The environment source entry that owns a server id (objects or surfaces).
+static func environment_source(id:String)->String:
+    return "authoring/environment/"+("objects/" if id.begins_with("environment.") else "surfaces/")+id+".tres"
+
 static func owner(kind:String,id:String,source:String,value:Variant)->Dictionary:
     var implemented="unassessed"
     var label=kind.replace("_"," ").capitalize()+" · "+id
@@ -236,17 +240,18 @@ static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,c
             var id:String=fact_value.get("behavior_id","")
             if values.has(id):result.append(owner(binding[1],id,path+":/"+pointer(id),values[id]))
     if fact_value.get("committed",true):
+        # Portals and finite world animations with old presentation, as the environment build lists them.
+        var inspection:Dictionary=Authoring.Catalog.environment_index(cache).get("inspection",{})
         var bindings:Array=[]
-        if kind=="portal_transfer":bindings=[["catalog/portals.json",fact_value.get("portal_content_id",""),"portal"]]
-        elif kind=="mechanism_activation":bindings=[["catalog/world_animations.json",fact_value.get("mechanism_content_id",""),"world_animation"]]
+        if kind=="portal_transfer":bindings=[["portal",fact_value.get("portal_content_id","")]]
+        elif kind=="mechanism_activation":bindings=[["world_animation",fact_value.get("mechanism_content_id","")]]
         for binding in bindings:
-            var document=Authoring.load_data(binding[0],cache)
-            if document.has(binding[1]):result.append(owner(binding[2],binding[1],binding[0]+":/"+pointer(binding[1]),document[binding[1]]))
+            if inspection.get(binding[0],{}).has(binding[1]):result.append(owner(binding[0],binding[1],environment_source(binding[1]),inspection[binding[0]][binding[1]]))
     if kind=="object_destroyed":
-        var environment=Authoring.load_data("environment/index.json",cache)
+        var environment=Authoring.Catalog.environment_index(cache)
         for family in ["doors","props","traps"]:
             if environment.get(family,{}).has(fact_value.item_id):
-                result.append(owner("environment_"+{"doors":"door","props":"prop","traps":"trap"}[family],fact_value.item_id,"environment/index.json:/"+family+"/"+pointer(fact_value.item_id),environment[family][fact_value.item_id]))
+                result.append(owner("environment_"+{"doors":"door","props":"prop","traps":"trap"}[family],fact_value.item_id,environment_source(fact_value.item_id),environment[family][fact_value.item_id]))
     if kind=="damage" and fact_value.get("stage")=="applied":
         var release:Dictionary=fact_value.get("body_release",{}) if fact_value.get("body_release")!=null else {}
         var id:String=release.get("release_id","")

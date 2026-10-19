@@ -3,7 +3,7 @@ const Walking = preload("res://walking.gd")
 const Catalog = preload("res://source_catalog.gd")
 func _initialize() -> void:
     var cache={}
-    var definition: Dictionary = Catalog.read_file("world.json",cache).terrain_stairs
+    var definition: Dictionary = Catalog.environment_world(cache).terrain_stairs
     var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/unity_map.json"))
     var cells=Walking.index(data.placements,definition)
     var failures=0

@@ -90,7 +90,7 @@ func _ready() -> void:
     rig_config = Catalog.read_file(catalog.rig, catalog_cache)
     rigs = Catalog.read_file(catalog.rigs, catalog_cache)
     resources = Catalog.read_file(catalog.resources, catalog_cache)
-    stair_definition = Catalog.read_file("world.json", catalog_cache).terrain_stairs
+    stair_definition = Catalog.environment_world(catalog_cache).terrain_stairs
     scenes = JSON.parse_string(FileAccess.get_file_as_string("res://scenes.json")).scenes
     asset_catalog = JSON.parse_string(FileAccess.get_file_as_string("res://generated/catalog.json")).entries
     for entry in asset_catalog: catalog_by_id[entry.id] = entry
@@ -171,7 +171,7 @@ func prune_texture_cache(limit: int = 2147483647) -> void:
         if record.has("normal"): active[record.normal.region.path] = true
         for role in record.get("roles",[]):
             if role.selection.kind == "mask": active[role.selection.mask.region.path] = true
-        if record.has("water"): active[Catalog.read_file("assets.json",catalog_cache).resources[record.water.ripple].path] = true
+        if record.has("water"): active[Catalog.environment_resources(catalog_cache).resources[record.water.ripple].path] = true
     for playback in destruction.values() if texture_gc_dirty else []:
         if playback.phase!=2: active.merge(playback.get_meta("numeric_pages",{}))
     texture_gc_dirty = false

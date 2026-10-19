@@ -50,7 +50,7 @@ func run()->void:
     var clip=Body.Clip.new();layer.clip_sources.Idle="fixture-clip"
     host.catalog_cache[Body.KEY]={"index":index,"loaded":{"fixture":layer,"fixture-clip":clip}}
     host.catalog_cache["res://generated/unity_sources.json"]={}
-    host.catalog_cache["res://generated/environment_texture_layouts.json"]={"layouts":{}}
+    host.catalog_cache["res://build/presentation/environment/texture_layouts.res"]={"layouts":{}}
     for pair in [["ready",ENV],["late",LATE_ENV]]:
         var record={"path":pair[1],"native_size":[2,2],"pivot":[1,2],"scale":1.0,"roles":[]}
         host.catalog_cache["res://generated/unity_sources.json"][pair[0]]={"records":[record,record,record,record]}
