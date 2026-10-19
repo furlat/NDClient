@@ -436,7 +436,7 @@ Studio and the game read only `build/`. The Studio can rebuild one entry and rel
 3. **Art inside the project, packed by the build.**
    - Copy the deliveries into `assets/art/`. Done 18 October: 12 GB. The folder is `.gdignore`d, so Godot neither imports nor exports it. It is raw source art only.
    - Load the finished depth for the 85 roster NPCs the client never imported.
-   - The build packs the art the sources reference into `build/` as ready-to-upload texture bundles: colour plus depth, normals and masks per clip, as the L8 sheet prepack already does (359 clips → 68.7 MB). Only `build/` ships. Until this step, the game in development reads the raw images from `assets/art/`.
+   - The build packs the art the sources reference into `build/` as ready-to-upload texture bundles: colour plus depth, normals and masks per clip, as the L8 sheet prepack already does (359 clips → 68.7 MB). That tool (`tools/prepack_sheets.gd`, `presentation/resources/sheet_bundle.gd`, `tests/sheet_prepack_checks.gd`) was removed with the characters cleanup because it read the old body-source index. Restore it from commit `7dbb3c2` and point it at `build/presentation/characters`; don't rewrite it. Only `build/` ships. Until this step, the game in development reads the raw images from `assets/art/`.
    - Add an export preset and run a test export (the single executable) against the server.
 4. **Fill the coverage.**
    - Rigs and characters for the 123 new NPCs.
