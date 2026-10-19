@@ -347,11 +347,12 @@ static func _validate_condition(e: Resource, where: String, report: Dictionary) 
                     if not _in(step.fade_in, 0, 10) or not _in(step.fade_out, 0, 10):Common.error(report, where, "body film fades out of range")
     for text in [e.application_text, e.removal_text]:
         if text != null and text.duration != 0.0 and not _in(text.duration, 0.001, 10):Common.error(report, where, "feedback duration out of range")
-## Poses and markers against the rigs' clips (the characters' data as the game
-## reads it): a pose's rig and clip exist, a held frame lies inside the clip,
-## speeds are sane, and a rig-specific action's markers fall inside its clip.
+## Poses and markers against the rigs' clips (the characters source, which the
+## game's body sources are built from): a pose's rig and clip exist, a held frame
+## lies inside the clip, speeds are sane, and a rig-specific action's markers
+## fall inside its clip.
 static func _validate_rigs(entries: Dictionary, report: Dictionary) -> void:
-    var rigs: Dictionary = Catalog.read_file("catalog/rigs.json", {})
+    var rigs: Dictionary = _source_rigs()
     for id in entries.get("conditions", {}):
         for pose in entries.conditions[id].poses:
             var where: String = "abilities/conditions/" + id
@@ -425,3 +426,16 @@ static func _coverage(entries: Dictionary, report: Dictionary) -> void:
         var e: Resource = entries.actions[id]
         Common.cover(report, e.kind if e.kind in ACTION_KINDS else "action", id, e.status)
     for id in entries.get("damage_types", {}):Common.cover(report, "damage_type", id, entries.damage_types[id].status)
+
+## The characters source's rigs as {rig id: {clips: {clip name: {frames}}}}.
+static func _source_rigs() -> Dictionary:
+    var root: Resource = load("res://authoring/characters.tres") if FileAccess.file_exists("res://authoring/characters.tres") else null
+    var result: Dictionary = {}
+    if root == null:return result
+    for id in root.sections.get("rigs", {}):
+        var rig: Resource = load(root.sections.rigs[id])
+        if rig == null:continue
+        var clips: Dictionary = {}
+        for clip in rig.clips:clips[clip.name] = {"frames": clip.frames}
+        result[id] = {"clips": clips}
+    return result
