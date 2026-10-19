@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_rdt7l"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_kuvx6"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_qc5su"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_qc5su"]
 
 [sub_resource type="Resource" id="Resource_tuqo5"]
@@ -16,10 +17,19 @@ markers = Dictionary[String, float]({
 })
 hidden_slots = PackedStringArray()
 
+[sub_resource type="Resource" id="Resource_tpgy7"]
+script = ExtResource("2_qc5su")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
 [resource]
 script = ExtResource("2_kuvx6")
 id = "action.spell.evards_black_tentacles.escape_dexterity"
 kind = "action"
+icon = SubResource("Resource_tpgy7")
 disposition = "authored"
 body = SubResource("Resource_tuqo5")
 effect_sources = PackedStringArray()

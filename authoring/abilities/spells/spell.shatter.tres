@@ -140,6 +140,8 @@ body = SubResource("Resource_6bhtw")
 hand_layers = Array[ExtResource("6_elp21")]([SubResource("Resource_jblko"), SubResource("Resource_jb6yy")])
 sockets = "measured/abilities/spells/spell.shatter.sockets.json"
 effects = Array[ExtResource("3_kxouw")]([SubResource("Resource_nwmgp")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -159,9 +161,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "shatter__back"
+"selection": "shatter__back",
+"source": "assets/vfx/index.json:/selections/shatter__back/staging"
 }
 unported = {
 "condition": {
@@ -217,3 +220,4 @@ unported = {
 "viewFacing": "SE"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

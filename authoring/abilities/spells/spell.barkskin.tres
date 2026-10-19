@@ -124,6 +124,8 @@ body = SubResource("Resource_0c12u")
 hand_layers = Array[ExtResource("4_xbxhr")]([SubResource("Resource_7h3yx"), SubResource("Resource_a2s03")])
 sockets = "measured/abilities/spells/spell.barkskin.sockets.json"
 effects = Array[ExtResource("3_du3at")]([SubResource("Resource_lybcg")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -137,9 +139,10 @@ applies_conditions = PackedStringArray("condition.spell.barkskin")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "barkskin_native"
+"selection": "barkskin_native",
+"source": "assets/vfx/index.json:/selections/barkskin_native/staging"
 }
 unported = {
 "condition": {
@@ -158,3 +161,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -129,6 +129,8 @@ body = SubResource("Resource_qs4ik")
 hand_layers = Array[ExtResource("4_nsndg")]([SubResource("Resource_rl2b3"), SubResource("Resource_hpja3")])
 sockets = "measured/abilities/spells/spell.grease.sockets.json"
 effects = Array[ExtResource("3_s28x3")]([SubResource("Resource_7a56d")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.prone", "condition.spell.greas
 applies_surfaces = PackedStringArray("spatial_effect.spell.grease")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "grease__surface"
+"selection": "grease__surface",
+"source": "assets/vfx/index.json:/selections/grease__surface/staging"
 }
 unported = {
 "condition": {
@@ -160,3 +163,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_lmjkj"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_kbhec"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_sqbm3"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_kbhec"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_j38cm"]
@@ -9,6 +10,14 @@
 script = ExtResource("1_lmjkj")
 enabled = false
 colour = Color(0.6392157, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_j38cm"]
+script = ExtResource("2_kbhec")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_jm2hm"]
 script = ExtResource("3_kbhec")
@@ -30,6 +39,7 @@ colour = Color(0.80784315, 0.15294118, 0.7647059, 1)
 script = ExtResource("4_j38cm")
 id = "trait.skeleton_archer_marked"
 label = "Marked"
+icon = SubResource("Resource_j38cm")
 disposition = "authored"
 look = SubResource("Resource_abfcl")
 group = "marker.trait.skeleton_archer_marked"

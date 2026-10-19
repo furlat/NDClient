@@ -1,8 +1,18 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_fubq2"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_vnu5g"]
+
+[sub_resource type="Resource" id="Resource_jx4r3"]
+script = ExtResource("1_vnu5g")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.hunters_mark.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.hunters_mark"
+status = "stand_in"
+source = "ui-delivery-20261018"
 
 [resource]
 script = ExtResource("1_fubq2")
 id = "condition.spell.hunters_mark"
+icon = SubResource("Resource_jx4r3")
 status = "internal"

@@ -131,6 +131,8 @@ body = SubResource("Resource_tp2pm")
 hand_layers = Array[ExtResource("4_2bsm6")]([SubResource("Resource_vumq3"), SubResource("Resource_7p4ov")])
 sockets = "measured/abilities/spells/spell.lesser_restoration.sockets.json"
 effects = Array[ExtResource("3_ikcbd")]([SubResource("Resource_oc40r")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -144,9 +146,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "lesser_restoration__back"
+"selection": "lesser_restoration__back",
+"source": "assets/vfx/index.json:/selections/lesser_restoration__back/staging"
 }
 unported = {
 "condition": {
@@ -193,3 +196,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

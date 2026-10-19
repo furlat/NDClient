@@ -3153,6 +3153,8 @@ body = SubResource("Resource_jdsuv")
 hand_layers = Array[ExtResource("4_iwi2q")]([SubResource("Resource_gggva"), SubResource("Resource_istwy")])
 sockets = "measured/abilities/spells/spell.enhance_ability.sockets.json"
 effects = Array[ExtResource("3_ejxgb")]([SubResource("Resource_50ube")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -3167,9 +3169,10 @@ applies_conditions = PackedStringArray("condition.spell.enhance_ability")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "enhance_ability__bull_back"
+"selection": "enhance_ability__bull_back",
+"source": "assets/vfx/index.json:/selections/enhance_ability__bull_back/staging"
 }
 unported = {
 "condition": {
@@ -3188,3 +3191,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

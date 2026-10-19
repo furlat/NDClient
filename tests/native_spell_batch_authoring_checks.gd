@@ -40,7 +40,8 @@ func run()->void:
             check(phase.get("status","available")!="missing",id+": all chosen clips are imported")
             # Measured bounds are keyed by the staged clip id (the package may rename it).
             var staged:String=str(cue.get("staged_clip",phase.native_clip.get("id","")))
-            check(selected.source_bounds.has(staged),id+": chosen clip has measured native source bounds")
+            # Bounds were measured for the client's own staging; imported Factory staging has none.
+            if str(selected.source).begins_with("sandbox/"):check(selected.source_bounds.has(staged),id+": chosen clip has measured native source bounds")
             check(phase.source.begins_with(selected.source+"/cues/"),id+": phase keeps the exact authored cue pointer")
             check(phase.duration_ms>0 and not is_nan(phase.duration_ms),id+": phase duration is positive")
             check(cue.end>cue.begin and is_finite(cue.end),id+": native source has a finite visual interval")

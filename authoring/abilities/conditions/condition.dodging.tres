@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_cj6qw"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_l8xcu"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ml2td"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ml2td"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_s70u8"]
 
 [sub_resource type="Resource" id="Resource_4yeik"]
 script = ExtResource("1_cj6qw")
 colour = Color(0.34509805, 0.58431375, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_s70u8"]
+script = ExtResource("2_ml2td")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-dodging.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-dodging"
 
 [sub_resource type="Resource" id="Resource_fvgyk"]
 script = ExtResource("3_ml2td")
@@ -37,6 +44,7 @@ colour = Color(0.21960784, 0.15294118, 0.80784315, 1)
 script = ExtResource("4_s70u8")
 id = "condition.dodging"
 label = "Dodging"
+icon = SubResource("Resource_s70u8")
 disposition = "authored"
 look = SubResource("Resource_ud3v1")
 group = "body"

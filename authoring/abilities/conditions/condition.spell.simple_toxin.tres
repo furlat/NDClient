@@ -1,7 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_152ly"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_uncs8"]
+
+[sub_resource type="Resource" id="Resource_862vn"]
+script = ExtResource("1_152ly")
+path = "art/ui-delivery-20261018/runtime/smooth48/condition.spell.simple_toxin.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 condition.spell.simple_toxin"
 
 [resource]
 script = ExtResource("1_uncs8")
 id = "condition.spell.simple_toxin"
+icon = SubResource("Resource_862vn")

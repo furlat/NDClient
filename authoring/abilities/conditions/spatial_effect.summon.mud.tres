@@ -1,8 +1,16 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_6t4fp"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_hb3rx"]
+
+[sub_resource type="Resource" id="Resource_gc6rp"]
+script = ExtResource("1_hb3rx")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.status.mud.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.status.mud"
 
 [resource]
 script = ExtResource("1_6t4fp")
 id = "spatial_effect.summon.mud"
+icon = SubResource("Resource_gc6rp")
 surface = "spatial_effect.summon.mud"

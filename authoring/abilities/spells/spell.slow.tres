@@ -130,6 +130,8 @@ body = SubResource("Resource_ko4pf")
 hand_layers = Array[ExtResource("4_1lx4u")]([SubResource("Resource_vkqyj"), SubResource("Resource_slwtc")])
 sockets = "measured/abilities/spells/spell.slow.sockets.json"
 effects = Array[ExtResource("3_gup6g")]([SubResource("Resource_qqh4q")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -143,9 +145,10 @@ applies_conditions = PackedStringArray("condition.spell.slow")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "slow__back"
+"selection": "slow__back",
+"source": "assets/vfx/index.json:/selections/slow__back/staging"
 }
 unported = {
 "condition": {
@@ -164,3 +167,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

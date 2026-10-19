@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_pl2nh"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_okwa1"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_q4ok1"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_okwa1"]
 
@@ -16,11 +17,20 @@ markers = Dictionary[String, float]({
 })
 hidden_slots = PackedStringArray()
 
+[sub_resource type="Resource" id="Resource_m8phu"]
+script = ExtResource("2_okwa1")
+path = "art/media/ui/icons/smooth48/ui.filter-attacks.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-attacks"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-attacks"
+
 [resource]
 script = ExtResource("2_q4ok1")
 id = "action.monster.multiattack.thug"
 kind = "action"
 family = "monster"
+icon = SubResource("Resource_m8phu")
 disposition = "authored"
 body = SubResource("Resource_a2gc7")
 effect_sources = PackedStringArray()

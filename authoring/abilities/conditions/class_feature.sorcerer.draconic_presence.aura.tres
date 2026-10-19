@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_g17bf"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_fn6l6"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_qr1ae"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_qr1ae"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ursf4"]
 
@@ -9,6 +10,14 @@
 script = ExtResource("1_g17bf")
 enabled = false
 colour = Color(0.89411765, 0.34509805, 0.69411767, 1)
+
+[sub_resource type="Resource" id="Resource_ursf4"]
+script = ExtResource("2_qr1ae")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_e6rfo"]
 script = ExtResource("3_qr1ae")
@@ -30,6 +39,7 @@ colour = Color(0.80784315, 0.15294118, 0.21960784, 1)
 script = ExtResource("4_ursf4")
 id = "class_feature.sorcerer.draconic_presence.aura"
 label = "Draconic Presence"
+icon = SubResource("Resource_ursf4")
 disposition = "state_only"
 look = SubResource("Resource_f00h1")
 group = "body"

@@ -128,6 +128,8 @@ body = SubResource("Resource_7hq4e")
 hand_layers = Array[ExtResource("4_odnae")]([SubResource("Resource_vkykc"), SubResource("Resource_py20m")])
 sockets = "measured/abilities/spells/spell.harm.sockets.json"
 effects = Array[ExtResource("3_nv1x7")]([SubResource("Resource_pawsl")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -141,9 +143,10 @@ applies_conditions = PackedStringArray("condition.spell.harm")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "harm__back"
+"selection": "harm__back",
+"source": "assets/vfx/index.json:/selections/harm__back/staging"
 }
 unported = {
 "bodyMaterials": [{
@@ -271,3 +274,4 @@ unported = {
 "startOffsetMs": 120.0
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

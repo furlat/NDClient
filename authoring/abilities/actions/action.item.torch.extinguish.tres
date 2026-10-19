@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_8d32t"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_fpeay"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_iyjfp"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_fpeay"]
 
@@ -17,19 +18,22 @@ markers = Dictionary[String, float]({
 hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_fdisu"]
-script = ExtResource("3_fpeay")
-cue = "torch_extinguish"
-at = "event.start"
+script = ExtResource("2_fpeay")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
 
 [resource]
 script = ExtResource("2_iyjfp")
 id = "action.item.torch.extinguish"
 kind = "action"
 family = "item"
+icon = SubResource("Resource_fdisu")
 disposition = "authored"
 body = SubResource("Resource_cr2uj")
 effect_sources = PackedStringArray()
-sounds = Array[ExtResource("3_fpeay")]([SubResource("Resource_fdisu")])
 status = "partial"
 unported = {
 "actionFeedback": null,
@@ -51,3 +55,4 @@ unported = {
 "projectile": null,
 "variants": []
 }
+notes = "The audio library binds cue torch_extinguish, which it does not have."

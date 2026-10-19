@@ -200,6 +200,8 @@ body = SubResource("Resource_5w3qc")
 hand_layers = Array[ExtResource("4_la1xw")]([SubResource("Resource_1hm8c"), SubResource("Resource_haekv")])
 sockets = "measured/abilities/spells/spell.spirit_guardians.sockets.json"
 effects = Array[ExtResource("3_i2uxx")]([SubResource("Resource_4yvfi"), SubResource("Resource_1hyru")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -214,9 +216,10 @@ applies_conditions = PackedStringArray("condition.spell.spirit_guardians.slowed"
 applies_surfaces = PackedStringArray("spatial_effect.spell.spirit_guardians")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "spirit_guardians_radiant_native"
+"selection": "spirit_guardians_radiant_native",
+"source": "assets/vfx/index.json:/selections/spirit_guardians_radiant_native/staging"
 }
 unported = {
 "castPalettes": [{
@@ -252,3 +255,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

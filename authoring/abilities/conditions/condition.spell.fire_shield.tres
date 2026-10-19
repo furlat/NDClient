@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_vhnof"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_4wdeb"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_jcw1l"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_4wdeb"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_f8nok"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_ggvps"]
 script = ExtResource("1_vhnof")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_f8nok"]
+script = ExtResource("2_4wdeb")
+path = "art/media/ui/icons/smooth48/spell.fire_shield.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.fire_shield"
 
 [sub_resource type="Resource" id="Resource_76yqq"]
 script = ExtResource("3_4wdeb")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_f8nok")
 id = "condition.spell.fire_shield"
 label = "Fire Shield"
+icon = SubResource("Resource_f8nok")
 disposition = "authored"
 look = SubResource("Resource_swpha")
 layers = [{

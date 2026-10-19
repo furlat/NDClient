@@ -1,8 +1,18 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_jbok2"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_mhe1p"]
+
+[sub_resource type="Resource" id="Resource_5xsja"]
+script = ExtResource("1_mhe1p")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [resource]
 script = ExtResource("1_jbok2")
 id = "condition.class.cleric.intervention_use"
+icon = SubResource("Resource_5xsja")
 status = "internal"

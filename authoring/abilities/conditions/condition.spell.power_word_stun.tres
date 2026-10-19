@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_5yy3w"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ioc2p"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_nooql"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ioc2p"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_873dy"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_4vnlb"]
 script = ExtResource("1_5yy3w")
 colour = Color(0.34509805, 0.89411765, 0.52156866, 1)
+
+[sub_resource type="Resource" id="Resource_873dy"]
+script = ExtResource("2_ioc2p")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-powerwordstuneffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-powerwordstuneffect"
 
 [sub_resource type="Resource" id="Resource_tfbsk"]
 script = ExtResource("3_ioc2p")
@@ -30,6 +37,7 @@ colour = Color(0.15294118, 0.80784315, 0.70980394, 1)
 script = ExtResource("4_873dy")
 id = "condition.spell.power_word_stun"
 label = "Power Word Stun"
+icon = SubResource("Resource_873dy")
 disposition = "authored"
 look = SubResource("Resource_j2otc")
 group = "body"

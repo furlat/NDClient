@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_wr00h"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_0ycx4"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ceglv"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ceglv"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_e7yad"]
 
 [sub_resource type="Resource" id="Resource_jgiem"]
 script = ExtResource("1_wr00h")
 colour = Color(0.89411765, 0.54509807, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_e7yad"]
+script = ExtResource("2_ceglv")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-transmutation-jumpeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-transmutation-jumpeffect"
 
 [sub_resource type="Resource" id="Resource_acyf7"]
 script = ExtResource("3_ceglv")
@@ -28,6 +35,7 @@ colour = Color(0.80784315, 0.7411765, 0.15294118, 1)
 script = ExtResource("4_e7yad")
 id = "condition.spell.jump"
 label = "Jump"
+icon = SubResource("Resource_e7yad")
 disposition = "authored"
 look = SubResource("Resource_5ym7d")
 layers = [{

@@ -136,6 +136,8 @@ body = SubResource("Resource_kh6g7")
 hand_layers = Array[ExtResource("4_cna2f")]([SubResource("Resource_o0o64"), SubResource("Resource_qhbrt")])
 sockets = "measured/abilities/spells/spell.disintegrate.sockets.json"
 effects = Array[ExtResource("3_xo8cd")]([SubResource("Resource_apeb8")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -149,9 +151,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "disintegrate_native"
+"selection": "disintegrate_native",
+"source": "assets/vfx/index.json:/selections/disintegrate_native/staging"
 }
 unported = {
 "condition": {
@@ -185,3 +188,4 @@ unported = {
 "verticalScale": 1.224744871391589
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

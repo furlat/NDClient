@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_rp77k"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_0bg1u"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ibsfd"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ibsfd"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_4lil3"]
 
@@ -9,6 +10,12 @@
 script = ExtResource("1_rp77k")
 enabled = false
 colour = Color(0.89411765, 0.34509805, 0.70980394, 1)
+
+[sub_resource type="Resource" id="Resource_4lil3"]
+script = ExtResource("2_ibsfd")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-beaconofhopeeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-beaconofhopeeffect"
 
 [sub_resource type="Resource" id="Resource_qypa8"]
 script = ExtResource("3_ibsfd")
@@ -30,6 +37,7 @@ colour = Color(0.80784315, 0.15294118, 0.23921569, 1)
 script = ExtResource("4_4lil3")
 id = "condition.spell.beacon_of_hope"
 label = "Beacon of Hope"
+icon = SubResource("Resource_4lil3")
 disposition = "authored"
 look = SubResource("Resource_eiw26")
 layers = [{

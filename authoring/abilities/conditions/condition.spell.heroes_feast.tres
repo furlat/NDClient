@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_qdh05"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_jmgb5"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_p2mxs"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_jmgb5"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_5y5lg"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_ao5os"]
 script = ExtResource("1_qdh05")
 colour = Color(0.89411765, 0.34509805, 0.7647059, 1)
+
+[sub_resource type="Resource" id="Resource_5y5lg"]
+script = ExtResource("2_jmgb5")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-conjuration-heroesfeastbuff.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-conjuration-heroesfeastbuff"
 
 [sub_resource type="Resource" id="Resource_n0dk6"]
 script = ExtResource("3_jmgb5")
@@ -28,6 +35,7 @@ colour = Color(0.80784315, 0.15294118, 0.30588236, 1)
 script = ExtResource("4_5y5lg")
 id = "condition.spell.heroes_feast"
 label = "Heroes' Feast"
+icon = SubResource("Resource_5y5lg")
 disposition = "authored"
 look = SubResource("Resource_j5ipn")
 group = "body"

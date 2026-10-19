@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_h3hkw"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_qalta"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ugk7y"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_qalta"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ncw83"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_kj5yi"]
 script = ExtResource("1_h3hkw")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_ncw83"]
+script = ExtResource("2_qalta")
+path = "art/media/ui/icons/smooth48/spell.barkskin.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.barkskin"
 
 [sub_resource type="Resource" id="Resource_w32k7"]
 script = ExtResource("3_qalta")
@@ -39,6 +46,7 @@ enabled = false
 script = ExtResource("4_ncw83")
 id = "condition.spell.barkskin"
 label = "Barkskin"
+icon = SubResource("Resource_ncw83")
 disposition = "authored"
 look = SubResource("Resource_5gdrk")
 group = "condition.spell.barkskin"

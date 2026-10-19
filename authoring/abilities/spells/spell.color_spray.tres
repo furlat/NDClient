@@ -139,6 +139,8 @@ body = SubResource("Resource_owq60")
 hand_layers = Array[ExtResource("4_08xk1")]([SubResource("Resource_p31dk"), SubResource("Resource_pal0g")])
 sockets = "measured/abilities/spells/spell.color_spray.sockets.json"
 effects = Array[ExtResource("3_pqmin")]([SubResource("Resource_tgq0f")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -152,9 +154,10 @@ applies_conditions = PackedStringArray("condition.blinded", "condition.spell.col
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "color_spray__back"
+"selection": "color_spray__back",
+"source": "assets/vfx/index.json:/selections/color_spray__back/staging"
 }
 unported = {
 "condition": {
@@ -264,3 +267,4 @@ unported = {
 "id": "front"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

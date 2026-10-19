@@ -2,12 +2,21 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_bj5wa"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_br8tp"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_evqdh"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_evqdh"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_nov7p"]
 
 [sub_resource type="Resource" id="Resource_45rnc"]
 script = ExtResource("1_bj5wa")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_nov7p"]
+script = ExtResource("2_evqdh")
+path = "art/media/ui/icons/smooth48/spell.regenerate.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.regenerate"
+status = "stand_in"
+source = "ui/resources.json icon:spell.regenerate"
 
 [sub_resource type="Resource" id="Resource_332da"]
 script = ExtResource("3_evqdh")
@@ -28,6 +37,7 @@ enabled = false
 script = ExtResource("4_nov7p")
 id = "condition.spell.regenerate"
 label = "Regenerating"
+icon = SubResource("Resource_nov7p")
 disposition = "authored"
 look = SubResource("Resource_73imn")
 layers = [{

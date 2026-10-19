@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mefqv"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_60wor"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_yx5eg"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_yx5eg"]
 
 [sub_resource type="Resource" id="Resource_afn3i"]
@@ -16,11 +17,20 @@ markers = Dictionary[String, float]({
 })
 hidden_slots = PackedStringArray()
 
+[sub_resource type="Resource" id="Resource_3jqt8"]
+script = ExtResource("2_yx5eg")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
 [resource]
 script = ExtResource("2_60wor")
 id = "action.environment.wall_torch.extinguish"
 kind = "action"
 family = "environment"
+icon = SubResource("Resource_3jqt8")
 disposition = "authored"
 body = SubResource("Resource_afn3i")
 plays = "action.environment.trap_lever.pull"

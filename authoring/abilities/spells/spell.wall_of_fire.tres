@@ -152,6 +152,8 @@ body = SubResource("Resource_40yy8")
 hand_layers = Array[ExtResource("4_cmh6l")]([SubResource("Resource_45xe7"), SubResource("Resource_622f0")])
 sockets = "measured/abilities/spells/spell.wall_of_fire.sockets.json"
 effects = Array[ExtResource("3_ibhd4")]([SubResource("Resource_sxpac")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -166,9 +168,10 @@ applies_conditions = PackedStringArray("condition.spell.wall_of_fire.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.wall_of_fire")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "wall_of_fire_straight_native"
+"selection": "wall_of_fire_straight_native",
+"source": "assets/vfx/index.json:/selections/wall_of_fire_straight_native/staging"
 }
 unported = {
 "condition": {
@@ -184,3 +187,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

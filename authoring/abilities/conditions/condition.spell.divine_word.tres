@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_t24xp"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_npti7"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_oqj5c"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_oqj5c"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_i13pj"]
 
 [sub_resource type="Resource" id="Resource_22bev"]
 script = ExtResource("1_t24xp")
 colour = Color(0.34509805, 0.89411765, 0.61960787, 1)
+
+[sub_resource type="Resource" id="Resource_i13pj"]
+script = ExtResource("2_oqj5c")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-evocation-divinewordeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-evocation-divinewordeffect"
 
 [sub_resource type="Resource" id="Resource_03gqt"]
 script = ExtResource("3_oqj5c")
@@ -28,6 +35,7 @@ colour = Color(0.15294118, 0.78431374, 0.80784315, 1)
 script = ExtResource("4_i13pj")
 id = "condition.spell.divine_word"
 label = "Divine Word"
+icon = SubResource("Resource_i13pj")
 disposition = "authored"
 look = SubResource("Resource_u0osa")
 group = "body"

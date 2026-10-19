@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_2dfku"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_fph6w"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_xd5nv"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_fph6w"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_22xwe"]
@@ -9,6 +10,14 @@
 script = ExtResource("1_2dfku")
 enabled = false
 colour = Color(0.7647059, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_22xwe"]
+script = ExtResource("2_fph6w")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_i5uro"]
 script = ExtResource("3_fph6w")
@@ -30,6 +39,7 @@ colour = Color(0.30588236, 0.80784315, 0.15294118, 1)
 script = ExtResource("4_22xwe")
 id = "trait.pack_tactics"
 label = "Pack Tactics"
+icon = SubResource("Resource_22xwe")
 disposition = "state_only"
 look = SubResource("Resource_y7kok")
 group = "body"

@@ -1,11 +1,30 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_3xrn0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_enwtp"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_8g5fv"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ij0y4"]
+
+[sub_resource type="Resource" id="Resource_3hh7b"]
+script = ExtResource("1_enwtp")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ur0t5"]
+script = ExtResource("2_ij0y4")
+path = "art/media/ui/icons/smooth48/ui.filter-attacks.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-attacks"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-attacks"
 
 [resource]
 script = ExtResource("1_3xrn0")
 id = "action.monster.multiattack.undead_flareblade"
 kind = "action"
 family = "monster"
+icon = SubResource("Resource_ur0t5")
+body = SubResource("Resource_3hh7b")
 effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (multiattack); the rig resolves it to a clip once roles are built (coverage fill)."

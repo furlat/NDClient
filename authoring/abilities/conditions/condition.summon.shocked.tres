@@ -1,7 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_a73mj"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_xe41w"]
+
+[sub_resource type="Resource" id="Resource_w428i"]
+script = ExtResource("1_a73mj")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.status.shocked.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.status.shocked"
 
 [resource]
 script = ExtResource("1_xe41w")
 id = "condition.summon.shocked"
+icon = SubResource("Resource_w428i")

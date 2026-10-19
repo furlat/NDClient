@@ -1,8 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_4ddty"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_yd88q"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_yd88q"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_oqda1"]
+
+[sub_resource type="Resource" id="Resource_oqda1"]
+script = ExtResource("1_yd88q")
+role = "cast"
+enabled = false
+hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_kaqf3"]
 script = ExtResource("1_4ddty")
@@ -16,4 +23,6 @@ id = "action.spell.hunters_mark.reapply"
 kind = "action"
 family = "spell"
 icon = SubResource("Resource_kaqf3")
+body = SubResource("Resource_oqda1")
 effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill)."

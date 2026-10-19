@@ -762,6 +762,8 @@ body = SubResource("Resource_vrenj")
 hand_layers = Array[ExtResource("4_ri2g4")]([SubResource("Resource_0wvlp"), SubResource("Resource_oeu08")])
 sockets = "measured/abilities/spells/spell.telekinesis.sockets.json"
 effects = Array[ExtResource("3_f4sf7")]([SubResource("Resource_5wd3c")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -776,9 +778,10 @@ applies_conditions = PackedStringArray("condition.prone")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "telekinesis_native"
+"selection": "telekinesis_native",
+"source": "assets/vfx/index.json:/selections/telekinesis_native/staging"
 }
 unported = {
 "condition": {
@@ -946,3 +949,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

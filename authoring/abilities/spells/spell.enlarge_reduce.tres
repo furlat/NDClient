@@ -181,6 +181,8 @@ body = SubResource("Resource_4ldei")
 hand_layers = Array[ExtResource("4_jl6ld")]([SubResource("Resource_aq4or"), SubResource("Resource_jy60n")])
 sockets = "measured/abilities/spells/spell.enlarge_reduce.sockets.json"
 effects = Array[ExtResource("3_vsjab")]([SubResource("Resource_u5lhy"), SubResource("Resource_k06dc")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -195,9 +197,10 @@ applies_conditions = PackedStringArray("condition.spell.enlarge_reduce")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "enlarge_reduce_native"
+"selection": "enlarge_reduce_native",
+"source": "assets/vfx/index.json:/selections/enlarge_reduce_native/staging"
 }
 unported = {
 "condition": {
@@ -213,3 +216,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -129,6 +129,8 @@ body = SubResource("Resource_bmblq")
 hand_layers = Array[ExtResource("4_u5g6h")]([SubResource("Resource_1nc2r"), SubResource("Resource_2vmp3")])
 sockets = "measured/abilities/spells/spell.blight.sockets.json"
 effects = Array[ExtResource("3_84jvs")]([SubResource("Resource_g4ye4")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "blight__back"
+"selection": "blight__back",
+"source": "assets/vfx/index.json:/selections/blight__back/staging"
 }
 unported = {
 "bodyMaterials": [{
@@ -302,3 +305,4 @@ unported = {
 "startOffsetMs": 120.0
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

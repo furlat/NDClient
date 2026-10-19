@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ekavn"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_hqu4w"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_w5ql7"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_w5ql7"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_uee8f"]
 
 [sub_resource type="Resource" id="Resource_o0xan"]
 script = ExtResource("1_ekavn")
 colour = Color(0.69411767, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_uee8f"]
+script = ExtResource("2_w5ql7")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-necromancy-chilltoucheffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-necromancy-chilltoucheffect"
 
 [sub_resource type="Resource" id="Resource_ex7qe"]
 script = ExtResource("3_w5ql7")
@@ -28,6 +35,7 @@ colour = Color(0.21960784, 0.80784315, 0.15294118, 1)
 script = ExtResource("4_uee8f")
 id = "condition.spell.chill_touch"
 label = "Chill Touch Effect"
+icon = SubResource("Resource_uee8f")
 disposition = "authored"
 look = SubResource("Resource_7ag8r")
 group = "body"

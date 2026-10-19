@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ajwu6"]
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_e1ka0"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_dfamg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_e1ka0"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_um07p"]
 
 [sub_resource type="Resource" id="Resource_jiylq"]
@@ -21,11 +22,20 @@ script = ExtResource("2_e1ka0")
 text = "Greater Invisibility Potion"
 colour = Color(0.7490196, 0.49803922, 1, 1)
 
+[sub_resource type="Resource" id="Resource_dfamg"]
+script = ExtResource("3_e1ka0")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
 [resource]
 script = ExtResource("3_dfamg")
 id = "action.item.potion_greater_invisibility.drink"
 kind = "action"
 family = "item"
+icon = SubResource("Resource_dfamg")
 disposition = "authored"
 body = SubResource("Resource_jiylq")
 effect_sources = PackedStringArray()

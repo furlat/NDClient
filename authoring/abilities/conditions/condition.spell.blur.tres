@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_uas6w"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ww7hg"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_xsaa7"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ww7hg"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_l62l6"]
@@ -9,6 +10,12 @@
 script = ExtResource("1_uas6w")
 enabled = false
 colour = Color(0.4392157, 0.69411767, 0.827451, 1)
+
+[sub_resource type="Resource" id="Resource_l62l6"]
+script = ExtResource("2_ww7hg")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-illusion-blureffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-illusion-blureffect"
 
 [sub_resource type="Resource" id="Resource_66ehw"]
 script = ExtResource("3_ww7hg")
@@ -30,6 +37,7 @@ colour = Color(0.4392157, 0.69411767, 0.827451, 1)
 script = ExtResource("4_l62l6")
 id = "condition.spell.blur"
 label = "Blur"
+icon = SubResource("Resource_l62l6")
 disposition = "authored"
 look = SubResource("Resource_8v4gy")
 group = "body"

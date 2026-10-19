@@ -170,6 +170,8 @@ body = SubResource("Resource_hcube")
 hand_layers = Array[ExtResource("4_v5tlw")]([SubResource("Resource_h2x76"), SubResource("Resource_6a314")])
 sockets = "measured/abilities/spells/spell.death_ward.sockets.json"
 effects = Array[ExtResource("3_ej2cb")]([SubResource("Resource_3gdik"), SubResource("Resource_gr6jw"), SubResource("Resource_3bh0t")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -183,9 +185,10 @@ applies_conditions = PackedStringArray("condition.spell.death_ward")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "death_ward__back"
+"selection": "death_ward__back",
+"source": "assets/vfx/index.json:/selections/death_ward__back/staging"
 }
 unported = {
 "condition": {
@@ -204,3 +207,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

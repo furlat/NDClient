@@ -129,6 +129,8 @@ body = SubResource("Resource_5xf4e")
 hand_layers = Array[ExtResource("4_uss7u")]([SubResource("Resource_x2ehu"), SubResource("Resource_ouodk")])
 sockets = "measured/abilities/spells/spell.silence.sockets.json"
 effects = Array[ExtResource("3_mfvpc")]([SubResource("Resource_3rnis")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.deafened", "condition.spell.si
 applies_surfaces = PackedStringArray("spatial_effect.spell.silence")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "silence__back"
+"selection": "silence__back",
+"source": "assets/vfx/index.json:/selections/silence__back/staging"
 }
 unported = {
 "condition": {
@@ -163,3 +166,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

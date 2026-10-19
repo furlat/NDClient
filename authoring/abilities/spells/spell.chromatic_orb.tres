@@ -1,11 +1,21 @@
 [gd_resource type="Resource" script_class="PresentationSpell" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_wll5w"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_wn0r8"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_wn0r8"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_106og"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_7cege"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_neryu"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_5cfrs"]
+
+[sub_resource type="Resource" id="Resource_106og"]
+script = ExtResource("1_wn0r8")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
 
 [sub_resource type="Resource" id="Resource_cice0"]
 script = ExtResource("1_wll5w")
@@ -1506,7 +1516,10 @@ script = ExtResource("4_7cege")
 id = "spell.chromatic_orb"
 icon = SubResource("Resource_xa7qw")
 delivery = "projectile"
+body = SubResource("Resource_106og")
 effects = Array[ExtResource("1_wll5w")]([SubResource("Resource_cice0"), SubResource("Resource_lkxql")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -1522,5 +1535,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "chromatic_orb_native"
+"selection": "chromatic_orb_native",
+"source": "assets/vfx/index.json:/selections/chromatic_orb_native/staging"
 }
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

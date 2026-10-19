@@ -1,8 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_7ju8d"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_h82lc"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_7ju8d"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_qb3bv"]
+
+[sub_resource type="Resource" id="Resource_qb3bv"]
+script = ExtResource("1_7ju8d")
+role = "cast"
+enabled = false
+hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_ulfen"]
 script = ExtResource("1_h82lc")
@@ -16,4 +23,6 @@ id = "action.spell.dragons_breath.exhale"
 kind = "action"
 family = "spell"
 icon = SubResource("Resource_ulfen")
+body = SubResource("Resource_qb3bv")
 effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."

@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_xx8ri"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_d38ok"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_wqmd8"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_d38ok"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_78qxv"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_r5bms"]
 script = ExtResource("1_xx8ri")
 colour = Color(0.34509805, 0.7647059, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_78qxv"]
+script = ExtResource("2_d38ok")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-conjuration-spiritguardiansslowed.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-conjuration-spiritguardiansslowed"
 
 [sub_resource type="Resource" id="Resource_ka58c"]
 script = ExtResource("3_d38ok")
@@ -28,6 +35,7 @@ colour = Color(0.15294118, 0.30588236, 0.80784315, 1)
 script = ExtResource("4_78qxv")
 id = "condition.spell.spirit_guardians.slowed"
 label = "Spirit Guardians Slowed"
+icon = SubResource("Resource_78qxv")
 disposition = "authored"
 look = SubResource("Resource_1soro")
 layers = [{

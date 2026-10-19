@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_24s18"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ausu7"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_nl0rv"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ausu7"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_addjv"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_ol1xe"]
 script = ExtResource("1_24s18")
 colour = Color(0.89411765, 0.34509805, 0.69411767, 1)
+
+[sub_resource type="Resource" id="Resource_addjv"]
+script = ExtResource("2_ausu7")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-dashing.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-dashing"
 
 [sub_resource type="Resource" id="Resource_53mla"]
 script = ExtResource("3_ausu7")
@@ -28,6 +35,7 @@ colour = Color(0.80784315, 0.15294118, 0.21960784, 1)
 script = ExtResource("4_addjv")
 id = "condition.dashing"
 label = "Dashing"
+icon = SubResource("Resource_addjv")
 disposition = "authored"
 look = SubResource("Resource_drx8i")
 group = "body"

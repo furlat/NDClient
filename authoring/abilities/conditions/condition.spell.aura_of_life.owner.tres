@@ -1,7 +1,17 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_67rwf"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_r61fs"]
+
+[sub_resource type="Resource" id="Resource_r820p"]
+script = ExtResource("1_r61fs")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.aura_of_life.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.aura_of_life"
+status = "stand_in"
+source = "ui-delivery-20261018 srd22.spell.aura_of_life"
 
 [resource]
 script = ExtResource("1_67rwf")
 id = "condition.spell.aura_of_life.owner"
+icon = SubResource("Resource_r820p")

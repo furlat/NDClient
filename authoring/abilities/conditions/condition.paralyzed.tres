@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_71fji"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_atca4"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_b6tnv"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_atca4"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_u5hqw"]
@@ -9,6 +10,12 @@
 script = ExtResource("1_71fji")
 enabled = false
 colour = Color(0.84705883, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_u5hqw"]
+script = ExtResource("2_atca4")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-paralyzed.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-paralyzed"
 
 [sub_resource type="Resource" id="Resource_2nwsf"]
 script = ExtResource("3_atca4")
@@ -49,6 +56,7 @@ colour = Color(0.80784315, 0.15294118, 0.5137255, 1)
 script = ExtResource("4_u5hqw")
 id = "condition.paralyzed"
 label = "Paralyzed"
+icon = SubResource("Resource_u5hqw")
 disposition = "authored"
 look = SubResource("Resource_yvqjs")
 layers = [{

@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_vwmvr"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_djjy1"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="7_6g7kt"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_gbwdf"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="8_hlljj"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="9_627pj"]
 
@@ -47,9 +48,18 @@ hide = PackedStringArray()
 script = ExtResource("4_dfg0t")
 steps = Array[ExtResource("5_vwmvr")]([SubResource("Resource_31xra")])
 
+[sub_resource type="Resource" id="Resource_0ehrk"]
+script = ExtResource("7_gbwdf")
+path = "art/media/ui/icons/smooth48/ui.filter-spells.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-spells"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-spells"
+
 [resource]
 script = ExtResource("7_6g7kt")
 id = "spell.ice_knife.burst"
+icon = SubResource("Resource_0ehrk")
 body = SubResource("Resource_7pq82")
 sockets = "measured/abilities/spells/spell.ice_knife.burst.sockets.json"
 effect_roles = PackedStringArray()

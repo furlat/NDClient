@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_o5y8u"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_l2rgp"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_qxx4f"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_qxx4f"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_4oi6e"]
 
 [sub_resource type="Resource" id="Resource_db5pp"]
 script = ExtResource("1_o5y8u")
 colour = Color(0.69411767, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_4oi6e"]
+script = ExtResource("2_qxx4f")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-blesseffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-blesseffect"
 
 [sub_resource type="Resource" id="Resource_0ac1n"]
 script = ExtResource("3_qxx4f")
@@ -28,6 +35,7 @@ colour = Color(0.80784315, 0.15294118, 0.69803923, 1)
 script = ExtResource("4_4oi6e")
 id = "condition.spell.bless"
 label = "Bless"
+icon = SubResource("Resource_4oi6e")
 disposition = "authored"
 look = SubResource("Resource_h2ddv")
 layers = [{

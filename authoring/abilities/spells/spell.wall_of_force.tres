@@ -159,6 +159,8 @@ body = SubResource("Resource_du14d")
 hand_layers = Array[ExtResource("4_qdg8x")]([SubResource("Resource_gru3h"), SubResource("Resource_xqoxe")])
 sockets = "measured/abilities/spells/spell.wall_of_force.sockets.json"
 effects = Array[ExtResource("3_t5lnj")]([SubResource("Resource_3c2df")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -173,9 +175,10 @@ applies_conditions = PackedStringArray("condition.prone", "condition.spell.wall_
 applies_surfaces = PackedStringArray("spatial_effect.spell.frigid_air", "spatial_effect.spell.wall_of_force", "spatial_effect.spell.wall_of_ice", "spatial_effect.spell.wall_of_stone")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "wall_of_force_panels_back_native"
+"selection": "wall_of_force_panels_back_native",
+"source": "assets/vfx/index.json:/selections/wall_of_force_panels_back_native/staging"
 }
 unported = {
 "condition": {
@@ -195,3 +198,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

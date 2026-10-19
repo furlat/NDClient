@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_vqu5w"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_nnfl0"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_oyo4p"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_nnfl0"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_qs5ha"]
@@ -9,6 +10,14 @@
 script = ExtResource("1_vqu5w")
 enabled = false
 colour = Color(0.89411765, 0.4, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_qs5ha"]
+script = ExtResource("2_nnfl0")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_it5dg"]
 script = ExtResource("3_nnfl0")
@@ -30,6 +39,7 @@ colour = Color(0.80784315, 0.5686275, 0.15294118, 1)
 script = ExtResource("4_qs5ha")
 id = "trait.circus_dual_wielder"
 label = "Dual Wielder"
+icon = SubResource("Resource_qs5ha")
 disposition = "state_only"
 look = SubResource("Resource_lafdc")
 group = "body"

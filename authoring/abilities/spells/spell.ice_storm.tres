@@ -125,6 +125,8 @@ body = SubResource("Resource_jycpk")
 hand_layers = Array[ExtResource("4_02uky")]([SubResource("Resource_7q47k"), SubResource("Resource_b3luo")])
 sockets = "measured/abilities/spells/spell.ice_storm.sockets.json"
 effects = Array[ExtResource("3_b485e")]([SubResource("Resource_54a4d")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -138,9 +140,10 @@ applies_conditions = PackedStringArray("condition.spell.ice_storm.terrain")
 applies_surfaces = PackedStringArray("spatial_effect.spell.ice_storm")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "ice_storm_native"
+"selection": "ice_storm_native",
+"source": "assets/vfx/index.json:/selections/ice_storm_native/staging"
 }
 unported = {
 "condition": {
@@ -4793,3 +4796,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

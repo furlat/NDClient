@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_c2dc6"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_p64fc"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_xlqy6"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_xlqy6"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_5vtoj"]
 
@@ -9,6 +10,14 @@
 script = ExtResource("1_c2dc6")
 enabled = false
 colour = Color(0.6745098, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_5vtoj"]
+script = ExtResource("2_xlqy6")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_upxdv"]
 script = ExtResource("3_xlqy6")
@@ -30,6 +39,7 @@ colour = Color(0.19607843, 0.80784315, 0.15294118, 1)
 script = ExtResource("4_5vtoj")
 id = "trait.keen_hearing_and_smell"
 label = "Keen Hearing and Smell"
+icon = SubResource("Resource_5vtoj")
 disposition = "state_only"
 look = SubResource("Resource_solxp")
 group = "body"

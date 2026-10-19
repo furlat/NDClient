@@ -293,7 +293,7 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
                 if e.get(field) is String:Common.asset(report, where, e.get(field))
             if e.get("sounds") is Array:
                 for sound in e.sounds:
-                    if not sound.cue.is_empty() and not cues.has(sound.cue):Common.warn(report, where, "sound cue not in the audio library: " + sound.cue)
+                    if not sound.cue.is_empty() and not cues.has(sound.cue):Common.error(report, where, "sound cue not in the audio library: " + sound.cue)
     for id in entries.get("spells", {}):
         var e: Resource = entries.spells[id]
         var where: String = "abilities/spells/" + id

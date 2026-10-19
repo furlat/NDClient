@@ -129,6 +129,8 @@ body = SubResource("Resource_ggb1o")
 hand_layers = Array[ExtResource("4_boo8p")]([SubResource("Resource_lhbrp"), SubResource("Resource_buce2")])
 sockets = "measured/abilities/spells/spell.darkness.sockets.json"
 effects = Array[ExtResource("3_thsjj")]([SubResource("Resource_in30d")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.spell.darkness.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.darkness")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "darkness__volume"
+"selection": "darkness__volume",
+"source": "assets/vfx/index.json:/selections/darkness__volume/staging"
 }
 unported = {
 "condition": {
@@ -160,3 +163,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

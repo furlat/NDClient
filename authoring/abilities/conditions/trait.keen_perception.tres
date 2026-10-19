@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_c6ba7"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_owddd"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ps2w3"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ps2w3"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_dwi1g"]
 
 [sub_resource type="Resource" id="Resource_sqlbw"]
 script = ExtResource("1_c6ba7")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_dwi1g"]
+script = ExtResource("2_ps2w3")
+path = "art/media/ui/icons/smooth48/trait.keen_perception.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:trait.keen_perception"
 
 [sub_resource type="Resource" id="Resource_ypivb"]
 script = ExtResource("3_ps2w3")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_dwi1g")
 id = "trait.keen_perception"
 label = "Keen Perception"
+icon = SubResource("Resource_dwi1g")
 disposition = "state_only"
 look = SubResource("Resource_077j5")
 group = "innate"

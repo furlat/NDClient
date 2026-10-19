@@ -138,6 +138,8 @@ body = SubResource("Resource_a7ayg")
 hand_layers = Array[ExtResource("6_mu204")]([SubResource("Resource_lpkky"), SubResource("Resource_eyhl4")])
 sockets = "measured/abilities/spells/spell.sunburst.sockets.json"
 effects = Array[ExtResource("3_26d7a")]([SubResource("Resource_suyjf")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -157,9 +159,10 @@ applies_conditions = PackedStringArray("condition.blinded", "condition.spell.sun
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "sunburst_native"
+"selection": "sunburst_native",
+"source": "assets/vfx/index.json:/selections/sunburst_native/staging"
 }
 unported = {
 "condition": {
@@ -225,3 +228,4 @@ unported = {
 "startOffsetMs": 750.0
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

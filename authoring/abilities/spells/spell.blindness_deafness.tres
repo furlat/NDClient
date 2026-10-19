@@ -1095,6 +1095,8 @@ body = SubResource("Resource_120mu")
 hand_layers = Array[ExtResource("4_1tum6")]([SubResource("Resource_7425o"), SubResource("Resource_mjcrm")])
 sockets = "measured/abilities/spells/spell.blindness_deafness.sockets.json"
 effects = Array[ExtResource("3_yn5ps")]([SubResource("Resource_eh5ai")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -1109,9 +1111,10 @@ applies_conditions = PackedStringArray("condition.blinded", "condition.deafened"
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "blindness_deafness__back"
+"selection": "blindness_deafness__back",
+"source": "assets/vfx/index.json:/selections/blindness_deafness__back/staging"
 }
 unported = {
 "condition": {
@@ -1130,3 +1133,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

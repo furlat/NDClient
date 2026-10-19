@@ -1,12 +1,22 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_2cv3k"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_rq76v"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_rq76v"]
+
+[sub_resource type="Resource" id="Resource_micdb"]
+script = ExtResource("1_rq76v")
+path = "art/media/ui/icons/smooth48/ui.filter-all.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-all"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-all"
 
 [resource]
 script = ExtResource("1_2cv3k")
 id = "trait.keen_hearing_and_smell"
 kind = "trait"
 family = "trait"
+icon = SubResource("Resource_micdb")
 effect_sources = PackedStringArray()
 status = "internal"

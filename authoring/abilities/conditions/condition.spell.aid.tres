@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0037a"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ikehr"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_m41ql"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ikehr"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_mx0aa"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_lelf7"]
 script = ExtResource("1_0037a")
 colour = Color(0.4509804, 0.81960785, 0.84705883, 1)
+
+[sub_resource type="Resource" id="Resource_mx0aa"]
+script = ExtResource("2_ikehr")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-aideffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-aideffect"
 
 [sub_resource type="Resource" id="Resource_2bdm3"]
 script = ExtResource("3_ikehr")
@@ -28,6 +35,7 @@ colour = Color(0.4509804, 0.81960785, 0.84705883, 1)
 script = ExtResource("4_mx0aa")
 id = "condition.spell.aid"
 label = "Aid"
+icon = SubResource("Resource_mx0aa")
 disposition = "authored"
 look = SubResource("Resource_way5g")
 layers = [{

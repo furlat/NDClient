@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_aqnoa"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_kt7b5"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_wouji"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_kt7b5"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_vobvd"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_xbiu0"]
 script = ExtResource("1_aqnoa")
 colour = Color(0.4, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_vobvd"]
+script = ExtResource("2_kt7b5")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-disengaging.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-disengaging"
 
 [sub_resource type="Resource" id="Resource_fj5iq"]
 script = ExtResource("3_kt7b5")
@@ -37,6 +44,7 @@ colour = Color(0.5686275, 0.15294118, 0.80784315, 1)
 script = ExtResource("4_vobvd")
 id = "condition.disengaging"
 label = "Disengaging"
+icon = SubResource("Resource_vobvd")
 disposition = "authored"
 look = SubResource("Resource_dkj62")
 group = "body"

@@ -129,6 +129,8 @@ body = SubResource("Resource_0ujjv")
 hand_layers = Array[ExtResource("4_sp1ll")]([SubResource("Resource_y1agv"), SubResource("Resource_7cmos")])
 sockets = "measured/abilities/spells/spell.cloudkill.sockets.json"
 effects = Array[ExtResource("3_0bfuq")]([SubResource("Resource_j4xgd")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.spell.cloudkill.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.cloudkill")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "cloudkill__volume"
+"selection": "cloudkill__volume",
+"source": "assets/vfx/index.json:/selections/cloudkill__volume/staging"
 }
 unported = {
 "condition": {
@@ -160,3 +163,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -129,6 +129,8 @@ body = SubResource("Resource_rjeeu")
 hand_layers = Array[ExtResource("4_63eak")]([SubResource("Resource_vhm0p"), SubResource("Resource_bvalj")])
 sockets = "measured/abilities/spells/spell.insect_plague.sockets.json"
 effects = Array[ExtResource("3_yq586")]([SubResource("Resource_onlkg")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.spell.insect_plague.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.insect_plague")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "insect_plague__default"
+"selection": "insect_plague__default",
+"source": "assets/vfx/index.json:/selections/insect_plague__default/staging"
 }
 unported = {
 "condition": {
@@ -160,3 +163,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

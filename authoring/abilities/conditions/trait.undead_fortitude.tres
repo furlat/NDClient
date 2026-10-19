@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_kdr1f"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_7alea"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_8wv1o"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_8wv1o"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_3wuvn"]
 
@@ -9,6 +10,14 @@
 script = ExtResource("1_kdr1f")
 enabled = false
 colour = Color(0.41960785, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_3wuvn"]
+script = ExtResource("2_8wv1o")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_34sx6"]
 script = ExtResource("3_8wv1o")
@@ -30,6 +39,7 @@ colour = Color(0.5882353, 0.15294118, 0.80784315, 1)
 script = ExtResource("4_3wuvn")
 id = "trait.undead_fortitude"
 label = "Undead Fortitude"
+icon = SubResource("Resource_3wuvn")
 disposition = "state_only"
 look = SubResource("Resource_fey3v")
 group = "body"

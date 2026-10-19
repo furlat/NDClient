@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_6r0st"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_8ar1y"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_d2ngj"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_d2ngj"]
 
 [sub_resource type="Resource" id="Resource_hylub"]
@@ -16,11 +17,20 @@ markers = Dictionary[String, float]({
 })
 hidden_slots = PackedStringArray()
 
+[sub_resource type="Resource" id="Resource_d6a7a"]
+script = ExtResource("2_d2ngj")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
 [resource]
 script = ExtResource("2_8ar1y")
 id = "action.core.drop"
 kind = "action"
 family = "core"
+icon = SubResource("Resource_d6a7a")
 disposition = "authored"
 body = SubResource("Resource_hylub")
 effect_sources = PackedStringArray()

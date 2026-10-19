@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_amyla"]
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_fnaw7"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="3_bc4k0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_fnaw7"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="4_10coh"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="5_4ufdx"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="6_cjh4t"]
@@ -17,6 +18,12 @@ hidden_slots = PackedStringArray()
 [sub_resource type="Resource" id="Resource_qj2dw"]
 script = ExtResource("2_fnaw7")
 colour = Color(0.89411765, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_bc4k0"]
+script = ExtResource("3_fnaw7")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-prone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-prone"
 
 [sub_resource type="Resource" id="Resource_763n1"]
 script = ExtResource("4_10coh")
@@ -64,6 +71,7 @@ at = "event.start"
 script = ExtResource("5_4ufdx")
 id = "condition.prone"
 label = "Prone"
+icon = SubResource("Resource_bc4k0")
 disposition = "authored"
 look = SubResource("Resource_7ueia")
 layers = [{

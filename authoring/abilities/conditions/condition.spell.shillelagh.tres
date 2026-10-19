@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_q6yvp"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_brbeo"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_eq5ak"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_eq5ak"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_1egub"]
 
 [sub_resource type="Resource" id="Resource_rs80c"]
 script = ExtResource("1_q6yvp")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_1egub"]
+script = ExtResource("2_eq5ak")
+path = "art/media/ui/icons/smooth48/spell.shillelagh.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.shillelagh"
 
 [sub_resource type="Resource" id="Resource_igrls"]
 script = ExtResource("3_eq5ak")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_1egub")
 id = "condition.spell.shillelagh"
 label = "Shillelagh"
+icon = SubResource("Resource_1egub")
 disposition = "authored"
 look = SubResource("Resource_6icdj")
 group = "condition.spell.shillelagh"

@@ -1,8 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_b4v7f"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_qvi8t"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_b4v7f"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_khb3s"]
+
+[sub_resource type="Resource" id="Resource_khb3s"]
+script = ExtResource("1_b4v7f")
+role = "attack"
+enabled = false
+hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_ecjnb"]
 script = ExtResource("1_qvi8t")
@@ -16,6 +23,8 @@ id = "action.attack"
 kind = "action"
 family = "core"
 icon = SubResource("Resource_ecjnb")
+body = SubResource("Resource_khb3s")
 effect_sources = PackedStringArray()
 status = "ready"
-notes = "Presented by the attacks section (attacks/action.attack)."
+notes = "Presented by the attacks section (attacks/action.attack).
+Body role from the server's body kind (weapon_attack); the rig resolves it to a clip once roles are built (coverage fill)."

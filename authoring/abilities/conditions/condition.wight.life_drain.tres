@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_b77vg"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_eo30v"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_yohyi"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_yohyi"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_4meqf"]
 
@@ -9,6 +10,12 @@
 script = ExtResource("1_b77vg")
 enabled = false
 colour = Color(0.69411767, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_4meqf"]
+script = ExtResource("2_yohyi")
+path = "art/media/ui/icons/smooth48/action.monster.wight.life_drain.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.wight.life_drain"
 
 [sub_resource type="Resource" id="Resource_op2h5"]
 script = ExtResource("3_yohyi")
@@ -30,6 +37,7 @@ colour = Color(0.21960784, 0.80784315, 0.15294118, 1)
 script = ExtResource("4_4meqf")
 id = "condition.wight.life_drain"
 label = "Life Drain"
+icon = SubResource("Resource_4meqf")
 disposition = "authored"
 look = SubResource("Resource_7wxge")
 layers = [{

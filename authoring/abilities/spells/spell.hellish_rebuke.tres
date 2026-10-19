@@ -664,6 +664,8 @@ body = SubResource("Resource_8d4qw")
 hand_layers = Array[ExtResource("6_muhid")]([SubResource("Resource_3tu8c"), SubResource("Resource_dwo2e")])
 sockets = "measured/abilities/spells/spell.hellish_rebuke.sockets.json"
 effects = Array[ExtResource("3_5soq5")]([SubResource("Resource_5jstf")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -684,9 +686,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "hellish_rebuke__back"
+"selection": "hellish_rebuke__back",
+"source": "assets/vfx/index.json:/selections/hellish_rebuke__back/staging"
 }
 unported = {
 "condition": {
@@ -742,3 +745,4 @@ unported = {
 "viewFacing": "SE"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

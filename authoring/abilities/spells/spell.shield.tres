@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_6ju1t"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_g1n85"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="7_cjexq"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_sjutm"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="8_6rwqh"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="9_i3xkw"]
 
@@ -173,9 +174,16 @@ unported = {
 "slot": "effect"
 }
 
+[sub_resource type="Resource" id="Resource_0gk6s"]
+script = ExtResource("7_sjutm")
+path = "art/media/ui/icons/smooth48/reaction.shield.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:reaction.shield"
+
 [resource]
 script = ExtResource("7_cjexq")
 id = "spell.shield"
+icon = SubResource("Resource_0gk6s")
 delivery = "other"
 body = SubResource("Resource_wxw4p")
 hand_layers = Array[ExtResource("6_g1n85")]([SubResource("Resource_dkpty"), SubResource("Resource_vpj52")])

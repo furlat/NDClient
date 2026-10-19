@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_topsx"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_h08y3"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_pqgc5"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_pqgc5"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_qk4ci"]
 
 [sub_resource type="Resource" id="Resource_erjrh"]
 script = ExtResource("1_topsx")
 colour = Color(0.4392157, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_qk4ci"]
+script = ExtResource("2_pqgc5")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-conjuration-spiritguardianszone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-conjuration-spiritguardianszone"
 
 [sub_resource type="Resource" id="Resource_rt5oq"]
 script = ExtResource("3_pqgc5")
@@ -28,6 +35,7 @@ colour = Color(0.6117647, 0.15294118, 0.80784315, 1)
 script = ExtResource("4_qk4ci")
 id = "condition.spell.spirit_guardians.zone"
 label = "Spirit Guardians Zone"
+icon = SubResource("Resource_qk4ci")
 disposition = "authored"
 surface = "spatial_effect.spell.spirit_guardians"
 look = SubResource("Resource_hcsqd")

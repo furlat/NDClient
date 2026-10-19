@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_tyonc"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ojird"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_t2oww"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ojird"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ix4qq"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_bopn2"]
 script = ExtResource("1_tyonc")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_ix4qq"]
+script = ExtResource("2_ojird")
+path = "art/media/ui/icons/smooth48/spell.harm.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.harm"
 
 [sub_resource type="Resource" id="Resource_5l6dx"]
 script = ExtResource("3_ojird")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_ix4qq")
 id = "condition.spell.harm"
 label = "Harm"
+icon = SubResource("Resource_ix4qq")
 disposition = "authored"
 look = SubResource("Resource_vcwtn")
 layers = [{

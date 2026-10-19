@@ -2643,6 +2643,8 @@ body = SubResource("Resource_e6jhn")
 hand_layers = Array[ExtResource("4_aaexx")]([SubResource("Resource_y40ec"), SubResource("Resource_gn57d")])
 sockets = "measured/abilities/spells/spell.protection_from_energy.sockets.json"
 effects = Array[ExtResource("3_knt38")]([SubResource("Resource_5mj7l")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -2657,9 +2659,10 @@ applies_conditions = PackedStringArray("condition.spell.protection_from_energy")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "protection_from_energy__acid_back"
+"selection": "protection_from_energy__acid_back",
+"source": "assets/vfx/index.json:/selections/protection_from_energy__acid_back/staging"
 }
 unported = {
 "condition": {
@@ -2675,3 +2678,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

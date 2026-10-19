@@ -198,6 +198,8 @@ body = SubResource("Resource_coq5h")
 hand_layers = Array[ExtResource("4_x7ido")]([SubResource("Resource_i7nnl"), SubResource("Resource_isbor")])
 sockets = "measured/abilities/spells/spell.finger_of_death.sockets.json"
 effects = Array[ExtResource("3_tp0bh")]([SubResource("Resource_sxk7o"), SubResource("Resource_i1yfr")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -212,9 +214,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "finger_of_death__normal_back"
+"selection": "finger_of_death__normal_back",
+"source": "assets/vfx/index.json:/selections/finger_of_death__normal_back/staging"
 }
 unported = {
 "cancellationMedia": {
@@ -422,3 +425,4 @@ unported = {
 "scale": 0.46875
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

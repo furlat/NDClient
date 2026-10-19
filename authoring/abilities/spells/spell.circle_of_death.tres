@@ -225,6 +225,8 @@ body = SubResource("Resource_jqv4e")
 hand_layers = Array[ExtResource("4_8obgw")]([SubResource("Resource_tvfsn"), SubResource("Resource_p2n65")])
 sockets = "measured/abilities/spells/spell.circle_of_death.sockets.json"
 effects = Array[ExtResource("3_iwkxs")]([SubResource("Resource_iktdi"), SubResource("Resource_acojy"), SubResource("Resource_ol48r"), SubResource("Resource_0ok8r")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -238,9 +240,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "circle_of_death__whole"
+"selection": "circle_of_death__whole",
+"source": "assets/vfx/index.json:/selections/circle_of_death__whole/staging"
 }
 unported = {
 "bodyMaterials": [{
@@ -378,3 +381,4 @@ unported = {
 "startOffsetMs": 375.0
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -1,8 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_aouq7"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_cxbwk"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_aouq7"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_swc7o"]
+
+[sub_resource type="Resource" id="Resource_swc7o"]
+script = ExtResource("1_aouq7")
+role = "walk"
+enabled = false
+hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_e0whi"]
 script = ExtResource("1_cxbwk")
@@ -16,4 +23,6 @@ id = "action.move"
 kind = "action"
 family = "core"
 icon = SubResource("Resource_e0whi")
+body = SubResource("Resource_swc7o")
 effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (move); the rig resolves it to a clip once roles are built (coverage fill)."

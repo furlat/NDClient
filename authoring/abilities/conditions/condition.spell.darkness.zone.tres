@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_n7ux1"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_4e8di"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_b6qae"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_b6qae"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_7c06y"]
 
 [sub_resource type="Resource" id="Resource_wk6ik"]
 script = ExtResource("1_n7ux1")
 colour = Color(0.89411765, 0.54509807, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_7c06y"]
+script = ExtResource("2_b6qae")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-conjuration-darknesszone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-conjuration-darknesszone"
 
 [sub_resource type="Resource" id="Resource_urews"]
 script = ExtResource("3_b6qae")
@@ -28,6 +35,7 @@ colour = Color(0.80784315, 0.7411765, 0.15294118, 1)
 script = ExtResource("4_7c06y")
 id = "condition.spell.darkness.zone"
 label = "Darkness Zone"
+icon = SubResource("Resource_7c06y")
 disposition = "authored"
 surface = "spatial_effect.spell.darkness"
 look = SubResource("Resource_o34cu")

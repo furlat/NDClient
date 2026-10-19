@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_qbnfo"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_5qjau"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_pyoja"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_5qjau"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_pnl2j"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_rnvxe"]
 script = ExtResource("1_qbnfo")
 colour = Color(0.34509805, 0.70980394, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_pnl2j"]
+script = ExtResource("2_5qjau")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-commandfleeeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-commandfleeeffect"
 
 [sub_resource type="Resource" id="Resource_axt4w"]
 script = ExtResource("3_5qjau")
@@ -28,6 +35,7 @@ colour = Color(0.15294118, 0.23921569, 0.80784315, 1)
 script = ExtResource("4_pnl2j")
 id = "condition.spell.command.flee"
 label = "Command: Flee"
+icon = SubResource("Resource_pnl2j")
 disposition = "authored"
 look = SubResource("Resource_quykt")
 layers = [{

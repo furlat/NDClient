@@ -686,7 +686,7 @@ recipe = {
 "y": 0.0
 },
 "SW": {
-"x": 3.673940397442059e-16,
+"x": 3.6739403974420594e-16,
 "y": 6.0
 },
 "W": {
@@ -716,6 +716,8 @@ body = SubResource("Resource_63wlb")
 hand_layers = Array[ExtResource("6_wbbca")]([SubResource("Resource_72r0p"), SubResource("Resource_dtrtq")])
 sockets = "measured/abilities/spells/spell.sunbeam.sockets.json"
 effects = Array[ExtResource("3_vwvmt")]([SubResource("Resource_bca4r"), SubResource("Resource_nvw37")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -736,9 +738,10 @@ applies_conditions = PackedStringArray("condition.blinded", "condition.spell.sun
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "sunbeam_native"
+"selection": "sunbeam_native",
+"source": "assets/vfx/index.json:/selections/sunbeam_native/staging"
 }
 unported = {
 "condition": {
@@ -805,7 +808,7 @@ unported = {
 "y": 0.0
 },
 "SW": {
-"x": 3.673940397442059e-16,
+"x": 3.6739403974420594e-16,
 "y": 6.0
 },
 "W": {
@@ -822,3 +825,4 @@ unported = {
 "startOffsetMs": 375.0
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

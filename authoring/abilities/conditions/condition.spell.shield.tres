@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_7wjpf"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_3t8dk"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_hhmhw"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_hhmhw"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_w6p6f"]
 
@@ -9,6 +10,12 @@
 script = ExtResource("1_7wjpf")
 enabled = false
 colour = Color(0.3372549, 0.8039216, 1, 1)
+
+[sub_resource type="Resource" id="Resource_w6p6f"]
+script = ExtResource("2_hhmhw")
+path = "art/media/ui/icons/smooth48/spell.fire_shield.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.fire_shield"
 
 [sub_resource type="Resource" id="Resource_l8knr"]
 script = ExtResource("3_hhmhw")
@@ -30,6 +37,7 @@ colour = Color(0.3372549, 0.8039216, 1, 1)
 script = ExtResource("4_w6p6f")
 id = "condition.spell.shield"
 label = "Shield"
+icon = SubResource("Resource_w6p6f")
 disposition = "authored"
 owner_spell = "spell.shield"
 look = SubResource("Resource_kkql3")

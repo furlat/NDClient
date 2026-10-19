@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0s6o5"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_g6rkl"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_hqkk0"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_g6rkl"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ekp7j"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_2pyor"]
 script = ExtResource("1_0s6o5")
 colour = Color(0.89411765, 0.7294118, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_ekp7j"]
+script = ExtResource("2_g6rkl")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-baneeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-enchantment-baneeffect"
 
 [sub_resource type="Resource" id="Resource_mjk1i"]
 script = ExtResource("3_g6rkl")
@@ -28,6 +35,7 @@ colour = Color(0.654902, 0.80784315, 0.15294118, 1)
 script = ExtResource("4_ekp7j")
 id = "condition.spell.bane"
 label = "Bane"
+icon = SubResource("Resource_ekp7j")
 disposition = "authored"
 owner_spell = "spell.bane"
 look = SubResource("Resource_nwfcb")

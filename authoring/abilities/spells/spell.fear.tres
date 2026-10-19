@@ -155,6 +155,8 @@ body = SubResource("Resource_06g7b")
 hand_layers = Array[ExtResource("4_absul")]([SubResource("Resource_js8x1"), SubResource("Resource_mfvjf")])
 sockets = "measured/abilities/spells/spell.fear.sockets.json"
 effects = Array[ExtResource("3_s3n5n")]([SubResource("Resource_rotaj"), SubResource("Resource_n5jh0")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -168,9 +170,10 @@ applies_conditions = PackedStringArray("condition.frightened", "condition.spell.
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "fear_native"
+"selection": "fear_native",
+"source": "assets/vfx/index.json:/selections/fear_native/staging"
 }
 unported = {
 "condition": {
@@ -213,3 +216,4 @@ unported = {
 "scale": 0.6428571428571428
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

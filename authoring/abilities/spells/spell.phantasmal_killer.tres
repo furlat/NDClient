@@ -1,10 +1,21 @@
 [gd_resource type="Resource" script_class="PresentationSpell" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_x1dmb"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ypcyw"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_ypcyw"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_n1e8q"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_1bvcm"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="4_n1e8q"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_pn0ds"]
+
+[sub_resource type="Resource" id="Resource_n1e8q"]
+script = ExtResource("1_ypcyw")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
 
 [sub_resource type="Resource" id="Resource_n1ti5"]
 script = ExtResource("1_x1dmb")
@@ -169,11 +180,21 @@ extra = {
 "to_actor": "target"
 }
 
+[sub_resource type="Resource" id="Resource_1bvcm"]
+script = ExtResource("4_n1e8q")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.phantasmal_killer.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.spell.phantasmal_killer"
+
 [resource]
 script = ExtResource("3_n1e8q")
 id = "spell.phantasmal_killer"
+icon = SubResource("Resource_1bvcm")
 delivery = "condition_only"
+body = SubResource("Resource_n1e8q")
 effects = Array[ExtResource("1_x1dmb")]([SubResource("Resource_n1ti5"), SubResource("Resource_23vo2"), SubResource("Resource_jm8mj"), SubResource("Resource_s7f5u"), SubResource("Resource_pjnhk")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -188,5 +209,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "phantasmal_killer_readable_native"
+"selection": "phantasmal_killer_readable_native",
+"source": "assets/vfx/index.json:/selections/phantasmal_killer_readable_native/staging"
 }
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_nlhvy"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_3qou8"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_cfeoj"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_cfeoj"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_nceoy"]
 
@@ -9,6 +10,12 @@
 script = ExtResource("1_nlhvy")
 prefix = "+"
 duration = 1.4
+
+[sub_resource type="Resource" id="Resource_nceoy"]
+script = ExtResource("2_cfeoj")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-hidden.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-hidden"
 
 [sub_resource type="Resource" id="Resource_w74sh"]
 script = ExtResource("3_cfeoj")
@@ -31,6 +38,7 @@ duration = 1.4
 script = ExtResource("4_nceoy")
 id = "condition.hidden"
 label = "Hidden"
+icon = SubResource("Resource_nceoy")
 disposition = "authored"
 look = SubResource("Resource_wysm7")
 poses = [{

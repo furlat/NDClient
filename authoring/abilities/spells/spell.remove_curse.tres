@@ -129,6 +129,8 @@ body = SubResource("Resource_68886")
 hand_layers = Array[ExtResource("4_bhdep")]([SubResource("Resource_4re3a"), SubResource("Resource_sd2es")])
 sockets = "measured/abilities/spells/spell.remove_curse.sockets.json"
 effects = Array[ExtResource("3_emwsr")]([SubResource("Resource_4hi8c")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "remove_curse__back"
+"selection": "remove_curse__back",
+"source": "assets/vfx/index.json:/selections/remove_curse__back/staging"
 }
 unported = {
 "condition": {
@@ -192,3 +195,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

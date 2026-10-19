@@ -1,8 +1,16 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_omjx8"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_q8dfy"]
+
+[sub_resource type="Resource" id="Resource_0ly5a"]
+script = ExtResource("1_omjx8")
+path = "art/media/ui/icons/smooth48/spell.wind_wall.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.wind_wall.zone"
 
 [resource]
 script = ExtResource("1_q8dfy")
 id = "condition.spell.wind_wall.zone"
+icon = SubResource("Resource_0ly5a")
 surface = "spatial_effect.spell.wind_wall"

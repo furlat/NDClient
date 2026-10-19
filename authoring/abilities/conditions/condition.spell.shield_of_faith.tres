@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_yf8e3"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_c7w2h"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_wqmeh"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_wqmeh"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_efqas"]
 
 [sub_resource type="Resource" id="Resource_1v0m1"]
 script = ExtResource("1_yf8e3")
 colour = Color(0.8666667, 0.7137255, 0.36862746, 1)
+
+[sub_resource type="Resource" id="Resource_efqas"]
+script = ExtResource("2_wqmeh")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-shieldoffaitheffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-shieldoffaitheffect"
 
 [sub_resource type="Resource" id="Resource_df63p"]
 script = ExtResource("3_wqmeh")
@@ -28,6 +35,7 @@ colour = Color(0.8666667, 0.7137255, 0.36862746, 1)
 script = ExtResource("4_efqas")
 id = "condition.spell.shield_of_faith"
 label = "Shield of Faith"
+icon = SubResource("Resource_efqas")
 disposition = "authored"
 owner_spell = "spell.shield_of_faith"
 look = SubResource("Resource_0iyej")

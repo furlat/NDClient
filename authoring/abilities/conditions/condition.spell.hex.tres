@@ -1,8 +1,18 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_0agt3"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_w3mkv"]
+
+[sub_resource type="Resource" id="Resource_f2ut0"]
+script = ExtResource("1_0agt3")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.hex.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.hex"
+status = "stand_in"
+source = "ui-delivery-20261018"
 
 [resource]
 script = ExtResource("1_w3mkv")
 id = "condition.spell.hex"
+icon = SubResource("Resource_f2ut0")
 status = "internal"

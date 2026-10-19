@@ -137,6 +137,8 @@ body = SubResource("Resource_ytxyp")
 hand_layers = Array[ExtResource("4_8yq7f")]([SubResource("Resource_ht613"), SubResource("Resource_4yd2n")])
 sockets = "measured/abilities/spells/spell.darkvision.sockets.json"
 effects = Array[ExtResource("3_1n3gc")]([SubResource("Resource_l58tf")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -150,9 +152,10 @@ applies_conditions = PackedStringArray("condition.spell.darkvision")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "darkvision__back"
+"selection": "darkvision__back",
+"source": "assets/vfx/index.json:/selections/darkvision__back/staging"
 }
 unported = {
 "condition": {
@@ -171,3 +174,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

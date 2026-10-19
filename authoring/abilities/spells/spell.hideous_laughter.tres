@@ -1,11 +1,21 @@
 [gd_resource type="Resource" script_class="PresentationSpell" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_eakmr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_gjp33"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_gjp33"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_jpexv"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_t140m"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_raxc3"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_ehj2j"]
+
+[sub_resource type="Resource" id="Resource_jpexv"]
+script = ExtResource("1_gjp33")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
 
 [sub_resource type="Resource" id="Resource_7bgk6"]
 script = ExtResource("1_eakmr")
@@ -85,7 +95,10 @@ script = ExtResource("4_t140m")
 id = "spell.hideous_laughter"
 icon = SubResource("Resource_dn01s")
 delivery = "condition_only"
+body = SubResource("Resource_jpexv")
 effects = Array[ExtResource("1_eakmr")]([SubResource("Resource_7bgk6"), SubResource("Resource_lqxv0")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -100,5 +113,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "hideous_laughter_native"
+"selection": "hideous_laughter_native",
+"source": "assets/vfx/index.json:/selections/hideous_laughter_native/staging"
 }
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

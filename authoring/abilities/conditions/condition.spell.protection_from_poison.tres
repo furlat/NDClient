@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_wvjlp"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_q04yx"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_xk5ax"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_xk5ax"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_v5631"]
 
 [sub_resource type="Resource" id="Resource_ao408"]
 script = ExtResource("1_wvjlp")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_v5631"]
+script = ExtResource("2_xk5ax")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-protectionfrompoisoneffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-protectionfrompoisoneffect"
 
 [sub_resource type="Resource" id="Resource_sjinj"]
 script = ExtResource("3_xk5ax")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_v5631")
 id = "condition.spell.protection_from_poison"
 label = "Protection from Poison"
+icon = SubResource("Resource_v5631")
 disposition = "authored"
 look = SubResource("Resource_ifam5")
 layers = [{

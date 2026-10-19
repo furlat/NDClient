@@ -151,6 +151,8 @@ body = SubResource("Resource_yc2g4")
 hand_layers = Array[ExtResource("4_t1s0k")]([SubResource("Resource_gt5kn"), SubResource("Resource_it420")])
 sockets = "measured/abilities/spells/spell.misty_step.sockets.json"
 effects = Array[ExtResource("3_217sv")]([SubResource("Resource_6mcs7"), SubResource("Resource_q08hx")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -164,9 +166,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "misty_step__back"
+"selection": "misty_step__back",
+"source": "assets/vfx/index.json:/selections/misty_step__back/staging"
 }
 unported = {
 "condition": {
@@ -233,3 +236,4 @@ unported = {
 "viewFacing": "SE"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

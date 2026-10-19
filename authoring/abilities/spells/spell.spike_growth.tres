@@ -125,6 +125,8 @@ body = SubResource("Resource_gql04")
 hand_layers = Array[ExtResource("4_ena16")]([SubResource("Resource_b5rxw"), SubResource("Resource_m60x4")])
 sockets = "measured/abilities/spells/spell.spike_growth.sockets.json"
 effects = Array[ExtResource("3_yw2id")]([SubResource("Resource_vsfpn")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -138,9 +140,10 @@ applies_conditions = PackedStringArray("condition.spell.spike_growth.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.spike_growth")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "spike_growth_native"
+"selection": "spike_growth_native",
+"source": "assets/vfx/index.json:/selections/spike_growth_native/staging"
 }
 unported = {
 "condition": {
@@ -156,3 +159,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

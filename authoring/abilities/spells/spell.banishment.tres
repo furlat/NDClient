@@ -125,6 +125,8 @@ body = SubResource("Resource_bpajn")
 hand_layers = Array[ExtResource("4_sjtm5")]([SubResource("Resource_sbmmn"), SubResource("Resource_s4x40")])
 sockets = "measured/abilities/spells/spell.banishment.sockets.json"
 effects = Array[ExtResource("3_2j8sb")]([SubResource("Resource_4o82y")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -138,9 +140,10 @@ applies_conditions = PackedStringArray("condition.spell.banishment")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "banishment_native"
+"selection": "banishment_native",
+"source": "assets/vfx/index.json:/selections/banishment_native/staging"
 }
 unported = {
 "condition": {
@@ -159,3 +162,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

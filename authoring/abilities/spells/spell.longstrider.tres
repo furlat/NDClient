@@ -129,6 +129,8 @@ body = SubResource("Resource_u66wy")
 hand_layers = Array[ExtResource("4_er2cx")]([SubResource("Resource_t4oiv"), SubResource("Resource_sfj2v")])
 sockets = "measured/abilities/spells/spell.longstrider.sockets.json"
 effects = Array[ExtResource("3_eet5b")]([SubResource("Resource_7x1qw")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.spell.longstrider")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "longstrider__back"
+"selection": "longstrider__back",
+"source": "assets/vfx/index.json:/selections/longstrider__back/staging"
 }
 unported = {
 "condition": {
@@ -163,3 +166,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

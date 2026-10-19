@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_tkdvb"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_0b8ti"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_dtlg7"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_0b8ti"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_lmcon"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_gpq4i"]
 script = ExtResource("1_tkdvb")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_lmcon"]
+script = ExtResource("2_0b8ti")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-blinded.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.sunbeam.blinded"
 
 [sub_resource type="Resource" id="Resource_omqtm"]
 script = ExtResource("3_0b8ti")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_lmcon")
 id = "condition.spell.sunbeam.blinded"
 label = "Sunbeam Blindness"
+icon = SubResource("Resource_lmcon")
 disposition = "state_only"
 look = SubResource("Resource_q14un")
 group = "condition.spell.sunbeam.blinded"

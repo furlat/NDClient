@@ -1,8 +1,16 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_bx82a"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_p0cd7"]
+
+[sub_resource type="Resource" id="Resource_vuu3s"]
+script = ExtResource("1_p0cd7")
+path = "art/media/ui/icons/smooth48/spell.wall_of_ice.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.wall_of_ice.zone"
 
 [resource]
 script = ExtResource("1_bx82a")
 id = "condition.spell.wall_of_ice.zone"
+icon = SubResource("Resource_vuu3s")
 surface = "spatial_effect.spell.wall_of_ice"

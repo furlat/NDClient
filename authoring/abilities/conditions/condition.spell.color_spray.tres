@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_7m7cn"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_gjnx7"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_w4jba"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_w4jba"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_mdsja"]
 
 [sub_resource type="Resource" id="Resource_d64ih"]
 script = ExtResource("1_7m7cn")
 colour = Color(0.34509805, 0.54509807, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_mdsja"]
+script = ExtResource("2_w4jba")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-illusion-colorsprayeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-illusion-colorsprayeffect"
 
 [sub_resource type="Resource" id="Resource_4lh0v"]
 script = ExtResource("3_w4jba")
@@ -28,6 +35,7 @@ colour = Color(0.2627451, 0.15294118, 0.80784315, 1)
 script = ExtResource("4_mdsja")
 id = "condition.spell.color_spray"
 label = "Color Spray"
+icon = SubResource("Resource_mdsja")
 disposition = "authored"
 look = SubResource("Resource_0ad3a")
 group = "body"

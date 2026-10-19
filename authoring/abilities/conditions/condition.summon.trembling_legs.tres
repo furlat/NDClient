@@ -1,7 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_g3nf2"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_sm6r2"]
+
+[sub_resource type="Resource" id="Resource_0s2ko"]
+script = ExtResource("1_sm6r2")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.status.trembling_legs.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.status.trembling_legs"
 
 [resource]
 script = ExtResource("1_g3nf2")
 id = "condition.summon.trembling_legs"
+icon = SubResource("Resource_0s2ko")

@@ -2356,6 +2356,8 @@ body = SubResource("Resource_7js8m")
 hand_layers = Array[ExtResource("4_m16s1")]([SubResource("Resource_iqjpm"), SubResource("Resource_fksjp")])
 sockets = "measured/abilities/spells/spell.bestow_curse.sockets.json"
 effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_xcunn")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -2370,9 +2372,10 @@ applies_conditions = PackedStringArray("condition.spell.bestow_curse.ability", "
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "bestow_curse_ability_burden_native"
+"selection": "bestow_curse_ability_burden_native",
+"source": "assets/vfx/index.json:/selections/bestow_curse_ability_burden_native/staging"
 }
 unported = {
 "condition": {
@@ -2414,3 +2417,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

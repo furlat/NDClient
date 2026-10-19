@@ -149,6 +149,8 @@ body = SubResource("Resource_k1ffy")
 hand_layers = Array[ExtResource("4_j5jco")]([SubResource("Resource_cns88"), SubResource("Resource_obu10")])
 sockets = "measured/abilities/spells/spell.heroes_feast.sockets.json"
 effects = Array[ExtResource("3_p2x3c")]([SubResource("Resource_6hubd"), SubResource("Resource_v2vhe")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -162,9 +164,10 @@ applies_conditions = PackedStringArray("condition.spell.heroes_feast")
 applies_surfaces = PackedStringArray("spatial_effect.spell.heroes_feast")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "heroes_feast_native"
+"selection": "heroes_feast_native",
+"source": "assets/vfx/index.json:/selections/heroes_feast_native/staging"
 }
 unported = {
 "condition": {
@@ -183,3 +186,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

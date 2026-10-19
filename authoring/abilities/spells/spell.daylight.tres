@@ -129,6 +129,8 @@ body = SubResource("Resource_04coo")
 hand_layers = Array[ExtResource("4_kk842")]([SubResource("Resource_11upr"), SubResource("Resource_vvilu")])
 sockets = "measured/abilities/spells/spell.daylight.sockets.json"
 effects = Array[ExtResource("3_8c0mm")]([SubResource("Resource_u566m")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.spell.daylight.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.daylight")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "daylight__back"
+"selection": "daylight__back",
+"source": "assets/vfx/index.json:/selections/daylight__back/staging"
 }
 unported = {
 "condition": {
@@ -163,3 +166,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

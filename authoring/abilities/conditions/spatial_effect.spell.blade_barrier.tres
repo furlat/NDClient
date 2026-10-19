@@ -1,8 +1,18 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_012yi"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_p06yu"]
+
+[sub_resource type="Resource" id="Resource_g1ksk"]
+script = ExtResource("1_p06yu")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [resource]
 script = ExtResource("1_012yi")
 id = "spatial_effect.spell.blade_barrier"
+icon = SubResource("Resource_g1ksk")
 surface = "spatial_effect.spell.blade_barrier"

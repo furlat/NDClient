@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_c62ib"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_i6xfi"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ttqwi"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_i6xfi"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ftgoq"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_avanp"]
 script = ExtResource("1_c62ib")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_ftgoq"]
+script = ExtResource("2_i6xfi")
+path = "art/media/ui/icons/smooth48/trait.innate_flight.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:trait.innate_flight"
 
 [sub_resource type="Resource" id="Resource_oo088"]
 script = ExtResource("3_i6xfi")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_ftgoq")
 id = "trait.innate_flight"
 label = "Innate Flight"
+icon = SubResource("Resource_ftgoq")
 disposition = "state_only"
 look = SubResource("Resource_7xl41")
 group = "innate"

@@ -151,6 +151,8 @@ body = SubResource("Resource_xaajm")
 hand_layers = Array[ExtResource("4_xh55k")]([SubResource("Resource_umtd3"), SubResource("Resource_g71do")])
 sockets = "measured/abilities/spells/spell.hypnotic_pattern.sockets.json"
 effects = Array[ExtResource("3_rcwho")]([SubResource("Resource_sq3qo"), SubResource("Resource_teffb")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -164,9 +166,10 @@ applies_conditions = PackedStringArray("condition.charmed", "condition.spell.hyp
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "hypnotic_pattern_native"
+"selection": "hypnotic_pattern_native",
+"source": "assets/vfx/index.json:/selections/hypnotic_pattern_native/staging"
 }
 unported = {
 "condition": {
@@ -193,3 +196,4 @@ unported = {
 "scale": 0.5
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

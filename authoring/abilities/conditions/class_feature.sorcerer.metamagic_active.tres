@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_vsleg"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_p4v25"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_wdj84"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_p4v25"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_3xrut"]
@@ -9,6 +10,14 @@
 script = ExtResource("1_vsleg")
 enabled = false
 colour = Color(0.89411765, 0.50980395, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_3xrut"]
+script = ExtResource("2_p4v25")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_d2ko4"]
 script = ExtResource("3_p4v25")
@@ -30,6 +39,7 @@ colour = Color(0.80784315, 0.69803923, 0.15294118, 1)
 script = ExtResource("4_3xrut")
 id = "class_feature.sorcerer.metamagic_active"
 label = "MetamagicActive"
+icon = SubResource("Resource_3xrut")
 disposition = "authored"
 look = SubResource("Resource_vwm10")
 layers = [{

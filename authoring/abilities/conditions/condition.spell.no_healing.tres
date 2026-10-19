@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_jvin6"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ceahd"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_mw25h"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ceahd"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_xaw0t"]
@@ -9,6 +10,12 @@
 script = ExtResource("1_jvin6")
 enabled = false
 colour = Color(0.69411767, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_xaw0t"]
+script = ExtResource("2_ceahd")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-necromancy-nohealing.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-necromancy-nohealing"
 
 [sub_resource type="Resource" id="Resource_wqbeq"]
 script = ExtResource("3_ceahd")
@@ -30,6 +37,7 @@ colour = Color(0.21960784, 0.80784315, 0.15294118, 1)
 script = ExtResource("4_xaw0t")
 id = "condition.spell.no_healing"
 label = "Healing blocked"
+icon = SubResource("Resource_xaw0t")
 disposition = "authored"
 look = SubResource("Resource_4o442")
 layers = [{

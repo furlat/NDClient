@@ -159,6 +159,8 @@ body = SubResource("Resource_2g05e")
 hand_layers = Array[ExtResource("4_e01ii")]([SubResource("Resource_4j2jc"), SubResource("Resource_ffony")])
 sockets = "measured/abilities/spells/spell.mass_healing_word.sockets.json"
 effects = Array[ExtResource("3_jmmye")]([SubResource("Resource_kuqqk"), SubResource("Resource_uicdx")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -172,9 +174,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "mass_healing_word__back"
+"selection": "mass_healing_word__back",
+"source": "assets/vfx/index.json:/selections/mass_healing_word__back/staging"
 }
 unported = {
 "condition": {
@@ -219,3 +222,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

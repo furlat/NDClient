@@ -1,8 +1,16 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2rlnn"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_kg430"]
+
+[sub_resource type="Resource" id="Resource_qjqbd"]
+script = ExtResource("1_2rlnn")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-evocation-icestormterrain.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.wall_of_ice.frigid_air"
 
 [resource]
 script = ExtResource("1_kg430")
 id = "condition.spell.wall_of_ice.frigid_air"
+icon = SubResource("Resource_qjqbd")
 surface = "spatial_effect.spell.frigid_air"

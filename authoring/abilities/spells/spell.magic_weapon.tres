@@ -1,11 +1,21 @@
 [gd_resource type="Resource" script_class="PresentationSpell" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_e5qea"]
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_kqar5"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_e5qea"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_ht010"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_i8jol"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_xybgm"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_ln82v"]
+
+[sub_resource type="Resource" id="Resource_ht010"]
+script = ExtResource("1_e5qea")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
 
 [sub_resource type="Resource" id="Resource_qc5hc"]
 script = ExtResource("1_kqar5")
@@ -142,7 +152,10 @@ script = ExtResource("4_i8jol")
 id = "spell.magic_weapon"
 icon = SubResource("Resource_1smqy")
 delivery = "touch"
+body = SubResource("Resource_ht010")
 effects = Array[ExtResource("1_kqar5")]([SubResource("Resource_qc5hc"), SubResource("Resource_k03jg"), SubResource("Resource_sbmma"), SubResource("Resource_5jn0r")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -157,5 +170,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "magic_weapon_native"
+"selection": "magic_weapon_native",
+"source": "assets/vfx/index.json:/selections/magic_weapon_native/staging"
 }
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

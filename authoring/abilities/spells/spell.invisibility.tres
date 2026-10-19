@@ -140,6 +140,8 @@ body = SubResource("Resource_3wyea")
 hand_layers = Array[ExtResource("4_dkm3u")]([SubResource("Resource_65hig"), SubResource("Resource_qhl4r")])
 sockets = "measured/abilities/spells/spell.invisibility.sockets.json"
 effects = Array[ExtResource("3_do72n")]([SubResource("Resource_d046h"), SubResource("Resource_8awgl")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -153,9 +155,10 @@ applies_conditions = PackedStringArray("condition.spell.invisibility")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "invisibility_native"
+"selection": "invisibility_native",
+"source": "assets/vfx/index.json:/selections/invisibility_native/staging"
 }
 unported = {
 "condition": {
@@ -171,3 +174,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

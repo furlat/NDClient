@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_g4nb0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_oxidf"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_s2v4f"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_oxidf"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_6nomw"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_k2nem"]
 script = ExtResource("1_g4nb0")
 colour = Color(0.32156864, 0.9098039, 1, 1)
+
+[sub_resource type="Resource" id="Resource_6nomw"]
+script = ExtResource("2_oxidf")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-transmutation-hasteeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-transmutation-hasteeffect"
 
 [sub_resource type="Resource" id="Resource_fmdge"]
 script = ExtResource("3_oxidf")
@@ -31,6 +38,7 @@ colour = Color(0.3764706, 0.64705884, 0.98039216, 1)
 script = ExtResource("4_6nomw")
 id = "condition.spell.haste"
 label = "Haste"
+icon = SubResource("Resource_6nomw")
 disposition = "authored"
 look = SubResource("Resource_panhp")
 layers = [{

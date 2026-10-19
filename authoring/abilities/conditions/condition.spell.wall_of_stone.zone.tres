@@ -1,8 +1,16 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_trw8i"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_y3kd0"]
+
+[sub_resource type="Resource" id="Resource_5xouf"]
+script = ExtResource("1_y3kd0")
+path = "art/media/ui/icons/smooth48/spell.wall_of_stone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.wall_of_stone.zone"
 
 [resource]
 script = ExtResource("1_trw8i")
 id = "condition.spell.wall_of_stone.zone"
+icon = SubResource("Resource_5xouf")
 surface = "spatial_effect.spell.wall_of_stone"

@@ -1,10 +1,21 @@
 [gd_resource type="Resource" script_class="PresentationSpell" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_07s4r"]
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_vsy2t"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_07s4r"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_kso5i"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_7alld"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="4_kso5i"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_2owug"]
+
+[sub_resource type="Resource" id="Resource_kso5i"]
+script = ExtResource("1_07s4r")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
 
 [sub_resource type="Resource" id="Resource_imccq"]
 script = ExtResource("1_vsy2t")
@@ -111,11 +122,21 @@ extra = {
 "to_actor": "target"
 }
 
+[sub_resource type="Resource" id="Resource_7alld"]
+script = ExtResource("4_kso5i")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.irresistible_dance.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.spell.irresistible_dance"
+
 [resource]
 script = ExtResource("3_kso5i")
 id = "spell.irresistible_dance"
+icon = SubResource("Resource_7alld")
 delivery = "condition_only"
+body = SubResource("Resource_kso5i")
 effects = Array[ExtResource("1_vsy2t")]([SubResource("Resource_imccq"), SubResource("Resource_oxe13"), SubResource("Resource_oldq2")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -130,5 +151,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "irresistible_dance_native"
+"selection": "irresistible_dance_native",
+"source": "assets/vfx/index.json:/selections/irresistible_dance_native/staging"
 }
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."

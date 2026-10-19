@@ -137,6 +137,8 @@ body = SubResource("Resource_ayq8a")
 hand_layers = Array[ExtResource("4_im070")]([SubResource("Resource_427rv"), SubResource("Resource_3yjf6")])
 sockets = "measured/abilities/spells/spell.true_seeing.sockets.json"
 effects = Array[ExtResource("3_3fkwr")]([SubResource("Resource_6xp3k")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -150,9 +152,10 @@ applies_conditions = PackedStringArray("condition.spell.true_seeing")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "true_seeing__back"
+"selection": "true_seeing__back",
+"source": "assets/vfx/index.json:/selections/true_seeing__back/staging"
 }
 unported = {
 "condition": {
@@ -171,3 +174,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

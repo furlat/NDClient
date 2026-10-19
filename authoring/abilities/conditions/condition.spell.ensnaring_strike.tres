@@ -1,7 +1,17 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_0uyaw"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ib2tl"]
+
+[sub_resource type="Resource" id="Resource_qx7ku"]
+script = ExtResource("1_ib2tl")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.ensnaring_strike.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.ensnaring_strike"
+status = "stand_in"
+source = "ui-delivery-20261018"
 
 [resource]
 script = ExtResource("1_0uyaw")
 id = "condition.spell.ensnaring_strike"
+icon = SubResource("Resource_qx7ku")

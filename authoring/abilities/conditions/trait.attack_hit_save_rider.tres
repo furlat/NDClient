@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_2cscr"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_5v4qd"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_7piiw"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_7piiw"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_7fgb3"]
 
 [sub_resource type="Resource" id="Resource_f8prq"]
 script = ExtResource("1_2cscr")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_7fgb3"]
+script = ExtResource("2_7piiw")
+path = "art/media/ui/icons/smooth48/trait.attack_hit_save_rider.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:trait.attack_hit_save_rider"
 
 [sub_resource type="Resource" id="Resource_5nqvx"]
 script = ExtResource("3_7piiw")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_7fgb3")
 id = "trait.attack_hit_save_rider"
 label = "Attack Hit Save Rider"
+icon = SubResource("Resource_7fgb3")
 disposition = "state_only"
 look = SubResource("Resource_byffh")
 group = "innate"

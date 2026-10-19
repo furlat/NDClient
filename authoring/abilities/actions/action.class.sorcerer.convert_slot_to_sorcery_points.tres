@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mtfcn"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_270w0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_a85f2"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_a85f2"]
 
 [sub_resource type="Resource" id="Resource_u0scm"]
@@ -15,10 +16,19 @@ markers = Dictionary[String, float]({
 })
 hidden_slots = PackedStringArray()
 
+[sub_resource type="Resource" id="Resource_vkeh5"]
+script = ExtResource("2_a85f2")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
 [resource]
 script = ExtResource("2_270w0")
 id = "action.class.sorcerer.convert_slot_to_sorcery_points"
 kind = "action"
+icon = SubResource("Resource_vkeh5")
 disposition = "authored"
 body = SubResource("Resource_u0scm")
 effect_sources = PackedStringArray()

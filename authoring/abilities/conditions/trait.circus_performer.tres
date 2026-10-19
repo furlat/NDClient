@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ejlr7"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_v35xo"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_xhnou"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_v35xo"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_suur8"]
@@ -9,6 +10,12 @@
 script = ExtResource("1_ejlr7")
 enabled = false
 colour = Color(0.34509805, 0.6, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_suur8"]
+script = ExtResource("2_v35xo")
+path = "art/media/ui/icons/smooth48/condition.dnd-monsters-circus-fighter-conditions-circusperformer.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-monsters-circus-fighter-conditions-circusperformer"
 
 [sub_resource type="Resource" id="Resource_resfu"]
 script = ExtResource("3_v35xo")
@@ -30,6 +37,7 @@ colour = Color(0.19607843, 0.15294118, 0.80784315, 1)
 script = ExtResource("4_suur8")
 id = "trait.circus_performer"
 label = "Circus Performer"
+icon = SubResource("Resource_suur8")
 disposition = "state_only"
 look = SubResource("Resource_y1i84")
 group = "body"

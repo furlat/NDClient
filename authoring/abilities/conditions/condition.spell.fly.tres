@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_oggpj"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_4yu22"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_72vbr"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_72vbr"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_xffcq"]
 
@@ -9,6 +10,12 @@
 script = ExtResource("1_oggpj")
 enabled = false
 colour = Color(0.44313726, 0.77254903, 0.8980392, 1)
+
+[sub_resource type="Resource" id="Resource_xffcq"]
+script = ExtResource("2_72vbr")
+path = "art/media/ui/icons/smooth48/spell.fly.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.fly"
 
 [sub_resource type="Resource" id="Resource_pxyox"]
 script = ExtResource("3_72vbr")
@@ -30,6 +37,7 @@ colour = Color(0.44313726, 0.77254903, 0.8980392, 1)
 script = ExtResource("4_xffcq")
 id = "condition.spell.fly"
 label = "Fly"
+icon = SubResource("Resource_xffcq")
 disposition = "authored"
 look = SubResource("Resource_6730m")
 layers = [{

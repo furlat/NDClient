@@ -152,6 +152,8 @@ body = SubResource("Resource_c3ddb")
 hand_layers = Array[ExtResource("4_h14tw")]([SubResource("Resource_ngw66"), SubResource("Resource_6b5j5")])
 sockets = "measured/abilities/spells/spell.power_word_stun.sockets.json"
 effects = Array[ExtResource("3_u5ecn")]([SubResource("Resource_7ieek"), SubResource("Resource_lvb4s")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -165,9 +167,10 @@ applies_conditions = PackedStringArray("condition.spell.power_word_stun", "condi
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "power_word_stun__back"
+"selection": "power_word_stun__back",
+"source": "assets/vfx/index.json:/selections/power_word_stun__back/staging"
 }
 unported = {
 "condition": {
@@ -214,3 +217,4 @@ unported = {
 "scaleWithActor": true
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

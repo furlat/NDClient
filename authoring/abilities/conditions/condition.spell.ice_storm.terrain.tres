@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_uge56"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_kddhu"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_uxmng"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_kddhu"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_e8rml"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_fooin"]
 script = ExtResource("1_uge56")
 colour = Color(0.654902, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_e8rml"]
+script = ExtResource("2_kddhu")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-evocation-icestormterrain.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-evocation-icestormterrain"
 
 [sub_resource type="Resource" id="Resource_2f2yn"]
 script = ExtResource("3_kddhu")
@@ -28,6 +35,7 @@ colour = Color(0.80784315, 0.15294118, 0.7411765, 1)
 script = ExtResource("4_e8rml")
 id = "condition.spell.ice_storm.terrain"
 label = "Ice Storm Terrain"
+icon = SubResource("Resource_e8rml")
 disposition = "authored"
 surface = "spatial_effect.spell.ice_storm"
 look = SubResource("Resource_82nb7")

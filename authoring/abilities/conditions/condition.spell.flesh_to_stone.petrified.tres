@@ -1,7 +1,15 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_4l5ns"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_ix5cs"]
+
+[sub_resource type="Resource" id="Resource_hwq53"]
+script = ExtResource("1_4l5ns")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-petrified.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-petrified"
 
 [resource]
 script = ExtResource("1_ix5cs")
 id = "condition.spell.flesh_to_stone.petrified"
+icon = SubResource("Resource_hwq53")

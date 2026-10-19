@@ -125,6 +125,8 @@ body = SubResource("Resource_qsfr6")
 hand_layers = Array[ExtResource("4_lttuu")]([SubResource("Resource_6drdw"), SubResource("Resource_q2ywl")])
 sockets = "measured/abilities/spells/spell.sleet_storm.sockets.json"
 effects = Array[ExtResource("3_fr7j2")]([SubResource("Resource_002a7")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -138,9 +140,10 @@ applies_conditions = PackedStringArray("condition.prone", "condition.spell.sleet
 applies_surfaces = PackedStringArray("spatial_effect.spell.sleet_storm")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "sleet_storm_native"
+"selection": "sleet_storm_native",
+"source": "assets/vfx/index.json:/selections/sleet_storm_native/staging"
 }
 unported = {
 "condition": {
@@ -159,3 +162,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

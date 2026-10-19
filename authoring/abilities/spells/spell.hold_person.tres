@@ -128,6 +128,8 @@ body = SubResource("Resource_dcxq4")
 hand_layers = Array[ExtResource("4_xcbrt")]([SubResource("Resource_ldgs7"), SubResource("Resource_wtbr0")])
 sockets = "measured/abilities/spells/spell.hold_person.sockets.json"
 effects = Array[ExtResource("3_10x7l")]([SubResource("Resource_4mg37")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -141,9 +143,10 @@ applies_conditions = PackedStringArray("condition.paralyzed", "condition.spell.h
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "hold_person__back"
+"selection": "hold_person__back",
+"source": "assets/vfx/index.json:/selections/hold_person__back/staging"
 }
 unported = {
 "condition": {
@@ -162,3 +165,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

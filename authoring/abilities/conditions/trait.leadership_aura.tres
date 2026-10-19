@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_g06ku"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_0f3nl"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_mupfp"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_mupfp"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_osdfj"]
 
@@ -9,6 +10,14 @@
 script = ExtResource("1_g06ku")
 enabled = false
 colour = Color(0.7647059, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_osdfj"]
+script = ExtResource("2_mupfp")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_vkp33"]
 script = ExtResource("3_mupfp")
@@ -30,6 +39,7 @@ colour = Color(0.30588236, 0.80784315, 0.15294118, 1)
 script = ExtResource("4_osdfj")
 id = "trait.leadership_aura"
 label = "Leadership Aura"
+icon = SubResource("Resource_osdfj")
 disposition = "state_only"
 look = SubResource("Resource_e63o1")
 group = "body"

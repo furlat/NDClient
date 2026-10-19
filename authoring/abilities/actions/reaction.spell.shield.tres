@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_yyplu"]
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_nl7w4"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_4jh3e"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_nl7w4"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_r4odf"]
 
 [sub_resource type="Resource" id="Resource_weill"]
@@ -22,11 +23,20 @@ script = ExtResource("2_nl7w4")
 text = "Shield"
 colour = Color(0.84705883, 0.7058824, 0.99607843, 1)
 
+[sub_resource type="Resource" id="Resource_4jh3e"]
+script = ExtResource("3_nl7w4")
+path = "art/media/ui/icons/smooth48/ui.filter-reactions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-reactions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-reactions"
+
 [resource]
 script = ExtResource("3_4jh3e")
 id = "reaction.spell.shield"
 kind = "reaction"
 family = "reaction"
+icon = SubResource("Resource_4jh3e")
 disposition = "authored"
 body = SubResource("Resource_weill")
 effect_sources = PackedStringArray()

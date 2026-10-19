@@ -1,11 +1,30 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_avnib"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_khgnh"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_avnib"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_i06st"]
+
+[sub_resource type="Resource" id="Resource_i06st"]
+script = ExtResource("1_avnib")
+role = "cast_alt"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_25lnv"]
+script = ExtResource("2_i06st")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
 
 [resource]
 script = ExtResource("1_khgnh")
 id = "action.class.paladin.holy_nimbus"
 kind = "action"
 family = "class"
+icon = SubResource("Resource_25lnv")
+body = SubResource("Resource_i06st")
 effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill)."

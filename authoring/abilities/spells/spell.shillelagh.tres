@@ -138,6 +138,8 @@ body = SubResource("Resource_5ia1d")
 hand_layers = Array[ExtResource("4_uyo2n")]([SubResource("Resource_l1vfb"), SubResource("Resource_uk3ik")])
 sockets = "measured/abilities/spells/spell.shillelagh.sockets.json"
 effects = Array[ExtResource("3_lxmsn")]([SubResource("Resource_qdsky")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -151,9 +153,10 @@ applies_conditions = PackedStringArray("condition.spell.shillelagh")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "shillelagh_native"
+"selection": "shillelagh_native",
+"source": "assets/vfx/index.json:/selections/shillelagh_native/staging"
 }
 unported = {
 "condition": {
@@ -172,3 +175,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

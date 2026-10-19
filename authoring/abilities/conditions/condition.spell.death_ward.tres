@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_smle5"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_vtm8j"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_wx7a1"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_vtm8j"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_pfh2b"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_f7eqg"]
 script = ExtResource("1_smle5")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_pfh2b"]
+script = ExtResource("2_vtm8j")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-abjuration-deathwardeffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-abjuration-deathwardeffect"
 
 [sub_resource type="Resource" id="Resource_x65qm"]
 script = ExtResource("3_vtm8j")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_pfh2b")
 id = "condition.spell.death_ward"
 label = "Death Ward"
+icon = SubResource("Resource_pfh2b")
 disposition = "authored"
 look = SubResource("Resource_yyfpl")
 layers = [{

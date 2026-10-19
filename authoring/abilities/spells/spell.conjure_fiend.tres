@@ -132,6 +132,8 @@ body = SubResource("Resource_nswav")
 hand_layers = Array[ExtResource("4_nmbjb")]([SubResource("Resource_vhp0q"), SubResource("Resource_5wrkh")])
 sockets = "measured/abilities/spells/spell.conjure_fiend.sockets.json"
 effects = Array[ExtResource("3_yycvf")]([SubResource("Resource_uobdl")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -145,9 +147,10 @@ applies_conditions = PackedStringArray("condition.attack_assistance", "condition
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray("creature.claw_mote_devil", "creature.corrosive_demon", "creature.dread_demon", "creature.dretch", "creature.fellwing_devil", "creature.huntsman_wing_devil")
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "conjure_fiend_native"
+"selection": "conjure_fiend_native",
+"source": "assets/vfx/index.json:/selections/conjure_fiend_native/staging"
 }
 unported = {
 "condition": {
@@ -192,3 +195,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_nf56s"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_2mvp8"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_i6au5"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_i6au5"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_xcare"]
 
@@ -9,6 +10,12 @@
 script = ExtResource("1_nf56s")
 enabled = false
 colour = Color(0.54509807, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_xcare"]
+script = ExtResource("2_i6au5")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-blinded.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.sunbeam.blinded"
 
 [sub_resource type="Resource" id="Resource_wnjcs"]
 script = ExtResource("3_i6au5")
@@ -30,6 +37,7 @@ colour = Color(0.15294118, 0.80784315, 0.2627451, 1)
 script = ExtResource("4_xcare")
 id = "condition.blinded"
 label = "Blinded"
+icon = SubResource("Resource_xcare")
 disposition = "authored"
 look = SubResource("Resource_pm513")
 layers = [{

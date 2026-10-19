@@ -168,6 +168,8 @@ body = SubResource("Resource_smreu")
 hand_layers = Array[ExtResource("4_e71an")]([SubResource("Resource_kmo0x"), SubResource("Resource_6i1w5")])
 sockets = "measured/abilities/spells/spell.jump.sockets.json"
 effects = Array[ExtResource("3_nhchk")]([SubResource("Resource_3hwlw"), SubResource("Resource_718j8"), SubResource("Resource_hga2p")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -181,9 +183,10 @@ applies_conditions = PackedStringArray("condition.spell.jump")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "jump__back"
+"selection": "jump__back",
+"source": "assets/vfx/index.json:/selections/jump__back/staging"
 }
 unported = {
 "condition": {
@@ -199,3 +202,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

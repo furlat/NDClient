@@ -134,6 +134,8 @@ body = SubResource("Resource_3ilhp")
 hand_layers = Array[ExtResource("4_fxeu4")]([SubResource("Resource_prxb7"), SubResource("Resource_qxpg0")])
 sockets = "measured/abilities/spells/spell.charm_person.sockets.json"
 effects = Array[ExtResource("3_6avi3")]([SubResource("Resource_c2a15")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -147,9 +149,10 @@ applies_conditions = PackedStringArray("condition.charmed", "condition.spell.cha
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "charm_person__back"
+"selection": "charm_person__back",
+"source": "assets/vfx/index.json:/selections/charm_person__back/staging"
 }
 unported = {
 "condition": {
@@ -168,3 +171,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

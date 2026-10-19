@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_hxs6s"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_dq7t2"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_lxda2"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_lxda2"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_oh87c"]
 
 [sub_resource type="Resource" id="Resource_23u4v"]
 script = ExtResource("1_hxs6s")
 colour = Color(0.4745098, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_oh87c"]
+script = ExtResource("2_lxda2")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-conjuration-fogcloudzone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-conjuration-fogcloudzone"
 
 [sub_resource type="Resource" id="Resource_0nhuh"]
 script = ExtResource("3_lxda2")
@@ -28,6 +35,7 @@ colour = Color(0.15294118, 0.80784315, 0.34901962, 1)
 script = ExtResource("4_oh87c")
 id = "condition.spell.fog_cloud.zone"
 label = "Fog Cloud Zone"
+icon = SubResource("Resource_oh87c")
 disposition = "authored"
 surface = "spatial_effect.spell.fog_cloud"
 look = SubResource("Resource_g2qok")

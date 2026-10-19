@@ -165,6 +165,8 @@ body = SubResource("Resource_ur5wv")
 hand_layers = Array[ExtResource("4_i76ug")]([SubResource("Resource_8c53m"), SubResource("Resource_t48uo")])
 sockets = "measured/abilities/spells/spell.guardian_of_faith.sockets.json"
 effects = Array[ExtResource("3_vh4lk")]([SubResource("Resource_aggba"), SubResource("Resource_idufa")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -178,9 +180,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray("spatial_effect.spell.guardian_of_faith")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "guardian_of_faith_native"
+"selection": "guardian_of_faith_native",
+"source": "assets/vfx/index.json:/selections/guardian_of_faith_native/staging"
 }
 unported = {
 "condition": {
@@ -199,3 +202,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

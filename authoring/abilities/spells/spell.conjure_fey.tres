@@ -132,6 +132,8 @@ body = SubResource("Resource_k5vss")
 hand_layers = Array[ExtResource("4_dj1pv")]([SubResource("Resource_4s3qe"), SubResource("Resource_a8v0u")])
 sockets = "measured/abilities/spells/spell.conjure_fey.sockets.json"
 effects = Array[ExtResource("3_gm3ry")]([SubResource("Resource_oxwq2")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -145,9 +147,10 @@ applies_conditions = PackedStringArray("condition.attack_assistance", "condition
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray("creature.bison", "creature.blue_raptor", "creature.boar", "creature.brown_bear", "creature.elephant", "creature.hound", "creature.jaguar", "creature.lion", "creature.mammoth", "creature.ostrich", "creature.polar_bear", "creature.raptor", "creature.rhinoceros", "creature.stag", "creature.stegosaurus", "creature.tiger", "creature.triceratops", "creature.wolf")
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "conjure_fey_native"
+"selection": "conjure_fey_native",
+"source": "assets/vfx/index.json:/selections/conjure_fey_native/staging"
 }
 unported = {
 "condition": {
@@ -192,3 +195,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -142,6 +142,8 @@ body = SubResource("Resource_ohpf6")
 hand_layers = Array[ExtResource("6_te66m")]([SubResource("Resource_qdkyw"), SubResource("Resource_jmu7i")])
 sockets = "measured/abilities/spells/spell.inflict_wounds.sockets.json"
 effects = Array[ExtResource("3_p14vm")]([SubResource("Resource_q44m2")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -161,9 +163,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "inflict_wounds__back"
+"selection": "inflict_wounds__back",
+"source": "assets/vfx/index.json:/selections/inflict_wounds__back/staging"
 }
 unported = {
 "condition": {
@@ -221,3 +224,4 @@ unported = {
 "viewFacing": "SE"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

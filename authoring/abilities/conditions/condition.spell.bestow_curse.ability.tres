@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_nohki"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_7ut6h"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_mhb8x"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_mhb8x"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_5jjdi"]
 
@@ -9,6 +10,14 @@
 script = ExtResource("1_nohki")
 enabled = false
 colour = Color(0.34509805, 0.6745098, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_5jjdi"]
+script = ExtResource("2_mhb8x")
+path = "art/media/ui/icons/smooth48/spell.bestow-curse.png"
+native_size = Vector2i(48, 48)
+reuses = "spell.bestow_curse"
+status = "stand_in"
+source = "ui/resources.json icon:spell.bestow-curse"
 
 [sub_resource type="Resource" id="Resource_0ts1i"]
 script = ExtResource("3_mhb8x")
@@ -30,6 +39,7 @@ colour = Color(0.15294118, 0.19607843, 0.80784315, 1)
 script = ExtResource("4_5jjdi")
 id = "condition.spell.bestow_curse.ability"
 label = "Bestow Curse"
+icon = SubResource("Resource_5jjdi")
 disposition = "authored"
 look = SubResource("Resource_p22wf")
 layers = [{

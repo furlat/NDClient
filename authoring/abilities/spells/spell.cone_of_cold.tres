@@ -127,6 +127,8 @@ body = SubResource("Resource_qrrbf")
 hand_layers = Array[ExtResource("4_kuk1e")]([SubResource("Resource_p8rtl"), SubResource("Resource_dt8ss")])
 sockets = "measured/abilities/spells/spell.cone_of_cold.sockets.json"
 effects = Array[ExtResource("3_r8j7e")]([SubResource("Resource_syxpd")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -140,9 +142,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "cone_of_cold_native"
+"selection": "cone_of_cold_native",
+"source": "assets/vfx/index.json:/selections/cone_of_cold_native/staging"
 }
 unported = {
 "bodyMaterials": [{
@@ -270,3 +273,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

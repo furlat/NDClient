@@ -128,6 +128,8 @@ body = SubResource("Resource_rnj27")
 hand_layers = Array[ExtResource("4_aw67d")]([SubResource("Resource_uiab5"), SubResource("Resource_dwp5k")])
 sockets = "measured/abilities/spells/spell.power_word_kill.sockets.json"
 effects = Array[ExtResource("3_erc2s")]([SubResource("Resource_oj5a7")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -141,9 +143,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "power_word_kill__back"
+"selection": "power_word_kill__back",
+"source": "assets/vfx/index.json:/selections/power_word_kill__back/staging"
 }
 unported = {
 "condition": {
@@ -190,3 +193,4 @@ unported = {
 "scaleWithActor": true
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

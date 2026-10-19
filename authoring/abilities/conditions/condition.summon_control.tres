@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ss7uj"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_5rqom"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_urhfe"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_5rqom"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_1cd5g"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_rowbi"]
 script = ExtResource("1_ss7uj")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_1cd5g"]
+script = ExtResource("2_5rqom")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-enchantment-commandnextturneffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.summon_control"
 
 [sub_resource type="Resource" id="Resource_8r31l"]
 script = ExtResource("3_5rqom")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_1cd5g")
 id = "condition.summon_control"
 label = "Summon Control"
+icon = SubResource("Resource_1cd5g")
 disposition = "state_only"
 look = SubResource("Resource_5dw55")
 group = "summoning"

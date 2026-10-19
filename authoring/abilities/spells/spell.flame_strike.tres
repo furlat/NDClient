@@ -179,6 +179,8 @@ body = SubResource("Resource_cwh1e")
 hand_layers = Array[ExtResource("4_ycwfi")]([SubResource("Resource_c6u44"), SubResource("Resource_r7l6c")])
 sockets = "measured/abilities/spells/spell.flame_strike.sockets.json"
 effects = Array[ExtResource("3_gw6g5")]([SubResource("Resource_hesik"), SubResource("Resource_64b11"), SubResource("Resource_sxqil")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -192,9 +194,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "flame_strike__back"
+"selection": "flame_strike__back",
+"source": "assets/vfx/index.json:/selections/flame_strike__back/staging"
 }
 unported = {
 "condition": {
@@ -239,3 +242,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

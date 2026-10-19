@@ -251,6 +251,8 @@ body = SubResource("Resource_igkct")
 hand_layers = Array[ExtResource("4_s5ebj")]([SubResource("Resource_cawiq"), SubResource("Resource_1ggle")])
 sockets = "measured/abilities/spells/spell.divine_word.sockets.json"
 effects = Array[ExtResource("3_un2rm")]([SubResource("Resource_2nxhl"), SubResource("Resource_rogwt"), SubResource("Resource_rx1vd"), SubResource("Resource_ujetv"), SubResource("Resource_2dy2l")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -264,9 +266,10 @@ applies_conditions = PackedStringArray("condition.blinded", "condition.deafened"
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "divine_word__back"
+"selection": "divine_word__back",
+"source": "assets/vfx/index.json:/selections/divine_word__back/staging"
 }
 unported = {
 "condition": {
@@ -335,3 +338,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

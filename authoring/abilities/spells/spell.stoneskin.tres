@@ -156,6 +156,8 @@ body = SubResource("Resource_iqlwd")
 hand_layers = Array[ExtResource("4_ccyxp")]([SubResource("Resource_pv4xt"), SubResource("Resource_anlj3")])
 sockets = "measured/abilities/spells/spell.stoneskin.sockets.json"
 effects = Array[ExtResource("3_ocrn7")]([SubResource("Resource_0x570"), SubResource("Resource_1tir8")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -169,9 +171,10 @@ applies_conditions = PackedStringArray("condition.spell.stoneskin")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "stoneskin__back"
+"selection": "stoneskin__back",
+"source": "assets/vfx/index.json:/selections/stoneskin__back/staging"
 }
 unported = {
 "condition": {
@@ -190,3 +193,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

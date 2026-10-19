@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_t7ie3"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_dyket"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_oiy5k"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_oiy5k"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_kxan4"]
 
 [sub_resource type="Resource" id="Resource_lq6cl"]
 script = ExtResource("1_t7ie3")
 colour = Color(0.34509805, 0.89411765, 0.5647059, 1)
+
+[sub_resource type="Resource" id="Resource_kxan4"]
+script = ExtResource("2_oiy5k")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-illusion-silencezone.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-illusion-silencezone"
 
 [sub_resource type="Resource" id="Resource_ls1fq"]
 script = ExtResource("3_oiy5k")
@@ -28,6 +35,7 @@ colour = Color(0.15294118, 0.80784315, 0.7647059, 1)
 script = ExtResource("4_kxan4")
 id = "condition.spell.silence.zone"
 label = "Silence Zone"
+icon = SubResource("Resource_kxan4")
 disposition = "authored"
 surface = "spatial_effect.spell.silence"
 look = SubResource("Resource_2uy2o")

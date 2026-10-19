@@ -127,6 +127,8 @@ body = SubResource("Resource_sv0th")
 hand_layers = Array[ExtResource("4_c57s4")]([SubResource("Resource_c8m7n"), SubResource("Resource_3kco3")])
 sockets = "measured/abilities/spells/spell.dimension_door.sockets.json"
 effects = Array[ExtResource("3_sw86u")]([SubResource("Resource_723oi")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -140,9 +142,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "dimension_door_native"
+"selection": "dimension_door_native",
+"source": "assets/vfx/index.json:/selections/dimension_door_native/staging"
 }
 unported = {
 "condition": {
@@ -161,3 +164,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

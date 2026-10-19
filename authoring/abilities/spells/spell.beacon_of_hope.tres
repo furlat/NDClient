@@ -129,6 +129,8 @@ body = SubResource("Resource_iusav")
 hand_layers = Array[ExtResource("4_3n54r")]([SubResource("Resource_xxnk1"), SubResource("Resource_egkvi")])
 sockets = "measured/abilities/spells/spell.beacon_of_hope.sockets.json"
 effects = Array[ExtResource("3_dvqsw")]([SubResource("Resource_pjo3h")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.spell.beacon_of_hope")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "beacon_of_hope__back"
+"selection": "beacon_of_hope__back",
+"source": "assets/vfx/index.json:/selections/beacon_of_hope__back/staging"
 }
 unported = {
 "condition": {
@@ -163,3 +166,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

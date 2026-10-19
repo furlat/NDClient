@@ -1,12 +1,22 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_ehu6c"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_lj40i"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_lj40i"]
+
+[sub_resource type="Resource" id="Resource_bcxwm"]
+script = ExtResource("1_lj40i")
+path = "art/media/ui/icons/smooth48/ui.filter-all.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-all"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-all"
 
 [resource]
 script = ExtResource("1_ehu6c")
 id = "trait.sneak_attack"
 kind = "trait"
 family = "trait"
+icon = SubResource("Resource_bcxwm")
 effect_sources = PackedStringArray()
 status = "internal"

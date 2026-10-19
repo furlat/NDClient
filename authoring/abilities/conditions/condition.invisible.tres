@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0w1ht"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_dpmug"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_j6loj"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_dpmug"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_telr8"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_m6b6k"]
 script = ExtResource("1_0w1ht")
 colour = Color(0.6666667, 0.8, 1, 1)
+
+[sub_resource type="Resource" id="Resource_telr8"]
+script = ExtResource("2_dpmug")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-invisible.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-invisible"
 
 [sub_resource type="Resource" id="Resource_lm64f"]
 script = ExtResource("3_dpmug")
@@ -32,6 +39,7 @@ colour = Color(0.8745098, 0.8745098, 1, 1)
 script = ExtResource("4_telr8")
 id = "condition.invisible"
 label = "Invisible"
+icon = SubResource("Resource_telr8")
 disposition = "authored"
 look = SubResource("Resource_k4y4g")
 group = "visibility"

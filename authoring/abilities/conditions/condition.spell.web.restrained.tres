@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_to6u4"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_igalk"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_muacy"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_igalk"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_34lah"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_sasww"]
 script = ExtResource("1_to6u4")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_34lah"]
+script = ExtResource("2_igalk")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-restrained.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-restrained"
 
 [sub_resource type="Resource" id="Resource_bkp4r"]
 script = ExtResource("3_igalk")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_34lah")
 id = "condition.spell.web.restrained"
 label = "Web restraint"
+icon = SubResource("Resource_34lah")
 disposition = "authored"
 look = SubResource("Resource_6ked2")
 layers = [{

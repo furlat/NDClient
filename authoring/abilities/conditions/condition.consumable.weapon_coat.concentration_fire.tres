@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_b8ie0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_rb6cy"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_skuy4"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_rb6cy"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_4uadl"]
@@ -8,6 +9,14 @@
 [sub_resource type="Resource" id="Resource_bhsdo"]
 script = ExtResource("1_b8ie0")
 colour = Color(0.50980395, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_4uadl"]
+script = ExtResource("2_rb6cy")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_35lcn"]
 script = ExtResource("3_rb6cy")
@@ -28,6 +37,7 @@ colour = Color(0.15294118, 0.80784315, 0.30588236, 1)
 script = ExtResource("4_4uadl")
 id = "condition.consumable.weapon_coat.concentration_fire"
 label = "Flaming Coat"
+icon = SubResource("Resource_4uadl")
 disposition = "authored"
 look = SubResource("Resource_ajqk3")
 group = "equipment_weapon"

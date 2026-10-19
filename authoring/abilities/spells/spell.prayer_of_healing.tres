@@ -129,6 +129,8 @@ body = SubResource("Resource_ssubr")
 hand_layers = Array[ExtResource("4_ftyhm")]([SubResource("Resource_mcpx4"), SubResource("Resource_bhry6")])
 sockets = "measured/abilities/spells/spell.prayer_of_healing.sockets.json"
 effects = Array[ExtResource("3_2tj7a")]([SubResource("Resource_v4kw3")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "prayer_of_healing__back"
+"selection": "prayer_of_healing__back",
+"source": "assets/vfx/index.json:/selections/prayer_of_healing__back/staging"
 }
 unported = {
 "condition": {
@@ -190,3 +193,4 @@ unported = {
 "startOffsetMs": -500.0
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

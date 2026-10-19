@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ugik3"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_d2uuu"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ffm7s"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ffm7s"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_7h8br"]
 
 [sub_resource type="Resource" id="Resource_yjep4"]
 script = ExtResource("1_ugik3")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_7h8br"]
+script = ExtResource("2_ffm7s")
+path = "art/media/ui/icons/smooth48/trait.magic_resistance.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:trait.magic_resistance"
 
 [sub_resource type="Resource" id="Resource_ysqrx"]
 script = ExtResource("3_ffm7s")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_7h8br")
 id = "trait.magic_resistance"
 label = "Magic Resistance"
+icon = SubResource("Resource_7h8br")
 disposition = "state_only"
 look = SubResource("Resource_vpgtk")
 group = "innate"

@@ -1,7 +1,17 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7gxpg"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_tnvmw"]
+
+[sub_resource type="Resource" id="Resource_xi1r4"]
+script = ExtResource("1_7gxpg")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [resource]
 script = ExtResource("1_tnvmw")
 id = "condition.class.paladin.purity_of_spirit"
+icon = SubResource("Resource_xi1r4")

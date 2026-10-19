@@ -1,11 +1,28 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_j8dfd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mf14l"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_mf14l"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ommkk"]
+
+[sub_resource type="Resource" id="Resource_ommkk"]
+script = ExtResource("1_mf14l")
+role = "cast"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pq08n"]
+script = ExtResource("2_ommkk")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.burrow.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018 srd22.creature_action.burrow"
 
 [resource]
 script = ExtResource("1_j8dfd")
 id = "action.earth_myrmidon.burrow"
 kind = "action"
 family = "summon_form"
+icon = SubResource("Resource_pq08n")
+body = SubResource("Resource_ommkk")
 effect_sources = PackedStringArray()
+notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."

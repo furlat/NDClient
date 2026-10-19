@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_8565k"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_2wd8y"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_yhy6v"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_2wd8y"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_48xvk"]
@@ -9,6 +10,12 @@
 [sub_resource type="Resource" id="Resource_hs4wk"]
 script = ExtResource("1_8565k")
 colour = Color(0.34509805, 0.89411765, 0.58431375, 1)
+
+[sub_resource type="Resource" id="Resource_48xvk"]
+script = ExtResource("2_2wd8y")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-concentrating.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-concentrating"
 
 [sub_resource type="Resource" id="Resource_cc741"]
 script = ExtResource("3_2wd8y")
@@ -35,6 +42,7 @@ enabled = false
 script = ExtResource("4_48xvk")
 id = "condition.concentrating"
 label = "Concentrating"
+icon = SubResource("Resource_48xvk")
 disposition = "authored"
 look = SubResource("Resource_laiag")
 group = "body"

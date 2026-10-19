@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0j3kx"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_17qsr"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_gksd4"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_gksd4"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_s7g50"]
 
 [sub_resource type="Resource" id="Resource_ukjj5"]
 script = ExtResource("1_0j3kx")
 colour = Color(0.34509805, 0.7647059, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_s7g50"]
+script = ExtResource("2_gksd4")
+path = "art/media/ui/icons/smooth48/condition.dnd-spells-evocation-rayoffrosteffect.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-spells-evocation-rayoffrosteffect"
 
 [sub_resource type="Resource" id="Resource_wud27"]
 script = ExtResource("3_gksd4")
@@ -28,6 +35,7 @@ colour = Color(0.15294118, 0.30588236, 0.80784315, 1)
 script = ExtResource("4_s7g50")
 id = "condition.spell.ray_of_frost"
 label = "Ray of Frost Effect"
+icon = SubResource("Resource_s7g50")
 disposition = "authored"
 look = SubResource("Resource_gljf6")
 layers = [{

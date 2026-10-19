@@ -150,6 +150,8 @@ body = SubResource("Resource_78k84")
 hand_layers = Array[ExtResource("4_qwn6j")]([SubResource("Resource_ul8nd"), SubResource("Resource_526yf")])
 sockets = "measured/abilities/spells/spell.expeditious_retreat.sockets.json"
 effects = Array[ExtResource("3_m6wp6")]([SubResource("Resource_mkgtx"), SubResource("Resource_4p1ld")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -163,9 +165,10 @@ applies_conditions = PackedStringArray("condition.dashing", "condition.spell.exp
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "expeditious_retreat__back"
+"selection": "expeditious_retreat__back",
+"source": "assets/vfx/index.json:/selections/expeditious_retreat__back/staging"
 }
 unported = {
 "condition": {
@@ -181,3 +184,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

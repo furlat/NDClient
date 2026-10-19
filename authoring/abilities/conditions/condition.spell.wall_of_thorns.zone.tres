@@ -1,8 +1,16 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_8it5a"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_gy130"]
+
+[sub_resource type="Resource" id="Resource_htaga"]
+script = ExtResource("1_8it5a")
+path = "art/media/ui/icons/smooth48/spell.wall_of_thorns.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.spell.wall_of_thorns.zone"
 
 [resource]
 script = ExtResource("1_gy130")
 id = "condition.spell.wall_of_thorns.zone"
+icon = SubResource("Resource_htaga")
 surface = "spatial_effect.spell.wall_of_thorns"

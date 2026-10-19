@@ -1631,6 +1631,8 @@ body = SubResource("Resource_icgoe")
 hand_layers = Array[ExtResource("4_u5m0e")]([SubResource("Resource_0jkbc"), SubResource("Resource_elc70")])
 sockets = "measured/abilities/spells/spell.eyebite.sockets.json"
 effects = Array[ExtResource("3_ep8kh")]([SubResource("Resource_awhax"), SubResource("Resource_rc0l2"), SubResource("Resource_pll8e"), SubResource("Resource_un6hj")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -1645,9 +1647,10 @@ applies_conditions = PackedStringArray("condition.dashing", "condition.frightene
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "eyebite_frightened_native"
+"selection": "eyebite_frightened_native",
+"source": "assets/vfx/index.json:/selections/eyebite_frightened_native/staging"
 }
 unported = {
 "contact": {
@@ -2525,3 +2528,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

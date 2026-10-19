@@ -129,6 +129,8 @@ body = SubResource("Resource_3eyfq")
 hand_layers = Array[ExtResource("4_1dspc")]([SubResource("Resource_4ydkh"), SubResource("Resource_dsprl")])
 sockets = "measured/abilities/spells/spell.greater_restoration.sockets.json"
 effects = Array[ExtResource("3_l3w3j")]([SubResource("Resource_70757")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "greater_restoration__back"
+"selection": "greater_restoration__back",
+"source": "assets/vfx/index.json:/selections/greater_restoration__back/staging"
 }
 unported = {
 "condition": {
@@ -191,3 +194,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_dfp2p"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_12okw"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_ufro4"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ufro4"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_3qsoh"]
 
@@ -9,6 +10,12 @@
 script = ExtResource("1_dfp2p")
 enabled = false
 colour = Color(0.84705883, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_3qsoh"]
+script = ExtResource("2_ufro4")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-petrified.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-petrified"
 
 [sub_resource type="Resource" id="Resource_va4sa"]
 script = ExtResource("3_ufro4")
@@ -51,6 +58,7 @@ colour = Color(0.80784315, 0.15294118, 0.5137255, 1)
 script = ExtResource("4_3qsoh")
 id = "condition.petrified"
 label = "Petrified"
+icon = SubResource("Resource_3qsoh")
 disposition = "authored"
 look = SubResource("Resource_ug0qa")
 layers = [{

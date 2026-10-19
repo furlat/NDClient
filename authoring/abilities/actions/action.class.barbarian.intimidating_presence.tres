@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationAction" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_yaopa"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_60w4a"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_pak85"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_60w4a"]
 
@@ -15,10 +16,19 @@ markers = Dictionary[String, float]({
 })
 hidden_slots = PackedStringArray()
 
+[sub_resource type="Resource" id="Resource_3kkyf"]
+script = ExtResource("2_60w4a")
+path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+native_size = Vector2i(48, 48)
+reuses = "ui.filter-actions"
+status = "stand_in"
+source = "ui/resources.json icon:ui.filter-actions"
+
 [resource]
 script = ExtResource("2_pak85")
 id = "action.class.barbarian.intimidating_presence"
 kind = "action"
+icon = SubResource("Resource_3kkyf")
 disposition = "authored"
 body = SubResource("Resource_pv4fx")
 effect_sources = PackedStringArray()

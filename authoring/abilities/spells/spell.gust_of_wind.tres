@@ -140,6 +140,8 @@ body = SubResource("Resource_17cn6")
 hand_layers = Array[ExtResource("4_cey56")]([SubResource("Resource_41sg3"), SubResource("Resource_lnywk")])
 sockets = "measured/abilities/spells/spell.gust_of_wind.sockets.json"
 effects = Array[ExtResource("3_s5240")]([SubResource("Resource_ix3y3")])
+native_staging = true
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -153,9 +155,10 @@ applies_conditions = PackedStringArray("condition.prone", "condition.spell.gust_
 applies_surfaces = PackedStringArray("spatial_effect.spell.gust_of_wind")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "gust_of_wind__whole"
+"selection": "gust_of_wind__whole",
+"source": "assets/vfx/index.json:/selections/gust_of_wind__whole/staging"
 }
 unported = {
 "area": {
@@ -216,3 +219,4 @@ unported = {
 "id": "whole-wind"
 }]
 }
+notes = "Plays its imported Factory staging (coverage fill)."

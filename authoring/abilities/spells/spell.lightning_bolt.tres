@@ -134,6 +134,7 @@ body = SubResource("Resource_innuk")
 hand_layers = Array[ExtResource("4_1q7n6")]([SubResource("Resource_m8wms"), SubResource("Resource_mobsk")])
 sockets = "measured/abilities/spells/spell.lightning_bolt.sockets.json"
 effects = Array[ExtResource("3_y2yfs")]([SubResource("Resource_hpdc1")])
+effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -149,7 +150,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "bolt_live_heavy"
+"selection": "bolt_live_heavy",
+"source": "assets/vfx/index.json:/selections/bolt_live_heavy/staging"
 }
 unported = {
 "arcs": {
@@ -174,3 +176,5 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Not played in the game: its Factory live-electric clips need live target endpoints the client does not supply (their live approaches assert in electric_network.gd); the imported staging stays as review data.
+Plays its imported Factory staging (coverage fill)."

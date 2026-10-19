@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ltrva"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_15jaw"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ct4ua"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_15jaw"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_jclky"]
@@ -8,6 +9,14 @@
 [sub_resource type="Resource" id="Resource_2312w"]
 script = ExtResource("1_ltrva")
 colour = Color(0.34509805, 0.654902, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_jclky"]
+script = ExtResource("2_15jaw")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
 
 [sub_resource type="Resource" id="Resource_n4v2t"]
 script = ExtResource("3_15jaw")
@@ -28,6 +37,7 @@ colour = Color(0.15294118, 0.1764706, 0.80784315, 1)
 script = ExtResource("4_jclky")
 id = "condition.environment.wet"
 label = "Wet"
+icon = SubResource("Resource_jclky")
 disposition = "authored"
 look = SubResource("Resource_r17r3")
 group = "body"

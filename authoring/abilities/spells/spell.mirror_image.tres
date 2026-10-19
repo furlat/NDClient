@@ -124,6 +124,8 @@ body = SubResource("Resource_53r2r")
 hand_layers = Array[ExtResource("4_3tfds")]([SubResource("Resource_dh4da"), SubResource("Resource_rg4vi")])
 sockets = "measured/abilities/spells/spell.mirror_image.sockets.json"
 effects = Array[ExtResource("3_stfeh")]([SubResource("Resource_3fsel")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -137,9 +139,10 @@ applies_conditions = PackedStringArray("condition.spell.mirror_image")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "mirror_image_native"
+"selection": "mirror_image_native",
+"source": "assets/vfx/index.json:/selections/mirror_image_native/staging"
 }
 unported = {
 "condition": {
@@ -155,3 +158,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

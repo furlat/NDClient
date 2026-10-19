@@ -129,6 +129,8 @@ body = SubResource("Resource_pe7pj")
 hand_layers = Array[ExtResource("4_es8bm")]([SubResource("Resource_6kve6"), SubResource("Resource_2n21m")])
 sockets = "measured/abilities/spells/spell.freedom_of_movement.sockets.json"
 effects = Array[ExtResource("3_d6cod")]([SubResource("Resource_eb552")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -142,9 +144,10 @@ applies_conditions = PackedStringArray("condition.spell.freedom_of_movement")
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "partial"
+status = "ready"
 staging_unported = {
-"selection": "freedom_of_movement__back"
+"selection": "freedom_of_movement__back",
+"source": "assets/vfx/index.json:/selections/freedom_of_movement__back/staging"
 }
 unported = {
 "condition": {
@@ -163,3 +166,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+notes = "Plays its imported Factory staging (coverage fill)."

@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_5hsh3"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_5bh5b"]
 [ext_resource type="Script" path="res://presentation/source/look.gd" id="2_fx061"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_5bh5b"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ms8st"]
@@ -8,6 +9,12 @@
 [sub_resource type="Resource" id="Resource_koc6m"]
 script = ExtResource("1_5hsh3")
 enabled = false
+
+[sub_resource type="Resource" id="Resource_ms8st"]
+script = ExtResource("2_5bh5b")
+path = "art/media/ui/icons/smooth48/condition.dnd-conditions-blinded.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:condition.dnd-conditions-blinded"
 
 [sub_resource type="Resource" id="Resource_21rif"]
 script = ExtResource("3_5bh5b")
@@ -28,6 +35,7 @@ enabled = false
 script = ExtResource("4_ms8st")
 id = "condition.spell.sunburst.blinded"
 label = "Sunburst Blindness"
+icon = SubResource("Resource_ms8st")
 disposition = "state_only"
 look = SubResource("Resource_rydo3")
 group = "condition.spell.sunburst.blinded"

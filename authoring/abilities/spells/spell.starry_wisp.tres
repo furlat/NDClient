@@ -1,11 +1,21 @@
 [gd_resource type="Resource" script_class="PresentationSpell" format=3]
 
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_nxi35"]
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_uxoti"]
 [ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_nxi35"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_5e3by"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_x70ri"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_ubhne"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_rmwyk"]
+
+[sub_resource type="Resource" id="Resource_5e3by"]
+script = ExtResource("1_nxi35")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
 
 [sub_resource type="Resource" id="Resource_rlsq3"]
 script = ExtResource("1_uxoti")
@@ -134,7 +144,10 @@ script = ExtResource("4_x70ri")
 id = "spell.starry_wisp"
 icon = SubResource("Resource_0x0n2")
 delivery = "projectile"
+body = SubResource("Resource_5e3by")
 effects = Array[ExtResource("1_uxoti")]([SubResource("Resource_rlsq3"), SubResource("Resource_teby5"), SubResource("Resource_8ckua"), SubResource("Resource_e7ag1")])
+native_staging = true
+effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -149,5 +162,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "starry_wisp_native"
+"selection": "starry_wisp_native",
+"source": "assets/vfx/index.json:/selections/starry_wisp_native/staging"
 }
+notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+Plays its imported Factory staging (coverage fill)."
