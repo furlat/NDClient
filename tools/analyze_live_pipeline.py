@@ -17,15 +17,17 @@ def duration(row):
 def packet_shape(directory, sequence):
     packet = read_json(directory/'journal'/('%016d.json' % sequence))
     lineages = packet['lineages']
-    events = [event for lineage in lineages for event in lineage['events']]
-    updates = [update for lineage in lineages for update in lineage['world_updates']]
+    events = [event for lineage in lineages for event in lineage.get('events',[])]
+    updates = [update for lineage in lineages for update in lineage.get('world_updates',[])]
     return {'lineages': len(lineages), 'events': len(events),
-        'facts': dict(sorted(Counter(event['fact']['kind'] for event in events if event['fact'] is not None).items())),
-        'versions': sum(len(lineage['version_rows']) for lineage in lineages),
-        'observations': sum(len(lineage['observations']) for lineage in lineages),
-        'world_tiles': sum(len(update['tiles']) for update in updates),
-        'world_objects': sum(len(update['objects']) for update in updates),
-        'tile_changes': sum(len(update.get('tile_changes',[])) for update in updates)}
+        'facts': dict(sorted(Counter(event['fact']['kind'] for event in events if event.get('fact') is not None).items())),
+        'versions': sum(len(lineage.get('version_rows',[])) for lineage in lineages),
+        'bodies': sum(len(lineage.get('bodies',[])) for lineage in lineages),
+        'sensory_rows': sum(len(lineage.get('sensory_rows',[])) for lineage in lineages),
+        'world_tile_statics': sum(len(update.get('tile_statics',[])) for update in updates),
+        'world_tile_columns': sum(len(update.get('tile_columns',[])) for update in updates),
+        'world_objects': sum(len(update.get('objects',[])) for update in updates),
+        'world_boundary_structures': sum(len(update.get('boundary_structures',[])) for update in updates)}
 
 
 def opening_frames(frames, prepared_us, visible_us):

@@ -2,6 +2,12 @@
 
 19 October 2026. This is work the Factory author can start while client integration continues. It covers the complete delivered spell, condition and class library, rather than a special repair for Haste. It does not authorize replacing the client's renderer or changing game rules.
 
+## 19 October receiving update
+
+The complete `production-bindings-2081189e43bf0443` handoff is now installed in the isolated client. The public Circle receiving template and shared construction/forwarding seams are integrated; new created-weapon art and divine/history providers still need client cohorts. Bag8 appearance is already implemented, and the four unaccepted art families remain unaccepted. This supersedes earlier statements that those Factory sources/constructors are still absent. Remaining client/provider and public-selector gaps remain explicit.
+
+Two actual Gallery UI profiles found163–181ms native Quickened/Twinned construction. [Focused readiness request and exact evidence](FACTORY_CONSTRUCTION_READINESS_REQUEST_2026-10-19.md). This new source performance work can proceed independently of client migration.
+
 ## Where to work and deliver
 
 - Factory source root: `/mnt/c/Users/tommaso/Documents/assets/VFXFactory` (`C:\Users\tommaso\Documents\assets\VFXFactory`). Edit canonical recipes/components/packaging there.

@@ -30,5 +30,7 @@ static func project(node:Dictionary,descriptor:Dictionary,results:Dictionary)->D
     for row in damage:amount+=int(row.fact.applied_damage)
     return {"ready":true,"values":{"application_id":identity[1],"target_actor":str(target),"target_entity_uuid":str(target),
         "damage_applied":amount>0,"save_succeeded":saves[0].fact.succeeded,"damage_type":str(descriptor.damage_type).to_lower()},
-        "evidence":{"cast_lineage":identity[0],"application_id":identity[1],"target_uuid":target,"save_occurrence":saves[0].occurrence,
-            "damage_occurrences":damage.map(func(row):return row.occurrence),"applied_damage":amount}}
+        "evidence":{"cast_lineage":identity[0],"application_id":identity[1],"target_uuid":target,
+            "application_occurrence":str(node.id),"application_lineage":str(node.lineage_id),
+            "save_occurrence":saves[0].occurrence,"save_lineage":saves[0].lineage,
+            "damage_occurrences":damage.map(func(row):return row.occurrence),"damage_lineages":damage.map(func(row):return row.lineage),"applied_damage":amount}}

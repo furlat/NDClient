@@ -1,5 +1,5 @@
 {
-  "status": "initial complete matrix;plan-only except explicitly live reaction",
+  "status": "historical initial matrix; native-ID absence claim superseded by 19 October frozen-engine audit; no active bindings inferred",
   "backend_audit": "New cold class definitions/chassis/prepared grants present;no cleric.py/divine.py;paladin.py implements DivineSmite only. Cold feature labels are exact metadata, not native action/condition IDs.",
   "rules_evaluated_by_renderer": false,
   "rows": [
@@ -185,5 +185,18 @@
       "art": "Existing actual spells retain own art;no bonus labels become new conditions;Protectionstyle reuse actualexistingreaction only",
       "identity_status": "planned_contract_cold_label_where_present"
     }
-  ]
+  ],
+  "current_identity_correction": {
+    "authority": "Frozen engine 211b71134ed15c89e62232587381f7e15a5961c3; supplied FACTORY_PRODUCTION_BINDINGS_REQUEST_2026-10-19.md section3",
+    "mappings": "docs/production-divine-source-map-2026-10-19.json",
+    "contract": "docs/PRODUCTION_DIVINE_BINDINGS_2026-10-19.md",
+    "passive_native_ids": [
+      "class_feature.cleric.destroy_undead",
+      "class_feature.cleric.blessed_healer",
+      "class_feature.cleric.divine_strike",
+      "class_feature.paladin.improved_divine_smite"
+    ],
+    "original_backend_audit_retained_as_history": true,
+    "active_client_binding_or_art_acceptance": false
+  }
 }

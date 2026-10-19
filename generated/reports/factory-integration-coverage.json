@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-19T17:34:02",
+  "generated_utc": "2026-10-19T18:34:36",
   "scope": "Offline complete current server/typed-source catalogue and delivered Factory contracts; not runtime validation or visual approval",
   "engine": {
     "branch": "event-native-deltas",
@@ -13,7 +13,7 @@
     "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5",
     "uncommitted_paths": 0.0
   },
-  "factory_version": "conditions-candidate-7fab471588209a41",
+  "factory_version": "production-bindings-2081189e43bf0443",
   "counts": {
     "catalogue": 1504,
     "by_kind": {
@@ -57,8 +57,8 @@
       "conditions": 278,
       "spells": 191
     },
-    "factory_clips": 1149,
-    "factory_selections": 497,
+    "factory_clips": 1159,
+    "factory_selections": 504,
     "condition_families": 155,
     "authored_default_and_condition_candidate_clip_ids": 832,
     "possible_default_condition_input_channels": 59,
@@ -85,6 +85,8 @@
       "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot-authoring-schema/.runtime/schema16-recording-safety-post-construction/godot.log"
     },
     "reader_does_not_qualify": "Native pixels, shader/resource preparation, audible playback, Studio UI or actual live player gestures; script-error log must also be clean",
+    "reader_factory_version": "conditions-candidate-7fab471588209a41",
+    "safety_history": "The full safety sweep belongs to the previous package. Current native cohort, targeted live commands and performance evidence are separate; old passing statuses do not requalify this release.",
     "ui_report_source": "generated/reports/ui-art-coverage.json"
   },
   "entries": [
@@ -38827,7 +38829,7 @@
             {
               "at": "release",
               "attachment": "recipient_ground",
-              "clip": "review/circle_of_death/whole/circle_of_death__whole.receive_target",
+              "clip": "production/circle_of_death/recipient",
               "constructor_input": {
                 "component_path": [
                   "receiving",
@@ -38931,7 +38933,7 @@
               "at": "release",
               "selection": "",
               "dispatch": "event_cue",
-              "contract": "review/circle_of_death/whole/circle_of_death__whole.receive_target"
+              "contract": "production/circle_of_death/recipient"
             }
           ]
         }
@@ -163912,8 +163914,8 @@
       "providers": {},
       "visual_qualification": "not_inferred_from_binding_or_setter_presence"
     },
-    "review/circle_of_death/whole/circle_of_death__whole.receive_target": {
-      "clip": "review/circle_of_death/whole/circle_of_death__whole.receive_target",
+    "production/circle_of_death/recipient": {
+      "clip": "production/circle_of_death/recipient",
       "inputs": [
         "recipient_geometry",
         "targets"
@@ -163924,10 +163926,10 @@
       },
       "approaches": [
         {
-          "id": "gpu",
+          "id": "production-template",
           "kind": "gpu",
           "seekable": false,
-          "path": "res://assets/vfx/clips/414e9976156620ed2a5e2f73/construct.gd"
+          "path": "res://assets/vfx/sources/f96e18e08395bac8fbf5/circle_recipient_template.gd"
         }
       ],
       "providers": {
@@ -178594,6 +178596,30 @@
       },
       "visual_qualification": "not_inferred_from_binding_or_setter_presence"
     },
+    "review/circle_of_death/whole/circle_of_death__whole.receive_target": {
+      "clip": "review/circle_of_death/whole/circle_of_death__whole.receive_target",
+      "inputs": [
+        "recipient_geometry",
+        "targets"
+      ],
+      "input_setters": {
+        "recipient_geometry": "set_recipient_geometry",
+        "targets": "set_targets"
+      },
+      "approaches": [
+        {
+          "id": "gpu",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/clips/414e9976156620ed2a5e2f73/construct.gd"
+        }
+      ],
+      "providers": {
+        "recipient_geometry": "actual_authored_actor_exact_slot_surface_partial_unqualified",
+        "targets": "authored_endpoint_arity_roles_sockets_partial_unqualified"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
     "review/circle_of_death/whole/circle_of_death__whole.receive_target2": {
       "clip": "review/circle_of_death/whole/circle_of_death__whole.receive_target2",
       "inputs": [
@@ -181002,9 +181028,240 @@
         "admitted_cells": "prepared_world_rectangles_or_native_local_pairs_nullable_contract_partial_unqualified"
       },
       "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "items/created/flame_blade/appearance": {
+      "clip": "items/created/flame_blade/appearance",
+      "inputs": [
+        "created_item_binding"
+      ],
+      "input_setters": {
+        "created_item_binding": "set_created_item_binding"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/f8cacbfe7e8208b3662f/flame_blade_appearance.gd"
+        }
+      ],
+      "providers": {
+        "created_item_binding": "missing_provider"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "items/created/devotees_mace/appearance": {
+      "clip": "items/created/devotees_mace/appearance",
+      "inputs": [
+        "created_item_binding"
+      ],
+      "input_setters": {
+        "created_item_binding": "set_created_item_binding"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/5726b1150a7d7a0b9ccb/devotees_mace_appearance.gd"
+        }
+      ],
+      "providers": {
+        "created_item_binding": "missing_provider"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "unaccepted-20261019/aid/application": {
+      "clip": "unaccepted-20261019/aid/application",
+      "inputs": [
+        "recipient_geometry",
+        "targets",
+        "owner_state"
+      ],
+      "input_setters": {
+        "owner_state": "set_owner_state",
+        "recipient_geometry": "set_recipient_geometry",
+        "targets": "set_targets"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd"
+        }
+      ],
+      "providers": {
+        "recipient_geometry": "actual_authored_actor_exact_slot_surface_partial_unqualified",
+        "targets": "authored_endpoint_arity_roles_sockets_partial_unqualified",
+        "owner_state": "ordered_condition_owner_clock"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "unaccepted-20261019/aid/sustain": {
+      "clip": "unaccepted-20261019/aid/sustain",
+      "inputs": [
+        "owner_binding",
+        "owner_state"
+      ],
+      "input_setters": {
+        "owner_binding": "set_owner_binding",
+        "owner_state": "set_owner_state"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd"
+        }
+      ],
+      "providers": {
+        "owner_binding": "missing_provider",
+        "owner_state": "ordered_condition_owner_clock"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "unaccepted-20261019/bless/application": {
+      "clip": "unaccepted-20261019/bless/application",
+      "inputs": [
+        "recipient_geometry",
+        "targets",
+        "owner_state"
+      ],
+      "input_setters": {
+        "owner_state": "set_owner_state",
+        "recipient_geometry": "set_recipient_geometry",
+        "targets": "set_targets"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd"
+        }
+      ],
+      "providers": {
+        "recipient_geometry": "actual_authored_actor_exact_slot_surface_partial_unqualified",
+        "targets": "authored_endpoint_arity_roles_sockets_partial_unqualified",
+        "owner_state": "ordered_condition_owner_clock"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "unaccepted-20261019/bless/sustain": {
+      "clip": "unaccepted-20261019/bless/sustain",
+      "inputs": [
+        "owner_binding",
+        "owner_state"
+      ],
+      "input_setters": {
+        "owner_binding": "set_owner_binding",
+        "owner_state": "set_owner_state"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd"
+        }
+      ],
+      "providers": {
+        "owner_binding": "missing_provider",
+        "owner_state": "ordered_condition_owner_clock"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "unaccepted-20261019/false_life/application": {
+      "clip": "unaccepted-20261019/false_life/application",
+      "inputs": [
+        "recipient_geometry",
+        "targets",
+        "owner_state"
+      ],
+      "input_setters": {
+        "owner_state": "set_owner_state",
+        "recipient_geometry": "set_recipient_geometry",
+        "targets": "set_targets"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd"
+        }
+      ],
+      "providers": {
+        "recipient_geometry": "actual_authored_actor_exact_slot_surface_partial_unqualified",
+        "targets": "authored_endpoint_arity_roles_sockets_partial_unqualified",
+        "owner_state": "ordered_condition_owner_clock"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "unaccepted-20261019/false_life/sustain": {
+      "clip": "unaccepted-20261019/false_life/sustain",
+      "inputs": [
+        "owner_binding",
+        "owner_state"
+      ],
+      "input_setters": {
+        "owner_binding": "set_owner_binding",
+        "owner_state": "set_owner_state"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd"
+        }
+      ],
+      "providers": {
+        "owner_binding": "missing_provider",
+        "owner_state": "ordered_condition_owner_clock"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
+    },
+    "unaccepted-20261019/sacred_flame/application": {
+      "clip": "unaccepted-20261019/sacred_flame/application",
+      "inputs": [
+        "recipient_geometry",
+        "targets",
+        "owner_state"
+      ],
+      "input_setters": {
+        "owner_state": "set_owner_state",
+        "recipient_geometry": "set_recipient_geometry",
+        "targets": "set_targets"
+      },
+      "approaches": [
+        {
+          "id": "production-template",
+          "kind": "gpu",
+          "seekable": false,
+          "path": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd"
+        }
+      ],
+      "providers": {
+        "recipient_geometry": "actual_authored_actor_exact_slot_surface_partial_unqualified",
+        "targets": "authored_endpoint_arity_roles_sockets_partial_unqualified",
+        "owner_state": "ordered_condition_owner_clock"
+      },
+      "visual_qualification": "not_inferred_from_binding_or_setter_presence"
     }
   },
   "detailed_factory_input_inventory": "generated/factory_input_inventory_2026-10-19.json",
+  "current_public_construction_contracts": {
+    "entrypoint": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd",
+    "circle_template": "res://assets/vfx/sources/f96e18e08395bac8fbf5/circle_recipient_template.gd",
+    "rage_body_film": "res://assets/vfx/sources/acc2f171e4a7d636f818/accepted_film_actor_material_v176.gd",
+    "contracts": "res://assets/vfx/format/production-construction.json",
+    "scope": "Explicit preparation-time source operands; consumer projects actual facts; not a runtime discovery pass"
+  },
+  "current_intake": "agent_docs/FACTORY_PRODUCTION_BINDINGS_INTAKE_2026-10-19.md",
+  "construction_readiness": "generated/reports/factory-construction-readiness.json",
   "factory_noncondition_programs_not_automatic_new_gameplay_requirements": [
     {
       "key": "acid_splash",
@@ -186005,6 +186262,79 @@
       ],
       "has_current_typed_clip_reference": true,
       "gameplay_requirement": "not_implied_by_factory_program_presence"
+    },
+    {
+      "key": "circle_of_death_actual_recipient",
+      "runtime_key": "",
+      "definition_ref": {},
+      "clips": [
+        "production/circle_of_death/recipient"
+      ],
+      "has_current_typed_clip_reference": true,
+      "gameplay_requirement": "not_implied_by_factory_program_presence"
+    },
+    {
+      "key": "created_item_flame_blade_appearance",
+      "runtime_key": "",
+      "definition_ref": {},
+      "clips": [
+        "items/created/flame_blade/appearance"
+      ],
+      "has_current_typed_clip_reference": false,
+      "gameplay_requirement": "not_implied_by_factory_program_presence"
+    },
+    {
+      "key": "created_item_devotees_mace_appearance",
+      "runtime_key": "",
+      "definition_ref": {},
+      "clips": [
+        "items/created/devotees_mace/appearance"
+      ],
+      "has_current_typed_clip_reference": false,
+      "gameplay_requirement": "not_implied_by_factory_program_presence"
+    },
+    {
+      "key": "production_candidate_aid",
+      "runtime_key": "",
+      "definition_ref": {},
+      "clips": [
+        "unaccepted-20261019/aid/application",
+        "unaccepted-20261019/aid/sustain"
+      ],
+      "has_current_typed_clip_reference": false,
+      "gameplay_requirement": "not_implied_by_factory_program_presence"
+    },
+    {
+      "key": "production_candidate_bless",
+      "runtime_key": "",
+      "definition_ref": {},
+      "clips": [
+        "unaccepted-20261019/bless/application",
+        "unaccepted-20261019/bless/sustain"
+      ],
+      "has_current_typed_clip_reference": false,
+      "gameplay_requirement": "not_implied_by_factory_program_presence"
+    },
+    {
+      "key": "production_candidate_false_life",
+      "runtime_key": "",
+      "definition_ref": {},
+      "clips": [
+        "unaccepted-20261019/false_life/application",
+        "unaccepted-20261019/false_life/sustain"
+      ],
+      "has_current_typed_clip_reference": false,
+      "gameplay_requirement": "not_implied_by_factory_program_presence"
+    },
+    {
+      "key": "production_candidate_sacred_flame",
+      "runtime_key": "",
+      "definition_ref": {},
+      "clips": [
+        "unaccepted-20261019/sacred_flame/application"
+      ],
+      "has_current_typed_clip_reference": false,
+      "gameplay_requirement": "not_implied_by_factory_program_presence"
     }
   ],
   "handover": {
@@ -186139,7 +186469,7 @@
       "staged petrification failure count"
     ],
     "class_gates": [
-      "Rage/Frenzy require a finite observed removal; held live owners have no such public value.",
+      "The delivered Rage/Frenzy source now accepts held owners without removal. The client action projection still requires finite observed removal; that remaining client join blocks held owners.",
       "Frenzy requires a real child-to-parent condition UUID link, absent from current ConditionState.",
       "Second Wind factual self-heal projection is implemented but has no real class-action native output recording in this corpus."
     ],
@@ -186196,8 +186526,9 @@
     },
     "native_studio_cohort": {
       "status": "passed_with_warnings",
-      "checks": 10853,
+      "checks": 10870,
       "failures": [],
+      "factory_version": "production-bindings-2081189e43bf0443",
       "case_ids": [
         "action.move/ordinary",
         "spell.haste/lifecycle",
@@ -186212,13 +186543,15 @@
       "engine_warnings": [
         "WARNING: 1 ObjectDB instance was leaked at exit (run with `--verbose` for details)."
       ],
-      "report": ".runtime/schema16-studio-replay-post-construction.json",
-      "log": ".runtime/schema16-studio-replay-post-construction.log",
+      "report": ".runtime/production-bindings-native8.json",
+      "log": ".runtime/production-bindings-native8.log",
       "qualifies": "Actual native Studio replay cohort, not all-spell visual approval or a performance benchmark"
     },
     "live_all_spell_sweep": {
       "status": "complete_command_sweep",
       "report": ".runtime/schema16-native-gui-qualified/report.json",
+      "factory_version": "conditions-candidate-7fab471588209a41",
+      "current_package_requalified": false,
       "expected_cases": 189,
       "completed_cases": 189,
       "complete": true,

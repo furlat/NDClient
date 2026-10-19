@@ -183,9 +183,10 @@ def check_evidence(relative):
             'log': relative, 'qualifies': 'no native pixels'}
 
 def native_evidence():
+    current = '.runtime/production-bindings-native8'
     post = '.runtime/schema16-studio-replay-post-construction'
-    result_path = post + '.json' if (ROOT / (post + '.json')).exists() else '.runtime/schema16-studio-replay.json'
-    log_path = post + '.log' if result_path == post + '.json' else '.runtime/schema16-studio-replay-qualified.log'
+    result_path = current + '.json' if (ROOT / (current + '.json')).exists() else post + '.json' if (ROOT / (post + '.json')).exists() else '.runtime/schema16-studio-replay.json'
+    log_path = current + '.log' if result_path == current + '.json' else post + '.log' if result_path == post + '.json' else '.runtime/schema16-studio-replay-qualified.log'
     if not (ROOT / result_path).exists() or not (ROOT / log_path).exists():
         return {'status': 'not_available', 'report': result_path, 'log': log_path}
     result = read(result_path)
@@ -194,6 +195,7 @@ def native_evidence():
     warnings = [line for line in lines if line.startswith('WARNING:')]
     return {'status': 'failed' if result.get('failures') or errors else 'passed_with_warnings' if warnings else 'passed',
             'checks': result.get('checks', 0), 'failures': result.get('failures', []),
+            'factory_version': result.get('factory_version', 'conditions-candidate-7fab471588209a41'),
             'case_ids': [row['case'] for row in result.get('evidence', []) if 'case' in row],
             'engine_errors': errors, 'engine_warnings': warnings, 'report': result_path, 'log': log_path,
             'qualifies': 'Actual native Studio replay cohort, not all-spell visual approval or a performance benchmark'}
@@ -226,6 +228,8 @@ def live_evidence():
     log_path = '.runtime/schema16-live-all-spells-final-r3/godot.log' if relative != combined else None
     lines = (ROOT / log_path).read_text().splitlines() if log_path and (ROOT / log_path).exists() else []
     return {'status': 'complete_command_sweep' if complete else 'snapshot_only_completion_not_inferred', 'report': relative,
+            'factory_version': 'conditions-candidate-7fab471588209a41',
+            'current_package_requalified': factory['version'] == 'conditions-candidate-7fab471588209a41',
             'expected_cases': result.get('expected_cases'), 'completed_cases': result.get('completed_cases'),
             'complete': complete, 'native_exit': result.get('native_exit'), 'log': log_path,
             'artifact_provenance': result.get('artifact_provenance', result.get('sources', [])),
@@ -291,6 +295,8 @@ report = {
                       'reader_inventory_qualified': safety.get('qualified'),
                       'reader_log_validation': safety.get('log_validation', {'status': 'not_available'}),
                       'reader_does_not_qualify': safety.get('does_not_qualify'),
+                      'reader_factory_version': 'conditions-candidate-7fab471588209a41',
+                      'safety_history': 'The full safety sweep belongs to the previous package. Current native cohort, targeted live commands and performance evidence are separate; old passing statuses do not requalify this release.',
                       'ui_report_source': 'generated/reports/ui-art-coverage.json'},
     'entries': entries,
     'case_records': case_records,
@@ -303,6 +309,9 @@ report = {
     'condition_families': current_families,
     'clip_contracts': contracts,
     'detailed_factory_input_inventory': 'generated/factory_input_inventory_2026-10-19.json',
+    'current_public_construction_contracts': factory.get('runtime', {}).get('production_construction', {}),
+    'current_intake': 'agent_docs/FACTORY_PRODUCTION_BINDINGS_INTAKE_2026-10-19.md',
+    'construction_readiness': 'generated/reports/factory-construction-readiness.json',
     'factory_noncondition_programs_not_automatic_new_gameplay_requirements': programs,
     'handover': {'source': '.runtime/condition-handover-inventory.json', 'report': 'agent_docs/CONDITION_HANDOVER_MIGRATION_2026-10-19.md', 'errors': handover.get('errors', [])},
     'ui_summary': ui.get('summary', {}), 'ui_errors': ui.get('errors', []),
@@ -310,7 +319,7 @@ report = {
         'providers': ['weapon_binding_remaining_owner_and_legacy_contracts', 'appearance_provider_other_rigs_and_definitions_unqualified', 'history_state', 'actor_context', 'pose_provider_capture', 'event_state', 'event_binding', 'created_item_identity'],
         'partial_spatial_provider': provider_notes['admitted_cells'] + ' Complete spatial lifecycle/output qualification is pending.',
         'public_selectors': public_gaps,
-        'class_gates': ['Rage/Frenzy require a finite observed removal; held live owners have no such public value.',
+        'class_gates': ['The delivered Rage/Frenzy source now accepts held owners without removal. The client action projection still requires finite observed removal; that remaining client join blocks held owners.',
                         'Frenzy requires a real child-to-parent condition UUID link, absent from current ConditionState.',
                         'Second Wind factual self-heal projection is implemented but has no real class-action native output recording in this corpus.'],
         'unselected_action_programs': ['reaction.spell.counterspell has success/failure studies: needs the actual native outcome selector.',

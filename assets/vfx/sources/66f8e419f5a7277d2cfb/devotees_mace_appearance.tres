@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="appearance"]
+script = ExtResource("component")
+component_id = "appearance"
+constructor_script = "res://assets/vfx/sources/5726b1150a7d7a0b9ccb/devotees_mace_appearance.gd"
+input = {}
+provenance = "New Factory native owned weapon geometry, candidate/unaccepted. Original Flame Blade native fire source/details retained. Required actual immutable construction operands must be projected before public construction; no example identities."
+[resource]
+script = ExtResource("phase")
+clip_id = "items/created/devotees_mace/appearance"
+label = "devotees_mace actual created-item appearance"
+phase = "sustain"
+seconds = 1.0
+simulation_hz = 0.0
+components = Array[Resource]([SubResource("appearance")])
+bindings = [{"component":"appearance","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"production_operands_required": true, "owner_duration": "actual_item_existence", "art_status": "candidate_unaccepted"}

@@ -21,10 +21,5 @@ static func clip_with_inputs(phase:Resource,operands:Array)->Dictionary:
         values.merge(operand.values,true)
     return clip
 
-func _ready()->void:
-    handle=Source.make(self,clip_with_inputs(parameters.phase,parameters.operands),int(parameters.layer_mask))
-    construction_error=handle.error
-    if not construction_error.is_empty():return
-    clock=Clock.new()
-    refresh_material_bindings()
-    handle.root.show()
+func construction_clip()->Dictionary:
+    return clip_with_inputs(parameters.phase,parameters.operands)

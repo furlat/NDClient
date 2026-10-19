@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/6a74d3765882cbab6603/receiving_application.gd"
+input = {"material_scene": "res://assets/vfx/sources/54a07c1667da0df53a44/vfx_status_divine.tscn", "material_node": "Mesh", "shape": "petals", "colour": "73d1d8", "source_dissolve": 0.18, "alpha_gain": 0.82, "seconds": 1.15, "uniforms": {"primary_color": {"type": "Color", "value": "73d1d8"}, "secondary_color": {"type": "Color", "value": "50aabb"}, "tertiary_color": {"type": "Color", "value": "3b788c"}, "noise_scale": {"type": "Vector2", "value": [1.5, 0.45]}, "noise_scroll": {"type": "Vector2", "value": [0.04, -0.15]}, "noise_twist": 0.12, "waviness": 0.05, "hue_variation": 0.0, "emission": 1.35, "proximity_fade": false}, "curves": [{"width_cells": 0.037, "phase": 0.0, "controls": [[-0.95, 0.45, 0.045], [-0.55, 0.6, 0.06], [0.1, 0.77, 0.055], [0.75, 0.85, 0.04]]}, {"width_cells": 0.03, "phase": 2.0, "controls": [[0.82, 0.42, 0.045], [0.48, 0.54, 0.06], [-0.1, 0.68, 0.055], [-0.7, 0.78, 0.04]]}], "palette": ["293f59", "3b788c", "50aabb", "73d1d8", "aaeae8", "d0f5ed"], "noise_edges": [0.38, 0.78], "palette_finish": {"quantize": false, "energy_exposure": 3.0, "emission_gain": 0.22}}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Separate unaccepted aid candidate; source family retained; no production default changed"
+
+[resource]
+script = ExtResource("script")
+clip_id = "unaccepted-20261019/aid/application"
+label = "Unaccepted aid application candidate"
+phase = "application"
+variant = "back"
+source_recipe = "recipes/spells/aid.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.15
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"stage": "attached", "qualification": "separate_unaccepted_art_candidate_not_production_default", "placement": {"role": "attached", "attachment": "recipient_ground", "source_rate": 1.0, "source_end": 1.15, "scale": 1.0, "orientation": "world", "dynamic_geometry": true}}

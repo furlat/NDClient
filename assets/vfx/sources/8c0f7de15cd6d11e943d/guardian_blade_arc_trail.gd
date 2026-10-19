@@ -69,6 +69,7 @@ func _refresh_response() -> void:
 		"synthetic_response_geometry": true, "measured_144Hz_motion_claimed": false}
 	if not is_instance_valid(response_mesh) or not response_mesh.visible:
 		return
+	assert(history_observation.get("clock_consistent", false) and history_observation.has("source_frame") and history_observation.has("strike_frame"), "Visible blade response requires an admitted current history observation")
 	var source_frame: int = history_observation.source_frame
 	var strike_frame: int = history_observation.strike_frame
 	var keys: Array = fine_history.keys()

@@ -58,42 +58,9 @@ extra = {
 "delay_seconds": 0.0
 }
 
-[sub_resource type="Resource" id="Resource_acojy"]
-script = ExtResource("3_iwkxs")
-clip = "review/circle_of_death/whole/circle_of_death__whole.receive_caster"
-unbound_constructor_inputs = PackedStringArray("application")
-role = "attached"
-at = "release"
-delay = 0.375
-attachment = "recipient_ground"
-scale = 0.44
-orientation = "world"
-source_end = 1.625
-duration_policy = "authored"
-hide_at_contact = PackedStringArray()
-hide_at_release = PackedStringArray()
-hide_nodes = PackedStringArray()
-show_nodes = PackedStringArray()
-opacity_keys = PackedVector2Array()
-staging_from = "factory@20261018-c3c616e88a6b725f"
-extra = {
-"dynamic_geometry": true,
-"entity_geometry": {
-"actor": "caster",
-"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
-},
-"follow_attachment": true,
-"live_endpoints": [{
-"actor": "caster",
-"socket": "body_center",
-"surface_slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
-}],
-"to_actor": "caster"
-}
-
 [sub_resource type="Resource" id="Resource_ol48r"]
 script = ExtResource("3_iwkxs")
-clip = "review/circle_of_death/whole/circle_of_death__whole.receive_target"
+clip = "production/circle_of_death/recipient"
 scope = "application"
 constructor_input = {
 "kind": "application_result",
@@ -115,7 +82,7 @@ hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
-staging_from = "factory@20261018-c3c616e88a6b725f"
+staging_from = "factory@production-bindings-2081189e43bf0443"
 extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -129,39 +96,6 @@ extra = {
 "surface_slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
 }],
 "to_actor": "target"
-}
-
-[sub_resource type="Resource" id="Resource_0ok8r"]
-script = ExtResource("3_iwkxs")
-clip = "review/circle_of_death/whole/circle_of_death__whole.receive_target2"
-unbound_constructor_inputs = PackedStringArray("application")
-role = "attached"
-at = "release"
-delay = 0.375
-attachment = "recipient_ground"
-scale = 0.44
-orientation = "world"
-source_end = 1.625
-duration_policy = "authored"
-hide_at_contact = PackedStringArray()
-hide_at_release = PackedStringArray()
-hide_nodes = PackedStringArray()
-show_nodes = PackedStringArray()
-opacity_keys = PackedVector2Array()
-staging_from = "factory@20261018-c3c616e88a6b725f"
-extra = {
-"dynamic_geometry": true,
-"entity_geometry": {
-"actor": "target2",
-"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
-},
-"follow_attachment": true,
-"live_endpoints": [{
-"actor": "target2",
-"socket": "body_center",
-"surface_slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
-}],
-"to_actor": "target2"
 }
 
 [sub_resource type="Resource" id="Resource_q3n60"]

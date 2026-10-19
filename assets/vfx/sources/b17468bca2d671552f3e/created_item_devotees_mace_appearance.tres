@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="spell"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/66f8e419f5a7277d2cfb/devotees_mace_appearance.tres" id="appearance"]
+[resource]
+script = ExtResource("spell")
+spell_id = "created_item_devotees_mace_appearance"
+title = "Devotee's Mace created item · native appearance candidate"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("appearance")])
+provenance = "New native item body geometry, not inventory icons or unrelated equipped weapon coating. Actual immutable identities must be supplied before public construction."
+review_status = "Unaccepted artwork candidate; actual-item GPU review and delivery validation pending."

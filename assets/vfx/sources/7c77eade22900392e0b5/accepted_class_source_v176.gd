@@ -24,11 +24,14 @@ static func make_component(input: Dictionary) -> Node3D:
 
 
 func _validate_projection(projection: Dictionary) -> void:
-	for key in ["actor_id", "owner_uuid", "behavior_id", "admitted", "begin_seconds", "removed_seconds"]:
+	for key in ["actor_id", "owner_uuid", "behavior_id", "admitted", "begin_seconds"]:
 		assert(projection.has(key), "Explicit class owner needs " + key)
 	assert(not str(projection.actor_id).is_empty())
 	assert(not str(projection.owner_uuid).is_empty())
-	assert(float(projection.removed_seconds) < 0.0 or float(projection.removed_seconds) >= float(projection.begin_seconds))
+	var removed: Variant = projection.get("removed_seconds")
+	if removed != null:
+		assert((removed is float or removed is int) and is_finite(float(removed)))
+		assert(float(removed) < 0.0 or float(removed) >= float(projection.begin_seconds))
 	assert(float(settings.rise_seconds) > 0.0 and float(settings.return_seconds) > 0.0)
 	for event in feedback_events:
 		for key in ["feedback_uuid", "owner_uuid", "actor_id", "kind", "admitted", "energy_type", "begin_seconds"]:
@@ -79,7 +82,7 @@ func _strip(index: int, seconds: float) -> ArrayMesh:
 
 
 func _owner_admitted() -> bool:
-	if not bool(owner_projection.admitted):
+	if not bool(owner_projection.admitted) or bool(owner_projection.get("suppressed", false)):
 		return false
 	if str(geometry.get("actor", "")) != str(owner_projection.actor_id):
 		return false
@@ -90,7 +93,7 @@ func _owner_admitted() -> bool:
 			return false
 		if settings.get("frenzied_child_required", false):
 			var child: Dictionary = owner_projection.get("frenzied_child", {})
-			return bool(child.get("admitted", false)) and not str(child.get("owner_uuid", "")).is_empty() and str(child.get("behavior_id", "")) == "class_feature.barbarian.frenzied" and str(child.get("parent_owner_uuid", "")) == str(owner_projection.owner_uuid)
+			return bool(child.get("admitted", false)) and not bool(child.get("suppressed", false)) and not str(child.get("owner_uuid", "")).is_empty() and str(child.get("behavior_id", "")) == "class_feature.barbarian.frenzied" and str(child.get("parent_owner_uuid", "")) == str(owner_projection.owner_uuid)
 		return true
 	return str(owner_projection.behavior_id) == "class_feature.sorcerer.elemental_affinity.resistance" and not str(owner_projection.get("energy_type", "")).is_empty()
 
@@ -98,9 +101,10 @@ func _owner_admitted() -> bool:
 func _owner_tail(seconds: float) -> float:
 	if seconds < float(owner_projection.begin_seconds):
 		return 0.0
-	if float(owner_projection.removed_seconds) < 0.0:
+	var removed: Variant = owner_projection.get("removed_seconds")
+	if removed == null or float(removed) < 0.0:
 		return 1.0
-	return 1.0 - smoothstep(float(owner_projection.removed_seconds), float(owner_projection.removed_seconds) + float(settings.return_seconds), seconds)
+	return 1.0 - smoothstep(float(removed), float(removed) + float(settings.return_seconds), seconds)
 
 
 func sample(seconds: float) -> void:
@@ -119,7 +123,8 @@ func sample(seconds: float) -> void:
 					continue
 				var local := seconds - float(event.begin_seconds)
 				# An old owner's event cannot be replayed after its explicit removal.
-				if float(event.begin_seconds) < float(owner_projection.begin_seconds) or (float(owner_projection.removed_seconds) >= 0.0 and float(event.begin_seconds) >= float(owner_projection.removed_seconds)):
+				var removed: Variant = owner_projection.get("removed_seconds")
+				if float(event.begin_seconds) < float(owner_projection.begin_seconds) or (removed != null and float(removed) >= 0.0 and float(event.begin_seconds) >= float(removed)):
 					continue
 				var strength := smoothstep(0.0, .14, local) * (1.0 - smoothstep(.80, 1.25, local)) * _owner_tail(seconds)
 				if strength > supplied_envelope:

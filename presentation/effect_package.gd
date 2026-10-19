@@ -140,6 +140,11 @@ static func choice(value:Dictionary)->Dictionary:
         return {"kind":kind,"approaches":found,"reason":reason}
     return {"kind":"","approaches":[],"reason":"the package has no approach for "+str(value.get("id",""))}
 
+## Neutral public templates can load their immutable art without an outcome,
+## but construction/warm draws require that occurrence's actual operands.
+static func requires_construction(value:Dictionary)->bool:
+    return value.get("requires_constructor_input",false) or choice(value).approaches.any(func(approach):return approach.get("construction_required",false))
+
 static func key(value:Dictionary)->String:
     return str(value.get("id",""))+"|"+str(choice(value).kind)+"|"+str(value.get("opacity_uniform",""))
 
@@ -162,7 +167,7 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
     _ensure_clock()
     var pending:int=0;var errors:Array=[];var paths:Dictionary={};var live:Array=[]
     for value in clips:
-        if value.get("requires_constructor_input",false) or value.has("construction_inputs"):paths["res://presentation/native_constructed_occurrence.gd"]=true
+        if requires_construction(value) or value.has("construction_inputs"):paths["res://presentation/native_constructed_occurrence.gd"]=true
         var chosen:Dictionary=choice(value)
         if chosen.kind.is_empty():errors.append(chosen.reason);continue
         if chosen.kind=="recorded":
@@ -207,7 +212,10 @@ static func make(parent:Node3D,value:Dictionary,layer_mask:int,seed:int=0)->Dict
     var started:int=Time.get_ticks_usec()
     var chosen:Dictionary=choice(value)
     var handle:Dictionary
-    if chosen.kind=="recorded":
+    var needs_inputs:bool=value.get("requires_constructor_input",false) or chosen.approaches.any(func(approach):return approach.get("construction_required",false))
+    if needs_inputs and not value.has("construction_inputs"):
+        handle={"root":null,"error":"Native construction operands unavailable: "+str(value.get("id","")),"clip":value}
+    elif chosen.kind=="recorded":
         var bundle:Variant=Baked.ready_for(value,seed)
         handle=Baked.make(parent,bundle,value,layer_mask) if bundle is Resource else {"root":null,"error":"Recording is not loaded: "+str(value.get("id","")),"clip":value}
     elif chosen.kind.is_empty():handle={"root":null,"error":chosen.reason,"clip":value}
@@ -219,30 +227,45 @@ static func make(parent:Node3D,value:Dictionary,layer_mask:int,seed:int=0)->Dict
 
 static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:int)->Dictionary:
     var handle={"root":null,"occurrence":null,"inner":{},"error":"","clip":value.duplicate(false),"layer_mask":layer_mask,"geometry":[],"emitters":[],
-        "light_units":{},"opacity_bindings":[],"players":[],"seekable":bool(approach.get("seekable",false)),"initialized":false,"age":0.0}
+        "light_units":{},"opacity_bindings":[],"players":[],"seekable":bool(approach.get("seekable",false)),"initialized":false,"age":0.0,"construction_phases":{}}
+    var phase_started:int=Time.get_ticks_usec()
     if not Admission.begin_mutation():
         handle.error="Live effect construction admission is pending";return handle
+    handle.construction_phases.admission=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     var script:Script=ResourceLoader.load(approach.path)
+    var constructed:Script
+    var source_phase:Resource
+    if value.has("construction_inputs"):
+        constructed=load("res://presentation/native_constructed_occurrence.gd")
+        source_phase=ResourceLoader.load(approach.source_phase)
+    handle.construction_phases.script_load=(Time.get_ticks_usec()-phase_started)/1000.0
     if script==null or not script.has_method("make_component"):
         handle.error="Missing package constructor: "+str(approach.path);return handle
+    phase_started=Time.get_ticks_usec()
     var occurrence:Node3D
     if value.has("construction_inputs"):
-        var constructed:Script=load("res://presentation/native_constructed_occurrence.gd")
-        occurrence=constructed.make_component({"layer_mask":layer_mask,"phase":ResourceLoader.load(approach.source_phase),"operands":value.construction_inputs})
+        occurrence=constructed.make_component({"layer_mask":layer_mask,"phase":source_phase,"operands":value.construction_inputs})
     else:occurrence=script.make_component({"layer_mask":layer_mask})
+    handle.construction_phases.make_component=(Time.get_ticks_usec()-phase_started)/1000.0
     handle.occurrence=occurrence
+    if occurrence==null:
+        handle.error="Native constructor has no admitted operands: "+str(value.get("id",""));return handle
     # The occurrence builds its source in _ready (some components create
     # layers there); its geometry starts on the caller's (hidden) layer.
+    phase_started=Time.get_ticks_usec()
     parent.add_child(occurrence)
+    handle.construction_phases.ready=(Time.get_ticks_usec()-phase_started)/1000.0
     if not str(occurrence.construction_error).is_empty():
         handle.error=str(occurrence.construction_error);return handle
+    phase_started=Time.get_ticks_usec()
     var inner:Dictionary=occurrence.handle
     handle.inner=inner;handle.root=inner.root
     for field in ["geometry","emitters","light_units","opacity_bindings","players"]:handle[field]=inner[field]
     handle.root.hide()
     # No live membership is invented: an input the game does not supply is
     # empty, never the Factory fixture's preview data.
-    if "binding_owners" in value.get("inputs",[]):occurrence.call(value.input_setters.binding_owners,[])
+    if "binding_owners" in value.get("inputs",[]):set_input(handle,"binding_owners",[])
     var uniform:String=value.get("opacity_uniform","")
     if not uniform.is_empty():
         for location in Baked.material_locations(handle.root):
@@ -252,6 +275,7 @@ static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:
             var current:Variant=material.get_shader_parameter(uniform)
             inner.opacity_bindings.append({"material":material,"uniform":uniform,"native":1.0 if current==null else float(current)})
         if inner.opacity_bindings.is_empty():handle.error="Missing opacity control: "+str(value.get("id",""))+" / "+uniform
+    handle.construction_phases.adaptation=(Time.get_ticks_usec()-phase_started)/1000.0
     return handle
 
 ## The node paths a cue's staging names, by field.
@@ -310,7 +334,13 @@ static func sample(handle:Dictionary,seconds:float)->void:
 ## Supplies a declared input through the clip's setter (no-op when the clip
 ## does not declare it).
 static func set_input(handle:Dictionary,input:String,value:Variant)->void:
-    if input in handle.clip.get("inputs",[]) and is_instance_valid(handle.get("occurrence")):handle.occurrence.call(handle.clip.input_setters[input],value)
+    if input not in handle.clip.get("inputs",[]) or not is_instance_valid(handle.get("occurrence")):return
+    var method:String=handle.clip.input_setters[input]
+    # Public generic construction keeps the shared geometry/clock adapters;
+    # source-only setters belong to the child source, not a generated wrapper.
+    if handle.clip.has("construction_inputs") and method not in ["set_targets","set_live_endpoints","set_recipient_geometry", "set_entity_geometry","set_owner_state","set_lifecycle_context","set_root_path"]:
+        handle.occurrence.forward(method,value)
+    else:handle.occurrence.call(method,value)
 
 static func stop_emission(handle:Dictionary,source_seconds:float)->void:
     if handle.get("baked",false):Baked.stop_emission(handle,source_seconds)

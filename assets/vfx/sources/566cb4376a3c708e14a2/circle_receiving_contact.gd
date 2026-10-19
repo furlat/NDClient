@@ -22,13 +22,15 @@ static func make_component(input: Dictionary) -> Node3D:
 	return construct("res://assets/vfx/sources/566cb4376a3c708e14a2/circle_receiving_contact.gd", input)
 
 func set_entity_geometry(value: Dictionary) -> void:
-	receiving_surface = value
+	# A stale/wrong owner's packet retires this receiver. Keep the original
+	# actor identity intact; never relabel it to satisfy the constructor.
+	receiving_surface = value if value.get("actor", "") == parameters.application.target_actor else {}
 
 func set_live_endpoints(value: Array) -> void:
 	receiving_endpoints = value
 	for endpoint in value:
 		if endpoint.has("surface"):
-			receiving_surface = endpoint.surface
+			set_entity_geometry(endpoint.surface)
 
 func apply_scene_edits(node: Node) -> void:
 	super.apply_scene_edits(node)

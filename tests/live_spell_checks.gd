@@ -74,7 +74,7 @@ func _issue_input(selected:Dictionary,record:Dictionary)->void:
     var sweep:Array=[]
     for offset in [[-1,0],[0,-1],[1,0],[0,1],[0,0]]:
         var cell:Array=[target[0]+offset[0],target[1]+offset[1]]
-        if scene.Interaction.region_allows(scene.available_actions,selected.action,cell,scene.timeline.state) if selected.action.get("position_region")!=null else Choices.action_options(scene.available_actions,selected.action).any(func(option):return Choices.binding_position(scene.available_actions,option)==cell):
+        if scene.Interaction.region_allows(scene.available_actions,selected.action,cell,scene.timeline.state) if selected.action.get("position_region")!=null else Choices.action_options(scene.available_actions,selected.action).any(func(option):return scene.Interaction.same_position(Choices.binding_position(scene.available_actions,option),cell)):
             var point=grid_screen(cell)
             if root.get_visible_rect().has_point(point) and not scene.hud.pointer_over_controls(point) and scene.Interaction.same_position(scene.pick_cell(point).get("position"),cell):sweep.append(cell)
     check(sweep.size()>1,"Fireball sweep uses multiple actually offered and pickable neighboring cells")
@@ -91,11 +91,10 @@ func _issue_input(selected:Dictionary,record:Dictionary)->void:
         await _gesture_frame(record)
     record.ui_markers.append({"kind":"target_click","position":target,"time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames()})
     click_grid(target)
-    # Ordinary position spells auto-confirm after the real target preview reply.
-    # Return to the normal frame observer before that reply; do not consume cast
-    # frames waiting for a Confirm button which this native flow never requires.
+    # Free aim extends extra_target_positions and therefore uses the native
+    # explicit Confirm path, just like other compound position selections.
     var spec:Variant=selected.action.get("position_selection")
-    var explicit:bool=selected.action.target_type=="multi_entity" or (spec!=null and spec.kind in ["path","entity_destination"])
+    var explicit:bool=selected.action.get("position_region")!=null or selected.action.target_type=="multi_entity" or (spec!=null and spec.kind in ["path","entity_destination"])
     record.confirmation="explicit" if explicit else "native_target_auto_confirm"
     if explicit:
         if not await until(func():return scene.action_request<0 and scene.selection_preview.get("can_confirm",false) and not scene.hud.confirm_button.disabled,"Actual target preview enables native Confirm"):return
@@ -113,7 +112,7 @@ func _selected_step(step:Dictionary)->Dictionary:
             return {"action":action,"position":step.position,"recipient_uuid":""}
         var targets:Array=Choices.action_options(scene.available_actions,action)
         if step.has("position"):
-            targets=targets.filter(func(target):return Choices.binding_position(scene.available_actions,target)==step.position)
+            targets=targets.filter(func(target):return scene.Interaction.same_position(Choices.binding_position(scene.available_actions,target),step.position))
         if step.has("subject_name"):
             targets=targets.filter(func(target):
                 var subject:Variant=Choices.binding_subject(scene.available_actions,target)
@@ -250,6 +249,7 @@ func _run()->void:
     while Time.get_ticks_msec()<deadline:await scene.presentation_updated
     scene.set_process(false);scene.session.close();collect_pipeline(true)
     evidence.live_commands=command_trace.size();evidence.spell_commands=spell_occurrences
+    evidence.native_startup=scene.native_startup.duplicate(true)
     evidence.disclosed_tiles=scene.timeline.state.tiles.size();evidence.disclosed_objects=scene.timeline.state.objects.size()
     evidence.command_trace=scene.game_config.test_result.get_base_dir().path_join("live-command-trace.json")
     evidence.pipeline_trace=scene.game_config.test_result.get_base_dir().path_join("client-pipeline-trace.json")

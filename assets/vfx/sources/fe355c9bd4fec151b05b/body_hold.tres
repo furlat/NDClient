@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/3f8d4544f54d033f2d65/body_material_hold.gd"
+input = {"source_constructor": "res://assets/vfx/sources/2f63b2ef0cb2d87dafc6/blessing.gd", "source_input": {"scene": "res://assets/vfx/sources/636cf3be4a77c8ac1b12/vfx_status_divine.tscn", "settings": {"name": "vfx_status_divine", "scale": 0.9, "height": 1.25, "hue": 0.12, "palette": ["453328", "785934", "ab7e39", "cba24f", "ddbd70", "ecd497"], "pack": "binbun-statusfxfull", "animation": "open", "frames": 289, "close": 0, "anchor": "target_ground", "version": 6, "alphaGain": 0.32, "mode": "sustain", "parentSpell": "bless"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "disabled_script_paths": ["res://assets/vfx/sources/9973b30d6022cf4d4a87/VFXStatusBB.gd"]}, "material_node": "Donor/Mesh", "strength": 0.16, "application_seconds": 0.18, "removal_seconds": 0.25, "surface_material": {"primary": "ddbd70", "secondary": "ab7e39", "tertiary": "785934", "noise_scale": [1.0, 0.85], "scroll": [0.022, -0.036], "twist": 0.45, "waviness": 0.012, "emission": 0.85, "scale": 0.62, "noise_frequency_multiplier": 0.28, "noise_value_range": [0.46, 0.72]}}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Separate unaccepted bless candidate; source family retained; no production default changed"
+
+[resource]
+script = ExtResource("script")
+clip_id = "unaccepted-20261019/bless/sustain"
+label = "Unaccepted bless sustain candidate"
+phase = "sustain"
+variant = "back"
+source_recipe = "recipes/spells/bless.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"stage": "attached", "qualification": "unaccepted_fail_closed_material_provider", "public_inputs": {"owner_binding": "set_owner_binding", "owner_state": "set_owner_state"}, "public_output": {"body_surface_sample": "actual actor UUID -> native BodySurfaces sample or empty Dictionary"}, "registration_note": "Source donor is always hidden. Consumer composes material output on actual private actor layers through existing BodySurfaces API. No Stage option required.", "placement": {"role": "attached", "attachment": "recipient_ground", "source_end": 2.0, "scale": 1.0, "orientation": "world"}, "material_provider": {"api": "body_surface_sample", "argument": "actual_actor_uuid: String", "output": "Native BodySurfaces sample Dictionary, or empty Dictionary when unbound/hidden/suppressed/mismatched", "binding_setter": "set_owner_binding", "state_setter": "set_owner_state", "owner_binding_fields": ["owner_uuid", "actor_uuid"], "owner_state_fields": ["owner_uuid", "actor_uuid", "visible", "suppressed", "phase", "phase_age_seconds"], "clock": "sample(actual_owner_age_seconds)", "consumer": "Merge with actual actor samples, then BodySurfaces.compose(actual_actor_uuid,samples) and BodySurfaces.bind(actual private actor ShaderMaterials,stack). Renderer owns ordering/capacity and material layers.", "donor_visibility": "Always hidden; no geometry output or shell fallback", "human_approval": false}}

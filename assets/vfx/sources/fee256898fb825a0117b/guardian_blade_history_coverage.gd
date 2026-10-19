@@ -27,13 +27,17 @@ func build() -> void:
 
 
 func sample(seconds: float) -> void:
+	_observe_requested_age(seconds)
+	super.sample(seconds)
+
+
+func _observe_requested_age(seconds: float) -> void:
 	if last_requested_age >= 0.0 and seconds < last_requested_age - 0.0000001:
 		# The inherited source is forward sampled. Do not retain future trail data
 		# on an unsupported in-place rewind; a fresh source/replay restores its rig.
 		fine_history.clear()
 		history_epoch += 1
 	last_requested_age = seconds
-	super.sample(seconds)
 
 
 func add_quad(surface: SurfaceTool, points: Array, colour: Color) -> void:
@@ -45,7 +49,14 @@ func add_quad(surface: SurfaceTool, points: Array, colour: Color) -> void:
 
 
 func _refresh_response() -> void:
+	# A deferred refresh may run after its live provider was cleared. Never
+	# expose the preceding response or its history as a current observation.
+	history_observation = {"clock_consistent": false, "required_input": "current source and recipient endpoints"}
+	response_observation = {"visible": false}
+	if is_instance_valid(response_mesh):
+		response_mesh.visible = false
 	if not is_instance_valid(response_mesh) or live_endpoints.size() < 2:
+		fine_history.clear()
 		return
 	var source_frame: int = maxi(0, floori(float(tick - 1) * 32.0 / float(parameters.simulation_hz)))
 	var strike_frame: int = source_frame - 64

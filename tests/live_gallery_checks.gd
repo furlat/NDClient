@@ -174,7 +174,9 @@ func _issue_input(selected:Dictionary,record:Dictionary)->void:
     else:
         if selected.has("position") and selected.action.get("position_region")!=null:
             scene.select_action(selected.action)
-            scene.choose_target(selected.position)
+            check(scene.choose_target(selected.position),"Actual free aim accepts the requested disclosed target")
+            if not await until(func():return scene.action_request<0 and scene.selection_preview.get("can_confirm",false),"Actual free aim preview enables Confirm"):return
+            scene.confirm_selection()
             record.input="admitted_free_aim"
             return
         var target: Variant=Choices.binding_position(scene.available_actions,selected.target)

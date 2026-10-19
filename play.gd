@@ -570,6 +570,7 @@ func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
                 var clip:Dictionary={}
                 if component.get("native_spell",false) and component.get("status")!="missing":
                     clip=component.native_clip.duplicate(false)
+                    if component.has("native_constructor_inputs"):clip.construction_inputs=component.native_constructor_inputs
                     if component.get("native_cue",{}).has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
                     if component.has("lifecycle_phases"):lifecycles.append(clip)
                 elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":clip=component.native_hit.clip
@@ -627,11 +628,16 @@ func _prepare_optional_work()->void:
                 # constructors, including while its passive worker is running.
                 if required_world and pending_world!=null and not pending_world.prepared:continue
                 var started:int=Time.get_ticks_usec();var before:int=budget.used_usec
+                var part:int=Time.get_ticks_usec()
                 if native_startup_plan!=null:_step_native_startup(true)
+                FrameProfile.end_phase(profile,"optional_native_startup",part);part=Time.get_ticks_usec()
                 component_renderer.prepare_optional(self,catalog_cache,budget)
+                FrameProfile.end_phase(profile,"optional_component_prefetch",part);part=Time.get_ticks_usec()
                 if not external_playback:choice_resources.prepare(catalog_cache,budget)
+                FrameProfile.end_phase(profile,"optional_choice_resources",part);part=Time.get_ticks_usec()
                 # Spare shadow helpers, so a reveal's new actors construct none.
                 if generated_shadows.spares_needed():generated_shadows.prepare_spares(budget.limit_usec-budget.used_usec-(Time.get_ticks_usec()-started))
+                FrameProfile.end_phase(profile,"optional_shadow_spares",part)
                 _charge_preparation("optional_components",started,before)
             2:_warm_media(false,budget)
             3:

@@ -20,7 +20,12 @@ static func ensure_pool() -> void:
 	texture = ImageTexture.create_from_image(image)
 	for index in CAPACITY:
 		free_slots.append(CAPACITY - index - 1)
-	RenderingServer.global_shader_parameter_add("vfx_package_clock", RenderingServer.GLOBAL_VAR_TYPE_SAMPLER2D, texture)
+	# A receiving project may already declare this sampler in shader_globals.
+	# Registering it twice is an error even before the first source is drawn.
+	if ProjectSettings.has_setting("shader_globals/vfx_package_clock"):
+		RenderingServer.global_shader_parameter_set("vfx_package_clock", texture)
+	else:
+		RenderingServer.global_shader_parameter_add("vfx_package_clock", RenderingServer.GLOBAL_VAR_TYPE_SAMPLER2D, texture)
 	RenderingServer.frame_pre_draw.connect(flush)
 
 

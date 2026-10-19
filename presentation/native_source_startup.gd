@@ -31,7 +31,7 @@ static func recording_plan(rows:Array)->Array:
             if component.get("native_cue",{}).has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
         elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":
             clip=component.native_hit.get("clip",{}).duplicate(false)
-        if clip.is_empty() or (clip.get("requires_constructor_input",false) and not clip.has("construction_inputs")):continue
+        if clip.is_empty() or (Effects.requires_construction(clip) and not clip.has("construction_inputs")):continue
         var key:String=_key(clip)
         if not by_key.has(key):
             # A condition lifecycle warms with the load: its first draw compiles
@@ -46,7 +46,7 @@ static func recording_plan(rows:Array)->Array:
 static func source_plan(clips:Array,lifecycles:Array=[])->Array:
     var result:Array=[];var seen:Dictionary={}
     for clip in lifecycles+clips:
-        if clip.is_empty() or (clip.get("requires_constructor_input",false) and not clip.has("construction_inputs")):continue
+        if clip.is_empty() or (Effects.requires_construction(clip) and not clip.has("construction_inputs")):continue
         var key:String=_key(clip)
         if seen.has(key):continue
         seen[key]=true;result.append({"key":key,"clip":clip,"lifecycle":clip in lifecycles})
@@ -64,7 +64,7 @@ static func _plan(cache:Dictionary)->Array:
     var entries:Dictionary=index.spells
     for behavior in entries:
         for clip in Authoring.effect_clips(Authoring.selection(behavior,cache)):
-            if clip.get("requires_constructor_input",false):continue
+            if Effects.requires_construction(clip):continue
             var identity:String=_key(clip)
             if not seen.has(identity):
                 seen[identity]=true;result.append({"key":identity,"clip":clip})
@@ -199,15 +199,21 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
             return status(request)
         if not _state.active.drawn:return status(request)
         _frame=Engine.get_process_frames()
+        var retained_started:int=Time.get_ticks_usec()
         _retain_program_owners(_state.active.handle)
+        Profile.end_phase(world.profile,"native_startup_retain_programs",retained_started)
         if not _state.active.ages.is_empty():
             var age:float=_state.active.ages.pop_front()
+            var sample_started:int=Time.get_ticks_usec()
             Effects.sample(_state.active.handle,age)
+            Profile.end_phase(world.profile,"native_startup_sample",sample_started)
             _state.active.drawn=false
             _state.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
             RenderingServer.frame_post_draw.connect(_drawn.bind(_state.active),CONNECT_ONE_SHOT)
             return status(request)
+        var close_started:int=Time.get_ticks_usec()
         Effects.close(_state.active.handle)
+        Profile.end_phase(world.profile,"native_startup_close",close_started)
         _state.done[_state.active.key]=true
         _state.active={};_state.completed+=1
     var item:Dictionary={}
@@ -225,7 +231,9 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     # files and compiles its warm materials on workers. Its private warm draw
     # then compiles the pipelines it draws with, ahead of play.
     var item_key:String=_key(item.clip)
+    var resources_started:int=Time.get_ticks_usec()
     var loaded:Dictionary=Effects.prepare([item.clip],_state.resources,required.any(func(entry):return _key(entry.clip)==item_key))
+    Profile.end_phase(world.profile,"native_startup_resources",resources_started)
     var worker:Dictionary=Effects.Admission.material_profile
     if not is_same(worker,_state.last_worker_profile):
         _state.last_worker_profile=worker
@@ -237,6 +245,7 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     if not is_instance_valid(_state.owner):_state.owner=_owner(world)
     var construct_started:int=Time.get_ticks_usec()
     var handle:Dictionary=Effects.make(_state.owner,item.clip.duplicate(false),SOURCE_LAYER)
+    Profile.end_phase(world.profile,"native_startup_construct",construct_started)
     _state.construction_ms.append({"source":item.clip.id,"kind":handle.get("effect_kind",""),"ms":(Time.get_ticks_usec()-construct_started)/1000.0,"phases":handle.get("construction_phases",{})})
     if not handle.error.is_empty():
         _state.failures[item_key]=handle.error;Effects.close(handle)

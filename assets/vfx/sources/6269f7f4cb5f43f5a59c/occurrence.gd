@@ -9,6 +9,8 @@ var previous_age := 0.0
 var construction_error := ""
 var parameters: Dictionary = {}
 var materials_dirty := false
+var input_receivers: Dictionary = {}
+var inputs_dirty := true
 
 
 static func make_component(input: Dictionary) -> Node3D:
@@ -24,8 +26,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	# Source components with _ready-created condition layers must complete
 	# their normal tree lifecycle before the source sampler discovers bindings.
-	var phase: Resource = VfxPackageIO_6269f7f4cb.resource(parameters.phase_path)
-	handle = Source.make(self, phase.to_clip(), int(parameters.get("layer_mask", 2)))
+	handle = Source.make(self, construction_clip(), int(parameters.get("layer_mask", 2)))
 	construction_error = handle.error
 	if not construction_error.is_empty():
 		return
@@ -36,12 +37,39 @@ func _ready() -> void:
 	clock = Clock.new()
 	clock.prepare(materials)
 	materials_dirty = false
+	refresh_input_bindings()
 	handle.root.show()
+
+
+func construction_clip() -> Dictionary:
+	var phase: Resource = VfxPackageIO_6269f7f4cb.resource(parameters.phase_path)
+	return phase.to_clip()
 
 
 func _node_added(node: Node) -> void:
 	if is_ancestor_of(node):
 		materials_dirty = true
+		inputs_dirty = true
+
+
+func refresh_input_bindings() -> void:
+	# Resolve receiver identities once, never traverse the hierarchy on every
+	# disclosed owner-state tick. Late-created body layers invalidate this map.
+	input_receivers.clear()
+	for node in handle.root.find_children("*", "Node", true, false):
+		var script: Script = node.get_script()
+		if script == null:
+			continue
+		while script != null:
+			for method in script.get_script_method_list():
+				var method_name: String = method.name
+				if method_name.begins_with("set_") or method_name == "body_surface_sample":
+					if not input_receivers.has(method_name):
+						input_receivers[method_name] = []
+					if node not in input_receivers[method_name]:
+						input_receivers[method_name].append(node)
+			script = script.get_base_script()
+	inputs_dirty = false
 
 
 func refresh_material_bindings() -> void:
@@ -84,8 +112,10 @@ func sample(seconds: float) -> void:
 func forward(method: String, value: Variant) -> void:
 	if handle.is_empty() or not is_instance_valid(handle.get("root")):
 		return
-	for node in handle.root.find_children("*", "Node", true, false):
-		if node.has_method(method):
+	if inputs_dirty:
+		refresh_input_bindings()
+	for node in input_receivers.get(method, []):
+		if is_instance_valid(node):
 			node.call(method, value)
 
 

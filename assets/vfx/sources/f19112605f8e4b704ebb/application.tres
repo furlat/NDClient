@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/1e4fc794172dba0795de/sacred_contact.gd"
+input = {}
+options = {}
+provenance = "LeLu native torch mask/noise/cone derivative; Sacred holy palette and measured target contact; no production default changed"
+
+[resource]
+script = ExtResource("script")
+clip_id = "unaccepted-20261019/sacred_flame/application"
+label = "Unaccepted sacred_flame application candidate"
+phase = "application"
+variant = "back"
+source_recipe = "recipes/production_bindings/sacred_flame_candidate.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"stage": "attached", "qualification": "unaccepted_cantrip_contact_candidate", "contact_source_seconds": 0.24, "pre_roll_seconds": 0.24, "placement": {"role": "attached", "attachment": "recipient_ground", "source_rate": 1.0, "source_end": 1.5, "scale": 1.0, "orientation": "world"}}
