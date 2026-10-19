@@ -1,5 +1,6 @@
 extends RefCounted
 # Absolute displayed time is independent of SDK consumption and wall-clock time.
+const Characters=preload("res://presentation/characters.gd")
 const Tracks = preload("res://presentation/tracks.gd")
 const Compiler = preload("res://presentation/compiler.gd")
 const EventTrace = preload("res://presentation/event_trace.gd")
@@ -17,6 +18,7 @@ var display_ms = 0.0
 var source_cut_boundaries := true
 var _actor_samples_group: Dictionary = {}
 var _actor_samples_at := NAN
+var _actor_samples_resources:int=-1
 var _actor_samples: Dictionary = {}
 var media_target_ms = 0.0
 var group_start_ms = 0.0
@@ -89,7 +91,7 @@ var retained_components: Array = []
 var retained_directions: Dictionary = {}
 var resolved_impacts: Dictionary = {}
 var condition_owners: Dictionary = {}
-var item_appearance_owners:Dictionary={}
+var item_effect_owners:Dictionary={}
 const NativeItems=preload("res://presentation/native_items.gd")
 var appearance_cache:Dictionary={}
 var spatial_effect_owners:Dictionary={}
@@ -118,13 +120,13 @@ func accept(message: Dictionary) -> void:
         if not current.is_empty(): previous.push_front(current)
         current = {}; commit_index = 0; group_start_ms = display_ms
         retained_components=[]; retained_directions={}; resolved_impacts={}
-        condition_owners={}; spatial_effect_owners={}; item_appearance_owners={};crossed_audio=[];component_sample_ms=-1.0
+        condition_owners={}; spatial_effect_owners={}; item_effect_owners={};crossed_audio=[];component_sample_ms=-1.0
         waiting_for_media = false
         if retire_group.is_valid():
             for group in previous: retire_group.call(group)
         state = message.state
         Conditions.observe(condition_owners,state.actors,display_ms,true)
-        NativeItems.observe(item_appearance_owners,state,display_ms,[],appearance_cache)
+        NativeItems.observe(item_effect_owners,state,display_ms,appearance_cache)
         NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),display_ms,true)
         sequence = int(message.sequence)
         revision += 1
@@ -266,8 +268,9 @@ func _advance_immediate(delta_ms: float) -> void:
         while commit_index < commits.size() and float(commits[commit_index].at_ms) <= local + 0.000001:
             var delta: Dictionary = commits[commit_index].delta
             _append_membership_order(world_changes.order,delta,state)
+            var captures:Dictionary=pose_admissions(commits[commit_index],state.actors,condition_owners,current,group_start_ms,retained_directions,appearance_cache)
             Compiler.apply_delta(state,delta)
-            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),commits[commit_index].get("item_appearance_origins",[]))
+            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures)
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
@@ -292,12 +295,30 @@ func _advance_immediate(delta_ms: float) -> void:
 func _world_delta(delta: Dictionary) -> bool:
     return not delta.get("tiles_removed",[]).is_empty() or not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors")
 
-func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],item_origins:Array=[])->void:
+static func pose_admissions(commit:Dictionary,actors:Dictionary,owners:Dictionary,group:Dictionary,start_ms:float,directions:Dictionary,cache:Dictionary)->Dictionary:
+    var rows:Array=commit.get("condition_rows",[])
+    var wanted:Dictionary={}
+    for row in rows:
+        if row.before==null and row.after!=null and Conditions.ConditionPose.capture_requested(row.after,cache):wanted[row.actor_uuid]=true
+    if wanted.is_empty():return {}
+    var inputs:Dictionary={}
+    var rigs:Dictionary=Characters.rigs(cache)
+    for id in wanted:
+        if not actors.has(id):continue
+        var actor:Dictionary=actors[id]
+        var rig:String=Characters.rig_id(actor,cache)
+        if not rigs.has(rig):continue
+        var rest:Dictionary=Characters.rest_sample(actor,rigs[rig],cache)
+        if not rest.ok:continue
+        inputs[id]=actor.duplicate();inputs[id].presentation_rig=rig;inputs[id].presentation_rest=rest.value
+    return Conditions.ConditionPose.admissions(rows,inputs,owners,group,start_ms,float(commit.at_ms),directions,cache)
+
+func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={})->void:
     # These existing owner updates report actual resource-input changes. HP,
     # logs and ordinary movement still commit without rebuilding presenters.
-    var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows)
-    if NativeItems.interested(item_appearance_owners,item_origins,delta,appearance_cache):
-        changed=NativeItems.observe(item_appearance_owners,state,at_ms,item_origins,appearance_cache) or changed
+    var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows,captures)
+    if NativeItems.interested(item_effect_owners,delta,appearance_cache):
+        changed=NativeItems.observe(item_effect_owners,state,at_ms,appearance_cache,event_uuid) or changed
     if delta.get("set",{}).has("senses"):
         var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),at_ms)
         changed=changed or spatial_changed
@@ -555,18 +576,25 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
         if state.has(field): snapshot[field] = state[field].duplicate()
     var changes = {"full":false,"tiles":{},"objects":{},"senses":false,"order":[]}
     var next_revision = revision; var next_world_revision = world_revision; var next_sequence = sequence
+    var appearance_owners:Dictionary=Appearance.copy_owners(condition_owners)
+    var capture_directions:Dictionary=retained_directions.duplicate()
     for segment in plan.segments:
         for i in range(segment.first_commit,segment.end_commit):
             var delta: Dictionary = segment.group.commits[i].delta
             _append_membership_order(changes.order,delta,snapshot)
+            var commit:Dictionary=segment.group.commits[i]
+            var captures:Dictionary=pose_admissions(commit,snapshot.actors,appearance_owners,segment.group,segment.start_ms,capture_directions,appearance_cache)
             Compiler.apply_delta(snapshot,delta)
+            Conditions.observe(appearance_owners,delta.get("actors",{}),segment.start_ms+commit.at_ms,false,commit.get("condition_rows",[]),captures)
             for key in delta.get("tiles",{}): changes.tiles[key] = true
             for id in delta.get("objects",{}): changes.objects[id] = true
             for id in delta.get("objects_removed",[]): changes.objects[id] = true
             changes.senses = changes.senses or delta.get("set",{}).has("senses")
             next_revision += 1
             if _world_delta(delta): next_world_revision += 1
-        if segment.complete and segment.group.get("operation_end",false): next_sequence = int(segment.group.operation_sequence)
+        if segment.complete:
+            _directions(segment.group.get("actor_tracks",[]),INF,capture_directions)
+            if segment.group.get("operation_end",false):next_sequence=int(segment.group.operation_sequence)
     var last: Dictionary = _world_plan_tail(plan)
     var group: Dictionary = {} if last.complete else last.group
     var supports = _tiles_for(group,last.local_ms,snapshot)
@@ -586,18 +614,13 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
     for segment in plan.segments:
         for component in segment.group.get("components",[]):
             if component.kind=="sprite_layer":layer_candidates.append({"component":component,"group_start_ms":segment.start_ms})
-    var appearance_owners:Dictionary=Appearance.copy_owners(condition_owners)
-    for segment in plan.segments:
-        for i in range(segment.first_commit,segment.end_commit):
-            var commit:Dictionary=segment.group.commits[i]
-            Conditions.observe(appearance_owners,commit.delta.get("actors",{}),segment.start_ms+commit.at_ms,false,commit.get("condition_rows",[]))
     var actor_layers:Array=_actor_layers_at(layer_candidates,plan.display_ms)
     actor_layers.append_array(Appearance.components(appearance_owners,plan.display_ms,appearance_cache))
     return {"key":[initialization_revision,revision,last.group.get("operation_sequence",sequence),last.group.get("id",""),last.start_ms,last.end_commit,last.local_ms,last.complete],
         "preparation_key":[initialization_revision,world_revision,_support_signature(),last.group.get("operation_sequence",sequence),last.group.get("id",""),last.end_commit,last.local_ms,last.complete],
         "source_group_id":last.group.get("id",""),"source_local_ms":last.local_ms,"retained_boundary":plan.segments.is_empty(),
         "state":snapshot,"presentation_state":presented,"staged_tiles":supports,"staged_actors":_actors_for(group,last.local_ms),
-        "actor_samples":Tracks.samples(group.get("actor_tracks",[]),last.local_ms),"actor_layers":actor_layers,
+        "actor_samples":_project_actor_samples(Tracks.samples(group.get("actor_tracks",[]),last.local_ms),snapshot.actors,appearance_owners),"actor_layers":actor_layers,
         "changes":changes,"display_ms":plan.display_ms,"revision":next_revision,"world_revision":next_world_revision,
         "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.get("operation_sequence",sequence)),
         "resource_revision":resource_revision}
@@ -615,10 +638,11 @@ func _apply_world_plan(plan: Dictionary) -> void:
             var delta: Dictionary = commit.delta
             var started:int=Time.get_ticks_usec()
             _append_membership_order(world_changes.order,delta,state)
+            var captures:Dictionary=pose_admissions(commit,state.actors,condition_owners,current,group_start_ms,retained_directions,appearance_cache)
             Compiler.apply_delta(state,delta)
             FrameProfile.end_phase(profile,"timeline_apply_state",started)
             started=Time.get_ticks_usec()
-            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),commit.get("item_appearance_origins",[]))
+            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),str(commit.get("event_uuid","")),captures)
             FrameProfile.end_phase(profile,"timeline_apply_owners",started)
             started=Time.get_ticks_usec()
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)
@@ -670,8 +694,8 @@ func actor_directions() -> Dictionary:
 
 static func component_direction(group: Dictionary,component: Dictionary,previous: Dictionary) -> Array:
     var directions=previous.duplicate()
-    _directions(group.get("actor_tracks",[]),component.start_ms,directions)
-    return directions.get(component.get("actor_uuid"),[])
+    _directions(group.get("actor_tracks",[]),component.get("impact_at_ms",component.start_ms),directions)
+    return directions.get(component.get("impact_actor_uuid",component.get("actor_uuid")),[])
 
 func _retain_completed_presentation() -> void:
     for component in current.get("components",[]):
@@ -723,7 +747,7 @@ func component_samples(cache: Dictionary={}) -> Array:
     var condition_count:int=condition_owners.size();var spatial_count:int=spatial_effect_owners.size()
     result.append_array(Conditions.samples(condition_owners,display_ms,cache,activities))
     result.append_array(NativePersistent.spatial_samples(spatial_effect_owners,display_ms,cache))
-    result.append_array(NativeItems.samples(item_appearance_owners,state,display_ms))
+    result.append_array(NativeItems.samples(item_effect_owners,state,display_ms))
     if condition_count!=condition_owners.size() or spatial_count!=spatial_effect_owners.size():resource_revision+=1
     return result
 
@@ -771,11 +795,17 @@ func presentation_state() -> Dictionary:
     result.tiles.merge(tiles)
     return result
 
+func _project_actor_samples(samples:Dictionary,actors:Dictionary,owners:Dictionary)->Dictionary:
+    var rigs:Dictionary={}
+    for owner in owners.values():
+        if owner.has("logical_pose") and actors.has(owner.actor_uuid) and not rigs.has(owner.actor_uuid):rigs[owner.actor_uuid]=Characters.rig_id(actors[owner.actor_uuid],appearance_cache)
+    return Conditions.ConditionPose.project(samples,actors,owners,appearance_cache,rigs)
+
 func actor_samples() -> Dictionary:
     # Play and component sampling both read the same instant each frame.
-    if not is_same(_actor_samples_group,current) or _actor_samples_at!=display_ms-group_start_ms:
-        _actor_samples_group=current;_actor_samples_at=display_ms-group_start_ms
-        _actor_samples=Tracks.samples(current.get("actor_tracks",[]),_actor_samples_at)
+    if not is_same(_actor_samples_group,current) or _actor_samples_at!=display_ms-group_start_ms or _actor_samples_resources!=resource_revision:
+        _actor_samples_group=current;_actor_samples_at=display_ms-group_start_ms;_actor_samples_resources=resource_revision
+        _actor_samples=_project_actor_samples(Tracks.samples(current.get("actor_tracks",[]),_actor_samples_at),state.actors,condition_owners)
     return _actor_samples
 
 static func _actor_layers_at(candidates:Array,at_ms:float)->Array:

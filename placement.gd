@@ -7,6 +7,9 @@ const POSES = ["e", "s", "w", "n"]
 const DIRECTIONS = {"east": Vector2(1, 0), "north": Vector2(0, 1), "west": Vector2(-1, 0), "south": Vector2(0, -1)}
 const STAGES = {"terrain": 0, "covering": 1, "shadow": 2, "body": 3, "wall": 3, "cliff": 3}
 
+static func facing(direction:Vector2,cycle:Array)->String:
+    return cycle[posmod(roundi((atan2(direction.y,direction.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
+
 static func camera_transform(focus: Vector3, quarter: int) -> Transform3D:
     var offset=Basis(Vector3.UP,quarter*PI*.5)*Vector3(12,12*HEIGHT_UNIT,12)
     # Pan changes only translation. Subtracting a translated target in look_at

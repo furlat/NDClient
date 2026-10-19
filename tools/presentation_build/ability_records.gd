@@ -110,6 +110,7 @@ const CUE_FIELDS := [
     ["sampling", "sampling", "string", false], ["scope", "scope", "string", false], ["constructor_input", "constructor_input", "same", false],
     ["endpoint_actor_uuids", "endpoint_actor_uuids", "bool", false],
     ["attachment", "attachment", "string", false], ["orientation", "orientation", "string", false],
+    ["recipient_slots", "recipient_slots", "strings", false], ["follow", "follow", "bool", false],
     ["rotation_degrees", "rotation_degrees", "vec3", false],
     ["source_launch", "source_launch", "float", false], ["source_contact", "source_contact", "float", false],
     ["source_end", "source_end", "float", false], ["source_rate", "source_rate", "float", false],
@@ -402,6 +403,7 @@ static func condition_from_recipe(e: Resource, recipe: Dictionary) -> void:
         look.steps.append(outline)
     if F.value_at(raw, "persistent/frozenPose") is Dictionary:
         var frozen := LookStep.new();frozen.kind = "pose";frozen.pose_role = "frozen"
+        F.move(raw, "persistent/frozenPose/captureCurrent", frozen, "capture_current", "bool")
         F.move(raw, "persistent/frozenPose/clip", frozen, "pose_clip", "string", true)
         F.move(raw, "persistent/frozenPose/frame", frozen, "pose_frame", "int", true)
         look.steps.append(frozen)
@@ -466,6 +468,7 @@ static func condition_recipe(e: Resource) -> Dictionary:
         F.emit(record, "persistent/bodyOutline/onsetMs", outline, "fade_in", "ms")
     var frozen := step_of(e.look, "pose", "frozen")
     if frozen != null:
+        F.emit(record, "persistent/frozenPose/captureCurrent", frozen, "capture_current", "bool")
         F.emit(record, "persistent/frozenPose/clip", frozen, "pose_clip", "string", true)
         F.emit(record, "persistent/frozenPose/frame", frozen, "pose_frame", "int", true)
     var rest := step_of(e.look, "pose", "rest")

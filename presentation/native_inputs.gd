@@ -5,8 +5,8 @@ const Effects=preload("res://presentation/effect_package.gd")
 const Surface=preload("res://presentation/entity_surface.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
-const NativeItems=preload("res://presentation/native_items.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
+const ConditionPose=preload("res://presentation/condition_pose.gd")
 const Appearances=preload("res://presentation/condition_appearance.gd")
 var appearances:RefCounted=Appearances.new()
 var surfaces:RefCounted=Surface.new()
@@ -81,6 +81,32 @@ static func actor_layers(world:Node,actor:String)->Dictionary:
         layers.append({"slot":entry.actor_layer.slot,"node":entry.node,"material":entry.material})
         revision.append([entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_binding_revision",0)])
     return {"actor_uuid":actor,"layers":layers,"revision":revision}
+
+## Actual published layers in their painter order. GPU textures stay on the
+## GPU; revisions describe the current pose/material, never a guessed history.
+static func actor_context(world:Node,actor:String,receiver_depth:Texture2D)->Dictionary:
+    var visual:Dictionary=world.visual_actors.get(actor,{})
+    if not Sockets.displayed(visual):return {"ready":false,"reason":"actor_not_displayed"}
+    if not world.camera is Camera3D or receiver_depth==null:return {"ready":false,"reason":"actor_context_receiver_not_prepared"}
+    var pose:Dictionary=visual.get("sampled_pose",{})
+    if pose.is_empty():return {"ready":false,"reason":"actor_pose_not_sampled"}
+    var layers:Array=[];var revision:Array=[]
+    for entry in visual.entries:
+        if entry.role=="shadow" or not entry.node.is_visible_in_tree():continue
+        var effect:Dictionary=entry.actor_layer.get("effect",{})
+        if not effect.is_empty() and effect.get("kind")!="condition_appearance":continue
+        layers.append({"slot":entry.actor_layer.slot,"node":entry.node,"material":entry.material,
+            "received_material":entry.material,"pivot":entry.pivot,"ground_pixels":entry.get("geometry_ground_pixels",19.0)})
+        revision.append([entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_version",0),entry.get("source_binding_revision",0)])
+    if layers.is_empty():return {"ready":false,"reason":"actor_layers_not_displayed"}
+    return {"ready":true,"packet":{"actor_uuid":actor,"camera":world.camera,"receiver_depth":receiver_depth,
+        "depth_encoding":"rgb24_reversed_z","capture_size":Vector2i(world.get_viewport().get_visible_rect().size),
+        "origin":Sockets.Placement.contact(visual.row),"layers":layers,"pose_key":pose.key,
+        "material_revision":revision}}
+
+static func current_pose_history(handle:Dictionary)->bool:
+    var settings:Dictionary=handle.occurrence.parameters.get("actor_history",{})
+    return settings.get("mirror",false) and not settings.get("capture_departure",false) and not settings.get("specifications",[]).any(func(row):return float(row.get("delay",0.0))>0.0)
 
 static func endpoints(component:Dictionary,points:Dictionary,surface:Dictionary)->Array:
     # Legacy targets forwards to set_live_endpoints (source, recipient).
@@ -197,7 +223,7 @@ static func cell_membership(handle:Dictionary,component:Dictionary,endpoints:Arr
             Effects.set_input(handle,"admitted_cells",local)
     return handle.cell_input_reason
 
-func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->Dictionary:
+func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,receiver_depth:Texture2D=null)->Dictionary:
     var requested:Array=handle.clip.get("inputs",[])
     var supplied:Array=["root_path","binding_owners"]
     if component.has("lifecycle_phases"):supplied.append("owner_state")
@@ -208,13 +234,31 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
     var weapon:Dictionary={}
     var weapon_gaps:Array=[]
     var weapon_surface:Dictionary={}
+    if "actor_context" in requested:
+        if not current_pose_history(handle):unavailable.actor_context="authentic_actor_history_not_bound"
+        else:
+            var context:Dictionary=actor_context(world,actor,receiver_depth)
+            if context.ready:
+                # The camera/depth texture are live references; source sampling
+                # consumes exact current transforms even if source pixels match.
+                var accepted:bool=handle.occurrence.call(handle.clip.input_setters.actor_context,context.packet)
+                if accepted:handle.actor_context_bound=true;supplied.append("actor_context")
+                else:unavailable.actor_context="actor_context_not_accepted"
+            else:unavailable.actor_context=context.reason
+    if "history_state" in requested:
+        var state:Variant=component.get("condition",{}).get("state",component.get("native_preparation_inputs",{}).get("history_state"))
+        if state is Dictionary and state.has("duplicate_count"):
+            var packet:Dictionary={"duplicate_count":state.duplicate_count}
+            if packet!=handle.get("history_state_input",{}):
+                Effects.set_input(handle,"history_state",packet);handle.history_state_input=packet
+            supplied.append("history_state")
+        else:unavailable.history_state="duplicate_count_not_disclosed"
     if "created_item_binding" in requested:
-        if component.get("native_item",false):
-            var packet:Dictionary=created_item_binding(component,world.timeline.state,points)
-            if packet!=handle.get("created_item_input",{}):
-                Effects.set_input(handle,"created_item_binding",packet);handle.created_item_input=packet
-            supplied.append("created_item_binding")
-        else:unavailable.created_item_binding="created_item_appearance_owner_not_bound"
+        unavailable.created_item_binding="wielded_native_bodies_not_supported"
+    if component.get("intrinsic_item_effect",false) and "owner_state" in requested:
+        var age:float=maxf(0.0,float(world.timeline.display_ms)-float(component.start_ms))/1000.0
+        Effects.set_input(handle,"owner_state",{"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age})
+        supplied.append("owner_state")
     if "owner_visibility" in requested:
         var visibility:float=float(component.get("alpha",1.0)) if Sockets.displayed(world.visual_actors.get(actor,{})) else 0.0
         if visibility!=float(handle.get("owner_visibility_input",-1.0)):
@@ -285,6 +329,24 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
             handle.occurrence.call(handle.clip.input_setters.delivery_timing,timing.x,timing.y)
             handle.delivery_input=timing
         supplied.append("delivery_timing")
+    if "pose_provider" in requested:
+        if not handle.occurrence.parameters.get("actor_operation",{}).get("capture_pose",false):supplied.append("pose_provider")
+        else:
+            var identity:String=str(component.get("condition_uuid",component.get("condition",{}).get("condition_uuid","")))
+            var owner:Dictionary=world.timeline.condition_owners.get(identity,{})
+            var capture:Dictionary=owner.get("logical_pose",{})
+            if capture.is_empty():unavailable.pose_provider="condition_original_pose_not_observed"
+            elif capture.actor_uuid!=actor:unavailable.pose_provider="condition_capture_actor_mismatch"
+            else:
+                if not handle.has("pose_provider_binding"):
+                    var binding:RefCounted=ConditionPose.Binding.new()
+                    binding.actor_uuid=actor;binding.condition_uuid=identity;binding.capture=capture
+                    handle.pose_provider_binding=binding
+                var packet:Dictionary={"provider":handle.pose_provider_binding,"actor_uuid":actor,"owner_uuid":identity,"admitted":true}
+                if handle.occurrence.call(handle.clip.input_setters.pose_provider,packet):
+                    if not handle.get("pose_provider_admitted",false):handle.erase("actor_layer_input")
+                    handle.pose_provider_admitted=true;supplied.append("pose_provider")
+                else:unavailable.pose_provider="condition_pose_not_accepted"
     if "actor_layers" in requested:
         var packet:Dictionary=actor_layers(world,actor)
         var previous:Dictionary=handle.get("actor_layer_input",{})
@@ -308,8 +370,6 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
         var reason:String=appearances.bind(world,handle,component)
         if reason.is_empty():supplied.append("appearance_provider")
         else:unavailable.appearance_provider=reason
-    if "pose_provider" in requested and not handle.occurrence.parameters.get("actor_operation",{}).get("capture_pose",false):
-        supplied.append("pose_provider") # This operation does not request a capture.
     if "owner_projection" in requested and component.get("persistent_owner",false) and component.has("condition"):
         if component.get("initial",false):unavailable.owner_projection="condition_application_not_observed"
         else:
@@ -340,22 +400,3 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
 func clear()->void:
     surfaces.clear()
     appearances.clear()
-
-static func created_item_binding(component:Dictionary,state:Dictionary,points:Dictionary)->Dictionary:
-    var owner:Dictionary=component.item_origin
-    var location:Dictionary=points.item_location
-    var held:bool=location.kind=="held"
-    var packet={"item_uuid":owner.item_uuid,"item_id":owner.item_id,"present":true,"observed":true,"suppressed":false,
-        "item_exists":true,"equipped":held,"location_kind":location.kind,"holder_uuid":location.get("holder_uuid","") if held else "",
-        "render_slot":location.get("render_slot","") if held else "","hand":"off" if held and location.render_slot=="offhand" else "main" if held else "",
-        "visibility":component.get("alpha",1.0)}
-    packet["hand_transform" if held else "world_transform"]=points.item_transform
-    if owner.lifetime_condition_uuid.is_empty():packet.creator_uuid=owner.creator_uuid
-    else:
-        var creator:Dictionary=state.actors.get(owner.creator_uuid,{})
-        var holdings:Variant=creator.get("controlled_items")
-        var held_by_caster:bool=held and location.holder_uuid==owner.creator_uuid
-        packet.merge({"caster_uuid":owner.creator_uuid,"lifetime_condition_uuid":owner.lifetime_condition_uuid,
-            "lifetime_present":NativeItems.lifetime_present(owner,state),
-            "item_in_caster_holdings":held_by_caster or holdings!=null and owner.item_uuid in holdings})
-    return packet

@@ -484,7 +484,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
     var item_owners:Dictionary={}
     var item_state:Dictionary={"actors":before.actors.duplicate(),"items":before.items.duplicate(),"objects":before.objects.duplicate(),
         "object_members":before.get("object_members",{}),"senses":before.senses,"audience":before.audience}
-    NativeItems.observe(item_owners,item_state,0.0,[],cache)
+    NativeItems.observe(item_owners,item_state,0.0,cache)
     Conditions.observe(owners,before.actors,0.0,true)
     var condition_inputs:Dictionary={}
     for id in before.actors:
@@ -507,8 +507,8 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
             for field in ["object_members","senses"]:
                 if delta.get("set",{}).has(field):item_state[field]=delta.set[field]
             var changed:bool=false
-            if NativeItems.interested(item_owners,commit.get("item_appearance_origins",[]),delta,cache):
-                changed=NativeItems.observe(item_owners,item_state,at,commit.get("item_appearance_origins",[]),cache) or changed
+            if NativeItems.interested(item_owners,delta,cache):
+                changed=NativeItems.observe(item_owners,item_state,at,cache,str(commit.get("event_uuid",""))) or changed
             for id in delta.get("actors",{}):
                 var actor:Dictionary=delta.actors[id]
                 var selected:Array=[actor.get("conditions",[]),actor.get("life_state","alive")]
@@ -561,6 +561,12 @@ static func _native_requirement_cut(group: Dictionary, previous: Dictionary, own
         if row.kind!="audio":runtime_fields.append_array(["start_ms","absolute_start_ms","duration_ms"])
         for field in runtime_fields:
             row.erase(field)
+        # Small disclosed selectors can prepare a private compositor before
+        # publication. Never retain the whole condition or its owner clock.
+        if "history_state" in row.get("native_clip",{}).get("inputs",[]):
+            var state:Variant=sample.get("condition",{}).get("state")
+            if state is Dictionary and state.has("duplicate_count"):
+                row.native_preparation_inputs={"history_state":{"duplicate_count":state.duplicate_count}}
         if sample.has("native_cue"):
             row.native_cue = sample.native_cue.duplicate()
             row.native_cue.erase("initial"); row.native_cue.erase("owner_end_seconds")
@@ -595,14 +601,23 @@ static func _effect_only_change(before:Dictionary,after:Dictionary)->bool:
     var base:=func(layer):return layer.get("effect",{}).is_empty() or layer.get("effect",{}).get("kind")=="condition_appearance"
     return before.equipment_layers.filter(base)==after.equipment_layers.filter(base)
 
-static func _actor_source_clip(actor:Dictionary,structure:Dictionary,sample:Dictionary,cache:Dictionary)->String:
-    if structure.is_empty() or structure.has("error"):return ""
-    if not sample.is_empty():return sample.clip
+static func _actor_source_key(actor:Dictionary,structure:Dictionary,sample:Dictionary,cache:Dictionary)->Array:
+    if structure.is_empty() or structure.has("error"):return []
+    # A held logical capture's actual source is Timeline-owned. Compilation
+    # needs an invalidation identity, not a guessed Idle clip or its history.
+    var pose_owners:Array=[];var captured:bool=false
+    for condition in actor.get("conditions",[]):
+        if Conditions.suppressed(condition):continue
+        var persistent:Dictionary=Conditions.recipe(condition,cache).get("persistent",{})
+        if persistent.has("frozenPose") or persistent.has("bodyPose") or persistent.has("activityPoses"):pose_owners.append(condition.condition_uuid)
+        captured=captured or persistent.get("frozenPose",{}).get("captureCurrent",false)
+    if captured and actor.get("life_state")=="alive":return ["capture",structure.rig,pose_owners]
+    if not sample.is_empty():return [sample.clip]
     var rig:Dictionary=Authoring.rigs(cache)[structure.rig]
     var pose:Dictionary=Conditions.pose(actor,structure.rig,cache)
-    if not pose.is_empty() and rig.clips.has(pose.clip):return pose.clip
+    if not pose.is_empty() and rig.clips.has(pose.clip):return [pose.clip]
     var resting:Dictionary=Authoring.Characters.rest_sample(actor,rig,cache)
-    return resting.value.clip if resting.ok else ""
+    return [resting.value.clip] if resting.ok else []
 
 static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:Dictionary)->void:
     # Sparse after-value overlay: the admitted base stays read-only. Inspect only
@@ -652,7 +667,7 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
             var actor:Dictionary=actors.get(id,before.actors.get(id,{}))
             previous_inputs[id]=_actor_structure_inputs(actor,state,false,initial_loadouts)
             previous[id]=_actor_structure_value(actor,initial_loadouts,previous_inputs[id],cache)
-            previous_clips[id]=_actor_source_clip(actor,previous[id],{},cache)
+            previous_clips[id]=_actor_source_key(actor,previous[id],{},cache)
         var times:Array=cuts.keys();times.sort()
         var boundaries:Dictionary={};var source_boundaries:Dictionary={};var effect_boundaries:Dictionary={};var cursor=0
         for at in times:
@@ -679,7 +694,7 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                         if _effect_only_change(previous[id],value):effect_boundaries[float(at)]=true
                         else:boundaries[float(at)]=true
                     previous_inputs[id]=inputs;previous[id]=value
-                var clip:String=_actor_source_clip(actor,previous[id],samples.get(id,{}),cache)
+                var clip:Array=_actor_source_key(actor,previous[id],samples.get(id,{}),cache)
                 if previous_clips[id]!=clip:source_boundaries[float(at)]=true
                 previous_clips[id]=clip
         # Commits with no actor selector edge still carry the next sensory view.
@@ -773,10 +788,6 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.id,
                 "delta":captured.delta,"condition_rows":captured.get("condition_rows",[])})
         var trailing: Dictionary = recorded.trailing
-        var item_origins:Dictionary=NativeItems.origins(lineage.events,graph,before.items,cache)
-        for commit in group.commits:
-            commit.item_appearance_origins=item_origins.get(commit.event_uuid,[])
-            for origin in commit.item_appearance_origins:origin.operation_sequence=group.operation_sequence
         apply_delta(target,trailing)
         graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)
         if profile_enabled:stage_started=_profile_phase(compile_phases,"lineage_inputs",stage_started)

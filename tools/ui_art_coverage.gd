@@ -23,17 +23,21 @@ static func image_record(image:Resource,built:Dictionary)->Dictionary:
 static func inventory(abilities:Dictionary,characters:Dictionary,ids:Dictionary,maps:Dictionary)->Dictionary:
     var result:Dictionary={"icons":{},"portraits":{},"player_portraits":{},"summary":{"icons":{},"portraits":{}},"errors":[]}
     for kind in ICON_KINDS:
-        var entries:Dictionary=characters.get("gear",{}) if kind=="item" else abilities.get("spells",{}) if kind=="spell" else abilities.get("conditions",{}) if kind=="condition" else abilities.get("actions",{})
+        var entries:Dictionary=(characters.get("gear",{}) if kind=="item" else abilities.get("spells",{}) if kind=="spell" else abilities.get("conditions",{}) if kind=="condition" else abilities.get("actions",{})).duplicate()
+        if kind!="item":
+            for section in ["spells","conditions","actions"]:
+                for id in abilities.get(section,{}):
+                    if str(id).get_slice(".",0)!=kind:continue
+                    # Lifecycle sources can be the only typed owner of a
+                    # class feature. Match the existing builder/browser owner
+                    # rule, including their preference for a canonical action.
+                    var owner:String="spells" if kind=="spell" else "conditions" if kind=="condition" else "actions"
+                    if section!=owner and abilities.get(owner,{}).has(id):continue
+                    entries[id]=abilities[section][id]
         var rows:Dictionary={};var counts:Dictionary={"total":0,"server_ids":0,"typed_only":0,"assigned":0,"shared":0,"placeholder":0,"missing":0,"built_mismatch":0,"stand_in":0}
         var members:Dictionary=ids.get(kind,{}).duplicate()
         for id in entries:
-            # A historical lifecycle alias cannot become a second UI owner of
-            # spell/trait artwork. Actual class actions absent from the static
-            # server catalog still have an explicit typed UI requirement.
-            if kind in ["spell","condition","item"]:
-                if not str(id).begins_with(kind+"."):continue
-            elif entries[id].kind!=kind:continue
-            members[id]=true
+            if str(id).get_slice(".",0)==kind:members[id]=true
         for id in members:
             var entry:Resource=entries.get(id)
             var image:Resource=entry.icon if entry!=null else null

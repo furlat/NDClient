@@ -3,6 +3,7 @@ const Occurrences=preload("res://presentation/occurrences.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const ApplicationResults=preload("res://presentation/application_results.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
+const NativeItems=preload("res://presentation/native_items.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
 const Authoring=preload("res://presentation/authoring.gd")
 const Palette=preload("res://presentation/palette.gd")
@@ -165,12 +166,12 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
         else:
             _native_action_component(group,node,node,phase,NativeActions.inputs(node,binding,phase,graph,observations),graph)
 
-static func _native_action_component(group:Dictionary,owner:Dictionary,event:Dictionary,phase:Dictionary,observed:Dictionary,graph:Dictionary,recipient_uuid:String="")->void:
+static func _native_action_component(group:Dictionary,owner:Dictionary,event:Dictionary,phase:Dictionary,observed:Dictionary,graph:Dictionary,recipient_uuid:String="",points:Dictionary={})->Dictionary:
     var fact:Dictionary=owner.fact
     var source:String=str(fact.get("source_entity_uuid",""))
     var target:String=recipient_uuid if not recipient_uuid.is_empty() else str(fact.get("target_entity_uuid","")) if fact.get("target_entity_uuid")!=null else ""
-    var from:Variant=graph.positions.get(source)
-    var to:Variant=graph.positions.get(target)
+    var from:Variant=points.get("from_position",graph.positions.get(source))
+    var to:Variant=points.get("to_position",graph.positions.get(target))
     var parameters:Dictionary=phase.duplicate()
     parameters.native_inputs=observed.values
     parameters.native_input_gaps=observed.gaps
@@ -182,13 +183,31 @@ static func _native_action_component(group:Dictionary,owner:Dictionary,event:Dic
     var self_owned:bool=not recipient and not target_endpoint and to==null
     parameters.merge({"native_spell":true,"actor_uuid":source,"target_uuid":target,
         "from_position":from,"to_position":from if self_owned else to,
-        "from_elevation_feet":graph.contacts.get(source,{}).get("from_elevation_feet",0),
-        "to_elevation_feet":graph.contacts.get(source if self_owned else target,{}).get("from_elevation_feet",0),
+        "from_elevation_feet":points.get("from_elevation_feet",graph.contacts.get(source,{}).get("from_elevation_feet",0)),
+        "to_elevation_feet":points.get("to_elevation_feet",graph.contacts.get(source if self_owned else target,{}).get("from_elevation_feet",0)),
         "recipe":{},"cast_recipe":{"enabled":false}},true)
     if self_owned:parameters.target_uuid=source
     if from==null or ((recipient or target_endpoint) and to==null):
         parameters.status="missing";parameters.reason="native_action_position_unavailable"
-    add(group,event,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+    return add(group,event,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+
+static func _attack_impact_actor(node:Dictionary,graph:Dictionary,at_ms:float)->Dictionary:
+    # Native completion is post-order: a killing hit can retire its contact
+    # before the AttackFact arrives. Use its latest disclosed recipient cut
+    # at contact, excluding later cuts, nested attacks and unrelated events.
+    var pending:Array=[node]
+    var selected:Dictionary={}
+    var occurrence:int=-1
+    while not pending.is_empty():
+        var current:Dictionary=pending.pop_back()
+        if current!=node and current.get("fact")!=null and current.fact.kind=="attack":continue
+        if current.get("canceled",false):continue
+        var actor:Dictionary=graph.actor_inputs.get(current.id,{}).get(node.fact.target_entity_uuid,{})
+        if actor.get("last_visual_position")!=null and float(graph.times.get(current.id,INF))<=at_ms and int(current.id)>occurrence:
+            occurrence=int(current.id);selected={"actor":actor,"occurrence":current.id}
+        for child in current.get("children_lineages",[]):
+            if graph.nodes.has(child):pending.append(graph.nodes[child])
+    return selected
 
 static func projectile(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,duration: float,source: Array,target: Array,contacts: Dictionary,cache: Dictionary,owner:Dictionary={},fact:Dictionary={},application_index:int=0) -> void:
     var common={"actor_uuid":fact.source_entity_uuid,"target_uuid":fact.target_entity_uuid,
@@ -308,6 +327,28 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
         if action_bindings.has(fact.get("behavior_id","")) and action_bindings[fact.behavior_id].has("effect_cues"):
             native_action(group,node,action_bindings[fact.behavior_id],recipe,audio_track,audio_markers,graph,cache,lineage.events)
         if fact.kind=="attack":
+            var impact_binding:Dictionary=NativeItems.impact_binding(fact,cache)
+            if not impact_binding.is_empty():
+                var packet={"operation_sequence":group.operation_sequence,"occurrence":str(node.id),"lineage":str(node.lineage_id),
+                    "source_item_uuid":fact.source_item_uuid,"source_item_id":fact.source_item_id,"weapon_slot":fact.weapon_slot,
+                    "source_entity_uuid":fact.source_entity_uuid,"target_entity_uuid":fact.target_entity_uuid,"attack_outcome":fact.attack_outcome}
+                var cut:Dictionary=_attack_impact_actor(node,graph,contact)
+                var receipt:Dictionary=ImpactPlacement.prepare(cut.get("actor",{}),group.actor_tracks,contact,graph.contacts.get(fact.target_entity_uuid,{}),cache)
+                receipt.source_occurrence=cut.get("occurrence","")
+                var source_actor:Dictionary=graph.actor_inputs.get(node.id,{}).get(fact.source_entity_uuid,{})
+                var points={"from_position":audio_track.get("from_position",source_actor.get("last_visual_position")),
+                    "from_elevation_feet":audio_track.get("from_elevation_feet",0),
+                    "to_position":receipt.get("position"),"to_elevation_feet":receipt.get("elevation_feet",0)}
+                for phase in NativeActions.phases(impact_binding,fact,recipe,audio_track,audio_markers,cache):
+                    phase.start_ms+=float(phase.native_cue.get("delay_seconds",0.0))*1000.0
+                    var observed={"values":{"weapon_impact":packet},"gaps":[],"evidence":packet}
+                    var impact:Dictionary=_native_action_component(group,node,node,phase,observed,graph,"",points)
+                    impact.weapon_impact=packet;impact.native_weapon_impact=true
+                    impact.impact_actor_uuid=fact.target_entity_uuid;impact.impact_at_ms=contact
+                    impact.impact=receipt
+                    if impact.impact.status=="missing":impact.status="missing";impact.reason=impact.impact.reason
+                    if fact.get("target_kind","creature")!="creature":
+                        impact.status="missing";impact.reason="weapon_impact_object_contact_not_bound"
             var outcome: String={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.attack_outcome,"")
             var feedback: Variant=recipe.get("attackFeedback",{}).get(outcome) if recipe.get("attackFeedback")!=null else null
             if feedback!=null:_feedback(group,node,feedback,contact,fact.target_entity_uuid,"catalog/attack_recipes.json:/"+str(fact.behavior_id)+"/attackFeedback/"+outcome,cache)

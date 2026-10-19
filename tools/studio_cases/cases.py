@@ -94,6 +94,26 @@ def first_cohort():
     recovering=actors();recovering[0]={'role':'caster','side':'amber','premade':'fighter','at':[3,7],'damage':20}
     recovering[2]['at']=[9,7];recovering[3]['at']=[9,8]
     return [
+        {'id':'spell.flesh_to_stone/petrification_restoration',
+         'title':'Petrification: ordinary movement, failed saves, stone and restoration', 'kind':'spell',
+         'subjects':subjects(['spell.flesh_to_stone','spell.greater_restoration'], ['action.move'],
+             ['condition.spell.flesh_to_stone.stages','condition.spell.flesh_to_stone.petrified']),
+         'actors':[
+             {'role':'caster','side':'amber','creature':'creature.generic_caster','level':20,
+              'caster_level':20,'spells':['spell.flesh_to_stone'],'at':[3,7]},
+             {'role':'target','side':'blue','creature':'creature.goblin','at':[4,7]},
+             {'role':'restorer','side':'blue','creature':'creature.generic_caster','level':20,
+              'caster_level':20,'spells':['spell.greater_restoration'],'at':[5,6]}],
+         'seed':2,
+         'steps':[{'do':'action.move','by':'target','target':[4,6]},
+                  {'do':'spell.flesh_to_stone','by':'caster','target':'target'},
+                  {'do':'wait_condition','target':'target','condition':'condition.spell.flesh_to_stone.petrified',
+                   'while_condition':'condition.spell.flesh_to_stone.stages','max_turns':18},
+                  {'do':'spell.greater_restoration','by':'restorer','target':'target'},
+                  {'do':'action.move','by':'target','target':[4,7]}],
+         'required_behaviors':['spell.flesh_to_stone','spell.greater_restoration'],
+         'required_conditions':['condition.spell.flesh_to_stone.stages','condition.spell.flesh_to_stone.petrified'],
+         'required_condition_ends':['condition.spell.flesh_to_stone.petrified']},
         {'id':'action.class.fighter.second_wind/healing','title':'Second Wind: wounded fighter and actual self-healing','kind':'action',
          'subjects':subjects(actions=['action.class.fighter.second_wind','action.move']),
          'actors':recovering,'seed':2,

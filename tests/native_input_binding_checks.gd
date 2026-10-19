@@ -3,7 +3,10 @@ extends SceneTree
 const Inputs=preload("res://presentation/native_inputs.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Body=preload("res://modular.gdshader")
+class OwnerTimeline extends RefCounted:
+    var condition_owners:Dictionary={}
 class World extends Node3D:
+    var timeline:RefCounted=OwnerTimeline.new()
     var visual_actors:Dictionary={}
     var rigs:Dictionary={"fixture":{"cell_width":128,"cell_height":128,"origin_y_from_ground":32,"facing_rows":{"SW":0},"clips":{"Idle":{"fps":1.0,"frames":1}},"body_anchor":Vector2(64,64),
         "pose_sockets":{"head":{"Idle":{"SW":[Vector2(64,16)]}},"hand":{"Idle":{"SW":[Vector2(72,64)]}}}}}
@@ -52,6 +55,12 @@ class ProjectionProbe extends Node3D:
     var calls:int=0
     var packet:Dictionary={}
     func set_owner_projection(value:Dictionary)->void:calls+=1;packet=value
+class HistoryProbe extends Node3D:
+    var parameters:Dictionary={"actor_history":{"mirror":true,"specifications":[{"delay":0.0}]}}
+    var packet:Dictionary={}
+    var state:Dictionary={}
+    func set_actor_context(value:Dictionary)->bool:packet=value;return not value.is_empty()
+    func set_history_state(value:Dictionary)->void:state=value
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -103,8 +112,51 @@ func run()->void:
     var capture:Node3D=capture_phase.make_component({"layer_mask":0});world.add_child(capture)
     var capture_handle:Dictionary={"clip":Effects.clip("conditions/continuation/condition_petrified_body_persistent/application"),"occurrence":capture}
     var missing:Dictionary=bridge.sync(world,capture_handle,component,points)
-    check(missing.unavailable.get("pose_provider")=="provider_not_bound" and b.material.shader==Body,"A logical pose capture remains unavailable instead of displaying the live pose as petrified capture")
+    check(missing.unavailable.get("pose_provider")=="condition_original_pose_not_observed" and b.material.shader==Body,"A logical pose capture remains unavailable instead of displaying the live pose as petrified capture")
+    component.condition_uuid="stone-owner"
+    world.timeline.condition_owners["stone-owner"]={"logical_pose":{"actor_uuid":"b","clip":"Attack1","frame":4,"source_seconds":.4,"world_facing":"NE"}}
+    missing=bridge.sync(world,capture_handle,component,points)
+    check(missing.unavailable.is_empty() and capture.body_treatment.logical_capture,"Actual original logical pose acquires before the first layer binding")
+    check(b.material.shader!=Body and capture.body_treatment.materials==[b.material],"Petrification binds actual layers after capture admission without a lost first delivery")
+    var pose_binding:RefCounted=capture_handle.pose_provider_binding
     capture.free()
+    check(pose_binding.owners.is_empty() and b.material.shader==Body,"Closing captured source releases only its lease and restores actual current material")
+    component.erase("condition_uuid")
+
+    # Contract probes use disclosed values explicitly. These do not claim a
+    # real server count transition; the native replay gate checks actual art.
+    world.camera.free();world.camera=Camera3D.new();world.add_child(world.camera)
+    for entry in [a,b]:entry.pivot=Vector3(0,.5,0);entry.geometry_ground_pixels=23.0
+    world.visual_actors.b.sampled_pose={"key":["Idle",2,"SW"]}
+    var history_probe:HistoryProbe=HistoryProbe.new();world.add_child(history_probe)
+    var history_handle:Dictionary={"clip":{"inputs":["actor_context","history_state"],"input_setters":{"actor_context":"set_actor_context","history_state":"set_history_state"}},"occurrence":history_probe,"root":history_probe}
+    var history_component:Dictionary={"actor_uuid":"a","target_uuid":"b","native_cue":{},"condition":{"state":{"duplicate_count":3}}}
+    var depth:GradientTexture2D=GradientTexture2D.new()
+    var history_result:Dictionary=bridge.sync(world,history_handle,history_component,points,depth)
+    check(history_result.unavailable.is_empty() and history_probe.packet.actor_uuid=="b","History context names only the displayed actual recipient")
+    check(history_probe.packet.camera==world.camera and history_probe.packet.receiver_depth==depth and history_probe.packet.depth_encoding=="rgb24_reversed_z","History receives the real camera and GPU depth texture without readback")
+    check(history_probe.packet.layers[0].node==b.node and history_probe.packet.layers[0].pivot==b.pivot and history_probe.packet.layers[0].ground_pixels==23.0,"History keeps actual layer nodes, pivot and authored ground height")
+    var revision:Array=history_probe.packet.material_revision.duplicate(true)
+    b.source_version+=1;bridge.sync(world,history_handle,history_component,points,depth)
+    check(history_probe.packet.material_revision!=revision,"Changed source pixels invalidate the pose material capture even with the same source identity")
+    for count in [3,2,1,0]:
+        history_component.condition.state.duplicate_count=count
+        bridge.sync(world,history_handle,history_component,points,depth)
+        check(history_probe.state=={"duplicate_count":count},"History state preserves disclosed count "+str(count))
+    history_component.erase("condition")
+    history_component.native_preparation_inputs={"history_state":{"duplicate_count":2}}
+    history_result=bridge.sync(world,history_handle,history_component,points,depth)
+    check(history_result.unavailable.is_empty() and history_probe.state.duplicate_count==2,"Future preparation uses the exact small disclosed count without a full condition snapshot")
+    history_component.erase("native_preparation_inputs");history_component.condition={"state":{}}
+    history_result=bridge.sync(world,history_handle,history_component,points,depth)
+    check(history_result.unavailable.get("history_state")=="duplicate_count_not_disclosed","No default three copies when the server did not disclose a count")
+    history_probe.parameters.actor_history.specifications=[{"delay":.08}]
+    history_result=bridge.sync(world,history_handle,history_component,points,depth)
+    check(history_result.unavailable.get("actor_context")=="authentic_actor_history_not_bound","Delayed histories cannot fabricate predecessors from the current pose")
+    history_probe.parameters.actor_history.specifications=[{"delay":0.0}]
+    Effects.hide(history_handle)
+    check(history_probe.packet.is_empty() and not history_handle.actor_context_bound,"Hiding a retained occurrence invalidates its capture context")
+    history_probe.free()
 
     # Actual legacy package adapter: targets is forwarded to a source's
     # set_live_endpoints. Finger of Death requires its target at index one.

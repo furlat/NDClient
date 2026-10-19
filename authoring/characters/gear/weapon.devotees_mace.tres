@@ -3,8 +3,6 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_mjmim"]
 [ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_osjg3"]
 
-[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_item_use"]
-
 [sub_resource type="Resource" id="Resource_qblno"]
 script = ExtResource("1_mjmim")
 path = "art/media/ui/icons/smooth48/item.mace.png"
@@ -12,25 +10,11 @@ native_size = Vector2i(48, 48)
 reuses = "item.mace"
 source = "ui-icons-bg3-glyphs-2026-10-07"
 
-[sub_resource type="Resource" id="NativeItemAppearance"]
-script = ExtResource("native_item_use")
-clip = "items/created/devotees_mace/appearance"
-selection = "created_item_devotees_mace_appearance"
-role = "attached"
-sampling = "absolute"
-attachment = "item"
-orientation = "world"
-scale = 1.0
-light_multiplier = 0.0
-constructor_input = {"kind": "created_item", "component_path": ["appearance"], "creation_behaviors": ["action.class.cleric.divine_intervention.arm_thy_servant"], "lifetime_condition": ""}
-extra = {"equipment_slots": ["weapon_melee_main", "weapon_melee_off"]}
-staging_from = "factory production created-item public contract; candidate art not user accepted"
-
 [resource]
 script = ExtResource("2_osjg3")
 id = "weapon.devotees_mace"
 kind = "weapon"
+family = "weapon.mace"
 icon = SubResource("Resource_qblno")
 status = "partial"
-native_appearance = SubResource("NativeItemAppearance")
-notes = "Native created-item appearance candidate; exact observed construction provenance required. No borrowed sprite look."
+notes = "Wielded body uses the authored modular Mace sheets, matching the engine's Mace visual identity. Additional native decoration remains incomplete; the delivered native mace-body replacement is not selected."

@@ -23,6 +23,9 @@ const Look = preload("res://presentation/source/look.gd")
 @export var delay: float = 0.0
 ## caster_hand, caster_ground, caster_release, recipient_body, recipient_ground, cell, area.
 @export var attachment: String = ""
+## Optical receiver channels for a modular equipment decoration. A weapon
+## channel means the exact item's separate weapon sheet, never the whole body.
+@export var recipient_slots: PackedStringArray = []
 @export var follow: bool = false
 @export var scale: float = 1.0
 @export var rotation_degrees: Vector3 = Vector3.ZERO

@@ -9,7 +9,10 @@ extends Resource
 @export var source_owners: Dictionary = {}
 @export var equipment: Dictionary = {}
 @export var equipment_errors: Dictionary = {}
-@export var native_item_appearances: Dictionary = {}
+## Item id -> ordered native decoration cues. Equipment sheets remain separate.
+@export var item_effects: Dictionary = {}
+## Item id -> finite cues triggered by its actual attack contact.
+@export var item_impact_effects: Dictionary = {}
 @export var sheets: Dictionary = {}
 ## Server item id -> [family item id whose looks it wears, visual variant it stands for].
 @export var gear: Dictionary = {}

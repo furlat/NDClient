@@ -1,6 +1,6 @@
 # Schema 16, native conditions and the complete Studio
 
-19 October 2026 — revised execution plan. **Canonical base committed; complete Factory integration and shared-provider qualification active.** Requested branch: `codex-authoring-schemabump`; isolated implementation branch/worktree: `codex/schema16-unit-a` / `NDClientGodot-authoring-schema`, from committed plan `9b73f29a`. [Execution evidence and remaining gates](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md).
+19 October 2026 — revised execution plan. **Canonical base committed; complete Factory integration and shared-provider qualification active.** Requested branch: `codex-authoring-schemabump`; single active implementation branch/worktree: `codex-authoring-schemabump` / `NDClientGodot`, from committed plan `9b73f29a`. [Execution evidence and remaining gates](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md).
 
 Read the execution checklists first. The single appendix holds the design rationale, contracts and detailed acceptance rules. Phase numbers are unchanged so existing reviews remain traceable.
 
@@ -247,3 +247,107 @@ For each live slow action record exclusive `selection/click→Preview→submit�
 Warm meaningful actual inputs: Web after growth; exact Fly rig/clip media; real actor-history context. Surprise event queue lead must be measured, never assumed; selection/backlog is an opportunity, not a guarantee. No per-frame validation/readback, all-library preload, clock hold or effect dropping to hide a late preparation. Fix costs in their actual shared owner and preserve ordering/pixels.
 
 Run relevant current fast/native/live gates, not only manifest defaults; preserve named unrelated failures instead of claiming universal green. Zero new failures, script/engine/resource errors. Investigate Factory's known combined-fixture 21-instance shutdown warning through production repeat create/remove/seek/loop/teardown: neither assume a client leak nor ignore an actual one. Hand off exact identities/commands/gaps/rejected art/performance; leave no owned test process keeping the PC awake.
+
+
+## Immediate weapon-authoring cohort — user clarification, 19 October
+
+The user prioritizes the authoring structure, shared renderer and Studio tracks
+before requesting corresponding Factory effects. All wielded bodies remain
+sprite sheets. Native wielded weapon-body replacements are rejected. Begin with
+modular characters' separate weapon layers; full authored-character weapons are
+baked into their sprites and their attachment support is deferred. Spiritual
+Weapon is a separate summoned actor, not an equipped weapon substitute.
+
+- [x] Preserve each item's existing sprite family/body and add typed `Gear.effects`
+  using the common EffectUse resources. Compile to the existing body source index;
+  do not introduce another registry or runtime JSON loader.
+- [x] Reuse NativeItems/Timeline for independently keyed attached uses, with real
+  item UUID plus authored Resource locator; never invent a condition/effect UUID
+  or require creation ancestry for an ordinary existing item. Share change-time
+  membership work across effects, with live current modular weapon geometry.
+- [x] Conditions retain temporary enchantment/buff lifetimes; spells/actions retain
+  finite cast/contact cues. Intrinsic effects belong to actual item membership.
+  Unequip, replacement, transfer and loss of disclosure cannot coat another item.
+- [x] Expose each actual use and its input/source/channel in Studio, preserving
+  independent uses on one item, seek/loop, and truthful unsupported inputs. No
+  manufactured application event for an item already present at replay start.
+- [x] Qualify base sprite preservation, multiple private uses, actual journals,
+  seek/loop and native receiving pixels with existing delivered coating sources
+  in test-only staging. No new unaccepted production artwork assignment.
+- [x] Then write the Factory handoff with the executable Resource example,
+  ownership/input contract, output locations and named backend data gaps.
+
+Gate: affected headless/native checks with no script/resource errors; current
+ordered publication/approved lighting unchanged. Plan-adherence, antislop and
+antiOOP review are short passes at this cohort boundary. Do not expand into a
+native mesh/body system or baked-in weapon segmentation.
+
+
+Cohort receipt: implemented in the private worktree, not published through the
+failed actor-context candidate. The bounded held-modular contract and executable
+Factory handoff are in `MODULAR_WEAPON_EFFECTS_FACTORY_HANDOFF_2026-10-20.md`.
+Nine affected gates passed, then the actual-draw child-witness regression passed
+24 ownership/22 native checks. Offhand, baked-character/dropped-item support,
+full transfer and final performance remain explicit gaps; the checked cohort
+means the structure/render/Studio contract is ready, not that those variants or
+all art are complete.
+
+
+## Weapon on-impact arm — user addition, 20 October
+
+- [x] Add `Gear.impact_effects: Array[EffectUse]` beside sustained `effects`.
+  Keep one compiled body index and all existing weapon sheets.
+- [x] Emit each authored impact once from the actual Hit/Crit AttackFact with
+  exact source_item_uuid/item_id, source/target and attack occurrence/lineage.
+  Use the existing track impact marker (melee contact/projectile arrival), not
+  every damage packet. Zero-damage contacts remain hits; no damage is invented.
+- [x] Reuse native finite phase compilation, component preparation, rendering,
+  event hierarchy and Studio rows. No persistent item clock or second scheduler.
+  Creature body placement first; missing object/contact/result inputs stay named.
+- [x] Verify real two-faction attack recordings, miss/cancel/unknown-item
+  boundaries, finite timing, Studio parent/source and native pixels/seek/loop.
+- [x] Update the same Factory handoff and executable Resource example with the
+  split sustained/impact fields and actual event packet. Keep source admission,
+  art approval, backend rules and native lights separate.
+
+A short plan-adherence/antislop/antiOOP review owns this bounded addition. No
+engine/Factory writes or new damage logic. Temporary condition/rider attribution
+and hit material/audio specializations remain separate, not fabricated inputs.
+
+Cohort evidence: the seven affected gates pass 226 assertions with no
+script/resource/engine errors (`.runtime/tests/20261019T222437Z/`). The real Amber
+killing hit proves detached contact retention after visual retirement; Blue is
+independently reduced. The bounded plan/antislop/antiOOP review found no remaining
+material blocker. Test-only fire artwork is not a production assignment or visual
+approval. Details and Factory delivery instructions remain in the same modular
+weapon handoff.
+
+
+## Consolidate and restore the complete suite — user priority, 20 October
+
+The user explicitly requires all work in the main client and a passing full
+suite regardless of when a failure arose. This supersedes private candidate
+publication/selected-only stopping rules above.
+
+- [ ] Consolidate committed implementation and check every secondary worktree for
+  unique work. Keep one active branch, `codex-authoring-schemabump`, in
+  `C:/Users/tommaso/Documents/Dev/NDClientGodot`. Preserve historical evidence;
+  never blindly reintroduce obsolete APIs from an older branch.
+- [ ] Repair shared suite causes: real schema16 recordings/independent oracles,
+  current native Resources and renderer contracts, genuine runtime defects.
+  Preserve each observable assertion, event order and approved graphics. No
+  skips, status downgrades, invented events or relaxed checks to make green.
+- [ ] Run the complete executable test inventory from main: full fast first,
+  then native/GPU and live lanes with actual required inputs. Replace retired
+  tests only with documented current behavior coverage. Source errors in the
+  merged actor-context path are part of this work, not a private exemption.
+- [ ] Commit the fixes in main and update the main handoff with exact commands,
+  complete pass/failure counts and remaining incomplete capabilities. Leave no
+  owned Godot/backend process running.
+
+Delegation: one plan-adherence/antislop/antiOOP reviewer; one worker for authentic
+recording-based tests; one worker for stale test/runtime contracts. Root owns
+consolidation, common production/Studio blockers and final serialized validation.
+Initial evidence is the113-test fast run with57 failures; pre-existing status
+is not an exemption. Gate: zero failing executable tests, script/resource/engine
+errors, and working normal player/Studio smoke tests on the single main branch.

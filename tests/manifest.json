@@ -4985,24 +4985,94 @@
    "reason": "Delivered selective immutable resource bank through production EffectPackage; actual native construction, private clocks and changed-pose material-discovery contract. Not a gameplay/FPS benchmark."
   },
   {
-   "name": "native_item_owner_checks",
-   "script": "res://tests/native_item_owner_checks.gd",
+   "name": "native_actor_context_render_checks",
+   "script": "res://tests/native_actor_context_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "owned-by-migration",
+   "reason": "c494 serialized actor echo colour/depth shaders fail GPU compilation on preprocessor directives. 33 ownership checks pass; source output/parity, count loss and first-draw readiness remain unqualified. Candidate provider not published to receiving."
+  },
+  {
+   "name": "logical_pose_capture_checks",
+   "script": "res://tests/logical_pose_capture_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original schema16 Flesh to Stone application, held pose reconstruction and Greater Restoration; non-idle timing is a separate pure contract test."
+  },
+  {
+   "name": "logical_pose_render_checks",
+   "script": "res://tests/logical_pose_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Actual schema16 completed Flesh to Stone, native captured body material, four views and real Greater Restoration restoration."
+  },
+  {
+   "name": "wielded_weapon_sheet_checks",
+   "script": "res://tests/wielded_weapon_sheet_checks.gd",
    "mode": "headless",
    "tier": "fast",
    "args": [],
    "timeout": 180,
    "status": "ok",
-   "reason": "Actual two-seat Flame Blade creation/equip journal and item membership/lifetime cuts."
+   "reason": "Typed attached effects preserve modular weapon sheets and original item identities; no native weapon-body substitution."
   },
   {
-   "name": "native_item_render_checks",
-   "script": "res://tests/native_item_render_checks.gd",
+   "name": "weapon_effect_support",
+   "script": "res://tests/weapon_effect_support.gd",
+   "mode": "none",
+   "tier": "none",
+   "args": [],
+   "timeout": 1,
+   "status": "ok",
+   "reason": "Test-only typed source cache helper; no backend facts or production assignment."
+  },
+  {
+   "name": "wielded_weapon_effect_checks",
+   "script": "res://tests/wielded_weapon_effect_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Actual two-faction item admission, independent attached-use tracks/clocks, seek/loop and membership contracts."
+  },
+  {
+   "name": "wielded_weapon_effect_render_checks",
+   "script": "res://tests/wielded_weapon_effect_render_checks.gd",
    "mode": "gpu",
    "tier": "gate",
    "args": [],
    "timeout": 180,
    "status": "ok",
-   "reason": "Actual Flame Blade creation/equip, current native hand binding, framebuffer contribution, absolute clocks and reverse replay."
+   "reason": "Actual original modular weapon with two test-authored delivered coatings, framebuffer pixels and seek/loop; not an art acceptance or FPS claim."
+  },
+  {
+   "name": "wielded_weapon_impact_checks",
+   "script": "res://tests/wielded_weapon_impact_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Original two-faction weapon hit and event-owned impact; finite contact/source/hierarchy/seek and miss/cancellation boundaries."
+  },
+  {
+   "name": "wielded_weapon_impact_render_checks",
+   "script": "res://tests/wielded_weapon_impact_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "status": "ok",
+   "reason": "Original weapon contact through native rendering; actual pixels, Studio witness, preserved source sheets and finite seek/loop."
   }
  ]
 }

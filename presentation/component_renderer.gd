@@ -135,7 +135,7 @@ static func live_requirements(groups:Array,world:Node)->Array:
         var at:float=start
         var stale:Callable=func(component):
             if component.has("item_owner_uuid"):
-                var owner:Dictionary=world.timeline.item_appearance_owners.get(component.item_owner_uuid,{})
+                var owner:Dictionary=world.timeline.item_effect_owners.get(component.get("item_effect_owner",""),{})
                 return component.has("preparation_key") and at+float(component.preparation_at_ms)<=world.timeline.display_ms and (owner.is_empty() or not NativeItems.active(owner,world.timeline.state))
             var id:Variant=component.get("condition_uuid",component.get("spatial_effect_uuid"))
             return component.has("preparation_key") and id!=null and at+float(component.preparation_at_ms)<=world.timeline.display_ms and not owners.has(id) and not areas.has(id)
@@ -217,7 +217,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         # shells. Owner after-values and actual clocks remain Timeline-owned.
         var persistent:Array=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
         persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
-        persistent.append_array(NativeItems.samples(world.timeline.item_appearance_owners,world.timeline.state,world.timeline.display_ms))
+        persistent.append_array(NativeItems.samples(world.timeline.item_effect_owners,world.timeline.state,world.timeline.display_ms))
         var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent),world)
         var required:Array=live_requirements(preparation_groups(required_groups,persistent),world)
         var due:Array=due_groups(required,world,through_ms)
@@ -665,7 +665,7 @@ func _condition_witnesses(world: Node,actor_id: String,samples: Array) -> void:
             var actor:Dictionary=world.timeline.presentation_state().actors.get(actor_id,{})
             var activity:String=world.displayed_samples.get(actor_id,{}).get("activity","idle")
             var rig:String=world.visual_actors[actor_id].row.rig
-            var pose=Conditions.ConditionPose.select(actor,rig,activity,world.catalog_cache)
+            var pose=Conditions.ConditionPose.select(actor,rig,activity,world.catalog_cache,world.timeline.condition_owners)
             if pose.get("condition_uuid")==sample.condition_uuid and world.playbacks[actor_id].clip==pose.get("clip"):
                 for i in poses.size():
                     if poses[i].rigId==rig and poses[i].activity==activity:
@@ -675,10 +675,16 @@ func _condition_witnesses(world: Node,actor_id: String,samples: Array) -> void:
             if mechanism=="bodyRamp" and (persistent.bodyRamp.get("mapping")!="flowing_film" or not world.textures.has(world.resources.get(persistent.bodyRamp.get("texture")))):continue
             if mechanism=="bodyOutline" and (not outlines.owners.has(actor_id) or not outlines.owners[actor_id].drawn):continue
             if mechanism in ["bodyPose","frozenPose"]:
-                if not world.displayed_samples.get(actor_id,{}).is_empty():continue
+                var displayed:Dictionary=world.displayed_samples.get(actor_id,{})
+                if not displayed.is_empty() and not displayed.get("captured",false):continue
                 var actor: Dictionary=world.timeline.presentation_state().actors.get(actor_id,{})
-                var pose=Conditions.pose(actor,world.visual_actors[actor_id].row.rig,world.catalog_cache)
+                var rig:String=world.visual_actors[actor_id].row.rig
+                var pose=Conditions.pose(actor,rig,world.catalog_cache,world.timeline.condition_owners)
                 if pose.get("condition_uuid")!=sample.condition_uuid or world.playbacks[actor_id].clip!=pose.get("clip"):continue
+                if pose.get("captured",false):
+                    var clip:Dictionary=world.rigs[rig].clips[pose.clip]
+                    var frame:int=mini(int(world.playbacks[actor_id].sample_seconds*clip.fps),int(clip.frames)-1)
+                    if frame!=pose.frame or world.visual_actors[actor_id].row.facing!=pose.world_facing:continue
             _witness(world,{"id":"condition:"+sample.condition_uuid+":"+mechanism},true)
 
 func _release(world: Node, id: String) -> void:

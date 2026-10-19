@@ -1,4 +1,5 @@
 extends "res://presentation/sprite_sources.gd"
+const Tracks=preload("res://presentation/tracks.gd")
 # One unpublished world boundary. Worker owns passive projection/buffers;
 # the scene thread builds changed native groups.
 const WorldRows = preload("res://presentation/world.gd")
@@ -982,7 +983,7 @@ func _prepare_actor_resources()->void:
     var noise_resources:Dictionary={};var cycle:Array=host.rig_config.FACING_CYCLE
     for id in result.actors:
         var actor:Dictionary=result.actors[id];var layers:Dictionary={}
-        var facing:String="SW" if host.external_playback else actor.row.facing
+        var facing:String=actor.source_sample.get("world_facing","SW" if host.external_playback else actor.row.facing)
         facing=cycle[posmod(cycle.find(facing)+quarter*2,8)]
         for index in actor.layers.size():
             var layer:Dictionary=actor.layers[index]
@@ -991,7 +992,8 @@ func _prepare_actor_resources()->void:
             var binding:Dictionary=actor.source_bindings.get(layer.slot,{})
             if binding.is_empty() or not actor.rig.clips.has(clip):
                 media_issue="Prepared actor has no selected source for "+str(id)+" / "+layer.slot+" / "+clip;phase="failed";return
-            var frame:int=clampi(int(float(actor.source_sample.get("source_seconds",0.0))*actor.rig.clips[clip].fps),0,int(actor.rig.clips[clip].frames)-1)
+            var clip_time:float=Tracks.sample_seconds(float(actor.source_sample.get("source_seconds",0.0)),maxf(float(actor.rig.clips[clip].frames)/float(actor.rig.clips[clip].fps),.001),Tracks.character_loops(actor.rig,clip))
+            var frame:int=clampi(int(clip_time*actor.rig.clips[clip].fps),0,int(actor.rig.clips[clip].frames)-1)
             layers[index]={"layer":layer,"binding":binding,"frame":frame}
             actor_resource_textures[binding.path]=host.textures.get(binding.path)
             for path in binding.geometry.textures.values():actor_resource_textures[path]=host.textures.get(path)
@@ -1314,13 +1316,13 @@ func _prepare_actor_source_step(prepared:Dictionary,entry:Dictionary,private:boo
     if not private:
         if not source_binding.is_empty():actor_bindings.append({"entry":entry,"value":source_binding,"actor":prepared.row.id,"owner":prepared.actor_base})
         return true
-    var facing:String=prepared.row.facing
-    if host.external_playback:facing="SW"
+    var facing:String=selected.get("world_facing","SW" if host.external_playback else prepared.row.facing)
     var cycle:Array=host.rig_config.FACING_CYCLE
     facing=cycle[posmod(cycle.find(facing)+quarter*2,8)]
     # A valid source frame is enough to prepare all non-frame bindings. The
     # actual first sample either certifies the adjacent UV change or fully binds.
-    var frame:int=clampi(int(float(selected.get("source_seconds",0.0))*prepared.rig.clips[clip].fps),0,int(prepared.rig.clips[clip].frames)-1)
+    var clip_time:float=Tracks.sample_seconds(float(selected.get("source_seconds",0.0)),maxf(float(prepared.rig.clips[clip].frames)/float(prepared.rig.clips[clip].fps),.001),Tracks.character_loops(prepared.rig,clip))
+    var frame:int=clampi(int(clip_time*prepared.rig.clips[clip].fps),0,int(prepared.rig.clips[clip].frames)-1)
     var binding_started:int=Time.get_ticks_usec() if measured else 0
     ActorConstruction.bind_source(host,entry,prepared.rig,path,frame,facing,prepared.condition_parameters)
     _record_actor_phase("actor_source_bind",binding_started)

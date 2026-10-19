@@ -4,6 +4,7 @@ const Common=preload("res://tools/presentation_build/common.gd")
 const Build=preload("res://tools/presentation_build/abilities.gd")
 const Coverage=preload("res://tools/ui_art_coverage.gd")
 const UI=preload("res://presentation/ui_catalog.gd")
+const Library=preload("res://studio/case_library.gd")
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -12,7 +13,8 @@ func check(ok:bool,label:String)->void:
     if not ok:failures.append(label);printerr("UI_ART_FAIL "+label)
 func run()->void:
     var report:Dictionary=Common.report()
-    var abilities:Dictionary=Common.load_root("res://authoring/abilities.tres",report).entries
+    var source:Dictionary=Common.load_root("res://authoring/abilities.tres",report)
+    var abilities:Dictionary=source.entries
     var characters:Dictionary=Common.load_root("res://authoring/characters.tres",report).entries
     var ids:Dictionary=Common.server_ids().ids
     var built:Dictionary=Build.icons(abilities)
@@ -24,6 +26,20 @@ func run()->void:
     var maps:Dictionary=UI.icon_maps()
     var inventory:Dictionary=Coverage.inventory(abilities,characters,ids,maps)
     check(report.errors.is_empty() and inventory.errors.is_empty(),"Every current native UI assignment resolves through the actual shipping HUD maps")
+    var declared:Dictionary=Library.declared(source.root)
+    for kind in inventory.icons:
+        for id in declared.get(kind,{}):
+            var row:Dictionary=inventory.icons[kind].get(id,{})
+            check(not row.is_empty() and row.authoring==declared[kind][id].source_path,"Every Studio capability retains its canonical typed UI requirement: "+id)
+    for id in abilities.conditions:
+        if not str(id).begins_with("class_feature.") or abilities.actions.has(id):continue
+        var row:Dictionary=inventory.icons.class_feature.get(id,{})
+        var image:Resource=abilities.conditions[id].icon
+        check(not row.is_empty() and row.exists and row.built_matches and row.status==image.status,
+            "Lifecycle-only feature retains its actual supplied artwork and status: "+id)
+        if image.reuses=="condition.generic":check(row.art=="placeholder" and row.status=="stand_in","Generic lifecycle artwork remains explicitly incomplete: "+id)
+    check(inventory.icons.class_feature["class_feature.barbarian.reckless_attacking"].authoring==abilities.actions["class_feature.barbarian.reckless_attacking"].resource_path,
+        "A class-feature lifecycle alias cannot overwrite its canonical action artwork")
     for id in abilities.actions:
         var entry:Resource=abilities.actions[id]
         var row:Dictionary=inventory.icons[entry.kind][id]

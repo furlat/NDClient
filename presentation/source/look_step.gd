@@ -41,6 +41,7 @@ extends Resource
 @export var pose_role: String = ""
 @export var pose_clip: String = ""
 @export var pose_frame: int = -1
+@export var capture_current: bool = false
 @export var pose_by_rig: Dictionary[String, String] = {}
 ## Fade times when the look comes and goes.
 @export var fade_in: float = 0.0
