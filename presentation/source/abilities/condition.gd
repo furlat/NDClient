@@ -9,6 +9,7 @@ const SoundRef = preload("res://presentation/source/sound_ref.gd")
 const Look = preload("res://presentation/source/look.gd")
 const BodyUse = preload("res://presentation/source/abilities/body_use.gd")
 const Feedback = preload("res://presentation/source/abilities/feedback.gd")
+const EffectUse = preload("res://presentation/source/effect_use.gd")
 
 @export var id: String = ""
 @export var label: String = ""
@@ -21,12 +22,15 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## The application, sustain and removal effects come from the VFX package:
 ## its condition selections whose owner_ids name this server id and whose
 ## `when` matches the disclosed state, resolved at run time
-## (EffectPackage.conditions). The source never names Factory clips or keys;
+## (EffectPackage.conditions). This lookup never names individual phase keys;
 ## the coverage report says whether the installed package has one. False
 ## keeps the package's lifecycle from playing for this condition.
 @export var play_package_lifecycle: bool = true
 ## The spell whose staging names this condition as its lifecycle owner.
 @export var owner_spell: String = ""
+## Native held effects not supplied by a package condition selection. These
+## run on this condition instance's observed lifetime, never an action clip.
+@export var effects: Array[EffectUse] = []
 ## Surface id of a zone condition (its visuals belong to the surface).
 @export var surface: String = ""
 
@@ -36,7 +40,7 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## Held or looping poses per rig and activity (hide crouch, frozen frames).
 @export var poses: Array = []
 ## Old sprite condition layers as exported (asset ids; drawn only through a
-## native source naming them, e.g. Raging's mantle); their media rows are the
+## native source naming them); their media rows are the
 ## shared condition_media context.
 @export var layers: Array = []
 ## Prepared outfit layers driven by the package appearance-provider lease.

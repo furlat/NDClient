@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_cviul"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="1_d0tym"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="2_18a12"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_c56u7"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_cviul"]
 
@@ -10,6 +11,108 @@ script = ExtResource("1_cviul")
 role = "cast"
 enabled = false
 hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_brcyh"]
+script = ExtResource("2_18a12")
+clip = "divine-class-study/divine_cleansing_touch_study/0-windup"
+selection = "divine_cleansing_touch_study"
+role = "attached"
+scope = "source"
+constructor_input = {
+"component_path": ["divine_art"],
+"geometry_actor": "caster",
+"kind": "observed_event",
+"living_only": false,
+"outcome": "cast"
+}
+endpoint_actor_uuids = true
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.18
+light_multiplier = 0.0
+unbound_constructor_inputs = PackedStringArray()
+staging_from = "factory@production-bindings-2081189e43bf0443 selection:divine_cleansing_touch_study"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"pose_socket": "head",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"selection": "divine_cleansing_touch_study",
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_k83lg"]
+script = ExtResource("2_18a12")
+clip = "divine-class-study/divine_cleansing_touch_study/1-cleanse"
+selection = "divine_cleansing_touch_study"
+role = "attached"
+scope = "recipient"
+constructor_input = {
+"component_path": ["divine_art"],
+"geometry_actor": "target",
+"kind": "observed_event",
+"living_only": false,
+"outcome": "removal"
+}
+endpoint_actor_uuids = true
+at = "event.start"
+delay = 0.32
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.18
+light_multiplier = 0.0
+unbound_constructor_inputs = PackedStringArray()
+staging_from = "factory@production-bindings-2081189e43bf0443 selection:divine_cleansing_touch_study"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"pose_socket": "head",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"selection": "divine_cleansing_touch_study",
+"to_actor": "target"
+}
 
 [sub_resource type="Resource" id="Resource_18a12"]
 script = ExtResource("2_c56u7")
@@ -27,4 +130,7 @@ family = "class"
 icon = SubResource("Resource_18a12")
 body = SubResource("Resource_c56u7")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+effects = Array[ExtResource("2_18a12")]([SubResource("Resource_brcyh"), SubResource("Resource_k83lg")])
+applies_conditions = PackedStringArray()
+status = "partial"
+notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill). Native finite sources consume observed results; source/provider/scenario and visual approval remain separate."

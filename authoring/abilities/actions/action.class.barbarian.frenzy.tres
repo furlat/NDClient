@@ -31,23 +31,6 @@ script = ExtResource("3_ygi8c")
 cue = "stance_transition"
 at = "body.contact"
 
-[sub_resource type="Resource" id="NativeActionEffect_0"]
-script = ExtResource("native_effect_use")
-selection = "barbarian_frenzy_native"
-at = "body.effect"
-delay = 0.1
-light_multiplier = 0.0
-staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_frenzy_native"
-clip = "barbarian_frenzy_source_v176"
-role = "attached"
-attachment = "caster_ground"
-orientation = "world"
-scale = 1.0
-source_end = 4.0
-duration_policy = "authored"
-follow = true
-extra = {"entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}
-
 [sub_resource type="Resource" id="NativeActionEffect_1"]
 script = ExtResource("native_effect_use")
 selection = "barbarian_frenzy_native"
@@ -69,7 +52,7 @@ extra = {"entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest
 script = ExtResource("2_xl41u")
 id = "action.class.barbarian.frenzy"
 kind = "action"
-effects = Array[ExtResource("native_effect_use")]([SubResource("NativeActionEffect_0"), SubResource("NativeActionEffect_1")])
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeActionEffect_1")])
 icon = SubResource("Resource_864g7")
 disposition = "authored"
 body = SubResource("Resource_y2d1h")

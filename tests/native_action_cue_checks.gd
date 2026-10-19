@@ -8,6 +8,13 @@ const Actions=preload("res://presentation/native_action_authoring.gd")
 const Components=preload("res://presentation/components.gd")
 const Renderer=preload("res://presentation/native_spell_renderer.gd")
 const BodyIndex=preload("res://presentation/resources/body_source_index.gd")
+const Conditions=preload("res://presentation/conditions.gd")
+const Results=preload("res://presentation/application_results.gd")
+const Constructed=preload("res://presentation/native_constructed_occurrence.gd")
+const Effects=preload("res://presentation/effect_package.gd")
+const Timeline=preload("res://presentation/timeline.gd")
+class World extends Node:
+    var timeline=Timeline.new()
 const BODY_KEY="__body_source_admission"
 const ID="action.class.fighter.action_surge"
 const CLIP="fighter_action_surge_native"
@@ -78,16 +85,117 @@ func observations()->void:
     phase.native_clip.inputs=["owner_projection","activation_projection"]
     var binding={"applies_conditions":[owner.behavior_id]}
     var held:Dictionary=Actions.inputs(action,binding,phase,graph)
-    check(held.values.is_empty() and "native_owner_projection_removal_not_observed" in held.gaps,"A live held condition does not invent a finite removal from the clip duration")
+    check(held.gaps.is_empty() and held.values.owner_projection.removed_seconds==-1.0,"A live held condition supplies the source's explicit unknown-removal sentinel without inventing an expiry")
     graph.condition_cues["32"]=[{"phase":"removal","actor_uuid":"actor","condition":owner}]
     var ended:Dictionary=Actions.inputs(action,binding,phase,graph)
     check(ended.gaps.is_empty() and is_equal_approx(ended.values.owner_projection.removed_seconds,.2),"A real observed removal supplies the actual relative end")
     check(ended.values.activation_projection.action_uuid=="21" and ended.values.activation_projection.parent_owner_uuid=="actual-condition","Activation references the real action and observed condition UUID")
     var before:Dictionary=Actions.inputs(action,binding,phase,graph,[action,remove,apply])
-    check(before.values.is_empty() and "native_owner_projection_removal_not_observed" in before.gaps,"An earlier removal cannot close a newly reapplied equal UUID")
+    check(before.gaps.is_empty() and before.values.owner_projection.removed_seconds==-1.0,"An earlier removal cannot close a newly reapplied equal UUID")
     graph.condition_cues["31"].append({"phase":"removal","actor_uuid":"actor","condition":owner})
     var transient:Dictionary=Actions.inputs(action,binding,phase,graph,[action,apply])
     check(transient.gaps.is_empty() and transient.values.owner_projection.removed_seconds==0.0,"A same-occurrence ordered transient application/removal retains its zero-duration lifetime")
+
+func held_conditions()->void:
+    var id:String="class_feature.barbarian.raging"
+    var entry:Resource=load("res://authoring/abilities/conditions/"+id+".tres")
+    var built:Dictionary=Build.documents({"conditions":{id:entry}},{"conditions":{id:"res://authoring/abilities/conditions/"+id+".tres"}})
+    var config:Dictionary=built.docs["catalog/condition_recipes.json"][id]
+    check(config.persistent.nativeEffects.size()==1 and config.persistent.nativeEffects[0].clip=="barbarian_rage_source_v176","The mantle is authored on its condition, not on a finite action")
+    var action:Resource=load("res://authoring/abilities/actions/action.class.barbarian.rage.tres")
+    check(action.effects.size()==1 and action.effects[0].clip=="barbarian_rage_onset_v191_pressure","Only the finite onset remains action-owned")
+    var cache={"catalog/condition_recipes.json":{id:config},"catalog/condition_media.json":{},"native_effects/index.json":{"sources":{}},"audio/bindings.json":{"conditions":{}}}
+    var owner={"condition_uuid":"actual-owner","behavior_id":id,"state":{}}
+    var actors={"actor":{"conditions":[owner],"life_state":"alive"}}
+    var owners:Dictionary={}
+    var row={"actor_uuid":"actor","row":{"field":"condition"},"before":null,"after":owner}
+    Conditions.observe(owners,actors,100.0,false,[row])
+    var samples:Array=Conditions.native_samples(owners,6100.0,cache,true)
+    check(samples.size()==1 and samples[0].condition_uuid==owner.condition_uuid and is_inf(samples[0].duration_ms),"A held source survives the old four-second clip boundary without duplicating replaced media")
+    if not samples.is_empty():
+        check(samples[0].age_ms==6000.0 and not samples[0].native_cue.has("lifecycle") and is_inf(samples[0].native_cue.end),"Its free-running source uses actual owner age, not a frozen spatial hold pose")
+        check(samples[0].native_cue.entity_geometry.actor=="caster" and samples[0].trace_keys==[samples[0].id],"The condition retains its shared geometry provider and inspectable track")
+        var root_node:Node3D=Node3D.new()
+        var handle={"root":root_node,"light_units":{},"opacity_bindings":[]}
+        preload("res://presentation/native_spell_playback.gd").controls(handle,samples[0].native_cue,3600.0)
+        check(is_finite(handle.opacity) and handle.opacity==1.0,"An indefinite hold never feeds infinite clip-end bounds into the finite fade controller; the source owns its observed return")
+        root_node.free()
+    var long_hold:Array=Conditions.native_samples(owners,3600100.0,cache)
+    check(long_hold.size()==1 and long_hold[0].age_ms==3600000.0,"A disclosed indefinite owner has no fabricated round or inspection-duration expiry")
+    actors.actor.conditions=[];row.before=owner;row.after=null
+    Conditions.observe(owners,actors,3600200.0,false,[row])
+    var ended:Array=Conditions.native_samples(owners,3600300.0,cache)
+    check(ended.size()==1 and ended[0].duration_ms==3600100.0 and ended[0].removal_age_ms==100.0,"Only an observed removal starts the same owner's authored return")
+    var second:Dictionary=owner.duplicate();second.condition_uuid="second-owner"
+    actors.actor.conditions=[second];row.before=null;row.after=second
+    Conditions.observe(owners,actors,3600300.0,false,[row])
+    var overlap:Array=Conditions.native_samples(owners,3600350.0,cache)
+    check(owners.size()==2 and overlap.size()==1 and overlap[0].condition_uuid==second.condition_uuid and overlap[0].age_ms==50.0,"A new UUID gets its own clock; the existing exclusive-group policy selects its live owner over the retiring one")
+    var final:Array=Conditions.native_samples(owners,3600550.0,cache)
+    check(final.size()==1 and final[0].condition_uuid==second.condition_uuid,"The removal tail retires precisely; a later application remains held")
+
+func factual_events()->void:
+    var id:String="action.class.cleric.preserve_life"
+    var path:String="res://authoring/abilities/actions/"+id+".tres"
+    var entry:Resource=load(path)
+    var built:Dictionary=Build.documents({"actions":{id:entry}},{"actions":{id:path}})
+    var binding:Dictionary=built.docs["catalog/body_action_bindings.json"][id]
+    var action={"id":"51","lineage_id":"50","parent_lineage":null,"fact":{"kind":"action","behavior_id":id,"source_entity_uuid":"caster"}}
+    var first={"id":"61","lineage_id":"60","parent_lineage":"50","fact":{"kind":"heal","source_entity_uuid":"caster","target_entity_uuid":"ally","actual_healing":7,"was_blocked":false}}
+    var second={"id":"71","lineage_id":"70","parent_lineage":"50","fact":{"kind":"heal","source_entity_uuid":"caster","target_entity_uuid":"other","actual_healing":9,"was_blocked":false}}
+    var blocked={"id":"81","lineage_id":"80","parent_lineage":"50","fact":{"kind":"heal","source_entity_uuid":"caster","target_entity_uuid":"other","actual_healing":9,"was_blocked":true}}
+    var zero={"id":"91","lineage_id":"90","parent_lineage":"50","fact":{"kind":"heal","source_entity_uuid":"caster","target_entity_uuid":"ally","actual_healing":0,"was_blocked":false}}
+    var unrelated={"id":"101","lineage_id":"100","parent_lineage":null,"fact":{"kind":"heal","source_entity_uuid":"caster","target_entity_uuid":"ally","actual_healing":8,"was_blocked":false}}
+    var life={"id":"111","lineage_id":"110","parent_lineage":"50","fact":{"kind":"life","entity_uuid":"revived","previous_state":"dead","new_state":"alive"}}
+    var removal={"id":"121","lineage_id":"120","parent_lineage":"50","fact":{"kind":"actor_change"}}
+    var events:Array=[action,first,second,blocked,zero,unrelated,life,removal]
+    var graph={"nodes":{},"condition_cues":{"121":[{"phase":"removal","actor_uuid":"ally","condition":{"condition_uuid":"actual-removed"}}]},
+        "positions":{"caster":[3,7],"ally":[4,7],"other":[4,8],"revived":[3,8]},"contacts":{},"starts":{}}
+    for node in events:graph.nodes[node.lineage_id]=node;graph.starts[node.id]=float(graph.starts.size())*100.0
+    graph.observed_results=Results.observed_index(events,graph)
+    var original:Dictionary=graph.duplicate(true)
+    var group={"operation_sequence":7,"components":[]}
+    Components.native_action(group,action,binding,{}, {},{"event.start":0.0},graph,{},events)
+    check(group.components.size()==3,"One source invocation and two actual positive recipient heals are compiled without blocked, zero or unrelated outcomes")
+    var recipient_rows:Array=group.components.filter(func(row):return row.native_cue.scope=="recipient")
+    check(recipient_rows.map(func(row):return row.target_uuid)==["ally","other"],"Each receiving occurrence uses its actual native recipient")
+    check(recipient_rows.map(func(row):return row.source_event_uuid)==["61","71"],"Receiving effects attach to the real result occurrence, with source lineage retained separately")
+    for row in recipient_rows:
+        var operand:Dictionary=row.native_constructor_inputs[0]
+        check(operand.input_field.is_empty() and operand.values.actor_roles.target==row.target_uuid and operand.values.geometry_actor==row.target_uuid,"Construction remaps root identity/geometry scalars to the actual actor before make")
+        check(operand.values.event.is_empty() and operand.values.lease.is_empty() and not operand.values.plan_only,"Successful review event and lease are cleared before constructing a real occurrence")
+        check(row.native_inputs.event_input.actual_healing in [7,9] and row.native_input_evidence.source_occurrence=="51","The later input packet carries observed healing and separate original action evidence")
+        var source:Resource=load(Effects.choice(row.native_clip).approaches[0].source_phase)
+        var before:Dictionary=source.to_clip()
+        var constructed:Dictionary=Constructed.clip_with_inputs(source,row.native_constructor_inputs)
+        check(constructed.components[0].input.recipient_entity_uuid==row.target_uuid and source.to_clip()==before,"Whole-component input projection is private and leaves the delivered Resource unchanged")
+    check(Actions.effect_clips(id,{"catalog/body_action_bindings.json":{id:binding}}).all(func(clip):return clip.requires_constructor_input),"Choice preparation cannot instantiate a divine source with its successful review fixture")
+    var descriptor={"outcome":"revival","geometry_actor":"target"}
+    var revived:Array=Results.observed(action,descriptor,graph)
+    check(revived.size()==1 and revived[0].event.revived_entity_uuid=="revived" and not revived[0].event.has("actual_healing"),"Committed dead-to-alive revival needs no invented positive HealFact")
+    descriptor.outcome="removal"
+    var removed:Array=Results.observed(action,descriptor,graph)
+    check(removed.size()==1 and removed[0].event.removed_condition_uuids==["actual-removed"],"Cure inputs name only recipient-local accepted removal UUIDs")
+    check(graph==original,"Observed projections do not rewrite server facts, graph rows or condition members")
+
+func retained_occurrences()->void:
+    var world:World=World.new();var renderer=Renderer.new()
+    var delayed={"id":"actual-delayed-result","kind":"native_effect","native_spell":true,"start_ms":350.0,"duration_ms":1100.0}
+    renderer.handles[delayed.id]={"component":delayed}
+    world.timeline.retained_components=[{"component":delayed,"group_start_ms":500.0}]
+    world.timeline.display_ms=504.0
+    check(renderer._queued_ids(world).has(delayed.id),"The timeline owns an already prepared delayed receiver after its zero-time operation completes, before its first active sample")
+    check(renderer._queued_ids(world).has(delayed.id),"Unchanged retained ownership reuses the same native instance")
+    world.timeline.retained_components=[];world.timeline.resource_revision+=1
+    check(not renderer._queued_ids(world).has(delayed.id),"Timeline expiry invalidates retention and permits precise teardown")
+    renderer.handles.clear();world.free()
+    renderer._missing({"id":"known-input-gap","status":"missing","native_input_gaps":["native_condition_parent_link_unavailable"]},"native_condition_parent_link_unavailable")
+    check(renderer.issues.is_empty() and renderer.diagnostics["known-input-gap"].native_input_gaps==["native_condition_parent_link_unavailable"],"A declared unimplemented provider stays visible missing work without rejecting unrelated playback")
+    renderer._missing({"id":"runtime-error","status":"available"},"unexpected_source_failure")
+    check(renderer.issues.size()==1,"An actual source failure remains a presentation error")
+    var untouched={"application":{"effects":[{"assetId":"not-replaced-apply"}]},"removal":{"effects":[{"assetId":"not-replaced-remove"}]},
+        "persistent":{"nativeEffects":[{"replaces_media":["only-this-layer"]}]}}
+    check(Conditions.NativePersistent.replaced_media("condition.test.no_package",untouched)==["only-this-layer"],"An authored hold only replaces its declared media; unrelated missing apply/remove effects remain requirements")
 
 func run()->void:
     var use=Use.new();use.clip=CLIP;use.selection="fighter_action_surge_native"
@@ -158,6 +266,6 @@ func run()->void:
     Components.compile(group,{"events":[node]},graph,cache)
     check(group.components.size()==1 and group.components[0].status=="missing" and group.components[0].reason=="native_action_position_unavailable","Missing public placement never creates an effect at a fixture origin")
     check(fact==original,"Cue preparation and component dispatch do not mutate authoritative facts")
-    authored();observations()
+    authored();observations();held_conditions();factual_events();retained_occurrences()
     print(JSON.stringify({"checks":checks,"failures":failures}))
     quit(0 if failures.is_empty() else 1)

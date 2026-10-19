@@ -152,33 +152,43 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
         add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
 
 static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,recipe:Dictionary,track:Dictionary,markers:Dictionary,graph:Dictionary,cache:Dictionary,observations:Array=[])->void:
-    var fact:Dictionary=node.fact
+    for phase in NativeActions.phases(binding,node.fact,recipe,track,markers,cache):
+        var descriptor:Dictionary=phase.native_cue.get("constructor_input",{})
+        if descriptor.get("kind")=="observed_event":
+            if Occurrences.application(node):continue
+            for projected in ApplicationResults.observed(node,descriptor,graph):
+                var actual:Dictionary=phase.duplicate()
+                actual.start_ms=float(graph.starts[projected.node.id])+float(phase.start_ms)-float(markers["event.start"])
+                actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
+                actual.native_constructor_evidence=projected.evidence
+                _native_action_component(group,node,projected.node,actual,{"values":{"lease_input":{},"event_input":projected.event},"gaps":[],"evidence":projected.evidence},graph,projected.target_uuid)
+        else:
+            _native_action_component(group,node,node,phase,NativeActions.inputs(node,binding,phase,graph,observations),graph)
+
+static func _native_action_component(group:Dictionary,owner:Dictionary,event:Dictionary,phase:Dictionary,observed:Dictionary,graph:Dictionary,recipient_uuid:String="")->void:
+    var fact:Dictionary=owner.fact
     var source:String=str(fact.get("source_entity_uuid",""))
-    var target:String=str(fact.get("target_entity_uuid","")) if fact.get("target_entity_uuid")!=null else ""
+    var target:String=recipient_uuid if not recipient_uuid.is_empty() else str(fact.get("target_entity_uuid","")) if fact.get("target_entity_uuid")!=null else ""
     var from:Variant=graph.positions.get(source)
     var to:Variant=graph.positions.get(target)
-    for phase in NativeActions.phases(binding,fact,recipe,track,markers,cache):
-        var parameters:Dictionary=phase.duplicate()
-        var observed:Dictionary=NativeActions.inputs(node,binding,phase,graph,observations)
-        parameters.native_inputs=observed.values
-        parameters.native_input_gaps=observed.gaps
-        parameters.native_input_evidence=observed.evidence
-        if not observed.gaps.is_empty() and parameters.get("status")!="missing":
-            parameters.status="missing";parameters.reason=observed.gaps[0]
-        var recipient:bool=str(phase.native_cue.get("attachment","")).begins_with("recipient")
-        var target_endpoint:bool=phase.native_cue.get("live_endpoints",[]).any(func(endpoint):return endpoint.get("actor")=="target")
-        var self_owned:bool=not recipient and not target_endpoint and to==null
-        parameters.merge({"native_spell":true,"actor_uuid":source,"target_uuid":target,
-            "from_position":from,"to_position":from if self_owned else to,
-            "from_elevation_feet":graph.contacts.get(source,{}).get("from_elevation_feet",0),
-            "to_elevation_feet":graph.contacts.get(source if self_owned else target,{}).get("from_elevation_feet",0),
-            "recipe":{},"cast_recipe":{"enabled":false}},true)
-        if self_owned:parameters.target_uuid=source
-        # Missing public placement is an unavailable cue, never an origin at
-        # the map centre or a substituted first actor.
-        if from==null or ((recipient or target_endpoint) and to==null):
-            parameters.status="missing";parameters.reason="native_action_position_unavailable"
-        add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+    var parameters:Dictionary=phase.duplicate()
+    parameters.native_inputs=observed.values
+    parameters.native_input_gaps=observed.gaps
+    parameters.native_input_evidence=observed.evidence
+    if not observed.gaps.is_empty() and parameters.get("status")!="missing":
+        parameters.status="missing";parameters.reason=observed.gaps[0]
+    var recipient:bool=str(phase.native_cue.get("attachment","")).begins_with("recipient")
+    var target_endpoint:bool=phase.native_cue.get("live_endpoints",[]).any(func(endpoint):return endpoint.get("actor")=="target")
+    var self_owned:bool=not recipient and not target_endpoint and to==null
+    parameters.merge({"native_spell":true,"actor_uuid":source,"target_uuid":target,
+        "from_position":from,"to_position":from if self_owned else to,
+        "from_elevation_feet":graph.contacts.get(source,{}).get("from_elevation_feet",0),
+        "to_elevation_feet":graph.contacts.get(source if self_owned else target,{}).get("from_elevation_feet",0),
+        "recipe":{},"cast_recipe":{"enabled":false}},true)
+    if self_owned:parameters.target_uuid=source
+    if from==null or ((recipient or target_endpoint) and to==null):
+        parameters.status="missing";parameters.reason="native_action_position_unavailable"
+    add(group,event,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
 
 static func projectile(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,duration: float,source: Array,target: Array,contacts: Dictionary,cache: Dictionary,owner:Dictionary={},fact:Dictionary={},application_index:int=0) -> void:
     var common={"actor_uuid":fact.source_entity_uuid,"target_uuid":fact.target_entity_uuid,

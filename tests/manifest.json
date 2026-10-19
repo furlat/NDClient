@@ -4963,6 +4963,16 @@
    "timeout": 30,
    "status": "ok",
    "reason": "Actual schema16 native Resource metadata: private Thread ownership, queued request order, completed and active close without stale task IDs."
+  },
+  {
+   "name": "native_class_projection_checks",
+   "script": "res://tests/native_class_projection_checks.gd",
+   "mode": "headless",
+   "tier": "gate",
+   "args": [],
+   "timeout": 120,
+   "status": "needs-args",
+   "reason": "Requires current recorded Frenzy lifecycle and Preserve Life recipient cases from tools/studio_cases/record.py. Actual two-seat declaration/application, outcome and parent-gap gate; native drawing separate."
   }
  ]
 }

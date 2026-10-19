@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_wycao"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_kwgnu"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_effect_use"]
+
 [sub_resource type="Resource" id="Resource_klkta"]
 script = ExtResource("1_p4ioq")
 colour = Color(0.9372549, 0.26666668, 0.26666668, 1)
@@ -50,9 +52,27 @@ steps = Array[ExtResource("3_wycao")]([SubResource("Resource_bh0ox"), SubResourc
 script = ExtResource("1_p4ioq")
 colour = Color(0.9882353, 0.64705884, 0.64705884, 1)
 
+[sub_resource type="Resource" id="NativeConditionEffect_0"]
+script = ExtResource("native_effect_use")
+selection = "barbarian_rage_native"
+at = "owner_start"
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_rage_native"
+clip = "barbarian_rage_source_v176"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+fade_out = 0.35
+duration_policy = "authored"
+follow = true
+extra = {"replaces_media": ["class.rage.mantle-q0-back", "class.rage.mantle-q0-front"], "entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}
+
+
 [resource]
 script = ExtResource("4_kwgnu")
 id = "class_feature.barbarian.raging"
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeConditionEffect_0")])
 label = "Raging"
 icon = SubResource("Resource_kwgnu")
 disposition = "authored"

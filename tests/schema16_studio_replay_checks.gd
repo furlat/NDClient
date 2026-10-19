@@ -46,6 +46,10 @@ func run()->void:
             studio.select_perspective("amber")
             if not await settle(studio,-1.0,record.journals.amber):break
         await play_once(studio,record.id)
+        if record.id=="action.class.cleric.preserve_life/recipients":
+            var observed:Dictionary=evidence.back().get("observed_native",{})
+            check(observed.values().filter(func(row):return row.evidence.get("outcome")=="cast").size()==1,"Preserve Life: one native source has a submitted draw witness")
+            check(observed.values().filter(func(row):return row.evidence.get("outcome")=="heal").size()==2,"Preserve Life: both actual receiving results have submitted native draw witnesses")
         check(studio.world.presentation_errors.is_empty(),record.id+": no native presentation error")
         if not failures.is_empty():break
         print("SCHEMA16_STUDIO_CASE ",JSON.stringify({"id":record.id,"checks":checks,"failures":failures.size()}))

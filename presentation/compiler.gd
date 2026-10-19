@@ -754,6 +754,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 "delta":captured.delta,"condition_rows":captured.get("condition_rows",[])})
         var trailing: Dictionary = recorded.trailing
         apply_delta(target,trailing)
+        graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)
         if profile_enabled:stage_started=_profile_phase(compile_phases,"lineage_inputs",stage_started)
         if lineage.root != null: group.duration_ms = _schedule(lineage.root,0.0,target,group,graph,cache)
         for node in lineage.events:

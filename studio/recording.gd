@@ -998,6 +998,10 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                     var phase:String=NativePersistent.lifecycle_state(sample,(start-float(sample.absolute_start_ms))/1000.0).phase
                     component.lifecycle_phase=phase;component.effect_clip=str(sample.lifecycle_phases[phase].id)
                     component.label=phase.capitalize()+" · "+component.effect_clip
+                elif sample.get("condition_authored",false):
+                    component.label="Hold · "+str(sample.recipe.get("label",sample.condition.behavior_id))
+                    component.effect_clip=str(sample.native_clip.get("id",""))
+                    component.reason=sample.get("reason","")
                 rows.append(component)
                 if sample.get("native_spell",false):_persistent_native_channels(rows,component,sample)
 

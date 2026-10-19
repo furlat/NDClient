@@ -59,6 +59,7 @@ static func fade_ms(condition: Dictionary, cache: Dictionary) -> float:
 static func _fade_ms(condition:Dictionary,config:Dictionary,lifecycles:Array,cache:Dictionary)->float:
     var persistent:Dictionary=config.get("persistent",{})
     var fade=maxf(float(persistent.get("bodyRamp",{}).get("removalMs",0)),NativePersistent.removal_ms(lifecycles))
+    fade=maxf(fade,NativePersistent.authored_removal_ms(config))
     var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
     var replaced:Array=NativePersistent.replaced_media(str(condition.get("behavior_id","")),config)
     for layer in persistent.get("layers",[]):
@@ -95,6 +96,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         if is_inf(owner.end_ms) and float(persistent.get("alphaMultiplier",1.0))<1.0:invisible[owner.actor_uuid]=true
         for row in NativePersistent.lifecycle_samples(common,lifecycles,cache):
             row.life_state=owner.get("life_state","alive");lifecycle_rows.append(row)
+        result.append_array(NativePersistent.authored_samples(common,cache))
         # Keep the common owner rows through the same recipe priority/removal
         # selection below; only audio and native layer construction are skipped.
         if native_only and not include_legacy:continue
