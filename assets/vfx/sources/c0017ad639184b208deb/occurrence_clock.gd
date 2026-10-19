@@ -40,13 +40,22 @@ func prepare(materials: Array) -> void:
 	if slot < 0:
 		assert(not free_slots.is_empty(), "VFX occurrence clock capacity exceeded")
 		slot = free_slots.pop_back()
+		image.set_pixel(slot, 0, Color(0.0, 0.0, 0.0, 0.0))
+		dirty = true
 	for material in materials:
 		if not material is ShaderMaterial or material.shader == null:
 			continue
 		if seen_materials.get(material) == material.shader:
 			continue
-		var code: String = material.shader.code
 		bindings = bindings.filter(func(binding: Dictionary) -> bool: return binding.material != material)
+		if material.has_meta("factory_prepared_shader") and material.get_meta("factory_prepared_shader") == material.shader:
+			var prepared_names: Array = material.get_meta("factory_clock_names", [])
+			seen_materials[material] = material.shader
+			if not prepared_names.is_empty() or material.shader.code.contains("float vfx_package_seconds()"):
+				material.set_shader_parameter("vfx_package_clock_slot", slot)
+				bindings.append({"material": material, "names": prepared_names, "offsets": {}})
+			continue
+		var code: String = material.shader.code
 		if code.contains("float vfx_package_seconds()"):
 			var wrapped_names := []
 			var offsets := RegEx.new()
@@ -106,6 +115,13 @@ func sample(seconds: float) -> void:
 				if not is_equal_approx(float(binding.offsets.get(name, INF)), offset):
 					binding.material.set_shader_parameter("vfx_package_offset_" + name, offset)
 					binding.offsets[name] = offset
+
+
+func retain_materials(materials: Array) -> void:
+	bindings = bindings.filter(func(binding: Dictionary) -> bool: return binding.material in materials)
+	for material in seen_materials.keys():
+		if material not in materials:
+			seen_materials.erase(material)
 
 
 func release() -> void:

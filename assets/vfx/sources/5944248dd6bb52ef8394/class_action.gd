@@ -6,6 +6,8 @@ const Shaders := {
 	"arc":"res://assets/vfx/sources/649785ebb3c1bc498ccf/a8cf5127a0ae9a1dc84b4e34e0d7c8e94a41210e854f3102b4c78cb8500c3f17.gdshader",
 	"roar":"res://assets/vfx/sources/3174c3adf04efba0fdb5/38e00da788125cd1ce193ef50a2ab4d5edebfede1330bda222535674e51d28c3.gdshader",
 	"presence":"res://assets/vfx/sources/0a2aa8c42dce4063b3b2/c130ea5e24c38baf614eef5159cacbea1e85ebd34998b650f8c69d3c52d3913d.gdshader"}
+const Assets = preload("res://assets/vfx/sources/f962a9879cefd5f352ba/class_action_assets.gd")
+const Profile = preload("res://assets/vfx/sources/5e6062cb1efe781a65b7/construction_profile.gd")
 const NativePalette = preload("res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd")
 var settings: Dictionary
 var kind: String
@@ -13,7 +15,7 @@ var pieces: Array[MeshInstance3D] = []
 var geometry: Dictionary = {}
 var endpoints: Array = []
 var fit: Node3D
-var flow_noise: NoiseTexture2D
+var flow_noise: Texture2D
 var cores: Array[MeshInstance3D] = []
 var motes: Array[MeshInstance3D] = []
 
@@ -25,21 +27,13 @@ static func make_component(input: Dictionary) -> Node3D:
 	return node
 
 static func source_noise() -> NoiseTexture2D:
-	# Exact numeric settings from the preserved flow_noise.tres.
-	var texture := NoiseTexture2D.new()
-	texture.width=256;texture.height=256;texture.seamless=true;texture.seamless_blend_skirt=.2;texture.generate_mipmaps=true
-	var noise := FastNoiseLite.new()
-	noise.noise_type=3;noise.frequency=.018
-	noise.fractal_type=2;noise.fractal_octaves=4;noise.fractal_gain=.55
-	texture.noise=noise
-	return texture
+	return Assets.noise()
 
 func _piece(family: String, index: int) -> MeshInstance3D:
+	Profile.begin("class_piece_program_palette")
 	var piece := MeshInstance3D.new()
 	var material := ShaderMaterial.new()
-	var shader := Shader.new()
-	shader.code=VfxPackageIO_5944248dd6.text(Shaders[family])
-	material.shader=shader
+	material.shader=Assets.program(Shaders[family])
 	material.set_shader_parameter("source_noise" if family!="flow" else "flow_tex",flow_noise)
 	material.set_shader_parameter("seed",float(index)*.173)
 	material.set_shader_parameter("side",0.)
@@ -49,10 +43,13 @@ func _piece(family: String, index: int) -> MeshInstance3D:
 	piece.custom_aabb=AABB(Vector3(-4,-2,-4),Vector3(8,8,8))
 	fit.add_child(piece)
 	pieces.append(piece)
+	Profile.end("class_piece_program_palette")
 	return piece
 
 func _build() -> void:
+	Profile.begin("class_noise_creation")
 	flow_noise=source_noise()
+	Profile.end("class_noise_creation")
 	fit=Node3D.new()
 	fit.scale.y=.816496580927726
 	add_child(fit)
@@ -79,18 +76,13 @@ func _build() -> void:
 		var family := "arc" if kind in ["quickened","twinned","distant","affinity"] else "flow"
 		var count: int={"mantle":5,"affinity":5,"twinned":4,"distant":4,"quickened":3,"ground":7,"heal":6,"burst":6}.get(kind,6)
 		for index in count:_piece(family,index)
+		Profile.begin("class_glow_core")
 		if family=="arc" and kind!="affinity":
-			var glow_shader := Shader.new()
-			var code := VfxPackageIO_5944248dd6.text("res://assets/vfx/sources/3cf525dfd27524c63fa6/dcd7c27efcd84ec38e226e5180e753edb56d4c28a8364bf3053a30322f6d8774.gdshader")
-			code=code.replace("void fragment(){","void vertex(){ MODELVIEW_MATRIX=VIEW_MATRIX*mat4(INV_VIEW_MATRIX[0],INV_VIEW_MATRIX[1],INV_VIEW_MATRIX[2],MODEL_MATRIX[3]); }\nvoid fragment(){")
-			glow_shader.code=code
-			var image := Image.new()
-			image.load_png_from_buffer(VfxPackageIO_5944248dd6.bytes("res://assets/vfx/sources/0153d00f65f7d8626351/texture.res"))
-			var texture := ImageTexture.create_from_image(image)
+			var glow_shader := Assets.program("res://assets/vfx/sources/3cf525dfd27524c63fa6/dcd7c27efcd84ec38e226e5180e753edb56d4c28a8364bf3053a30322f6d8774.gdshader", true)
+			var texture := Assets.glow_texture()
 			for index in (2 if kind=="twinned" else 1):
 				var core := MeshInstance3D.new()
-				var quad := QuadMesh.new();quad.size=Vector2(.38,.38)
-				core.mesh=quad
+				core.mesh=Assets.glow_mesh()
 				core.position.x=(-.2 if index==0 else .2) if kind=="twinned" else 0.
 				var material := ShaderMaterial.new();material.shader=glow_shader
 				material.set_shader_parameter("glow_tex",texture)
@@ -98,16 +90,32 @@ func _build() -> void:
 				core.material_override=material
 				core.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 				fit.add_child(core);cores.append(core)
+		Profile.end("class_glow_core")
+		Profile.begin("class_motes")
 		# These are the original orbiting native motes, not a noise film painted
 		# onto the body. Preserve them with the source arc/flow layers.
+		var shared_arc_material: StandardMaterial3D
 		for index in (14 if family=="arc" else 12):
+			Profile.begin("class_mote_mesh")
 			var mote := MeshInstance3D.new()
-			var ball := SphereMesh.new();ball.radius=.013 if family=="arc" else .018;ball.height=ball.radius*2.;ball.radial_segments=4;ball.rings=2
-			mote.mesh=ball
-			var material := StandardMaterial3D.new();material.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+			mote.mesh=Assets.mote_mesh(family=="arc")
+			Profile.end("class_mote_mesh")
+			Profile.begin("class_mote_material")
+			var material: StandardMaterial3D = shared_arc_material
+			if material == null:
+				material = StandardMaterial3D.new()
+				material.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED
+				material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+				if family=="arc": shared_arc_material=material
 			mote.material_override=material;mote.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			Profile.end("class_mote_material")
+			Profile.begin("class_mote_child")
 			fit.add_child(mote);motes.append(mote)
+			Profile.end("class_mote_child")
+		Profile.end("class_motes")
+		Profile.begin("class_build_sample")
 		sample(0.)
+		Profile.end("class_build_sample")
 
 func set_entity_geometry(value: Dictionary) -> void:
 	geometry=value
@@ -212,7 +220,10 @@ func sample(seconds: float) -> void:
 		if settings.has("native_palette"):
 			colour = Color(settings.native_palette[mini(3, settings.native_palette.size()-1)])
 			colour.a = alpha
-		motes[index].material_override.albedo_color = colour
+		if motes[index].material_override.get_meta("factory_mote_albedo_uniform", false):
+			motes[index].material_override.set_shader_parameter("albedo", colour)
+		else:
+			motes[index].material_override.albedo_color = colour
 
 func capture_observation() -> Dictionary:
 	return {"kind":kind,"native_meshes":pieces.size(),"measured_points":geometry.get("points",[]).size(),"live_endpoints":endpoints.size()}

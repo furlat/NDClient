@@ -3,12 +3,40 @@ extends RefCounted
 ## Alpha, noise and geometry remain owned by the original material/component.
 const SourceBindings = preload("res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd")
 const Stage = preload("res://assets/vfx/sources/7ffdb77f06cb06b0c42e/contract_stage.gd")
+static var programs: Dictionary = {}
+static var textures: Dictionary = {}
 
 
 static func apply(material: ShaderMaterial, colors: Array, options: Dictionary = {}) -> void:
 	if colors.is_empty() or material.has_meta("native_energy_palette"):
 		return
 	var code: String = SourceBindings.expand_shader(material.shader.code, material.shader.resource_path.get_base_dir())
+	var key: String = code
+	var shader: Shader = programs.get(key)
+	if shader == null:
+		shader = _program(code)
+		programs[key] = shader
+	SourceBindings.replace_shader(material, shader)
+	bind_parameters(material, colors, options)
+	material.set_meta("native_energy_palette", true)
+
+
+static func bind_parameters(material: ShaderMaterial, colors: Array, options: Dictionary = {}) -> void:
+	# The prepared source bank uses the same finish; only its immutable program
+	# is already prepared. Selected palette values remain occurrence-local.
+	var texture_key := ""
+	for color in colors:
+		texture_key += Color(color).to_html(true) + "/"
+	if not textures.has(texture_key):
+		textures[texture_key] = Stage.palette_texture(colors)
+	material.set_shader_parameter("native_palette_texture", textures[texture_key])
+	material.set_shader_parameter("native_palette_count", colors.size())
+	material.set_shader_parameter("native_palette_quantize", options.get("quantize",true))
+	material.set_shader_parameter("native_emission_gain", options.get("emission_gain",0.0))
+	material.set_shader_parameter("native_palette_exposure", maxf(0.0, float(options.get("energy_exposure",1.0))))
+
+
+static func _program(code: String) -> Shader:
 	var fragment: int = code.find("void fragment()")
 	var start: int = code.find("{", fragment)
 	if fragment < 0 or start < 0:
@@ -36,12 +64,6 @@ static func apply(material: ShaderMaterial, colors: Array, options: Dictionary =
 	"""
 	code = code.insert(end - 1, finish)
 	code = code.replace("shader_type spatial;", "shader_type spatial;\n#include \"res://assets/vfx/sources/eb06cc2929dc57d35d5b/cie_d65_v1.gdshaderinc\"\nuniform sampler2D native_palette_texture:filter_nearest,repeat_disable;\nuniform int native_palette_count=1;\nuniform bool native_palette_quantize=true;\nuniform float native_emission_gain=0.0;\nuniform float native_palette_exposure=1.0;")
-	var shader: Shader = Shader.new()
+	var shader := Shader.new()
 	shader.code = code
-	SourceBindings.replace_shader(material, shader)
-	material.set_shader_parameter("native_palette_texture", Stage.palette_texture(colors))
-	material.set_shader_parameter("native_palette_count", colors.size())
-	material.set_shader_parameter("native_palette_quantize", options.get("quantize",true))
-	material.set_shader_parameter("native_emission_gain", options.get("emission_gain",0.0))
-	material.set_shader_parameter("native_palette_exposure", maxf(0.0, float(options.get("energy_exposure",1.0))))
-	material.set_meta("native_energy_palette", true)
+	return shader

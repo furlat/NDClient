@@ -3,6 +3,7 @@ extends "res://assets/vfx/sources/30ef867264d6f398c2d7/native_factory_source.gd"
 ## This prevents soft-shadow pair counter errors while configuring native light
 ## masks. The pinned sampler hides it only after construction. No artwork or
 ## lighting value is changed; all other source behavior remains the same.
+const Profile = preload("res://assets/vfx/sources/5e6062cb1efe781a65b7/construction_profile.gd")
 const RuntimeParticleUnits = preload("res://assets/vfx/sources/dce4978aa79c8ef7fd8e/runtime_particle_units.gd")
 
 static func make(parent: Node3D, clip: Dictionary, layer_mask:int=DEFAULT_LAYER) -> Dictionary:
@@ -15,9 +16,16 @@ static func make(parent: Node3D, clip: Dictionary, layer_mask:int=DEFAULT_LAYER)
         if script==null or not script.has_method("make_component"):
             handle.error = "Missing Factory constructor: "+spec.script
             return handle
+        Profile.begin("component_construction")
         var component: Node3D = script.make_component(spec.input.duplicate(true))
+        Profile.end("component_construction")
         if component==null:
             handle.error = "Factory construction failed: "+spec.id
+            return handle
+        var source_error: Variant = component.get("construction_error")
+        if source_error is String and not source_error.is_empty():
+            handle.error = "Factory source rejected operands: "+spec.id+" / "+source_error
+            component.free()
             return handle
         # Recovered import assignments must precede source recolouring, ready
         # callbacks and animation sampling (not overwrite their results later).
@@ -39,9 +47,18 @@ static func make(parent: Node3D, clip: Dictionary, layer_mask:int=DEFAULT_LAYER)
         # native_scene_effect intentionally shares source materials in export;
         # each editable sandbox instance must own its mutable material values.
         if spec.script.ends_with("/native_scene_effect.gd"): Resources.isolate_node(component,{})
+        Profile.begin("component_tree_registration")
         handle.root.add_child(component)
+        Profile.end("component_tree_registration")
+        source_error = component.get("construction_error")
+        if source_error is String and not source_error.is_empty():
+            handle.error = "Factory source preparation failed: "+spec.id+" / "+source_error
+            component.free()
+            return handle
         handle.components[spec.id] = component
+        Profile.begin("initial_source_sample")
         component.sample(0.0)
+        Profile.end("initial_source_sample")
         if clip.has("carrier_path"):
             handle.carriers.append({"component":component,"node":component.get_node(clip.carrier_path),"origin":component.position})
         if clip.has("carrier_property"):
@@ -56,44 +73,61 @@ static func make(parent: Node3D, clip: Dictionary, layer_mask:int=DEFAULT_LAYER)
         sphere.radius=float(override.radius);sphere.height=float(override.height)
         sphere.radial_segments=int(override.get("radial_segments",32));sphere.rings=int(override.get("rings",16))
         node.mesh=sphere;node.material_override=original
+    Profile.begin("sampler_registration")
     var seen = {}
-    for node in handle.root.find_children("*","",true,false):
-        if node is AnimationPlayer:
-            node.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
-            node.advance(0.0)
-            handle.players.append(node)
-            if not node.current_animation.is_empty():handle.native_animation_end=maxf(handle.native_animation_end,node.current_animation_length)
-            if not handle.clip.get("bounded_formation",false) and not node.current_animation.is_empty():
-                handle.clip.seconds=maxf(handle.clip.seconds,node.current_animation_length)
-        if node is GPUParticles3D:
-            handle.emitter_speeds[node.get_instance_id()]=node.speed_scale
-            node.speed_scale = 0
-            var units=ParticleUnits.prepare(node)
-            if not units.is_empty():handle.particle_units.append(units)
-            handle.emitters.append(node)
-        if node is Light3D:
-            # Native material self-lighting belongs to the effect geometry.
-            # Painted actors/floors receive this source through PointLight2D
-            # only, so they cannot be lit twice by the same source.
-            node.light_cull_mask=int(handle.layer_mask)
-            node.layers=int(handle.layer_mask)
-            if node is OmniLight3D:handle.light_units[node.get_instance_id()]=LightUnits.prepare(node)
-        if node is Decal:
-            # Native decals project onto the painted scene's reconstructed
-            # surface positions, never onto the packed depth measurement pass.
-            node.cull_mask=1
-        if node is GeometryInstance3D:
+    var declared: Dictionary = _declared_bindings(handle)
+    if not declared.is_empty():
+        for node in declared.geometry:
             handle.geometry.append({"node":node,"path":str(handle.root.get_path_to(node)),"selected":node.visible and node.layers!=0,"layer_enabled":node.layers!=0})
-            if node.layers!=0: node.layers=int(handle.layer_mask)
-        if node.get_script()!=null:
-            node.set_process(false); node.set_physics_process(false)
-            # Donor gameplay controllers do not own this fixture's movement.
-            # The selected trail scripts alone need native frame callbacks.
-            if node.get_script().resource_path.ends_with("Trail3D.gd"): handle.scripts.append(node)
-        for property in node.get_property_list():
-            if int(property.usage)&PROPERTY_USAGE_STORAGE:
-                var resource = node.get(property.name)
-                if resource is Resource: _materials(resource,seen,handle.clocks)
+            if node.layers!=0:
+                node.layers=int(handle.layer_mask)
+        for material in declared.materials:
+            Profile.begin("sampler_material_discovery")
+            _declared_material(material,seen,handle.clocks)
+            Profile.end("sampler_material_discovery")
+        handle.static_material_topology=true
+        handle.static_geometry_layers=true
+    else:
+        for node in handle.root.find_children("*","",true,false):
+            if node is AnimationPlayer:
+                node.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+                node.advance(0.0)
+                handle.players.append(node)
+                if not node.current_animation.is_empty():handle.native_animation_end=maxf(handle.native_animation_end,node.current_animation_length)
+                if not handle.clip.get("bounded_formation",false) and not node.current_animation.is_empty():
+                    handle.clip.seconds=maxf(handle.clip.seconds,node.current_animation_length)
+            if node is GPUParticles3D:
+                handle.emitter_speeds[node.get_instance_id()]=node.speed_scale
+                node.speed_scale = 0
+                var units=ParticleUnits.prepare(node)
+                if not units.is_empty():handle.particle_units.append(units)
+                handle.emitters.append(node)
+            if node is Light3D:
+                # Native material self-lighting belongs to the effect geometry.
+                # Painted actors/floors receive this source through PointLight2D
+                # only, so they cannot be lit twice by the same source.
+                node.light_cull_mask=int(handle.layer_mask)
+                node.layers=int(handle.layer_mask)
+                if node is OmniLight3D:handle.light_units[node.get_instance_id()]=LightUnits.prepare(node)
+            if node is Decal:
+                # Native decals project onto the painted scene's reconstructed
+                # surface positions, never onto the packed depth measurement pass.
+                node.cull_mask=1
+            if node is GeometryInstance3D:
+                handle.geometry.append({"node":node,"path":str(handle.root.get_path_to(node)),"selected":node.visible and node.layers!=0,"layer_enabled":node.layers!=0})
+                if node.layers!=0: node.layers=int(handle.layer_mask)
+            if node.get_script()!=null:
+                node.set_process(false); node.set_physics_process(false)
+                # Donor gameplay controllers do not own this fixture's movement.
+                # The selected trail scripts alone need native frame callbacks.
+                if node.get_script().resource_path.ends_with("Trail3D.gd"): handle.scripts.append(node)
+            for property in node.get_property_list():
+                if int(property.usage)&PROPERTY_USAGE_STORAGE:
+                    var resource = node.get(property.name)
+                    if resource is Resource:
+                        Profile.begin("sampler_material_discovery")
+                        _materials(resource,seen,handle.clocks)
+                        Profile.end("sampler_material_discovery")
     for binding in clip.get("emitters",[]):
         var emitter: GPUParticles3D = handle.components[binding.component].get_node(binding.path)
         emitter.use_fixed_seed=true; emitter.seed=int(binding.seed); emitter.fixed_fps=int(binding.fixed_fps)
@@ -113,8 +147,13 @@ static func make(parent: Node3D, clip: Dictionary, layer_mask:int=DEFAULT_LAYER)
         var trail:GPUParticles3D=handle.root.get_node(path)
         handle.motion_trails[trail.get_instance_id()]={"node":trail,"released":false}
         trail.hide()
+    handle.materials=[]
+    for resource in seen:
+        if resource is Material:
+            handle.materials.append(resource)
     handle.root.hide()
     for player in handle.players:player.clear_caches()
+    Profile.end("sampler_registration")
     return handle
 
 
@@ -197,5 +236,38 @@ static func sample(handle: Dictionary, seconds: float, frame_seconds: float, mot
             for emitter in handle.emitters:
                 if is_instance_valid(emitter): emitter.speed_scale=0.0,CONNECT_ONE_SHOT)
 
+
+
+static func _declared_bindings(handle: Dictionary) -> Dictionary:
+    var nodes: Array=[]
+    var materials: Array=[]
+    for component in handle.components.values():
+        if not component.has_method("source_bindings"):
+            return {}
+        var bindings: Dictionary=component.source_bindings()
+        if not bindings.get("static_material_topology",false):
+            return {}
+        for node in bindings.geometry:
+            assert(node is GeometryInstance3D and component.is_ancestor_of(node), "Declared geometry must belong to this source")
+            nodes.append(node)
+        for material in bindings.materials:
+            assert(material is Material, "Declared material must be an actual displayed resource")
+            if material not in materials:
+                materials.append(material)
+    return {"geometry":nodes,"materials":materials}
+
+
+static func _declared_material(material: Material, seen: Dictionary, clocks: Array) -> void:
+    if seen.has(material):
+        return
+    seen[material]=true
+    if material is ShaderMaterial and material.shader!=null:
+        var token=RegEx.new()
+        token.compile("\\bTIME\\b")
+        if token.search(material.shader.code):
+            # The established source sampler preserves original default textures.
+            _materials(material,{},clocks)
+    if material.next_pass!=null:
+        _declared_material(material.next_pass,seen,clocks)
 
 const VfxPackageIO_e139201e6f = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

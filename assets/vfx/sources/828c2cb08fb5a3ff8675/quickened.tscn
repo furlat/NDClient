@@ -1,0 +1,229 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/48c5f0a497996bca7c9b/program-e30eb6cf459630e6.gdshader" id="1_gbc04"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/c5411362a5f7445dc212/texture-03af14ffe6bee216.res" id="2_is44y"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/86669ac94843ca8ce259/texture-021d01dbae15d496.res" id="3_qfa7g"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/bbfc5bf573e8476360a1/mesh-00.res" id="4_2xtg4"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/3651e7574babd7d07e47/program-19c6687b4e7fcff6.gdshader" id="5_uevp5"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/1a6b8fb7041d713b87f2/texture-3e710d7f79798425.res" id="6_dkctq"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/sources/d3ae80a5a32b00d90d82/mesh-01.res" id="7_pv2s8"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/001cbcd6a8cd3126115a/program-db1921a6f2ee5bb3.gdshader" id="8_lc4yj"]
+[ext_resource type="SphereMesh" path="res://assets/vfx/sources/37073d6a048c1977a240/mesh-02.res" id="9_mwg4u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_omds1"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_gbc04")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_clock = 0.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/native_palette_texture = ExtResource("2_is44y")
+shader_parameter/native_palette_count = 5
+shader_parameter/native_palette_quantize = true
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.0
+shader_parameter/source_noise = ExtResource("3_qfa7g")
+shader_parameter/clock = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/side = 0.0
+shader_parameter/factory_motion_kind = 4
+shader_parameter/factory_piece_index = 0
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_gbc04")
+metadata/factory_clock_names = ["clock"]
+metadata/factory_world_space_uniform = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3lvog"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_gbc04")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_clock = 0.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/native_palette_texture = ExtResource("2_is44y")
+shader_parameter/native_palette_count = 5
+shader_parameter/native_palette_quantize = true
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.0
+shader_parameter/source_noise = ExtResource("3_qfa7g")
+shader_parameter/clock = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.173
+shader_parameter/side = 0.0
+shader_parameter/factory_motion_kind = 4
+shader_parameter/factory_piece_index = 1
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_gbc04")
+metadata/factory_clock_names = ["clock"]
+metadata/factory_world_space_uniform = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ypm21"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_gbc04")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_clock = 0.0
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/native_palette_texture = ExtResource("2_is44y")
+shader_parameter/native_palette_count = 5
+shader_parameter/native_palette_quantize = true
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.0
+shader_parameter/source_noise = ExtResource("3_qfa7g")
+shader_parameter/clock = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.346
+shader_parameter/side = 0.0
+shader_parameter/factory_motion_kind = 4
+shader_parameter/factory_piece_index = 2
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_gbc04")
+metadata/factory_clock_names = ["clock"]
+metadata/factory_world_space_uniform = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aoyr7"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("5_uevp5")
+shader_parameter/native_palette_texture = ExtResource("2_is44y")
+shader_parameter/native_palette_count = 5
+shader_parameter/native_palette_quantize = true
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.0
+shader_parameter/glow_tex = ExtResource("6_dkctq")
+shader_parameter/strength = 0.0
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("5_uevp5")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jpee3"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("8_lc4yj")
+shader_parameter/albedo = Color(0.78431374, 0.8509804, 0.70980394, 0)
+shader_parameter/albedo_texture_size = Vector2i(0, 0)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Vector4(1, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+metadata/factory_mote_albedo_uniform = true
+metadata/factory_prepared_shader = ExtResource("8_lc4yj")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[node name="Fit" type="Node3D" unique_id=1237015120]
+transform = Transform3D(1, 0, 0, 0, 0.8164966, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Strip0" type="MeshInstance3D" parent="." unique_id=664084772]
+material_override = SubResource("ShaderMaterial_omds1")
+cast_shadow = 0
+custom_aabb = AABB(-4, -2, -4, 8, 8, 8)
+mesh = ExtResource("4_2xtg4")
+
+[node name="Strip1" type="MeshInstance3D" parent="." unique_id=168976168]
+material_override = SubResource("ShaderMaterial_3lvog")
+cast_shadow = 0
+custom_aabb = AABB(-4, -2, -4, 8, 8, 8)
+mesh = ExtResource("4_2xtg4")
+
+[node name="Strip2" type="MeshInstance3D" parent="." unique_id=1860833308]
+material_override = SubResource("ShaderMaterial_ypm21")
+cast_shadow = 0
+custom_aabb = AABB(-4, -2, -4, 8, 8, 8)
+mesh = ExtResource("4_2xtg4")
+
+[node name="Core0" type="MeshInstance3D" parent="." unique_id=2003256684]
+material_override = SubResource("ShaderMaterial_aoyr7")
+cast_shadow = 0
+mesh = ExtResource("7_pv2s8")
+
+[node name="Mote0" type="MeshInstance3D" parent="." unique_id=47665593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0, 0)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote1" type="MeshInstance3D" parent="." unique_id=976404639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.076300114, 0.16729689, 0.13215566)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote2" type="MeshInstance3D" parent="." unique_id=1778230867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01113486, -0.24185689, -0.019286148)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote3" type="MeshInstance3D" parent="." unique_id=1181683615]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15694898, 0.2064313, 0)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote4" type="MeshInstance3D" parent="." unique_id=2003757832]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.024854068, -0.27124286, 0.0430485)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote5" type="MeshInstance3D" parent="." unique_id=202418903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12392041, 0.15477644, 0.2146365)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote6" type="MeshInstance3D" parent="." unique_id=1718895553]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08252613, -0.29740223, 0)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote7" type="MeshInstance3D" parent="." unique_id=150522243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1450031, 0.14687896, -0.2511527)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote8" type="MeshInstance3D" parent="." unique_id=413986434]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09627625, -0.10952, -0.1667554)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote9" type="MeshInstance3D" parent="." unique_id=492444210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07299313, 0.22648834, 0)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote10" type="MeshInstance3D" parent="." unique_id=709258877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11574122, -0.10552371, 0.20046964)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote11" type="MeshInstance3D" parent="." unique_id=513021643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12453989, -0.10636516, 0.21570946)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote12" type="MeshInstance3D" parent="." unique_id=1846542957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2709983, -0.095340006, 0)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")
+
+[node name="Mote13" type="MeshInstance3D" parent="." unique_id=1806140919]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13377456, -0.14374743, -0.23170431)
+material_override = SubResource("ShaderMaterial_jpee3")
+cast_shadow = 0
+mesh = ExtResource("9_mwg4u")

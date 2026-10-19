@@ -1,4 +1,7 @@
 extends RefCounted
+## Immutable source text/interfaces. Materials and their values remain private.
+static var expanded_sources: Dictionary = {}
+static var uniform_names: Dictionary = {}
 
 
 ## Native source loading semantics used by archived authoring code.
@@ -25,6 +28,9 @@ static func imported_image(path: String) -> Image:
 
 
 static func expand_shader(code: String, base: String) -> String:
+	var key := base + "\n" + code
+	if expanded_sources.has(key):
+		return expanded_sources[key]
 	var result = ""
 	for line in code.split("\n"):
 		if line.strip_edges().begins_with("#include"):
@@ -34,7 +40,14 @@ static func expand_shader(code: String, base: String) -> String:
 			result += expand_shader(VfxPackageIO_39ced3e79a.text(path), path.get_base_dir()) + "\n"
 		else:
 			result += line + "\n"
+	expanded_sources[key] = result
 	return result
+
+
+static func clear_program_caches() -> void:
+	# Editor/offline rebuild after include-file edits, never per occurrence.
+	expanded_sources.clear()
+	uniform_names.clear()
 
 ## Equivalent finite proximity fade with increasing smoothstep edges. Generated
 ## VisualShader sources invert smoothstep by swapping its edges, which is undefined
@@ -78,11 +91,16 @@ static func finish_function(code: String, function_name: String, addition: Strin
 ## Declared names also work before the renderer has compiled the uniform list.
 static func replace_shader(material: ShaderMaterial, shader: Shader) -> void:
 	var parameters := {}
-	var declarations := RegEx.new()
-	declarations.compile("uniform\\s+(?:(?:lowp|mediump|highp)\\s+)?\\w+\\s+(\\w+)")
 	var original: Shader = material.shader
-	for found in declarations.search_all(expand_shader(original.code,original.resource_path.get_base_dir())):
-		var name: String = found.get_string(1)
+	var code: String = expand_shader(original.code, original.resource_path.get_base_dir())
+	if not uniform_names.has(code):
+		var declarations := RegEx.new()
+		declarations.compile("uniform\\s+(?:(?:lowp|mediump|highp)\\s+)?\\w+\\s+(\\w+)")
+		var names: Array[String] = []
+		for found in declarations.search_all(code):
+			names.append(found.get_string(1))
+		uniform_names[code] = names
+	for name in uniform_names[code]:
 		var value: Variant = material.get_shader_parameter(name)
 		if value!=null:
 			parameters[name]=value
