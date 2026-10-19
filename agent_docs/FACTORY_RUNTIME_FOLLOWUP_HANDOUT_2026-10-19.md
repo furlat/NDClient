@@ -111,6 +111,37 @@ non-white tint and one body material/impact treatment. This source-review
 finding needs actual pixel comparison; it is not yet a measured visual failure.
 The client continues actual owner/context/history preparation independently.
 
+### 4. Blocking actual consumer shader compilation failure
+
+The first real schema16 Mirror Image replay, with actual native actor layers,
+exposed **two shader compilation errors** in the sealed c494 package:
+
+- `assets/vfx/shared/resources/e7ee404afa25f1a82e67ee0e853f083d0e72c1c568063acea0d3b2074d02f6bb.res`
+  (actor echo colour): `Tokenizer: Unknown character #35: '#'` at the
+  `#include "res://integrations/ndclient/presentation/source_colour_modular.gdshaderinc"`
+  directive.
+- `assets/vfx/shared/resources/bda6d5b000039e4a932a2da57906325cb960203a5955eb6f5b5b0d9510d14dff.res`
+  (actor echo depth): the same tokenizer error at `#define CAPPED_MODULAR`;
+  its following includes also reference Factory's `integrations/ndclient/`.
+
+Original log, in the private client worktree:
+`.runtime/tests/20261019T212040Z/native_actor_context_render_checks.log`.
+Reproduce with `bash tools/run_tests.sh --only native_actor_context_render_checks`.
+Actual current fixture: `tests/fixtures/schema16/mirror-image/amber`.
+The candidate client provider code and test remain **private, not published to
+the receiving client** while these errors exist. The test is explicitly a
+migration-owned failed gate. Existing main client graphics remain unchanged.
+
+The source's colour and depth shaders must compile in the actual closed
+consumer package, with all preprocessor/include dependencies resolved correctly
+when serialized. Do not require a client-only shader monkey patch or reconstruct
+Factory's integration directory in the client. Include a direct GPU use of both
+serialized Resources in the complete successor's receiving smoke test.
+The 33 passing consumer ownership/count/context assertions and 47 changed pixels
+in this failed run do **not** qualify these shaders or their output. This is now
+an observed source-package failure in addition to the source-colour parity gap
+above. Client providers and qualification can proceed on independent capabilities.
+
 ## Delivery and qualification
 
 - Keep your existing1–2ms constructor allowance (aim below1ms) and<=250µs
