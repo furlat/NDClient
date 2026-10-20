@@ -18,6 +18,27 @@ when = {"attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
 
 Fields combine with AND and values in each array with OR. Current accepted public enums are `attack_outcome = Hit | Miss | Crit | Crit Miss` and `target_kind = creature | object`. Missing/null facts retain the baseline. Empty `when` deliberately stays unsupported; neither `kind`, `value`, ID nor an art title dispatches it. Element, passive rider or area branches still need their actual public fact/provider contract; titles are insufficient.
 
+Exact disclosed option identity is also supported:
+
+```gdscript
+when = {"effect_id": ["support.enhance_ability.strength"]}
+```
+
+This is literal `SpellFact.effect_id`, separate from a saving throw's effect ID.
+The client now assigns the existing17 public forms across Bestow Curse,
+Blindness/Deafness, Enhance Ability and Protection from Energy, borrowing one
+current immutable caster/recipe and their existing condition owners. No new
+spell-specific decoder or copied TypeScript recipe is required. Missing, null
+and unknown values retain the baseline. Chromatic Orb, Acid Arrow and Sorcerous
+Burst originals still carry null option IDs; do not invent elemental selectors.
+[Exact forms, original journals and remaining gaps](PRODUCTION_OPTION_IDENTITIES_2026-10-20.md).
+
+The one newly confirmed source request is Deafness's finite application: the
+shared `review/blindness_deafness/back/lifecycle` is hardcoded Blinded. Its
+Deafened option remains explicitly missing instead of playing that art. The
+separate actual Deafened condition marker already works and must not be replaced
+or counted as the missing finite source.
+
 Saving-throw alternatives now have a shared application-result provider:
 
 ```gdscript
@@ -36,8 +57,8 @@ opposite booleans on different effect IDs are not mutually exclusive predicates.
 Rendering and Studio borrow the same cached application choice and evidence.
 
 The Resource retains all130 imported alternatives/240cues across43 current
-native owners, their metadata and gaps. Three explicitly authored outcome
-predicates are active. The remaining alternative count is not a count of missing
+native owners, their metadata and gaps. Three explicitly authored saved-outcome
+predicates and seventeen literal public option predicates are active. The remaining alternative count is not a count of missing
 gameplay branches: condition/spatial/item ownership, review-only choices and
 rejected artwork have separate meanings. Source presence, input provider,
 recorded scenario, native output and user approval remain separate facts.

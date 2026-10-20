@@ -1,0 +1,133 @@
+{
+ "id": "spell.divine_favor/equipped_use_retire_replace",
+ "title": "Divine Favor: actual held item, use, retirement and replacement",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.divine_favor"
+  ],
+  "action": [
+   "action.attack"
+  ],
+  "condition": [
+   "condition.spell.divine_favor"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.divine_favor"
+   ],
+   "at": [
+    4,
+    6
+   ],
+   "items": [
+    {
+     "id": "weapon.quarterstaff",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "id": "weapon.longsword",
+     "placement": "inventory"
+    }
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.ogre",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.divine_favor",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "seed": 2,
+ "required_behaviors": [
+  "spell.divine_favor",
+  "action.attack",
+  "action.drop_concentration"
+ ],
+ "required_conditions": [
+  "condition.spell.divine_favor"
+ ],
+ "required_condition_ends": [
+  "condition.spell.divine_favor"
+ ],
+ "required_facts": [
+  "attack"
+ ],
+ "purpose": "Exact real equipped item lifecycle and public owner evidence. A missing authoritative owner is a failed requirement, never a fabricated lifetime."
+}

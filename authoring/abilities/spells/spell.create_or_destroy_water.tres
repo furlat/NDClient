@@ -101,14 +101,14 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0, 1)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
 variants = Array[ExtResource("6_hh7bg")]([SubResource("Resource_esmpd")])
-applies_conditions = PackedStringArray("condition.spell.rain_wet")
+applies_conditions = PackedStringArray("unbound:dnd.spatial.environmental_conditions.Wet")
 applies_surfaces = PackedStringArray("spatial_effect.material.water_surface")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
@@ -118,4 +118,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/create_water_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual disclosed water-surface UUID owns the create source. Default finite surface cue0 belongs to that spatial owner; Wet cue1 belongs to the actual condition UUID via its exact disclosed semantic authoring key. Neither finite cast duplicates the held owners. Destroy/removal choreography remains separately unqualified."

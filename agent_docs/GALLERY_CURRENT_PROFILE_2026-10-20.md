@@ -685,3 +685,63 @@ Exact complete source:
 `.runtime/consolidation/production-closure-live-analysis.json`. This preserves
 the open frame/latency work without interrupting the production migration for
 another optimization detour.
+
+
+## Exact option/water provider checkpoint: actual Gallery repeat
+
+Source-frozen actual issued-command test313/0, no script/engine errors or owned
+leftovers: `.runtime/tests/20261020T113039.907232Z/summary.json`.
+Exact launcher arguments are retained in that receipt: ordinary
+`live_spell_checks --scenario gallery_sorcerer --profile-pipeline`.
+The full173headless suite and serialized native gates finished first; no other
+Godot process, correctness job, source build or offline analysis ran during
+this measured encounter. No cProfile/action timing hooks were enabled.
+
+Original run `.runtime/player-runs/20261020T113042.617128Z`, original profile
+`generated/profiles/2026-10-20T13-31-40-gallery-live-spells.json`. Native root is
+1600×960 and measured camera size12. The27command window has6980frames, zero
+evictions, sorted-floor p50/p95/p99/max **6.228/12.713/16.152/42.460ms**;
+58frames exceed16.667ms and one exceeds33.333ms. This is a functional/timing
+receipt, not a controlled A/B speedup or the final100FPS/no-spike pass.
+
+Exclusive input→first-animation stages, milliseconds:
+
+| Command | Input→sent | Sent→admission start | Admission | Fold | Compile | Opening | Publication/gaps | Total |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+|Door1|14.795|49.319|5.437|38.933|10.211|6.926|107.817|233.438|
+|Room move2|2.746|70.268|3.334|72.294|5.367|7.763|16.957|178.729|
+|Opportunity move8|2.959|69.372|10.647|46.794|14.223|7.347|25.097|176.439|
+|Fireball13|20.522|62.063|1.847|34.361|9.488|9.312|51.562|189.155|
+
+Sent→admission includes server dispatch, transport, framing and queue time.
+Matched actual worker dispatch (command number AND actor UUID) is
+29.380/55.032/47.568/43.780ms respectively. The actual execute/project split is
+15.662/13.447ms for the door and28.737/14.859ms for Fireball, inside that
+interval; these are different-clock durations, not additional stages.
+
+Room movement's72.294ms canonical envelope contains reduce70.735ms, with
+46.892facts/18.359world nested inside, then stage.825/commit.672. Fireball's
+34.361ms envelope contains reduce32.689, stage.701/commit.894; nested facts
+13.316/world16.043. Its9.212ms compiler splits into trace2.659, lineage2.186,
+shell1.258, actor cuts.976, delivery.876, components.541, requirements.400,
+ending.289 and disclosure.020. Opening metadata separately reports characters
+4.151, source publications2.370, source sizes.569, roles.941, environment.274
+and source files.068ms; these are nested scopes, not addends to compile.
+Door's107.817ms publication/gaps is still an observed remainder and remains
+open; it is not mislabeled server work or one identified CPU task.
+
+The42.460ms worst interaction frame1090 occurs during command3 end-turn.
+Play16.238ms, HUD/diagnostics.308 leave25.914ms outside those scopes. Nested
+Play leaves include session/timeline11.094, timeline advance7.344, readiness
+5.538, media plan4.083, preparation3.525, source preparation2.535 and actor
+sample1.675ms. Last available render CPU/GPU.342/.402ms do not explain the
+remainder. The next largest frame is24.994ms: Play15.407, outside scopes9.174;
+CPU-media release2.598ms is one nested leaf. No driver/source/scheduler cause
+is asserted from this incomplete attribution.
+
+Complete27command exclusive decompositions, matching worker leaves and full
+worst-frame scopes are in `.runtime/consolidation/option-water-live-analysis.json`.
+Approved source graphics, lighting, colours, wall/sorting rules and clocks were
+not retuned. This Gallery repeat does not qualify Water/Wet surprise first-use
+latency or the new enchantments' native output; their recorded/native evidence
+has its own stated boundary.

@@ -57,13 +57,18 @@ static func replaced_media(condition:Dictionary,recipe:Dictionary)->Array:
 ## lifecycles. Cache only its immutable phase; the owner clock remains private.
 static func authored_samples(common:Dictionary,cache:Dictionary)->Array:
     var result:Array=[]
-    for phase in authored_phases(common.recipe,str(common.condition.behavior_id),cache,str(common.source)):
+    for phase in authored_phases(common.recipe,Authoring.Catalog.condition_key(common.condition),cache,str(common.source)):
         var row:Dictionary=common.merged(phase,true)
         row.merge({"id":str(common.id)+":authored:"+str(phase.native_cue.source_index),"kind":"native_effect","native_spell":true,
             "persistent_owner":true,"target_uuid":common.actor_uuid,"cast_recipe":{"enabled":false},
             "start_ms":common.start_ms,"absolute_start_ms":common.absolute_start_ms,"duration_ms":common.duration_ms,
             "from_position":[0,0],"to_position":[0,0],"from_elevation_feet":0.0,"to_elevation_feet":0.0,
             "ground_target":false,"sample_hz":60.0},true)
+        # The authored setter observes this actual member's lifetime, not a
+        # spell duration or a Factory fixture default. NativeInputs owns its
+        # ordinary deduplicated setter publication.
+        var membership:String=str(row.native_cue.get("membership_input",""))
+        if not membership.is_empty():row.native_inputs={membership:common.removal_age_ms==null}
         row.trace_keys=[row.id]
         result.append(row)
     return result
@@ -303,10 +308,28 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
             var source_anchor:Variant=source_effect.get("anchor_position")
             if source_anchor==null:source_anchor=source_effect.positions[0]
             var observed_removals:Array=owner.get("spatial_removals",[])
-            var construction:Dictionary=SpatialInputs.construction(str(id),effect,phase.native_cue,source_effect,observed_removals)
+            var constructed_surface:bool=phase.native_cue.get("constructor_input",{}).get("cell_input")=="surface_groups"
+            # Immutable topology belongs to this exact admitted spatial owner.
+            # Reuse it while current AreaMask admission changes independently.
+            var construction:Dictionary=owner.get("surface_constructions",{}).get(phase.native_cue.source_index,{}) if constructed_surface else {}
+            if construction.is_empty():
+                construction=SpatialInputs.construction(str(id),effect,phase.native_cue,source_effect,observed_removals)
+                if constructed_surface and construction.ready:
+                    if not owner.has("surface_constructions"):owner.surface_constructions={}
+                    owner.surface_constructions[phase.native_cue.source_index]=construction
+            elif positions.any(func(position):return position not in construction.source_cells):
+                construction={"ready":false,"reason":"spatial_source_topology_extension_not_bound"}
             if construction.ready:
                 row.native_constructor_inputs=construction.operands
                 row.native_constructor_evidence=construction.evidence
+                if construction.has("surface_records"):
+                    row.spatial_surface_records=construction.surface_records
+                    # First disclosure is not creation. Only the exact native
+                    # created row at this owner's admission cut opens rainfall.
+                    var birth_observed:bool=not owner.initial and owner.get("spatial_observations",[]).any(func(observation):
+                        return observation.operation=="created" and float(observation.at_ms)==float(owner.start_ms))
+                    row.spatial_creation_observed=birth_observed
+                    if not birth_observed:row.age_ms+=float(phase.native_cue.get("initial_source_seconds",0.0))*1000.0
                 if construction.has("source_anchor"):
                     source_anchor=construction.source_anchor
                     var elevation:float=float(construction.source_elevation_steps)*5.0 if construction.source_elevation_steps!=null else 0.0

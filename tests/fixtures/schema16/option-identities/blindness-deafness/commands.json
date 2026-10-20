@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "66f7cac0-de80-4fdd-9c42-2023f3a3116a",
+   "state_revision": "e761ab82-9711-4aef-addd-8574a22c4005",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_blindness_deafness_baseline",
+   "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+   "audience_id": "5a1c2984-86ce-4e0f-97ec-0bf15f2b9ca6",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_blindness_deafness_baseline",
+    "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+    "audience_id": "5a1c2984-86ce-4e0f-97ec-0bf15f2b9ca6",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "603fd159-c869-4e7f-a424-718f1bedc64f",
+   "state_revision": "9eff5860-e024-4f05-8869-a828d764c5f5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_blindness_deafness_baseline",
+   "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+   "audience_id": "0082471d-aced-4717-94c7-5f39c46639d6",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_blindness_deafness_baseline",
+    "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+    "audience_id": "0082471d-aced-4717-94c7-5f39c46639d6",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "a186f5db-09d6-416a-882b-16a0ab87cf44",
+   "state_revision": "86d84790-53cb-419d-8c34-31ea78cd42a3",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_blindness_deafness_baseline",
+   "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+   "audience_id": "0082471d-aced-4717-94c7-5f39c46639d6",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_blindness_deafness_baseline",
+    "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+    "audience_id": "0082471d-aced-4717-94c7-5f39c46639d6",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.blindness_deafness",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.blindness_deafness",
+   "display_name": "Blindness/Deafness (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "b9ff1810-ef8c-4bbe-a970-5ec6b6f90961",
+   "state_revision": "97d30b3e-aa9f-46f8-898c-cf2b04c27fc9",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_blindness_deafness_baseline",
+   "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+   "audience_id": "5a1c2984-86ce-4e0f-97ec-0bf15f2b9ca6",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_blindness_deafness_baseline",
+    "game_epoch": "8214d278-6f18-4021-8bb7-e58e0d60eabd",
+    "audience_id": "5a1c2984-86ce-4e0f-97ec-0bf15f2b9ca6",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

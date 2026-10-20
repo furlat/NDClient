@@ -182,7 +182,7 @@ static func _native_phase(entry:Dictionary,phase:Dictionary,owner_phase:String,m
 static func _recorded(entry: Dictionary,rows: Array) -> void:
     for row in rows:
         if row.kind in ["condition","condition_exit","condition_state"]:continue
-        var persistent=row.get("owner",{}).get("condition",{}).get("behavior_id")==entry.id
+        var persistent=Catalog.condition_key(row.get("owner",{}).get("condition",{}))==entry.id
         var component:Dictionary=row.get("component",{})
         var owner:Dictionary=row.get("owner",{})
         var spatial:bool=owner.get("effect",{}).get("content_ref",{}).get("content_id")==entry.id \

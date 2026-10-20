@@ -590,14 +590,14 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                 _bound_audio(group,node,sounds.get("equipment",{}),"change",audio_markers,group.actor_tracks.filter(func(track):return track.source_event_uuid==node.id)[0].actor_uuid,"equipment",cache,audio_track)
             for cue in graph.condition_cues.get(node.id,[]):
                 var condition:Dictionary=cue.condition
-                var binding:Dictionary=sounds.get("conditions",{}).get(str(condition.behavior_id),{})
-                _bound_audio(group,node,binding,cue.phase,audio_markers,cue.actor_uuid,"conditions/"+str(condition.behavior_id),cache,audio_track)
+                var binding:Dictionary=sounds.get("conditions",{}).get(Authoring.Catalog.condition_key(condition),{})
+                _bound_audio(group,node,binding,cue.phase,audio_markers,cue.actor_uuid,"conditions/"+Authoring.Catalog.condition_key(condition),cache,audio_track)
                 var feedback:Dictionary=cue.recipe.get(cue.phase,{})
                 if not feedback.get("feedbackEnabled",false):continue
                 var style=Authoring.load_data("catalog/badge_style.json",cache)
                 var prefix:String=feedback.get("feedbackPrefix","−" if cue.phase=="removal" else "+")
                 var text:String=prefix+str(condition.get("name",cue.recipe.get("label",condition.behavior_id)))
-                var pointer:String=str(condition.behavior_id)+"/"+cue.phase+"/feedbackEnabled"
+                var pointer:String=Authoring.Catalog.condition_key(condition)+"/"+cue.phase+"/feedbackEnabled"
                 _feedback(group,node,{"text":text,"color":feedback.feedbackColor,"durationMs":feedback.get("feedbackDurationMs",style.durationMs)},start,cue.actor_uuid,Authoring.Catalog.source_pointer("catalog/condition_recipes.json",pointer,cache),cache)
     var projectiles={}
     for component in group.components:

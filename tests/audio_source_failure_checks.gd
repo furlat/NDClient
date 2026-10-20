@@ -30,7 +30,9 @@ func failed_sources()->void:
     check(presenter.preparation_counts.loads==2,"Distinct failed sources own one read each; two cue owners share the same source")
     check(not presenter.ready(rows),"Starting failed-source preparation cannot claim readiness")
     var deadline:int=Time.get_ticks_msec()+10000
-    while presenter.loads.values().any(func(job):return job.task>=0) and Time.get_ticks_msec()<deadline:
+    # One shared read may finish between two cue owners in the same prepare.
+    # Await each public terminal outcome, not the source task's internal token.
+    while rows.any(func(row):return presenter.diagnostics(row.id).rows.get(row.id,{}).get("state")!="missing") and Time.get_ticks_msec()<deadline:
         await process_frame
         presenter.prepare(rows,host)
     check(presenter.loads.size()==2 and presenter.loads.values().all(func(job):return job.task==-1),"Completed failures retain results after consuming each pool ID exactly once")

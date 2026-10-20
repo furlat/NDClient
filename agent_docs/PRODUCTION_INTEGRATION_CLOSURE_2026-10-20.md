@@ -51,9 +51,11 @@ The remaining migration is concrete: unsupported delivered source inputs and
 fixed review endpoints; additional genuine lifecycle/outcome/item/class scenarios;
 native output for those scenarios; the five named backend/setup baseline failures;
 unaccepted artwork and final live frame/latency qualification. These are distinct
-from installing the whole package. Bestow Curse, Blindness, Enhance Ability and
-Protection from Energy already expose useful actual public effect IDs; they must
-not all be mislabeled as absent wire data. Native wielded weapon-body alternatives
+from installing the whole package. Bestow Curse, Blindness/Deafness, Enhance Ability and
+Protection from Energy expose17 literal public option IDs. They are now selected
+from those actual IDs while borrowing their current common recipe/caster;15
+already-correct condition/state forms keep their owners. Old full-recipe copies
+are removed. This does not claim per-option native qualification for all17. Native wielded weapon-body alternatives
 remain rejected;87 unassigned weapon clips are not automatic production work.
 
 The post-batch actual Gallery receipt is313/0, all logs clean, with interaction
@@ -112,3 +114,75 @@ python3 tools/studio.py --recording tests/fixtures/schema16/root-target-save/sav
 ```
 
 No preview is automatically left running by this checkpoint.
+
+
+## Next production checkpoint: exact options and water owners
+
+| Shared path / consumers | Concrete current state | Still open |
+|---|---|---|
+| Exact option selection |17literal predicates in4production Resources; shared caster/current recipe, four unchanged two-seat baselines; removed8,000+lines of obsolete recipe copies. |13other per-form original witnesses; Deafness finite source hardcodes Blinded and remains an explicit missing cue. Existing Deafened marker is separate. |
+| Disclosed water surface |One actual spatial UUID owns immutable native constructor groups, exact13cells,160optical samples per group, current AreaMask. |Original has no creation/removal row: no claim of rainfall onset or destroy choreography. Topology extension remains explicit. |
+| Wet held source |Exact null-behavior semantic authoring lookup, actual condition UUID lifetime, actual recipient geometry, Boolean membership. One native-only Resource without legacy stack defaults. |No recorded Wet retirement; private false-membership controls are not server events. User visual acceptance remains separate. |
+| Telekinesis source operand |Explicit authored suppressed=false under the existing schema16 retired-Antimagic disposition. No global default. |Full spell choreography/native-output qualification remains separate from this input policy. |
+| Enchantment lifecycles |New unchanged Shillelagh and Divine Favor equipped/use/retire/replace journals; imported with the same ordinary Studio path. |Magic Weapon has a valid equipped cast but no public item/condition effect membership. Its original remains failed. Divine Favor held attack misses, so it cannot qualify positive radiant impact. |
+
+The four option cases, water baseline and three enchantment cases are published
+in the local Studio library from committed originals. Source/cache/coverage
+readers use one pure key function: any non-null behavior remains verbatim;
+otherwise only the exact public semantic key selects an authored source. The
+canonical condition keeps its UUID, state and ordering. Unknown keys do not
+borrow an approximate source. There is no second reduced state, runtime
+validator, renderer, scheduler, vendor edit or lighting retune.
+
+Bounded plan/antiOOP/antislop review found no remaining source/ownership blocker.
+The initial missing Wet output exposed default legacy maxLayers=0; native-only
+Resources now enter the existing build through their nonempty effects and omit
+legacy composition. Explicit old zero-layer semantics remain unchanged.
+Offline membership guards reject geometry/event channels and finite/delayed
+ownership; the runtime uses its existing deduplicated setter path.
+
+Focused receipts: selector1155/0, actual production option identities324/0;
+surface166/0; Wet+offline controls52/0. Ordinary native water/Wet278/0 proves
+both actual faction streams, four views, separate source-hidden/restored
+framebuffer pixels, canonical reverse seeks/loops and private-owner cleanup.
+[Water receipts and24capture witnesses](WATER_SOURCE_PROVIDER_COHORT_2026-10-20.md).
+[Original enchantment lifecycles and producer gap](WEAPON_ENCHANTMENT_LIFECYCLES_2026-10-20.md).
+
+Recreate these local Studio entries without a backend:
+
+```sh
+python3 tools/studio_cases/record.py --import-recordings tests/fixtures/schema16/option-identities tests/fixtures/schema16/water-source-provider tests/fixtures/schema16/weapon-enchantment-lifecycle
+```
+
+Open `studio.cmd`; select the existing capability and its baseline or
+`equipped_use_retire_replace` case. A recorded case, prepared native source,
+measured output and user visual acceptance remain separate facts.
+
+
+Post-build corrections exposed by the complete fast run are retained in
+`.runtime/tests/20261020T112131.682294Z`:170/172 passed. The UI-art inventory
+had omitted the opaque semantic condition key; it now shares the Studio source
+kind classifier and Wet explicitly reuses the existing generic condition icon
+as a stand-in. No new image or claim of dedicated artwork was added. The failed
+source-audio test awaited a pool task token instead of each public cue outcome;
+its wait now observes all terminal diagnostics. No runtime audio code changed.
+Both failures pass in the focused receipt alongside the new653/0 enchantment
+gate (`.runtime/tests/20261020T112635.321519Z/summary.json`).
+
+Latest serialized native regression run is clean: Vampiric Touch82/0,
+production saved-outcome receivers84/0 and water/Wet278/0,
+`.runtime/tests/20261020T112708.503903Z/summary.json`.
+
+
+Final complete fast suite: **173/173 clean**, zero script/engine errors or owned
+leftovers (`.runtime/tests/20261020T112707.141470Z/summary.json`).
+Subsequent exclusively measured issued-command Gallery: **313/313 clean**
+(`.runtime/tests/20261020T113039.907232Z/summary.json`).
+Frame p50/p95/p99/max6.228/12.713/16.152/42.460ms,58frames above16.667ms,
+one above33.333ms; no eviction. Door/room move/opportunity move/Fireball
+input→first-animation233.438/178.729/176.439/189.155ms. Full actual client and
+matched worker decompositions are retained in
+`.runtime/consolidation/option-water-live-analysis.json` and
+[the performance ledger](GALLERY_CURRENT_PROFILE_2026-10-20.md).
+These are safety/timing receipts, not a claimed optimization or final latency
+pass. Water/Wet surprise first-use and enchantment-native output remain open.

@@ -117,7 +117,7 @@ static func _recipe_missing(row: Dictionary, recipe: Dictionary, source: String,
         _need(row,"audio","authored_action_audio_not_implemented",recipe.get("_source_fields",{}).get("effectAudioCue",pointer+"/effectAudioCue"),"cue_id",recipe.effectAudioCue)
 
 static func _persistent_condition(row: Dictionary, condition: Dictionary, persistent: Dictionary, cache: Dictionary, rig_id: String) -> void:
-    var prefix = str(condition.behavior_id)+"/persistent/"
+    var prefix = Authoring.Catalog.condition_key(condition)+"/persistent/"
     var source = "catalog/condition_recipes.json:/"+prefix.trim_suffix("/")
     var mechanisms: Array=[]
     var replaced:Array=NativePersistent.replaced_media(condition,{"persistent":persistent})
@@ -165,10 +165,10 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
 
 ## The package lifecycles this applied condition plays (one occurrence each).
 static func _lifecycle_components(row:Dictionary,condition:Dictionary,actor_uuid:Variant,cache:Dictionary)->void:
-    var config:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).get(str(condition.behavior_id),{})
+    var config:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).get(Authoring.Catalog.condition_key(condition),{})
     var common:Dictionary={"id":"condition:"+str(condition.condition_uuid),"condition_uuid":condition.condition_uuid,"actor_uuid":actor_uuid,"condition":condition,
         "start_ms":row.get("_commit_ms",row._admit_ms),"absolute_start_ms":row.get("_commit_ms",row._admit_ms),"duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false,
-        "recipe":config,"source":"catalog/condition_recipes.json:/"+str(condition.behavior_id)}
+        "recipe":config,"source":"catalog/condition_recipes.json:/"+Authoring.Catalog.condition_key(condition)}
     var samples:Array=NativePersistent.lifecycle_samples(common,NativePersistent.lifecycles(condition),cache)
     samples.append_array(NativePersistent.authored_samples(common,cache))
     for sample in samples:
@@ -470,7 +470,7 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
         _requirements(row,node,actor,cache,graph.recipes.get(node.id,{}),graph.get("spell_sources",{}),graph)
         for cue in graph.condition_cues.get(node.id,[]):
             var condition:Dictionary=cue.condition
-            var key:String=str(condition.get("behavior_id",""));var recipe:Dictionary=cue.recipe
+            var key:String=Authoring.Catalog.condition_key(condition);var recipe:Dictionary=cue.recipe
             var change:Dictionary=recipe.get(cue.phase,{})
             if change.get("feedbackEnabled",false):_need(row,"feedback_text","authored_condition_feedback_not_implemented",Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+cue.phase+"/feedbackEnabled",cache))
             var replaced:Array=NativePersistent.replaced_media(condition,recipe)

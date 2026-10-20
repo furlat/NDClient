@@ -53,7 +53,7 @@ static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initia
     return changed
 
 static func recipe(condition: Dictionary, cache: Dictionary) -> Dictionary:
-    return Authoring.load_data("catalog/condition_recipes.json",cache).get(condition.get("behavior_id"),{})
+    return Authoring.load_data("catalog/condition_recipes.json",cache).get(Authoring.Catalog.condition_key(condition),{})
 
 static func suppressed(condition: Dictionary) -> bool:
     var state:Variant=condition.get("state")
@@ -94,7 +94,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         var age=maxf(0,at_ms-owner.start_ms)
         var alpha=1.0 if is_inf(owner.end_ms) else clampf(1-(at_ms-owner.end_ms)/maxf(.001,fade),0,1)
         var common={"id":"condition:"+owner.id,"kind":"condition","condition_uuid":owner.id,"actor_uuid":owner.actor_uuid,
-            "source":"catalog/condition_recipes.json:/"+str(owner.condition.behavior_id),"source_event_uuid":"",
+            "source":"catalog/condition_recipes.json:/"+Authoring.Catalog.condition_key(owner.condition),"source_event_uuid":"",
             "status":"available","start_ms":owner.start_ms,"absolute_start_ms":owner.start_ms,"duration_ms":owner.end_ms-owner.start_ms,
             "age_ms":age,"initial":owner.initial,"alpha":alpha,"recipe":config,"condition":owner.condition,"sample_hz":32.0}
         if owner.has("logical_pose"):common.logical_pose=owner.logical_pose
@@ -131,11 +131,11 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             row.loop=true;row.source_duration_ms=natives[source_id].duration*1000.0
             result.append(row)
         if native_only:continue
-        var audio_binding:Dictionary=Authoring.load_data("audio/bindings.json",cache).get("conditions",{}).get(owner.condition.behavior_id,{})
+        var audio_binding:Dictionary=Authoring.load_data("audio/bindings.json",cache).get("conditions",{}).get(Authoring.Catalog.condition_key(owner.condition),{})
         if audio_binding.has("persistent") and is_inf(owner.end_ms):
             var sound=AudioCues.resolve(audio_binding.persistent.cue,common.id,0,owner.start_ms,INF,
                 {"actor_uuid":owner.actor_uuid,"assignment_enabled":audio_binding.persistent.get("enabled",true),"assignment_reason":audio_binding.persistent.get("reason","audio_assignment_disabled")},cache)
-            sound.assignment_source="audio/bindings.json:/conditions/"+owner.condition.behavior_id+"/persistent"
+            sound.assignment_source="audio/bindings.json:/conditions/"+Authoring.Catalog.condition_key(owner.condition)+"/persistent"
             sound.timing_source=sound.assignment_source+"/timing";sound.timing_selector=audio_binding.persistent.timing
             sound.absolute_start_ms=sound.start_ms;sound.age_ms=maxf(0,at_ms-sound.start_ms)
             if sound.timing_selector!="condition.interval":sound.status="missing";sound.reason="authored_audio_timing_unavailable"

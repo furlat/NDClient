@@ -12,7 +12,7 @@ static func _read(path:String)->Dictionary:
     if not FileAccess.file_exists(path):return {}
     var value=JSON.parse_string(FileAccess.get_file_as_string(path));return value if value is Dictionary else {}
 static func category(kind:String)->String:return CATEGORY.get(kind,"Rules")
-static func _label(id:String)->String:return id.get_slice("@",0).get_slice(":",0).get_file().get_slice("/",0).split(".")[-1].replace("_"," ").capitalize()
+static func _label(id:String)->String:return id.get_slice("@",0).get_file().get_slice("/",0).split(".")[-1].replace("_"," ").capitalize()
 static func _same_engine(expected:Dictionary,actual:Dictionary)->bool:
     for field in ["commit","protocol_version","player_schema_version","schema_digest"]:
         if expected.get(field)!=actual.get(field):return false
@@ -44,11 +44,15 @@ static func _group(kind:String,id:String,definition:Variant)->String:
     return str(row.get("family",kind.replace("_"," "))).replace("_"," ").capitalize()
 ## The root lists source-owned capabilities without loading every entry. Class
 ## grants can have typed sources while absent from the exported ID snapshot.
+static func source_kind(section:String,id:String)->String:
+    var kind:String=id.get_slice(".",0)
+    return "condition" if section=="conditions" and not CATEGORY.has(kind) else kind
+
 static func declared(root:Resource)->Dictionary:
     var inventory:Dictionary={}
     for section in ["spells","conditions","actions"]:
         for id in root.sections.get(section,{}):
-            var kind:String=str(id).get_slice(".",0)
+            var kind:String=source_kind(section,str(id))
             var owner:String={"spell":"spells","condition":"conditions"}.get(kind,"actions")
             # Retained aliases must not replace a current capability's own
             # source, e.g. conditions/spell.false_life vs the actual spell.

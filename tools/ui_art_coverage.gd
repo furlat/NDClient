@@ -4,6 +4,7 @@ const Common=preload("res://tools/presentation_build/common.gd")
 const AbilityBuild=preload("res://tools/presentation_build/abilities.gd")
 const CharacterBuild=preload("res://tools/presentation_build/characters.gd")
 const UI=preload("res://presentation/ui_catalog.gd")
+const Library=preload("res://studio/case_library.gd")
 const ICON_KINDS=["spell","condition","action","reaction","class_feature","trait","feat","item"]
 static func image_record(image:Resource,built:Dictionary)->Dictionary:
     if image==null:return {"status":"missing","art":"missing","path":"","exists":false,"built_matches":built.is_empty()}
@@ -27,7 +28,7 @@ static func inventory(abilities:Dictionary,characters:Dictionary,ids:Dictionary,
         if kind!="item":
             for section in ["spells","conditions","actions"]:
                 for id in abilities.get(section,{}):
-                    if str(id).get_slice(".",0)!=kind:continue
+                    if Library.source_kind(section,str(id))!=kind:continue
                     # Lifecycle sources can be the only typed owner of a
                     # class feature. Match the existing builder/browser owner
                     # rule, including their preference for a canonical action.
@@ -37,7 +38,7 @@ static func inventory(abilities:Dictionary,characters:Dictionary,ids:Dictionary,
         var rows:Dictionary={};var counts:Dictionary={"total":0,"server_ids":0,"typed_only":0,"assigned":0,"shared":0,"placeholder":0,"missing":0,"built_mismatch":0,"stand_in":0}
         var members:Dictionary=ids.get(kind,{}).duplicate()
         for id in entries:
-            if str(id).get_slice(".",0)==kind:members[id]=true
+            if str(id).get_slice(".",0)==kind or (kind=="condition" and abilities.get("conditions",{}).has(id) and Library.source_kind("conditions",str(id))==kind):members[id]=true
         for id in members:
             var entry:Resource=entries.get(id)
             var image:Resource=entry.icon if entry!=null else null

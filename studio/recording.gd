@@ -271,7 +271,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     for owner in spatial_owners.values():
         if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+_spatial_presentation(owner.effect,result.cache).close_ms)
     var condition_ids={}
-    for owner in condition_history.values():condition_ids[owner.condition.behavior_id]=true
+    for owner in condition_history.values():condition_ids[Compiler.Authoring.Catalog.condition_key(owner.condition)]=true
     var condition_requirements={}
     if not condition_ids.is_empty():
         for entry in ConditionCoverage.build(result.cache,[],condition_ids).entries:condition_requirements[entry.id]=entry.requirements
@@ -285,10 +285,10 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         var parent: String=occurrence_ids.get(origin.get("cause_uuid",""),origin.get("event_id","")) if not origin.get("initial",false) else ""
         var life={"id":"condition:"+owner.id,"parent":parent,"kind":"condition","label":str(owner.condition.name),
             "start_ms":owner.start_ms,"end_ms":end,"owner":owner,"recipe":recipe,
-            "source":"catalog/condition_recipes.json:/"+str(owner.condition.behavior_id),
+            "source":"catalog/condition_recipes.json:/"+Compiler.Authoring.Catalog.condition_key(owner.condition),
             "status":"missing" if recipe.is_empty() else ("state_only" if recipe.get("disposition")=="state_only" else "available")}
         result.rows.append(life)
-        var requirements:Array=condition_requirements.get(owner.condition.behavior_id,[])
+        var requirements:Array=condition_requirements.get(Compiler.Authoring.Catalog.condition_key(owner.condition),[])
         var intervals: Array=condition_intervals.get(owner.id,[])
         if intervals.size()>1 or intervals.any(func(interval):return interval.suppressed):
             for n in intervals.size():
@@ -484,7 +484,7 @@ static func _condition_restoration_rows(index:Dictionary,owner:Dictionary,remova
             for boundary in [track.start_ms,track.start_ms+track.duration_ms,track.group_end_ms]:
                 if boundary>at:end=minf(end,boundary)
         end=maxf(at,end)
-        var source:String=previous.source if field=="pose" else Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json",owner.condition.behavior_id+"/persistent/"+field,index.cache)
+        var source:String=previous.source if field=="pose" else Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json",Compiler.Authoring.Catalog.condition_key(owner.condition)+"/persistent/"+field,index.cache)
         var method:Dictionary={"label":"Body pose selection","surface":"body","renderer":"res://presentation/characters.gd::rest_sample + res://presentation/condition_pose.gd::select"} if field=="pose" else MATERIAL_METHODS[field]
         var label:String="Body pose · "+str(previous.clip)+" → "+str(current.clip) if field=="pose" else method.label+" restored"
         if field=="pose" and previous.clip==current.clip and previous.sampling!=current.sampling:label="Body pose · "+str(current.clip)+" "+str(previous.sampling)+" → "+str(current.sampling)
@@ -1080,7 +1080,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
             if sample.kind=="condition":
                 for appearance in Appearance.components(sampled_owners,start,cache):
                     if owner.id not in appearance.layer.condition_uuids:continue
-                    var source:String=Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json",owner.condition.behavior_id+"/persistent/appearanceLayers",cache)
+                    var source:String=Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json",Compiler.Authoring.Catalog.condition_key(owner.condition)+"/persistent/appearanceLayers",cache)
                     var component:Dictionary=appearance.merged({"id":"condition:"+owner.id+":appearance:"+str(appearance.layer.id),
                         "source":source,"start_ms":owner.start_ms,"duration_ms":end-start,"status":"available"},true)
                     rows.append(common.merged({"id":prefix+"appearance:"+str(appearance.layer.id),"kind":"condition_appearance",
@@ -1097,7 +1097,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                 if persistent.get("alphaMultiplier",1.0)!=1.0:operations.alphaMultiplier=persistent.alphaMultiplier
                 if material_selected and not operations.is_empty():
                     for field in operations:
-                        var source=Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json",owner.condition.behavior_id+"/persistent/"+field,cache)
+                        var source=Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json",Compiler.Authoring.Catalog.condition_key(owner.condition)+"/persistent/"+field,cache)
                         var requirement:Dictionary={}
                         for candidate in requirements:
                             if candidate.mechanism==field and candidate.source==source:requirement=candidate;break
@@ -1106,7 +1106,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                         var material=common.duplicate();material.merge({"id":prefix+"material:"+field,"kind":"condition_material","label":method.label,
                             "mechanism":field,"operations":{field:operations[field]},"source_fields":{field:source},"source":source,
                             "trace_track_id":"condition:"+owner.id+":"+field,
-                            "legacy_source":requirement.get("legacy_source","catalog/condition_recipes.json:/"+owner.condition.behavior_id+"/persistent/"+field),
+                            "legacy_source":requirement.get("legacy_source","catalog/condition_recipes.json:/"+Compiler.Authoring.Catalog.condition_key(owner.condition)+"/persistent/"+field),
                             "recipient_uuid":owner.actor_uuid,"render_method":method,"preview_scope":"composed_actor","diagnostic_scope":"condition_owner",
                             "status":"missing" if missing else sample.status,"reason":requirement.get("reason",""),
                             "missing_category":("implementation" if requirement.get("implementation")=="missing" else "source") if missing else "",

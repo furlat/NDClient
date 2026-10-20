@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "6ebb0993-7b72-4b12-a2fd-f495589498ca",
+   "state_revision": "7b2b2eee-eba7-40bd-a68a-66265401a1eb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_bestow_curse_baseline",
+   "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+   "audience_id": "ff415f38-0810-4d63-8967-7e1476dde8c4",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_bestow_curse_baseline",
+    "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+    "audience_id": "ff415f38-0810-4d63-8967-7e1476dde8c4",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0eae96f9-6e81-4545-b0d7-3eec2603b067",
+   "state_revision": "7526a237-1823-4a10-b30e-41cb3c1bad8a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_bestow_curse_baseline",
+   "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+   "audience_id": "5d9f3ce1-7f52-4873-9174-e62a8bb6af27",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_bestow_curse_baseline",
+    "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+    "audience_id": "5d9f3ce1-7f52-4873-9174-e62a8bb6af27",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "15280901-4064-4a7a-8b23-b1e6837077a1",
+   "state_revision": "34dd6634-ed51-40cf-b350-9b92fae5214b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_bestow_curse_baseline",
+   "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+   "audience_id": "5d9f3ce1-7f52-4873-9174-e62a8bb6af27",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_bestow_curse_baseline",
+    "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+    "audience_id": "5d9f3ce1-7f52-4873-9174-e62a8bb6af27",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.bestow_curse",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.bestow_curse",
+   "display_name": "Bestow Curse (Level 3)",
+   "cast_at_level": 3,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "116de50f-13e1-4c54-afc3-48d4c42ab5ee",
+   "state_revision": "c056d2c1-b9b0-4549-9820-4002c151cb34",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_bestow_curse_baseline",
+   "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+   "audience_id": "ff415f38-0810-4d63-8967-7e1476dde8c4",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_bestow_curse_baseline",
+    "game_epoch": "1bb337a1-d456-4f3b-af67-d14350e92654",
+    "audience_id": "ff415f38-0810-4d63-8967-7e1476dde8c4",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

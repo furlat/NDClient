@@ -16,6 +16,14 @@ const ENVIRONMENT := "res://build/presentation/environment/"
 static var _documents:Dictionary={}
 static var _documents_mutex:=Mutex.new()
 
+## Exact authoring key only. Canonical membership and lifetime remain the
+## disclosed condition UUID. Unknown non-null behaviors never fall through.
+static func condition_key(condition:Dictionary)->String:
+    var behavior:Variant=condition.get("behavior_id")
+    if behavior!=null:return str(behavior)
+    var state:Variant=condition.get("state")
+    return str(state.get("semantic_key","")) if state!=null else ""
+
 static func media_path(path: String) -> String:
     # Project assets (res://assets/art/...) load by their res:// path.
     if path.begins_with("res://"): return path

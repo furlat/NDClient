@@ -12,7 +12,8 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 ## The facet value it selects (Fire, miss, wolf, ...).
 @export var value: String = ""
 ## Exact disclosed SpellFact or application-save values, combined with AND.
-## SavingThrowFact outcomes require the explicit effect ID below. Values are authored
+## effect_id compares the literal disclosed option identity. SavingThrowFact
+## outcomes require the separate explicit save effect ID below. Values are authored
 ## alternatives (OR), never inferred from kind/value, a title or child damage.
 ## Empty predicates remain inventory drafts and cannot dispatch at runtime.
 @export var when: Dictionary = {}

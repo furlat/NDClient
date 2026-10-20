@@ -382,3 +382,21 @@ strings. This does not expose a new wire UUID or qualify passive/rider attributi
 Gate: original two-seat damage recordings, canceled/request/zero/foreign-source
 controls, unchanged canonical rows, exact constructor operands and native source
 consumer when its legal case is available. No new scheduler or runtime validator.
+
+
+### 20 October option/water execution checkpoint
+
+Continued the authorized Phase4 shared-input/Phase5 consumer cohort in the sole
+main branch.17exact public option predicates now borrow the same current native
+recipe/caster, with obsolete TypeScript snapshots removed. Actual spatial water
+and null-behavior Wet use existing private spatial/condition ownership, immutable
+preconstruction inputs and one exact semantic source lookup. Telekinesis authors
+its supported schema16 suppression disposition. Actual equipped/use/retire/replace
+journals extend Shillelagh/Divine Favor coverage and expose the absent Magic
+Weapon public owner without manufacturing it.
+
+[Production closure, exact receipts, open branches and Studio commands](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
+The bounded plan/antiOOP/antislop reviewer accepted the source/ownership changes;
+no native output/user approval is inferred from routing or scenario presence.
+This execution note does not mark the whole migration or final performance gate
+complete, and adds no runtime validation or new requirements.

@@ -118,7 +118,7 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
     var suppressed: Array = []
     for id in _sorted(conditions):
         var e: Resource = conditions[id]
-        if not e.disposition.is_empty() or not e.creation_source_id.is_empty():
+        if not e.disposition.is_empty() or not e.creation_source_id.is_empty() or not e.effects.is_empty():
             var record:Dictionary=R.condition_recipe(e)
             if not e.effects.is_empty():record._resource_source=paths.get("conditions",{}).get(id,"")
             recipes[id] = provenance(record, paths.get("conditions", {}).get(id, ""))
@@ -437,8 +437,9 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
     for id in entries.get("conditions", {}):_validate_condition(entries.conditions[id], "abilities/conditions/" + id, report)
 
 ## Deliberately small public selector language. These are actual SpellFact
-## enums, not renderer guesses about saves, elements or passive riders.
-const VARIANT_FIELDS={"attack_outcome":["Hit","Miss","Crit","Crit Miss"],"target_kind":["creature","object"],"save_succeeded":[true,false]}
+## fields, not renderer guesses about saves, elements or passive riders.
+## effect_id is an opaque disclosed option identity, never a parsed spell name.
+const VARIANT_FIELDS={"attack_outcome":["Hit","Miss","Crit","Crit Miss"],"target_kind":["creature","object"],"save_succeeded":[true,false],"effect_id":[]}
 static func _check_variants(e:Resource,where:String,report:Dictionary)->void:
     var active:Array=[];var identities:Dictionary={}
     for variant in e.variants:
@@ -453,7 +454,9 @@ static func _check_variants(e:Resource,where:String,report:Dictionary)->void:
             if not values is Array or values.is_empty():
                 Common.error(report,where,"variant "+variant.id+" predicate needs a nonempty value array");continue
             for value in values:
-                if value not in VARIANT_FIELDS[field]:Common.error(report,where,"variant "+variant.id+" has noncanonical "+field+" value: "+str(value))
+                if field=="effect_id":
+                    if not value is String or value.is_empty():Common.error(report,where,"variant "+variant.id+" needs an exact nonempty effect_id")
+                elif value not in VARIANT_FIELDS[field]:Common.error(report,where,"variant "+variant.id+" has noncanonical "+field+" value: "+str(value))
         if variant.when.is_empty() or not variant.dispatch_gap.is_empty():continue
         if variant.override_owner_cues:
             var cue_count:int=variant.effects.size() if not variant.effects.is_empty() else e.effects.size()
@@ -474,6 +477,14 @@ static func _check_variants(e:Resource,where:String,report:Dictionary)->void:
         active.append(variant)
 
 static func _check_constructor(use:Resource,where:String,clips:Dictionary,report:Dictionary)->void:
+    # Actual member lifetime can supply a declared boolean setter; it cannot
+    # stand in for a source's geometry/event packet. Offline only.
+    var membership:String=str(use.extra.get("membership_input",""))
+    if not membership.is_empty():
+        if not where.begins_with("abilities/conditions/") or membership!="wet_presence" \
+            or membership not in clips.get(use.clip,{}).get("inputs",[]) \
+            or use.role!="attached" or use.at!="owner_start" or use.delay!=0.0:
+            Common.error(report,where,"membership input needs a declared boolean setter and actual condition owner_start clock");return
     var binding:Dictionary=use.constructor_input
     if not use.extra.get("input_policies",{}).is_empty() and binding.get("kind") not in ["propagation_links","spell_strike","observed_event"]:
         Common.error(report,where,"explicit input policy has no qualified source constructor");return

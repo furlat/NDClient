@@ -2,6 +2,7 @@ extends RefCounted
 ## Outfit membership is prepared from ordered condition owners. Factory leases
 ## only control opacity on that prepared layer, following the body's own pose.
 const Documents=preload("res://presentation/ability_documents.gd")
+const Catalog=preload("res://source_catalog.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const RECIPES="catalog/condition_recipes.json"
@@ -31,7 +32,7 @@ static func declarations(condition:Dictionary,cache:Dictionary)->Array:
     var state:Dictionary=condition.get("state",{}) if condition.get("state") is Dictionary else {}
     if not state.get("suppression_provider_uuids",[]).is_empty():return []
     if not cache.has(RECIPES):cache[RECIPES]=Documents.read(RECIPES)
-    return cache.get(RECIPES,{}).get(condition.get("behavior_id",""),{}).get("persistent",{}).get("appearanceLayers",[])
+    return cache.get(RECIPES,{}).get(Catalog.condition_key(condition),{}).get("persistent",{}).get("appearanceLayers",[])
 
 static func removal_ms(condition:Dictionary)->float:
     var result:float=0.0

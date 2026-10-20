@@ -1,0 +1,90 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "85884b9c-9493-44d7-8358-10b58f7d61d3": "Amber caster",
+  "15034cca-5d5f-41e1-acee-bc8c3e266315": "Amber ally",
+  "499c7304-108a-46c4-bc12-4be62e9be897": "Blue target",
+  "cb6a3e71-46c5-4edb-b2f8-1c1fa4c05ade": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.protection_from_energy \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 3,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.protection_from_energy": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.protection_from_energy"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 50,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "85884b9c-9493-44d7-8358-10b58f7d61d3",
+   "condition_uuid": "79c67cc8-700b-410d-9857-887173135396",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.protection_from_energy",
+   "kind": "actor_change",
+   "actor_uuid": "15034cca-5d5f-41e1-acee-bc8c3e266315",
+   "condition_uuid": "4c7a5ec5-af43-4cf2-8449-0f51b680be55",
+   "condition_id": "condition.spell.protection_from_energy"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 52,
+   "lineage": 41,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "85884b9c-9493-44d7-8358-10b58f7d61d3",
+   "condition_uuid": "79c67cc8-700b-410d-9857-887173135396",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 53,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.protection_from_energy"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

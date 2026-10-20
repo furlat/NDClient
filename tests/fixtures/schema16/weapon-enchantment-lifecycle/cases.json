@@ -1,0 +1,56 @@
+[
+ {
+  "id": "spell.magic_weapon/equipped_use_retire_replace",
+  "spell_id": "spell.magic_weapon",
+  "status": "failed",
+  "reason": "required_conditions absent from actual journal: condition.spell.magic_weapon",
+  "perspectives": [
+   {
+    "id": "amber",
+    "journal": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/magic-weapon/amber/journal"
+   },
+   {
+    "id": "blue",
+    "journal": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/magic-weapon/blue/journal"
+   }
+  ],
+  "scenario": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/magic-weapon/scenario.json",
+  "recording": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/magic-weapon/recording.json"
+ },
+ {
+  "id": "spell.shillelagh/equipped_use_retire_replace",
+  "spell_id": "spell.shillelagh",
+  "status": "recorded",
+  "reason": "",
+  "perspectives": [
+   {
+    "id": "amber",
+    "journal": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/shillelagh/amber/journal"
+   },
+   {
+    "id": "blue",
+    "journal": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/shillelagh/blue/journal"
+   }
+  ],
+  "scenario": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/shillelagh/scenario.json",
+  "recording": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/shillelagh/recording.json"
+ },
+ {
+  "id": "spell.divine_favor/equipped_use_retire_replace",
+  "spell_id": "spell.divine_favor",
+  "status": "recorded",
+  "reason": "",
+  "perspectives": [
+   {
+    "id": "amber",
+    "journal": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/divine-favor/amber/journal"
+   },
+   {
+    "id": "blue",
+    "journal": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/divine-favor/blue/journal"
+   }
+  ],
+  "scenario": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/divine-favor/scenario.json",
+  "recording": "res://tests/fixtures/schema16/weapon-enchantment-lifecycle/divine-favor/recording.json"
+ }
+]

@@ -22,7 +22,9 @@ func settle(world:Node,component_id:String="")->bool:
         var inputs_ready:bool=component_id.is_empty() or (not bindings.is_empty() and bindings.unavailable.is_empty())
         if world.playback_prepared() and inputs_ready:
             await frame()
-            if world.playback_prepared():return true
+            bindings=world.component_renderer.native_spells.diagnostics.get(component_id,{}).get("input_bindings",{})
+            inputs_ready=component_id.is_empty() or (not bindings.is_empty() and bindings.unavailable.is_empty())
+            if world.playback_prepared() and inputs_ready:return true
         await frame()
     check(false,"Native preparation: "+str({"errors":world.presentation_errors,"media":world.media_issue,"native":world.component_renderer.native_spells.diagnostics}))
     return false

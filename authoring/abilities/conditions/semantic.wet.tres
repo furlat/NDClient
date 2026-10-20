@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="image"]
+
+[sub_resource type="Resource" id="WetIcon"]
+script = ExtResource("image")
+path = "art/media/ui/icons/smooth48/condition.generic.png"
+native_size = Vector2i(48, 48)
+reuses = "condition.generic"
+status = "stand_in"
+source = "ui/resources.json icon:condition.generic"
+
+[sub_resource type="Resource" id="ObservedWet"]
+script = ExtResource("effect")
+clip = "bg3-36/create-or-destroy-water/rain-wet"
+role = "attached"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+sampling = "absolute"
+light_multiplier = 0.0
+extra = {
+"entity_geometry": {"actor": "target"},
+"membership_input": "wet_presence"
+}
+staging_from = "client@schema16_observed_wet_20261020"
+
+[resource]
+script = ExtResource("condition")
+id = "unbound:dnd.spatial.environmental_conditions.Wet"
+label = "Wet"
+icon = SubResource("WetIcon")
+play_package_lifecycle = false
+effects = Array[ExtResource("effect")]([SubResource("ObservedWet")])
+status = "partial"
+notes = "Exact disclosed semantic authoring key for an actual null-behavior condition. Its unchanged UUID owns native runoff on actual admitted body geometry; membership controls wet_presence. No duration, rain creation, removal event or gameplay wetness is inferred. Real original qualifies application and hold only; removal choreography and user acceptance remain unqualified."

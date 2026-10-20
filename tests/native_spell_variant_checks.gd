@@ -89,6 +89,7 @@ func run()->void:
     check(NativeSpells.effect_clips(record.selection).size()==NativeSpells.effect_clips(NativeSpells.selection(ID,cache)).size(),"Ordinary startup/other offered choices do not warm every alternative")
     optional_controls(prepared,record,cache)
     validate_negative(entry)
+    effect_identity_controls(entry)
     component_controls(source,cache)
     check(var_to_bytes([record.selection,record.recipe,record.variants])==immutable,"Application/phase/preparation sampling leaves the shared immutable source unchanged")
     inventory()
@@ -170,7 +171,7 @@ func optional_controls(prepared:Dictionary,record:Resource,cache:Dictionary)->vo
     world.context_menu.free();world.free()
 
 func validate_negative(entry:Resource)->void:
-    for control in ["unknown","noncanonical","empty","overlap","cue_indices","cast"]:
+    for control in ["unknown","noncanonical","empty","overlap","cue_indices","cast","empty_effect","nontext_effect"]:
         var invalid:Resource=entry.duplicate(true)
         match control:
             "unknown":invalid.variants[0].when={"saved":[true]}
@@ -179,8 +180,23 @@ func validate_negative(entry:Resource)->void:
             "overlap":invalid.variants[1].when={"attack_outcome":["Miss"]}
             "cue_indices":invalid.owner_cues=PackedInt32Array([0])
             "cast":invalid.variants[0].recipe={"cast":{"actionClip":"invented"}}
+            "empty_effect":invalid.variants[0].when={"effect_id":[""]}
+            "nontext_effect":invalid.variants[0].when={"effect_id":[true]}
         var report:Dictionary=Common.report();Build._check_variants(invalid,ID,report)
         check(not report.errors.is_empty(),"Offline rejection: "+control)
+func effect_identity_controls(original:Resource)->void:
+    var entry:Resource=original.duplicate(true)
+    var first:Resource=variant("test.actual_option",{"effect_id":["support.fixture.first"]},entry)
+    var second:Resource=variant("test.other_option",{"effect_id":["support.fixture.second"]},entry)
+    entry.variants.assign([first,second])
+    var report:Dictionary=Common.report();Build._check_variants(entry,ID,report)
+    check(report.errors.is_empty(),"Disjoint literal effect identities pass the ordinary offline predicate check")
+    var built_source:Resource=built(entry).native.records[ID]
+    var source:Dictionary={"recipe":built_source.recipe,"selection":built_source.selection,"variants":built_source.variants}
+    for pair in [[{},""],[{"effect_id":null},""],[{"effect_id":"support.fixture.first"},first.id],[{"effect_id":"support.fixture.second"},second.id],[{"effect_id":"support.fixture.first.suffix"},""],[{"effect_id":"support.fixture.First"},""],[{"effect_id":"unknown","name":"support.fixture.first"},""]]:
+        var selected:Dictionary=NativeSpells.selected(source,pair[0])
+        check(selected.selection.get("variant",{}).get("id","")==pair[1],"Only the actual exact disclosed option selects its recipient source: "+str(pair))
+        check(is_same(selected.recipe.cast,built_source.recipe.cast),"Literal option selection retains one shared cast owner")
 func component_controls(source:Dictionary,cache:Dictionary)->void:
     var group:Dictionary={"operation_sequence":1,"components":[],"commits":[]}
     var node:Dictionary={"id":"compiler-control","lineage_id":"compiler-control","resolution_record":{},"fact":{}}

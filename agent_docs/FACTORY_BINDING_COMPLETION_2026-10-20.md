@@ -1,5 +1,15 @@
 # Factory binding cohort — 20 October 2026
 
+Current option/water cohort static join:
+732typed sources/746subjects,216provider-present unqualified default cues,
+143owner handovers,39provider gaps,18explicit gaps,11disabled and8excluded
+finite probes. Three resolved channels are source-specific water surface records,
+Wet membership and explicitly authored Telekinesis suppression. This is a static
+join, not a claim of all-native output or user approval. Latest report:
+`.runtime/consolidation/option-water-binding-coverage.json`.
+[Current cohort qualification](WATER_SOURCE_PROVIDER_COHORT_2026-10-20.md) and
+[exact public option routing](PRODUCTION_OPTION_IDENTITIES_2026-10-20.md).
+
 The dated c494 counts below are historical cohort evidence. Current complete
 package is `runtime-e102c29dec58524b`:1246clips/504selections. The latest offline
 join covers730typed sources/745subjects and reports218provider-present but

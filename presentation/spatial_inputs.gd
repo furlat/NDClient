@@ -58,6 +58,21 @@ static func construction(identity:String,effect:Dictionary,cue:Dictionary,source
     var positions:Array=admitted_cells(effect)
     if capacity>0 and positions.size()>capacity:
         return {"ready":false,"reason":"spatial_source_cell_capacity_exceeded"}
+    if descriptor.get("cell_input")=="surface_groups":
+        # Coverage is immutable source geometry. Admission and visibility use
+        # the existing spatial AreaMask, never a second gameplay footprint.
+        var original:Array=source_effect.positions
+        if positions.any(func(position):return position not in original):
+            return {"ready":false,"reason":"spatial_source_topology_extension_not_bound"}
+        var anchor:Variant=source_effect.get("anchor_position")
+        if anchor==null:anchor=original[0]
+        var groups:Array=surface_groups(identity,original,anchor)
+        return {"ready":true,"reason":"","operands":[{"component_path":descriptor.component_path,
+            "input_field":descriptor.input_field,"values":{"surface_groups":groups}}],
+            "source_anchor":anchor,"source_elevation_steps":source_effect.get("anchor_elevation_steps"),
+            "source_cells":original,"observed_removals":[],"surface_records":groups,
+            "evidence":{"spatial_effect_uuid":identity,"content_id":content_id(effect),
+                "constructed_cells":original,"surface_group_count":groups.size(),"points_per_group":160}}
     if descriptor.get("cell_input")=="cells":
         # This source constructs its native vegetation once from disclosed
         # topology. Visibility and temporary suppression remain AreaMask's
@@ -88,3 +103,25 @@ static func presence(component:Dictionary,state:Dictionary)->Dictionary:
     if content_id(effect)!=str(component.get("spatial_content_id","")):
         return {"ready":false,"reason":"surface_spatial_content_not_bound"}
     return {"ready":true,"value":not admitted_cells(effect).is_empty(),"reason":""}
+
+## The sealed rain source accepts at most32 exact cells and160 optical points
+## per immutable group. These are coverage samples inside disclosed cells,
+## not particles, gameplay water cells, or another spatial owner.
+static func surface_groups(identity:String,positions:Array,anchor:Array)->Array:
+    var result:Array=[]
+    for start in range(0,positions.size(),32):
+        var local:Array=[]
+        var minimum:Vector2i=Vector2i(positions[start][0]-anchor[0],positions[start][1]-anchor[1])
+        var maximum:Vector2i=minimum
+        for index in range(start,mini(start+32,positions.size())):
+            var point:Vector2i=Vector2i(positions[index][0]-anchor[0],positions[index][1]-anchor[1])
+            minimum=minimum.min(point);maximum=maximum.max(point);local.append([point.x,point.y])
+        var samples:Array=[]
+        for index in 160:
+            var cell:Array=local[index%local.size()]
+            var x:float=fposmod((float(index)+0.5)*0.6180339887498949,1.0)-0.5
+            var z:float=fposmod((float(index)+0.5)*0.7548776662466927,1.0)-0.5
+            samples.append([float(cell[0])+x,float(cell[1])+z])
+        result.append({"source_uuid":identity,"cells":local,"points":samples,
+            "bounds":[float(minimum.x)-0.5,float(minimum.y)-0.5,float(maximum.x-minimum.x+1),float(maximum.y-minimum.y+1)]})
+    return result

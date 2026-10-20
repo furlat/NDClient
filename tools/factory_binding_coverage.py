@@ -95,6 +95,8 @@ def typed_source(path: Path, section: str) -> dict:
                 "role": value(fields.get("role"), ""), "scope": value(fields.get("scope"), ""),
                 "at": value(fields.get("at"), ""), "constructor_input": value(fields.get("constructor_input"), {}),
                 "input_policies": value(fields.get("extra"), {}).get("input_policies", {}),
+                "membership_input": value(fields.get("extra"), {}).get("membership_input", ""),
+                "authored_suppressed": value(fields.get("extra"), {}).get("authored_suppressed"),
                 "unbound_constructor_inputs": value(fields.get("unbound_constructor_inputs"), []),
                 "source_index": len(result)})
         return result
@@ -253,6 +255,12 @@ def report() -> dict:
                     supplied = supplied | {"surface_presence"}
                     if cue["constructor_input"].get("cell_input") == "cells":
                         supplied = supplied | {"removed_cells"}
+                    elif cue["constructor_input"].get("cell_input") == "surface_groups":
+                        supplied = supplied | {"surface_records"}
+                if row["section"] == "conditions" and cue["membership_input"]:
+                    supplied = supplied | {cue["membership_input"]}
+                if cue["authored_suppressed"] is not None:
+                    supplied = supplied | {"suppressed"}
                 if constructor == "propagation_links":
                     supplied = supplied | {"link_edges"}
                 if constructor == "spell_strike":

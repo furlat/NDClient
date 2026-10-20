@@ -1,0 +1,269 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 13,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "7a6ae75d-e0fa-439a-bc1c-88515e4b09cc": "Amber caster",
+  "433c3aba-d6ae-452b-9905-faf005a3be8b": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "spell.shillelagh \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "unequip \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "equip \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 25,
+   "actor_change": 10,
+   "spell": 1,
+   "damage": 4,
+   "attack": 2
+  },
+  "behaviors": {
+   "spell.shillelagh": 1,
+   "action.attack": 2
+  },
+  "conditions": [
+   "condition.spell.shillelagh"
+  ],
+  "ended_conditions": [
+   "condition.spell.shillelagh"
+  ],
+  "positive_applied_damage_types": [
+   "Bludgeoning",
+   "Slashing"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 18,
+   "lineage": 12,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "7a6ae75d-e0fa-439a-bc1c-88515e4b09cc",
+   "condition_uuid": "90693c04-e891-4d61-b10c-e8d03a9e0b6b",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 19,
+   "lineage": 12,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.shillelagh",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 39,
+   "lineage": 37,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "7a6ae75d-e0fa-439a-bc1c-88515e4b09cc",
+   "condition_uuid": "90693c04-e891-4d61-b10c-e8d03a9e0b6b",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 57,
+   "lineage": 42,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 58,
+   "lineage": 42,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 60,
+   "lineage": 42,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 89,
+   "lineage": 83,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "7a6ae75d-e0fa-439a-bc1c-88515e4b09cc",
+   "condition_uuid": "90693c04-e891-4d61-b10c-e8d03a9e0b6b",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "amber"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 154,
+   "lineage": 139,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 155,
+   "lineage": 139,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 157,
+   "lineage": 139,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 18,
+   "lineage": 12,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "7a6ae75d-e0fa-439a-bc1c-88515e4b09cc",
+   "condition_uuid": "90693c04-e891-4d61-b10c-e8d03a9e0b6b",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 19,
+   "lineage": 12,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.shillelagh",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 39,
+   "lineage": 37,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "7a6ae75d-e0fa-439a-bc1c-88515e4b09cc",
+   "condition_uuid": "90693c04-e891-4d61-b10c-e8d03a9e0b6b",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 57,
+   "lineage": 42,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 58,
+   "lineage": 42,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 60,
+   "lineage": 42,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 88,
+   "lineage": 82,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "7a6ae75d-e0fa-439a-bc1c-88515e4b09cc",
+   "condition_uuid": "90693c04-e891-4d61-b10c-e8d03a9e0b6b",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "blue"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 153,
+   "lineage": 138,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 154,
+   "lineage": 138,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 156,
+   "lineage": 138,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Bludgeoning",
+  "Slashing"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

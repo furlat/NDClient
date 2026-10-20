@@ -599,6 +599,16 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         else:unavailable.history_state="duplicate_count_not_disclosed"
     if "created_item_binding" in requested:
         unavailable.created_item_binding="wielded_native_bodies_not_supported"
+    if "surface_records" in requested:
+        # This setter is preconstruction-only in the sealed source. The exact
+        # records were admitted through native_constructor_inputs before make.
+        if component.has("spatial_surface_records") and component.get("spatial_owner",false):supplied.append("surface_records")
+        else:unavailable.surface_records="surface_immutable_coverage_not_bound"
+    if "suppressed" in requested and component.get("native_cue",{}).get("authored_suppressed")!=null:
+        var authored:bool=component.native_cue.authored_suppressed
+        if not handle.has("authored_suppressed_input") or handle.authored_suppressed_input!=authored:
+            Effects.set_input(handle,"suppressed",authored);handle.authored_suppressed_input=authored
+        supplied.append("suppressed")
     if "surface_presence" in requested:
         var packet:Dictionary=SpatialInputs.presence(component,world.timeline.state)
         if packet.ready:

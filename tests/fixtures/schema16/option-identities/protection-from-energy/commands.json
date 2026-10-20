@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "15034cca-5d5f-41e1-acee-bc8c3e266315",
+   "state_revision": "5fdc2def-2e42-4f74-93d3-2f760bbdfbae",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_protection_from_energy_baseline",
+   "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+   "audience_id": "6195f824-e0a4-430f-bc2e-d0a10bf85f36",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_protection_from_energy_baseline",
+    "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+    "audience_id": "6195f824-e0a4-430f-bc2e-d0a10bf85f36",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "cb6a3e71-46c5-4edb-b2f8-1c1fa4c05ade",
+   "state_revision": "46b4dc2e-e281-475c-ad56-a0175aacbd7b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_protection_from_energy_baseline",
+   "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+   "audience_id": "c74429e3-14d7-467f-9d9e-ba1fff6c7adc",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_protection_from_energy_baseline",
+    "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+    "audience_id": "c74429e3-14d7-467f-9d9e-ba1fff6c7adc",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "499c7304-108a-46c4-bc12-4be62e9be897",
+   "state_revision": "75189e6d-a0f5-43c8-951f-5f4b139e7100",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_protection_from_energy_baseline",
+   "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+   "audience_id": "c74429e3-14d7-467f-9d9e-ba1fff6c7adc",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_protection_from_energy_baseline",
+    "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+    "audience_id": "c74429e3-14d7-467f-9d9e-ba1fff6c7adc",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.protection_from_energy",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.protection_from_energy",
+   "display_name": "Protection from Energy (Level 3)",
+   "cast_at_level": 3,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "85884b9c-9493-44d7-8358-10b58f7d61d3",
+   "state_revision": "18ffa05e-ed75-4e36-99fd-8201d80e3daf",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_protection_from_energy_baseline",
+   "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+   "audience_id": "6195f824-e0a4-430f-bc2e-d0a10bf85f36",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_protection_from_energy_baseline",
+    "game_epoch": "5072d6a4-7389-42f6-9b2c-c4bfcf8d5ea0",
+    "audience_id": "6195f824-e0a4-430f-bc2e-d0a10bf85f36",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

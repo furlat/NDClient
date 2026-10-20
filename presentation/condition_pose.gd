@@ -27,7 +27,7 @@ static func select(actor: Dictionary, rig_id: String, activity: String, cache: D
     for condition in actor.get("conditions", []):
         var state: Variant = condition.get("state")
         if state != null and not state.get("suppression_provider_uuids", []).is_empty(): continue
-        var id: String = str(condition.behavior_id) if condition.get("behavior_id")!=null else ""
+        var id: String = Catalog.condition_key(condition)
         var config: Dictionary = recipes.get(id, {})
         if config.get("disposition") == "state_only": continue
         var persistent: Dictionary = config.get("persistent", {})
@@ -105,10 +105,10 @@ static func capture_departure(departure:Dictionary,capture:Dictionary,motion:Dic
     return result
 
 static func departure_requested(condition:Dictionary,cache:Dictionary)->bool:
-    return Catalog.read_file(RECIPES,cache).get(condition.get("behavior_id",""),{}).get("persistent",{}).get("actorHistory",{}).get("captureDeparture",false)
+    return Catalog.read_file(RECIPES,cache).get(Catalog.condition_key(condition),{}).get("persistent",{}).get("actorHistory",{}).get("captureDeparture",false)
 
 static func capture_requested(condition:Dictionary,cache:Dictionary)->bool:
-    var persistent:Dictionary=Catalog.read_file(RECIPES,cache).get(condition.get("behavior_id",""),{}).get("persistent",{})
+    var persistent:Dictionary=Catalog.read_file(RECIPES,cache).get(Catalog.condition_key(condition),{}).get("persistent",{})
     return persistent.get("frozenPose",{}).get("captureCurrent",false) or persistent.get("actorHistory",{}).get("captureDeparture",false)
 
 ## Called only at actual ordered admission, before the canonical after-value.

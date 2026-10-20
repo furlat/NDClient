@@ -1,0 +1,385 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 17,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "7e2c178d-50ac-430b-862b-1efe0620d7c2": "Amber caster",
+  "3b4dbc8a-d164-4cac-883f-547a6b33f466": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "spell.divine_favor \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.drop_concentration \u00b7 Amber caster",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "unequip \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "equip \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 31,
+   "actor_change": 13,
+   "spell": 1,
+   "attack": 3,
+   "action": 1,
+   "damage": 4
+  },
+  "behaviors": {
+   "spell.divine_favor": 1,
+   "action.attack": 3,
+   "action.drop_concentration": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.divine_favor"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.spell.divine_favor"
+  ],
+  "positive_applied_damage_types": [
+   "Bludgeoning",
+   "Slashing"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 12,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "10cb1216-051b-4004-a924-57e1d4b9291a",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 22,
+   "lineage": 12,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.divine_favor",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "cb23fb5c-34ed-4488-a2eb-a6632d4a45e4",
+   "condition_id": "condition.spell.divine_favor",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 23,
+   "lineage": 12,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "10cb1216-051b-4004-a924-57e1d4b9291a",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 24,
+   "lineage": 12,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.divine_favor",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 44,
+   "lineage": 42,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.divine_favor",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "cb23fb5c-34ed-4488-a2eb-a6632d4a45e4",
+   "condition_id": "condition.spell.divine_favor",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 52,
+   "lineage": 47,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 83,
+   "lineage": 75,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.divine_favor",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "cb23fb5c-34ed-4488-a2eb-a6632d4a45e4",
+   "condition_id": "condition.spell.divine_favor",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 84,
+   "lineage": 75,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "10cb1216-051b-4004-a924-57e1d4b9291a",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 86,
+   "lineage": 75,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 102,
+   "lineage": 87,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 103,
+   "lineage": 87,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 105,
+   "lineage": 87,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 28,
+   "occurrence": 194,
+   "lineage": 179,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 28,
+   "occurrence": 195,
+   "lineage": 179,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 28,
+   "occurrence": 197,
+   "lineage": 179,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 12,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "10cb1216-051b-4004-a924-57e1d4b9291a",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 22,
+   "lineage": 12,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.divine_favor",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "cb23fb5c-34ed-4488-a2eb-a6632d4a45e4",
+   "condition_id": "condition.spell.divine_favor",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 23,
+   "lineage": 12,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "10cb1216-051b-4004-a924-57e1d4b9291a",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 24,
+   "lineage": 12,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.divine_favor",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 44,
+   "lineage": 42,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.divine_favor",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "cb23fb5c-34ed-4488-a2eb-a6632d4a45e4",
+   "condition_id": "condition.spell.divine_favor",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 52,
+   "lineage": 47,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 82,
+   "lineage": 74,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.divine_favor",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "cb23fb5c-34ed-4488-a2eb-a6632d4a45e4",
+   "condition_id": "condition.spell.divine_favor",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 83,
+   "lineage": 74,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "condition_uuid": "10cb1216-051b-4004-a924-57e1d4b9291a",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 85,
+   "lineage": 74,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 101,
+   "lineage": 86,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 102,
+   "lineage": 86,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 104,
+   "lineage": 86,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 28,
+   "occurrence": 193,
+   "lineage": 178,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 28,
+   "occurrence": 194,
+   "lineage": 178,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 28,
+   "occurrence": 196,
+   "lineage": 178,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Bludgeoning",
+  "Slashing"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

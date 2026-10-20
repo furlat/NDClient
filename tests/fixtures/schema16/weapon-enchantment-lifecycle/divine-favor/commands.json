@@ -1,0 +1,647 @@
+[
+ {
+  "request": {
+   "do": "spell.divine_favor",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "23f8bfb3-0aff-4656-b45b-a807bb5cf316",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.divine_favor",
+   "display_name": "Divine Favor (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "23f8bfb3-0aff-4656-b45b-a807bb5cf316",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 27,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "4ec1f177-eec2-4c44-b573-a3bf93c7d75c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "3b4dbc8a-d164-4cac-883f-547a6b33f466",
+   "state_revision": "0cf8457f-062b-4861-84c9-def3ec14c912",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "1be99f85-94d4-4832-b3cc-4e26e5f602a4",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Quarterstaff",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "1be99f85-94d4-4832-b3cc-4e26e5f602a4",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "0266f4dd-fb0a-4467-afa9-074e20b98459",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "3b4dbc8a-d164-4cac-883f-547a6b33f466",
+   "state_revision": "d362aebf-710c-4912-96c8-b7425fc57711",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "0c6133b1-e815-401f-9c7f-e852fc4a5139",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "0c6133b1-e815-401f-9c7f-e852fc4a5139",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "69011f5b-89e1-48a6-b950-38ba7aa158bd",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Quarterstaff",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "69011f5b-89e1-48a6-b950-38ba7aa158bd",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "d4251de4-86a2-4ee2-b7a2-73f539b9eab3",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "3b4dbc8a-d164-4cac-883f-547a6b33f466",
+   "state_revision": "3e906129-1daf-4ddf-be39-6712e5d441b0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "58a5323f-64f9-4687-94ee-e5a65e0a1ff1",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "6d83a481-6169-4748-921e-6602fcd2a7f1",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "3b4dbc8a-d164-4cac-883f-547a6b33f466",
+   "state_revision": "23a2da97-bb96-4e0c-8985-2dcdbe7e5659",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "7679c47d-6ef6-4f1e-92e9-dea3a514f2d3",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "609052a9-b8fa-457f-9c24-240fde3439a1",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 23
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 11,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "6b682fae-e838-44d0-96eb-7f4298291e8a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 11,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 24
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "3b4dbc8a-d164-4cac-883f-547a6b33f466",
+   "state_revision": "9ea0ef7e-d627-4966-ac2a-5d639a6e252d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "f11dd7da-b887-46ee-aeb7-746d4e4d9e9f",
+    "sequence": 26
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ded8a691-f9d6-43e8-a1e8-6c1472e63e60",
+  "discovery_generation": 5,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 12,
+   "actor_uuid": "7e2c178d-50ac-430b-862b-1efe0620d7c2",
+   "state_revision": "ded8a691-f9d6-43e8-a1e8-6c1472e63e60",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 5,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+   "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+   "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+   "command_number": 12,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_favor_equipped_use_retire_replace",
+    "game_epoch": "c4099e44-9f1f-4ead-9398-e39293e5357e",
+    "audience_id": "618d9579-456d-4aa5-a9a2-f1cb8360e6e5",
+    "sequence": 28
+   }
+  }
+ }
+]
