@@ -1,0 +1,200 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "e9b1949a-6f04-4344-848c-88092bc2a6b1",
+   "state_revision": "a58bc675-ae05-4dc6-851f-f85f0170da0c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+   "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+   "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+    "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+    "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8a1bd74e-3db8-497d-ade6-058d96d607ef",
+   "state_revision": "03a1e1ab-51b6-4f5c-9c82-a8db6880ad72",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+   "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+   "audience_id": "4707d1a5-0f0a-4dd9-9dfe-a15ada066dc9",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+    "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+    "audience_id": "4707d1a5-0f0a-4dd9-9dfe-a15ada066dc9",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.hold_person",
+   "by": "caster",
+   "target": "target",
+   "level": 2
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "d7a85cab-01d3-4bcc-bebc-cc9de00a2744",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.hold_person",
+   "display_name": "Hold Person (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "state_revision": "d7a85cab-01d3-4bcc-bebc-cc9de00a2744",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 2
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+   "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+   "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+    "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+    "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "state_revision": "b55fe54b-5f4a-481c-8f23-90b4f96a65e7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+   "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+   "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+    "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+    "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.power_word_heal",
+   "by": "ally",
+   "target": "target"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ff28d0bd-cade-4d19-a694-109459937773",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.power_word_heal",
+   "display_name": "Power Word Heal (Level 9)",
+   "cast_at_level": 9,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "e9b1949a-6f04-4344-848c-88092bc2a6b1",
+   "state_revision": "ff28d0bd-cade-4d19-a694-109459937773",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+   "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+   "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_wounded_condition_restoration",
+    "game_epoch": "8fd52585-545e-4fd1-879a-09830db3f87a",
+    "audience_id": "ad241b76-a7f2-4356-bab4-0270cfa7e991",
+    "sequence": 10
+   }
+  }
+ }
+]

@@ -1,0 +1,231 @@
+[
+ {
+  "request": {
+   "do": "spell.hold_person",
+   "by": "caster",
+   "target": "target"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "18d61860-d7b5-4818-91e1-3c1631335066",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.hold_person",
+   "display_name": "Hold Person (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "state_revision": "18d61860-d7b5-4818-91e1-3c1631335066",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hold_person_agency_restoration",
+   "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+   "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hold_person_agency_restoration",
+    "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+    "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "state_revision": "9b521ee1-bcca-47c2-b9fb-9a07ca1c2c5c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hold_person_agency_restoration",
+   "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+   "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hold_person_agency_restoration",
+    "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+    "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+    "sequence": 3
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "d22f8761-002d-4df8-b509-7f595d060245",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "state_revision": "d22f8761-002d-4df8-b509-7f595d060245",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hold_person_agency_restoration",
+   "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+   "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hold_person_agency_restoration",
+    "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+    "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+    "sequence": 6
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "state_revision": "af3b929f-80cd-467e-ad9a-7b806a3229f8",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hold_person_agency_restoration",
+   "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+   "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hold_person_agency_restoration",
+    "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+    "audience_id": "14fbfe30-7ad2-4749-8ae4-baa15cfd7d3e",
+    "sequence": 7
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    10,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "8c178439-df95-4b19-80aa-8d423b8a4d52",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "state_revision": "8c178439-df95-4b19-80aa-8d423b8a4d52",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hold_person_agency_restoration",
+   "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+   "audience_id": "07700690-ba97-41a9-8d7f-a22ca7f85184",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hold_person_agency_restoration",
+    "game_epoch": "965b2c30-d15b-46a1-8252-1b36558c6222",
+    "audience_id": "07700690-ba97-41a9-8d7f-a22ca7f85184",
+    "sequence": 9
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ }
+]

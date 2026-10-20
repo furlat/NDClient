@@ -1,0 +1,70 @@
+{
+ "id": "movement.window/destroy_insert_cross",
+ "title": "Window: actual grille destruction, retained frame and traversal",
+ "kind": "interaction",
+ "seed": 3,
+ "battlefield": "battlefield.window_proving_ground",
+ "subjects": {
+  "spell": [
+   "spell.fire_bolt"
+  ],
+  "action": [
+   "action.traverse_connector"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.fire_bolt"
+   ],
+   "at": [
+    4,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    14,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.fire_bolt",
+   "by": "caster",
+   "target": {
+    "object": "Window grille G8"
+   }
+  },
+  {
+   "do": "action.traverse_connector",
+   "by": "caster",
+   "target": [
+    5,
+    8
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.fire_bolt",
+  "action.traverse_connector"
+ ],
+ "required_facts": [
+  "object_destroyed"
+ ]
+}

@@ -440,7 +440,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if drawn and caught_up and submitted_bounds and input_bindings.unavailable.is_empty():
             var witness={"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())}
             witnesses.append(witness)
-            if component.get("intrinsic_item_effect",false) and "weapon_binding" in input_bindings.supplied and input_bindings.supplied.any(func(name):return name in ["entity_geometry","recipient_geometry"]):
+            if component.get("native_item",false) and "weapon_binding" in input_bindings.supplied and input_bindings.supplied.any(func(name):return name in ["entity_geometry","recipient_geometry"]):
                 var receiver:Dictionary=witness.duplicate(false);receiver.id=id+":weapon_surface";witnesses.append(receiver)
         if float(handle.drawn_time)!=sample_time:
             var sampled_root:WeakRef=weakref(handle.root)

@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Recorded condition spans retain their causal identity across faction views.
 ## This checks index/navigation values, not native rendering or new SDK states.
 const Recording=preload("res://studio/recording.gd")
@@ -11,11 +12,7 @@ func check(value:bool,label:String)->void:
     if not value:failures.append(label);print("CONDITION_NAVIGATION_FAIL ",label)
 
 func _initialize()->void:
-    var name="condition_owners-seed4"
-    var perspectives=[]
-    for id in ["amber","blue"]:
-        perspectives.append({"id":id,"label":id.capitalize(),"journal":"res://.runtime/studio-cases/"+name+"/"+id+"/journal"})
-    var bundle=Recording.read_case({"id":name,"perspectives":perspectives})
+    var bundle=Recording.read_case(Fixtures.case_record("condition-owners"))
     check(bundle.ok,"Actual independent condition-owner recordings compile")
     if not bundle.ok:_finish();return
     var views={}
@@ -58,9 +55,9 @@ func _initialize()->void:
                 evidence.append({"view":id,"row":row.id,"causes":row.interval_causes,"source_ms":at,"mapped_ms":mapped,"expected_ms":expected})
             if missing_checked or row.start_ms<=row.owner.start_ms:continue
             var commit:Variant=null
-            for cause in row.interval_causes:
+            for cause in anchor.interval_causes:
                 if not cause.begins_with("event:"):continue
-                var event:Dictionary=target.clock_events.get(cause.trim_prefix("event:"),{})
+                var event:Dictionary=Recording._clock_rows(target).get(cause.trim_prefix("event:"),{})
                 for marker in event.get("markers",[]):
                     if marker.kind=="commit":commit=marker.at_ms;break
                 if commit!=null:break

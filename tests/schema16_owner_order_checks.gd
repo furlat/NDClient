@@ -97,6 +97,67 @@ func owners()->void:
     check(timeline.condition_owners[OWNER].start_ms==250.0 and timeline.condition_owners[OWNER].end_ms==700.0,"Later removal closes the new lifetime without changing its start")
     check(intervals[OWNER].back().end_ms==700.0 and parents[OWNER].removal_event=="5:4","Studio closes the reapplied interval at the actual later removal")
 
+func item_rows()->void:
+    # Small value-contract controls, not an additional recorded scenario.
+    var vector:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(BODY))
+    var state:Dictionary=vector.initial.duplicate(true)
+    check(Reducer.enter_body(state,vector.steps[0].input.body).ok,"Reference body admits item-row contract controls")
+    state.senses={"spatial_effects":{}}
+    var actor:String=state.actors.keys()[0]
+    var effect:Dictionary={"effect_uuid":"member","behavior_id":"item.property.additional_damage","damage_type":"Radiant", "duration":{"duration_type":"rounds","remaining_rounds":2}}
+    check(Reducer.enter_item(state,{"item_uuid":"item","look":{},"effects":[effect]}).ok,"Existing item has its own exact effect member")
+    var original:Dictionary=state.duplicate(true)
+    var packet:Dictionary=operation(state,actor,[
+        {"field":"item_effects","item_uuid":"item","effects":[]},
+        {"field":"item_effects","item_uuid":"item","effects":[effect]},
+        {"field":"item_effect_duration","item_uuid":"item","key":"member","duration":{"duration_type":"rounds","remaining_rounds":1}}],1)
+    var input:Dictionary=packet.duplicate(true)
+    var folded:Dictionary=Reducer._reduce_operation_retained(state,packet,true)
+    check(folded.ok,"Ordered item remove/reapply/duration folds once")
+    if not folded.ok:return
+    var rows:Array=folded.transitions.lineages[0].events[0].item_rows
+    check(rows.size()==3,"Every actual ordered membership/duration mutation is retained")
+    if rows.size()!=3:return
+    check(rows[0].before==[effect] and rows[0].after.is_empty(),"Removal retains the member from before its row")
+    check(rows[1].before.is_empty() and rows[1].after==[effect],"Reapplication retains the intervening empty membership")
+    check(rows[2].before[0].duration.remaining_rounds==2 and rows[2].after[0].duration.remaining_rounds==1,"Duration update retains both immutable member versions")
+    check(rows.all(func(row):return row.actor_uuid==actor and row.item_uuid=="item"),"Native actor/item identity remains separate from effect identity")
+    check(state==original and packet==input,"Capturing item rows leaves the canonical prefix and packet unchanged")
+    var compiled:Dictionary=Compiler.compile_recorded(state,packet,{},folded.value,folded.transitions)
+    check(compiled.ok,"Ordered item rows compile with the normal canonical after-state")
+    if not compiled.ok:return
+    check(compiled.value.groups[0].commits[0].item_rows==rows,"The shared presentation commit retains exact SDK row order")
+    var timeline=Timeline.new()
+    timeline.accept({"kind":"initialization","state":state.duplicate(true),"sequence":0})
+    timeline.accept({"kind":"operation","groups":compiled.value.groups})
+    timeline.advance(compiled.value.groups[0].duration_ms)
+    check(timeline.state==folded.value,"Item row metadata does not add a second canonical fold/state")
+    var canceled:Dictionary=packet.duplicate(true);canceled.lineages[0].events[0].canceled=true
+    var ignored:Dictionary=Reducer._reduce_operation_retained(state,canceled,true)
+    check(ignored.ok and ignored.transitions.lineages[0].events[0].item_rows.is_empty() and ignored.value.items==state.items,"Canceled rows create neither membership evidence nor changed items")
+    var record_rows:Array=[];var copy:Dictionary=state.duplicate(true)
+    check(Reducer.apply_actor_change_fact(copy,{"items":[{"item_uuid":"item","look":{}}]},[],record_rows).ok,"Explicit item-record replacement folds in the existing body reader")
+    check(record_rows.size()==1 and record_rows[0].field=="item_record" and record_rows[0].before==[effect] and record_rows[0].after.is_empty(),"Item-record empty membership is an actual removal, not an omitted owner signal")
+    var body_rows:Array=[];copy=state.duplicate(true)
+    var body:Dictionary=vector.steps[0].input.body.duplicate(true)
+    body.body.controlled_items=["item"];body.items=[]
+    check(Reducer.Bodies.enter_body(copy,body,body_rows).ok,"Actual body replacement uses the same ordered membership capture seam")
+    check(body_rows.size()==1 and body_rows[0].actor_uuid==actor and body_rows[0].before==[effect] and body_rows[0].after.is_empty(),"A body disclosure that clears held item effects retains its exact before-member")
+    var trailing_packet:Dictionary=operation(state,actor,[],1)
+    body.occurrence=1;trailing_packet.lineages[0].bodies=[body];trailing_packet.lineages[0].end_cursor=2
+    var last:Dictionary=Reducer._reduce_operation_retained(state,trailing_packet,true)
+    check(last.ok,"Trailing body admission folds through the existing node owner")
+    if not last.ok:return
+    var captured:Dictionary=last.transitions.lineages[0]
+    check(captured.trailing_item_rows.size()==1 and captured.trailing.items.get("item",{}).get("effects",[effect]).is_empty(),"Trailing delta includes a cleared shown item omitted from the body record")
+    var last_compiled:Dictionary=Compiler.compile_recorded(state,trailing_packet,{},last.value,last.transitions)
+    check(last_compiled.ok,"Trailing item removal compiles without a second fold")
+    if not last_compiled.ok:return
+    check(last_compiled.value.groups[0].commits.any(func(commit):return commit.get("item_rows",[])==captured.trailing_item_rows),"Final publication boundary retains exact trailing membership rows")
+    timeline=Timeline.new();timeline.accept({"kind":"initialization","state":state.duplicate(true),"sequence":0})
+    timeline.accept({"kind":"operation","groups":last_compiled.value.groups});timeline.advance(last_compiled.value.groups[0].duration_ms)
+    check(timeline.state==last.value and timeline.state.items.item.effects.is_empty(),"Canonical fold and published trailing state agree on the actual cleared item")
+
 func child_order()->void:
     var state:Dictionary=Reducer.empty_state("owner-order","observer")
     state.senses={"spatial_effects":{}}
@@ -124,6 +185,6 @@ func child_order()->void:
     check(packet==original,"Presentation child metadata does not mutate the native packet")
 
 func run()->void:
-    owners();child_order()
+    owners();item_rows();child_order()
     print(JSON.stringify({"checks":checks,"failures":failures}))
     quit(0 if failures.is_empty() else 1)

@@ -1,0 +1,475 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 10,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "1d9cd2b6-3f48-4136-93d7-a7bb810ef0fc": "Amber caster",
+  "1f578f22-980b-4357-8ba2-42523a42255b": "Amber patient",
+  "a196483b-172a-4e28-888a-be17abd10571": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "patient": "Amber patient",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber patient",
+  "spell.magic_missile \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "spell.revivify \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber patient",
+  "end_turn \u00b7 Blue target",
+  "spell.cure_wounds \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.move \u00b7 Amber patient"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 17,
+   "actor_change": 1,
+   "damage": 10,
+   "life": 3,
+   "spell": 8,
+   "spatial": 4,
+   "sensory": 3,
+   "heal": 1,
+   "step": 1,
+   "movement": 1
+  },
+  "behaviors": {
+   "spell.magic_missile": 6,
+   "spell.revivify": 1,
+   "spell.cure_wounds": 1,
+   "action.move": 1
+  },
+  "conditions": [],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 4,
+   "occurrence": 62,
+   "lineage": 42,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 63,
+   "lineage": 42,
+   "event_offset": 3,
+   "kind": "life",
+   "label": "life ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 64,
+   "lineage": 42,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 65,
+   "lineage": 42,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 74,
+   "lineage": 42,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 75,
+   "lineage": 42,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 76,
+   "lineage": 42,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 85,
+   "lineage": 42,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 86,
+   "lineage": 42,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 87,
+   "lineage": 42,
+   "event_offset": 11,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 96,
+   "lineage": 42,
+   "event_offset": 12,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 103,
+   "lineage": 42,
+   "event_offset": 14,
+   "kind": "life",
+   "label": "life ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 106,
+   "lineage": 42,
+   "event_offset": 16,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 107,
+   "lineage": 42,
+   "event_offset": 17,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 116,
+   "lineage": 42,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 117,
+   "lineage": 42,
+   "event_offset": 19,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 118,
+   "lineage": 42,
+   "event_offset": 20,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 124,
+   "lineage": 42,
+   "event_offset": 23,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 145,
+   "lineage": 133,
+   "event_offset": 3,
+   "kind": "life",
+   "label": "life ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 146,
+   "lineage": 133,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.revivify",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 182,
+   "lineage": 176,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 183,
+   "lineage": 176,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.cure_wounds",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 215,
+   "lineage": 197,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 57,
+   "lineage": 37,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 58,
+   "lineage": 37,
+   "event_offset": 3,
+   "kind": "life",
+   "label": "life ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 59,
+   "lineage": 37,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 60,
+   "lineage": 37,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 69,
+   "lineage": 37,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 70,
+   "lineage": 37,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 71,
+   "lineage": 37,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 80,
+   "lineage": 37,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 81,
+   "lineage": 37,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 82,
+   "lineage": 37,
+   "event_offset": 11,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 91,
+   "lineage": 37,
+   "event_offset": 12,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 94,
+   "lineage": 37,
+   "event_offset": 13,
+   "kind": "life",
+   "label": "life ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 97,
+   "lineage": 37,
+   "event_offset": 15,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 98,
+   "lineage": 37,
+   "event_offset": 16,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 107,
+   "lineage": 37,
+   "event_offset": 17,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 108,
+   "lineage": 37,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 109,
+   "lineage": 37,
+   "event_offset": 19,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 115,
+   "lineage": 37,
+   "event_offset": 22,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 132,
+   "lineage": 124,
+   "event_offset": 2,
+   "kind": "life",
+   "label": "life ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 133,
+   "lineage": 124,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.revivify",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 169,
+   "lineage": 163,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 170,
+   "lineage": 163,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.cure_wounds",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 202,
+   "lineage": 184,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

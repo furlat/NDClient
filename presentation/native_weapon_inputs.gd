@@ -28,7 +28,7 @@ static func resolve(world:Node,component:Dictionary)->Dictionary:
     var raw:Variant=component.get("condition",{}).get("state")
     var condition:Dictionary=raw if raw is Dictionary else {}
     var explicit:Dictionary=component.get("native_inputs",{}).get("weapon_binding",{})
-    var item:Variant=component.get("item_owner_uuid") if component.get("intrinsic_item_effect",false) else condition.get("affected_item_uuid")
+    var item:Variant=component.get("item_owner_uuid") if component.get("native_item",false) else condition.get("affected_item_uuid")
     if item==null:item=explicit.get("item_uuid")
     var target:Variant=component.get("target_uuid")
     if item==null and target!=null and world.timeline.state.get("items",{}).has(str(target)):item=target
@@ -65,22 +65,30 @@ static func resolve(world:Node,component:Dictionary)->Dictionary:
     result.merge(selected,true);result.erase("key");result.slots=[result.render_slot]
     var record:Dictionary=world.timeline.state.get("items",{}).get(result.item_uuid,{})
     if record.is_empty():result.reason="weapon_item_not_disclosed";return result
-    var effect:Variant=component.get("condition_uuid",component.get("condition",{}).get("condition_uuid"))
+    var effect:Variant=component.get("item_effect_uuid") if component.get("dynamic_item_effect",false) else component.get("condition_uuid",component.get("condition",{}).get("condition_uuid"))
     var intrinsic:bool=component.get("intrinsic_item_effect",false)
     if not intrinsic and (effect==null or str(effect).is_empty()):result.reason="weapon_effect_identity_not_disclosed";return result
     # Schema16 retires active Antimagic suppression; its absent legacy field
     # is not an unknown verdict. An actual supplied override still retires
     # the coating without changing the exact owner/item binding.
     var suppressed:bool=bool(explicit.get("suppressed",false))
-    var owner_kind:String="item" if intrinsic else "caster" if actors.has(owner) else "item"
-    result.binding={"owner_kind":owner_kind,"owner_uuid":result.item_uuid if intrinsic else owner,"item_uuid":result.item_uuid,
+    var item_owned:bool=component.get("native_item",false)
+    var owner_kind:String="item" if item_owned else "caster" if actors.has(owner) else "item"
+    result.binding={"owner_kind":owner_kind,"owner_uuid":result.item_uuid if item_owned else owner,"item_uuid":result.item_uuid,
         "item_id":result.item_id,"holder_uuid":result.actor,"equipment_slot":result.equipment_slot,"render_slot":result.render_slot,
         "present":true,"observed":true,"equipped":true,"suppressed":suppressed,
         "binding_origin":"observed_condition_and_current_visual_item"}
     if intrinsic:
         result.binding.binding_origin="intrinsic_authored_item"
         result.binding.authored_effect_source=component.source
-    else:result.binding.effect_uuid=str(effect)
+    else:
+        result.binding.effect_uuid=str(effect)
+        if component.get("dynamic_item_effect",false):
+            result.binding.binding_origin="observed_item_effect"
+            result.binding.authored_effect_source=component.source
+            for field in ["contribution_uuid","behavior_id","damage_type","applied_source_event_cursor"]:
+                var value:Variant=component.get("item_effect_member",{}).get(field)
+                if value!=null:result.binding[field]=value
     # Legacy ownership sources have additional admission semantics. These are
     # not universal wire fields and prepared Measured does not require them.
     # Keep them explicit until their authored owner projection is supplied.

@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Real Gallery rows plus small display-only boundary fixtures. No GPU claims.
 const Recording=preload("res://studio/recording.gd")
 const Timeline=preload("res://studio/timeline_view.gd")
@@ -12,7 +13,7 @@ func check(value:bool,label:String)->void:
     if not value:failures.append(label);print("TIMELINE_LAYOUT_FAIL ",label)
 
 func run()->void:
-    var index=Recording.read("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal")
+    var index=Fixtures.read("gallery")
     check(index.ok,"Actual Gallery recording admits")
     if not index.ok:finish();return
     var original=JSON.stringify(index.rows)

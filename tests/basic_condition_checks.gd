@@ -10,6 +10,7 @@ const Document=preload("res://presentation/resources/ability_document.gd")
 const AbilityDocuments=preload("res://presentation/ability_documents.gd")
 const Builder=preload("res://tools/presentation_build/abilities.gd")
 const Common=preload("res://tools/presentation_build/common.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -21,11 +22,10 @@ func run()->void:
     var directory=""
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--cases="):directory=arg.trim_prefix("--cases=")
-    if directory.is_empty():print("Use --cases=<actual captured Studio cases directory>");quit(2);return
     for row in [["dash","dashing",0xe458b1],["dodge","dodging",0x5895e4],["disengage","disengaging",0x6658e4]]:
-        examine(directory.path_join(row[0]+"-seed3/amber/journal"),row[0],row[1],row[2])
+        examine(Fixtures.journal(row[0]) if directory.is_empty() else directory.path_join(row[0]+"-seed3/amber/journal"),row[0],row[1],row[2])
     reload_check()
-    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Real recorded Dash/Dodge/Disengage; authoritative lifetime and commits, no new body/duration, shared contour selection, Resource reload rejection. Pixel rendering is a separate gate."}
+    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Real recorded Dash/Dodge/Disengage; authoritative lifetime and commits, no new body/duration, current authored Dash has no contour; Dodge/Disengage contour selection, Resource reload rejection. Pixel rendering is a separate gate."}
     FileAccess.open("res://generated/basic_condition_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("BASIC_CONDITION ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 func examine(directory:String,action:String,name:String,color:int)->void:
@@ -36,21 +36,26 @@ func examine(directory:String,action:String,name:String,color:int)->void:
     var recipe:Dictionary=Catalog.read_file("catalog/condition_recipes.json",index.cache)[id]
     var action_recipe:Dictionary=Catalog.read_file("catalog/body_action_recipes.json",index.cache)["action."+action]
     check(not action_recipe.actor.enabled,"Body-disabled "+action+" remains body-disabled")
-    check(recipe.persistent.bodyOutline.color==color and recipe.persistent.bodyOutline.pulseOpacity==0,"Explicit new palette uses original feedback colour without Paralyzed stripe: "+name)
+    var outlined:bool=action!="dash"
+    if outlined:check(recipe.persistent.bodyOutline.color==color and recipe.persistent.bodyOutline.pulseOpacity==0,"Explicit palette uses original feedback colour without Paralyzed stripe: "+name)
+    else:check(not recipe.persistent.has("bodyOutline"),"Current authored Dash explicitly omits the retired pink contour")
     check(recipe.persistent.get("bodyColor")==null and recipe.persistent.alphaMultiplier==1 and not recipe.persistent.has("activityPoses"),"Indicator keeps original body pose, colour and alpha: "+name)
     var entry:Resource=load("res://authoring/abilities/conditions/"+id+".tres")
-    check(entry!=null and entry.look.steps.any(func(step):return step.kind=="outline"),"The abilities source holds the indicator contour: "+name)
+    check(entry!=null and entry.look.steps.any(func(step):return step.kind=="outline")==outlined,"The actual editable source explicitly owns the selected contour policy: "+name)
+    check(entry.look.steps.any(func(step):return step.kind=="body_adjust"),"Actual condition source retains its body-adjustment declaration: "+name)
     var rows=index.rows.filter(func(row):return row.kind=="condition_material" and row.owner.condition.behavior_id==id)
-    check(not rows.is_empty(),"Recorded owner has indexed persistent contour: "+name)
-    var owner={}
+    check(not rows.is_empty() if outlined else rows.all(func(row):return not row.operations.has("bodyOutline")),"Recorded material spans follow explicit source contour policy: "+name)
+    var lifetime:Array=index.rows.filter(func(row):return row.kind=="condition" and row.owner.condition.behavior_id==id)
+    check(lifetime.size()==1,"Original application has one authoritative indexed condition owner: "+name)
+    var owner:Dictionary={} if lifetime.is_empty() else lifetime[0].owner
     for row in rows:
         owner=row.owner
-        check(row.operations.has("bodyOutline") and row.source_fields.bodyOutline=="res://authoring/abilities/conditions/condition."+name+".tres::look","Exact editable Resource provenance: "+name)
+        if outlined:check(row.operations.has("bodyOutline") and row.source_fields.bodyOutline=="res://authoring/abilities/conditions/condition."+name+".tres::look","Exact editable Resource provenance: "+name)
         var at:float=(row.start_ms+row.end_ms)*.5
         var timeline=Recording.restore(index,at)
         var original=timeline.state.duplicate(true)
         var material=Conditions.material(row.owner.actor_uuid,timeline.component_samples(index.cache))
-        check(material.outline.get("color")==color,"Shared live selection applies real owner at indexed time: "+name)
+        check(material.outline.get("color")==color if outlined else material.outline.is_empty(),"Shared live selection follows actual owner/source policy at indexed time: "+name)
         check(material.tint==Vector3.ONE and material.alpha==1,"Contour does not dim or tint assembled source: "+name)
         check(timeline.state==original,"Presentation sampling leaves canonical state unchanged: "+name)
     check(not owner.is_empty() and owner.start_ms>0 and is_finite(owner.end_ms) and owner.end_ms>owner.start_ms,"Actual application and removal, not fabricated lifespan: "+name)
@@ -60,10 +65,10 @@ func examine(directory:String,action:String,name:String,color:int)->void:
             check(not timeline.component_samples(index.cache).any(func(sample):return sample.get("condition_uuid")==owner.id),"No contour outside actual owner lifespan: "+name+" at "+str(at))
         var badge_rows=index.rows.filter(func(row):return row.kind=="feedback_text" and row.component.get("legacy_source",row.source).begins_with("catalog/condition_recipes.json:/"+id+"/"))
         check(badge_rows.any(func(row):return row.component.text.begins_with("+")) and badge_rows.any(func(row):return row.component.text.begins_with("−")),"Application and removal feedback both recorded: "+name)
-        evidence.append({"action":action,"condition":id,"condition_uuid":owner.id,"start_ms":owner.start_ms,"end_ms":owner.end_ms,"material_spans":rows.size(),"source":recipe._resource_source})
+        evidence.append({"action":action,"condition":id,"condition_uuid":owner.id,"start_ms":owner.start_ms,"end_ms":owner.end_ms,"material_spans":rows.size(),"source":entry.resource_path})
     var requirements=Coverage.build(index.cache,index.rows,{id:true}).entries[0].requirements
     check(not requirements.any(func(row):return row.get("gap_kind")=="authoring_assignment"),"Persistent assignment exists, not status suppression: "+name)
-    check(requirements.any(func(row):return row.mechanism=="bodyOutline" and not row.evidence.is_empty()),"Coverage cites actual recorded contour spans: "+name)
+    check(requirements.any(func(row):return row.mechanism=="bodyOutline" and not row.evidence.is_empty()) if outlined else not requirements.any(func(row):return row.mechanism=="bodyOutline"),"Coverage follows the explicit current authored contour requirement: "+name)
     var baseline_cache=index.cache.duplicate()
     baseline_cache["catalog/condition_recipes.json"]=Catalog.read_file("catalog/condition_recipes.json",index.cache).duplicate(true)
     baseline_cache["catalog/condition_recipes.json"][id].persistent.erase("bodyOutline")
@@ -76,7 +81,7 @@ func examine(directory:String,action:String,name:String,color:int)->void:
     files.sort();var operation=0
     for file in files:
         var raw=FileAccess.get_file_as_bytes(directory.path_join(file))
-        var decoded=journal.protocol.decode("InitializationResponse" if operation==0 else "PlayerOperation",raw)
+        var decoded=journal.decode_record(int(file.get_basename()),raw)
         check(decoded.ok,"Actual packet admits "+action+"/"+file)
         if not decoded.ok:break
         var before:Dictionary=journal.state

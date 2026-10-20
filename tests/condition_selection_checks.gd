@@ -3,6 +3,8 @@ const Conditions=preload("res://presentation/conditions.gd")
 const Authoring=preload("res://presentation/authoring.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
 const Palette=preload("res://presentation/palette.gd")
+const NativePersistent=preload("res://presentation/native_persistent.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -38,8 +40,10 @@ func run()->void:
     var color:Dictionary=chosen.recipe.persistent.bodyColor
     check(material.tint.is_equal_approx(Palette.rgb(int(color.tintRgb))) and is_equal_approx(material.saturation,color.saturation) and is_equal_approx(material.brightness,color.brightness),"Highest selected original bodyColor alone wins while lower owners remain semantic")
     var base=owner(oracle.conditions["condition.poisoned"])
-    var applied=Conditions.samples({base.id:base},0,cache).filter(func(row):return row.has("layer"))
-    check(applied.size()==1 and applied[0].alpha==0,"Application marker participates before its visual fade starts")
+    var applied=Conditions.samples({base.id:base},0,cache).filter(func(row):return row.has("lifecycle_phases"))
+    check(not applied.is_empty(),"The current exact package replaces the original Poisoned marker with native lifecycles")
+    for component in applied:
+        check(NativePersistent.lifecycle_state(component,0).phase=="application","Actual application owner begins at its native application, not an invented fade")
     var recipes:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache)
     for id in ["class_feature.sorcerer.elemental_affinity.resistance","class_feature.sorcerer.metamagic_active","condition.spell.enhance_ability","condition.spell.enlarge_reduce"]:
         if not recipes.has(id):continue
@@ -52,17 +56,24 @@ func run()->void:
                 check(Conditions.select_layers([row],0).is_empty(),"Authored state selector rejects other value "+layer.id)
     var charm={"condition_uuid":"charm","behavior_id":"condition.charmed","state":{}}
     var start=owner(charm)
-    var layers=recipes["condition.charmed"].persistent.layers
-    var offset:float=layers.filter(func(row):return row.get("startOffsetMs",0)>0)[0].startOffsetMs
-    check(Conditions.samples({start.id:start},offset-.01,cache).filter(func(row):return row.has("layer") and row.layer.get("startOffsetMs",0)>0).is_empty(),"Authored startOffset withholds sustain before its source start")
-    var after=Conditions.samples({start.id:start},offset+50,cache).filter(func(row):return row.has("layer") and row.layer.get("startOffsetMs",0)>0)
-    check(not after.is_empty() and after.all(func(row):return is_equal_approx(row.source_age_ms,50+row.layer.get("phaseOffsetMs",0))),"Application source age subtracts start offset and adds phase")
-    start.initial=true
-    var initial=Conditions.samples({start.id:start},50,cache).filter(func(row):return row.has("layer") and row.layer.get("startOffsetMs",0)>0)
-    check(not initial.is_empty() and initial.all(func(row):return row.source_age_ms==50),"Already active source ignores application offsets")
-    check(after.all(func(row):return row.status=="available"),"Exact condition_media alias resolves actual sustain registration")
-    var rage=raw.filter(func(row):return row.kind=="native_effect")
-    check(not rage.is_empty() and rage.all(func(row):return row.has("metadata") and row.scale==row.metadata.get("scale",.5)),"Native layer retains original metadata and registration scale")
+    var charm_samples=Conditions.samples({start.id:start},0,cache).filter(func(row):return row.has("lifecycle_phases"))
+    check(not charm_samples.is_empty(),"Charmed exposes the delivered application/sustain/removal source contract")
+    for component in charm_samples:
+        var duration:float=component.lifecycle_phases.application.seconds
+        check(duration>0 and NativePersistent.lifecycle_state(component,duration-.00001).phase=="application","Native sustain is withheld until its authored application source ends")
+        var after:Dictionary=NativePersistent.lifecycle_state(component,duration+.05)
+        check(after.phase=="sustain" and is_equal_approx(after.phase_age_seconds,.05),"Native sustain source age subtracts the actual authored application duration")
+        var initial_component:Dictionary=component.duplicate();initial_component.initial=true
+        var initial:Dictionary=NativePersistent.lifecycle_state(initial_component,.05)
+        check(initial.phase=="sustain" and is_equal_approx(initial.phase_age_seconds,.05),"An initially active owner starts at sustain, without replaying application")
+        var removed:Dictionary=component.duplicate();removed.duration_ms=(duration+.1)*1000.0
+        var removal:Dictionary=NativePersistent.lifecycle_state(removed,duration+.15)
+        check(removal.phase=="removal" and is_equal_approx(removal.phase_age_seconds,.05),"Removal starts at the real owner end and has its own source clock")
+        for phase in ["application","sustain","removal"]:
+            var declared:Dictionary=Effects.clip(str(component.lifecycle_phases[phase].id))
+            check(declared==component.lifecycle_phases[phase] and not declared.is_empty(),"Native phase retains exact installed package registration: "+phase)
+        var registration:Dictionary=Effects.conditions("condition.charmed").filter(func(selection):return selection.key==component.lifecycle_key)[0].condition.registration
+        check(component.native_cue.scale==registration.scale and component.native_cue.attachment==registration.attachment,"Native layer keeps its original package attachment and registration scale")
     var deceased={base.id:owner(oracle.conditions["condition.poisoned"])}
     Conditions.observe(deceased,{"actor":{"life_state":"dead","conditions":[]}},600)
     check(Conditions.samples(deceased,601,cache).filter(func(row):return row.has("layer")).is_empty(),"Removal tails use current disclosed actor life state rather than stale living marker eligibility")
@@ -77,19 +88,22 @@ func run()->void:
         if row.condition_uuid=="a-owner":row.removal_age_ms=10
     check(Conditions.select_layers(paired,0).all(func(row):return row.condition_uuid=="z-owner"),"Live marker owner wins over lower-UUID fading owner without deleting semantic lifetime")
     var thumbnails=Thumbnails.new()
-    var marker=raw.filter(func(row):return row.has("layer") and row.condition.behavior_id=="condition.paralyzed")[0]
-    var preview_row={"id":"paralyzed-preview","kind":marker.kind,"status":marker.status,"component":marker,"selection_policy":"sampled","start_ms":0.0,"condition_owners":owners,"source_start_ms":0.0}
-    var inactive_key=thumbnails.request(preview_row,1800,0)
-    check(thumbnails.inactive.has(inactive_key) and thumbnails.pending.is_empty() and thumbnails.errors.is_empty(),"Inactive marker thumbnail is labeled without pending native work or source error")
-    var active_key=thumbnails.request(preview_row,600,0)
-    check(thumbnails.requested.has(active_key) and thumbnails.pending.size()==1 and thumbnails.pending[0].age_ms==600,"Active thumbnail queues the shared selected source clock")
+    var native_rows: Array=raw.filter(func(row):return row.has("lifecycle_phases"))
+    check(not native_rows.is_empty(),"Current condition sources provide actual native preview candidates")
+    if not native_rows.is_empty():
+        var marker:Dictionary=native_rows[0]
+        var preview_row={"id":"native-preview","kind":marker.kind,"status":marker.status,"component":marker,"start_ms":0.0,"source_start_ms":0.0}
+        var key:String=thumbnails.request(preview_row,600,0,false)
+        check(thumbnails.requested.has(key) and thumbnails.pending.size()==1 and is_equal_approx(thumbnails.pending[0].age_ms,600),"Native thumbnail queues the same unshifted owner clock used by its lifecycle")
+        check(thumbnails.pending[0].component.lifecycle_phases==marker.lifecycle_phases,"Thumbnail retains the exact source phase records, not retired spritesheet aliases")
     thumbnails.reset()
     check(thumbnails.pending.is_empty() and thumbnails.requested.is_empty() and thumbnails.inactive.is_empty(),"Thumbnail reset cancels all queued/inactive generation state")
-    var charm_component=after[0]
-    var charm_row={"id":"charm-preview","kind":charm_component.kind,"status":charm_component.status,"component":charm_component,"selection_policy":"sampled","start_ms":0.0,"condition_owners":{"charm":owner(charm)},"source_start_ms":0.0}
-    thumbnails.request(charm_row,offset+50,0)
-    check(thumbnails.pending.size()==1 and thumbnails.pending[0].age_ms==50+charm_component.layer.get("phaseOffsetMs",0),"Thumbnail source clock preserves authored application delay")
+    for component in charm_samples:
+        var at:float=float(component.lifecycle_phases.application.seconds)*1000.0+50
+        var preview_row={"id":"charm-preview:"+component.id,"kind":component.kind,"status":component.status,"component":component,"start_ms":0.0,"source_start_ms":0.0}
+        thumbnails.request(preview_row,at,0,false)
+        check(is_equal_approx(thumbnails.pending[-1].age_ms,floorf(at*60/1000.0)*1000.0/60.0),"Native thumbnail clock retains the authored lifecycle boundary and exact sample quantization")
     thumbnails.close()
-    var result={"checks":checks,"failures":failures,"original_source":oracle.source,"recordings":oracle.recordings,"scope":"Original marker operator and authored composition/state/clock policy; no native pixel claim"}
+    var result={"checks":checks,"failures":failures,"original_source":oracle.source,"recordings":oracle.recordings,"scope":"Original marker operator and authored composition/state predicates; current exact native lifecycle source clocks/registration and thumbnail jobs; no native pixel claim"}
     FileAccess.open("res://generated/condition_selection_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("CONDITION_SELECTION_CHECKS ",JSON.stringify(result));quit(0 if failures.is_empty() else 1)

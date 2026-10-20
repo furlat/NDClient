@@ -284,7 +284,18 @@ def moments(journal, names=None):
 
 def journal_summary(journal):
     counted, behaviors, conditions = Counter(), Counter(), set()
-    known={};ended=set()
+    known={};ended=set();positive_damage_types=set()
+    # Initial memberships establish owner identity, not an application event.
+    initialization=json.loads((Path(journal)/('0'*16+'.json')).read_bytes())['initialization']
+    for record in initialization.get('bodies', []):
+        for member in record.get('body', {}).get('conditions', []):
+            if member.get('behavior_id'):known[member['condition_uuid']]=member['behavior_id']
+    for node in initialization.get('nodes', []):
+        if node.get('canceled', False) or node.get('fact') is None:continue
+        for _, row in condition_rows(node):
+            member=row.get('member')
+            if member and member.get('behavior_id'):known[row['condition_uuid']]=member['behavior_id']
+            elif member is None:known.pop(row['condition_uuid'], None)
     for _, _, _, node in nodes(journal):
         fact=node.get('fact') or {}
         identities={row['behavior_id'] for row in node.get('content_attributions',[])
@@ -293,6 +304,8 @@ def journal_summary(journal):
         behaviors.update(identities)
         if not fact:continue
         counted[fact['kind']] += 1
+        if fact['kind']=='damage' and fact.get('stage')=='applied' and fact.get('applied_damage',0)>0:
+            positive_damage_types.add(fact['damage_type'])
         for _, row in condition_rows(node):
             member = row.get('member')
             if member and member.get('behavior_id'):
@@ -300,7 +313,7 @@ def journal_summary(journal):
             elif member is None:
                 previous=known.pop(row['condition_uuid'],None)
                 if previous is not None:ended.add(previous)
-    return {'facts':dict(counted), 'behaviors':dict(behaviors), 'conditions':sorted(conditions),'ended_conditions':sorted(ended)}
+    return {'facts':dict(counted), 'behaviors':dict(behaviors), 'conditions':sorted(conditions),'ended_conditions':sorted(ended),'positive_applied_damage_types':sorted(positive_damage_types)}
 
 
 # --- SDK driver -----------------------------------------------------------------

@@ -1,0 +1,90 @@
+{
+ "id": "spell.blur/defend_then_remove",
+ "title": "Blur: actual incoming attack, held movement and restored body",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.blur"
+  ],
+  "action": [
+   "action.attack",
+   "action.move",
+   "action.drop_concentration"
+  ],
+  "condition": [
+   "condition.spell.blur"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.blur"
+   ],
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.blur",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.attack",
+   "by": "target",
+   "target": "caster",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "spell.blur",
+  "action.attack",
+  "action.move",
+  "action.drop_concentration"
+ ],
+ "required_conditions": [
+  "condition.spell.blur"
+ ],
+ "required_condition_ends": [
+  "condition.spell.blur"
+ ],
+ "required_facts": [
+  "attack"
+ ]
+}

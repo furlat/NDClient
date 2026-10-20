@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Studio's publication/transport boundary. Native first-frame readiness is an
 ## explicit input here; the integrated checkpoint proves actual renderer output.
 const Studio=preload("res://studio/studio.gd")
@@ -53,7 +54,7 @@ func run()->void:
     check(not host.follow_tracks and not menu.is_item_checked(0),"Visible Follow disables the actual transport setting and Inspect")
     host._set_follow_tracks(true)
     check(host.follow_button.button_pressed and menu.is_item_checked(0),"Inspect setting synchronizes the visible Follow control")
-    var index:Dictionary=Recording.read("res://.runtime/studio-spells-20261015/magic_missile-seed3/amber/journal")
+    var index:Dictionary=Fixtures.read("magic-missile")
     check(index.ok,"Original Magic Missile recording admits for transport proof")
     if index.ok:
         var view=TimelineView.new();view.size=Vector2(1280,340);view.thumbnails.suspended=true

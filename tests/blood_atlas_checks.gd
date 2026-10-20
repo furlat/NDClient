@@ -12,6 +12,7 @@ const Preview=preload("res://presentation/blood_preview.gd")
 const Recording=preload("res://studio/recording.gd")
 const Order=preload("res://grid_order.gd")
 const Profile=preload("res://frame_profile.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks:int=0
 var failures:Array=[]
 var timing:Dictionary={"old_sample":[],"new_sample":[],"old_flight":[],"new_flight":[],"old_fields":[],"new_fields":[]}
@@ -78,7 +79,7 @@ func run()->void:
     # The oracle folder also keeps the pre-edit blood.gd (per-frame particles).
     var old_blood:Script=original.Blood;var new_blood:Script=current.Blood
     var occurrences:Array=[]
-    for path in ["res://.runtime/studio-cases/dash-seed3/amber/journal","res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal"]:
+    for path in [Fixtures.journal("dash"),Fixtures.journal("gallery")]:
         var index:Dictionary=Recording.read(path)
         check(index.ok,"Actual recording admits "+path)
         if not index.ok:continue

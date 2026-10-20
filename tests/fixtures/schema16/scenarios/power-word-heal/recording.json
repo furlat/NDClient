@@ -1,0 +1,62 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "61014fe9-469f-4ed6-8100-21b0d8117c1b": "Amber caster",
+  "a63013c2-2721-4e4f-95da-048dab81c561": "Amber ally",
+  "d09d46c2-9d11-4302-8715-d98ee0189be6": "Blue second target",
+  "f4fac018-af2a-468b-9b41-689d6744576a": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.power_word_heal \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "heal": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.power_word_heal": 1
+  },
+  "conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.power_word_heal"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

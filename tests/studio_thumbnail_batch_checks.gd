@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Same native source compositor at one/eight swatches, using real recordings.
 const Recording=preload("res://studio/recording.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
@@ -50,8 +51,8 @@ func cancel_batch(index:Dictionary,row:Dictionary)->void:
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(640,480)
     var exercised={}
-    for name in ["melee-seed3","hide-light-schema9-seed3","dodge-seed3","condition_owners-seed4","magic_missile-seed3"]:
-        var index=Recording.read("res://.runtime/studio-cases/"+name+"/amber/journal")
+    for name in ["melee","hide-light","dodge","condition-owners","magic-missile"]:
+        var index=Fixtures.read(name)
         check(index.ok,"Actual source recording indexes: "+name)
         if not index.ok:continue
         var rows:Array=[];var kinds={}
@@ -69,7 +70,7 @@ func run()->void:
             if serial.pixels[key]!=batched.pixels.get(key):mismatches.append(key)
         check(mismatches.is_empty(),"Every final native swatch byte matches the single-composite path: "+name)
         evidence.append({"case":name,"kinds":kinds.keys(),"samples":batched.samples,"serial_ms":serial.elapsed_ms,"batch_ms":batched.elapsed_ms,"serial_source_reads":serial.source_reads,"batch_source_reads":batched.source_reads,"peak_batch_views":batched.peak_views,"pixel_mismatches":mismatches})
-        if name=="melee-seed3":await cancel_batch(index,rows[0])
+        if name=="melee":await cancel_batch(index,rows[0])
     # Sprite-sheet condition media have no renderer (they show nothing until a
     # native source is authored); no recording may produce them.
     check(exercised.has("body") and exercised.has("material_flash") and exercised.has("condition_restore") and not exercised.has("registered_media"),"Parity set includes real body, impact material and condition restoration; no sprite-sheet media")

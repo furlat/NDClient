@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Real single-preview replay controls and independently selected faction journals.
 const Studio=preload("res://studio/studio.gd")
 const Recording=preload("res://studio/recording.gd")
@@ -134,7 +135,7 @@ func play_once(studio:Control,label:String)->void:
     var next_sample=0.0;var frames=0;var longest=0.0;var last=Time.get_ticks_usec()
     var observed_native:Dictionary={}
     var atomic_targets:Dictionary={};var atomic_seen:Dictionary={}
-    if label=="hide-light-schema9-seed3":
+    if label=="hide-light":
         for i in range(studio.index.groups.size()-1):
             var item:Dictionary=studio.index.groups[i];var next:Dictionary=studio.index.groups[i+1]
             var end:float=item.start_ms+float(item.group.duration_ms)
@@ -202,7 +203,7 @@ func run()->void:
     DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://.captures/studio/replay-comparison"))
     var studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
     if not await settle(studio):await finish(studio);return
-    var movement_directory="res://.runtime/studio-cases/movement-oa/journal"
+    var movement_directory=Fixtures.journal("oa-walk")
     if studio.active_directory!=movement_directory:
         studio._load(movement_directory)
         if not await settle(studio,0,movement_directory):await finish(studio);return
@@ -239,18 +240,18 @@ func run()->void:
     check(wraps==2,"Real movement/OA loops twice with independent restores")
     studio._toggle_play();studio.loop_enabled=false
     await measure_single(studio)
-    for name in ["hide-seed3-v3","hide-light-schema9-seed3","invisibility-seed3-v2","oa_jump_lethal-seed5-v2"]:
-        var directory="res://.runtime/studio-cases/"+name+"/amber/journal"
+    for name in ["hide","hide-light","invisibility","oa-jump-lethal"]:
+        var directory=Fixtures.journal(name)
         studio._load(directory)
         if not await settle(studio,0,directory):break
         check(studio.replay_diagnostics().panes.size()==1,name+": one selected renderer")
-        if name=="hide-seed3-v3":
+        if name=="hide":
             verify_prefix(studio,"Hide amber audience")
             studio.select_perspective("blue")
-            if not await settle(studio,0,"res://.runtime/studio-cases/"+name+"/blue/journal"):break
+            if not await settle(studio,0,Fixtures.journal(name,"blue")):break
             check(studio.active_perspective=="blue","Hide faction switch installs actual Blue journal")
             verify_prefix(studio,"Hide blue audience")
-        if name=="invisibility-seed3-v2":
+        if name=="invisibility":
             var cast:Dictionary={}
             for item in studio.index.groups:
                 if int(item.group.operation_sequence)==6 and item.group.components.any(func(component):return component.kind=="sprite_layer"):cast=item;break
@@ -262,7 +263,7 @@ func run()->void:
                 verify_prefix(studio,"Invisibility active-cast seek")
                 studio._seek(0)
                 if not await settle(studio,0):break
-        if name=="hide-light-schema9-seed3":
+        if name=="hide-light":
             var restores=studio.index.rows.filter(func(row):return row.kind=="condition_restore" and row.owner.condition.behavior_id=="condition.hidden" and row.get("source_perspective",studio.active_perspective)==studio.active_perspective)
             check(not restores.is_empty(),"Actual bright-light Hidden removal has a restoration track")
             if not restores.is_empty():
@@ -281,7 +282,7 @@ func run()->void:
                     await save_capture(studio,"light-reveal-"+("before" if point.offset<0 else "after"))
         await play_once(studio,name)
         await save_capture(studio,name+"-end")
-        if name=="invisibility-seed3-v2" and failures.is_empty():
+        if name=="invisibility" and failures.is_empty():
             studio.loop_enabled=true;studio._play_study()
             if not await settle(studio):break
             var wrapped:bool=false

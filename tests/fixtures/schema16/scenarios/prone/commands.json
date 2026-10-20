@@ -1,0 +1,153 @@
+[
+ {
+  "request": {
+   "do": "spell.grease",
+   "by": "caster",
+   "target": [
+    9,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ca6bf087-983b-4cc4-86ac-6eb56dc99a62",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.grease",
+   "display_name": "Grease (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "position",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "82f4bf4d-1d4b-4982-a5d7-79aedabcaa50",
+   "state_revision": "ca6bf087-983b-4cc4-86ac-6eb56dc99a62",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 13,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       9,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_condition_prone_grease_auto_stand",
+   "game_epoch": "a58294f0-0807-45b6-8626-1af98df96af0",
+   "audience_id": "243abff2-e6d9-45e4-adb4-031cb60308fd",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_prone_grease_auto_stand",
+    "game_epoch": "a58294f0-0807-45b6-8626-1af98df96af0",
+    "audience_id": "243abff2-e6d9-45e4-adb4-031cb60308fd",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "82f4bf4d-1d4b-4982-a5d7-79aedabcaa50",
+   "state_revision": "00737c7d-d47e-41b4-94c9-8111272edc5d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_condition_prone_grease_auto_stand",
+   "game_epoch": "a58294f0-0807-45b6-8626-1af98df96af0",
+   "audience_id": "243abff2-e6d9-45e4-adb4-031cb60308fd",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_prone_grease_auto_stand",
+    "game_epoch": "a58294f0-0807-45b6-8626-1af98df96af0",
+    "audience_id": "243abff2-e6d9-45e4-adb4-031cb60308fd",
+    "sequence": 3
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    11,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ff040672-cf9d-49ef-8cae-21a81dbd61fe",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "ae4d2857-b41f-4c26-b5b9-ba7786b72d78",
+   "state_revision": "ff040672-cf9d-49ef-8cae-21a81dbd61fe",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      11
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_condition_prone_grease_auto_stand",
+   "game_epoch": "a58294f0-0807-45b6-8626-1af98df96af0",
+   "audience_id": "c9a2bd10-627a-47d9-98b7-1caab629a0c4",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_prone_grease_auto_stand",
+    "game_epoch": "a58294f0-0807-45b6-8626-1af98df96af0",
+    "audience_id": "c9a2bd10-627a-47d9-98b7-1caab629a0c4",
+    "sequence": 5
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ }
+]

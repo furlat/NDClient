@@ -1,0 +1,814 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a115ebf9-bd8a-47f6-827a-f3c3d79c83ed",
+   "state_revision": "800a4097-8cfa-4098-9698-dc6e7516cb52",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber patient",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.magic_missile",
+   "by": "target",
+   "target": "patient",
+   "level": 1,
+   "recipients": [
+    "patient",
+    "caster",
+    "caster"
+   ]
+  },
+  "previews": 3,
+  "stage": "preview_3",
+  "query_revision": "76ae37cd-8d87-4aac-91de-3a88da704242",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.magic_missile",
+   "display_name": "Magic Missile (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "automatic",
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "76ae37cd-8d87-4aac-91de-3a88da704242",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 6,
+     "target_indices": [
+      1,
+      0,
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "607cb4b1-44b2-47f3-814f-f13688bce381",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "d15e2e9b-d99f-48c5-8b5b-74e6db3faed2",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "c62074f2-21ec-483c-9482-f28ec78ca5af",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "4438d5fc-04b5-416a-a3fa-de01837e140f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "81e862f2-1d03-47a8-aac1-c9a79786828c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "488f766a-521b-4a30-acac-d1c4549f3b23",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 17
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "27e48f45-951e-4218-b3b2-106eddcb5e5d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 20
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "2e4bd4f1-a518-40e7-92a7-8c975e7bed48",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 22
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "a115ebf9-bd8a-47f6-827a-f3c3d79c83ed",
+   "state_revision": "fd6c29bb-2446-4121-9190-85a168bbe46d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber patient",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 24
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "4adb15da-98b8-4b30-89c9-8947fe2c6e16",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 26
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "e6505f29-ac9b-4e2f-912c-ae6c0d71b901",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 28
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "a115ebf9-bd8a-47f6-827a-f3c3d79c83ed",
+   "state_revision": "d849d6e0-4f84-455f-9cc3-c6daca60c221",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber patient",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 30
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "5785cca3-4dcb-43bf-9f4a-b6aa9a02a550",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 32
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "d2dcf99a-4c73-40c4-808f-249eea45d786",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 34
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "a115ebf9-bd8a-47f6-827a-f3c3d79c83ed",
+   "state_revision": "5c9735d3-326d-40d6-95be-187aaaf56511",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber patient",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 36
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "fb7417b6-5e2c-4c62-942d-fa2143869caa",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 38
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 11,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "07137d8d-142f-4192-bf5e-f7e0da08b3ef",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 11,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 40
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 12,
+   "actor_uuid": "a115ebf9-bd8a-47f6-827a-f3c3d79c83ed",
+   "state_revision": "c4624218-3fac-48b6-9206-899f8e95ac39",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber patient",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 12,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 42
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "47563a81-1b9e-473e-8c1d-91fb373e1412",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 44
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 13,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "3bf69e4d-f2c6-4c9a-9bf0-82442fcbec9e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 13,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 46
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 14,
+   "actor_uuid": "a115ebf9-bd8a-47f6-827a-f3c3d79c83ed",
+   "state_revision": "738bb944-85dd-47b0-bbae-3f8c5a23564d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber patient",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 14,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 48
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "bb08ac31-a7b0-4c27-8353-d1d67284b3a4",
+   "state_revision": "17f74254-5771-4baf-a67a-536705dc8005",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "19e38281-1b0d-4c9a-b768-1bf409fa7301",
+    "sequence": 50
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 15,
+   "actor_uuid": "dc865834-2520-42f5-8b71-e8e264117e31",
+   "state_revision": "013302a4-0488-404e-b6d8-c548f9f49a34",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 15,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 52
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 16,
+   "actor_uuid": "a115ebf9-bd8a-47f6-827a-f3c3d79c83ed",
+   "state_revision": "99a07e03-c954-4d92-a953-9e16f061aaa7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber patient",
+  "receipt": {
+   "game_id": "studio_survival_death_save_turns_seed2",
+   "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+   "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+   "command_number": 16,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_survival_death_save_turns_seed2",
+    "game_epoch": "c30d7339-3d56-4088-85c3-b6fa2c7d6b96",
+    "audience_id": "bb465ffe-1dff-408f-a975-eee9a205e25d",
+    "sequence": 54
+   }
+  }
+ }
+]

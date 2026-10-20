@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## A real authored attack must preview the same native path/phase as its source.
 const Recording=preload("res://studio/recording.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
@@ -20,7 +21,7 @@ func fitted(source:Image)->Image:
     return output
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(640,480)
-    var index=Recording.read("res://.runtime/studio-cases/window_break-seed3-v3/amber/journal")
+    var index=Fixtures.read("window-break")
     check(index.ok,"Actual window-break attack journal independently admits")
     if not index.ok:finish();return
     var rows=index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("source_id")=="class.martial.slash" and row.status=="available")

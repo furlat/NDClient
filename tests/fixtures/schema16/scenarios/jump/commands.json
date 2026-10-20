@@ -1,0 +1,115 @@
+[
+ {
+  "request": {
+   "do": "action.jump",
+   "by": "caster",
+   "target": [
+    5,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.jump",
+   "display_name": "Jump",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "position_los",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "c2d4e972-5069-477f-b85a-0a344983639e",
+   "state_revision": "cd6b14e2-c473-47de-a92a-6005376e58ae",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 12,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       5,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_action_jump_land_and_walk",
+   "game_epoch": "5fd0ba9b-19b7-4bda-8f10-7fb173a58cfc",
+   "audience_id": "8c9e293c-04b3-424b-9848-e61eb7258ff8",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_jump_land_and_walk",
+    "game_epoch": "5fd0ba9b-19b7-4bda-8f10-7fb173a58cfc",
+    "audience_id": "8c9e293c-04b3-424b-9848-e61eb7258ff8",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "c2d4e972-5069-477f-b85a-0a344983639e",
+   "state_revision": "a0bb8ddf-6c82-4871-bf14-c9bea8c3baca",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_action_jump_land_and_walk",
+   "game_epoch": "5fd0ba9b-19b7-4bda-8f10-7fb173a58cfc",
+   "audience_id": "8c9e293c-04b3-424b-9848-e61eb7258ff8",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_jump_land_and_walk",
+    "game_epoch": "5fd0ba9b-19b7-4bda-8f10-7fb173a58cfc",
+    "audience_id": "8c9e293c-04b3-424b-9848-e61eb7258ff8",
+    "sequence": 3
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

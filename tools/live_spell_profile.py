@@ -11,7 +11,7 @@ from time import perf_counter_ns
 from uuid import uuid4
 
 from dnd_player import (Follower, acknowledge, action_options, all_actions, attach,
-    binding_subject, connect, follow, next_options, preview, receipt,
+    binding_position, binding_subject, connect, follow, next_options, preview, receipt,
     selection_for, status, submit_command, wait_for_cursor)
 from studio_cases.adapter import choices
 
@@ -88,17 +88,27 @@ async def drive_blue(url: str, token: str, output: Path) -> None:
                         'correlation_id': str(uuid4())}))['choices']
                     offered = [row for row in all_actions(discovered)
                         if row['behavior_id'] == step['behavior'] and row['can_afford']
-                        and action_options(discovered, row)]
+                        and row.get("availability_status")=="available"
+                        and (action_options(discovered, row) or row.get("position_region") is not None)]
                     if not offered:
                         raise RuntimeError('Blue legal choices do not offer ' + step['behavior'])
                     row = min(offered, key=lambda value: (value.get('cast_at_level') or 0, value['discovery_index']))
-                    targets = [target for target in action_options(discovered, row)
-                        if (binding_subject(discovered, target) or {}).get('name') == step['subject_name']]
-                    if not targets:
-                        raise RuntimeError('Blue legal choices do not contain the requested subject')
-                    target = targets[0]
-                    subject = binding_subject(discovered, target)['uuid']
-                    selected = selection_for(row, [target], prefer_safe=False)
+                    wanted=step['subject_name']
+                    point=[int(value) for value in wanted] if isinstance(wanted,list) else None
+                    if point is not None and row.get('position_region') is not None:
+                        # This is the exact authored optical position; the real
+                        # Preview still admits or rejects it before submission.
+                        selected=selection_for(row,[],extra_target_positions=[point],prefer_safe=False)
+                        subject=None
+                    else:
+                        targets=[target for target in action_options(discovered,row)
+                            if (list(binding_position(discovered,target) or ())==point if point is not None
+                                else (binding_subject(discovered,target) or {}).get('name')==wanted)]
+                        if not targets:
+                            raise RuntimeError('Blue legal choices do not contain the requested subject/position')
+                        target=targets[0]
+                        subject=(binding_subject(discovered,target) or {}).get('uuid')
+                        selected=selection_for(row,[target],prefer_safe=False)
                     for _ in range(16):
                         aimed = (await preview(connection, {'actor_uuid': actor,
                             'state_revision': revision, 'discovery_generation': discovered['discovery_generation'],
@@ -106,8 +116,9 @@ async def drive_blue(url: str, token: str, output: Path) -> None:
                         record['previews'].append(aimed)
                         if aimed['can_confirm'] and len(selected['target_indices']) >= len(step.get('recipients', [])):
                             break
-                        options = [item for item in next_options(aimed)
-                            if (binding_subject(aimed, item) or {}).get('uuid') == subject]
+                        options=[item for item in next_options(aimed)
+                            if (list(binding_position(aimed,item) or ())==point if point is not None
+                                else (binding_subject(aimed,item) or {}).get('uuid')==subject)]
                         if not options:
                             raise RuntimeError('Blue multi-target preview lost the requested recipient')
                         selected['target_indices'].append(options[0]['index'])

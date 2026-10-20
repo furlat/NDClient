@@ -84,7 +84,7 @@ async def run(args):
                         summary=adapter.journal_summary(folder/'amber/journal')
                         missing=set(scenario.get('required_behaviors',[]))-summary['behaviors'].keys()
                         if result['ok'] and missing:result.update(ok=False,failure='Missing required actual occurrences: '+', '.join(sorted(missing)))
-                        for field,observed in (('required_facts',summary['facts']),('required_conditions',summary['conditions']),('required_condition_ends',summary['ended_conditions'])):
+                        for field,observed in (('required_facts',summary['facts']),('required_conditions',summary['conditions']),('required_condition_ends',summary['ended_conditions']),('required_applied_damage_types',summary['positive_applied_damage_types'])):
                             missing=set(scenario.get(field,()))-set(observed)
                             if result['ok'] and missing:result.update(ok=False,failure=field+' absent from actual journal: '+', '.join(sorted(missing)))
                         result['summary']=summary

@@ -1,0 +1,119 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 2,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "f06fd382-32fb-4d97-a3ce-9dc6e3850183": "Amber caster",
+  "ce9cd3bc-8a04-450d-b6cd-dfb8c28d5e0a": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "spell.fire_bolt \u00b7 Amber caster",
+  "action.traverse_connector \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 1,
+   "spatial": 3,
+   "object_destroyed": 1,
+   "object_damage": 1,
+   "spell": 1,
+   "sensory": 1,
+   "step": 1,
+   "movement": 1
+  },
+  "behaviors": {
+   "spell.fire_bolt": 1,
+   "action.traverse_connector": 1
+  },
+  "conditions": [],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 39,
+   "lineage": 16,
+   "event_offset": 5,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 40,
+   "lineage": 16,
+   "event_offset": 6,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 41,
+   "lineage": 16,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "amber"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 56,
+   "lineage": 42,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 39,
+   "lineage": 16,
+   "event_offset": 5,
+   "kind": "object_destroyed",
+   "label": "object_destroyed ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 40,
+   "lineage": 16,
+   "event_offset": 6,
+   "kind": "object_damage",
+   "label": "object_damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 41,
+   "lineage": 16,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "blue"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 56,
+   "lineage": 42,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -156,6 +156,30 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
         parameters.merge(phase,true)
         parameters.merge({"native_spell":true,"cast_recipe":cast,"native_cast_id":cast_id},true)
         var constructor:Dictionary=phase.native_cue.get("constructor_input",{})
+        if constructor.get("kind")=="observed_event" and parameters.get("status")!="missing":
+            var observations:Array=ApplicationResults.observed(node,constructor,graph)
+            if observations.is_empty() and constructor.outcome=="cast":
+                parameters.status="missing";parameters.reason="native_observed_event_recipient_not_disclosed"
+                add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+            for observation in observations:
+                var actual:Dictionary=parameters.duplicate()
+                actual.target_uuid=observation.target_uuid
+                actual.to_position=graph.positions.get(observation.target_uuid)
+                actual.to_elevation_feet=graph.contacts.get(observation.target_uuid,{}).get("from_elevation_feet",0)
+                actual.ground_target=false
+                actual.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":"","values":observation.values}]
+                actual.native_constructor_evidence=observation.evidence
+                actual.native_inputs={"lease_input":{},"event_input":observation.event}
+                if constructor.outcome=="cast":
+                    add(group,observation.node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,actual)
+                else:
+                    # Scheduling this cast has not visited its descendants yet.
+                    # Retain the delivery operands now; emit the result only in
+                    # the existing post-schedule component pass, at its own clock.
+                    if not graph.has("observed_spell_phases"):graph.observed_spell_phases=[]
+                    graph.observed_spell_phases.append({"node":observation.node,"parameters":actual,
+                        "offset_ms":float(phase.start_ms)-float(graph.starts[node.id])})
+            continue
         if not constructor.is_empty() and parameters.get("status")!="missing":
             var observed:Dictionary={}
             if constructor.get("kind")=="propagation_links":observed=linked
@@ -318,6 +342,10 @@ static func _native_interceptions(group:Dictionary,lineage:Dictionary,graph:Dict
             add(group,node,"native_effect",parameters.start_ms,phase.duration_ms,phase.source,parameters)
 
 static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cache: Dictionary) -> Dictionary:
+    for observed in graph.get("observed_spell_phases",[]):
+        var parameters:Dictionary=observed.parameters
+        parameters.start_ms=float(graph.starts[observed.node.id])+observed.offset_ms
+        add(group,observed.node,"native_effect",parameters.start_ms,parameters.duration_ms,parameters.source,parameters)
     _native_interceptions(group,lineage,graph,cache)
     var sounds: Dictionary=Authoring.load_data("audio/bindings.json",cache)
     var nodes: Dictionary={}

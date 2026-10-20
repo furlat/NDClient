@@ -1,0 +1,268 @@
+[
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "9460f032-dfa7-42a0-b93d-0ce4774feae7",
+   "state_revision": "79e0ecb4-b656-4772-836c-4c5470450f2e",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 7,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+   "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+   "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+    "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+    "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.feature.extra_attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.feature.extra_attack",
+   "display_name": "Extra Attack (Melee Main)",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "MELEE_MAIN",
+     "label": "Melee Main"
+    }
+   ],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "9460f032-dfa7-42a0-b93d-0ce4774feae7",
+   "state_revision": "f9404006-fd98-4583-93b1-5c6164be3723",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 5,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+   "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+   "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+    "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+    "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+    "sequence": 3
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.class.fighter.action_surge",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.class.fighter.action_surge",
+   "display_name": "Action Surge",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "9460f032-dfa7-42a0-b93d-0ce4774feae7",
+   "state_revision": "a5b7b45f-a7b8-4e68-874e-6ec18a69ea3a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 27,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+   "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+   "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+    "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+    "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+    "sequence": 4
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "9460f032-dfa7-42a0-b93d-0ce4774feae7",
+   "state_revision": "cde421c2-a8e6-4bd7-af8e-7ee74f7f0a6a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 7,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+   "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+   "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+    "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+    "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+    "sequence": 5
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.feature.extra_attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.feature.extra_attack",
+   "display_name": "Extra Attack (Melee Main)",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "MELEE_MAIN",
+     "label": "Melee Main"
+    }
+   ],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "9460f032-dfa7-42a0-b93d-0ce4774feae7",
+   "state_revision": "e390ee3c-a0dd-414e-bcfc-60ea1fd327e2",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 5,
+    "selection": {
+     "action_index": 5,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+   "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+   "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_fighter_action_surge_extra_attacks",
+    "game_epoch": "ba6b9c92-0533-4a42-bd9c-0a3f3a92ddb3",
+    "audience_id": "1e8cdcac-c452-47b0-8c9e-8088e2a9ccc6",
+    "sequence": 6
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

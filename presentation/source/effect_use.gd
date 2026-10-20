@@ -26,6 +26,11 @@ const Look = preload("res://presentation/source/look.gd")
 ## Optical receiver channels for a modular equipment decoration. A weapon
 ## channel means the exact item's separate weapon sheet, never the whole body.
 @export var recipient_slots: PackedStringArray = []
+## Gear.effects: empty selects an intrinsic decoration. Otherwise this use
+## belongs to exact disclosed ItemRecord.effects membership with this behavior.
+@export var item_effect_behavior_id: String = ""
+## Optional exact public damage-type selector; never infers a damage outcome.
+@export var item_effect_damage_type: String = ""
 @export var follow: bool = false
 @export var scale: float = 1.0
 @export var rotation_degrees: Vector3 = Vector3.ZERO

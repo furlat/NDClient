@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Real condition application owns Shield's gesture; the SDK events stay intact.
 const Journal=preload("res://sdk/journal.gd")
 const Compiler=preload("res://presentation/compiler.gd")
@@ -38,7 +39,7 @@ func inspect_case(path:String)->void:
     if not baseline.ok:return
     var events={}
     for lineage in packet.lineages:
-        for event in lineage.events:events[event.uuid]=event
+        for event in Compiler.Occurrences.group(lineage).events:events[event.id]=event
     var reactions:Array=[]
     var state=journal.state.duplicate(true)
     check(compiled.value.groups.size()==baseline.value.groups.size(),path+": gesture adds no presentation event group")
@@ -63,18 +64,24 @@ func inspect_case(path:String)->void:
             var fact:Dictionary=node.fact
             var body:Dictionary=Compiler.Components.NativeSpells.recipe({"behavior_id":track.reaction_cast_binding},cache).cast
             var clip:Dictionary=Compiler.Authoring.clip(track.presentation_actor,track.clip,cache)
-            check(fact.kind=="condition" and fact.event_type=="condition_application" and fact.condition.behavior_id=="condition.spell.shield",path+": actual Shield application owns its gesture without a fabricated SpellFact")
-            check(track.actor_uuid==fact.target_entity_uuid and track.condition_uuid==fact.condition.condition_uuid,path+": recipient Blue owns its exact reaction and condition instance")
+            var owners:Array=[]
+            if fact.kind=="actor_change":
+                for actor in fact.actors:
+                    for row in actor.rows:
+                        if row.field=="condition" and row.get("member")!=null and row.member.behavior_id=="condition.spell.shield":owners.append({"actor_uuid":actor.actor_uuid,"condition":row.member})
+            check(owners.size()==1,path+": actual Shield membership owns its gesture without a fabricated SpellFact")
+            if owners.size()!=1:continue
+            check(track.actor_uuid==owners[0].actor_uuid and track.condition_uuid==owners[0].condition.condition_uuid,path+": recipient Blue owns its exact reaction and condition instance")
             check(track.clip==body.actionClip and track.activity=="cast" and track.hidden_slots==["weapon","offhand"],path+": existing authored cast pose/equipment policy is reused")
             check(track.effect_layers.size()==1 and track.effect_layers[0].category=="Magic2",path+": same approved hand-magic policy applies without caster aura")
-            check(is_equal_approx(track.contact_ms,times[node.uuid]) and track.start_ms>=0,path+": release equals the unchanged actual condition commit, with bounded pre-roll")
+            check(is_equal_approx(track.contact_ms,times[node.id]) and track.start_ms>=0,path+": release equals the unchanged actual condition commit, with bounded pre-roll")
             var sampled:Dictionary=Compiler.Tracks.samples([track],track.contact_ms)[track.actor_uuid]
             check(is_equal_approx(sampled.source_seconds,float(body.releaseFrame)/clip.fps),path+": actual release samples the exact authored source frame")
             var hostile:Array=group.actor_tracks.filter(func(other):return other.actor_uuid!=track.actor_uuid and events[other.source_event_uuid].fact.get("behavior_id")=="spell.magic_missile")
             check(hostile.size()==1 and track.target_position==hostile[0].from_position and track.from_position==hostile[0].target_position,path+": Blue faces the disclosed Amber threat; Amber retains its own cast")
-            var hands:Array=group.components.filter(func(component):return component.kind=="sprite_layer" and component.source_event_uuid==node.uuid)
+            var hands:Array=group.components.filter(func(component):return component.kind=="sprite_layer" and component.source_event_uuid==node.id)
             check(hands.size()==1 and hands[0].actor_uuid==track.actor_uuid and hands[0].source=="spells/spell.shield.json:/cast" and hands[0].body_track_id==track.trace_track_id,path+": real condition event owns its correctly sourced hand-magic track")
-            var trace:Array=group.events.filter(func(event):return event.event_uuid==node.uuid)
+            var trace:Array=group.events.filter(func(event):return event.event_uuid==node.id)
             check(trace.size()==1 and trace[0].components.any(func(component):return component.kind=="body" and component.get("reaction_cast_binding")=="spell.shield" and component.trace_track_id==track.trace_track_id),path+": reaction body registers its own exact event witness")
             check(trace[0].components.all(func(component):return component.status!="missing"),path+": Shield event has no unprocessed authored body/hand requirement")
             check(group.duration_ms>=track.start_ms+track.duration_ms,path+": authored recovery stays inside presentation duration")
@@ -101,16 +108,21 @@ func crop_boundary(node:Dictionary,source:Dictionary,cast:Dictionary,cache:Dicti
     var contact={"from_elevation_feet":source.get("from_elevation_feet",0),"to_elevation_feet":source.get("to_elevation_feet",0)}
     graph.positions[source.actor_uuid]=[source.from_position[0]+8,source.from_position[1]+8]
     graph.contacts[source.actor_uuid]={"from_elevation_feet":50,"to_elevation_feet":50}
-    graph.reaction_contacts={node.uuid:{"position":source.from_position,"contact":contact}}
-    graph.nodes={};graph.ends={};graph.spell_sources={};graph.actor_inputs={node.uuid:{source.actor_uuid:source.presentation_actor}}
-    graph.recipes={node.uuid:Compiler.Authoring.load_data("catalog/condition_recipes.json",cache)["condition.spell.shield"]}
+    var owner:Dictionary={}
+    for actor in node.fact.actors:
+        for row in actor.rows:
+            if row.field=="condition" and row.get("member",{}).get("condition_uuid")==source.condition_uuid:owner=row.member
+    var recipe:Dictionary=Compiler.Authoring.load_data("catalog/condition_recipes.json",cache)["condition.spell.shield"]
+    graph.condition_cues={node.id:[{"phase":"application","actor_uuid":source.actor_uuid,"condition":owner,"recipe":recipe,"reaction_contact":{"position":source.from_position,"contact":contact}}]}
+    graph.nodes={};graph.ends={};graph.spell_sources={};graph.actor_inputs={node.id:{source.actor_uuid:source.presentation_actor}}
+    graph.recipes={node.id:Compiler.Authoring.load_data("catalog/condition_recipes.json",cache)["condition.spell.shield"]}
     var group={"operation_sequence":2,"actor_tracks":[],"skipped":[],"duration_ms":source.contact_ms,
-        "commits":[{"event_uuid":node.uuid,"at_ms":source.contact_ms}]}
+        "commits":[{"event_uuid":node.id,"at_ms":source.contact_ms}]}
     Compiler._reaction_casts({"events":[node]},{},group,graph,cache)
     check(group.actor_tracks.size()==1 and group.actor_tracks[0].from_position==source.from_position and group.actor_tracks[0].to_position==source.from_position and group.actor_tracks[0].from_elevation_feet==contact.from_elevation_feet,"Reaction contact remains at its actual sampled position/elevation when later group movement changes the graph")
 
 func run()->void:
-    for faction in ["amber","blue"]:inspect_case("res://.runtime/studio-spells-20261015/shield-seed3/"+faction+"/journal")
+    for faction in ["amber","blue"]:inspect_case(Fixtures.journal("shield",faction))
     var report={"checks":checks,"failures":failures,"observations":observations,"scope":"Actual two-perspective Shield recording; shared cast-track timing, real recipient/condition ownership, unchanged commits and SDK state. Headless semantic coverage, not native pixel qualification."}
     FileAccess.open("res://.runtime/shield-reaction-cast-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SHIELD_REACTION_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

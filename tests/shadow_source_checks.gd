@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 # Native camera math and the original authored flame samples; no GPU rendering.
 const Journal=preload("res://sdk/journal.gd")
 const Reducer=preload("res://sdk/reducer.gd")
@@ -47,7 +48,7 @@ func run()->void:
         var centroid=moment/weight
         heights.append((resource.pivot[1]-centroid.y)*resource.scale/64.0)
     for i in energies.size():energies[i]=clampf(energies[i]/(total/energies.size()),.85,1.15)
-    var directory="res://.runtime/player-runs/20261012T190351.188770Z/journal"
+    var directory=Fixtures.journal("door")
     var journal=Journal.new();var opened=journal.open(ProjectSettings.globalize_path(directory),true,false)
     if not opened.ok:push_error(str(opened));quit(1);return
     var state={};var seen={}
@@ -58,7 +59,8 @@ func run()->void:
         var decoded=journal.protocol.decode(kind,FileAccess.get_file_as_bytes(directory.path_join(name)))
         if not decoded.ok:failures.append(name+" decode");break
         var packet:Dictionary=journal.protocol.normalize(kind,decoded.value)
-        var result=Reducer.reduce_initialization(packet.initialization,packet.content_additions) if state.is_empty() else Reducer.reduce_operation(state,packet)
+        var replayed:Dictionary=journal.replay(int(packet.cursor.sequence))
+        var result={"ok":replayed.ok,"value":journal.state}
         if not result.ok:failures.append(name+" reduction");break
         state=result.value
         var rows={}
@@ -80,9 +82,10 @@ func run()->void:
             for frame in energies.size():
                 var energy={};var height={};var mean_heights={}
                 for source in lighting.sources:
-                    if source.actor_uuid.is_empty() and state.objects.get(source.item_uuid,{}).get("item",{}).get("item_id")=="environment.wall_torch":
-                        energy[source.item_uuid]=energies[frame];height[source.item_uuid]=heights[frame]
-                        mean_heights[source.item_uuid]=heights.reduce(func(a,b):return a+b,0.0)/heights.size()
+                    if source.actor_uuid.is_empty() and source.item_id in Lighting.TORCH_ITEM_IDS and not source.anchor_item_uuid.is_empty():
+                        var anchor:String=source.anchor_item_uuid
+                        energy[anchor]=energies[frame];height[anchor]=heights[frame]
+                        mean_heights[anchor]=heights.reduce(func(a,b):return a+b,0.0)/heights.size()
                 lighting.sample(rows,energy,height)
                 var before=lighting.sampled.duplicate(true)
                 lighting.sample(rows,energy,height,mean_heights);lighting.project(camera)
@@ -110,7 +113,7 @@ func run()->void:
                 var previous:Dictionary=previous_choices.get(identity,{})
                 if not previous.is_empty() and previous.position!=rows[id].position and previous.source!=selections[id][0]:changed_positions+=1
                 previous_choices[identity]={"position":rows[id].position,"source":selections[id][0]}
-                if packet.cursor.sequence in [69,70,71]:
+                if not shadows._source_ids.is_empty():
                     var foot=camera.unproject_position(Placement.contact(rows[id]))
                     var original=shadows._dominant(foot)
                     if original>=0:
@@ -137,7 +140,7 @@ func run()->void:
                 if unique.size()>1:
                     records.append({"sequence":packet.cursor.sequence,"actor":id,"position":rows[id].position,"quarter":quarter,"selected":selections[id],"scores":scores[id]})
     check(changed_positions>0,"Actual recorded actor movement changes casting ownership")
-    check(extinction_checks>0,"Actual69–71 source fixtures cover extinction and moving-light transitions")
+    check(extinction_checks>0,"Original disclosed source fixtures cover extinction and moving-light transitions")
     var report={"checks":checks,"recorded_movement_source_changes":changed_positions,"extinction_movement_fixtures":extinction_checks,"snapshots":seen.size(),"flicker_switch_cases":records.size(),"frame_energies":energies,"frame_heights":heights,"cases":records,"failures":failures,"scope":"Original user journal subjective states held stationary while all16 exact authored flame frames vary, all4cameraquarters; native camera/production source and selection functions; no GPU assertion."}
     FileAccess.open("res://generated/shadow_source_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SHADOW_SOURCE_CHECKS checks=",checks," snapshots=",seen.size()," flicker_switch_cases=",records.size()," failures=",failures)

@@ -1,0 +1,143 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "5affe2c7-90cc-42f4-8be0-b6ab07458ad7": "Amber caster",
+  "83c6a374-d001-4845-a275-3553ab54932e": "Amber ally",
+  "02bfbf60-acba-4816-afef-10fcbf1ccbfa": "Blue second target",
+  "2bdd9b28-7a82-4818-a1d9-543ee3633775": "Blue target",
+  "92a47894-dfc0-4cd2-b482-e0c88ffb3853": "Draconic Spirit"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.summon_dragon \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "sensory": 2,
+   "actor_change": 3,
+   "spatial": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.summon_dragon": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.summon_dragon.shared_resistance"
+  ],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 54,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.summon_dragon.shared_resistance",
+   "kind": "actor_change",
+   "actor_uuid": "5affe2c7-90cc-42f4-8be0-b6ab07458ad7",
+   "condition_uuid": "28ec0cb2-55b4-48dd-95d0-dff7655efb6c",
+   "condition_id": "condition.spell.summon_dragon.shared_resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 6,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "5affe2c7-90cc-42f4-8be0-b6ab07458ad7",
+   "condition_uuid": "655ffa3c-461f-461e-a8b8-d0e620da4753",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 63,
+   "lineage": 41,
+   "event_offset": 7,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "5affe2c7-90cc-42f4-8be0-b6ab07458ad7",
+   "condition_uuid": "655ffa3c-461f-461e-a8b8-d0e620da4753",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 64,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.summon_dragon",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 53,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.summon_dragon.shared_resistance",
+   "kind": "actor_change",
+   "actor_uuid": "5affe2c7-90cc-42f4-8be0-b6ab07458ad7",
+   "condition_uuid": "28ec0cb2-55b4-48dd-95d0-dff7655efb6c",
+   "condition_id": "condition.spell.summon_dragon.shared_resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "5affe2c7-90cc-42f4-8be0-b6ab07458ad7",
+   "condition_uuid": "655ffa3c-461f-461e-a8b8-d0e620da4753",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 6,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "5affe2c7-90cc-42f4-8be0-b6ab07458ad7",
+   "condition_uuid": "655ffa3c-461f-461e-a8b8-d0e620da4753",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 63,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.summon_dragon",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

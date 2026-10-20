@@ -26,10 +26,7 @@ async def record(args):
             result.update(ok=False,failure=field+' absent from actual journal: '+', '.join(sorted(missing)))
     if not result['ok'] and not result.get('failure'):
         result['failure']='; '.join(str(row['reason']) for row in result.get('gaps',[]))
-    positive_damage_types=sorted({row[3]['fact']['damage_type']
-        for row in adapter.facts(args.out/perspectives[0]/'journal')
-        if row[3]['fact'].get('kind')=='damage' and row[3]['fact'].get('stage')=='applied'
-        and row[3]['fact'].get('applied_damage',0)>0})
+    positive_damage_types=summary['positive_applied_damage_types']
     missing=set(scenario.get('required_applied_damage_types',()))-set(positive_damage_types)
     if missing and result['ok']:
         result.update(ok=False,failure='Required positive applied damage types absent: '+', '.join(sorted(missing)))

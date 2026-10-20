@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "9b90d4c7-5d07-4263-9d8a-5b101178b0d8",
+   "state_revision": "6558ea2d-16af-445b-a5da-1c6867493294",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_foresight_baseline",
+   "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+   "audience_id": "71893414-b134-4502-9f1a-97a443361918",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_foresight_baseline",
+    "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+    "audience_id": "71893414-b134-4502-9f1a-97a443361918",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0db53c4a-e0a4-48f6-b421-eaabe7c5be9c",
+   "state_revision": "e579ac7c-94b6-4ba3-af6c-ec6889cbf6e6",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_foresight_baseline",
+   "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+   "audience_id": "65f045a2-5487-496d-be2c-baf2ddc92430",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_foresight_baseline",
+    "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+    "audience_id": "65f045a2-5487-496d-be2c-baf2ddc92430",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "982575c1-1006-4e6e-bf20-a662f29c224d",
+   "state_revision": "7c8e09b8-f375-4a7d-a2f6-0b89b1c1e28a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_foresight_baseline",
+   "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+   "audience_id": "65f045a2-5487-496d-be2c-baf2ddc92430",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_foresight_baseline",
+    "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+    "audience_id": "65f045a2-5487-496d-be2c-baf2ddc92430",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.foresight",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.foresight",
+   "display_name": "Foresight (Level 9)",
+   "cast_at_level": 9,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "faeb655b-1e7f-4c0c-bf80-248de096fba5",
+   "state_revision": "f96ca816-0cec-4670-bd87-d470da5c22b6",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_foresight_baseline",
+   "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+   "audience_id": "71893414-b134-4502-9f1a-97a443361918",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_foresight_baseline",
+    "game_epoch": "6cb4d38f-de06-49a9-b5e9-5cd161b0989e",
+    "audience_id": "71893414-b134-4502-9f1a-97a443361918",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

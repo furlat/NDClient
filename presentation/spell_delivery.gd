@@ -4,6 +4,7 @@ const Occurrences=preload("res://presentation/occurrences.gd")
 ## counts come from facts; the catalog only selects which source roles display.
 const Authoring=preload("res://presentation/authoring.gd")
 const PropagationInputs=preload("res://presentation/propagation_inputs.gd")
+const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 
 static func ancestor(node:Dictionary,graph:Dictionary)->Dictionary:
     var parent:Variant=node.get("parent_lineage")
@@ -71,7 +72,7 @@ static func endpoints(fact:Dictionary,graph:Dictionary,state:Dictionary,selectio
     if target==null and fact.get("aoe_position")!=null:target=fact.aoe_position
     # A self spell has no separate recipient. Do not invent a target for a
     # projectile whose real recipient is outside the disclosed view.
-    var needs_target:bool=selection.staging.cues.any(func(cue):return cue.role in ["flight","impact","strike"] or cue.get("attachment","").begins_with("recipient"))
+    var needs_target:bool=NativeSpells.event_cues(selection).any(func(cue):return cue.role in ["flight","impact","strike"] or cue.get("attachment","").begins_with("recipient"))
     if target==null and not needs_target:target=source
     if target==null and fact.get("target_entity_uuid")==fact.source_entity_uuid:target=source
     if source==null or target==null:return {}

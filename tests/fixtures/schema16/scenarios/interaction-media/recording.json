@@ -1,0 +1,162 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 9,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "88930d6c-c591-40aa-8cfd-540b1d735bd4": "Amber caster",
+  "5cb5504f-b814-456a-94da-7c2bbe6cb71d": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.move \u00b7 Amber caster",
+  "unequip \u00b7 Amber caster",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.item.potion_healing.drink \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 13,
+   "spatial": 10,
+   "sensory": 5,
+   "step": 5,
+   "movement": 1,
+   "actor_change": 1,
+   "attack": 2,
+   "item_charge": 1,
+   "heal": 1,
+   "action": 1
+  },
+  "behaviors": {
+   "action.move": 1,
+   "action.attack": 2,
+   "action.item.potion_healing.drink": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 107,
+   "lineage": 29,
+   "event_offset": 25,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 114,
+   "lineage": 109,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 141,
+   "lineage": 136,
+   "event_offset": 0,
+   "kind": "item_charge",
+   "label": "item_charge ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 145,
+   "lineage": 136,
+   "event_offset": 1,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 147,
+   "lineage": 136,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.item.potion_healing.drink",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 174,
+   "lineage": 169,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 115,
+   "lineage": 37,
+   "event_offset": 25,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 122,
+   "lineage": 117,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 149,
+   "lineage": 144,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 151,
+   "lineage": 144,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.item.potion_healing.drink",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 178,
+   "lineage": 173,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

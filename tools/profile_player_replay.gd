@@ -11,6 +11,7 @@ var world:Node3D
 var frames:Array=[]
 var failures:Array=[]
 var label="gallery"
+var case_path=CASE
 var start_ms=0.0
 var end_ms=INF
 var caster=""
@@ -35,13 +36,14 @@ func follow()->void:
 func run()->void:
     if DisplayServer.get_name()=="headless":printerr("Requires native rendering");quit(2);return
     for arg in OS.get_cmdline_user_args():
-        if arg.begins_with("--profile-label="):label=arg.trim_prefix("--profile-label=")
+        if arg.begins_with("--profile-case="):case_path=arg.trim_prefix("--profile-case=")
+        elif arg.begins_with("--profile-label="):label=arg.trim_prefix("--profile-label=")
         elif arg.begins_with("--profile-start="):start_ms=arg.trim_prefix("--profile-start=").to_float()*1000
         elif arg.begins_with("--profile-end="):end_ms=arg.trim_prefix("--profile-end=").to_float()*1000
     Engine.max_fps=0;DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     root.size=Vector2i(1600,960);root.position=Vector2i(40,40);root.unfocusable=true
     var setup_started:int=Time.get_ticks_usec()
-    var spec:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(CASE))
+    var spec:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(case_path))
     var selected:Dictionary=spec.perspectives.filter(func(view):return str(view.id)=="amber")[0]
     var index=Recording.read(selected.journal)
     if not index.get("ok",false):printerr(index);quit(2);return

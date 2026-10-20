@@ -519,7 +519,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
                 if delta.get("set",{}).has(field):item_state[field]=delta.set[field]
             var changed:bool=false
             if NativeItems.interested(item_owners,delta,cache):
-                changed=NativeItems.observe(item_owners,item_state,at,cache,str(commit.get("event_uuid",""))) or changed
+                changed=NativeItems.observe(item_owners,item_state,at,cache,str(commit.get("event_uuid","")),commit.get("item_rows",[])) or changed
             for id in delta.get("actors",{}):
                 var actor:Dictionary=delta.actors[id]
                 var selected:Array=[actor.get("conditions",[]),actor.get("life_state","alive")]
@@ -770,6 +770,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         var cursors:Dictionary=graph.version_index.events
         for node in lineage.events:graph.nodes[node.lineage_id]=node
         var applications:Dictionary={}
+        graph.item_rows={}
         graph.application_results=Components.ApplicationResults.index(lineage.events)
         for node in lineage.events:
             var resolution:Dictionary=node.resolution_record
@@ -784,6 +785,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             var captured: Dictionary = recorded.events[event_index]
             graph.actor_inputs[node.id]=_spell_actor_inputs(node,captured.actor_inputs,target,graph)
             graph.item_inputs[node.id]=captured.item_inputs
+            graph.item_rows[node.id]=captured.get("item_rows",[])
             var cues:Array=[]
             for change in captured.get("condition_rows",[]):
                 if change.row.get("field")!="condition":continue
@@ -797,7 +799,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 graph.object_inputs[node.id]=target.objects.get(node.fact.object_uuid,{})
             apply_delta(target,captured.delta)
             group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.id,
-                "delta":captured.delta,"condition_rows":captured.get("condition_rows",[])})
+                "delta":captured.delta,"condition_rows":captured.get("condition_rows",[]),"item_rows":captured.get("item_rows",[])})
         var trailing: Dictionary = recorded.trailing
         apply_delta(target,trailing)
         graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)
@@ -844,7 +846,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                     var key: String = Reducer.Audience.point_key(track[field])
                     if group.staged_tiles.has(key): tile_clocks[key] = minf(tile_clocks.get(key,end),track.start_ms)
         for key in group.staged_tiles: group.staged_tile_at_ms[key] = tile_clocks.get(key,end)
-        group.commits.append({"at_ms":group.duration_ms,"source_index":lineage.end_cursor,"delta":trailing})
+        group.commits.append({"at_ms":group.duration_ms,"source_index":lineage.end_cursor,"delta":trailing,"item_rows":recorded.get("trailing_item_rows",[])})
         if profile_enabled:stage_started=_profile_phase(compile_phases,"disclosure_times",stage_started)
         var components:Dictionary=Components.compile(group,lineage,graph,cache)
         if not components.ok:return components

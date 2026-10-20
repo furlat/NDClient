@@ -28,11 +28,11 @@ percentages in the19 October cohort ledger describe their named checkpoint.
 
 | Workstream | Estimate | Remaining responsibility |
 |---|---:|---|
-| Single main checkout/branch |100%|Checkpoints7ef2f3f8, f489896f,4ec905b2 and8b9a05fc are committed; next cohort is under qualification.|
+| Single main checkout/branch |100%|Checkpoints7ef2f3f8 throughaffb7a25 are committed; the current cohort is under qualification in the same checkout.|
 | Canonical schema16 SDK/state|100%|Retain reference fold/COW/independent-seat checks.|
 | Ordering, preparation and publication|90%|Repeat native/live equipment and reveal boundaries after integration.|
 | Studio browser, replay and tracks|80%|Complete scenario depth and missing-provider visibility; broader native qualification.|
-| All-spell crash safety|In progress|Current-main partitions cover59/189 IDs:57 safe and two named producer failures; remaining130 must run. Historical182/189 is not current qualification.|
+| All-spell crash safety|182/189safe|All189IDs tested through real commands. Seven named engine/setup/Factory failures remain; source/provider/visual coverage is separate.|
 | Complete Factory integration|75%|Whole c494 is installed; family/variant runtime and visual coverage is incomplete.|
 | Shared native client providers|65%|History/capture shader qualification, remaining event/owner inputs and weapon variants.|
 | Complete scenario/capability coverage|45%|More genuine interactions, lifecycle/outcome variants and class/condition studies.|
@@ -313,3 +313,127 @@ rebuilt all three typed domains before its readers. The116-test receipt
 supersedes the earlier115/116 partial run, without erasing its failed evidence.
 The current executable native/live inventory and named upstream producer/Factory
 gaps remain separate from that fast-lane result.
+
+
+### Support, item membership and current-schema native test inputs
+
+This cohort remains in the same sole branch and checkout. Installed Factory
+package and approved graphics are unchanged.
+
+- Three finite support casts now use the shared observed-event admission:
+  Aura of Life, Foresight and Power Word Heal. Recipient role comes from the
+  delivered source; caster-only casts no longer disappear because an unrelated
+  held cue requires a target. Headless356 and native287 checks pass, including
+  both original factions, declared inputs, actual geometry/output, seek and
+  teardown. These baseline recordings do not prove positive healing or complete
+  held lifecycles. [Source and receipts](SUPPORT_EVENT_PROVIDER_COHORT_2026-10-20.md).
+- Dynamic item decorations extend the existing typed `Gear.effects` and passive
+  Timeline item owner table. Selection uses the actual behavior/damage type and
+  real effect UUID, not a fabricated condition or enchantment. SDK writes capture
+  immutable before/after arrays once, then compiler/Timeline/Studio preserve
+  their order. Same-occurrence remove/reapply and trailing item clears remain
+  observable. Actual Mace membership survives unequip/re-equip with one clock;
+  cached metadata alone cannot admit an owner. Native qualification is pending.
+  [Exact limits and test staging](DYNAMIC_ITEM_MEMBERSHIP_COHORT_2026-10-20.md).
+- Original two-seat death-save failure, natural20 recovery and Revivify journals
+  replace obsolete synthetic test inputs. A genuine source omission was fixed:
+  Dead→Alive now uses the authored reversed Die recovery, as the existing dying
+  and stable states already did. Combat4021, basic-condition198, selector132 and
+  original media oracle5850 checks pass. Native basic131, blood26515 and history
+  UI20 pass. Shadow geometry parity is still under qualification.
+- One further actual source reference was missing: Summon Dragon's shared
+  resistance condition. It is now linked, with26 checks against both original
+  packets. The public energy_type is null in that recording; no elemental
+  variant is guessed and no Factory output is claimed.
+
+Focused receipts: `.runtime/tests/20261020T012605.759036Z/`,
+`.runtime/tests/20261020T012803.542289Z/`,
+`.runtime/tests/20261020T012822.482676Z/`,
+`.runtime/tests/20261020T013103.597972Z/`, and
+`.runtime/tests/20261020T013442.555282Z/`.
+
+The current live sweep explicitly retains the installed Mirror Image shader
+compilation failure. Its legal server cast and condition succeed, but native
+safety does not. Hellish Rebuke's legal Fire Myrmidon scenario also completes
+its actual incoming hit without the required reaction; the failed original
+recordings are retained. Neither is marked a renderer or full-family pass.
+The remaining94-ID live partition is still running; join the actual reports
+before publishing a total. Repeat all fast checks and five equipment sessions
+once this cohort is qualified, then profile the actual Gallery again.
+
+
+### Complete current live spell inventory
+
+The joined live report at
+`.runtime/consolidation/live-all-spells-current-joined.json` now contains all189
+current spell IDs, preserving every older attempt and the exact case log range.
+182pass runtime safety;184complete every requested recipe command. A successful
+setup attack alone does not count as completing a later unavailable spell.
+Seven cases remain failed, without runtime source substitutions:
+
+| Actual case | Remaining boundary |
+|---|---|
+| Branding Smite / Ensnaring Strike / Searing Smite | Frozen native server returns game_failed; original terminal-root/child capture failures are retained. |
+| Fixture Test Bless | Declared developer spell has no grantable registered spell action. |
+| Hellish Rebuke | Legal incoming Ice Storm on Fire Myrmidon completes, but required reaction/Fire result is absent. |
+| Mirror Image | Actual cast and condition succeed; two installed Factory shaders fail compilation. Four error lines describe these two shader failures. |
+| Spare the Dying | Real setup damage succeeds; spell button is disabled because native target eligibility excludes the actual dying patient. No completed Spare-the-Dying command is claimed. |
+
+The final94-case partition is complete:
+`.runtime/consolidation/live-spell-resume-after-hellish/results.json`.
+Prior partitions and corrected legal retries remain linked by the joined report.
+This is crash-safety accounting, not full lifecycle/scenario/output/approval.
+
+The seven-check SDK regression cohort passes10,089 assertions (including8,865
+independent protocol cases and32per-record canonical spool comparisons):
+`.runtime/tests/20261020T015010.859254Z/`, zero failures or errors.
+Shadow geometry native parity now passes1703checks with its unchanged original
+shader oracle and existing tolerance:
+`.runtime/tests/20261020T014526.330403Z/`. The new item-effect gate still requires
+qualification; its first actual replay exposed a missing authored Taunt grip
+and a separate replay-only source-boundary publication omission. These are
+being repaired/tested without a guessed socket or missing-world dictionary guard.
+
+Positive Power Word Heal is also under qualification: one original two-seat
+study legally applies Hold Person then actually heals38HP/removes the patient
+members. Its two finite sources need the exact nested public HealFact, in
+addition to older flat fields retained for existing consumers. Actual-result
+spell effects now emit in the existing post-schedule component pass, once child
+clocks exist; body/cast clocks are unchanged.251headless assertions pass; native
+pixels and fresh full fast remain pending at this note.
+
+
+Native cohort receipt `.runtime/tests/20261020T015752.094638Z/`: dynamic item82
+and actual positive healing148 checks pass, zero script/engine errors and clean
+owned teardown. Actual before/after source-hidden captures were inspected.
+This proves selected output and replay recovery, not user artwork acceptance,
+all weapon poses or gameplay performance. Taunt lacks a measured weapon grip;
+its exact appearance is hidden/unavailable until a registered pose returns,
+without poisoning the entire replay. The live and replay source-only boundary
+now use the same existing atomic publication callback.
+
+The full118-test fast run at `.runtime/tests/20261020T015458.037756Z/` had one
+stale Aura-of-Life handover expectation. A real aura has both a publicly applied
+ground owner and recipient body members; finite observed-event windup is not a
+held cue. The test retains exact held cue indices, all required body owners,
+public provenance for every additional owner, the strict existing Haste mapping
+and the original explicit/rejected-source baselines. Its focused533checks now
+pass at `.runtime/tests/20261020T015921.260773Z/`. A fresh complete fast rerun is
+in progress before committing; neither the partial run nor unqualified wider
+native input migrations are reported as a whole green suite.
+
+
+The coherent checkpoint now passes the entire current **118-test fast lane**:
+`.runtime/tests/20261020T015953.238306Z/`, zero failed assertions, script/engine
+errors or owned leftovers. The exclusive source-owner gate rebuilt all three
+typed domains before the readers. This supersedes the117/118attempt without
+erasing it. Bounded correctness/anti-slop/anti-OOP reviews passed the item,
+result-emission and replay-publication changes.
+
+The checkpoint also preserves durable original inputs and exact invocation
+arguments for previously stale native gates. Their wider native qualification
+is still active, including known obsolete UI/correspondence assumptions; it is
+not covered by the118-test result. The source-only commit intentionally excludes
+all artwork, compiled resources, caches, captures and runtime/diagnostic reports.
+Five current live equipment sessions and final actual-command profiling remain
+required after this checkpoint; no final performance claim is made here.

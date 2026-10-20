@@ -21,8 +21,17 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_rua0c")
 clip = "high-level-22/aura-of-life/windup"
 role = "attached"
+scope = "source"
+constructor_input = {
+"component_path": ["support"],
+"geometry_actor": "caster",
+"kind": "observed_event",
+"outcome": "cast",
+"recipient_role": "caster"
+}
+endpoint_actor_uuids = true
 at = "cast"
-attachment = "recipient_ground"
+attachment = "caster_ground"
 orientation = "world"
 source_end = 0.9
 duration_policy = "authored"
@@ -47,6 +56,7 @@ extra = {
 "socket": "cast_hand"
 }, {
 "actor": "caster",
+"pose_socket": "head",
 "socket": "face"
 }, {
 "actor": "caster",
@@ -188,12 +198,12 @@ effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
 owner_kind = "condition"
-owner_ids = PackedStringArray("condition.spell.aura_of_life.benefit", "condition.spell.pass_without_trace.bonus")
-owner_cues = PackedInt32Array(0, 1, 2, 3)
+owner_ids = PackedStringArray("condition.spell.aura_of_life.benefit", "condition.spell.aura_of_life.owner")
+owner_cues = PackedInt32Array(1, 2, 3)
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
-applies_conditions = PackedStringArray("condition.spell.aura_of_life.benefit", "condition.spell.aura_of_life.membership", "condition.spell.aura_of_life.owner", "condition.spell.pass_without_trace.bonus", "condition.spell.pass_without_trace.membership")
+applies_conditions = PackedStringArray("condition.spell.aura_of_life.benefit", "condition.spell.aura_of_life.owner")
 applies_surfaces = PackedStringArray("spatial_effect.spell.aura_of_life")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"

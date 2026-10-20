@@ -1,0 +1,81 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "e0ad23cc-b2da-4de7-a762-f5318710a800": "Amber caster",
+  "44b0d4fc-eeb7-4cfb-99b3-ffcfdc9d1d2b": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.move \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "spatial": 12,
+   "sensory": 6,
+   "step": 6,
+   "movement": 2
+  },
+  "behaviors": {
+   "action.move": 2
+  },
+  "conditions": [],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 64,
+   "lineage": 16,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 134,
+   "lineage": 86,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 64,
+   "lineage": 16,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 134,
+   "lineage": 86,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

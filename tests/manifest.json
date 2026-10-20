@@ -106,7 +106,9 @@
    "script": "res://tests/actor_preparation_native_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--profile-case=res://tests/fixtures/schema16/scenarios/gallery/profile_case.json"
+   ],
    "timeout": 600,
    "status": "ok",
    "reason": ""
@@ -157,7 +159,7 @@
   {
    "name": "audio_contact_checks",
    "script": "res://tests/audio_contact_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -203,7 +205,7 @@
   {
    "name": "basic_condition_checks",
    "script": "res://tests/basic_condition_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -211,33 +213,37 @@
     "--cases"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Stable original Dash/Dodge/Disengage; source-declared contour policy, authoritative lifetime and unchanged ordered compiler values. No rendering API used."
   },
   {
    "name": "basic_condition_render_checks",
    "script": "res://tests/basic_condition_render_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/dash/amber"
+   ],
    "timeout": 600,
    "options": [
     "--cases"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Original stable base-condition owners through production Studio and four native views; current Dash source has no retired contour."
   },
   {
    "name": "blood_atlas_checks",
    "script": "res://tests/blood_atlas_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--oracle=res://tests/oracles/blood_before_atlas/blood_renderer.gd"
+   ],
    "timeout": 600,
    "options": [
     "--oracle"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Frozen f77f83d1 pre-atlas renderer and local original shaders/math; original schema16 Dash/Gallery releases, exact native pixels/order/fields."
   },
   {
    "name": "blood_authority_checks",
@@ -275,7 +281,9 @@
    "script": "res://tests/blood_loading_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--oracle=res://tests/oracles/blood_before_atlas/blood_renderer.gd"
+   ],
    "timeout": 600,
    "options": [
     "--oracle"
@@ -329,7 +337,7 @@
   {
    "name": "blood_tile_index_checks",
    "script": "res://tests/blood_tile_index_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -444,7 +452,7 @@
   {
    "name": "character_media_first_use_checks",
    "script": "res://tests/character_media_first_use_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -477,12 +485,12 @@
   {
    "name": "combat_timing_checks",
    "script": "res://tests/combat_timing_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Original schema16 damage/life journals through pure compiler/marker perturbation and hierarchical log ordering; no native renderer qualification."
   },
   {
    "name": "compact_interaction_checks",
@@ -654,15 +662,17 @@
   {
    "name": "condition_selection_checks",
    "script": "res://tests/condition_selection_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--oracle=res://tests/oracles/condition_selection_original.json"
+   ],
    "timeout": 600,
    "options": [
     "--oracle"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Unchanged independently generated Pygame selector oracle; pure state/composition/source-clock selection and queued thumbnail metadata, no render flush."
   },
   {
    "name": "creature_geometry_checks",
@@ -1137,10 +1147,12 @@
    "script": "res://tests/history_panel_ui_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Unchanged actual schema16 Gallery combat text; native Control input/layout/expansion/copy and optional saved captures."
   },
   {
    "name": "history_view_checks",
@@ -1656,15 +1668,17 @@
   {
    "name": "media_source_delta_checks",
    "script": "res://tests/media_source_delta_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--oracle=res://tests/oracles/media_before_source_delta.gd"
+   ],
    "timeout": 600,
    "options": [
     "--oracle"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Frozen pre-contribution-delta public source owner; test-only record-role union adapter compares actual pins/readiness/queues. No image decode or render publication."
   },
   {
    "name": "media_streaming_checks",
@@ -2539,11 +2553,11 @@
    "mode": "gpu",
    "tier": "gate",
    "args": [
-    "--cases=none",
-    "--gallery=res://tests/fixtures/schema16/fire-bolt",
+    "--cases=default",
+    "--gallery=res://tests/fixtures/schema16/scenarios/gallery/amber",
     "--play-frames=120"
    ],
-   "timeout": 300,
+   "timeout": 600,
    "options": [
     "--cases",
     "--explain",
@@ -2551,7 +2565,7 @@
     "--play-frames"
    ],
    "status": "ok",
-   "reason": "Native Studio/renderer painter oracle on the committed current-schema journal; historical missing schema9 case list is not selected."
+   "reason": "Original schema16 large Gallery plus base movement/stairs/jump/window/condition/attack native painter ordering; exact synthetic tie/pit controls retained."
   },
   {
    "name": "packet_pipeline_equality_checks",
@@ -3273,7 +3287,7 @@
   {
    "name": "scheduled_environment_checks",
    "script": "res://tests/scheduled_environment_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -3741,13 +3755,15 @@
    "script": "res://tests/shadow_geometry_cache_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--oracle=res://tests/oracles/shadows_before_geometry_cache.gd"
+   ],
    "timeout": 600,
    "options": [
     "--oracle"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Frozen bd3c20f7 pre-geometry-cache native shadow helper; delivered bodies and original four-view/UV/light-only controls."
   },
   {
    "name": "shadow_idle_checks",
@@ -3873,7 +3889,9 @@
    "script": "res://tests/studio_audio_transport_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/interaction-media/amber"
+   ],
    "timeout": 600,
    "status": "ok",
    "reason": ""
@@ -3978,7 +3996,7 @@
   {
    "name": "studio_condition_navigation_checks",
    "script": "res://tests/studio_condition_navigation_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -4134,7 +4152,9 @@
    "script": "res://tests/studio_light_calibration_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/jump/amber"
+   ],
    "timeout": 600,
    "status": "ok",
    "reason": ""
@@ -4155,7 +4175,7 @@
   {
    "name": "studio_light_tracks_checks",
    "script": "res://tests/studio_light_tracks_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -4178,7 +4198,7 @@
   {
    "name": "studio_material_method_checks",
    "script": "res://tests/studio_material_method_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -4292,7 +4312,7 @@
   {
    "name": "studio_replay_comparison_checks",
    "script": "res://tests/studio_replay_comparison_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -4370,7 +4390,9 @@
    "script": "res://tests/studio_single_view_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--native"
+   ],
    "timeout": 600,
    "options": [
     "--native"
@@ -4453,7 +4475,9 @@
    "script": "res://tests/studio_thumbnail_cache_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--native"
+   ],
    "timeout": 600,
    "options": [
     "--native"
@@ -5093,7 +5117,7 @@
   {
    "name": "world_preparation_sparse_checks",
    "script": "res://tests/world_preparation_sparse_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
@@ -5224,16 +5248,16 @@
    "reason": ""
   },
   {
-      "name": "actor_row_requirement_checks",
-      "script": "res://tests/actor_row_requirement_checks.gd",
-      "mode": "headless",
-      "tier": "fast",
-      "args": [],
-      "timeout": 300,
-      "status": "ok",
-      "reason": "Canonical per-row ActorChange requirements and exact existing Studio owners, original independent recordings and metadata negative controls."
-    },
-    {
+   "name": "actor_row_requirement_checks",
+   "script": "res://tests/actor_row_requirement_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Canonical per-row ActorChange requirements and exact existing Studio owners, original independent recordings and metadata negative controls."
+  },
+  {
    "name": "studio_spatial_owner_checks",
    "script": "res://tests/studio_spatial_owner_checks.gd",
    "mode": "headless",
@@ -5332,6 +5356,72 @@
    "timeout": 300,
    "status": "ok",
    "reason": "Original independent first-cast Vampiric Touch: actual strike setter/admission, measured hand/recipient, native pixels and seek/loop/cleanup; retained/repeat/healing remain explicit gaps."
+  },
+  {
+   "name": "support_spell_event_checks",
+   "script": "res://tests/support_spell_event_checks.gd",
+   "mode": "headless",
+   "tier": "gate",
+   "args": [],
+   "timeout": 120,
+   "status": "ok",
+   "reason": "Original independent Aura of Life/Foresight/Power Word Heal event projections through in-memory typed sources; no GPU or broad condition qualification."
+  },
+  {
+   "name": "dynamic_item_effect_checks",
+   "script": "res://tests/dynamic_item_effect_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "status": "ok",
+   "timeout": 120,
+   "args": []
+  },
+  {
+   "name": "native_support_spell_event_checks",
+   "script": "res://tests/native_support_spell_event_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "status": "ok",
+   "timeout": 300,
+   "args": []
+  },
+  {
+   "name": "dynamic_item_effect_render_checks",
+   "script": "res://tests/dynamic_item_effect_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "status": "ok",
+   "timeout": 300,
+   "args": []
+  },
+  {
+   "name": "condition_owner_reference_checks",
+   "script": "res://tests/condition_owner_reference_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "status": "ok",
+   "timeout": 120,
+   "args": []
+  },
+  {
+   "name": "positive_healing_event_checks",
+   "script": "res://tests/positive_healing_event_checks.gd",
+   "mode": "headless",
+   "tier": "gate",
+   "args": [],
+   "timeout": 120,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_positive_healing_render_checks",
+   "script": "res://tests/native_positive_healing_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
   }
  ]
 }

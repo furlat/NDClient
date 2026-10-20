@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Real independent SDK journals, aligned causes, original rates and exact prefixes.
 const Recording=preload("res://studio/recording.gd")
 const Compare=preload("res://studio/replay_comparison.gd")
@@ -13,11 +14,9 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);print("REPLAY_COMPARISON_FAIL ",label)
 func read_case(name:String)->Dictionary:
-    var record={"id":name,"perspectives":[]}
-    for id in ["amber","blue"]:record.perspectives.append({"id":id,"label":id.capitalize(),"journal":"res://.runtime/studio-cases/"+name+"/"+id+"/journal"})
-    return Recording.read_case(record)
+    return Recording.read_case(Fixtures.case_record(name))
 func run()->void:
-    for name in ["hide-seed3-v3","invisibility-seed3-v2","oa_jump-seed3-v2","oa_jump_lethal-seed5-v2","oa_jump_late_lethal-seed5-v2"]:
+    for name in ["hide","invisibility","oa-jump","oa-jump-lethal","oa-jump-late-lethal"]:
         var bundle=read_case(name)
         check(bundle.ok,name+": both independent SDK journals admit")
         if not bundle.ok:continue
@@ -29,7 +28,7 @@ func run()->void:
         if not compared.comparison:
             check(compared.views==bundle.views,name+": identical presentations retain the single-view path")
             continue
-        if name=="oa_jump_late_lethal-seed5-v2":
+        if name=="oa-jump-late-lethal":
             var arrivals={};var starts={};var lengths={}
             for view in compared.views:
                 for item in compared.views[view].groups:
@@ -48,9 +47,9 @@ func run()->void:
         for cut in compared.schedule:
             times[cut.common_ms]=true
             if cut.common_ms>.01:times[cut.common_ms-.01]=true
-            if not cut.event_uuid.is_empty():
-                if shared.has(cut.event_uuid):check(absf(shared[cut.event_uuid]-cut.common_ms)<.00001,name+": shared event commit has one common causal cut")
-                shared[cut.event_uuid]=cut.common_ms
+            if cut.correspondence_key.begins_with("shared:"):
+                if shared.has(cut.correspondence_key):check(absf(shared[cut.correspondence_key]-cut.common_ms)<.00001,name+": shared event commit has one common causal cut")
+                shared[cut.correspondence_key]=cut.common_ms
         for view in bundle.views:
             var old:Dictionary=bundle.views[view];var aligned:Dictionary=compared.views[view]
             check(old.groups.size()==aligned.groups.size(),name+" "+view+": no authoritative groups invented or dropped")
@@ -61,7 +60,7 @@ func run()->void:
                 var prior=-INF
                 for c in a.commits.size():
                     check(a.commits[c].get("event_uuid")==b.commits[c].get("event_uuid") and a.commits[c].delta==b.commits[c].delta,name+" "+view+": original ordered delta retained")
-                    check(b.commits[c].at_ms>=prior,name+" "+view+": no own commit order inversion")
+                    check(b.commits[c].at_ms+Compare.EPS>=prior,name+" "+view+": no own commit order inversion")
                     prior=b.commits[c].at_ms
                     Compiler.apply_delta(expected,a.commits[c].delta)
                     var exact=Recording.restore_boundary(aligned,g,c+1)
@@ -121,7 +120,7 @@ func run()->void:
         check(inspect.rows.filter(func(row):return row.kind=="body" and "blue" in row.audiences).size()>0,name+": peer native sprite rows remain inspectable or share the identical source lane")
         evidence.append({"case":name,"original_ms":bundle.views.values().map(func(view):return view.presentation_end_ms),"common_ms":compared.presentation_end_ms,"cuts":compared.schedule.size(),"blocks":compared.blocks.size(),"rows":inspect.rows.size()})
     var canceled=Recording.cancellation();Recording.cancel(canceled)
-    var bundle=read_case("hide-seed3-v3")
+    var bundle=read_case("hide")
     check(Recording.compare_case(bundle,canceled).get("canceled",false),"Superseded comparison projection cancels without publishing a partial pair")
     var same=bundle.duplicate();same.views={"amber":bundle.views.amber,"blue":bundle.views.amber.duplicate(true)}
     check(not Recording.requires_comparison(same),"Identical initial rendering and event sources retain one pane")

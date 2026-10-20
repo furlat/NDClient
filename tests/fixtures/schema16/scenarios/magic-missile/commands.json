@@ -1,0 +1,58 @@
+[
+ {
+  "request": {
+   "do": "spell.magic_missile",
+   "by": "caster",
+   "target": "target",
+   "recipients": [
+    "target",
+    "second_target",
+    "target"
+   ]
+  },
+  "previews": 3,
+  "selected_action": {
+   "behavior_id": "spell.magic_missile",
+   "display_name": "Magic Missile (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "automatic",
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "51c9d586-49e3-486d-8387-a4195602e355",
+   "state_revision": "ea18e4c5-bfb8-4b1b-aebb-7b3241a1b092",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 6,
+     "target_indices": [
+      0,
+      1,
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_magic_missile_split_recipients",
+   "game_epoch": "f5f845f4-92a9-4235-adda-c826780e5346",
+   "audience_id": "4190a49e-9611-4fe5-9732-1471bdd65ba3",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_magic_missile_split_recipients",
+    "game_epoch": "f5f845f4-92a9-4235-adda-c826780e5346",
+    "audience_id": "4190a49e-9611-4fe5-9732-1471bdd65ba3",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

@@ -1,0 +1,66 @@
+{
+ "id": "action.jump/land_and_walk",
+ "title": "Jump: actual launch, landing and subsequent walking",
+ "kind": "action",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.jump",
+   "action.move"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    14,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.jump",
+   "by": "caster",
+   "target": [
+    5,
+    7
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ]
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "action.jump",
+  "action.move"
+ ],
+ "required_conditions": [],
+ "required_condition_ends": [],
+ "required_facts": [
+  "movement"
+ ]
+}

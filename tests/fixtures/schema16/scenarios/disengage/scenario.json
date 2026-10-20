@@ -1,0 +1,79 @@
+{
+ "id": "action.disengage/departure",
+ "title": "Disengage: apply, leave real threat, expire and walk normally",
+ "kind": "action",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.disengage",
+   "action.move"
+  ],
+  "condition": [
+   "condition.disengaging"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.disengage",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    7
+   ]
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "action.disengage",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.disengaging"
+ ],
+ "required_condition_ends": [
+  "condition.disengaging"
+ ],
+ "required_facts": []
+}

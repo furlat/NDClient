@@ -18,9 +18,10 @@ extends SceneTree
 const Studio=preload("res://studio/studio.gd")
 const Order=preload("res://grid_order.gd")
 const Placement=preload("res://placement.gd")
-const GALLERY:="res://.runtime/player-runs/20261017T050051.313612Z/journal"
-const CASES:=["dash-seed3","elevation-seed3","jump-seed3-v2","oa_jump_late_lethal-seed5-v2","window-seed3","window_break-seed3-v3",
-    "melee-seed3","magic_missile-seed3","hide-light-seed3","prone-seed3","ranged-seed3","walk_diagonal-seed3-v2","invisibility-seed3-v2","movement-oa"]
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const GALLERY:="res://tests/fixtures/schema16/scenarios/gallery/amber"
+const CASES:=["dash","stairs","jump","oa-jump-late-lethal","window","window-break",
+    "melee","magic-missile","hide-light","prone","ranged","move","invisibility","oa-walk"]
 class Probe extends "res://play.gd":
     func _ready() -> void:
         set_process(false); set_process_unhandled_input(false)
@@ -378,8 +379,8 @@ func run()->void:
     var names:Array=CASES
     if selected=="all":
         names=[]
-        for name in DirAccess.get_directories_at("res://.runtime/studio-cases"):
-            if DirAccess.dir_exists_absolute("res://.runtime/studio-cases/%s/amber/journal"%name):names.append(name)
+        for name in Fixtures.catalog():
+            if not Fixtures.journal(name).is_empty():names.append(name)
     elif selected=="none":names=[]
     elif selected!="default":names=selected.split(",")
     var play_frames:=int(argument("--play-frames","600"))
@@ -390,7 +391,7 @@ func run()->void:
     if gallery!="none":
         await journal(gallery,play_frames)
         await overlay_routes()
-    for name in names:await journal("res://.runtime/studio-cases/%s/amber/journal"%name,play_frames)
+    for name in names:await journal(Fixtures.journal(name),play_frames)
     var worst:={"min_depth_gap":INF,"min_reference_gap":INF,"max_abs_offset":0.0,"min_rank_step":INF,"widest_reference_gap":0}
     for value in configurations:
         if value.get("as_rendered",false):continue

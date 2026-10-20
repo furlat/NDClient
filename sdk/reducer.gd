@@ -23,7 +23,7 @@ static func _retained_target(target:Dictionary)->Dictionary:
     return result
 static func enter_body(target:Dictionary,record:Dictionary)->Dictionary:return Bodies.enter_body(target,record)
 static func enter_item(target:Dictionary,record:Dictionary)->Dictionary:return Bodies.enter_item(target,record)
-static func apply_actor_change_fact(target:Dictionary,fact:Dictionary,condition_rows:Array=[])->Dictionary:return Bodies.actor_change(target,fact,condition_rows)
+static func apply_actor_change_fact(target:Dictionary,fact:Dictionary,condition_rows:Array=[],item_rows:Array=[])->Dictionary:return Bodies.actor_change(target,fact,condition_rows,item_rows)
 static func clear_unseen_positions(target:Dictionary)->void:Audience.clear_unseen_positions(target)
 static func apply_world_update(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->Dictionary:
     var prior_tiles:Dictionary=target.tiles.duplicate();var prior_objects:Dictionary=target.objects.duplicate();var result=World.fold(target,update)
@@ -77,13 +77,13 @@ static func stage_lineage(target:Dictionary,lineage:Dictionary)->Dictionary:
 static func _write_actor(target:Dictionary,identity:Variant)->Variant:
     if not target.actors.has(identity):return null
     var actor:Dictionary=target.actors[identity].duplicate();target.actors[identity]=actor;return actor
-static func apply_player_fact(target:Dictionary,fact:Dictionary,source_cursor:Variant=null,values:Dictionary={},condition_rows:Array=[])->Dictionary:
+static func apply_player_fact(target:Dictionary,fact:Dictionary,source_cursor:Variant=null,values:Dictionary={},condition_rows:Array=[],item_rows:Array=[])->Dictionary:
     var identity:Variant;var actor:Variant
     match fact.kind:
         "sensory":
             if values.is_empty():return failure("A sensory fact requires its group's rows")
             return Audience.fold(target,fact,values)
-        "actor_change":return Bodies.actor_change(target,fact,condition_rows)
+        "actor_change":return Bodies.actor_change(target,fact,condition_rows,item_rows)
         "faction":
             actor=_write_actor(target,fact.entity_uuid)
             if actor!=null:actor.faction=fact.faction_after
@@ -136,13 +136,13 @@ static func apply_player_fact(target:Dictionary,fact:Dictionary,source_cursor:Va
             if fact.get("round_number")!=null:target.round_number=fact.round_number
             if fact.event_type in ["turn_start","turn_end","encounter_end"]:target.current_actor_uuid=fact.entity_uuid if fact.event_type=="turn_start" else null
     return success(target)
-static func apply_committed_player_fact(target:Dictionary,fact:Dictionary,source_cursor:int,occurrences:Variant,values:Dictionary={},condition_rows:Array=[])->Dictionary:
+static func apply_committed_player_fact(target:Dictionary,fact:Dictionary,source_cursor:int,occurrences:Variant,values:Dictionary={},condition_rows:Array=[],item_rows:Array=[])->Dictionary:
     if fact.kind=="spatial" and fact.get("entity_uuid")!=null and fact.change_type in ["entity_entered","entity_left"]:
         var committed:Variant=fact.get("commit_occurrence")
         if committed==null or not committed in occurrences:return failure("Spatial change at cursor %d lacks its recorded commit version"%source_cursor)
         if committed<int(target.spatial_commit_cursors.get(fact.entity_uuid,-1)) and int(target.spatial_commit_cursors.get(fact.entity_uuid,-1))<source_cursor:return success(target)
         target.spatial_commit_cursors[fact.entity_uuid]=committed
-    return apply_player_fact(target,fact,source_cursor,values,condition_rows)
+    return apply_player_fact(target,fact,source_cursor,values,condition_rows,item_rows)
 
 static func node_lineages(nodes:Array,versions:Dictionary)->Array:
     var owners={}
@@ -182,9 +182,9 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
     var next=0;var world_updates={}
     for update in updates:world_updates[int(update.occurrence)]=update
     for node in nodes:
-        var admitted:Array=[];var changed_items={};var changed_actors={};var items_before:Dictionary=result.items.duplicate();var actors_before:Dictionary=result.actors.duplicate()
+        var admitted:Array=[];var item_rows:Array=[];var changed_items={};var changed_actors={};var items_before:Dictionary=result.items.duplicate();var actors_before:Dictionary=result.actors.duplicate()
         while next<pending.size() and pending[next].occurrence<=node.occurrence:
-            var entered=Bodies.enter_body(result,pending[next])
+            var entered=Bodies.enter_body(result,pending[next],item_rows)
             if not entered.ok:return entered
             admitted.append(pending[next]);next+=1
         var started:int=Time.get_ticks_usec() if profile!=null else 0;var inputs=Transitions.actor_inputs(result,node);var update:Variant=world_updates.get(int(node.occurrence));var disclosed={}
@@ -199,7 +199,7 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
         if profile!=null:_profile_elapsed(profile,"world",started)
         var condition_rows:Array=[];started=Time.get_ticks_usec() if profile!=null else 0
         if not node.get("canceled",false) and node.get("fact")!=null:
-            var folded=apply_committed_player_fact(result,node.fact,int(node.occurrence),versions.get("occurrences",[]),composed.value,condition_rows)
+            var folded=apply_committed_player_fact(result,node.fact,int(node.occurrence),versions.get("occurrences",[]),composed.value,condition_rows,item_rows)
             if not folded.ok:return folded
         if profile!=null:_profile_elapsed(profile,"facts",started)
         if recorded!=null:
@@ -207,14 +207,17 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
                 if not actors_before.has(identity) or not is_same(actors_before[identity],result.actors[identity]):changed_actors[identity]=true
             for identity in result.items:
                 if not items_before.has(identity) or not is_same(items_before[identity],result.items[identity]):changed_items[identity]=true
-            recorded.events.append({"event_uuid":int(node.occurrence),"occurrence":int(node.occurrence),"source_index":int(node.occurrence),"actor_inputs":inputs,"item_inputs":item_inputs,"condition_rows":condition_rows,"delta":Transitions.capture_delta(result,node,admitted,update,{},true,disclosed,changed_actors,changed_items)})
+            recorded.events.append({"event_uuid":int(node.occurrence),"occurrence":int(node.occurrence),"source_index":int(node.occurrence),"actor_inputs":inputs,"item_inputs":item_inputs,"condition_rows":condition_rows,"item_rows":item_rows,"delta":Transitions.capture_delta(result,node,admitted,update,{},true,disclosed,changed_actors,changed_items)})
     while next<pending.size():
-        var entered=Bodies.enter_body(result,pending[next])
+        var item_rows:Array=[]
+        var entered=Bodies.enter_body(result,pending[next],item_rows)
         if not entered.ok:return entered
         if recorded!=null:
+            recorded.trailing_item_rows.append_array(item_rows)
             recorded.trailing.set.static=result.static.duplicate()
             recorded.trailing.actors[pending[next].actor_uuid]=result.actors[pending[next].actor_uuid]
             for record in pending[next].get("items",[]):recorded.trailing.items[record.item_uuid]=result.items[record.item_uuid]
+            for row in item_rows:recorded.trailing.items[row.item_uuid]=result.items[row.item_uuid]
         next+=1
     return success(result)
 
@@ -281,7 +284,7 @@ static func _reduce_operation(target:Dictionary,update:Dictionary,record_events:
         if lineage.start_cursor!=result.reducer_cursor:return failure("Operation occurrence sequence has a gap")
         var checked=check_spell_declarations(lineage.events,lineage.version_rows,lineage.get("resolutions",[]))
         if not checked.ok:return checked
-        var recorded:Variant={"lineage":int(lineage.lineage),"lineage_uuid":int(lineage.lineage),"start_cursor":lineage.start_cursor,"end_cursor":lineage.end_cursor,"events":[],"trailing":Transitions.empty_delta(),"world":{}} if record_events else null
+        var recorded:Variant={"lineage":int(lineage.lineage),"lineage_uuid":int(lineage.lineage),"start_cursor":lineage.start_cursor,"end_cursor":lineage.end_cursor,"events":[],"trailing":Transitions.empty_delta(),"trailing_item_rows":[],"world":{}} if record_events else null
         var folded=_reduce_lineage_owned(result,lineage,recorded,profile)
         if not folded.ok:return folded
         if record_events:records.lineages.append(recorded)

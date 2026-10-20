@@ -387,6 +387,14 @@ static func _actor_requirements(row:Dictionary,node:Dictionary,graph:Dictionary,
             expected.owner_id="condition:"+expected.condition_uuid
             expected.inspection_links=row.components.filter(func(component):return component.actor_uuid==expected.actor_uuid and str(component.trace_track_id).begins_with(expected.owner_id+":")).map(func(component):return component.trace_track_id)
         elif expected.actor_field=="condition_duration":expected.owner_id="condition:"+expected.condition_uuid
+        elif expected.actor_field in ["item_effects","item_effect_duration"]:
+            var wire:Dictionary=node.fact.actors[expected.actor_index].rows[expected.row_index] if expected.actor_index>=0 else node.fact.items[expected.row_index]
+            for change in graph.get("item_rows",{}).get(node.id,[]):
+                if not is_same(change.get("row",change.get("record")),wire):continue
+                expected.effect_members_before=change.before;expected.effect_members_after=change.after
+                expected.effect_uuids_before=change.before.map(func(member):return str(member.effect_uuid))
+                expected.effect_uuids_after=change.after.map(func(member):return str(member.effect_uuid))
+                break
         # Missing requirements remain independent from any working sibling.
         # Classified/delegated rows are inspection metadata, never fabricated
         # draw components or evidence of a body/material sample.

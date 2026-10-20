@@ -1,0 +1,342 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 5,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "33209b42-f51f-4d61-90d1-3bd763aa275f": "Amber caster",
+  "fddb6272-5031-4ed4-ae96-de9d51945c17": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "spell.hold_person \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.drop_concentration \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.move \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 9,
+   "saving_throw": 2,
+   "actor_change": 8,
+   "spell": 1,
+   "action": 1,
+   "spatial": 2,
+   "sensory": 1,
+   "step": 1,
+   "movement": 1
+  },
+  "behaviors": {
+   "spell.hold_person": 1,
+   "action.drop_concentration": 1,
+   "action.move": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.paralyzed",
+   "condition.spell.hold_person"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.paralyzed",
+   "condition.spell.hold_person"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 18,
+   "lineage": 12,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 25,
+   "lineage": 12,
+   "event_offset": 1,
+   "label": "condition applied condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "6e9ee3bb-9ad6-42c2-8f83-706658383ce6",
+   "condition_id": "condition.paralyzed",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 30,
+   "lineage": 12,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "condition_uuid": "b83695b3-42f1-4a4e-94d3-b571136e0ea8",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 31,
+   "lineage": 12,
+   "event_offset": 3,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "13db0b9f-6f40-4d57-943b-1458d2b681e0",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 32,
+   "lineage": 12,
+   "event_offset": 4,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "condition_uuid": "b83695b3-42f1-4a4e-94d3-b571136e0ea8",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 33,
+   "lineage": 12,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 40,
+   "lineage": 38,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "13db0b9f-6f40-4d57-943b-1458d2b681e0",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 49,
+   "lineage": 43,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 71,
+   "lineage": 60,
+   "event_offset": 0,
+   "label": "condition ended condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "6e9ee3bb-9ad6-42c2-8f83-706658383ce6",
+   "condition_id": "condition.paralyzed",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 72,
+   "lineage": 60,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "13db0b9f-6f40-4d57-943b-1458d2b681e0",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 73,
+   "lineage": 60,
+   "event_offset": 2,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "condition_uuid": "b83695b3-42f1-4a4e-94d3-b571136e0ea8",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 75,
+   "lineage": 60,
+   "event_offset": 3,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 98,
+   "lineage": 84,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 18,
+   "lineage": 12,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 25,
+   "lineage": 12,
+   "event_offset": 1,
+   "label": "condition applied condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "6e9ee3bb-9ad6-42c2-8f83-706658383ce6",
+   "condition_id": "condition.paralyzed",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 30,
+   "lineage": 12,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "condition_uuid": "b83695b3-42f1-4a4e-94d3-b571136e0ea8",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 31,
+   "lineage": 12,
+   "event_offset": 3,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "13db0b9f-6f40-4d57-943b-1458d2b681e0",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 32,
+   "lineage": 12,
+   "event_offset": 4,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "condition_uuid": "b83695b3-42f1-4a4e-94d3-b571136e0ea8",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 33,
+   "lineage": 12,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 40,
+   "lineage": 38,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "13db0b9f-6f40-4d57-943b-1458d2b681e0",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 49,
+   "lineage": 43,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 71,
+   "lineage": 60,
+   "event_offset": 0,
+   "label": "condition ended condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "6e9ee3bb-9ad6-42c2-8f83-706658383ce6",
+   "condition_id": "condition.paralyzed",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 72,
+   "lineage": 60,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "fddb6272-5031-4ed4-ae96-de9d51945c17",
+   "condition_uuid": "13db0b9f-6f40-4d57-943b-1458d2b681e0",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 73,
+   "lineage": 60,
+   "event_offset": 2,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33209b42-f51f-4d61-90d1-3bd763aa275f",
+   "condition_uuid": "b83695b3-42f1-4a4e-94d3-b571136e0ea8",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 75,
+   "lineage": 60,
+   "event_offset": 3,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 98,
+   "lineage": 84,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

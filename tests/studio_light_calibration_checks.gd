@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Matched production captures: existing native radial profile and ambient calibration.
 const Studio=preload("res://studio/studio.gd")
 const RangeProfile=preload("res://presentation/resources/light_range_profile.gd")
@@ -82,7 +83,7 @@ func run()->void:
     DirAccess.make_dir_recursive_absolute(DIRECTORY)
     var studio=Studio.new();root.add_child(studio)
     if not await settle(studio):await finish(studio);return
-    check(studio.active_directory=="res://.runtime/studio-cases/jump-seed3-v2/amber/journal","Capture starts from the exact real Jump recording")
+    check(studio.active_directory==Fixtures.journal("jump"),"Capture starts from the exact real Jump recording")
     if not failures.is_empty():await finish(studio);return
     studio.loop_enabled=false;studio.world.timeline.paused=true
     # In-memory cap/Normals only; the saved settings are never written.
@@ -103,7 +104,7 @@ func run()->void:
     studio.world.camera.size=6;studio.world.position_camera()
     studio._seek(1087.0)
     if await settle(studio):await capture_pair(studio,"jump",Vector2i(4,6))
-    studio._load("res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal")
+    studio._load(Fixtures.journal("hide-light"))
     if not await settle(studio):await finish(studio);return
     var descriptor:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(studio.active_directory.get_base_dir().path_join("case.json")))
     for probe in descriptor.light_probes:

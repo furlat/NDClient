@@ -2,6 +2,7 @@ extends SceneTree
 # Isolated Control validation using unchanged combat text extracted from a real
 # saved journal. No Player, backend, scene rendering or synthetic combat events.
 const History = preload("res://ui/history_panel.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 class DisplayFeed extends RefCounted:
     var state = {"displayed":true}
     var queue: Array = []
@@ -33,13 +34,13 @@ func settle() -> void:
     await process_frame
 func run() -> void:
     var args = OS.get_cmdline_user_args()
-    if args.is_empty(): push_error("Pass a real journal directory"); quit(2); return
-    var directory = DirAccess.open(args[0])
+    var journal:String=Fixtures.journal("gallery") if args.is_empty() else args[0]
+    var directory = DirAccess.open(journal)
     if directory == null: push_error("Journal not found"); quit(2); return
     var names = directory.get_files()
     names.sort()
     for name in names:
-        if name.ends_with(".json"): collect(JSON.parse_string(FileAccess.get_file_as_string(args[0].path_join(name))))
+        if name.ends_with(".json"): collect(JSON.parse_string(FileAccess.get_file_as_string(journal.path_join(name))))
     if native_logs.is_empty(): push_error("Journal has no actual combat text"); quit(2); return
     root.size = Vector2i(1280,720)
     var host = Host.new()

@@ -1,0 +1,348 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 27,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "a225cacd-f399-44d7-b9c5-7f152447e4bb": "Amber caster",
+  "e79c09f2-b4d0-4f6a-ba1e-6543695689af": "Amber patient",
+  "ef58acff-3a22-4b3c-a94e-93140b69f12e": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "patient": "Amber patient",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber patient",
+  "end_turn \u00b7 Amber caster",
+  "spell.magic_missile \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 85,
+   "actor_change": 3,
+   "damage": 2,
+   "life": 2,
+   "spell": 4,
+   "sensory": 2,
+   "death_save": 4,
+   "spatial": 1
+  },
+  "behaviors": {
+   "spell.magic_missile": 4
+  },
+  "conditions": [
+   "condition.spell.shield"
+  ],
+  "ended_conditions": [
+   "condition.spell.shield"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 70,
+   "lineage": 50,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 71,
+   "lineage": 50,
+   "event_offset": 3,
+   "kind": "life",
+   "label": "life ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 72,
+   "lineage": 50,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 73,
+   "lineage": 50,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 81,
+   "lineage": 50,
+   "event_offset": 6,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "a225cacd-f399-44d7-b9c5-7f152447e4bb",
+   "condition_uuid": "bc8fc6c0-9513-45d2-8700-d47caa82559d",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 84,
+   "lineage": 50,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 91,
+   "lineage": 50,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 93,
+   "lineage": 50,
+   "event_offset": 12,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 108,
+   "lineage": 103,
+   "event_offset": 0,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 120,
+   "lineage": 115,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "a225cacd-f399-44d7-b9c5-7f152447e4bb",
+   "condition_uuid": "bc8fc6c0-9513-45d2-8700-d47caa82559d",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 145,
+   "lineage": 140,
+   "event_offset": 0,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 178,
+   "lineage": 173,
+   "event_offset": 0,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 221,
+   "lineage": 206,
+   "event_offset": 3,
+   "kind": "life",
+   "label": "life ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 225,
+   "lineage": 206,
+   "event_offset": 5,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 65,
+   "lineage": 45,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 66,
+   "lineage": 45,
+   "event_offset": 3,
+   "kind": "life",
+   "label": "life ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 67,
+   "lineage": 45,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 68,
+   "lineage": 45,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 76,
+   "lineage": 45,
+   "event_offset": 6,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "a225cacd-f399-44d7-b9c5-7f152447e4bb",
+   "condition_uuid": "bc8fc6c0-9513-45d2-8700-d47caa82559d",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 79,
+   "lineage": 45,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 86,
+   "lineage": 45,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 87,
+   "lineage": 45,
+   "event_offset": 11,
+   "kind": "spell",
+   "label": "spell spell.magic_missile",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 102,
+   "lineage": 97,
+   "event_offset": 0,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 114,
+   "lineage": 109,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "a225cacd-f399-44d7-b9c5-7f152447e4bb",
+   "condition_uuid": "bc8fc6c0-9513-45d2-8700-d47caa82559d",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 139,
+   "lineage": 134,
+   "event_offset": 0,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 172,
+   "lineage": 167,
+   "event_offset": 0,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 211,
+   "lineage": 200,
+   "event_offset": 2,
+   "kind": "life",
+   "label": "life ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 215,
+   "lineage": 200,
+   "event_offset": 4,
+   "kind": "death_save",
+   "label": "death_save ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Force"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

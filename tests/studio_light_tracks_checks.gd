@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Actual optical source commits + native resolver + actor motion -> Studio lanes.
 const Recording=preload("res://studio/recording.gd")
 const LightTracks=preload("res://studio/light_tracks.gd")
@@ -13,8 +14,8 @@ func check(value:bool,label:String)->void:
 
 func run()->void:
     for audience in ["amber","blue"]:
-        var index=Recording.read("res://.runtime/studio-cases/hide-light-schema9-seed3/"+audience+"/journal")
-        check(index.ok,audience+" actual schema9 torch recording admits")
+        var index=Fixtures.read("hide-light",audience)
+        check(index.ok,audience+" actual schema16 torch recording admits")
         if not index.ok:continue
         var lights=index.rows.filter(func(row):return row.kind=="light")
         check(not lights.is_empty(),audience+" exposes its actual native light tracks")
@@ -78,7 +79,7 @@ func run()->void:
         # the real known actors but supply no disclosed anchor in this input;
         # inspection must not recover the private owner by proximity or item ID.
         var optical_only:Dictionary=index.initialization.state.duplicate(true)
-        for observed in optical_only.senses.light_sources.values():observed.anchor_entity_uuid=null;observed.anchor_item_uuid=null
+        for observed in optical_only.light_sources.values():observed.anchor_entity_uuid=null;observed.anchor_item_uuid=null
         var private_history={}
         LightTracks.observe(private_history,optical_only,0.0,"",0,index.cache)
         check(not private_history.is_empty(),audience+" optical-only projection input retains real source geometry")

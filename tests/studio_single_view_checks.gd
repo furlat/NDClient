@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## One displayed faction, independently recorded timing, normal seek/loop publication.
 const Studio=preload("res://studio/studio.gd")
 const Recording=preload("res://studio/recording.gd")
@@ -38,9 +39,7 @@ func verify(studio:Control,label:String)->void:
         for nested in child.find_children("*","SubViewport",true,false):check(nested.render_target_update_mode==SubViewport.UPDATE_DISABLED,label+": spare helper frozen")
     check(studio.perspective_picker.get_item_metadata(studio.perspective_picker.selected)==studio.active_perspective,label+": faction selector matches displayed audience")
 func headless_contract()->void:
-    var cases:Array=[record]
-    for item in Library.read():
-        if item.id=="gallery-sorcerer-expedition":cases.append(item)
+    var cases:Array=[record,Fixtures.public_case("gallery")]
     for item in cases:
         # A selectable but unopened journal must not be read or planned before
         # the requested audience is usable. The real second journal is loaded
@@ -154,7 +153,7 @@ func native_controls()->void:
 func close(studio:Control)->void:
     studio.queue_free();await frame();await frame()
 func run()->void:
-    var cases=Library.read().filter(func(item):return item.id=="hide-light-schema9-seed3")
+    var cases=[Fixtures.public_case("hide-light")]
     check(cases.size()==1,"Exact real Hide/light Library case exists")
     if not cases.is_empty():
         record=cases[0]

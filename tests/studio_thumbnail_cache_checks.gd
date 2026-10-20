@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Actual recorded source crops, cache scheduling, and optional native swatches.
 const Recording=preload("res://studio/recording.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
@@ -17,7 +18,7 @@ func _same_parts(a:Dictionary,b:Dictionary)->bool:
     return true
 func run()->void:
     native="--native" in OS.get_cmdline_user_args()
-    var index=Recording.read("res://.runtime/studio-cases/dash-seed3/amber/journal")
+    var index=Fixtures.read("dash")
     check(index.ok,"Actual server journal admits")
     if not index.ok:finish();return
     var body:Dictionary=index.rows.filter(func(row):return row.kind=="body" and row.end_ms>row.start_ms)[0]

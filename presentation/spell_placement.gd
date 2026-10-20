@@ -83,7 +83,7 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
     # These registrations need actual head/equipment ownership. Never fall
     # through to an unrelated ground/body point or a missing transform key.
     if attachment=="item":
-        if component.get("intrinsic_item_effect",false):
+        if component.get("native_item",false):
             var attached:Dictionary=component.duplicate(false);attached.native_cue=cue.duplicate(false);attached.native_cue.attachment="recipient_weapon"
             return endpoints(world,attached)
         return {"ready":false,"unavailable":true,"reason":"native_item_registration_not_bound"}
@@ -92,7 +92,12 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
         if not weapon.ready:return {"ready":false,"unavailable":true,"reason":weapon.reason}
         if weapon.render_slot!="weapon":return {"ready":false,"unavailable":true,"reason":"weapon_offhand_socket_not_authored"}
         var received:Dictionary=pose_point(world,world.visual_actors[weapon.actor].row,"hand")
-        if not received.ready:return received
+        if not received.ready:
+            # A pose without authored grip registration is a recoverable
+            # presentation gap. Actual asynchronous source admission remains
+            # pending; neither case authorizes a substitute socket or point.
+            if not received.get("pending",false):received.unavailable=true
+            return received
         var ground:Vector3=Placement.contact(world.visual_actors[weapon.actor].row)
         return {"ready":true,"from":received.point,"hand":received.point,"to":received.point,"ground":ground,"caster_ground":ground,
             "surfaces":[received],"fixed":{},"item_uuid":weapon.item_uuid,"holder_uuid":weapon.actor,"equipment_slot":weapon.equipment_slot}

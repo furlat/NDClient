@@ -158,6 +158,14 @@ static func _check_characters(state: Dictionary, characters: Dictionary) -> Dict
     elif state.rigs[result.root].kind != "layered":Common.error(report, "characters", "the player body needs the layered rig")
     return result
 
+static func _check_item_effect_selector(use:Resource,where:String,report:Dictionary,impact:bool=false)->void:
+    if impact and (not use.item_effect_behavior_id.is_empty() or not use.item_effect_damage_type.is_empty()):
+        Common.error(report,where,"dynamic item membership selectors do not qualify elemental impact attribution")
+    if use.item_effect_behavior_id.is_empty() and not use.item_effect_damage_type.is_empty():
+        Common.error(report,where,"item-effect damage selector requires its actual behavior id")
+    if not use.item_effect_damage_type.is_empty() and use.item_effect_damage_type not in ["Acid","Bludgeoning","Cold","Fire","Force","Lightning","Necrotic","Piercing","Poison","Psychic","Radiant","Slashing","Thunder"]:
+        Common.error(report,where,"unknown public item-effect damage type "+use.item_effect_damage_type)
+
 static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
     var report: Dictionary = state.report
     var ids: Dictionary = Common.server_ids().get("ids", {}).get("item", {})
@@ -173,6 +181,7 @@ static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
         if entry.icon != null and entry.icon.status != "missing":Common.asset(report, where, entry.icon.path)
         for use in entry.effects:
             if use==null:Common.error(report,where,"null item decoration");continue
+            _check_item_effect_selector(use,where,report)
             if clips.is_empty():
                 var package:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
                 for clip in package.clips:clips[clip.clip_id]=clip
@@ -180,7 +189,7 @@ static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
             elif "created_item_binding" in clips[use.clip].get("inputs",[]):
                 Common.error(report,where,"native item-body source cannot be authored as a weapon decoration: "+use.clip)
             if use.role not in ["sustain","attached"] or use.at not in ["","owner_start"] or not is_zero_approx(use.delay):
-                Common.error(report,where,"intrinsic item effects sustain on displayed item membership; finite/delayed cues belong to spells/actions/conditions")
+                Common.error(report,where,"item decorations sustain on actual item membership; finite/delayed cues belong to spells/actions/conditions")
             if not use.lifecycle.is_empty() or not is_zero_approx(use.source_start) or use.source_end>=0 or not is_equal_approx(use.source_rate,1.0):
                 Common.error(report,where,"intrinsic item effects use the unscaled held source clock; finite/rate staging belongs to event/condition authoring")
             if not use.follow:Common.error(report,where,"intrinsic weapon decorations must follow the displayed weapon")
@@ -193,6 +202,7 @@ static func _check_gear(state: Dictionary, gear: Dictionary) -> Dictionary:
                 if slot not in GEAR_SLOTS:Common.error(report,where,"unknown item decoration equipment slot "+str(slot))
         for use in entry.impact_effects:
             if use==null:Common.error(report,where,"null weapon impact");continue
+            _check_item_effect_selector(use,where,report,true)
             if clips.is_empty():
                 var package:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
                 for clip in package.clips:clips[clip.clip_id]=clip
@@ -495,6 +505,8 @@ static func _equipment(state: Dictionary, gear: Dictionary) -> void:
                 cue.source=entry.resource_path+"::"+field+"/"+str(ordinal)
                 Records.F.emit(cue,"selection",uses[ordinal],"selection","string")
                 Records.F.emit(cue,"offset",uses[ordinal],"offset","vec3")
+                Records.F.emit(cue,"item_effect_behavior_id",uses[ordinal],"item_effect_behavior_id","string")
+                Records.F.emit(cue,"item_effect_damage_type",uses[ordinal],"item_effect_damage_type","string")
                 if not uses[ordinal].recipient_slots.is_empty():
                     cue.entity_geometry={"actor":"recipient","slots":Array(uses[ordinal].recipient_slots)}
                 if field=="impact_effects":cue.at="body.impact"

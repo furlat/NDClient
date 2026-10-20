@@ -1,0 +1,65 @@
+{
+ "id": "movement.window/cleared_both_directions",
+ "title": "Window: enter actual empty aperture, cross and return",
+ "kind": "interaction",
+ "seed": 3,
+ "battlefield": "battlefield.window_proving_ground",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.traverse_connector"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    14,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.traverse_connector",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.traverse_connector",
+   "by": "caster",
+   "target": [
+    4,
+    6
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "action.traverse_connector"
+ ],
+ "required_facts": []
+}

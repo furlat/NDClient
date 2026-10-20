@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Retention decisions on actual compiled recordings. No source construction,
 ## native rendering, playback cadence or authoritative state is changed here.
 const Recording=preload("res://studio/recording.gd")
@@ -103,7 +104,7 @@ func recording(path:String,label:String,benchmark:bool=false)->void:
     renderer.handles.clear();renderer.close();world.free()
 
 func run()->void:
-    recording("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal","Gallery",true)
+    recording(Fixtures.journal("gallery"),"Gallery",true)
     var inventory=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_spell_case_inventory.json"))
     for name in ["shield","web"]:
         var specs:Array=inventory.cases.filter(func(item):return item.id=="native-spell-"+name)

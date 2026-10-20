@@ -21,6 +21,15 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_7q60l")
 clip = "high-level-22/power-word-heal/spoken_word"
 role = "attached"
+scope = "source"
+constructor_input = {
+"component_path": ["support"],
+"geometry_actor": "caster",
+"kind": "observed_event",
+"outcome": "cast",
+"recipient_role": "target"
+}
+endpoint_actor_uuids = true
 at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
@@ -47,6 +56,7 @@ extra = {
 "socket": "cast_hand"
 }, {
 "actor": "caster",
+"pose_socket": "head",
 "socket": "face"
 }, {
 "actor": "target",
@@ -59,7 +69,15 @@ extra = {
 script = ExtResource("1_7q60l")
 clip = "high-level-22/power-word-heal/full_restoration"
 role = "attached"
-at = "contact"
+scope = "recipient"
+constructor_input = {
+"component_path": ["support"],
+"geometry_actor": "target",
+"kind": "observed_event",
+"outcome": "heal"
+}
+endpoint_actor_uuids = true
+at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 1.7
@@ -85,6 +103,7 @@ extra = {
 "socket": "cast_hand"
 }, {
 "actor": "caster",
+"pose_socket": "head",
 "socket": "face"
 }, {
 "actor": "target",
@@ -97,7 +116,15 @@ extra = {
 script = ExtResource("1_7q60l")
 clip = "high-level-22/power-word-heal/restoration_cross"
 role = "attached"
-at = "contact"
+scope = "recipient"
+constructor_input = {
+"component_path": ["support"],
+"geometry_actor": "target",
+"kind": "observed_event",
+"outcome": "heal"
+}
+endpoint_actor_uuids = true
+at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 0.85
@@ -123,6 +150,7 @@ extra = {
 "socket": "cast_hand"
 }, {
 "actor": "caster",
+"pose_socket": "head",
 "socket": "face"
 }, {
 "actor": "target",

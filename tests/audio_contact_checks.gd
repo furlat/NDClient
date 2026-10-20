@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Authored source contacts must survive rate changes, split tracks and real journals.
 const Cues=preload("res://presentation/audio_cues.gd")
 const Recording=preload("res://studio/recording.gd")
@@ -43,8 +44,8 @@ func run()->void:
     var catalog=JSON.parse_string(FileAccess.get_file_as_string("res://authoring/audio/cues.json"))
     catalog.cues.condition_loop.source_sync_s=[.08]
     check(Cues.resolve("condition_loop","unsupported-loop",0,100,500,{}, {"audio/cues.json":catalog}).reason=="loop_source_sync_not_supported","Loop sync requires explicit interval semantics")
-    for path in ["walk_diagonal-seed3-v2/amber","jump-seed3-v2/amber","oa_jump_lethal-seed5-v2/amber","oa_jump_late_lethal-seed5-v2/amber"]:
-        var index=Recording.read("res://.runtime/studio-cases/"+path+"/journal")
+    for path in ["interaction-media","jump","oa-jump-lethal","oa-jump-late-lethal"]:
+        var index=Fixtures.read(path)
         check(index.ok,"Actual contact recording compiles: "+path)
         if not index.ok:continue
         var rows=[];var landings=0;var steps=0
@@ -63,10 +64,10 @@ func run()->void:
                     steps+=1
                     var pose=Tracks.samples([row.source_track],row.contact_ms-.000001)
                     check(not pose.is_empty() and absf(fposmod(pose.values()[0].source_seconds*12,15)-row.source_frame)<.001,"Recorded footstep matches actually sampled source pose")
-        if path.begins_with("walk_"):check(steps==3,"Real diagonal Move has three source-stride contacts")
-        if path.begins_with("jump-"):check(landings==1,"Full Jump has exactly one touchdown sound")
-        if path.begins_with("oa_jump_lethal"):check(landings==0,"Early interrupted Jump has no invented touchdown sound")
-        if path.begins_with("oa_jump_late_lethal"):check(landings==1,"Late reaction retains its actual completed world touchdown")
+        if path=="interaction-media":check(steps==3,"Real diagonal Move has three source-stride contacts")
+        if path=="jump":check(landings==1,"Full Jump has exactly one touchdown sound")
+        if path=="oa-jump-lethal":check(landings==0,"Early interrupted Jump has no invented touchdown sound")
+        if path=="oa-jump-late-lethal":check(landings==1,"Late reaction retains its actual completed world touchdown")
         evidence.append({"recording":path,"rows":rows})
     var result={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Source clock inversion, authored contact/sound transient alignment and actual replay compilation; native rendered/PCM qualification is separate."}
     FileAccess.open("res://generated/audio_contact_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))

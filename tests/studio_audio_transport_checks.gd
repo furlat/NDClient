@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Slow native lane: actual Studio controls, recorded cues and emitted SFX PCM.
 const Studio=preload("res://studio/studio.gd")
 const Placement=preload("res://placement.gd")
@@ -87,9 +88,10 @@ func collect(studio:Control,capture:AudioEffectCapture,label:String,stop_after_c
     evidence.append(result);return result
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,720)
+    var required_study_cues={"unarmed_swing":false,"potion_drink":false,"door_open":false}
     var studio=Studio.new();root.add_child(studio)
     if not await settle(studio):await finish(studio);return
-    check(studio.active_directory=="res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal","Exact real Move recording loaded")
+    check(studio.active_directory==Fixtures.journal("interaction-media"),"Exact real Move recording loaded")
     var bus=AudioServer.get_bus_index("SFX")
     check(bus>=0,"Actual prepared Studio creates SFX bus")
     if not failures.is_empty():await finish(studio);return
@@ -123,8 +125,8 @@ func run()->void:
         var looped=await collect(studio,capture,"selected_clip_loop",rows[0].component.id,2)
         check(looped.starts.get(rows[0].component.id,0)==2,"Selected cue starts once on each of two real loop passes")
         studio.loop_enabled=false
-    for path in ["jump-seed3-v2/amber","melee-seed3/amber","hide-light-schema9-seed3/amber","rage-seed3-v3/amber","movement-oa","action_economy-seed3-v2/amber"]:
-        studio._load("res://.runtime/studio-cases/"+path+"/journal")
+    for path in ["jump","melee","hide-light","rage","interaction-media","action-surge","door"]:
+        studio._load(Fixtures.journal(path))
         if not await settle(studio):break
         studio.loop_enabled=false
         capture.clear_buffer();studio._play_study();await settle(studio)
@@ -134,16 +136,16 @@ func run()->void:
         check(not cues.is_empty(),path+": recorded audio tracks are present")
         for row in cues:
             check_admission(row,played.diagnostics,path)
-            if path=="jump-seed3-v2/amber" and row.component.cue_id=="landing":
+            if path=="jump" and row.component.cue_id=="landing":
                 var contact:Dictionary=played.contacts.get(row.component.id,{})
                 check(not contact.is_empty(),"Actual Jump native voice reaches touchdown")
                 if not contact.is_empty():
                     check(absf(contact.clock_error_s)<.001 and is_equal_approx(contact.source_sync_s,.08),"Native landing source clock puts its80ms impact at world touchdown")
                     check(absf(contact.lift_pixels)<.01 and contact.native_ground_distance<.001 and contact.native_actor_position==row.component.source_track.to_position,"Native Jump sprite reaches its destination ground when the landing transient is reached")
                     check(absf(contact.native_position_s-contact.offset_s)<.15,"Native playback clock agrees within its mixer buffer")
-            if path=="melee-seed3/amber" and row.component.attachment in ["weapon","target_body"]:
+            if path=="melee" and row.component.attachment in ["weapon","target_body"]:
                 check(played.attachments.get(row.component.id,{}).get("distance_from_ground_contact",0)>.01,"Melee "+row.component.attachment+" voice uses its authored body/hand anchor above ground contact")
-        if path=="hide-light-schema9-seed3/amber":
+        if path=="hide-light":
             var equipment=cues.filter(func(row):return row.component.cue_id=="equipment_handle")
             check(not equipment.is_empty() and cues.any(func(row):return row.component.cue_id=="torch_ignite"),"Previously silent equipment and torch ignition are exercised in real Studio")
             if not equipment.is_empty():
@@ -155,12 +157,12 @@ func run()->void:
                 capture.clear_buffer();studio._toggle_play()
                 var skipped=await collect(studio,capture,"equipment_seek_inside")
                 check(skipped.starts.get(equipment[0].component.id,0)==0,"Seeking inside new equipment cue never replays its stale onset")
-        elif path=="movement-oa":
-            for id in ["unarmed_swing","potion_drink","door_open"]:
-                check(cues.any(func(row):return row.component.cue_id==id),"Actual movement/OA study exercises "+id)
-        elif path=="action_economy-seed3-v2/amber":
+        for id in required_study_cues:
+            if cues.any(func(row):return row.component.cue_id==id):required_study_cues[id]=true
+        if path=="action-surge":
             check(cues.any(func(row):return row.component.cue_id=="action_surge" and row.component.clip.contains("/kenney/rpg/cloth")),"Action Surge replacement plays a real physical cloth source")
-    studio._load("res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal")
+    for id in required_study_cues:check(required_study_cues[id],"Actual independent study recordings exercise "+id)
+    studio._load(Fixtures.journal("hide-light"))
     if await settle(studio):
         for listening in ["amber","blue"]:
             studio.select_perspective(listening)

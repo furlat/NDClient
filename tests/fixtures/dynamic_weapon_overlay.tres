@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="PresentationGear" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="gear"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="DynamicOverlay"]
+script = ExtResource("effect")
+clip = "conditions/continuation/condition_sacred_weapon_persistent/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "item"
+recipient_slots = PackedStringArray("weapon")
+item_effect_behavior_id = "item.property.additional_damage"
+item_effect_damage_type = "Radiant"
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "test-only existing measured coating for public Radiant item membership; not a Sacred Weapon condition, production assignment or art approval"
+
+[sub_resource type="Resource" id="IntrinsicOverlay"]
+script = ExtResource("effect")
+clip = "conditions/continuation/condition_coating_fire_persistent/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "test-only intrinsic ownership control; no Fire damage is asserted"
+
+[resource]
+script = ExtResource("gear")
+id = "weapon.devotees_mace"
+kind = "weapon"
+family = "weapon.mace"
+effects = Array[ExtResource("effect")]([SubResource("DynamicOverlay"), SubResource("DynamicOverlay"), SubResource("IntrinsicOverlay")])
+status = "partial"
+notes = "Three independent test uses share delivered immutable art and actual modular Mace sheets. No production overlay, extra damage, condition or cast is fabricated."

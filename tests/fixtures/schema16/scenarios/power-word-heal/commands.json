@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a63013c2-2721-4e4f-95da-048dab81c561",
+   "state_revision": "1a0f9cf9-6792-4374-9737-1ee86384f230",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_baseline",
+   "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+   "audience_id": "24f07d13-4344-48e4-936e-57c8b0c779d0",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_baseline",
+    "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+    "audience_id": "24f07d13-4344-48e4-936e-57c8b0c779d0",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "d09d46c2-9d11-4302-8715-d98ee0189be6",
+   "state_revision": "184f052c-e80b-49d0-9b7b-8aa10ab9e6db",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_baseline",
+   "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+   "audience_id": "73ef9240-ba65-4fd5-a4c3-b3b88ea4e1fb",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_baseline",
+    "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+    "audience_id": "73ef9240-ba65-4fd5-a4c3-b3b88ea4e1fb",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "f4fac018-af2a-468b-9b41-689d6744576a",
+   "state_revision": "14b15133-84e3-43c0-9cbf-c25150c57512",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_baseline",
+   "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+   "audience_id": "73ef9240-ba65-4fd5-a4c3-b3b88ea4e1fb",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_baseline",
+    "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+    "audience_id": "73ef9240-ba65-4fd5-a4c3-b3b88ea4e1fb",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.power_word_heal",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.power_word_heal",
+   "display_name": "Power Word Heal (Level 9)",
+   "cast_at_level": 9,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "61014fe9-469f-4ed6-8100-21b0d8117c1b",
+   "state_revision": "565fde1f-809f-4154-8062-ce3112a0884a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_baseline",
+   "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+   "audience_id": "24f07d13-4344-48e4-936e-57c8b0c779d0",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_baseline",
+    "game_epoch": "2f1fa38c-5743-457d-8d9e-67e7730bd993",
+    "audience_id": "24f07d13-4344-48e4-936e-57c8b0c779d0",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

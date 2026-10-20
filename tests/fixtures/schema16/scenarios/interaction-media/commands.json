@@ -1,0 +1,384 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    7,
+    5
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "78d3e833-f2e7-4537-9fa0-9b0bd07cc525",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "88930d6c-c591-40aa-8cfd-540b1d735bd4",
+   "state_revision": "78d3e833-f2e7-4537-9fa0-9b0bd07cc525",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      70
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "88930d6c-c591-40aa-8cfd-540b1d735bd4",
+   "state_revision": "0ee8fb4f-b922-4664-8133-869e4ab07bcb",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "name": "Unarmed",
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "bdf369de-3771-4f1a-bd8d-b9e5f6d6a873",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Unarmed",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "88930d6c-c591-40aa-8cfd-540b1d735bd4",
+   "state_revision": "bdf369de-3771-4f1a-bd8d-b9e5f6d6a873",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "88930d6c-c591-40aa-8cfd-540b1d735bd4",
+   "state_revision": "a3e2614c-b07a-4f41-b695-c310e95d6e77",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "5cb5504f-b814-456a-94da-7c2bbe6cb71d",
+   "state_revision": "d08d6c60-f5ce-47f9-88cb-87f83f198b59",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "3ba1cc88-fda2-4f12-ad5f-f14460186919",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "3ba1cc88-fda2-4f12-ad5f-f14460186919",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.item.potion_healing.drink",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ec04ea04-565f-4673-9994-ea8615fd09f1",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.item.potion_healing.drink",
+   "display_name": "Drink Potion (Potion of Healing x3)",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "88930d6c-c591-40aa-8cfd-540b1d735bd4",
+   "state_revision": "ec04ea04-565f-4673-9994-ea8615fd09f1",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 30,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "88930d6c-c591-40aa-8cfd-540b1d735bd4",
+   "state_revision": "5beec964-ccfc-4729-91f3-baa4d027d90d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "5cb5504f-b814-456a-94da-7c2bbe6cb71d",
+   "state_revision": "38dd0386-c3d5-4f80-a797-3c44b04d9e67",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "3ba1cc88-fda2-4f12-ad5f-f14460186919",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "3ba1cc88-fda2-4f12-ad5f-f14460186919",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "RANGED_MAIN",
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "8639a465-c406-49f4-adee-526c5863bc45",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Shortbow",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "RANGED_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "88930d6c-c591-40aa-8cfd-540b1d735bd4",
+   "state_revision": "8639a465-c406-49f4-adee-526c5863bc45",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 7,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+   "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+   "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_interaction_media_inputs_stride_unarmed_potion_ranged",
+    "game_epoch": "4c628896-b389-47b6-bc68-a35717a8eb07",
+    "audience_id": "a85d064f-3dd6-4825-a3da-c44bf703f1ca",
+    "sequence": 14
+   }
+  }
+ }
+]

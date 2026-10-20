@@ -44,14 +44,19 @@ static func owned_cues(selected:Dictionary)->Array:
         return Effects.conditions(str(id)).any(func(selection):return selection.condition.get("body_channel_included",false)))
     return lifecycle.get("cue_ids",[]).map(func(value):return int(value)) if carried else []
 
+## The same event ownership filter supplies phase compilation and its endpoint
+## requirements. Held effects cannot demand a recipient for a caster-only cue.
+static func event_cues(selected:Dictionary)->Array:
+    var persistent:Array=owned_cues(selected)
+    return selected.staging.cues.filter(func(choice):
+        var source_index:int=choice.source_index
+        return source_index not in selected.get("excluded_cue_indices",[]) \
+            and (not selected.get("explicit_event_cues",false) or source_index in selected.event_cue_indices) \
+            and source_index not in persistent)
+
 static func phases(selected:Dictionary,owner:Dictionary,launch_ms:float,travel_ms:float,application_index:int,include_cast:bool)->Array:
     var rows:Array=[]
-    var persistent:Array=owned_cues(selected)
-    for choice in selected.staging.cues:
-        var source_index:int=choice.source_index
-        if source_index in selected.get("excluded_cue_indices",[]):continue
-        if selected.get("explicit_event_cues",false) and source_index not in selected.event_cue_indices:continue
-        if source_index in persistent:continue
+    for choice in event_cues(selected):
         if choice.role=="cast" and not include_cast:continue
         rows.append(_phase(selected,choice,owner,launch_ms,travel_ms,application_index))
     return rows

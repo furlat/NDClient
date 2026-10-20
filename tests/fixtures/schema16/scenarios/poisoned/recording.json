@@ -1,0 +1,240 @@
+{
+ "ok": false,
+ "failure": "required_condition_ends absent from actual journal: condition.poisoned",
+ "commands": 15,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "a5355e88-8dd6-4c0e-885a-44d7700d3661": "Amber caster",
+  "0773ecbd-c34b-47e6-b45d-4b95b20b4fdc": "Amber restorer",
+  "cfdb5c3c-5cc7-4515-8713-10f406edcbba": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target",
+  "restorer": "Amber restorer"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber restorer",
+  "action.move \u00b7 Amber caster",
+  "unequip \u00b7 Amber caster",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber restorer",
+  "action.item.potion_healing.drink \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber restorer",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "spell.protection_from_poison \u00b7 Amber restorer"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 25,
+   "spatial": 10,
+   "sensory": 6,
+   "step": 5,
+   "movement": 1,
+   "actor_change": 3,
+   "attack": 2,
+   "item_charge": 1,
+   "heal": 1,
+   "action": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "action.move": 1,
+   "action.attack": 2,
+   "action.item.potion_healing.drink": 1,
+   "spell.protection_from_poison": 1
+  },
+  "conditions": [
+   "condition.spell.protection_from_poison"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 4,
+   "occurrence": 126,
+   "lineage": 48,
+   "event_offset": 25,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 133,
+   "lineage": 128,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 168,
+   "lineage": 163,
+   "event_offset": 0,
+   "kind": "item_charge",
+   "label": "item_charge ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 172,
+   "lineage": 163,
+   "event_offset": 1,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 174,
+   "lineage": 163,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.item.potion_healing.drink",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 209,
+   "lineage": 204,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 25,
+   "occurrence": 238,
+   "lineage": 231,
+   "event_offset": 1,
+   "label": "condition ended cccaf907-c319-4f61-8a88-fbd7c3d2c41a",
+   "kind": "actor_change",
+   "actor_uuid": "a5355e88-8dd6-4c0e-885a-44d7700d3661",
+   "condition_uuid": "cccaf907-c319-4f61-8a88-fbd7c3d2c41a",
+   "condition_id": null,
+   "faction": "amber"
+  },
+  {
+   "sequence": 25,
+   "occurrence": 242,
+   "lineage": 231,
+   "event_offset": 2,
+   "label": "condition applied condition.spell.protection_from_poison",
+   "kind": "actor_change",
+   "actor_uuid": "a5355e88-8dd6-4c0e-885a-44d7700d3661",
+   "condition_uuid": "051ef1e3-c2f5-46b1-a5cb-4314f1e10539",
+   "condition_id": "condition.spell.protection_from_poison",
+   "faction": "amber"
+  },
+  {
+   "sequence": 25,
+   "occurrence": 243,
+   "lineage": 231,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.protection_from_poison",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 128,
+   "lineage": 50,
+   "event_offset": 25,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 135,
+   "lineage": 130,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 170,
+   "lineage": 165,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 172,
+   "lineage": 165,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.item.potion_healing.drink",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 207,
+   "lineage": 202,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 25,
+   "occurrence": 235,
+   "lineage": 229,
+   "event_offset": 0,
+   "label": "condition ended cccaf907-c319-4f61-8a88-fbd7c3d2c41a",
+   "kind": "actor_change",
+   "actor_uuid": "a5355e88-8dd6-4c0e-885a-44d7700d3661",
+   "condition_uuid": "cccaf907-c319-4f61-8a88-fbd7c3d2c41a",
+   "condition_id": null,
+   "faction": "blue"
+  },
+  {
+   "sequence": 25,
+   "occurrence": 239,
+   "lineage": 229,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.protection_from_poison",
+   "kind": "actor_change",
+   "actor_uuid": "a5355e88-8dd6-4c0e-885a-44d7700d3661",
+   "condition_uuid": "051ef1e3-c2f5-46b1-a5cb-4314f1e10539",
+   "condition_id": "condition.spell.protection_from_poison",
+   "faction": "blue"
+  },
+  {
+   "sequence": 25,
+   "occurrence": 240,
+   "lineage": 229,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.protection_from_poison",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

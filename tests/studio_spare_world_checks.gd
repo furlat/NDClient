@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Reuse one hidden native host across different real authoritative prefixes.
 const Recording=preload("res://studio/recording.gd")
 const Play=preload("res://play.gd")
@@ -15,7 +16,7 @@ func settle(world:Node)->bool:
     check(world.playback_prepared(),"Actual hidden host reaches full world/media readiness")
     return world.playback_prepared()
 func run()->void:
-    var index=Recording.read("res://.runtime/studio-cases/melee-seed3/amber/journal")
+    var index=Fixtures.read("melee")
     check(index.ok,"Actual melee recording indexes")
     if not index.ok:finish();return
     var initial=Recording.restore(index,0)

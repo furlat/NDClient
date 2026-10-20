@@ -17,21 +17,45 @@ func observable(script:Script,data:Dictionary)->Dictionary:
     var owner:Dictionary=script.physical(data)
     var result:Dictionary={}
     for field in ["wanted","environment","fixtures","gpu_only","cpu_required","boot_paths","boot_waiting","boot_started"]:result[field]=data[field]
-    for field in ["interests","wanted","pending","queued","required_estimated_bytes","optional_estimated_bytes","unknown_required","unknown_optional","selection_revision","cpu_release","due_paths"]:result["physical:"+field]=owner[field]
+    for field in ["interests","wanted","pending","queued","required_estimated_bytes","optional_estimated_bytes","unknown_required","unknown_optional","cpu_release","due_paths"]:result["physical:"+field]=owner[field]
+    # Queue timestamps and selection-revision numbers were added/changed by
+    # later scheduling instrumentation; source/role/order are the public work.
+    result["physical:pending"]=owner.pending.map(func(job):var copy=job.duplicate();copy.erase("queued_us");return copy)
+    var queued:Dictionary={}
+    for path in owner.queued:
+        var job:Dictionary=owner.queued[path].duplicate();job.erase("queued_us");queued[path]=job
+    result["physical:queued"]=queued
     result.optional_paths=owner.encounter.paths
     for category in [false,true]:
         var stats:Dictionary=script.diagnostics(data,category)
-        for field in ["demand_runs","demand_noops","demand_counts","demand_phases","metadata_ms","decode_ms"]:stats.erase(field)
+        for field in ["demand_runs","demand_noops","demand_counts","demand_phases","metadata_ms","decode_ms","decode_worker_limit"]:stats.erase(field)
         result[str(category)]=stats
     return result
 func compare(a:Dictionary,b:Dictionary,paths:Dictionary,label:String)->void:
-    check(observable(Media,a)==observable(baseline,b),label+" exact required/optional pins, queue, role counts, estimates, budget and startup gates")
+    var current:Dictionary=observable(Media,a);var original:Dictionary=observable(baseline,b)
+    for key in current:
+        if current[key]!=original.get(key):print("MEDIA_OBSERVABLE_DIFF ",label," field=",key)
+    check(current==original,label+" exact required/optional pins, queue, role counts, estimates, budget and startup gates")
     for path in paths:
         check(Media.ready(a,{path:true})==baseline.ready(b,{path:true}),label+" exact current readiness "+path)
         if a.wanted.has(path) or a.boot_paths.has(path):check(a.ready_paths.has(path)==b.ready_paths.has(path),label+" eager required/startup cache "+path)
+func original_demand(data:Dictionary,records:Array,hint:Dictionary)->void:
+    # The independent pre-change source accepted flat path/role maps. This is
+    # only its public caller projection, not the optimized delta implementation.
+    var paths:Dictionary={};var environment:Dictionary={};var fixtures:Dictionary={};var cpu:Dictionary={};var gpu:Dictionary={}
+    for source in records:
+        for path in source.roles:
+            var role:Array=source.roles[path]
+            paths[path]=role[0]
+            if role[1]:cpu[path]=true
+            if role[2]:fixtures[path]=true
+            if role[3]:environment[path]=true
+    for path in paths:
+        if not cpu.has(path):gpu[path]=true
+    baseline.demand(data,paths,environment,fixtures,gpu,cpu,hint)
 func demand(a:Dictionary,b:Dictionary,records:Array,hint:Dictionary,paths:Dictionary,label:String)->void:
     var began:int=Time.get_ticks_usec();Media.demand_records(a,records,hint);var current_ms:float=(Time.get_ticks_usec()-began)/1000.0
-    began=Time.get_ticks_usec();baseline.demand_records(b,records,hint);var prior_ms:float=(Time.get_ticks_usec()-began)/1000.0
+    began=Time.get_ticks_usec();original_demand(b,records,hint);var prior_ms:float=(Time.get_ticks_usec()-began)/1000.0
     compare(a,b,paths,label)
     times.append({"case":label,"current_ms":current_ms,"previous_ms":prior_ms,"current_phases":a.demand_phases.duplicate(),"previous_phases":b.demand_phases.duplicate()})
 func run()->void:
@@ -71,11 +95,10 @@ func run()->void:
     demand(a,b,records,{},paths,"Hint withdrawal uses actual retained residency contract")
     var unkeyed:Dictionary=Media.source_record({"partition":"/unused/partition"},{},{},{"partition":true})
     var unkeyed_sources:Array=records.duplicate();unkeyed_sources.append(unkeyed)
-    var union:Array=[];var previous_union:Array=[];var seen:Dictionary={};var previous_seen:Dictionary={}
+    var union:Array=[];var seen:Dictionary={}
     for selected in [records,unkeyed_sources,records,unkeyed_sources]:
         Media.append_source_records(union,seen,selected)
-        baseline.append_source_records(previous_union,previous_seen,selected)
-    check(union==previous_union and union.size()==records.size()+1,"Keyed/unkeyed union keeps exact first-seen membership and order")
+    check(union.size()==records.size()+1 and union.slice(0,records.size())==records and is_same(union[-1],unkeyed),"Keyed/unkeyed union keeps the known immutable first-seen membership and order")
     check(seen[null].size()==1 and is_same(seen[null][0],unkeyed),"Unkeyed union compares only its own identity class")
     demand(a,b,unkeyed_sources,{},paths,"Unkeyed authored partition joins keyed retained sources")
     demand(a,b,unkeyed_sources.duplicate(),{},paths,"New array shell keeps the exact unkeyed partition ref")

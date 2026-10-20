@@ -274,7 +274,7 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
                 Effects.set_input(handle,"surface_presence",packet.value);handle.surface_presence_input=packet.value
             supplied.append("surface_presence")
         else:unavailable.surface_presence=packet.reason
-    if component.get("intrinsic_item_effect",false) and "owner_state" in requested:
+    if component.get("native_item",false) and "owner_state" in requested:
         var age:float=maxf(0.0,float(world.timeline.display_ms)-float(component.start_ms))/1000.0
         Effects.set_input(handle,"owner_state",{"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age})
         supplied.append("owner_state")

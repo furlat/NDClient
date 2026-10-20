@@ -1,0 +1,113 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "cd67c16b-1235-4790-b72d-aa9196ef03bc": "Amber caster",
+  "315c5192-dd19-4b92-9969-982f446bf8e9": "Amber ally",
+  "130be4d2-db2c-49be-8df0-b6f907f00842": "Blue second target",
+  "f639f014-38a8-4c41-9be9-7444d45a60cf": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.aura_of_life \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 5,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.aura_of_life": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.aura_of_life.benefit",
+   "condition.spell.aura_of_life.owner"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 55,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.aura_of_life.benefit",
+   "kind": "actor_change",
+   "actor_uuid": "315c5192-dd19-4b92-9969-982f446bf8e9",
+   "condition_uuid": "d5f1ad38-aac0-4db6-a90b-b266d9d24ed7",
+   "condition_id": "condition.spell.aura_of_life.benefit"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.aura_of_life.benefit",
+   "kind": "actor_change",
+   "actor_uuid": "cd67c16b-1235-4790-b72d-aa9196ef03bc",
+   "condition_uuid": "8e05d425-0023-449a-bdb3-64d063f318be",
+   "condition_id": "condition.spell.aura_of_life.benefit"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 4,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "cd67c16b-1235-4790-b72d-aa9196ef03bc",
+   "condition_uuid": "5ab0e9b7-a38a-4d14-88aa-ff27b54d7eb7",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.aura_of_life.owner",
+   "kind": "actor_change",
+   "actor_uuid": "cd67c16b-1235-4790-b72d-aa9196ef03bc",
+   "condition_uuid": "db914941-815c-4847-8891-cff1db4bc8ce",
+   "condition_id": "condition.spell.aura_of_life.owner"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 6,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "cd67c16b-1235-4790-b72d-aa9196ef03bc",
+   "condition_uuid": "5ab0e9b7-a38a-4d14-88aa-ff27b54d7eb7",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.aura_of_life"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

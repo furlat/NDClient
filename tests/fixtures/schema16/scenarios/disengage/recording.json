@@ -1,0 +1,155 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 5,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "be6fb3c3-3054-4b00-8461-97c98b94ec5a": "Amber caster",
+  "10bc771f-dafa-41d2-8c78-1276118e476c": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.disengage \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.move \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 2,
+   "action": 1,
+   "spatial": 4,
+   "sensory": 2,
+   "step": 2,
+   "movement": 2
+  },
+  "behaviors": {
+   "action.disengage": 1,
+   "action.move": 2
+  },
+  "conditions": [
+   "condition.disengaging"
+  ],
+  "ended_conditions": [
+   "condition.disengaging"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 16,
+   "event_offset": 0,
+   "label": "condition applied condition.disengaging",
+   "kind": "actor_change",
+   "actor_uuid": "be6fb3c3-3054-4b00-8461-97c98b94ec5a",
+   "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
+   "condition_id": "condition.disengaging",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 23,
+   "lineage": 16,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.disengage",
+   "faction": "amber"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 42,
+   "lineage": 24,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 65,
+   "lineage": 60,
+   "event_offset": 0,
+   "label": "condition ended condition.disengaging",
+   "kind": "actor_change",
+   "actor_uuid": "be6fb3c3-3054-4b00-8461-97c98b94ec5a",
+   "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
+   "condition_id": "condition.disengaging",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 86,
+   "lineage": 68,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 16,
+   "event_offset": 0,
+   "label": "condition applied condition.disengaging",
+   "kind": "actor_change",
+   "actor_uuid": "be6fb3c3-3054-4b00-8461-97c98b94ec5a",
+   "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
+   "condition_id": "condition.disengaging",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 23,
+   "lineage": 16,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.disengage",
+   "faction": "blue"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 42,
+   "lineage": 24,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 65,
+   "lineage": 60,
+   "event_offset": 0,
+   "label": "condition ended condition.disengaging",
+   "kind": "actor_change",
+   "actor_uuid": "be6fb3c3-3054-4b00-8461-97c98b94ec5a",
+   "condition_uuid": "fe480175-dc2b-4f87-9daf-287d779c3594",
+   "condition_id": "condition.disengaging",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 86,
+   "lineage": 68,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

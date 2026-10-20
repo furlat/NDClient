@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Recording=preload("res://studio/recording.gd")
 const Media=preload("res://presentation/media_warmup.gd")
 const Characters=preload("res://presentation/characters.gd")
@@ -39,7 +40,7 @@ func ready_gate(state:Dictionary,group:Dictionary,plan:Dictionary,schedule:Dicti
     host.timeline.media_ready=Callable();host.timeline.world_ready=Callable()
     Media.close(host.media_warmup);host.context_menu.free();host.free()
 func run()->void:
-    var index=Recording.read("res://.runtime/player-runs/20261015T213323.878907Z/journal")
+    var index=Fixtures.read("gallery")
     check(index.ok,"Current-schema live recording admits")
     if not index.ok:quit(1);return
     var state:Dictionary=index.initialization.state.duplicate(true)
@@ -64,7 +65,7 @@ func run()->void:
             var actor:Dictionary=track.presentation_actor.duplicate()
             actor.presentation_layers=track.get("effect_layers",[])
             if track.has("visual_loadout"):actor.visual_loadout=track.visual_loadout
-            var exact:Dictionary=Characters.sheet_paths(actor,[track.clip],cache)
+            var exact:Dictionary=Characters.sheet_paths(actor,[track.clip],cache,track.get("presentation_item_looks",Characters.item_looks(actor,state)))
             check(exact.ok,"Recorded track resolves its exact authored source outfit")
             if not exact.ok:continue
             var at:Dictionary=Media.required_at(schedule,float(track.start_ms))

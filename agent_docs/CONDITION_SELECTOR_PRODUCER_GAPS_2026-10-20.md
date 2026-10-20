@@ -158,3 +158,48 @@ from presentation implementation and visual acceptance.
 The two additional real passive outcomes with absent typed handler attribution
 (Blessed Healer and Destroy Undead) and their checked-in original fixtures are
 documented in [the scenario worklist](SCENARIO_COVERAGE_WORKLIST_2026-10-20.md).
+
+## Bounded spell ownership audit and positive reference correction
+
+An offline pass inspected all 191 current spell TRES `owner_ids`,
+`applies_conditions` and cast-time `owner_cues`, existing original baseline
+recording summaries and the current Factory lifecycle metadata. After the Aura
+correction, no additional unrelated spell-prefixed `owner_ids` alias or sealed
+`mode=windup` cue handed to a condition owner was found. Other cast-time held
+cues use actual application/apply source phases; those were not mistaken for
+casting windups.
+
+One exact positive omission was corrected: `spell.summon_dragon` now includes
+`condition.spell.summon_dragon.shared_resistance` in `applies_conditions`.
+Original baseline `20261019T143657.346589Z` packet 8 independently applies it to
+caster `5affe2c7-90cc-42f4-8be0-b6ab07458ad7` in Amber occurrence 54 and Blue
+occurrence 53. Both carry actual condition UUID
+`28ec0cb2-55b4-48dd-95d0-dff7655efb6c`. The original public state still has
+`energy_type=null` and no `damage_type`; no elemental variant or owner handover
+was added. The five delivered resistance selections remain blocked by that
+exact missing selector.
+
+Two verbatim complete original operation packets and original recording
+metadata are retained under
+`tests/fixtures/schema16/condition-ownership/summon-dragon/` (about 27 KiB).
+`tests/condition_owner_reference_checks.gd` decodes each through the current
+protocol, proves exact native cast ancestry and recipient membership,
+checks the typed reference and immutable original packet, and ensures the
+missing selector selects none of the five Factory variants. No hand-translated
+wire rows or synthetic game outcome is used.
+
+The audit also found cross-wall/frigid-air reference unions on Forcecage,
+Wall of Force, Wall of Ice and Wall of Stone, and broad shared condition lists
+on Conjure Elemental/Planar Ally/Summon Dragon. These are **not removed based
+on their names or a single cast-only absence**. Their real recordings disclose
+positive constructions or summoned bodies, but do not qualify every later
+break/contact/variant interaction. Original Acid Arrow/Orb surface references,
+payload-lifetime reuse and Necrotic Bless/Bane reuse also demonstrate why a
+name-prefix rule would delete legitimate shared mechanics. Exact future
+exclusion evidence is needed before further reference removal; no broad
+rewrite or registry is introduced by this audit.
+
+The focused `condition_owner_reference_checks` gate passed **26 checks,
+0 failures, 0 script/engine errors in 1.5 seconds**:
+`.runtime/tests/20261020T013442.555282Z`. No source-index build, GPU run,
+backend execution or Factory source modification was performed.

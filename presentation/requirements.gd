@@ -111,7 +111,7 @@ static func actor_field(field:String)->Dictionary:
         reason="Current disclosed body visibility and light/audio eligibility consume disposition; departure/echo art remains separately authored."
     elif field in ["item_effects","item_effect_duration"]:
         participant="item_effect";disposition="unresolved";implementation="unassessed";inspection="missing"
-        reason="Dynamic item-effect membership/duration has no established shared owner inspection; intrinsic Gear effects cannot qualify it."
+        reason="Ordered dynamic membership/duration reaches the exact item/effect owner; this occurrence still requires an explicitly selected Gear cue and per-use output qualification. Intrinsic decorations cannot qualify a dynamic member."
     elif field=="resolved_size":
         participant="size";disposition="unresolved";implementation="unassessed";inspection="missing"
         reason="Resolved mechanical size is stored; the mapping to authored sprite/condition scale remains unassessed."

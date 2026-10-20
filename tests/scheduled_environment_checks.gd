@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Actual received Fireballs through Play's environment gate and both Timeline paths.
 const Journal=preload("res://sdk/journal.gd")
 const Compiler=preload("res://presentation/compiler.gd")
@@ -61,10 +62,14 @@ func qualify(before:Dictionary,groups:Array,world_path:bool,sequence:int)->void:
     player.component_renderer.audio.close()
     player.context_menu.free();player.free()
 func run()->void:
-    var directory="res://.runtime/player-runs/20261015T173423.382202Z/journal"
-    var journal=Journal.new()
-    check(journal.open(directory,true,false).ok,"Actual live journal opens without network")
-    for sequence in [5,6]:
+    for case_id in ["gallery","fireball"]:
+        var directory:String=Fixtures.journal(case_id)
+        var journal=Journal.new()
+        check(journal.open(directory,true,false).ok,"Actual live journal opens without network")
+        var casts:Array=Fixtures.fact_rows(case_id,"spell").filter(func(row):return row.fact.get("behavior_id")=="spell.fireball")
+        check(not casts.is_empty(),"Original recording contains its actual Fireball")
+        if casts.is_empty():continue
+        var sequence:int=int(casts[0].sequence)
         check(journal.replay(sequence-1).ok,"Actual operation-before state reduces")
         var before:Dictionary=journal.state
         var decoded=journal.protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join("%016d.json"%sequence)))

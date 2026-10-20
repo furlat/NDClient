@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 # Original recorded residue after-values versus exhaustive indexing. No new
 # residue facts, GPU resources, live commands or alternate reducer path.
 const Journal=preload("res://sdk/journal.gd")
@@ -73,8 +74,8 @@ func recorded(directory:String,sequence:int)->void:
     renderer.sync_tiles(before.tiles,revision+3)
     check(renderer.tiles==expected(final_tiles),"Repeated terminal sample preserves exact index")
 func run()->void:
-    recorded("res://.runtime/studio-cases/dash-seed3/amber/journal",3)
-    recorded("res://.runtime/player-runs/20261015T112341.941408Z/journal",199)
+    recorded(Fixtures.journal("dash"),3)
+    recorded(Fixtures.journal("gallery"),18)
     var report={"checks":checks,"failures":failures,"scope":"Real opportunity-hit deposit and late light-only operation; exact sparse index, historical deposit removal, snapshot/seek/missed-publication fallback. No GPU claim."}
     FileAccess.open("res://generated/blood_tile_index_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print(JSON.stringify(report));quit(0 if failures.is_empty() else 1)

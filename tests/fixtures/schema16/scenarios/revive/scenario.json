@@ -1,0 +1,111 @@
+{
+ "id": "survival.revive/death_revivify_walk",
+ "title": "Living fighter: real lethal damage, Revivify and restored movement",
+ "kind": "interaction",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.revivify",
+   "spell.cure_wounds",
+   "spell.magic_missile"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.revivify",
+    "spell.cure_wounds"
+   ],
+   "at": [
+    3,
+    6
+   ]
+  },
+  {
+   "role": "patient",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ],
+   "damage": 43
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.magic_missile"
+   ],
+   "at": [
+    9,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.magic_missile",
+   "by": "target",
+   "target": "patient",
+   "level": 3,
+   "recipients": [
+    "patient",
+    "patient",
+    "patient",
+    "patient",
+    "patient"
+   ]
+  },
+  {
+   "do": "spell.revivify",
+   "by": "caster",
+   "target": "patient"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.cure_wounds",
+   "by": "caster",
+   "target": "patient"
+  },
+  {
+   "do": "action.move",
+   "by": "patient",
+   "target": [
+    4,
+    7
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.revivify",
+  "spell.cure_wounds",
+  "spell.magic_missile",
+  "action.move"
+ ],
+ "required_facts": [
+  "damage",
+  "life",
+  "heal"
+ ]
+}

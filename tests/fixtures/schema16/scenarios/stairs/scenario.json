@@ -1,0 +1,67 @@
+{
+ "id": "movement.stairs/ascent_descent",
+ "title": "Stairs: real progressive supports, ascent and descent",
+ "kind": "interaction",
+ "seed": 3,
+ "battlefield": "battlefield.elevation_proving_ground",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.move"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    5,
+    4
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    14,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    8,
+    4
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    4
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "action.move"
+ ],
+ "required_facts": [
+  "movement"
+ ]
+}

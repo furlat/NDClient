@@ -1,0 +1,148 @@
+{
+ "id": "survival.death_save/turns_seed2",
+ "title": "Death saves: one missile, genuine turn-start rolls and final outcome",
+ "kind": "interaction",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.magic_missile"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "at": [
+    3,
+    6
+   ]
+  },
+  {
+   "role": "patient",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ],
+   "damage": 43
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.magic_missile"
+   ],
+   "at": [
+    9,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.magic_missile",
+   "by": "target",
+   "target": "patient",
+   "level": 1,
+   "recipients": [
+    "patient",
+    "caster",
+    "caster"
+   ]
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  }
+ ],
+ "required_behaviors": [
+  "spell.magic_missile"
+ ],
+ "required_facts": [
+  "damage",
+  "life",
+  "death_save"
+ ]
+}

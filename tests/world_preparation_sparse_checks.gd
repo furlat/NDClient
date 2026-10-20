@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const World = preload("res://presentation/world.gd")
 const Preparation = preload("res://presentation/world_preparation.gd")
 const Ground = preload("res://presentation/ground_data.gd")
@@ -21,7 +22,7 @@ func _initialize() -> void:
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Actual WorldPreparation worker with an unchanged unrelated floor; sparse routing, no live base mutation, cancelled worker completion and source adoption. No rendered-scene/timing acceptance."}))
     quit(0 if failures.is_empty() else 1)
 func exercise(count: int) -> void:
-    var state = {"tiles":{},"objects":{},"actors":{},"senses":{"visible":[[0,0]],"objects":{},"light_sources":{}}}
+    var state = {"tiles":{},"objects":{},"actors":{},"senses":{"visible":Journal.Reducer.Cells.mask([[0,0]]),"objects":{},"light_sources":{}}}
     for i in count:
         state.tiles[str(i)+",0"] = {"tile_uuid":"tile-"+str(i),"position":[i,0],"elevation_steps":0,"surface":{"base_material":"stone"}}
     state.objects["wall"] = {"placement":{"kind":"boundary","position":[0,1],"base_height_steps":0,"top_height_steps":3,"boundary_direction":"north"},
@@ -68,10 +69,10 @@ func exercise(count: int) -> void:
 
 func actual_initial_residues()->void:
     var journal=Journal.new()
-    var opened:Dictionary=journal.open("res://.runtime/player-runs/20261016T110104.141262Z/journal",true,false)
+    var opened:Dictionary=journal.open(Fixtures.journal("gallery"),true,false)
     check(opened.ok,"Actual Gallery recording opens for persistent-residue preparation")
     if not opened.ok:return
-    var restored:Dictionary=journal.replay(5)
+    var restored:Dictionary=journal.replay(17)
     check(restored.ok,"Actual Fireball after-state reduces before renderer preparation")
     if not restored.ok:return
     var state:Dictionary=journal.state

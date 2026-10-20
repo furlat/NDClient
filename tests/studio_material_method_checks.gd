@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Recorded SDK journals -> inspectable graphical methods and recipients.
 ## This is a semantic Studio contract, not a GPU rendering qualification.
 const Recording=preload("res://studio/recording.gd")
@@ -22,14 +23,14 @@ func recorded_name(index:Dictionary,actor_id:String,at_ms:float)->String:
 
 func run()->void:
     var cases={
-        "dodge-seed3":["bodyOutline"],
-        "hide-seed3-v3":["alphaMultiplier"],
-        "poisoned-seed3-v2":["bodyColor"],
-        "invisibility-seed3-v2":["bodyColor","alphaMultiplier"],
-        "rage-seed3-v3":["bodyColor","bodyRamp"]
+        "dodge":["bodyOutline"],
+        "hide":["alphaMultiplier"],
+        "poisoned":["bodyColor"],
+        "invisibility":["bodyColor","alphaMultiplier"],
+        "rage":["bodyColor","bodyRamp"]
     }
     for case_name in cases:
-        var index=Recording.read("res://.runtime/studio-cases/"+case_name+"/amber/journal")
+        var index=Fixtures.read(case_name)
         check(index.ok,case_name+" actual journal admits")
         if not index.ok:continue
         var methods=index.rows.filter(func(row):return row.kind=="condition_material")

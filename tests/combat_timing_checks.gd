@@ -8,6 +8,8 @@ const Tracks=preload("res://presentation/tracks.gd")
 const EventTrace=preload("res://presentation/event_trace.gd")
 const Characters=preload("res://presentation/characters.gd")
 const World=preload("res://presentation/world.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Occurrences=preload("res://presentation/occurrences.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -30,10 +32,33 @@ func _cache(mode:String)->Dictionary:
         cache["catalog/attack_recipes.json"]=recipes
     return cache
 
+func _parent(node:Dictionary,lineage:Dictionary)->Dictionary:
+    for candidate in lineage.events:
+        if candidate.lineage_id==node.get("parent_lineage"):return candidate
+    return {}
+func _request_id(node:Dictionary,lineage:Dictionary)->String:
+    var current:Dictionary=node
+    while not current.is_empty():
+        if current.get("fact")!=null and current.fact.kind=="damage" and current.fact.get("stage")=="taken":return current.id
+        current=_parent(current,lineage)
+    return node.id
+func _source_damage(node:Dictionary,lineage:Dictionary,cache:Dictionary)->Dictionary:
+    var current:Dictionary=_parent(node,lineage)
+    while not current.is_empty():
+        var fact:Variant=current.get("fact")
+        if fact!=null and fact.kind=="spell" and fact.has("behavior_id"):
+            var source:Dictionary=Authoring.spell(fact,cache)
+            if source.has("damage"):return source.damage
+        if fact!=null and fact.kind=="attack":
+            var source:Dictionary=Authoring.load_data("catalog/attack_recipes.json",cache).get(fact.behavior_id,{})
+            if source.has("damage"):return source.damage
+        current=_parent(current,lineage)
+    return {}
+
 func _inspect(group:Dictionary,lineage:Dictionary,mode:String,cache:Dictionary,label:String)->Dictionary:
     var counts={"damage":0,"lethal":0,"dying":0,"held_dead":0,"falls":0,"revival":0}
     var events={}
-    for node in lineage.events:events[node.uuid]=node
+    for node in lineage.events:events[node.id]=node
     var rows={}
     for row in group.events:rows[row.event_uuid]=row
     for row in group.events:
@@ -41,6 +66,8 @@ func _inspect(group:Dictionary,lineage:Dictionary,mode:String,cache:Dictionary,l
         counts.damage+=1
         var timing:Dictionary=row.damage_timing
         var node:Dictionary=events[row.event_uuid]
+        var context:Dictionary=Authoring.load_data("catalog/damage_context.json",cache)
+        var source_damage:Dictionary=_source_damage(node,lineage,cache)
         var bodies:Array=group.actor_tracks.filter(func(track):return track.source_event_uuid==row.event_uuid)
         var no_body:bool=timing.lethal or timing.terminal
         check(bodies.is_empty() if no_body else bodies.size()==1,label+" hit body follows actual terminal outcome")
@@ -52,18 +79,18 @@ func _inspect(group:Dictionary,lineage:Dictionary,mode:String,cache:Dictionary,l
             var body:Dictionary=bodies[0]
             var clip:Dictionary=Authoring.load_data("catalog/rigs.json",cache)[body.rig].clips[body.clip]
             var rate:float=clip.frames*1000.0/clip.fps/body.duration_ms
-            var number_frame:float=3 if mode=="ancestor" else (2 if mode=="defaults" else 0)
-            var flash_frame:float=2 if mode=="ancestor" else (1 if mode=="defaults" else 0)
+            var number_frame:float=source_damage.get("floatingNumber",{}).get("frame",context.get("numberFrame",0))
+            var flash_frame:float=source_damage.get("hitFlash",{}).get("frame",context.get("flashFrame",0))
             check(is_equal_approx(timing.hp,body.start_ms+number_frame*1000.0/clip.fps/rate),label+" HP uses authored number frame and selected source rate")
             check(is_equal_approx(timing.flash,body.start_ms+flash_frame*1000.0/clip.fps/rate),label+" flash uses its independent source frame")
         # The real parent request is admitted at the weapon contact; no game
         # outcome or inferred universal pause is inserted for damage feedback.
         var parent:Dictionary={}
         for candidate in lineage.events:
-            if candidate.lineage_uuid==node.parent_lineage:parent=candidate;break
-        if not parent.is_empty() and rows.has(parent.uuid):
-            var delay:float=29 if mode=="ancestor" else (13 if mode=="defaults" else 0)
-            check(is_equal_approx(timing.start,rows[parent.uuid]._start_ms+delay),label+" impact delay starts at real request contact")
+            if candidate.lineage_id==node.parent_lineage:parent=candidate;break
+        if not parent.is_empty() and rows.has(parent.id):
+            var delay:float=source_damage.get("impactDelayMs",context.get("impactDelayMs",0))
+            check(is_equal_approx(timing.start,rows[parent.id]._start_ms+delay),label+" impact delay starts at real request contact")
         check(is_equal_approx(row._commit_ms,timing.hp),label+" exact damage after-value publishes at HP marker")
         for component in group.components:
             if component.source_event_uuid!=row.event_uuid:continue
@@ -73,15 +100,15 @@ func _inspect(group:Dictionary,lineage:Dictionary,mode:String,cache:Dictionary,l
     for node in lineage.events:
         if node.canceled or node.fact==null or node.fact.kind!="life":continue
         var fact:Dictionary=node.fact
-        var bodies:Array=group.actor_tracks.filter(func(track):return track.source_event_uuid==node.uuid)
+        var bodies:Array=group.actor_tracks.filter(func(track):return track.source_event_uuid==node.id)
         check(bodies.size()==1,label+" actual life fact owns one body response")
         if bodies.is_empty():continue
         var body:Dictionary=bodies[0]
-        var audio:Array=group.components.filter(func(component):return component.source_event_uuid==node.uuid and component.kind=="audio")
+        var audio:Array=group.components.filter(func(component):return component.source_event_uuid==node.id and component.kind=="audio")
         if fact.previous_state=="alive" and fact.new_state=="dying":
             counts.dying+=1
             check(body.duration_ms>0,label+" initial Dying has an actual fall")
-            var applied:Array=group.events.filter(func(row):return row.has("damage_timing") and row.target_uuid==fact.entity_uuid)
+            var applied:Array=group.events.filter(func(row):return row.has("damage_timing") and row.target_uuid==fact.entity_uuid and _request_id(events[row.event_uuid],lineage)==_request_id(node,lineage))
             check(applied.size()==1 and is_equal_approx(body.start_ms,applied[0].damage_timing.hp),label+" Dying starts at owning HP marker")
             check(audio.size()==1 and is_equal_approx(audio[0].start_ms,body.start_ms+body.duration_ms),label+" body fall cue follows actual fall source end")
             counts.falls+=audio.size()
@@ -94,6 +121,12 @@ func _inspect(group:Dictionary,lineage:Dictionary,mode:String,cache:Dictionary,l
         elif fact.new_state=="alive":
             counts.revival+=1
             check(body.source_start_seconds>body.source_end_seconds,label+" actual revival retains authored reverse rise")
+            var poses:Dictionary=Authoring.load_data("catalog/life_state_context.json",cache).bodyPoses
+            var declared:Dictionary=poses.get(fact.previous_state,{}).get("removalBody",{})
+            check(declared.get("reversed",false) and body.clip==declared.get("bodyClip"),label+" recovery uses the actual previous life state's authored removal source")
+            var opening:Dictionary=Tracks.samples([body],body.start_ms).get(body.actor_uuid,{})
+            var closing:Dictionary=Tracks.samples([body],body.start_ms+body.duration_ms-.001).get(body.actor_uuid,{})
+            check(opening.get("source_seconds")==body.source_start_seconds and float(closing.get("source_seconds",INF))<.001,label+" actual recipient rises from the terminal source frame to its ordinary source start")
     return counts
 
 func _recording(directory:String,role:String)->void:
@@ -111,7 +144,7 @@ func _recording(directory:String,role:String)->void:
     var totals={"damage":0,"lethal":0,"dying":0,"held_dead":0,"falls":0,"revival":0}
     for sequence in names.size():
         var raw=FileAccess.get_file_as_bytes(directory.path_join(names[sequence]))
-        var decoded=journal.protocol.decode("InitializationResponse" if sequence==0 else "PlayerOperation",raw)
+        var decoded=journal.decode_record(int(names[sequence].get_basename()),raw)
         check(decoded.ok,"Strict actual packet "+str(sequence))
         if not decoded.ok:return
         var before:Dictionary=journal.state
@@ -127,9 +160,10 @@ func _recording(directory:String,role:String)->void:
             var display=before.duplicate(true)
             var actual_commits:Array=[]
             var life_events={}
-            for lineage in admitted.normalized.lineages:
+            var actual_groups:Array=admitted.normalized.lineages.map(func(source):return Occurrences.group(source))
+            for lineage in actual_groups:
                 for node in lineage.events:
-                    if not node.canceled and node.fact!=null and node.fact.kind=="life":life_events[node.uuid]=node.fact
+                    if not node.canceled and node.fact!=null and node.fact.kind=="life":life_events[node.id]=node.fact
             for index in compiled.value.groups.size():
                 var group:Dictionary=compiled.value.groups[index]
                 if mode=="current":EventTrace.activate(trace,group.events,0)
@@ -158,8 +192,8 @@ func _recording(directory:String,role:String)->void:
                             EventTrace.commit(trace,sequence,commit.event_uuid)
                             if original_log!=null:check(row.committed_log==original_log,"Committed hierarchical log retains exact original data")
                         EventTrace.append_logs(trace,commit.get("trace_logs",[]))
-                if index<admitted.normalized.lineages.size():
-                    var counts=_inspect(group,admitted.normalized.lineages[index],mode,caches[mode],role+" seq"+str(sequence))
+                if index<actual_groups.size():
+                    var counts=_inspect(group,actual_groups[index],mode,caches[mode],role+" seq"+str(sequence))
                     if mode=="current":
                         for key in totals:totals[key]+=counts[key]
             check(display==journal.state and compiled.value.final_state==journal.state,"Timing never changes any final canonical after-value")
@@ -168,7 +202,7 @@ func _recording(directory:String,role:String)->void:
     check(totals.damage>0,role+" contains witnessed positive damage")
     if role=="dying":check(totals.dying==1 and totals.held_dead==1 and totals.falls==1,"Actual Dying→Dead has one fall and one terminal hold")
     if role=="lethal":check(totals.lethal>0,"Actual lethal opportunity attack exercises no-hit path")
-    if role=="revival":check(totals.revival==1,"Actual death-save recovery exercises reverse rise")
+    if role in ["revival","revivify"]:check(totals.revival==1,"Actual authoritative revival exercises reverse rise")
     if role=="dying":
         var corpses:Array=journal.state.actors.values().filter(func(actor):return actor.life_state=="dead")
         check(corpses.size()==1,"Real completed recording retains one disclosed corpse")
@@ -176,8 +210,16 @@ func _recording(directory:String,role:String)->void:
             var corpse:Dictionary=corpses[0]
             check(not journal.state.senses.entities.has(corpse.uuid),"Server removes final Dead actor from living perception contacts")
             check(World.visible_actor(corpse,journal.state),"Witnessed intact corpse stays rendered at the retained server position")
+            var frozen:Dictionary=journal.state.duplicate(true)
+            # This is a visibility-policy counterfactual, never a recorded fact
+            # or a display publication. An own-seat actor would remain known
+            # through control, so remove only that operand in the private copy.
+            var unseen_state:Dictionary=journal.state.duplicate()
+            unseen_state.audience=journal.state.audience.duplicate()
+            unseen_state.audience.controlled=journal.state.audience.controlled.filter(func(identity):return identity!=corpse.uuid)
             var unseen_living=corpse.duplicate();unseen_living.life_state="alive"
-            check(not World.visible_actor(unseen_living,journal.state),"Corpse retention does not reveal an unseen living actor")
+            check(not World.visible_actor(unseen_living,unseen_state),"Corpse retention does not reveal an unseen living actor")
+            check(journal.state==frozen,"Visibility policy controls leave the original canonical recording unchanged")
             for replacement in [{"present":false},{"last_visual_position":null},{"spatial_disposition":"absent"},{"remains_disposition":"disintegrated"}]:
                 var removed=corpse.duplicate();removed.merge(replacement,true)
                 check(not World.visible_actor(removed,journal.state),"Explicit absence/disintegration still removes corpse: "+str(replacement))
@@ -203,11 +245,14 @@ func _recording(directory:String,role:String)->void:
 func _initialize()->void:
     var paths={}
     for argument in OS.get_cmdline_user_args():
-        for role in ["dying","lethal","hit","revival"]:
+        for role in ["dying","lethal","hit","revival","revivify"]:
             if argument.begins_with("--"+role+"="):paths[role]=argument.trim_prefix("--"+role+"=")
-    if not paths.has("dying") or not paths.has("lethal"):
-        printerr("Requires --dying=<real complete journal> --lethal=<real complete journal>; optional --hit= / --revival=")
-        quit(2);return
+    if paths.is_empty():
+        # The positive is the actual witnessed retained corpse. The separate
+        # unseen/uncontrolled negative is an explicit unit policy control.
+        paths={"dying":Fixtures.journal("death-save"),"lethal":Fixtures.journal("oa-jump-lethal"),"hit":Fixtures.journal("melee"),"revival":Fixtures.journal("death-save-recovery"),"revivify":Fixtures.journal("revive")}
+    if paths.values().any(func(path):return str(path).is_empty()):
+        printerr("Every timing role requires its original stable native journal");quit(2);return
     for role in paths:_recording(paths[role],role)
     var report={"checks":checks,"failures":failures,"evidence":evidence,"arguments":Array(OS.get_cmdline_user_args()),"qualification":"SDK/compiler value and temporal sampling only; no native graphics/audio output claim."}
     FileAccess.open("res://generated/combat_timing_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

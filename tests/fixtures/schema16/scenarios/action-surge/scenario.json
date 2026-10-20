@@ -1,0 +1,85 @@
+{
+ "id": "action.class.fighter.action_surge/extra_attacks",
+ "title": "Action Surge: two attacks, extra action, two further attacks",
+ "kind": "action",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.attack",
+   "action.feature.extra_attack",
+   "action.class.fighter.action_surge"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [],
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "action.feature.extra_attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "action.class.fighter.action_surge",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "action.feature.extra_attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "action.attack",
+  "action.feature.extra_attack",
+  "action.class.fighter.action_surge"
+ ],
+ "required_conditions": [],
+ "required_condition_ends": [],
+ "required_facts": [
+  "attack",
+  "damage"
+ ]
+}

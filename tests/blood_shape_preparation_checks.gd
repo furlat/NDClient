@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 # Real received Gallery residue versions through the worker/adoption boundary.
 const Renderer=preload("res://presentation/blood_renderer.gd")
 const Blood=preload("res://presentation/blood.gd")
@@ -13,10 +14,10 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr("BLOOD_PREPARE_FAIL ",label)
 func run()->void:
-    var index=Recording.read("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal")
+    var index=Fixtures.read("gallery")
     check(index.ok,"Actual Gallery recording admits")
     if not index.ok:quit(1);return
-    var original=load("res://.runtime/blood-kernels-original.gd")
+    var original=load("res://tests/oracles/blood_before_shape_cache.gd")
     var owner=Owner.new();owner.catalog_cache=index.cache;root.add_child(owner)
     var renderer=Renderer.new();renderer.resources_ready=true;renderer.source=Blood.asset(index.cache)
     var versions:int=0

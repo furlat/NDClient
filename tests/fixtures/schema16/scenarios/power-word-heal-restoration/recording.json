@@ -1,0 +1,347 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 5,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "f425f8e6-31c8-402f-99b3-b6db913eff8a": "Amber caster",
+  "e9b1949a-6f04-4344-848c-88092bc2a6b1": "Amber ally",
+  "742aaa0e-67e3-478a-838c-faa7f7498ba5": "Blue target",
+  "8a1bd74e-3db8-497d-ade6-058d96d607ef": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.hold_person \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "spell.power_word_heal \u00b7 Amber ally"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 11,
+   "saving_throw": 2,
+   "actor_change": 8,
+   "spell": 2,
+   "heal": 1
+  },
+  "behaviors": {
+   "spell.hold_person": 1,
+   "spell.power_word_heal": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.paralyzed",
+   "condition.spell.hold_person"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.paralyzed",
+   "condition.spell.hold_person"
+  ],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 54,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "ffae5001-5144-43e5-bb08-eda824989a76",
+   "condition_id": "condition.paralyzed",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "condition_uuid": "45a3a638-13f0-429a-a792-7aa20b605baf",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 60,
+   "lineage": 41,
+   "event_offset": 3,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "d44ea133-71ac-4ffd-ab13-92aebd2ee2fa",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 4,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "condition_uuid": "45a3a638-13f0-429a-a792-7aa20b605baf",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 67,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "d44ea133-71ac-4ffd-ab13-92aebd2ee2fa",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 78,
+   "lineage": 72,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 104,
+   "lineage": 89,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 105,
+   "lineage": 89,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "condition_uuid": "45a3a638-13f0-429a-a792-7aa20b605baf",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 106,
+   "lineage": 89,
+   "event_offset": 2,
+   "label": "condition ended condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "ffae5001-5144-43e5-bb08-eda824989a76",
+   "condition_id": "condition.paralyzed",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 107,
+   "lineage": 89,
+   "event_offset": 3,
+   "label": "condition ended condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "d44ea133-71ac-4ffd-ab13-92aebd2ee2fa",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 108,
+   "lineage": 89,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.power_word_heal",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 63,
+   "lineage": 57,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 70,
+   "lineage": 57,
+   "event_offset": 1,
+   "label": "condition applied condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "ffae5001-5144-43e5-bb08-eda824989a76",
+   "condition_id": "condition.paralyzed",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 75,
+   "lineage": 57,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "condition_uuid": "45a3a638-13f0-429a-a792-7aa20b605baf",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 76,
+   "lineage": 57,
+   "event_offset": 3,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "d44ea133-71ac-4ffd-ab13-92aebd2ee2fa",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 77,
+   "lineage": 57,
+   "event_offset": 4,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "condition_uuid": "45a3a638-13f0-429a-a792-7aa20b605baf",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 78,
+   "lineage": 57,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 85,
+   "lineage": 83,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "d44ea133-71ac-4ffd-ab13-92aebd2ee2fa",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 94,
+   "lineage": 88,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 120,
+   "lineage": 105,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 121,
+   "lineage": 105,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f425f8e6-31c8-402f-99b3-b6db913eff8a",
+   "condition_uuid": "45a3a638-13f0-429a-a792-7aa20b605baf",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 122,
+   "lineage": 105,
+   "event_offset": 2,
+   "label": "condition ended condition.paralyzed",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "ffae5001-5144-43e5-bb08-eda824989a76",
+   "condition_id": "condition.paralyzed",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 123,
+   "lineage": 105,
+   "event_offset": 3,
+   "label": "condition ended condition.spell.hold_person",
+   "kind": "actor_change",
+   "actor_uuid": "742aaa0e-67e3-478a-838c-faa7f7498ba5",
+   "condition_uuid": "d44ea133-71ac-4ffd-ab13-92aebd2ee2fa",
+   "condition_id": "condition.spell.hold_person",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 124,
+   "lineage": 105,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.power_word_heal",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -61,6 +61,8 @@ def spell_baselines(inventory):
             step={'do':'action.attack','by':'caster','target':'target'}
             required=['reaction.class_feature.paladin.divine_smite']
         elif spell=='spell.hellish_rebuke':
+            # Its native creature owns a real learned-source innate reaction.
+            # Frozen encounter behavior grants cannot install this reaction.
             roster[0]={'role':'caster','side':'amber','creature':'creature.spell.fire_myrmidon','at':[3,7]}
             roster[2]['spells']=['spell.ice_storm']
             # An actual save-for-half area hit tests the native reaction
@@ -205,7 +207,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort()
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study()]
 
 
 def gallery_sorcerer():
@@ -582,3 +584,52 @@ def passive_handler_cohort():
          'required_behaviors':['action.class.cleric.turn_undead','class_feature.cleric.destroy_undead'],
          'required_applied_damage_types':['Radiant'],'required_facts':['saving_throw','damage']},
     ]
+
+
+def interaction_media_study():
+    """Legal native input controls; initial Poisoned is not an application claim."""
+    return {'id': 'interaction.media_inputs/stride_unarmed_potion_ranged',
+     'title': 'Native inputs: stride, unarmed strike, potion, shortbow and Poisoned removal',
+     'kind': 'interaction',
+     'seed': 2,
+     'subjects': {'spell': ['spell.protection_from_poison'],
+                  'action': ['action.move', 'action.attack', 'action.item.potion_healing.drink'],
+                  'condition': ['condition.poisoned', 'condition.spell.protection_from_poison'],
+                  'creature': ['creature.knight'],
+                  'environment_object': [],
+                  'spatial_effect': [],
+                  'residue': [],
+                  'item': ['weapon.shortbow', 'consumable.healing_potion']},
+     'actors': [{'role': 'caster',
+                 'side': 'amber',
+                 'premade': 'fighter',
+                 'damage': 8,
+                 'at': [2, 4],
+                 'items': [{'id': 'weapon.shortbow', 'slot': 'RANGED_MAIN'},
+                           {'id': 'consumable.healing_potion', 'heal_amount': 7}],
+                 'conditions': ['condition.poisoned']},
+                {'role': 'target', 'side': 'blue', 'creature': 'creature.knight', 'at': [8, 5]},
+                {'role': 'restorer',
+                 'side': 'amber',
+                 'creature': 'creature.generic_caster',
+                 'level': 20,
+                 'caster_level': 20,
+                 'spells': ['spell.protection_from_poison'],
+                 'at': [6, 5]}],
+     'steps': [{'do': 'action.move', 'by': 'caster', 'target': [7, 5]},
+               {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
+               {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'name': 'Unarmed', 'capture_choices': True},
+               {'do': 'end_turn', 'by': 'caster'},
+               {'do': 'action.item.potion_healing.drink', 'by': 'caster', 'target': 'self'},
+               {'do': 'end_turn', 'by': 'caster'},
+               {'do': 'action.attack',
+                'by': 'caster',
+                'target': 'target',
+                'weapon_slot': 'RANGED_MAIN',
+                'capture_choices': True},
+               {'do': 'spell.protection_from_poison', 'by': 'restorer', 'target': 'caster'}],
+     'required_behaviors': ['action.move',
+                            'action.attack',
+                            'action.item.potion_healing.drink',
+                            'spell.protection_from_poison'],
+     'required_condition_ends': ['condition.poisoned']}

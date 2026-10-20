@@ -1,0 +1,87 @@
+{
+ "id": "spell.hold_person/agency_restoration",
+ "title": "Hold Person: actual paralysis, skipped recipient turn, concentration end, movement restored",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.hold_person"
+  ],
+  "action": [
+   "action.drop_concentration",
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.hold_person"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.hold_person"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 1,
+   "caster_level": 20,
+   "spells": [],
+   "at": [
+    9,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.hold_person",
+   "by": "caster",
+   "target": "target"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    10,
+    7
+   ]
+  }
+ ],
+ "seed": 4,
+ "required_behaviors": [
+  "spell.hold_person",
+  "action.drop_concentration",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.hold_person"
+ ],
+ "required_condition_ends": [
+  "condition.spell.hold_person"
+ ],
+ "required_facts": []
+}

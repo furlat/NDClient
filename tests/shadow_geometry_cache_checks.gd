@@ -20,6 +20,18 @@ func visibility_matches(current:Dictionary,previous:Dictionary)->bool:
         if delta>0:differing+=1;largest_delta=maxi(largest_delta,delta)
     differing_samples+=differing;compared_samples+=a.size()/stride
     return differing*200<=a.size()/stride
+func modular()->Dictionary:
+    # The original painted sheet is unchanged. Its current metadata owner is
+    # the registered native source path and must be explicitly prepared before
+    # Geometry.bind's passive descriptor read (as in the gameplay media lane).
+    var entry:Dictionary=super.modular()
+    var path:String="res://assets/art/media/smallscale/modular/Chest14/Idle.png"
+    var admitted:Dictionary=Geometry.BodySources.prepare_descriptor(path,"chest",cache)
+    check(not admitted.is_empty(),"Actual modular Chest14 native source metadata admits before geometry binding")
+    Geometry.bind(entry,path,cache,texture,true,true,"reference")
+    check(SourceMaterial.value(entry,"has_component_geometry") and SourceMaterial.value(entry,"component_depth")!=null and SourceMaterial.value(entry,"component_support")!=null,"Prepared modular source publishes its actual depth and support operands")
+    return entry
+
 func run()->void:
     if DisplayServer.get_name()=="headless":quit(2);return
     create_timer(90).timeout.connect(func():printerr("Shadow cache qualification deadline");quit(2))
@@ -94,6 +106,11 @@ func run()->void:
                 check(is_same(shape,manager._caster_shapes[entry.id]),"Light movement preserves cached local geometry")
                 await process_frame;await RenderingServer.frame_post_draw
                 check(visibility_matches(current,previous),"Light-only redraw within the fixed-target noise "+str([entry.id,quarter,step]))
+        if not manager.actors.has(entry.id) or not reference.actors.has(entry.id):
+            # Failed admission is already a failing gate; still finish/report
+            # cleanly instead of indexing a helper that was never admitted.
+            check(false,"Both actual helpers remain available for source-frame timing controls: "+entry.id)
+            entry.node.hide();continue
         for cycle in 9:
             for step in 40:
                 var uv:Vector4=SourceMaterial.value(entry,"frame_uv")

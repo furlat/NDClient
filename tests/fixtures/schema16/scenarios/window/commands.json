@@ -1,0 +1,175 @@
+[
+ {
+  "request": {
+   "do": "action.traverse_connector",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "b6231b09-6831-449f-bc40-c279b3697bba",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.traverse_connector",
+   "display_name": "Traverse window",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "e933d6af-7e5d-4db8-a234-f23fdfa8e75c",
+   "state_revision": "b6231b09-6831-449f-bc40-c279b3697bba",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_movement_window_cleared_both_directions",
+   "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+   "audience_id": "c7623e88-4b0f-4691-9031-8b32f8d7d7a2",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_movement_window_cleared_both_directions",
+    "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+    "audience_id": "c7623e88-4b0f-4691-9031-8b32f8d7d7a2",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "e933d6af-7e5d-4db8-a234-f23fdfa8e75c",
+   "state_revision": "ba350607-702d-4e4a-8df5-c904a214308d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_movement_window_cleared_both_directions",
+   "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+   "audience_id": "c7623e88-4b0f-4691-9031-8b32f8d7d7a2",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_movement_window_cleared_both_directions",
+    "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+    "audience_id": "c7623e88-4b0f-4691-9031-8b32f8d7d7a2",
+    "sequence": 3
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "ddf1e5fa-1b1a-4c1b-a487-ea368e5c6c4b",
+   "state_revision": "b1ab2738-bf87-4b0b-b438-3bbd9b47acbf",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_movement_window_cleared_both_directions",
+   "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+   "audience_id": "166e9930-b29a-4138-970b-b4bcd555b16a",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_movement_window_cleared_both_directions",
+    "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+    "audience_id": "166e9930-b29a-4138-970b-b4bcd555b16a",
+    "sequence": 5
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "action.traverse_connector",
+   "by": "caster",
+   "target": [
+    4,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "5625c627-24dd-4ff2-acbb-a7360d096116",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.traverse_connector",
+   "display_name": "Traverse window",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "e933d6af-7e5d-4db8-a234-f23fdfa8e75c",
+   "state_revision": "5625c627-24dd-4ff2-acbb-a7360d096116",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_movement_window_cleared_both_directions",
+   "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+   "audience_id": "c7623e88-4b0f-4691-9031-8b32f8d7d7a2",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_movement_window_cleared_both_directions",
+    "game_epoch": "468a7dae-0eca-435d-b7c6-56d58049e781",
+    "audience_id": "c7623e88-4b0f-4691-9031-8b32f8d7d7a2",
+    "sequence": 7
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

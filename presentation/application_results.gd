@@ -82,7 +82,8 @@ static func observed_index(events:Array,graph:Dictionary)->Dictionary:
         var rows:Array=[]
         if fact.kind=="heal" and int(fact.actual_healing)>0 and not fact.was_blocked:
             rows.append({"kind":"heal","target_uuid":str(fact.target_entity_uuid),"node":node,
-                "event":{"actual_healing":fact.actual_healing,"blocked":fact.was_blocked}})
+                "event":{"actual_healing":fact.actual_healing,"blocked":fact.was_blocked,
+                    "heal_fact":fact}})
         if fact.kind=="damage" and fact.get("stage")=="applied" and int(fact.applied_damage)>0:
             # The finite Factory outcome uses an opaque damage-component key.
             # One disclosed applied-result occurrence is that exact component;
@@ -115,7 +116,11 @@ static func observed_index(events:Array,graph:Dictionary)->Dictionary:
 static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
     var source:String=str(node.fact.source_entity_uuid)
     var kind:String=str(descriptor.outcome)
-    var rows:Array=[{"node":node,"target_uuid":source,"event":{}}] if kind=="cast" else graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):return row.kind==kind)
+    # A finite source may draw at the caster or speak toward the actual
+    # recipient. A target role never turns an undisclosed recipient into self.
+    var recipient:Variant=node.fact.get("target_entity_uuid") if descriptor.get("recipient_role","caster")=="target" else source
+    if node.get("canceled",false) or (kind=="cast" and recipient==null):return []
+    var rows:Array=[{"node":node,"target_uuid":str(recipient),"event":{}}] if kind=="cast" else graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):return row.kind==kind)
     var revived:Array=[]
     if descriptor.get("living_only",false):
         for row in graph.get("observed_results",{}).get(str(node.id),[]):
@@ -133,7 +138,8 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
         var roles={"caster":source,"target":target}
         var values={"source_entity_uuid":source,"recipient_entity_uuid":target,"owner_uuid":str(node.id),"event_uuid":str(row.node.id),
             "actor_roles":roles,"geometry_actor":roles[str(descriptor.geometry_actor)],"lease":{},"event":{},"plan_only":false,
-            "native_behavior_id":str(node.fact.behavior_id)}
+            "native_behavior_id":str(node.fact.behavior_id),"voice_recipient_actor":target}
+        if kind=="cast":values.parent_owner_uuid=""
         var evidence:Dictionary={"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),
             "result_occurrence":str(row.node.id),"result_lineage":str(row.node.lineage_id),"target_uuid":target,"outcome":kind}
         if kind=="damage":

@@ -58,14 +58,22 @@ def parse_result(text: str) -> tuple:
     """(checks, failures) from the formats the tests print; None when absent."""
     for line in reversed(text.splitlines()):
         start = line.find("{")
-        if start < 0 or '"checks"' not in line:
+        if start < 0 or not any(key in line for key in ('"checks"','"passed"')):
             continue
         try:
             value = json.loads(line[start:])
         except ValueError:
             continue
         failures = value.get("failures", value.get("failed"))
-        return value.get("checks"), len(failures) if isinstance(failures, list) else failures
+        checks=value.get("checks",value.get("passed"))
+        if not isinstance(checks,int):continue
+        return checks, len(failures) if isinstance(failures, list) else failures
+    for line in reversed(text.splitlines()):
+        match=re.search(r"^[A-Z_]+ (\d+) failures=(\[.*\])$",line)
+        if match:
+            try:failures=json.loads(match[2])
+            except ValueError:continue
+            return int(match[1]),len(failures)
     for pattern in (r"checks[=: ]+(\d+)\D+?failures[=: ]+(\d+)", r"(\d+) passed=\d+ failed=(\d+)", r"checks[=: ]+(\d+)\D+?failed[=: ]+(\d+)"):
         found = re.findall(pattern, text)
         if found:

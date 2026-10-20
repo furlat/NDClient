@@ -1,0 +1,72 @@
+{
+ "id": "spell.magic_missile/split_recipients",
+ "title": "Magic Missile: three actual deliveries across two recipients",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.magic_missile"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.magic_missile"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    9,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    9,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.magic_missile",
+   "by": "caster",
+   "target": "target",
+   "recipients": [
+    "target",
+    "second_target",
+    "target"
+   ]
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "spell.magic_missile"
+ ],
+ "required_conditions": [],
+ "required_condition_ends": [],
+ "required_facts": [
+  "damage"
+ ]
+}

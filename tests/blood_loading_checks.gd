@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 ## Real recorded blood, through the production renderer's loading boundary.
 const Preview=preload("res://presentation/blood_preview.gd")
 const Journal=preload("res://sdk/journal.gd")
@@ -32,7 +33,7 @@ func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(384,256)
     Engine.max_fps=0;DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     create_timer(45).timeout.connect(func():printerr("Blood loading test deadline");quit(2))
-    var path:String="res://.runtime/studio-cases/dash-seed3/amber/journal";var oracle:String=""
+    var path:String=Fixtures.journal("dash");var oracle:String=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--oracle="):oracle=argument.trim_prefix("--oracle=")
     var journal=Journal.new();var opened:Dictionary=journal.open(path,true,false)

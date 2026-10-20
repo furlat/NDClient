@@ -161,7 +161,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                 var captures:Dictionary=Timeline.pose_admissions(commit,preview_state.actors,condition_history,group,offset,previous_directions,result.cache)
                 Compiler.apply_delta(preview_state,commit.delta)
                 if NativeItems.interested(item_owners,commit.delta,result.cache):
-                    NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,result.cache,str(commit.get("event_uuid","")))
+                    NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,result.cache,str(commit.get("event_uuid","")),commit.get("item_rows",[]))
                     _observe_item_history(item_history,item_spans,item_owners,preview_state,offset+commit.at_ms,"%s:%s"%[sequence,commit.get("event_uuid","")],result.cache)
                 LightTracks.observe(light_history,preview_state,offset+commit.at_ms,commit.get("event_uuid",""),sequence,result.cache)
                 _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),offset+commit.at_ms,commit.get("event_uuid",""))
@@ -303,6 +303,8 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             _condition_rows(result.rows,exit_row,owner,[{"start_ms":owner.end_ms,"end_ms":owner.end_ms+fade,"suppressed":Timeline.Conditions.suppressed(owner.condition),"source_event":origin.get("removal_event","")}],preview_states.get(owner.actor_uuid,[]),result.cache,preview_tracks.get(owner.actor_uuid,[]),requirements)
         _condition_restoration_rows(result,owner,condition_removals.get(owner.id,{}),preview_states.get(owner.actor_uuid,[]),preview_tracks.get(owner.actor_uuid,[]))
     for span in item_spans:
+        if span.kind=="item_effect_membership":
+            result.rows.append(span);continue
         span.end_ms=minf(span.end_ms,result.presentation_end_ms)
         var component:Dictionary=span.component
         component=component.duplicate(false);component.duration_ms=span.end_ms-span.start_ms
@@ -346,18 +348,22 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
 static func _actor_row_links(index:Dictionary)->void:
     # Offline links reuse the already indexed owners. They neither emit an
     # operation nor qualify pixels, and never borrow another perspective.
-    var conditions:Dictionary={};var items:Dictionary={};var lights:Dictionary={};var tracks:Dictionary={}
+    var conditions:Dictionary={};var items:Dictionary={};var item_effects:Dictionary={};var lights:Dictionary={};var tracks:Dictionary={}
     for row in index.rows:
         var track:String=str(row.get("trace_track_id",row.get("track",{}).get("trace_track_id","")))
         if not track.is_empty():
             if not tracks.has(track):tracks[track]=[]
             tracks[track].append(row.id)
         if row.kind=="condition":conditions[[str(row.owner.id),str(row.owner.actor_uuid)]]=row.id
-        elif row.kind=="native_effect" and row.get("component",{}).get("intrinsic_item_effect",false):
+        elif row.kind=="native_effect" and row.get("component",{}).get("native_item",false):
             var component:Dictionary=row.component
             var key:Array=[str(component.item_owner_uuid),str(component.actor_uuid)]
             if not items.has(key):items[key]=[]
             items[key].append(row.id)
+            if component.get("dynamic_item_effect",false):
+                var identity:Array=[str(component.item_owner_uuid),str(component.item_effect_uuid)]
+                if not item_effects.has(identity):item_effects[identity]=[]
+                item_effects[identity].append(row.id)
         elif row.kind=="light":
             for key in row.light_keys:
                 var identity:Array=[str(key.operation_sequence),str(key.source_event_uuid),str(row.anchor_item_uuid)]
@@ -378,6 +384,12 @@ static func _actor_row_links(index:Dictionary)->void:
             if expected.has("item_uuid") and expected.actor_field in ["inventory","layer","active_weapon_set"]:
                 for linked in items.get([expected.item_uuid,expected.actor_uuid],[]):
                     if linked not in expected.inspection_links:expected.inspection_links.append(linked)
+            if expected.has("item_uuid") and expected.actor_field in ["item_effects","item_effect_duration"]:
+                var identities:Array=expected.get("effect_uuids_before",[])+expected.get("effect_uuids_after",expected.get("effect_uuids",[]))
+                if expected.has("effect_uuid"):identities.append(expected.effect_uuid)
+                for identity in identities:
+                    for linked in item_effects.get([expected.item_uuid,str(identity)],[]):
+                        if linked not in expected.inspection_links:expected.inspection_links.append(linked)
             if expected.actor_field=="item_state" and "is_lit" in expected.changed_keys:
                 for linked in lights.get([str(row.event.sequence),str(row.event.event_uuid),expected.item_uuid],[]):
                     if linked not in expected.inspection_links:expected.inspection_links.append(linked)
@@ -1321,6 +1333,18 @@ static func step_time(index: Dictionary, row: Dictionary, time_ms: float, direct
 ## Exact item eligibility intervals; geometry is still sampled by production
 ## NativeSpellRenderer from the restored canonical stream in the main preview.
 static func _observe_item_history(current:Dictionary,spans:Array,owners:Dictionary,state:Dictionary,at_ms:float,event_id:String,cache:Dictionary)->void:
+    # Zero-duration ordered membership is inspection evidence, never an
+    # optical component or an invented visible lifetime.
+    for owner in NativeItems.transient_memberships(owners,at_ms):
+        var end_event:String=str(owner.get("end_event_uuid",""))
+        if end_event!=event_id.get_slice(":",1):continue
+        var id:String=owner.id+":membership:"+str(owner.start_ms)+":"+str(owner.source_event_uuid)+":"+end_event
+        if spans.any(func(span):return span.id==id):continue
+        spans.append({"id":id,"parent":event_id if not end_event.is_empty() else "","kind":"item_effect_membership","label":"Item effect membership",
+            "start_ms":at_ms,"end_ms":at_ms,"source":owner.definition.source,"source_event_uuid":owner.source_event_uuid,
+            "item_uuid":owner.item_uuid,"effect_uuid":str(owner.member.effect_uuid),"member":owner.member,
+            "status":"state_only","preview_scope":"source_property_keys","preview_status":"not_applicable",
+            "coverage":{"implementation":"resolved","source":"explicit_membership","prepared":"not_applicable","rendered":"not_witnessed"}})
     var active:Dictionary={}
     for sample in NativeItems.samples(owners,state,at_ms):
         active[sample.id]=sample
@@ -1330,7 +1354,7 @@ static func _observe_item_history(current:Dictionary,spans:Array,owners:Dictiona
     for id in active:
         var component:Dictionary=active[id]
         var location:Dictionary=component.item_effect.location
-        var signature:Array=[component.status,component.get("reason",""),location.kind,location.get("holder_uuid",""),location.get("render_slot","")]
+        var signature:Array=[component.status,component.get("reason",""),component.start_ms,location.kind,location.get("holder_uuid",""),location.get("render_slot","")]
         if current.has(id) and current[id].signature==signature:continue
         if current.has(id):current[id].end_ms=at_ms
         var origin:Dictionary=component.item_effect

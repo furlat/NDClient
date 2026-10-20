@@ -44,13 +44,21 @@ func run()->void:
         var attached:Array=[]
         for index in entry.effects.size():
             var effect:Resource=entry.effects[index]
+            if effect.constructor_input.get("kind")=="observed_event":
+                check(index not in entry.owner_cues,"Finite actual-event cues retain their occurrence rather than a held condition: "+id+":"+str(index))
+                continue
             if effect.role=="attached" and effect.attachment.begins_with("recipient_") and index not in entry.excluded_cues and (not entry.explicit_event_cues or index in entry.event_cues):attached.append(index)
         if entry.delivery=="summon" or not entry.summons.is_empty():
             check(entry.owner_kind.is_empty(),"Transitive summon rider conditions cannot suppress the summon-creation cast: "+id)
             continue
         if not applicable.is_empty() and not attached.is_empty() and not baseline.existing.has(id):
             migrated+=1
-            check(entry.owner_kind=="condition" and Array(entry.owner_ids)==applicable and Array(entry.owner_cues)==attached,"Every compatible recipient-body spell hands over actual declared owners/cues: "+id)
+            # A real aura can have a ground owner as well as recipient body
+            # members. Both must be publicly applied; body ownership alone is
+            # not the complete authored owner set.
+            check(entry.owner_kind=="condition" and applicable.all(func(owner):return owner in entry.owner_ids) \
+                and Array(entry.owner_ids).all(func(owner):return owner in entry.applies_conditions) \
+                and Array(entry.owner_cues)==attached,"Every compatible recipient-body spell hands over its actual declared body/ground owners and held cues: "+id)
         if entry.owner_kind!="condition":continue
         for owner in entry.owner_ids:
             check(owner in entry.applies_conditions or owner in baseline.existing.get(id,{}).get("owner_ids",[]),"No condition owner was guessed from a spell name: "+id+":"+owner)
