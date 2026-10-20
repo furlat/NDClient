@@ -98,13 +98,13 @@ static func project(node:Dictionary,descriptor:Dictionary,results:Dictionary)->D
             "save_occurrence":saves[0].occurrence,"save_lineage":saves[0].lineage,
             "damage_occurrences":damage.map(func(row):return row.occurrence),"damage_lineages":damage.map(func(row):return row.lineage),"applied_damage":amount}}
 
-## A first-cast spell strike consumes its own native descendant result. The
+## A completed spell strike consumes its own native descendant result. The
 ## Factory's *_uuid aliases below are opaque seat-local occurrence keys,
 ## never private damage-roll UUIDs or a fabricated held-condition owner.
 static func spell_strike(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Dictionary:
     var fact:Variant=node.get("fact")
     if node.get("canceled",false):return {"ready":false,"reason":"spell_strike_canceled"}
-    if fact==null or fact.get("kind")!="spell" or fact.get("behavior_id")!=descriptor.get("behavior_id"):
+    if fact==null or fact.get("kind")!="spell" or fact.get("behavior_id")!=descriptor.get("behavior_id") or node.get("phase")!="completion":
         return {"ready":false,"reason":"spell_strike_first_cast_not_observed"}
     if fact.get("attack_outcome") not in ["Hit","Crit"]:
         return {"ready":false,"reason":"spell_strike_hit_not_observed"}
@@ -113,7 +113,8 @@ static func spell_strike(node:Dictionary,descriptor:Dictionary,graph:Dictionary)
     if source==null or target==null:return {"ready":false,"reason":"spell_strike_recipient_not_disclosed"}
     var rows:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):
         return row.kind=="damage" and row.target_uuid==str(target) and row.node.fact.get("source_entity_uuid")==source \
-            and row.node.fact.damage_type==descriptor.damage_type)
+            and row.node.fact.damage_type==descriptor.damage_type and row.node.get("phase")=="completion" \
+            and _cast_owns_result(node,row.node,graph))
     if rows.size()!=1:return {"ready":false,"reason":"spell_strike_exact_damage_not_observed"}
     var damage:Dictionary=rows[0].node
     var strike:Dictionary={"source_actor_uuid":str(source),"recipient_uuid":str(target),"attack_uuid":str(node.id),
@@ -126,14 +127,31 @@ static func spell_strike(node:Dictionary,descriptor:Dictionary,graph:Dictionary)
         "damage_fact_identity":"native_applied_result_occurrence","resolution":node.get("resolution_record",{})}
     for field in ["source_condition_uuid","effect_id"]:
         if damage.fact.get(field)!=null:strike[field]=damage.fact[field];evidence[field]=damage.fact[field]
-    # This finite source branch never reads owner, condition, tick or healing.
-    # Clear their review packets and unused review identities in the private
-    # source input; its sealed phase/material/art settings are retained.
+    # Clear review packets before applying the exact finite source operands.
+    # An initial impact never reads an owner. A completed granted repeat is
+    # an event-local activity witness for its one disclosed pre-row member;
+    # it does not infer contribution activity at any idle or later cut.
     var values:Dictionary={"source_actor_uuid":str(source),"recipient_uuid":str(target),"attack_uuid":str(node.id),
         "behavior_id":str(fact.behavior_id),"strike":strike,"owner":{},"condition":{},"tick":{},"healing":{},
         "item_uuid":"","equipment_slot":"","render_slot":"","activation_event_uuid":"",
         "condition_uuid":"","condition_id":"","owner_uuid":"","owner_id":""}
-    return {"ready":true,"reason":"","values":values,"inputs":{"strike_input":strike},"evidence":evidence}
+    var inputs:Dictionary={"strike_input":strike}
+    var owner_id:String=str(descriptor.get("owner_condition_id",""))
+    if not owner_id.is_empty():
+        var actor:Dictionary=graph.get("actor_inputs",{}).get(str(node.id),{}).get(str(source),{})
+        var members:Array=actor.get("conditions",[]).filter(func(member):return member.get("behavior_id")==owner_id)
+        if actor.get("uuid")!=source or members.size()!=1:
+            return {"ready":false,"reason":"spell_strike_exact_grant_owner_not_disclosed"}
+        var member:Dictionary=members[0]
+        var owner:Dictionary={"condition_uuid":str(member.condition_uuid),"condition_id":owner_id,
+            "source_actor_uuid":str(source),"recipient_uuid":str(source),"present":true,"observed":true,
+            "contribution_active":true,"suppressed":false}
+        values.owner=owner;values.owner_uuid=owner.condition_uuid;values.owner_id=owner_id
+        inputs.owner_input=owner
+        evidence.merge({"condition_uuid":owner.condition_uuid,"condition_id":owner_id,
+            "owner_activity_occurrence":str(node.id),"owner_activity_basis":"completed_granted_strike",
+            "owner_cut":"source_actor_before_row"})
+    return {"ready":true,"reason":"","node":damage,"values":values,"inputs":inputs,"evidence":evidence}
 
 ## Index committed outcomes once per received group. An ancestor consumes only
 ## its native descendants; neither recipient proximity nor art chooses results.
@@ -216,6 +234,7 @@ static func _cast_owns_result(cast:Dictionary,result:Dictionary,graph:Dictionary
 
 static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
     var projection:String=str(descriptor.get("projection","event"))
+    if projection=="owned_fire_contact":return _owned_fire_contact(node,descriptor,graph)
     if projection!="event" and (node.get("phase")!="completion" or node.fact.get("source_entity_uuid")==null):return []
     var source:String=str(node.fact.source_entity_uuid)
     var kind:String=str(descriptor.outcome)
@@ -293,3 +312,38 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
             inputs={"observation":completion}
         result.append({"node":row.node,"target_uuid":target,"values":values,"event":event,"inputs":inputs,"evidence":evidence})
     return result
+
+## An accepted action by an actual condition-owned source can retain its
+## original caster on damage facts. Exact native ancestry owns the result;
+## changing the damage source to the optical source would invent attribution.
+static func _owned_fire_contact(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
+    var fact:Variant=node.get("fact")
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null \
+        or fact.get("kind") not in ["spell","action"] or fact.get("source_entity_uuid")==null \
+        or fact.get("target_entity_uuid")==null:return []
+    var source:String=str(fact.source_entity_uuid)
+    var target:String=str(fact.target_entity_uuid)
+    var actor:Dictionary=graph.get("actor_inputs",{}).get(str(node.id),{}).get(source,{})
+    var owners:Array=actor.get("conditions",[]).filter(func(member):return member.get("behavior_id")==descriptor.owner_condition_id)
+    if owners.size()!=1:return []
+    var saves:Dictionary=save_context(node,graph.get("application_results",{})).get("by_effect",{}).get(str(descriptor.save_effect_id),{})
+    if not saves.get("ready",false):return []
+    var rows:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):
+        return row.kind=="damage" and row.target_uuid==target and row.node.get("phase")=="completion" \
+            and row.node.fact.get("damage_type")==descriptor.damage_type and row.node.fact.get("source_entity_uuid")!=null \
+            and _cast_owns_result(node,row.node,graph))
+    if rows.size()!=1:return []
+    var damage:Dictionary=rows[0].node
+    var event:Dictionary={"owner_uuid":str(owners[0].condition_uuid),"source_uuid":source,
+        "damage_component_uuid":str(damage.id),"trigger":str(descriptor.trigger),
+        "outcome":"saved_half" if saves.save_succeeded else "failed_save","applied":true,"recipient_uuid":target}
+    return [{"node":damage,"target_uuid":target,
+        "values":{"owner_uuid":event.owner_uuid,"source_uuid":source,"event":event},
+        "event":event,"inputs":{"contact_event":event},
+        "evidence":{"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),
+            "result_occurrence":str(damage.id),"result_lineage":str(damage.lineage_id),
+            "source_uuid":source,"target_uuid":target,"owner_uuid":event.owner_uuid,
+            "owner_condition_id":str(descriptor.owner_condition_id),"outcome":"damage",
+            "damage_source_uuid":str(damage.fact.source_entity_uuid),"damage_type":damage.fact.damage_type,
+            "applied_damage":damage.fact.applied_damage,"damage_component_identity":"native_applied_result_occurrence",
+            "save":saves.evidence}}]

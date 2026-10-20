@@ -1,6 +1,7 @@
 extends "res://tests/native_vampiric_touch_render_checks.gd"
 ## Three real actor births, independently reduced from both original seats.
-## Ordinary Play owns bodies, publication, source setters and native rendering.
+## Ordinary Play owns publication, source setters and native rendering. The
+## authored creature rigs are stand-ins; visible bodies do not qualify final art.
 const Journal=preload("res://sdk/journal.gd")
 const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
@@ -82,7 +83,7 @@ func birth_seat(name:String,seat:String)->void:
         var requested:Array=component.native_clip.inputs;var supplied:Array=bindings.get("supplied",[])
         check("owner_state" in requested and "owner_state" in supplied and bindings.get("unavailable",{}).is_empty() \
             and requested.all(func(channel):return channel in supplied) and supplied.all(func(channel):return channel in requested),label+" all and only actual declared native inputs are supplied")
-        check(Sockets.displayed(world.visual_actors.get(identity,{})),label+" ordinary actor renderer actually displays the real summoned body")
+        check(Sockets.displayed(world.visual_actors.get(identity,{})),label+" ordinary actor renderer displays the authored creature stand-in")
         var quarters:Array=[0,1,2,3] if pass_index==0 else [0]
         for quarter in quarters:
             world.request_view(quarter)
@@ -132,6 +133,6 @@ func close_birth(world:Node,view:SubViewport,label:String)->void:
 
 func finish()->void:
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Three actual born-actor manifestation selections, both original seats, ordinary Play body/ground/input/source/native framebuffer, four views and reverse seek/replay cleanup. Terminal/despawn, other summon forms, performance and human art acceptance remain unqualified."}
+        "scope":"Three actual born-actor arrival VFX selections, both original seats, ordinary Play stand-in body/ground/input/source/native framebuffer, four views and reverse seek/replay cleanup. Intended creature bodies, terminal/despawn, other summon forms, performance and human art acceptance remain unqualified."}
     FileAccess.open("res://.runtime/native-actor-birth-render-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_ACTOR_BIRTH ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

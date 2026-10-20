@@ -4,6 +4,22 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_u8b62"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_u8b62"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_24wvt"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="ActualRamContact"]
+script = ExtResource("effect")
+clip = "bg3-36/flaming-sphere/native_sphere_ram"
+selection = "flaming_sphere_native"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "damage", "projection": "owned_fire_contact", "owner_condition_id": "condition.spell.flaming_sphere.aura", "save_effect_id": "action.spell.flaming_sphere.ram.saving_throw", "damage_type": "Fire", "trigger": "sphere_ram", "geometry_actor": "target", "component_path": ["effect"], "input_field": ""}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+light_multiplier = 0.0
+extra = {"dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "chest", "legs"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}
 
 [sub_resource type="Resource" id="Resource_24wvt"]
 script = ExtResource("1_u8b62")
@@ -24,5 +40,7 @@ kind = "action"
 family = "spell"
 icon = SubResource("Resource_lgyxn")
 body = SubResource("Resource_24wvt")
+effects = Array[ExtResource("effect")]([SubResource("ActualRamContact")])
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+status = "partial"
+notes = "One finite Ram contact follows this actual accepted action's save and positive Fire result. The source belongs to the disclosed sphere aura UUID; damage retains the original caster identity and native ancestry. No sphere casting body, timed review hit, trail or decorative light is added. Saved-half output, end-turn contact and visual acceptance remain separately unqualified."

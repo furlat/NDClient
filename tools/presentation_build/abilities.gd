@@ -493,12 +493,17 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
         if binding.get("outcome") not in ["cast","heal","damage","removal","revival"] or use.scope not in ["source","recipient","cast"] or binding.get("geometry_actor") not in ["caster","target"]:
             Common.error(report,where,"observed event needs an outcome, declared event scope and actual geometry role");return
         var projection:String=str(binding.get("projection","event"))
-        if projection not in ["event","applied_contact","cast_completion","healing_return"] \
+        if projection not in ["event","applied_contact","cast_completion","healing_return","owned_fire_contact"] \
             or projection in ["applied_contact","cast_completion"] and use.scope!="cast" \
             or projection=="applied_contact" and (binding.outcome!="damage" or str(binding.get("damage_type","")).is_empty() or use.at!="cast" or use.delay!=0.0) \
             or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target") \
             or projection=="healing_return" and (binding.outcome!="heal" or binding.geometry_actor!="target" or use.at!="cast" or use.delay!=0.0):
             Common.error(report,where,"observed projection must match its actual result, source clock and recipient contract");return
+        if projection=="owned_fire_contact" and (use.scope!="source" or use.at!="event.start" or use.delay!=0.0 \
+            or binding.outcome!="damage" or binding.get("damage_type")!="Fire" or binding.geometry_actor!="target" \
+            or str(binding.get("owner_condition_id","")).is_empty() or str(binding.get("save_effect_id","")).is_empty() \
+            or binding.get("trigger")!="sphere_ram" or binding.get("input_field")!=""):
+            Common.error(report,where,"owned fire contact needs an actual source member, exact save/result and zero-delay accepted-action clock");return
     elif binding.get("kind")=="condition_application":
         if use.scope!="cast" or use.at not in ["cast","release"] or use.delay!=0.0 \
             or binding.get("owner_actor")!="caster" or str(binding.get("condition_id","")).is_empty() or binding.get("input_field")!="":
@@ -533,8 +538,12 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             or use.extra.get("live_endpoints",[]).size()!=2:
             Common.error(report,where,"propagation links need application flight scope, native launch and positive optical travel");return
     elif binding.get("kind")=="spell_strike":
-        if use.scope!="recipient" or use.role!="impact" or binding.get("behavior_id")!="spell.vampiric_touch" or binding.get("input_field")!="":
-            Common.error(report,where,"spell strike needs recipient impact scope and the exact first-cast Vampiric Touch contract");return
+        var repeat:bool=binding.get("behavior_id")=="action.spell.vampiric_touch.strike"
+        if use.scope!="recipient" or use.role!="impact" or binding.get("input_field")!="" \
+            or binding.get("behavior_id") not in ["spell.vampiric_touch","action.spell.vampiric_touch.strike"] \
+            or repeat and (binding.get("owner_condition_id")!="condition.spell.vampiric_touch" or use.at!="event.start" or use.delay!=0.0) \
+            or not repeat and not str(binding.get("owner_condition_id","")).is_empty():
+            Common.error(report,where,"spell strike needs recipient impact scope and its exact initial or condition-granted repeat contract");return
     elif binding.get("kind")=="application_result" and use.scope=="application":
         if str(binding.get("save_effect_id","")).is_empty() or str(binding.get("damage_type","")).is_empty():
             Common.error(report,where,"application result lacks save effect or damage type");return
@@ -572,6 +581,11 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             elif projection=="healing_return":
                 _check_healing_return_input_policies(use,component,where,report)
                 if "healing_input" not in clips[use.clip].get("inputs",[]):Common.error(report,where,"healing return requires its actual healing_input setter")
+            elif projection=="owned_fire_contact":
+                if component.get("script")!="res://assets/vfx/sources/40a136ae47ae570e43c9/fire_contact.gd" \
+                    or not input.get("event") is Dictionary or not input.has("owner_uuid") or not input.has("source_uuid") \
+                    or input.event.get("trigger")!=binding.trigger or "contact_event" not in clips[use.clip].get("inputs",[]):
+                    Common.error(report,where,"owned fire contact requires the selected source's exact identity/event interface")
             elif not use.extra.get("input_policies",{}).is_empty():
                 Common.error(report,where,"observed input policy has no exact source-branch proof")
         if binding.get("kind")=="actor_birth":
@@ -608,17 +622,18 @@ static func _check_input_policies(use:Resource,component:Dictionary,where:String
     if not parent_source.contains('if settings.get("density_mask", false):'):
         Common.error(report,where,"qualified Factory density-mask default changed; review this explicit client input policy")
 
-## A finite initial impact does not claim held-owner, repeat-strike, healing or
-## condition coverage. Their declared channels stay explicit consumer omissions.
+## Exact sealed impact branches consume initial strike or the completed grant
+## witness. Neither consumes healing, recipient condition or delayed ticks.
 static func _check_vampiric_input_policies(use:Resource,component:Dictionary,where:String,report:Dictionary)->void:
+    var repeat:bool=use.constructor_input.get("behavior_id")=="action.spell.vampiric_touch.strike"
     var policies:Dictionary={}
-    for name in ["owner_input","healing_input","condition_input","tick_input"]:
-        policies[name]={"mode":"not_applicable","reason":"first_cast_impact_does_not_consume_owner_or_repeat_inputs"}
+    for name in (["healing_input","condition_input","tick_input"] if repeat else ["owner_input","healing_input","condition_input","tick_input"]):
+        policies[name]={"mode":"not_applicable","reason":"accepted_repeat_impact_does_not_consume_healing_condition_tick_inputs" if repeat else "first_cast_impact_does_not_consume_owner_or_repeat_inputs"}
     if use.clip!="bg3-36/vampiric-touch/vampiric_touch_native/impact" \
         or use.constructor_input.component_path!=["owned_contact"] or use.extra.get("input_policies",{})!=policies \
         or component.get("script")!="res://assets/vfx/sources/8d17316149890f77c98b/vampiric_touch.gd" \
         or component.input.get("phase")!="impact" or component.input.get("behavior_id")!="spell.vampiric_touch":
-        Common.error(report,where,"first-cast input policy is restricted to the exact initial Vampiric Touch impact source")
+        Common.error(report,where,"strike input policy is restricted to the exact sealed Vampiric Touch impact source")
 
 
 ## The sealed healing branch admits the actual HealFact independently of the

@@ -65,15 +65,44 @@ extra = {
 }]
 }
 
-[sub_resource type="Resource" id="Resource_missing_impact"]
+[sub_resource type="Resource" id="Resource_impact"]
 script = ExtResource("4_heal")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/impact"
 role = "impact"
 scope = "recipient"
-at = "cast"
+constructor_input = {
+"kind": "spell_strike",
+"behavior_id": "action.spell.vampiric_touch.strike",
+"owner_condition_id": "condition.spell.vampiric_touch",
+"damage_type": "Necrotic",
+"component_path": ["owned_contact"],
+"input_field": ""
+}
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
 source_end = 0.44
 duration_policy = "authored"
-unbound_constructor_inputs = PackedStringArray("actual_repeat_owner_activity_not_bound")
+extra = {
+"input_policies": {
+"healing_input": {"mode": "not_applicable", "reason": "accepted_repeat_impact_does_not_consume_healing_condition_tick_inputs"},
+"condition_input": {"mode": "not_applicable", "reason": "accepted_repeat_impact_does_not_consume_healing_condition_tick_inputs"},
+"tick_input": {"mode": "not_applicable", "reason": "accepted_repeat_impact_does_not_consume_healing_condition_tick_inputs"}
+},
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
+}]
+}
 
 [resource]
 script = ExtResource("2_fhpum")
@@ -83,6 +112,6 @@ family = "spell"
 icon = SubResource("Resource_3r58r")
 body = SubResource("Resource_orvy0")
 effect_sources = PackedStringArray()
-effects = Array[ExtResource("4_heal")]([SubResource("Resource_healing"), SubResource("Resource_missing_impact")])
+effects = Array[ExtResource("4_heal")]([SubResource("Resource_healing"), SubResource("Resource_impact")])
 status = "partial"
-notes = "Repeat remains its actual action identity. The existing action.effects seam binds only a positive native self-heal to the finite healing-return source, retaining the enemy optical endpoint and actual heal parent. Repeat impact remains an explicit owner-activity input gap; a held UUID alone does not prove contribution activity. No new spell cast or equipped item identity is fabricated."
+notes = "Repeat remains its actual action identity. Positive self-healing retains the enemy optical endpoint and actual heal parent. Finite contact binds its own accepted Hit/Crit and positive Necrotic result plus the one disclosed caster before-member; the completed granted attack witnesses owner activity only for that event. Membership alone never proves idle contribution activity. Both finite sources use their actual result clocks. The existing UUID lifecycle still owns the held hand and removal; no new cast, item or duplicate held owner is fabricated."

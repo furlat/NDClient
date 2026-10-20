@@ -255,6 +255,15 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
                 actual.native_constructor_evidence=projected.evidence
             _native_action_component(group,node,node,actual,{"values":projected.get("inputs",{}),
                 "gaps":[] if projected.ready else [projected.reason],"evidence":projected.get("evidence",{})},graph)
+        elif descriptor.get("kind")=="spell_strike":
+            var projected:Dictionary=ApplicationResults.spell_strike(node,descriptor,graph)
+            var actual:Dictionary=phase.duplicate()
+            if projected.ready:
+                actual.start_ms=float(graph.starts[projected.node.id])+float(phase.start_ms)-float(markers["event.start"])
+                actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
+                actual.native_constructor_evidence=projected.evidence
+            _native_action_component(group,node,projected.get("node",node),actual,{"values":projected.get("inputs",{}),
+                "gaps":[] if projected.ready else [projected.reason],"evidence":projected.get("evidence",{})},graph)
         elif descriptor.get("kind")=="observed_event":
             if Occurrences.application(node):continue
             for projected in ApplicationResults.observed(node,descriptor,graph):

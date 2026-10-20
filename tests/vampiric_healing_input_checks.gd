@@ -48,7 +48,8 @@ func run()->void:
     check(spell.owner_kind=="condition" and spell.owner_ids==PackedStringArray(["condition.spell.vampiric_touch"]) \
         and spell.owner_cues==PackedInt32Array([3,4]) and spell.excluded_cues.is_empty(),"Held and retire probes hand over to the exact existing UUID lifecycle, without exclusions")
     check(not spell.effects[0].unbound_constructor_inputs.is_empty() and spell.status=="partial", "Future owner before application remains an explicit windup gap")
-    check(action.effects.size()==2 and not action.effects[1].unbound_constructor_inputs.is_empty() and action.status=="partial", "Native repeat action gets actual healing only; repeat-impact owner activity remains missing")
+    check(action.effects.size()==2 and action.effects[1].unbound_constructor_inputs.is_empty() \
+        and action.effects[1].constructor_input.get("owner_condition_id")=="condition.spell.vampiric_touch" and action.status=="partial", "Native repeat contact has its own exact grant/result contract; pre-application windup remains partial")
     var descriptor:Dictionary=spell.effects[2].constructor_input
     check(descriptor.projection=="healing_return" and action.effects[0].constructor_input==descriptor \
         and spell.effects[2].at=="cast" and spell.effects[2].delay==0.0,"First and repeat use the same observed-heal projection without a second authored delay")
