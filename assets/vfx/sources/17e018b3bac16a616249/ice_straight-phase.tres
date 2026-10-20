@@ -1,0 +1,64 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_ial03"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_k8r8g"]
+
+[sub_resource type="Resource" id="Resource_4ajex"]
+script = ExtResource("1_ial03")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/4b9580110fc329eabba3/ice_wall.gd"
+input = {
+"debris_clear_interval_seconds": [0.75, 1.45],
+"fog_noise_resource": "res://assets/vfx/sources/900721c102c94ad02849/texture.res",
+"scene": "res://assets/vfx/sources/475b77b7024f2636c921/VFX_Ice_Wall_A.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"kind": "ice",
+"mode": "lifecycle",
+"shape": "straight"
+},
+"side": "full",
+"simulation_hz": 144,
+&"solid_bank": "res://assets/vfx/sources/12a003fffdbfc70fda51/ice_straight-bank.tres",
+"source_breakup": {
+"angular_damp_per_second": 0.7,
+"angular_velocity_source_radians_per_second": [2.0, 1.6, 1.8],
+"body_collision_layer": 2097152,
+"body_mass_kg": 0.3,
+"bounce": 0.08,
+"contact_margin_source_units": 0.04,
+"floor_collision_mask": 1,
+"friction": 0.8,
+"gravity_source_units_per_second_squared": 11.76,
+"linear_damp_per_second": 0.25,
+"seeded_yaw": true,
+"source_seed": 47291,
+"velocity_forward_source_units_per_second": 0.7,
+"velocity_forward_step_source_units_per_second": 0.2,
+"velocity_rise_source_units_per_second": 0.8,
+"velocity_rise_step_source_units_per_second": 0.35,
+"velocity_side_source_units_per_second": 0.7
+}
+}
+provenance = "Private actual Ice assembly transfer; original donor material and cold layers retained."
+
+[resource]
+script = ExtResource("2_k8r8g")
+clip_id = "wall-native/ice_wall_assembly_breakup_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "straight_back"
+source_recipe = "recipes/spells/wall_of_ice.json"
+components = Array[Resource]([SubResource("Resource_4ajex")])
+bindings = [{
+"component": "assembly",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 7.0
+simulation_hz = 144.0
+options = {
+"qualification": "Native-context visual review; not production approval"
+}

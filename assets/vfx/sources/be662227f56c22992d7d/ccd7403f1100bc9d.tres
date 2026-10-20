@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c7903100e89e7c78c542/native_material_receiver.gd"
+input = {"source_snapshot_seconds": 0.8, "alpha_gain": 0.3, "uniforms": {"ColorIntensity": 0.9, "Details_speed": {"type": "Vector2", "value": [0, 0]}}, "source_material": "res://assets/vfx/sources/e8ac042cb6e506bb84bc/m_ice_spikes_I1.tres", "_prepared_materials": [{"key": "b09cc8cd279b20643f56c631b6e2401fa947a074052fcffae68d7444463ec1f7", "path": "res://assets/vfx/sources/fd8791f842eec1152e81/b09cc8cd279b20643f56c631b6e2401fa947a074052fcffae68d7444463ec1f7.res"}]}
+options = {}
+provenance = "Explicit retained native material derivative; recipes/conditions/remaining_art_delta.json"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_brittle_persistent/application"
+label = "brittle"
+phase = "application"
+source_recipe = "recipes/conditions/remaining_art_delta.json"
+components = Array[Resource]([SubResource("visual")])
+bindings = []
+emitters = []
+seconds = 4.0
+options = {"qualification": "source candidate; GPU and actual-recipient visual checks pending"}

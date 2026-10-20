@@ -1,0 +1,72 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/1c032b7dd329b3ac041a/b20d195abb40f67c5c38fe18d6f28bc7e9d864676a28629f24ad5784eb6c73eb.gdshader" id="1_t1qpl"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res" id="2_invdp"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/7eddd0f4a71d6ddc658c/texture.res" id="3_at0un"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/8be991816b0855833827/fixed-four-pose-ribbon.tres" id="4_a8iy1"]
+[ext_resource type="Script" path="res://assets/vfx/sources/914dc571de4538caf45d/style.gd" id="5_opjgm"]
+
+[sub_resource type="Image" id="Image_eirqw"]
+data = {
+"data": PackedByteArray(16, 46, 104, 255, 38, 124, 206, 255, 123, 201, 235, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 3
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_4cfos"]
+image = SubResource("Image_eirqw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yvtie"]
+render_priority = 0
+shader = ExtResource("1_t1qpl")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_4cfos")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.0
+shader_parameter/wake_inner = null
+shader_parameter/wake_tip = null
+shader_parameter/wake_count = null
+shader_parameter/wake_seconds = null
+shader_parameter/wake_history_seconds = 0.055
+shader_parameter/wake_maximum_reach_cells = 0.1
+shader_parameter/wake_mode = 5
+shader_parameter/wake_opacity = 0.48
+shader_parameter/wake_source = ExtResource("3_at0un")
+shader_parameter/wake_detail = ExtResource("2_invdp")
+shader_parameter/wake_dark = Color(0.0627451, 0.18039216, 0.40784314, 1)
+shader_parameter/wake_body = Color(0.14901961, 0.4862745, 0.80784315, 1)
+shader_parameter/wake_edge = Color(0.48235294, 0.7882353, 0.92156863, 1)
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_t1qpl")
+metadata/factory_clock_names = []
+
+[resource]
+script = ExtResource("5_opjgm")
+element = "electric"
+variant_id = "electric.cross_discharge"
+strength = "lesser"
+history_seconds = 0.055
+outer_blade_fraction = 0.25
+maximum_reach_cells = 0.1
+mesh = ExtResource("4_a8iy1")
+material = SubResource("ShaderMaterial_yvtie")
+provenance = [{
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/7eddd0f4a71d6ddc658c/texture.res",
+"sha256": "7eddd0f4a71d6ddc658c6ed9452df16e61ecfc140b93117fca8a1bc7c00b92ca"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res",
+"sha256": "8bc8bf311494b7cec3951453d4f73787b278b4b585239650dd448c9aab10924c"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/d54a92e7968191060328/VFX_Wolven_sword.tscn",
+"sha256": "8eb7f0d2e8a22a853fa63995854baaefc6233615e522b1da1d3d95bf4d1a2e15"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/67b4053d1ed91adbb828/s_shad1.gdshader",
+"sha256": "1d44f16a265d1f4da3555155351dcac27ed129da3a186a5e9593364b49b167ce"
+}]

@@ -52,4 +52,9 @@ func sample(seconds: float) -> void:
 func capture_observation() -> Dictionary:
  return {"spatial_owner_uuid":specification.spatial_owner_uuid,"one_event_uuid":consumed_event_uuid,"event":event,"visible":active,"payload_inferred_from_damage":false,"rest_recast_or_suppression_detonates":false,"sleep_condition_or_forced_movement_solved":false,"optical_lights":0}
 
+func source_bindings() -> Dictionary:
+ var nodes: Array=[rune];var materials: Array=[rune_material]
+ if wave!=null:nodes.append(wave);materials.append(element_material)
+ return {"geometry":nodes,"materials":materials,"static_material_topology":true}
+
 const VfxPackageIO_3388e7d838 = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

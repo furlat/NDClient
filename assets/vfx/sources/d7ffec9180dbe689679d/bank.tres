@@ -1,0 +1,1597 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Material" path="res://assets/vfx/sources/a7ede46933ebd5da12b4/ice_rime_facets_lesser.tres" id="1_nd6lk"]
+[ext_resource type="Material" path="res://assets/vfx/sources/f573c375ba5aa0cdfdfc/ice_rime_facets_medium.tres" id="2_prt8s"]
+[ext_resource type="Material" path="res://assets/vfx/sources/0a362e3b72537f012b5c/ice_rime_facets_greater.tres" id="3_iyflj"]
+[ext_resource type="Material" path="res://assets/vfx/sources/495c6a0e1a9e2cf87adc/ice_clear_glaze_lesser.tres" id="4_j1mo1"]
+[ext_resource type="Material" path="res://assets/vfx/sources/984a3a2c601dd897de33/ice_clear_glaze_medium.tres" id="5_srnda"]
+[ext_resource type="Material" path="res://assets/vfx/sources/d3567658dfe1d640ec1a/ice_clear_glaze_greater.tres" id="6_nohnb"]
+[ext_resource type="Material" path="res://assets/vfx/sources/581d344d7dc91b8c0255/electric_axial_forks_lesser.tres" id="7_2cdi5"]
+[ext_resource type="Material" path="res://assets/vfx/sources/51f2706bfe285536c8aa/electric_axial_forks_medium.tres" id="8_3nxb0"]
+[ext_resource type="Material" path="res://assets/vfx/sources/405fac7894dc417feaf1/electric_axial_forks_greater.tres" id="9_rvt63"]
+[ext_resource type="Material" path="res://assets/vfx/sources/d20f7fba8cba0531eecb/electric_cross_discharge_lesser.tres" id="10_vsxf4"]
+[ext_resource type="Material" path="res://assets/vfx/sources/dcfffc2a174639fd8cf4/electric_cross_discharge_medium.tres" id="11_7lgs7"]
+[ext_resource type="Material" path="res://assets/vfx/sources/e1a6b0ff5e4fa6f0f35d/electric_cross_discharge_greater.tres" id="12_ba8y5"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/1cec35fe0fa3fcfdefd3/fire_blade_tongues_lesser.tscn" id="13_4uutp"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/f74b6a26470fb572192d/fire_blade_tongues_medium.tscn" id="14_gxbsg"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/74e6c522e9aa17385314/fire_blade_tongues_greater.tscn" id="15_0ukxf"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/cef77d21197a087e6c01/fire_ember_sheath_lesser.tscn" id="16_67jdu"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/0fc9f41636c5597ecd3d/fire_ember_sheath_medium.tscn" id="17_rrwal"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/ad9e1aced720cd1768d3/fire_ember_sheath_greater.tscn" id="18_5ovai"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/01d0afd6ba653d1e791f/a6664663fe6e1648ed0282640db7c13f6dcece249117cdb926182a077c122ed3.gdshader" id="19_6ql1n"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/262052a6cefad211573e/texture.res" id="20_oppqt"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/27818ff80e774f4cf214/aac14307c0df8ac2bb26173c7fae8de196d0aac749b44e7887ec885b18d93e72.gdshader" id="21_dbdfp"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/0e3177abe1c5fb689282/881ce583930b7cf1998e90599d2d672725b33c6588c74412a8c31c0958e0fcaa.gdshader" id="22_p1sqj"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/9f6a8d6964c16adc6951/texture.res" id="23_mum7w"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/bed2c1535562496996e3/703bf71502d640a41179e44724efc3ced8d6383312bef39d82128cf2e9d9f17f.gdshader" id="24_r1pv3"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/7a968dba7704a66bf26b/00f527082b3029ac069cac3a52f4434f677fe95ef5db3cc49e32e7a202cb6e72.gdshader" id="25_a0nvq"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/398d60afcd4d71b3d8a6/4d8677b8feb914913216efe2591013fd3315fb1476cb608342ed84be28499357.gdshader" id="26_1xf5f"]
+[ext_resource type="Script" path="res://assets/vfx/sources/a2faf5cdacd180c7a453/weapon_native_presets.gd" id="27_88xg2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mbhde"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("19_6ql1n")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_flipbook = ExtResource("20_oppqt")
+shader_parameter/blade_axis_world = Vector3(0, 1, 0)
+shader_parameter/lateral_scale = 0.48
+shader_parameter/axial_scale = 1.45
+shader_parameter/colour_gain = 1.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_opacity_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f37wr"]
+shader = ExtResource("21_dbdfp")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 9.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.38
+shader_parameter/initial_linear_velocity_max = 0.62
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 5.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.01
+shader_parameter/radial_velocity_max = 0.025
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -15.0
+shader_parameter/initial_angle_max = 15.0
+shader_parameter/scale_min = 0.11
+shader_parameter/scale_max = 0.18
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 1.0
+shader_parameter/anim_speed_max = 1.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_box_extents = Vector3(0.012, 0.13, 0.008)
+shader_parameter/color_value = Color(0.862745, 0.580392, 0.560784, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+metadata/factory_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="QuadMesh" id="QuadMesh_qr6wn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a1fat"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("22_p1sqj")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_pattern = ExtResource("23_mum7w")
+shader_parameter/source_gain = 0.6
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_opacity_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="Curve" id="Curve_2y13p"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_wsadp"]
+_limits = [-2.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1.33238), 0.0, 0.0, 0, 0, Vector2(1, 0.664765), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_x4qp5"]
+_data = [Vector2(0, -0.00285292), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_n582s"]
+curve_x = SubResource("Curve_2y13p")
+curve_y = SubResource("Curve_wsadp")
+curve_z = SubResource("Curve_x4qp5")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_axpbm"]
+shader = ExtResource("24_r1pv3")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.25
+shader_parameter/initial_linear_velocity_max = 0.35
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 1.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.05
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/orbit_velocity_curve = SubResource("CurveXYZTexture_n582s")
+metadata/factory_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_rrxoh"]
+size = 0.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oqdjj"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("25_a0nvq")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/power = 1.0
+shader_parameter/tex = ExtResource("23_mum7w")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_opacity_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="Curve" id="Curve_m6wsy"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.498246, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_syhbo"]
+texture_mode = 1
+curve = SubResource("Curve_m6wsy")
+
+[sub_resource type="Curve" id="Curve_xpn6p"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_l31oa"]
+curve = SubResource("Curve_xpn6p")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vkgp5"]
+shader = ExtResource("26_1xf5f")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.1
+shader_parameter/scale_max = 0.12
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.4
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.03
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_syhbo")
+shader_parameter/scale_curve = SubResource("CurveTexture_l31oa")
+metadata/factory_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="QuadMesh" id="QuadMesh_imyki"]
+size = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mjtjf"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("19_6ql1n")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_flipbook = ExtResource("20_oppqt")
+shader_parameter/blade_axis_world = Vector3(0, 1, 0)
+shader_parameter/lateral_scale = 0.48
+shader_parameter/axial_scale = 1.45
+shader_parameter/colour_gain = 1.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_opacity_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gx8gp"]
+shader = ExtResource("21_dbdfp")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 9.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.38
+shader_parameter/initial_linear_velocity_max = 0.62
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 5.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.01
+shader_parameter/radial_velocity_max = 0.025
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -15.0
+shader_parameter/initial_angle_max = 15.0
+shader_parameter/scale_min = 0.11
+shader_parameter/scale_max = 0.18
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 1.0
+shader_parameter/anim_speed_max = 1.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_box_extents = Vector3(0.012, 0.13, 0.008)
+shader_parameter/color_value = Color(0.862745, 0.580392, 0.560784, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+metadata/factory_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_edft0"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("22_p1sqj")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_pattern = ExtResource("23_mum7w")
+shader_parameter/source_gain = 0.6
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_opacity_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5dfq6"]
+shader = ExtResource("24_r1pv3")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.25
+shader_parameter/initial_linear_velocity_max = 0.35
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 1.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.05
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/orbit_velocity_curve = SubResource("CurveXYZTexture_n582s")
+metadata/factory_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_km4ax"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("25_a0nvq")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/power = 1.0
+shader_parameter/tex = ExtResource("23_mum7w")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_opacity_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2is67"]
+shader = ExtResource("26_1xf5f")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.1
+shader_parameter/scale_max = 0.12
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.4
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.03
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_syhbo")
+shader_parameter/scale_curve = SubResource("CurveTexture_l31oa")
+metadata/factory_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_og6fp"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("19_6ql1n")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_flipbook = ExtResource("20_oppqt")
+shader_parameter/blade_axis_world = Vector3(0, 1, 0)
+shader_parameter/lateral_scale = 0.48
+shader_parameter/axial_scale = 1.45
+shader_parameter/colour_gain = 1.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_opacity_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_obxtl"]
+shader = ExtResource("21_dbdfp")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 9.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.38
+shader_parameter/initial_linear_velocity_max = 0.62
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 5.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.01
+shader_parameter/radial_velocity_max = 0.025
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -15.0
+shader_parameter/initial_angle_max = 15.0
+shader_parameter/scale_min = 0.11
+shader_parameter/scale_max = 0.18
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 1.0
+shader_parameter/anim_speed_max = 1.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_box_extents = Vector3(0.012, 0.13, 0.008)
+shader_parameter/color_value = Color(0.862745, 0.580392, 0.560784, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+metadata/factory_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nmu8o"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("22_p1sqj")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_pattern = ExtResource("23_mum7w")
+shader_parameter/source_gain = 0.6
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_opacity_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kcsbu"]
+shader = ExtResource("24_r1pv3")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.25
+shader_parameter/initial_linear_velocity_max = 0.35
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 1.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.05
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/orbit_velocity_curve = SubResource("CurveXYZTexture_n582s")
+metadata/factory_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ixga7"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("25_a0nvq")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/power = 1.0
+shader_parameter/tex = ExtResource("23_mum7w")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_opacity_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7wsa8"]
+shader = ExtResource("26_1xf5f")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.1
+shader_parameter/scale_max = 0.12
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.4
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.03
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_syhbo")
+shader_parameter/scale_curve = SubResource("CurveTexture_l31oa")
+metadata/factory_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7utym"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("19_6ql1n")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_flipbook = ExtResource("20_oppqt")
+shader_parameter/blade_axis_world = Vector3(0, 1, 0)
+shader_parameter/lateral_scale = 0.34
+shader_parameter/axial_scale = 1.15
+shader_parameter/colour_gain = 1.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_opacity_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_usbpe"]
+shader = ExtResource("21_dbdfp")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 9.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.38
+shader_parameter/initial_linear_velocity_max = 0.62
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 5.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.01
+shader_parameter/radial_velocity_max = 0.025
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -15.0
+shader_parameter/initial_angle_max = 15.0
+shader_parameter/scale_min = 0.11
+shader_parameter/scale_max = 0.18
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 1.0
+shader_parameter/anim_speed_max = 1.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_box_extents = Vector3(0.012, 0.13, 0.008)
+shader_parameter/color_value = Color(0.862745, 0.580392, 0.560784, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+metadata/factory_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0bkk6"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("22_p1sqj")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_pattern = ExtResource("23_mum7w")
+shader_parameter/source_gain = 0.6
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_opacity_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ig57g"]
+shader = ExtResource("24_r1pv3")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.25
+shader_parameter/initial_linear_velocity_max = 0.35
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 1.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.05
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/orbit_velocity_curve = SubResource("CurveXYZTexture_n582s")
+metadata/factory_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivbnt"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("25_a0nvq")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/power = 1.0
+shader_parameter/tex = ExtResource("23_mum7w")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_opacity_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wv1lc"]
+shader = ExtResource("26_1xf5f")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.1
+shader_parameter/scale_max = 0.12
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.4
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.03
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_syhbo")
+shader_parameter/scale_curve = SubResource("CurveTexture_l31oa")
+metadata/factory_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flxk8"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("19_6ql1n")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_flipbook = ExtResource("20_oppqt")
+shader_parameter/blade_axis_world = Vector3(0, 1, 0)
+shader_parameter/lateral_scale = 0.34
+shader_parameter/axial_scale = 1.15
+shader_parameter/colour_gain = 1.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_opacity_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5qvrl"]
+shader = ExtResource("21_dbdfp")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 9.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.38
+shader_parameter/initial_linear_velocity_max = 0.62
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 5.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.01
+shader_parameter/radial_velocity_max = 0.025
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -15.0
+shader_parameter/initial_angle_max = 15.0
+shader_parameter/scale_min = 0.11
+shader_parameter/scale_max = 0.18
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 1.0
+shader_parameter/anim_speed_max = 1.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_box_extents = Vector3(0.012, 0.13, 0.008)
+shader_parameter/color_value = Color(0.862745, 0.580392, 0.560784, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+metadata/factory_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f6wy3"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("22_p1sqj")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_pattern = ExtResource("23_mum7w")
+shader_parameter/source_gain = 0.6
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_opacity_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21x1w"]
+shader = ExtResource("24_r1pv3")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.25
+shader_parameter/initial_linear_velocity_max = 0.35
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 1.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.05
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/orbit_velocity_curve = SubResource("CurveXYZTexture_n582s")
+metadata/factory_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_befrv"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("25_a0nvq")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/power = 1.0
+shader_parameter/tex = ExtResource("23_mum7w")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_opacity_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vocjl"]
+shader = ExtResource("26_1xf5f")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.1
+shader_parameter/scale_max = 0.12
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.4
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.03
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_syhbo")
+shader_parameter/scale_curve = SubResource("CurveTexture_l31oa")
+metadata/factory_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hy2c3"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("19_6ql1n")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_flipbook = ExtResource("20_oppqt")
+shader_parameter/blade_axis_world = Vector3(0, 1, 0)
+shader_parameter/lateral_scale = 0.34
+shader_parameter/axial_scale = 1.15
+shader_parameter/colour_gain = 1.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_opacity_prepared_shader = ExtResource("19_6ql1n")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s7gn"]
+shader = ExtResource("21_dbdfp")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 9.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.38
+shader_parameter/initial_linear_velocity_max = 0.62
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 5.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.01
+shader_parameter/radial_velocity_max = 0.025
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -15.0
+shader_parameter/initial_angle_max = 15.0
+shader_parameter/scale_min = 0.11
+shader_parameter/scale_max = 0.18
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 1.0
+shader_parameter/anim_speed_max = 1.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_box_extents = Vector3(0.012, 0.13, 0.008)
+shader_parameter/color_value = Color(0.862745, 0.580392, 0.560784, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+metadata/factory_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("21_dbdfp")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_526a3"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("22_p1sqj")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/source_pattern = ExtResource("23_mum7w")
+shader_parameter/source_gain = 0.6
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_opacity_prepared_shader = ExtResource("22_p1sqj")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uc2pl"]
+shader = ExtResource("24_r1pv3")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.25
+shader_parameter/initial_linear_velocity_max = 0.35
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 1.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.05
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/orbit_velocity_curve = SubResource("CurveXYZTexture_n582s")
+metadata/factory_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("24_r1pv3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_elwwe"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("25_a0nvq")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/power = 1.0
+shader_parameter/tex = ExtResource("23_mum7w")
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_opacity_prepared_shader = ExtResource("25_a0nvq")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rwimo"]
+shader = ExtResource("26_1xf5f")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 1.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.1
+shader_parameter/scale_max = 0.12
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.4
+shader_parameter/emission_ring_radius = 0.08
+shader_parameter/emission_ring_inner_radius = 0.03
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(5, 1.2, 0.427, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_syhbo")
+shader_parameter/scale_curve = SubResource("CurveTexture_l31oa")
+metadata/factory_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("26_1xf5f")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+
+[resource]
+script = ExtResource("27_88xg2")
+fire = {
+"fire.blade_tongues:greater": ExtResource("15_0ukxf"),
+"fire.blade_tongues:lesser": ExtResource("13_4uutp"),
+"fire.blade_tongues:medium": ExtResource("14_gxbsg"),
+"fire.ember_sheath:greater": ExtResource("18_5ovai"),
+"fire.ember_sheath:lesser": ExtResource("16_67jdu"),
+"fire.ember_sheath:medium": ExtResource("17_rrwal")
+}
+fire_layers = {
+"fire.blade_tongues:greater": [{
+"name": "Fire",
+"properties": {
+"amount": 80,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_qr6wn"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 0.52,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_og6fp"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_obxtl"),
+"seed": 31,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "Trails",
+"properties": {
+"amount": 5,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("RibbonTrailMesh_rrxoh"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 2.0,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_nmu8o"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_kcsbu"),
+"seed": 31,
+"trail_enabled": true,
+"trail_lifetime": 0.5,
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "sparks",
+"properties": {
+"amount": 4,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_imyki"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_ixga7"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_7wsa8"),
+"seed": 31,
+"trail_lifetime": 0.5,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.290464, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}],
+"fire.blade_tongues:lesser": [{
+"name": "Fire",
+"properties": {
+"amount": 32,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_qr6wn"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 0.52,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_mbhde"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_f37wr"),
+"seed": 31,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "Trails",
+"properties": {
+"amount": 5,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("RibbonTrailMesh_rrxoh"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 2.0,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_a1fat"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_axpbm"),
+"seed": 31,
+"trail_enabled": true,
+"trail_lifetime": 0.5,
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "sparks",
+"properties": {
+"amount": 4,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_imyki"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_oqdjj"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_vkgp5"),
+"seed": 31,
+"trail_lifetime": 0.5,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.290464, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}],
+"fire.blade_tongues:medium": [{
+"name": "Fire",
+"properties": {
+"amount": 56,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_qr6wn"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 0.52,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_mjtjf"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_gx8gp"),
+"seed": 31,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "Trails",
+"properties": {
+"amount": 5,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("RibbonTrailMesh_rrxoh"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 2.0,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_edft0"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_5dfq6"),
+"seed": 31,
+"trail_enabled": true,
+"trail_lifetime": 0.5,
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "sparks",
+"properties": {
+"amount": 4,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_imyki"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_km4ax"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_2is67"),
+"seed": 31,
+"trail_lifetime": 0.5,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.290464, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}],
+"fire.ember_sheath:greater": [{
+"name": "Fire",
+"properties": {
+"amount": 40,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_qr6wn"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 0.38,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_hy2c3"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_4s7gn"),
+"seed": 31,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "Trails",
+"properties": {
+"amount": 5,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("RibbonTrailMesh_rrxoh"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 2.0,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_526a3"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_uc2pl"),
+"seed": 31,
+"trail_enabled": true,
+"trail_lifetime": 0.5,
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "sparks",
+"properties": {
+"amount": 4,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_imyki"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_elwwe"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_rwimo"),
+"seed": 31,
+"trail_lifetime": 0.5,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.290464, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}],
+"fire.ember_sheath:lesser": [{
+"name": "Fire",
+"properties": {
+"amount": 16,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_qr6wn"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 0.38,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_7utym"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_usbpe"),
+"seed": 31,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "Trails",
+"properties": {
+"amount": 5,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("RibbonTrailMesh_rrxoh"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 2.0,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_0bkk6"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_ig57g"),
+"seed": 31,
+"trail_enabled": true,
+"trail_lifetime": 0.5,
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "sparks",
+"properties": {
+"amount": 4,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_imyki"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_ivbnt"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_wv1lc"),
+"seed": 31,
+"trail_lifetime": 0.5,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.290464, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}],
+"fire.ember_sheath:medium": [{
+"name": "Fire",
+"properties": {
+"amount": 28,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_qr6wn"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 0.38,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_flxk8"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_5qvrl"),
+"seed": 31,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "Trails",
+"properties": {
+"amount": 5,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("RibbonTrailMesh_rrxoh"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"lifetime": 2.0,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_f6wy3"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_21x1w"),
+"seed": 31,
+"trail_enabled": true,
+"trail_lifetime": 0.5,
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}, {
+"name": "sparks",
+"properties": {
+"amount": 4,
+"cast_shadow": 0,
+"draw_pass_1": SubResource("QuadMesh_imyki"),
+"emitting": false,
+"fixed_fps": 60,
+"layers": 524288,
+"local_coords": true,
+"material_override": SubResource("ShaderMaterial_befrv"),
+"preprocess": 0.2,
+"process_material": SubResource("ShaderMaterial_vocjl"),
+"seed": 31,
+"trail_lifetime": 0.5,
+"transform": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.290464, 0),
+"use_fixed_seed": true,
+"visibility_aabb": AABB(-1, -1, -1, 2, 3, 2)
+}
+}]
+}
+exterior = {
+"electric.axial_forks:greater": ExtResource("9_rvt63"),
+"electric.axial_forks:lesser": ExtResource("7_2cdi5"),
+"electric.axial_forks:medium": ExtResource("8_3nxb0"),
+"electric.cross_discharge:greater": ExtResource("12_ba8y5"),
+"electric.cross_discharge:lesser": ExtResource("10_vsxf4"),
+"electric.cross_discharge:medium": ExtResource("11_7lgs7"),
+"ice.clear_glaze:greater": ExtResource("6_nohnb"),
+"ice.clear_glaze:lesser": ExtResource("4_j1mo1"),
+"ice.clear_glaze:medium": ExtResource("5_srnda"),
+"ice.rime_facets:greater": ExtResource("3_iyflj"),
+"ice.rime_facets:lesser": ExtResource("1_nd6lk"),
+"ice.rime_facets:medium": ExtResource("2_prt8s")
+}

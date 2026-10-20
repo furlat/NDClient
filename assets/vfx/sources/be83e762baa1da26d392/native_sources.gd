@@ -2,9 +2,15 @@ extends RefCounted
 ## Inspected selected native masks/materials, never entire unrelated effects.
 const Graph=preload("res://assets/vfx/sources/1d02b6d800655ef86df2/resource_graph.gd")
 const Source=preload("res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd")
+const Immutable=preload("res://assets/vfx/sources/c1e0733a7ef81c657ab9/immutable_materials.gd")
 const CONE="res://assets/vfx/sources/90363fadea5df270b1fb/sm_flamethrower_l2.res"
 const ELEMENTS={"thunder":"res://assets/vfx/sources/dd903604bf5fc6524309/wind_native.tres","fire":"res://assets/vfx/sources/c5ad74ab3c07ce02119f/m_fireflameth4.tres","acid":"res://assets/vfx/sources/6ff209a98aedfb2bcb41/acid_native.tres","cold":"res://assets/vfx/sources/ffded0928bacd3bd740f/ice_mist_04_mist.tres","poison":"res://assets/vfx/sources/70be1c02a6cdaa3372d3/stink_small_02_clouds_01.tres","lightning":"res://assets/vfx/sources/5d37dbe1ea3b5e8b3ebb/electric_tail_native.tres"}
-static func finite(original: ShaderMaterial,gain: float) -> ShaderMaterial:
+static func finite(original: ShaderMaterial,gain: float,source_key: String="") -> ShaderMaterial:
+ var identity=source_key if not source_key.is_empty() else original.resource_path
+ assert(not identity.is_empty(),"Prepared extraction requires an explicit untouched source identity")
+ var recipe=[identity,gain]
+ var prepared=Immutable.take("ward_finite",recipe)
+ if prepared!=null:return prepared
  Graph.native_sampler_scopes+=1
  var material: ShaderMaterial=Graph.clone_value(original,{})
  Graph.native_sampler_scopes-=1
@@ -15,9 +21,12 @@ static func finite(original: ShaderMaterial,gain: float) -> ShaderMaterial:
  var token=RegEx.new();token.compile("\\bTIME\\b");code=token.sub(code,"ward_seconds",true)
  code=code.replace("shader_type spatial;","shader_type spatial;\nuniform float ward_seconds=0.0;\nuniform float ward_alpha=0.0;")
  code=Source.finish_fragment(code,"\nALBEDO*="+str(gain)+";\nEMISSION*="+str(gain)+";\nALPHA*=ward_alpha;\n")
- var shader=Shader.new();shader.code=code;Source.replace_shader(material,shader);return material
+ var shader=Shader.new();shader.code=code;Source.replace_shader(material,shader);return Immutable.capture("ward_finite",recipe,material)
 static func element(kind: String,cone: bool=false) -> ShaderMaterial:
  assert(ELEMENTS.has(kind),"Explicit supplied native element is required")
+ var recipe=[kind,cone]
+ var prepared=Immutable.take("ward_element",recipe)
+ if prepared!=null:return prepared
  var material=finite(VfxPackageIO_be83e762ba.resource(ELEMENTS[kind]),.11 if kind in ["fire","acid"] else .55 if kind in ["cold","poison"] else .42)
  # Particle billboard orientation cannot replace the admitted 3D cone carrier.
  if kind in ["cold","poison"]:
@@ -49,8 +58,10 @@ static func element(kind: String,cone: bool=false) -> ShaderMaterial:
    ALPHA*=smoothstep(-0.02,0.025,along)*end_cover*side_cover;
   """)
   var shader=Shader.new();shader.code=code;Source.replace_shader(material,shader)
- return material
+ return Immutable.capture("ward_element",recipe,material)
 static func rune() -> ShaderMaterial:
+ var prepared=Immutable.take("ward_rune",[])
+ if prepared!=null:return prepared
  var material=finite(VfxPackageIO_be83e762ba.resource("res://assets/vfx/sources/15e998736200a1a620df/rune_native.tres"),.16)
  material.set_shader_parameter("Vanishing",.05)
  # Generic perceived spatial state discloses no payload. Preserve native rune
@@ -58,7 +69,7 @@ static func rune() -> ShaderMaterial:
  var original_code=material.shader.code.replace("depth_draw_opaque","depth_draw_never")
  original_code=original_code.replace("ALPHA_SCISSOR_THRESHOLD = n_out6p0;","ALPHA*=smoothstep(n_out6p0,n_out6p0+0.08,n_out18p0);")
  var code=Source.finish_fragment(original_code,"\nALBEDO=vec3(dot(ALBEDO,vec3(0.2126,0.7152,0.0722)));\n")
- var shader=Shader.new();shader.code=code;Source.replace_shader(material,shader);return material
+ var shader=Shader.new();shader.code=code;Source.replace_shader(material,shader);return Immutable.capture("ward_rune",[],material)
 static func draw(parent: Node3D,label: String,mesh: Mesh,material: Material) -> MeshInstance3D:
  var node=MeshInstance3D.new();node.name=label;node.mesh=mesh;node.material_override=material;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;node.hide();parent.add_child(node);return node
 static func clock(material: ShaderMaterial,seconds: float,alpha: float) -> void:

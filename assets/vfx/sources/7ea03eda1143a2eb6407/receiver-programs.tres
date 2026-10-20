@@ -1,0 +1,123 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/7f6ca9b93d7ffa3af8b9/2a6a62199ca46456e3a10a861a7c164206e08351764ed314e2bd80eb55c4a421.gdshader" id="1_etag8"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/5010375539966f421b9d/058fbf1bdaa880202b33565e980f6a8b42d8ce248d9c00ff3cb2defa9af7c907.gdshader" id="2_cps5x"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/bc2265c681f1ec6df125/649fc53a00f2a1a11890017e98b09deaf50ccbe99ae7ff03e8d9f13308d7aaa7.gdshader" id="3_4eqfw"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0fbf9b88434fe02d4db8/weapon_receiver_programs.gd" id="4_rq7gc"]
+
+[resource]
+script = ExtResource("4_rq7gc")
+programs = {
+"7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490": ExtResource("3_4eqfw"),
+"88dab08f51cf855eeb05b3160af1028320df91977651ac9a633cf7983ba0a8d2": ExtResource("1_etag8"),
+"cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956": ExtResource("3_4eqfw"),
+"fd0e8eea64114195bf6cd7f45e018462dce590b5c4288ef6df03fd6539f8dc07": ExtResource("2_cps5x")
+}
+uniforms = {
+"7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490": Array[String](["sheet", "frame_uv", "tint", "layer_alpha", "shadow", "native_body_enabled", "native_body_surface", "native_body_strength", "native_body_ramp", "native_body_ramp_count", "native_body_ramp_floor", "native_body_ramp_ceiling", "native_body_ramp_uses_luma", "body_surface_enabled", "body_surface_count", "body_surface_texture", "body_surface_primary", "body_surface_secondary", "body_surface_tertiary", "body_surface_scale", "body_surface_strength", "body_surface_clock", "body_surface_noise_scale", "body_surface_scroll", "body_surface_twist", "body_surface_waviness", "body_surface_emission", "effect_palette_enabled", "effect_palette", "effect_palette_count", "effect_range", "effect_gamma", "effect_frame", "effect_has_noise", "effect_noise", "condition_tint", "condition_saturation", "condition_brightness", "condition_alpha", "material_cell_size", "flash_strength", "flash_palette", "flash_palette_count", "flash_has_noise", "flash_noise", "flash_gamma", "flash_untinted", "flash_frame", "flash_screen_blend", "condition_film_enabled", "condition_film", "condition_film_frames", "condition_film_frame", "condition_film_palette", "condition_film_strength", "condition_film_gain", "condition_film_weight", "light_table", "light_count", "light_cookies", "light_ambient", "light_cap", "light_normals", "source_quad_size", "wall_opacity", "wall_mask_enabled", "wall_mask_id", "wall_mask_texture", "native_scene_enabled", "native_scene_plane", "native_scene_pivot", "native_scene_ground_height", "has_component_geometry", "component_depth", "component_support", "component_normal", "component_normal_valid", "component_scale_x", "component_depth_range", "component_units", "component_reconstruction_origin", "component_elevation", "frame_uv", "material_cell_size", "authored_base_light", "calibrated_component_receiver", "use_component_depth", "use_component_normals"]),
+"88dab08f51cf855eeb05b3160af1028320df91977651ac9a633cf7983ba0a8d2": Array[String](["two_sided_receiver", "sheet", "frame_uv", "tint", "layer_alpha", "shadow", "native_body_enabled", "native_body_surface", "native_body_strength", "native_body_ramp", "native_body_ramp_count", "native_body_ramp_floor", "native_body_ramp_ceiling", "native_body_ramp_uses_luma", "body_surface_enabled", "body_surface_count", "body_surface_texture", "body_surface_primary", "body_surface_secondary", "body_surface_tertiary", "body_surface_scale", "body_surface_strength", "body_surface_clock", "body_surface_noise_scale", "body_surface_scroll", "body_surface_twist", "body_surface_waviness", "body_surface_emission", "effect_palette_enabled", "effect_palette", "effect_palette_count", "effect_range", "effect_gamma", "effect_frame", "effect_has_noise", "effect_noise", "condition_tint", "condition_saturation", "condition_brightness", "condition_alpha", "material_cell_size", "flash_strength", "flash_palette", "flash_palette_count", "flash_has_noise", "flash_noise", "flash_gamma", "flash_untinted", "flash_frame", "flash_screen_blend", "condition_film_enabled", "condition_film", "condition_film_frames", "condition_film_frame", "condition_film_palette", "condition_film_strength", "condition_film_gain", "condition_film_weight", "authored_base_light", "component_depth", "component_normal", "component_support", "component_normal_valid", "component_depth_range", "component_units", "component_scale_x", "component_reconstruction_origin", "component_elevation", "calibrated_component_receiver", "has_component_geometry", "use_component_depth", "use_component_normals"]),
+"cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956": Array[String](["sheet", "frame_uv", "tint", "layer_alpha", "shadow", "native_body_enabled", "native_body_surface", "native_body_strength", "native_body_ramp", "native_body_ramp_count", "native_body_ramp_floor", "native_body_ramp_ceiling", "native_body_ramp_uses_luma", "body_surface_enabled", "body_surface_count", "body_surface_texture", "body_surface_primary", "body_surface_secondary", "body_surface_tertiary", "body_surface_scale", "body_surface_strength", "body_surface_clock", "body_surface_noise_scale", "body_surface_scroll", "body_surface_twist", "body_surface_waviness", "body_surface_emission", "effect_palette_enabled", "effect_palette", "effect_palette_count", "effect_range", "effect_gamma", "effect_frame", "effect_has_noise", "effect_noise", "condition_tint", "condition_saturation", "condition_brightness", "condition_alpha", "material_cell_size", "flash_strength", "flash_palette", "flash_palette_count", "flash_has_noise", "flash_noise", "flash_gamma", "flash_untinted", "flash_frame", "flash_screen_blend", "condition_film_enabled", "condition_film", "condition_film_frames", "condition_film_frame", "condition_film_palette", "condition_film_strength", "condition_film_gain", "condition_film_weight", "light_table", "light_count", "light_cookies", "light_ambient", "light_cap", "light_normals", "source_quad_size", "wall_opacity", "wall_mask_enabled", "wall_mask_id", "wall_mask_texture", "native_scene_enabled", "native_scene_plane", "native_scene_pivot", "native_scene_ground_height", "has_component_geometry", "component_depth", "component_support", "component_normal", "component_normal_valid", "component_scale_x", "component_depth_range", "component_units", "component_reconstruction_origin", "component_elevation", "frame_uv", "material_cell_size", "authored_base_light", "calibrated_component_receiver", "use_component_depth", "use_component_normals"]),
+"fd0e8eea64114195bf6cd7f45e018462dce590b5c4288ef6df03fd6539f8dc07": Array[String](["sheet", "frame_uv", "tint", "layer_alpha", "shadow", "native_body_enabled", "native_body_surface", "native_body_strength", "native_body_ramp", "native_body_ramp_count", "native_body_ramp_floor", "native_body_ramp_ceiling", "native_body_ramp_uses_luma", "body_surface_enabled", "body_surface_count", "body_surface_texture", "body_surface_primary", "body_surface_secondary", "body_surface_tertiary", "body_surface_scale", "body_surface_strength", "body_surface_clock", "body_surface_noise_scale", "body_surface_scroll", "body_surface_twist", "body_surface_waviness", "body_surface_emission", "effect_palette_enabled", "effect_palette", "effect_palette_count", "effect_range", "effect_gamma", "effect_frame", "effect_has_noise", "effect_noise", "condition_tint", "condition_saturation", "condition_brightness", "condition_alpha", "material_cell_size", "flash_strength", "flash_palette", "flash_palette_count", "flash_has_noise", "flash_noise", "flash_gamma", "flash_untinted", "flash_frame", "flash_screen_blend", "condition_film_enabled", "condition_film", "condition_film_frames", "condition_film_frame", "condition_film_palette", "condition_film_strength", "condition_film_gain", "condition_film_weight", "received", "received_is_encoded_hdr", "light_cap", "source_quad_size", "current_visibility", "use_instance_visibility", "native_body_enabled", "native_body_surface", "native_body_strength", "native_body_ramp", "native_body_ramp_count", "native_body_ramp_floor", "native_body_ramp_ceiling", "native_body_ramp_uses_luma", "body_surface_enabled", "body_surface_count", "body_surface_texture", "body_surface_primary", "body_surface_secondary", "body_surface_tertiary", "body_surface_scale", "body_surface_strength", "body_surface_clock", "body_surface_noise_scale", "body_surface_scroll", "body_surface_twist", "body_surface_waviness", "body_surface_emission", "native_scene_enabled", "native_scene_plane", "native_scene_pivot", "native_scene_ground_height", "has_component_geometry", "component_depth", "component_support", "component_normal", "component_normal_valid", "component_scale_x", "component_depth_range", "component_units", "component_reconstruction_origin", "component_elevation", "frame_uv", "material_cell_size", "atlas_region", "source_crop", "use_instance_atlas", "atlas_cell_size", "wall_opacity", "wall_mask_enabled", "wall_mask_id", "wall_mask_texture"])
+}
+default_textures = {
+"7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490": {},
+"88dab08f51cf855eeb05b3160af1028320df91977651ac9a633cf7983ba0a8d2": {},
+"cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956": {},
+"fd0e8eea64114195bf6cd7f45e018462dce590b5c4288ef6df03fd6539f8dc07": {}
+}
+source_revisions = {
+"7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490": {
+"dependencies": {
+"modular.gdshader": {
+"bytes": 4275.0,
+"sha256": "7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490"
+},
+"presentation/body_surface.gdshaderinc": {
+"bytes": 2587.0,
+"sha256": "b5a3cb70f8d89dbaf956a7e82332fb2157221a9dda9ebc25d5f67483468a0883"
+},
+"presentation/character_material.gdshaderinc": {
+"bytes": 4642.0,
+"sha256": "cf6b40ae46dab7a3f10afa27764cddb14584d49a3b1f6033cefe8007d4cc5273"
+},
+"presentation/light_table.gdshaderinc": {
+"bytes": 1806.0,
+"sha256": "77a856b45ae3816566fa38f79f0d1111332356196d84fb7952412ce74f3d4b16"
+},
+"presentation/lit_receiving.gdshaderinc": {
+"bytes": 5775.0,
+"sha256": "08c3e03137b1ef9ca73eb0c604bf5cc81f9bc420906acff2cf4aee288b49be5b"
+},
+"presentation/native_body_material.gdshaderinc": {
+"bytes": 1446.0,
+"sha256": "8cd7b442ac3ee2d169636554bd09cb1186ed68d3a64ea444bb92d00b3fa61e7b"
+},
+"presentation/native_scene_vertex.gdshaderinc": {
+"bytes": 2901.0,
+"sha256": "e5633ac3fa166ff76da2d5a508649f675e0b0f24d190e0be63836dfdfbc3db63"
+},
+"presentation/native_spell_finish.gdshaderinc": {
+"bytes": 713.0,
+"sha256": "362395910e8aacbe8f3138a40574c876c0417c0ae0affc87f9901c100315791f"
+},
+"presentation/source_colour_modular.gdshaderinc": {
+"bytes": 515.0,
+"sha256": "b51e354aee8cd23c61f888c25ba85e81fa7f1c087035e20018efe47c163407df"
+}
+},
+"dependency_fingerprint": "bab8ddefa2849d55002ea4a7c1dafa307759964bf042609bf09dd8796065c099",
+"expanded_sha256": "cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956",
+"expanded_shader": "res://assets/vfx/sources/f72bb5b2e0f5a585fac6/bab8ddefa2849d55002e.gdshader",
+"kind": "read_only_actual_current_receiving_source",
+"root_code_sha256": "7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490",
+"source_project": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot-authoring-schema",
+"source_root": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot-authoring-schema/modular.gdshader"
+},
+"cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956": {
+"dependencies": {
+"modular.gdshader": {
+"bytes": 4275.0,
+"sha256": "7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490"
+},
+"presentation/body_surface.gdshaderinc": {
+"bytes": 2587.0,
+"sha256": "b5a3cb70f8d89dbaf956a7e82332fb2157221a9dda9ebc25d5f67483468a0883"
+},
+"presentation/character_material.gdshaderinc": {
+"bytes": 4642.0,
+"sha256": "cf6b40ae46dab7a3f10afa27764cddb14584d49a3b1f6033cefe8007d4cc5273"
+},
+"presentation/light_table.gdshaderinc": {
+"bytes": 1806.0,
+"sha256": "77a856b45ae3816566fa38f79f0d1111332356196d84fb7952412ce74f3d4b16"
+},
+"presentation/lit_receiving.gdshaderinc": {
+"bytes": 5775.0,
+"sha256": "08c3e03137b1ef9ca73eb0c604bf5cc81f9bc420906acff2cf4aee288b49be5b"
+},
+"presentation/native_body_material.gdshaderinc": {
+"bytes": 1446.0,
+"sha256": "8cd7b442ac3ee2d169636554bd09cb1186ed68d3a64ea444bb92d00b3fa61e7b"
+},
+"presentation/native_scene_vertex.gdshaderinc": {
+"bytes": 2901.0,
+"sha256": "e5633ac3fa166ff76da2d5a508649f675e0b0f24d190e0be63836dfdfbc3db63"
+},
+"presentation/native_spell_finish.gdshaderinc": {
+"bytes": 713.0,
+"sha256": "362395910e8aacbe8f3138a40574c876c0417c0ae0affc87f9901c100315791f"
+},
+"presentation/source_colour_modular.gdshaderinc": {
+"bytes": 515.0,
+"sha256": "b51e354aee8cd23c61f888c25ba85e81fa7f1c087035e20018efe47c163407df"
+}
+},
+"dependency_fingerprint": "bab8ddefa2849d55002ea4a7c1dafa307759964bf042609bf09dd8796065c099",
+"expanded_sha256": "cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956",
+"expanded_shader": "res://assets/vfx/sources/f72bb5b2e0f5a585fac6/bab8ddefa2849d55002e.gdshader",
+"kind": "read_only_actual_current_receiving_source",
+"root_code_sha256": "7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490",
+"source_project": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot-authoring-schema",
+"source_root": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot-authoring-schema/modular.gdshader"
+}
+}

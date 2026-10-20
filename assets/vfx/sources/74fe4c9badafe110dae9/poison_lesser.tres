@@ -1,0 +1,188 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/4518429001dac4c2f808/174fb47bda1e0fe778d978c6563e0f01dd000f15bfa477e682549174f441bf07.gdshader" id="1_8pjcs"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/a37a97c61fa5e4b48079/937c56ce3e9a44bf0761.res" id="2_aqnr8"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/a99cd849ca5fa555d986/2ee146f6d4242b77f25d.res" id="3_tid0g"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/98208968fb5afdc9572f/circle_01.tres" id="4_v82dg"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/sources/73c7be2db6911bdcb201/contact-card.tres" id="5_ygq4h"]
+[ext_resource type="Script" path="res://assets/vfx/sources/4a7480f2530d55f75733/layer.gd" id="6_vo7xk"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/519d41a68dab8d47cd14/66eb6f8f31d4a5a10100cd49890bda98c7947142b7fab0bf4482b68d3bc9ab60.gdshader" id="7_cttyt"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/ef4462b539b9e99efae5/texture.res" id="8_aw2gt"]
+[ext_resource type="Script" path="res://assets/vfx/sources/084133c44e6ed6f0215e/style.gd" id="9_6yui6"]
+
+[sub_resource type="Image" id="Image_tcv4a"]
+data = {
+"data": PackedByteArray(29, 53, 18, 255, 98, 139, 38, 255, 198, 216, 104, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 3
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_fu7ll"]
+image = SubResource("Image_tcv4a")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_708c7"]
+render_priority = 0
+shader = ExtResource("1_8pjcs")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_fu7ll")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.0
+shader_parameter/contact_span = 0.4
+shader_parameter/contact_alpha = 0.7020000000000001
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.2584, 0.19)
+shader_parameter/contact_offset_cells = Vector2(0, -0.0075999997)
+shader_parameter/contact_drift_cells = Vector2(0.0342, 0.0418)
+shader_parameter/contact_angle = -0.4
+shader_parameter/contact_expansion = 0.15
+shader_parameter/mask1_texture = ExtResource("2_aqnr8")
+shader_parameter/mask1_scroll = Vector2(0.1, 0.1)
+shader_parameter/mask1_scale = Vector2(0.2, 1)
+shader_parameter/mask1_radial = false
+shader_parameter/mask1_rotation = 0.0
+shader_parameter/use_mask2 = true
+shader_parameter/mask2_texture = ExtResource("3_tid0g")
+shader_parameter/mask2_scroll = Vector2(0, 0.2)
+shader_parameter/mask2_scale = Vector2(1, 1)
+shader_parameter/mask2_strength = 0.2
+shader_parameter/mask2_blend_mode = 3
+shader_parameter/mask2_radial = false
+shader_parameter/mask2_rotation = 0.0
+shader_parameter/use_mask3 = true
+shader_parameter/mask3_texture = ExtResource("4_v82dg")
+shader_parameter/mask3_scroll = Vector2(0, 0)
+shader_parameter/mask3_scale = Vector2(1, 1)
+shader_parameter/mask3_strength = 1.0
+shader_parameter/mask3_blend_mode = 2
+shader_parameter/mask3_radial = false
+shader_parameter/mask3_rotation = 0.0
+shader_parameter/primary_color = Color(0.7764706, 0.84705883, 0.40784314, 1)
+shader_parameter/secondary_color = Color(0.11372549, 0.20784314, 0.07058824, 1)
+shader_parameter/tertiary_color = Color(0, 0.360784, 0.109804, 1)
+shader_parameter/use_tertiary = true
+shader_parameter/color_smoothness = 1.0
+shader_parameter/billboard = false
+shader_parameter/displacement_scale = 0.0
+shader_parameter/displacement_offset = 0.5
+shader_parameter/time_scale = 1.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/uv_alignment = 0
+shader_parameter/emission_strength = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/edge_cutoff = Vector4(0, 0, 0, 0)
+shader_parameter/alpha_smoothness = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_8pjcs")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_0f04j"]
+script = ExtResource("6_vo7xk")
+layer_id = "Poison0"
+mesh = ExtResource("5_ygq4h")
+material = SubResource("ShaderMaterial_708c7")
+source_paths = PackedStringArray("res://assets/vfx/sources/70be1c02a6cdaa3372d3/stink_small_02_clouds_01.tres", "res://assets/vfx/sources/433811ee46a3565e4314/particle.gdshader")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vq0rf"]
+render_priority = 0
+shader = ExtResource("7_cttyt")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_fu7ll")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.0
+shader_parameter/contact_span = 0.3
+shader_parameter/contact_alpha = 0.741
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.152, 0.1748)
+shader_parameter/contact_offset_cells = Vector2(-0.0342, 0.011399999)
+shader_parameter/contact_drift_cells = Vector2(-0.060799997, 0.0418)
+shader_parameter/contact_angle = -0.75
+shader_parameter/contact_expansion = 0.15
+shader_parameter/contact_mask = ExtResource("8_aw2gt")
+shader_parameter/primary_color = Color(0.7764706, 0.84705883, 0.40784314, 1)
+shader_parameter/secondary_color = Color(0.11372549, 0.20784314, 0.07058824, 1)
+shader_parameter/contact_erosion = 0.18
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("7_cttyt")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_f3fv7"]
+script = ExtResource("6_vo7xk")
+layer_id = "Mask1"
+mesh = ExtResource("5_ygq4h")
+material = SubResource("ShaderMaterial_vq0rf")
+source_paths = PackedStringArray("res://assets/vfx/sources/ef4462b539b9e99efae5/texture.res", "res://assets/vfx/sources/8c4c1048ae861b0a0dc7/s_simple_shader2.tres")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qatid"]
+render_priority = 0
+shader = ExtResource("7_cttyt")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_fu7ll")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.012
+shader_parameter/contact_span = 0.32
+shader_parameter/contact_alpha = 0.6864
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.114, 0.1368)
+shader_parameter/contact_offset_cells = Vector2(0.0266, -0.011399999)
+shader_parameter/contact_drift_cells = Vector2(0.0722, -0.0266)
+shader_parameter/contact_angle = 1.35
+shader_parameter/contact_expansion = 0.15
+shader_parameter/contact_mask = ExtResource("8_aw2gt")
+shader_parameter/primary_color = Color(0.7764706, 0.84705883, 0.40784314, 1)
+shader_parameter/secondary_color = Color(0.11372549, 0.20784314, 0.07058824, 1)
+shader_parameter/contact_erosion = 0.18
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("7_cttyt")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_trt6q"]
+script = ExtResource("6_vo7xk")
+layer_id = "Mask2"
+mesh = ExtResource("5_ygq4h")
+material = SubResource("ShaderMaterial_qatid")
+source_paths = PackedStringArray("res://assets/vfx/sources/ef4462b539b9e99efae5/texture.res", "res://assets/vfx/sources/8c4c1048ae861b0a0dc7/s_simple_shader2.tres")
+
+[resource]
+script = ExtResource("9_6yui6")
+element = "poison"
+strength = "lesser"
+duration_seconds = 0.44
+use_optical_surface = true
+layers = Array[Resource]([SubResource("Resource_0f04j"), SubResource("Resource_f3fv7"), SubResource("Resource_trt6q")])
+provenance = [{
+"license_evidence": "factory-source:docs/licenses/binbun/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/70be1c02a6cdaa3372d3/stink_small_02_clouds_01.tres",
+"sha256": "252efba8de3df961fdc2823db659b1a976218b0e31dfa2611124933672275cbd"
+}, {
+"license_evidence": "factory-source:docs/licenses/binbun/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/433811ee46a3565e4314/particle.gdshader",
+"sha256": "bb3a3c4b598bd07f49c017aa9b0e107efff39bca48822b60e10ce643b4a8d831"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/ef4462b539b9e99efae5/texture.res",
+"sha256": "ef4462b539b9e99efae532cc36d12f17af67b7c6dbce68807f47b98ab4181147"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/8c4c1048ae861b0a0dc7/s_simple_shader2.tres",
+"sha256": "a18575aefc1534f5ff2626a810b6839eac9891b36cd8a290d708a2e0c56efc80"
+}]

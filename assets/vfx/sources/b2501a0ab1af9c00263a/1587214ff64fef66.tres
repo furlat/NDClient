@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/cca131f01848c92f1da4/prepared_chromatic_orb.gd"
+input = {"scene": "res://assets/vfx/sources/f4ec9e055ca01dec6c75/magic_orb_basic_vfx_03.tscn", "element": "fire", "side": "creature", "palette": ["351810", "6d2917", "ae4a20", "d98b3b", "e7bc72"], "phase": "impact", "attack_outcome": "miss", "launch_seconds": 0.3, "travel_seconds": 0.52, "observed_ground_splash": true, "prepared_draws": "res://assets/vfx/sources/f5a28127735b2c1bdc3e/ab8fb68f6042d11b.tres"}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/chromatic-orb/fire/miss-splash"
+label = "Observed fire ground splash after miss"
+phase = "impact"
+variant = "fire"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.52
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Private native candidate; GPU/art/event qualification pending"}

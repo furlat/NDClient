@@ -1,6 +1,7 @@
 extends RefCounted
 ## Selective asynchronous immutable-resource preparation. Never builds an effect,
 ## calls sample(), publishes a node, owns a clock, or caches occurrence inputs.
+const Bindings = preload("res://assets/vfx/sources/dabf568b4506db4883ad/occurrence_bindings.gd")
 static var resources: Dictionary = {}
 static var requests: Dictionary = {}
 
@@ -10,6 +11,8 @@ static func begin(clip: Dictionary) -> Dictionary:
 	for component in clip.components:
 		pending.append({"path": component.script, "script": true,
 			"input": component.input.duplicate(true), "requested": false})
+		for record in component.input.get("_prepared_materials", []):
+			pending.append({"path": record.path, "script": false, "requested": false})
 	return {"pending": pending, "at": 0, "complete": pending.is_empty(), "error": "",
 		"steps": [], "requested_paths": [], "scope": "immutable resources only; no occurrence prototype"}
 
@@ -46,6 +49,17 @@ static func step(job: Dictionary) -> Dictionary:
 				requests.erase(path)
 	if job.error.is_empty() and resources.has(path):
 		var value: Resource = resources[path]
+		if entry.script:
+			# The source Script's inherited public setter interface is immutable.
+			# Resolve it here rather than during the first owner's tree binding.
+			Bindings.methods(value)
+		elif value is ShaderMaterial:
+			# Native materials lazily reflect their uniform property interface on
+			# the first private duplicate. This is Resource-only publication work;
+			# it does not sample a source or preconstruct an occurrence.
+			value.get_property_list()
+			value.shader.get_shader_uniform_list()
+			operation = "publish_material_and_prepare_immutable_interface"
 		if entry.script and value.has_method("preparation_resources"):
 			var paths: Array = value.preparation_resources(entry.input)
 			for required in paths:
@@ -53,6 +67,13 @@ static func step(job: Dictionary) -> Dictionary:
 				if required not in job.requested_paths:
 					job.requested_paths.append(required)
 					job.pending.append({"path": required, "script": false, "requested": false})
+		# Opt-in immutable interface preparation belongs before publication. A
+		# native material may lazily reflect/compile its uniform interface on its
+		# first private duplicate. This hook may warm immutable Resource APIs;
+		# it must not construct/sample nodes, own clocks or retain occurrence input.
+		if value.has_method("prepare_immutable_interface"):
+			value.prepare_immutable_interface()
+			operation = "publish_resource_and_prepare_immutable_interface"
 		# Transient discovery inputs are not part of any shared prepared asset.
 		entry.erase("input")
 		job.at += 1

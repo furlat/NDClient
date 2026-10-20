@@ -1,0 +1,47 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/126e19553516547aa864/cell_manhattan_01.tres" id="1_v7yco"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/7eddd0f4a71d6ddc658c/texture.res" id="2_c22ww"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/d6cadd18a1555493a135/sheet_material.gdshader" id="3_ls1it"]
+
+[resource]
+resource_name = "Actual weapon — electric.pure_storm greater pure candidate"
+render_priority = 0
+shader = ExtResource("3_ls1it")
+shader_parameter/weapon_pure_enabled = false
+shader_parameter/weapon_pure_axis_valid = false
+shader_parameter/weapon_pure_kind = 2
+shader_parameter/weapon_pure_variant = 1
+shader_parameter/weapon_pure_seconds = null
+shader_parameter/weapon_pure_strength = 0.95
+shader_parameter/weapon_pure_hilt_tip = null
+shader_parameter/weapon_pure_half_width_uv = null
+shader_parameter/weapon_pure_grip_end = null
+shader_parameter/weapon_pure_cells = ExtResource("1_v7yco")
+shader_parameter/weapon_pure_arc_sheet = ExtResource("2_c22ww")
+shader_parameter/weapon_pure_dark = null
+shader_parameter/weapon_pure_body = null
+shader_parameter/weapon_pure_core = null
+shader_parameter/weapon_pure_accent = null
+shader_parameter/weapon_pure_frame = null
+shader_parameter/weapon_pure_has_normals = null
+shader_parameter/weapon_pure_has_normal_valid = null
+shader_parameter/weapon_pure_has_support = null
+metadata/factory_weapon_pure_uniforms = {
+"weapon_pure_accent": Vector3(0.98, 0.63, 0.075),
+"weapon_pure_arc_sheet": ExtResource("2_c22ww"),
+"weapon_pure_body": Vector3(0.065, 0.16, 0.6),
+"weapon_pure_cells": ExtResource("1_v7yco"),
+"weapon_pure_core": Vector3(0.16, 0.66, 0.96),
+"weapon_pure_dark": Vector3(0.018, 0.035, 0.2),
+"weapon_pure_kind": 2,
+"weapon_pure_strength": 0.95,
+"weapon_pure_variant": 1
+}
+metadata/variant_id = "electric.pure_storm"
+metadata/art_status = "pure_elemental_candidate_requires_current_visual_review"
+metadata/preserves_source_alpha = true
+metadata/source_axis = "actual_current_frame_authored_hilt_tip"
+metadata/adds_lights = false
+metadata/assignment_installed = false
+metadata/mechanism = "Two opposing native branching source fields braided across a connected charged body"

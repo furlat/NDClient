@@ -70,7 +70,8 @@ func _construct() -> void:
 	Profile.end("clock_preparation")
 	materials_dirty = false
 	material_sites = Bindings.sites(handle.root)
-	material_signature = Bindings.signature(material_sites)
+	if not handle.get("static_material_topology", false):
+		material_signature = Bindings.signature(material_sites)
 	topology_dirty = false
 	Profile.begin("input_receiver_binding")
 	refresh_input_bindings()
@@ -181,6 +182,31 @@ func forward(method: String, value: Variant) -> void:
 	for node in input_receivers.get(method, []):
 		if is_instance_valid(node):
 			node.call(method, value)
+			# Some adaptive inputs are consumed by the following source sample.
+			# A held display age must not silently discard that placement update.
+			# Only explicit source refresh hooks consume this flag; native particle
+			# time remains owned by the normal advancing sample/post-draw pair.
+			handle.source_inputs_dirty = true
+
+
+func set_actor_layers(value: Dictionary) -> void:
+	forward("set_actor_layers", value)
+
+
+func set_weapon_motion(value: Dictionary) -> void:
+	forward("set_weapon_motion", value)
+
+
+func set_weapon_hit(value: Dictionary) -> void:
+	forward("set_weapon_hit", value)
+
+
+func set_weapon_impact(value: Dictionary) -> void:
+	forward("set_weapon_impact", value)
+
+
+func set_weapon_binding(value: Dictionary) -> void:
+	forward("set_weapon_binding", value)
 
 
 func set_targets(value: Array) -> void:
@@ -218,10 +244,12 @@ func set_delivery_timing(launch: float, travel: float) -> void:
 	for node in input_receivers.get("set_delivery_timing", []):
 		if is_instance_valid(node):
 			node.set_delivery_timing(launch, travel)
+			handle.source_inputs_dirty = true
 
 
 func set_root_path(value: Transform3D) -> void:
 	global_transform = value
+	forward("set_root_path", value)
 
 
 func _exit_tree() -> void:

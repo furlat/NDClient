@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("component")
+component_id = "divine_art"
+constructor_script = "res://assets/vfx/sources/0d1b2fcaa1a9a00de8d7/divine_intervention.gd"
+input = {"geometry_actor": "target", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 8, "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "recipient_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "owner_uuid": "c15d47d3-2403-5c69-950d-fac5ed8d0be8", "condition_id": "", "event_uuid": "084834a5-1d25-5d28-bbd0-fa22225c8acd", "study_contract": "study.divine.divine_strike", "part": "strike", "mode": "instant", "outcome_kind": "damage", "seconds": 0.55, "apply_seconds": 0.12, "retire_seconds": 0.25, "width_cells": 0.018, "vertex_colour": "ffffff", "vertex_alpha": 0.82, "material": {"texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "d9b77b", "grain_strength": 0.2, "native_family": "holy_plume", "source_shader": "res://assets/vfx/sources/388327134640b78113bd/7fbb09109872ebd1046994ac5eac8a2775bbeafbabff54c98041d8b9bcbf9ed7.gdshader"}, "lease": {"owner_uuid": "c15d47d3-2403-5c69-950d-fac5ed8d0be8", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "study_contract": "study.divine.divine_strike", "observed": true, "present": true, "contribution_active": true, "suppressed": false}, "event": {"uuid": "084834a5-1d25-5d28-bbd0-fa22225c8acd", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "canceled": false, "effect_admitted": true, "blocked": false, "actual_healing": 22, "actual_damage": 14, "damage_component_uuid": "6b315430-8901-5dc9-af23-b435acbb1550", "removed_condition_uuids": ["a98da677-774f-552f-9592-8ca766a5ea5b"], "removed_owner_uuid": "c15d47d3-2403-5c69-950d-fac5ed8d0be8", "membership_owner_uuid": "c15d47d3-2403-5c69-950d-fac5ed8d0be8", "membership_feature": "study.divine.divine_strike", "ordinary_item_admitted": true, "item_uuid": "8673afd9-a51b-5c0b-9afe-785d325f272e", "creation_position_cells": [0.0, 0.0, 0.0], "outcome_source": "explicit_plan_only_fixture", "removal_cause": "supplied_exact_owner_retirement"}, "presentation_radius_cells": 6.0, "source_accent_reach_cells": 0.9, "plan_only": true, "gpu_paths": true, "prepared_receiving": "res://assets/vfx/sources/4dd4449f0411c0e5ab8b/1c224e87da43f497.tres"}
+provenance = "Plan-only native study; no verified new backend behavior identity."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "divine-class-study/divine_divine_strike_study/0-strike"
+label = "divine_strike / strike / main"
+phase = "instant"
+variant = "main"
+source_recipe = "res://assets/vfx/sources/6f469c05c8b9c1fbc8e1/feature-matrix.json"
+seconds = 0.55
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("art")])
+bindings = [{"component":"divine_art","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-divine-v386-20261018"}

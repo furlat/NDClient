@@ -3,8 +3,13 @@ extends RefCounted
 ## graph textures survive derivative creation; no source scene is made visible.
 const SourceMaterials = preload("res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd")
 const EnergyPalette = preload("res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd")
+const Immutable = preload("res://assets/vfx/sources/c1e0733a7ef81c657ab9/immutable_materials.gd")
 
 static func make(input: Dictionary, motif: String, finish: String) -> ShaderMaterial:
+	var recipe := [input, motif, finish]
+	var prepared := Immutable.take("smite", recipe)
+	if prepared != null:
+		return prepared
 	var original: ShaderMaterial
 	var donor: Node
 	if input.has("scene"):
@@ -52,6 +57,6 @@ static func make(input: Dictionary, motif: String, finish: String) -> ShaderMate
 	material.render_priority = 1
 	if donor != null:
 		donor.free()
-	return material
+	return Immutable.capture("smite", recipe, material)
 
 const VfxPackageIO_e0cbef75c1 = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

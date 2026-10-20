@@ -1,0 +1,164 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/f3fbe0f1b6f4f051d0a0/ceae20dd6d9833e65075e56df55391315066e9c8342cce2e9396482251b38f29.gdshader" id="1_0fm2c"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res" id="2_qfkt5"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/e7224120f85b5bb4ec41/texture.res" id="3_ae7g0"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/sources/73c7be2db6911bdcb201/contact-card.tres" id="4_gv12l"]
+[ext_resource type="Script" path="res://assets/vfx/sources/4a7480f2530d55f75733/layer.gd" id="5_375o6"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/519d41a68dab8d47cd14/66eb6f8f31d4a5a10100cd49890bda98c7947142b7fab0bf4482b68d3bc9ab60.gdshader" id="6_5k1or"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/febb0c67aed638e9c60b/texture.res" id="7_spbfk"]
+[ext_resource type="Script" path="res://assets/vfx/sources/084133c44e6ed6f0215e/style.gd" id="8_djjrd"]
+
+[sub_resource type="Image" id="Image_3r3tp"]
+data = {
+"data": PackedByteArray(84, 17, 11, 255, 232, 65, 18, 255, 255, 194, 75, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 3
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_et8uj"]
+image = SubResource("Image_3r3tp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o60c6"]
+render_priority = 0
+shader = ExtResource("1_0fm2c")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_et8uj")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.0
+shader_parameter/contact_span = 0.28
+shader_parameter/contact_alpha = 0.88
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.234, 0.3861)
+shader_parameter/contact_offset_cells = Vector2(-0.02925, 0.08775)
+shader_parameter/contact_drift_cells = Vector2(-0.017549999, 0.04095)
+shader_parameter/contact_angle = -0.18
+shader_parameter/contact_expansion = 0.15
+shader_parameter/contact_flame = ExtResource("3_ae7g0")
+shader_parameter/contact_detail = ExtResource("2_qfkt5")
+shader_parameter/primary_color = Color(1, 0.7607843, 0.29411766, 1)
+shader_parameter/secondary_color = Color(0.32941177, 0.06666667, 0.043137256, 1)
+shader_parameter/contact_surface_normal_world = Vector3(0, 0, 0)
+metadata/contact_optical_normal = true
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_0fm2c")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_81wv7"]
+script = ExtResource("5_375o6")
+layer_id = "Flame0"
+mesh = ExtResource("4_gv12l")
+material = SubResource("ShaderMaterial_o60c6")
+source_paths = PackedStringArray("res://assets/vfx/sources/e7224120f85b5bb4ec41/texture.res", "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res", "res://assets/vfx/sources/b79fc4e95cba5450d544/s_basic_typeA7.tres", "res://assets/vfx/sources/3d62e45838aaca42aa3e/VFX_Toony_Fire_2_blue.tscn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arlgd"]
+render_priority = 0
+shader = ExtResource("1_0fm2c")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_et8uj")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.012
+shader_parameter/contact_span = 0.25
+shader_parameter/contact_alpha = 0.78
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.1872, 0.2925)
+shader_parameter/contact_offset_cells = Vector2(0.04095, 0.05265)
+shader_parameter/contact_drift_cells = Vector2(0.017549999, 0.035099998)
+shader_parameter/contact_angle = 0.2
+shader_parameter/contact_expansion = 0.15
+shader_parameter/contact_flame = ExtResource("3_ae7g0")
+shader_parameter/contact_detail = ExtResource("2_qfkt5")
+shader_parameter/primary_color = Color(1, 0.7607843, 0.29411766, 1)
+shader_parameter/secondary_color = Color(0.32941177, 0.06666667, 0.043137256, 1)
+shader_parameter/contact_surface_normal_world = Vector3(0, 0, 0)
+metadata/contact_optical_normal = true
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_0fm2c")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_myj8v"]
+script = ExtResource("5_375o6")
+layer_id = "Flame1"
+mesh = ExtResource("4_gv12l")
+material = SubResource("ShaderMaterial_arlgd")
+source_paths = PackedStringArray("res://assets/vfx/sources/e7224120f85b5bb4ec41/texture.res", "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res", "res://assets/vfx/sources/b79fc4e95cba5450d544/s_basic_typeA7.tres", "res://assets/vfx/sources/3d62e45838aaca42aa3e/VFX_Toony_Fire_2_blue.tscn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iuyj3"]
+render_priority = 0
+shader = ExtResource("6_5k1or")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_et8uj")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.0
+shader_parameter/contact_span = 0.16
+shader_parameter/contact_alpha = 0.45
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.1755, 0.1638)
+shader_parameter/contact_offset_cells = Vector2(0, 0)
+shader_parameter/contact_drift_cells = Vector2(0.04095, 0.05265)
+shader_parameter/contact_angle = 0.25
+shader_parameter/contact_expansion = 0.15
+shader_parameter/contact_mask = ExtResource("7_spbfk")
+shader_parameter/primary_color = Color(1, 0.7607843, 0.29411766, 1)
+shader_parameter/secondary_color = Color(0.32941177, 0.06666667, 0.043137256, 1)
+shader_parameter/contact_erosion = 0.18
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("6_5k1or")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_lg3ld"]
+script = ExtResource("5_375o6")
+layer_id = "Mask2"
+mesh = ExtResource("4_gv12l")
+material = SubResource("ShaderMaterial_iuyj3")
+source_paths = PackedStringArray("res://assets/vfx/sources/febb0c67aed638e9c60b/texture.res", "res://assets/vfx/sources/8c4c1048ae861b0a0dc7/s_simple_shader2.tres")
+
+[resource]
+script = ExtResource("8_djjrd")
+element = "fire"
+strength = "greater"
+duration_seconds = 0.28
+use_optical_surface = true
+layers = Array[Resource]([SubResource("Resource_81wv7"), SubResource("Resource_myj8v"), SubResource("Resource_lg3ld")])
+provenance = [{
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/e7224120f85b5bb4ec41/texture.res",
+"sha256": "e7224120f85b5bb4ec41410d1209816b894af736328602b0b68a0d5704bb7bb7"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res",
+"sha256": "8bc8bf311494b7cec3951453d4f73787b278b4b585239650dd448c9aab10924c"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/b79fc4e95cba5450d544/s_basic_typeA7.tres",
+"sha256": "fbf741f5eb32f4aa3506e32c77108bc4da429bf48b2ee168c58886c10109f7bb"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/3d62e45838aaca42aa3e/VFX_Toony_Fire_2_blue.tscn",
+"sha256": "16231425c86e5c51b08a6f8b2ad5c8b48a3d7b68cab9b6ee89ed8ffd20950fa6"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/febb0c67aed638e9c60b/texture.res",
+"sha256": "febb0c67aed638e9c60b5cc59d07807976a24793ada0b86fbe136f05d84a1e0e"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/8c4c1048ae861b0a0dc7/s_simple_shader2.tres",
+"sha256": "a18575aefc1534f5ff2626a810b6839eac9891b36cd8a290d708a2e0c56efc80"
+}]

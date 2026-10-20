@@ -1,0 +1,36 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_h0cp0"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_rrp57"]
+
+[sub_resource type="Resource" id="Resource_w7von"]
+script = ExtResource("1_h0cp0")
+component_id = "weapon_contact"
+constructor_script = "res://assets/vfx/sources/92195462e2f9774e134a/component.gd"
+input = {
+"style": "res://assets/vfx/sources/74fe4c9badafe110dae9/poison_lesser.tres"
+}
+provenance = "Owned Binbun/LeLu contact derivative; exact source hashes on style; no spell explosion reuse"
+
+[resource]
+script = ExtResource("2_rrp57")
+clip_id = "weapons/contact/poison/lesser"
+label = "Poison weapon contact · lesser"
+phase = "impact"
+variant = "lesser"
+components = Array[Resource]([SubResource("Resource_w7von")])
+bindings = [{
+"component": "weapon_contact",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 0.44
+simulation_hz = 60.0
+options = {
+"adaptive_inputs": true,
+"art_status": "native_candidate_not_visually_approved",
+"follow": false,
+"inputs": ["weapon_impact", "root_path", "entity_geometry"],
+"seeking": "pure source-clock equations; no historical state"
+}

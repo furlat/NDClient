@@ -3,10 +3,18 @@ extends RefCounted
 const Graph = preload("res://assets/vfx/sources/1d02b6d800655ef86df2/resource_graph.gd")
 const SourceMaterials = preload("res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd")
 const Palette = preload("res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd")
+const Immutable = preload("res://assets/vfx/sources/c1e0733a7ef81c657ab9/immutable_materials.gd")
 
 
 static func extract(original: ShaderMaterial, colors: Array, gain: float, finite_power: bool = false) -> ShaderMaterial:
 	assert(original != null and original.shader != null, "Selected original material is absent")
+	# These callers extract untouched source-scene materials. Their stable
+	# resource identity and exact shader source identify the selected graph.
+	assert(not original.resource_path.is_empty(), "Prepared extraction requires a saved untouched donor material")
+	var recipe := [original.resource_path, colors, gain, finite_power]
+	var prepared := Immutable.take("orb_burst", recipe)
+	if prepared != null:
+		return prepared
 	Graph.native_sampler_scopes += 1
 	var material: ShaderMaterial = Graph.clone_value(original, {})
 	Graph.native_sampler_scopes -= 1
@@ -32,7 +40,7 @@ static func extract(original: ShaderMaterial, colors: Array, gain: float, finite
 	shader.code = code
 	SourceMaterials.replace_shader(material, shader)
 	Palette.apply(material, colors, {"quantize": false, "emission_gain": gain})
-	return material
+	return Immutable.capture("orb_burst", recipe, material)
 
 
 static func draw(parent: Node3D, label: String, mesh: Mesh, material: ShaderMaterial) -> MeshInstance3D:

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/1f851a0f5227cc9a1a13/support_foresight.gd"
+input = {"geometry_actor": "caster", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "caster", "socket": "body_center"}], "piece_capacity": 5, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "recipient_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "owner_uuid": "031c7702-7d10-567b-8f2d-ba7dee745e00", "condition_id": "condition.spell.foresight", "event_uuid": "f0894ea6-dd8c-5e0c-be4f-c6159c47c407", "part": "windup", "mode": "windup", "seconds": 0.9, "apply_seconds": 0.18, "retire_seconds": 0.27, "width_cells": 0.024, "vertex_colour": "c7a260", "vertex_alpha": 1.0, "material": {"scene": "res://assets/vfx/sources/74ac066f277573fe9d6a/shield_arcane.tscn", "node": "Breath/Spin/Band0", "fragment_uv_swap": true, "alpha": 0.75, "alpha_floor": 0.35, "emission_gain": 0.0, "uniforms": {"ring_color": {"type": "Color", "value": "856cbe"}, "hot_color": {"type": "Color", "value": "d4b66e"}, "intensity": 0.85, "tile": 1.0, "scroll_speed": 0.1, "pulse_speed": 0.8, "pulse_depth": 0.06, "flow_speed": 0.17, "flow_gain": 0.12, "back_dim": 0.9}}, "lease": {"observed": true, "condition_state": {"condition_uuid": "031c7702-7d10-567b-8f2d-ba7dee745e00", "behavior_id": "condition.spell.foresight", "suppression_provider_uuids": [], "applied_source_event_cursor": 1}, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "authoritative_parent_uuid": "ff7b794b-deca-5161-86c2-773f853d6c25"}, "event": {"uuid": "f0894ea6-dd8c-5e0c-be4f-c6159c47c407", "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "canceled": false}, "parent_owner_uuid": "ff7b794b-deca-5161-86c2-773f853d6c25", "prepared_receiving": "res://assets/vfx/sources/0f7bbcb601cce3ea281d/0c70a804b2cbaf7c.tres"}
+provenance = "Native source mechanisms and actual backend semantics: evidence/parallel-high-level-support-v100/PLAN.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/foresight/windup"
+label = "foresight_native · windup"
+phase = "windup"
+variant = "windup"
+source_recipe = "evidence/parallel-high-level-support-v100/PLAN.md"
+seconds = 0.9
+simulation_hz = 60
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-support-v380-20261018"}

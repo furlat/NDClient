@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c7903100e89e7c78c542/native_material_receiver.gd"
+input = {"source_scene": "res://assets/vfx/sources/f3e524aacc9fef3ca61b/VFX_WindBlow_2.tscn", "source_node": "cut", "uniforms": {"UseFresnel": false, "Scale": {"type": "Vector2", "value": [0.5, 1]}, "Speed_XY": {"type": "Vector2", "value": [0, -1]}}, "source_snapshot_seconds": 0.18, "alpha_gain": 0.08, "source_vertex_policy": "measured_support_only", "native_vertex_colour": [1.0, 1.0, 1.0, 0.025], "_prepared_materials": [{"key": "ddbcc5ad6745d21fd9fb09935f36acb10b759912b8d63624d80b935aa0fc0dee", "path": "res://assets/vfx/sources/e1a1e795cebcde72bea5/ddbcc5ad6745d21fd9fb09935f36acb10b759912b8d63624d80b935aa0fc0dee.res"}]}
+options = {}
+provenance = "Explicit observed event source; recipes/conditions/remaining_art_delta.json"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_draconic_breath_cadence_bludgeoning_event/application"
+label = "event_draconic_bludgeoning"
+phase = "application"
+source_recipe = "recipes/conditions/remaining_art_delta.json"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 4.0
+options = {"qualification":"Event-owned source candidate; actual-event GPU gate and visual checks pending"}

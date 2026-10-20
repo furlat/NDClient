@@ -43,7 +43,7 @@ func _ready() -> void:
 		return
 	slot = Clock.free_slots.pop_back()
 	if not scenes.has(parameters.scene):
-		scenes[parameters.scene] = load(parameters.scene)
+		scenes[parameters.scene] = VfxPackageIO_9a96cad58c.resource(parameters.scene)
 	var scene: PackedScene = scenes[parameters.scene]
 	var visual: Node3D = scene.instantiate()
 	add_child(visual)
@@ -274,6 +274,10 @@ func set_actor_context(value: Dictionary) -> bool:
 	return actor_history.set_actor_context(value) if actor_history != null else false
 
 
+func prepare_actor_context(value: Dictionary) -> Dictionary:
+	return actor_history.prepare_actor_context(value) if actor_history != null else {"ready": true}
+
+
 func set_history_state(value: Dictionary) -> void:
 	if actor_history != null: actor_history.set_history_state(value)
 
@@ -330,3 +334,5 @@ func _exit_tree() -> void:
 	if slot >= 0:
 		Clock.free_slots.append(slot)
 		slot = -1
+
+const VfxPackageIO_9a96cad58c = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

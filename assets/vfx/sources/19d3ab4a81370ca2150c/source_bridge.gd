@@ -15,9 +15,25 @@ static func make(parent: Node3D, clip: Dictionary, layer_mask: int, _use_prepare
 	ResourceGraph.native_sampler_scopes -= 1
 	if handle.error.is_empty():
 		Profile.begin("source_path_normalization")
-		preload("res://assets/vfx/sources/e8a2e9f9c17a7274c3d7/stable_source_paths.gd").normalize(handle.root)
-		for geometry in handle.geometry:
-			geometry.path = str(handle.root.get_path_to(geometry.node))
+		# An exact prepared constructor may prove its complete native names and
+		# paths offline. All actual components must opt in; an unknown component,
+		# a renamed/ambiguous root or an unprepared source retains normalization.
+		# Geometry paths were already collected after component registration.
+		var stable: bool = not handle.components.is_empty()
+		for key in handle.components:
+			var component: Node = handle.components[key]
+			if component.name != String(key) or String(component.name).begins_with("@") or not component.has_method("has_verified_stable_paths"):
+				stable = false
+				break
+			var verified: Variant = component.has_verified_stable_paths()
+			if not verified is bool or not verified:
+				stable = false
+				break
+		if not stable:
+			preload("res://assets/vfx/sources/e8a2e9f9c17a7274c3d7/stable_source_paths.gd").normalize(handle.root)
+			for geometry in handle.geometry:
+				geometry.path = str(handle.root.get_path_to(geometry.node))
+		handle.source_paths_prepared = stable
 		Profile.end("source_path_normalization")
 		Profile.begin("source_adaptation")
 		SourceSpace.adapt_materials(handle.materials) if handle.has("materials") else SourceSpace.adapt(handle.root)

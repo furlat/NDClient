@@ -1,0 +1,27 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/1f59768a77209ba0dc65/sheet_material.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res" id="2_a"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/fde8093965021852e1b3/texture.res" id="3_b"]
+
+[resource]
+resource_name = "Actual equipped weapon — necrotic.hollow_veins medium candidate"
+shader = ExtResource("1_shader")
+shader_parameter/weapon_auxiliary_enabled = false
+shader_parameter/weapon_auxiliary_axis_valid = false
+shader_parameter/weapon_auxiliary_family = 4
+shader_parameter/weapon_auxiliary_variant = 1
+shader_parameter/weapon_auxiliary_strength = 0.7
+shader_parameter/weapon_auxiliary_texture_a = ExtResource("2_a")
+shader_parameter/weapon_auxiliary_texture_b = ExtResource("3_b")
+shader_parameter/weapon_auxiliary_dark = Color(0.035, 0.008, 0.012, 1.0)
+shader_parameter/weapon_auxiliary_body = Color(0.46, 0.07, 0.10, 1.0)
+shader_parameter/weapon_auxiliary_edge = Color(0.88, 0.19, 0.14, 1.0)
+metadata/variant_id = "necrotic.hollow_veins"
+metadata/artistic_strength = "medium"
+metadata/art_status = "uncompiled_source_backed_weapon_material_candidate"
+metadata/production_qualified = false
+metadata/default_selection_changed = false
+metadata/moves_vertices = false
+metadata/changes_source_alpha = false
+metadata/adds_lights = false

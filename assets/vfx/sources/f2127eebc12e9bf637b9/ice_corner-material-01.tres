@@ -1,0 +1,57 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/4c9b0d5ce7af2edcb7fc/program-6ce52bb1f9d983c7da9d.gdshader" id="1_nfk38"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/cc3ee322db85204a95aa/texture.res" id="2_5heio"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/9dd4b1e9c98d16632575/texture.res" id="3_k118y"]
+
+[sub_resource type="Gradient" id="Gradient_meuux"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.682584, 0.786517, 0.929775)
+colors = PackedColorArray(0.09, 0.137667, 0.2, 1, 0.424525, 0.485861, 0.584245, 1, 0.3285, 0.3771, 0.45, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ff6k8"]
+gradient = SubResource("Gradient_meuux")
+
+[sub_resource type="Gradient" id="Gradient_2nxni"]
+interpolation_color_space = 2
+colors = PackedColorArray(0.678944, 0.678944, 0.678943, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_phu81"]
+frequency = 0.0166
+domain_warp_enabled = true
+domain_warp_frequency = -0.06
+domain_warp_fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_edmtc"]
+noise = SubResource("FastNoiseLite_phu81")
+color_ramp = SubResource("Gradient_2nxni")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_nfk38")
+shader_parameter/factory_world_to_source = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/wall_clock = null
+shader_parameter/opacity = null
+shader_parameter/fracture = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/fresnelpower = 1.435
+shader_parameter/AddTexture = ExtResource("2_5heio")
+shader_parameter/BreakFactorGlobal = 0.0
+shader_parameter/Texture_add2_offset = Vector2(3.045, 1.13)
+shader_parameter/AddTexture2 = ExtResource("3_k118y")
+shader_parameter/Details_scale = Vector2(1, 1)
+shader_parameter/Details_speed = Vector2(0, 0.02)
+shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_edmtc")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_ff6k8")
+shader_parameter/ColorIntensity = 1.45
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_nfk38")
+metadata/factory_opacity_prepared_shader = ExtResource("1_nfk38")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true

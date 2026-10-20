@@ -1,0 +1,76 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/1c032b7dd329b3ac041a/b20d195abb40f67c5c38fe18d6f28bc7e9d864676a28629f24ad5784eb6c73eb.gdshader" id="1_w6ur6"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res" id="2_5b1ep"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/b03dcc0a94ec669f5bb7/texture.res" id="3_kliov"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/8be991816b0855833827/fixed-four-pose-ribbon.tres" id="4_y8411"]
+[ext_resource type="Script" path="res://assets/vfx/sources/914dc571de4538caf45d/style.gd" id="5_nhd28"]
+
+[sub_resource type="Image" id="Image_yb8mw"]
+data = {
+"data": PackedByteArray(69, 16, 8, 255, 229, 59, 10, 255, 255, 179, 60, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 3
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_eivua"]
+image = SubResource("Image_yb8mw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bvutl"]
+render_priority = 0
+shader = ExtResource("1_w6ur6")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_eivua")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.0
+shader_parameter/wake_inner = null
+shader_parameter/wake_tip = null
+shader_parameter/wake_count = null
+shader_parameter/wake_seconds = null
+shader_parameter/wake_history_seconds = 0.055
+shader_parameter/wake_maximum_reach_cells = 0.1
+shader_parameter/wake_mode = 1
+shader_parameter/wake_opacity = 0.48
+shader_parameter/wake_source = ExtResource("3_kliov")
+shader_parameter/wake_detail = ExtResource("2_5b1ep")
+shader_parameter/wake_dark = Color(0.27058825, 0.0627451, 0.03137255, 1)
+shader_parameter/wake_body = Color(0.8980392, 0.23137255, 0.039215688, 1)
+shader_parameter/wake_edge = Color(1, 0.7019608, 0.23529412, 1)
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_w6ur6")
+metadata/factory_clock_names = []
+
+[resource]
+script = ExtResource("5_nhd28")
+element = "fire"
+variant_id = "fire.ember_threads"
+strength = "lesser"
+history_seconds = 0.055
+outer_blade_fraction = 0.25
+maximum_reach_cells = 0.1
+mesh = ExtResource("4_y8411")
+material = SubResource("ShaderMaterial_bvutl")
+provenance = [{
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/b03dcc0a94ec669f5bb7/texture.res",
+"sha256": "b03dcc0a94ec669f5bb7ac5cfb81d611990192d0a01da6d404bd1f505d2d0aa3"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res",
+"sha256": "8bc8bf311494b7cec3951453d4f73787b278b4b585239650dd448c9aab10924c"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/8896c975cf0bde2987fd/VFX_Fire_strike.tscn",
+"sha256": "1c540fafc98bc59237cee0bfb813aef5c6764645b4ccbaff6ab49ac4e8b16c42"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/67b4053d1ed91adbb828/s_shad1.gdshader",
+"sha256": "1d44f16a265d1f4da3555155351dcac27ed129da3a186a5e9593364b49b167ce"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/e20b4909845e23a7851f/s_Trail_TypeB.tres",
+"sha256": "76a34b686d06b75f5724549803c725e6557747cb397ed2996ce9e97003809755"
+}]

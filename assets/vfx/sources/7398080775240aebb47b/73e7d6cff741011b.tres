@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/d620b1c37ac78f6f614f/composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/8ddf946230a5d36b99c5/healing.gd", "input": {"scene": "res://assets/vfx/sources/d6654b791469c50248d5/VFX_Healing_Ring_A.tscn", "settings": {"pack": "lelu-healing-protection", "name": "VFX_Healing_Ring_A", "animation": "Init", "scale": 0.48, "height": 1.0, "hue": 0.52, "frames": 432, "close": 0, "palette": ["273958", "386998", "4c9fc2", "6bcbdf", "96e5ee", "c6f5ee"], "mode": "heal", "level": 6, "title": "Heal", "note": "Stronger radial restoration and rising body ribbons than Cure Wounds; no damage reaction.", "cell": 512, "alphaGain": 1.0, "anchor": "target_ground", "id": "heal"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "healing", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "prepared_recipient_bank": "res://assets/vfx/sources/ceacf96e337d162711eb/ba155095f50d5fa3.tres"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/heal.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/heal/back/production_impact"
+label = "Production Impact"
+phase = "production_impact"
+variant = "back"
+source_recipe = "recipes/spells/heal.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

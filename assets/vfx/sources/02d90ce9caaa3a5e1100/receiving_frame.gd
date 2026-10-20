@@ -1,5 +1,6 @@
 extends RefCounted
 ## Measured current receiving support; no canonical body dimensions or rules.
+const QueryIndex = preload("res://assets/vfx/sources/7861b47ba3b77bbd762a/support_query_index.gd")
 
 
 static func measure(surface: Dictionary) -> Dictionary:
@@ -35,15 +36,7 @@ static func support(frame: Dictionary, across_cells: float, elevation_cells: flo
 	var cache_key: Vector2=Vector2(across_cells,elevation_cells-frame.origin.y)
 	if cached.has(cache_key):
 		return {"position":cached[cache_key][0]+frame.origin,"normal":cached[cache_key][1]}
-	var neighbours := []
-	for point in frame.points:
-		var delta: Vector3 = point.position - frame.centre
-		var distance := pow(delta.dot(frame.side) - across_cells, 2.0) + pow(point.position.y - elevation_cells, 2.0)
-		if neighbours.size() < 4 or distance < float(neighbours.back().distance):
-			neighbours.append({"point":point,"distance":distance})
-			neighbours.sort_custom(func(first:Dictionary,second:Dictionary)->bool:return first.distance<second.distance)
-			if neighbours.size() > 4:
-				neighbours.pop_back()
+	var neighbours := _nearest(frame, frame.centre, across_cells, elevation_cells, false)
 	var position := Vector3.ZERO
 	var normal := Vector3.ZERO
 	var weight := .0
@@ -64,12 +57,7 @@ static func tangent_support(frame: Dictionary, centre: Vector3, across: float, r
 	var cache_key: Array=[centre-frame.origin,across,rise]
 	if cached.has(cache_key):
 		return {"position":cached[cache_key][0]+frame.origin,"normal":cached[cache_key][1]}
-	var neighbours: Array = []
-	for point in frame.points:
-		var delta: Vector3 = point.position-centre
-		var distance: float = pow(delta.dot(frame.side)-across,2.0)+pow(delta.dot(frame.up)-rise,2.0)
-		neighbours.append({"point":point,"distance":distance})
-	neighbours.sort_custom(func(first:Dictionary,second:Dictionary)->bool:return first.distance<second.distance)
+	var neighbours := _nearest(frame, centre, across, rise, true)
 	var position: Vector3 = Vector3.ZERO
 	var normal: Vector3 = Vector3.ZERO
 	var weight: float = .0
@@ -89,3 +77,31 @@ static func tangent_support(frame: Dictionary, centre: Vector3, across: float, r
 	cached[cache_key]=[position-frame.origin,result.normal]
 	frame._tangent_cache=cached
 	return result
+
+
+static func _nearest(frame: Dictionary, centre: Vector3, across: float, rise: float, tangent: bool) -> Array:
+	if frame.points.size() >= 32:
+		var index: RefCounted = QueryIndex.obtain(frame, tangent)
+		var found: Dictionary = index.nearest(centre, across, rise)
+		if not found.ambiguous:
+			var neighbours := []
+			for at in found.indices.size():
+				neighbours.append({"point": frame.points[found.indices[at]], "distance": found.distances[at]})
+			return neighbours
+	# Preserve the original source's tie ordering. Array.sort_custom is not a
+	# stable sort, so a reordered equal-distance subset is not equivalent.
+	var neighbours := []
+	for point in frame.points:
+		var delta: Vector3 = point.position - centre
+		var distance := pow(delta.dot(frame.side) - across, 2.0)
+		distance += pow(delta.dot(frame.up) - rise, 2.0) if tangent else pow(point.position.y - rise, 2.0)
+		if tangent or neighbours.size() < 4 or distance < float(neighbours.back().distance):
+			neighbours.append({"point": point, "distance": distance})
+			if not tangent:
+				neighbours.sort_custom(func(first: Dictionary, second: Dictionary) -> bool: return first.distance < second.distance)
+				if neighbours.size() > 4:
+					neighbours.pop_back()
+	if tangent:
+		neighbours.sort_custom(func(first: Dictionary, second: Dictionary) -> bool: return first.distance < second.distance)
+		neighbours.resize(mini(4, neighbours.size()))
+	return neighbours

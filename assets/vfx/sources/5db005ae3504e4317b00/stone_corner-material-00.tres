@@ -1,0 +1,37 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/f278ffd4e754d94795f3/program-5ccce74323e458374640.gdshader" id="1_rcd1f"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/e418bdcc2f6e95a37730/texture.res" id="2_wi1mn"]
+
+[sub_resource type="Image" id="Image_ukqmq"]
+data = {
+"data": PackedByteArray(59, 52, 44, 255, 98, 88, 71, 255, 154, 141, 114, 255, 195, 183, 154, 255, 224, 211, 183, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 5
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_mdeyj"]
+image = SubResource("Image_ukqmq")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_rcd1f")
+shader_parameter/factory_world_to_source = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/factory_source_palette = SubResource("ImageTexture_mdeyj")
+shader_parameter/factory_source_palette_count = 5
+shader_parameter/rock_tex = ExtResource("2_wi1mn")
+shader_parameter/tint = Vector3(1.65, 1.62, 1.48)
+shader_parameter/opacity = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+metadata/factory_source_nearest_palette = true
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_rcd1f")
+metadata/factory_opacity_prepared_shader = ExtResource("1_rcd1f")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true

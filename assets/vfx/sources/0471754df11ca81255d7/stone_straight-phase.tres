@@ -1,0 +1,70 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_aisk7"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_bries"]
+
+[sub_resource type="Resource" id="Resource_uldmy"]
+script = ExtResource("1_aisk7")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/43967dc1d1f84884782f/stone_wall.gd"
+input = {
+"finishing": {
+"alpha_cutoff_byte": 2,
+"association": "linear_premultiplied",
+"block_pixels": 2,
+"colors": ["3b342c", "625847", "9a8d72", "c3b79a", "e0d3b7"],
+"id": "nearest_palette",
+"input_state": "raw_capture"
+},
+"scene": "res://assets/vfx/sources/62e57df98bc5a1e44bb9/VFX_Earth_WallRock.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"kind": "stone",
+"mode": "lifecycle",
+"shape": "straight"
+},
+"side": "whole",
+"simulation_hz": 144,
+&"solid_bank": "res://assets/vfx/sources/ec5bbbec72c0d397ed78/stone_straight-bank.tres",
+"source_breakup": {
+"angular_damp_per_second": 0.7,
+"angular_velocity_source_radians_per_second": [2.0, 1.6, 1.8],
+"body_collision_layer": 2097152,
+"body_mass_kg": 2.0,
+"bounce": 0.08,
+"contact_margin_source_units": 0.04,
+"floor_collision_mask": 1,
+"friction": 0.8,
+"gravity_source_units_per_second_squared": 11.76,
+"linear_damp_per_second": 0.25,
+"seeded_yaw": true,
+"source_seed": 47291,
+"velocity_forward_source_units_per_second": 0.7,
+"velocity_forward_step_source_units_per_second": 0.2,
+"velocity_rise_source_units_per_second": 0.8,
+"velocity_rise_step_source_units_per_second": 0.35,
+"velocity_side_source_units_per_second": 0.7
+}
+}
+provenance = "Pinned native selection; recipes/spells/wall_of_stone.json"
+
+[resource]
+script = ExtResource("2_bries")
+clip_id = "wall-native/wall_of_stone_straight_back_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "straight_back"
+source_recipe = "recipes/spells/wall_of_stone.json"
+components = Array[Resource]([SubResource("Resource_uldmy")])
+bindings = [{
+"component": "assembly",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 7.0
+simulation_hz = 144.0
+options = {
+"qualification": "Native-context visual review; not production approval"
+}

@@ -52,15 +52,7 @@ func sample(seconds: float) -> void:
 	# facing. Use the actual torso patch's centre and nearest real depth sample
 	# for a retained burn; do not keep a face-side floating contact as its base.
 	if not patch.points.is_empty():
-		var centre := Vector3.ZERO
-		for point in patch.points:
-			centre += point.position
-		centre /= float(patch.points.size())
-		var nearest: Dictionary = patch.points[0]
-		for point in patch.points:
-			if point.position.distance_squared_to(centre) < nearest.position.distance_squared_to(centre):
-				nearest = point
-		hit = {"position":nearest.position+nearest.normal*.018,"normal":nearest.normal.normalized()}
+		hit = recipient_torso_contact(patch)
 	var normal: Vector3 = hit.normal
 	var axes := plane_axes(normal)
 	# Three coherent flame surfaces rise from the real torso/contact. Each has

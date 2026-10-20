@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/f95a9864b1f165d83f44/timed_assembly.gd"
+input = {"entries": [{"id": "near", "composition": {"components": [{"script": "res://assets/vfx/sources/b996c54280ac8c5720c5/prepared_cone_frost.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "layer": 0}, "side": "full", "seed": 47291, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 3.0, "position": [0, 0, 0], "scale": 1.0}, {"id": "middle", "composition": {"components": [{"script": "res://assets/vfx/sources/b996c54280ac8c5720c5/prepared_cone_frost.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "layer": 1}, "side": "full", "seed": 47291, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 3.0, "position": [0, 0, 0], "scale": 1.0}, {"id": "far", "composition": {"components": [{"script": "res://assets/vfx/sources/b996c54280ac8c5720c5/prepared_cone_frost.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "layer": 2}, "side": "full", "seed": 47291, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 3.0, "position": [0, 0, 0], "scale": 1.0}, {"id": "ground", "composition": {"components": [{"script": "res://assets/vfx/sources/b996c54280ac8c5720c5/prepared_cone_frost.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "layer": 3}, "side": "full", "seed": 47291, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 3.0, "position": [0, 0, 0], "scale": 1.0}], "opacity_control": true}
+options = {}
+provenance = "Pinned native selection; recipes/spell.cone_of_cold.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "assembled/cone_of_cold_native"
+label = "Whole native assembly"
+phase = "lifecycle"
+variant = "cone_of_cold_native"
+source_recipe = "recipes/spell.cone_of_cold.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "factory_occurrence_alpha", "source_revision": "gpu-analytical-v402-20261018"}

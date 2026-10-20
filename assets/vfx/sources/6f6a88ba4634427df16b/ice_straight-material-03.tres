@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/10e69fb4b55714cdfec9/program-f70356e4f67eddc0eb1c.gdshader" id="1_37um0"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/900721c102c94ad02849/texture.res" id="2_x0ft8"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_37um0")
+shader_parameter/factory_world_to_source = null
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/cold_noise = ExtResource("2_x0ft8")
+shader_parameter/wall_clock = null
+shader_parameter/opacity = null
+shader_parameter/actor_ground = null
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/foreground = false
+shader_parameter/centre = Vector3(0, 2.1213202, 1.0606601)
+shader_parameter/half_extent = Vector3(2.1213202, 2.1213202, 0.84852815)
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_37um0")
+metadata/factory_opacity_prepared_shader = ExtResource("1_37um0")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true

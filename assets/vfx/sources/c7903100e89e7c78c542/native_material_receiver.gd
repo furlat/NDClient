@@ -4,10 +4,28 @@ extends Node3D
 const SourceMaterials = preload("res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd")
 const MaterialValues = preload("res://assets/vfx/sources/601eb8db9c55b6ad084e/shader_material.gd")
 const Palette = preload("res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd")
+const Immutable = preload("res://assets/vfx/sources/c1e0733a7ef81c657ab9/immutable_materials.gd")
 var retained_material: ShaderMaterial
 
 
 static func make_component(input: Dictionary) -> Node3D:
+	var recipe := input.duplicate(false)
+	recipe.erase("_prepared_materials")
+	var material := Immutable.take("native_receiver", recipe)
+	if material == null:
+		material = Immutable.capture("native_receiver", recipe, build_material(input))
+	var root: Node3D = VfxPackageIO_c7903100e8.resource("res://assets/vfx/sources/c7903100e89e7c78c542/native_material_receiver.gd").new()
+	root.retained_material = material
+	material.set_meta("condition_fade_scissor", true)
+	var draw := MeshInstance3D.new()
+	draw.name = "NativeReceivingMaterial"
+	draw.mesh = QuadMesh.new()
+	draw.material_override = material
+	draw.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(draw)
+	return root
+
+static func build_material(input: Dictionary) -> ShaderMaterial:
 	var source: ShaderMaterial
 	var donor: Node
 	if input.has("material_definition"):
@@ -75,21 +93,15 @@ static func make_component(input: Dictionary) -> Node3D:
 		material.set_shader_parameter(parameter, MaterialValues.uniform_value(input.uniforms[parameter]))
 	if not input.get("palette", []).is_empty():
 		Palette.apply(material, input.palette, {"quantize": false, "emission_gain": input.get("emission_gain", .08)})
-	var root: Node3D = VfxPackageIO_c7903100e8.resource("res://assets/vfx/sources/c7903100e89e7c78c542/native_material_receiver.gd").new()
-	root.retained_material = material
-	material.set_meta("condition_fade_scissor",true)
-	var draw := MeshInstance3D.new()
-	draw.name = "NativeReceivingMaterial"
-	draw.mesh = QuadMesh.new()
-	draw.material_override = material
-	draw.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	root.add_child(draw)
 	if donor != null:
 		donor.free()
-	return root
+	return material
 
 
 func sample(seconds: float) -> void:
 	retained_material.set_shader_parameter("owned_clock", seconds)
+
+func source_bindings() -> Dictionary:
+	return {"geometry": get_children(), "materials": [retained_material], "static_material_topology": true}
 
 const VfxPackageIO_c7903100e8 = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

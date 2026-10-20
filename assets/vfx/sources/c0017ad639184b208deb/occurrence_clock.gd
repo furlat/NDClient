@@ -35,28 +35,46 @@ static func flush() -> void:
 		dirty = false
 
 
-func prepare(materials: Array) -> void:
+func _acquire_slot() -> void:
+	if slot >= 0:
+		return
 	ensure_pool()
-	if slot < 0:
-		assert(not free_slots.is_empty(), "VFX occurrence clock capacity exceeded")
-		slot = free_slots.pop_back()
-		image.set_pixel(slot, 0, Color(0.0, 0.0, 0.0, 0.0))
-		dirty = true
+	assert(not free_slots.is_empty(), "VFX occurrence clock capacity exceeded")
+	slot = free_slots.pop_back()
+	image.set_pixel(slot, 0, Color(0.0, 0.0, 0.0, 0.0))
+	dirty = true
+
+
+func prepare(materials: Array) -> void:
+	# A pure component-owned source clock needs no shared texture, slot or
+	# per-frame upload. Acquire only when an actual shader reads the pool.
 	for material in materials:
 		if not material is ShaderMaterial or material.shader == null:
 			continue
 		if seen_materials.get(material) == material.shader:
 			continue
-		bindings = bindings.filter(func(binding: Dictionary) -> bool: return binding.material != material)
+		# A completely new material cannot have an old binding. Keep the removal
+		# for an actual Shader replacement on an already registered material.
+		if seen_materials.has(material):
+			bindings = bindings.filter(func(binding: Dictionary) -> bool: return binding.material != material)
 		if material.has_meta("factory_prepared_shader") and material.get_meta("factory_prepared_shader") == material.shader:
 			var prepared_names: Array = material.get_meta("factory_clock_names", [])
 			seen_materials[material] = material.shader
+			# Exact offline source interfaces may prove that their component owns
+			# every clock and the shader never reads the package pool. Avoid copying
+			# a large native process program per material merely to rediscover it.
+			# Unknown metadata and all declared pool-clock names retain old behavior.
+			var pool_required: Variant = material.get_meta("factory_clock_pool_required") if material.has_meta("factory_clock_pool_required") else null
+			if prepared_names.is_empty() and pool_required is bool and not pool_required:
+				continue
 			if not prepared_names.is_empty() or material.shader.code.contains("float vfx_package_seconds()"):
+				_acquire_slot()
 				material.set_shader_parameter("vfx_package_clock_slot", slot)
 				bindings.append({"material": material, "names": prepared_names, "offsets": {}})
 			continue
 		var code: String = material.shader.code
 		if code.contains("float vfx_package_seconds()"):
+			_acquire_slot()
 			var wrapped_names := []
 			var offsets := RegEx.new()
 			offsets.compile("uniform\\s+float\\s+vfx_package_offset_(\\w+)")
@@ -76,6 +94,7 @@ func prepare(materials: Array) -> void:
 		if names.is_empty() and time_pattern.search(code) == null:
 			seen_materials[material] = material.shader
 			continue
+		_acquire_slot()
 		code = time_pattern.sub(code, "vfx_package_seconds()", true)
 		var prefix := "\nglobal uniform sampler2D vfx_package_clock;\nuniform int vfx_package_clock_slot=0;\nfloat vfx_package_seconds(){return texelFetch(vfx_package_clock,ivec2(vfx_package_clock_slot,0),0).r;}\n"
 		for name in names:
@@ -105,6 +124,8 @@ func prepare(materials: Array) -> void:
 
 
 func sample(seconds: float) -> void:
+	if slot < 0:
+		return
 	image.set_pixel(slot, 0, Color(seconds, 0.0, 0.0, 0.0))
 	dirty = true
 	for binding in bindings:
@@ -128,3 +149,26 @@ func release() -> void:
 	if slot >= 0:
 		free_slots.append(slot)
 		slot = -1
+	bindings.clear()
+	seen_materials.clear()
+
+
+static func shutdown_idle_pool() -> bool:
+	# Explicit editor/test/application teardown, NEVER occurrence retirement.
+	# An application-wide clock remains resident while any owner still holds it.
+	if image == null:
+		return true
+	if free_slots.size() != CAPACITY:
+		return false
+	if RenderingServer.frame_pre_draw.is_connected(flush):
+		RenderingServer.frame_pre_draw.disconnect(flush)
+	if ProjectSettings.has_setting("shader_globals/vfx_package_clock"):
+		RenderingServer.global_shader_parameter_set("vfx_package_clock", null)
+	else:
+		RenderingServer.global_shader_parameter_remove("vfx_package_clock")
+	image = null
+	texture = null
+	free_slots.clear()
+	programs.clear()
+	dirty = false
+	return true

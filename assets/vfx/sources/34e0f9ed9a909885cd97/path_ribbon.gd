@@ -8,7 +8,8 @@ static func assign(draw: MeshInstance3D, points: Array[Vector3], widths: Array[f
 	assert(points.size() == widths.size() and points.size() >= 2)
 	var material: ShaderMaterial = draw.material_override
 	if not material.has_meta("gpu_path_atlas"):
-		Programs.prepare(material, "path_ribbon")
+		if not material.has_meta("gpu_path_prepared_shader") or material.get_meta("gpu_path_prepared_shader") != material.shader:
+			Programs.prepare(material, "path_ribbon")
 		var image := Image.create(64, 32, false, Image.FORMAT_RGBAF)
 		var texture := ImageTexture.create_from_image(image)
 		material.set_meta("gpu_path_atlas", {"image":image, "texture":texture, "rows":0})

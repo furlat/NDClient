@@ -1,0 +1,101 @@
+[gd_resource type="Resource" format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/3bc9326a4b5f8111905a/program-d645b065e504da00.gdshader" id="1_yewgm"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/c7ee1221e2a3647be1d5/texture-1515c011681f55f0.res" id="2_pdhbl"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d1f3ed6a451c3dfec5e4/receiving_program.gd" id="3_jpekp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7sj7c"]
+render_priority = 0
+shader = ExtResource("1_yewgm")
+shader_parameter/source_noise = ExtResource("2_pdhbl")
+shader_parameter/pigment = Color(0.7411765, 0.65882355, 0.54509807, 1)
+shader_parameter/support_clock = 0.0
+shader_parameter/support_envelope = 0.0
+shader_parameter/support_visibility = 1.0
+shader_parameter/grain_strength = 0.2
+shader_parameter/leaf_mask = ExtResource("2_pdhbl")
+shader_parameter/use_leaf_mask = false
+shader_parameter/gpu_support_precise_queries = false
+shader_parameter/gpu_support_count = 0
+shader_parameter/gpu_support_kind = 5
+shader_parameter/gpu_support_part = 8
+shader_parameter/gpu_support_mode = 0
+shader_parameter/gpu_support_centre = Vector3(0, 0, 0)
+shader_parameter/gpu_support_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_support_up = Vector3(0, 0, 0)
+shader_parameter/gpu_support_side = Vector3(0, 0, 0)
+shader_parameter/gpu_support_bottom = 0.0
+shader_parameter/gpu_support_height = 0.0
+shader_parameter/gpu_support_half_width = 0.0
+shader_parameter/gpu_support_seconds = 0.0
+shader_parameter/gpu_support_duration = 1.0
+shader_parameter/gpu_support_width = 0.018
+shader_parameter/gpu_support_radius = 0.0
+shader_parameter/gpu_support_start = Vector3(0, 0, 0)
+shader_parameter/gpu_support_end = Vector3(0, 0, 0)
+shader_parameter/gpu_support_piece_count = 1
+metadata/factory_prepared_shader = ExtResource("1_yewgm")
+metadata/factory_clock_names = []
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_f852t"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 1, 2, 1e-05),
+"attribute_data": PackedByteArray("////0QAAAAAAAAAA////0QAAgD4AAAAA////0QAAAD8AAAAA////0QAAQD8AAAAA////0QAAgD8AAAAA////0QAAAAAAAAA/////0QAAgD4AAAA/////0QAAAD8AAAA/////0QAAQD8AAAA/////0QAAgD8AAAA/////0QAAAAAAAIA/////0QAAgD4AAIA/////0QAAAD8AAIA/////0QAAQD8AAIA/////0QAAgD8AAIA/"),
+"format": 34359742495,
+"index_count": 48,
+"index_data": PackedByteArray("AAABAAUAAQAGAAUAAQACAAYAAgAHAAYAAgADAAcAAwAIAAcAAwAEAAgABAAJAAgABQAGAAoABgALAAoABgAHAAsABwAMAAsABwAIAAwACAANAAwACAAJAA0ACQAOAA0A"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 15,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAAL8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AAAAAAAAAAAAAgD8AAAAAAAAAPwAAgL8AAAAAAAAAPwAAAL8AAAAAAAAAPwAAAAAAAAAAAAAAPwAAAD8AAAAAAAAAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAAL8AAAAAAACAPwAAAAAAAAAAAACAPwAAAD8AAAAAAACAPwAAgD8AAAAA/3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7ibbj"]
+_surfaces = [{
+"aabb": AABB(0, -1, 1, 1, 2, 1e-05),
+"attribute_data": PackedByteArray("////0QAAAAAAAAAA////0QAAgD4AAAAA////0QAAAD8AAAAA////0QAAQD8AAAAA////0QAAgD8AAAAA////0QAAAAAAAAA/////0QAAgD4AAAA/////0QAAAD8AAAA/////0QAAQD8AAAA/////0QAAgD8AAAA/////0QAAAAAAAIA/////0QAAgD4AAIA/////0QAAAD8AAIA/////0QAAQD8AAIA/////0QAAgD8AAIA/"),
+"format": 34359742495,
+"index_count": 48,
+"index_data": PackedByteArray("AAABAAUAAQAGAAUAAQACAAYAAgAHAAYAAgADAAcAAwAIAAcAAwAEAAgABAAJAAgABQAGAAoABgALAAoABgAHAAsABwAMAAsABwAIAAwACAANAAwACAAJAA0ACQAOAA0A"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 15,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAIA/AAAAAAAAAL8AAIA/AAAAAAAAAAAAAIA/AAAAAAAAAD8AAIA/AAAAAAAAgD8AAIA/AAAAPwAAgL8AAIA/AAAAPwAAAL8AAIA/AAAAPwAAAAAAAIA/AAAAPwAAAD8AAIA/AAAAPwAAgD8AAIA/AACAPwAAgL8AAIA/AACAPwAAAL8AAIA/AACAPwAAAAAAAIA/AACAPwAAAD8AAIA/AACAPwAAgD8AAIA//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8jsy8"]
+_surfaces = [{
+"aabb": AABB(0, -1, 2, 1, 2, 1e-05),
+"attribute_data": PackedByteArray("////0QAAAAAAAAAA////0QAAgD4AAAAA////0QAAAD8AAAAA////0QAAQD8AAAAA////0QAAgD8AAAAA////0QAAAAAAAAA/////0QAAgD4AAAA/////0QAAAD8AAAA/////0QAAQD8AAAA/////0QAAgD8AAAA/////0QAAAAAAAIA/////0QAAgD4AAIA/////0QAAAD8AAIA/////0QAAQD8AAIA/////0QAAgD8AAIA/"),
+"format": 34359742495,
+"index_count": 48,
+"index_data": PackedByteArray("AAABAAUAAQAGAAUAAQACAAYAAgAHAAYAAgADAAcAAwAIAAcAAwAEAAgABAAJAAgABQAGAAoABgALAAoABgAHAAsABwAMAAsABwAIAAwACAANAAwACAAJAA0ACQAOAA0A"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 15,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAABAAAAAAAAAAL8AAABAAAAAAAAAAAAAAABAAAAAAAAAAD8AAABAAAAAAAAAgD8AAABAAAAAPwAAgL8AAABAAAAAPwAAAL8AAABAAAAAPwAAAAAAAABAAAAAPwAAAD8AAABAAAAAPwAAgD8AAABAAACAPwAAgL8AAABAAACAPwAAAL8AAABAAACAPwAAAAAAAABAAACAPwAAAD8AAABAAACAPwAAgD8AAABA/3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8fsqs"]
+_surfaces = [{
+"aabb": AABB(0, -1, 3, 1, 2, 1e-05),
+"attribute_data": PackedByteArray("////0QAAAAAAAAAA////0QAAgD4AAAAA////0QAAAD8AAAAA////0QAAQD8AAAAA////0QAAgD8AAAAA////0QAAAAAAAAA/////0QAAgD4AAAA/////0QAAAD8AAAA/////0QAAQD8AAAA/////0QAAgD8AAAA/////0QAAAAAAAIA/////0QAAgD4AAIA/////0QAAAD8AAIA/////0QAAQD8AAIA/////0QAAgD8AAIA/"),
+"format": 34359742495,
+"index_count": 48,
+"index_data": PackedByteArray("AAABAAUAAQAGAAUAAQACAAYAAgAHAAYAAgADAAcAAwAIAAcAAwAEAAgABAAJAAgABQAGAAoABgALAAoABgAHAAsABwAMAAsABwAIAAwACAANAAwACAAJAA0ACQAOAA0A"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 15,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAEBAAAAAAAAAAL8AAEBAAAAAAAAAAAAAAEBAAAAAAAAAAD8AAEBAAAAAAAAAgD8AAEBAAAAAPwAAgL8AAEBAAAAAPwAAAL8AAEBAAAAAPwAAAAAAAEBAAAAAPwAAAD8AAEBAAAAAPwAAgD8AAEBAAACAPwAAgL8AAEBAAACAPwAAAL8AAEBAAACAPwAAAAAAAEBAAACAPwAAAD8AAEBAAACAPwAAgD8AAEBA/3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+
+[resource]
+script = ExtResource("3_jpekp")
+source_constructor = "res://assets/vfx/sources/0d1b2fcaa1a9a00de8d7/divine_intervention.gd"
+source_input_sha256 = "21ae8875fdcbab4e43b3578d125e5221b0c79099a0056e4614fd842630314c05"
+family = 5
+active_piece_count = 4
+material = SubResource("ShaderMaterial_7sj7c")
+meshes = Array[Mesh]([SubResource("ArrayMesh_f852t"), SubResource("ArrayMesh_7ibbj"), SubResource("ArrayMesh_8jsy8"), SubResource("ArrayMesh_8fsqs"), null, null, null, null])
+bounds = Array[AABB]([AABB(-5, -5, -5, 10, 10, 10), AABB(-5, -5, -5, 10, 10, 10), AABB(-5, -5, -5, 10, 10, 10), AABB(-5, -5, -5, 10, 10, 10), AABB(0, 0, 0, 0, 0, 0), AABB(0, 0, 0, 0, 0, 0), AABB(0, 0, 0, 0, 0, 0), AABB(0, 0, 0, 0, 0, 0)])

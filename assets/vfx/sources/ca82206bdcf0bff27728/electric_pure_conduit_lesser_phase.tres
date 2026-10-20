@@ -1,0 +1,47 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_32me3"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_gfqvc"]
+
+[sub_resource type="Resource" id="Resource_8df62"]
+script = ExtResource("1_32me3")
+component_id = "equipped_weapon"
+constructor_script = "res://assets/vfx/sources/b030caea4fa2359738f0/equipped_treatment.gd"
+input = {
+"appearance_mode": "pure",
+"artistic_strength": "lesser",
+"axes": "res://assets/vfx/sources/b8907a76e860483f2da6/pose-bank.tres",
+"element": "electric",
+"exterior": true,
+&"exterior_variant": "electric.axial_forks",
+"native_presets": "res://assets/vfx/sources/d7ffec9180dbe689679d/bank.tres",
+"noise": "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res",
+"pure_preset": "res://assets/vfx/sources/433408fda8558ad49612/electric_pure_conduit_lesser.tres",
+"receiver_programs": "res://assets/vfx/sources/7ea03eda1143a2eb6407/receiver-programs.tres",
+"variant_id": "electric.pure_conduit",
+&"wake_style": "res://assets/vfx/sources/bd8e9efe539331b00cfd/electric_arc_threads_lesser.tres"
+}
+provenance = "Actual equipped sheet; purchased mask provenance in element-studies sources manifests. No new item, condition, attack or lamp."
+
+[resource]
+script = ExtResource("2_gfqvc")
+clip_id = "weapons/equipped/electric/pure_conduit/lesser/sustain"
+label = "electric.pure_conduit · lesser"
+phase = "sustain"
+variant = "electric.pure_conduit"
+components = Array[Resource]([SubResource("Resource_8df62")])
+bindings = [{
+"component": "equipped_weapon",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 60.0
+options = {
+"art_status": "actual_equipped_sheet_candidate_not_human_approved",
+"inputs": ["weapon_binding", "entity_geometry", "actor_layers", "owner_state", "root_path"],
+"requires_actual_receiver_program_preparation": true,
+"runtime": "native_gpu_receiver_and_optional_native_particles",
+"seeking": "sequential_actual_pose_history_with_shader_clock",
+"single_direct_material_owner": true
+}

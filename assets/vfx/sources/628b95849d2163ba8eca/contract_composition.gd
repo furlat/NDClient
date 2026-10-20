@@ -94,4 +94,32 @@ func sample(seconds: float) -> void:
 				binding.player.seek(local_time, true)
 				binding.player.pause()
 
+## Preparation traverses actual recipe data and loads no scene/occurrence.
+static func preparation_resources(contract: Dictionary) -> Array:
+	var paths := []
+	for specification in contract.get("components", []):
+		var script: Script = VfxPackageIO_628b95849d.resource(specification.script)
+		if script.has_method("preparation_resources"):
+			for path in script.preparation_resources(specification.input):
+				if path not in paths:
+					paths.append(path)
+	return paths
+
+func source_bindings() -> Dictionary:
+	if not resolved_emitters.is_empty():
+		return {}
+	var result := {"geometry": [], "materials": [], "lights": [], "players": [], "static_material_topology": true, "static_geometry_layers": true}
+	for component in components.values():
+		if not component.has_method("source_bindings"):
+			return {}
+		var declared: Dictionary = component.source_bindings()
+		if not declared.get("static_material_topology", false):
+			return {}
+		result.static_geometry_layers = result.static_geometry_layers and declared.get("static_geometry_layers", true)
+		for field in ["geometry", "materials", "lights", "players"]:
+			for value in declared.get(field, []):
+				if value not in result[field]:
+					result[field].append(value)
+	return result
+
 const VfxPackageIO_628b95849d = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

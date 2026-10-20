@@ -30,4 +30,7 @@ func sample(seconds: float) -> void:
 func capture_observation() -> Dictionary:
  return {"spatial_owner_uuid":specification.spatial_owner_uuid,"caster_owner_uuid":specification.caster_owner_uuid,"condition":"condition.spell.glyph_of_warding","spatial_effect":"spatial_effect.spell.glyph_of_warding","observed_radius_cells":specification.observed_radius_cells,"neutral_armed_appearance":true,"payload_inferred":false,"visible":active,"suppression_consumes_owner":false,"source_material":"res://assets/vfx/sources/15e998736200a1a620df/rune_native.tres","optical_lights":0,"solves_occupancy_or_trigger":false}
 
+func source_bindings() -> Dictionary:
+ return {"geometry":[draw],"materials":[material],"static_material_topology":true}
+
 const VfxPackageIO_f9823d1983 = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

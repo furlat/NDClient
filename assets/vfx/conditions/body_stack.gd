@@ -31,7 +31,7 @@ static func unbind(material: ShaderMaterial, owner: int) -> void:
 
 static func texture(path: String) -> Texture2D:
 	if not textures.has(path):
-		textures[path] = load(path)
+		textures[path] = VfxPackageIO_11a040843c.resource(path)
 	return textures[path]
 
 
@@ -81,3 +81,5 @@ static func refresh(material: ShaderMaterial, entry: Dictionary) -> void:
 	material.set_shader_parameter("factory_body_kinds", kinds)
 	material.set_shader_parameter("factory_body_strengths", strengths)
 	material.set_shader_parameter("factory_body_periods", periods)
+
+const VfxPackageIO_11a040843c = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

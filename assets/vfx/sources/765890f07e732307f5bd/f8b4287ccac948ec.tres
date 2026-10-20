@@ -1,0 +1,74 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/f2056221575c0261cadf/movement.gd" id="1_4vj3n"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/7597d3e5a3ba44562960/f8b4287ccac948ec.tscn" id="2_gy433"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0250a3f89c551f4fc017/bank.gd" id="3_clk7o"]
+
+[resource]
+script = ExtResource("3_clk7o")
+scene = ExtResource("2_gy433")
+source_script = "res://assets/vfx/sources/dbbd11d7b37fd1be2bc0/movement.gd"
+adapter_script = ExtResource("1_4vj3n")
+stable_paths_prepared = true
+input_sha256 = "07925047f9473d86d18ae7f44569842bf6d2ec8e3cd888fb3ba838df38fc2d08"
+material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windsoil"
+}])
+world_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windsoil"
+}])
+provenance = {
+"clock_ticks_sampled": 0,
+"immutable_material_bindings": Array[Dictionary]([]),
+"immutable_material_policy": "StandardMaterial3D only; audited native family and no script/method/property-track writes",
+"native_lights_retained": Array[String]([]),
+"native_players_retained": Array[String]([]),
+"native_process_materials_private": true,
+"owner_pose_saved": false,
+"pre_tree_emission_baseline": [],
+"retained_materials": [{
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windsoil"
+},
+"shader_sha256": "e4ec918c566cbf371406f7107a532c5b449adf1b0d5a515a3d68db9a5fb81853"
+}],
+"source_input": {
+"animation_missing_policy": "first_available",
+"clip_normal": [0.70710678, 0, 0.70710678],
+"scene": "res://assets/vfx/sources/eacac555d4b66c15cf87/VFX_WindExtras_2.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"close": 0,
+"frames": 289,
+"height": 0,
+"kind": "loop",
+"name": "VFX_WindExtras_2",
+"pack": "lelu-godot-wind-premium-1",
+"palette": ["283d49", "466373", "6e96a4", "99c0c7", "c1dadd", "e2eeeb"],
+"parent": "retreat",
+"scale": 0.75,
+"version": 1
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_phase": "res://assets/vfx/sources/e2608aa45ba0570580c9/00.tres",
+"source_script": "res://assets/vfx/sources/dbbd11d7b37fd1be2bc0/movement.gd",
+"source_script_sha256": "29428846511b21026121467d0988ebc5027451b4f052bd1624b5d0f4113601ca",
+"source_seed_records": [],
+"stable_path_proof": {
+"animation_tracks": 0,
+"complete": true,
+"named_nodes": 2,
+"unresolved": []
+},
+"texture_freeze_policy": "reject_animated_sampler_or_resource_tracks"
+}
+declared_registration_complete = true

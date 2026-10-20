@@ -73,4 +73,7 @@ func _read_only_binding_diagnostic() -> Dictionary:
 func capture_observation() -> Dictionary:
  return {"read_only_cold_binding_diagnostic":_read_only_binding_diagnostic(),"phase":specification.phase,"grant_uuid":specification.grant_uuid,"recipient_uuid":specification.recipient_uuid,"original_caster_uuid":specification.original_caster_uuid,"explicit_retained_element":specification.element,"acting_recipient_uuid":specification.get("acting_recipient_uuid",""),"origin":origin,"heading":heading,"range_cells":3.0,"source_material":Native.ELEMENTS[specification.element],"source_mesh":Native.CONE,"visible":active,"original_dc_level_retained_externally":true,"source_socket":"face" if specification.phase=="exhale" else "current_hand","solves_area_save_damage_or_surface":false,"optical_lights":0,"observer_element_snapshot_gap":true}
 
+func source_bindings() -> Dictionary:
+ return {"geometry":[draw],"materials":[material],"static_material_topology":true}
+
 const VfxPackageIO_2f6628255a = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

@@ -1,0 +1,192 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_c24ik"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_mkw5l"]
+
+[sub_resource type="Resource" id="Resource_3jhmp"]
+script = ExtResource("1_c24ik")
+component_id = "field"
+constructor_script = "res://assets/vfx/sources/1e9c756931e6bf816871/field.gd"
+input = {
+"apply_seconds": 0.55,
+"bar_radius_cells": 0.00416666666666666,
+&"forcecage_bank": "res://assets/vfx/sources/5b71a9fe2647b4bd9f8b/native_sections.tres",
+"form": "cage",
+"material": {
+"palette": ["132a46", "1d4a78", "3e7fad", "89b8d0"],
+"resource": "res://assets/vfx/sources/5b5a61351d0f2a4281e3/m_basic_blueshield1.tres",
+"uniforms": {
+"Gradient_Line": 1.0,
+"Overlay_Power": 2.0,
+"Overlay_Scale": {
+"type": "Vector2",
+"value": [2.0, 2.0]
+},
+"Overlay_Velocity": {
+"type": "Vector2",
+"value": [0.015, 0.03]
+},
+"Proximity_light": 0.0,
+"Size_Sphere": 0.0,
+"darkness": 0.5
+}
+},
+"opacity": 0.55,
+"owner_uuid": "fixture-forcecage-cage",
+"retire_seconds": 0.35,
+"review_states": [{
+"seconds": 3.4,
+"state": {
+"ending_started_at": 3.4
+}
+}],
+"sections": [{
+"horizontal": [2.0, 0.0, 0.0],
+"origin": [-2.0, 0.0, -2.0],
+"uuid": "fixture-cage-face0-column0-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [2.0, 0.0, 0.0],
+"origin": [-2.0, 2.0, -2.0],
+"uuid": "fixture-cage-face0-column0-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [2.0, 0.0, 0.0],
+"origin": [0.0, 0.0, -2.0],
+"uuid": "fixture-cage-face0-column1-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [2.0, 0.0, 0.0],
+"origin": [0.0, 2.0, -2.0],
+"uuid": "fixture-cage-face0-column1-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, 2.0],
+"origin": [2.0, 0.0, -2.0],
+"uuid": "fixture-cage-face1-column0-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, 2.0],
+"origin": [2.0, 2.0, -2.0],
+"uuid": "fixture-cage-face1-column0-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, 2.0],
+"origin": [2.0, 0.0, 0.0],
+"uuid": "fixture-cage-face1-column1-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, 2.0],
+"origin": [2.0, 2.0, 0.0],
+"uuid": "fixture-cage-face1-column1-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [-2.0, 0.0, 0.0],
+"origin": [2.0, 0.0, 2.0],
+"uuid": "fixture-cage-face2-column0-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [-2.0, 0.0, 0.0],
+"origin": [2.0, 2.0, 2.0],
+"uuid": "fixture-cage-face2-column0-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [-2.0, 0.0, 0.0],
+"origin": [0.0, 0.0, 2.0],
+"uuid": "fixture-cage-face2-column1-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [-2.0, 0.0, 0.0],
+"origin": [0.0, 2.0, 2.0],
+"uuid": "fixture-cage-face2-column1-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, -2.0],
+"origin": [-2.0, 0.0, 2.0],
+"uuid": "fixture-cage-face3-column0-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, -2.0],
+"origin": [-2.0, 2.0, 2.0],
+"uuid": "fixture-cage-face3-column0-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, -2.0],
+"origin": [-2.0, 0.0, 0.0],
+"uuid": "fixture-cage-face3-column1-row0",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [0.0, 0.0, -2.0],
+"origin": [-2.0, 2.0, 0.0],
+"uuid": "fixture-cage-face3-column1-row1",
+"vertical": [0, 2, 0]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [-2.0, 0.025, -2.0],
+"uuid": "fixture-cage-floor-0-0",
+"vertical": [0, 0, 2]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [-2.0, 0.025, 0.0],
+"uuid": "fixture-cage-floor-0-1",
+"vertical": [0, 0, 2]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [0.0, 0.025, -2.0],
+"uuid": "fixture-cage-floor-1-0",
+"vertical": [0, 0, 2]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [0.0, 0.025, 0.0],
+"uuid": "fixture-cage-floor-1-1",
+"vertical": [0, 0, 2]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [-2.0, 4.025, -2.0],
+"uuid": "fixture-cage-roof-0-0",
+"vertical": [0, 0, 2]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [-2.0, 4.025, 0.0],
+"uuid": "fixture-cage-roof-0-1",
+"vertical": [0, 0, 2]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [0.0, 4.025, -2.0],
+"uuid": "fixture-cage-roof-1-0",
+"vertical": [0, 0, 2]
+}, {
+"horizontal": [2, 0, 0],
+"origin": [0.0, 4.025, 0.0],
+"uuid": "fixture-cage-roof-1-1",
+"vertical": [0, 0, 2]
+}],
+"state": {
+"observed": true,
+"owner_uuid": "fixture-forcecage-cage",
+"present": true,
+"suppressed": false
+},
+"trace_spacing_cells": 0.2
+}
+provenance = "Pinned native selection; docs/HIGH_LEVEL_22_NATIVE_ARTWORK_PLAN_2026-10-15.md"
+
+[resource]
+script = ExtResource("2_mkw5l")
+clip_id = "high-level-22/forcecage/cage"
+label = "Forcecage · cage"
+phase = "lifecycle"
+variant = "cage"
+source_recipe = "docs/HIGH_LEVEL_22_NATIVE_ARTWORK_PLAN_2026-10-15.md"
+components = Array[Resource]([SubResource("Resource_3jhmp")])
+bindings = [{
+"component": "field",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 3.9
+simulation_hz = 60.0
+options = {
+"opacity_uniform": "field_opacity"
+}

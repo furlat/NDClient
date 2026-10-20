@@ -10,9 +10,16 @@ uniform vec3 gpu_head_right;
 uniform vec3 gpu_head_left_normal;
 uniform vec3 gpu_head_right_normal;
 uniform vec3 gpu_head_hand;
+uniform sampler2D gpu_head_stations : filter_nearest, repeat_disable;
+uniform bool gpu_head_source_stations=false;
+uniform int gpu_head_count=1;
 instance uniform int gpu_head_number=0;
 instance uniform int gpu_head_layer=0;
+vec4 gpu_head_station(int station) {
+ return texelFetch(gpu_head_stations,ivec2(station,gpu_head_layer*gpu_head_count+gpu_head_number),0);
+}
 vec3 gpu_head_point(int station) {
+ if(gpu_head_source_stations)return gpu_head_station(station).xyz;
  float u=float(station)/32.;float t=gpu_head_seconds;float number=float(gpu_head_number);
  float sign_value=gpu_head_number%2==0 ? -1.:1.;
  vec3 normal=sign_value<0.?gpu_head_left_normal:gpu_head_right_normal;
@@ -38,11 +45,12 @@ vec3 gpu_head_point(int station) {
 void gpu_directed_vertex(inout vec3 vertex,inout vec3 normal,inout vec3 tangent,inout vec3 binormal) {
  int station=int(vertex.x+.5);float edge=vertex.y;float fin=vertex.z;
  vec3 before=gpu_head_point(max(0,station-1));vec3 after=gpu_head_point(min(32,station+1));
- vec3 direction=length(after-before)>.000001?normalize(after-before):vec3(0.,0.,-1.);
+ vec3 direction=length(after-before)<.000001?vec3(0.,0.,-1.):normalize(after-before);
  vec3 reference=abs(dot(direction,vec3(0.,1.,0.)))>.99?vec3(1.,0.,0.):vec3(0.,1.,0.);
  vec3 base=normalize(cross(direction,reference));float angle=fin*6.28318530718/3.;
  vec3 side=base*cos(angle)+cross(direction,base)*sin(angle)+direction*dot(direction,base)*(1.-cos(angle));
  float u=float(station)/32.;
  float width=gpu_head_width*pow(max(0.,sin(u*3.14159265359)),.75)*gpu_head_intensity*(1.+.12*sin(gpu_head_seconds*4.-u*6.28318530718+float(gpu_head_number)))*(1.+float(gpu_head_layer)*.25);
+ if(gpu_head_source_stations)width=gpu_head_station(station).a;
  vertex=gpu_head_point(station)+side*width*edge;normal=normalize(cross(side,direction));
 }

@@ -31,5 +31,7 @@ func sample(seconds: float) -> void:
  draw.visible=alpha>.001;Native.clock(material,seconds,alpha*(.45 if bool(event.get("saved",false)) else .7))
 func capture_observation() -> Dictionary:
  return {"source_owner_uuid":specification.source_owner_uuid,"recipient_uuid":specification.recipient_uuid,"typed_applied_fact":event,"actual_surface_points":surface.get("points",[]).size(),"visible":draw!=null and draw.visible,"optical_lights":0,"invented_condition_or_damage":false}
+func source_bindings() -> Dictionary:
+ return {"geometry":[draw],"materials":[material],"static_material_topology":true}
 
 const VfxPackageIO_4bbc6a884f = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

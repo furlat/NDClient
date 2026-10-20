@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c7903100e89e7c78c542/native_material_receiver.gd"
+input = {"source_material": "res://assets/vfx/sources/5b5a61351d0f2a4281e3/m_basic_blueshield1.tres", "uniforms": {"Size_Sphere": 0.0, "Gradient_Line": 1.0, "darkness": 0.5, "Proximity_light": 0.0, "Overlay_Power": 2.0, "Overlay_Scale": {"type": "Vector2", "value": [2.0, 2.0]}, "Overlay_Velocity": {"type": "Vector2", "value": [0.015, 0.03]}, "Line_Gradient": {"type": "GradientTexture1D", "colors": ["000000", "000000"], "offsets": [0.0, 1.0]}}, "palette": ["132a46", "1d4a78", "3e7fad", "89b8d0"], "source_snapshot_seconds": 0.22, "alpha_gain": 0.18, "_prepared_materials": [{"key": "6b0bb16d9e1286e3c607175431263df4cda4304487c68f8502868e203f552e11", "path": "res://assets/vfx/sources/68076f1d38334ca8daba/6b0bb16d9e1286e3c607175431263df4cda4304487c68f8502868e203f552e11.res"}]}
+options = {}
+provenance = "Explicit observed event source; recipes/conditions/remaining_art_delta.json"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_draconic_breath_cadence_force_event/application"
+label = "event_draconic_force"
+phase = "application"
+source_recipe = "recipes/conditions/remaining_art_delta.json"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 4.0
+options = {"qualification":"Event-owned source candidate; actual-event GPU gate and visual checks pending"}

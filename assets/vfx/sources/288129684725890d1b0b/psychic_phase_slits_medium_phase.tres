@@ -1,0 +1,45 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_h4cok"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_cvn7l"]
+
+[sub_resource type="Resource" id="Resource_5vhuj"]
+script = ExtResource("1_h4cok")
+component_id = "equipped_weapon"
+constructor_script = "res://assets/vfx/sources/b030caea4fa2359738f0/equipped_treatment.gd"
+input = {
+"appearance_mode": "enhanced",
+"artistic_strength": "medium",
+"auxiliary_preset": "res://assets/vfx/sources/2b019122be4a4a7c58d8/psychic_phase_slits_medium.tres",
+"axes": "res://assets/vfx/sources/b8907a76e860483f2da6/pose-bank.tres",
+"element": "psychic",
+"exterior": false,
+"native_presets": "res://assets/vfx/sources/d7ffec9180dbe689679d/bank.tres",
+"noise": "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res",
+"receiver_programs": "res://assets/vfx/sources/7ea03eda1143a2eb6407/receiver-programs.tres",
+"variant_id": "psychic.phase_slits"
+}
+provenance = "Actual equipped sheet; purchased mask provenance in element-studies sources manifests. No new item, condition, attack or lamp."
+
+[resource]
+script = ExtResource("2_cvn7l")
+clip_id = "weapons/equipped/psychic/phase_slits/medium/sustain"
+label = "psychic.phase_slits · medium"
+phase = "sustain"
+variant = "psychic.phase_slits"
+components = Array[Resource]([SubResource("Resource_5vhuj")])
+bindings = [{
+"component": "equipped_weapon",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 60.0
+options = {
+"art_status": "actual_equipped_sheet_candidate_not_human_approved",
+"inputs": ["weapon_binding", "entity_geometry", "actor_layers", "owner_state", "root_path"],
+"requires_actual_receiver_program_preparation": true,
+"runtime": "native_gpu_receiver_and_optional_native_particles",
+"seeking": "pure_shader_source_clock",
+"single_direct_material_owner": true
+}

@@ -1,6 +1,7 @@
 extends RefCounted
 ## Shared execution of the original high-level support equations. Admission
 ## remains in each source class. Geometry is measured only for a changed pose.
+const Tables = preload("res://assets/vfx/sources/d3bf76efa97b3499c285/receiving_table.gd")
 const Programs = preload("res://assets/vfx/sources/801b495c0bd760a8e358/directed_program.gd")
 var source: Node3D
 var kind: int
@@ -11,14 +12,27 @@ var texture: ImageTexture
 var uploads := 0
 var body_ready := false
 var patch_ready := false
+var active_piece_count := 0
 
-func _init(component: Node3D, family: int) -> void:
+func _init(component: Node3D, family: int, prepared: Resource = null) -> void:
 	source = component
 	kind = family
 	var part_name := str(source.settings.part)
 	part = {"field": 1, "ground": 1, "windup": 2, "recovery": 3, "break": 4, "word": 5, "cross": 6}.get(part_name, 0)
+	if kind == 5:
+		part = {"invocation": 1, "sunder": 2, "destroy": 3, "strike": 4,
+			"improved_smite": 5, "nimbus_contact": 6, "arm": 7,
+			"generosity": 8, "revival_dead": 9, "revival_living": 10}.get(part_name, 0)
+	if prepared != null:
+		active_piece_count = prepared.active_piece_count
+		for index in prepared.meshes.size():
+			source.pieces[index].mesh = prepared.meshes[index]
+			source.pieces[index].custom_aabb = prepared.bounds[index]
+		return
 	if kind == 4 and part == 6:
-		return # The measured cross is static per pose, using the exact source mesh.
+		source._prepare_pieces(1)
+		source.pieces[0].mesh = _patch_template()
+		source.pieces[0].custom_aabb = AABB(Vector3.ONE * -5., Vector3.ONE * 10.)
 	var counts := []
 	match kind:
 		0:
@@ -35,6 +49,17 @@ func _init(component: Node3D, family: int) -> void:
 		4:
 			for index in (3 if part == 5 else 6):
 				counts.append(25 if part == 5 else 41)
+		5:
+			var count: int = 5 if part == 1 else 7 if part == 2 else 3 if part in [3, 9] else 2 if part in [4, 5, 6, 7] else 4 if part == 8 else 6
+			for index in count:
+				counts.append(25 if part == 7 else 3 if part == 8 else 33)
+		6:
+			counts = [25, 25, 25, 25, 25, 25]
+		7:
+			counts = [49, 49, 49, 49, 49]
+	if kind == 4 and part == 6:
+		counts = []
+	active_piece_count = 1 if kind == 4 and part == 6 else counts.size()
 	source._prepare_pieces(counts.size())
 	for index in counts.size():
 		source.pieces[index].mesh = _template(index, counts[index])
@@ -47,6 +72,38 @@ func _init(component: Node3D, family: int) -> void:
 	source.material.set_shader_parameter("gpu_support_duration", float(source.settings.seconds))
 	if kind == 0 and part == 1:
 		source.material.set_shader_parameter("gpu_support_radius", float(source.settings.public_area.radius_cells))
+	if kind == 5 and part in [2, 3, 4, 5, 6]:
+		source.material.set_shader_parameter("gpu_support_piece_count", active_piece_count)
+
+
+func _patch_template() -> ArrayMesh:
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var coordinates := PackedVector2Array()
+	var colours := PackedColorArray()
+	var indices := PackedInt32Array()
+	var colour := Color.html(str(source.settings.vertex_colour)).srgb_to_linear()
+	colour.a = float(source.settings.get("vertex_alpha", 1.0))
+	for row in 13:
+		for column in 13:
+			var uv := Vector2(float(column) / 12.0, float(row) / 12.0)
+			vertices.append(Vector3(uv.x, uv.y, 0.0))
+			normals.append(Vector3.UP)
+			coordinates.append(uv)
+			colours.append(colour)
+			if row > 0 and column > 0:
+				var first := (row - 1) * 13 + column - 1
+				indices.append_array(PackedInt32Array([first, first + 1, first + 13, first + 1, first + 14, first + 13]))
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_TEX_UV] = coordinates
+	arrays[Mesh.ARRAY_COLOR] = colours
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
 
 func _template(piece: int, count: int) -> ArrayMesh:
 	var vertices := PackedVector3Array()
@@ -83,37 +140,40 @@ func _body() -> bool:
 	var key: Array = preload("res://assets/vfx/sources/9c05cee00f7d74560348/geometry_key.gd").from_surface(source.surface)
 	var origin: Vector3 = source.surface.origin
 	if not body_ready or key.is_empty() or key != geometry_key:
-		source.frame = source.Frame.measure(source.surface)
-		if source.frame.is_empty():
+		var table: Dictionary = Tables.obtain(source.surface, kind == 4 and part == 6)
+		if table.is_empty():
 			body_ready = false
 			return false
 		geometry_key = key.duplicate(true)
 		last_origin = origin
 		body_ready = true
-		patch_ready = false
-		if kind == 4 and part == 6:
-			return true
-		var image := Image.create(source.frame.points.size(), 2, false, Image.FORMAT_RGBAF)
-		for index in source.frame.points.size():
-			var position: Vector3 = source.frame.points[index].position - origin
-			var normal: Vector3 = source.frame.points[index].normal
-			image.set_pixel(index, 0, Color(position.x, position.y, position.z, 1.))
-			image.set_pixel(index, 1, Color(normal.x, normal.y, normal.z, 1.))
-		if texture != null and texture.get_size() == Vector2(image.get_size()):
-			texture.update(image)
-		else:
-			texture = ImageTexture.create_from_image(image)
+		source.frame = Tables.world_frame(table.full, source.surface)
+		var receiving_frame: Dictionary = Tables.world_frame(table.receiving, source.surface)
+		texture = table.texture
 		uploads += 1
 		var material: ShaderMaterial = source.material
 		material.set_shader_parameter("gpu_support_points", texture)
-		material.set_shader_parameter("gpu_support_count", source.frame.points.size())
-		material.set_shader_parameter("gpu_support_centre", source.frame.centre - origin)
-		material.set_shader_parameter("gpu_support_normal", source.frame.normal)
-		material.set_shader_parameter("gpu_support_up", source.frame.up)
-		material.set_shader_parameter("gpu_support_side", source.frame.side)
-		material.set_shader_parameter("gpu_support_bottom", source.frame.bottom - origin.y)
-		material.set_shader_parameter("gpu_support_height", source.frame.height)
-		material.set_shader_parameter("gpu_support_half_width", source.frame.half_width)
+		material.set_shader_parameter("gpu_support_count", table.count)
+		var queries: Texture2D = Tables.fixed_queries(table, kind) if kind == 3 and part != 4 else null
+		material.set_shader_parameter("gpu_support_fixed_queries", queries)
+		material.set_shader_parameter("gpu_support_precise_queries", queries != null)
+		if kind == 1 and part != 1:
+			material.set_shader_parameter("gpu_support_holy_roots", Tables.holy_roots(table, source.surface))
+		material.set_shader_parameter("gpu_support_centre", receiving_frame.centre - origin)
+		material.set_shader_parameter("gpu_support_normal", receiving_frame.normal)
+		material.set_shader_parameter("gpu_support_up", receiving_frame.up)
+		material.set_shader_parameter("gpu_support_side", receiving_frame.side)
+		material.set_shader_parameter("gpu_support_bottom", receiving_frame.bottom - origin.y)
+		material.set_shader_parameter("gpu_support_height", receiving_frame.height)
+		material.set_shader_parameter("gpu_support_half_width", receiving_frame.half_width)
+	elif last_origin != origin:
+		var offset: Vector3 = origin - last_origin
+		source.frame.centre += offset
+		source.frame.top += offset.y
+		source.frame.bottom += offset.y
+		source.frame.origin = origin
+		source.frame.points = source.surface.points
+		last_origin = origin
 	return true
 
 func rebuild() -> void:
@@ -121,18 +181,12 @@ func rebuild() -> void:
 		for piece in source.pieces:
 			piece.hide()
 		return
-	if kind == 4 and part == 6:
-		if not patch_ready:
-			var paths: Array = source._paths()
-			source._prepare_pieces(paths.size())
-			for index in paths.size():
-				source.pieces[index].mesh = source._mesh(paths[index])
-			patch_ready = true
-	else:
-		source.material.set_shader_parameter("gpu_support_seconds", source.local_clock)
-	for piece in source.pieces:
-		piece.global_transform = Transform3D(Basis.IDENTITY, source.surface.origin)
-		piece.show()
+	source.material.set_shader_parameter("gpu_support_seconds", source.local_clock)
+	for index in source.pieces.size():
+		var piece: MeshInstance3D = source.pieces[index]
+		piece.visible = index < active_piece_count
+		if piece.visible:
+			piece.global_transform = Transform3D(Basis.IDENTITY, source.surface.origin)
 
 func _endpoints() -> bool:
 	var first := {}
@@ -153,6 +207,15 @@ func _endpoints() -> bool:
 		second = source.endpoint(str(source.settings.voice_recipient_actor), "body_center")
 		if first.is_empty() or second.is_empty() or first.point.is_equal_approx(second.point):
 			return false
+	elif kind == 5 and part == 1:
+		first = source.endpoint("caster", "cast_hand")
+		if first.is_empty():
+			return false
+	elif kind == 5 and part in [7, 8]:
+		var location: Array = source.event_input.get("creation_position_cells", [])
+		if location.size() != 3:
+			return false
+		first = {"point": Vector3(location[0], location[1], location[2])}
 	if not first.is_empty():
 		source.material.set_shader_parameter("gpu_support_start", first.point - source.surface.origin)
 	if not second.is_empty():

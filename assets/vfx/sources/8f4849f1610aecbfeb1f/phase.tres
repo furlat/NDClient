@@ -1,0 +1,51 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_r1wcy"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_h7nlc"]
+
+[sub_resource type="Resource" id="Resource_hkfye"]
+script = ExtResource("1_r1wcy")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/69332c8476b08e07ee05/prepared_cold_breath.gd"
+input = {
+"acting_recipient_uuid": "target",
+"element": "cold",
+"grant_uuid": "fixture.dragons_breath.grant",
+&"immutable_plume_bank": "res://assets/vfx/sources/f6b33d1cf70dc00c02ce/bank.tres",
+"original_caster_uuid": "caster",
+"phase": "exhale",
+"preserve_radial_axes": true,
+"recipient_uuid": "target",
+"state": {
+"contributions_active": true,
+"element": "cold",
+"grant_uuid": "fixture.dragons_breath.grant",
+"observed": true,
+"original_caster_uuid": "caster",
+"present": true,
+"recipient_action_discovered": true,
+"recipient_uuid": "target",
+"suppressed": false
+}
+}
+provenance = "Exact new36 card/read-only backend. Selected actual native source materials and explicit observed owner/outcome fixture."
+
+[resource]
+script = ExtResource("2_h7nlc")
+clip_id = "bg3-36/dragons-breath/cold_native_exhale"
+label = "cold_native_exhale"
+phase = "exhale"
+variant = "cold"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.dragons_breath"
+components = Array[Resource]([SubResource("Resource_hkfye")])
+bindings = [{
+"component": "effect",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 1.1
+simulation_hz = 144.0
+options = {
+"qualification": "Native source-art candidate with bounded GPU/recorded-frame review; human approval and production integration pending"
+}

@@ -1,0 +1,193 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/vfx/sources/5db005ae3504e4317b00/stone_corner-material-00.tres" id="1_8aw77"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/99a21f3860659e04139d/mesh-b69d963c8baae35474ad.res" id="2_we83c"]
+[ext_resource type="Material" path="res://assets/vfx/sources/ddb0967b73da47edc062/stone_corner-material-01.tres" id="3_ryjba"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/d3acba739c1cdd55788a/mesh-4a577c9ceb5e877d1c67.res" id="4_h2mci"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/8d8c19d5079a1bade249/mesh-9f53efc29fc6407ee0ce.res" id="5_f7a0q"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/f269b0ca0617a7f2bfc7/mesh-aa01bea4aef21c53daa4.res" id="6_2ma0y"]
+[ext_resource type="Material" path="res://assets/vfx/sources/d0ce248cb0c8a743ad1f/stone_corner-material-02.tres" id="7_lvo4t"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/f0541bf8f2158e2d4940/mesh-210777f75fcadb9890ee.res" id="8_twttw"]
+[ext_resource type="Material" path="res://assets/vfx/sources/bcee263e05a8f3086c45/stone_corner-material-03.tres" id="9_5j10s"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/df8b5f7b6dd7eaa2f635/mesh-699619dd4d72760eb36b.res" id="10_lt7nb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o714o"]
+size = Vector3(40, 0.5, 40)
+
+[node name="Donor" type="Node3D" unique_id=842601132]
+
+[node name="FactoryGenerated_0000_Node3D" type="Node3D" parent="." unique_id=659570407]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2426405, 0, 1.0606601)
+
+[node name="FactoryGenerated_0000_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=1700354002]
+transform = Transform3D(1, 0, 0, 0, 0.3, 0, 0, 0, 0.6, 0, 0, 0)
+material_override = ExtResource("1_8aw77")
+custom_aabb = AABB(-2.2213202, -0.1, -0.8864479, 4.4426403, 4.420723, 1.7105532)
+mesh = ExtResource("2_we83c")
+
+[node name="FactoryGenerated_0001_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=1063445799]
+transform = Transform3D(1.66945, 0, 0, 0, 3.1338913, 0, 0, 0, 2.8250158, -1.6810287, 0.989451, 0.08014425)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0002_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=1232551988]
+transform = Transform3D(1.5126396, 0, 0.33316994, 0, 6.2583394, 0, -0.21616541, 0, 2.3313909, -0.787472, 0.19607003, 0.16609204)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0003_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=329071726]
+transform = Transform3D(0.98152196, 0, -0.1363412, 0, 2.9011722, 0, 0.090336576, 0, 1.4813699, 0.03228271, 0.08834446, -0.09683907)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0004_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=657690471]
+transform = Transform3D(1.6637578, 0, -0.23308602, 0, 2.6669989, 0, 0.13774452, 0, 2.8153472, 0.86455566, 0.8420409, 0.08182461)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0005_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=1928504538]
+transform = Transform3D(1.5119307, 0, 0.34021044, 0, 5.826218, 0, -0.22106965, 0, 2.3267536, 1.7581124, 0.18253192, 0.16510965)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0006_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=663873259]
+transform = Transform3D(2.0033402, 0, 0, 0, 0.6123696, 0, 0, 0, 2.8250158, -1.5717573, 0.19334102, 0.24014425)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0007_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=1502344022]
+transform = Transform3D(1.8018377, 0, 0.5056899, 0, 1.0546024, 0, -0.3398563, 0, 2.6810484, -0.45706272, 0.03304006, 0.17886205)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0008_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=1863081409]
+transform = Transform3D(1.1464942, 0, -0.42309162, 0, 0.591207, 0, 0.29082257, 0, 1.6679311, 0.5690693, 0.018003022, -0.077782154)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0009_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0000_Node3D" unique_id=734124717]
+transform = Transform3D(1.9824299, 0, 0.407103, 0, 0.6123696, 0, -0.28869423, 0, 2.795529, 1.6102233, 0.19334102, -0.07825454)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0001_Node3D" type="Node3D" parent="." unique_id=1344737336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0606601)
+
+[node name="FactoryGenerated_0000_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=226189878]
+transform = Transform3D(1, 0, 0, 0, 0.3, 0, 0, 0, 0.6, 0, 0, 0)
+material_override = ExtResource("7_lvo4t")
+custom_aabb = AABB(-2.2213202, -0.1, -0.8694852, 4.4426403, 4.4326177, 1.7101419)
+mesh = ExtResource("8_twttw")
+
+[node name="FactoryGenerated_0001_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=1219081953]
+transform = Transform3D(0.97492146, 0, 0.24284138, 0, 3.4594967, 0, -0.14516929, 0, 1.6308633, -1.6647736, 0.10534617, 0.07341643)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0002_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=641940642]
+transform = Transform3D(1.6689827, 0, -0.054691605, 0, 3.3028274, 0, 0.039498597, 0, 2.3109515, -0.83250064, 1.0427885, 0.06973693)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0003_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=930435338]
+transform = Transform3D(1.5146102, 0, -0.34307718, 0, 4.548102, 0, 0.20189664, 0, 2.5737336, 0.061056115, 0.14248931, -0.00039690733)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0004_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=2065929692]
+transform = Transform3D(0.97978365, 0, 0.17969157, 0, 2.9851346, 0, -0.10756382, 0, 1.636785, 0.88081086, 0.090901226, 0.07432748)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0005_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=956729424]
+transform = Transform3D(1.6662612, 0, 0.14279802, 0, 3.6376617, 0, -0.103135966, 0, 2.3070402, 1.7130839, 1.1485044, 0.06805234)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0006_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=1107250774]
+transform = Transform3D(1.7931855, 0, 0.56972706, 0, 1.0546024, 0, -0.38289338, 0, 2.6681745, -1.517723, 0.03304006, 0.17886205)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0007_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=242866996]
+transform = Transform3D(1.1818848, 0, -0.06784286, 0, 0.591207, 0, 0.046633486, 0, 1.7194178, -0.4915908, 0.018003022, -0.077782154)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0008_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=1905402011]
+transform = Transform3D(1.9784443, 0, -0.4439862, 0, 0.6123696, 0, 0.31484973, 0, 2.7899086, 0.5495631, 0.19334102, -0.07825454)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0009_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0001_Node3D" unique_id=1678443183]
+transform = Transform3D(1.7767264, 0, 0.6742981, 0, 1.0546024, 0, -0.45317188, 0, 2.6436841, 1.6642576, 0.03304006, -0.0121693015)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0002_Node3D" type="Node3D" parent="." unique_id=1381803838]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.1213202, 0, 3.1819806)
+
+[node name="FactoryGenerated_0000_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=328491593]
+transform = Transform3D(1, 0, 0, 0, 0.3, 0, 0, 0, 0.6, 0, 0, 0)
+material_override = ExtResource("9_5j10s")
+custom_aabb = AABB(-2.2213202, -0.1, -0.8772097, 4.4426403, 4.4316845, 1.7534294)
+mesh = ExtResource("10_lt7nb")
+
+[node name="FactoryGenerated_0001_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=1228198096]
+transform = Transform3D(1.5260786, 0, 0.119393624, 0, 6.099259, 0, -0.07674735, 0, 2.3740764, -1.6360002, 0.19108613, 0.17144603)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0002_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=1738573779]
+transform = Transform3D(0.974604, 0, -0.22031516, 0, 2.6907318, 0, 0.1472855, 0, 1.457849, -0.81624544, 0.08193628, -0.09142311)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0003_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=514075054]
+transform = Transform3D(1.6676275, 0, 0.13192686, 0, 2.8155408, 0, -0.07798702, 0, 2.8210444, 0.016027538, 0.88893944, 0.07181011)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0004_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=569223950]
+transform = Transform3D(1.5170603, 0, 0.28357813, 0, 6.1356835, 0, -0.18257686, 0, 2.356296, 0.9095843, 0.19222729, 0.17060551)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0005_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=1578600491]
+transform = Transform3D(0.978081, 0, -0.18288042, 0, 3.2262397, 0, 0.122080304, 0, 1.4651983, 1.729339, 0.09824319, -0.09239214)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0006_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=156337332]
+transform = Transform3D(1.1523744, 0, 0.38780937, 0, 0.591207, 0, -0.26657045, 0, 1.6764858, -1.5522511, 0.018003022, -0.077782154)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0007_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=1078162938]
+transform = Transform3D(1.9510219, 0, -0.6414033, 0, 0.6123696, 0, 0.45484668, 0, 2.751239, -0.511097, 0.19334102, -0.07825454)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")
+
+[node name="FactoryGenerated_0008_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=798019826]
+transform = Transform3D(1.8280501, 0, 0.21228154, 0, 1.0546024, 0, -0.14266689, 0, 2.7200515, 0.6035974, 0.03304006, -0.0121693015)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("5_f7a0q")
+
+[node name="FactoryGenerated_0009_MeshInstance3D" type="MeshInstance3D" parent="FactoryGenerated_0002_Node3D" unique_id=1537214182]
+transform = Transform3D(1.1735381, 0, 0.2149705, 0, 0.591207, 0, -0.14776534, 0, 1.707275, 1.6297295, 0.018003022, 0.034187283)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("6_2ma0y")
+
+[node name="FactoryGenerated_0003_StaticBody3D" type="StaticBody3D" parent="." unique_id=727597027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+
+[node name="FactoryGenerated_0000_CollisionShape3D" type="CollisionShape3D" parent="FactoryGenerated_0003_StaticBody3D" unique_id=1211977327]
+shape = SubResource("BoxShape3D_o714o")
+
+[node name="QuarryCornerPort" type="Node3D" parent="." unique_id=1432071978]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1213202, 0, 1.0606601)
+
+[node name="FactoryGenerated_0000_MeshInstance3D" type="MeshInstance3D" parent="QuarryCornerPort" unique_id=392691610]
+transform = Transform3D(2.6711204, 0, 0, 0, 3.6021738, 0, 0, 0, 2.568196, 0.025644066, 1.1373, 0.0728584)
+material_override = ExtResource("3_ryjba")
+mesh = ExtResource("4_h2mci")

@@ -1,0 +1,123 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/12b876b2908476545b90/support.gd" id="1_8hu6e"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/870582c7faae0342e985/12e3df6f2ce692e1.tscn" id="2_1ly4t"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0250a3f89c551f4fc017/bank.gd" id="3_kum1s"]
+
+[resource]
+script = ExtResource("3_kum1s")
+scene = ExtResource("2_1ly4t")
+source_script = "res://assets/vfx/sources/ec9cb8f39586b3f03214/support.gd"
+adapter_script = ExtResource("1_8hu6e")
+stable_paths_prepared = true
+emission_start_edges = Array[NodePath]([NodePath("SecondWisp")])
+input_sha256 = "9e21808aaebf7f0dda30ac6db1ec500f8291ae8343a8afdb5f92ca941f6af19e"
+material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smallparticles4"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "verticalflash2"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "distortion"
+}])
+player_paths = Array[String](["AnimationPlayer"])
+light_paths = Array[String](["OmniLight3D3"])
+seeds = [{
+"path": "Donor/smallparticles4",
+"seed": 47291
+}, {
+"path": "Donor/verticalflash2",
+"seed": 47292
+}]
+provenance = {
+"clock_ticks_sampled": 0,
+"constructor_emission_start_edges": Array[NodePath]([NodePath("SecondWisp")]),
+"immutable_material_bindings": Array[Dictionary]([]),
+"immutable_material_policy": "StandardMaterial3D only; audited native family and no script/method/property-track writes",
+"native_lights_retained": Array[String](["OmniLight3D3"]),
+"native_players_retained": Array[String](["AnimationPlayer"]),
+"native_process_materials_private": true,
+"owner_pose_saved": false,
+"pre_tree_emission_baseline": [{
+"emitting": false,
+"node": "smallparticles4"
+}, {
+"emitting": false,
+"node": "verticalflash2"
+}, {
+"emitting": true,
+"node": "SecondWisp"
+}],
+"retained_materials": [{
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smallparticles4"
+},
+"shader_sha256": "4f9dacbb94fd93608bfe7f568b54e0e8b4ebcc842056d2e2bf5e6991dc662bf1"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "verticalflash2"
+},
+"shader_sha256": "42d16b839281a032f439023fe07ec406517c63cd46585f26352d516b82dc2b59"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "distortion"
+},
+"shader_sha256": "8da831518a117572be41e57f0fd19f4cb72579f17a1083581d499ff9c9d0cb48"
+}],
+"source_input": {
+"animation_missing_policy": "first_available",
+"clip_normal": [0.70710678, 0, 0.70710678],
+"material_family": "support",
+"preparation_stage": "before_tree",
+"scene": "res://assets/vfx/sources/2472d7f100f9254a5ad9/VFX_Healing_R1.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 3.0,
+"anchor": "each_selected_target_ground",
+"animation": "Init",
+"cell": 384,
+"close": 188,
+"frames": 432,
+"height": 0.3,
+"hue": 0.25,
+"id": "prayer_of_healing",
+"name": "VFX_Healing_R1",
+"pack": "lelu-healing-protection",
+"palette": ["294353", "43799d", "519cad", "69bbc6", "9cdada", "d1f2ef"],
+"scale": 0.9,
+"version": 8
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_phase": "res://assets/vfx/sources/01d57d1d22aa6b455939/00.tres",
+"source_script": "res://assets/vfx/sources/ec9cb8f39586b3f03214/support.gd",
+"source_script_sha256": "00b37545ea3c45ebc8af4d388970b6ec666e6b8e2a35b39319b178db973f3faf",
+"source_seed_records": [{
+"path": "Donor/smallparticles4",
+"seed": 47291
+}, {
+"path": "Donor/verticalflash2",
+"seed": 47292
+}],
+"stable_path_proof": {
+"animation_tracks": 8,
+"complete": true,
+"generated_name_bindings": [],
+"named_nodes": 7,
+"unresolved": []
+},
+"texture_freeze_policy": "reject_animated_sampler_or_resource_tracks"
+}
+declared_registration_complete = true

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c7903100e89e7c78c542/native_material_receiver.gd"
+input = {"material_definition": {"shader": "res://assets/vfx/sources/008f4aab805beb16fef0/sunbeam_hand.gdshader", "parameters": {"noise_tex": {"type": "Resource", "path": "res://assets/vfx/sources/79ea8307f7adab9ec44f/texture.res"}, "detail_tex": {"type": "Resource", "path": "res://assets/vfx/sources/5b0a18fdc09c1fcdd677/texture.res"}}}, "uniforms": {}, "source_snapshot_seconds": 0.4, "alpha_gain": 0.17, "source_code_replacements": [{"from": "VERTEX*=radius;", "to": "// Current measured mouth pixels own scale; retain native local/radius varyings."}], "_prepared_materials": [{"key": "3dd48a5fc4a6a784b39600480a7d859b45d42d9b5374f17d5dbdbe308cd479e2", "path": "res://assets/vfx/sources/772e733f5fc14f4dd1a4/3dd48a5fc4a6a784b39600480a7d859b45d42d9b5374f17d5dbdbe308cd479e2.res"}]}
+options = {}
+provenance = "Explicit observed event source; recipes/conditions/remaining_art_delta.json"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/continuation/condition_draconic_breath_cadence_radiant_event/application"
+label = "event_draconic_radiant"
+phase = "application"
+source_recipe = "recipes/conditions/remaining_art_delta.json"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 4.0
+options = {"qualification":"Event-owned source candidate; actual-event GPU gate and visual checks pending"}

@@ -1,0 +1,68 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/1c032b7dd329b3ac041a/b20d195abb40f67c5c38fe18d6f28bc7e9d864676a28629f24ad5784eb6c73eb.gdshader" id="1_najlw"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/9a09b92d201eb45081fc/a3c2ed3aa841e83f0a09.res" id="2_22pfy"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/8a0fcadef1697a7eeddd/429b1317df22b75f2cb0.res" id="3_tw4rf"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/8be991816b0855833827/fixed-four-pose-ribbon.tres" id="4_6eo00"]
+[ext_resource type="Script" path="res://assets/vfx/sources/914dc571de4538caf45d/style.gd" id="5_ywjsd"]
+
+[sub_resource type="Image" id="Image_e1s2q"]
+data = {
+"data": PackedByteArray(23, 61, 87, 255, 82, 154, 180, 255, 178, 220, 232, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 3
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_cagrc"]
+image = SubResource("Image_e1s2q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vuv6m"]
+render_priority = 0
+shader = ExtResource("1_najlw")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_cagrc")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.0
+shader_parameter/wake_inner = null
+shader_parameter/wake_tip = null
+shader_parameter/wake_count = null
+shader_parameter/wake_seconds = null
+shader_parameter/wake_history_seconds = 0.075
+shader_parameter/wake_maximum_reach_cells = 0.16
+shader_parameter/wake_mode = 3
+shader_parameter/wake_opacity = 0.68
+shader_parameter/wake_source = ExtResource("3_tw4rf")
+shader_parameter/wake_detail = ExtResource("2_22pfy")
+shader_parameter/wake_dark = Color(0.09019608, 0.23921569, 0.34117648, 1)
+shader_parameter/wake_body = Color(0.32156864, 0.6039216, 0.7058824, 1)
+shader_parameter/wake_edge = Color(0.69803923, 0.8627451, 0.9098039, 1)
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_najlw")
+metadata/factory_clock_names = []
+
+[resource]
+script = ExtResource("5_ywjsd")
+element = "ice"
+variant_id = "ice.rime_wisp"
+mesh = ExtResource("4_6eo00")
+material = SubResource("ShaderMaterial_vuv6m")
+provenance = [{
+"license_evidence": "factory-source:docs/licenses/binbun/README.md",
+"path": "res://assets/vfx/sources/9dcaa1fc11385c7a38ab/cell_manhattan_02.tres",
+"sha256": "429b1317df22b75f2cb0a790cf0c9b38d0f7496190ba987d3670729ff20962a2"
+}, {
+"license_evidence": "factory-source:docs/licenses/binbun/README.md",
+"path": "res://assets/vfx/sources/126e19553516547aa864/cell_manhattan_01.tres",
+"sha256": "a3c2ed3aa841e83f0a09633dea8d6e78cf86d6e5ff8f56c7e9605bed187ead09"
+}, {
+"license_evidence": "factory-source:docs/licenses/binbun/README.md",
+"path": "res://assets/vfx/sources/5101c060e6184b928028/ice_shard_01_core.tres",
+"sha256": "849b05f4eee6fdcb4e90ed667be4e5985e31ac29ee773d9bc7d1a1789423460a"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"path": "res://assets/vfx/sources/67b4053d1ed91adbb828/s_shad1.gdshader",
+"sha256": "1d44f16a265d1f4da3555155351dcac27ed129da3a186a5e9593364b49b167ce"
+}]

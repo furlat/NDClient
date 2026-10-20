@@ -1,0 +1,162 @@
+[gd_resource type="Resource" format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/600bbf436571b55de45d/program-a3c41fb255c0e1aa.gdshader" id="1_ilcyh"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/ed5114dccc8b085fbba1/texture.res" id="2_mle7q"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/900721c102c94ad02849/texture.res" id="3_jadxd"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/6e5b4c7d0a7756c529a4/program-3bd8792e31f6c7f0.gdshader" id="4_fwk36"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/bd26963aad0fc48741ac/texture.res" id="5_rdjdg"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/1c8c4922707ab71510ff/texture.res" id="6_w47q7"]
+[ext_resource type="Script" path="res://assets/vfx/sources/9625d3b6646b9289c628/immutable_draws.gd" id="7_b1dsn"]
+
+[sub_resource type="Gradient" id="Gradient_yl6bs"]
+colors = PackedColorArray(0.450648, 0.450648, 0.450648, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ncyxc"]
+gradient = SubResource("Gradient_yl6bs")
+
+[sub_resource type="Gradient" id="Gradient_xfuxr"]
+offsets = PackedFloat32Array(0, 0.0255102, 0.979592, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0urru"]
+gradient = SubResource("Gradient_xfuxr")
+width = 512
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3mc7x"]
+render_priority = 2
+shader = ExtResource("1_ilcyh")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/psychic_clock = 0.0
+shader_parameter/psychic_envelope = 0.0
+shader_parameter/psychic_opacity = 1.0
+shader_parameter/psychic_tint = Color(0.44313726, 0.58431375, 0.627451, 1)
+shader_parameter/scroll_offset = 0.0
+shader_parameter/speed = Vector2(-0.35, 0)
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/BaseTexture = ExtResource("2_mle7q")
+shader_parameter/wind_speed = Vector2(0, 0)
+shader_parameter/wind_scale = Vector2(1, 1)
+shader_parameter/wind_2_speed = Vector2(-0.22, -0.38)
+shader_parameter/wind_2_scale = Vector2(3, 1)
+shader_parameter/Wind_2_texture_subs = ExtResource("3_jadxd")
+shader_parameter/Multiply_Mask = SubResource("GradientTexture2D_0urru")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_ncyxc")
+shader_parameter/gpu_head_shape = 1
+shader_parameter/gpu_head_mode = 0
+shader_parameter/gpu_head_seconds = 0.0
+shader_parameter/gpu_head_width = 0.036
+shader_parameter/gpu_head_intensity = 1.0
+shader_parameter/gpu_head_heading = Vector3(0, 0, 0)
+shader_parameter/gpu_head_side = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_hand = Vector3(0, 0, 0)
+shader_parameter/gpu_head_source_stations = false
+shader_parameter/gpu_head_count = 1
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_ilcyh")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("1_ilcyh")
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="Gradient" id="Gradient_1wwen"]
+colors = PackedColorArray(0.521141, 0.521141, 0.521141, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2kq1a"]
+gradient = SubResource("Gradient_1wwen")
+
+[sub_resource type="Gradient" id="Gradient_4mxry"]
+offsets = PackedFloat32Array(0, 0.0255102, 0.979592, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u73ub"]
+gradient = SubResource("Gradient_4mxry")
+width = 512
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_waeuj"]
+render_priority = 2
+shader = ExtResource("4_fwk36")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/psychic_clock = 0.0
+shader_parameter/psychic_envelope = 0.0
+shader_parameter/psychic_opacity = 1.0
+shader_parameter/psychic_tint = Color(0.44313726, 0.58431375, 0.627451, 1)
+shader_parameter/scroll_offset = 0.0
+shader_parameter/speed = Vector2(-0.22, 0)
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/BaseTexture = ExtResource("5_rdjdg")
+shader_parameter/wind_speed = Vector2(0, 0)
+shader_parameter/wind_scale = Vector2(1, 1)
+shader_parameter/Wind_1_texture = ExtResource("6_w47q7")
+shader_parameter/wind_2_speed = Vector2(-0.18, 0.13)
+shader_parameter/wind_2_scale = Vector2(1, 1)
+shader_parameter/Multiply_Mask = SubResource("GradientTexture2D_u73ub")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_2kq1a")
+shader_parameter/gpu_head_shape = 1
+shader_parameter/gpu_head_mode = 0
+shader_parameter/gpu_head_seconds = 0.0
+shader_parameter/gpu_head_width = 0.036
+shader_parameter/gpu_head_intensity = 1.0
+shader_parameter/gpu_head_heading = Vector3(0, 0, 0)
+shader_parameter/gpu_head_side = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_hand = Vector3(0, 0, 0)
+shader_parameter/gpu_head_source_stations = false
+shader_parameter/gpu_head_count = 1
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("4_fwk36")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_fwk36")
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_b0pia"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 32, 2, 2),
+"attribute_data": PackedByteArray("KkxZzAAAAAAAAAAAKkxZzAAAgD8AAAAAKkxZzAAAAAAAAAA9KkxZzAAAgD8AAAA9KkxZzAAAAAAAAIA9KkxZzAAAgD8AAIA9KkxZzAAAAAAAAMA9KkxZzAAAgD8AAMA9KkxZzAAAAAAAAAA+KkxZzAAAgD8AAAA+KkxZzAAAAAAAACA+KkxZzAAAgD8AACA+KkxZzAAAAAAAAEA+KkxZzAAAgD8AAEA+KkxZzAAAAAAAAGA+KkxZzAAAgD8AAGA+KkxZzAAAAAAAAIA+KkxZzAAAgD8AAIA+KkxZzAAAAAAAAJA+KkxZzAAAgD8AAJA+KkxZzAAAAAAAAKA+KkxZzAAAgD8AAKA+KkxZzAAAAAAAALA+KkxZzAAAgD8AALA+KkxZzAAAAAAAAMA+KkxZzAAAgD8AAMA+KkxZzAAAAAAAANA+KkxZzAAAgD8AANA+KkxZzAAAAAAAAOA+KkxZzAAAgD8AAOA+KkxZzAAAAAAAAPA+KkxZzAAAgD8AAPA+KkxZzAAAAAAAAAA/KkxZzAAAgD8AAAA/KkxZzAAAAAAAAAg/KkxZzAAAgD8AAAg/KkxZzAAAAAAAABA/KkxZzAAAgD8AABA/KkxZzAAAAAAAABg/KkxZzAAAgD8AABg/KkxZzAAAAAAAACA/KkxZzAAAgD8AACA/KkxZzAAAAAAAACg/KkxZzAAAgD8AACg/KkxZzAAAAAAAADA/KkxZzAAAgD8AADA/KkxZzAAAAAAAADg/KkxZzAAAgD8AADg/KkxZzAAAAAAAAEA/KkxZzAAAgD8AAEA/KkxZzAAAAAAAAEg/KkxZzAAAgD8AAEg/KkxZzAAAAAAAAFA/KkxZzAAAgD8AAFA/KkxZzAAAAAAAAFg/KkxZzAAAgD8AAFg/KkxZzAAAAAAAAGA/KkxZzAAAgD8AAGA/KkxZzAAAAAAAAGg/KkxZzAAAgD8AAGg/KkxZzAAAAAAAAHA/KkxZzAAAgD8AAHA/KkxZzAAAAAAAAHg/KkxZzAAAgD8AAHg/KkxZzAAAAAAAAIA/KkxZzAAAgD8AAIA/KkxZzAAAAAAAAAAAKkxZzAAAgD8AAAAAKkxZzAAAAAAAAAA9KkxZzAAAgD8AAAA9KkxZzAAAAAAAAIA9KkxZzAAAgD8AAIA9KkxZzAAAAAAAAMA9KkxZzAAAgD8AAMA9KkxZzAAAAAAAAAA+KkxZzAAAgD8AAAA+KkxZzAAAAAAAACA+KkxZzAAAgD8AACA+KkxZzAAAAAAAAEA+KkxZzAAAgD8AAEA+KkxZzAAAAAAAAGA+KkxZzAAAgD8AAGA+KkxZzAAAAAAAAIA+KkxZzAAAgD8AAIA+KkxZzAAAAAAAAJA+KkxZzAAAgD8AAJA+KkxZzAAAAAAAAKA+KkxZzAAAgD8AAKA+KkxZzAAAAAAAALA+KkxZzAAAgD8AALA+KkxZzAAAAAAAAMA+KkxZzAAAgD8AAMA+KkxZzAAAAAAAANA+KkxZzAAAgD8AANA+KkxZzAAAAAAAAOA+KkxZzAAAgD8AAOA+KkxZzAAAAAAAAPA+KkxZzAAAgD8AAPA+KkxZzAAAAAAAAAA/KkxZzAAAgD8AAAA/KkxZzAAAAAAAAAg/KkxZzAAAgD8AAAg/KkxZzAAAAAAAABA/KkxZzAAAgD8AABA/KkxZzAAAAAAAABg/KkxZzAAAgD8AABg/KkxZzAAAAAAAACA/KkxZzAAAgD8AACA/KkxZzAAAAAAAACg/KkxZzAAAgD8AACg/KkxZzAAAAAAAADA/KkxZzAAAgD8AADA/KkxZzAAAAAAAADg/KkxZzAAAgD8AADg/KkxZzAAAAAAAAEA/KkxZzAAAgD8AAEA/KkxZzAAAAAAAAEg/KkxZzAAAgD8AAEg/KkxZzAAAAAAAAFA/KkxZzAAAgD8AAFA/KkxZzAAAAAAAAFg/KkxZzAAAgD8AAFg/KkxZzAAAAAAAAGA/KkxZzAAAgD8AAGA/KkxZzAAAAAAAAGg/KkxZzAAAgD8AAGg/KkxZzAAAAAAAAHA/KkxZzAAAgD8AAHA/KkxZzAAAAAAAAHg/KkxZzAAAgD8AAHg/KkxZzAAAAAAAAIA/KkxZzAAAgD8AAIA/KkxZzAAAAAAAAAAAKkxZzAAAgD8AAAAAKkxZzAAAAAAAAAA9KkxZzAAAgD8AAAA9KkxZzAAAAAAAAIA9KkxZzAAAgD8AAIA9KkxZzAAAAAAAAMA9KkxZzAAAgD8AAMA9KkxZzAAAAAAAAAA+KkxZzAAAgD8AAAA+KkxZzAAAAAAAACA+KkxZzAAAgD8AACA+KkxZzAAAAAAAAEA+KkxZzAAAgD8AAEA+KkxZzAAAAAAAAGA+KkxZzAAAgD8AAGA+KkxZzAAAAAAAAIA+KkxZzAAAgD8AAIA+KkxZzAAAAAAAAJA+KkxZzAAAgD8AAJA+KkxZzAAAAAAAAKA+KkxZzAAAgD8AAKA+KkxZzAAAAAAAALA+KkxZzAAAgD8AALA+KkxZzAAAAAAAAMA+KkxZzAAAgD8AAMA+KkxZzAAAAAAAANA+KkxZzAAAgD8AANA+KkxZzAAAAAAAAOA+KkxZzAAAgD8AAOA+KkxZzAAAAAAAAPA+KkxZzAAAgD8AAPA+KkxZzAAAAAAAAAA/KkxZzAAAgD8AAAA/KkxZzAAAAAAAAAg/KkxZzAAAgD8AAAg/KkxZzAAAAAAAABA/KkxZzAAAgD8AABA/KkxZzAAAAAAAABg/KkxZzAAAgD8AABg/KkxZzAAAAAAAACA/KkxZzAAAgD8AACA/KkxZzAAAAAAAACg/KkxZzAAAgD8AACg/KkxZzAAAAAAAADA/KkxZzAAAgD8AADA/KkxZzAAAAAAAADg/KkxZzAAAgD8AADg/KkxZzAAAAAAAAEA/KkxZzAAAgD8AAEA/KkxZzAAAAAAAAEg/KkxZzAAAgD8AAEg/KkxZzAAAAAAAAFA/KkxZzAAAgD8AAFA/KkxZzAAAAAAAAFg/KkxZzAAAgD8AAFg/KkxZzAAAAAAAAGA/KkxZzAAAgD8AAGA/KkxZzAAAAAAAAGg/KkxZzAAAgD8AAGg/KkxZzAAAAAAAAHA/KkxZzAAAgD8AAHA/KkxZzAAAAAAAAHg/KkxZzAAAgD8AAHg/KkxZzAAAAAAAAIA/KkxZzAAAgD8AAIA/"),
+"format": 34359742495,
+"index_count": 576,
+"index_data": PackedByteArray("AAABAAIAAQADAAIAAgADAAQAAwAFAAQABAAFAAYABQAHAAYABgAHAAgABwAJAAgACAAJAAoACQALAAoACgALAAwACwANAAwADAANAA4ADQAPAA4ADgAPABAADwARABAAEAARABIAEQATABIAEgATABQAEwAVABQAFAAVABYAFQAXABYAFgAXABgAFwAZABgAGAAZABoAGQAbABoAGgAbABwAGwAdABwAHAAdAB4AHQAfAB4AHgAfACAAHwAhACAAIAAhACIAIQAjACIAIgAjACQAIwAlACQAJAAlACYAJQAnACYAJgAnACgAJwApACgAKAApACoAKQArACoAKgArACwAKwAtACwALAAtAC4ALQAvAC4ALgAvADAALwAxADAAMAAxADIAMQAzADIAMgAzADQAMwA1ADQANAA1ADYANQA3ADYANgA3ADgANwA5ADgAOAA5ADoAOQA7ADoAOgA7ADwAOwA9ADwAPAA9AD4APQA/AD4APgA/AEAAPwBBAEAAQgBDAEQAQwBFAEQARABFAEYARQBHAEYARgBHAEgARwBJAEgASABJAEoASQBLAEoASgBLAEwASwBNAEwATABNAE4ATQBPAE4ATgBPAFAATwBRAFAAUABRAFIAUQBTAFIAUgBTAFQAUwBVAFQAVABVAFYAVQBXAFYAVgBXAFgAVwBZAFgAWABZAFoAWQBbAFoAWgBbAFwAWwBdAFwAXABdAF4AXQBfAF4AXgBfAGAAXwBhAGAAYABhAGIAYQBjAGIAYgBjAGQAYwBlAGQAZABlAGYAZQBnAGYAZgBnAGgAZwBpAGgAaABpAGoAaQBrAGoAagBrAGwAawBtAGwAbABtAG4AbQBvAG4AbgBvAHAAbwBxAHAAcABxAHIAcQBzAHIAcgBzAHQAcwB1AHQAdAB1AHYAdQB3AHYAdgB3AHgAdwB5AHgAeAB5AHoAeQB7AHoAegB7AHwAewB9AHwAfAB9AH4AfQB/AH4AfgB/AIAAfwCBAIAAgACBAIIAgQCDAIIAhACFAIYAhQCHAIYAhgCHAIgAhwCJAIgAiACJAIoAiQCLAIoAigCLAIwAiwCNAIwAjACNAI4AjQCPAI4AjgCPAJAAjwCRAJAAkACRAJIAkQCTAJIAkgCTAJQAkwCVAJQAlACVAJYAlQCXAJYAlgCXAJgAlwCZAJgAmACZAJoAmQCbAJoAmgCbAJwAmwCdAJwAnACdAJ4AnQCfAJ4AngCfAKAAnwChAKAAoAChAKIAoQCjAKIAogCjAKQAowClAKQApAClAKYApQCnAKYApgCnAKgApwCpAKgAqACpAKoAqQCrAKoAqgCrAKwAqwCtAKwArACtAK4ArQCvAK4ArgCvALAArwCxALAAsACxALIAsQCzALIAsgCzALQAswC1ALQAtAC1ALYAtQC3ALYAtgC3ALgAtwC5ALgAuAC5ALoAuQC7ALoAugC7ALwAuwC9ALwAvAC9AL4AvQC/AL4AvgC/AMAAvwDBAMAAwADBAMIAwQDDAMIAwgDDAMQAwwDFAMQA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 198,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADgQQAAgD8AAAAAAADoQQAAgL8AAAAAAADoQQAAgD8AAAAAAADwQQAAgL8AAAAAAADwQQAAgD8AAAAAAAD4QQAAgL8AAAAAAAD4QQAAgD8AAAAAAAAAQgAAgL8AAAAAAAAAQgAAgD8AAAAAAAAAAAAAgL8AAIA/AAAAAAAAgD8AAIA/AACAPwAAgL8AAIA/AACAPwAAgD8AAIA/AAAAQAAAgL8AAIA/AAAAQAAAgD8AAIA/AABAQAAAgL8AAIA/AABAQAAAgD8AAIA/AACAQAAAgL8AAIA/AACAQAAAgD8AAIA/AACgQAAAgL8AAIA/AACgQAAAgD8AAIA/AADAQAAAgL8AAIA/AADAQAAAgD8AAIA/AADgQAAAgL8AAIA/AADgQAAAgD8AAIA/AAAAQQAAgL8AAIA/AAAAQQAAgD8AAIA/AAAQQQAAgL8AAIA/AAAQQQAAgD8AAIA/AAAgQQAAgL8AAIA/AAAgQQAAgD8AAIA/AAAwQQAAgL8AAIA/AAAwQQAAgD8AAIA/AABAQQAAgL8AAIA/AABAQQAAgD8AAIA/AABQQQAAgL8AAIA/AABQQQAAgD8AAIA/AABgQQAAgL8AAIA/AABgQQAAgD8AAIA/AABwQQAAgL8AAIA/AABwQQAAgD8AAIA/AACAQQAAgL8AAIA/AACAQQAAgD8AAIA/AACIQQAAgL8AAIA/AACIQQAAgD8AAIA/AACQQQAAgL8AAIA/AACQQQAAgD8AAIA/AACYQQAAgL8AAIA/AACYQQAAgD8AAIA/AACgQQAAgL8AAIA/AACgQQAAgD8AAIA/AACoQQAAgL8AAIA/AACoQQAAgD8AAIA/AACwQQAAgL8AAIA/AACwQQAAgD8AAIA/AAC4QQAAgL8AAIA/AAC4QQAAgD8AAIA/AADAQQAAgL8AAIA/AADAQQAAgD8AAIA/AADIQQAAgL8AAIA/AADIQQAAgD8AAIA/AADQQQAAgL8AAIA/AADQQQAAgD8AAIA/AADYQQAAgL8AAIA/AADYQQAAgD8AAIA/AADgQQAAgL8AAIA/AADgQQAAgD8AAIA/AADoQQAAgL8AAIA/AADoQQAAgD8AAIA/AADwQQAAgL8AAIA/AADwQQAAgD8AAIA/AAD4QQAAgL8AAIA/AAD4QQAAgD8AAIA/AAAAQgAAgL8AAIA/AAAAQgAAgD8AAIA/AAAAAAAAgL8AAABAAAAAAAAAgD8AAABAAACAPwAAgL8AAABAAACAPwAAgD8AAABAAAAAQAAAgL8AAABAAAAAQAAAgD8AAABAAABAQAAAgL8AAABAAABAQAAAgD8AAABAAACAQAAAgL8AAABAAACAQAAAgD8AAABAAACgQAAAgL8AAABAAACgQAAAgD8AAABAAADAQAAAgL8AAABAAADAQAAAgD8AAABAAADgQAAAgL8AAABAAADgQAAAgD8AAABAAAAAQQAAgL8AAABAAAAAQQAAgD8AAABAAAAQQQAAgL8AAABAAAAQQQAAgD8AAABAAAAgQQAAgL8AAABAAAAgQQAAgD8AAABAAAAwQQAAgL8AAABAAAAwQQAAgD8AAABAAABAQQAAgL8AAABAAABAQQAAgD8AAABAAABQQQAAgL8AAABAAABQQQAAgD8AAABAAABgQQAAgL8AAABAAABgQQAAgD8AAABAAABwQQAAgL8AAABAAABwQQAAgD8AAABAAACAQQAAgL8AAABAAACAQQAAgD8AAABAAACIQQAAgL8AAABAAACIQQAAgD8AAABAAACQQQAAgL8AAABAAACQQQAAgD8AAABAAACYQQAAgL8AAABAAACYQQAAgD8AAABAAACgQQAAgL8AAABAAACgQQAAgD8AAABAAACoQQAAgL8AAABAAACoQQAAgD8AAABAAACwQQAAgL8AAABAAACwQQAAgD8AAABAAAC4QQAAgL8AAABAAAC4QQAAgD8AAABAAADAQQAAgL8AAABAAADAQQAAgD8AAABAAADIQQAAgL8AAABAAADIQQAAgD8AAABAAADQQQAAgL8AAABAAADQQQAAgD8AAABAAADYQQAAgL8AAABAAADYQQAAgD8AAABAAADgQQAAgL8AAABAAADgQQAAgD8AAABAAADoQQAAgL8AAABAAADoQQAAgD8AAABAAADwQQAAgL8AAABAAADwQQAAgD8AAABAAAD4QQAAgL8AAABAAAD4QQAAgD8AAABAAAAAQgAAgL8AAABAAAAAQgAAgD8AAABA/3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+
+[resource]
+script = ExtResource("7_b1dsn")
+constructor = "res://assets/vfx/sources/35053d9088ac18c0b474/head_accent.gd"
+input_sha256 = "ab0b38a60e6c1ccae6c64203c99d47fbb2ad7988f1f3df673416c70b1155fb44"
+meshes = Array[Mesh]([SubResource("ArrayMesh_b0pia"), SubResource("ArrayMesh_b0pia"), SubResource("ArrayMesh_b0pia"), SubResource("ArrayMesh_b0pia"), SubResource("ArrayMesh_b0pia"), SubResource("ArrayMesh_b0pia"), SubResource("ArrayMesh_b0pia"), SubResource("ArrayMesh_b0pia")])
+materials = Array[ShaderMaterial]([SubResource("ShaderMaterial_3mc7x"), SubResource("ShaderMaterial_waeuj")])
+material_indices = Array[int]([0, 0, 0, 0, 1, 1, 1, 1])
+bounds = Array[AABB]([AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2)])
+instance_uniforms = Array[Dictionary]([{
+"gpu_head_layer": 0,
+"gpu_head_number": 0
+}, {
+"gpu_head_layer": 0,
+"gpu_head_number": 1
+}, {
+"gpu_head_layer": 0,
+"gpu_head_number": 2
+}, {
+"gpu_head_layer": 0,
+"gpu_head_number": 3
+}, {
+"gpu_head_layer": 1,
+"gpu_head_number": 0
+}, {
+"gpu_head_layer": 1,
+"gpu_head_number": 1
+}, {
+"gpu_head_layer": 1,
+"gpu_head_number": 2
+}, {
+"gpu_head_layer": 1,
+"gpu_head_number": 3
+}])

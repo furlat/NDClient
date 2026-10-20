@@ -1,0 +1,134 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/8ddf946230a5d36b99c5/healing.gd" id="1_wxwdf"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/b9d8f469019a4f1ea11c/ba155095f50d5fa3.tscn" id="2_fgg5p"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0250a3f89c551f4fc017/bank.gd" id="3_n6qht"]
+
+[resource]
+script = ExtResource("3_n6qht")
+scene = ExtResource("2_fgg5p")
+source_script = "res://assets/vfx/sources/1e83a91767b68e67396e/healing.gd"
+adapter_script = ExtResource("1_wxwdf")
+stable_paths_prepared = true
+input_sha256 = "44ad5ef7c5c20341e9368eba905ea40e2f5decedfceee8531f3f861ab9c65bb7"
+material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smallparticles"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "floorflash"
+}])
+player_paths = Array[String](["AnimationPlayer"])
+light_paths = Array[String](["OmniLight3D"])
+immutable_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windpopB"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "trails_blue"
+}])
+seeds = [{
+"path": "Donor/windpopB",
+"seed": 47291
+}, {
+"path": "Donor/trails_blue",
+"seed": 47292
+}, {
+"path": "Donor/smallparticles",
+"seed": 47293
+}]
+provenance = {
+"clock_ticks_sampled": 0,
+"immutable_material_bindings": Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windpopB"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "trails_blue"
+}]),
+"immutable_material_policy": "StandardMaterial3D only; audited native family and no script/method/property-track writes",
+"native_lights_retained": Array[String](["OmniLight3D"]),
+"native_players_retained": Array[String](["AnimationPlayer"]),
+"native_process_materials_private": true,
+"owner_pose_saved": false,
+"pre_tree_emission_baseline": [{
+"emitting": false,
+"node": "windpopB"
+}, {
+"emitting": false,
+"node": "trails_blue"
+}, {
+"emitting": false,
+"node": "smallparticles"
+}],
+"retained_materials": [{
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smallparticles"
+},
+"shader_sha256": "4f9dacbb94fd93608bfe7f568b54e0e8b4ebcc842056d2e2bf5e6991dc662bf1"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "floorflash"
+},
+"shader_sha256": "88e4eba9c92366cf1a33955a7edfca1b5de705f8016ff32b98e466ac25927f05"
+}],
+"source_input": {
+"animation_missing_policy": "first_available",
+"clip_normal": [0.70710678, 0, 0.70710678],
+"material_family": "healing",
+"scene": "res://assets/vfx/sources/d6654b791469c50248d5/VFX_Healing_Ring_A.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"anchor": "target_ground",
+"animation": "Init",
+"cell": 512,
+"close": 0,
+"frames": 432,
+"height": 1.0,
+"hue": 0.52,
+"id": "heal",
+"level": 6,
+"mode": "heal",
+"name": "VFX_Healing_Ring_A",
+"note": "Stronger radial restoration and rising body ribbons than Cure Wounds; no damage reaction.",
+"pack": "lelu-healing-protection",
+"palette": ["273958", "386998", "4c9fc2", "6bcbdf", "96e5ee", "c6f5ee"],
+"scale": 0.48,
+"title": "Heal"
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_phase": "res://assets/vfx/sources/194c83e55a00effaaf36/00.tres",
+"source_script": "res://assets/vfx/sources/1e83a91767b68e67396e/healing.gd",
+"source_script_sha256": "18d2adb31968fcf53c0a8b3308a64af9d61b06564a08fd9bdf81fb63c9aa1466",
+"source_seed_records": [{
+"path": "Donor/windpopB",
+"seed": 47291
+}, {
+"path": "Donor/trails_blue",
+"seed": 47292
+}, {
+"path": "Donor/smallparticles",
+"seed": 47293
+}],
+"stable_path_proof": {
+"animation_tracks": 10,
+"complete": true,
+"named_nodes": 8,
+"unresolved": []
+},
+"texture_freeze_policy": "reject_animated_sampler_or_resource_tracks"
+}
+declared_registration_complete = true

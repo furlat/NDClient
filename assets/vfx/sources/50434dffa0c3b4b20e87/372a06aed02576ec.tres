@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/4b5038cae952accd9477/support_power_word_heal.gd"
+input = {"geometry_actor": "caster", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 3, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "recipient_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "owner_uuid": "fd8b0d18-7ba3-540b-a4d0-16e56846c9a0", "condition_id": "", "event_uuid": "fd8b0d18-7ba3-540b-a4d0-16e56846c9a0", "part": "word", "mode": "windup", "seconds": 0.8, "apply_seconds": 0.18, "retire_seconds": 0.24, "width_cells": 0.025, "vertex_colour": "a2d5ca", "vertex_alpha": 1.0, "material": {"scene": "res://assets/vfx/sources/b148780f9293f5eb3c26/vfx_status_heal.tscn", "node": "Aura", "alpha": 0.88, "emission_gain": 0.0, "uniforms": {"primary_color": {"type": "Color", "value": "a0d8d0"}, "secondary_color": {"type": "Color", "value": "488f9c"}, "tertiary_color": {"type": "Color", "value": "254e6c"}, "emission": 0.8, "hue_variation": 0.0, "proximity_fade": false, "edge_hardness": 0.0, "edge_position": 0.0, "shape_curve": 0.8, "use_secondary": false, "noise_scale": {"type": "Vector2", "value": [0.8, 0.65]}}, "fragment_uv_scale": [0.22, 0.45]}, "lease": {}, "event": {"uuid": "fd8b0d18-7ba3-540b-a4d0-16e56846c9a0", "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "canceled": false}, "voice_recipient_actor": "target", "prepared_receiving": "res://assets/vfx/sources/2f53fc981a732bdbee9f/372a06aed02576ec.tres"}
+provenance = "Native source mechanisms and actual backend semantics: evidence/parallel-high-level-support-v100/PLAN.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/power-word-heal/spoken_word"
+label = "power_word_heal_native · spoken_word"
+phase = "windup"
+variant = "spoken_word"
+source_recipe = "evidence/parallel-high-level-support-v100/PLAN.md"
+seconds = 0.8
+simulation_hz = 60
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-support-v380-20261018"}

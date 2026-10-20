@@ -1,0 +1,50 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/fea9f0a6d32c570291c4/program-b15110393c49dcf48337.gdshader" id="1_yxd1e"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/cc3ee322db85204a95aa/texture.res" id="2_80gd6"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/9dd4b1e9c98d16632575/texture.res" id="3_ebepy"]
+
+[sub_resource type="Gradient" id="Gradient_gy65w"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.682584, 0.786517, 0.929775)
+colors = PackedColorArray(0.09, 0.137667, 0.2, 1, 0.424525, 0.485861, 0.584245, 1, 0.3285, 0.3771, 0.45, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_h6fd1"]
+gradient = SubResource("Gradient_gy65w")
+
+[sub_resource type="Gradient" id="Gradient_2qodv"]
+interpolation_color_space = 2
+colors = PackedColorArray(0.678944, 0.678944, 0.678943, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nchvq"]
+frequency = 0.0166
+domain_warp_enabled = true
+domain_warp_frequency = -0.06
+domain_warp_fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_eoagj"]
+noise = SubResource("FastNoiseLite_nchvq")
+color_ramp = SubResource("Gradient_2qodv")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_yxd1e")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/fresnelpower = 1.435
+shader_parameter/AddTexture = ExtResource("2_80gd6")
+shader_parameter/BreakFactorGlobal = 0.0
+shader_parameter/Texture_add2_offset = Vector2(2.875, 1.02)
+shader_parameter/AddTexture2 = ExtResource("3_ebepy")
+shader_parameter/Details_scale = Vector2(1, 1)
+shader_parameter/Details_speed = Vector2(0, 0.05)
+shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_eoagj")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_h6fd1")
+shader_parameter/ColorIntensity = 3.0
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_yxd1e")
+metadata/factory_opacity_prepared_shader = ExtResource("1_yxd1e")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false

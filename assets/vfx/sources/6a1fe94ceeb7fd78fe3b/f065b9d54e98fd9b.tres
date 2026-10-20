@@ -1,0 +1,210 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/8ddf946230a5d36b99c5/healing.gd" id="1_sbq0m"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/a918d224d6be0a44c7d3/f065b9d54e98fd9b.tscn" id="2_gmwte"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0250a3f89c551f4fc017/bank.gd" id="3_3cf5g"]
+
+[resource]
+script = ExtResource("3_3cf5g")
+scene = ExtResource("2_gmwte")
+source_script = "res://assets/vfx/sources/1e83a91767b68e67396e/healing.gd"
+adapter_script = ExtResource("1_sbq0m")
+stable_paths_prepared = true
+generated_name_bindings = Array[Dictionary]([{
+"node_class": "PhysicalBoneSimulator3D",
+"parent": "am_flower_001/Armature/Skeleton3D",
+"source_internal_index": 1
+}])
+input_sha256 = "c7e84c70f4fc89cc38aaace2bbfd1589ca0bc0eb5f1c3cff65086eb147561aed"
+material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "external_base_ring2"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "SmConeTypeBa"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "am_flower_001/Armature/Skeleton3D/LilyFlower"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "floorflash5"
+}])
+player_paths = Array[String](["AnimationPlayer", "am_flower_001/AnimationPlayer"])
+light_paths = Array[String](["OmniLight3D"])
+immutable_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "VFX_Smoke_B_green"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "leafflowz5"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "leafflowz6"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "sparks5"
+}, {
+"kind": "mesh_surface",
+&"next_pass_depth": 0,
+"node": "am_flower_001/Armature/Skeleton3D/LilyFlower",
+"surface": 0
+}])
+seeds = [{
+"path": "Donor/VFX_Smoke_B_green",
+"seed": 47291
+}, {
+"path": "Donor/leafflowz5",
+"seed": 47292
+}, {
+"path": "Donor/leafflowz6",
+"seed": 47293
+}, {
+"path": "Donor/sparks5",
+"seed": 47294
+}, {
+"path": "Donor/external_base_ring2",
+"seed": 47295
+}]
+provenance = {
+"clock_ticks_sampled": 0,
+"immutable_material_bindings": Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "VFX_Smoke_B_green"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "leafflowz5"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "leafflowz6"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "sparks5"
+}, {
+"kind": "mesh_surface",
+&"next_pass_depth": 0,
+"node": "am_flower_001/Armature/Skeleton3D/LilyFlower",
+"surface": 0
+}]),
+"immutable_material_policy": "StandardMaterial3D only; audited native family and no script/method/property-track writes",
+"native_lights_retained": Array[String](["OmniLight3D"]),
+"native_players_retained": Array[String](["AnimationPlayer", "am_flower_001/AnimationPlayer"]),
+"native_process_materials_private": true,
+"owner_pose_saved": false,
+"pre_tree_emission_baseline": [{
+"emitting": false,
+"node": "VFX_Smoke_B_green"
+}, {
+"emitting": false,
+"node": "leafflowz5"
+}, {
+"emitting": false,
+"node": "leafflowz6"
+}, {
+"emitting": false,
+"node": "sparks5"
+}, {
+"emitting": false,
+"node": "external_base_ring2"
+}],
+"retained_materials": [{
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "external_base_ring2"
+},
+"shader_sha256": "710e5ef10981fca00496000501765a5edae182601b9d4ab2267c86dbf82a65ce"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "SmConeTypeBa"
+},
+"shader_sha256": "c603d48e06ff32759961f2c25797c34c948b70de5f831d577a48f2560ba4156f"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "am_flower_001/Armature/Skeleton3D/LilyFlower"
+},
+"shader_sha256": "54ef7696c335eafb9c9353f56bdddc0866106043dab7d9a89b628ff1bf18c259"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "floorflash5"
+},
+"shader_sha256": "b5e2b21e7540291b7846d46243dc8817dfe3c42d8307b34be29c6f0b7c623bb3"
+}],
+"source_input": {
+"animation_missing_policy": "first_available",
+"clip_normal": [0.70710678, 0, 0.70710678],
+"material_family": "healing",
+"scene": "res://assets/vfx/sources/e1686bb48a6190ecc3ae/VFX_Healing_Flower.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 1.0,
+"anchor": "target_ground",
+"animation": "Init",
+"cell": 512,
+"close": 345,
+"frames": 504,
+"height": 0.0,
+"hue": 0.51,
+"id": "greater_restoration",
+"level": 5,
+"mode": "cleanse",
+"name": "VFX_Healing_Flower",
+"note": "Full-body leaf-ribbon cleanse with a focused column; finite restoration, no passive bubble.",
+"pack": "lelu-healing-protection",
+"palette": ["293958", "386a88", "4babc0", "70d3df", "9be8ed", "d0f4ed"],
+"scale": 0.7,
+"title": "Greater Restoration"
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_phase": "res://assets/vfx/sources/845c17db040405179906/01.tres",
+"source_script": "res://assets/vfx/sources/1e83a91767b68e67396e/healing.gd",
+"source_script_sha256": "18d2adb31968fcf53c0a8b3308a64af9d61b06564a08fd9bdf81fb63c9aa1466",
+"source_seed_records": [{
+"path": "Donor/VFX_Smoke_B_green",
+"seed": 47291
+}, {
+"path": "Donor/leafflowz5",
+"seed": 47292
+}, {
+"path": "Donor/leafflowz6",
+"seed": 47293
+}, {
+"path": "Donor/sparks5",
+"seed": 47294
+}, {
+"path": "Donor/external_base_ring2",
+"seed": 47295
+}],
+"stable_path_proof": {
+"animation_tracks": 73,
+"complete": true,
+"generated_name_bindings": [{
+"node_class": "PhysicalBoneSimulator3D",
+"parent": "am_flower_001/Armature/Skeleton3D",
+"source_internal_index": 1
+}],
+"named_nodes": 16,
+"unresolved": []
+},
+"texture_freeze_policy": "reject_animated_sampler_or_resource_tracks"
+}
+declared_registration_complete = true

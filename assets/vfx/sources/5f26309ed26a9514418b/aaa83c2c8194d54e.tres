@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/204c9407d2b9d37cadd4/support_dispel_evil_and_good.gd"
+input = {"geometry_actor": "caster", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "caster", "socket": "body_center"}], "piece_capacity": 6, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "recipient_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "owner_uuid": "7929ed67-bcf8-54d4-b293-7e250352d2fe", "condition_id": "condition.spell.dispel_evil_and_good", "event_uuid": "a976d829-c03d-562f-bc23-b907bd36efd9", "part": "ward", "mode": "apply", "seconds": 0.9, "apply_seconds": 0.18, "retire_seconds": 0.27, "width_cells": 0.027, "vertex_colour": "92b7c8", "vertex_alpha": 0.0, "material": {"scene": "res://assets/vfx/sources/6127982409e0b8718186/VFX_Protection_4_Shield.tscn", "node": "external_base_ring", "alpha": 0.8, "emission_gain": 0.0, "uniforms": {"Enable_Proximity_Fade": false, "Enable_Fresnel": false, "Opacity": 0.95, "Texture2_Scale": {"type": "Vector2", "value": [1.0, 1.0]}, "Dissolver_Scale2": {"type": "Vector2", "value": [1.1, 0.75]}, "Speed_texture": {"type": "Vector2", "value": [0.07, 0.17]}, "Speed_disolver": {"type": "Vector2", "value": [-0.11, 0.08]}}}, "lease": {"observed": true, "condition_state": {"condition_uuid": "7929ed67-bcf8-54d4-b293-7e250352d2fe", "behavior_id": "condition.spell.dispel_evil_and_good", "suppression_provider_uuids": [], "applied_source_event_cursor": 1}, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352"}, "event": {"uuid": "a976d829-c03d-562f-bc23-b907bd36efd9", "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "canceled": false}, "prepared_receiving": "res://assets/vfx/sources/5d38a36b9732a44823ab/aaa83c2c8194d54e.tres"}
+provenance = "Native source mechanisms and actual backend semantics: evidence/parallel-high-level-support-v100/PLAN.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/dispel-evil-and-good/application"
+label = "dispel_evil_and_good_native · application"
+phase = "impact"
+variant = "application"
+source_recipe = "evidence/parallel-high-level-support-v100/PLAN.md"
+seconds = 0.9
+simulation_hz = 60
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-support-v380-20261018"}

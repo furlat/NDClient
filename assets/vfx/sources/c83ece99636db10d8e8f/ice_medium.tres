@@ -1,0 +1,276 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/893c4d920217e9144b57/c46896b91d1944f95edecef03d64288dc5aa9eb9e08144c8547c60ed0bb2c5f3.gdshader" id="1_1oggx"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/ce812c0a1aa3e1c6714d/2c4c3977bddbf79cf0eb.res" id="2_ahpbv"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/959e357c81e3240822d6/a156e9371db2c733899c.res" id="3_s3hks"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/sources/db5a57e5d92c007d555b/ice-chip.res" id="4_prfdn"]
+[ext_resource type="Script" path="res://assets/vfx/sources/4a7480f2530d55f75733/layer.gd" id="5_gnc3f"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/519d41a68dab8d47cd14/66eb6f8f31d4a5a10100cd49890bda98c7947142b7fab0bf4482b68d3bc9ab60.gdshader" id="6_8c2sw"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/d25a4eb7003b01761c48/texture.res" id="7_mi6w2"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/sources/73c7be2db6911bdcb201/contact-card.tres" id="8_mw286"]
+[ext_resource type="Script" path="res://assets/vfx/sources/084133c44e6ed6f0215e/style.gd" id="9_8qv4b"]
+
+[sub_resource type="Image" id="Image_k5i7m"]
+data = {
+"data": PackedByteArray(22, 63, 97, 255, 77, 159, 194, 255, 192, 233, 242, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 3
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_byr8t"]
+image = SubResource("Image_k5i7m")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8tila"]
+render_priority = 0
+shader = ExtResource("1_1oggx")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_byr8t")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.0
+shader_parameter/contact_span = 0.35
+shader_parameter/contact_alpha = 0.95
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.13, 0.13)
+shader_parameter/contact_offset_cells = Vector2(-0.025, 0)
+shader_parameter/contact_drift_cells = Vector2(-0.16, 0.16)
+shader_parameter/contact_angle = -0.65
+shader_parameter/contact_expansion = 0.15
+shader_parameter/mask1_texture = ExtResource("2_ahpbv")
+shader_parameter/mask1_scroll = Vector2(0, -0.01)
+shader_parameter/mask1_scale = Vector2(2, 2)
+shader_parameter/mask1_radial = false
+shader_parameter/use_mask2 = true
+shader_parameter/mask2_texture = ExtResource("3_s3hks")
+shader_parameter/mask2_scroll = Vector2(0, -0.2)
+shader_parameter/mask2_scale = Vector2(2, 2)
+shader_parameter/mask2_strength = 1.0
+shader_parameter/mask2_blend_mode = 3
+shader_parameter/mask2_radial = false
+shader_parameter/use_mask3 = false
+shader_parameter/mask3_scroll = Vector2(0, 0)
+shader_parameter/mask3_scale = Vector2(1, 1)
+shader_parameter/mask3_strength = 0.0
+shader_parameter/mask3_blend_mode = 0
+shader_parameter/mask3_radial = false
+shader_parameter/primary_color = Color(0.7529412, 0.9137255, 0.9490196, 1)
+shader_parameter/secondary_color = Color(0.08627451, 0.24705882, 0.38039216, 1)
+shader_parameter/tertiary_color = Color(0.5056, 0.58624, 0.64, 1)
+shader_parameter/use_tertiary = false
+shader_parameter/color_smoothness = 0.5
+shader_parameter/billboard = false
+shader_parameter/displacement_scale = 0.0
+shader_parameter/displacement_offset = 0.5
+shader_parameter/time_scale = 1.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/uv_alignment = 0
+shader_parameter/emission_strength = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_1oggx")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_md4vp"]
+script = ExtResource("5_gnc3f")
+layer_id = "Chip0"
+mesh = ExtResource("4_prfdn")
+material = SubResource("ShaderMaterial_8tila")
+source_paths = PackedStringArray("res://assets/vfx/sources/1de4aba0c112cd12248b/sm_ice004uv2.res", "res://assets/vfx/sources/5101c060e6184b928028/ice_shard_01_core.tres")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p85k8"]
+render_priority = 0
+shader = ExtResource("1_1oggx")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_byr8t")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.012
+shader_parameter/contact_span = 0.36
+shader_parameter/contact_alpha = 0.95
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.11, 0.11)
+shader_parameter/contact_offset_cells = Vector2(0.025, 0)
+shader_parameter/contact_drift_cells = Vector2(0.16, 0.08)
+shader_parameter/contact_angle = 0.85
+shader_parameter/contact_expansion = 0.15
+shader_parameter/mask1_texture = ExtResource("2_ahpbv")
+shader_parameter/mask1_scroll = Vector2(0, -0.01)
+shader_parameter/mask1_scale = Vector2(2, 2)
+shader_parameter/mask1_radial = false
+shader_parameter/use_mask2 = true
+shader_parameter/mask2_texture = ExtResource("3_s3hks")
+shader_parameter/mask2_scroll = Vector2(0, -0.2)
+shader_parameter/mask2_scale = Vector2(2, 2)
+shader_parameter/mask2_strength = 1.0
+shader_parameter/mask2_blend_mode = 3
+shader_parameter/mask2_radial = false
+shader_parameter/use_mask3 = false
+shader_parameter/mask3_scroll = Vector2(0, 0)
+shader_parameter/mask3_scale = Vector2(1, 1)
+shader_parameter/mask3_strength = 0.0
+shader_parameter/mask3_blend_mode = 0
+shader_parameter/mask3_radial = false
+shader_parameter/primary_color = Color(0.7529412, 0.9137255, 0.9490196, 1)
+shader_parameter/secondary_color = Color(0.08627451, 0.24705882, 0.38039216, 1)
+shader_parameter/tertiary_color = Color(0.5056, 0.58624, 0.64, 1)
+shader_parameter/use_tertiary = false
+shader_parameter/color_smoothness = 0.5
+shader_parameter/billboard = false
+shader_parameter/displacement_scale = 0.0
+shader_parameter/displacement_offset = 0.5
+shader_parameter/time_scale = 1.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/uv_alignment = 0
+shader_parameter/emission_strength = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_1oggx")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_1yjyk"]
+script = ExtResource("5_gnc3f")
+layer_id = "Chip1"
+mesh = ExtResource("4_prfdn")
+material = SubResource("ShaderMaterial_p85k8")
+source_paths = PackedStringArray("res://assets/vfx/sources/1de4aba0c112cd12248b/sm_ice004uv2.res", "res://assets/vfx/sources/5101c060e6184b928028/ice_shard_01_core.tres")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drrd2"]
+render_priority = 0
+shader = ExtResource("1_1oggx")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_byr8t")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.028
+shader_parameter/contact_span = 0.33
+shader_parameter/contact_alpha = 0.9
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.08, 0.08)
+shader_parameter/contact_offset_cells = Vector2(0, -0.015)
+shader_parameter/contact_drift_cells = Vector2(0.025, -0.12)
+shader_parameter/contact_angle = 0.15
+shader_parameter/contact_expansion = 0.15
+shader_parameter/mask1_texture = ExtResource("2_ahpbv")
+shader_parameter/mask1_scroll = Vector2(0, -0.01)
+shader_parameter/mask1_scale = Vector2(2, 2)
+shader_parameter/mask1_radial = false
+shader_parameter/use_mask2 = true
+shader_parameter/mask2_texture = ExtResource("3_s3hks")
+shader_parameter/mask2_scroll = Vector2(0, -0.2)
+shader_parameter/mask2_scale = Vector2(2, 2)
+shader_parameter/mask2_strength = 1.0
+shader_parameter/mask2_blend_mode = 3
+shader_parameter/mask2_radial = false
+shader_parameter/use_mask3 = false
+shader_parameter/mask3_scroll = Vector2(0, 0)
+shader_parameter/mask3_scale = Vector2(1, 1)
+shader_parameter/mask3_strength = 0.0
+shader_parameter/mask3_blend_mode = 0
+shader_parameter/mask3_radial = false
+shader_parameter/primary_color = Color(0.7529412, 0.9137255, 0.9490196, 1)
+shader_parameter/secondary_color = Color(0.08627451, 0.24705882, 0.38039216, 1)
+shader_parameter/tertiary_color = Color(0.5056, 0.58624, 0.64, 1)
+shader_parameter/use_tertiary = false
+shader_parameter/color_smoothness = 0.5
+shader_parameter/billboard = false
+shader_parameter/displacement_scale = 0.0
+shader_parameter/displacement_offset = 0.5
+shader_parameter/time_scale = 1.0
+shader_parameter/texture_scale = Vector2(1, 1)
+shader_parameter/uv_alignment = 0
+shader_parameter/emission_strength = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 1.0
+shader_parameter/alpha_multiplier = 1.0
+shader_parameter/alpha_mode = 0
+shader_parameter/alpha_cutoff = 0.02
+shader_parameter/dither_cutoff = 0.8
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("1_1oggx")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_bn34j"]
+script = ExtResource("5_gnc3f")
+layer_id = "Chip2"
+mesh = ExtResource("4_prfdn")
+material = SubResource("ShaderMaterial_drrd2")
+source_paths = PackedStringArray("res://assets/vfx/sources/1de4aba0c112cd12248b/sm_ice004uv2.res", "res://assets/vfx/sources/5101c060e6184b928028/ice_shard_01_core.tres")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2shh1"]
+render_priority = 0
+shader = ExtResource("6_8c2sw")
+shader_parameter/native_palette_texture = SubResource("ImageTexture_byr8t")
+shader_parameter/native_palette_count = 3
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 1.5
+shader_parameter/contact_seconds = 0.0
+shader_parameter/contact_delay = 0.0
+shader_parameter/contact_span = 0.2
+shader_parameter/contact_alpha = 0.6
+shader_parameter/contact_variant = 0.0
+shader_parameter/contact_extent_cells = Vector2(0.25, 0.26)
+shader_parameter/contact_offset_cells = Vector2(0, 0)
+shader_parameter/contact_drift_cells = Vector2(0, 0)
+shader_parameter/contact_angle = 0.45
+shader_parameter/contact_expansion = 0.15
+shader_parameter/contact_mask = ExtResource("7_mi6w2")
+shader_parameter/primary_color = Color(0.7529412, 0.9137255, 0.9490196, 1)
+shader_parameter/secondary_color = Color(0.08627451, 0.24705882, 0.38039216, 1)
+shader_parameter/contact_erosion = 0.18
+metadata/native_energy_palette = true
+metadata/factory_prepared_shader = ExtResource("6_8c2sw")
+metadata/factory_clock_names = []
+
+[sub_resource type="Resource" id="Resource_aajvf"]
+script = ExtResource("5_gnc3f")
+layer_id = "Mask3"
+mesh = ExtResource("8_mw286")
+material = SubResource("ShaderMaterial_2shh1")
+source_paths = PackedStringArray("res://assets/vfx/sources/d25a4eb7003b01761c48/texture.res", "res://assets/vfx/sources/8c4c1048ae861b0a0dc7/s_simple_shader2.tres")
+
+[resource]
+script = ExtResource("9_8qv4b")
+element = "ice"
+duration_seconds = 0.4
+use_optical_surface = true
+layers = Array[Resource]([SubResource("Resource_md4vp"), SubResource("Resource_1yjyk"), SubResource("Resource_bn34j"), SubResource("Resource_aajvf")])
+provenance = [{
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/1de4aba0c112cd12248b/sm_ice004uv2.res",
+"sha256": "bb7bfb46d7f1a942d3bf21563332f1c43d0e9f2761831dd1cc8e079fe2b97a49"
+}, {
+"license_evidence": "factory-source:docs/licenses/binbun/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/5101c060e6184b928028/ice_shard_01_core.tres",
+"sha256": "849b05f4eee6fdcb4e90ed667be4e5985e31ac29ee773d9bc7d1a1789423460a"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/d25a4eb7003b01761c48/texture.res",
+"sha256": "d25a4eb7003b01761c487874fb16bea32ff03da3d1fc3a51e706fce975f4f162"
+}, {
+"license_evidence": "factory-source:docs/licenses/lelu/README.md",
+"origin": "owned_pack",
+"path": "res://assets/vfx/sources/8c4c1048ae861b0a0dc7/s_simple_shader2.tres",
+"sha256": "a18575aefc1534f5ff2626a810b6839eac9891b36cd8a290d708a2e0c56efc80"
+}]

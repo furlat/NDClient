@@ -1,0 +1,1920 @@
+{
+  "base_version": "production-bindings-c494177f9ef03e3d",
+  "version": "weapons-5dccea14a874afd3",
+  "source_revision": "5dccea14a874afd3",
+  "packages": [
+    "pack_binbun_godoticevfx",
+    "pack_binbun_hitfxfull",
+    "pack_binbun_poisonvfx",
+    "pack_lelu_godot_blood_premium",
+    "pack_lelu_godot_electric_lightning_premium",
+    "pack_lelu_godot_hit_impact_effect_premium",
+    "pack_lelu_godot_magic_projectiles_premium_demo_project",
+    "pack_lelu_godot_magic_projectiles_premium_vfx_only",
+    "pack_lelu_godot_patreons_community_pack_3_d",
+    "pack_lelu_godot_stylized_fire_effect_premium",
+    "pack_lelu_godot_trail_effects_premium",
+    "pack_lelu_godot_weapon_effects_premium"
+  ],
+  "source_fingerprints": {
+    "authoring/modular-weapons-20261020/equipped/pose-bank.tres": "40b1e8fa5f7fd12a2f802c81424d1a94f6f8a9aed3f194a94a23832e82d75149",
+    "factory/resources/weapon_pose_bank.gd": "59a23b1e64daa381a8befd3e3fba692acb9c5c3473de131dd90eb6862105afce",
+    "factory/packaging/source_readiness.gd": "e9c78328e8e3a3d8ae1ddbef45ac3460e99ed89f8cad96aa82eced39e6034217",
+    "factory/packaging/scene_document.gd": "698f1b1ab06ea61ae1fd22eaf278d181aa0634e3f8c251874f4274be14e44ebc",
+    "factory/packaging/resource_io.gd": "7a001b4b69c2480a2ee5b85c8f85e7fcc812c8ed67398483522ea9be8d9f39ed",
+    "factory/packaging/occurrence.gd": "8dec66b99e64921f5c6a0116c8e44f3d6680d06edd94f48b43a8dc804b0fdf2e",
+    "factory/packaging/occurrence_bindings.gd": "30d613541975e19fd62bced07522ce4959da6657489ae4531143ac9a5c886df3",
+    "factory/packaging/construction_profile.gd": "78b2194e6c972c80a191799044e7886450fa36bbb0c52b7a0d783a9a706bd4e8",
+    "factory/packaging/occurrence_clock.gd": "309ad8725b21bb5a418e48627157eaff6ef9e8abe003c539b9196c693d2e140c",
+    "factory/core/source_materials.gd": "6bddd2705f141002b24d8f9cfc5749f90b9325abdd98dec90464aa65ee35919b",
+    "factory/baking/source_bridge.gd": "dc1602b750a81358349155da319407421a315012649e3a901c392738399272cf",
+    "factory/baking/stable_source_paths.gd": "79d8683f87bbf7f860c394af64e5c4837c627911c4f94f01d4762377136fcce3",
+    "factory/core/resource_graph.gd": "eca090b0c9895146375d3e959eaf193fef1236f0a7aadf91d9f137e50f853627",
+    "factory/core/native_source_space.gd": "f8cc53bd9caed6a2168bf7c478d08cbff25fa8ea83ecd3aa48817ac8a27b66a6",
+    "factory/baking/recording_source_sampler.gd": "04b507aca1386616aef10d3ba668ff1040a9eadea9bcab3938a7520afcc6f0de",
+    "factory/core/immutable_materials.gd": "7ccf04d48918a608d4b4f39a2e8fa86fe1d638cee8f48543441328ac55b521ba",
+    "factory/baking/runtime_particle_units.gd": "0d9240226c96e22bbf6271361687d2f4c8cf1ffe34f8dd98983a1114fe06b3b9",
+    "integrations/ndclient/presentation/native_particle_units.gd": "ce21b59d14dcbe593c8f8bd9b689bca6a6a6033e293b1c892f1aaaeb1d135ba5",
+    "integrations/ndclient/presentation/native_factory_source.gd": "4d5896dba23598d57e7b3ee9ccca9c1f1f76931ca010a7dced6b311db38f5bfd",
+    "integrations/ndclient/presentation/native_light_units.gd": "80eb9e980fcdf00ecd58834bde45389b760495922114a2f66c2c5a7d06b1c7f5",
+    "integrations/ndclient/presentation/native_effects.gd": "f288b44595271f899a2be4f963413f18e8c604970e56766098ce10418c2d18e4",
+    "integrations/ndclient/presentation/native_effect_palette.gdshader": "58074cd68941da3049c488e42d4b3f0115a864a48063419c048c23b900bb4203",
+    "integrations/ndclient/authoring/native_effects/index.json": "3062c34b403f70beccd47578315d5745c8ece672f4a476de7225a7512b783035",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "9eaad456e2aa4cfc91b1dbd2463e8fb84e51f8363233c498d0aac5a59f1cbfa3",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "d5efdfa957e96b684c03e8706e1e83c3d2fc288a8679ef24cef7c43e065e5583",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "8b542bcc993654d88c4e007aaafec8be67e59b9f492221e0e769c160fa8784f8",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "5c3993df8e3a7f329dbf5abc034ec39fc5acfa1ff014871cdc5af341dce09428",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "b31656c3b83e5006e23dcc08e043e1125b0c4d8bac50934fec83bd72f4a3144e",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "022adcea7620dc32f7aa8948751927d4deec60544a3b708ca7b520dee6fb5c8d",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "e5167e8b5cb2eb000a31c3349d69463b3c3a3fd8c28d6cacb9bd95bea58432fd",
+    "library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "cb3a53c2b298625f603a6638a4ee8f00323255d196dc142cb43dd5c153255be5",
+    "integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres": "638185929e10e90b3accceab043e07da1d70d8e391fc41925e1a0081a2708964",
+    "integrations/ndclient/presentation/native_effect_mote.gdshader": "9425a324f584a792d2ff5d6568dada1365abcf3d66625ebf5846b886fa1be445",
+    "integrations/ndclient/assets/native_effects/class_actions/Flow.gdshader": "1e7fcb04c1f31c237adf7fefdf7d2b9ece9d0c7fa179e1f041b9b2413daea8e8",
+    "integrations/ndclient/assets/native_effects/class_actions/ClassComponents.gd": "beffe6ba882eccc92b7672613cd5959e225a893fe21a6f528cff746063a742b7",
+    "integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png": "0153d00f65f7d86263514a57b5892176816d8fb374ca94325de74e7e667aa820",
+    "integrations/ndclient/assets/native_effects/class_actions/Glow.gdshader": "dcd7c27efcd84ec38e226e5180e753edb56d4c28a8364bf3053a30322f6d8774",
+    "integrations/ndclient/assets/native_effects/class_actions/Charge.gdshader": "19dbd070254366ba40b284511b159e757415779aefc8167775db011e01e1259e",
+    "integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn": "7035b169077b6c5144b6ccf77795ac67f72b1ea6332d45248d1e5eb80bfddb5e",
+    "integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/star.png": "a5a94d4fd20b2794485c25adb50f47238dd2f38926754621b9f9f0736c40135d",
+    "integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/textures/ember.png": "c143513f7154cf2a9322d6f115e457689236b8081fd0613dc0f4b6af68bc0fd0",
+    "integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/shaders/ribbon.gdshader": "2be39c852753907caee390514c2cb228f66edab12f2eadc3b99f1c87d68dca57",
+    "integrations/ndclient/assets/native_effects/class_actions/vfx_1/arc_charge/scripts/arc_charge_swirl.gd": "0aa31ac5de4f4efc74b4adcfd020266c53dda13920276114c88d0a0edaa39777",
+    "integrations/ndclient/assets/native_effects/class_actions/Film.gdshader": "1da06086b96579d88ef317026c395699f9e379f306a11ce76075307521bad3ca",
+    "integrations/ndclient/assets/native_effects/factory/factory/shaders/energy_palette_v1.gdshader": "32f76501adc64e7e6444b28b779150d39c96b857bf868b1c075348fa0715c47e",
+    "integrations/ndclient/assets/native_effects/factory/factory/shaders/cie_d65_v1.gdshaderinc": "252c03994b0bb8925b8e656abe9a62d922753fb341567e334c0a57065cdef7f9",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn": "14f16f90110769de3f5d98850a4005242cbf72f8274555cd972520804f880520",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+    "integrations/ndclient/assets/native_effects/factory/archive/objects/73/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091": "73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn": "e3dc3d912d7f6c07f3649aed17877fd09f146945b212aac7487ccd851296a89e",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn": "33639e05a422bab5ef19e4c1b47146eeb6c39fa837c3c9b7a2666d5830382b7a",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn": "68c97270042bccea62ea5d5b22b8bc1753342803eafda4be698177ed8a951eb0",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn": "f0e2a479e0c03f2540a743c813c60e61ce6d94213e759d5cb00d9454cedc745b",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres": "77e3bc50180da87bd76ed9f4808e69a30e87dd7dc8861aeeacc1e043152b0a88",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader": "5cd8214ed58b515189f1aafd77aba17b99dbf57a86571c0885f8070ab1db3778",
+    "integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn": "f621aad24921fffeb7988413bb861ab51dcedea5ff249fecef60a6f23fb07195",
+    "integrations/ndclient/assets/native_effects/class_actions/strike_hit.png": "fbde8002dad5a6cc88e8fffa95af4b36ba8eaf77b7c4ae2c9c44b40e3da9883b",
+    "integrations/ndclient/assets/native_effects/class_actions/Strike.gdshader": "3d00a1eb3a5ee5705699e2171e509d832633a1e7645bebc9bb6e7513eca6bf89",
+    "integrations/ndclient/assets/native_effects/class_actions/Strike.gd": "1042121c97885e95cf4006690cab0ad080bc879f9c6ea39c1f433ca092566d81",
+    "integrations/ndclient/assets/native_effects/class_actions/StrikePaths.json": "341630ccd6adcd31965a753c58e8302f075f9a7cab225646fe608816beabb220",
+    "integrations/ndclient/assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd": "a093af6fd6afa7fa5deb99fa45ba216df65846d7d2c8029f38eebf34a0a8588b",
+    "authoring/modular-weapons-20261020/contacts/fire_greater_phase.tres": "168100c549486a121ca7e9942effb8095e92e2785e59fa4940cbf96dad173ef6",
+    "authoring/modular-weapons-20261020/contacts/fire_greater.tres": "b5ad535b64c663fc6f587c6b8cb2772f6121d7358083cafd15146cab715db020",
+    "library/lelu/pack_lelu_godot_hit_impact_effect_premium/VFX/Shaders/s_simple_shader2.tres": "a18575aefc1534f5ff2626a810b6839eac9891b36cd8a290d708a2e0c56efc80",
+    "library/lelu/pack_lelu_godot_hit_impact_effect_premium/VFX/Textures/T_Spark2.PNG": "febb0c67aed638e9c60b5cc59d07807976a24793ada0b86fbe136f05d84a1e0e",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Scenes/VFX_Toony_Fire_2_blue.tscn": "16231425c86e5c51b08a6f8b2ad5c8b48a3d7b68cab9b6ee89ed8ffd20950fa6",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Shaders/s_shader_Fire.tres": "dfef091231ab154975dc87e3ea08a7842cebad41419415462d6fd78fe2de33a1",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Textures/T_Fire3.jpg": "96793c7c979f893f5971345d0df80b32bcc50b5f196caae1924fe91c2872cd6c",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Textures/T_Distortion3.jpg": "d4bc3f7731d393acc0ed04d504d5a9c65f30b98725953f8782532433720b9d6a",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Textures/T_FireF_1.png": "e7224120f85b5bb4ec41410d1209816b894af736328602b0b68a0d5704bb7bb7",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Textures/T_Distortion1.jpg": "3d41f90c29a82e550e2881560a41107e1398702b2e51cb3cf1d377c8c9eddfb8",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Shaders/s_basic_typeA7.tres": "fbf741f5eb32f4aa3506e32c77108bc4da429bf48b2ee168c58886c10109f7bb",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Textures/T_mask2standar.png": "0cf1a3af80a43153e6086ce0cc073e1b5b03ddbb9ce1d58da5d5eae67dc0386f",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Textures/T_T_Flare05.PNG": "cd95c8842d220d86bc4e0791c13df210def6eefd96a36628165c8cc779ddfaf4",
+    "library/lelu/pack_lelu_godot_stylized_fire_effect_premium/VFX/Shaders/s_FirePoints.tres": "e050b918b5ae1c0040e4c102ae1c8dc575a5b403f2913ed0fe23e1d7327d70eb",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_VFX_PerlinNoise_Tiled.png": "8bc8bf311494b7cec3951453d4f73787b278b4b585239650dd448c9aab10924c",
+    "factory/components/weapon_appearance/contacts/style.gd": "b08db3571ec807b7064862026b4d6ae46851471d13d9498644fbddcc3dd78718",
+    "authoring/modular-weapons-20261020/contacts/programs/66eb6f8f31d4a5a10100cd49890bda98c7947142b7fab0bf4482b68d3bc9ab60.gdshader": "66eb6f8f31d4a5a10100cd49890bda98c7947142b7fab0bf4482b68d3bc9ab60",
+    "factory/components/weapon_appearance/contacts/layer.gd": "9fa00052ad77a397551652759d44d0748ed36b7c9776ed9e0471427b5f44a78d",
+    "authoring/modular-weapons-20261020/contacts/contact-card.tres": "f6983f0b19f159d103d8d37bb87fd0072b90a2ba97594e57915cdbdfceca6651",
+    "authoring/modular-weapons-20261020/contacts/programs/ceae20dd6d9833e65075e56df55391315066e9c8342cce2e9396482251b38f29.gdshader": "ceae20dd6d9833e65075e56df55391315066e9c8342cce2e9396482251b38f29",
+    "factory/components/weapon_appearance/contacts/component.gd": "b0dbddef5b600bda8b53ba3807e88aab67d6c437c731d4a4b6d383f377902bbc",
+    "factory/authoring/phase.gd": "e60cd3283f20b7555657d7336054094dcb8f1a791939e4956ec563114bcd1779",
+    "factory/authoring/component.gd": "3a37b2d404e3daf6a645f7a1569f878619e28d0c477d4f88af3c824b3f300fa3",
+    "authoring/modular-weapons-20261020/contacts/fire_medium_phase.tres": "a4264f3e089b790df56d9ff4e8351fb03bd409df91d212dda1921410446b7fab",
+    "authoring/modular-weapons-20261020/contacts/fire_medium.tres": "38d4ca5f3ccdbc1c3fc90bc9c99fee91d40a16e7cc328f39d9cc2ae523b33558",
+    "authoring/modular-weapons-20261020/contacts/fire_lesser_phase.tres": "163af70a666d1097ce09d2f9031a2c41aefc7e5de59973d5a3146e2d3c76165e",
+    "authoring/modular-weapons-20261020/contacts/fire_lesser.tres": "68cea007fa116846646dcd37d7fca0d38d8d6e35bff8575a5176d7be5e43d0e1",
+    "authoring/modular-weapons-20261020/contacts/necrotic_greater_phase.tres": "6cccafab9cb09ea533f002b7c2dd6216f39fc9da024f90a566c652f427f02b2f",
+    "authoring/modular-weapons-20261020/contacts/necrotic_greater.tres": "d3e4161670127490aac33e8d4bb50b6a29593196a0b89d46ccc3d15b5b66a153",
+    "library/lelu/pack_lelu_godot_hit_impact_effect_premium/VFX/Textures/T_Hit13.PNG": "ef4462b539b9e99efae532cc36d12f17af67b7c6dbce68807f47b98ab4181147",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/effects/impact/vfx_impact_01.tscn": "3ddaaa3c396d8cc611a3da82f8d66813bcdb280c135f0bd524d7b6dc412c54e7",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/shader/glow.gdshader": "d33ad4158915aa4070b63ae038375bb9908771ed12b91046603efb1c3e36b7fd",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/shared/script/VFXOmniLightBB.gd": "a8adbc69a2e94a6da18713604188e10962e7a2b6adba16b25c56f17defd36c06",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/shader/impact_core.gdshader": "14c5ca2104f1617feb0f819a6ede0377450ffdfd92a93f48cd8f34cc2f9460dc",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/shader/impact_slash.gdshader": "7b011190d9f1f66ee52f5428490597a586e84b246611624bc3f5d8d89f2beab4",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/shader/impact_sphere.gdshader": "7ba9bb23c86502517a29c160cdf741ec1aafbd3f7da14c0e2dc106c82271ec83",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/script/VFXImpactBB.gd": "0fd189b0485b378e79579f9abd4b09bdfda1fb63d6d244c397abac4f65c48cd8",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/shared/script/VFXControllerBB.gd": "d4a11ee8805b9abb20038abd79705d998285cf08c65ab2d1ea60072cb8a5accb",
+    "authoring/modular-weapons-20261020/contacts/textures/5ca2830a9847c55f64b2.res": "94c448fab98e6c23880297c8183f8558169d440ae5a70d71e973b46c9574d2cc",
+    "authoring/modular-weapons-20261020/contacts/programs/9d207c55287bbab541fa1d4784883546e383256d9731ea512a007d42321e5f85.gdshader": "9d207c55287bbab541fa1d4784883546e383256d9731ea512a007d42321e5f85",
+    "authoring/modular-weapons-20261020/contacts/necrotic_medium_phase.tres": "d05481be017d48f92eb2afd25242b817479d3df2c621341465e6eeb3efbed867",
+    "authoring/modular-weapons-20261020/contacts/necrotic_medium.tres": "aa1aef3f49cfecbff3b7229e54d4739795f2ab00252f18d8cba5703846c98d06",
+    "authoring/modular-weapons-20261020/contacts/necrotic_lesser_phase.tres": "695eb4f7568155b43fc84c3d67eac81bd8ee9cc70f8444ad5431e2adc4aaacd7",
+    "authoring/modular-weapons-20261020/contacts/necrotic_lesser.tres": "747d4ebe5761e1285f0b5f04bd0326b6330576ca07dce62c90cf45dd5c450116",
+    "authoring/modular-weapons-20261020/contacts/radiant_greater_phase.tres": "ba1a8ee9433a3ebcb28f81380f859315b939cb944efd2b076a93f75ddaa693b9",
+    "authoring/modular-weapons-20261020/contacts/radiant_greater.tres": "6c49889999da65a53b697d655c966a6ba1e4a3e97600f708bf95b255b0c353c8",
+    "library/lelu/pack_lelu_godot_hit_impact_effect_premium/VFX/Textures/T_V12.PNG": "2caba3a80342fa31e0273a3fbc769ee575897a4f757a6feb190166dbb36b3a97",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/effects/strike/vfx_strike_01.tscn": "51679e8f4d71a2c238dcf960c0740cd911ead527167c40d76a73bd6ceb1b183b",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/shader/four_point_star.gdshader": "28ba9531d7b31a158e0089b01fdb83b524f5adfc84abfbcfff09dd9cd3e2a660",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/shader/streaks.gdshader": "36c6669d31496efc8bb84e790a57cc23c89f1afa3b1f7bad9716f17c887e9835",
+    "library/binbun/pack_binbun_hitfxfull/assets/BinbunVFX_Vol2/StylizedHitFX/shader/util/blend_util.gdshaderinc": "8dc83b45eac3711a993508ed0566eb9ceb3f1078fc540d20ea3904af8c5c819f",
+    "authoring/modular-weapons-20261020/contacts/programs/87f7addc66d54315b3e779c0273055a8266c4dfa05d59eb6d353ab608266258f.gdshader": "87f7addc66d54315b3e779c0273055a8266c4dfa05d59eb6d353ab608266258f",
+    "authoring/modular-weapons-20261020/contacts/radiant_medium_phase.tres": "54f9a516a6315f6239961ed25511cec8dd5279b1b11e9f0992cf2a325c411b02",
+    "authoring/modular-weapons-20261020/contacts/radiant_medium.tres": "c5fd6222f0fc0046cce4081f3b40c2de63cd9b1b0a3aed6b781255cf8ce917dd",
+    "authoring/modular-weapons-20261020/contacts/radiant_lesser_phase.tres": "4939c3bdfcbcae5b0fd1a2c41113019b80aec54fbdb8b0fb1bbda41551927544",
+    "authoring/modular-weapons-20261020/contacts/radiant_lesser.tres": "4cb23f2dc733b1b7c404a43f6d05eff47491cea3b96f39e55526ac7a3a71a042",
+    "authoring/modular-weapons-20261020/contacts/poison_greater_phase.tres": "7299e87c8d12019f7693566d55f48510d6f1f3ba94e0a61b386d8180d82b7294",
+    "authoring/modular-weapons-20261020/contacts/poison_greater.tres": "364f277f935573d21711480d0e76f52d42884a2dedd95bce4de3c86aa297e798",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/shader/particle.gdshader": "bb3a3c4b598bd07f49c017aa9b0e107efff39bca48822b60e10ce643b4a8d831",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/shader/util/alpha.gdshaderinc": "e96ad3782009ee296d044bb9802f45003e4b3be0bf5424559ca21015ee588b05",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/shader/util/dithering.gdshaderinc": "5e32891f6fb4e625f92388b6edc7d3aad8261fb0103ab9a88c67140212195cab",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/shader/util/uvtools.gdshaderinc": "d004a204c41b65e6b267f1d879aca0fec6e8099929e8d5b6f7f322db251567ab",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/shader/util/blend.gdshaderinc": "9ee43e3c82be1c32d015f1ab1ed40794c6ba36bd553fd6bd701ef7c514025f93",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/poison_effects/src/material/stink_small/stink_small_02/stink_small_02_clouds_01.tres": "252efba8de3df961fdc2823db659b1a976218b0e31dfa2611124933672275cbd",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/texture/gradient/circle/circle_01.tres": "4b815288bc9453c6d557b51751a52dcc7222f674b6160be43efe403490425975",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/texture/noise/cell/cell_inverted_02.tres": "f768f68f58bea08cfb0248890939e64bb3c91ce02c786ec933ba798186bc4dc5",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/texture/noise/warp/warp_blotch_01.tres": "31918e6d1dba6adc473ace043e9d29fa00564b2ad5757fe77861cd6dfee6e747",
+    "authoring/modular-weapons-20261020/contacts/textures/2ee146f6d4242b77f25d.res": "f235009117b1d81db2d9db48a59c40bde81773120712341293893762b623cc69",
+    "authoring/modular-weapons-20261020/contacts/textures/937c56ce3e9a44bf0761.res": "481e6959c3331b80ea6fe40df6192f96f04d3db5593e5ca19705383ed141859f",
+    "authoring/modular-weapons-20261020/contacts/programs/174fb47bda1e0fe778d978c6563e0f01dd000f15bfa477e682549174f441bf07.gdshader": "174fb47bda1e0fe778d978c6563e0f01dd000f15bfa477e682549174f441bf07",
+    "authoring/modular-weapons-20261020/contacts/poison_medium_phase.tres": "4033c8dcbbeb3f4177f57708c713e9b2c64e38756bba16ee451d56f6a81c7022",
+    "authoring/modular-weapons-20261020/contacts/poison_medium.tres": "8786ddc6c39eeff7d2588215d89b55c79a664f95f36de364c8a68c9e604b7720",
+    "authoring/modular-weapons-20261020/contacts/poison_lesser_phase.tres": "06732d45debf0f10fbf733e08692492db156e85caa2a51160443b56b36ec2964",
+    "authoring/modular-weapons-20261020/contacts/poison_lesser.tres": "8b8c1fca924e9047a44d274bf072d6017684c39af0c1ac147213dc757e296d1b",
+    "authoring/modular-weapons-20261020/contacts/psychic_greater_phase.tres": "752e6515482430494552d10090a8b2ad5cd54344fb1a53ec88112fee952c0eb5",
+    "authoring/modular-weapons-20261020/contacts/psychic_greater.tres": "33dc2aa9485dcd55d551fd3f092218d7d03ac1df126c3fe8da9d39f01417d408",
+    "library/lelu/pack_lelu_godot_hit_impact_effect_premium/VFX/Textures/T_Fl1.PNG": "8ed072b3dfe1540030913622daf5b584c556ec06dcde4e27984c6b19777a4557",
+    "authoring/modular-weapons-20261020/contacts/psychic_medium_phase.tres": "721298a7a31878322f2d0e7bb1c91ab0c5a39986d3ae4adb826a57ce2bc1a87b",
+    "authoring/modular-weapons-20261020/contacts/psychic_medium.tres": "e733146bb47778f3399f81607bc5c4accb6e0f049a4b9d015bb2a0fea10c8394",
+    "authoring/modular-weapons-20261020/contacts/psychic_lesser_phase.tres": "a5091aa0a38c03d0b07e831aef0398a84167698646212c1c68a458048a66570a",
+    "authoring/modular-weapons-20261020/contacts/psychic_lesser.tres": "57ad0538021d0e8345f064b9cca5ab4141c4b1762c48cc157894b96106830fe3",
+    "authoring/modular-weapons-20261020/contacts/electric_greater_phase.tres": "5bdfd89e28bf52cf7073cfd795d5520ef83a0cbe1b3c8bbd9ce9fd74614e2f94",
+    "authoring/modular-weapons-20261020/contacts/electric_greater.tres": "ae7a7a643aa65939a88b876ed03704ff7e3885c72b504fcecfde58e8f41b6d7f",
+    "library/lelu/pack_lelu_godot_hit_impact_effect_premium/VFX/Textures/T_distortion_.png": "7dfc32dc0d940271c5f36417eab6851b45db809771e340fd6c47bd43fc3a9ab4",
+    "authoring/modular-weapons-20261020/contacts/programs/fe8b850f4c1557a8ce670bf7b0541015e6c566c1a60bdfa9a7cde931bc692c22.gdshader": "fe8b850f4c1557a8ce670bf7b0541015e6c566c1a60bdfa9a7cde931bc692c22",
+    "authoring/modular-weapons-20261020/contacts/electric_medium_phase.tres": "049362e2d3589113dc46652b6f4d0bcd148cf826a191aef682ca240bd21485db",
+    "authoring/modular-weapons-20261020/contacts/electric_medium.tres": "bc0ec8884a6c9acf21ab0016bc2af17f495d2af1ea094270efced620390dc9c6",
+    "authoring/modular-weapons-20261020/contacts/electric_lesser_phase.tres": "f3f4a4a4311374422d8afcb2f77eeb11407a1f70a0b9487b68eef057de7d1bba",
+    "authoring/modular-weapons-20261020/contacts/electric_lesser.tres": "08077fdd524ccfae503a21ddf28bab9ba181acb37b79a4b8ec5bc922c50e9974",
+    "authoring/modular-weapons-20261020/contacts/ice_greater_phase.tres": "bfac8a33d74ef20091bb4ec3d5f9c1718b5cf8e5124c2ac1f36003858c78af36",
+    "authoring/modular-weapons-20261020/contacts/ice_greater.tres": "bc3d2e6965071ceec8315be4baaf82fe8c7c017662d9a8aaf852e964ee29a4de",
+    "library/lelu/pack_lelu_godot_hit_impact_effect_premium/VFX/Textures/T_vfx_irl12.png": "d25a4eb7003b01761c487874fb16bea32ff03da3d1fc3a51e706fce975f4f162",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/ice_effects/src/material/ice_shard/ice_shard_01/ice_shard_01_core.tres": "849b05f4eee6fdcb4e90ed667be4e5985e31ac29ee773d9bc7d1a1789423460a",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/cell/cell_manhattan_02.tres": "429b1317df22b75f2cb0a790cf0c9b38d0f7496190ba987d3670729ff20962a2",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/texture/noise/cell/cell_manhattan_01.tres": "a3c2ed3aa841e83f0a09633dea8d6e78cf86d6e5ff8f56c7e9605bed187ead09",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/opaque.gdshader": "ec8b0ac7d92be214ab22825b481212e8529ccdd70b5545340cdfa83dc88360b8",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/alpha.gdshaderinc": "e96ad3782009ee296d044bb9802f45003e4b3be0bf5424559ca21015ee588b05",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/dithering.gdshaderinc": "5e32891f6fb4e625f92388b6edc7d3aad8261fb0103ab9a88c67140212195cab",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/uvtools.gdshaderinc": "d004a204c41b65e6b267f1d879aca0fec6e8099929e8d5b6f7f322db251567ab",
+    "library/binbun/pack_binbun_godoticevfx/assets/BinbunVFX/shared/shader/util/blend.gdshaderinc": "9ee43e3c82be1c32d015f1ab1ed40794c6ba36bd553fd6bd701ef7c514025f93",
+    "library/lelu/pack_lelu_godot_patreons_community_pack_3_d/VFX/objects/sm_ice004uv2.obj": "bb7bfb46d7f1a942d3bf21563332f1c43d0e9f2761831dd1cc8e079fe2b97a49",
+    "authoring/modular-weapons-20261020/contacts/ice-chip.res": "7e7800166c4cb3b2ebc0edda224add42f534a303d2e1876df24347955312c471",
+    "authoring/modular-weapons-20261020/contacts/textures/a156e9371db2c733899c.res": "79e68779055345e8f7719678ff74d6e4fe6e079b1e57e508224ce95dc006fefd",
+    "authoring/modular-weapons-20261020/contacts/textures/2c4c3977bddbf79cf0eb.res": "7ce21331281a104e12acd2f9d861d384682292506886bcbcafcf399d66362693",
+    "authoring/modular-weapons-20261020/contacts/programs/c46896b91d1944f95edecef03d64288dc5aa9eb9e08144c8547c60ed0bb2c5f3.gdshader": "c46896b91d1944f95edecef03d64288dc5aa9eb9e08144c8547c60ed0bb2c5f3",
+    "authoring/modular-weapons-20261020/contacts/ice_medium_phase.tres": "540944cd10a050ad4c62af97176d328803204e347c550a61db43cff4ca022e5e",
+    "authoring/modular-weapons-20261020/contacts/ice_medium.tres": "4ef2357760381bf2937b161fc94f4f90fd4fc34763d0c93b24a010c603bdfd5c",
+    "authoring/modular-weapons-20261020/contacts/ice_lesser_phase.tres": "814e54f2e5267e09ede6ce6cc8338bbef6de5004b0707d2f4a229440408d28b4",
+    "authoring/modular-weapons-20261020/contacts/ice_lesser.tres": "78556cb0e1e19bfecdebac345f4b1df491b437ab4ec68702e70a46e136c8840d",
+    "authoring/modular-weapons-20261020/equipped/fire_blade_tongues_effect_only_greater_phase.tres": "b813af488913cfd473a5ebbb707217033275934d158bf891129ed1ad8aed573e",
+    "authoring/modular-weapons-20261020/swing-trails/fire_tongue_shear_greater.tres": "5242988c958fe8ee6f64eb392b49dab7e047644b41f0d8d6aeb60a864d9520ef",
+    "library/lelu/pack_lelu_godot_electric_lightning_premium/VFX/Shaders/s_shad1.gdshader": "1d44f16a265d1f4da3555155351dcac27ed129da3a186a5e9593364b49b167ce",
+    "factory/components/weapon_appearance/swing_trails/style.gd": "b0799c85e70baa95b61f9abcc8c6645f4a167f471e7a6e87c61828ad30be2b43",
+    "authoring/modular-weapons-20261020/swing-trails/fixed-four-pose-ribbon.tres": "7bfa1e8cc8dadee5f6bdfd105c863bda96a6df9894604f019af2a12ecb0a5425",
+    "authoring/modular-weapons-20261020/swing-trails/programs/b20d195abb40f67c5c38fe18d6f28bc7e9d864676a28629f24ad5784eb6c73eb.gdshader": "b20d195abb40f67c5c38fe18d6f28bc7e9d864676a28629f24ad5784eb6c73eb",
+    "factory/shaders/cie_d65_v1.gdshaderinc": "1b92ec2f105962f8126bc3e7c38110d163fdc62414820e65c730f752aade2dae",
+    "authoring/modular-weapons-20261020/equipped/receiver-programs.tres": "5776003667b201d46d5e6e0e4156f163a79c7141ed0dbea8da556b53bc44e510",
+    "authoring/modular-weapons-20261020/receiving-source/bab8ddefa2849d55002e.gdshader": "cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956",
+    "factory/resources/weapon_receiver_programs.gd": "56a3305bd76577bbc18545871c15999e1591f0205cb97e7803d6a5919651eba8",
+    "authoring/weapon-appearance-20261019/programs/649fc53a00f2a1a11890017e98b09deaf50ccbe99ae7ff03e8d9f13308d7aaa7.gdshader": "649fc53a00f2a1a11890017e98b09deaf50ccbe99ae7ff03e8d9f13308d7aaa7",
+    "factory/components/weapon_appearance/element_studies/pure/material.gdshaderinc": "0b9602e61c84c9371f5a3746d81fe1bf2ca3134d14867e315481b48c9507b351",
+    "factory/components/weapon_appearance/element_studies/auxiliary/material.gdshaderinc": "25ae149992ff5361b5324fd77bfd1bfa3458dc04b752918f47866c2eedb52dbf",
+    "factory/components/weapon_appearance/element_studies/element_material.gdshaderinc": "840be7e880be8dc5d0626f49b1205d7612b837cffbbf9a5e8207b1b8452ea0e5",
+    "authoring/weapon-appearance-20261019/programs/058fbf1bdaa880202b33565e980f6a8b42d8ce248d9c00ff3cb2defa9af7c907.gdshader": "058fbf1bdaa880202b33565e980f6a8b42d8ce248d9c00ff3cb2defa9af7c907",
+    "authoring/weapon-appearance-20261019/programs/2a6a62199ca46456e3a10a861a7c164206e08351764ed314e2bd80eb55c4a421.gdshader": "2a6a62199ca46456e3a10a861a7c164206e08351764ed314e2bd80eb55c4a421",
+    "authoring/modular-weapons-20261020/equipped/native/bank.tres": "beb06ad9fff2626ffbb8069df1928559e77812501d28fa8c0aa32eb7ac4e7d76",
+    "factory/resources/weapon_native_presets.gd": "76378113c3bd159fdadb008f1645e79ae8394ef6d75793e57dcae7f9d03e71d5",
+    "authoring/modular-weapons-20261020/equipped/native/4d8677b8feb914913216efe2591013fd3315fb1476cb608342ed84be28499357.gdshader": "4d8677b8feb914913216efe2591013fd3315fb1476cb608342ed84be28499357",
+    "authoring/modular-weapons-20261020/equipped/native/00f527082b3029ac069cac3a52f4434f677fe95ef5db3cc49e32e7a202cb6e72.gdshader": "00f527082b3029ac069cac3a52f4434f677fe95ef5db3cc49e32e7a202cb6e72",
+    "authoring/modular-weapons-20261020/equipped/native/703bf71502d640a41179e44724efc3ced8d6383312bef39d82128cf2e9d9f17f.gdshader": "703bf71502d640a41179e44724efc3ced8d6383312bef39d82128cf2e9d9f17f",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_VFX_f32.PNG": "9f6a8d6964c16adc69512af71d351907453a8ade0db8606584bafed2511f3a97",
+    "authoring/modular-weapons-20261020/equipped/native/881ce583930b7cf1998e90599d2d672725b33c6588c74412a8c31c0958e0fcaa.gdshader": "881ce583930b7cf1998e90599d2d672725b33c6588c74412a8c31c0958e0fcaa",
+    "authoring/modular-weapons-20261020/equipped/native/aac14307c0df8ac2bb26173c7fae8de196d0aac749b44e7887ec885b18d93e72.gdshader": "aac14307c0df8ac2bb26173c7fae8de196d0aac749b44e7887ec885b18d93e72",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_fire_flipbook4_sm.png": "262052a6cefad211573e6b951ee359a9926fae5904ee5b36f160ae7766805c6a",
+    "authoring/modular-weapons-20261020/equipped/native/a6664663fe6e1648ed0282640db7c13f6dcece249117cdb926182a077c122ed3.gdshader": "a6664663fe6e1648ed0282640db7c13f6dcece249117cdb926182a077c122ed3",
+    "authoring/modular-weapons-20261020/equipped/native/fire_ember_sheath_greater.tscn": "0224e61eb9b8e1cbb51dae11c701dcfb0105e95c5cea0125db1ece3466b78e51",
+    "authoring/modular-weapons-20261020/equipped/native/fire_ember_sheath_medium.tscn": "7e3e44fc0e7113b60391ecec26fd1872e51a04cde534163599389d8aa988caff",
+    "authoring/modular-weapons-20261020/equipped/native/fire_ember_sheath_lesser.tscn": "d98c8248e1ab5be1bd31055ccf65bc8cb99252ac4f5195e104966aba8bd45aec",
+    "authoring/modular-weapons-20261020/equipped/native/fire_blade_tongues_greater.tscn": "422132c00bc95a2cde317e79239d7fb8cdbda6169f3f86497d219c0b277f6b03",
+    "authoring/modular-weapons-20261020/equipped/native/fire_blade_tongues_medium.tscn": "10aedb8146354a619a8d86583389a122bd8e007d45a866476f3e41f1631e646b",
+    "authoring/modular-weapons-20261020/equipped/native/fire_blade_tongues_lesser.tscn": "ca411251af7aef47e83072fb1c4fa5cf0c5c528d1de48417e3d760b186f82acf",
+    "authoring/modular-weapons-20261020/equipped/native/electric_cross_discharge_greater.tres": "7c1a558215dec486c539e381d4f804a36a0d4c146bc339a8c7355f52089bcd37",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_VFX_LighteningRand1.png": "7eddd0f4a71d6ddc658c6ed9452df16e61ecfc140b93117fca8a1bc7c00b92ca",
+    "authoring/modular-weapons-20261020/equipped/native/84219902a9d5244cb5294ea4b449cadb2a1f21957df6c7c2b6e3e78fd251db69.gdshader": "84219902a9d5244cb5294ea4b449cadb2a1f21957df6c7c2b6e3e78fd251db69",
+    "authoring/modular-weapons-20261020/equipped/native/electric_cross_discharge_medium.tres": "1c287ed1dd2645a1d31a0e7c60bc0a85e1fb77b026ce20a51609911dc06d8c47",
+    "authoring/modular-weapons-20261020/equipped/native/electric_cross_discharge_lesser.tres": "1eb83867f8b9dea2861c17fcb7bc1f09e7ebbc45bb5d5f13db7889437d00c6f3",
+    "authoring/modular-weapons-20261020/equipped/native/electric_axial_forks_greater.tres": "d577a3797eabc1d22ba64a2b28a1a9c02d071e64405168fc15d43b716bef7186",
+    "authoring/modular-weapons-20261020/equipped/native/electric_axial_forks_medium.tres": "61f470aea54820e44dbd7028b9a86e0fcfa65f22ab50ab82e0553eb4188514c9",
+    "authoring/modular-weapons-20261020/equipped/native/electric_axial_forks_lesser.tres": "fbe2855a2896ec747c04f94a9226bf4b0d2b5d612ef5c3bb258a3bcfa6a5f227",
+    "authoring/modular-weapons-20261020/equipped/native/ice_clear_glaze_greater.tres": "00e59a4beac70f265ac1554d22283d377b50196baf296e1f291e12d2be09685f",
+    "authoring/modular-weapons-20261020/equipped/native/c9488a23a9e6808c0279a1447d5c5cdfaa93a9d31fc016666776aeedc9e3bb68.gdshader": "c9488a23a9e6808c0279a1447d5c5cdfaa93a9d31fc016666776aeedc9e3bb68",
+    "authoring/modular-weapons-20261020/equipped/native/ice_clear_glaze_medium.tres": "06a81b7cb72350244c1a0df0c58fd2ca6cc4671fc491bbe18481eb7a1b812af7",
+    "authoring/modular-weapons-20261020/equipped/native/ice_clear_glaze_lesser.tres": "ef4f745c8777bb90bfe15a88c5284c15977fc175461f0640bfe4e318be3b44ee",
+    "authoring/modular-weapons-20261020/equipped/native/ice_rime_facets_greater.tres": "4db4ad2fdfa75b91d28abd047ead7c31a00044ac85fe764980a74f7db520212e",
+    "authoring/modular-weapons-20261020/equipped/native/ice_rime_facets_medium.tres": "17e6f477084e4f07498071a115d029dbcdd9786a5f72e7ad4fefcfb16c59b122",
+    "authoring/modular-weapons-20261020/equipped/native/ice_rime_facets_lesser.tres": "5e52b042d79ca751421aeb922f101e59e97bd5f4fa3da1310474379366824da4",
+    "factory/components/weapon_appearance/equipped_treatment.gd": "ccf0a2eb19c4cfcc19ecce8545664cc5ff51369200584aba6af0038e826ccae2",
+    "authoring/modular-weapons-20261020/lelu-assembly/fire_layers.tscn": "8f156333e64c6ff8a69d572333f50ec3b6bd0ac623de86eac6af31d3e3ff7449",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Shaders/s_simple_shader.tres": "f460d5cd9a966366efd841a0de18efbaba74a6d0fdaec5eb37f8d28feb561cde",
+    "factory/components/weapon_appearance/source_ribbon_coverage.gdshader": "32d434fedac5a7a83727ad667a044add12599a5e7ab57ea8cd772f4566f92457",
+    "factory/components/weapon_appearance/element_exterior.gd": "d77aa7d1dcd0c60a7a4ee0512b69b0c541c54c94bd33e2edd3b2e04e63191e9a",
+    "factory/components/weapon_appearance/element_studies/bind.gd": "30a131be5fb7b370ae544eae6e4250051694ba49759202f70c95cdb50bb37ee3",
+    "factory/components/weapon_appearance/swing_trails/component.gd": "05801069b010e7f7ac80c18938579c85a1832833eed72fe5be329c2e1eb456d4",
+    "factory/components/weapon_appearance/sheet_source_layers.gd": "e689cd1e8f7334af5dcf466c8dcee917df45636c910086319564418c212d6336",
+    "factory/components/weapon_appearance/source_axial_flame.gdshader": "d5450516e6531ab0b67de83aae55f5ac0d303555fcc423f3f0ccf983154d18eb",
+    "authoring/modular-weapons-20261020/lelu-assembly/trail_mesh.tres": "9c35f615990775788fe63c03e672c12cc302f633f5f27f41dacd66bd5910e47a",
+    "library/lelu/pack_lelu_godot_trail_effects_premium/textures/T_VFX_FireDrag.PNG": "d5dc3e54722a04a734e06e83bdb78e693b3f8762e73fe3f6fc265a16e1462592",
+    "library/lelu/pack_lelu_godot_trail_effects_premium/GPUTrail-main/shaders/trail_draw_pass.gdshader": "4fefcf2b8ed5a20e19a33416255771d3c3795380c4e6252eabe7049562e9b589",
+    "authoring/modular-weapons-20261020/lelu-assembly/trail_process.tres": "ec01bbebc56259af85871b6cbcaede525dd334963bc324be75adc8e52aa0f6fc",
+    "factory/components/weapon_appearance/direct_blade_material.gd": "2025438c8225e1ba5c600d4c1d15aa71996154b7beb067bf60ce9cd621b6029e",
+    "factory/components/weapon_appearance/element_studies/auxiliary/bind.gd": "157812df0fa79fde98095571f927baa681ae7020d4b6edfe3585c632dbd80d55",
+    "factory/components/weapon_appearance/element_studies/pure/bind.gd": "e33485fcce66d0b79f1ce7e57f12a0201e580d5fa036f9400e5f9e610dab6f03",
+    "factory/components/weapon_surface/treatment.gd": "7910f94200434732ad456ffc0fc9cd75da0d98cb03bdf7f4113c0164a4de0f1c",
+    "factory/packaging/condition_measured.gd": "92619b78f6e385bbc7a72ca820bb3ac5402af84e9c321a12a1d59a6840b6518e",
+    "authoring/modular-weapons-20261020/equipped/fire_blade_tongues_effect_only_medium_phase.tres": "922f841942421b810dc238d98230cd5cc1cb498872f2fc290435ddaf0e0a8e61",
+    "authoring/modular-weapons-20261020/swing-trails/fire_tongue_shear_medium.tres": "d14970bb0d6a2036e85f33493ef78ec3409e72954870ae6d841fc4673f2dda1f",
+    "authoring/modular-weapons-20261020/equipped/fire_blade_tongues_effect_only_lesser_phase.tres": "dd2287719416f30ecb360408351d5ccec5079b27b3d55a7b9a763ffe15e32a87",
+    "authoring/modular-weapons-20261020/swing-trails/fire_tongue_shear_lesser.tres": "f70b7e984b709d7cc8a7a021d7f7cb789aa50bcd4d9666b7d0a60a265ecd5fb0",
+    "authoring/modular-weapons-20261020/equipped/electric_pure_storm_greater_phase.tres": "b1147c1be23c0461ff85fc04fd25d1828cdc819380851f52a96cf8d81c000482",
+    "authoring/modular-weapons-20261020/swing-trails/electric_cross_discharge_greater.tres": "ed604a8597e280c8665be5729a4823f93781a70f7c89f5b4079adb4c7b940f85",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Scenes/VFX_Wolven_sword.tscn": "8eb7f0d2e8a22a853fa63995854baaefc6233615e522b1da1d3d95bf4d1a2e15",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Objects/Weapons/wolven_blade_model.res": "ff7fac040a452d71551c4ef2aa3d5d94c34df75201085456bdf7880080e7ce09",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Objects/Weapons/wolven_blade_-_stylized_sword_1.png": "1e24a95cba12fe9a56b4e778acdd30c7bbc26a2d3d2846cda84f6907b1acc602",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_VFX_Lava_E.PNG": "92fdeff95f37053c86a083749c23479d2176d57f168cad9a163f26aed1a13be5",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Shaders/s_magic_aura3x.tres": "77697ef28adde977db01b0fa864f3839019b611fcabca694810546eaa3c2fe3c",
+    "authoring/modular-weapons-20261020/element-studies/pure/electric_pure_storm_greater.tres": "95b10986255a889aa5a0f9640029580a1a1c29f283b11e6fadaf281eff6f869b",
+    "factory/components/weapon_appearance/element_studies/pure/sheet_material.gdshader": "1a2879c85140c491223d4b32011e00159d11226fd94543839e90fbedb72abd21",
+    "authoring/modular-weapons-20261020/equipped/electric_pure_storm_medium_phase.tres": "7436fbf1ca00e6a87ec89e667ab9d0f852a811647bef5d40d888772e737a8461",
+    "authoring/modular-weapons-20261020/swing-trails/electric_cross_discharge_medium.tres": "37729d26024b28e0319afc47802dd98fe3371fa1a6d4aee908d70d7f2a5fe923",
+    "authoring/modular-weapons-20261020/element-studies/pure/electric_pure_storm_medium.tres": "89f86e6cd175d89a4df7cd3ac337d4e5f0d3a29129012896dee6b7a9665a751b",
+    "authoring/modular-weapons-20261020/equipped/electric_pure_storm_lesser_phase.tres": "d3e8eca7cc95606ad5eb72928773e781927f590f4b11bcb547aa1ec545f56ce9",
+    "authoring/modular-weapons-20261020/swing-trails/electric_cross_discharge_lesser.tres": "099b7c411fbd7578ee0fa3f89a660f16842ff3186a5ea2284b7c60c23ee95f85",
+    "authoring/modular-weapons-20261020/element-studies/pure/electric_pure_storm_lesser.tres": "2b99d58aadb292bfd28f381f487e4b103a9ca78601e6956897cc5be5f3eb5f72",
+    "authoring/modular-weapons-20261020/equipped/electric_pure_conduit_greater_phase.tres": "832262b5e829a953a6265abb0461cdc9a02bb7819bf31e9f4bf548ee3c2a0bf0",
+    "authoring/modular-weapons-20261020/swing-trails/electric_arc_threads_greater.tres": "3d39f4d17693feefbedf1d91c85ffcb49bab7bb707fc8036f261fc658129e489",
+    "authoring/modular-weapons-20261020/element-studies/pure/electric_pure_conduit_greater.tres": "1bf295bb80128254a050ca23c4f2b14eb344ca0e4bb01a158e6197edb4b380ae",
+    "authoring/modular-weapons-20261020/equipped/electric_pure_conduit_medium_phase.tres": "9b1cee1117781734729b8a3080794c06aa2ee666426200057076591a55ad208b",
+    "authoring/modular-weapons-20261020/swing-trails/electric_arc_threads_medium.tres": "a2f18bf3861f9f0eab9124ace3580266637704e0d10d75e9cb5bf7f78c6d01e2",
+    "authoring/modular-weapons-20261020/element-studies/pure/electric_pure_conduit_medium.tres": "f067c01e9ecc5aafffd59444f0e468d3d178723753036396a2118892f5e46603",
+    "authoring/modular-weapons-20261020/equipped/electric_pure_conduit_lesser_phase.tres": "9e1631b1758086d7d00f09572aaa8a885139d3e589c41f3ae1458dad3c33787f",
+    "authoring/modular-weapons-20261020/swing-trails/electric_arc_threads_lesser.tres": "2caa9974985a84d4631b2720181cefa95f54b941075ba912a1e575e88acf7903",
+    "authoring/modular-weapons-20261020/element-studies/pure/electric_pure_conduit_lesser.tres": "b4f10119e9816aa5a115c0f524f86db8d8eadb9b4b76461bfb115b2edc7c9eff",
+    "authoring/modular-weapons-20261020/equipped/ice_pure_rime_greater_phase.tres": "76350550d2ec18e9e94ebbc45e235194f0ea522bc1592ccc6e07841cab0a5f2b",
+    "authoring/modular-weapons-20261020/swing-trails/ice_rime_wisp_greater.tres": "a08047e285dd6e23a62f06118aca19244eb110c0b3e349423018ccc2d2ba780d",
+    "authoring/modular-weapons-20261020/swing-trails/textures/429b1317df22b75f2cb0.res": "3813a35229e6571d20afa3521c98b6a2327ebf5a1d7a82d1e66d566c995f78e0",
+    "authoring/modular-weapons-20261020/swing-trails/textures/a3c2ed3aa841e83f0a09.res": "31d9d1e07a62ebfc80500880b8415563347e38103b618f098ca97ec4d799b0a6",
+    "authoring/modular-weapons-20261020/element-studies/pure/ice_pure_rime_greater.tres": "b02dc96511e37015eac9c3554552aeb2f2ecbeca5082be5cc31658f98897d1cf",
+    "authoring/modular-weapons-20261020/equipped/ice_pure_rime_medium_phase.tres": "002596b9a3e44984a0b07d6fdd5a5be833d16fadda2ccbb270b5e2407c4181e4",
+    "authoring/modular-weapons-20261020/swing-trails/ice_rime_wisp_medium.tres": "d683f05ef57a97372bb6cdd37a98ea2177969bce34f2b9bee868c9c9a16b1ff9",
+    "authoring/modular-weapons-20261020/element-studies/pure/ice_pure_rime_medium.tres": "195acf1be04a5c725884ed9c7ca2013084c0be5aeb1389bf68eb3c3f4e714e90",
+    "authoring/modular-weapons-20261020/equipped/ice_pure_rime_lesser_phase.tres": "fd21c096282db0514097e63c78ca43823e45b5b353490a1b07431901bc3f5bda",
+    "authoring/modular-weapons-20261020/swing-trails/ice_rime_wisp_lesser.tres": "d1e83417d24f12850117a5ceef47ec8760f64a4f4dc7e0bcf2c321979e89adb7",
+    "authoring/modular-weapons-20261020/element-studies/pure/ice_pure_rime_lesser.tres": "3fd42bffef2733660cde75d10b14c02fedda8808feaa477f9d354e01c7a3d19b",
+    "authoring/modular-weapons-20261020/equipped/ice_pure_crystal_greater_phase.tres": "00f92c8f0abbc964471db8f66e59f16f200b5d23324b667e692e7c79541c36b4",
+    "authoring/modular-weapons-20261020/swing-trails/ice_facet_rake_greater.tres": "348fbe9e2783472bdcb8f92080100b5998f1ba7e463a46b9eb4f5a5397c77ee2",
+    "authoring/modular-weapons-20261020/element-studies/pure/ice_pure_crystal_greater.tres": "d618b23fc0267c132b0fdb749aec75fbe043ed0f161b0ed1091414fbe8c2641d",
+    "authoring/modular-weapons-20261020/equipped/ice_pure_crystal_medium_phase.tres": "3033ae157207552897553291efb604291bf6674a4cdaf0c1c281be17779c49f3",
+    "authoring/modular-weapons-20261020/swing-trails/ice_facet_rake_medium.tres": "f5200d3fa328068fe2c8b34d628a57f6a8768064179149a8e2050293e7ebf6d3",
+    "authoring/modular-weapons-20261020/element-studies/pure/ice_pure_crystal_medium.tres": "4778d86b8216f2536984aaa0f32dffe71714d88c0e820c21ee88f40ea187a820",
+    "authoring/modular-weapons-20261020/equipped/ice_pure_crystal_lesser_phase.tres": "8c6d1887360a7b17c56b8e3f656778d611edab133b5cc2f392560f630ca3f21f",
+    "authoring/modular-weapons-20261020/swing-trails/ice_facet_rake_lesser.tres": "378592448ea1011b2f2ace11f49b9af4b620f54e8b0a0cb3dde28db8a348d399",
+    "authoring/modular-weapons-20261020/element-studies/pure/ice_pure_crystal_lesser.tres": "c6c119a4c726ee76c8b7ef083319caf53577d72a867a38ac47ecef846fde09b4",
+    "authoring/modular-weapons-20261020/equipped/wood_living_grain_greater_phase.tres": "09284f5b074b86112366fb0e289e9a35c325210d29a8b9259f83c876c909def1",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/wood_living_grain_greater.tres": "0643a0091edff8a4885a9370f1ecb4f378869873c37bd7ff0f18fa262f8ea83e",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_VFX_MarbleNoise_tiled.png": "d9693b7f9e0749d03a88cd61594ddc6d2315b5ee18a7d8495cc6b738348b2820",
+    "factory/components/weapon_appearance/element_studies/auxiliary/sheet_material.gdshader": "3b006c3ce4ae7898217d134e2f5b4f256368f745de3ad4b5b27382e335d6409a",
+    "authoring/modular-weapons-20261020/equipped/wood_living_grain_medium_phase.tres": "164b2f59dc1ad4cbc6c2ce26350e58d8dbfb7be1242f3a0112eefe31f563b21b",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/wood_living_grain_medium.tres": "5d3c8d03a5cd77ae2fdf541e3cb4e07914abd41681b03e89915cfd35ab46600a",
+    "authoring/modular-weapons-20261020/equipped/wood_living_grain_lesser_phase.tres": "e4c13b0f469b71dacb6b9727f1db75441d9284f45bbcf5012c07e445274614a1",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/wood_living_grain_lesser.tres": "29291d22886c1450c99e489a523c2aef77724630a18d8baf5346bfd441667327",
+    "authoring/modular-weapons-20261020/equipped/arcane_swept_glint_greater_phase.tres": "96ff3eb2c572733964d997283a195cafa686de5e493d1c90f0d0fe718c2147e0",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/arcane_swept_glint_greater.tres": "fb6ab116e798d13ded404cee1ad7ac44a702e950105f0af42fbf016af6b9627a",
+    "authoring/modular-weapons-20261020/equipped/arcane_swept_glint_medium_phase.tres": "c7287ed14f92aa3fa18608e10707ac7a06e1286f76f07439df12a8f9fb393dd9",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/arcane_swept_glint_medium.tres": "d80f67a5907c18de4f79a8d79470770f6e159ffc0671661865b0def34353a46a",
+    "authoring/modular-weapons-20261020/equipped/arcane_swept_glint_lesser_phase.tres": "201cda3165d7a5737bcfc9e35d8e692d2afe299e4465b242ef22f43c4cecfd58",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/arcane_swept_glint_lesser.tres": "ae438f91339d97f1bcdcf3fbc92c14aaa58ae479e00d1945de74366966043351",
+    "authoring/modular-weapons-20261020/equipped/arcane_etched_steel_greater_phase.tres": "299e508bf7d869c2396f5301cbd366fbc7542ad0dcf66656ebce3efde3659f66",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/arcane_etched_steel_greater.tres": "ea446328b762db3a5288be5b37c717368fa0ee40d64cd318d2db4669248cfc2b",
+    "authoring/modular-weapons-20261020/equipped/arcane_etched_steel_medium_phase.tres": "98186faca0ccc144177935698666d554dc3df272156c6723150a1d6a18d345ab",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/arcane_etched_steel_medium.tres": "82481adcecdc5de9d0afb37369132eaf60525c599fc842e8fa5061fed7d68440",
+    "authoring/modular-weapons-20261020/equipped/arcane_etched_steel_lesser_phase.tres": "3cfffc32ae3f3f53c204bdab5feb90ce7242cca87646babac2047e6763a455d0",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/arcane_etched_steel_lesser.tres": "9916231a64cabee80d5d0dab95e8acc316e253a2e7cfec4f563b300c1b3c9dc2",
+    "authoring/modular-weapons-20261020/equipped/necrotic_hollow_veins_greater_phase.tres": "007402544430bc4ff1d81a8df3429c685cbac08af36fc6102823af507fd67d22",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/necrotic_hollow_veins_greater.tres": "4ec7382a3369c37385cddaaf84c3032c6a66a04bac4db5e976314a9b493da539",
+    "library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_VFX_gas12.png": "fde8093965021852e1b3080e75109a29f4386a4a58e8425726675a999ddd9a66",
+    "authoring/modular-weapons-20261020/equipped/necrotic_hollow_veins_medium_phase.tres": "a1f3b3c0dbcdf530b83157a8acab6ad9bc0d506683d16f181bec7c747ad81e40",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/necrotic_hollow_veins_medium.tres": "23ed682347f377d8b226445de697878819d89d5b2fdd64f0881e5bead8bd7294",
+    "authoring/modular-weapons-20261020/equipped/necrotic_hollow_veins_lesser_phase.tres": "3a69b045686c2bf6c13be9e2ee8343b4ddc926310b4d61bffa3655d0c7a50849",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/necrotic_hollow_veins_lesser.tres": "4ced4d49bf56ac90fc9af3b4a437dc4c81c948af7c5f8c4ec57a3bebff04e63a",
+    "authoring/modular-weapons-20261020/equipped/necrotic_soul_smoke_greater_phase.tres": "411b1b1b10af49a839c5fb082e9ab62a20f1ea2f4203d3aff1f7a1f23fe16593",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/necrotic_soul_smoke_greater.tres": "29a4086431dd0f857ba89837521d1babaf3c80c37b7c3e576d07938500eb358e",
+    "authoring/modular-weapons-20261020/equipped/necrotic_soul_smoke_medium_phase.tres": "2f7fce57521e394f96e4d46123f6ac20c3dd7f21bea11a7ce10c2da447a858e2",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/necrotic_soul_smoke_medium.tres": "51e7ebf811f99221db8c90820a46558c3582d0149a80eaf2776ae7226b4a9bf5",
+    "authoring/modular-weapons-20261020/equipped/necrotic_soul_smoke_lesser_phase.tres": "0e7fe593e7ed5fecf327de3a9f9390670544a03feaee17c87c64355d6b933311",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/necrotic_soul_smoke_lesser.tres": "5f8ee2e93473e1405e1dcb8586bc207bcae36c372bc36a80f002969d0893f9e3",
+    "authoring/modular-weapons-20261020/equipped/radiant_solar_bevel_greater_phase.tres": "2cc1fa4807e110281bfc97609c4dd39fe6c9d6e76cbecf5f0a3cbecc603ee9a1",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/radiant_solar_bevel_greater.tres": "77fdb91c60b4090590ae8d6cb6bf3e3a07410b0f9ff7a28bb7ac470ab420ef14",
+    "authoring/modular-weapons-20261020/equipped/radiant_solar_bevel_medium_phase.tres": "1c567d25ee1c8493340b56812db84f4a7ec816ab4f89e70df6d1c46ebbd2ab21",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/radiant_solar_bevel_medium.tres": "4ef2c745b153ba389ed16d035c9d6bc6193a6bfd00d31eb458918b1ee86ed49c",
+    "authoring/modular-weapons-20261020/equipped/radiant_solar_bevel_lesser_phase.tres": "0cf7627868a28394ebede29c06ba661f721ab3f24106dadb3c8804607ac8029f",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/radiant_solar_bevel_lesser.tres": "d0ee06045c92ecc7e2300741611e9d1eeb4328e33e640a2fd845f79452db689e",
+    "authoring/modular-weapons-20261020/equipped/radiant_gilded_etch_greater_phase.tres": "69fd9e8c75d25b31c51e4bffb6b22af1efbfa01c55e53a7c55174025212121bf",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/radiant_gilded_etch_greater.tres": "85ae28fb0cb54291d9a5d3ac0258a1143994fb3b4691a381e69bdc54653a4d12",
+    "authoring/modular-weapons-20261020/equipped/radiant_gilded_etch_medium_phase.tres": "33e48750df16a95db1a00c300aa4d6c137210a65e8e52a4f254f6ccada6a69d4",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/radiant_gilded_etch_medium.tres": "578c8a355503bb6550b52da8f742d24a9648142b69c1c3dff79d9c6103f747f7",
+    "authoring/modular-weapons-20261020/equipped/radiant_gilded_etch_lesser_phase.tres": "46b0a62881a0197d0afe4ee66d00104caafa1ec97a488da3ba54b0331291448a",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/radiant_gilded_etch_lesser.tres": "7307721a5f254b2b57d8c638668b553ecb7dd6caf6b0c99e1e5f48e320cfceb2",
+    "authoring/modular-weapons-20261020/equipped/poison_venom_beads_greater_phase.tres": "50ec38acc463a7589400483a39d51e7c5b4c1834b8247fec7475c202875c2823",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/poison_venom_beads_greater.tres": "cb4ab6c4ba4a3e87e15bb9ed029321cf15f8d6ed7491d4bdec85b6e441186581",
+    "library/binbun/pack_binbun_poisonvfx/assets/BinbunVFX/shared/texture/noise/web/web_02.tres": "f75fb2755891642ffa90b43b3a16973126b2368fd1714cdca9cf06621b7e519e",
+    "authoring/modular-weapons-20261020/equipped/poison_venom_beads_medium_phase.tres": "9b1dee6d1eb19849075c2287484d91098901b5deeceef6abefb783ee31cfd276",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/poison_venom_beads_medium.tres": "79f246640ffac36ae8582c02868d3b915312c3a3f702c4e2925326f0652514b7",
+    "authoring/modular-weapons-20261020/equipped/poison_venom_beads_lesser_phase.tres": "dcd0b9c4daece259385f479e7580c936797588476ff847ec85471e46171d1c8d",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/poison_venom_beads_lesser.tres": "dc7a0da3168589a1e5200c78faf1e98cf6652375a5a3595ea1d46be9baf6d404",
+    "authoring/modular-weapons-20261020/equipped/poison_viscous_film_greater_phase.tres": "9a7bae660f6a97b929d892d793f075c46d895b888c4df3193ef441acba6fee99",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/poison_viscous_film_greater.tres": "f35ec0a0466a9f2f7f86f08f5a84303eb1b9e5353b370c78178038cad742644e",
+    "authoring/modular-weapons-20261020/equipped/poison_viscous_film_medium_phase.tres": "e9aab8990c0019f4fe036c7fe037f820a6f9d292bf159cbbb9be53191b7bb3c2",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/poison_viscous_film_medium.tres": "a0ba42339fc47f710fe75f920ea0e5977746c1dbfb611f12613d34f00ac93fff",
+    "authoring/modular-weapons-20261020/equipped/poison_viscous_film_lesser_phase.tres": "947f3c9ccbe231098a79fb663410d3eed0f1b67d91fc289cee3a28d76bea86d3",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/poison_viscous_film_lesser.tres": "33460e0e50b94251ceee4f7f32ef14d4c68f175d5521ca0055ec7a34bb87f48c",
+    "authoring/modular-weapons-20261020/equipped/psychic_phase_slits_greater_phase.tres": "a5c04013f151f10c4888e50c3b723f340d620714b8ad9a4234fca2e9c0a9aaac",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/psychic_phase_slits_greater.tres": "c2599b06f0a620c81b0a89d9f267eab8ae775b81bf0289374994cf22a40500d0",
+    "authoring/modular-weapons-20261020/equipped/psychic_phase_slits_medium_phase.tres": "2e36ef68a391559d401f081fce6b5ea84c8c0669fecd31b9790ac363e00cf10e",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/psychic_phase_slits_medium.tres": "ee4ea4ebebf6a88a75d68d70a7ae5db08eca8358940e477e3c192bf37de23692",
+    "authoring/modular-weapons-20261020/equipped/psychic_phase_slits_lesser_phase.tres": "c86ff41eea9b5c30e10194d28c75661fec5688151fc5bc3667cea41f063db331",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/psychic_phase_slits_lesser.tres": "53c188431753ba1a25b1644c192a492eb0b7b1f988409973ae448c63fbb1d406",
+    "authoring/modular-weapons-20261020/equipped/psychic_vein_lattice_greater_phase.tres": "3e8d411971d8d2ae0ca880eca7278ca2873b4ac825f482cc9a5613392f83a41d",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/psychic_vein_lattice_greater.tres": "648e390cb9ad20d50bc2f71923fe23acb1d3eaaf4a45ed9ae8de25ba840061db",
+    "authoring/modular-weapons-20261020/equipped/psychic_vein_lattice_medium_phase.tres": "a7d28f5fa08e8fc0aa80af2afc02e4dde08799e86af51c9c2909d7f71e9f8800",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/psychic_vein_lattice_medium.tres": "1c3343120ad0f35a5876be19cce576a6ad951303a634689a2b4372f6fe4487ff",
+    "authoring/modular-weapons-20261020/equipped/psychic_vein_lattice_lesser_phase.tres": "9435b1f2d8aa1067f94a13a7bc5754c29d2ea2ccc79f349395eeb2877d7fa26e",
+    "authoring/modular-weapons-20261020/element-studies/auxiliary/psychic_vein_lattice_lesser.tres": "8b3a7afa3c1e996bd7caaea0c8a0e68ca081ba3d441dfc5d824f3e24c49c80ff",
+    "authoring/modular-weapons-20261020/equipped/electric_cross_discharge_greater_phase.tres": "d7f8bb73e3a7cc2d0d70080d1e906f3356761345f462b630d0f94b565d0185c4",
+    "authoring/modular-weapons-20261020/equipped/electric_cross_discharge_medium_phase.tres": "a6d939ee01ba8815c277d94a2eba3bf474740330e5e40183ada31f1553112be3",
+    "authoring/modular-weapons-20261020/equipped/electric_cross_discharge_lesser_phase.tres": "37b0ce1839f05699724f59cffa847d2f7b1d21434abfcef9fc4f7b6fc35c1fb1",
+    "authoring/modular-weapons-20261020/equipped/electric_axial_forks_greater_phase.tres": "6925e236360a5a3ee5fb1e73cd6f00f917249faf2953ae2c9c1b6394f319628d",
+    "authoring/modular-weapons-20261020/equipped/electric_axial_forks_medium_phase.tres": "b5e74ed0500ffca3df37514411119fa2e279927debbd8302907e40b9742078a5",
+    "authoring/modular-weapons-20261020/equipped/electric_axial_forks_lesser_phase.tres": "483d9d41612f46895af329011e5e60e2036dda65adfebb9be4b7c49ee21bb9bf",
+    "authoring/modular-weapons-20261020/equipped/ice_clear_glaze_greater_phase.tres": "977243a604f36f25c18d637f98e4908fde7deb88cced309035abe14bcbd8929b",
+    "authoring/modular-weapons-20261020/equipped/ice_clear_glaze_medium_phase.tres": "ceaa38fce10185f21d5aa9f37aac43819f95337a21a5dbac88a5588241af7147",
+    "authoring/modular-weapons-20261020/equipped/ice_clear_glaze_lesser_phase.tres": "1f975d56c0d6f00eb4b779ba82f7c07a16fa3c5b9a2bd89e3b2c53908e0ec2db",
+    "authoring/modular-weapons-20261020/equipped/ice_rime_facets_greater_phase.tres": "f5c18b1ca7a27fbc0ca5005c4bfc33b8320182db9e81fed148047fd3f6dcccef",
+    "authoring/modular-weapons-20261020/equipped/ice_rime_facets_medium_phase.tres": "a5c1a9b3d55877e525634d8e598689042526838129a5b0478dfe8d238175268c",
+    "authoring/modular-weapons-20261020/equipped/ice_rime_facets_lesser_phase.tres": "65e2cc55396efc003ccb16506c7c492c41dd2398f0e0f925877d0ec708934527",
+    "authoring/modular-weapons-20261020/equipped/fire_ember_sheath_greater_phase.tres": "02368a13fb35bc4c4aed358d2fa77a173e60faf958531aedf23a10ddb09924f8",
+    "authoring/modular-weapons-20261020/swing-trails/fire_ember_threads_greater.tres": "8c448f07c10abb9324083c4ee05bd7ef73558964673abb6d3f9369852067cc73",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_Trail_TypeB.tres": "76a34b686d06b75f5724549803c725e6557747cb397ed2996ce9e97003809755",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Scenes/VFX_Fire_strike.tscn": "1c540fafc98bc59237cee0bfb813aef5c6764645b4ccbaff6ab49ac4e8b16c42",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Misc/Trail3D.gd": "f9711abd9d51f3f75c612c355c71f760fcbfbd75dc7320178bfe57b1fe0ac7c1",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_Trail_dynamic.tres": "8e45884bca727507873aad3d28321354fdc49ec226ffe1a03a6e850dd0fe8e7e",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_VFX_smoke_1.PNG": "7ac4968717daaea09218645c906f87c63c742aea25b5815ade7184828dd22d09",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_basic_disolve_p.tres": "bd91a519863c93fd32e30312797f6bb1330a7dd2220f62623d47f4a8dad25285",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_FireTrail_Desat.PNG": "b03dcc0a94ec669f5bb7ac5cfb81d611990192d0a01da6d404bd1f505d2d0aa3",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Objects/m_fireStrikeHead.tres": "fe47cdf6ff10719671e5517cd6b3d788c7c7eff55bb91f588acbde3e8dc3e881",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/gradients/g_fireTypeC.tres": "0324db4c622e94751219dce08b63b60f9da7634569e57dca3fe98216b105281a",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_VFX_Noise_019.png": "5aecbaf1cbc2519c6be05e6fe85c6f1663c2b08ac07e214a6d540aff2b958a66",
+    "library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_ProjectileSoft_B_Disp.tres": "8c8e69e88fcb8f3fc3518bf165bf48324cedc94c43d4bfbb077e6592354ba005",
+    "authoring/modular-weapons-20261020/equipped/fire_ember_sheath_medium_phase.tres": "85755141dee1970106599e4c64d956b212c9154f7c954e6ee05d107466a4054d",
+    "authoring/modular-weapons-20261020/swing-trails/fire_ember_threads_medium.tres": "44da2dd92db86afbc2b24b3c552f3290d1a682b932f035399efb848fe37fd4fa",
+    "authoring/modular-weapons-20261020/equipped/fire_ember_sheath_lesser_phase.tres": "98864b884ae0f960e8fd34ed15284978b8f48e4a3461a754db8a073a7e69941b",
+    "authoring/modular-weapons-20261020/swing-trails/fire_ember_threads_lesser.tres": "7e98db9598f260f16f6737dbff46e04e77f4e8de45b12903c7a4ff15132cf770",
+    "authoring/modular-weapons-20261020/equipped/fire_blade_tongues_greater_phase.tres": "9150bca33a0f07446ee0bdf9aece70d33e0de70739fac9b23a3ac3f4736ac017",
+    "authoring/modular-weapons-20261020/equipped/fire_blade_tongues_medium_phase.tres": "983f2da041334249a3b8d819c28ec0fc8f52e001a9b1d896e4a13fe6b7ca2d04",
+    "authoring/modular-weapons-20261020/equipped/fire_blade_tongues_lesser_phase.tres": "3b055a8ffd069c611e6d81c22905e5124f71f8d163a6eafaf8b732f1a0d41120"
+  },
+  "new_clip_ids": [
+    "weapons/equipped/fire/blade_tongues/lesser/sustain",
+    "weapons/equipped/fire/blade_tongues/medium/sustain",
+    "weapons/equipped/fire/blade_tongues/greater/sustain",
+    "weapons/equipped/fire/ember_sheath/lesser/sustain",
+    "weapons/equipped/fire/ember_sheath/medium/sustain",
+    "weapons/equipped/fire/ember_sheath/greater/sustain",
+    "weapons/equipped/ice/rime_facets/lesser/sustain",
+    "weapons/equipped/ice/rime_facets/medium/sustain",
+    "weapons/equipped/ice/rime_facets/greater/sustain",
+    "weapons/equipped/ice/clear_glaze/lesser/sustain",
+    "weapons/equipped/ice/clear_glaze/medium/sustain",
+    "weapons/equipped/ice/clear_glaze/greater/sustain",
+    "weapons/equipped/electric/axial_forks/lesser/sustain",
+    "weapons/equipped/electric/axial_forks/medium/sustain",
+    "weapons/equipped/electric/axial_forks/greater/sustain",
+    "weapons/equipped/electric/cross_discharge/lesser/sustain",
+    "weapons/equipped/electric/cross_discharge/medium/sustain",
+    "weapons/equipped/electric/cross_discharge/greater/sustain",
+    "weapons/equipped/psychic/vein_lattice/lesser/sustain",
+    "weapons/equipped/psychic/vein_lattice/medium/sustain",
+    "weapons/equipped/psychic/vein_lattice/greater/sustain",
+    "weapons/equipped/psychic/phase_slits/lesser/sustain",
+    "weapons/equipped/psychic/phase_slits/medium/sustain",
+    "weapons/equipped/psychic/phase_slits/greater/sustain",
+    "weapons/equipped/poison/viscous_film/lesser/sustain",
+    "weapons/equipped/poison/viscous_film/medium/sustain",
+    "weapons/equipped/poison/viscous_film/greater/sustain",
+    "weapons/equipped/poison/venom_beads/lesser/sustain",
+    "weapons/equipped/poison/venom_beads/medium/sustain",
+    "weapons/equipped/poison/venom_beads/greater/sustain",
+    "weapons/equipped/radiant/gilded_etch/lesser/sustain",
+    "weapons/equipped/radiant/gilded_etch/medium/sustain",
+    "weapons/equipped/radiant/gilded_etch/greater/sustain",
+    "weapons/equipped/radiant/solar_bevel/lesser/sustain",
+    "weapons/equipped/radiant/solar_bevel/medium/sustain",
+    "weapons/equipped/radiant/solar_bevel/greater/sustain",
+    "weapons/equipped/necrotic/soul_smoke/lesser/sustain",
+    "weapons/equipped/necrotic/soul_smoke/medium/sustain",
+    "weapons/equipped/necrotic/soul_smoke/greater/sustain",
+    "weapons/equipped/necrotic/hollow_veins/lesser/sustain",
+    "weapons/equipped/necrotic/hollow_veins/medium/sustain",
+    "weapons/equipped/necrotic/hollow_veins/greater/sustain",
+    "weapons/equipped/arcane/etched_steel/lesser/sustain",
+    "weapons/equipped/arcane/etched_steel/medium/sustain",
+    "weapons/equipped/arcane/etched_steel/greater/sustain",
+    "weapons/equipped/arcane/swept_glint/lesser/sustain",
+    "weapons/equipped/arcane/swept_glint/medium/sustain",
+    "weapons/equipped/arcane/swept_glint/greater/sustain",
+    "weapons/equipped/wood/living_grain/lesser/sustain",
+    "weapons/equipped/wood/living_grain/medium/sustain",
+    "weapons/equipped/wood/living_grain/greater/sustain",
+    "weapons/equipped/ice/pure_crystal/lesser/sustain",
+    "weapons/equipped/ice/pure_crystal/medium/sustain",
+    "weapons/equipped/ice/pure_crystal/greater/sustain",
+    "weapons/equipped/ice/pure_rime/lesser/sustain",
+    "weapons/equipped/ice/pure_rime/medium/sustain",
+    "weapons/equipped/ice/pure_rime/greater/sustain",
+    "weapons/equipped/electric/pure_conduit/lesser/sustain",
+    "weapons/equipped/electric/pure_conduit/medium/sustain",
+    "weapons/equipped/electric/pure_conduit/greater/sustain",
+    "weapons/equipped/electric/pure_storm/lesser/sustain",
+    "weapons/equipped/electric/pure_storm/medium/sustain",
+    "weapons/equipped/electric/pure_storm/greater/sustain",
+    "weapons/equipped/fire/blade_tongues_effect_only/lesser/sustain",
+    "weapons/equipped/fire/blade_tongues_effect_only/medium/sustain",
+    "weapons/equipped/fire/blade_tongues_effect_only/greater/sustain",
+    "weapons/contact/ice/lesser",
+    "weapons/contact/ice/medium",
+    "weapons/contact/ice/greater",
+    "weapons/contact/electric/lesser",
+    "weapons/contact/electric/medium",
+    "weapons/contact/electric/greater",
+    "weapons/contact/psychic/lesser",
+    "weapons/contact/psychic/medium",
+    "weapons/contact/psychic/greater",
+    "weapons/contact/poison/lesser",
+    "weapons/contact/poison/medium",
+    "weapons/contact/poison/greater",
+    "weapons/contact/radiant/lesser",
+    "weapons/contact/radiant/medium",
+    "weapons/contact/radiant/greater",
+    "weapons/contact/necrotic/lesser",
+    "weapons/contact/necrotic/medium",
+    "weapons/contact/necrotic/greater",
+    "weapons/contact/fire/lesser",
+    "weapons/contact/fire/medium",
+    "weapons/contact/fire/greater"
+  ],
+  "new_selections": [],
+  "geometry": "Exact current item/holder/frame source mask, authored hilt/tip and qualified optical inputs; unknown source pixels stay absent",
+  "source_evidence": {
+    "weapons/equipped/fire/blade_tongues/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 1341,
+      "actual_binding_and_first_sample_us": 272,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 48.0,
+        "mean_us": 34.0,
+        "median_us": 33.0,
+        "p95_us": 38.0
+      },
+      "immutable_preparation_us": 321901,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/blade_tongues/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 849,
+      "actual_binding_and_first_sample_us": 258,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 47.0,
+        "mean_us": 34.421875,
+        "median_us": 34.0,
+        "p95_us": 38.0
+      },
+      "immutable_preparation_us": 26766,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/blade_tongues/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 819,
+      "actual_binding_and_first_sample_us": 251,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 45.0,
+        "mean_us": 33.53125,
+        "median_us": 33.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 27762,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/ember_sheath/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 886,
+      "actual_binding_and_first_sample_us": 268,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 75.0,
+        "mean_us": 34.953125,
+        "median_us": 33.0,
+        "p95_us": 45.0
+      },
+      "immutable_preparation_us": 30283,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/ember_sheath/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 796,
+      "actual_binding_and_first_sample_us": 274,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 47.0,
+        "mean_us": 33.875,
+        "median_us": 33.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 26038,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/ember_sheath/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 816,
+      "actual_binding_and_first_sample_us": 254,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 59.0,
+        "mean_us": 34.15625,
+        "median_us": 33.0,
+        "p95_us": 36.0
+      },
+      "immutable_preparation_us": 27387,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/rime_facets/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 962,
+      "actual_binding_and_first_sample_us": 330,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 47.0,
+        "mean_us": 34.890625,
+        "median_us": 35.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 58867,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/rime_facets/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 751,
+      "actual_binding_and_first_sample_us": 315,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 49.0,
+        "mean_us": 34.4375,
+        "median_us": 34.0,
+        "p95_us": 38.0
+      },
+      "immutable_preparation_us": 39974,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/rime_facets/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 742,
+      "actual_binding_and_first_sample_us": 303,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 69.0,
+        "mean_us": 36.390625,
+        "median_us": 35.0,
+        "p95_us": 42.0
+      },
+      "immutable_preparation_us": 40368,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/clear_glaze/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 586,
+      "actual_binding_and_first_sample_us": 301,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 138.0,
+        "mean_us": 30.203125,
+        "median_us": 27.0,
+        "p95_us": 39.0
+      },
+      "immutable_preparation_us": 39578,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/clear_glaze/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 580,
+      "actual_binding_and_first_sample_us": 282,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 38.0,
+        "mean_us": 27.921875,
+        "median_us": 27.0,
+        "p95_us": 31.0
+      },
+      "immutable_preparation_us": 41648,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/clear_glaze/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 590,
+      "actual_binding_and_first_sample_us": 297,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 41.0,
+        "mean_us": 27.546875,
+        "median_us": 27.0,
+        "p95_us": 30.0
+      },
+      "immutable_preparation_us": 41289,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/axial_forks/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 682,
+      "actual_binding_and_first_sample_us": 298,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 114.0,
+        "mean_us": 40.5,
+        "median_us": 36.0,
+        "p95_us": 57.0
+      },
+      "immutable_preparation_us": 39929,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/axial_forks/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 671,
+      "actual_binding_and_first_sample_us": 293,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 47.0,
+        "mean_us": 34.765625,
+        "median_us": 34.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 41032,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/axial_forks/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 803,
+      "actual_binding_and_first_sample_us": 348,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 140.0,
+        "mean_us": 37.84375,
+        "median_us": 34.0,
+        "p95_us": 61.0
+      },
+      "immutable_preparation_us": 41520,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/cross_discharge/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 845,
+      "actual_binding_and_first_sample_us": 342,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 74.0,
+        "mean_us": 36.59375,
+        "median_us": 35.0,
+        "p95_us": 44.0
+      },
+      "immutable_preparation_us": 40571,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/cross_discharge/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 778,
+      "actual_binding_and_first_sample_us": 317,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 46.0,
+        "mean_us": 34.859375,
+        "median_us": 34.0,
+        "p95_us": 38.0
+      },
+      "immutable_preparation_us": 39038,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/cross_discharge/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 708,
+      "actual_binding_and_first_sample_us": 308,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 118.0,
+        "mean_us": 36.6875,
+        "median_us": 34.0,
+        "p95_us": 42.0
+      },
+      "immutable_preparation_us": 41568,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/psychic/vein_lattice/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 324,
+      "actual_binding_and_first_sample_us": 251,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 59.0,
+        "mean_us": 21.171875,
+        "median_us": 20.0,
+        "p95_us": 25.0
+      },
+      "immutable_preparation_us": 27447,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/psychic/vein_lattice/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 341,
+      "actual_binding_and_first_sample_us": 233,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 32.0,
+        "mean_us": 19.84375,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 21085,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/psychic/vein_lattice/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 314,
+      "actual_binding_and_first_sample_us": 254,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 30.0,
+        "mean_us": 19.890625,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 19764,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/psychic/phase_slits/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 313,
+      "actual_binding_and_first_sample_us": 227,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 48.0,
+        "mean_us": 20.796875,
+        "median_us": 20.0,
+        "p95_us": 26.0
+      },
+      "immutable_preparation_us": 15022,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/psychic/phase_slits/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 317,
+      "actual_binding_and_first_sample_us": 248,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 30.0,
+        "mean_us": 19.890625,
+        "median_us": 20.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 22125,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/psychic/phase_slits/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 325,
+      "actual_binding_and_first_sample_us": 262,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 56.0,
+        "mean_us": 22.6875,
+        "median_us": 20.0,
+        "p95_us": 31.0
+      },
+      "immutable_preparation_us": 15028,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/poison/viscous_film/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 358,
+      "actual_binding_and_first_sample_us": 233,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 56.0,
+        "mean_us": 21.421875,
+        "median_us": 20.0,
+        "p95_us": 25.0
+      },
+      "immutable_preparation_us": 92192,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/poison/viscous_film/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 336,
+      "actual_binding_and_first_sample_us": 232,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 37.0,
+        "mean_us": 20.09375,
+        "median_us": 20.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 14959,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/poison/viscous_film/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 346,
+      "actual_binding_and_first_sample_us": 223,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 61.0,
+        "mean_us": 21.1875,
+        "median_us": 20.0,
+        "p95_us": 25.0
+      },
+      "immutable_preparation_us": 21967,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/poison/venom_beads/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 343,
+      "actual_binding_and_first_sample_us": 241,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 32.0,
+        "mean_us": 19.890625,
+        "median_us": 20.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 21377,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/poison/venom_beads/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 322,
+      "actual_binding_and_first_sample_us": 223,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 31.0,
+        "mean_us": 19.71875,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 20963,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/poison/venom_beads/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 368,
+      "actual_binding_and_first_sample_us": 249,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 40.0,
+        "mean_us": 19.921875,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 22777,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/radiant/gilded_etch/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 330,
+      "actual_binding_and_first_sample_us": 230,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 32.0,
+        "mean_us": 20.265625,
+        "median_us": 19.0,
+        "p95_us": 25.0
+      },
+      "immutable_preparation_us": 20797,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/radiant/gilded_etch/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 353,
+      "actual_binding_and_first_sample_us": 293,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 30.0,
+        "mean_us": 19.71875,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 21001,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/radiant/gilded_etch/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 329,
+      "actual_binding_and_first_sample_us": 235,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 44.0,
+        "mean_us": 20.3125,
+        "median_us": 20.0,
+        "p95_us": 24.0
+      },
+      "immutable_preparation_us": 18428,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/radiant/solar_bevel/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 345,
+      "actual_binding_and_first_sample_us": 223,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 31.0,
+        "mean_us": 19.5625,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 23009,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/radiant/solar_bevel/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 312,
+      "actual_binding_and_first_sample_us": 223,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 30.0,
+        "mean_us": 19.765625,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 22701,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/radiant/solar_bevel/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 344,
+      "actual_binding_and_first_sample_us": 226,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 32.0,
+        "mean_us": 19.8125,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 21977,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/necrotic/soul_smoke/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 349,
+      "actual_binding_and_first_sample_us": 234,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 34.0,
+        "mean_us": 20.6875,
+        "median_us": 20.0,
+        "p95_us": 24.0
+      },
+      "immutable_preparation_us": 27070,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/necrotic/soul_smoke/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 340,
+      "actual_binding_and_first_sample_us": 235,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 60.0,
+        "mean_us": 22.25,
+        "median_us": 20.0,
+        "p95_us": 31.0
+      },
+      "immutable_preparation_us": 22540,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/necrotic/soul_smoke/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 342,
+      "actual_binding_and_first_sample_us": 258,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 34.0,
+        "mean_us": 21.84375,
+        "median_us": 21.0,
+        "p95_us": 24.0
+      },
+      "immutable_preparation_us": 22279,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/necrotic/hollow_veins/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 350,
+      "actual_binding_and_first_sample_us": 235,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 37.0,
+        "mean_us": 19.90625,
+        "median_us": 19.0,
+        "p95_us": 23.0
+      },
+      "immutable_preparation_us": 21414,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/necrotic/hollow_veins/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 365,
+      "actual_binding_and_first_sample_us": 247,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 46.0,
+        "mean_us": 19.890625,
+        "median_us": 19.0,
+        "p95_us": 23.0
+      },
+      "immutable_preparation_us": 19762,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/necrotic/hollow_veins/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 332,
+      "actual_binding_and_first_sample_us": 219,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 29.0,
+        "mean_us": 19.75,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 19156,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/arcane/etched_steel/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 316,
+      "actual_binding_and_first_sample_us": 224,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 51.0,
+        "mean_us": 21.296875,
+        "median_us": 20.0,
+        "p95_us": 31.0
+      },
+      "immutable_preparation_us": 14921,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/arcane/etched_steel/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 345,
+      "actual_binding_and_first_sample_us": 239,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 31.0,
+        "mean_us": 19.765625,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 15211,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/arcane/etched_steel/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 513,
+      "actual_binding_and_first_sample_us": 302,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 38.0,
+        "mean_us": 19.640625,
+        "median_us": 19.0,
+        "p95_us": 22.0
+      },
+      "immutable_preparation_us": 20935,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/arcane/swept_glint/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 323,
+      "actual_binding_and_first_sample_us": 217,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 28.0,
+        "mean_us": 19.890625,
+        "median_us": 19.0,
+        "p95_us": 23.0
+      },
+      "immutable_preparation_us": 21380,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/arcane/swept_glint/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 311,
+      "actual_binding_and_first_sample_us": 218,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 29.0,
+        "mean_us": 20.0,
+        "median_us": 20.0,
+        "p95_us": 23.0
+      },
+      "immutable_preparation_us": 15402,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/arcane/swept_glint/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 351,
+      "actual_binding_and_first_sample_us": 222,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 29.0,
+        "mean_us": 19.84375,
+        "median_us": 19.0,
+        "p95_us": 23.0
+      },
+      "immutable_preparation_us": 19528,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/wood/living_grain/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 356,
+      "actual_binding_and_first_sample_us": 230,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 30.0,
+        "mean_us": 19.984375,
+        "median_us": 19.0,
+        "p95_us": 23.0
+      },
+      "immutable_preparation_us": 21983,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/wood/living_grain/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 315,
+      "actual_binding_and_first_sample_us": 220,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 32.0,
+        "mean_us": 19.625,
+        "median_us": 19.0,
+        "p95_us": 23.0
+      },
+      "immutable_preparation_us": 21636,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/wood/living_grain/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 381,
+      "actual_binding_and_first_sample_us": 241,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 80.0,
+        "mean_us": 20.859375,
+        "median_us": 19.0,
+        "p95_us": 24.0
+      },
+      "immutable_preparation_us": 15060,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/pure_crystal/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 787,
+      "actual_binding_and_first_sample_us": 324,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 71.0,
+        "mean_us": 36.1875,
+        "median_us": 34.0,
+        "p95_us": 47.0
+      },
+      "immutable_preparation_us": 50218,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/pure_crystal/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 781,
+      "actual_binding_and_first_sample_us": 304,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 49.0,
+        "mean_us": 34.65625,
+        "median_us": 34.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 47155,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/pure_crystal/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 746,
+      "actual_binding_and_first_sample_us": 282,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 108.0,
+        "mean_us": 37.421875,
+        "median_us": 34.0,
+        "p95_us": 51.0
+      },
+      "immutable_preparation_us": 45706,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/pure_rime/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 747,
+      "actual_binding_and_first_sample_us": 291,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 72.0,
+        "mean_us": 35.125,
+        "median_us": 34.0,
+        "p95_us": 39.0
+      },
+      "immutable_preparation_us": 46839,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/pure_rime/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 798,
+      "actual_binding_and_first_sample_us": 299,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 110.0,
+        "mean_us": 37.625,
+        "median_us": 35.0,
+        "p95_us": 49.0
+      },
+      "immutable_preparation_us": 46061,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/ice/pure_rime/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 684,
+      "actual_binding_and_first_sample_us": 277,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 48.0,
+        "mean_us": 35.515625,
+        "median_us": 35.0,
+        "p95_us": 38.0
+      },
+      "immutable_preparation_us": 47587,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/pure_conduit/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 768,
+      "actual_binding_and_first_sample_us": 295,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 51.0,
+        "mean_us": 35.328125,
+        "median_us": 35.0,
+        "p95_us": 38.0
+      },
+      "immutable_preparation_us": 47100,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/pure_conduit/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 771,
+      "actual_binding_and_first_sample_us": 301,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 165.0,
+        "mean_us": 37.875,
+        "median_us": 35.0,
+        "p95_us": 46.0
+      },
+      "immutable_preparation_us": 48859,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/pure_conduit/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 735,
+      "actual_binding_and_first_sample_us": 291,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 108.0,
+        "mean_us": 38.65625,
+        "median_us": 35.0,
+        "p95_us": 50.0
+      },
+      "immutable_preparation_us": 48172,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/pure_storm/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 720,
+      "actual_binding_and_first_sample_us": 276,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 49.0,
+        "mean_us": 34.921875,
+        "median_us": 34.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 48243,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/pure_storm/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 813,
+      "actual_binding_and_first_sample_us": 296,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 79.0,
+        "mean_us": 35.609375,
+        "median_us": 34.0,
+        "p95_us": 40.0
+      },
+      "immutable_preparation_us": 47062,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/electric/pure_storm/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 757,
+      "actual_binding_and_first_sample_us": 292,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 45.0,
+        "mean_us": 34.75,
+        "median_us": 34.0,
+        "p95_us": 38.0
+      },
+      "immutable_preparation_us": 47479,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/blade_tongues_effect_only/lesser/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 865,
+      "actual_binding_and_first_sample_us": 258,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 46.0,
+        "mean_us": 34.578125,
+        "median_us": 34.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 19514,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/blade_tongues_effect_only/medium/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 883,
+      "actual_binding_and_first_sample_us": 251,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 75.0,
+        "mean_us": 36.609375,
+        "median_us": 34.0,
+        "p95_us": 57.0
+      },
+      "immutable_preparation_us": 21598,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/equipped/fire/blade_tongues_effect_only/greater/sustain": {
+      "report": "evidence/weapon-appearance-20261020/equipped-runtime-v9/checks.json",
+      "report_sha256": "5de407ea00aab2188a4b6992a7f966fc610796299028de2ea1ac4f6f7e7ace7d",
+      "complete_constructor_us": 871,
+      "actual_binding_and_first_sample_us": 302,
+      "advancing_clock_and_sample": {
+        "iterations": 64,
+        "max_us": 55.0,
+        "mean_us": 33.953125,
+        "median_us": 33.0,
+        "p95_us": 37.0
+      },
+      "immutable_preparation_us": 16550,
+      "scope": "Actual Factory source context; not a packaged/client timing or a global completion claim"
+    },
+    "weapons/contact/ice/lesser": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 871,
+        "median_us": 758,
+        "p95_us": 871
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 4,
+        "median_us": 1,
+        "p95_us": 2
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/ice/medium": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 642,
+        "median_us": 482,
+        "p95_us": 642
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 8,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/ice/greater": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 776,
+        "median_us": 604,
+        "p95_us": 776
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 3,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/electric/lesser": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 360,
+        "median_us": 323,
+        "p95_us": 360
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/electric/medium": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 519,
+        "median_us": 358,
+        "p95_us": 519
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/electric/greater": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 368,
+        "median_us": 343,
+        "p95_us": 368
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/psychic/lesser": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 366,
+        "median_us": 315,
+        "p95_us": 366
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/psychic/medium": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 420,
+        "median_us": 399,
+        "p95_us": 420
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/psychic/greater": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 477,
+        "median_us": 358,
+        "p95_us": 477
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 1,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/poison/lesser": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 362,
+        "median_us": 302,
+        "p95_us": 362
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/poison/medium": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 400,
+        "median_us": 384,
+        "p95_us": 400
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 1,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/poison/greater": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 703,
+        "median_us": 556,
+        "p95_us": 703
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/radiant/lesser": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 333,
+        "median_us": 297,
+        "p95_us": 333
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/radiant/medium": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 302,
+        "median_us": 295,
+        "p95_us": 302
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/radiant/greater": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 400,
+        "median_us": 293,
+        "p95_us": 400
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 6,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/necrotic/lesser": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 402,
+        "median_us": 341,
+        "p95_us": 402
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/necrotic/medium": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 405,
+        "median_us": 358,
+        "p95_us": 405
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 3,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/necrotic/greater": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 535,
+        "median_us": 419,
+        "p95_us": 535
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 4,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/fire/lesser": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 342,
+        "median_us": 300,
+        "p95_us": 342
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/fire/medium": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 450,
+        "median_us": 298,
+        "p95_us": 450
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    },
+    "weapons/contact/fire/greater": {
+      "report": ".runtime/weapon-contacts-20261020/checks.json",
+      "report_sha256": "4e745c6c79706e73e8b8ed4227dfc598ed3e075047d027d0e8d186852de098e3",
+      "full_phase_cpu_construction": {
+        "count": 3,
+        "maximum_us": 380,
+        "median_us": 361,
+        "p95_us": 380
+      },
+      "cpu_source_sample": {
+        "count": 64,
+        "maximum_us": 2,
+        "median_us": 1,
+        "p95_us": 1
+      },
+      "actual_optical_fixture_checked": true,
+      "scope": "Headless public input/material isolation/finite source-clock and resident CPU construction; no GPU pixels or visual approval"
+    }
+  },
+  "human_approval_inferred": false,
+  "production_assignment_performed": false,
+  "production_integration_performed": false,
+  "whole_library_runtime_complete": false
+}

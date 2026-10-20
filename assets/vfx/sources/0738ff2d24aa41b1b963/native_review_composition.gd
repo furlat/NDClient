@@ -35,6 +35,11 @@ static func make_component(input: Dictionary) -> Node3D:
 	node.definition = input.duplicate(true)
 	return node
 
+func prepare_source_interfaces() -> Array:
+	if definition.get("opacity_control", false):
+		NativeOpacity.apply(self)
+	return SourceSpace.adapt(self, {}, [])
+
 func sample(seconds: float) -> void:
 	if not prepared:
 		prepared = true
@@ -55,9 +60,7 @@ func sample(seconds: float) -> void:
 	composition.sample(seconds)
 	ResourceGraph.native_sampler_scopes -= 1
 	if not adapted:
-		if definition.get("opacity_control", false):
-			NativeOpacity.apply(self)
-		source_materials = SourceSpace.adapt(self, {}, [])
+		source_materials = prepare_source_interfaces()
 		for role in definition.get("light_roles", []):
 			for light in find_children("*", role["class"], true, false):
 				light.set_meta("factory_light_role", role.role)

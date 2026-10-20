@@ -71,6 +71,14 @@ static func _resource(resource: Resource, seen: Dictionary, materials: Array) ->
 		return
 	seen[resource] = true
 	_adapt_material(resource, materials)
+	if resource is ShaderMaterial and resource.shader != null and resource.has_meta("factory_prepared_shader") and resource.get_meta("factory_prepared_shader") == resource.shader:
+		# A prepared spatial program already declares its exact source-space
+		# interface. Shader uniforms may reference textures, not more materials;
+		# enumerating every shader property here needlessly forces lazy renderer
+		# reflection. The actual material next-pass chain still needs adaptation.
+		if resource.next_pass != null:
+			_resource(resource.next_pass, seen, materials)
+		return
 	for property in resource.get_property_list():
 		if int(property.usage) & PROPERTY_USAGE_STORAGE:
 			var value: Variant = resource.get(property.name)

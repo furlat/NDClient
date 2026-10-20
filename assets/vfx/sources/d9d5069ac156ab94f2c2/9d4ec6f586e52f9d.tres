@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "smite"
+constructor_script = "res://assets/vfx/sources/36d8596898bdb446e1e9/branding_smite.gd"
+input = {"phase": "retire", "seconds": 0.42, "lifecycle_mode": "bounded_fixture", "source_actor_uuid": "caster", "recipient_uuid": "target", "item_uuid": "caster-MELEE_MAIN", "attack_uuid": "fixture.branding_smite_miss_native.attack", "equipment_slot": "MELEE_MAIN", "render_slot": "weapon", "behavior_id": "spell.branding_smite", "condition_uuid": "fixture.branding_smite_miss_native.condition", "condition_id": "condition.spell.branding_smite", "effective_handler_uuid": "fixture.branding_smite_miss_native.effective-handler", "material": {"scene": "res://assets/vfx/sources/175451f651f42e72f567/VFX_Healing_W1.tscn", "node": "verticalflash", "source_colour": [1, 1, 1, 1], "palette": ["30352b", "6d7951", "a6b17a", "c9ca93"], "uniforms": {"speed": [0, -0.055], "Use_Proximity_Fade": false}}, "strike": {"source_actor_uuid": "caster", "recipient_uuid": "target", "item_uuid": "caster-MELEE_MAIN", "attack_uuid": "fixture.branding_smite_miss_native.attack", "equipment_slot": "MELEE_MAIN", "source_kind": "equipped", "attack_kind": "weapon", "outcome": "miss", "behavior_id": "spell.branding_smite", "effective_handler_uuid": "fixture.branding_smite_miss_native.effective-handler", "payload_applied": false, "damage_component_uuid": "", "selection_origin": "explicit_applied_result_no_local_cost_or_slot_selection"}, "condition": {"condition_uuid": "fixture.branding_smite_miss_native.condition", "condition_id": "condition.spell.branding_smite", "source_actor_uuid": "caster", "recipient_uuid": "target", "present": false, "observed": true, "contribution_active": false, "suppressed": false, "retire_reason": "explicit_example_removal"}, "tick": {"condition_uuid": "fixture.branding_smite_miss_native.condition", "recipient_uuid": "target", "damage_applied": false, "damage_type": "fire", "damage_fact_uuid": "", "source": "explicit_post_save_damage_fact_not_animation_clock"}, "_prepared_materials": [{"key": "1b9411847153ec8de26e8b902e9c715fa66d21cd55f39ff33b4fe2df748d4037", "path": "res://assets/vfx/sources/7b6597e09750e438e363/1b9411847153ec8de26e8b902e9c715fa66d21cd55f39ff33b4fe2df748d4037.res"}, {"key": "026e2f67267a983fae78a182254791e30b09a937f55f05f7babb68889bee0855", "path": "res://assets/vfx/sources/c687f6820d279845cc3b/026e2f67267a983fae78a182254791e30b09a937f55f05f7babb68889bee0855.res"}], "prepared_geometry_queries": true}
+options = {}
+provenance = "Exact current card/backend; explicit applied attack/condition/damage fixture; no invented armed condition."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/branding-smite/branding_smite_miss_native/retire"
+label = "Branding Smite · retire"
+phase = "retire"
+variant = "branding_smite_miss_native"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#spell.branding_smite"
+bindings = [{"component":"smite","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 0.42
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "coded_pending_capture; native source material extraction, not whole-scene recolour", "source_revision": "gpu-cached-v382-20261018"}

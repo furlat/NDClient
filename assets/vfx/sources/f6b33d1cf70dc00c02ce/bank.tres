@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/d88e3684dc04fa0ff126/source.tscn" id="1_gljlj"]
+[ext_resource type="Script" path="res://assets/vfx/sources/3a934e730cb7ed00bada/prepared_plume_bank.gd" id="2_6nsnj"]
+
+[resource]
+script = ExtResource("2_6nsnj")
+scene = ExtResource("1_gljlj")
+paths = Array[NodePath]([NodePath("Core"), NodePath("Mist")])
+provenance = {
+"native_emitters": [{
+"amount": 16,
+"fixed_fps": 144,
+"lifetime": 0.58,
+"local_coords": false,
+"name": &"Core",
+"program_sha256": "ec0577eb924964e4fbe092190f4020cebe9a284bb9fafb23a629ec2055d44d34",
+"seed": 7273
+}, {
+"amount": 80,
+"fixed_fps": 144,
+"lifetime": 0.58,
+"local_coords": false,
+"name": &"Mist",
+"program_sha256": "32d2b68c31fa4aa429669f1641c296729cfa5fc8488031acd5409b0bfbb61b3c",
+"seed": 7274
+}],
+"owner_pose_or_clock_saved": false,
+"source_donor_scene": "res://assets/vfx/sources/06788cda4d826eb97b05/ice_mist_vfx_04.tscn",
+"source_phase": "res://assets/vfx/sources/38ca4133c2166b53c4d5/cold_native_exhale.tres",
+"source_phase_sha256": "9ba0c33f6177f3d2d021a35e51888c83a15c8a2dfef1dd064ece604ac804bb43",
+"source_script": "res://assets/vfx/sources/ce3fb52e9d3edba4bb39/cold_breath_particles.gd",
+"source_script_sha256": "ef01107ed123191622d8686d09d144f4b0fb68af13b766b6e170583a09e1b9cb"
+}

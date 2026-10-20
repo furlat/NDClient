@@ -1,0 +1,133 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/12b876b2908476545b90/support.gd" id="1_620hx"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/15c423e2d5958159ca8c/1056ec7bdd0b90b9.tscn" id="2_kl85y"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0250a3f89c551f4fc017/bank.gd" id="3_bayb7"]
+
+[resource]
+script = ExtResource("3_bayb7")
+scene = ExtResource("2_kl85y")
+source_script = "res://assets/vfx/sources/ec9cb8f39586b3f03214/support.gd"
+adapter_script = ExtResource("1_620hx")
+stable_paths_prepared = true
+input_sha256 = "98ab5897d034b6a85061e81c885a1f0b7a9077458aa2920dc190455a3036eaa0"
+material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smallparticles2"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "objectflare"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smoke2init2"
+}])
+player_paths = Array[String](["AnimationPlayer"])
+light_paths = Array[String](["OmniLight3D"])
+immutable_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "lines"
+}])
+seeds = [{
+"path": "Donor/smallparticles2",
+"seed": 47291
+}, {
+"path": "Donor/lines",
+"seed": 47292
+}, {
+"path": "Donor/smoke2init2",
+"seed": 47293
+}]
+provenance = {
+"clock_ticks_sampled": 0,
+"immutable_material_bindings": Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "lines"
+}]),
+"immutable_material_policy": "StandardMaterial3D only; audited native family and no script/method/property-track writes",
+"native_lights_retained": Array[String](["OmniLight3D"]),
+"native_players_retained": Array[String](["AnimationPlayer"]),
+"native_process_materials_private": true,
+"owner_pose_saved": false,
+"pre_tree_emission_baseline": [{
+"emitting": false,
+"node": "smallparticles2"
+}, {
+"emitting": false,
+"node": "lines"
+}, {
+"emitting": false,
+"node": "smoke2init2"
+}],
+"retained_materials": [{
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smallparticles2"
+},
+"shader_sha256": "4f9dacbb94fd93608bfe7f568b54e0e8b4ebcc842056d2e2bf5e6991dc662bf1"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "objectflare"
+},
+"shader_sha256": "7541f9689fc68b87437fe9f4554300a16ec2fc6ef8bb23836637660e98639cc1"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smoke2init2"
+},
+"shader_sha256": "c6584ae60d947d759a9b1a99c74d227e115cf8a398d86ebbcca73f94e60f5721"
+}],
+"source_input": {
+"animation_missing_policy": "first_available",
+"clip_normal": [0.70710678, 0, 0.70710678],
+"material_family": "support",
+"scene": "res://assets/vfx/sources/3d62b9344ab9b2fa9429/VFX_HealPuff_A.tscn",
+"seed": 47291,
+"settings": {
+"alphaGain": 0.75,
+"anchor": "target_ground",
+"animation": "Init",
+"close": 0,
+"frames": 432,
+"height": 1.2,
+"hue": 0.43,
+"id": "cure_wounds",
+"name": "VFX_HealPuff_A",
+"pack": "lelu-healing-protection",
+"palette": ["334465", "474dab", "508eac", "68c4d1", "7adddf", "83f0f3"],
+"scale": 0.8,
+"version": 6
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_phase": "res://assets/vfx/sources/91cfa94bec25391690d2/01_consume.tres",
+"source_script": "res://assets/vfx/sources/ec9cb8f39586b3f03214/support.gd",
+"source_script_sha256": "00b37545ea3c45ebc8af4d388970b6ec666e6b8e2a35b39319b178db973f3faf",
+"source_seed_records": [{
+"path": "Donor/smallparticles2",
+"seed": 47291
+}, {
+"path": "Donor/lines",
+"seed": 47292
+}, {
+"path": "Donor/smoke2init2",
+"seed": 47293
+}],
+"stable_path_proof": {
+"animation_tracks": 11,
+"complete": true,
+"named_nodes": 7,
+"unresolved": []
+},
+"texture_freeze_policy": "reject_animated_sampler_or_resource_tracks"
+}
+declared_registration_complete = true

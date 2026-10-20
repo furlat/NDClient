@@ -1,0 +1,126 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/f2056221575c0261cadf/movement.gd" id="1_ppb0l"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/f28f6c889c9d9b1a2086/ee61b16f254950ad.tscn" id="2_xla3f"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0250a3f89c551f4fc017/bank.gd" id="3_c0w4d"]
+
+[resource]
+script = ExtResource("3_c0w4d")
+scene = ExtResource("2_xla3f")
+source_script = "res://assets/vfx/sources/dbbd11d7b37fd1be2bc0/movement.gd"
+adapter_script = ExtResource("1_ppb0l")
+stable_paths_prepared = true
+input_sha256 = "583f6894db7fc7a54f23ac93aa6a4ac4816d4bb333593e80160eb231f69f5b2a"
+material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "WindUpFlow"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windflowz"
+}])
+world_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "WindUpFlow"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windflowz"
+}])
+immutable_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "leafflowz"
+}])
+seeds = [{
+"path": "Donor/windflowz",
+"seed": 47291
+}, {
+"path": "Donor/leafflowz",
+"seed": 47292
+}, {
+"path": "Donor/leafflowz2",
+"seed": 47293
+}]
+provenance = {
+"clock_ticks_sampled": 0,
+"immutable_material_bindings": Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "leafflowz"
+}]),
+"immutable_material_policy": "StandardMaterial3D only; audited native family and no script/method/property-track writes",
+"native_lights_retained": Array[String]([]),
+"native_players_retained": Array[String]([]),
+"native_process_materials_private": true,
+"owner_pose_saved": false,
+"pre_tree_emission_baseline": [{
+"emitting": true,
+"node": "windflowz"
+}, {
+"emitting": true,
+"node": "leafflowz"
+}, {
+"emitting": true,
+"node": "leafflowz2"
+}],
+"retained_materials": [{
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "WindUpFlow"
+},
+"shader_sha256": "da1c3daad233113c2afd22678ff0453466b87f107b82577c72517e03cb9a3f95"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "windflowz"
+},
+"shader_sha256": "3358bc7b98a6beae452f2a13e309ca7b5e000b1a4be0135d3f3a1f5756ad26db"
+}],
+"source_input": {
+"animation_missing_policy": "first_available",
+"clip_normal": [0.70710678, 0, 0.70710678],
+"scene": "res://assets/vfx/sources/e964274d52f5c3e9d5ce/VFX_AirFlowUP.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"close": 0,
+"frames": 288,
+"height": 0,
+"kind": "trail",
+"name": "VFX_AirFlowUP",
+"pack": "lelu-godot-wind-premium-1",
+"palette": ["313b56", "526681", "7899b6", "9fc2d1", "c8dedf", "e5eddf"],
+"parent": "haste",
+"scale": 0.34,
+"version": 2
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_phase": "res://assets/vfx/sources/3ad98be44aaba0517571/02.tres",
+"source_script": "res://assets/vfx/sources/dbbd11d7b37fd1be2bc0/movement.gd",
+"source_script_sha256": "29428846511b21026121467d0988ebc5027451b4f052bd1624b5d0f4113601ca",
+"source_seed_records": [{
+"path": "Donor/windflowz",
+"seed": 47291
+}, {
+"path": "Donor/leafflowz",
+"seed": 47292
+}, {
+"path": "Donor/leafflowz2",
+"seed": 47293
+}],
+"stable_path_proof": {
+"animation_tracks": 0,
+"complete": true,
+"named_nodes": 5,
+"unresolved": []
+},
+"texture_freeze_policy": "reject_animated_sampler_or_resource_tracks"
+}
+declared_registration_complete = true

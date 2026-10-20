@@ -1,0 +1,45 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_dlgrd"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_qrbt8"]
+
+[sub_resource type="Resource" id="Resource_w80hv"]
+script = ExtResource("1_dlgrd")
+component_id = "equipped_weapon"
+constructor_script = "res://assets/vfx/sources/b030caea4fa2359738f0/equipped_treatment.gd"
+input = {
+"appearance_mode": "enhanced",
+"artistic_strength": "lesser",
+"axes": "res://assets/vfx/sources/b8907a76e860483f2da6/pose-bank.tres",
+"element": "fire",
+"exterior": false,
+"native_presets": "res://assets/vfx/sources/d7ffec9180dbe689679d/bank.tres",
+"noise": "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res",
+"receiver_programs": "res://assets/vfx/sources/7ea03eda1143a2eb6407/receiver-programs.tres",
+"variant_id": "fire.blade_tongues",
+&"wake_style": "res://assets/vfx/sources/989ff1278bf2bd9734a7/fire_tongue_shear_lesser.tres"
+}
+provenance = "Actual equipped sheet; purchased mask provenance in element-studies sources manifests. No new item, condition, attack or lamp."
+
+[resource]
+script = ExtResource("2_qrbt8")
+clip_id = "weapons/equipped/fire/blade_tongues/lesser/sustain"
+label = "fire.blade_tongues · lesser"
+phase = "sustain"
+variant = "fire.blade_tongues"
+components = Array[Resource]([SubResource("Resource_w80hv")])
+bindings = [{
+"component": "equipped_weapon",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 144.0
+options = {
+"art_status": "actual_equipped_sheet_candidate_not_human_approved",
+"inputs": ["weapon_binding", "entity_geometry", "actor_layers", "owner_state", "root_path"],
+"requires_actual_receiver_program_preparation": true,
+"runtime": "native_gpu_receiver_and_optional_native_particles",
+"seeking": "sequential_native_particles_and_actual_pose_history",
+"single_direct_material_owner": true
+}

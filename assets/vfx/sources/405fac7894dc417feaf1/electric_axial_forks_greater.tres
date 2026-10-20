@@ -1,0 +1,45 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/83e416e213a25e715a1e/84219902a9d5244cb5294ea4b449cadb2a1f21957df6c7c2b6e3e78fd251db69.gdshader" id="1_noius"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/7eddd0f4a71d6ddc658c/texture.res" id="2_7yn5c"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/126e19553516547aa864/cell_manhattan_01.tres" id="3_ewwwh"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/9dcaa1fc11385c7a38ab/cell_manhattan_02.tres" id="4_7fqg5"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res" id="5_5w44d"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_noius")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_weapon_element_seconds = 0.0
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/weapon_element_enabled = false
+shader_parameter/weapon_element_axis_valid = false
+shader_parameter/weapon_element_kind = 2
+shader_parameter/weapon_element_variant = 0
+shader_parameter/weapon_element_seconds = 0.0
+shader_parameter/weapon_element_strength = 0.95
+shader_parameter/weapon_element_hilt_tip = Vector4(0, 0, 0, 0)
+shader_parameter/weapon_element_half_width_uv = 0.025
+shader_parameter/weapon_element_grip_end = 0.04
+shader_parameter/weapon_element_noise = ExtResource("5_5w44d")
+shader_parameter/weapon_element_arc_sheet = ExtResource("2_7yn5c")
+shader_parameter/weapon_element_ice_cells = ExtResource("3_ewwwh")
+shader_parameter/weapon_element_ice_detail = ExtResource("4_7fqg5")
+shader_parameter/weapon_element_cold_dark = Color(0.075, 0.16, 0.23, 1)
+shader_parameter/weapon_element_cold_body = Color(0.25, 0.56, 0.68, 1)
+shader_parameter/weapon_element_cold_edge = Color(0.62, 0.86, 0.9, 1)
+shader_parameter/weapon_element_electric_body = Color(0.025, 0.13, 0.29, 1)
+shader_parameter/weapon_element_electric_halo = Color(0.025, 0.35, 0.88, 1)
+shader_parameter/weapon_element_electric_core = Color(0.27, 0.76, 0.97, 1)
+shader_parameter/weapon_element_electric_warm = Color(0.92, 0.64, 0.12, 1)
+shader_parameter/weapon_corona_frame = Vector4(0, 0, 1, 1)
+shader_parameter/weapon_corona_radius_pixels = 3.0
+shader_parameter/weapon_corona_opacity = 0.74
+shader_parameter/weapon_corona_energy = 1.05
+shader_parameter/weapon_corona_enabled = true
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_noius")
+metadata/factory_opacity_prepared_shader = ExtResource("1_noius")
+metadata/factory_clock_names = ["weapon_element_seconds"]
+metadata/factory_world_space_uniform = false

@@ -1,0 +1,36 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_ef37i"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_tln1t"]
+
+[sub_resource type="Resource" id="Resource_sgefb"]
+script = ExtResource("1_ef37i")
+component_id = "weapon_contact"
+constructor_script = "res://assets/vfx/sources/92195462e2f9774e134a/component.gd"
+input = {
+"style": "res://assets/vfx/sources/707acbefea02a6dc2b5f/psychic_greater.tres"
+}
+provenance = "Owned Binbun/LeLu contact derivative; exact source hashes on style; no spell explosion reuse"
+
+[resource]
+script = ExtResource("2_tln1t")
+clip_id = "weapons/contact/psychic/greater"
+label = "Psychic weapon contact · greater"
+phase = "impact"
+variant = "greater"
+components = Array[Resource]([SubResource("Resource_sgefb")])
+bindings = [{
+"component": "weapon_contact",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 0.4
+simulation_hz = 60.0
+options = {
+"adaptive_inputs": true,
+"art_status": "native_candidate_not_visually_approved",
+"follow": false,
+"inputs": ["weapon_impact", "root_path", "entity_geometry"],
+"seeking": "pure source-clock equations; no historical state"
+}

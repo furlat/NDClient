@@ -1,0 +1,533 @@
+[gd_scene format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/a88ef320918baaa50a99/program-4f9dacbb94fd9360.gdshader" id="1_pgs8f"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/a980d6c533fad007b885/texture.res" id="2_fit1s"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/cb8c6701cb01b31ba8a6/program-7541f9689fc68b87.gdshader" id="3_njgbj"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/4e49a21bae56d28a3b19/texture.res" id="4_i75dv"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/900721c102c94ad02849/texture.res" id="5_up3v5"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/4af9174079e5a3d9f93d/texture.res" id="6_p0qp8"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/afe38573ecb38d0f92dd/program-c6584ae60d947d75.gdshader" id="7_3dvst"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/997cf5541ce144349254/texture.res" id="8_dayuq"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/1c8c4922707ab71510ff/texture.res" id="9_0hpvw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x1qlh"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_pgs8f")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_support_clock = 0.0
+shader_parameter/support_clock = 0.0
+shader_parameter/support_envelope = 1.0
+shader_parameter/Alpha_Texture = ExtResource("2_fit1s")
+shader_parameter/power = 1.0
+metadata/factory_prepared_shader = ExtResource("1_pgs8f")
+metadata/factory_opacity_prepared_shader = ExtResource("1_pgs8f")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_names = ["support_clock"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_stwlf"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.208333, 1), 0.0, 0.0, 0, 0, Vector2(0.770318, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_rfxax"]
+texture_mode = 1
+curve = SubResource("Curve_stwlf")
+
+[sub_resource type="Curve" id="Curve_gwoaw"]
+
+[sub_resource type="Curve" id="Curve_0fkji"]
+_data = [Vector2(0, 0.597842), 0.0, 0.0, 0, 0, Vector2(1, 0.96259), 0.308464, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_1hou5"]
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_b8kie"]
+curve_x = SubResource("Curve_gwoaw")
+curve_y = SubResource("Curve_0fkji")
+curve_z = SubResource("Curve_1hou5")
+
+[sub_resource type="Curve" id="Curve_bsysa"]
+_data = [Vector2(0, 0.0478873), 0.0, 0.674485, 0, 0, Vector2(1, 0.871831), 2.14225, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mk38x"]
+curve = SubResource("Curve_bsysa")
+
+[sub_resource type="Curve" id="Curve_upaqa"]
+_data = [Vector2(0.257951, 1), 0.0, 0.0, 0, 0, Vector2(0.487632, 0.915827), 0.0, 0.0, 0, 0, Vector2(0.540636, 0), 0.0, 0.0, 0, 0, Vector2(0.565371, 0.859712), 0.0, 0.0, 0, 0, Vector2(0.621908, 1), 0.0, 0.0, 0, 0, Vector2(0.671378, 0.0460432), 0.0, 0.0, 0, 0, Vector2(0.70318, 0.81295), 0.0, 0.0, 0, 0, Vector2(1, 0.579137), 0.0, 0.0, 0, 0]
+point_count = 8
+
+[sub_resource type="CurveTexture" id="CurveTexture_8lcla"]
+curve = SubResource("Curve_upaqa")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_25pjn"]
+resource_local_to_scene = true
+lifetime_randomness = 0.3
+emission_shape = 1
+emission_sphere_radius = 0.8
+direction = Vector3(0, 1, 0)
+spread = 0.0
+directional_velocity_min = -1.60933e-05
+directional_velocity_max = 0.499984
+directional_velocity_curve = SubResource("CurveXYZTexture_b8kie")
+radial_velocity_min = 0.499978
+radial_velocity_max = 1.99998
+radial_velocity_curve = SubResource("CurveTexture_mk38x")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.3
+scale_curve = SubResource("CurveTexture_8lcla")
+color = Color(0.65, 1.5, 1.1429999, 1)
+alpha_curve = SubResource("CurveTexture_rfxax")
+hue_variation_min = -0.4
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_x26nt"]
+
+[sub_resource type="Image" id="Image_bxlr0"]
+data = {
+"data": PackedByteArray("GqtuABqrbgEaq24BGqpuAhqqbgMaqm4DGqpuBBqqbgUaqm0FGqptBhqpbQYbqW0HG6ltCBupbQgbqW0JG6ltChupbQobqG0LG6htDBuobQwbqG0NG6htDhuobQ4cqG0PHKdtDxynbRAcp20RHKdtERynbRIcp2wTHKdsExymbBQcpmwVHKZsFRymbBYdpmwXHaZsFx2mbBgdpWwYHaVsGR2lbBodpWwaHaVsGx2lbBwdpWwcHaRsHR2kbB4epGweHqRsHx6kbCAepGwgHqRrIR6kayEeo2siHqNrIx6jayMeo2skHqNrJR6jayUfo2smH6JrJx+iaycfomsoH6JrKR+iaykfomsqH6JrKh+haysfoWssH6FrLB+hay0goWsuIKFqLiChai8goGowIKBqMCCgajEgoGoyIKBqMiCgajMgoGozIJ9qNCCfajUhn2o1IZ9qNiGfajchn2o3IZ9qOCGeajkhnmo5IZ5qOiKhazoipW47I6lwOyOsczsksHU8JLR3PCW4ej0lu3w9Jr9/PSbDgT4nx4M+J8qGPyjOiD8ny4Y9J8eEOyfDgTkmv383Jrt9Nia3ejQls3gyJa91MCWrcy4kp3AsJKZvLCSmcC0lp3AvJadwMCWocTIlqHEzJalxNSWpcjYmqnI4JqpyOSarczsmq3M8JqtzPiasdD8nrHRBJ610QietdUQnrnVFJ651Ryevdkgor3ZKKK92Syiwd00osHdOKLF3UCixeFEpsnhTKbJ4VCmzeVYps3lXKbR5WSm0eloqtHpcKrV6XSq1e18qtntgKrZ7Yiq3fGMrt3xlK7h8Ziu4fWgruH1pK7l9ayu5fmwsun5uLLp+byy7f3Esu39yLLx/dCy8gHUtvYB3Lb2AeC29gXotvoF7Lb6BfS2/gn4uv4KALsCCgS7Ag4MuwYOELsGDhi7BhIcvwoSJL8KEii/DhYwvw4WNL8SFjy/EhpAwxYaSMMWGkzDGh5UwxoeWMMaHmDDHiJkxx4ibMciInDHIiZ4xyYmfMcmJoTHKiqIyyoqkMsqKpTLLi6cyy4uoMsyLqjLMjKszzYytM82MrjPOjbAzzo2xM8+NszPPjrQ0z462NNCOtzTQj7k00Y+6NNGPvDTSkL010pC/NdOQwDXTkcI105HDNdSRxTXUksY21ZLINtWSyTbWk8s21pPMNteTzjbXlM832JTRN9iU0jfYldQ32ZXVN9mV1zfaltg42pbaONuW2zjbl9043JfeONyX4DjcmOE53ZjjOd2Y5DnemeY53pnnOd+Z6Tnfmuo64JrsOuCa7Trhm+864ZvwOuGb8jrinPM74pz1O+Oc9jvjnfg75J35O+Sd+zvlnvw85Z7+POae/w=="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 256
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_odegb"]
+image = SubResource("Image_bxlr0")
+
+[sub_resource type="Image" id="Image_6o0jv"]
+data = {
+"data": PackedByteArray("//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7+/v/8/Pz/+/v7//n5+f/4+Pj/9/f3//f39//29vb/9vb2//f39//39/f/+Pj4//n5+f/7+/v//Pz8//7+/v/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9/f3/+/v7//j4+P/29vb/9PT0//Ly8v/x8fH/7+/v/+/v7//u7u7/7u7u/+7u7v/u7u7/7+/v/+/v7//x8fH/8vLy//T09P/29vb/+Pj4//v7+//9/f3///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////z8/P/4+Pj/9fX1//Ly8v/w8PD/7e3t/+vr6//q6ur/6Ojo/+fn5//m5ub/5eXl/+Xl5f/l5eX/5eXl/+bm5v/n5+f/6Ojo/+rq6v/r6+v/7e3t//Dw8P/y8vL/9fX1//j4+P/8/Pz/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/v7//j4+P/09PT/8PDw/+3t7f/q6ur/5+fn/+Xl5f/j4+P/4eHh/+Dg4P/e3t7/3d3d/93d3f/c3Nz/3Nzc/93d3f/d3d3/3t7e/+Dg4P/h4eH/4+Pj/+Xl5f/n5+f/6urq/+3t7f/w8PD/9PT0//j4+P/7+/v////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9/f3/+Pj4//T09P/w8PD/7Ozs/+jo6P/l5eX/4uLi/9/f3//d3d3/29vb/9nZ2f/X19f/1tbW/9XV1f/U1NT/1NTU/9TU1P/U1NT/1dXV/9bW1v/X19f/2dnZ/9vb2//d3d3/39/f/+Li4v/l5eX/6Ojo/+zs7P/w8PD/9PT0//j4+P/9/f3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////6+vr/9fX1//Hx8f/s7Oz/6Ojo/+Tk5P/g4OD/3d3d/9ra2v/X19f/1NTU/9LS0v/Q0ND/zs7O/83Nzf/MzMz/y8vL/8vLy//Ly8v/y8vL/8zMzP/Nzc3/zs7O/9DQ0P/S0tL/1NTU/9fX1//a2tr/3d3d/+Dg4P/k5OT/6Ojo/+zs7P/x8fH/9fX1//r6+v////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////39/f/4+Pj/8/Pz/+7u7v/p6en/5eXl/+Dg4P/c3Nz/2dnZ/9XV1f/S0tL/z8/P/8zMzP/Kysr/yMjI/8bGxv/FxcX/xMTE/8PDw//CwsL/wsLC/8PDw//ExMT/xcXF/8bGxv/IyMj/ysrK/8zMzP/Pz8//0tLS/9XV1f/Z2dn/3Nzc/+Dg4P/l5eX/6enp/+7u7v/z8/P/+Pj4//39/f////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////z8/P/39/f/8fHx/+zs7P/n5+f/4uLi/93d3f/Z2dn/1dXV/9HR0f/Nzc3/ysrK/8fHx//ExMT/wcHB/7+/v/+9vb3/vLy8/7u7u/+6urr/urq6/7q6uv+6urr/u7u7/7y8vP+9vb3/v7+//8HBwf/ExMT/x8fH/8rKyv/Nzc3/0dHR/9XV1f/Z2dn/3d3d/+Li4v/n5+f/7Ozs//Hx8f/39/f//Pz8//////////////////////////////////////////////////////////////////////////////////////////////////////////////////z8/P/29vb/8PDw/+rq6v/l5eX/4ODg/9vb2//W1tb/0dHR/83Nzf/Jycn/xcXF/8LCwv+/v7//vLy8/7m5uf+3t7f/tbW1/7Ozs/+ysrL/srKy/7Gxsf+xsbH/srKy/7Kysv+zs7P/tbW1/7e3t/+5ubn/vLy8/7+/v//CwsL/xcXF/8nJyf/Nzc3/0dHR/9bW1v/b29v/4ODg/+Xl5f/q6ur/8PDw//b29v/8/Pz///////////////////////////////////////////////////////////////////////////////////////////////////////z8/P/29vb/7+/v/+rq6v/k5OT/3t7e/9nZ2f/U1NT/z8/P/8rKyv/Gxsb/wcHB/729vf+6urr/tra2/7Ozs/+xsbH/rq6u/6ysrP+rq6v/qqqq/6mpqf+pqan/qamp/6mpqf+qqqr/q6ur/6ysrP+urq7/sbGx/7Ozs/+2trb/urq6/729vf/BwcH/xsbG/8rKyv/Pz8//1NTU/9nZ2f/e3t7/5OTk/+rq6v/v7+//9vb2//z8/P////////////////////////////////////////////////////////////////////////////////////////////z8/P/29vb/7+/v/+np6f/j4+P/3d3d/9jY2P/S0tL/zc3N/8jIyP/Dw8P/vr6+/7q6uv+2trb/srKy/66urv+rq6v/qamp/6ampv+kpKT/oqKi/6Ghof+goKD/oKCg/6CgoP+goKD/oaGh/6Kiov+kpKT/pqam/6mpqf+rq6v/rq6u/7Kysv+2trb/urq6/76+vv/Dw8P/yMjI/83Nzf/S0tL/2NjY/93d3f/j4+P/6enp/+/v7//29vb//Pz8//////////////////////////////////////////////////////////////////////////////////39/f/39/f/8PDw/+rq6v/j4+P/3d3d/9fX1//R0dH/y8vL/8bGxv/BwcH/vLy8/7e3t/+ysrL/rq6u/6qqqv+mpqb/o6Oj/6CgoP+enp7/nJyc/5qamv+ZmZn/mJiY/5eXl/+Xl5f/mJiY/5mZmf+ampr/nJyc/56env+goKD/o6Oj/6ampv+qqqr/rq6u/7Kysv+3t7f/vLy8/8HBwf/Gxsb/y8vL/9HR0f/X19f/3d3d/+Pj4//q6ur/8PDw//f39//9/f3////////////////////////////////////////////////////////////////////////////4+Pj/8fHx/+rq6v/k5OT/3d3d/9fX1//R0dH/y8vL/8XFxf+/v7//urq6/7W1tf+wsLD/q6ur/6ampv+ioqL/n5+f/5ubm/+YmJj/lZWV/5OTk/+RkZH/kJCQ/4+Pj/+Pj4//j4+P/4+Pj/+QkJD/kZGR/5OTk/+VlZX/mJiY/5ubm/+fn5//oqKi/6ampv+rq6v/sLCw/7W1tf+6urr/v7+//8XFxf/Ly8v/0dHR/9fX1//d3d3/5OTk/+rq6v/x8fH/+Pj4///////////////////////////////////////////////////////////////////////6+vr/8/Pz/+zs7P/l5eX/3t7e/9jY2P/R0dH/y8vL/8XFxf+/v7//ubm5/7Ozs/+urq7/qamp/6SkpP+fn5//m5ub/5eXl/+Tk5P/kJCQ/42Njf+Li4v/iYmJ/4eHh/+Ghob/hoaG/4aGhv+Ghob/h4eH/4mJif+Li4v/jY2N/5CQkP+Tk5P/l5eX/5ubm/+fn5//pKSk/6mpqf+urq7/s7Oz/7m5uf+/v7//xcXF/8vLy//R0dH/2NjY/97e3v/l5eX/7Ozs//Pz8//6+vr////////////////////////////////////////////////////////////9/f3/9fX1/+7u7v/n5+f/4ODg/9nZ2f/S0tL/y8vL/8XFxf+/v7//uLi4/7Kysv+srKz/p6en/6Kiov+cnJz/mJiY/5OTk/+Pj4//i4uL/4iIiP+FhYX/goKC/4CAgP9/f3//fn5+/319ff99fX3/fn5+/39/f/+AgID/goKC/4WFhf+IiIj/i4uL/4+Pj/+Tk5P/mJiY/5ycnP+ioqL/p6en/6ysrP+ysrL/uLi4/7+/v//FxcX/y8vL/9LS0v/Z2dn/4ODg/+fn5//u7u7/9fX1//39/f//////////////////////////////////////////////////////+Pj4//Hx8f/p6en/4uLi/9vb2//U1NT/zc3N/8bGxv+/v7//ubm5/7Kysv+srKz/pqam/6CgoP+bm5v/lZWV/5CQkP+MjIz/h4eH/4ODg/+AgID/fX19/3p6ev94eHj/dnZ2/3V1df91dXX/dXV1/3V1df92dnb/eHh4/3p6ev99fX3/gICA/4ODg/+Hh4f/jIyM/5CQkP+VlZX/m5ub/6CgoP+mpqb/rKys/7Kysv+5ubn/v7+//8bGxv/Nzc3/1NTU/9vb2//i4uL/6enp//Hx8f/4+Pj/////////////////////////////////////////////////+/v7//T09P/s7Oz/5eXl/93d3f/W1tb/z8/P/8jIyP/BwcH/urq6/7Ozs/+srKz/pqam/6CgoP+ampr/lJSU/4+Pj/+JiYn/hISE/4CAgP98fHz/eHh4/3V1df9ycnL/b29v/25ubv9tbW3/bGxs/2xsbP9tbW3/bm5u/29vb/9ycnL/dXV1/3h4eP98fHz/gICA/4SEhP+JiYn/j4+P/5SUlP+ampr/oKCg/6ampv+srKz/s7Oz/7q6uv/BwcH/yMjI/8/Pz//W1tb/3d3d/+Xl5f/s7Oz/9PT0//v7+/////////////////////////////////////////////j4+P/w8PD/6Ojo/+Dg4P/Z2dn/0dHR/8rKyv/Dw8P/vLy8/7W1tf+urq7/p6en/6CgoP+ampr/lJSU/46Ojv+IiIj/goKC/319ff94eHj/dHR0/3BwcP9tbW3/ampq/2dnZ/9lZWX/ZGRk/2NjY/9jY2P/ZGRk/2VlZf9nZ2f/ampq/21tbf9wcHD/dHR0/3h4eP99fX3/goKC/4iIiP+Ojo7/lJSU/5qamv+goKD/p6en/66urv+1tbX/vLy8/8PDw//Kysr/0dHR/9nZ2f/g4OD/6Ojo//Dw8P/4+Pj///////////////////////////////////////z8/P/09PT/7Ozs/+Tk5P/c3Nz/1dXV/83Nzf/Gxsb/vr6+/7e3t/+wsLD/qamp/6Kiov+bm5v/lJSU/46Ojv+Hh4f/gYGB/3x8fP92dnb/cXFx/21tbf9oaGj/ZWVl/2FhYf9fX1//XV1d/1tbW/9bW1v/W1tb/1tbW/9dXV3/X19f/2FhYf9lZWX/aGho/21tbf9xcXH/dnZ2/3x8fP+BgYH/h4eH/46Ojv+UlJT/m5ub/6Kiov+pqan/sLCw/7e3t/++vr7/xsbG/83Nzf/V1dX/3Nzc/+Tk5P/s7Oz/9PT0//z8/P/////////////////////////////////4+Pj/8PDw/+jo6P/g4OD/2dnZ/9HR0f/Jycn/wcHB/7q6uv+ysrL/q6ur/6SkpP+cnJz/lZWV/4+Pj/+IiIj/gYGB/3t7e/91dXX/b29v/2pqav9lZWX/YWFh/11dXf9ZWVn/VlZW/1RUVP9TU1P/UlJS/1JSUv9TU1P/VFRU/1ZWVv9ZWVn/XV1d/2FhYf9lZWX/ampq/29vb/91dXX/e3t7/4GBgf+IiIj/j4+P/5WVlf+cnJz/pKSk/6urq/+ysrL/urq6/8HBwf/Jycn/0dHR/9nZ2f/g4OD/6Ojo//Dw8P/4+Pj////////////////////////////9/f3/9fX1/+3t7f/l5eX/3d3d/9XV1f/Nzc3/xcXF/729vf+2trb/rq6u/6ampv+fn5//mJiY/5CQkP+JiYn/goKC/3x8fP91dXX/b29v/2lpaf9jY2P/Xl5e/1lZWf9VVVX/UVFR/05OTv9MTEz/SkpK/0lJSf9JSUn/SkpK/0xMTP9OTk7/UVFR/1VVVf9ZWVn/Xl5e/2NjY/9paWn/b29v/3V1df98fHz/goKC/4mJif+QkJD/mJiY/5+fn/+mpqb/rq6u/7a2tv+9vb3/xcXF/83Nzf/V1dX/3d3d/+Xl5f/t7e3/9fX1//39/f//////////////////////+/v7//Ly8v/q6ur/4uLi/9ra2v/S0tL/ysrK/8LCwv+6urr/srKy/6qqqv+ioqL/m5ub/5OTk/+MjIz/hISE/319ff92dnb/b29v/2lpaf9jY2P/XV1d/1dXV/9SUlL/TU1N/0lJSf9GRkb/Q0ND/0JCQv9BQUH/QUFB/0JCQv9DQ0P/RkZG/0lJSf9NTU3/UlJS/1dXV/9dXV3/Y2Nj/2lpaf9vb2//dnZ2/319ff+EhIT/jIyM/5OTk/+bm5v/oqKi/6qqqv+ysrL/urq6/8LCwv/Kysr/0tLS/9ra2v/i4uL/6urq//Ly8v/7+/v///////////////////////j4+P/w8PD/5+fn/9/f3//X19f/z8/P/8fHx/+/v7//tra2/66urv+mpqb/n5+f/5eXl/+Pj4//h4eH/4CAgP94eHj/cXFx/2pqav9jY2P/XV1d/1ZWVv9QUFD/S0tL/0ZGRv9CQkL/Pj4+/zs7O/85OTn/ODg4/zg4OP85OTn/Ozs7/z4+Pv9CQkL/RkZG/0tLS/9QUFD/VlZW/11dXf9jY2P/ampq/3Fxcf94eHj/gICA/4eHh/+Pj4//l5eX/5+fn/+mpqb/rq6u/7a2tv+/v7//x8fH/8/Pz//X19f/39/f/+fn5//w8PD/+Pj4//////////////////7+/v/29vb/7e3t/+Xl5f/d3d3/1NTU/8zMzP/ExMT/vLy8/7Ozs/+rq6v/o6Oj/5ubm/+Tk5P/i4uL/4ODg/98fHz/dHR0/21tbf9lZWX/Xl5e/1dXV/9QUFD/SkpK/0RERP8/Pz//Ojo6/zY2Nv8zMzP/MTEx/y8vL/8vLy//MTEx/zMzM/82Njb/Ojo6/z8/P/9ERET/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YWFh/2hoaP9wcHD/eHh4/4CAgP+IiIj/kJCQ/5iYmP+goKD/qamp/7Gxsf+5ubn/wcHB/8rKyv/S0tL/29vb/+Pj4//r6+v/9PT0//z8/P////////////7+/v/29vb/7e3t/+Xl5f/d3d3/1NTU/8zMzP/ExMT/vLy8/7Ozs/+rq6v/o6Oj/5ubm/+Tk5P/i4uL/4ODg/98fHz/dHR0/21tbf9lZWX/Xl5e/1dXV/9QUFD/SkpK/0RERP8/Pz//Ojo6/zY2Nv8zMzP/MTEx/y8vL/8vLy//MTEx/zMzM/82Njb/Ojo6/z8/P/9ERET/SkpK/1BQUP9XV1f/Xl5e/2VlZf9tbW3/dHR0/3x8fP+Dg4P/i4uL/5OTk/+bm5v/o6Oj/6urq/+zs7P/vLy8/8TExP/MzMz/1NTU/93d3f/l5eX/7e3t//b29v/+/v7/////////////////+Pj4//Dw8P/n5+f/39/f/9fX1//Pz8//x8fH/7+/v/+2trb/rq6u/6ampv+fn5//l5eX/4+Pj/+Hh4f/gICA/3h4eP9xcXH/ampq/2NjY/9dXV3/VlZW/1BQUP9LS0v/RkZG/0JCQv8+Pj7/Ozs7/zk5Of84ODj/ODg4/zk5Of87Ozv/Pj4+/0JCQv9GRkb/S0tL/1BQUP9WVlb/XV1d/2NjY/9qamr/cXFx/3h4eP+AgID/h4eH/4+Pj/+Xl5f/n5+f/6ampv+urq7/tra2/7+/v//Hx8f/z8/P/9fX1//f39//5+fn//Dw8P/4+Pj///////////////////////v7+//y8vL/6urq/+Li4v/a2tr/0tLS/8rKyv/CwsL/urq6/7Kysv+qqqr/oqKi/5ubm/+Tk5P/jIyM/4SEhP99fX3/dnZ2/29vb/9paWn/Y2Nj/11dXf9XV1f/UlJS/01NTf9JSUn/RkZG/0NDQ/9CQkL/QUFB/0FBQf9CQkL/Q0ND/0ZGRv9JSUn/TU1N/1JSUv9XV1f/XV1d/2NjY/9paWn/b29v/3Z2dv99fX3/hISE/4yMjP+Tk5P/m5ub/6Kiov+qqqr/srKy/7q6uv/CwsL/ysrK/9LS0v/a2tr/4uLi/+rq6v/y8vL/+/v7///////////////////////9/f3/9fX1/+3t7f/l5eX/3d3d/9XV1f/Nzc3/xcXF/729vf+2trb/rq6u/6ampv+fn5//mJiY/5CQkP+JiYn/goKC/3x8fP91dXX/b29v/2lpaf9jY2P/Xl5e/1lZWf9VVVX/UVFR/05OTv9MTEz/SkpK/0lJSf9JSUn/SkpK/0xMTP9OTk7/UVFR/1VVVf9ZWVn/Xl5e/2NjY/9paWn/b29v/3V1df98fHz/goKC/4mJif+QkJD/mJiY/5+fn/+mpqb/rq6u/7a2tv+9vb3/xcXF/83Nzf/V1dX/3d3d/+Xl5f/t7e3/9fX1//39/f////////////////////////////j4+P/w8PD/6Ojo/+Dg4P/Z2dn/0dHR/8nJyf/BwcH/urq6/7Kysv+rq6v/pKSk/5ycnP+VlZX/j4+P/4iIiP+BgYH/e3t7/3V1df9vb2//ampq/2VlZf9hYWH/XV1d/1lZWf9WVlb/VFRU/1NTU/9SUlL/UlJS/1NTU/9UVFT/VlZW/1lZWf9dXV3/YWFh/2VlZf9qamr/b29v/3V1df97e3v/gYGB/4iIiP+Pj4//lZWV/5ycnP+kpKT/q6ur/7Kysv+6urr/wcHB/8nJyf/R0dH/2dnZ/+Dg4P/o6Oj/8PDw//j4+P/////////////////////////////////8/Pz/9PT0/+zs7P/k5OT/3Nzc/9XV1f/Nzc3/xsbG/76+vv+3t7f/sLCw/6mpqf+ioqL/m5ub/5SUlP+Ojo7/h4eH/4GBgf98fHz/dnZ2/3Fxcf9tbW3/aGho/2VlZf9hYWH/X19f/11dXf9bW1v/W1tb/1tbW/9bW1v/XV1d/19fX/9hYWH/ZWVl/2hoaP9tbW3/cXFx/3Z2dv98fHz/gYGB/4eHh/+Ojo7/lJSU/5ubm/+ioqL/qamp/7CwsP+3t7f/vr6+/8bGxv/Nzc3/1dXV/9zc3P/k5OT/7Ozs//T09P/8/Pz///////////////////////////////////////j4+P/w8PD/6Ojo/+Dg4P/Z2dn/0dHR/8rKyv/Dw8P/vLy8/7W1tf+urq7/p6en/6CgoP+ampr/lJSU/46Ojv+IiIj/goKC/319ff94eHj/dHR0/3BwcP9tbW3/ampq/2dnZ/9lZWX/ZGRk/2NjY/9jY2P/ZGRk/2VlZf9nZ2f/ampq/21tbf9wcHD/dHR0/3h4eP99fX3/goKC/4iIiP+Ojo7/lJSU/5qamv+goKD/p6en/66urv+1tbX/vLy8/8PDw//Kysr/0dHR/9nZ2f/g4OD/6Ojo//Dw8P/4+Pj////////////////////////////////////////////7+/v/9PT0/+zs7P/l5eX/3d3d/9bW1v/Pz8//yMjI/8HBwf+6urr/s7Oz/6ysrP+mpqb/oKCg/5qamv+UlJT/j4+P/4mJif+EhIT/gICA/3x8fP94eHj/dXV1/3Jycv9vb2//bm5u/21tbf9sbGz/bGxs/21tbf9ubm7/b29v/3Jycv91dXX/eHh4/3x8fP+AgID/hISE/4mJif+Pj4//lJSU/5qamv+goKD/pqam/6ysrP+zs7P/urq6/8HBwf/IyMj/z8/P/9bW1v/d3d3/5eXl/+zs7P/09PT/+/v7//////////////////////////////////////////////////j4+P/x8fH/6enp/+Li4v/b29v/1NTU/83Nzf/Gxsb/v7+//7m5uf+ysrL/rKys/6ampv+goKD/m5ub/5WVlf+QkJD/jIyM/4eHh/+Dg4P/gICA/319ff96enr/eHh4/3Z2dv91dXX/dXV1/3V1df91dXX/dnZ2/3h4eP96enr/fX19/4CAgP+Dg4P/h4eH/4yMjP+QkJD/lZWV/5ubm/+goKD/pqam/6ysrP+ysrL/ubm5/7+/v//Gxsb/zc3N/9TU1P/b29v/4uLi/+np6f/x8fH/+Pj4///////////////////////////////////////////////////////9/f3/9fX1/+7u7v/n5+f/4ODg/9nZ2f/S0tL/y8vL/8XFxf+/v7//uLi4/7Kysv+srKz/p6en/6Kiov+cnJz/mJiY/5OTk/+Pj4//i4uL/4iIiP+FhYX/goKC/4CAgP9/f3//fn5+/319ff99fX3/fn5+/39/f/+AgID/goKC/4WFhf+IiIj/i4uL/4+Pj/+Tk5P/mJiY/5ycnP+ioqL/p6en/6ysrP+ysrL/uLi4/7+/v//FxcX/y8vL/9LS0v/Z2dn/4ODg/+fn5//u7u7/9fX1//39/f////////////////////////////////////////////////////////////r6+v/z8/P/7Ozs/+Xl5f/e3t7/2NjY/9HR0f/Ly8v/xcXF/7+/v/+5ubn/s7Oz/66urv+pqan/pKSk/5+fn/+bm5v/l5eX/5OTk/+QkJD/jY2N/4uLi/+JiYn/h4eH/4aGhv+Ghob/hoaG/4aGhv+Hh4f/iYmJ/4uLi/+NjY3/kJCQ/5OTk/+Xl5f/m5ub/5+fn/+kpKT/qamp/66urv+zs7P/ubm5/7+/v//FxcX/y8vL/9HR0f/Y2Nj/3t7e/+Xl5f/s7Oz/8/Pz//r6+v//////////////////////////////////////////////////////////////////////+Pj4//Hx8f/q6ur/5OTk/93d3f/X19f/0dHR/8vLy//FxcX/v7+//7q6uv+1tbX/sLCw/6urq/+mpqb/oqKi/5+fn/+bm5v/mJiY/5WVlf+Tk5P/kZGR/5CQkP+Pj4//j4+P/4+Pj/+Pj4//kJCQ/5GRkf+Tk5P/lZWV/5iYmP+bm5v/n5+f/6Kiov+mpqb/q6ur/7CwsP+1tbX/urq6/7+/v//FxcX/y8vL/9HR0f/X19f/3d3d/+Tk5P/q6ur/8fHx//j4+P////////////////////////////////////////////////////////////////////////////39/f/39/f/8PDw/+rq6v/j4+P/3d3d/9fX1//R0dH/y8vL/8bGxv/BwcH/vLy8/7e3t/+ysrL/rq6u/6qqqv+mpqb/o6Oj/6CgoP+enp7/nJyc/5qamv+ZmZn/mJiY/5eXl/+Xl5f/mJiY/5mZmf+ampr/nJyc/56env+goKD/o6Oj/6ampv+qqqr/rq6u/7Kysv+3t7f/vLy8/8HBwf/Gxsb/y8vL/9HR0f/X19f/3d3d/+Pj4//q6ur/8PDw//f39//9/f3//////////////////////////////////////////////////////////////////////////////////Pz8//b29v/v7+//6enp/+Pj4//d3d3/2NjY/9LS0v/Nzc3/yMjI/8PDw/++vr7/urq6/7a2tv+ysrL/rq6u/6urq/+pqan/pqam/6SkpP+ioqL/oaGh/6CgoP+goKD/oKCg/6CgoP+hoaH/oqKi/6SkpP+mpqb/qamp/6urq/+urq7/srKy/7a2tv+6urr/vr6+/8PDw//IyMj/zc3N/9LS0v/Y2Nj/3d3d/+Pj4//p6en/7+/v//b29v/8/Pz////////////////////////////////////////////////////////////////////////////////////////////8/Pz/9vb2/+/v7//q6ur/5OTk/97e3v/Z2dn/1NTU/8/Pz//Kysr/xsbG/8HBwf+9vb3/urq6/7a2tv+zs7P/sbGx/66urv+srKz/q6ur/6qqqv+pqan/qamp/6mpqf+pqan/qqqq/6urq/+srKz/rq6u/7Gxsf+zs7P/tra2/7q6uv+9vb3/wcHB/8bGxv/Kysr/z8/P/9TU1P/Z2dn/3t7e/+Tk5P/q6ur/7+/v//b29v/8/Pz///////////////////////////////////////////////////////////////////////////////////////////////////////z8/P/29vb/8PDw/+rq6v/l5eX/4ODg/9vb2//W1tb/0dHR/83Nzf/Jycn/xcXF/8LCwv+/v7//vLy8/7m5uf+3t7f/tbW1/7Ozs/+ysrL/srKy/7Gxsf+xsbH/srKy/7Kysv+zs7P/tbW1/7e3t/+5ubn/vLy8/7+/v//CwsL/xcXF/8nJyf/Nzc3/0dHR/9bW1v/b29v/4ODg/+Xl5f/q6ur/8PDw//b29v/8/Pz//////////////////////////////////////////////////////////////////////////////////////////////////////////////////Pz8//f39//x8fH/7Ozs/+fn5//i4uL/3d3d/9nZ2f/V1dX/0dHR/83Nzf/Kysr/x8fH/8TExP/BwcH/v7+//729vf+8vLz/u7u7/7q6uv+6urr/urq6/7q6uv+7u7v/vLy8/729vf+/v7//wcHB/8TExP/Hx8f/ysrK/83Nzf/R0dH/1dXV/9nZ2f/d3d3/4uLi/+fn5//s7Oz/8fHx//f39//8/Pz////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9/f3/+Pj4//Pz8//u7u7/6enp/+Xl5f/g4OD/3Nzc/9nZ2f/V1dX/0tLS/8/Pz//MzMz/ysrK/8jIyP/Gxsb/xcXF/8TExP/Dw8P/wsLC/8LCwv/Dw8P/xMTE/8XFxf/Gxsb/yMjI/8rKyv/MzMz/z8/P/9LS0v/V1dX/2dnZ/9zc3P/g4OD/5eXl/+np6f/u7u7/8/Pz//j4+P/9/f3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////6+vr/9fX1//Hx8f/s7Oz/6Ojo/+Tk5P/g4OD/3d3d/9ra2v/X19f/1NTU/9LS0v/Q0ND/zs7O/83Nzf/MzMz/y8vL/8vLy//Ly8v/y8vL/8zMzP/Nzc3/zs7O/9DQ0P/S0tL/1NTU/9fX1//a2tr/3d3d/+Dg4P/k5OT/6Ojo/+zs7P/x8fH/9fX1//r6+v////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////39/f/4+Pj/9PT0//Dw8P/s7Oz/6Ojo/+Xl5f/i4uL/39/f/93d3f/b29v/2dnZ/9fX1//W1tb/1dXV/9TU1P/U1NT/1NTU/9TU1P/V1dX/1tbW/9fX1//Z2dn/29vb/93d3f/f39//4uLi/+Xl5f/o6Oj/7Ozs//Dw8P/09PT/+Pj4//39/f////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////v7+//4+Pj/9PT0//Dw8P/t7e3/6urq/+fn5//l5eX/4+Pj/+Hh4f/g4OD/3t7e/93d3f/d3d3/3Nzc/9zc3P/d3d3/3d3d/97e3v/g4OD/4eHh/+Pj4//l5eX/5+fn/+rq6v/t7e3/8PDw//T09P/4+Pj/+/v7//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////z8/P/4+Pj/9fX1//Ly8v/w8PD/7e3t/+vr6//q6ur/6Ojo/+fn5//m5ub/5eXl/+Xl5f/l5eX/5eXl/+bm5v/n5+f/6Ojo/+rq6v/r6+v/7e3t//Dw8P/y8vL/9fX1//j4+P/8/Pz///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////39/f/7+/v/+Pj4//b29v/09PT/8vLy//Hx8f/v7+//7+/v/+7u7v/u7u7/7u7u/+7u7v/v7+//7+/v//Hx8f/y8vL/9PT0//b29v/4+Pj/+/v7//39/f/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/v7//Pz8//v7+//5+fn/+Pj4//f39//39/f/9vb2//b29v/39/f/9/f3//j4+P/5+fn/+/v7//z8/P/+/v7//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w=="),
+"format": "RGBA8",
+"height": 64,
+"mipmaps": false,
+"width": 64
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_xxgnu"]
+image = SubResource("Image_6o0jv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2crcq"]
+resource_local_to_scene = true
+render_priority = -1
+shader = ExtResource("3_njgbj")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_support_clock = 0.0
+shader_parameter/support_clock = 0.0
+shader_parameter/support_envelope = 1.0
+shader_parameter/Intensity = 2.0
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/Texture_Add = ExtResource("4_i75dv")
+shader_parameter/Enable_Distortion = false
+shader_parameter/Dist_Zoom_Strenght = 1.0
+shader_parameter/Diost_repeat_strenght = 1.0
+shader_parameter/Distortion_Speed_XY = Vector2(0, 0)
+shader_parameter/Distortion_Attenuation = 5.0
+shader_parameter/Zoom_Strenght = 0.5
+shader_parameter/repeat = 2.0
+shader_parameter/Speed_XY = Vector2(-1, 0)
+shader_parameter/Texture_Main = ExtResource("5_up3v5")
+shader_parameter/Power = 1.0
+shader_parameter/Texture_Substract = SubResource("ImageTexture_xxgnu")
+shader_parameter/Proximity_Fade = 1.0
+shader_parameter/Color_1D_Gradient = SubResource("ImageTexture_odegb")
+shader_parameter/Transparency = 0.0
+metadata/factory_prepared_shader = ExtResource("3_njgbj")
+metadata/factory_opacity_prepared_shader = ExtResource("3_njgbj")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_names = ["support_clock"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_20vpw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sgk5p"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("6_p0qp8")
+albedo_texture_force_srgb = true
+billboard_keep_scale = true
+
+[sub_resource type="Curve" id="Curve_u85un"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.142857, 0.857143), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_4kolc"]
+texture_mode = 1
+curve = SubResource("Curve_u85un")
+
+[sub_resource type="Curve" id="Curve_jimo0"]
+_data = [Vector2(0.298611, 1), 0.0, 0.0, 0, 0, Vector2(0.795139, 0), -3.31751, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_sy6f1"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0.0173611, 0), 0.0, 4.43493, 0, 0, Vector2(0.447005, 1.68132), 3.17949, 3.17949, 0, 0, Vector2(1, 0.263736), -3.2869, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_dfrus"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_wxqls"]
+curve_x = SubResource("Curve_jimo0")
+curve_y = SubResource("Curve_sy6f1")
+curve_z = SubResource("Curve_dfrus")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7wyh7"]
+resource_local_to_scene = true
+lifetime_randomness = 0.27
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 0.3
+initial_velocity_max = 0.3
+gravity = Vector3(0, 0, 0)
+scale_min = 0.099999994
+scale_max = 0.19999999
+scale_curve = SubResource("CurveXYZTexture_wxqls")
+color = Color(0.76, 1.1, 0.9572, 1)
+alpha_curve = SubResource("CurveTexture_4kolc")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_x3ttp"]
+_surfaces = [{
+"aabb": AABB(-1, 0, 0, 2, 2, 1e-05),
+"format": 34359742465,
+"index_count": 108,
+"index_data": PackedByteArray("AAATAAIAAgATAAEAAAAUABMAAwAUAAAAEwAVAAEAAQAVABAAFQARABAAEAARABIAFQAPABEAEwAJABUACQAPABUAFAAJABMACQAOAA8AFgAOAAkAFAAWAAkAFgAGAA4AAwAXABQAFwAWABQABQAXAAMAGAAGABYAFwAYABYAGAAHAAYABQAZABcAGQAYABcABAAZAAUAGgAHABgAGQAaABgAGgALAAcACgALABoAGwAaABkAGwAKABoABAAbABkADAAKABsACAAbAAQACAAMABsADQAMAAgA"),
+"lods": [0.00016600123, PackedByteArray("AAABAAIAAwABAAAAAwAEAAEABQAEAAMABAAGAAEABAAHAAYACAAHAAQAAQAGAAkACAAKAAcACgALAAcADAAKAAgADQAMAAgABgAOAAkACQAOAA8AAQAJABAACQAPABEACQARABAAEAARABIA")],
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 28,
+"vertex_data": PackedByteArray("7+NgP1hV1T8AAAAAn6qqPgAAAEAAAAAAAACAPwAAAEAAAAAA3sdBP6iqqj8AAAAAzY8DP7CqKj8AAAAA3qsiPwAAgD8AAAAAzY8Dv7CqKj8AAAAAeefIvp+qqj4AAAAAeefIPp+qqj4AAAAA9S+Bvqiqqj8AAAAA9+m4vQAAAAAAAAAAV6+KvgAAAAAAAAAA9+m4PQAAAAAAAAAAV6+KPgAAAAAAAAAA3qsivwAAgD8AAAAA3sdBv6iqqj8AAAAAn6qqvgAAAEAAAAAA7+Ngv1hV1T8AAAAAAACAvwAAAEAAAAAASu2VPlhV1T8AAAAA9S+BPqiqqj8AAAAASu2VvlhV1T8AAAAAP+VYvgAAgD8AAAAAP+VYPgAAgD8AAAAAUWovvrCqKj8AAAAAUWovPrCqKj8AAAAApu8Fvp+qqj4AAAAApu8FPp+qqj4AAAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_71ed6"]
+_surfaces = [{
+"aabb": AABB(-1, 0, 0, 2, 2, 1e-05),
+"attribute_data": PackedByteArray("AACAP8GqKj6wqio/AAAAAAAAgD8AAAAAAACAP5+qqj4AAIA/sKoqPwAAgD8AAAA/AAAAALCqKj8AAAAAUFVVPwAAgD9QVVU/n6qqPp+qqj6fqqo+AACAPwAAAAAAAIA/sKoqPwAAgD8AAIA/AACAPwAAAAAAAAA/AAAAAJ+qqj6fqqo+AAAAAAAAAADBqio+AAAAAAAAAACwqio/waoqPrCqKj+fqqo+n6qqPsGqKj6fqqo+AAAAP7CqKj8AAAA/n6qqPrCqKj+wqio/sKoqP5+qqj5QVVU/sKoqP1BVVT8="),
+"format": 34359742487,
+"index_count": 108,
+"index_data": PackedByteArray("AAATAAIAAgATAAEAAAAUABMAAwAUAAAAEwAVAAEAAQAVABAAFQARABAAEAARABIAFQAPABEAEwAJABUACQAPABUAFAAJABMACQAOAA8AFgAOAAkAFAAWAAkAFgAGAA4AAwAXABQAFwAWABQABQAXAAMAGAAGABYAFwAYABYAGAAHAAYABQAZABcAGQAYABcABAAZAAUAGgAHABgAGQAaABgAGgALAAcACgALABoAGwAaABkAGwAKABoABAAbABkADAAKABsACAAbAAQACAAMABsADQAMAAgA"),
+"lods": [0.00016600123, PackedByteArray("AAABAAIAAwABAAAAAwAEAAEABQAEAAMABAAGAAEABAAHAAYACAAHAAQAAQAGAAkACAAKAAcACgALAAcADAAKAAgADQAMAAgABgAOAAkACQAOAA8AAQAJABAACQAPABEACQARABAAEAARABIA")],
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 28,
+"vertex_data": PackedByteArray("7+NgP1hV1T8AAAAAn6qqPgAAAEAAAAAAAACAPwAAAEAAAAAA3sdBP6iqqj8AAAAAzY8DP7CqKj8AAAAA3qsiPwAAgD8AAAAAzY8Dv7CqKj8AAAAAeefIvp+qqj4AAAAAeefIPp+qqj4AAAAA9S+Bvqiqqj8AAAAA9+m4vQAAAAAAAAAAV6+KvgAAAAAAAAAA9+m4PQAAAAAAAAAAV6+KPgAAAAAAAAAA3qsivwAAgD8AAAAA3sdBv6iqqj8AAAAAn6qqvgAAAEAAAAAA7+Ngv1hV1T8AAAAAAACAvwAAAEAAAAAASu2VPlhV1T8AAAAA9S+BPqiqqj8AAAAASu2VvlhV1T8AAAAAP+VYvgAAgD8AAAAAP+VYPgAAgD8AAAAAUWovvrCqKj8AAAAAUWovPrCqKj8AAAAApu8Fvp+qqj4AAAAApu8FPp+qqj4AAAAA/3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////78=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_x3ttp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qoty0"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("7_3dvst")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_support_clock = 0.0
+shader_parameter/support_clock = 0.0
+shader_parameter/support_envelope = 1.0
+shader_parameter/Color = Color(0.40500003, 1, 0.75009996, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/smoke_texture = ExtResource("9_0hpvw")
+shader_parameter/Power_Contrast = 1.0
+shader_parameter/dissolver_radial_uv = false
+shader_parameter/Mask_Zoom_Strenght = 1.0
+shader_parameter/Mask_repeat = 1.0
+shader_parameter/Mask_Scale = Vector2(1, 1)
+shader_parameter/Mask_pivot = Vector2(1, 1)
+shader_parameter/smake_mask = ExtResource("8_dayuq")
+shader_parameter/ProximityFade = 0.1
+metadata/factory_prepared_shader = ExtResource("7_3dvst")
+metadata/factory_opacity_prepared_shader = ExtResource("7_3dvst")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_names = ["support_clock"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_xhnp4"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.76087, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_embmw"]
+texture_mode = 1
+curve = SubResource("Curve_xhnp4")
+
+[sub_resource type="Curve" id="Curve_7s0el"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ivv5h"]
+curve = SubResource("Curve_7s0el")
+
+[sub_resource type="Gradient" id="Gradient_u1ylt"]
+colors = PackedColorArray(0, 0, 0, 1, 0.691357, 0.691357, 0.691357, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ipyo2"]
+gradient = SubResource("Gradient_u1ylt")
+
+[sub_resource type="Curve" id="Curve_8bx1y"]
+_data = [Vector2(0, 0.824176), 0.0, -2.82747, 0, 0, Vector2(0.376812, 0.175824), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_glfk0"]
+curve = SubResource("Curve_8bx1y")
+
+[sub_resource type="Curve" id="Curve_jp8mh"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7rwof"]
+curve = SubResource("Curve_jp8mh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_12r0b"]
+resource_local_to_scene = true
+lifetime_randomness = 0.11
+particle_flag_rotate_y = true
+emission_shape_scale = Vector3(0.9, 0.35, 0.9)
+emission_shape = 1
+emission_sphere_radius = 0.4
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_max = 0.25
+angular_velocity_min = -1.60933e-05
+angular_velocity_max = -1.60933e-05
+angular_velocity_curve = SubResource("CurveTexture_ivv5h")
+radial_velocity_min = 0.4
+radial_velocity_max = 0.9
+radial_velocity_curve = SubResource("CurveTexture_glfk0")
+gravity = Vector3(0, 1, 0)
+damping_max = 2.0
+scale_min = 1.3
+scale_max = 1.95
+scale_curve = SubResource("CurveTexture_7rwof")
+color_ramp = SubResource("GradientTexture1D_ipyo2")
+alpha_curve = SubResource("CurveTexture_embmw")
+
+[sub_resource type="QuadMesh" id="QuadMesh_2gegt"]
+
+[sub_resource type="Animation" id="Animation_nbyov"]
+resource_name = "Init"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("smallparticles2:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.133333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("lines:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("smoke2init2:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("objectflare:material_override:shader_parameter/Transparency")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.333333, 0.8, 1.23333, 1.66667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0, 0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("lines:process_material:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0666667, 1.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.1, 0.2), Vector2(0.4, 0.8)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("OmniLight3D:light_energy")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.233333, 0.6, 1.46667, 1.93333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_mf2of"]
+resource_name = "RESET"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("lines:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("smoke2init2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("objectflare:material_override:shader_parameter/Transparency")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("lines:process_material:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.4, 0.8)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("OmniLight3D:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xu6uc"]
+_data = {
+&"Init": SubResource("Animation_nbyov"),
+&"RESET": SubResource("Animation_mf2of")
+}
+
+[node name="Donor" type="Node3D" unique_id=501000028]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1.2, 0)
+
+[node name="smallparticles2" type="GPUParticles3D" parent="." unique_id=1114106569]
+layers = 4
+material_override = SubResource("ShaderMaterial_x1qlh")
+cast_shadow = 0
+emitting = false
+amount = 50
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.32
+randomness = 1.0
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 60
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+process_material = SubResource("ParticleProcessMaterial_25pjn")
+draw_pass_1 = SubResource("QuadMesh_x26nt")
+
+[node name="objectflare" type="MeshInstance3D" parent="." unique_id=797207328]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -0.0235543, 0, 0)
+layers = 0
+material_override = SubResource("ShaderMaterial_2crcq")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_20vpw")
+skeleton = NodePath("../../../..")
+
+[node name="lines" type="GPUParticles3D" parent="." unique_id=1115286988]
+layers = 0
+material_override = SubResource("StandardMaterial3D_sgk5p")
+cast_shadow = 0
+emitting = false
+amount = 12
+lifetime = 1.3
+one_shot = true
+explosiveness = 0.18
+randomness = 1.0
+use_fixed_seed = true
+seed = 47292
+fixed_fps = 60
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_7wyh7")
+draw_pass_1 = SubResource("ArrayMesh_71ed6")
+
+[node name="smoke2init2" type="GPUParticles3D" parent="." unique_id=597305019]
+layers = 4
+material_override = SubResource("ShaderMaterial_qoty0")
+cast_shadow = 0
+emitting = false
+amount = 5
+lifetime = 0.85
+one_shot = true
+explosiveness = 0.52
+use_fixed_seed = true
+seed = 47293
+fixed_fps = 60
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+process_material = SubResource("ParticleProcessMaterial_12r0b")
+draw_pass_1 = SubResource("QuadMesh_2gegt")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1099501760]
+libraries/ = SubResource("AnimationLibrary_xu6uc")
+autoplay = &"Init"
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=600606497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.54192, 0.186586)
+light_color = Color(0.501333, 1, 0.32, 1)
+light_energy = 0.0

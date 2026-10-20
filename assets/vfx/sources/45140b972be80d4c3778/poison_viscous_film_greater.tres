@@ -1,0 +1,27 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/1f59768a77209ba0dc65/sheet_material.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/97323168afa18a5dee7e/cell_inverted_02.tres" id="2_a"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/38ff4a52757b3a88332d/web_02.tres" id="3_b"]
+
+[resource]
+resource_name = "Actual equipped weapon — poison.viscous_film greater candidate"
+shader = ExtResource("1_shader")
+shader_parameter/weapon_auxiliary_enabled = false
+shader_parameter/weapon_auxiliary_axis_valid = false
+shader_parameter/weapon_auxiliary_family = 2
+shader_parameter/weapon_auxiliary_variant = 0
+shader_parameter/weapon_auxiliary_strength = 0.9
+shader_parameter/weapon_auxiliary_texture_a = ExtResource("2_a")
+shader_parameter/weapon_auxiliary_texture_b = ExtResource("3_b")
+shader_parameter/weapon_auxiliary_dark = Color(0.025, 0.11, 0.035, 1.0)
+shader_parameter/weapon_auxiliary_body = Color(0.15, 0.39, 0.045, 1.0)
+shader_parameter/weapon_auxiliary_edge = Color(0.64, 0.79, 0.11, 1.0)
+metadata/variant_id = "poison.viscous_film"
+metadata/artistic_strength = "greater"
+metadata/art_status = "uncompiled_source_backed_weapon_material_candidate"
+metadata/production_qualified = false
+metadata/default_selection_changed = false
+metadata/moves_vertices = false
+metadata/changes_source_alpha = false
+metadata/adds_lights = false

@@ -1,0 +1,63 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_e2kcw"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_onqhv"]
+
+[sub_resource type="Resource" id="Resource_siv0c"]
+script = ExtResource("1_e2kcw")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/5e4766ab0720b6d13e75/ice_dome.gd"
+input = {
+"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"mode": "lifecycle",
+"shape": "ice-dome"
+},
+"side": "full",
+"simulation_hz": 144,
+&"solid_bank": "res://assets/vfx/sources/a0f71e8154eb9b74cb55/ice_dome-bank.tres",
+"source_breakup": {
+"angular_damp_per_second": 0.7,
+"angular_velocity_source_limit_radians_per_second": 1.4,
+"body_collision_layer": 2097152,
+"body_mass_kg": 0.3,
+"bounce": 0.0,
+"contact_margin_source_units": 0.002,
+"floor_collision_mask": 1,
+"friction": 1.0,
+"gravity_source_units_per_second_squared": 9.8,
+"linear_damp_per_second": 0.15,
+"radial_velocity_source_units_per_second": 1.2,
+"source_seed": 72510,
+"vertical_velocity_source_units_per_second": -0.5
+},
+"surface_partition": {
+"centre_source_units": [0.0, 0.0, 0.0],
+"chunk_count": 26,
+"direction_quantization": 100000.0,
+"source_seed": 72510
+}
+}
+provenance = "Private exact intact-surface partition; no added render rims. Original material and full existing retirement clocks retained."
+
+[resource]
+script = ExtResource("2_onqhv")
+clip_id = "wall-native/ice_dome_surface_breakup_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "dome_back"
+source_recipe = "recipes/spells/wall_of_force.json"
+components = Array[Resource]([SubResource("Resource_siv0c")])
+bindings = [{
+"component": "assembly",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 8.0
+simulation_hz = 144.0
+options = {
+"qualification": "Native-context visual review; not production approval"
+}

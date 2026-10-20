@@ -1,0 +1,136 @@
+[gd_resource type="Resource" format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/83c10b8548c55a0fd3b3/program-2f1a5640327d2a25.gdshader" id="1_5lrft"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/e58b2edf2d5c941ece59/program-1336095cfda4dbde.gdshader" id="2_d0h7d"]
+[ext_resource type="Script" path="res://assets/vfx/sources/9625d3b6646b9289c628/immutable_draws.gd" id="3_jjvx6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yvre2"]
+render_priority = 0
+shader = ExtResource("1_5lrft")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/psychic_clock = 0.0
+shader_parameter/psychic_envelope = 0.0
+shader_parameter/psychic_opacity = 1.0
+shader_parameter/psychic_tint = Color(1, 1, 1, 1)
+shader_parameter/primary_color = Color(0.8117647, 0.4509804, 0.3647059, 1)
+shader_parameter/secondary_color = Color(0.45882353, 0.24705882, 0.26666668, 1)
+shader_parameter/emission = 0.85
+shader_parameter/emission_mult = 1.0
+shader_parameter/streaks1_count = 5.0
+shader_parameter/streaks2_count = 3.0
+shader_parameter/streaks_fade = 0.6999999396496
+shader_parameter/streaks_thickness = 0.06
+shader_parameter/center_radius = 0.0
+shader_parameter/fade_radius = 0.29
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 0.5
+shader_parameter/billboard = false
+shader_parameter/gpu_head_shape = 0
+shader_parameter/gpu_head_mode = 0
+shader_parameter/gpu_head_seconds = 0.0
+shader_parameter/gpu_head_width = 0.025
+shader_parameter/gpu_head_intensity = 0.85
+shader_parameter/gpu_head_heading = Vector3(0, 0, 0)
+shader_parameter/gpu_head_side = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_hand = Vector3(0, 0, 0)
+shader_parameter/gpu_head_source_stations = false
+shader_parameter/gpu_head_count = 1
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_5lrft")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("1_5lrft")
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qffqt"]
+noise_type = 0
+fractal_octaves = 3
+fractal_lacunarity = 1.5
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pfq1o"]
+noise = SubResource("FastNoiseLite_qffqt")
+seamless = true
+seamless_blend_skirt = 0.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ltmru"]
+render_priority = 0
+shader = ExtResource("2_d0h7d")
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/psychic_clock = 0.0
+shader_parameter/psychic_envelope = 0.0
+shader_parameter/psychic_opacity = 1.0
+shader_parameter/psychic_tint = Color(1, 1, 1, 1)
+shader_parameter/primary_color = Color(0.70980394, 0.49019608, 0.39607844, 1)
+shader_parameter/secondary_color = Color(0.39607844, 0.22352941, 0.25490198, 1)
+shader_parameter/tertiary_color = Color(0.13333334, 0.19215687, 0.23137255, 1)
+shader_parameter/emission = 0.75
+shader_parameter/color_curve = 1.0
+shader_parameter/hue_variation = 0.0
+shader_parameter/use_secondary = false
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_pfq1o")
+shader_parameter/noise_scale = Vector2(1, 1)
+shader_parameter/noise_scroll = Vector2(0.12, -0.35)
+shader_parameter/shape_curve = 0.8
+shader_parameter/noise_twist = 0.0
+shader_parameter/waviness = 0.51
+shader_parameter/edge_hardness = 0.0
+shader_parameter/edge_position = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 0.5
+shader_parameter/gpu_head_shape = 0
+shader_parameter/gpu_head_mode = 0
+shader_parameter/gpu_head_seconds = 0.0
+shader_parameter/gpu_head_width = 0.025
+shader_parameter/gpu_head_intensity = 0.85
+shader_parameter/gpu_head_heading = Vector3(0, 0, 0)
+shader_parameter/gpu_head_side = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right = Vector3(0, 0, 0)
+shader_parameter/gpu_head_left_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_right_normal = Vector3(0, 0, 0)
+shader_parameter/gpu_head_hand = Vector3(0, 0, 0)
+shader_parameter/gpu_head_source_stations = false
+shader_parameter/gpu_head_count = 1
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("2_d0h7d")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("2_d0h7d")
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xcfug"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 32, 2, 2),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAgD8AAAAA/////wAAAAAAAAA9/////wAAgD8AAAA9/////wAAAAAAAIA9/////wAAgD8AAIA9/////wAAAAAAAMA9/////wAAgD8AAMA9/////wAAAAAAAAA+/////wAAgD8AAAA+/////wAAAAAAACA+/////wAAgD8AACA+/////wAAAAAAAEA+/////wAAgD8AAEA+/////wAAAAAAAGA+/////wAAgD8AAGA+/////wAAAAAAAIA+/////wAAgD8AAIA+/////wAAAAAAAJA+/////wAAgD8AAJA+/////wAAAAAAAKA+/////wAAgD8AAKA+/////wAAAAAAALA+/////wAAgD8AALA+/////wAAAAAAAMA+/////wAAgD8AAMA+/////wAAAAAAANA+/////wAAgD8AANA+/////wAAAAAAAOA+/////wAAgD8AAOA+/////wAAAAAAAPA+/////wAAgD8AAPA+/////wAAAAAAAAA//////wAAgD8AAAA//////wAAAAAAAAg//////wAAgD8AAAg//////wAAAAAAABA//////wAAgD8AABA//////wAAAAAAABg//////wAAgD8AABg//////wAAAAAAACA//////wAAgD8AACA//////wAAAAAAACg//////wAAgD8AACg//////wAAAAAAADA//////wAAgD8AADA//////wAAAAAAADg//////wAAgD8AADg//////wAAAAAAAEA//////wAAgD8AAEA//////wAAAAAAAEg//////wAAgD8AAEg//////wAAAAAAAFA//////wAAgD8AAFA//////wAAAAAAAFg//////wAAgD8AAFg//////wAAAAAAAGA//////wAAgD8AAGA//////wAAAAAAAGg//////wAAgD8AAGg//////wAAAAAAAHA//////wAAgD8AAHA//////wAAAAAAAHg//////wAAgD8AAHg//////wAAAAAAAIA//////wAAgD8AAIA//////wAAAAAAAAAA/////wAAgD8AAAAA/////wAAAAAAAAA9/////wAAgD8AAAA9/////wAAAAAAAIA9/////wAAgD8AAIA9/////wAAAAAAAMA9/////wAAgD8AAMA9/////wAAAAAAAAA+/////wAAgD8AAAA+/////wAAAAAAACA+/////wAAgD8AACA+/////wAAAAAAAEA+/////wAAgD8AAEA+/////wAAAAAAAGA+/////wAAgD8AAGA+/////wAAAAAAAIA+/////wAAgD8AAIA+/////wAAAAAAAJA+/////wAAgD8AAJA+/////wAAAAAAAKA+/////wAAgD8AAKA+/////wAAAAAAALA+/////wAAgD8AALA+/////wAAAAAAAMA+/////wAAgD8AAMA+/////wAAAAAAANA+/////wAAgD8AANA+/////wAAAAAAAOA+/////wAAgD8AAOA+/////wAAAAAAAPA+/////wAAgD8AAPA+/////wAAAAAAAAA//////wAAgD8AAAA//////wAAAAAAAAg//////wAAgD8AAAg//////wAAAAAAABA//////wAAgD8AABA//////wAAAAAAABg//////wAAgD8AABg//////wAAAAAAACA//////wAAgD8AACA//////wAAAAAAACg//////wAAgD8AACg//////wAAAAAAADA//////wAAgD8AADA//////wAAAAAAADg//////wAAgD8AADg//////wAAAAAAAEA//////wAAgD8AAEA//////wAAAAAAAEg//////wAAgD8AAEg//////wAAAAAAAFA//////wAAgD8AAFA//////wAAAAAAAFg//////wAAgD8AAFg//////wAAAAAAAGA//////wAAgD8AAGA//////wAAAAAAAGg//////wAAgD8AAGg//////wAAAAAAAHA//////wAAgD8AAHA//////wAAAAAAAHg//////wAAgD8AAHg//////wAAAAAAAIA//////wAAgD8AAIA//////wAAAAAAAAAA/////wAAgD8AAAAA/////wAAAAAAAAA9/////wAAgD8AAAA9/////wAAAAAAAIA9/////wAAgD8AAIA9/////wAAAAAAAMA9/////wAAgD8AAMA9/////wAAAAAAAAA+/////wAAgD8AAAA+/////wAAAAAAACA+/////wAAgD8AACA+/////wAAAAAAAEA+/////wAAgD8AAEA+/////wAAAAAAAGA+/////wAAgD8AAGA+/////wAAAAAAAIA+/////wAAgD8AAIA+/////wAAAAAAAJA+/////wAAgD8AAJA+/////wAAAAAAAKA+/////wAAgD8AAKA+/////wAAAAAAALA+/////wAAgD8AALA+/////wAAAAAAAMA+/////wAAgD8AAMA+/////wAAAAAAANA+/////wAAgD8AANA+/////wAAAAAAAOA+/////wAAgD8AAOA+/////wAAAAAAAPA+/////wAAgD8AAPA+/////wAAAAAAAAA//////wAAgD8AAAA//////wAAAAAAAAg//////wAAgD8AAAg//////wAAAAAAABA//////wAAgD8AABA//////wAAAAAAABg//////wAAgD8AABg//////wAAAAAAACA//////wAAgD8AACA//////wAAAAAAACg//////wAAgD8AACg//////wAAAAAAADA//////wAAgD8AADA//////wAAAAAAADg//////wAAgD8AADg//////wAAAAAAAEA//////wAAgD8AAEA//////wAAAAAAAEg//////wAAgD8AAEg//////wAAAAAAAFA//////wAAgD8AAFA//////wAAAAAAAFg//////wAAgD8AAFg//////wAAAAAAAGA//////wAAgD8AAGA//////wAAAAAAAGg//////wAAgD8AAGg//////wAAAAAAAHA//////wAAgD8AAHA//////wAAAAAAAHg//////wAAgD8AAHg//////wAAAAAAAIA//////wAAgD8AAIA/"),
+"format": 34359742495,
+"index_count": 576,
+"index_data": PackedByteArray("AAABAAIAAQADAAIAAgADAAQAAwAFAAQABAAFAAYABQAHAAYABgAHAAgABwAJAAgACAAJAAoACQALAAoACgALAAwACwANAAwADAANAA4ADQAPAA4ADgAPABAADwARABAAEAARABIAEQATABIAEgATABQAEwAVABQAFAAVABYAFQAXABYAFgAXABgAFwAZABgAGAAZABoAGQAbABoAGgAbABwAGwAdABwAHAAdAB4AHQAfAB4AHgAfACAAHwAhACAAIAAhACIAIQAjACIAIgAjACQAIwAlACQAJAAlACYAJQAnACYAJgAnACgAJwApACgAKAApACoAKQArACoAKgArACwAKwAtACwALAAtAC4ALQAvAC4ALgAvADAALwAxADAAMAAxADIAMQAzADIAMgAzADQAMwA1ADQANAA1ADYANQA3ADYANgA3ADgANwA5ADgAOAA5ADoAOQA7ADoAOgA7ADwAOwA9ADwAPAA9AD4APQA/AD4APgA/AEAAPwBBAEAAQgBDAEQAQwBFAEQARABFAEYARQBHAEYARgBHAEgARwBJAEgASABJAEoASQBLAEoASgBLAEwASwBNAEwATABNAE4ATQBPAE4ATgBPAFAATwBRAFAAUABRAFIAUQBTAFIAUgBTAFQAUwBVAFQAVABVAFYAVQBXAFYAVgBXAFgAVwBZAFgAWABZAFoAWQBbAFoAWgBbAFwAWwBdAFwAXABdAF4AXQBfAF4AXgBfAGAAXwBhAGAAYABhAGIAYQBjAGIAYgBjAGQAYwBlAGQAZABlAGYAZQBnAGYAZgBnAGgAZwBpAGgAaABpAGoAaQBrAGoAagBrAGwAawBtAGwAbABtAG4AbQBvAG4AbgBvAHAAbwBxAHAAcABxAHIAcQBzAHIAcgBzAHQAcwB1AHQAdAB1AHYAdQB3AHYAdgB3AHgAdwB5AHgAeAB5AHoAeQB7AHoAegB7AHwAewB9AHwAfAB9AH4AfQB/AH4AfgB/AIAAfwCBAIAAgACBAIIAgQCDAIIAhACFAIYAhQCHAIYAhgCHAIgAhwCJAIgAiACJAIoAiQCLAIoAigCLAIwAiwCNAIwAjACNAI4AjQCPAI4AjgCPAJAAjwCRAJAAkACRAJIAkQCTAJIAkgCTAJQAkwCVAJQAlACVAJYAlQCXAJYAlgCXAJgAlwCZAJgAmACZAJoAmQCbAJoAmgCbAJwAmwCdAJwAnACdAJ4AnQCfAJ4AngCfAKAAnwChAKAAoAChAKIAoQCjAKIAogCjAKQAowClAKQApAClAKYApQCnAKYApgCnAKgApwCpAKgAqACpAKoAqQCrAKoAqgCrAKwAqwCtAKwArACtAK4ArQCvAK4ArgCvALAArwCxALAAsACxALIAsQCzALIAsgCzALQAswC1ALQAtAC1ALYAtQC3ALYAtgC3ALgAtwC5ALgAuAC5ALoAuQC7ALoAugC7ALwAuwC9ALwAvAC9AL4AvQC/AL4AvgC/AMAAvwDBAMAAwADBAMIAwQDDAMIAwgDDAMQAwwDFAMQA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 198,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADgQQAAgD8AAAAAAADoQQAAgL8AAAAAAADoQQAAgD8AAAAAAADwQQAAgL8AAAAAAADwQQAAgD8AAAAAAAD4QQAAgL8AAAAAAAD4QQAAgD8AAAAAAAAAQgAAgL8AAAAAAAAAQgAAgD8AAAAAAAAAAAAAgL8AAIA/AAAAAAAAgD8AAIA/AACAPwAAgL8AAIA/AACAPwAAgD8AAIA/AAAAQAAAgL8AAIA/AAAAQAAAgD8AAIA/AABAQAAAgL8AAIA/AABAQAAAgD8AAIA/AACAQAAAgL8AAIA/AACAQAAAgD8AAIA/AACgQAAAgL8AAIA/AACgQAAAgD8AAIA/AADAQAAAgL8AAIA/AADAQAAAgD8AAIA/AADgQAAAgL8AAIA/AADgQAAAgD8AAIA/AAAAQQAAgL8AAIA/AAAAQQAAgD8AAIA/AAAQQQAAgL8AAIA/AAAQQQAAgD8AAIA/AAAgQQAAgL8AAIA/AAAgQQAAgD8AAIA/AAAwQQAAgL8AAIA/AAAwQQAAgD8AAIA/AABAQQAAgL8AAIA/AABAQQAAgD8AAIA/AABQQQAAgL8AAIA/AABQQQAAgD8AAIA/AABgQQAAgL8AAIA/AABgQQAAgD8AAIA/AABwQQAAgL8AAIA/AABwQQAAgD8AAIA/AACAQQAAgL8AAIA/AACAQQAAgD8AAIA/AACIQQAAgL8AAIA/AACIQQAAgD8AAIA/AACQQQAAgL8AAIA/AACQQQAAgD8AAIA/AACYQQAAgL8AAIA/AACYQQAAgD8AAIA/AACgQQAAgL8AAIA/AACgQQAAgD8AAIA/AACoQQAAgL8AAIA/AACoQQAAgD8AAIA/AACwQQAAgL8AAIA/AACwQQAAgD8AAIA/AAC4QQAAgL8AAIA/AAC4QQAAgD8AAIA/AADAQQAAgL8AAIA/AADAQQAAgD8AAIA/AADIQQAAgL8AAIA/AADIQQAAgD8AAIA/AADQQQAAgL8AAIA/AADQQQAAgD8AAIA/AADYQQAAgL8AAIA/AADYQQAAgD8AAIA/AADgQQAAgL8AAIA/AADgQQAAgD8AAIA/AADoQQAAgL8AAIA/AADoQQAAgD8AAIA/AADwQQAAgL8AAIA/AADwQQAAgD8AAIA/AAD4QQAAgL8AAIA/AAD4QQAAgD8AAIA/AAAAQgAAgL8AAIA/AAAAQgAAgD8AAIA/AAAAAAAAgL8AAABAAAAAAAAAgD8AAABAAACAPwAAgL8AAABAAACAPwAAgD8AAABAAAAAQAAAgL8AAABAAAAAQAAAgD8AAABAAABAQAAAgL8AAABAAABAQAAAgD8AAABAAACAQAAAgL8AAABAAACAQAAAgD8AAABAAACgQAAAgL8AAABAAACgQAAAgD8AAABAAADAQAAAgL8AAABAAADAQAAAgD8AAABAAADgQAAAgL8AAABAAADgQAAAgD8AAABAAAAAQQAAgL8AAABAAAAAQQAAgD8AAABAAAAQQQAAgL8AAABAAAAQQQAAgD8AAABAAAAgQQAAgL8AAABAAAAgQQAAgD8AAABAAAAwQQAAgL8AAABAAAAwQQAAgD8AAABAAABAQQAAgL8AAABAAABAQQAAgD8AAABAAABQQQAAgL8AAABAAABQQQAAgD8AAABAAABgQQAAgL8AAABAAABgQQAAgD8AAABAAABwQQAAgL8AAABAAABwQQAAgD8AAABAAACAQQAAgL8AAABAAACAQQAAgD8AAABAAACIQQAAgL8AAABAAACIQQAAgD8AAABAAACQQQAAgL8AAABAAACQQQAAgD8AAABAAACYQQAAgL8AAABAAACYQQAAgD8AAABAAACgQQAAgL8AAABAAACgQQAAgD8AAABAAACoQQAAgL8AAABAAACoQQAAgD8AAABAAACwQQAAgL8AAABAAACwQQAAgD8AAABAAAC4QQAAgL8AAABAAAC4QQAAgD8AAABAAADAQQAAgL8AAABAAADAQQAAgD8AAABAAADIQQAAgL8AAABAAADIQQAAgD8AAABAAADQQQAAgL8AAABAAADQQQAAgD8AAABAAADYQQAAgL8AAABAAADYQQAAgD8AAABAAADgQQAAgL8AAABAAADgQQAAgD8AAABAAADoQQAAgL8AAABAAADoQQAAgD8AAABAAADwQQAAgL8AAABAAADwQQAAgD8AAABAAAD4QQAAgL8AAABAAAD4QQAAgD8AAABAAAAAQgAAgL8AAABAAAAAQgAAgD8AAABA/3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+
+[resource]
+script = ExtResource("3_jjvx6")
+constructor = "res://assets/vfx/sources/35053d9088ac18c0b474/head_accent.gd"
+input_sha256 = "927ec9db2c020f98c3ebc6cdf28f947ffd8fd443fc4d45365bbfd881caf86190"
+meshes = Array[Mesh]([SubResource("ArrayMesh_xcfug"), SubResource("ArrayMesh_xcfug"), SubResource("ArrayMesh_xcfug"), SubResource("ArrayMesh_xcfug")])
+materials = Array[ShaderMaterial]([SubResource("ShaderMaterial_yvre2"), SubResource("ShaderMaterial_ltmru")])
+material_indices = Array[int]([0, 0, 1, 1])
+bounds = Array[AABB]([AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2), AABB(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2)])
+instance_uniforms = Array[Dictionary]([{
+"gpu_head_layer": 0,
+"gpu_head_number": 0
+}, {
+"gpu_head_layer": 0,
+"gpu_head_number": 1
+}, {
+"gpu_head_layer": 1,
+"gpu_head_number": 0
+}, {
+"gpu_head_layer": 1,
+"gpu_head_number": 1
+}])

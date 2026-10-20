@@ -34,7 +34,7 @@ func prepare_plume() -> void:
 	for index in 2:
 		var emitter: GPUParticles3D = plume.get_node("Core" if index == 0 else "Mist")
 		var source_material: ShaderMaterial = emitter.material_override
-		var adapted: ShaderMaterial = Native.finite(source_material, .3 if index == 0 else .65)
+		var adapted: ShaderMaterial = Native.finite(source_material, .3 if index == 0 else .65, MIST_SCENE + ("::Core" if index == 0 else "::Mist"))
 		var code: String = Native.Source.scaled_billboard(adapted.shader.code)
 		# Keep all three native masks. Cubing their product left isolated ice
 		# points; the mist layer needs the lower-opacity connective wisps too.
@@ -117,5 +117,10 @@ func capture_observation() -> Dictionary:
 		"source_scene": MIST_SCENE, "native_layers": ["Core", "Mist"],
 		"source_socket": "face", "receiver_socket": "body_center", "optical_lights": 0,
 		"solves_area_save_damage_or_surface": false, "seek_qualified": false}
+
+func source_bindings() -> Dictionary:
+	# This source retains actual GPU emitters. Use the source sampler's emitter
+	# registration; the inherited single-static-mesh shortcut does not apply.
+	return {}
 
 const VfxPackageIO_ce3fb52e9d = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

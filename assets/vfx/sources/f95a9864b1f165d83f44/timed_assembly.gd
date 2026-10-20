@@ -15,6 +15,14 @@ var opacity_control: bool = false
 func set_live_endpoints(value: Array) -> void:
 	live_endpoints = value
 
+static func preparation_resources(input: Dictionary) -> Array:
+	var paths := []
+	for entry in input.entries:
+		for path in Composition.preparation_resources(entry.composition):
+			if path not in paths:
+				paths.append(path)
+	return paths
+
 static func make_component(input: Dictionary) -> Node3D:
 	var node := VfxPackageIO_f95a9864b1.resource("res://assets/vfx/sources/f95a9864b1f165d83f44/timed_assembly.gd").new() as Node3D
 	node.selections = input.entries.duplicate(true)
@@ -40,9 +48,17 @@ func _prepare() -> void:
 		if not error.is_empty():
 			set_meta("native_construction_error",error)
 			push_error(error)
-		if opacity_control:
-			NativeOpacity.apply(root)
-		var materials := SourceSpace.adapt(root, {}, [])
+		var declared: Dictionary = composition.source_bindings()
+		var materials: Array
+		if declared.is_empty():
+			if opacity_control:
+				NativeOpacity.apply(root)
+			materials = SourceSpace.adapt(root, {}, [])
+		else:
+			if opacity_control:
+				for material in declared.materials:
+					NativeOpacity.adapt_resource(material, {})
+			materials = SourceSpace.adapt_materials(declared.materials)
 		entries.append({"root":root,"composition":composition,"definition":selected,"source_materials":materials,
 			"origin":root.position,"rotation":root.rotation})
 
@@ -75,5 +91,17 @@ func sample(seconds: float) -> void:
 			entry.last_transform=entry.root.global_transform
 			for material in entry.source_materials:
 				material.set_shader_parameter("factory_world_to_source", entry.root.global_transform.affine_inverse())
+
+func source_bindings() -> Dictionary:
+	var result := {"geometry": [], "materials": [], "lights": [], "static_material_topology": true}
+	for entry in entries:
+		var declared: Dictionary = entry.composition.source_bindings()
+		if declared.is_empty():
+			return {}
+		for field in ["geometry", "materials", "lights"]:
+			for value in declared.get(field, []):
+				if value not in result[field]:
+					result[field].append(value)
+	return result
 
 const VfxPackageIO_f95a9864b1 = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

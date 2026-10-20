@@ -1,0 +1,45 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_ju1iq"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_te3pa"]
+
+[sub_resource type="Resource" id="Resource_cp641"]
+script = ExtResource("1_ju1iq")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/3f3d6952a3ea933aca3b/wind_wall.gd"
+input = {
+"clip_ground": [1, 1],
+"scene": "res://assets/vfx/sources/546681adf3a962816738/VFX_WindHit_K2.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"coverage_noise": "res://assets/vfx/sources/5aecbaf1cbc2519c6be0/texture.res",
+"path_points": [[-4, 0], [-1, 0], [1, 2], [3, 2]]
+},
+"side": "full",
+"simulation_hz": 144,
+&"wind_bank": "res://assets/vfx/sources/3af353a514ffb6351aa1/native-bank.tres"
+}
+provenance = "Pinned native selection; recipes/spells/wind_wall.json; exact shared parametric native grid/prepared source materials; original layers preserved"
+
+[resource]
+script = ExtResource("2_te3pa")
+clip_id = "wall-native/wind_wall_corner_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "corner"
+source_recipe = "recipes/spells/wind_wall.json"
+components = Array[Resource]([SubResource("Resource_cp641")])
+bindings = [{
+"component": "assembly",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 5.0
+simulation_hz = 144.0
+options = {
+"qualification": "Native-context visual review; not production approval",
+&"runtime_candidate": "prepared_native_wind_parametric_grid",
+&"source_path_settings_remain_parametric": true
+}

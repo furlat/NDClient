@@ -18,6 +18,8 @@ static func adapt_resource(resource: Resource, visited: Dictionary) -> void:
 	if visited.has(resource):
 		return
 	visited[resource] = true
+	if resource is ShaderMaterial and resource.has_meta("factory_opacity_prepared_shader") and resource.get_meta("factory_opacity_prepared_shader") == resource.shader:
+		return
 	if resource is ShaderMaterial and resource.shader != null and not resource.has_meta(UNIFORM):
 		var code: String = SourceBindings.expand_shader(resource.shader.code, resource.shader.resource_path.get_base_dir())
 		var fragment: int = code.find("void fragment()")

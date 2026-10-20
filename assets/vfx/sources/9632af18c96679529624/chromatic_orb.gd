@@ -165,4 +165,7 @@ func capture_observation() -> Dictionary:
 		"creates_surface": false, "applies_damage_or_condition": false,
 		"retained_condition": false, "optical_lights": 0}
 
+func source_bindings() -> Dictionary:
+	return {"geometry": Array(shells) + Array(splinters), "materials": Array(materials), "static_material_topology": true}
+
 const VfxPackageIO_9632af18c9 = preload("res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd")

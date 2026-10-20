@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/35d83dcc94ce1e7f986c/prepared_sorcerous_burst.gd"
+input = {"scene": "res://assets/vfx/sources/8896c975cf0bde2987fd/VFX_Fire_strike.tscn", "element": "psychic", "palette": ["2d1a37", "5c305f", "985780", "ba89a4", "dcc3c9"], "phase": "delivery", "attack_outcome": "hit", "launch_seconds": 0.3, "travel_seconds": 0.38, "gpu_paths": true, "prepared_draws": "res://assets/vfx/sources/d1760556bc3e31841d76/6a0105b34e23b8b9.tres"}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#sorcerous_burst"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/sorcerous-burst/psychic/delivery"
+label = "Psychic compact bolt"
+phase = "delivery"
+variant = "psychic"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#sorcerous_burst"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.85
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Private native candidate; GPU/art/event qualification pending", "source_revision": "gpu-minor-v395-20261018"}

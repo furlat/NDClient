@@ -1,0 +1,127 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/f2056221575c0261cadf/movement.gd" id="1_deq2t"]
+[ext_resource type="PackedScene" path="res://assets/vfx/sources/fa22a6db18420c5d588f/c4a9ac9091bc12bb.tscn" id="2_ppldc"]
+[ext_resource type="Script" path="res://assets/vfx/sources/0250a3f89c551f4fc017/bank.gd" id="3_pwdoj"]
+
+[resource]
+script = ExtResource("3_pwdoj")
+scene = ExtResource("2_ppldc")
+source_script = "res://assets/vfx/sources/dbbd11d7b37fd1be2bc0/movement.gd"
+adapter_script = ExtResource("1_deq2t")
+stable_paths_prepared = true
+input_sha256 = "efb828669b1e696ad76fcc324e9be6e4a63569954d3bb7ae7c9160d7b673c72c"
+material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "clouds_external2"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "VFX_Smoke_A2"
+}])
+world_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "clouds_external2"
+}, {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "VFX_Smoke_A2"
+}])
+player_paths = Array[String](["AnimationPlayer"])
+immutable_material_bindings = Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smoke2init7"
+}])
+seeds = [{
+"path": "Donor/clouds_external2",
+"seed": 47291
+}, {
+"path": "Donor/smoke2init7",
+"seed": 47292
+}, {
+"path": "Donor/VFX_Smoke_A2",
+"seed": 47293
+}]
+provenance = {
+"clock_ticks_sampled": 0,
+"immutable_material_bindings": Array[Dictionary]([{
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "smoke2init7"
+}]),
+"immutable_material_policy": "StandardMaterial3D only; audited native family and no script/method/property-track writes",
+"native_lights_retained": Array[String]([]),
+"native_players_retained": Array[String](["AnimationPlayer"]),
+"native_process_materials_private": true,
+"owner_pose_saved": false,
+"pre_tree_emission_baseline": [{
+"emitting": false,
+"node": "clouds_external2"
+}, {
+"emitting": false,
+"node": "smoke2init7"
+}, {
+"emitting": false,
+"node": "VFX_Smoke_A2"
+}],
+"retained_materials": [{
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "clouds_external2"
+},
+"shader_sha256": "1e5d57d63dae45febf0c774de344a6e8362f8aecc47fef80e809e69b00dd3e85"
+}, {
+"binding": {
+"kind": "override",
+&"next_pass_depth": 0,
+"node": "VFX_Smoke_A2"
+},
+"shader_sha256": "04285178da4ca25f25f0a5d5e32dfcbfe620ca9fa0821d7bf25506dbe01b5674"
+}],
+"source_input": {
+"animation_missing_policy": "first_available",
+"clip_normal": [0.70710678, 0, 0.70710678],
+"scene": "res://assets/vfx/sources/21a6b10d33a7f22b5543/VFX_WindArea_Jump.tscn",
+"seed": 47291,
+"settings": {
+"animation": "Init",
+"close": 0,
+"frames": 288,
+"height": 0,
+"kind": "burst",
+"name": "VFX_WindArea_Jump",
+"pack": "lelu-godot-wind-premium-1",
+"palette": ["26483f", "426b59", "65977e", "8dbda0", "b7dbb5", "d8ead1"],
+"parent": "jump",
+"scale": 0.36,
+"version": 1
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_phase": "res://assets/vfx/sources/e8e158c82768d9da7845/01.tres",
+"source_script": "res://assets/vfx/sources/dbbd11d7b37fd1be2bc0/movement.gd",
+"source_script_sha256": "29428846511b21026121467d0988ebc5027451b4f052bd1624b5d0f4113601ca",
+"source_seed_records": [{
+"path": "Donor/clouds_external2",
+"seed": 47291
+}, {
+"path": "Donor/smoke2init7",
+"seed": 47292
+}, {
+"path": "Donor/VFX_Smoke_A2",
+"seed": 47293
+}],
+"stable_path_proof": {
+"animation_tracks": 3,
+"complete": true,
+"named_nodes": 5,
+"unresolved": []
+},
+"texture_freeze_policy": "reject_animated_sampler_or_resource_tracks"
+}
+declared_registration_complete = true

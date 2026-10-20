@@ -2,6 +2,35 @@ extends RefCounted
 ## Immutable source text/interfaces. Materials and their values remain private.
 static var expanded_sources: Dictionary = {}
 static var uniform_names: Dictionary = {}
+## Weak Shader identity avoids rehashing large immutable source strings for
+## every material in one occurrence. Actual code/path/default changes invalidate
+## through Resource.changed; editor include edits use clear_program_caches().
+static var shader_interfaces: Dictionary = {}
+
+
+static func declared_uniforms(shader: Shader) -> Array:
+	var identity := shader.get_instance_id()
+	if shader_interfaces.has(identity):
+		var retained: Dictionary = shader_interfaces[identity]
+		if retained.shader.get_ref() == shader:
+			return retained.names
+	var code := expand_shader(shader.code, shader.resource_path.get_base_dir())
+	if not uniform_names.has(code):
+		var declarations := RegEx.new()
+		declarations.compile("uniform\\s+(?:(?:lowp|mediump|highp)\\s+)?\\w+\\s+(\\w+)")
+		var names: Array[String] = []
+		for found in declarations.search_all(code):
+			names.append(found.get_string(1))
+		uniform_names[code] = names
+	shader_interfaces[identity] = {"shader": weakref(shader), "names": uniform_names[code]}
+	var invalidate := _shader_interface_changed.bind(identity)
+	if not shader.changed.is_connected(invalidate):
+		shader.changed.connect(invalidate)
+	return uniform_names[code]
+
+
+static func _shader_interface_changed(identity: int) -> void:
+	shader_interfaces.erase(identity)
 
 
 ## Native source loading semantics used by archived authoring code.
@@ -48,6 +77,7 @@ static func clear_program_caches() -> void:
 	# Editor/offline rebuild after include-file edits, never per occurrence.
 	expanded_sources.clear()
 	uniform_names.clear()
+	shader_interfaces.clear()
 
 ## Equivalent finite proximity fade with increasing smoothstep edges. Generated
 ## VisualShader sources invert smoothstep by swapping its edges, which is undefined
@@ -92,15 +122,7 @@ static func finish_function(code: String, function_name: String, addition: Strin
 static func replace_shader(material: ShaderMaterial, shader: Shader) -> void:
 	var parameters := {}
 	var original: Shader = material.shader
-	var code: String = expand_shader(original.code, original.resource_path.get_base_dir())
-	if not uniform_names.has(code):
-		var declarations := RegEx.new()
-		declarations.compile("uniform\\s+(?:(?:lowp|mediump|highp)\\s+)?\\w+\\s+(\\w+)")
-		var names: Array[String] = []
-		for found in declarations.search_all(code):
-			names.append(found.get_string(1))
-		uniform_names[code] = names
-	for name in uniform_names[code]:
+	for name in declared_uniforms(original):
 		var value: Variant = material.get_shader_parameter(name)
 		if value!=null:
 			parameters[name]=value

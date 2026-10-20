@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/cca131f01848c92f1da4/prepared_chromatic_orb.gd"
+input = {"scene": "res://assets/vfx/sources/f4ec9e055ca01dec6c75/magic_orb_basic_vfx_03.tscn", "element": "poison", "side": "ground", "palette": ["193226", "2e5c3d", "638640", "9bad58", "bfcc8a"], "phase": "impact", "attack_outcome": "ground", "launch_seconds": 0.3, "travel_seconds": 0.52, "prepared_draws": "res://assets/vfx/sources/ef2ad6356eb03085dd0d/a5c08791490fe307.tres"}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/chromatic-orb/poison/ground-splash"
+label = "Poison ground contact without attack damage"
+phase = "impact"
+variant = "poison"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.52
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Private native candidate; GPU/art/event qualification pending"}

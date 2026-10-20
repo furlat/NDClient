@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_wcr6e"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_pj24j"]
+
+[sub_resource type="Resource" id="Resource_wkhcq"]
+script = ExtResource("1_wcr6e")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/f9090a7c6dfd95af5ae7/particle_cone_frost.gd"
+input = {
+"prepared_cone_bank": "res://assets/vfx/sources/c867491c3a554590d04e/immutable.tres"
+}
+provenance = "Pinned native selection; recipes/spell.cone_of_cold.json"
+
+[resource]
+script = ExtResource("2_pj24j")
+clip_id = "assembled/cone_of_cold_native"
+label = "Whole native assembly"
+phase = "lifecycle"
+variant = "cone_of_cold_native"
+source_recipe = "recipes/spell.cone_of_cold.json"
+components = Array[Resource]([SubResource("Resource_wkhcq")])
+bindings = [{
+"component": "assembly",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 1.5
+simulation_hz = 60.0
+options = {
+"opacity_uniform": "factory_occurrence_alpha",
+"source_revision": "gpu-analytical-v402-20261018"
+}
