@@ -398,3 +398,80 @@ Other >16.667ms frames are retained rather than discarded: e.g. trial1 move5 fra
 Independent server dispatch durations (same actor + actual command number) are30.261/30.321/30.150ms for door,51.028/48.062/48.874ms for room move and45.970/50.783/46.026ms for Fireball. They are server-clock durations, **not extra addends or client/server timestamp subtraction**. Full server execution/audience components are retained in JSON.
 
 Client work still dominates particular movement responses: room move canonical folding is85.122/83.978/75.330ms (nested reduce83.430/82.681/73.988ms, chiefly fact/world folding). Move5 folds122.594/84.675/82.396ms; trial1 includes27.294ms commit. Move8 reaches279.521/293.090/272.750ms: its compile interval124.335/124.343/118.245ms contains **schedule_delivery110.529/110.744/105.019ms**; the other compiler leaves total roughly13ms. This is the next named client latency leaf to decompose, separately from remaining frame/transfer gaps and Factory integration. No runtime/source change follows from this report alone.
+
+### Move8 attack metadata ownership — bounded repair and exact-prefix proof
+
+The105–111ms `schedule_delivery` leaf above is the first real opportunity attack, not a long movement path: original journal sequence32 has two Step facts, the goblin's actual `reaction.opportunity_attack`, its applied/taken damage and the recipient HP after-value. A private instrumented copy compiled the unchanged prefix on a preparation thread. It subtracts recursive child scheduling before reporting each node's own work; source admission, occurrence copying and variant selection are separate leaves. No server/GPU launch or scheduler clock change was involved.
+
+The cold cost was native metadata admission plus redundant ownership: the abilities builder embedded the same135-pose measured trail bank four times in a3,857,268-byte Variant table, and every attack deep-copied one entire recipe although the goblin cannot use a modular weapon trail. The original measured source is `assets/measured/abilities/attacks/action.attack.trail.json`, shared by four actual typed attack owners. Variant selection itself was only about0.3ms.
+
+The existing abilities builder now writes each exact rig/category/clip pose once under its authored source path. The small recipe table retains exact pose document locators; `Components.weapon_trail` admits a pose only after selecting the actual eligible equipped layer. `Authoring.attack` gives each occurrence its own shallow recipe shell and borrows immutable nested authoring. Source locators, selected geometry/palette, impact art, body/audio/effect clocks and ordered commits are unchanged. All condition/impact/trace consumers were checked; none needs the full pose bank.
+
+|Same original sequence32, preparation-thread probe|Before|After|
+|---|---:|---:|
+|Cold native attack table admission|85.532ms|6.871ms|
+|Cold occurrence recipe copy|11.669ms|0.004ms|
+|Cold recursive scheduling total|98.312ms|7.684ms|
+|Cold whole compilation|108.744ms|11.565ms|
+|Warm scheduling, three repeats|10.580–11.270ms|0.593–0.680ms|
+|Warm whole compilation, three repeats|20.344–22.035ms|3.394–3.724ms|
+|Recipe table Variant bytes|3,857,268|383,860|
+
+This is a12.8× cold scheduling reduction in the controlled original-prefix probe; **the later live three-trial run has not been repeated for this repair**. The entire compiled result equals the retained pre-split original Dictionary exactly, including all tracks, components, commit timing/deltas and final state. The input state, admitted packet, final canonical state and original journal bytes remain unchanged. The goblin admission loads no modular pose document. Probe evidence: `.runtime/consolidation/move8-delivery-leaves.json` and `move8-delivery-after-leaves.json`; retained original compilation and source table are private binary artifacts beside them.
+
+`attack_recipe_admission_checks` passed **3186 checks/0 failures**: all five actual typed attack owners, every one of the135 original measured pose payloads/provenance,297 independent pre-split selector and actual outfit/pose controls, shared physical admission across aliases, and private occurrence shell/source immutability. It reconstructs expectations from the typed authoring and original measured file, not the runtime selector's answer. Parent exclusive abilities rebuild passed in4.5s with0 errors. This qualifies metadata ownership and exact compilation; it does not declare new artwork approved or replace existing native graphics gates. Engine log: `.runtime/consolidation/attack-recipe-admission-engine.log`.
+
+### Shared-provider live checkpoint —20 October08:02UTC
+
+Actual unchanged Gallery sorcerer live route,27issued client commands,1600×960,
+camera size12, Forward+/Vulkan/RTX5090; frozen schema16 engine unchanged.
+`.runtime/tests/20261020T080237.031410Z/summary.json`: **313checks/0failures,
+zero script/engine errors, zero owned leftovers**,69.8s. Original run:
+`.runtime/player-runs/20261020T080239.915794Z`.
+
+The earlier075248run also completed313assertions but emitted20,185 `Invalid
+Task ID` errors in selected-media polling; it is a failed run, and its timings
+are not acceptance evidence. No duplicate SelectionMedia client join was found.
+A diagnostic rerun with task lifecycle prints passed313/0 without errors before
+the repair, establishing an intermittent failure rather than a deterministic
+client double join. Passive ability/Factory phase metadata still bypassed the
+existing isolated SourceMetadata reader from pool workers. Those reads now use
+that same reader; native constructors/GPU loading and presentation clocks are
+unchanged. Cold worker/replacement/cancel/close gate17/0, actual body-source
+reload30/0 and attack admission3186/0 pass. The exact engine token invalidator
+has not been proven; one clean post-change live run does not establish permanent
+elimination of that intermittent error. The separate definite audio failed-load
+consumed-token bug is fixed and independently qualified55/0 plus260 existing
+audio assertions, without retrying missing sources each frame.
+
+The first actual opportunity attack, sequence32/command8, now schedules in
+**8.787ms** and compiles in13.372ms, compared with the prior same zoom12 live
+schedule105.019–110.744ms/compile118.245–124.343ms. This is an observed11.95–12.60×
+reduction in that shared leaf after splitting/borrowing the immutable pose bank;
+the full response still includes server/transport, folding and publication.
+No individual spell art changed.
+
+|Actual command|Input→send|Send→admission|Admission|Fold|Compile|Opening|Publication/gaps|First visible total|
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+|Door1|15.176|63.879|4.910|32.580|13.061|8.430|41.951|179.987ms|
+|Room move2|3.580|73.648|2.463|72.097|6.707|7.667|16.282|182.444ms|
+|Opportunity move8|3.372|65.730|10.780|45.695|13.372|7.143|21.384|167.476ms|
+|Fireball13|17.638|55.157|1.804|30.996|7.458|7.532|44.889|165.474ms|
+
+All columns are disjoint same-Godot-clock intervals and sum to the observed
+first animation. Send→admission includes server, transport, framing and queue
+work, not exclusively server execution. Publication/gaps includes exact small
+between-stage gaps; it is not one timed function. Opening is the actual opening
+witness, not the full later preparation job: the latter continues after visible
+animation (e.g. Door full metadata183.6ms), without delaying ordered publication.
+
+All7,227frames between first input and final command completion: p50 **6.126ms**,
+p95 **12.167ms**,p99 **15.650ms**,maximum **33.064ms**;46frames>16.667ms,none>33.333ms,
+no recording eviction. The largest frame is first end-turn:7.805ms Play +.221ms
+HUD +.152ms diagnostics +24.886ms unallocated wall. Do not attribute that remainder
+without more evidence. Another27.617ms frame has18.589ms HUD work (inclusive
+subscopes are not additional addends). These remain actual performance gaps;
+this is not a no-spike or100fps-every-frame claim. The new Factory/provider
+qualification continues rather than reopening per-spell performance tuning.
+Full operands/compiler leaves and worst-frame scopes are in ignored machine
+report `.runtime/consolidation/shared-provider-live-gallery-20261020T080239.json`.

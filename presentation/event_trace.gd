@@ -120,7 +120,7 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
     var prefix = str(condition.behavior_id)+"/persistent/"
     var source = "catalog/condition_recipes.json:/"+prefix.trim_suffix("/")
     var mechanisms: Array=[]
-    var replaced:Array=NativePersistent.replaced_media(str(condition.behavior_id),{"persistent":persistent})
+    var replaced:Array=NativePersistent.replaced_media(condition,{"persistent":persistent})
     for field in ["bodyColor","bodyRamp","bodyOutline","bodyPose","frozenPose"]:
         if persistent.get(field)!=null:mechanisms.append(field)
     var size_change:Variant=condition.get("state",{}).get("size_change") if condition.get("state")!=null else null
@@ -466,7 +466,7 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
             var key:String=str(condition.get("behavior_id",""));var recipe:Dictionary=cue.recipe
             var change:Dictionary=recipe.get(cue.phase,{})
             if change.get("feedbackEnabled",false):_need(row,"feedback_text","authored_condition_feedback_not_implemented",Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+cue.phase+"/feedbackEnabled",cache))
-            var replaced:Array=NativePersistent.replaced_media(key,recipe)
+            var replaced:Array=NativePersistent.replaced_media(condition,recipe)
             _media_needed(row,change.get("effects",[]),"catalog/condition_recipes.json:"+key+"."+cue.phase,row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+cue.phase+"/effects",replaced)
             if cue.phase=="application":
                 var owner:Dictionary=graph.actor_inputs.get(node.id,{}).get(cue.actor_uuid,{})

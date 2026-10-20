@@ -10,6 +10,7 @@ const ConditionPose=preload("res://presentation/condition_pose.gd")
 const Appearances=preload("res://presentation/condition_appearance.gd")
 const SpatialInputs=preload("res://presentation/spatial_inputs.gd")
 const CreationInputs=preload("res://presentation/creation_inputs.gd")
+const ActorBirthInputs=preload("res://presentation/actor_birth_inputs.gd")
 const PropagationInputs=preload("res://presentation/propagation_inputs.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Construction=preload("res://presentation/actor_construction.gd")
@@ -121,6 +122,102 @@ static func departure_history(handle:Dictionary)->bool:
     var settings:Dictionary=handle.occurrence.parameters.get("actor_history",{})
     return settings.get("capture_departure",false) and not settings.get("mirror",false)
 
+## History modes come from the selected delivered constructor, never spell IDs.
+static func rolling_history(handle:Dictionary)->bool:
+    if not handle.has("occurrence") or not is_instance_valid(handle.occurrence):return false
+    var settings:Dictionary=handle.occurrence.parameters.get("actor_history",{})
+    return not settings.get("mirror",false) and not settings.get("capture_departure",false) and settings.get("specifications",[]).any(func(row):return float(row.get("delay",0.0))>0.0)
+
+static func history_key(world:Node,handle:Dictionary,component:Dictionary)->Array:
+    return [world.timeline.initialization_revision,component.get("condition_uuid"),world.quarter,world.camera.global_basis,
+        world.source_depth,world.source_normals,world.character_light_profile]
+
+static func _history_source_key(capture:Dictionary)->Array:
+    var value:Dictionary=capture.departure
+    # Frames, position, facing and treatment age bind at seeding, not construction.
+    # Shared source topology/private layer ownership survives a view recapture.
+    return [capture.rig,capture.clip,value.row.equipment_layers,capture.hidden_slots,
+        value.row.scale,value.row.get("scale_x",1.0),value.layer_samples.map(func(row):return row.get("clip","")),
+        value.material.get("ramp",{}).get("texture"),value.material.get("flash",{}).get("material",{}).get("palette",{}).get("noiseSheet")]
+
+func prepare_history(world:Node,handle:Dictionary,component:Dictionary,admit:bool=true)->Dictionary:
+    var owner:String=str(component.get("condition_uuid",""))
+    if not world.timeline.condition_owners.has(owner):return {"ready":true,"pending":false}
+    var key:Array=history_key(world,handle,component)
+    if handle.get("history_seeded_key",[])==key or handle.get("history_sources_ready_key",[])==key:return {"ready":true,"pending":false}
+    if not admit:return {"ready":false,"pending":true}
+    var at:float=world.timeline.display_ms
+    if handle.get("history_prepare_key",[])!=key:
+        var maximum:float=0.0
+        for specification in handle.occurrence.parameters.actor_history.specifications:maximum=maxf(maximum,float(specification.get("delay",0.0)))
+        var delays:Array=[0.0,maximum]
+        for step in range(1,ceili(maximum*60.0)):delays.append(float(step)/60.0)
+        for specification in handle.occurrence.parameters.actor_history.specifications:
+            var delay:float=float(specification.get("delay",0.0))
+            if delay not in delays:delays.append(delay)
+        var observed:Dictionary=world.timeline.history_captures(recipient(component),owner,at,delays)
+        if not observed.ready:return {"ready":false,"pending":false,"reason":observed.reason}
+        handle.history_prepare_key=key;handle.history_captures=observed.captures
+        handle.history_allocation_step=0;handle.erase("history_allocated")
+        handle.history_capture_range={"from_ms":observed.get("available_from_ms",at),"to_ms":at,"complete_window":observed.get("complete_window",false)}
+        handle.history_active_sources={}
+    var sources:Dictionary=handle.get("history_sources",{})
+    handle.history_sources=sources
+    var representatives:Dictionary={}
+    for capture in handle.history_captures:
+        var source_key:Array=_history_source_key(capture)
+        if representatives.has(source_key):continue
+        representatives[source_key]=true
+        handle.history_active_sources[source_key]=true
+        if not sources.has(source_key):sources[source_key]={"occurrence":handle.occurrence,"clip":handle.clip,"root":handle.root}
+        var row:Dictionary=sources[source_key]
+        var bound:Dictionary=component.duplicate(false);bound.logical_pose=row.get("departure_capture",capture)
+        var prepared:Dictionary=prepare_departure(world,row,bound)
+        if not prepared.ready:return prepared
+    handle.history_sources_ready_key=key
+    return {"ready":true,"pending":false}
+
+func seed_history(world:Node,handle:Dictionary,component:Dictionary,receiver_depth:Texture2D)->Dictionary:
+    var key:Array=history_key(world,handle,component)
+    if handle.get("history_seeded_key",[])==key:return {"ready":true}
+    # A normal admission starts with real current observations. The source
+    # correctly omits delayed copies until their original predecessors exist.
+    if float(component.get("age_ms",INF))<=1000.0/60.0:
+        handle.history_seeded_key=key;return {"ready":true}
+    var prepared:Dictionary=prepare_history(world,handle,component)
+    if not prepared.ready:return prepared
+    var helper:RefCounted=handle.occurrence.actor_history
+    for capture in handle.get("history_captures",[]):
+        var source:Dictionary=handle.history_sources[_history_source_key(capture)]
+        var packet:Dictionary=_private_layer_context(world,source,capture,receiver_depth)
+        if not packet.ready:return packet
+        if not handle.occurrence.call(handle.clip.input_setters.actor_context,packet.packet):return {"ready":false,"reason":"actor_history_prefix_not_accepted"}
+        # This public component samples only captures. Other particles, phase
+        # envelopes and the occurrence clock never run through historical time.
+        var seconds:float=maxf(0.0,float(capture.sample_ms)-float(capture.admitted_at_ms))/1000.0
+        helper.sample(seconds)
+        # The public sampler establishes a new camera basis on its first
+        # capture. Repeating that same real observation preserves it after
+        # the source's view reset; no occurrence or native delta is advanced.
+        if helper.history.is_empty():helper.sample(seconds)
+    handle.history_seeded_key=key
+    for source_key in handle.get("history_sources",{}).keys():
+        if not handle.history_active_sources.has(source_key):
+            release_departure(handle.history_sources[source_key]);handle.history_sources.erase(source_key)
+    return {"ready":true}
+
+static func invalidate_history(handle:Dictionary)->void:
+    if not rolling_history(handle) or not handle.has("history_seeded_key"):return
+    # A genuine withdrawal breaks observation continuity. Future/admitted
+    # private preparation alone never creates this published-sample marker.
+    handle.occurrence.actor_history.close()
+    for field in ["history_seeded_key","history_prepare_key","history_sources_ready_key","history_captures","history_allocated","history_allocation_key","history_allocation_step"]:handle.erase(field)
+
+static func history_paths(handle:Dictionary)->Dictionary:
+    var paths:Dictionary={}
+    for source in handle.get("history_sources",{}).values():paths.merge(source.get("departure_paths",{}))
+    return paths
+
 static func departure_capture(component:Dictionary)->Dictionary:
     var capture:Dictionary=component.get("logical_pose",{})
     if capture.get("condition_uuid")!=component.get("condition_uuid") or capture.get("actor_uuid")!=recipient(component):return {}
@@ -167,11 +264,13 @@ static func _departure_metadata(capture:Dictionary,cache:Dictionary,config:Dicti
 
 ## Finite capture preparation belongs to its existing occurrence. Workers only
 ## see immutable pre-cut data, admitted metadata and explicit texture snapshots.
-func prepare_departure(world:Node,handle:Dictionary,component:Dictionary)->Dictionary:
+func prepare_departure(world:Node,handle:Dictionary,component:Dictionary,admit:bool=true)->Dictionary:
     var capture:Dictionary=departure_capture(component)
     if capture.is_empty():return {"ready":false,"pending":false,"reason":"condition_original_departure_not_observed"}
     if not str(capture.departure.reason).is_empty():return {"ready":false,"pending":false,"reason":capture.departure.reason}
     var key:Array=[capture,world.source_depth,world.source_normals,world.character_light_profile]
+    if handle.get("departure_key",[])==key and handle.has("departure_entries"):return {"ready":true,"pending":false,"reason":""}
+    if not admit:return {"ready":false,"pending":true}
     if handle.get("departure_key",[])!=key:
         release_departure(handle)
         handle.departure_key=key;handle.departure_capture=capture
@@ -203,33 +302,83 @@ func prepare_departure(world:Node,handle:Dictionary,component:Dictionary)->Dicti
         handle.departure_entries=entries
     return {"ready":true,"pending":false,"reason":""}
 
-func departure_context(world:Node,handle:Dictionary,component:Dictionary,receiver_depth:Texture2D)->Dictionary:
-    var capture:Dictionary=departure_capture(component)
-    if capture.is_empty():return {"ready":false,"reason":"condition_original_departure_not_observed"}
+func _private_layer_context(world:Node,handle:Dictionary,capture:Dictionary,receiver_depth:Texture2D)->Dictionary:
     if not handle.has("departure_entries"):return {"ready":false,"reason":"departure_layers_not_prepared"}
     if not world.camera is Camera3D or receiver_depth==null:return {"ready":false,"reason":"actor_context_receiver_not_prepared"}
     var row:Dictionary=capture.departure.row;var rig:Dictionary=Characters.rigs(world.catalog_cache)[capture.rig]
     var layers:Array=[];var revision:Array=[]
+    var parameters:Dictionary=Construction.Conditions.parameters(capture.departure.material,world.textures,world.resources)
+    parameters.make_read_only()
     for entry in handle.departure_entries:
         var selected:Dictionary=_departure_layer(entry.actor_layer,capture,rig,world.quarter,world.rig_config.FACING_CYCLE)
         var binding:Dictionary=entry.prepared_source_binding
         Construction.bind_source_values(entry,rig,binding.path,selected.frame,selected.facing,binding.sheet,binding.sheet_size,
-            world.textures,world.resources,entry.bound_condition_parameters)
+            world.textures,world.resources,parameters)
         entry.node.global_transform=Construction.layer_transform(world.camera.basis,row,rig,capture.departure.motion,entry.role,
             capture.clip,world.rig_config.FACING_CYCLE[posmod(world.rig_config.FACING_CYCLE.find(capture.world_facing)+world.quarter*2,8)],int(capture.frame),float(capture.departure.tile_width),float(capture.departure.material.body_scale.factor))
         layers.append({"slot":entry.actor_layer.slot,"node":entry.node,"material":entry.material,"received_material":entry.material,
             "pivot":entry.pivot,"ground_pixels":entry.get("geometry_ground_pixels",19.0)})
         revision.append([entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_version",0),entry.get("source_binding_revision",0)])
     if layers.is_empty():return {"ready":false,"reason":"departure_layers_not_prepared"}
-    var logical:Array=[capture.actor_uuid,capture.condition_uuid,capture.admitted_at_ms]
     var origin:Vector3=Sockets.Placement.contact(row)
     return {"ready":true,"packet":{"actor_uuid":capture.actor_uuid,"camera":world.camera,"receiver_depth":receiver_depth,
         "depth_encoding":"rgb24_reversed_z","capture_size":Vector2i(world.get_viewport().get_visible_rect().size),
-        "origin":origin,"layers":[],"departure_layers":layers,"departure_revision":logical,
-        "departure_origin":origin,"departure_capture_revision":[logical,world.quarter,world.camera.global_basis,revision],
-        "pose_key":[capture.clip,capture.frame,capture.world_facing,world.quarter],"material_revision":revision}}
+        "origin":origin,"layers":layers,"pose_key":[capture.clip,capture.frame,capture.world_facing,world.quarter,capture.get("sample_ms",capture.admitted_at_ms)],"material_revision":revision}}
+
+static func allocation_key(world:Node,handle:Dictionary,component:Dictionary)->Array:
+    var entries:Array=handle.get("departure_entries",[]) if departure_history(handle) else world.visual_actors.get(recipient(component),{}).get("entries",[])
+    var topology:Array=[]
+    for entry in entries:
+        if entry.role=="shadow":continue
+        var effect:Dictionary=entry.actor_layer.get("effect",{})
+        if not effect.is_empty() and effect.get("kind")!="condition_appearance":continue
+        topology.append([entry.node.get_instance_id(),entry.material.get_instance_id(),entry.material.shader])
+    return [history_key(world,handle,component),world.get_viewport().get_visible_rect().size,topology]
+
+func allocation_context(world:Node,handle:Dictionary,component:Dictionary,receiver_depth:Texture2D)->Dictionary:
+    if departure_history(handle):return departure_context(world,handle,component,receiver_depth)
+    if rolling_history(handle):
+        var step:int=int(handle.get("history_allocation_step",0))
+        var sources:Array=handle.get("history_active_sources",{}).keys()
+        if step<sources.size():
+            var source:Dictionary=handle.history_sources[sources[step]]
+            return _private_layer_context(world,source,source.departure_capture,receiver_depth)
+    return actor_context(world,recipient(component),receiver_depth)
+
+static func advance_allocation(handle:Dictionary)->bool:
+    if not rolling_history(handle):return true
+    var step:int=int(handle.get("history_allocation_step",0))
+    if step>=handle.get("history_active_sources",{}).size():return true
+    handle.history_allocation_step=step+1
+    return false
+
+func departure_context(world:Node,handle:Dictionary,component:Dictionary,receiver_depth:Texture2D)->Dictionary:
+    var capture:Dictionary=departure_capture(component)
+    if capture.is_empty():return {"ready":false,"reason":"condition_original_departure_not_observed"}
+    var context:Dictionary=_private_layer_context(world,handle,capture,receiver_depth)
+    if not context.ready:return context
+    var logical:Array=[capture.actor_uuid,capture.condition_uuid,capture.admitted_at_ms]
+    var packet:Dictionary=context.packet
+    packet.departure_layers=packet.layers;packet.layers=[]
+    packet.departure_revision=logical;packet.departure_origin=packet.origin
+    packet.departure_capture_revision=[logical,world.quarter,world.camera.global_basis,packet.material_revision]
+    return context
+
+static func seed_departure(handle:Dictionary,context:Dictionary)->void:
+    var key:Variant=context.packet.departure_capture_revision
+    if handle.get("departure_seeded_key")==key:return
+    # This is the actual pre-cut body observed at this condition's admission.
+    # Its original owner age is zero even when playback seeks past departure.
+    # Only the public history helper receives it; the occurrence stays at its
+    # normal current clock and never replays particles/phase envelopes.
+    var helper:RefCounted=handle.occurrence.actor_history
+    helper.sample(0.0)
+    if helper.history.is_empty():helper.sample(0.0)
+    handle.departure_seeded_key=key
 
 static func release_departure(handle:Dictionary)->void:
+    for source in handle.get("history_sources",{}).values():release_departure(source)
+    for field in ["history_sources","history_active_sources","history_captures","history_prepare_key","history_seeded_key","history_sources_ready_key","history_allocation_key","history_allocation_step","history_capture_range"]:handle.erase(field)
     for field in ["departure_task","departure_resource_task"]:
         if int(handle.get(field,-1))>=0:WorkerThreadPool.wait_for_task_completion(handle[field])
     if handle.has("departure_parent") and is_instance_valid(handle.departure_parent):handle.departure_parent.free()
@@ -237,7 +386,7 @@ static func release_departure(handle:Dictionary)->void:
         for packets in handle.departure_output.get("rows",{}).values():
             for packet in packets.values():
                 if is_instance_valid(packet.entry.node):packet.entry.node.free()
-    for field in ["departure_key","departure_capture","departure_metadata","departure_task","departure_paths","departure_output","departure_resource_task","departure_parent","departure_entries"]:handle.erase(field)
+    for field in ["departure_key","departure_capture","departure_metadata","departure_task","departure_paths","departure_output","departure_resource_task","departure_parent","departure_entries","departure_seeded_key"]:handle.erase(field)
 
 static func endpoints(component:Dictionary,points:Dictionary,surface:Dictionary)->Array:
     # Legacy targets forwards to set_live_endpoints (source, recipient).
@@ -253,7 +402,10 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
     if not cue.has("live_endpoints"):
         if component.has("lifecycle_phases"):
             var live:Dictionary=handle.occurrence.parameters.get("live_pose",{})
-            if live.get("mode")=="gaze":return {"rows":[],"reason":"authored_endpoint_aim_not_bound"}
+            if live.get("mode")=="gaze":
+                var visual:Dictionary=world.visual_actors.get(recipient(component),{})
+                if not Sockets.displayed(visual):return {"rows":[],"reason":"actor_not_displayed"}
+                return Sockets.display_facing_aim(visual.row,world.rig_config.FACING_CYCLE,points.to,live,str(cue.get("aim_policy","")))
             var point:Vector3=points.hand if str(cue.get("attachment","")).begins_with("caster_hand") else points.to
             var row:Dictionary={"actor_uuid":recipient(component),"point":point}
             if not surface.is_empty():row.surface=surface
@@ -355,7 +507,7 @@ static func cell_membership(handle:Dictionary,component:Dictionary,endpoints:Arr
             Effects.set_input(handle,"admitted_cells",local)
     return handle.cell_input_reason
 
-func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,receiver_depth:Texture2D=null)->Dictionary:
+func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,receiver_depth:Texture2D=null,prepare_only:bool=false)->Dictionary:
     var requested:Array=handle.clip.get("inputs",[])
     var supplied:Array=["root_path","binding_owners"]
     if component.has("lifecycle_phases"):supplied.append("owner_state")
@@ -374,18 +526,24 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
     var weapon_surface:Dictionary={}
     var source_contact_seconds:float=-1.0
     if "actor_context" in requested:
-        if not current_pose_history(handle) and not departure_history(handle):unavailable.actor_context="authentic_actor_history_not_bound"
+        if not current_pose_history(handle) and not departure_history(handle) and not rolling_history(handle):unavailable.actor_context="authentic_actor_history_not_bound"
         else:
+            var history:Dictionary=seed_history(world,handle,component,receiver_depth) if rolling_history(handle) and not prepare_only else {"ready":true}
             var context:Dictionary=departure_context(world,handle,component,receiver_depth) if departure_history(handle) else actor_context(world,actor,receiver_depth)
+            if not history.ready:context={"ready":false,"reason":history.reason}
             if context.ready:
                 # The camera/depth texture are live references; source sampling
                 # consumes exact current transforms even if source pixels match.
                 var accepted:bool=handle.occurrence.call(handle.clip.input_setters.actor_context,context.packet)
-                if accepted:handle.actor_context_bound=true;supplied.append("actor_context")
+                if accepted:
+                    handle.actor_context_bound=true;supplied.append("actor_context")
+                    if departure_history(handle) and not prepare_only:seed_departure(handle,context)
                 else:unavailable.actor_context="actor_context_not_accepted"
             else:unavailable.actor_context=context.reason
     if "history_state" in requested and departure_history(handle):
         not_applicable.history_state="non_mirror_departure_does_not_consume_duplicate_count"
+    elif "history_state" in requested and rolling_history(handle):
+        not_applicable.history_state="non_mirror_history_does_not_consume_duplicate_count"
     elif "history_state" in requested:
         var state:Variant=component.get("condition",{}).get("state",component.get("native_preparation_inputs",{}).get("history_state"))
         if state is Dictionary and state.get("duplicate_count")!=null:
@@ -403,6 +561,13 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
                 Effects.set_input(handle,"surface_presence",packet.value);handle.surface_presence_input=packet.value
             supplied.append("surface_presence")
         else:unavailable.surface_presence=packet.reason
+    if component.has("native_actor_birth") and "owner_state" in requested:
+        var birth:Dictionary=ActorBirthInputs.packet(component,world.timeline.state,Sockets.displayed(world.visual_actors.get(actor,{})))
+        if birth.ready:
+            if handle.get("actor_birth_input",{})!=birth.value:
+                Effects.set_input(handle,"owner_state",birth.value);handle.actor_birth_input=birth.value
+            supplied.append("owner_state")
+        else:unavailable.owner_state=birth.reason
     if component.get("native_item",false) and "owner_state" in requested:
         var age:float=maxf(0.0,float(world.timeline.display_ms)-float(component.start_ms))/1000.0
         Effects.set_input(handle,"owner_state",{"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age})
@@ -420,6 +585,19 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             # offhand socket cannot borrow the main hand's authored position.
             hand=Sockets.pose_point(world,world.visual_actors[weapon.actor].row,"hand") if weapon.render_slot=="weapon" else {"ready":false,"reason":"weapon_offhand_socket_not_authored"}
         var packet:Dictionary=Weapons.packet(weapon,hand)
+        if "created_item_identity" in requested:
+            var creation:Dictionary=CreationInputs.lifetime_packet(component,world.timeline.state,weapon)
+            if creation.ready:
+                packet.binding.merge(creation.weapon,true)
+                if handle.get("created_item_identity_input",{})!=creation.identity:
+                    Effects.set_input(handle,"created_item_identity",creation.identity)
+                    handle.created_item_identity_input=creation.identity
+                supplied.append("created_item_identity")
+            else:
+                if handle.has("created_item_identity_input"):
+                    Effects.set_input(handle,"created_item_identity",{})
+                    handle.erase("created_item_identity_input")
+                unavailable.created_item_identity=creation.reason
         weapon_gaps=packet.public_gaps
         if requested.any(func(name):return name in ["entity_geometry","recipient_geometry"]):
             weapon_surface=receiver_surface(geometry_sample(world,component,"entity_geometry",weapon),handle.root.global_transform)

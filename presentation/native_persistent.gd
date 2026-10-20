@@ -37,9 +37,10 @@ static func removal_ms(selections:Array)->float:
 ## Recipe media the package draws instead: its application and removal
 ## phases take the recipe's application/removal effects; an overhead marker
 ## lifecycle takes the marker layers (markerGroup), a lifecycle carrying the
-## spell's body visual the others. Those sprites are neither drawn nor required.
-static func replaced_media(condition_id:String,recipe:Dictionary)->Array:
-    var selections:Array=Effects.conditions(condition_id)
+## spell's body visual the others. Only a lifecycle selected by this owner's
+## disclosed state replaces media; a declared but unmatched variant does not.
+static func replaced_media(condition:Dictionary,recipe:Dictionary)->Array:
+    var selections:Array=lifecycles(condition)
     var markers:bool=selections.any(func(selection):return not selection.condition.get("marker",{}).is_empty())
     var body:bool=selections.any(func(selection):return selection.condition.get("body_channel_included",false))
     var result:Array=[]
@@ -124,6 +125,8 @@ static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionar
             "scale":float(registration.get("scale",1.0)),"offset":[float(offset[0]),float(offset[1]),float(offset[2])],"orientation":"world",
             "begin":0.0,"end":INF,"launch":0.0,"contact":0.0,"clip":phases.application,"staged_clip":str(phases.application.id)}
         if not str(registration.get("origin_path","")).is_empty():cue.origin_path=str(registration.origin_path)
+        var aim:String=str(common.get("recipe",{}).get("persistent",{}).get("nativeAim",""))
+        if not aim.is_empty():cue.aim_policy=aim
         # The spell's own staging decides only the finish (palette ramp) of
         # the spell's body visual and its light: Light's is the server's light.
         var optical:Dictionary={"energy_multiplier":float(selection.get("staging",{}).get("decorative_light_multiplier",0.0))}

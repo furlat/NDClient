@@ -16,10 +16,16 @@ const PATH="res://authoring/abilities/conditions/condition.spell.banishment.tres
 const ID="condition.spell.banishment"
 const OWNER="ecf7b3e2-db29-4bd1-a409-db454c273679"
 const ACTOR="624b4c84-d297-4a3e-9b17-f267b7c4ce81"
+class CaptureProbe extends RefCounted:
+    var history:Dictionary={}
+    var ages:Array=[]
+    func sample(seconds:float)->void:
+        ages.append(seconds);history.recipient=[seconds]
 class HistoryProbe extends Node3D:
     var parameters:Dictionary={"actor_history":{"capture_departure":true,"mirror":false}}
     var context:Dictionary={}
     var history_calls:int=0
+    var actor_history:RefCounted=CaptureProbe.new()
     func set_actor_context(value:Dictionary)->bool:context=value;return true
     func set_history_state(_value:Dictionary)->void:history_calls+=1
 class World extends Node3D:
@@ -60,7 +66,7 @@ func run()->void:
     check(not Inputs.departure_history({"baked":true,"clip":{}}),"Recorded handles without a live occurrence have no departure constructor")
     for seat in ["amber","blue"]:await inspect_seat(seat,cache)
     print("BANISHMENT_DEPARTURE ",JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Both unchanged original admissions, independent original pre-cut operands, faction-specific null/retained position, async private source realization, explicit non-Mirror count N/A, camera re-realization and teardown. Factory shader/native pixels and performance remain separate red/unqualified gates."}))
+        "scope":"Both unchanged original admissions, independent original pre-cut operands, faction-specific null/retained position, async private source realization, explicit non-Mirror count N/A, camera re-realization and teardown. Native pixels and live performance are qualified separately by the shared compositor gate."}))
     quit(0 if failures.is_empty() else 1)
 func inspect_seat(seat:String,cache:Dictionary)->void:
     var index:Dictionary=Recording.read(ROOT.path_join(seat),{},{},cache)
@@ -128,6 +134,7 @@ func inspect_seat(seat:String,cache:Dictionary)->void:
             var bound:Dictionary=bridge.sync(world,handle,component,points,receiver)
             check(bound.unavailable.is_empty() and "actor_context" in bound.supplied,seat+" original layer packet reaches the actual public setter seam in view "+str(quarter))
             check(bound.not_applicable.get("history_state")=="non_mirror_departure_does_not_consume_duplicate_count" and source.history_calls==0,seat+" non-Mirror source count is explicitly N/A, never fabricated")
+            check(source.actor_history.ages.size()==quarter+1 and source.actor_history.ages.all(func(age):return age==0.0),seat+" each new optical view seeds only the genuine original admission age, never the occurrence clock")
             var packet:Dictionary=source.context
             check(packet.layers.is_empty() and packet.departure_layers.size()==handle.departure_entries.size(),seat+" departure packet contains private original layers instead of current body proxies")
             check(packet.departure_origin==Placement.contact(capture.departure.row),seat+" departure origin does not change with camera")

@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b2751686-2c4c-472e-b0cb-1d3146502a9d",
+   "state_revision": "92d5d47f-9b36-45cf-8b5e-e4d0646dda37",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_eyebite_baseline",
+   "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+   "audience_id": "a1792de9-236d-4a96-87dd-7790187f22ae",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_eyebite_baseline",
+    "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+    "audience_id": "a1792de9-236d-4a96-87dd-7790187f22ae",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "412a741f-e892-4fa2-83e5-9c411a88910e",
+   "state_revision": "20fd3d99-5144-4810-bfa9-dd107842f7b2",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_eyebite_baseline",
+   "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+   "audience_id": "3b12b318-ed38-47ca-b052-3e74f4357ec8",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_eyebite_baseline",
+    "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+    "audience_id": "3b12b318-ed38-47ca-b052-3e74f4357ec8",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "63daa144-c3d6-41cb-8220-be7b60447be7",
+   "state_revision": "e0388c42-3356-469a-99bf-49a2709cbb5f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_eyebite_baseline",
+   "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+   "audience_id": "3b12b318-ed38-47ca-b052-3e74f4357ec8",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_eyebite_baseline",
+    "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+    "audience_id": "3b12b318-ed38-47ca-b052-3e74f4357ec8",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.eyebite",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.eyebite",
+   "display_name": "Eyebite (Level 6)",
+   "cast_at_level": 6,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "d1d87568-cff5-48b5-966b-2540ab6d3aac",
+   "state_revision": "961c99bb-b01a-4279-9be1-c17d03ae3222",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_eyebite_baseline",
+   "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+   "audience_id": "a1792de9-236d-4a96-87dd-7790187f22ae",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_eyebite_baseline",
+    "game_epoch": "66887e55-8d0a-498f-ba25-96f7127da292",
+    "audience_id": "a1792de9-236d-4a96-87dd-7790187f22ae",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

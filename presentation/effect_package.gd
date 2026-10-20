@@ -13,6 +13,7 @@ const Native=preload("res://presentation/native_effects.gd")
 const INDEX:="res://assets/vfx/index.json"
 ## Conditions whose package lifecycle the client keeps from playing.
 const LIFECYCLES:="condition_lifecycles.json"
+const Metadata=preload("res://presentation/source_metadata.gd")
 const AbilityDocuments=preload("res://presentation/ability_documents.gd")
 const Constructed=preload("res://presentation/native_constructed_occurrence.gd")
 ## Played when a clip has it and no kind is requested: recorded, else gpu, else native.
@@ -65,7 +66,7 @@ static func _load()->void:
             # The client can keep a package lifecycle from playing (abilities source).
             var listed:Variant=AbilityDocuments.read(LIFECYCLES)
             for id in (listed.get("suppressed",[]) if listed is Dictionary else []):_conditions.erase(id)
-            _clock=load(index.get("runtime",{}).get("clock",""))
+            _clock=Metadata.read(index.get("runtime",{}).get("clock",""),ResourceLoader.CACHE_MODE_REUSE) as Script
             _immutable_preparation=str(index.get("runtime",{}).get("production_construction",{}).get("immutable_preparation",""))
         else:push_error("VFX package index cannot be read: "+INDEX)
     _mutex.unlock()
@@ -123,7 +124,7 @@ static func clip(id:String)->Dictionary:
     var bounded:bool=false
     for approach in entry.approaches:
         if approach.has("source_phase"):
-            var phase:Resource=ResourceLoader.load(approach.source_phase)
+            var phase:Resource=Metadata.read(approach.source_phase,ResourceLoader.CACHE_MODE_REUSE)
             bounded=phase!=null and bool(phase.get("options").get("bounded_formation",false));break
     result={"id":id,"spell":entry.spell,"stage":entry.stage,"seconds":float(entry.seconds),"loop":entry.loop,"inputs":entry.inputs,
         "input_setters":entry.input_setters,"approaches":entry.approaches,"bounded_formation":bounded,"content_hash":entry.content_hash}

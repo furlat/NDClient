@@ -226,7 +226,7 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
         totals.entries+=1
         var recipe:Dictionary=recipes[id]
         var native=NativeSpells.condition(id,cache)
-        var replaced:Array=Persistent.replaced_media(id,recipe)
+        var replaced:Array=Persistent.replaced_media({"behavior_id":id},recipe)
         # The spell's native contact source draws an actual interception.
         if not NativeSpells.contact_phases(native).is_empty():
             for effects in recipe.get("interceptionEffectsByDirection",{}).values():replaced.append_array(effects.map(func(effect):return str(effect.get("assetId",""))))

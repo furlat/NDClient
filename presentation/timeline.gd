@@ -92,6 +92,9 @@ var retained_components: Array = []
 var retained_directions: Dictionary = {}
 var resolved_impacts: Dictionary = {}
 var condition_owners: Dictionary = {}
+## Small disclosed draw cuts for authored rolling actor histories. No Nodes,
+## full-world snapshots or independent reducer/clock live in this table.
+var actor_history_cuts:Dictionary={}
 var item_effect_owners:Dictionary={}
 const NativeItems=preload("res://presentation/native_items.gd")
 var appearance_cache:Dictionary={}
@@ -121,12 +124,13 @@ func accept(message: Dictionary) -> void:
         if not current.is_empty(): previous.push_front(current)
         current = {}; commit_index = 0; group_start_ms = display_ms
         retained_components=[]; retained_directions={}; resolved_impacts={}
-        condition_owners={}; spatial_effect_owners={}; item_effect_owners={};crossed_audio=[];component_sample_ms=-1.0
+        condition_owners={}; actor_history_cuts={}; spatial_effect_owners={}; item_effect_owners={};crossed_audio=[];component_sample_ms=-1.0
         waiting_for_media = false
         if retire_group.is_valid():
             for group in previous: retire_group.call(group)
         state = message.state
         Conditions.observe(condition_owners,state.actors,display_ms,true)
+        _record_history_cut(display_ms,{},display_ms)
         NativeItems.observe(item_effect_owners,state,display_ms,appearance_cache)
         NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},display_ms,true)
         sequence = int(message.sequence)
@@ -157,6 +161,7 @@ func advance(delta_ms: float) -> void:
         pending_world = {}; _world_plan = {}; waiting_for_world = false
         _scheduled_group = {}; _staged_world_times = []; _staged_group = {}
         _advance_immediate(delta_ms)
+    _prune_history(display_ms)
 
 # Offline comparisons prepare each independent reducer before publishing either.
 # These use the same group planner and delta consumer as ordinary playback.
@@ -268,6 +273,7 @@ func _advance_immediate(delta_ms: float) -> void:
             commit_index = 0
             EventTrace.activate(trace,current.get("events",[]),group_start_ms)
             _resolve_preparation_issue(current)
+            _record_history_cut(group_start_ms,current,group_start_ms)
         var local = minf(target-group_start_ms,float(current.duration_ms))
         var commits: Array = current.commits
         while commit_index < commits.size() and float(commits[commit_index].at_ms) <= local + 0.000001:
@@ -275,7 +281,8 @@ func _advance_immediate(delta_ms: float) -> void:
             _append_membership_order(world_changes.order,delta,state)
             var captures:Dictionary=pose_admissions(commits[commit_index],state,condition_owners,current,group_start_ms,retained_directions,appearance_cache,retained_components)
             Compiler.apply_delta(state,delta)
-            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures,commits[commit_index].get("item_rows",[]))
+            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures,commits[commit_index].get("item_rows",[]),commits[commit_index].get("creation_bindings",{}))
+            _record_history_cut(group_start_ms+commits[commit_index].at_ms,current,group_start_ms)
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
@@ -296,6 +303,7 @@ func _advance_immediate(delta_ms: float) -> void:
         _retain_completed_presentation()
         if retire_group.is_valid(): retire_group.call(current)
         current = {}
+        _record_history_cut(display_ms,{},display_ms)
 
 func _world_delta(delta: Dictionary) -> bool:
     return not delta.get("tiles_removed",[]).is_empty() or not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors")
@@ -322,34 +330,16 @@ static func pose_admissions(commit:Dictionary,state:Dictionary,owners:Dictionary
         var at_ms:float=start_ms+float(commit.at_ms)
         var finite:Array=retained.duplicate()
         for component in group.get("components",[]):finite.append({"component":component,"group_start_ms":start_ms})
-        var source_samples:Array=[];var seen:Dictionary={}
-        for item in finite:
-            var component:Dictionary=item.component
-            if component.kind not in ["material_flash","body_surface","sprite_layer"] or seen.has(component.id):continue
-            var begin:float=float(item.group_start_ms)+float(component.start_ms)
-            if at_ms<begin or at_ms>=begin+float(component.duration_ms):continue
-            var sample:Dictionary=component.duplicate(false);sample.age_ms=at_ms-begin
-            sample.absolute_start_ms=begin;source_samples.append(sample);seen[component.id]=true
+        var source_samples:Array=_history_finite_samples(finite,at_ms)
         var active:Dictionary=Tracks.samples(group.get("actor_tracks",[]),float(commit.at_ms))
-        var config:Dictionary=Characters.Catalog.read_file(Characters.Catalog.read_file("catalog-index.json",cache).rig,cache)
         var ordered_actors:Dictionary=actors.duplicate();var ordered_owners:Dictionary=Appearance.copy_owners(owners)
         for change in rows:
             var id:String=change.actor_uuid
             if not inputs.has(id):continue
             if change.before==null and change.after!=null and Conditions.ConditionPose.departure_requested(change.after,cache):
                 var samples:Array=Conditions.samples(Appearance.copy_owners(ordered_owners),at_ms,cache,{},false)+source_samples
-                var loadouts:Dictionary=ActorConstruction.loadouts(active,samples)
-                var actor:Dictionary=ActorConstruction.actor_with_loadout(ordered_actors[id],loadouts)
-                var resolved:Dictionary=Characters.resolve(actor,state,cache)
-                if resolved.ok and resolved.value!=null and Compiler.WorldRows.visible_actor(actor,state):
-                    var material:Dictionary=Conditions.material(id,samples)
-                    var missing:String=""
-                    if samples.any(func(sample):return sample.get("actor_uuid")==id and "actor_layers" in sample.get("native_clip",{}).get("inputs",[])):missing="departure_native_body_treatment_not_bound"
-                    if samples.any(func(sample):return sample.get("actor_uuid")==id and not sample.get("native_hit",{}).is_empty()):missing="departure_native_hit_frame_not_bound"
-                    if resolved.value.equipment_layers.any(func(layer):return layer.get("effect",{}).get("kind")=="condition_appearance"):missing="departure_appearance_opacity_not_bound"
-                    departures[change.after.condition_uuid]={"actor":actor,"row":resolved.value,"item_looks":Characters.item_looks(actor,state),
-                        "material":material,"layer_samples":samples.filter(func(sample):return sample.kind=="sprite_layer" and sample.actor_uuid==id),
-                        "tile_width":float(config.TILE_W),"reason":missing}
+                var departure:Dictionary=_history_draw_operands(ordered_actors[id],state,active,samples,cache,Compiler.WorldRows.visible_actor(ordered_actors[id],state))
+                if not departure.is_empty():departures[change.after.condition_uuid]=departure
             var next:Dictionary=ordered_actors[id].duplicate(false)
             next.conditions=next.get("conditions",[]).filter(func(condition):return condition.condition_uuid!=change.row.condition_uuid)
             if change.after!=null:next.conditions.append(change.after)
@@ -357,10 +347,195 @@ static func pose_admissions(commit:Dictionary,state:Dictionary,owners:Dictionary
             Conditions.observe(ordered_owners,{id:next},at_ms,false,[change])
     return Conditions.ConditionPose.admissions(rows,inputs,owners,group,start_ms,float(commit.at_ms),directions,cache,departures)
 
-func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={},item_rows:Array=[])->void:
+static func _history_finite_samples(candidates:Array,at_ms:float)->Array:
+    var result:Array=[];var seen:Dictionary={}
+    for item in candidates:
+        var component:Dictionary=item.component
+        if component.kind not in ["material_flash","body_surface","sprite_layer"] or seen.has(component.id):continue
+        var begin:float=float(item.group_start_ms)+float(component.start_ms)
+        if at_ms<begin or at_ms>=begin+float(component.duration_ms):continue
+        var sample:Dictionary=component.duplicate(false);sample.age_ms=at_ms-begin
+        sample.absolute_start_ms=begin;result.append(sample);seen[component.id]=true
+    return result
+
+static func _history_draw_operands(actor:Dictionary,state_inputs:Dictionary,active:Dictionary,samples:Array,cache:Dictionary,visible:bool)->Dictionary:
+    if not visible:return {}
+    actor=ActorConstruction.actor_with_loadout(actor,ActorConstruction.loadouts(active,samples))
+    var resolved:Dictionary=Characters.resolve(actor,state_inputs,cache)
+    if not resolved.ok or resolved.value==null:return {}
+    var id:String=actor.uuid
+    var missing:String=""
+    if samples.any(func(sample):return sample.get("actor_uuid")==id and "actor_layers" in sample.get("native_clip",{}).get("inputs",[])):missing="departure_native_body_treatment_not_bound"
+    if samples.any(func(sample):return sample.get("actor_uuid")==id and not sample.get("native_hit",{}).is_empty()):missing="departure_native_hit_frame_not_bound"
+    if resolved.value.equipment_layers.any(func(layer):return layer.get("effect",{}).get("kind")=="condition_appearance"):missing="departure_appearance_opacity_not_bound"
+    var config:Dictionary=Characters.Catalog.read_file(Characters.Catalog.read_file("catalog-index.json",cache).rig,cache)
+    return {"actor":actor,"row":resolved.value,"item_looks":Characters.item_looks(actor,state_inputs),"material":Conditions.material(id,samples),
+        "layer_samples":samples.filter(func(sample):return sample.kind=="sprite_layer" and sample.actor_uuid==id),"tile_width":float(config.TILE_W),"reason":missing}
+
+func _record_history_cut(at_ms:float,group:Dictionary,start_ms:float)->void:
+    var wanted:Dictionary={}
+    for owner in condition_owners.values():
+        var seconds:float=float(Conditions.recipe(owner.condition,appearance_cache).get("persistent",{}).get("actorHistory",{}).get("windowSeconds",0.0))
+        if seconds<=0.0:continue
+        var until:float=float(owner.end_ms)+Conditions.fade_ms(owner.condition,appearance_cache) if not is_inf(owner.end_ms) else INF
+        if at_ms>=until:continue
+        if not wanted.has(owner.actor_uuid):wanted[owner.actor_uuid]={"owners":{},"window_ms":0.0,"until_ms":until}
+        var interest:Dictionary=wanted[owner.actor_uuid]
+        interest.window_ms=maxf(interest.window_ms,seconds*1000.0);interest.until_ms=maxf(interest.until_ms,until)
+        var member:Dictionary=owner.duplicate(false);member.make_read_only();interest.owners[owner.id]=member
+    for id in actor_history_cuts.keys():
+        if not wanted.has(id):actor_history_cuts.erase(id)
+    for id in wanted:
+        var interest:Dictionary=wanted[id]
+        if not actor_history_cuts.has(id):actor_history_cuts[id]={"cuts":[]}
+        var retained:Dictionary=actor_history_cuts[id]
+        retained.merge(interest,true)
+        var staged:bool=group.get("staged_actors",{}).has(id) and at_ms-start_ms>=float(group.get("staged_at_ms",{}).get(id,0.0))
+        var actor:Dictionary=state.actors.get(id,group.get("staged_actors",{}).get(id,{}) if staged else {})
+        var local_owners:Dictionary={}
+        for key in condition_owners:
+            if condition_owners[key].actor_uuid==id:
+                var copy:Dictionary=condition_owners[key].duplicate(false);copy.make_read_only();local_owners[key]=copy
+        var tracks:Array=group.get("actor_tracks",[]).filter(func(track):return track.actor_uuid==id)
+        var items:Dictionary={}
+        var loadouts:Array=[actor.get("visual_loadout",{})]
+        for track in tracks:
+            loadouts.append(track.get("visual_loadout",track.get("presentation_actor",{}).get("visual_loadout",{})))
+        for loadout in loadouts:
+            for layer in loadout.get("layers",[]):
+                if state.items.has(layer.item_uuid):items[layer.item_uuid]=state.items[layer.item_uuid]
+        var tiles:Dictionary={}
+        var position:Variant=actor.get("last_visual_position")
+        if position!=null:
+            var key:String=Compiler.WorldRows.cell_key(position)
+            if state.tiles.has(key):tiles[key]=state.tiles[key]
+            elif group.get("staged_tiles",{}).has(key) and at_ms-start_ms>=float(group.get("staged_tile_at_ms",{}).get(key,0.0)):tiles[key]=group.staged_tiles[key]
+        var finite:Array=retained_components.filter(func(item):return item.component.get("actor_uuid")==id)
+        for component in group.get("components",[]):
+            if component.get("actor_uuid")==id and component.kind in ["material_flash","body_surface","sprite_layer"]:finite.append({"component":component,"group_start_ms":start_ms})
+        var inputs:Dictionary={"items":items,"tiles":tiles};inputs.make_read_only()
+        items.make_read_only();tiles.make_read_only();local_owners.make_read_only();tracks.make_read_only();finite.make_read_only()
+        var cut:Dictionary={"at_ms":at_ms,"actor":actor,"state_inputs":inputs,"owners":local_owners,"tracks":tracks,
+            "group_start_ms":start_ms,"directions":retained_directions.duplicate(),"finite":finite,
+            "visible":not actor.is_empty() and Compiler.WorldRows.visible_actor(actor,state,staged)}
+        cut.make_read_only()
+        var cuts:Array=retained.cuts
+        # At one display clock, the latest ordered prefix is the actual pose.
+        # Source history likewise replaces its same-time snapshot.
+        if not cuts.is_empty() and float(cuts.back().at_ms)==at_ms:cuts[-1]=cut
+        else:cuts.append(cut)
+    _prune_history(at_ms)
+
+func _prune_history(at_ms:float)->void:
+    for id in actor_history_cuts.keys():
+        var retained:Dictionary=actor_history_cuts[id]
+        if at_ms>=float(retained.until_ms):actor_history_cuts.erase(id);continue
+        var cuts:Array=retained.cuts
+        var begin:float=at_ms-float(retained.window_ms)
+        while cuts.size()>1 and float(cuts[1].at_ms)<=begin:cuts.pop_front()
+
+## Query only this Timeline's actually consumed prefix. Sampling a received
+## future group, another faction or the present renderer at a past age is absent.
+func history_captures(actor_id:String,condition_uuid:String,target_ms:float,delays_seconds:Array)->Dictionary:
+    if target_ms>display_ms+.000001:return {"ready":false,"reason":"actor_history_future_not_published","captures":[]}
+    var retained:Dictionary=actor_history_cuts.get(actor_id,{})
+    if retained.is_empty() or not retained.owners.has(condition_uuid):return {"ready":false,"reason":"actor_history_owner_not_observed","captures":[]}
+    var owner:Dictionary=retained.owners[condition_uuid]
+    var cuts:Array=retained.cuts
+    if cuts.is_empty():return {"ready":false,"reason":"actor_history_prefix_not_observed","captures":[]}
+    if target_ms<maxf(float(owner.start_ms),float(cuts[0].at_ms)):
+        return {"ready":false,"reason":"actor_history_prefix_not_retained","captures":[]}
+    var lower:float=maxf(float(owner.start_ms),target_ms-float(retained.window_ms))
+    var visible_begin:float=INF
+    for cut in cuts:
+        if float(cut.at_ms)>target_ms:break
+        if not cut.visible:visible_begin=INF
+        elif is_inf(visible_begin):visible_begin=float(cut.at_ms)
+    if is_inf(visible_begin):return {"ready":false,"reason":"actor_history_actor_not_disclosed","captures":[]}
+    var available:float=maxf(lower,visible_begin)
+    var times:Dictionary={target_ms:true,available:true}
+    for delay in delays_seconds:
+        var at:float=target_ms-float(delay)*1000.0
+        if at>=available and at<=target_ms:times[at]=true
+    for cut in cuts:
+        if float(cut.at_ms)>=available and float(cut.at_ms)<=target_ms:times[float(cut.at_ms)]=true
+        for track in cut.tracks:
+            var begin:float=float(cut.group_start_ms)+float(track.start_ms)
+            var end:float=begin+float(track.duration_ms)
+            if begin>=available and begin<=target_ms:times[begin]=true
+            if end>=available and end<=target_ms:times[end]=true
+    _history_frame_times(cuts,available,target_ms,times)
+    var ordered:Array=times.keys();ordered.sort()
+    var result:Array=[]
+    for at in ordered:
+        var cut:Dictionary={}
+        for candidate in cuts:
+            if float(candidate.at_ms)<=float(at):cut=candidate
+            else:break
+        if cut.is_empty():continue
+        var captured:Dictionary=_history_capture(cut,owner,float(at))
+        if not captured.ready:return {"ready":false,"reason":captured.reason,"captures":[]}
+        result.append(captured.capture)
+    return {"ready":not result.is_empty(),"reason":"" if not result.is_empty() else "actor_history_prefix_not_observed","captures":result,
+        "available_from_ms":available,"complete_window":available<=target_ms-float(retained.window_ms)+.000001}
+
+func _history_frame_times(cuts:Array,lower:float,upper:float,times:Dictionary)->void:
+    for index in cuts.size():
+        var cut:Dictionary=cuts[index]
+        var first:float=maxf(lower,float(cut.at_ms))
+        var last:float=minf(upper,float(cuts[index+1].at_ms)) if index+1<cuts.size() else upper
+        if first>last or cut.actor.is_empty():continue
+        var rig:Dictionary=Characters.rigs(appearance_cache).get(Characters.rig_id(cut.actor,appearance_cache),{})
+        var rest:Dictionary=Characters.rest_sample(cut.actor,rig,appearance_cache)
+        if rest.ok and cut.actor.life_state=="alive":
+            var fps:float=float(rig.clips[rest.value.clip].fps)
+            for frame in range(int(ceil(first*fps/1000.0)),int(floor(last*fps/1000.0))+1):times[float(frame)*1000.0/fps]=true
+        for track in cut.tracks:
+            var duration:float=float(track.duration_ms)
+            if duration<=0.0:continue
+            var fps:float=float(rig.clips[track.clip].fps)
+            var begin:float=float(cut.group_start_ms)+float(track.start_ms)
+            var keys:Array=track.get("source_time_keys",[[0.0,track.get("source_start_seconds",0.0)],[1.0,track.get("source_end_seconds",0.0)]])
+            for key_index in range(1,keys.size()):
+                var a:Array=keys[key_index-1];var b:Array=keys[key_index]
+                var at_a:float=begin+float(a[0])*duration;var at_b:float=begin+float(b[0])*duration
+                if at_b<=at_a or a[1]==b[1]:continue
+                var lo:float=maxf(first,at_a);var hi:float=minf(last,at_b)
+                if lo>hi:continue
+                var source_lo:float=lerpf(float(a[1]),float(b[1]),(lo-at_a)/(at_b-at_a))
+                var source_hi:float=lerpf(float(a[1]),float(b[1]),(hi-at_a)/(at_b-at_a))
+                for frame in range(int(ceil(minf(source_lo,source_hi)*fps)),int(floor(maxf(source_lo,source_hi)*fps))+1):
+                    times[lerpf(at_a,at_b,inverse_lerp(float(a[1]),float(b[1]),float(frame)/fps))]=true
+
+func _history_capture(cut:Dictionary,owner:Dictionary,at_ms:float)->Dictionary:
+    if not cut.visible:return {"ready":false,"reason":"actor_history_actor_not_disclosed"}
+    var actor:Dictionary=cut.actor
+    var rig_id:String=Characters.rig_id(actor,appearance_cache)
+    var rig:Dictionary=Characters.rigs(appearance_cache).get(rig_id,{})
+    var rest:Dictionary=Characters.rest_sample(actor,rig,appearance_cache)
+    if not rest.ok:return {"ready":false,"reason":rest.error.message}
+    var active:Dictionary=Tracks.samples(cut.tracks,at_ms-float(cut.group_start_ms))
+    var samples:Array=Conditions.samples(Appearance.copy_owners(cut.owners),at_ms,appearance_cache,{},false)+_history_finite_samples(cut.finite,at_ms)
+    var departure:Dictionary=_history_draw_operands(actor,cut.state_inputs,active,samples,appearance_cache,true)
+    if departure.is_empty():return {"ready":false,"reason":"actor_history_draw_not_disclosed"}
+    if not departure.reason.is_empty():return {"ready":false,"reason":departure.reason}
+    var pose:Dictionary=Conditions.pose(actor,rig_id,appearance_cache,cut.owners)
+    var pose_age:float=at_ms-float(cut.owners.get(pose.get("condition_uuid",""),{}).get("start_ms",at_ms))
+    var directions:Dictionary=cut.directions.duplicate();_directions(cut.tracks,at_ms-float(cut.group_start_ms),directions)
+    var config:Dictionary=Characters.Catalog.read_file(Characters.Catalog.read_file("catalog-index.json",appearance_cache).rig,appearance_cache)
+    var facing:String="SW";var path:Array=directions.get(actor.uuid,[])
+    if path.size()==2:facing=Conditions.ConditionPose.Placement.facing(Vector2(path[1][0]-path[0][0],path[1][1]-path[0][1]),config.FACING_CYCLE)
+    var motion:Dictionary=active.get(actor.uuid,{})
+    var capture:Dictionary=Conditions.ConditionPose.capture_sample(rest.value,actor.life_state,rig,pose,motion,at_ms,pose_age,facing)
+    capture.merge({"actor_uuid":actor.uuid,"condition_uuid":owner.id,"rig":rig_id,"admitted_at_ms":owner.start_ms,"sample_ms":at_ms})
+    capture.departure=Conditions.ConditionPose.capture_departure(departure,capture,motion)
+    capture.make_read_only()
+    return {"ready":true,"capture":capture}
+
+func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={},item_rows:Array=[],creation_bindings:Dictionary={})->void:
     # These existing owner updates report actual resource-input changes. HP,
     # logs and ordinary movement still commit without rebuilding presenters.
-    var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows,captures)
+    var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows,captures,creation_bindings)
     if NativeItems.interested(item_effect_owners,delta,appearance_cache):
         changed=NativeItems.observe(item_effect_owners,state,at_ms,appearance_cache,event_uuid,item_rows) or changed
     if delta.get("set",{}).has("senses"):
@@ -630,7 +805,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
             var commit:Dictionary=segment.group.commits[i]
             var captures:Dictionary=pose_admissions(commit,snapshot,appearance_owners,segment.group,segment.start_ms,capture_directions,appearance_cache,capture_components)
             Compiler.apply_delta(snapshot,delta)
-            Conditions.observe(appearance_owners,delta.get("actors",{}),segment.start_ms+commit.at_ms,false,commit.get("condition_rows",[]),captures)
+            Conditions.observe(appearance_owners,delta.get("actors",{}),segment.start_ms+commit.at_ms,false,commit.get("condition_rows",[]),captures,commit.get("creation_bindings",{}))
             for key in delta.get("tiles",{}): changes.tiles[key] = true
             for id in delta.get("objects",{}): changes.objects[id] = true
             for id in delta.get("objects_removed",[]): changes.objects[id] = true
@@ -691,7 +866,8 @@ func _apply_world_plan(plan: Dictionary) -> void:
             Compiler.apply_delta(state,delta)
             FrameProfile.end_phase(profile,"timeline_apply_state",started)
             started=Time.get_ticks_usec()
-            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),str(commit.get("event_uuid","")),captures,commit.get("item_rows",[]))
+            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),str(commit.get("event_uuid","")),captures,commit.get("item_rows",[]),commit.get("creation_bindings",{}))
+            _record_history_cut(group_start_ms+commit.at_ms,current,group_start_ms)
             FrameProfile.end_phase(profile,"timeline_apply_owners",started)
             started=Time.get_ticks_usec()
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)
@@ -711,7 +887,9 @@ func _apply_world_plan(plan: Dictionary) -> void:
             _retain_completed_presentation()
             if retire_group.is_valid(): retire_group.call(current)
             current = {}
+            _record_history_cut(display_ms,{},display_ms)
     display_ms = plan.display_ms
+    _prune_history(display_ms)
     # Structural actor cuts can keep the same group/world revision. Their
     # consumed preview must still yield to the next authored constructor edge.
     if plan.get("boundary",false):

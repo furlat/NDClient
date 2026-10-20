@@ -749,6 +749,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             for key in captured.delta.get("tiles",{}):
                 if not target.tiles.has(key) and not group.staged_tiles.has(key):group.staged_tiles[key]=captured.delta.tiles[key]
         var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"item_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{},"spell_sources":{},"spell_facts":{},"application_indices":{},"condition_cues":{}}
+        graph.body_records=lineage.get("bodies",[])
         # Retain only authoritative blood receiving cells needed to reveal a
         # later residue increment. No future tile or full-map snapshot is made.
         graph.initial_tiles={}
@@ -803,6 +804,9 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         var trailing: Dictionary = recorded.trailing
         apply_delta(target,trailing)
         graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)
+        var creation_bindings:Dictionary=Components.CreationInputs.lifetime_bindings(lineage.events,graph,group.commits)
+        for commit in group.commits:
+            if creation_bindings.has(str(commit.get("event_uuid",""))):commit.creation_bindings=creation_bindings[str(commit.event_uuid)]
         if profile_enabled:stage_started=_profile_phase(compile_phases,"lineage_inputs",stage_started)
         if lineage.root != null: group.duration_ms = _schedule(lineage.root,0.0,target,group,graph,cache)
         for node in lineage.events:

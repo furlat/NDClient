@@ -8,6 +8,23 @@ static func facing(world:Node,row:Dictionary)->String:
     var cycle:Array=world.rig_config.FACING_CYCLE
     return cycle[posmod(cycle.find(row.get("facing","SW"))+world.quarter*2,8)]
 
+## Source live_pose.gaze consumes WORLD points and adds its declared offset in
+## world space. The received anchor already includes the actual root placement.
+## Its second point conveys orientation only: distance is normalized by source.
+## row.facing is world-facing, before the sprite's camera-quarter row rotation.
+static func display_facing_aim(row:Dictionary,cycle:Array,source_point:Vector3,live_pose:Dictionary,policy:String)->Dictionary:
+    if policy!="display_facing" or live_pose.get("mode")!="gaze":return {"rows":[],"reason":"authored_endpoint_aim_not_bound"}
+    var index:int=cycle.find(str(row.get("facing","")))
+    var east:int=cycle.find("E")
+    if index<0 or east<0:return {"rows":[],"reason":"display_facing_not_available"}
+    var angle:float=float(posmod(index-east,8))*TAU/8.0-PI/4.0
+    var direction:=Vector3(cos(angle),0.0,sin(angle))
+    var offset:Array=live_pose.get("offset",[0.0,0.0,0.0])
+    var origin:Vector3=source_point+Vector3(offset[0],offset[1],offset[2])
+    return {"rows":[{"actor_uuid":str(row.id),"point":source_point},
+        {"actor_uuid":str(row.id),"point":origin+direction,"optical_aim":"display_facing"}],
+        "reason":"","direction":direction,"source_origin":origin}
+
 static func projectile_point(world: Node,component: Dictionary,fraction: float) -> Vector3:
     var recipe: Dictionary=component.recipe
     var a=Vector3(component.from_position[0],component.from_elevation_feet/5.0*Placement.HEIGHT_UNIT,component.from_position[1])

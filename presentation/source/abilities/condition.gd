@@ -29,6 +29,15 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 ## Retain the actual pre-admission body for a delivered departure compositor.
 ## This does not freeze the displayed body or supply delayed live history.
 @export var capture_departure: bool = false
+## Maximum original pose history requested by its delivered compositor.
+## The timeline retains only this actor's bounded logical cuts, not screenshots.
+@export var history_window_seconds: float = 0.0
+## A created item's identity is admitted only from this actual source action's
+## descendant inventory row, paired with this condition's own UUID admission.
+@export var creation_source_id: String = ""
+@export var creation_item_id: String = ""
+## Optical orientation only. No target, action range or gameplay aim is made.
+@export var aim_policy: String = ""
 ## The spell whose staging names this condition as its lifecycle owner.
 @export var owner_spell: String = ""
 ## Native held effects not supplied by a package condition selection. These

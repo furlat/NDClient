@@ -21,10 +21,17 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_by2jc")
 clip = "high-level-22/summon-manifestation/deva/admitted"
 role = "attached"
-at = "release"
+scope = "cast"
+constructor_input = {
+"kind": "actor_birth",
+"component_path": ["summon_manifestation"],
+"input_field": "",
+"creature_id": "creature.spell.deva"
+}
+at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
-source_end = 4.6
+source_end = 2.1291666666666667
 duration_policy = "authored"
 hide_at_contact = PackedStringArray()
 hide_at_release = PackedStringArray()
@@ -35,12 +42,9 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "id": "planar_ally_deva_native-event",
 "live_endpoints": [{
-"point": [0.0, 0.0, 0.0]
-}, {
-"point": [0.45, 0.0, 0.25]
-}],
-"review_stationary_ground": [0.0, 0.0, 0.0],
-"to_actor": "target"
+"actor": "target",
+"socket": "ground"
+}]
 }
 
 [sub_resource type="Resource" id="Resource_hc2pg"]
@@ -76,4 +80,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/planar_ally_deva_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual disclosed deva birth owns the finite manifestation at its admitted ground position. Actor body and terminal manifestation are separate; terminal input is not observed/qualified."

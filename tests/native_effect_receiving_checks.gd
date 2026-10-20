@@ -68,18 +68,22 @@ func run()->void:
                 "cookie_scale":Vector2.ONE*2.0,"offset":Vector2.ZERO,"height":56.0*pixel_scale,"energy":.9,"color":Lighting.TORCH_COLOUR,"enabled":true}
             table.publish([light],func(_texture):return null)
             var age=.2
-            var sample=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
+            var sample={"ready":false,"error":""}
             var deadline=Time.get_ticks_msec()+10000
             while not sample.ready and sample.error.is_empty() and Time.get_ticks_msec()<deadline:
-                await process_frame;await RenderingServer.frame_post_draw
+                # The player submits source age during process, before the
+                # draw which completes it. Do not schedule its next delta in
+                # the completion callback of the preceding draw.
+                await process_frame
                 sample=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
+                await RenderingServer.frame_post_draw
             if not sample.ready:print("UNPREPARED ",id," q",quarter," sample=",sample," handleage=",preview.handle.get("age")," pending=",preview.handle.get("pending")," drawn=",preview.sampled_age," requested=",preview.requested_age," keys=",preview._rendered_key==preview._requested_render_key)
             check(sample.error.is_empty() and sample.ready,id+" accepts explicit receiving registration and completes bounded native seek")
-            await process_frame;await RenderingServer.frame_post_draw
             # The source and receiving views are texture dependencies. A second
             # unchanged sample also proves paused pixels and source age stability.
+            await process_frame
             preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
-            await process_frame;await RenderingServer.frame_post_draw
+            await RenderingServer.frame_post_draw
             var colour=preview.viewport.get_texture().get_image()
             var normal=preview.receiving.normal.get_texture().get_image()
             var final_image=main.get_texture().get_image()
@@ -93,9 +97,10 @@ func run()->void:
             normal.save_png("res://.captures/native-effects/blood/"+name+"-normal.png")
             final_image.save_png("res://.captures/native-effects/blood/"+name+"-lit.png")
             light.energy=0.0;table.publish([light],func(_texture):return null)
+            await process_frame
             var changed_light=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
             check(changed_light.ready,id+" a changed room light needs no new native capture")
-            await process_frame;await RenderingServer.frame_post_draw
+            await RenderingServer.frame_post_draw
             var dark=main.get_texture().get_image()
             var same_normal=preview.receiving.normal.get_texture().get_image()
             check(normal.get_data()==same_normal.get_data(),id+" receiving light does not alter source normal capture")

@@ -2,12 +2,14 @@ extends "res://tests/native_effect_receiving_checks.gd"
 # Finite source-plane qualification. Actual recorded actor interleaving is a
 # separate scene test; no optical receiver depth is used as sorting authority.
 func settle_source(preview:Node3D,age:float,basis:Basis,anchor:Vector3,context:Dictionary)->Dictionary:
-    var result=preview.sample(age,basis,anchor,1.,[],context)
+    var result={"ready":false,"error":""}
     var end=Time.get_ticks_msec()+10000
     while not result.ready and result.error.is_empty() and Time.get_ticks_msec()<end:
-        await process_frame;await RenderingServer.frame_post_draw
+        # Match the player's request-before-draw protocol. A request made in
+        # the post-draw continuation cannot own the frame which just finished.
+        await process_frame
         result=preview.sample(age,basis,anchor,1.,[],context)
-    await process_frame;await RenderingServer.frame_post_draw
+        await RenderingServer.frame_post_draw
     return result
 func run()->void:
     DirAccess.make_dir_recursive_absolute("res://.captures/native-effects/partition")
@@ -32,8 +34,10 @@ func run()->void:
         for side in [-1.,1.]:
             var foot=anchor+normal*side*20.
             check(preview.bind_actor_partition(foot,basis,anchor,1.).is_empty(),"Actor presentation plane accepts current foot")
+            await process_frame
             var fresh=preview.sample(.2,basis,anchor,1.,[],context)
             check(not fresh.ready,"Changed actor plane waits for its own native draw")
+            await RenderingServer.frame_post_draw
             await settle_source(preview,.2,basis,anchor,context)
             var back=preview.views[0].viewport.get_texture().get_image()
             var front=preview.views[1].viewport.get_texture().get_image()

@@ -7,7 +7,7 @@ const AudioCues=preload("res://presentation/audio_cues.gd")
 const ConditionPose=preload("res://presentation/condition_pose.gd")
 const BodySurfaces=preload("res://presentation/body_surfaces.gd")
 
-static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false, rows:Array=[],captures:Dictionary={}) -> bool:
+static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false, rows:Array=[],captures:Dictionary={},creation_bindings:Dictionary={}) -> bool:
     var changed:bool=false
     # These are the native event's ordered immutable row captures, not a fold
     # over invented facts or a diff of final snapshots.
@@ -45,6 +45,11 @@ static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initia
             changed=changed or owner.get("life_state")!=actor.get("life_state","alive")
             owner.life_state=actor.get("life_state","alive")
             if not live.has(owner.id) and is_inf(owner.end_ms):owner.end_ms=at_ms;changed=true
+    for identity in creation_bindings:
+        if not owners.has(identity) or not is_inf(owners[identity].end_ms):continue
+        if owners[identity].get("creation_binding",{})==creation_bindings[identity]:continue
+        owners[identity]=owners[identity].duplicate(false)
+        owners[identity].creation_binding=creation_bindings[identity];changed=true
     return changed
 
 static func recipe(condition: Dictionary, cache: Dictionary) -> Dictionary:
@@ -62,7 +67,7 @@ static func _fade_ms(condition:Dictionary,config:Dictionary,lifecycles:Array,cac
     var fade=maxf(float(persistent.get("bodyRamp",{}).get("removalMs",0)),NativePersistent.removal_ms(lifecycles))
     fade=maxf(fade,NativePersistent.authored_removal_ms(config))
     var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
-    var replaced:Array=NativePersistent.replaced_media(str(condition.get("behavior_id","")),config)
+    var replaced:Array=NativePersistent.replaced_media(condition,config)
     for layer in persistent.get("layers",[]):
         if layer.get("assetId","") in replaced:continue
         var metadata:Dictionary=media.get(layer.assetId,{})
@@ -93,6 +98,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             "status":"available","start_ms":owner.start_ms,"absolute_start_ms":owner.start_ms,"duration_ms":owner.end_ms-owner.start_ms,
             "age_ms":age,"initial":owner.initial,"alpha":alpha,"recipe":config,"condition":owner.condition,"sample_hz":32.0}
         if owner.has("logical_pose"):common.logical_pose=owner.logical_pose
+        if owner.has("creation_binding"):common.creation_binding=owner.creation_binding
         common.removal_age_ms=null if is_inf(owner.end_ms) else maxf(0,at_ms-owner.end_ms)
         result.append(common)
         if is_inf(owner.end_ms) and float(persistent.get("alphaMultiplier",1.0))<1.0:invisible[owner.actor_uuid]=true
@@ -103,7 +109,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         # selection below; only audio and native layer construction are skipped.
         if native_only and not include_legacy:continue
         var natives: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
-        var replaced:Array=NativePersistent.replaced_media(str(owner.condition.behavior_id),config)
+        var replaced:Array=NativePersistent.replaced_media(owner.condition,config)
         for layer in persistent.get("layers",[]):
             if layer.get("assetId","") in replaced:continue
             var row=common.duplicate();row.id+=":"+layer.id;row.layer=layer;row.attachment=layer.attachment

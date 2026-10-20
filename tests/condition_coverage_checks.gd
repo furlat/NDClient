@@ -37,7 +37,7 @@ func run()->void:
                 check(requirement.status=="missing" and not requirement.reason.is_empty(),"Unsupported/missing-source mechanism remains explicit "+requirement.id)
         var recipe:Dictionary=recipes[entry.id]
         var selected=Coverage.NativeSpells.condition(entry.id,cache)
-        var replaced:Array=Coverage.Persistent.replaced_media(entry.id,recipe)
+        var replaced:Array=Coverage.Persistent.replaced_media({"behavior_id":entry.id},recipe)
         if not Coverage.NativeSpells.contact_phases(selected).is_empty():
             for effects in recipe.get("interceptionEffectsByDirection",{}).values():replaced.append_array(effects.map(func(effect):return effect.assetId))
         var persistent:Dictionary=recipe.get("persistent",{})
@@ -124,11 +124,11 @@ func run()->void:
     check(entries["condition.spell.guidance"].requirements.any(func(row):return row.mechanism=="native:condition_guidance_retained_native" and row.availability=="available" and row.implementation=="implemented" and row.status=="unexercised"),"Guidance now uses its actual native owner source instead of the replaced static sprite")
     for id in ["condition.blinded","condition.spell.bestow_curse.ability"]:
         var offsets=entries[id].requirements.filter(func(row):return row.mechanism.ends_with(":offsetY"))
-        var retained:Array=recipes[id].persistent.layers.filter(func(layer):return layer.get("offsetY",0)!=0 and layer.assetId not in Coverage.Persistent.replaced_media(id,recipes[id]))
+        var retained:Array=recipes[id].persistent.layers.filter(func(layer):return layer.get("offsetY",0)!=0 and layer.assetId not in Coverage.Persistent.replaced_media({"behavior_id":id},recipes[id]))
         check(offsets.size()==retained.size() and offsets.all(func(row):return row.implementation=="implemented" and row.status=="unexercised" and not row.rendered),"Only retained registered offsets remain independently inventoried "+id)
     for id in ["condition.frightened","condition.spell.eyebite.asleep"]:
         var attachments=entries[id].requirements.filter(func(row):return row.mechanism.ends_with(":attachment"))
-        var retained:Array=recipes[id].persistent.layers.filter(func(layer):return layer.get("attachment","body") not in ["body","head"] and layer.assetId not in Coverage.Persistent.replaced_media(id,recipes[id]))
+        var retained:Array=recipes[id].persistent.layers.filter(func(layer):return layer.get("attachment","body") not in ["body","head"] and layer.assetId not in Coverage.Persistent.replaced_media({"behavior_id":id},recipes[id]))
         check(attachments.size()==retained.size() and attachments.all(func(row):return row.implementation=="implemented" and row.status=="unexercised" and not row.rendered),"Retained ground/face registration stays distinct from source or pixel evidence "+id)
     var selected_report=Coverage.build(cache,[],{"condition.spell.hold_person":true})
     check(selected_report.entries.size()==1 and selected_report.totals.entries==1,"Witnessed condition filter preserves exact finite denominator")

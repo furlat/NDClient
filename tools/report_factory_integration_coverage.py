@@ -20,8 +20,9 @@ safety_source = ('.runtime/shared-provider-recording-safety-final/report.json'
                  else '.runtime/schema16-recording-safety-qualified/report.json'
                  if (ROOT / '.runtime/schema16-recording-safety-qualified/report.json').exists()
                  else '.runtime/schema16-recording-safety.json')
-safety = read(safety_source)
-handover = read('.runtime/condition-handover-inventory.json')
+safety = read(safety_source) if (ROOT / safety_source).exists() else {"status": "not_available", "log_validation": {"status": "not_available"}}
+handover_path = '.runtime/condition-handover-inventory.json'
+handover = read(handover_path) if (ROOT / handover_path).exists() else {'status': 'not_available'}
 clips = {row['clip_id']: row for row in factory['clips']}
 selections = {str(row.get('spell_id', row['key'])): row for row in factory['selections']}
 families = defaultdict(list)
@@ -33,7 +34,7 @@ for row in factory['selections']:
 # or visual output has been qualified. State/history/geometry remain separate.
 bridge = {
     'root_path': 'existing_occurrence_placement',
-    'owner_state': 'ordered_condition_owner_clock',
+    'owner_state': 'ordered_condition_item_owner_clock_or_exact_factual_actor_birth_visibility',
     'binding_owners': 'legacy_empty_membership_only',
     'entity_geometry': 'actual_authored_actor_exact_slot_surface_partial_unqualified',
     'recipient_geometry': 'actual_authored_actor_exact_slot_surface_partial_unqualified',
@@ -45,12 +46,25 @@ bridge = {
     'treatment_state': 'disclosed_condition_state_bridge_partial_unqualified',
     'owner_projection': 'actual_positive_self_heal_or_observed_condition_uuid_clock_unknown_end_allowed',
     'activation_projection': 'actual_action_and_observed_condition_only_missing_frenzy_parent',
-    'event_input': 'authored_observed_event_construction_cast_positive_heal_removal_revival_partial_unqualified',
+    'event_input': 'authored_observed_cast_positive_damage_heal_removal_revival_and_ordinary_creation_partial_consumer_qualification',
     'lease_input': 'finite_observed_event_empty_lease_only_persistent_source_provenance_still_required',
     'owner_visibility': 'actual_displayed_actor_and_authored_owner_alpha_partial_unqualified',
     'admitted_cells': 'prepared_world_rectangles_or_native_local_pairs_nullable_contract_partial_unqualified',
     'weapon_binding': 'exact_disclosed_item_holder_slot_and_optical_surface_partial_owner_and_legacy_gaps',
     'appearance_provider': 'prepared_modular_outfit_exact_condition_uuid_sampled_frame_lease_fly_qualified',
+    'actor_context': 'actual_current_copy_original_departure_or_bounded_disclosed_history_three_mode_native_gate_only',
+    'history_state': 'actual_disclosed_mirror_duplicate_count_non_mirror_scoped_inapplicability',
+    'pose_provider': 'original_immutable_condition_admission_and_shared_current_view_pose_provider',
+    'created_item_identity': 'same_source_condition_inventory_join_and_current_exact_item_partial_subjective_ancestry',
+    'surface_presence': 'actual_current_disclosed_spatial_owner_membership_not_synthetic_creation_or_burn',
+    'removed_cells': 'actual_observed_spatial_owner_retirement_not_subjective_visibility_loss',
+    'strike_input': 'exact_first_cast_vampiric_positive_strike_scope_only',
+    'healing_input': 'exact_positive_vampiric_healing_return_scope_only',
+    'native_state': 'actual_applied_contact_scope_only_not_later_end_or_payload_outcomes',
+    'observation': 'actual_cast_completion_scope_only_not_all_recipient_outcomes',
+    'link_edges': 'actual_disclosed_application_propagation_links_not_all_particle_or_density_sources',
+    'weapon_impact': 'exact_observed_equipped_item_attributed_damage_contact_scope_only',
+    'reaction_observation': 'actual_reaction_constructor_producer_exists_incoming_presentation_source_interface_blocked',
 }
 provider_notes = {
     'appearance_provider': 'Typed appearance definitions prepare actual outfit sheets before admission. Per-condition Factory leases control only opacity; layers follow the body clip/frame/facing. Actual Fly apply/move/view/gear/remove, independent factions, seeking and looping are qualified in agent_docs/APPEARANCE_PROVIDER_COHORT_2026-10-19.md. Unsupported fixed rigs and created-item art remain gaps; there is no new animation controller.',
@@ -59,7 +73,9 @@ provider_notes = {
     'delivery_timing': 'Uses the selected cue launch and contact-minus-launch in the actual two-argument setter. This supplies timing, not evidence that its native visual release/socket is correct.',
     'body_material': 'Current visible body layers and private material revisions are supplied. Focused setter/restoration tests cover private ownership; this does not qualify all treatments, stacking, outfits, animation revisions or final pixels.',
     'admitted_cells': 'The selected approach manifest condition_prepared flag chooses world rectangles/Array-to-bool versus native local pairs/Variant-to-void. Native optional null is skipped, prepared unknown clears then reports unavailable, known empty is distinct, and explicit nonempty false is rejection. Native pairs use the actual first endpoint plane or endpoint-free root inverse; non-unit/non-quarter-turn grid frames remain unavailable. Footprint and frame changes invalidate one cached conversion.',
-    'pose_provider': 'A non-capture operation needs no pose packet. Actual requested pose capture, actor history and departure/admission evidence remain unbound; current geometry is not substituted for history.',
+    'pose_provider': 'A non-capture operation needs no pose packet. Actual original condition admission is retained through ordered immutable cuts; Flesh to Stone native captured-pose/restoration and the separate logical capture gates qualify their scope. Current geometry is never substituted for history.',
+    'actor_context': 'The three delivered actor-history modes consume genuine immutable original draw operands: actual current Mirror copies with disclosed count; bounded real Blur predecessors; Banishment original pre-cut departure even when the actor is canonically absent. Shared native gate294, logical history350 and departure436 are green on independent originals/all quarters/seek/teardown. Actual gear-transition/live surprise cost and whole-package visual approval are not inferred.',
+    'created_item_identity': 'The typed creationIdentity descriptor joins an actual lifetime admission and unique descendant inventory admission under its completed original cast. Metadata publishes on the later actual commit. Actual current item/holder/lifetime gates native identity/weapon delivery; absent subjective ancestry stays unavailable. Created native wielded bodies remain disabled. Producer155 is qualified; native output is separately gated.',
     'weapon_binding': 'Exact authored weapon/offhand slots cross-check displayed layer item UUID and canonical visual_loadout. Wrong owner, missing item, ambiguity and actual missing item-owner and legacy admission inputs remain explicit. Active Antimagic suppression is retired in schema16; its absent token is not a provider gap. Magic Weapon/Sacred Weapon item memberships are not published by the frozen producer. See agent_docs/WEAPON_PROVIDER_COHORT_2026-10-19.md; setter-contract checks do not qualify production pixels.',
     'construction': 'Explicit application_result cues join native cast lineage/application UUID, matching saving throw and applied damage before public Source.make. observed_event cues join their source declaration to real positive heals, recipient-local removals and dead-to-alive changes. Application facts cannot repeat the source invocation. Private phase input data replaces only declared component operands; shared Resources and native facts stay immutable. Static selection cannot construct a successful fixture. Circle has one cast source plus four real recipients, and Preserve Life has one source plus two real receiving draws. Distinct consumers still need native qualification.',
 }
@@ -305,7 +321,7 @@ report = {
                       'reader_inventory_qualified': safety.get('qualified'),
                       'reader_log_validation': safety.get('log_validation', {'status': 'not_available'}),
                       'reader_does_not_qualify': safety.get('does_not_qualify'),
-                      'reader_factory_version': safety.get('factory_version', 'conditions-candidate-7fab471588209a41'),
+                      'reader_factory_version': safety.get('factory_version'),
                       'safety_history': 'Recording safety, native issued-command witnesses and visual approval are distinct. Each report retains its package identity and completeness; an older passing report does not requalify a successor.',
                       'ui_report_source': 'generated/reports/ui-art-coverage.json'},
     'entries': entries,
@@ -324,17 +340,17 @@ report = {
     'current_intake': 'agent_docs/FACTORY_PRODUCTION_BINDINGS_INTAKE_2026-10-19.md',
     'construction_readiness': 'generated/reports/factory-construction-readiness.json',
     'factory_noncondition_programs_not_automatic_new_gameplay_requirements': programs,
-    'handover': {'source': '.runtime/condition-handover-inventory.json', 'report': 'agent_docs/CONDITION_HANDOVER_MIGRATION_2026-10-19.md', 'errors': handover.get('errors', [])},
+    'handover': {'status': handover.get('status', 'reported'), 'source': handover_path, 'report': 'agent_docs/CONDITION_HANDOVER_MIGRATION_2026-10-19.md', 'errors': handover.get('errors', [])},
     'ui_summary': ui.get('summary', {}), 'ui_errors': ui.get('errors', []),
     'remaining_shared_gaps': {
-        'providers': ['weapon_binding_remaining_owner_and_legacy_contracts', 'appearance_provider_other_rigs_and_definitions_unqualified', 'history_state', 'actor_context', 'pose_provider_capture', 'event_state', 'event_binding', 'created_item_identity'],
-        'partial_spatial_provider': provider_notes['admitted_cells'] + ' Complete spatial lifecycle/output qualification is pending.',
+        'providers': ['weapon_binding_remaining_owner_offhand_and_legacy_contracts', 'appearance_provider_other_rigs_and_definitions_unqualified', 'actor_history_actual_gear_transition_and_live_readiness_qualification', 'event_state_exact_factual_attribution_and_receiving_regions', 'event_binding_exact_current_owner_readiness', 'created_item_identity_subjective_creation_ancestry_gaps'],
+        'partial_spatial_provider': provider_notes['admitted_cells'] + ' Actual Web membership/suppression and prepared surface-presence contracts are qualified separately; named burn/armed/payload/contact outcomes remain incomplete.',
         'public_selectors': public_gaps,
         'class_gates': ['Rage/Frenzy holds now use actual condition UUID ownership and unknown-removal clocks. Initial unobserved application, ordinary Rage native output and the separate body-film API remain unqualified.',
                         'Frenzy requires a real child-to-parent condition UUID link, absent from current ConditionState; its legal recorded lifecycle preserves that exact missing input.',
                         'Second Wind has an original two-faction wounded-fighter/self-heal recording, actual projection checks and a submitted native self-heal draw through seeking/factions/looping. This qualifies that scenario, not all class-native consumers.',
                         'Preserve Life has actual declaration/recipient/native-output qualification; Cleansing Touch, Opulent Revival, Turn Undead and Turn Unholy bindings need their own legal scenario/output qualification.'],
-        'unselected_action_programs': ['reaction.spell.counterspell has success/failure studies: needs the actual native outcome selector.',
+        'unselected_action_programs': ['reaction.spell.counterspell has actual succeeded/triggered-lineage/native-parent projection; the incoming optical presentation path remains source-interface blocked.',
                                      'action.fire_breath is not an exact current catalogue/typed action ID; do not alias another breath by name.'],
         'actual_attributions': ['Divine Smite modifies a native occurrence through content_attributions, not a synthetic ActionFact.'],
         'runtime_art': ['Body/head/weapon registrations, body-material stacking and authentic history/appearance/event cohorts need native consumer qualification.',
@@ -347,7 +363,7 @@ report = {
                'native_class_projection': check_evidence('.runtime/shared-providers-headless/native_class_projection_checks.log'),
                'native_studio_cohort': native_evidence(),
                'live_all_spell_sweep': live,
-               'recording_safety': {'report': safety_source, 'checks': safety.get('checks'),
+               'recording_safety': {'status': safety.get('status', 'reported'), 'report': safety_source, 'checks': safety.get('checks'),
                                     'passed_spells': len(safety.get('passed', [])),
                                     'inventory': safety.get('inventory'),
                                     'inventory_qualified': safety.get('qualified'),

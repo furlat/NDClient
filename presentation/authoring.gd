@@ -57,7 +57,9 @@ static func attack(fact: Dictionary, actor: Dictionary, cache: Dictionary) -> Di
     var recipes = load_data("catalog/attack_recipes.json", cache)
     var key: Variant = fact.behavior_id
     if not recipes.has(key): return {}
-    var recipe: Dictionary = recipes[key].duplicate(true)
+    # Occurrences own the selected shell. Measured poses, variants and their
+    # authored operands remain immutable source data shared by all attacks.
+    var recipe: Dictionary = recipes[key].duplicate()
     var delivery = "projectile" if fact.weapon_slot in ["RANGED_MAIN", "RANGED_OFF"] else "melee"
     var rig = rig_id(actor, cache)
     var outcomes = {"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}

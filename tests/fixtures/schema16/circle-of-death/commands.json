@@ -1,0 +1,145 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "7edcd4f5-1daf-4454-a96d-be84140d87d5",
+   "state_revision": "f96ed650-5751-41a2-ba73-7a86f5275693",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_circle_of_death_baseline",
+   "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+   "audience_id": "64565134-8677-4350-b0a4-b8d649fd327c",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_circle_of_death_baseline",
+    "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+    "audience_id": "64565134-8677-4350-b0a4-b8d649fd327c",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b6553571-42cb-4148-ba09-307af3b67612",
+   "state_revision": "f391c91e-44ff-4ff6-8cab-1b7fc258e337",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_circle_of_death_baseline",
+   "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+   "audience_id": "72d22657-6b1f-48e7-b1ee-6a9a18eca773",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_circle_of_death_baseline",
+    "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+    "audience_id": "72d22657-6b1f-48e7-b1ee-6a9a18eca773",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "3b0effbf-39d8-425c-ab0d-5e9c867b2c8c",
+   "state_revision": "e0c893e8-2805-4d9e-987a-a163e7a165dd",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_circle_of_death_baseline",
+   "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+   "audience_id": "72d22657-6b1f-48e7-b1ee-6a9a18eca773",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_circle_of_death_baseline",
+    "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+    "audience_id": "72d22657-6b1f-48e7-b1ee-6a9a18eca773",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.circle_of_death",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.circle_of_death",
+   "display_name": "Circle of Death (Level 6)",
+   "cast_at_level": 6,
+   "variant_facets": [],
+   "target_type": "position_aoe",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "fdaef6f2-e48d-4d77-b5b2-7b7badfa0ce2",
+   "state_revision": "77ad8f64-0657-4bba-b410-e770aee1c222",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_circle_of_death_baseline",
+   "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+   "audience_id": "64565134-8677-4350-b0a4-b8d649fd327c",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_circle_of_death_baseline",
+    "game_epoch": "1392e64e-33a6-496c-a35a-f3f104651f50",
+    "audience_id": "64565134-8677-4350-b0a4-b8d649fd327c",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

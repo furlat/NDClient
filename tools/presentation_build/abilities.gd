@@ -118,7 +118,7 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
     var suppressed: Array = []
     for id in _sorted(conditions):
         var e: Resource = conditions[id]
-        if not e.disposition.is_empty():
+        if not e.disposition.is_empty() or not e.creation_source_id.is_empty():
             var record:Dictionary=R.condition_recipe(e)
             if not e.effects.is_empty():record._resource_source=paths.get("conditions",{}).get(id,"")
             recipes[id] = provenance(record, paths.get("conditions", {}).get(id, ""))
@@ -162,7 +162,22 @@ static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary
         var e: Resource = attacks[id]
         var trail: Variant = measured(e.trail_points)
         var sockets: Variant = measured(e.variant_sockets)
-        attack_recipes[id] = R.attack_recipe(e, trail.get("poses") if trail is Dictionary else null, sockets if sockets is Dictionary else {})
+        # The same measured bank is shared by several attack owners. Emit each
+        # exact pose once, and admit it only after the actual equipped layer
+        # selects that rig/category/clip. The recipe table carries no pose bank.
+        var measured_poses:bool=trail is Dictionary and trail.has("poses")
+        var record:Dictionary=R.attack_recipe(e,[] if measured_poses else null,sockets if sockets is Dictionary else {})
+        if measured_poses:
+            record.weaponTrail.erase("poses")
+            var documents:Dictionary={}
+            for pose in trail.poses:
+                var key:String=str(pose.rigId)+"/"+str(pose.category)+"/"+str(pose.clip)
+                if documents.has(key):continue # The original selector takes the first exact pose.
+                var path:String="weapon_trails/"+e.trail_points.get_basename()+"/"+key+".json"
+                documents[key]=path
+                if not docs.has(path):docs[path]=F.plain(pose)
+            record.weaponTrail.poseDocuments=documents
+        attack_recipes[id]=record
     docs["catalog/attack_recipes.json"] = _ordered(order, "catalog/attack_recipes.json", attack_recipes)
     # Contexts, damage types and native sources.
     for id in contexts:
@@ -404,6 +419,11 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
     elif binding.get("kind")=="spatial_owner":
         if use.scope!="spatial" or binding.get("input_field")!="":
             Common.error(report,where,"spatial owner requires spatial scope and whole component input");return
+    elif binding.get("kind")=="actor_birth":
+        if use.scope!="cast" or use.at!="cast" or use.delay!=0.0 or use.attachment!="recipient_ground" \
+            or str(binding.get("creature_id","")).is_empty() or binding.get("input_field")!="" \
+            or use.extra.get("live_endpoints",[])!=[{"actor":"target","socket":"ground"}]:
+            Common.error(report,where,"actor birth needs the observed created creature and its exact ground endpoint");return
     elif binding.get("kind")=="creation_admission":
         if use.scope!="recipient" or binding.get("admission") not in ["inventory","placed_object"] or binding.get("geometry_actor")!="caster" or str(binding.get("item_id","")).is_empty() or binding.get("input_field")!="":
             Common.error(report,where,"creation admission needs an exact ordinary item kind, admission source and caster geometry");return
@@ -446,6 +466,11 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 if "healing_input" not in clips[use.clip].get("inputs",[]):Common.error(report,where,"healing return requires its actual healing_input setter")
             elif not use.extra.get("input_policies",{}).is_empty():
                 Common.error(report,where,"observed input policy has no exact source-branch proof")
+        if binding.get("kind")=="actor_birth":
+            if not input.get("initial_state") is Dictionary or not input.get("review_states") is Array \
+                or not input.has("birth_event_uuid") or not input.has("owner_uuid") \
+                or "owner_state" not in clips[use.clip].get("inputs",[]):
+                Common.error(report,where,"actor birth requires the source's explicit owner/birth/state interface")
         if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="cells":
             if not input.get("cells") is Array or not input.get("observed_removals") is Array \
                 or use.orientation!="world" or use.scale!=1.0:

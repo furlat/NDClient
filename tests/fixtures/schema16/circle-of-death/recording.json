@@ -1,0 +1,184 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "fdaef6f2-e48d-4d77-b5b2-7b7badfa0ce2": "Amber caster",
+  "7edcd4f5-1daf-4454-a96d-be84140d87d5": "Amber ally",
+  "3b0effbf-39d8-425c-ab0d-5e9c867b2c8c": "Blue target",
+  "b6553571-42cb-4148-ba09-307af3b67612": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.circle_of_death \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 4,
+   "actor_change": 4,
+   "damage": 8,
+   "spell": 5
+  },
+  "behaviors": {
+   "spell.circle_of_death": 1
+  },
+  "conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 72,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 89,
+   "lineage": 41,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 90,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 91,
+   "lineage": 41,
+   "event_offset": 11,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 96,
+   "lineage": 41,
+   "event_offset": 12,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 113,
+   "lineage": 41,
+   "event_offset": 15,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 114,
+   "lineage": 41,
+   "event_offset": 16,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 115,
+   "lineage": 41,
+   "event_offset": 17,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 120,
+   "lineage": 41,
+   "event_offset": 18,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 137,
+   "lineage": 41,
+   "event_offset": 21,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 138,
+   "lineage": 41,
+   "event_offset": 22,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 139,
+   "lineage": 41,
+   "event_offset": 23,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 140,
+   "lineage": 41,
+   "event_offset": 24,
+   "kind": "spell",
+   "label": "spell spell.circle_of_death"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

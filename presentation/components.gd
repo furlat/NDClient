@@ -6,6 +6,7 @@ const ApplicationResults=preload("res://presentation/application_results.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
 const ReactionInputs=preload("res://presentation/reaction_inputs.gd")
 const CreationInputs=preload("res://presentation/creation_inputs.gd")
+const ActorBirthInputs=preload("res://presentation/actor_birth_inputs.gd")
 const PropagationInputs=preload("res://presentation/propagation_inputs.gd")
 const NativeItems=preload("res://presentation/native_items.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
@@ -39,9 +40,10 @@ static func weapon_trail(recipe: Dictionary,fact: Dictionary,actor: Dictionary,c
     var slot="offhand" if fact.weapon_slot=="MELEE_OFF" else "weapon"
     for layer in outfit.value:
         if layer.slot!=slot:continue
-        for pose in trail.poses:
-            if pose.rigId==rig_id and pose.category==layer.category and pose.clip==recipe.actor.clip:
-                return {"pose":pose,"palette":trail.palette,"impact_asset_id":trail.impactAssetId}
+        var key:String=rig_id+"/"+str(layer.category)+"/"+str(recipe.actor.clip)
+        var document:String=trail.get("poseDocuments",{}).get(key,"")
+        if not document.is_empty():
+            return {"pose":Authoring.load_data(document,cache),"palette":trail.palette,"impact_asset_id":trail.impactAssetId}
     return {}
 
 static func attack_colors(fact: Dictionary,cache: Dictionary) -> Dictionary:
@@ -157,6 +159,21 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
         parameters.merge(phase,true)
         parameters.merge({"native_spell":true,"cast_recipe":cast,"native_cast_id":cast_id},true)
         var constructor:Dictionary=phase.native_cue.get("constructor_input",{})
+        if constructor.get("kind")=="actor_birth" and parameters.get("status")!="missing":
+            var births:Array=ActorBirthInputs.observed(node,constructor,graph,group.commits)
+            if births.is_empty():
+                parameters.status="missing";parameters.reason="native_actor_birth_not_disclosed"
+                add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+            for birth in births:
+                var actual:Dictionary=parameters.duplicate()
+                actual.target_uuid=birth.target_uuid;actual.to_position=birth.position
+                actual.to_elevation_feet=birth.elevation_feet;actual.ground_target=false
+                actual.native_actor_birth=birth.binding
+                actual.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":"","values":birth.values}]
+                actual.native_constructor_evidence=birth.evidence
+                if not graph.has("observed_spell_phases"):graph.observed_spell_phases=[]
+                graph.observed_spell_phases.append({"node":birth.node,"parameters":actual,"offset_ms":0.0,"at_commit":true})
+            continue
         if constructor.get("kind")=="observed_event" and parameters.get("status")!="missing":
             var observations:Array=ApplicationResults.observed(node,constructor,graph)
             if observations.is_empty() and constructor.outcome=="cast":
@@ -346,6 +363,9 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
     for observed in graph.get("observed_spell_phases",[]):
         var parameters:Dictionary=observed.parameters
         parameters.start_ms=float(graph.starts[observed.node.id])+observed.offset_ms
+        if observed.get("at_commit",false):
+            for commit in group.commits:
+                if str(commit.get("event_uuid",""))==str(observed.node.id):parameters.start_ms=float(commit.at_ms);break
         add(group,observed.node,"native_effect",parameters.start_ms,parameters.duration_ms,parameters.source,parameters)
     _native_interceptions(group,lineage,graph,cache)
     var sounds: Dictionary=Authoring.load_data("audio/bindings.json",cache)

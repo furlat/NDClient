@@ -177,7 +177,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     perception[event.event_uuid]=contacts
                 var actors: Dictionary=commit.delta.get("actors",{})
                 _observe_condition_history(condition_history,condition_intervals,condition_parents,actors,offset+commit.at_ms,
-                    "%s:%s"%[sequence,commit.get("event_uuid","")],false,commit.get("condition_rows",[]),captures)
+                    "%s:%s"%[sequence,commit.get("event_uuid","")],false,commit.get("condition_rows",[]),captures,commit.get("creation_bindings",{}))
                 _preview_states(preview_states,preview_state,actors,condition_history,offset+commit.at_ms,result.cache,commit.get("event_uuid",""))
             var events: Dictionary = {}
             for event in group.events:
@@ -1236,7 +1236,7 @@ static func _preview_states(output: Dictionary,state: Dictionary,actors: Diction
         output[id].append({"at_ms":at_ms,"actor":row,"actor_name":actor.get("name",""),"sampled_pose":pose,"pose_owner":condition.get("condition_uuid",""),"pose_actor":{"life_state":actor.life_state,"conditions":actor.get("conditions",[])},"condition_owners":local_owners,"source_event_uuid":source_event_uuid})
 
 static func _observe_condition_history(history: Dictionary, intervals: Dictionary, parents: Dictionary,
-        actors: Dictionary, at_ms: float, event: String, initial: bool=false,rows:Array=[],captures:Dictionary={})->void:
+        actors: Dictionary, at_ms: float, event: String, initial: bool=false,rows:Array=[],captures:Dictionary={},creation_bindings:Dictionary={})->void:
     # An event's final snapshot can erase an entire transient lifetime or
     # conceal remove/reapply of an equal member. Keep the native row boundaries
     # before reconciling ordinary member/suppression snapshots below.
@@ -1277,7 +1277,7 @@ static func _observe_condition_history(history: Dictionary, intervals: Dictionar
                 var states: Array=intervals[owner.id]
                 if not states.is_empty() and is_inf(states[-1].end_ms):states[-1].end_ms=at_ms
                 if is_inf(owner.end_ms):parents[owner.id].removal_event=event
-    Timeline.Conditions.observe(history,actors,at_ms,initial,rows,captures)
+    Timeline.Conditions.observe(history,actors,at_ms,initial,rows,captures,creation_bindings)
 
 static func restore(index: Dictionary, target_ms: float, token: Dictionary={}) -> RefCounted:
     var timeline = Timeline.new()

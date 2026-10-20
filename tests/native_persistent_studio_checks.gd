@@ -97,7 +97,7 @@ func inspect_case(case:Dictionary,perspective:Dictionary)->void:
             check(child.markers.all(func(marker):return marker.at_ms>=row.start_ms and marker.at_ms<=row.end_ms),spell+": repeated inspection spans do not display keys outside their own interval")
     var entry_report=Coverage.build(index.cache,index.rows,owners) if not owners.is_empty() else {"entries":[]}
     for entry in entry_report.entries:
-        var replaced:Array=Native.replaced_media(entry.id,Coverage.Authoring.load_data("catalog/condition_recipes.json",index.cache)[entry.id])
+        var replaced:Array=Native.replaced_media({"behavior_id":entry.id},Coverage.Authoring.load_data("catalog/condition_recipes.json",index.cache)[entry.id])
         check(not entry.requirements.any(func(requirement):return requirement.get("asset_id","") in replaced),spell+": replaced sprite media creates no obsolete requirements")
         var phases:Array=entry.requirements.filter(func(requirement):return requirement.mechanism.begins_with("native:"))
         check(phases.size()==Native.Effects.conditions(entry.id).size() and not phases.is_empty(),spell+": every package lifecycle of the owner has source coverage")

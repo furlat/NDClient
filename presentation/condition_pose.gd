@@ -85,6 +85,25 @@ static func body_sample(rest:Dictionary,life:String,rig:Dictionary,pose:Dictiona
         if pose.get("captured",false):result.merge({"world_facing":pose.world_facing,"hidden_slots":pose.hidden_slots,"captured":true})
     return result
 
+## Shared logical draw selection for admission and observed rolling history.
+## No renderer, media, material instance or later actor state is consulted.
+static func capture_sample(rest:Dictionary,life:String,rig:Dictionary,pose:Dictionary,motion:Dictionary,at_ms:float,owner_age_ms:float,facing:String)->Dictionary:
+    var selected:Dictionary=body_sample(rest,life,rig,pose,motion,at_ms,owner_age_ms)
+    var clip:Dictionary=rig.clips[selected.clip]
+    var seconds:float=Tracks.sample_seconds(selected.source_seconds,maxf(float(clip.frames)/float(clip.fps),.001),Tracks.character_loops(rig,selected.clip))
+    return {"clip":selected.clip,"source_seconds":selected.source_seconds,"frame":mini(int(seconds*clip.fps),int(clip.frames)-1),
+        "world_facing":selected.get("world_facing",facing),"hidden_slots":selected.get("hidden_slots",motion.get("hidden_slots",[])).duplicate()}
+
+static func capture_departure(departure:Dictionary,capture:Dictionary,motion:Dictionary)->Dictionary:
+    var result:Dictionary=departure.duplicate(false)
+    var row:Dictionary=departure.row.duplicate(false)
+    if motion.has("position"):row.position=motion.position;row.base_height_steps=motion.base_height_steps
+    row.visual_height=float(motion.get("lift_pixels",0))*(128.0/float(departure.tile_width))/64.0
+    row.facing=capture.world_facing
+    row.make_read_only();result.row=row;result.motion=motion.duplicate(true)
+    result.make_read_only()
+    return result
+
 static func departure_requested(condition:Dictionary,cache:Dictionary)->bool:
     return Catalog.read_file(RECIPES,cache).get(condition.get("behavior_id",""),{}).get("persistent",{}).get("actorHistory",{}).get("captureDeparture",false)
 
@@ -122,24 +141,14 @@ static func admissions(rows:Array,actors:Dictionary,owners:Dictionary,group:Dict
                 if not rest.is_empty():
                     var pose:Dictionary=select(actor,rig_id,"idle",cache,prior_owners)
                     var age:float=start_ms+local_ms-float(prior_owners.get(pose.get("condition_uuid",""),{}).get("start_ms",start_ms+local_ms))
-                    var source:Dictionary=body_sample(rest,actor.life_state,rig,pose,active.get(actor_id,{}),start_ms+local_ms,age)
-                    var clip:Dictionary=rig.clips[source.clip]
-                    var seconds:float=Tracks.sample_seconds(source.source_seconds,maxf(float(clip.frames)/float(clip.fps),.001),Tracks.character_loops(rig,source.clip))
-                    var facing:String=source.get("world_facing","SW")
+                    var facing:String="SW"
                     var path:Array=directions.get(actor_id,[])
-                    if not source.get("captured",false) and path.size()==2:facing=Placement.facing(Vector2(path[1][0]-path[0][0],path[1][1]-path[0][1]),cycle)
-                    var capture:Dictionary={"actor_uuid":actor_id,"condition_uuid":after.condition_uuid,"rig":rig_id,"clip":source.clip,
-                        "source_seconds":source.source_seconds,"frame":mini(int(seconds*clip.fps),int(clip.frames)-1),"world_facing":facing,
-                        "hidden_slots":source.get("hidden_slots",active.get(actor_id,{}).get("hidden_slots",[])).duplicate(),"admitted_at_ms":start_ms+local_ms}
+                    if path.size()==2:facing=Placement.facing(Vector2(path[1][0]-path[0][0],path[1][1]-path[0][1]),cycle)
+                    var capture:Dictionary=capture_sample(rest,actor.life_state,rig,pose,active.get(actor_id,{}),start_ms+local_ms,age,facing)
+                    capture.merge({"actor_uuid":actor_id,"condition_uuid":after.condition_uuid,"rig":rig_id,"admitted_at_ms":start_ms+local_ms})
                     if departure_requested(after,cache) and departures.has(after.condition_uuid):
-                        var departure:Dictionary=departures[after.condition_uuid].duplicate(false)
-                        var row:Dictionary=departure.row.duplicate(false)
                         var motion:Dictionary=active.get(actor_id,{})
-                        if motion.has("position"):row.position=motion.position;row.base_height_steps=motion.base_height_steps
-                        row.visual_height=float(motion.get("lift_pixels",0))*(128.0/float(departure.tile_width))/64.0
-                        row.facing=facing
-                        row.make_read_only();departure.row=row;departure.motion=motion.duplicate(true)
-                        departure.make_read_only();capture.departure=departure
+                        capture.departure=capture_departure(departures[after.condition_uuid],capture,motion)
                     capture.make_read_only();result[after.condition_uuid]=capture
                     prior_owners[after.condition_uuid]={"logical_pose":capture,"start_ms":start_ms+local_ms}
         if actor.is_empty():continue

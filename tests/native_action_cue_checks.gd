@@ -195,7 +195,7 @@ func retained_occurrences()->void:
     check(renderer.issues.size()==1,"An actual source failure remains a presentation error")
     var untouched={"application":{"effects":[{"assetId":"not-replaced-apply"}]},"removal":{"effects":[{"assetId":"not-replaced-remove"}]},
         "persistent":{"nativeEffects":[{"replaces_media":["only-this-layer"]}]}}
-    check(Conditions.NativePersistent.replaced_media("condition.test.no_package",untouched)==["only-this-layer"],"An authored hold only replaces its declared media; unrelated missing apply/remove effects remain requirements")
+    check(Conditions.NativePersistent.replaced_media({"behavior_id":"condition.test.no_package"},untouched)==["only-this-layer"],"An authored hold only replaces its declared media; unrelated missing apply/remove effects remain requirements")
 
 func run()->void:
     var use=Use.new();use.clip=CLIP;use.selection="fighter_action_surge_native"

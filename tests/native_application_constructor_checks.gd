@@ -34,7 +34,7 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr("APPLICATION_CONSTRUCTOR_FAIL "+label)
 func run()->void:
-    var directory:String=""
+    var directory:String="res://tests/fixtures/schema16/circle-of-death/amber/journal"
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--journal="):directory=arg.trim_prefix("--journal=")
     if directory.is_empty():printerr("Pass --journal=<actual Circle baseline amber journal>");quit(2);return

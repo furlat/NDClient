@@ -4,6 +4,7 @@ extends RefCounted
 ## documents they replace, under the same names, so every reader keeps its
 ## code. A document is reused while its file is unchanged. The setting
 ## source_data/abilities_build (default ROOT) points a check at another build.
+const Metadata=preload("res://presentation/source_metadata.gd")
 const ROOT := "res://build/presentation/abilities/"
 ## The old documents the abilities source owns (plus spells/<id>.json).
 const DOCUMENTS := [
@@ -25,7 +26,7 @@ static var _documents: Dictionary = {}
 static var _mutex := Mutex.new()
 
 static func owns(path: String) -> bool:
-    return path in DOCUMENTS or (path.begins_with("spells/") and path.ends_with(".json"))
+    return path in DOCUMENTS or ((path.begins_with("spells/") or path.begins_with("weapon_trails/")) and path.ends_with(".json"))
 
 static func root() -> String:
     return str(ProjectSettings.get_setting("source_data/abilities_build", ROOT))
@@ -45,7 +46,7 @@ static func read(path: String) -> Variant:
     _mutex.lock();var known: Array = _documents.get(source, []);_mutex.unlock()
     if not known.is_empty() and known[0] == stamp:return known[1]
     var data: Variant = null
-    var document: Resource = ResourceLoader.load(source, "", ResourceLoader.CACHE_MODE_IGNORE) if exists else null
+    var document: Resource = Metadata.read(source, ResourceLoader.CACHE_MODE_IGNORE) if exists else null
     if document != null and document.get("is_list") != null:data = document.items if document.is_list else document.data
     else:push_error("The abilities build has no record table " + source + " (run tools/build_presentation.gd)")
     _mutex.lock();_documents[source] = [stamp, data];_mutex.unlock()

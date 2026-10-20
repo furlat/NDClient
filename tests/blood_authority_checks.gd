@@ -19,7 +19,7 @@ func damage_node(packet:Dictionary,identity:String="")->Dictionary:
             var fact:Dictionary=node.fact if node.get("fact")!=null else {}
             if identity.is_empty():
                 if fact.get("kind")=="damage" and fact.get("stage")=="applied" and fact.get("body_release")!=null and fact.body_release.release_id=="body.blood":return node
-            elif node.uuid==identity:return node
+            elif str(int(node.occurrence))==identity:return node
     return {}
 
 func verify(before:Dictionary,packet:Dictionary,identity:String,cache:Dictionary,label:String,air:bool,residue:bool)->void:
@@ -43,7 +43,7 @@ func verify(before:Dictionary,packet:Dictionary,identity:String,cache:Dictionary
     check(ground.size()==(1 if residue else 0),label+": ground renderer requires disclosed receiving regions")
     check(requirements.size()==(1 if residue else 0),label+": ground presentation exists only for disclosed residue regions")
     var node=damage_node(packet,identity)
-    if not node.canceled and node.fact.get("applied_damage",0)>0:
+    if not node.get("canceled",false) and node.fact.get("applied_damage",0)>0:
         check(audio.size()==1,label+": physical contact audio is independent from blood authorization")
     if air and blood.size()==1 and not residue:
         check(blood[0].attachment=="impact" and blood[0].residue_deposition==false,label+": finite air response makes no residue claim")
@@ -81,11 +81,11 @@ func run()->void:
     var node=damage_node(packet)
     check(not node.is_empty(),"Actual operation contains an explicit ordinary blood release")
     if node.is_empty():quit(1);return
-    var identity:String=node.uuid;var release:Dictionary=node.fact.body_release
+    var identity:String=str(int(node.occurrence));var release:Dictionary=node.fact.body_release
     check(not release.regions.is_empty(),"Actual operation provides deposited receiving regions")
     var positions:Array=[]
     for region in release.regions:positions.append_array(region.positions)
-    check(positions.size()>9,"Real region exceeds the removed generic three-by-three deposit support")
+    check(positions.size()==20,"Original melee injury retains all twenty disclosed receiving positions")
     var cache={}
     verify(journal.state,packet,identity,cache,"original recorded release",true,true)
     for mode in ["null release","omitted release","empty receiving regions","bone release","corrosive release","dread release","zero applied damage","canceled damage"]:
@@ -109,6 +109,6 @@ func run()->void:
             check(rows[0].component.kind=="residue_deposit" and rows[0].component.duration_ms>0,"Studio retains the finite authored landing clock")
             check(rows[0].component.body_release==release,"Studio inspector retains exact authoritative receiving geometry")
         check(not index.rows.any(func(row):return row.get("component",{}).get("source_id","").begins_with("blood.deposit")),"Studio has no fabricated ground blood track")
-    var report={"checks":checks,"failures":failures,"recording":directory,"sequence":sequence,"event_uuid":identity,"authoritative_receiving_tiles":positions.size(),"evidence":evidence,"invocation":Array(OS.get_cmdline_user_args()),"scope":"Real raw Hide damage plus explicitly labeled passive boundary variants. Public compiler and Studio index only; native appearance is qualified separately by studio_blood_residue_checks."}
+    var report={"checks":checks,"failures":failures,"recording":directory,"sequence":sequence,"event_uuid":identity,"authoritative_receiving_tiles":positions.size(),"evidence":evidence,"invocation":Array(OS.get_cmdline_user_args()),"scope":"Original schema16 melee damage plus explicitly labeled private presentation-boundary variants. Public compiler and Studio index only; native appearance is qualified separately by studio_blood_residue_checks."}
     FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("BLOOD_AUTHORITY_CHECKS ",JSON.stringify({"checks":checks,"failures":failures}));quit(0 if failures.is_empty() else 1)

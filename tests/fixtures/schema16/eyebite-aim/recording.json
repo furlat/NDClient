@@ -1,0 +1,111 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "d1d87568-cff5-48b5-966b-2540ab6d3aac": "Amber caster",
+  "b2751686-2c4c-472e-b0cb-1d3146502a9d": "Amber ally",
+  "412a741f-e892-4fa2-83e5-9c411a88910e": "Blue second target",
+  "63daa144-c3d6-41cb-8220-be7b60447be7": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.eyebite \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 4,
+   "saving_throw": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.eyebite": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.eyebite.casting",
+   "condition.spell.eyebite.sickened"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "d1d87568-cff5-48b5-966b-2540ab6d3aac",
+   "condition_uuid": "3546f2f2-938f-4929-aed5-6153a45e66f6",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.eyebite.casting",
+   "kind": "actor_change",
+   "actor_uuid": "d1d87568-cff5-48b5-966b-2540ab6d3aac",
+   "condition_uuid": "e94cc307-c32a-436f-8d99-5136e2ff8eaf",
+   "condition_id": "condition.spell.eyebite.casting"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 55,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 60,
+   "lineage": 41,
+   "event_offset": 3,
+   "label": "condition applied condition.spell.eyebite.sickened",
+   "kind": "actor_change",
+   "actor_uuid": "63daa144-c3d6-41cb-8220-be7b60447be7",
+   "condition_uuid": "16d5904c-a49b-4dc1-9cc8-ec5547d42dee",
+   "condition_id": "condition.spell.eyebite.sickened"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 4,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "d1d87568-cff5-48b5-966b-2540ab6d3aac",
+   "condition_uuid": "3546f2f2-938f-4929-aed5-6153a45e66f6",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.eyebite"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

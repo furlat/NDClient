@@ -480,3 +480,36 @@ not assert they have all been individually proven pre-existing. The new impact,
 existing weapon, logical pose and native action checks pass. These unrelated
 suite/fixture repairs are not folded into this bounded authoring task. The runner
 restored tracked generated reports and cleaned up owned test processes.
+
+## 20 October shared-provider checkpoint — supersedes earlier estimates
+
+Earlier implementation estimates mixed installed art, implemented providers and qualified output. Use the exact gates and [finite provider checklist](SHARED_PROVIDER_COMPLETION_CHECKLIST_2026-10-20.md), not those older percentages.
+
+- Complete sealed namespace e102 committed as `ad26e594`:1,246 clips/504 selections/155 condition families; existing defaults retained,87 additional weapon clips still unassigned.
+- Actual selected-condition media ownership:42 conditional selections/nine families,929 checks. No unmatched variant hides existing recipe media.
+- Genuine current/rolling/original-departure actor history uses bounded immutable Timeline cuts, budgeted private layers and public capture-helper samples. Native294+34 and logical350+436 gates are clean, all four views, independent originals and seek/cleanup. Real outfit-transition/surprise timing remain qualification work.
+- Common attack recipes borrow immutable measured trails and load the selected pose only.3186 checks and byte-identical compiled original operations; controlled cold scheduling98.312→7.684ms. Live comparison is separate.
+- Created-item lifetime identity joins actual condition/inventory/source ancestry on its later ordered commit.155 logical+48 native checks are green; Blue's unparented equip remains explicitly unavailable. Existing weapon sprites remain; native wielded bodies stay disabled.
+- Actual actor-birth manifestation provider replaces fixture ownership for all three delivered forms.446 logical+525 native checks are green in both original factions, actual ground/body/clock, all camera directions and replay. No terminal is inferred from visibility loss.
+- Authored display-facing cosmetic aim uses actual world facing and the source's declared offset.1465 equation/original-data checks plus257 native checks are green, both original owners/all four published camera quarters.
+- Combined required fast tier158/158 clean: `.runtime/tests/20261020T074330.447685Z/summary.json`. Five independent live equip/publication runs34/0 each: `.runtime/tests/20261020T075025.026968Z/summary.json`, zero world/media holds, script/engine errors or owned leftovers. No full-repository/all-status or whole-package visual approval claim.
+
+Remaining work is explicit: missing public selector/event/rider/payload attribution, source defects for recorded Sleep/Insect and incoming Counterspell, unaccepted art, offhand/baked attachment authoring, and actual overlapping native treatment/history and final live readiness/scale qualifications. Client-owned supported cohorts continue independently of those gaps.
+
+
+Shared runtime qualification update: current Gallery27actual commands pass313/0
+with zero script/engine errors or owned leftovers in
+`.runtime/tests/20261020T080237.031410Z/summary.json`. Actual opportunity-attack
+scheduling105–111→8.787ms; all7,227interaction frames p50/p95/p99
+6.126/12.167/15.650ms,max33.064ms. Full disjoint door/move/Fireball decomposition
+and remaining gaps are in [the live ledger](GALLERY_CURRENT_PROFILE_2026-10-20.md).
+The previous intermittent selected-task error run remains a failed receipt;
+passive ability/Factory phase reads now use the existing isolated metadata reader,
+but its exact engine invalidator is unproven. Definite failed-audio task reuse is
+separately fixed and qualifies55new+260existing assertions. No new art acceptance.
+
+Final frozen-source checkpoint gate: required fast tier **160/160 clean**,
+`.runtime/tests/20261020T080828.158246Z/summary.json`,zero script/engine errors
+and owned leftovers. This adds the actual cold selected-worker ownership and
+terminal failed-audio-source regressions to the earlier158 gates. No all-status
+or full-package visual-approval claim. The interrupted080649run is not a receipt.

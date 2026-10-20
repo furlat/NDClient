@@ -102,9 +102,16 @@ func prepare(components:Array,host:Node=null,budget:Dictionary={})->Array:
                 loads[key]={"result":output,"task":WorkerThreadPool.add_task(_read_stream.bind(row,output),false,"Authored audio stream")}
                 preparation_counts.loads+=1
             var job:Dictionary=loads[key]
-            if not WorkerThreadPool.is_task_completed(job.task):continue
-            WorkerThreadPool.wait_for_task_completion(job.task)
-            if job.result.has("error"):_error(job.result.error);continue
+            if job.task>=0:
+                if not WorkerThreadPool.is_task_completed(job.task):continue
+                var task:int=job.task
+                job.task=-1
+                WorkerThreadPool.wait_for_task_completion(task)
+            # A failed source is a finished admission, not a pending pool ID.
+            # Retain its exact error so other owners/repeated prepares cannot
+            # poll the consumed task or restart the same failed read each frame.
+            if job.result.has("error"):
+                _error(job.result.error);_record(row,"missing",job.result.error);continue
             streams[key]=job.result.stream;loads.erase(key)
         if not outcomes.has(row.id):_record(row,"ready")
         if voices.has(row.id) or prepared_voices.has(row.id):continue
@@ -158,6 +165,8 @@ func _start(host: Node, row: Dictionary, age_ms: float, speed: float, paused: bo
     if row.get("attachment_error","")!="":
         _record(row,"skipped",row.attachment_error);return true
     var key=_key(row)
+    if loads.has(key) and loads[key].task<0 and loads[key].result.has("error"):
+        _record(row,"missing",loads[key].result.error);return true
     # A stream still loading never holds the picture; the voice starts late.
     if not streams.has(key) or not prepared_voices.has(row.id):
         _record(row,"scheduled","awaiting_stream");return false
@@ -263,5 +272,9 @@ func sample(host: Node, components: Array, display_ms: float, speed: float, paus
 func close() -> void:
     for id in voices.keys(): _release(id)
     for node in prepared_voices.values():node.free()
+    for job in loads.values():
+        var task:int=job.task
+        job.task=-1
+        if task>=0:WorkerThreadPool.wait_for_task_completion(task)
     prepared_voices.clear();loads.clear()
     streams.clear();consumed.clear();outcomes.clear();last_ms=NAN;sampled_ms=NAN;epoch=-1

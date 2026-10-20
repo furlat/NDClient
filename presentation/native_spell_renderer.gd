@@ -194,12 +194,18 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     FrameProfile.end_phase(world.profile,"native_prepare_optical_surfaces",started)
     for component in wanted.values()+(optional.values() if allow_optional else []):
         if not handles.has(component.id) or not Inputs.departure_history(handles[component.id]):continue
-        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
         started=Time.get_ticks_usec()
-        var departure:Dictionary=inputs.prepare_departure(world,handles[component.id],component)
+        var departure:Dictionary=inputs.prepare_departure(world,handles[component.id],component,budget.is_empty() or budget.used_usec<budget.limit_usec)
         if wanted.has(component.id) and departure.get("pending",false):result.ready=false;result.pending+=1
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
         FrameProfile.end_phase(world.profile,"native_prepare_departure",started)
+    for component in wanted.values()+(optional.values() if allow_optional else []):
+        if not handles.has(component.id) or not Inputs.rolling_history(handles[component.id]):continue
+        started=Time.get_ticks_usec()
+        var history:Dictionary=inputs.prepare_history(world,handles[component.id],component,budget.is_empty() or budget.used_usec<budget.limit_usec)
+        if wanted.has(component.id) and history.get("pending",false):result.ready=false;result.pending+=1
+        if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+        FrameProfile.end_phase(world.profile,"native_prepare_history",started)
     started=Time.get_ticks_usec()
     # Future exact pose selection owns CPU-image demand before its measurement
     # can run. The existing media owner admits those bytes asynchronously.
@@ -208,16 +214,34 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     for component in wanted.values()+(optional.values() if allow_optional else []):
         if not handles.has(component.id):continue
         var handle:Dictionary=handles[component.id]
-        if "actor_context" not in handle.clip.get("inputs",[]) or handle.get("history_allocated",false) or handle.root.is_visible_in_tree():continue
-        if not Inputs.current_pose_history(handle) and not (Inputs.departure_history(handle) and handle.has("departure_entries")):continue
-        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
+        if "actor_context" not in handle.clip.get("inputs",[]):continue
+        var allocation_key:Array=Inputs.allocation_key(world,handle,component)
+        if handle.get("history_allocation_key",[])!=allocation_key:
+            handle.history_allocation_key=allocation_key;handle.history_allocation_step=0;handle.erase("history_allocated")
+        if handle.get("history_allocated",false):continue
+        if not Inputs.current_pose_history(handle) and not Inputs.rolling_history(handle) and not (Inputs.departure_history(handle) and handle.has("departure_entries")):continue
+        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
+            if wanted.has(component.id):result.ready=false;result.pending+=1
+            continue
         var points:Dictionary=Sockets.endpoints(world,component)
         if not points.ready:continue
         started=Time.get_ticks_usec()
-        var bound:Dictionary=inputs.sync(world,handle,component,points,_support.viewport.get_texture())
-        if bound.unavailable.is_empty():
-            # Zero-delay copies can allocate from the actual current private
-            # pose before the cue. No fabricated predecessor or publication.
+        var bound:Dictionary=inputs.sync(world,handle,component,points,_support.viewport.get_texture(),true)
+        var context:Dictionary=inputs.allocation_context(world,handle,component,_support.viewport.get_texture())
+        if context.ready and handle.occurrence.has_method("prepare_actor_context"):
+            # Prepare every retained outfit topology, then the current one.
+            # The index resumes within this same owner/budget across frames;
+            # no historical sample or occurrence clock runs during allocation.
+            var available:int=maxi(0,budget.limit_usec-budget.used_usec) if not budget.is_empty() else 2000
+            var allocation:Dictionary={"ready":false}
+            while Time.get_ticks_usec()-started<available:
+                allocation=handle.occurrence.prepare_actor_context(context.packet)
+                if not allocation.ready:continue
+                if Inputs.advance_allocation(handle):handle.history_allocated=true;break
+                context=inputs.allocation_context(world,handle,component,_support.viewport.get_texture())
+                if not context.ready:break
+            if not handle.get("history_allocated",false) and wanted.has(component.id):result.ready=false;result.pending+=1
+        elif context.ready and bound.unavailable.is_empty():
             Effects.sample(handle,0.0);handle.history_allocated=true
         Effects.hide(handle)
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
@@ -338,7 +362,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     for id in active:retained[id]=true
     for id in handles.keys():
         if not retained.has(id):Inputs.release_departure(handles[id]);Effects.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
-        elif not active.has(id):Effects.hide(handles[id])
+        elif not active.has(id):Inputs.invalidate_history(handles[id]);Effects.hide(handles[id])
     FrameProfile.end_phase(world.profile,"native_sample_retention",sample_phase)
     sample_phase=Time.get_ticks_usec()
     for id in active:
@@ -354,6 +378,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var age:float=maxf(0,float(component.age_ms)/1000.0)
         var points=Sockets.endpoints(world,component,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch))
         if not points.ready:
+            if points.get("unavailable",false):Inputs.invalidate_history(handle)
             Effects.hide(handle)
             if points.get("unavailable",false):_unavailable(component,points.reason)
             elif points.get("pending",false):ready=false;_pending(component,points.reason)
@@ -383,7 +408,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         # samples must follow the requested component clock at any frame rate.
         var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))
         # A seekable approach draws any age directly; only a simulation has history.
-        if handle.get("seekable",false) or ("actor_context" in handle.clip.get("inputs",[]) and (Inputs.current_pose_history(handle) or Inputs.departure_history(handle))):handle.warming=false
+        if handle.get("seekable",false) or ("actor_context" in handle.clip.get("inputs",[]) and (Inputs.current_pose_history(handle) or Inputs.departure_history(handle) or Inputs.rolling_history(handle))):handle.warming=false
         elif not handle.started and age>expected_step+0.000001:handle.warming=true
         elif handle.started and not handle.warming and age-float(handle.requested_time)>expected_step*2.0+0.000001:handle.warming=true
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
@@ -709,8 +734,10 @@ func _image_requirements(world:Node)->void:
     var received_sources:Dictionary={}
     var departure_paths:Dictionary={}
     for id in _required_ids:
-        for path in handles.get(id,{}).get("departure_paths",{}):
-            key.append(["departure",path]);departure_paths[path]=true
+        var retained_paths:Dictionary=handles.get(id,{}).get("departure_paths",{}).duplicate()
+        retained_paths.merge(Inputs.history_paths(handles.get(id,{})))
+        for path in retained_paths:
+            key.append(["history",path]);departure_paths[path]=true
     for source in self.inputs.surfaces.received_poses:received_sources[[source.path,source.slot]]=true
     for source in received_sources:
         key.append(["received",source[0],source[1]])

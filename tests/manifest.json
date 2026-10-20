@@ -167,6 +167,17 @@
    "reason": ""
   },
   {
+   "name": "audio_source_failure_checks",
+   "script": "res://tests/audio_source_failure_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "options": [],
+   "status": "ok",
+   "reason": "Failed audio-source task ownership, repeated preparation/close, normal authored-source control."
+  },
+  {
    "name": "audio_presenter_checks",
    "script": "res://tests/audio_presenter_checks.gd",
    "mode": "headless",
@@ -252,15 +263,18 @@
    "script": "res://tests/blood_authority_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/melee/amber",
+    "--sequence=2"
+   ],
    "timeout": 300,
    "options": [
     "--output",
     "--recording",
     "--sequence"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --recording=<real SDK journal> --sequence=<operation with body.blood> [--output=<report>] (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current schema16 unchanged original inputs and actual typed source contracts; qualified headless at20261020T064914.548822Z; native output remains a separate gate."
   },
   {
    "name": "blood_kernel_cache_checks",
@@ -455,10 +469,12 @@
    "script": "res://tests/character_geometry_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--state=res://tests/fixtures/schema16/character_sources.json"
+   ],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "characters"
+   "status": "ok",
+   "reason": "Current schema16 unchanged original inputs and actual typed source contracts; qualified headless at20261020T064914.548822Z; native output remains a separate gate."
   },
   {
    "name": "character_geometry_render_checks",
@@ -1875,7 +1891,7 @@
    "args": [],
    "timeout": 300,
    "status": "ok",
-   "reason": "Merged main-client actor-history provider: actual Mirror output is a required gate. Installed c494 source shader defects remain failures until a complete repaired delivery arrives."
+   "reason": "Actual selected e102 Mirror source: private ownership, four current views, framebuffer contribution, reverse seek and cleanup."
   },
   {
    "name": "native_application_constructor_checks",
@@ -1883,11 +1899,11 @@
    "mode": "headless",
    "tier": "gate",
    "args": [
-    "--journal=res://.runtime/studio-library/cases/spell.circle_of_death__baseline/20261019T142214.366493Z/amber/journal"
+    "--journal=res://tests/fixtures/schema16/circle-of-death/amber/journal"
    ],
    "timeout": 90,
-   "status": "needs-args",
-   "reason": "Requires retained actual Circle amber journal; scope/constructor/order test, separate from native output and timing."
+   "status": "ok",
+   "reason": "Stable original schema16 Circle journal: actual native scope, constructor and order. Separate from native output and timing."
   },
   {
    "name": "native_area_mask_checks",
@@ -4045,6 +4061,17 @@
    "reason": "takes --recording (argument not yet chosen)"
   },
   {
+   "name": "selection_worker_ownership_checks",
+   "script": "res://tests/selection_worker_ownership_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 90,
+   "options": [],
+   "status": "ok",
+   "reason": "Cold actual typed/Factory metadata from pool workers, concurrent selection replacement/cancel and exact task retirement."
+  },
+  {
    "name": "selection_media_checks",
    "script": "res://tests/selection_media_checks.gd",
    "mode": "gpu",
@@ -5981,6 +6008,106 @@
    "timeout": 120,
    "status": "ok",
    "reason": "Exact delivered approach/default/recorded-family preparation ownership; actual native constructors/drawing remain the exhaustive package bench gate."
+  },
+  {
+   "name": "attack_recipe_admission_checks",
+   "script": "res://tests/attack_recipe_admission_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Shared immutable measured attack bank and lazy exact-pose admission; original compiled operations remain byte-identical."
+  },
+  {
+   "name": "actor_history_capture_checks",
+   "script": "res://tests/actor_history_capture_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Bounded immutable actual actor draw history; private owners, disclosure gaps, view-independent original sampling and replay cuts."
+  },
+  {
+   "name": "condition_replacement_selection_checks",
+   "script": "res://tests/condition_replacement_selection_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Actual conditional lifecycle predicates alone replace existing media; missing and mismatched selectors preserve gaps."
+  },
+  {
+   "name": "native_actor_history_modes_checks",
+   "script": "res://tests/native_actor_history_modes_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "timeout": 180,
+   "args": [],
+   "status": "ok",
+   "reason": "Shared current-copy, rolling-history and actual departure paths over original independent seat streams, all view quarters, seeking and teardown."
+  },
+  {
+   "name": "created_item_identity_checks",
+   "script": "res://tests/created_item_identity_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Exact same-cast created item/lifetime/caster ancestry, later ordered publication and independent faction gaps."
+  },
+  {
+   "name": "native_created_item_identity_checks",
+   "script": "res://tests/native_created_item_identity_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "timeout": 180,
+   "args": [],
+   "status": "ok",
+   "reason": "Actual created-item identity and modular weapon native output in all quarters, exact missing ancestry refusal and canonical sprite retention."
+  },
+  {
+   "name": "actor_birth_input_checks",
+   "script": "res://tests/actor_birth_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Actual actor-birth ownership, distinct independent faction birth/body identities, exact spatial publication and inactive prepared source; native output separately gated."
+  },
+  {
+   "name": "display_facing_aim_checks",
+   "script": "res://tests/display_facing_aim_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Authored cosmetic world-facing aim: exact delivered gaze equation, all directions/camera quarters/root transforms and original independent owner streams."
+  },
+  {
+   "name": "native_actor_birth_render_checks",
+   "script": "res://tests/native_actor_birth_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "timeout": 600,
+   "args": [],
+   "status": "ok",
+   "reason": "Actual manifestation birth source output through original both-seat journals, body/admission identity, all camera quarters, reverse seek/replay and cleanup; terminal remains separate."
+  },
+  {
+   "name": "native_display_facing_aim_render_checks",
+   "script": "res://tests/native_display_facing_aim_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "timeout": 300,
+   "args": [],
+   "status": "ok",
+   "reason": "Original two-seat actual authored gaze lifecycle: published camera directions, exact native input/source orientation and isolated framebuffer pixels through seek/loop/cleanup."
   }
  ]
 }
