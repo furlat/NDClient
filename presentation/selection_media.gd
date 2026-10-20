@@ -244,7 +244,7 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
     # remains exclusively driven by a received authoritative damage fact.
     if recipe.get("damage")!=null and Catalog.residue_asset(cache).is_empty():
         result.errors.append("Cannot load selected asset metadata: particles.region.blood")
-    result.native_selection=NativeSpells.selection(request.behavior,cache)
+    result.native_selection=NativeSpells.preparation_selection(request.behavior,cache)
     var rigs: Dictionary=Authoring.rigs(cache)
     var actor_order: Array=[request.actor_uuid]
     actor_order.append_array(state.actors.keys().filter(func(id):return id!=request.actor_uuid))

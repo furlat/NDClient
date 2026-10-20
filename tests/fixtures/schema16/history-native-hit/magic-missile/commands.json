@@ -1,0 +1,372 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "1e062dd9-2866-4411-b69f-d377fc982532",
+   "state_revision": "22ed5511-ee0a-4e80-8797-3158ce39b5f7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "62316e18-167d-4b83-bc6c-edce400d424b",
+   "state_revision": "8497bc76-9ef5-4458-9b9e-de65489d22e8",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue attacker",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "2c51ae59-a220-4164-a3d7-cc2761638a0d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "2c51ae59-a220-4164-a3d7-cc2761638a0d",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "toggle_handler",
+   "by": "caster",
+   "handler": "reaction.spell.shield",
+   "enabled": false
+  },
+  "previews": 0,
+  "stage": "choices",
+  "query_revision": "cbd35fcc-7c33-45a6-aea0-d5ed476949e9",
+  "discovery_generation": 1,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+   "state_revision": "cbd35fcc-7c33-45a6-aea0-d5ed476949e9",
+   "intent": {
+    "kind": "toggle_handler",
+    "discovery_generation": 1,
+    "handler": {
+     "handler_uuid": "bc6952a3-83b1-48dc-a6fb-8a81ecf446e0",
+     "enabled": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.blur",
+   "by": "caster",
+   "target": "self",
+   "track": true,
+   "track_condition": "condition.spell.blur"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "82670e81-5e28-43d0-a1e4-f5bba10fac99",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.blur",
+   "display_name": "Blur (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+   "state_revision": "82670e81-5e28-43d0-a1e4-f5bba10fac99",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "attacker"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+   "state_revision": "1786688a-bbfd-44b0-aed7-e34b07cf5067",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "attacker"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "1e062dd9-2866-4411-b69f-d377fc982532",
+   "state_revision": "fbd13442-cb7b-4a8c-91c3-6885d33d6790",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.magic_missile",
+   "by": "attacker",
+   "target": "caster",
+   "level": 1,
+   "recipients": [
+    "caster",
+    "ally",
+    "ally"
+   ]
+  },
+  "previews": 3,
+  "stage": "preview_3",
+  "query_revision": "b1167e79-2c74-4bc7-98d7-3be8ee25c527",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.magic_missile",
+   "display_name": "Magic Missile (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "automatic",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "62316e18-167d-4b83-bc6c-edce400d424b",
+   "state_revision": "b1167e79-2c74-4bc7-98d7-3be8ee25c527",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 6,
+     "target_indices": [
+      0,
+      1,
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue attacker",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "2c51ae59-a220-4164-a3d7-cc2761638a0d",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "2c51ae59-a220-4164-a3d7-cc2761638a0d",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "62316e18-167d-4b83-bc6c-edce400d424b",
+   "state_revision": "e5004dc0-b240-47fb-b442-685d3ffb3ac5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue attacker",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "2c51ae59-a220-4164-a3d7-cc2761638a0d",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "2c51ae59-a220-4164-a3d7-cc2761638a0d",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "328106d6-9766-4c16-9976-5910799c232b",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+   "state_revision": "328106d6-9766-4c16-9976-5910799c232b",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      3
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+   "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+   "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_condition_spell_blur_native_missile_history_active_window",
+    "game_epoch": "c42db383-a763-4167-be8e-14709979f674",
+    "audience_id": "ca374433-d89b-4867-b194-d1a2e97a3965",
+    "sequence": 15
+   }
+  }
+ }
+]

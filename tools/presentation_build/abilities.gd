@@ -265,9 +265,28 @@ static func native_records(spells: Dictionary, policy: Dictionary, conditions:Di
             spell.recipe = raw.duplicate(true)
             spell.recipe.cast = treatment.cast
             if spell.recipe.get("damage") != null and not treatment.flash.is_empty():spell.recipe.damage.hitFlash = treatment.flash
-        spell.hit = F.plain(R.spell_hit(e, name))
         spell.requirement_source = "spells/" + id + ".json:"
         spell.requirements = Requirements.recipe(spell.recipe, spell.requirement_source, ["spell"], {})
+        for variant in e.variants:
+            var selected:Dictionary=F.plain(R.variant_selection(spell.selection,variant))
+            var variant_recipe:Dictionary=spell.recipe
+            if not variant.recipe.is_empty():
+                variant_recipe=F.plain(variant.recipe)
+                var treatment:Dictionary=Feedback.prepare(variant_recipe,selected.palette,selected.staging,policy)
+                variant_recipe=variant_recipe.duplicate()
+                # Body/cast ownership is the original real cast, independent
+                # of each recipient's eventual outcome.
+                variant_recipe.cast=spell.recipe.get("cast",{})
+                if variant_recipe.get("damage")!=null and not treatment.flash.is_empty():
+                    variant_recipe.damage=variant_recipe.damage.duplicate()
+                    variant_recipe.damage.hitFlash=treatment.flash
+            var reason:String=variant.dispatch_gap
+            if variant.when.is_empty():reason="public_fact_predicate_not_authored"
+            spell.variants.append({"id":variant.id,"kind":variant.kind,"value":variant.value,
+                "when":F.plain(variant.when),"dispatch_gap":reason,"status":variant.status,
+                "selection":selected,"recipe":variant_recipe,"requirement_source":spell.requirement_source,
+                "requirements":spell.requirements if is_same(variant_recipe,spell.recipe) else Requirements.recipe(variant_recipe,spell.requirement_source,["spell"],{})})
+        spell.hit = F.plain(R.spell_hit(e, name))
         result.records[id] = spell
     var ownership:Dictionary=condition_owners(spells,conditions,result.records)
     result.conditions=ownership.owners;result.condition_conflicts=ownership.conflicts
@@ -301,7 +320,7 @@ static func condition_owners(spells:Dictionary,conditions:Dictionary,available:D
 static func _save_native(out_dir: String, native: Dictionary, report: Dictionary) -> void:
     var root := out_dir.path_join("native_spells")
     var hashed := PackedStringArray()
-    for id in _sorted(native.records):hashed.append(JSON.stringify([id, native.records[id].selection, native.records[id].recipe, native.records[id].hit]))
+    for id in _sorted(native.records):hashed.append(JSON.stringify([id, native.records[id].selection, native.records[id].recipe, native.records[id].hit, native.records[id].variants]))
     var revision := "".join(hashed).sha256_text().left(12) + "-" + str(int(Time.get_unix_time_from_system()))
     var directory := root.path_join(revision)
     if DirAccess.dir_exists_absolute(root):
@@ -368,6 +387,7 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
             if clips.has(use.clip):continue
             if e.native_staging:Common.warn(report, where, "staged clip resolves by role or rename, not by id: " + use.clip)
             elif use.staging_from.begins_with("factory"):Common.error(report, where, "imported clip not in the package: " + use.clip)
+        _check_variants(e,where,report)
         for variant in e.variants:
             for use in variant.effects:
                 _check_constructor(use,where,clips,report)
@@ -397,6 +417,34 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
         for sound in entries.damage_types[id].sounds:_check_binding(report, "abilities/damage_types/" + id, bindings.get("damage_types", {}).get(id), sound)
     _validate_rigs(entries, report)
     for id in entries.get("conditions", {}):_validate_condition(entries.conditions[id], "abilities/conditions/" + id, report)
+
+## Deliberately small public selector language. These are actual SpellFact
+## enums, not renderer guesses about saves, elements or passive riders.
+const VARIANT_FIELDS={"attack_outcome":["Hit","Miss","Crit","Crit Miss"],"target_kind":["creature","object"]}
+static func _check_variants(e:Resource,where:String,report:Dictionary)->void:
+    var active:Array=[];var identities:Dictionary={}
+    for variant in e.variants:
+        if identities.has(variant.id):Common.error(report,where,"duplicate variant id: "+variant.id)
+        identities[variant.id]=true
+        for field in variant.when:
+            if not VARIANT_FIELDS.has(field):
+                Common.error(report,where,"variant "+variant.id+" uses unsupported public fact field: "+str(field));continue
+            var values:Variant=variant.when[field]
+            if not values is Array or values.is_empty():
+                Common.error(report,where,"variant "+variant.id+" predicate needs a nonempty value array");continue
+            for value in values:
+                if value not in VARIANT_FIELDS[field]:Common.error(report,where,"variant "+variant.id+" has noncanonical "+field+" value: "+str(value))
+        if variant.when.is_empty() or not variant.dispatch_gap.is_empty():continue
+        if not variant.effects.is_empty() and (not e.owner_cues.is_empty() or not e.contact_cues.is_empty() or not e.excluded_cues.is_empty() or e.explicit_event_cues):
+            Common.error(report,where,"variant "+variant.id+" cannot inherit base cue-index ownership over a replaced cue list")
+        if variant.recipe.has("cast") and variant.recipe.cast!=raw_recipe(e).get("cast",{}):
+            Common.error(report,where,"variant "+variant.id+" changes the shared caster body; outcome dispatch owns only recipient delivery")
+        for prior in active:
+            var disjoint:bool=false
+            for field in variant.when:
+                if prior.when.has(field) and not variant.when[field].any(func(value):return value in prior.when[field]):disjoint=true;break
+            if not disjoint:Common.error(report,where,"overlapping variant predicates: "+prior.id+" / "+variant.id)
+        active.append(variant)
 
 static func _check_constructor(use:Resource,where:String,clips:Dictionary,report:Dictionary)->void:
     var binding:Dictionary=use.constructor_input

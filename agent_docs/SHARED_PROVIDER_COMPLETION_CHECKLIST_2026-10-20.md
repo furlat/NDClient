@@ -24,6 +24,31 @@ The latest static typed-cue snapshot reports 218 provider-present/unqualified cu
 
 **Current shared checkpoint:** actual selected lifecycle media replacement and all three native history modes have passed their cohort gates. Shared same-cast created-item identity and actual actor-birth manifestation ownership now pass logical and native output gates. Explicit display-facing cosmetic gaze passes1465 source-equation and257 native-output checks on both original owners/all four published views. See the dated cohort handoffs. This updates implementation/output facts without claiming final live readiness, all historical equipment transitions, missing public inputs or user art approval.
 
+## Latest shared cohorts
+
+- [Typed variant dispatch](TYPED_SPELL_VARIANT_DISPATCH_COHORT_2026-10-20.md)
+  now serializes all130alternatives across43native-enabled spell owners. Exact
+  per-application predicates, source/requirement selection and bounded optional
+  preparation share the production path.627logical+47native checks pass. No
+  unpredicated production alternative or rejected art is silently enabled.
+- [Ordered spatial transitions](SPATIAL_TRANSITION_PROVIDER_2026-10-20.md) retain
+  actual occurrence/lineage/owner/cell rows through Compiler, Timeline and
+  Recording. Both vegetation sources receive actual partial/full removal with
+  source-owned retirement;164logical+448native checks pass on genuine original
+  two-seat burns. Early preparation receives neutral runtime removal operands.
+- Prepared weapon registration, accepted operations and non-native historical
+  material transitions are published in5b12fdf6. The complete current fast lane
+  passes165/165; source availability and these cohort gates are separate from
+  full variant output and final performance.
+- The remaining mutable native-hit/global-clock history dependency has an exact
+  [Factory contract handoff](FACTORY_NATIVE_HIT_HISTORY_CONTRACT_HANDOFF_2026-10-20.md).
+  A seek-only private draft was not shipped as live-history completion.
+- Existing held-item source limits are separated from factual client placement
+  in the [held-item handoff](FACTORY_HELD_ITEM_SOURCE_HANDOFF_2026-10-20.md):
+  current-holder rebinding, bounded permanent seeking, explicit lifecycle
+  handover and exact legacy attribution. Inventory-only originals are not held
+  output witnesses, and native weapon-body replacements remain disabled.
+
 ## Supported substrate to reuse
 
 - `NativeInputs` supplies actual displayed layer/material identities, EntitySurface points/normals/UVs, named endpoint sockets, current camera/depth, precise owner visibility, authored delivery timing and condition/item membership. Topology/media share; actor transforms, source clocks, materials, UUIDs and leases remain private.
@@ -107,7 +132,7 @@ Actual `weapon_binding` resolves disclosed item UUID, current holder, equipment 
 
 **Inventory:** 61 clips / 55 selections. Channels: `accepted_release`, `admitted_cells`, `blast_event`, `body_state`, `glyph_state`, `membership_present`, `patch_states`, `payload_anchor`, `payload_state`, `removed_cells`, `retirement_time`, `suppressed`, `surface_presence`, `surface_records`, `surface_state`, `transition_events`, `visual_occupants`, `visual_state`, `wet_presence`.
 
-Actual spatial UUID/cells/membership already drive the shared `SpatialInputs` / persistent path. `admitted_cells` has explicit grid-frame/capacity/topology constraints. `removed_cells` requires the real spatial owner and recorded retirement observations; loss of sight is not burning or disappearance. The new `surface_presence` branch is in flight, not an excuse to infer all surface transition channels.
+Actual spatial UUID/cells/membership already drive the shared `SpatialInputs` / persistent path. `admitted_cells` has explicit grid-frame/capacity/topology constraints. `removed_cells` now receives actual same-owner recorded retirement observations for both compatible vegetation clips, with private original clocks and a source-owned0.70second optical tail. Loss of sight is not burning or disappearance. The existing `surface_presence` branch binds its exact disclosed spatial owner. Actual native transition rows now have ordered transport; this is not permission to infer unbound contact, payload or particle channels.
 
 | Family | Remaining exact dependency |
 |---|---|

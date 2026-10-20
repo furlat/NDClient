@@ -1,0 +1,56 @@
+{
+ "id": "spell.ray_of_sickness/observed-miss",
+ "title": "Ray of Sickness: actual attack outcome against Dodge",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.ray_of_sickness"
+  ],
+  "action": [
+   "action.dodge"
+  ]
+ },
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 1,
+   "caster_level": 1,
+   "spells": [
+    "spell.ray_of_sickness"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.knight",
+   "at": [
+    6,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.dodge",
+   "by": "target"
+  },
+  {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  }
+ ],
+ "required_behaviors": [
+  "action.dodge",
+  "spell.ray_of_sickness"
+ ],
+ "purpose": "One legal fixed-seed attack versus an actually Dodging armoured target; no forced result or retries. Actual outcome only."
+}

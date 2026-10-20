@@ -1,0 +1,107 @@
+{
+ "id": "condition.spell.blur/native_missile_history/active_window",
+ "title": "Blur authentic rolling history with actual opposing magic missile",
+ "kind": "interaction",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.blur",
+   "spell.magic_missile"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.blur"
+  ],
+  "creature": [
+   "creature.generic_caster"
+  ],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.blur"
+   ],
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  },
+  {
+   "role": "attacker",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 5,
+   "at": [
+    8,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "toggle_handler",
+   "by": "caster",
+   "handler": "reaction.spell.shield",
+   "enabled": false
+  },
+  {
+   "do": "spell.blur",
+   "by": "caster",
+   "target": "self",
+   "track": true,
+   "track_condition": "condition.spell.blur"
+  },
+  {
+   "do": "spell.magic_missile",
+   "by": "attacker",
+   "target": "caster",
+   "level": 1,
+   "recipients": [
+    "caster",
+    "ally",
+    "ally"
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.blur",
+  "spell.magic_missile",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.blur"
+ ],
+ "required_applied_damage_types": [
+  "Force"
+ ],
+ "purpose": "Authentic native-hit/history input cohort. Actual misses, cancellation, concentration loss and per-seat disclosure remain original observations; presenter style is a separate client test control. This bounded capture ends after actual post-hit movement; no authoritative Blur removal is claimed."
+}

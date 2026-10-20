@@ -138,8 +138,9 @@ static func _spell_sources(behavior: String, graph: Dictionary, cache: Dictionar
     # Both selectors consume only the behavior and immutable authored documents.
     # Applications retain their own timing/delivery below; share no runtime state.
     if not graph.spell_sources.has(behavior):
-        graph.spell_sources[behavior] = {"recipe":Components.NativeSpells.recipe({"behavior_id":behavior},cache),
-            "selection":Components.NativeSpells.selection(behavior,cache)}
+        graph.spell_sources[behavior] = Components.NativeSpells.source(behavior,cache)
+        if graph.spell_sources[behavior].recipe.is_empty():
+            graph.spell_sources[behavior].recipe=Components.NativeSpells.recipe({"behavior_id":behavior},cache)
     return graph.spell_sources[behavior]
 
 static func _children(node: Dictionary, graph: Dictionary) -> Array:
@@ -364,7 +365,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         for child in children:finish=maxf(finish,_schedule(child,start,state,group,graph,cache))
     elif kind == "spell" and not node.canceled:
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
-        var sources = _spell_sources(str(fact.behavior_id),graph,cache)
+        var sources:Dictionary=Components.NativeSpells.selected(_spell_sources(str(fact.behavior_id),graph,cache),fact)
         var recipe: Dictionary = sources.recipe
         graph.recipes[node.id]=recipe
         var cast: Dictionary=recipe.get("cast",{})
@@ -511,7 +512,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
         var sampled_at:float=start
         for commit in group.get("commits",[]):
             var delta: Dictionary = commit.delta
-            if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses") and delta.get("items",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("object_members"): continue
+            if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses") and delta.get("items",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("object_members") and commit.get("spatial_rows",[]).is_empty(): continue
             var at: float = start+commit.at_ms
             for field in ["actors","items","objects"]:item_state[field].merge(delta.get(field,{}),true)
             for id in delta.get("objects_removed",[]):item_state.objects.erase(id)
@@ -526,10 +527,9 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
                 changed=changed or condition_inputs.get(id,[])!=selected
                 condition_inputs[id]=selected
             changed=Conditions.observe(owners,delta.get("actors",{}),at,false,commit.get("condition_rows",[])) or changed
-            if delta.get("set",{}).has("senses"):
-                var spatial:Dictionary=delta.set.senses.get("spatial_effects",{}) if delta.set.senses!=null else {}
-                Conditions.NativePersistent.observe_spatial(areas,spatial,at)
-                changed=changed or spatial_inputs!=spatial
+            if delta.get("set",{}).has("senses") or not commit.get("spatial_rows",[]).is_empty():
+                var spatial:Dictionary=item_state.senses.get("spatial_effects",{}) if item_state.senses!=null else {}
+                changed=Conditions.NativePersistent.observe_spatial(areas,spatial,at,false,commit.get("spatial_rows",[])) or changed
                 spatial_inputs=spatial
             # Several HP/position after-values can share one effect contact.
             # They change no persistent constructor operand. Keep all distinct
@@ -572,6 +572,13 @@ static func _native_requirement_cut(group: Dictionary, previous: Dictionary, own
         if row.kind!="audio":runtime_fields.append_array(["start_ms","absolute_start_ms","duration_ms"])
         for field in runtime_fields:
             row.erase(field)
+        # A received requirement can prepare topology before its commit. Its
+        # operation-local projection is not the actual persistent source age.
+        # Only the ordered Timeline sample may latch permanent removal times.
+        if row.has("spatial_observed_removals"):
+            row.spatial_observed_removals=[]
+            row.native_constructor_evidence=row.native_constructor_evidence.duplicate()
+            row.native_constructor_evidence.observed_removals=[]
         # Small disclosed selectors can prepare a private compositor before
         # publication. Never retain the whole condition or its owner clock.
         if "history_state" in row.get("native_clip",{}).get("inputs",[]):
@@ -802,7 +809,8 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 graph.object_inputs[node.id]=target.objects.get(node.fact.object_uuid,{})
             apply_delta(target,captured.delta)
             group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.id,
-                "delta":captured.delta,"condition_rows":captured.get("condition_rows",[]),"item_rows":captured.get("item_rows",[])})
+                "delta":captured.delta,"condition_rows":captured.get("condition_rows",[]),"item_rows":captured.get("item_rows",[]),
+                "spatial_rows":Conditions.NativePersistent.SpatialInputs.observed_rows(node)})
         var trailing: Dictionary = recorded.trailing
         apply_delta(target,trailing)
         graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)

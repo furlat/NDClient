@@ -348,6 +348,18 @@ static func spell_selection(e: Resource, short_id: String, bounds: Dictionary) -
         if key not in ["staging", "lifecycle", "delivery", "palette"]:result[key] = F.deep(e.staging_unported[key])
     return result
 
+## Variant cues replace the finite event selection; the base cast body stays
+## shared by the real cast. Build validation rejects inherited index policies
+## that would refer to a different cue list.
+static func variant_selection(base:Dictionary,variant:Resource)->Dictionary:
+    var selected:Dictionary=base.duplicate()
+    selected.staging=base.staging.duplicate()
+    if not variant.effects.is_empty():
+        selected.staging.cues=[]
+        for i in variant.effects.size():selected.staging.cues.append(cue_from_effect(variant.effects[i],i))
+    selected.variant={"id":variant.id,"when":F.deep(variant.when),"selection":variant.selection,"replaces_effects":not variant.effects.is_empty()}
+    return selected
+
 ## The native hit record (body material and finish) the game reads.
 static func spell_hit(e: Resource, short_id: String) -> Dictionary:
     var hit := {"spell_id": short_id, "definition": e.body_material.duplicate(true), "finish_profile": spell_finish(e)}

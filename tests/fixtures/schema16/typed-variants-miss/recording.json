@@ -1,0 +1,113 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "c1e9601c-af74-49ea-955d-58d4f1b9b2c9": "Amber caster",
+  "6a850ea5-5f5d-49d1-86ed-ea8f9b2fd233": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber caster",
+  "action.dodge \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "spell.ray_of_sickness \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 1,
+   "action": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "action.dodge": 1,
+   "spell.ray_of_sickness": 1
+  },
+  "conditions": [
+   "condition.dodging"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 4,
+   "occurrence": 27,
+   "lineage": 20,
+   "event_offset": 0,
+   "label": "condition applied condition.dodging",
+   "kind": "actor_change",
+   "actor_uuid": "6a850ea5-5f5d-49d1-86ed-ea8f9b2fd233",
+   "condition_uuid": "ee72f936-78d0-4ffc-a41e-131f6d2e1dca",
+   "condition_id": "condition.dodging",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 28,
+   "lineage": 20,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.dodge",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 45,
+   "lineage": 42,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "amber"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 35,
+   "lineage": 28,
+   "event_offset": 0,
+   "label": "condition applied condition.dodging",
+   "kind": "actor_change",
+   "actor_uuid": "6a850ea5-5f5d-49d1-86ed-ea8f9b2fd233",
+   "condition_uuid": "ee72f936-78d0-4ffc-a41e-131f6d2e1dca",
+   "condition_id": "condition.dodging",
+   "faction": "blue"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 36,
+   "lineage": 28,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.dodge",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 53,
+   "lineage": 50,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

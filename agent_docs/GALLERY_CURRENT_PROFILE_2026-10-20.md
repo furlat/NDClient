@@ -544,3 +544,56 @@ recording eviction. These are two clean correctness repeats after containment,
 not a no-spike/permanent-crash-fix or100FPS-every-frame claim. Shared migration
 continues; the remaining frame and publication tails are explicit final-scale
 qualification work.
+
+
+## Typed-dispatch/spatial-publication final live qualification
+
+The combined165fast and two native gates finished before this fresh live run;
+no owned GPU job, recorder or CPU benchmark overlapped its measurement. Same
+frozen engine, e102 package and27actual player commands. Receipt
+`.runtime/tests/20261020T092008.343570Z/summary.json`: **313/0**,69.7seconds,
+zero script/engine errors or owned leftovers. Actual game directory:
+`.runtime/player-runs/20261020T092011.298204Z`.
+
+From first command start_frame through final command end_frame,6736frames:
+p50/p95/p99 **6.494/13.220/16.833ms**,maximum **76.273ms**;73frames exceed16.667ms,
+two exceed33.333ms, zero recording eviction. These remain insufficient for the
+100FPS/no-spike gate. This single correctness/profile repeat is not a matched
+three-trial performance improvement claim.
+
+Exclusive same-client-clock stage milliseconds:
+
+| Action | Input→send | Sent→admission | Admission | Fold | Compile | Opening | Publication/gaps | First animation |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+|Door|15.121|48.041|4.915|29.067|7.745|3.729|94.250|202.868|
+|Room move|2.691|76.241|2.569|75.316|6.605|7.963|18.714|190.099|
+|Opportunity move|4.389|80.070|14.751|51.600|19.441|10.694|26.798|207.743|
+|Fireball|21.375|72.810|1.950|33.567|8.023|7.306|43.073|188.104|
+
+Opportunity scheduling13.306ms remains below its earlier105–111ms source-load
+bottleneck, but is slower than the preceding9.2–9.7ms repeats. There is no causal
+attribution from one timing sample. Fireball's nested fold is32.025ms reduce,
+.865ms stage and.625ms commit; reducer world16.506ms/facts12.209ms are inside
+reduce. Its compiler7.902ms envelope contains schedule.796, event trace2.326,
+lineage1.557, input shell1.084, actor cuts.916, components.554, requirements.406,
+ending.241 and disclosure.018ms. Rounding/envelopes are not extra independent
+stages. Send→admission still includes server/network/framing/queue, not only
+server CPU. Publication/gaps is remaining wall time, not a timed function.
+
+Two largest measured frames:
+
+- Fireball frame3267,76.273ms: Play11.732ms; after Play/HUD/diagnostics,
+  **64.092ms remains unallocated**. Nested optional preparation5.631ms includes
+  residency3.812ms and CPU release2.788ms; actor sample2.693ms and native2D
+  lighting1.360ms are other nested work. Last-available render CPU/GPU
+  .635/.534ms and pipeline counters cannot establish the unallocated cause.
+- Frame975,49.557ms: Play19.809ms and29.355ms unallocated after
+  Play/HUD/diagnostics. Session13.503ms includes timeline8.945ms/media ready
+  6.773ms; media plan5.018ms and preparation4.291ms/component3.913ms are nested
+  scopes. Do not sum parent and child timings or label the remainder as server
+  work or shader compilation without more evidence.
+
+Original full scopes, exact commands and derivation are retained in
+`.runtime/consolidation/shared-variant-spatial-live-analysis.json`, the game
+trace files and its original generated frame-profile path. Shared source
+integration continues independently of these documented final-scale limits.

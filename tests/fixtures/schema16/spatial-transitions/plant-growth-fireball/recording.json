@@ -1,0 +1,504 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 13,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "3d12d0d9-a70b-4c57-b4dd-881b28501ab9": "Amber caster",
+  "ba07a0a5-7b5a-49c2-bebc-214334f74712": "Amber ally",
+  "20372e7a-bb49-40fd-89b2-ef18170e6327": "Blue second target",
+  "9e36dc7f-1670-46ea-8230-d3aa4c8e66da": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.plant_growth \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.fireball \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.fireball \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 25,
+   "sensory": 5,
+   "spatial_effect_state": 3,
+   "spell": 7,
+   "area_reach": 2,
+   "saving_throw": 4,
+   "actor_change": 4,
+   "damage": 8
+  },
+  "behaviors": {
+   "spell.plant_growth": 1,
+   "spell.fireball": 6
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Fire"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 55,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 57,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.plant_growth",
+   "faction": "amber"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 108,
+   "lineage": 92,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 110,
+   "lineage": 92,
+   "event_offset": 3,
+   "kind": "area_reach",
+   "label": "area_reach ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 116,
+   "lineage": 92,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.fireball",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 169,
+   "lineage": 159,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 186,
+   "lineage": 159,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 187,
+   "lineage": 159,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 188,
+   "lineage": 159,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 193,
+   "lineage": 159,
+   "event_offset": 6,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 210,
+   "lineage": 159,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 211,
+   "lineage": 159,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 212,
+   "lineage": 159,
+   "event_offset": 11,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 217,
+   "lineage": 159,
+   "event_offset": 12,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 234,
+   "lineage": 159,
+   "event_offset": 15,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 235,
+   "lineage": 159,
+   "event_offset": 16,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 236,
+   "lineage": 159,
+   "event_offset": 17,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 241,
+   "lineage": 159,
+   "event_offset": 18,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 258,
+   "lineage": 159,
+   "event_offset": 21,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 259,
+   "lineage": 159,
+   "event_offset": 22,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 260,
+   "lineage": 159,
+   "event_offset": 23,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 274,
+   "lineage": 159,
+   "event_offset": 25,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 277,
+   "lineage": 159,
+   "event_offset": 28,
+   "kind": "area_reach",
+   "label": "area_reach ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 283,
+   "lineage": 159,
+   "event_offset": 31,
+   "kind": "spell",
+   "label": "spell spell.fireball",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 55,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 57,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.plant_growth",
+   "faction": "blue"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 107,
+   "lineage": 91,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 109,
+   "lineage": 91,
+   "event_offset": 3,
+   "kind": "area_reach",
+   "label": "area_reach ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 115,
+   "lineage": 91,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.fireball",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 167,
+   "lineage": 157,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 184,
+   "lineage": 157,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 185,
+   "lineage": 157,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 186,
+   "lineage": 157,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 191,
+   "lineage": 157,
+   "event_offset": 6,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 208,
+   "lineage": 157,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 209,
+   "lineage": 157,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 210,
+   "lineage": 157,
+   "event_offset": 11,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 215,
+   "lineage": 157,
+   "event_offset": 12,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 232,
+   "lineage": 157,
+   "event_offset": 15,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 233,
+   "lineage": 157,
+   "event_offset": 16,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 234,
+   "lineage": 157,
+   "event_offset": 17,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 239,
+   "lineage": 157,
+   "event_offset": 18,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 256,
+   "lineage": 157,
+   "event_offset": 21,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 257,
+   "lineage": 157,
+   "event_offset": 22,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 258,
+   "lineage": 157,
+   "event_offset": 23,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 272,
+   "lineage": 157,
+   "event_offset": 25,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 275,
+   "lineage": 157,
+   "event_offset": 28,
+   "kind": "area_reach",
+   "label": "area_reach ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 24,
+   "occurrence": 281,
+   "lineage": 157,
+   "event_offset": 31,
+   "kind": "spell",
+   "label": "spell spell.fireball",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Fire"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

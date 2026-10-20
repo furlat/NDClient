@@ -184,7 +184,7 @@ static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dic
         "timing":{"resolved":true,"start_ms":component.start_ms,"end_ms":component.start_ms+component.duration_ms,"reason":"compiled_source_clock"}},true)
     # Only finite diagnostic identities are retained. No actor/world snapshots,
     # source tracks, materials or native handles enter the bounded live trace.
-    for field in ["attachment","text","source_id","authored_id","cue_id","intercepted_by_condition_uuid"]:
+    for field in ["attachment","text","source_id","authored_id","cue_id","intercepted_by_condition_uuid","native_variant"]:
         if component.has(field):row[field]=component[field]
     if component.has("layer"):
         row.slot=component.layer.get("slot","");row.authored_id=component.layer.get("id","")
@@ -317,7 +317,7 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 if row.get("cast_owner_event",node.id)==node.id and not cast.is_empty() and cast.get("enabled",true):
                     _cast_requirements(row,cast,source+".cast")
                 var behavior:String=str(fact.behavior_id)
-                var selected:Dictionary=spell_sources[behavior].selection if spell_sources.has(behavior) else NativeSpells.selection(behavior,cache)
+                var selected:Dictionary=NativeSpells.selected(spell_sources[behavior],fact).selection if spell_sources.has(behavior) else NativeSpells.selection_for(fact,cache)
                 var shared_area:bool=not selected.is_empty() and SpellDelivery.selected_for(selected,fact).get("delivery",{}).get("scope")=="area"
                 if Occurrences.application(node) and not shared_area and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
                     row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))

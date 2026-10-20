@@ -1,5 +1,13 @@
 # Shared-provider qualification checkpoint — 20 October 2026
 
+**Historical checkpoint below.** Current complete package is e102, committed
+as `ad26e594`; the actor-history shader failures described here are closed.
+Current shared code is `5b12fdf6` after `a33d1e59`:163/163 fast gates, five
+independent34-assertion equipment runs and two313-assertion Gallery repeats.
+See [the current execution ledger](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md) and
+[finite provider checklist](SHARED_PROVIDER_COMPLETION_CHECKLIST_2026-10-20.md).
+These later gates do not imply all art/variants or final performance are complete.
+
 All work remains in `NDClientGodot`, branch `codex-authoring-schemabump`, after
 `0fdaa552`. Frozen engine211b71134/schema16 and whole Factory package
 `production-bindings-c494177f9ef03e3d` are unchanged. This is a checkpoint of the

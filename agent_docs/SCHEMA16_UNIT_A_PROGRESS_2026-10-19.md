@@ -555,3 +555,63 @@ leftovers: `.runtime/tests/20261020T085202.318010Z/summary.json`.
 Bounded anti-slop/correctness review found no further blocker in these owner,
 weapon and operation changes. Every source/scenario/provider/approval fact stays
 separate; these gates do not mark all155families or189spell variants complete.
+
+Checkpoint `5b12fdf6` publishes this batch on the sole branch. The subsequent
+whole-inventory headless playback sweep passes **184 available spell baselines**
+with **zero tested failures, script/resource errors or warnings**:
+`.runtime/shared-provider-recording-safety-second-checkpoint/report.json`.
+The full189gate remains incomplete: Branding/Searing Smite and Ensnaring Strike
+have frozen-engine command failures; Fixture Test Bless cannot start; Spare the
+Dying discovery excludes its genuine0HPpatient. Hellish Rebuke's real
+single-target recording is now included. Native gameplay/visual completeness
+is not inferred from this headless result.
+
+Next shared work is explicit typed per-application spell-variant dispatch and
+actual ordered spatial-transition/retired-cell ownership. Factory's shallow
+history texture/clock limitation has an exact
+[source-contract handoff](FACTORY_NATIVE_HIT_HISTORY_CONTRACT_HANDOFF_2026-10-20.md);
+the unshipped seek-only draft does not qualify ordinary live history.
+
+
+## Typed alternative dispatch and exact spatial publication
+
+The shared runtime previously discarded all typed spell alternatives at build.
+The native Resource now preserves130alternatives/240cues across43enabled spell
+owners, with explicit public-fact predicates, application-specific source and
+requirements, unchanged shared caster/body ownership and exact active-capability
+optional preparation. Unknown/unauthored predicates retain the baseline and an
+explicit gap; no production alternative is guessed from its name. Full typed
+inventory also retains3alternatives on3deliberately native-disabled owners.
+[Implementation and evidence](TYPED_SPELL_VARIANT_DISPATCH_COHORT_2026-10-20.md);
+[Factory authoring handoff](FACTORY_TYPED_VARIANT_AUTHORING_HANDOFF_2026-10-20.md).
+
+The same ordered commit path now carries actual spatial transitions to existing
+owners. Before-publication requirements prepare topology without latching
+removal timestamps. Actual partial/full removal supplies source-relative cells
+and the original clock; canonical state changes immediately while only recorded
+retired cells retain the sealed0.70second optical dissolve. Real Web and Plant
+Growth/Fireball two-seat originals prove the stream. The latter actually removes
+26then23cells. Both compatible source clips share this provider; camera changes,
+seek/loop, cached descriptors and visibility loss keep separate semantics.
+[Spatial cohort](SPATIAL_TRANSITION_PROVIDER_2026-10-20.md).
+
+Final abilities build4.6seconds clean:
+`.runtime/tests/20261020T091601.973300Z/summary.json`. Combined fast **165/165**
+clean (`.runtime/tests/20261020T091644.415567Z/summary.json`), including164spatial
+and627variant assertions. Native **448spatial+47variant** assertions pass with
+zero script/engine errors or owned leftovers
+(`.runtime/tests/20261020T091645.582466Z/summary.json`). Native variant output uses
+explicitly labelled test authoring on genuine Miss facts; imported fixed review
+endpoints and absent predicates remain gaps. Bounded reviews caught and fixed
+unrelated-variant Miss-impact suppression, early removal latching and physical
+removal reopening from cached senses. The approved baseline graphics are retained.
+
+
+Fresh post-batch issued-command Gallery run also passes313/0, zero script/engine
+errors and leftovers (`.runtime/tests/20261020T092008.343570Z/summary.json`). Its
+6736interaction frames measure p50/p95/p99/max6.494/13.220/16.833/76.273ms;
+Door/room move/opportunity move/Fireball first-animation times are
+202.868/190.099/207.743/188.104ms. Complete exclusive stages, compiler/reducer
+leaves and the unallocated worst-frame remainder are in the live ledger.
+The final100FPS/no-spike/performance gate remains open; no source or user art
+approval is inferred. Actual publication holds remain forbidden.

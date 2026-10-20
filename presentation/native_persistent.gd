@@ -86,6 +86,7 @@ static func authored_phases(config:Dictionary,identity:String,cache:Dictionary,s
             phase.lifecycle={}
             phase.native_cue=phase.native_cue.duplicate()
             phase.native_cue.begin=0.0;phase.native_cue.end=INF
+            phase.removal_retention_ms=float(cue.get("fade_out_seconds",0.0))*1000.0
             # The source's observed owner projection owns its return. Generic
             # finite-clip fading would evaluate smoothstep(INF, INF, age).
             phase.native_cue.erase("fade_out_seconds")
@@ -229,17 +230,37 @@ static func spatial_lifecycles(effect:Dictionary)->Array:
     var selected:Array=Effects.conditions(identity)
     return Effects.conditions("spatial_effect."+identity) if selected.is_empty() else selected
 
-static func observe_spatial(owners:Dictionary,effects:Dictionary,at_ms:float,initial:bool=false)->bool:
+static func observe_spatial(owners:Dictionary,effects:Dictionary,at_ms:float,initial:bool=false,rows:Array=[])->bool:
     var changed:bool=false
     for id in effects:
         if not owners.has(id):
-            owners[id]={"id":id,"start_ms":at_ms,"end_ms":INF,"initial":initial,"effect":effects[id],"source_effect":effects[id]}
+            owners[id]={"id":id,"start_ms":at_ms,"end_ms":INF,"initial":initial,"effect":effects[id],"source_effect":effects[id],
+                "spatial_observations":[],"spatial_removals":[],"spatial_observation_keys":{},"physical_end_ms":INF,"observed":true}
             changed=true
-        else:
+        elif is_inf(float(owners[id].physical_end_ms)):
             changed=changed or not is_same(owners[id].effect,effects[id]) or not is_inf(owners[id].end_ms)
-            owners[id].effect=effects[id];owners[id].end_ms=INF
+            owners[id].effect=effects[id];owners[id].end_ms=INF;owners[id].observed=true
+    # The owner still carries its original before-cut topology when the final
+    # sensory after-value removes it. Keep that actual event before visibility
+    # closes the presentation interval below.
+    for row in rows:
+        var identity:String=str(row.spatial_effect_uuid)
+        if not owners.has(identity):continue
+        var owner:Dictionary=owners[identity]
+        var key:Array=[row.event_uuid,row.lineage_uuid]
+        if owner.spatial_observation_keys.has(key):continue
+        owner.spatial_observation_keys[key]=true
+        var observed:Dictionary=row.merged({"at_ms":at_ms})
+        # Replace the small immutable operand arrays once per actual event.
+        # Earlier prepared/Studio cuts keep their own before-removal values.
+        owner.spatial_observations=owner.spatial_observations+[observed]
+        if not row.removed_positions.is_empty():owner.spatial_removals=owner.spatial_removals+[SpatialInputs.removal(owner,observed)]
+        if row.operation=="removed":
+            owner.physical_end_ms=at_ms;owner.end_ms=minf(float(owner.end_ms),at_ms);owner.observed=false
+        changed=true
     for id in owners:
-        if not effects.has(id) and is_inf(owners[id].end_ms):owners[id].end_ms=at_ms;changed=true
+        if not effects.has(id) and is_inf(owners[id].end_ms):
+            owners[id].end_ms=at_ms;owners[id].observed=false;changed=true
     return changed
 
 static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Array:
@@ -254,7 +275,9 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
         if selected.is_empty() and lifecycles.is_empty() and authored.is_empty():continue
         var close_ms:float=removal_ms(lifecycles) if not lifecycles.is_empty() else fade_ms(selected)
         close_ms=maxf(close_ms,authored_removal_ms(config))
-        if at_ms>=float(owner.end_ms)+close_ms:owners.erase(id);continue
+        var retained_until:float=float(owner.end_ms)+close_ms
+        if not owner.get("spatial_removals",[]).is_empty():retained_until=maxf(retained_until,float(owner.spatial_removals.back().at_ms)+close_ms)
+        if at_ms>=retained_until:owners.erase(id);continue
         var positions:Array=SpatialInputs.admitted_cells(effect)
         if positions.is_empty():continue
         var anchor:Variant=effect.get("anchor_position")
@@ -276,16 +299,22 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
                 "start_ms":common.start_ms,"absolute_start_ms":common.absolute_start_ms,"duration_ms":common.duration_ms,
                 "from_position":anchor,"to_position":anchor,"from_elevation_feet":common.elevation_feet,"to_elevation_feet":common.elevation_feet,
                 "ground_target":true,"spatial_content_id":SpatialInputs.content_id(effect),"sample_hz":60.0},true)
-            var construction:Dictionary=SpatialInputs.construction(str(id),effect,phase.native_cue,owner.get("source_effect",{}))
+            var source_effect:Dictionary=owner.get("source_effect",{})
+            var source_anchor:Variant=source_effect.get("anchor_position")
+            if source_anchor==null:source_anchor=source_effect.positions[0]
+            var observed_removals:Array=owner.get("spatial_removals",[])
+            var construction:Dictionary=SpatialInputs.construction(str(id),effect,phase.native_cue,source_effect,observed_removals)
             if construction.ready:
                 row.native_constructor_inputs=construction.operands
                 row.native_constructor_evidence=construction.evidence
                 if construction.has("source_anchor"):
-                    var source_anchor:Array=construction.source_anchor
+                    source_anchor=construction.source_anchor
                     var elevation:float=float(construction.source_elevation_steps)*5.0 if construction.source_elevation_steps!=null else 0.0
                     row.merge({"position":source_anchor,"from_position":source_anchor,"to_position":source_anchor,
                         "elevation_feet":elevation,"from_elevation_feet":elevation,"to_elevation_feet":elevation,
-                        "spatial_source_cells":construction.source_cells,"spatial_observed_removals":construction.observed_removals},true)
+                        "spatial_source_cells":construction.source_cells,"spatial_observed_removals":construction.observed_removals,
+                        "resolved_area_positions":SpatialInputs.presentation_cells(owner,at_ms,float(phase.removal_retention_ms))},true)
+                    if row.resolved_area_positions.is_empty():continue
             else:
                 row.status="missing";row.reason=construction.reason;row.native_input_gaps=[construction.reason]
             row.trace_keys=[row.id]

@@ -300,8 +300,10 @@ static func _prepared_recipe(selected:Dictionary,source:String,kind:String,behav
     # revision. A behavior name alone cannot qualify a changed/custom recipe.
     if kind=="spell":
         var record:Resource=cache.get(Sources.CACHE_KEY,{}).get("loaded",{}).get(behavior)
-        if record!=null and is_same(record.recipe,selected) and record.requirement_source==source:
-            return record.requirements.duplicate()
+        if record!=null:
+            if is_same(record.recipe,selected) and record.requirement_source==source:return record.requirements.duplicate()
+            for variant in record.variants:
+                if is_same(variant.recipe,selected) and variant.requirement_source==source:return variant.requirements.duplicate()
     return recipe(selected,source,[kind],cache)
 
 static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,cache:Dictionary)->Array:

@@ -8,3 +8,7 @@ extends Resource
 ## Occurrences retain their own applicability, participants and coverage state.
 @export var requirement_source:String=""
 @export var requirements:Array=[]
+
+## Every typed alternative is retained, including explicitly undispatched
+## drafts. Each selected application borrows its own immutable record.
+@export var variants:Array=[]

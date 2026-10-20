@@ -6,21 +6,61 @@ const Authoring=preload("res://presentation/authoring.gd")
 const Sources=preload("res://presentation/native_presentation_sources.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 
+## A behavior-owned immutable source. Outcome selection never replaces this
+## cache entry or writes into a sibling application's recipe/selection.
+static func source(behavior_id:String,cache:Dictionary)->Dictionary:
+    var record:Resource=Sources.find(behavior_id,cache)
+    return {"recipe":record.recipe,"selection":record.selection,"variants":record.variants} if record!=null else {"recipe":{},"selection":{},"variants":[]}
+
+static func selected(source_value:Dictionary,fact:Dictionary)->Dictionary:
+    for variant in source_value.get("variants",[]):
+        if variant.when.is_empty() or not variant.dispatch_gap.is_empty():continue
+        var matches:bool=true
+        for field in variant.when:
+            if fact.get(field)==null or fact[field] not in variant.when[field]:matches=false;break
+        if matches:return variant
+    return source_value
+
 static func recipe(fact:Dictionary,cache:Dictionary)->Dictionary:
     var behavior:String=str(fact.get("behavior_id",""))
     var index:Resource=Sources.admission(cache).index
     if index==null:return {}
     if not index.spells.has(behavior):return Authoring.spell(fact,cache)
-    var record:Resource=Sources.find(behavior,cache)
-    return record.recipe if record!=null else {}
+    return selected(source(behavior,cache),fact).recipe
 
+## Baseline selection for static inventory and condition-parent ownership.
 static func selection(behavior_id:String,cache:Dictionary)->Dictionary:
-    var record:Resource=Sources.find(behavior_id,cache)
-    return record.selection if record!=null else {}
+    return source(behavior_id,cache).selection
+
+static func selection_for(fact:Dictionary,cache:Dictionary)->Dictionary:
+    return selected(source(str(fact.get("behavior_id","")),cache),fact).selection
+
+## A variant of an unrelated facet cannot opt into Miss contact. Nor can an
+## inherited default cue list acquire new impact semantics merely by selection.
+static func miss_impact_authored(selected_value:Dictionary,fact:Dictionary)->bool:
+    var variant:Dictionary=selected_value.get("variant",{})
+    return variant.get("replaces_effects",false) and fact.get("attack_outcome") in variant.get("when",{}).get("attack_outcome",[])
+
+## Only an actively selected capability asks for eligible alternatives. This
+## wrapper is preparation-only; received occurrences borrow their exact choice.
+static func preparation_selection(behavior_id:String,cache:Dictionary)->Dictionary:
+    var value:Dictionary=source(behavior_id,cache)
+    var alternatives:Array=[]
+    for variant in value.variants:
+        if not variant.when.is_empty() and variant.dispatch_gap.is_empty():alternatives.append(variant.selection)
+    if alternatives.is_empty():return value.selection
+    var result:Dictionary=value.selection.duplicate()
+    result.preparation_variants=alternatives
+    return result
 
 ## The package clips this spell's staged cues play (excluded probes omitted).
 static func effect_clips(selected:Dictionary)->Array:
     var result:Array=[];var seen:Dictionary={}
+    _effect_clips(selected,result,seen)
+    for alternative in selected.get("preparation_variants",[]):_effect_clips(alternative,result,seen)
+    return result
+
+static func _effect_clips(selected:Dictionary,result:Array,seen:Dictionary)->void:
     var cues:Array=selected.get("staging",{}).get("cues",[])
     var persistent:Array=owned_cues(selected)
     for at in cues.size():
@@ -31,7 +71,6 @@ static func effect_clips(selected:Dictionary)->Array:
             clip=clip.duplicate()
             if not cues[at].get("constructor_input",{}).is_empty():clip.requires_constructor_input=true
             seen[clip.id]=true;result.append(clip)
-    return result
 
 ## Staged cues an owner plays instead of the cast: a spatial owner's cue, and
 ## the spell's attached visual when the package's lifecycle of its condition
@@ -125,6 +164,7 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
         "native_cue":cue,"native_clip":clip,"spell_id":selected.id,"native_lights":bounds.get("lights",[]),
         "source_id":"spell."+selected.id+".native."+str(cue.role),"finish_profile":selected.palette,
         "optical":{"energy_multiplier":staging.get("decorative_light_multiplier",1.0)},"source":source}
+    if selected.has("variant"):row.native_variant=selected.variant
     if staging.has("light_color"):row.optical.color=Color(staging.light_color)
     var unbound:Array=cue.get("unbound_constructor_inputs",[])
     if not unbound.is_empty():

@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8fda1ee7-f704-4b39-a183-f0af8e6f2457",
+   "state_revision": "b69bcc49-3ebd-4b32-ba12-935097e3f4fa",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_scorching_ray_baseline",
+   "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+   "audience_id": "34d5b6a7-2875-44a5-90d2-3b52a8566297",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_scorching_ray_baseline",
+    "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+    "audience_id": "34d5b6a7-2875-44a5-90d2-3b52a8566297",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "59014924-a871-4e45-9c2d-dedf02dd47a8",
+   "state_revision": "1b15b808-19f4-49b3-ab06-cead83e6b12c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_scorching_ray_baseline",
+   "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+   "audience_id": "b10ece36-43ba-4fc4-a9f8-bcfa9a044859",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_scorching_ray_baseline",
+    "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+    "audience_id": "b10ece36-43ba-4fc4-a9f8-bcfa9a044859",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "228aa55b-4df9-463d-9662-8f80a8edb3a4",
+   "state_revision": "5e0f0dca-9cf8-4b5f-9ca0-ff0ac732fb5d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_scorching_ray_baseline",
+   "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+   "audience_id": "b10ece36-43ba-4fc4-a9f8-bcfa9a044859",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_scorching_ray_baseline",
+    "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+    "audience_id": "b10ece36-43ba-4fc4-a9f8-bcfa9a044859",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.scorching_ray",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.scorching_ray",
+   "display_name": "Scorching Ray (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "871b3c64-752f-43cc-846e-13c11bd90d57",
+   "state_revision": "31d7e081-421b-432c-a091-b5498c2fee6a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_scorching_ray_baseline",
+   "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+   "audience_id": "34d5b6a7-2875-44a5-90d2-3b52a8566297",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_scorching_ray_baseline",
+    "game_epoch": "32bda786-b03c-4093-9b6d-dbe1ba6ca291",
+    "audience_id": "34d5b6a7-2875-44a5-90d2-3b52a8566297",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

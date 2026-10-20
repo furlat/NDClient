@@ -1,0 +1,109 @@
+{
+ "id": "condition.spell.blur/native_fire-bolt_history/real_replacement",
+ "title": "Blur authentic rolling history with actual opposing fire bolt",
+ "kind": "interaction",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.blur",
+   "spell.fire_bolt"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.blur"
+  ],
+  "creature": [
+   "creature.generic_caster"
+  ],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.blur"
+   ],
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  },
+  {
+   "role": "attacker",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 5,
+   "at": [
+    8,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "toggle_handler",
+   "by": "caster",
+   "handler": "reaction.spell.shield",
+   "enabled": false
+  },
+  {
+   "do": "spell.blur",
+   "by": "caster",
+   "target": "self",
+   "track": true,
+   "track_condition": "condition.spell.blur"
+  },
+  {
+   "do": "spell.fire_bolt",
+   "by": "attacker",
+   "target": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "spell.blur",
+   "by": "caster",
+   "target": "self"
+  }
+ ],
+ "required_behaviors": [
+  "spell.blur",
+  "spell.fire_bolt",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.blur"
+ ],
+ "required_applied_damage_types": [
+  "Fire"
+ ],
+ "purpose": "Authentic applied native spell hit during first Blur owner, movement and lawful second Blur cast for genuine concentration replacement. Actual misses/concentration loss remain original; replacement and native-history qualification require actual UUID rows.",
+ "required_condition_ends": [
+  "condition.spell.blur"
+ ]
+}

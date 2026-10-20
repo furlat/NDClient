@@ -1,0 +1,553 @@
+{
+ "scope": "Read-only original native facts and ordered condition rows; client native-hit materials/clock and pixels are not yet qualified by this recording-only task.",
+ "case": "fire-bolt",
+ "actor_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+ "client_material_control": "native_spell_hit_material=true, explicit client test configuration only",
+ "expected_authored_clock_parameter": "source_clock",
+ "views": {
+  "amber": {
+   "packets": 17,
+   "owners": {
+    "3e0f715e-d30a-44bd-9c82-b3cf9afc5941": {
+     "application": {
+      "sequence": 7,
+      "occurrence": 43,
+      "lineage": 36,
+      "parent_event": 35,
+      "resolution": {
+       "lineage": 33
+      }
+     },
+     "duration_updates": [
+      {
+       "sequence": 14,
+       "occurrence": 106,
+       "lineage": 106,
+       "parent_event": 105,
+       "resolution": null
+      }
+     ],
+     "removal": {
+      "sequence": 16,
+      "occurrence": 141,
+      "lineage": 130,
+      "parent_event": 129,
+      "resolution": {
+       "lineage": 124
+      }
+     }
+    },
+    "12db1d6d-eebc-4c85-8089-12b639e0dff6": {
+     "application": {
+      "sequence": 16,
+      "occurrence": 140,
+      "lineage": 127,
+      "parent_event": 126,
+      "resolution": {
+       "lineage": 124
+      }
+     },
+     "duration_updates": []
+    }
+   },
+   "applied_damage": [
+    {
+     "sequence": 12,
+     "occurrence": 97,
+     "lineage": 81,
+     "parent_event": 80,
+     "resolution": {
+      "lineage": 67
+     },
+     "fact": {
+      "kind": "damage",
+      "stage": "applied",
+      "source_entity_uuid": "97d173b6-be0b-4d96-894e-e9cf52c1843a",
+      "target_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "applied_damage": 10,
+      "resulting_normal_hp": 150,
+      "resulting_temporary_hp": 0,
+      "damage_type": "Fire",
+      "body_release": {
+       "release_id": "body.blood",
+       "position": [
+        4,
+        6
+       ],
+       "occupancy_layer": "ground",
+       "deposited_position": [
+        4,
+        6
+       ],
+       "pattern": "blunt",
+       "critical_hit": false,
+       "regions": [
+        {
+         "ellipse": {
+          "center": [
+           4.0,
+           6.0
+          ],
+          "radius_x": 1.5,
+          "radius_y": 1.5,
+          "angle": 0.0
+         },
+         "positions": [
+          [
+           3,
+           5
+          ],
+          [
+           3,
+           6
+          ],
+          [
+           3,
+           7
+          ],
+          [
+           4,
+           5
+          ],
+          [
+           4,
+           6
+          ],
+          [
+           4,
+           7
+          ],
+          [
+           5,
+           5
+          ],
+          [
+           5,
+           6
+          ],
+          [
+           5,
+           7
+          ]
+         ],
+         "elevation_steps": 0
+        }
+       ],
+       "primary_damage_type": "Fire",
+       "secondary_damage_type": null
+      }
+     },
+     "disclosed_blur_owners_before_result": [
+      "3e0f715e-d30a-44bd-9c82-b3cf9afc5941"
+     ]
+    }
+   ],
+   "spell_completions": [
+    {
+     "sequence": 7,
+     "occurrence": 45,
+     "lineage": 33,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 33
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.blur",
+      "name": "Blur",
+      "source_position": [
+       4,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 12,
+     "occurrence": 99,
+     "lineage": 67,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 67
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "97d173b6-be0b-4d96-894e-e9cf52c1843a",
+      "target_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "behavior_id": "spell.fire_bolt",
+      "name": "Fire Bolt",
+      "source_position": [
+       8,
+       6
+      ],
+      "declared_target_entity_uuids": [
+       "4e086d1d-743c-47be-ae37-d7fa93a4b8c8"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 16,
+     "occurrence": 144,
+     "lineage": 124,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 124
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.blur",
+      "name": "Blur",
+      "source_position": [
+       3,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "sequence": 15,
+     "occurrence": 122,
+     "lineage": 112,
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "from_position": [
+       4,
+       6
+      ],
+      "to_position": [
+       3,
+       6
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        4,
+        6
+       ],
+       [
+        3,
+        6
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    }
+   ],
+   "saving_throws": [
+    {
+     "sequence": 12,
+     "occurrence": 96,
+     "lineage": 93,
+     "parent_event": 92,
+     "resolution": {
+      "lineage": 67
+     },
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "ability_name": "constitution",
+      "succeeded": true,
+      "effect_id": null
+     }
+    }
+   ],
+   "owners_still_disclosed_at_end": [
+    "12db1d6d-eebc-4c85-8089-12b639e0dff6"
+   ]
+  },
+  "blue": {
+   "packets": 16,
+   "owners": {
+    "3e0f715e-d30a-44bd-9c82-b3cf9afc5941": {
+     "application": {
+      "sequence": 6,
+      "occurrence": 38,
+      "lineage": 31,
+      "parent_event": 30,
+      "resolution": {
+       "lineage": 28
+      }
+     },
+     "duration_updates": [
+      {
+       "sequence": 13,
+       "occurrence": 101,
+       "lineage": 101,
+       "parent_event": 100,
+       "resolution": null
+      }
+     ],
+     "removal": {
+      "sequence": 15,
+      "occurrence": 136,
+      "lineage": 125,
+      "parent_event": 124,
+      "resolution": {
+       "lineage": 119
+      }
+     }
+    },
+    "12db1d6d-eebc-4c85-8089-12b639e0dff6": {
+     "application": {
+      "sequence": 15,
+      "occurrence": 135,
+      "lineage": 122,
+      "parent_event": 121,
+      "resolution": {
+       "lineage": 119
+      }
+     },
+     "duration_updates": []
+    }
+   },
+   "applied_damage": [
+    {
+     "sequence": 11,
+     "occurrence": 92,
+     "lineage": 76,
+     "parent_event": 75,
+     "resolution": {
+      "lineage": 62
+     },
+     "fact": {
+      "kind": "damage",
+      "stage": "applied",
+      "source_entity_uuid": "97d173b6-be0b-4d96-894e-e9cf52c1843a",
+      "target_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "applied_damage": 10,
+      "resulting_normal_hp": 150,
+      "resulting_temporary_hp": 0,
+      "damage_type": "Fire",
+      "body_release": {
+       "release_id": "body.blood",
+       "position": [
+        4,
+        6
+       ],
+       "occupancy_layer": "ground",
+       "deposited_position": [
+        4,
+        6
+       ],
+       "pattern": "blunt",
+       "critical_hit": false,
+       "regions": [
+        {
+         "ellipse": {
+          "center": [
+           4.0,
+           6.0
+          ],
+          "radius_x": 1.5,
+          "radius_y": 1.5,
+          "angle": 0.0
+         },
+         "positions": [
+          [
+           3,
+           5
+          ],
+          [
+           3,
+           6
+          ],
+          [
+           3,
+           7
+          ],
+          [
+           4,
+           5
+          ],
+          [
+           4,
+           6
+          ],
+          [
+           4,
+           7
+          ],
+          [
+           5,
+           5
+          ],
+          [
+           5,
+           6
+          ],
+          [
+           5,
+           7
+          ]
+         ],
+         "elevation_steps": 0
+        }
+       ],
+       "primary_damage_type": "Fire",
+       "secondary_damage_type": null
+      }
+     },
+     "disclosed_blur_owners_before_result": [
+      "3e0f715e-d30a-44bd-9c82-b3cf9afc5941"
+     ]
+    }
+   ],
+   "spell_completions": [
+    {
+     "sequence": 6,
+     "occurrence": 40,
+     "lineage": 28,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 28
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.blur",
+      "name": "Blur",
+      "source_position": [
+       4,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 11,
+     "occurrence": 94,
+     "lineage": 62,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 62
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "97d173b6-be0b-4d96-894e-e9cf52c1843a",
+      "target_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "behavior_id": "spell.fire_bolt",
+      "name": "Fire Bolt",
+      "source_position": [
+       8,
+       6
+      ],
+      "declared_target_entity_uuids": [
+       "4e086d1d-743c-47be-ae37-d7fa93a4b8c8"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 15,
+     "occurrence": 139,
+     "lineage": 119,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 119
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.blur",
+      "name": "Blur",
+      "source_position": [
+       3,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "sequence": 14,
+     "occurrence": 117,
+     "lineage": 107,
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "from_position": [
+       4,
+       6
+      ],
+      "to_position": [
+       3,
+       6
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        4,
+        6
+       ],
+       [
+        3,
+        6
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    }
+   ],
+   "saving_throws": [
+    {
+     "sequence": 11,
+     "occurrence": 91,
+     "lineage": 88,
+     "parent_event": 87,
+     "resolution": {
+      "lineage": 62
+     },
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "4e086d1d-743c-47be-ae37-d7fa93a4b8c8",
+      "ability_name": "constitution",
+      "succeeded": true,
+      "effect_id": null
+     }
+    }
+   ],
+   "owners_still_disclosed_at_end": [
+    "12db1d6d-eebc-4c85-8089-12b639e0dff6"
+   ]
+  }
+ }
+}

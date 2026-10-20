@@ -114,7 +114,8 @@ def typed_source(path: Path, section: str) -> dict:
     for identity in re.findall(r'SubResource\("([^"]+)"\)', root.get("variants", "")):
         fields = sub[identity]
         row["variants"].append({"id": value(fields.get("id"), ""), "kind": value(fields.get("kind"), ""),
-            "selection": value(fields.get("selection"), ""), "effects": cues(fields.get("effects"))})
+            "selection": value(fields.get("selection"), ""), "when": value(fields.get("when"), {}),
+            "dispatch_gap": value(fields.get("dispatch_gap"), ""), "effects": cues(fields.get("effects"))})
     return row
 
 
@@ -221,6 +222,8 @@ def report() -> dict:
             "when": s["condition"].get("when", {}), "phases": s["condition"].get("phases", {})}
             for s in owners[row["id"]]] if row["section"] == "conditions" else []
         for variant, cues in [("default", row["effects"])] + [(v["id"], v["effects"]) for v in row["variants"]]:
+            variant_record = next((v for v in row["variants"] if v["id"] == variant), {})
+            variant_gap = variant_record.get("dispatch_gap", "") or ("public_fact_predicate_not_authored" if variant != "default" and not variant_record.get("when") else "")
             for cue in cues:
                 clip = cue["clip"]
                 if clip not in clips:
@@ -260,7 +263,8 @@ def report() -> dict:
                 disabled = row["section"] == "spells" and not row["native_staging"]
                 excluded = cue["source_index"] in row["excluded_cues"]
                 handed_over = cue["source_index"] in row["owner_cues"] and (row["owner_kind"] == "spatial_effect" or any(s["condition"].get("body_channel_included", False) for owner in row["owner_ids"] for s in owners[owner]))
-                cue["dispatch"] = "authored_disabled" if disabled else "variant_requires_actual_selector" if variant != "default" else "excluded_probe" if excluded else "owner_handover" if handed_over else "not_selected_for_event" if row["explicit_event_cues"] and cue["source_index"] not in row["event_cues"] else "explicit_gap" if cue["unbound_constructor_inputs"] else "bound_provider_gap" if cue["missing_provider_channels"] else "bound_provider_present_unqualified"
+                cue["dispatch"] = "authored_disabled" if disabled else variant_gap if variant != "default" and variant_gap else "excluded_probe" if excluded else "owner_handover" if handed_over else "not_selected_for_event" if row["explicit_event_cues"] and cue["source_index"] not in row["event_cues"] else "explicit_gap" if cue["unbound_constructor_inputs"] else "bound_provider_gap" if cue["missing_provider_channels"] else "bound_provider_present_unqualified"
+                cue["variant_when"] = variant_record.get("when", {})
                 references[clip].append({"id": row["id"], "variant": variant, "source_index": cue["source_index"], "dispatch": cue["dispatch"],
                     "provided_channels": cue["provided_channels"], "not_applicable_channels": inapplicable,
                     "missing_provider_channels": cue["missing_provider_channels"]})
@@ -312,7 +316,7 @@ def main() -> None:
             fields = ["source", "native_staging", "play_package_lifecycle", "owner_kind", "owner_ids", "owner_cues", "excluded_cues", "explicit_event_cues", "event_cues"]
             cue_fields = ["clip", "selection", "role", "scope", "at", "constructor_input", "unbound_constructor_inputs"]
             return [dict({k: row[k] for k in fields}, effects=[{k: cue[k] for k in cue_fields} for cue in row["effects"]],
-                variants=[{"id": v["id"], "effects": [{k: cue[k] for k in cue_fields} for cue in v["effects"]]} for v in row["variants"]]) for row in subject["sources"]]
+                variants=[{"id": v["id"], "when": v.get("when", {}), "dispatch_gap": v.get("dispatch_gap", ""), "effects": [{k: cue[k] for k in cue_fields} for cue in v["effects"]]} for v in row["variants"]]) for row in subject["sources"]]
         result["delta"] = [{"id": s["id"], "before": old.get(s["id"]), "after": s} for s in result["subjects"] if bindings(s) != bindings(old.get(s["id"]))]
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=1) + "\n")

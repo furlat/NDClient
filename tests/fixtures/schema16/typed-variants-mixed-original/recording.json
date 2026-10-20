@@ -1,0 +1,128 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "871b3c64-752f-43cc-846e-13c11bd90d57": "Amber caster",
+  "8fda1ee7-f704-4b39-a183-f0af8e6f2457": "Amber ally",
+  "228aa55b-4df9-463d-9662-8f80a8edb3a4": "Blue target",
+  "59014924-a871-4e45-9c2d-dedf02dd47a8": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.scorching_ray \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 1,
+   "damage": 6,
+   "spell": 4
+  },
+  "behaviors": {
+   "spell.scorching_ray": 1
+  },
+  "conditions": [],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 63,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 77,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 78,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 79,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 93,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 94,
+   "lineage": 41,
+   "event_offset": 11,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 95,
+   "lineage": 41,
+   "event_offset": 12,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 96,
+   "lineage": 41,
+   "event_offset": 13,
+   "kind": "spell",
+   "label": "spell spell.scorching_ray"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

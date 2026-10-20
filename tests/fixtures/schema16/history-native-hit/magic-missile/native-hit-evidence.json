@@ -1,0 +1,419 @@
+{
+ "scope": "Read-only original native facts and ordered condition rows; client native-hit materials/clock and pixels are not yet qualified by this recording-only task.",
+ "case": "magic-missile",
+ "actor_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+ "client_material_control": "native_spell_hit_material=true, explicit client test configuration only",
+ "expected_authored_clock_parameter": "",
+ "views": {
+  "amber": {
+   "packets": 16,
+   "owners": {
+    "d850f53c-b3ff-436b-a834-38747a5b0b84": {
+     "application": {
+      "sequence": 7,
+      "occurrence": 43,
+      "lineage": 36,
+      "parent_event": 35,
+      "resolution": {
+       "lineage": 33
+      }
+     },
+     "duration_updates": []
+    }
+   },
+   "applied_damage": [
+    {
+     "sequence": 12,
+     "occurrence": 87,
+     "lineage": 75,
+     "parent_event": 74,
+     "resolution": {
+      "lineage": 67,
+      "application_id": "c2893d6c-300a-5f7c-9567-f8cb6bc98402"
+     },
+     "fact": {
+      "kind": "damage",
+      "stage": "applied",
+      "source_entity_uuid": "62316e18-167d-4b83-bc6c-edce400d424b",
+      "target_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "applied_damage": 4,
+      "resulting_normal_hp": 156,
+      "resulting_temporary_hp": 0,
+      "damage_type": "Force",
+      "body_release": {
+       "release_id": "body.blood",
+       "position": [
+        4,
+        6
+       ],
+       "occupancy_layer": "ground",
+       "deposited_position": [
+        4,
+        6
+       ],
+       "pattern": "blunt",
+       "critical_hit": false,
+       "regions": [
+        {
+         "ellipse": {
+          "center": [
+           4.0,
+           6.0
+          ],
+          "radius_x": 1.5,
+          "radius_y": 1.5,
+          "angle": 0.0
+         },
+         "positions": [
+          [
+           3,
+           5
+          ],
+          [
+           3,
+           6
+          ],
+          [
+           3,
+           7
+          ],
+          [
+           4,
+           5
+          ],
+          [
+           4,
+           6
+          ],
+          [
+           4,
+           7
+          ],
+          [
+           5,
+           5
+          ],
+          [
+           5,
+           6
+          ],
+          [
+           5,
+           7
+          ]
+         ],
+         "elevation_steps": 0
+        }
+       ],
+       "primary_damage_type": "Force",
+       "secondary_damage_type": null
+      }
+     },
+     "disclosed_blur_owners_before_result": [
+      "d850f53c-b3ff-436b-a834-38747a5b0b84"
+     ]
+    }
+   ],
+   "spell_completions": [
+    {
+     "sequence": 7,
+     "occurrence": 45,
+     "lineage": 33,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 33
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.blur",
+      "name": "Blur",
+      "source_position": [
+       4,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 12,
+     "occurrence": 108,
+     "lineage": 67,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 67
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "62316e18-167d-4b83-bc6c-edce400d424b",
+      "target_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "behavior_id": "spell.magic_missile",
+      "name": "Magic Missile",
+      "source_position": [
+       8,
+       6
+      ],
+      "declared_target_entity_uuids": [
+       "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+       "1e062dd9-2866-4411-b69f-d377fc982532",
+       "1e062dd9-2866-4411-b69f-d377fc982532"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "sequence": 15,
+     "occurrence": 130,
+     "lineage": 120,
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "from_position": [
+       4,
+       6
+      ],
+      "to_position": [
+       3,
+       6
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        4,
+        6
+       ],
+       [
+        3,
+        6
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    }
+   ],
+   "saving_throws": [],
+   "owners_still_disclosed_at_end": [
+    "d850f53c-b3ff-436b-a834-38747a5b0b84"
+   ]
+  },
+  "blue": {
+   "packets": 15,
+   "owners": {
+    "d850f53c-b3ff-436b-a834-38747a5b0b84": {
+     "application": {
+      "sequence": 6,
+      "occurrence": 38,
+      "lineage": 31,
+      "parent_event": 30,
+      "resolution": {
+       "lineage": 28
+      }
+     },
+     "duration_updates": []
+    }
+   },
+   "applied_damage": [
+    {
+     "sequence": 11,
+     "occurrence": 82,
+     "lineage": 70,
+     "parent_event": 69,
+     "resolution": {
+      "lineage": 62,
+      "application_id": "c2893d6c-300a-5f7c-9567-f8cb6bc98402"
+     },
+     "fact": {
+      "kind": "damage",
+      "stage": "applied",
+      "source_entity_uuid": "62316e18-167d-4b83-bc6c-edce400d424b",
+      "target_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "applied_damage": 4,
+      "resulting_normal_hp": 156,
+      "resulting_temporary_hp": 0,
+      "damage_type": "Force",
+      "body_release": {
+       "release_id": "body.blood",
+       "position": [
+        4,
+        6
+       ],
+       "occupancy_layer": "ground",
+       "deposited_position": [
+        4,
+        6
+       ],
+       "pattern": "blunt",
+       "critical_hit": false,
+       "regions": [
+        {
+         "ellipse": {
+          "center": [
+           4.0,
+           6.0
+          ],
+          "radius_x": 1.5,
+          "radius_y": 1.5,
+          "angle": 0.0
+         },
+         "positions": [
+          [
+           3,
+           5
+          ],
+          [
+           3,
+           6
+          ],
+          [
+           3,
+           7
+          ],
+          [
+           4,
+           5
+          ],
+          [
+           4,
+           6
+          ],
+          [
+           4,
+           7
+          ],
+          [
+           5,
+           5
+          ],
+          [
+           5,
+           6
+          ],
+          [
+           5,
+           7
+          ]
+         ],
+         "elevation_steps": 0
+        }
+       ],
+       "primary_damage_type": "Force",
+       "secondary_damage_type": null
+      }
+     },
+     "disclosed_blur_owners_before_result": [
+      "d850f53c-b3ff-436b-a834-38747a5b0b84"
+     ]
+    }
+   ],
+   "spell_completions": [
+    {
+     "sequence": 6,
+     "occurrence": 40,
+     "lineage": 28,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 28
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.blur",
+      "name": "Blur",
+      "source_position": [
+       4,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 11,
+     "occurrence": 103,
+     "lineage": 62,
+     "parent_event": null,
+     "resolution": {
+      "lineage": 62
+     },
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "62316e18-167d-4b83-bc6c-edce400d424b",
+      "target_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "behavior_id": "spell.magic_missile",
+      "name": "Magic Missile",
+      "source_position": [
+       8,
+       6
+      ],
+      "declared_target_entity_uuids": [
+       "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+       "1e062dd9-2866-4411-b69f-d377fc982532",
+       "1e062dd9-2866-4411-b69f-d377fc982532"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "sequence": 14,
+     "occurrence": 125,
+     "lineage": 115,
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "957811dd-17d3-4ae6-9f39-bfdf5dcb22f9",
+      "from_position": [
+       4,
+       6
+      ],
+      "to_position": [
+       3,
+       6
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        4,
+        6
+       ],
+       [
+        3,
+        6
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    }
+   ],
+   "saving_throws": [],
+   "owners_still_disclosed_at_end": [
+    "d850f53c-b3ff-436b-a834-38747a5b0b84"
+   ]
+  }
+ }
+}

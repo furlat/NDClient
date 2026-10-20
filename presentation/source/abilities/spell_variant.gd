@@ -11,6 +11,12 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 @export var kind: String = ""
 ## The facet value it selects (Fire, miss, wolf, ...).
 @export var value: String = ""
+## Exact disclosed SpellFact values, combined with AND. Values are authored
+## alternatives (OR), never inferred from kind/value, a title or child damage.
+## Empty predicates remain inventory drafts and cannot dispatch at runtime.
+@export var when: Dictionary = {}
+## A known source/input limitation can keep an authored predicate non-active.
+@export var dispatch_gap: String = ""
 ## Factory selection key whose staging it carries.
 @export var selection: String = ""
 @export var effects: Array[EffectUse] = []

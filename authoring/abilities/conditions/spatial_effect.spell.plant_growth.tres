@@ -23,6 +23,7 @@ attachment = "recipient_ground"
 orientation = "world"
 scale = 1.0
 sampling = "absolute"
+fade_out = 0.7
 light_multiplier = 0.0
 constructor_input = {
 "kind": "spatial_owner",
@@ -40,4 +41,4 @@ icon = SubResource("Resource_0nyvo")
 disposition = "authored"
 effects = Array[ExtResource("spatial_effect_use")]([SubResource("ObservedVegetation")])
 status = "partial"
-notes = "The actual spatial UUID owns vegetation constructed from its first disclosed footprint. Review cells/removal choreography are replaced before construction. Current visibility and suppression use the existing reversible area mask; they are not permanent burns. Original two-seat baseline has 49 cells and no observed removal. Newly disclosed cells outside constructed topology, partial burning, expiry and performance remain unqualified; source presence is not visual approval."
+notes = "The actual spatial UUID owns vegetation constructed from its first disclosed footprint. Review cells/removal choreography are replaced before construction. Only actual spatial removed_positions reach the source's set_removed_cells, whose sealed sample has a0.70second dissolve; this authored interval retains those retired cells without a second envelope. Current visibility and suppression use the existing reversible area mask; they are not permanent burns. Original two-seat baseline has49cells; separate genuine Plant Growth/Fireball originals disclose partial26-cell and final23-cell removal. Native output, unsupported topology expansion and performance have independent gates; source presence is not visual approval."

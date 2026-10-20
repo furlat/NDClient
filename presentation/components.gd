@@ -155,7 +155,7 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
                 cue.live_endpoints[0].socket=cue.source_socket
             return cue)
     for phase in NativeSpells.phases(delivery,owner,start,duration,index,include_cast):
-        if phase.native_cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
+        if not NativeSpells.miss_impact_authored(selected,fact) and phase.native_cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
         var parameters:Dictionary=common.duplicate()
         parameters.merge(phase,true)
         parameters.merge({"native_spell":true,"cast_recipe":cast,"native_cast_id":cast_id},true)
@@ -311,13 +311,13 @@ static func projectile(group: Dictionary,node: Dictionary,recipe: Dictionary,sta
         "attachment":"projectile","recipe":recipe.projectile,"scale":recipe.projectile.scale}
     if Occurrences.application(node):
         common.application_id=node.resolution_record.application_id;common.cast_lineage=str(node.resolution_record.lineage);common.application_index=application_index
-    var selected:=NativeSpells.selection(fact.behavior_id,cache)
+    var selected:=NativeSpells.selection_for(fact,cache)
     if not selected.is_empty():
         var cast_id:String=owner.get("source_event_uuid",node.id)
         var include_cast=not group.components.any(func(row):return row.get("native_cast_id")==cast_id and row.get("native_cue",{}).get("role")=="cast")
         var index:int=application_index
         for phase in NativeSpells.phases(selected,owner,start,duration,index,include_cast):
-            if phase.native_cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
+            if not NativeSpells.miss_impact_authored(selected,fact) and phase.native_cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
             var parameters:Dictionary=common.duplicate()
             parameters.merge(phase,true)
             parameters.merge({"native_spell":true,"cast_recipe":recipe.cast,"native_cast_id":cast_id},true)

@@ -1,0 +1,169 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "c1e9601c-af74-49ea-955d-58d4f1b9b2c9",
+   "state_revision": "5c2d8db9-b1e3-49ec-99da-1c6ddafdf28a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_observed_miss",
+   "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+   "audience_id": "0cd44492-c778-4a8f-bafa-24550e1d5f45",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_observed_miss",
+    "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+    "audience_id": "0cd44492-c778-4a8f-bafa-24550e1d5f45",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.dodge",
+   "by": "target"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2bab8795-64c8-445b-a529-8988402dfe26",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.dodge",
+   "display_name": "Dodge",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "6a850ea5-5f5d-49d1-86ed-ea8f9b2fd233",
+   "state_revision": "2bab8795-64c8-445b-a529-8988402dfe26",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 13,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_observed_miss",
+   "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+   "audience_id": "a2791d87-fe6b-4760-b18f-1f7167893cad",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_observed_miss",
+    "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+    "audience_id": "a2791d87-fe6b-4760-b18f-1f7167893cad",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "6a850ea5-5f5d-49d1-86ed-ea8f9b2fd233",
+   "state_revision": "fc929652-e7dd-4669-a5d7-b77ec877451a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_observed_miss",
+   "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+   "audience_id": "a2791d87-fe6b-4760-b18f-1f7167893cad",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_observed_miss",
+    "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+    "audience_id": "a2791d87-fe6b-4760-b18f-1f7167893cad",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "163853de-7488-4600-b902-4ced5e759efa",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.ray_of_sickness",
+   "display_name": "Ray of Sickness (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "c1e9601c-af74-49ea-955d-58d4f1b9b2c9",
+   "state_revision": "163853de-7488-4600-b902-4ced5e759efa",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_observed_miss",
+   "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+   "audience_id": "0cd44492-c778-4a8f-bafa-24550e1d5f45",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_observed_miss",
+    "game_epoch": "50a160ea-5c34-4a9c-b015-39fe039b35ba",
+    "audience_id": "0cd44492-c778-4a8f-bafa-24550e1d5f45",
+    "sequence": 7
+   }
+  }
+ }
+]

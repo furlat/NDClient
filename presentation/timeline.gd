@@ -281,7 +281,7 @@ func _advance_immediate(delta_ms: float) -> void:
             _append_membership_order(world_changes.order,delta,state)
             var captures:Dictionary=pose_admissions(commits[commit_index],state,condition_owners,current,group_start_ms,retained_directions,appearance_cache,retained_components)
             Compiler.apply_delta(state,delta)
-            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures,commits[commit_index].get("item_rows",[]),commits[commit_index].get("creation_bindings",{}))
+            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures,commits[commit_index].get("item_rows",[]),commits[commit_index].get("creation_bindings",{}),commits[commit_index].get("spatial_rows",[]))
             _record_history_cut(group_start_ms+commits[commit_index].at_ms,current,group_start_ms)
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
@@ -532,14 +532,14 @@ func _history_capture(cut:Dictionary,owner:Dictionary,at_ms:float)->Dictionary:
     capture.make_read_only()
     return {"ready":true,"capture":capture}
 
-func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={},item_rows:Array=[],creation_bindings:Dictionary={})->void:
+func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={},item_rows:Array=[],creation_bindings:Dictionary={},spatial_rows:Array=[])->void:
     # These existing owner updates report actual resource-input changes. HP,
     # logs and ordinary movement still commit without rebuilding presenters.
     var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms,false,rows,captures,creation_bindings)
     if NativeItems.interested(item_effect_owners,delta,appearance_cache):
         changed=NativeItems.observe(item_effect_owners,state,at_ms,appearance_cache,event_uuid,item_rows) or changed
-    if delta.get("set",{}).has("senses"):
-        var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},at_ms)
+    if delta.get("set",{}).has("senses") or not spatial_rows.is_empty():
+        var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},at_ms,false,spatial_rows)
         changed=changed or spatial_changed
     if changed:resource_revision+=1
 
@@ -866,7 +866,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             Compiler.apply_delta(state,delta)
             FrameProfile.end_phase(profile,"timeline_apply_state",started)
             started=Time.get_ticks_usec()
-            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),str(commit.get("event_uuid","")),captures,commit.get("item_rows",[]),commit.get("creation_bindings",{}))
+            _observe_resource_owners(delta,group_start_ms+commit.at_ms,commit.get("condition_rows",[]),str(commit.get("event_uuid","")),captures,commit.get("item_rows",[]),commit.get("creation_bindings",{}),commit.get("spatial_rows",[]))
             _record_history_cut(group_start_ms+commit.at_ms,current,group_start_ms)
             FrameProfile.end_phase(profile,"timeline_apply_owners",started)
             started=Time.get_ticks_usec()

@@ -3756,7 +3756,7 @@
    "args": [],
    "timeout": 300,
    "status": "known-red",
-   "reason": "Complete189-spell inventory currently has six explicit frozen-engine/setup unavailable baselines (Branding/Searing Smite, Ensnaring Strike, fixture.test_bless, Hellish Rebuke, Spare the Dying). Actual available183 two-faction recordings pass. Full script/resource-log qualification: tools/studio_cases/check_recordings.py; do not interpret available-recording success as a complete inventory pass."
+   "reason": "Complete189-spell inventory has five explicit frozen-engine/setup unavailable baselines (Branding/Searing Smite, Ensnaring Strike, fixture.test_bless, Spare the Dying). Actual available184 independent originals pass with no script/resource errors. Hellish single-target original is included. Full log qualification: tools/studio_cases/check_recordings.py; available-recording success is not the full inventory gate."
   },
   {
    "name": "schema16_residue_preparation_checks",
@@ -6174,6 +6174,56 @@
    "options": [],
    "status": "ok",
    "reason": "Shared accepted-operation inputs, actual original Wizard recovery/scribe journals, private source ownership and subjective gaps; native separately qualified."
+  },
+  {
+   "name": "spatial_transition_input_checks",
+   "script": "res://tests/spatial_transition_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 120,
+   "status": "ok",
+   "reason": "Original independent Web and Plant Growth native transition rows; exact ordered removal ownership and source-clock retirement, no sensory-loss inference."
+  },
+  {
+   "name": "native_spatial_transition_render_checks",
+   "script": "res://tests/native_spatial_transition_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 240,
+   "status": "ok",
+   "reason": "Real partial/full IGNITE through ordinary Play; exact cells/private instance/clock, source-owned tail, four views, seeking/looping and framebuffer output for both compatible source clips."
+  },
+  {
+   "name": "native_spell_variant_checks",
+   "script": "res://tests/native_spell_variant_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 120,
+   "status": "ok",
+   "reason": "Typed public-fact predicates survive native metadata build; application-private dispatch, unchanged caster/default sources, exact active preparation closure and genuine original outcomes. No blanket variant/art acceptance."
+  },
+  {
+   "name": "native_spell_variant_render_checks",
+   "script": "res://tests/native_spell_variant_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Real two-seat Miss with explicit test-only typed predicate, ordinary reducer/renderer source ownership, native output and seek/loop. Imported unbound Miss artwork and production variants remain separate gaps."
+  },
+  {
+   "name": "spatial_transition_support",
+   "script": "res://tests/spatial_transition_support.gd",
+   "mode": "none",
+   "tier": "none",
+   "args": [],
+   "timeout": 0,
+   "status": "helper",
+   "reason": "Private typed source staging plus exact original spatial-transition clock readers; no generated gameplay facts."
   }
  ]
 }

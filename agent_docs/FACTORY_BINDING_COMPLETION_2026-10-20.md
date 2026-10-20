@@ -1,5 +1,17 @@
 # Factory binding cohort — 20 October 2026
 
+The dated c494 counts below are historical cohort evidence. Current complete
+package is `runtime-e102c29dec58524b`:1246clips/504selections. The latest offline
+join covers730typed sources/745subjects and reports218provider-present but
+unqualified default cues,125owner handovers,55provider gaps,18explicit gaps,
+11disabled and6probes. Report:
+`.runtime/consolidation/shared-provider-second-binding-coverage.json`.
+The184available spell baselines pass current headless playback with zero
+script/resource errors; five frozen-engine/setup baselines remain unavailable.
+Current per-cohort native, live and incomplete facts are in
+[the execution ledger](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md).
+Do not interpret source inventory or these historical notes as visual approval.
+
 This is a typed-source integration and complete offline inventory pass against
 the installed `production-bindings-c494177f9ef03e3d` and frozen engine
 `211b71134ed15c89e62232587381f7e15a5961c3`, schema16. It does not claim that

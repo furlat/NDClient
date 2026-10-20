@@ -166,7 +166,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,result.cache,str(commit.get("event_uuid","")),commit.get("item_rows",[]))
                     _observe_item_history(item_history,item_spans,item_owners,preview_state,offset+commit.at_ms,"%s:%s"%[sequence,commit.get("event_uuid","")],result.cache)
                 LightTracks.observe(light_history,preview_state,offset+commit.at_ms,commit.get("event_uuid",""),sequence,result.cache)
-                _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),offset+commit.at_ms,commit.get("event_uuid",""))
+                _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}) if preview_state.senses!=null else {},offset+commit.at_ms,commit.get("event_uuid",""),false,commit.get("spatial_rows",[]))
                 if nodes.has(commit.get("event_uuid","")):
                     var event:Dictionary=nodes[commit.event_uuid]
                     var contacts={}
@@ -1152,8 +1152,8 @@ static func _persistent_native_channels(rows:Array,parent:Dictionary,sample:Dict
         # source property changes, not invented gameplay illumination curves.
         rows.append(row)
 
-static func _observe_spatial_history(history:Dictionary,owners:Dictionary,effects:Dictionary,at_ms:float,event_uuid:String,initial:bool=false)->void:
-    NativePersistent.observe_spatial(owners,effects,at_ms,initial)
+static func _observe_spatial_history(history:Dictionary,owners:Dictionary,effects:Dictionary,at_ms:float,event_uuid:String,initial:bool=false,rows:Array=[])->void:
+    NativePersistent.observe_spatial(owners,effects,at_ms,initial,rows)
     for id in owners:
         var owner:Dictionary=owners[id]
         if not history.has(id):history[id]={"source_event_uuid":event_uuid,"keys":[]}
