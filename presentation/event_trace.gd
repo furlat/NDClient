@@ -317,7 +317,14 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 if row.get("cast_owner_event",node.id)==node.id and not cast.is_empty() and cast.get("enabled",true):
                     _cast_requirements(row,cast,source+".cast")
                 var behavior:String=str(fact.behavior_id)
-                var selected:Dictionary=NativeSpells.selected(spell_sources[behavior],fact).selection if spell_sources.has(behavior) else NativeSpells.selection_for(fact,cache)
+                var choice:Dictionary=graph.get("spell_choices",{}).get(node.id,{})
+                var selected:Dictionary
+                if not choice.is_empty():selected=choice.selection
+                elif spell_sources.has(behavior):selected=NativeSpells.selected(spell_sources[behavior],fact).selection
+                else:selected=NativeSpells.selection_for(fact,cache)
+                row.native_variant=selected.get("variant",{})
+                if choice.has("variant_evidence"):row.variant_evidence=choice.variant_evidence
+                if choice.has("variant_dispatch_gaps"):row.variant_dispatch_gaps=choice.variant_dispatch_gaps
                 var shared_area:bool=not selected.is_empty() and SpellDelivery.selected_for(selected,fact).get("delivery",{}).get("scope")=="area"
                 if Occurrences.application(node) and not shared_area and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
                     row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))

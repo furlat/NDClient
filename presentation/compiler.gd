@@ -143,6 +143,17 @@ static func _spell_sources(behavior: String, graph: Dictionary, cache: Dictionar
             graph.spell_sources[behavior].recipe=Components.NativeSpells.recipe({"behavior_id":behavior},cache)
     return graph.spell_sources[behavior]
 
+## One immutable choice per actual application. Rendering and Studio borrow it
+## together, including the exact disclosed save evidence or its named gap.
+static func _spell_choice(node:Dictionary,fact:Dictionary,graph:Dictionary,cache:Dictionary)->Dictionary:
+    if not graph.spell_choices.has(node.id):
+        var source:Dictionary=_spell_sources(str(fact.behavior_id),graph,cache)
+        var context:Dictionary={"applicable":false}
+        if Occurrences.application(node) and source.variants.any(func(variant):return variant.when.has("save_succeeded") and variant.dispatch_gap.is_empty()):
+            context=Components.ApplicationResults.save_context(node,graph.application_results)
+        graph.spell_choices[node.id]=Components.NativeSpells.selected(source,fact,context)
+    return graph.spell_choices[node.id]
+
 static func _children(node: Dictionary, graph: Dictionary) -> Array:
     var rows: Array = []
     for identity in node.children_lineages:
@@ -365,7 +376,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         for child in children:finish=maxf(finish,_schedule(child,start,state,group,graph,cache))
     elif kind == "spell" and not node.canceled:
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
-        var sources:Dictionary=Components.NativeSpells.selected(_spell_sources(str(fact.behavior_id),graph,cache),fact)
+        var sources:Dictionary=_spell_choice(node,fact,graph,cache)
         var recipe: Dictionary = sources.recipe
         graph.recipes[node.id]=recipe
         var cast: Dictionary=recipe.get("cast",{})
@@ -756,7 +767,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 if not target.actors.has(id) and (not group.staged_actors.has(id) or group.staged_actors[id].last_visual_position==null):group.staged_actors[id]=actor
             for key in captured.delta.get("tiles",{}):
                 if not target.tiles.has(key) and not group.staged_tiles.has(key):group.staged_tiles[key]=captured.delta.tiles[key]
-        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"item_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{},"spell_sources":{},"spell_facts":{},"application_indices":{},"condition_cues":{}}
+        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"item_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{},"spell_sources":{},"spell_choices":{},"spell_facts":{},"application_indices":{},"condition_cues":{}}
         graph.body_records=lineage.get("bodies",[])
         # Retain only authoritative blood receiving cells needed to reveal a
         # later residue increment. No future tile or full-map snapshot is made.

@@ -626,3 +626,28 @@ The final fast lane passes165/165, including1141variant assertions covering all
 reader controls. Native variant output remains47/0. No production predicates or
 art assignments were activated. Evidence and exact ownership boundary are in the
 [variant cohort](TYPED_SPELL_VARIANT_DISPATCH_COHORT_2026-10-20.md).
+
+### Actual saving-throw application choices
+
+The existing application-result index now supplies exact disclosed saves to the
+same typed variant selector. Effect IDs are authored explicitly; true/false,
+recipient, application and cast lineage cannot be borrowed across recipients.
+Compiler, Components, prepared requirements and Studio use one cached choice.
+Unknown/ambiguous application results retain named gaps; declarations have no
+recipient-save requirement or false missing-provider warning.
+
+Final fast **167/167**, zero script/engine errors or owned leftovers:
+`.runtime/tests/20261020T094950.111639Z/summary.json`. The new gates cover80context
+and384dispatch assertions on original independent four-recipient Circle streams;
+existing1141variant/104constructor assertions remain green. Native shared variant
+output is47/0. [Cohort and evidence](APPLICATION_SAVE_VARIANT_COHORT_2026-10-20.md).
+[Factory handoff](FACTORY_TYPED_VARIANT_AUTHORING_HANDOFF_2026-10-20.md) now includes
+the actual observed save IDs across31capabilities. No production predicate,
+unaccepted artwork, backend fact or approved lighting was changed.
+
+Post-change actual Gallery passes313/0 with clean logs and no owned leftovers
+(`.runtime/tests/20261020T095307.551688Z/summary.json`). Interaction-frame
+p50/p95/p99/max is6.070/12.319/16.029/71.206ms. Door/room move/opportunity
+move/Fireball first-animation is208.277/199.024/172.371/168.368ms. Exact
+exclusive stages, nested leaves and unallocated frame remainder are retained
+in the live ledger; no final no-spike or controlled speedup claim is made.

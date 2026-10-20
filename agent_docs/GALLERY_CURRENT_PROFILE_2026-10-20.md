@@ -597,3 +597,46 @@ Original full scopes, exact commands and derivation are retained in
 `.runtime/consolidation/shared-variant-spatial-live-analysis.json`, the game
 trace files and its original generated frame-profile path. Shared source
 integration continues independently of these documented final-scale limits.
+
+## Latest: persisted ownership and save-result selection
+
+Actual issued-command Gallery,313/0, zero script/engine errors and owned
+leftovers: `.runtime/tests/20261020T095307.551688Z/summary.json`.
+Run `.runtime/player-runs/20261020T095309.982218Z`; original full frame dump
+`generated/profiles/2026-10-20T11-54-09-gallery-live-spells.json`.
+No correctness suite, source build or recorder ran concurrently with profiling.
+
+The27command interaction window contains7,422frames, with no profile eviction.
+p50/p95/p99/max: **6.070/12.319/16.029/71.206ms**;58frames exceed16.667ms and
+two exceed33.333ms. This is a fresh qualification run, not a controlled speedup
+claim. The final100FPS/no-spike gate remains open.
+
+Exclusive input-to-first-animation stages, milliseconds:
+
+| Command | Input→command sent | Sent→SSE admission | Admission | Canonical consumer | Compile | Opening | Publication/gaps | Total |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Door1 |16.432|61.628|5.199|30.671|9.802|4.464|80.081|208.277|
+| Room move2 |4.047|83.769|4.453|76.246|6.393|7.709|16.407|199.024|
+| Opportunity move8 |2.935|66.051|10.628|46.311|12.783|7.095|26.568|172.371|
+| Fireball13 |18.857|55.956|1.794|31.218|8.767|7.898|43.878|168.368|
+
+Sent→admission includes server, transport, framing and queue time, not measured
+server execution alone. Publication/gaps is the remaining observed interval,
+not a claimed named CPU task. Nested Fireball fold: reduce29.898ms, stage0.640,
+commit0.643; world14.841/facts11.881 are within reduce. Its compiler reports
+event trace2.277, lineage inputs1.688, input shell1.359, delivery1.113, actor
+cuts0.857, components0.699, requirements0.357 and ending0.217ms. Opportunity
+move delivery8.658ms stays far below its historical105–111ms; the canonical
+fact fold is still33.589ms within reduce44.928ms.
+
+Worst frame1196:71.206ms, Play26.030/HUD0.108/diagnostics0.189, leaving44.879ms
+unallocated by these scopes. Play includes session/timeline20.326ms, preparation
+12.832, media plan8.935, timeline advance7.209/readiness6.886, demand5.210,
+prioritization3.490 and component preparation3.372ms. These scopes nest.
+Last available render CPU/GPU samples0.347/0.401ms do not explain the remainder.
+Frame7324 is36.789ms: Play8.181/HUD0.441/diagnostics0.351 leave27.816ms;
+its largest measured Play tasks are actor sample2.682 and session2.450ms.
+No source, driver or scheduler cause is asserted without a matching measurement.
+
+Exact stage derivation, compiler/fold leaves and complete two-worst-frame scopes:
+`.runtime/consolidation/shared-save-variant-live-analysis.json`.

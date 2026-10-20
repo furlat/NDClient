@@ -11,10 +11,14 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 @export var kind: String = ""
 ## The facet value it selects (Fire, miss, wolf, ...).
 @export var value: String = ""
-## Exact disclosed SpellFact values, combined with AND. Values are authored
+## Exact disclosed SpellFact or application-save values, combined with AND.
+## SavingThrowFact outcomes require the explicit effect ID below. Values are authored
 ## alternatives (OR), never inferred from kind/value, a title or child damage.
 ## Empty predicates remain inventory drafts and cannot dispatch at runtime.
 @export var when: Dictionary = {}
+## A save predicate consumes this exact disclosed SavingThrowFact.effect_id
+## within the same cast/application/recipient; never a spell-name inference.
+@export var save_effect_id: String = ""
 ## A known source/input limitation can keep an authored predicate non-active.
 @export var dispatch_gap: String = ""
 ## Factory selection key whose staging it carries.

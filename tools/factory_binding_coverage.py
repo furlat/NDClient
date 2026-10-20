@@ -115,6 +115,7 @@ def typed_source(path: Path, section: str) -> dict:
         fields = sub[identity]
         row["variants"].append({"id": value(fields.get("id"), ""), "kind": value(fields.get("kind"), ""),
             "selection": value(fields.get("selection"), ""), "when": value(fields.get("when"), {}),
+            "save_effect_id": value(fields.get("save_effect_id"), ""),
             "dispatch_gap": value(fields.get("dispatch_gap"), ""), "effects": cues(fields.get("effects"))})
     return row
 

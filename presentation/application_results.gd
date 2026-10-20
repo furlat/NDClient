@@ -16,6 +16,42 @@ static func index(events:Array)->Dictionary:
         result[identity]["saves" if fact.kind=="saving_throw" else "damage"].append({"occurrence":str(node.id),"lineage":str(node.lineage_id),"fact":fact})
     return result
 
+## Variant operands belong to one actual application and recipient. A false
+## result is disclosed data; absence, a null effect, or duplicate saves is not.
+static func save_context(node:Dictionary,results:Dictionary)->Dictionary:
+    if node.get("canceled",false):return {"ready":false,"reason":"application_save_canceled","by_effect":{}}
+    var identity:Array=key(node)
+    if identity.is_empty():return {"ready":false,"reason":"application_result_identity_unavailable","by_effect":{}}
+    var fact:Variant=node.get("fact")
+    var target:Variant=null if fact==null else fact.get("target_entity_uuid")
+    if target==null:return {"ready":false,"reason":"application_result_target_unavailable","by_effect":{}}
+    var grouped:Dictionary={}
+    for row in results.get(identity,{}).get("saves",[]):
+        if row.fact.get("target_entity_uuid")!=target:continue
+        var effect:Variant=row.fact.get("effect_id")
+        if effect==null or effect=="":continue
+        if not grouped.has(effect):grouped[effect]=[]
+        grouped[effect].append(row)
+    var by_effect:Dictionary={};var ready:bool=false
+    for effect in grouped:
+        var rows:Array=grouped[effect]
+        var evidence:Dictionary={"cast_lineage":identity[0],"application_id":identity[1],
+            "application_occurrence":str(node.id),"application_lineage":str(node.lineage_id),
+            "target_uuid":target,"effect_id":effect}
+        if rows.size()!=1:
+            evidence.save_occurrences=rows.map(func(row):return row.occurrence)
+            evidence.save_lineages=rows.map(func(row):return row.lineage)
+            by_effect[effect]={"ready":false,"reason":"save_result_ambiguous","evidence":evidence}
+            continue
+        var save:Dictionary=rows[0]
+        evidence.save_occurrence=save.occurrence;evidence.save_lineage=save.lineage
+        if save.fact.get("succeeded")==null:
+            by_effect[effect]={"ready":false,"reason":"save_outcome_unavailable","evidence":evidence}
+            continue
+        by_effect[effect]={"ready":true,"reason":"","save_succeeded":save.fact.succeeded,"evidence":evidence}
+        ready=true
+    return {"ready":ready,"reason":"" if ready else "save_effect_unavailable" if by_effect.is_empty() else "save_result_unavailable","by_effect":by_effect}
+
 static func project(node:Dictionary,descriptor:Dictionary,results:Dictionary)->Dictionary:
     var identity:Array=key(node)
     if identity.is_empty():return {"ready":false,"reason":"application_result_identity_unavailable"}

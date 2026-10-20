@@ -357,7 +357,7 @@ static func variant_selection(base:Dictionary,variant:Resource)->Dictionary:
     if not variant.effects.is_empty():
         selected.staging.cues=[]
         for i in variant.effects.size():selected.staging.cues.append(cue_from_effect(variant.effects[i],i))
-    selected.variant={"id":variant.id,"when":F.deep(variant.when),"selection":variant.selection,"replaces_effects":not variant.effects.is_empty()}
+    selected.variant={"id":variant.id,"when":F.deep(variant.when),"save_effect_id":variant.save_effect_id,"selection":variant.selection,"replaces_effects":not variant.effects.is_empty()}
     return selected
 
 ## The native hit record (body material and finish) the game reads.

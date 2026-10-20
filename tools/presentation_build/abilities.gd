@@ -284,6 +284,7 @@ static func native_records(spells: Dictionary, policy: Dictionary, conditions:Di
             if variant.when.is_empty():reason="public_fact_predicate_not_authored"
             spell.variants.append({"id":variant.id,"kind":variant.kind,"value":variant.value,
                 "when":F.plain(variant.when),"dispatch_gap":reason,"status":variant.status,
+                "save_effect_id":variant.save_effect_id,
                 "inherits_recipe":variant.recipe.is_empty(),
                 "selection":selected,"recipe":variant_recipe,"requirement_source":spell.requirement_source,
                 "requirements":spell.requirements if is_same(variant_recipe,spell.recipe) else Requirements.recipe(variant_recipe,spell.requirement_source,["spell"],{})})
@@ -437,12 +438,14 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
 
 ## Deliberately small public selector language. These are actual SpellFact
 ## enums, not renderer guesses about saves, elements or passive riders.
-const VARIANT_FIELDS={"attack_outcome":["Hit","Miss","Crit","Crit Miss"],"target_kind":["creature","object"]}
+const VARIANT_FIELDS={"attack_outcome":["Hit","Miss","Crit","Crit Miss"],"target_kind":["creature","object"],"save_succeeded":[true,false]}
 static func _check_variants(e:Resource,where:String,report:Dictionary)->void:
     var active:Array=[];var identities:Dictionary={}
     for variant in e.variants:
         if identities.has(variant.id):Common.error(report,where,"duplicate variant id: "+variant.id)
         identities[variant.id]=true
+        if variant.when.has("save_succeeded") and variant.save_effect_id.is_empty():
+            Common.error(report,where,"variant "+variant.id+" needs the exact save_effect_id")
         for field in variant.when:
             if not VARIANT_FIELDS.has(field):
                 Common.error(report,where,"variant "+variant.id+" uses unsupported public fact field: "+str(field));continue
@@ -459,6 +462,9 @@ static func _check_variants(e:Resource,where:String,report:Dictionary)->void:
         for prior in active:
             var disjoint:bool=false
             for field in variant.when:
+                # Different saves are independent observations, so opposite
+                # booleans alone cannot prove these predicates exclusive.
+                if field=="save_succeeded" and prior.save_effect_id!=variant.save_effect_id:continue
                 if prior.when.has(field) and not variant.when[field].any(func(value):return value in prior.when[field]):disjoint=true;break
             if not disjoint:Common.error(report,where,"overlapping variant predicates: "+prior.id+" / "+variant.id)
         active.append(variant)

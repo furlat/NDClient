@@ -26,6 +26,12 @@ The latest static typed-cue snapshot reports 218 provider-present/unqualified cu
 
 ## Latest shared cohorts
 
+- [Application-save variants](APPLICATION_SAVE_VARIANT_COHORT_2026-10-20.md)
+  now use the existing exact cast/application/recipient result index. Compiler,
+  Components, prepared requirements and Studio borrow one cached choice.
+  Declaration branches are inapplicable without false warnings. Current
+  fast167/167 passes; [31capabilities have original save-ID evidence](FACTORY_OBSERVED_SAVE_EFFECT_IDS_2026-10-20.md).
+  This adds a shared provider, not automatic production predicates or art approval.
 - [Typed variant dispatch](TYPED_SPELL_VARIANT_DISPATCH_COHORT_2026-10-20.md)
   now serializes all130alternatives across43native-enabled spell owners. Exact
   per-application predicates, source/requirement selection and bounded optional

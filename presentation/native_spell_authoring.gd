@@ -12,14 +12,35 @@ static func source(behavior_id:String,cache:Dictionary)->Dictionary:
     var record:Resource=Sources.find(behavior_id,cache)
     return {"recipe":record.recipe,"selection":record.selection,"variants":record.variants} if record!=null else {"recipe":{},"selection":{},"variants":[]}
 
-static func selected(source_value:Dictionary,fact:Dictionary)->Dictionary:
+static func selected(source_value:Dictionary,fact:Dictionary,save_context:Dictionary={})->Dictionary:
+    var gaps:Array=[]
     for variant in source_value.get("variants",[]):
         if variant.when.is_empty() or not variant.dispatch_gap.is_empty():continue
         var matches:bool=true
         for field in variant.when:
+            if field=="save_succeeded":continue
             if fact.get(field)==null or fact[field] not in variant.when[field]:matches=false;break
-        if matches:return variant
-    return source_value
+        if not matches:continue
+        if variant.when.has("save_succeeded"):
+            if not save_context.get("applicable",true):continue
+            var effect:String=variant.save_effect_id
+            var save:Dictionary=save_context.get("by_effect",{}).get(effect,{})
+            if not save.get("ready",false):
+                var reason:String=save.get("reason","save_effect_unavailable")
+                if save.is_empty() and not save_context.get("ready",true):reason=save_context.reason
+                gaps.append({"variant_id":variant.id,"effect_id":effect,
+                    "reason":reason,
+                    "evidence":save.get("evidence",{})})
+                continue
+            if save.save_succeeded not in variant.when.save_succeeded:continue
+            var choice:Dictionary=variant.duplicate()
+            choice.variant_evidence=save.evidence
+            return choice
+        return variant
+    if gaps.is_empty():return source_value
+    var baseline:Dictionary=source_value.duplicate()
+    baseline.variant_dispatch_gaps=gaps
+    return baseline
 
 static func recipe(fact:Dictionary,cache:Dictionary)->Dictionary:
     var behavior:String=str(fact.get("behavior_id",""))
