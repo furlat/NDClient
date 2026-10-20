@@ -284,6 +284,7 @@ static func native_records(spells: Dictionary, policy: Dictionary, conditions:Di
             if variant.when.is_empty():reason="public_fact_predicate_not_authored"
             spell.variants.append({"id":variant.id,"kind":variant.kind,"value":variant.value,
                 "when":F.plain(variant.when),"dispatch_gap":reason,"status":variant.status,
+                "inherits_recipe":variant.recipe.is_empty(),
                 "selection":selected,"recipe":variant_recipe,"requirement_source":spell.requirement_source,
                 "requirements":spell.requirements if is_same(variant_recipe,spell.recipe) else Requirements.recipe(variant_recipe,spell.requirement_source,["spell"],{})})
         spell.hit = F.plain(R.spell_hit(e, name))
@@ -291,6 +292,22 @@ static func native_records(spells: Dictionary, policy: Dictionary, conditions:Di
     var ownership:Dictionary=condition_owners(spells,conditions,result.records)
     result.conditions=ownership.owners;result.condition_conflicts=ownership.conflicts
     return result
+
+## Dictionary aliases are not preserved by Godot's Resource serializer. Store
+## only recipient recipe differences; admission attaches the one base owner.
+static func persisted_native_record(record:Resource)->Resource:
+    var stored:Resource=NativeSpell.new()
+    stored.selection=record.selection;stored.recipe=record.recipe;stored.hit=record.hit
+    stored.requirement_source=record.requirement_source;stored.requirements=record.requirements
+    for variant in record.variants:
+        var value:Dictionary=variant.duplicate()
+        if value.inherits_recipe:
+            value.erase("recipe");value.erase("requirements")
+        else:
+            value.recipe=variant.recipe.duplicate()
+            value.recipe.erase("cast")
+        stored.variants.append(value)
+    return stored
 
 ## A shared condition has no implicit first-spell palette/staged-cue owner.
 ## Explicit condition authoring wins; otherwise only a unique native binding
@@ -334,7 +351,7 @@ static func _save_native(out_dir: String, native: Dictionary, report: Dictionary
     for kind in schema["$defs"].PlayerNode.properties.fact.anyOf[0].discriminator.mapping:index.fact_requirements[kind] = Requirements.fact(kind)
     for id in _sorted(native.records):
         var path := directory.path_join(short(id) + ".res")
-        if ResourceSaver.save(native.records[id], path, ResourceSaver.FLAG_COMPRESS) != OK:Common.error(report, "abilities", "cannot save " + path);continue
+        if ResourceSaver.save(persisted_native_record(native.records[id]), path, ResourceSaver.FLAG_COMPRESS) != OK:Common.error(report, "abilities", "cannot save " + path);continue
         index.spells[id] = path
     index.conditions = native.conditions
     index.revision = "abilities-" + revision

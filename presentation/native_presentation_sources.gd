@@ -48,7 +48,7 @@ static func find(behavior_id:String,cache:Dictionary)->Resource:
         _admission_mutex.lock()
         if not _sources.has(owner.index):_sources[owner.index]={}
         var physical:Dictionary=_sources[owner.index]
-        if not physical.has(path):physical[path]=Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
+        if not physical.has(path):physical[path]=_bind_recipe_owners(Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE))
         var resource:Resource=physical[path]
         _admission_mutex.unlock()
         var loaded:Dictionary=owner.loaded.duplicate()
@@ -57,6 +57,19 @@ static func find(behavior_id:String,cache:Dictionary)->Resource:
         if loaded[behavior_id]==null:_load_error(cache,path)
         return loaded[behavior_id]
     return owner.loaded[behavior_id]
+
+## One-time admission, before this immutable Resource reaches workers/owners.
+## Serialized variants contain differences, never another caster/body recipe.
+static func _bind_recipe_owners(record:Resource)->Resource:
+    if record==null:return null
+    if record.recipe_owners_bound:return record
+    for variant in record.variants:
+        if variant.inherits_recipe:
+            variant.recipe=record.recipe;variant.requirements=record.requirements
+        else:
+            variant.recipe.cast=record.recipe.get("cast",{})
+    record.recipe_owners_bound=true
+    return record
 
 static func snapshot(owner:Dictionary)->Dictionary:
     return owner

@@ -615,3 +615,14 @@ Door/room move/opportunity move/Fireball first-animation times are
 leaves and the unallocated worst-frame remainder are in the live ledger.
 The final100FPS/no-spike/performance gate remains open; no source or user art
 approval is inferred. Actual publication holds remain forbidden.
+
+### Persisted shared recipe ownership
+
+Review caught that Dictionary aliases in the builder were serialized by value.
+The native build now omits inherited recipient recipe/requirements and common
+cast payloads; existing cold admission attaches the actual shared owners once.
+The final fast lane passes165/165, including1141variant assertions covering all
+130production disk-loaded alternatives plus real compact save/reload and cold
+reader controls. Native variant output remains47/0. No production predicates or
+art assignments were activated. Evidence and exact ownership boundary are in the
+[variant cohort](TYPED_SPELL_VARIANT_DISPATCH_COHORT_2026-10-20.md).

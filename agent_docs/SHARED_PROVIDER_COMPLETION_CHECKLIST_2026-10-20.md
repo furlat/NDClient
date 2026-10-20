@@ -29,7 +29,9 @@ The latest static typed-cue snapshot reports 218 provider-present/unqualified cu
 - [Typed variant dispatch](TYPED_SPELL_VARIANT_DISPATCH_COHORT_2026-10-20.md)
   now serializes all130alternatives across43native-enabled spell owners. Exact
   per-application predicates, source/requirement selection and bounded optional
-  preparation share the production path.627logical+47native checks pass. No
+  preparation share the production path.627logical+47native checks pass using
+  explicit test-only predicates. **Zero production predicates are authored or
+  active**;130retained alternatives do not mean130playable variants. No
   unpredicated production alternative or rejected art is silently enabled.
 - [Ordered spatial transitions](SPATIAL_TRANSITION_PROVIDER_2026-10-20.md) retain
   actual occurrence/lineage/owner/cell rows through Compiler, Timeline and

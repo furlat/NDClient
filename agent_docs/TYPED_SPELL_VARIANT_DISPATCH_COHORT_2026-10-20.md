@@ -56,3 +56,30 @@ errors or leftovers (`.runtime/tests/20261020T091601.973300Z/summary.json`). The
 combined fast165/165 gate passes in `.runtime/tests/20261020T091644.415567Z/summary.json`,
 including627/0 variant checks. No current production alternative is inferred
 complete from these explicit test-only bindings.
+
+## Persisted recipe ownership correction
+
+The first gate checked builder-process Dictionary aliases. Godot's binary
+Resource serializer writes containers by value, so those aliases did not survive
+disk admission. This was a metadata ownership gap; it did not create another
+cast, body animation or texture upload.
+
+The build now persists an explicit `inherits_recipe` flag and omits inherited
+recipe/requirements payloads. Overriding recipient recipes omit the common cast.
+The existing physical source reader attaches the base recipe, requirement rows
+and caster Dictionary once, before publishing that Resource to worker/occurrence
+owners. A nonserialized admission flag makes repeated reads idempotent. There is
+no per-occurrence equality validation, recipe cloning or additional owner type.
+
+Actual compact save/reload, cold `Sources.find` admission, recipient overrides,
+unchanged original sources and matching/compiler/preparation controls pass
+729 logical assertions; native output remains 47/0, with no script/engine errors
+or owned leftovers (`.runtime/tests/20261020T093914.107060Z/summary.json`). The
+production inventory check additionally examines all 130 actual disk-loaded
+alternatives in the final fast lane. These tests do not activate any production
+predicate or change approved art.
+
+Final fast lane: **165/165**, including **1,141 variant assertions**, with zero
+script/engine errors or owned leftovers;
+`.runtime/tests/20261020T094040.778353Z/summary.json`. The actual abilities rebuild
+also passed in 5.0 seconds (`.runtime/tests/20261020T093728.618878Z/summary.json`).

@@ -12,3 +12,6 @@ extends Resource
 ## Every typed alternative is retained, including explicitly undispatched
 ## drafts. Each selected application borrows its own immutable record.
 @export var variants:Array=[]
+
+## Admission-only ownership: not serialized and never changed by occurrences.
+var recipe_owners_bound:bool=false
