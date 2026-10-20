@@ -1,0 +1,82 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn" id="1_abnwc"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_qubdx"]
+
+[resource]
+script = ExtResource("2_qubdx")
+scene = ExtResource("1_abnwc")
+bindings = [{
+"node_index": 2,
+"node_path": "./support/FactoryGenerated_0000_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_ic0u6"
+}, {
+"node_index": 3,
+"node_path": "./support/FactoryGenerated_0001_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_lvtnf"
+}, {
+"node_index": 4,
+"node_path": "./support/FactoryGenerated_0002_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_qtgbk"
+}, {
+"node_index": 5,
+"node_path": "./support/FactoryGenerated_0003_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_8mkcf"
+}, {
+"node_index": 6,
+"node_path": "./support/FactoryGenerated_0004_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_hlcx6"
+}, {
+"node_index": 7,
+"node_path": "./support/FactoryGenerated_0005_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/b928edcedf99a8ca1024c9859a1c89b629ff4070e9f6636c36caa03e147bea38.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn",
+"scene_sha256": "ec6fcdbbe80f8dbf2ad619e49dd80694db8aa86d1142d6ffbe25f7bf90e8ada1",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_ic0u6",
+"source_sha256": "31d96ee891216376d2b09310f4d8961731a1a28ff53299f9b28cce6db9c5ae2a",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_lvtnf",
+"source_sha256": "31d96ee891216376d2b09310f4d8961731a1a28ff53299f9b28cce6db9c5ae2a",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_qtgbk",
+"source_sha256": "31d96ee891216376d2b09310f4d8961731a1a28ff53299f9b28cce6db9c5ae2a",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_8mkcf",
+"source_sha256": "31d96ee891216376d2b09310f4d8961731a1a28ff53299f9b28cce6db9c5ae2a",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_holy_aura_persistent/prepared.scn::Shader_hlcx6",
+"source_sha256": "31d96ee891216376d2b09310f4d8961731a1a28ff53299f9b28cce6db9c5ae2a",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/b928edcedf99a8ca1024c9859a1c89b629ff4070e9f6636c36caa03e147bea38.res",
+"source_sha256": "31d96ee891216376d2b09310f4d8961731a1a28ff53299f9b28cce6db9c5ae2a",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}],
+"source_program_equations_changed": false
+}

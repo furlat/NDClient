@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "surface"
+constructor_script = "res://assets/vfx/extensions/late-20261020/sources/97fb9af256ceebde4f0f/steam.gd"
+input = {"cells": [[-1, -1], [-1, 0], [-1, 1]], "retire_at": 4.0, "emitter_count": 24, "particles_per_emitter": 28, "particle_scale_min": 1.05, "particle_scale_max": 1.65, "cell_fill_radius_cells": 0.46, "gpu_paths": true, "prepared_surface_bank": "res://assets/vfx/extensions/late-20261020/sources/8feed0fa6df6632d688a/steam.tres"}
+options = {}
+provenance = "Pinned native selection; authored_liquid_material_review / original ContinuousWeb / LeLu fire and smoke"
+
+[resource]
+script = ExtResource("script")
+clip_id = "steam-maintained-owner"
+label = "Steam-Maintained-Owner"
+phase = "lifecycle"
+variant = "steam-maintained-owner"
+source_recipe = "authored_liquid_material_review / original ContinuousWeb / LeLu fire and smoke"
+bindings = [{"component": "surface", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.8
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-remaining-v389-20261018"}

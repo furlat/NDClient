@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_wxge1"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_fwh5j"]
+
+[sub_resource type="Resource" id="Resource_cxijn"]
+script = ExtResource("1_wxge1")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/c66c883f4d5ba64157b6/06d6a812b60ad2227b09.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_fwh5j")
+clip_id = "spells/false_life/back/sustain"
+label = "Native subtle sustain — existing recorded geometry"
+phase = "sustain"
+variant = "back"
+source_recipe = "recipes/spells/false_life.json"
+components = Array[Resource]([SubResource("Resource_cxijn")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 2.00694444444444
+simulation_hz = 144.0
+options = {
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat"
+}

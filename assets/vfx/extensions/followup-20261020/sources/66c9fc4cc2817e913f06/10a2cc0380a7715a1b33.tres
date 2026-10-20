@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_5p5r8"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_g2r0m"]
+
+[sub_resource type="Resource" id="Resource_h5aho"]
+script = ExtResource("1_5p5r8")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/6e0900bd8b9fcf57e1ef/10a2cc0380a7715a1b33.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_g2r0m")
+clip_id = "review/enhance_ability/fox_back/sustain"
+label = "Sustain — existing recorded geometry"
+phase = "sustain"
+variant = "fox_back"
+source_recipe = "recipes/spells/enhance_ability.json"
+components = Array[Resource]([SubResource("Resource_h5aho")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 4.66666666666667
+simulation_hz = 144.0
+options = {
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat"
+}

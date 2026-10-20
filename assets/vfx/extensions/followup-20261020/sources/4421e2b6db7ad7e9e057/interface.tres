@@ -1,0 +1,104 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn" id="1_k15jg"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_1brmr"]
+
+[resource]
+script = ExtResource("2_1brmr")
+scene = ExtResource("1_k15jg")
+bindings = [{
+"node_index": 2,
+"node_path": "./divine_art/FactoryGenerated_0000_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_6ylaw"
+}, {
+"node_index": 3,
+"node_path": "./divine_art/FactoryGenerated_0001_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ajhok"
+}, {
+"node_index": 4,
+"node_path": "./divine_art/FactoryGenerated_0002_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ud32p"
+}, {
+"node_index": 5,
+"node_path": "./divine_art/FactoryGenerated_0003_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ft1c2"
+}, {
+"node_index": 6,
+"node_path": "./divine_art/FactoryGenerated_0004_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ylatk"
+}, {
+"node_index": 7,
+"node_path": "./divine_art/FactoryGenerated_0005_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_27b17"
+}, {
+"node_index": 8,
+"node_path": "./divine_art/FactoryGenerated_0006_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_65ojx"
+}, {
+"node_index": 9,
+"node_path": "./divine_art/FactoryGenerated_0007_MeshInstance3D",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/6142bfb417e1af3177f38e7c5484630627e9b073544ca9254b75aab176d5ad53.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn",
+"scene_sha256": "c6a27c4ea68f7a97cca743633e1dcce314eaf518d60c82b209042e9c8a9d03b0",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_6ylaw",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ajhok",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ud32p",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ft1c2",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_ylatk",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_27b17",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_paladin_aura_courage_persistent/prepared.scn::Shader_65ojx",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/6142bfb417e1af3177f38e7c5484630627e9b073544ca9254b75aab176d5ad53.res",
+"source_sha256": "27a6197a3e83138a30a725a361b8f3872d04197ce2a10fbcd098ef1577a412b3",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}],
+"source_program_equations_changed": false
+}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "surface"
+constructor_script = "res://assets/vfx/extensions/late-20261020/sources/c952b48391f8cc44666f/live.gd"
+input = {"liquid_bank": "res://assets/vfx/extensions/late-20261020/sources/737e665c9d825175da70/water-secondary-source-bank.tres"}
+options = {}
+provenance = "Pinned native selection; authored_liquid_material_review / original ContinuousWeb / LeLu fire and smoke"
+
+[resource]
+script = ExtResource("script")
+clip_id = "water-secondary-source"
+label = "Water-Secondary-Source"
+phase = "lifecycle"
+variant = "water-secondary-source"
+source_recipe = "authored_liquid_material_review / original ContinuousWeb / LeLu fire and smoke"
+bindings = [{"component": "surface", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 12.3
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-idle-v394-20261018"}

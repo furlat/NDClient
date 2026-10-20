@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/37785dde819b7df05531/field.gd"
+input = {"palette": ["223a13", "506e16", "869625", "b8c44b", "d3da70"], "head_material": "res://assets/vfx/extensions/late-20261020/sources/d9382fa1ef089f3b657c/mprojectile_javelin_02_head.tres", "core_material": "res://assets/vfx/extensions/late-20261020/sources/3c6c730d3061140c4791/mprojectile_javelin_02_core.tres", "trail_material": "res://assets/vfx/extensions/late-20261020/sources/ed396a71d4b8a420c89e/mprojectile_javelin_02_trail.tres", "droplet_material": "res://assets/vfx/sources/5ce1470914e9a1c4027a/poison_puddle_02_bubble.tres", "patch_material": "res://assets/vfx/extensions/late-20261020/sources/34d150a03f5f8eaeb92c/poison_puddle_02_ground.tres", "launch_seconds": 0.3, "travel_seconds": 0.5, "attack_outcome": "hit", "opacity_response": {"head_material": 0.65, "core_material": 0.8, "trail_material": 1.0, "droplet_material": 0.55}, "patch_opacity_exponent": 0.8, "phase": "tick", "condition_admitted": true, "factual_delayed_tick": true, "acid_residual_bank": "res://assets/vfx/extensions/followup-20261020/sources/121b7aee799180029fe5/02ff9cb0ad0e6992.res"}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#acid_arrow"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/acid-arrow/tick"
+label = "Acid Arrow tick"
+phase = "tick"
+variant = "default"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#acid_arrow"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.55
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Native candidate; full recorded-frame visual review pending"}

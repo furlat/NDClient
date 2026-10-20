@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/7449f867b8ff0e78c354/fireball_turbulence.gd"
+input = {"scene": "res://assets/vfx/extensions/followup-20261020/sources/b239cfc55e82f09e7971/VFX_Explosion_B.tscn", "settings": {"animation": "Init", "layer": "fire"}, "side": "full", "simulation_hz": 144, "seed": 47291, "detail_profile": "res://assets/vfx/sources/3a6ed1cd673b1184fc4d/native_fireball_turbulence.json"}
+options = {}
+provenance = "Intentional Fireball material derivative; full original emitter/layer set retained. Original selected resource unchanged."
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/fireball/fire/lifecycle"
+label = "Lifecycle · fire"
+phase = "lifecycle"
+variant = "fire"
+source_recipe = "recipes/spells/fireball.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "impact", "registration_note": "Native sandbox variant: complete unflattened source; choreography and world sizing authored separately."}

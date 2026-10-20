@@ -1,0 +1,27 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_aegis_spark_persistent/prepared.scn" id="1_3h3d7"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_lhsxj"]
+
+[resource]
+script = ExtResource("2_lhsxj")
+scene = ExtResource("1_3h3d7")
+bindings = [{
+"node_index": 2,
+"node_path": "./effect/OriginalCompactShieldPanel",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/d06ac7c28e2397cc2e0a4e75cce500d0de6299b95b24691dc93b5e22877ec6b0.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_aegis_spark_persistent/prepared.scn",
+"scene_sha256": "211cc469c31f2bfc7382d3154d00ca63af88635a82be228182f8f9ffff08c34c",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/d06ac7c28e2397cc2e0a4e75cce500d0de6299b95b24691dc93b5e22877ec6b0.res",
+"source_sha256": "d4ec86f1533b9858d043a6aeb1f22873233fb22fdc09456fbb4db15601185a6f",
+"unused_original_clock_declarations": ["owned_clock"]
+}],
+"source_program_equations_changed": false
+}

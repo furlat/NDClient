@@ -1,0 +1,49 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_ensnaring_vines_persistent/prepared.scn" id="1_yvnse"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_f3chl"]
+
+[resource]
+script = ExtResource("2_f3chl")
+scene = ExtResource("1_yvnse")
+bindings = [{
+"node_index": 2,
+"node_path": "./owned_contact/MeasuredBarkVine0",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_ensnaring_vines_persistent/prepared.scn::Shader_2eerk"
+}, {
+"node_index": 3,
+"node_path": "./owned_contact/MeasuredBarkVine1",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_ensnaring_vines_persistent/prepared.scn::Shader_5kequ"
+}, {
+"node_index": 4,
+"node_path": "./owned_contact/MeasuredBarkVine2",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/3c3752841adec2876b5799392c99834a0df6a9abbc9052b4f99364f28f27283d.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_ensnaring_vines_persistent/prepared.scn",
+"scene_sha256": "3cdc37d71123e2a201a8223108bdb88dddb7582a653ef2f09fb02a19d4b5cee4",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_ensnaring_vines_persistent/prepared.scn::Shader_2eerk",
+"source_sha256": "fc775e27cef8491e760af313a44c399d4bd40fdb3fe38826720817de94ecd65b",
+"unused_original_clock_declarations": ["owned_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_ensnaring_vines_persistent/prepared.scn::Shader_5kequ",
+"source_sha256": "fc775e27cef8491e760af313a44c399d4bd40fdb3fe38826720817de94ecd65b",
+"unused_original_clock_declarations": ["owned_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/3c3752841adec2876b5799392c99834a0df6a9abbc9052b4f99364f28f27283d.res",
+"source_sha256": "fc775e27cef8491e760af313a44c399d4bd40fdb3fe38826720817de94ecd65b",
+"unused_original_clock_declarations": ["owned_clock", "gpu_support_seconds"]
+}],
+"source_program_equations_changed": false
+}

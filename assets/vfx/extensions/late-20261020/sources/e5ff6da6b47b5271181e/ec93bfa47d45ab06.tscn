@@ -1,0 +1,506 @@
+[gd_scene format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/2cbeb7107041fdcdb8c8/program-13a4aa724d4fb91a.gdshader" id="1_li2jc"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/ed6f200121742475d523/texture.res" id="2_xjcdg"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/bc82f5828ae250c66799/program-894d03766f0d0a36.gdshader" id="3_hwu6g"]
+
+[sub_resource type="Image" id="Image_ssrqe"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_dmtrt"]
+image = SubResource("Image_ssrqe")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_af82g"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_dmtrt")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 0
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_oodp4"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_tqbng"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_0enrk"]
+image = SubResource("Image_tqbng")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_smjuj"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_0enrk")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.317
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 1
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_12r2l"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_ji2hg"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_jndxm"]
+image = SubResource("Image_ji2hg")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sek8s"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_jndxm")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.634
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 2
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0uxhs"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_u42kv"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_nuk8e"]
+image = SubResource("Image_u42kv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g1xds"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_nuk8e")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 3
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_dgmuk"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_q4xwm"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_fa8dc"]
+image = SubResource("Image_q4xwm")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8ektu"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_fa8dc")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.317
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 4
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_giy3r"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_mt84m"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_60yfw"]
+image = SubResource("Image_mt84m")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ups12"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_60yfw")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.634
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 5
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_b3x0b"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_gj3ll"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_7av4y"]
+image = SubResource("Image_gj3ll")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ib8jv"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_7av4y")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 6
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_jmu8h"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_ygt6o"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_unndb"]
+image = SubResource("Image_ygt6o")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_meck1"]
+render_priority = 0
+shader = ExtResource("1_li2jc")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_unndb")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_xjcdg")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.317
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 7
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_opacity_prepared_shader = ExtResource("1_li2jc")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_awr0t"]
+_surfaces = [{
+"aabb": AABB(0, -1, 0, 28, 2, 1e-05),
+"attribute_data": PackedByteArray("/////wAAAAAAAAAA/////wAAAAAAAIA//////yVJEj0AAAAA/////wAAAAAAAIA//////yVJEj0AAIA//////yVJEj0AAAAA/////yVJEj0AAAAA/////yVJEj0AAIA//////yVJkj0AAAAA/////yVJEj0AAIA//////yVJkj0AAIA//////yVJkj0AAAAA/////yVJkj0AAAAA/////yVJkj0AAIA//////7dt2z0AAAAA/////yVJkj0AAIA//////7dt2z0AAIA//////7dt2z0AAAAA/////7dt2z0AAAAA/////7dt2z0AAIA//////yVJEj4AAAAA/////7dt2z0AAIA//////yVJEj4AAIA//////yVJEj4AAAAA/////yVJEj4AAAAA/////yVJEj4AAIA//////27bNj4AAAAA/////yVJEj4AAIA//////27bNj4AAIA//////27bNj4AAAAA/////27bNj4AAAAA/////27bNj4AAIA//////7dtWz4AAAAA/////27bNj4AAIA//////7dtWz4AAIA//////7dtWz4AAAAA/////7dtWz4AAAAA/////7dtWz4AAIA//////wAAgD4AAAAA/////7dtWz4AAIA//////wAAgD4AAIA//////wAAgD4AAAAA/////wAAgD4AAAAA/////wAAgD4AAIA//////yVJkj4AAAAA/////wAAgD4AAIA//////yVJkj4AAIA//////yVJkj4AAAAA/////yVJkj4AAAAA/////yVJkj4AAIA//////0mSpD4AAAAA/////yVJkj4AAIA//////0mSpD4AAIA//////0mSpD4AAAAA/////0mSpD4AAAAA/////0mSpD4AAIA//////27btj4AAAAA/////0mSpD4AAIA//////27btj4AAIA//////27btj4AAAAA/////27btj4AAAAA/////27btj4AAIA//////5IkyT4AAAAA/////27btj4AAIA//////5IkyT4AAIA//////5IkyT4AAAAA/////5IkyT4AAAAA/////5IkyT4AAIA//////7dt2z4AAAAA/////5IkyT4AAIA//////7dt2z4AAIA//////7dt2z4AAAAA/////7dt2z4AAAAA/////7dt2z4AAIA//////9u27T4AAAAA/////7dt2z4AAIA//////9u27T4AAIA//////9u27T4AAAAA/////9u27T4AAAAA/////9u27T4AAIA//////wAAAD8AAAAA/////9u27T4AAIA//////wAAAD8AAIA//////wAAAD8AAAAA/////wAAAD8AAAAA/////wAAAD8AAIA//////5IkCT8AAAAA/////wAAAD8AAIA//////5IkCT8AAIA//////5IkCT8AAAAA/////5IkCT8AAAAA/////5IkCT8AAIA//////yVJEj8AAAAA/////5IkCT8AAIA//////yVJEj8AAIA//////yVJEj8AAAAA/////yVJEj8AAAAA/////yVJEj8AAIA//////7dtGz8AAAAA/////yVJEj8AAIA//////7dtGz8AAIA//////7dtGz8AAAAA/////7dtGz8AAAAA/////7dtGz8AAIA//////0mSJD8AAAAA/////7dtGz8AAIA//////0mSJD8AAIA//////0mSJD8AAAAA/////0mSJD8AAAAA/////0mSJD8AAIA//////9u2LT8AAAAA/////0mSJD8AAIA//////9u2LT8AAIA//////9u2LT8AAAAA/////9u2LT8AAAAA/////9u2LT8AAIA//////27bNj8AAAAA/////9u2LT8AAIA//////27bNj8AAIA//////27bNj8AAAAA/////27bNj8AAAAA/////27bNj8AAIA//////wAAQD8AAAAA/////27bNj8AAIA//////wAAQD8AAIA//////wAAQD8AAAAA/////wAAQD8AAAAA/////wAAQD8AAIA//////5IkST8AAAAA/////wAAQD8AAIA//////5IkST8AAIA//////5IkST8AAAAA/////5IkST8AAAAA/////5IkST8AAIA//////yVJUj8AAAAA/////5IkST8AAIA//////yVJUj8AAIA//////yVJUj8AAAAA/////yVJUj8AAAAA/////yVJUj8AAIA//////7dtWz8AAAAA/////yVJUj8AAIA//////7dtWz8AAIA//////7dtWz8AAAAA/////7dtWz8AAAAA/////7dtWz8AAIA//////0mSZD8AAAAA/////7dtWz8AAIA//////0mSZD8AAIA//////0mSZD8AAAAA/////0mSZD8AAAAA/////0mSZD8AAIA//////9u2bT8AAAAA/////0mSZD8AAIA//////9u2bT8AAIA//////9u2bT8AAAAA/////9u2bT8AAAAA/////9u2bT8AAIA//////27bdj8AAAAA/////9u2bT8AAIA//////27bdj8AAIA//////27bdj8AAAAA/////27bdj8AAAAA/////27bdj8AAIA//////wAAgD8AAAAA/////27bdj8AAIA//////wAAgD8AAIA//////wAAgD8AAAAA"),
+"format": 34359738399,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 168,
+"vertex_data": PackedByteArray("AAAAAAAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgL8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAgL8AAAAAAACAPwAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgL8AAAAAAACAPwAAgD8AAAAAAAAAQAAAgD8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgL8AAAAAAAAAQAAAgD8AAAAAAABAQAAAgD8AAAAAAABAQAAAgL8AAAAAAABAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgL8AAAAAAABAQAAAgD8AAAAAAACAQAAAgD8AAAAAAACAQAAAgL8AAAAAAACAQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgL8AAAAAAACAQAAAgD8AAAAAAACgQAAAgD8AAAAAAACgQAAAgL8AAAAAAACgQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgL8AAAAAAACgQAAAgD8AAAAAAADAQAAAgD8AAAAAAADAQAAAgL8AAAAAAADAQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgL8AAAAAAADAQAAAgD8AAAAAAADgQAAAgD8AAAAAAADgQAAAgL8AAAAAAADgQAAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgL8AAAAAAADgQAAAgD8AAAAAAAAAQQAAgD8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAAQQAAgD8AAAAAAAAQQQAAgD8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAQQQAAgD8AAAAAAAAgQQAAgD8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAgQQAAgD8AAAAAAAAwQQAAgD8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgL8AAAAAAAAwQQAAgD8AAAAAAABAQQAAgD8AAAAAAABAQQAAgL8AAAAAAABAQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgL8AAAAAAABAQQAAgD8AAAAAAABQQQAAgD8AAAAAAABQQQAAgL8AAAAAAABQQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgL8AAAAAAABQQQAAgD8AAAAAAABgQQAAgD8AAAAAAABgQQAAgL8AAAAAAABgQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgL8AAAAAAABgQQAAgD8AAAAAAABwQQAAgD8AAAAAAABwQQAAgL8AAAAAAABwQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgL8AAAAAAABwQQAAgD8AAAAAAACAQQAAgD8AAAAAAACAQQAAgL8AAAAAAACAQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgL8AAAAAAACAQQAAgD8AAAAAAACIQQAAgD8AAAAAAACIQQAAgL8AAAAAAACIQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgL8AAAAAAACIQQAAgD8AAAAAAACQQQAAgD8AAAAAAACQQQAAgL8AAAAAAACQQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgL8AAAAAAACQQQAAgD8AAAAAAACYQQAAgD8AAAAAAACYQQAAgL8AAAAAAACYQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgL8AAAAAAACYQQAAgD8AAAAAAACgQQAAgD8AAAAAAACgQQAAgL8AAAAAAACgQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgL8AAAAAAACgQQAAgD8AAAAAAACoQQAAgD8AAAAAAACoQQAAgL8AAAAAAACoQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgL8AAAAAAACoQQAAgD8AAAAAAACwQQAAgD8AAAAAAACwQQAAgL8AAAAAAACwQQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgL8AAAAAAACwQQAAgD8AAAAAAAC4QQAAgD8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgL8AAAAAAAC4QQAAgD8AAAAAAADAQQAAgD8AAAAAAADAQQAAgL8AAAAAAADAQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgL8AAAAAAADAQQAAgD8AAAAAAADIQQAAgD8AAAAAAADIQQAAgL8AAAAAAADIQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgL8AAAAAAADIQQAAgD8AAAAAAADQQQAAgD8AAAAAAADQQQAAgL8AAAAAAADQQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgL8AAAAAAADQQQAAgD8AAAAAAADYQQAAgD8AAAAAAADYQQAAgL8AAAAAAADYQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgL8AAAAAAADYQQAAgD8AAAAAAADgQQAAgD8AAAAAAADgQQAAgL8AAAAA/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+custom_aabb = AABB(-2, -2, -2, 4, 4, 4)
+
+[sub_resource type="Image" id="Image_5584c"]
+data = {
+"data": PackedByteArray("HT8x/zJpT/9JjmH/ZLl1/4rZh/+056X/2fPH//D23P8="),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_ml8ue"]
+image = SubResource("Image_5584c")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oxogp"]
+render_priority = 0
+shader = ExtResource("3_hwu6g")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_ml8ue")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/strength = 1.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_time = 0.0
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_camera_quadrant = 0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_hwu6g")
+metadata/factory_opacity_prepared_shader = ExtResource("3_hwu6g")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_ltxkp"]
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="MultiMesh" id="MultiMesh_rvlpe"]
+transform_format = 1
+custom_aabb = AABB(-3, -3, -3, 6, 6, 6)
+instance_count = 16
+mesh = SubResource("QuadMesh_ltxkp")
+
+[node name="Donor" type="Node3D" unique_id=1800126775]
+transform = Transform3D(1, 0, 0, 0, 0.8164966, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Ribbon00" type="MeshInstance3D" parent="." unique_id=827268676]
+material_override = SubResource("ShaderMaterial_af82g")
+mesh = SubResource("ArrayMesh_oodp4")
+
+[node name="Ribbon01" type="MeshInstance3D" parent="." unique_id=1998865808]
+material_override = SubResource("ShaderMaterial_smjuj")
+mesh = SubResource("ArrayMesh_12r2l")
+
+[node name="Ribbon02" type="MeshInstance3D" parent="." unique_id=1745666301]
+material_override = SubResource("ShaderMaterial_sek8s")
+mesh = SubResource("ArrayMesh_0uxhs")
+
+[node name="Ribbon03" type="MeshInstance3D" parent="." unique_id=861562982]
+material_override = SubResource("ShaderMaterial_g1xds")
+mesh = SubResource("ArrayMesh_dgmuk")
+
+[node name="Ribbon04" type="MeshInstance3D" parent="." unique_id=1503927511]
+material_override = SubResource("ShaderMaterial_8ektu")
+mesh = SubResource("ArrayMesh_giy3r")
+
+[node name="Ribbon05" type="MeshInstance3D" parent="." unique_id=511286065]
+material_override = SubResource("ShaderMaterial_ups12")
+mesh = SubResource("ArrayMesh_b3x0b")
+
+[node name="Ribbon06" type="MeshInstance3D" parent="." unique_id=2111273901]
+material_override = SubResource("ShaderMaterial_ib8jv")
+mesh = SubResource("ArrayMesh_jmu8h")
+
+[node name="Ribbon07" type="MeshInstance3D" parent="." unique_id=542435815]
+material_override = SubResource("ShaderMaterial_meck1")
+mesh = SubResource("ArrayMesh_awr0t")
+
+[node name="AnalyticalSourceMotes" type="MultiMeshInstance3D" parent="." unique_id=1971080855]
+material_override = SubResource("ShaderMaterial_oxogp")
+multimesh = SubResource("MultiMesh_rvlpe")
+metadata/factory_analytical_source_clock = true

@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/88b0620648525d8806b3/program-b3550d4719c2108b7b1a.gdshader" id="1_jyc2p"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/ac726512d10264d1f7e4/texture-00958465bb0d62505355.res" id="2_f2mgu"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_jyc2p")
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1.8, 0, 1.4, 1)
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/frost = ExtResource("2_f2mgu")
+shader_parameter/front = false
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_jyc2p")
+metadata/factory_opacity_prepared_shader = ExtResource("1_jyc2p")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true

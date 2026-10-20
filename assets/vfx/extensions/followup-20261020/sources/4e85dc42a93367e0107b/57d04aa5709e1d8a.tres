@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/2ef1907a408fe4ae0445/receiving_forms.gd"
+input = {"profile": "offbeat_lobes", "count": 3, "width_cells": 0.055, "height_cap_cells": 0.45, "width_cap_cells": 0.28, "motion_rate": 3.4, "layers": [{"scene": "res://assets/vfx/extensions/followup-20261020/sources/0e5f9b47f4924cd09eb2/VFX_WindAura_2.tscn", "node": "windup4", "alpha": 0.62, "alpha_floor": 0.12, "alpha_power": 0.65, "uniforms": {"Fresnel_Invert": true, "Fresnel_power": 1.0, "Opacity": 0.8, "Gradient_Color_1D2": {"type": "GradientTexture1D", "colors": ["634222", "bc8d3e", "e0bf71"], "offsets": [0.0, 0.5, 1.0]}, "Fresnel_Gradient_Color_1D": {"type": "GradientTexture1D", "colors": ["634222", "bc8d3e", "e0bf71"], "offsets": [0.0, 0.5, 1.0]}, "Speed_XY2": {"type": "Vector2", "value": [0.1, 0.7]}}}], "seconds": 3.2, "mode": "hold", "apply_seconds": 0.15, "retire_seconds": 0.28, "camber_cells": 0.025, "source_alpha": 0.9}
+provenance = "Actual selected native source material mechanism and measured receiving geometry; evidence/parallel-high-level-control-v104/PLAN_REVIEW.md."
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/irresistible-dance/held"
+label = "irresistible_dance · held"
+phase = "sustain"
+variant = "held"
+source_recipe = "evidence/parallel-high-level-control-v104/PLAN_REVIEW.md"
+seconds = 3.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "control_opacity", "source_revision": "gpu-forms-v379-20261018"}

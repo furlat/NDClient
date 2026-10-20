@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "surface"
+constructor_script = "res://assets/vfx/extensions/late-20261020/sources/9d08421b51dfac9658fc/reactive_liquid.gd"
+input = {"simulation": "res://assets/vfx/extensions/late-20261020/sources/2f56978923588e42dcb0/23960fa47af5150e67c8010aca80d3dc4f965b525ca2010ef7f4ac9c53c233be.json", "kind": "water", "colours": ["293f49", "4c6b76", "a1b2ab"], "freeze_at": 6.0, "thaw_at": 99.0, "remove_at": 10.6, "events": [{"operation": "freeze", "at": 6.0, "cells": [[-1, -1], [-1, 0], [-1, 1]], "contact": [-1, 0], "front_seconds": 0.35}, {"operation": "vaporize", "at": 8.0, "cells": [[-1, -1], [-1, 0], [-1, 1]], "contact": [-1, 0], "front_seconds": 0.35, "steam_seconds": 2.0}], "charge_pattern": "interior_network", "steam_source_count": 24, "steam_particles_per_emitter": 18, "steam_particle_scale_min": 1.65, "steam_particle_scale_max": 2.4}
+options = {}
+provenance = "Pinned native selection; authored_liquid_material_review"
+
+[resource]
+script = ExtResource("script")
+clip_id = "water_partial_freeze_vaporize"
+label = "Committed cells · retained source footprint"
+phase = "lifecycle"
+variant = "water"
+source_recipe = "authored_liquid_material_review"
+bindings = [{"component": "surface", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 11.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-idle-v394-20261018"}

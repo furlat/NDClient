@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("component")
+component_id = "divine_art"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/478452765e07c2cb9aca/membership.gd"
+input = {"geometry_actor": "target", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 8, "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "recipient_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "owner_uuid": "9bcf3cc2-9acf-5a50-b6ae-e4ddd65e39db", "condition_id": "", "event_uuid": "faa5b3f8-f758-5709-be39-cb35d822f7e2", "study_contract": "study.divine.aura_courage", "part": "courage", "mode": "instant", "outcome_kind": "membership", "seconds": 0.8, "apply_seconds": 0.12, "retire_seconds": 0.25, "width_cells": 0.018, "vertex_colour": "ffffff", "vertex_alpha": 0.82, "material": {"texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "c6bf89", "grain_strength": 0.2}, "lease": {"owner_uuid": "9bcf3cc2-9acf-5a50-b6ae-e4ddd65e39db", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "study_contract": "study.divine.aura_courage", "observed": true, "present": true, "contribution_active": true, "suppressed": false}, "event": {"uuid": "faa5b3f8-f758-5709-be39-cb35d822f7e2", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "canceled": false, "effect_admitted": true, "blocked": false, "actual_healing": 22, "actual_damage": 14, "damage_component_uuid": "806b0a60-1d07-5402-9a33-2281a34aa5b6", "removed_condition_uuids": ["a98da677-774f-552f-9592-8ca766a5ea5b"], "removed_owner_uuid": "9bcf3cc2-9acf-5a50-b6ae-e4ddd65e39db", "membership_owner_uuid": "9bcf3cc2-9acf-5a50-b6ae-e4ddd65e39db", "membership_feature": "study.divine.aura_courage", "ordinary_item_admitted": true, "item_uuid": "43735696-5643-590a-8135-62938167c634", "creation_position_cells": [0.0, 0.0, 0.0], "outcome_source": "explicit_plan_only_fixture", "removal_cause": "supplied_exact_owner_retirement"}, "presentation_radius_cells": 6.0, "source_accent_reach_cells": 0.9, "plan_only": true, "gpu_paths": true}
+provenance = "Plan-only native study; no verified new backend behavior identity."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "divine-class-study/divine_aura_courage_study/0-courage"
+label = "aura_courage / courage / main"
+phase = "instant"
+variant = "main"
+source_recipe = "res://assets/vfx/sources/6f469c05c8b9c1fbc8e1/feature-matrix.json"
+seconds = 0.8
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("art")])
+bindings = [{"component":"divine_art","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-divine-v386-20261018"}

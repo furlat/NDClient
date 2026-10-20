@@ -1,0 +1,2984 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/c1ada9b4a6fbb2429509/program-1d72d4cbf498d082.gdshader" id="1_2l68l"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/738a590d656da53091f0/texture.res" id="2_s4m80"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/dfede27521212082b57d/texture.res" id="3_ooq8c"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/9158a281573cddefbfc7/4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5.gdshader" id="4_titm7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ewto"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_4exur"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hq22k"]
+texture_mode = 1
+curve = SubResource("Curve_4exur")
+
+[sub_resource type="Curve" id="Curve_idp0d"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ubxkc"]
+curve = SubResource("Curve_idp0d")
+
+[sub_resource type="Gradient" id="Gradient_y7rkk"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rjywj"]
+gradient = SubResource("Gradient_y7rkk")
+
+[sub_resource type="Curve" id="Curve_adj06"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_46cco"]
+curve = SubResource("Curve_adj06")
+
+[sub_resource type="Curve" id="Curve_i355g"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_w0geh"]
+curve = SubResource("Curve_i355g")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1vavv"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_rjywj")
+shader_parameter/alpha_curve = SubResource("CurveTexture_hq22k")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_ubxkc")
+shader_parameter/scale_curve = SubResource("CurveTexture_w0geh")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_46cco")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_r0ve7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x6r05"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_10qju"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hdttk"]
+texture_mode = 1
+curve = SubResource("Curve_10qju")
+
+[sub_resource type="Curve" id="Curve_npois"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8i0f7"]
+curve = SubResource("Curve_npois")
+
+[sub_resource type="Gradient" id="Gradient_eq16h"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7s4an"]
+gradient = SubResource("Gradient_eq16h")
+
+[sub_resource type="Curve" id="Curve_c3jn0"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3nomg"]
+curve = SubResource("Curve_c3jn0")
+
+[sub_resource type="Curve" id="Curve_v7dqa"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3bmbd"]
+curve = SubResource("Curve_v7dqa")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbchp"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_7s4an")
+shader_parameter/alpha_curve = SubResource("CurveTexture_hdttk")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_8i0f7")
+shader_parameter/scale_curve = SubResource("CurveTexture_3bmbd")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_3nomg")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_pmrma"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sqaq5"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_2oxol"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7kmlb"]
+texture_mode = 1
+curve = SubResource("Curve_2oxol")
+
+[sub_resource type="Curve" id="Curve_5usv4"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rt3gw"]
+curve = SubResource("Curve_5usv4")
+
+[sub_resource type="Gradient" id="Gradient_1o7pa"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ibaxg"]
+gradient = SubResource("Gradient_1o7pa")
+
+[sub_resource type="Curve" id="Curve_jipae"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_oa4u5"]
+curve = SubResource("Curve_jipae")
+
+[sub_resource type="Curve" id="Curve_geqh0"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mrvsl"]
+curve = SubResource("Curve_geqh0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lkonh"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_ibaxg")
+shader_parameter/alpha_curve = SubResource("CurveTexture_7kmlb")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_rt3gw")
+shader_parameter/scale_curve = SubResource("CurveTexture_mrvsl")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_oa4u5")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_v7a1k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3gk1a"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_ix0tx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hjfto"]
+texture_mode = 1
+curve = SubResource("Curve_ix0tx")
+
+[sub_resource type="Curve" id="Curve_7exr8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_m43px"]
+curve = SubResource("Curve_7exr8")
+
+[sub_resource type="Gradient" id="Gradient_ec0b2"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wqbp2"]
+gradient = SubResource("Gradient_ec0b2")
+
+[sub_resource type="Curve" id="Curve_vann7"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_t1k10"]
+curve = SubResource("Curve_vann7")
+
+[sub_resource type="Curve" id="Curve_kgo0l"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rv1lr"]
+curve = SubResource("Curve_kgo0l")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kmfuw"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_wqbp2")
+shader_parameter/alpha_curve = SubResource("CurveTexture_hjfto")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_m43px")
+shader_parameter/scale_curve = SubResource("CurveTexture_rv1lr")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_t1k10")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_bmxy5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0d8g"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_cdi3q"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_v74ji"]
+texture_mode = 1
+curve = SubResource("Curve_cdi3q")
+
+[sub_resource type="Curve" id="Curve_4by6l"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jb2hr"]
+curve = SubResource("Curve_4by6l")
+
+[sub_resource type="Gradient" id="Gradient_lqcay"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4vu55"]
+gradient = SubResource("Gradient_lqcay")
+
+[sub_resource type="Curve" id="Curve_s4f02"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tddi0"]
+curve = SubResource("Curve_s4f02")
+
+[sub_resource type="Curve" id="Curve_uh06v"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ntkwv"]
+curve = SubResource("Curve_uh06v")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xy8pp"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_4vu55")
+shader_parameter/alpha_curve = SubResource("CurveTexture_v74ji")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_jb2hr")
+shader_parameter/scale_curve = SubResource("CurveTexture_ntkwv")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_tddi0")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_e6em1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8553"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_n0dlt"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_o6m1u"]
+texture_mode = 1
+curve = SubResource("Curve_n0dlt")
+
+[sub_resource type="Curve" id="Curve_a07u5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_d6q0m"]
+curve = SubResource("Curve_a07u5")
+
+[sub_resource type="Gradient" id="Gradient_7terl"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ko24a"]
+gradient = SubResource("Gradient_7terl")
+
+[sub_resource type="Curve" id="Curve_4616v"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4qfx1"]
+curve = SubResource("Curve_4616v")
+
+[sub_resource type="Curve" id="Curve_vkjsf"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ohtd6"]
+curve = SubResource("Curve_vkjsf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qq5ql"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_ko24a")
+shader_parameter/alpha_curve = SubResource("CurveTexture_o6m1u")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_d6q0m")
+shader_parameter/scale_curve = SubResource("CurveTexture_ohtd6")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_4qfx1")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_64ndl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6f3nc"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_w6xod"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_slo3h"]
+texture_mode = 1
+curve = SubResource("Curve_w6xod")
+
+[sub_resource type="Curve" id="Curve_fdyam"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_op4q8"]
+curve = SubResource("Curve_fdyam")
+
+[sub_resource type="Gradient" id="Gradient_8qmjj"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ncd6a"]
+gradient = SubResource("Gradient_8qmjj")
+
+[sub_resource type="Curve" id="Curve_kqooh"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_npdjv"]
+curve = SubResource("Curve_kqooh")
+
+[sub_resource type="Curve" id="Curve_l5umj"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_x18su"]
+curve = SubResource("Curve_l5umj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dimwh"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_ncd6a")
+shader_parameter/alpha_curve = SubResource("CurveTexture_slo3h")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_op4q8")
+shader_parameter/scale_curve = SubResource("CurveTexture_x18su")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_npdjv")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_txt1p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdvxg"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_ej7xv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_vb7rm"]
+texture_mode = 1
+curve = SubResource("Curve_ej7xv")
+
+[sub_resource type="Curve" id="Curve_65nci"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5s20n"]
+curve = SubResource("Curve_65nci")
+
+[sub_resource type="Gradient" id="Gradient_766d7"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mhwsk"]
+gradient = SubResource("Gradient_766d7")
+
+[sub_resource type="Curve" id="Curve_6xugm"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_705m3"]
+curve = SubResource("Curve_6xugm")
+
+[sub_resource type="Curve" id="Curve_merh8"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3vca6"]
+curve = SubResource("Curve_merh8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8xgy"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_mhwsk")
+shader_parameter/alpha_curve = SubResource("CurveTexture_vb7rm")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_5s20n")
+shader_parameter/scale_curve = SubResource("CurveTexture_3vca6")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_705m3")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_y8ea2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hfth7"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_gq5fj"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_bh1gk"]
+texture_mode = 1
+curve = SubResource("Curve_gq5fj")
+
+[sub_resource type="Curve" id="Curve_j01cl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7vjwf"]
+curve = SubResource("Curve_j01cl")
+
+[sub_resource type="Gradient" id="Gradient_4l4hn"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_x7qfn"]
+gradient = SubResource("Gradient_4l4hn")
+
+[sub_resource type="Curve" id="Curve_k7mt0"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yiear"]
+curve = SubResource("Curve_k7mt0")
+
+[sub_resource type="Curve" id="Curve_tatkc"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_da2wt"]
+curve = SubResource("Curve_tatkc")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tra2t"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_x7qfn")
+shader_parameter/alpha_curve = SubResource("CurveTexture_bh1gk")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_7vjwf")
+shader_parameter/scale_curve = SubResource("CurveTexture_da2wt")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_yiear")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_r5ar2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ollc"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_txhka"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ebjo2"]
+texture_mode = 1
+curve = SubResource("Curve_txhka")
+
+[sub_resource type="Curve" id="Curve_sxnet"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_41w70"]
+curve = SubResource("Curve_sxnet")
+
+[sub_resource type="Gradient" id="Gradient_2k7fs"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kej58"]
+gradient = SubResource("Gradient_2k7fs")
+
+[sub_resource type="Curve" id="Curve_b02ak"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6g12t"]
+curve = SubResource("Curve_b02ak")
+
+[sub_resource type="Curve" id="Curve_h8ei7"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pvrhw"]
+curve = SubResource("Curve_h8ei7")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qxgxk"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_kej58")
+shader_parameter/alpha_curve = SubResource("CurveTexture_ebjo2")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_41w70")
+shader_parameter/scale_curve = SubResource("CurveTexture_pvrhw")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_6g12t")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_s2dt3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l2s0s"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_1ifgl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ncwks"]
+texture_mode = 1
+curve = SubResource("Curve_1ifgl")
+
+[sub_resource type="Curve" id="Curve_kxhby"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_evvf3"]
+curve = SubResource("Curve_kxhby")
+
+[sub_resource type="Gradient" id="Gradient_4r16v"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sl615"]
+gradient = SubResource("Gradient_4r16v")
+
+[sub_resource type="Curve" id="Curve_louj0"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_u1bfj"]
+curve = SubResource("Curve_louj0")
+
+[sub_resource type="Curve" id="Curve_t1x12"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ffmo1"]
+curve = SubResource("Curve_t1x12")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j6vvk"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_sl615")
+shader_parameter/alpha_curve = SubResource("CurveTexture_ncwks")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_evvf3")
+shader_parameter/scale_curve = SubResource("CurveTexture_ffmo1")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_u1bfj")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_gsj71"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jslbf"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_yrhr2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pab1x"]
+texture_mode = 1
+curve = SubResource("Curve_yrhr2")
+
+[sub_resource type="Curve" id="Curve_felob"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_acci0"]
+curve = SubResource("Curve_felob")
+
+[sub_resource type="Gradient" id="Gradient_7r2j2"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mmym0"]
+gradient = SubResource("Gradient_7r2j2")
+
+[sub_resource type="Curve" id="Curve_2ydyt"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sh788"]
+curve = SubResource("Curve_2ydyt")
+
+[sub_resource type="Curve" id="Curve_ls2gb"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tqa1j"]
+curve = SubResource("Curve_ls2gb")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y6rip"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_mmym0")
+shader_parameter/alpha_curve = SubResource("CurveTexture_pab1x")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_acci0")
+shader_parameter/scale_curve = SubResource("CurveTexture_tqa1j")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_sh788")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_vc3uj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wquyy"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_cq41u"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ytnht"]
+texture_mode = 1
+curve = SubResource("Curve_cq41u")
+
+[sub_resource type="Curve" id="Curve_ht523"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_su0pk"]
+curve = SubResource("Curve_ht523")
+
+[sub_resource type="Gradient" id="Gradient_iy56l"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_j853b"]
+gradient = SubResource("Gradient_iy56l")
+
+[sub_resource type="Curve" id="Curve_3hrq0"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4goqx"]
+curve = SubResource("Curve_3hrq0")
+
+[sub_resource type="Curve" id="Curve_rm6nf"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4v17m"]
+curve = SubResource("Curve_rm6nf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_or1fp"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_j853b")
+shader_parameter/alpha_curve = SubResource("CurveTexture_ytnht")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_su0pk")
+shader_parameter/scale_curve = SubResource("CurveTexture_4v17m")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_4goqx")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_lclkv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0q565"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_ueq35"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8hy2x"]
+texture_mode = 1
+curve = SubResource("Curve_ueq35")
+
+[sub_resource type="Curve" id="Curve_hc58m"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4qyf0"]
+curve = SubResource("Curve_hc58m")
+
+[sub_resource type="Gradient" id="Gradient_mvot6"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_q3c7o"]
+gradient = SubResource("Gradient_mvot6")
+
+[sub_resource type="Curve" id="Curve_ler4s"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qxwyi"]
+curve = SubResource("Curve_ler4s")
+
+[sub_resource type="Curve" id="Curve_eeqea"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8vwhk"]
+curve = SubResource("Curve_eeqea")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_76n50"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_q3c7o")
+shader_parameter/alpha_curve = SubResource("CurveTexture_8hy2x")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_4qyf0")
+shader_parameter/scale_curve = SubResource("CurveTexture_8vwhk")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_qxwyi")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ag17t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_evetc"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_lq127"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hvfrg"]
+texture_mode = 1
+curve = SubResource("Curve_lq127")
+
+[sub_resource type="Curve" id="Curve_cywla"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pl5wu"]
+curve = SubResource("Curve_cywla")
+
+[sub_resource type="Gradient" id="Gradient_gmp5p"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fubce"]
+gradient = SubResource("Gradient_gmp5p")
+
+[sub_resource type="Curve" id="Curve_jx2n4"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mdls1"]
+curve = SubResource("Curve_jx2n4")
+
+[sub_resource type="Curve" id="Curve_kxmms"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8ttni"]
+curve = SubResource("Curve_kxmms")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r1pww"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_fubce")
+shader_parameter/alpha_curve = SubResource("CurveTexture_hvfrg")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_pl5wu")
+shader_parameter/scale_curve = SubResource("CurveTexture_8ttni")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_mdls1")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_l1g2t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7dkwp"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_nnn4c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3hogd"]
+texture_mode = 1
+curve = SubResource("Curve_nnn4c")
+
+[sub_resource type="Curve" id="Curve_vx3vu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xwqnq"]
+curve = SubResource("Curve_vx3vu")
+
+[sub_resource type="Gradient" id="Gradient_v5pwx"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vdl51"]
+gradient = SubResource("Gradient_v5pwx")
+
+[sub_resource type="Curve" id="Curve_npo1i"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_80hhb"]
+curve = SubResource("Curve_npo1i")
+
+[sub_resource type="Curve" id="Curve_kb4qh"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nhwfo"]
+curve = SubResource("Curve_kb4qh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fukd6"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_vdl51")
+shader_parameter/alpha_curve = SubResource("CurveTexture_3hogd")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_xwqnq")
+shader_parameter/scale_curve = SubResource("CurveTexture_nhwfo")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_80hhb")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_n0si5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_opef4"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_i07t5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_p5uvo"]
+texture_mode = 1
+curve = SubResource("Curve_i07t5")
+
+[sub_resource type="Curve" id="Curve_utiyg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rj22v"]
+curve = SubResource("Curve_utiyg")
+
+[sub_resource type="Gradient" id="Gradient_tl3wg"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nfuh8"]
+gradient = SubResource("Gradient_tl3wg")
+
+[sub_resource type="Curve" id="Curve_gufnp"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_20cag"]
+curve = SubResource("Curve_gufnp")
+
+[sub_resource type="Curve" id="Curve_ixrb7"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aucpa"]
+curve = SubResource("Curve_ixrb7")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_il8fn"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_nfuh8")
+shader_parameter/alpha_curve = SubResource("CurveTexture_p5uvo")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_rj22v")
+shader_parameter/scale_curve = SubResource("CurveTexture_aucpa")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_20cag")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_pchph"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dq85n"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_8aida"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gx2vp"]
+texture_mode = 1
+curve = SubResource("Curve_8aida")
+
+[sub_resource type="Curve" id="Curve_iwmpf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_cyrw6"]
+curve = SubResource("Curve_iwmpf")
+
+[sub_resource type="Gradient" id="Gradient_mcb0k"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fm3v3"]
+gradient = SubResource("Gradient_mcb0k")
+
+[sub_resource type="Curve" id="Curve_apyf8"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_uo7qk"]
+curve = SubResource("Curve_apyf8")
+
+[sub_resource type="Curve" id="Curve_wbh8x"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_seq6j"]
+curve = SubResource("Curve_wbh8x")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u2t8j"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_fm3v3")
+shader_parameter/alpha_curve = SubResource("CurveTexture_gx2vp")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_cyrw6")
+shader_parameter/scale_curve = SubResource("CurveTexture_seq6j")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_uo7qk")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_qbvkm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q7yvs"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_k70ut"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1bjbc"]
+texture_mode = 1
+curve = SubResource("Curve_k70ut")
+
+[sub_resource type="Curve" id="Curve_6qgac"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_33hen"]
+curve = SubResource("Curve_6qgac")
+
+[sub_resource type="Gradient" id="Gradient_wte3v"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lneei"]
+gradient = SubResource("Gradient_wte3v")
+
+[sub_resource type="Curve" id="Curve_in554"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_k5ab5"]
+curve = SubResource("Curve_in554")
+
+[sub_resource type="Curve" id="Curve_khqc2"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_cjdpo"]
+curve = SubResource("Curve_khqc2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8mv1i"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_lneei")
+shader_parameter/alpha_curve = SubResource("CurveTexture_1bjbc")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_33hen")
+shader_parameter/scale_curve = SubResource("CurveTexture_cjdpo")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_k5ab5")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_5rigj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c0p5w"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_u7hii"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_irvu3"]
+texture_mode = 1
+curve = SubResource("Curve_u7hii")
+
+[sub_resource type="Curve" id="Curve_0o84r"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_btma3"]
+curve = SubResource("Curve_0o84r")
+
+[sub_resource type="Gradient" id="Gradient_u5yyc"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_q2kqc"]
+gradient = SubResource("Gradient_u5yyc")
+
+[sub_resource type="Curve" id="Curve_ecubb"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_snwhy"]
+curve = SubResource("Curve_ecubb")
+
+[sub_resource type="Curve" id="Curve_k43mg"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_bomdx"]
+curve = SubResource("Curve_k43mg")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epk1g"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_q2kqc")
+shader_parameter/alpha_curve = SubResource("CurveTexture_irvu3")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_btma3")
+shader_parameter/scale_curve = SubResource("CurveTexture_bomdx")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_snwhy")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_yv8ck"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fyouh"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_jmamk"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tx3wo"]
+texture_mode = 1
+curve = SubResource("Curve_jmamk")
+
+[sub_resource type="Curve" id="Curve_mvx45"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xj2hg"]
+curve = SubResource("Curve_mvx45")
+
+[sub_resource type="Gradient" id="Gradient_fu6yh"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_176qn"]
+gradient = SubResource("Gradient_fu6yh")
+
+[sub_resource type="Curve" id="Curve_71k1l"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_retlk"]
+curve = SubResource("Curve_71k1l")
+
+[sub_resource type="Curve" id="Curve_hyf07"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nyupa"]
+curve = SubResource("Curve_hyf07")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yp16p"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_176qn")
+shader_parameter/alpha_curve = SubResource("CurveTexture_tx3wo")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_xj2hg")
+shader_parameter/scale_curve = SubResource("CurveTexture_nyupa")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_retlk")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_bga6q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e1hup"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_vdp8o"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5ywxy"]
+texture_mode = 1
+curve = SubResource("Curve_vdp8o")
+
+[sub_resource type="Curve" id="Curve_v86pu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_m464j"]
+curve = SubResource("Curve_v86pu")
+
+[sub_resource type="Gradient" id="Gradient_5g27j"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5nfdu"]
+gradient = SubResource("Gradient_5g27j")
+
+[sub_resource type="Curve" id="Curve_deks6"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_fblc0"]
+curve = SubResource("Curve_deks6")
+
+[sub_resource type="Curve" id="Curve_cehvu"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_j7iks"]
+curve = SubResource("Curve_cehvu")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kpslm"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_5nfdu")
+shader_parameter/alpha_curve = SubResource("CurveTexture_5ywxy")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_m464j")
+shader_parameter/scale_curve = SubResource("CurveTexture_j7iks")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_fblc0")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_2e013"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cwoqb"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_qdhmr"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_esgh6"]
+texture_mode = 1
+curve = SubResource("Curve_qdhmr")
+
+[sub_resource type="Curve" id="Curve_iacuo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yil01"]
+curve = SubResource("Curve_iacuo")
+
+[sub_resource type="Gradient" id="Gradient_l8xcb"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rcyq1"]
+gradient = SubResource("Gradient_l8xcb")
+
+[sub_resource type="Curve" id="Curve_8d5kl"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_a1l0c"]
+curve = SubResource("Curve_8d5kl")
+
+[sub_resource type="Curve" id="Curve_dsuo3"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_exv32"]
+curve = SubResource("Curve_dsuo3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y4v82"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_rcyq1")
+shader_parameter/alpha_curve = SubResource("CurveTexture_esgh6")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_yil01")
+shader_parameter/scale_curve = SubResource("CurveTexture_exv32")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_a1l0c")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_tfx3n"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_04o3f"]
+render_priority = 1
+shader = ExtResource("1_2l68l")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("3_ooq8c")
+shader_parameter/smake_mask = ExtResource("2_s4m80")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_opacity_prepared_shader = ExtResource("1_2l68l")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="Curve" id="Curve_efxpd"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jbc5f"]
+texture_mode = 1
+curve = SubResource("Curve_efxpd")
+
+[sub_resource type="Curve" id="Curve_a0hpm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ccwg1"]
+curve = SubResource("Curve_a0hpm")
+
+[sub_resource type="Gradient" id="Gradient_2n6v6"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3hlsc"]
+gradient = SubResource("Gradient_2n6v6")
+
+[sub_resource type="Curve" id="Curve_augq4"]
+_data = [Vector2(0.0409836, 1), 0.0, -4.41629, 0, 0, Vector2(0.352459, 0.263736), -0.603297, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8kumi"]
+curve = SubResource("Curve_augq4")
+
+[sub_resource type="Curve" id="Curve_yrbnb"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aroy4"]
+curve = SubResource("Curve_yrbnb")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_covck"]
+shader = ExtResource("4_titm7")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -16.0
+shader_parameter/angular_velocity_max = 16.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.06
+shader_parameter/radial_velocity_max = 0.16
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.05
+shader_parameter/scale_max = 1.65
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 0.55, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_3hlsc")
+shader_parameter/alpha_curve = SubResource("CurveTexture_jbc5f")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_ccwg1")
+shader_parameter/scale_curve = SubResource("CurveTexture_aroy4")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_8kumi")
+metadata/factory_prepared_shader = ExtResource("4_titm7")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("4_titm7")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_immutable_native_process = "local_coords_static_native_operands"
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_o0eo3"]
+
+[node name="PreparedNativeSurface" type="Node3D" unique_id=942723120]
+
+[node name="SourceSteam0" type="GPUParticles3D" parent="." unique_id=1559883739]
+material_override = SubResource("ShaderMaterial_2ewto")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51293
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_1vavv")
+draw_pass_1 = SubResource("QuadMesh_r0ve7")
+
+[node name="SourceSteam1" type="GPUParticles3D" parent="." unique_id=2094391019]
+material_override = SubResource("ShaderMaterial_x6r05")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51324
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_jbchp")
+draw_pass_1 = SubResource("QuadMesh_pmrma")
+
+[node name="SourceSteam2" type="GPUParticles3D" parent="." unique_id=1907571251]
+material_override = SubResource("ShaderMaterial_sqaq5")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51355
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_lkonh")
+draw_pass_1 = SubResource("QuadMesh_v7a1k")
+
+[node name="SourceSteam3" type="GPUParticles3D" parent="." unique_id=1813350371]
+material_override = SubResource("ShaderMaterial_3gk1a")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51386
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_kmfuw")
+draw_pass_1 = SubResource("QuadMesh_bmxy5")
+
+[node name="SourceSteam4" type="GPUParticles3D" parent="." unique_id=964120989]
+material_override = SubResource("ShaderMaterial_n0d8g")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51417
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_xy8pp")
+draw_pass_1 = SubResource("QuadMesh_e6em1")
+
+[node name="SourceSteam5" type="GPUParticles3D" parent="." unique_id=1803016972]
+material_override = SubResource("ShaderMaterial_e8553")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51448
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_qq5ql")
+draw_pass_1 = SubResource("QuadMesh_64ndl")
+
+[node name="SourceSteam6" type="GPUParticles3D" parent="." unique_id=1774748337]
+material_override = SubResource("ShaderMaterial_6f3nc")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51479
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_dimwh")
+draw_pass_1 = SubResource("QuadMesh_txt1p")
+
+[node name="SourceSteam7" type="GPUParticles3D" parent="." unique_id=744318054]
+material_override = SubResource("ShaderMaterial_wdvxg")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51510
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_e8xgy")
+draw_pass_1 = SubResource("QuadMesh_y8ea2")
+
+[node name="SourceSteam8" type="GPUParticles3D" parent="." unique_id=1922251864]
+material_override = SubResource("ShaderMaterial_hfth7")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51541
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_tra2t")
+draw_pass_1 = SubResource("QuadMesh_r5ar2")
+
+[node name="SourceSteam9" type="GPUParticles3D" parent="." unique_id=481083766]
+material_override = SubResource("ShaderMaterial_6ollc")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51572
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_qxgxk")
+draw_pass_1 = SubResource("QuadMesh_s2dt3")
+
+[node name="SourceSteam10" type="GPUParticles3D" parent="." unique_id=618488048]
+material_override = SubResource("ShaderMaterial_l2s0s")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51603
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_j6vvk")
+draw_pass_1 = SubResource("QuadMesh_gsj71")
+
+[node name="SourceSteam11" type="GPUParticles3D" parent="." unique_id=1504862124]
+material_override = SubResource("ShaderMaterial_jslbf")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51634
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_y6rip")
+draw_pass_1 = SubResource("QuadMesh_vc3uj")
+
+[node name="SourceSteam12" type="GPUParticles3D" parent="." unique_id=1694941924]
+material_override = SubResource("ShaderMaterial_wquyy")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51665
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_or1fp")
+draw_pass_1 = SubResource("QuadMesh_lclkv")
+
+[node name="SourceSteam13" type="GPUParticles3D" parent="." unique_id=516875823]
+material_override = SubResource("ShaderMaterial_0q565")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51696
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_76n50")
+draw_pass_1 = SubResource("QuadMesh_ag17t")
+
+[node name="SourceSteam14" type="GPUParticles3D" parent="." unique_id=936172095]
+material_override = SubResource("ShaderMaterial_evetc")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51727
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_r1pww")
+draw_pass_1 = SubResource("QuadMesh_l1g2t")
+
+[node name="SourceSteam15" type="GPUParticles3D" parent="." unique_id=1296545348]
+material_override = SubResource("ShaderMaterial_7dkwp")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51758
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_fukd6")
+draw_pass_1 = SubResource("QuadMesh_n0si5")
+
+[node name="SourceSteam16" type="GPUParticles3D" parent="." unique_id=2040463086]
+material_override = SubResource("ShaderMaterial_opef4")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51789
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_il8fn")
+draw_pass_1 = SubResource("QuadMesh_pchph")
+
+[node name="SourceSteam17" type="GPUParticles3D" parent="." unique_id=539692672]
+material_override = SubResource("ShaderMaterial_dq85n")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51820
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_u2t8j")
+draw_pass_1 = SubResource("QuadMesh_qbvkm")
+
+[node name="SourceSteam18" type="GPUParticles3D" parent="." unique_id=928579829]
+material_override = SubResource("ShaderMaterial_q7yvs")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51851
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_8mv1i")
+draw_pass_1 = SubResource("QuadMesh_5rigj")
+
+[node name="SourceSteam19" type="GPUParticles3D" parent="." unique_id=1375056589]
+material_override = SubResource("ShaderMaterial_c0p5w")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51882
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_epk1g")
+draw_pass_1 = SubResource("QuadMesh_yv8ck")
+
+[node name="SourceSteam20" type="GPUParticles3D" parent="." unique_id=2001037574]
+material_override = SubResource("ShaderMaterial_fyouh")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51913
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_yp16p")
+draw_pass_1 = SubResource("QuadMesh_bga6q")
+
+[node name="SourceSteam21" type="GPUParticles3D" parent="." unique_id=450581322]
+material_override = SubResource("ShaderMaterial_e1hup")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51944
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_kpslm")
+draw_pass_1 = SubResource("QuadMesh_2e013")
+
+[node name="SourceSteam22" type="GPUParticles3D" parent="." unique_id=1374150251]
+material_override = SubResource("ShaderMaterial_cwoqb")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 51975
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_y4v82")
+draw_pass_1 = SubResource("QuadMesh_tfx3n")
+
+[node name="SourceSteam23" type="GPUParticles3D" parent="." unique_id=1137642746]
+material_override = SubResource("ShaderMaterial_04o3f")
+cast_shadow = 0
+emitting = false
+amount = 28
+lifetime = 2.0
+use_fixed_seed = true
+seed = 52006
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ShaderMaterial_covck")
+draw_pass_1 = SubResource("QuadMesh_o0eo3")

@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_1sksy"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_xlnug"]
+
+[sub_resource type="Resource" id="Resource_7ay7k"]
+script = ExtResource("1_1sksy")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/2cd710be3201c544db8f/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/d33f1aec7226fdda3c24/21c4e344943e73184a81.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_xlnug")
+clip_id = "assembled/spirit_guardians_radiant_native"
+label = "Whole native assembly — existing recorded geometry"
+phase = "lifecycle"
+variant = "spirit_guardians_radiant_native"
+source_recipe = "recipes/spell.spirit_guardians.json"
+components = Array[Resource]([SubResource("Resource_7ay7k")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 4.5
+simulation_hz = 60.0
+options = {
+"recorded_source_rate": 60.0,
+"runtime_candidate": "prepared_existing_recorded_geometry"
+}

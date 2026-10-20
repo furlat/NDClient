@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/continuation42-20261020/sources/aa6d31e0db538a4bab5e/assembly.gd"
+input = {"entries": [{"id": "spiral", "composition": {"components": [{"script": "res://assets/vfx/extensions/continuation42-20261020/sources/fa9cf3f3d9e0897ec463/hypnotic.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"kind": "hypnotic", "width": 1, "mode": "binding", "pack": "binbun-statusfxfull", "name": "vfx_status_purple", "cell": 768, "ortho": 16, "targetY": 1.2, "frames": 129, "animation": "", "palette": ["762d3f", "b34d60", "e47786", "f5a1a0", "edb37e", "ffdbc0", "fff0dc"], "adapter": "LoopHypnoticCapture.gd", "loopFrames": 128, "loopSeconds": 4, "duplicateEndpoint": 128, "id": "hypnotic_spiral_loop", "cameraQuarter": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "prepared_recipient_bank": "res://assets/vfx/extensions/continuation42-20261020/sources/6f5d0cd4a6ad95422fce/2f720824079533afffdb.res"}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 4.04, "position": [0, 0, 0], "scale": 1.0}, {"id": "ground", "composition": {"components": [{"script": "res://assets/vfx/extensions/continuation42-20261020/sources/5d7de5fb479fcbfd8f94/hypnotic_ground.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"kind": "hypnotic", "width": 1, "mode": "binding", "pack": "binbun-statusfxfull", "name": "vfx_status_purple", "cell": 768, "ortho": 16, "targetY": 1.2, "frames": 96, "animation": "", "palette": ["79535e", "b87883", "e4d8be"], "adapter": "GroundHypnoticCapture.gd", "loopFrames": 128, "loopSeconds": 4, "duplicateEndpoint": 128, "id": "hypnotic_circle_ground", "cameraQuarter": 0, "rosette": true}, "side": "full", "simulation_hz": 144, "seed": 47291, "prepared_recipient_bank": "res://assets/vfx/extensions/continuation42-20261020/sources/9b2073ed12c42bba7e0e/b191298053efe1bb0b02.res"}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 3.0, "position": [0, 0, 0], "scale": 1.0}]}
+options = {}
+provenance = "Pinned native selection; recipes/spell.hypnotic_pattern.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "assembled/hypnotic_pattern_native"
+label = "Whole native assembly"
+phase = "lifecycle"
+variant = "hypnotic_pattern_native"
+source_recipe = "recipes/spell.hypnotic_pattern.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.04
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

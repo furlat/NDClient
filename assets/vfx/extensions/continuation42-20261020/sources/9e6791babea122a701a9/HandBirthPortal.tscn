@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/c62c78459a2bb95d84f7/s_PolarPanning_ds_unlit.tres" id="2_08g2u"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/extensions/continuation42-20261020/sources/a5f322c9a0afd0417634/texture.res" id="3_2we5v"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/extensions/continuation42-20261020/sources/9cd820fc0e056d10127a/texture.res" id="4_mk0nc"]
+
+[sub_resource type="Gradient" id="Gradient_donc1"]
+offsets = PackedFloat32Array(0, 0.185874, 0.710526, 0.855019, 1)
+colors = PackedColorArray(0.249167, 0.15, 1, 0, 0.35264, 0.2592, 0.96, 1, 0.0245, 0.35, 0.246925, 1, 0.0773334, 0, 0.29, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_e672q"]
+gradient = SubResource("Gradient_donc1")
+
+[sub_resource type="Gradient" id="Gradient_5jua3"]
+offsets = PackedFloat32Array(0.524164, 0.852632, 0.984211)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8d86v"]
+gradient = SubResource("Gradient_5jua3")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_4hken"]
+offsets = PackedFloat32Array(0.0483271, 0.226766, 0.620818, 0.780669, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.275367, 0.275367, 0.275367, 1, 0.505344, 0.505344, 0.505344, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6xfoj"]
+gradient = SubResource("Gradient_4hken")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ydnr"]
+render_priority = -1
+shader = ExtResource("2_08g2u")
+shader_parameter/Intensity = 6.775
+shader_parameter/Enable_Distortion = true
+shader_parameter/Dist_Zoom_Strenght = 1.0
+shader_parameter/Diost_repeat_strenght = 3.0
+shader_parameter/Distortion_Speed_XY = Vector2(0, 1)
+shader_parameter/Distortion_Attenuation = 5.0
+shader_parameter/Zoom_Strenght = 2.0
+shader_parameter/repeat = -1.0
+shader_parameter/Speed_XY = Vector2(-0.5, 0)
+shader_parameter/Power = 0.46
+shader_parameter/Proximity_Fade = 2.65
+shader_parameter/Transparency = 0.0
+shader_parameter/Texture_Add = SubResource("GradientTexture2D_8d86v")
+shader_parameter/Distortion_Texture = ExtResource("3_2we5v")
+shader_parameter/Texture_Main = ExtResource("4_mk0nc")
+shader_parameter/Texture_Substract = SubResource("GradientTexture2D_6xfoj")
+shader_parameter/Color_1D_Gradient = SubResource("GradientTexture1D_e672q")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_orjjv"]
+size = Vector2(10, 10)
+
+
+[node name="HandBirthPortal" type="MeshInstance3D"]
+mesh=SubResource("PlaneMesh_orjjv")
+material_override=SubResource("ShaderMaterial_7ydnr")

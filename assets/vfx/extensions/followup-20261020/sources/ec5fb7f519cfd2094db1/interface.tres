@@ -1,0 +1,60 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn" id="1_vgysa"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_vwjmm"]
+
+[resource]
+script = ExtResource("2_vwjmm")
+scene = ExtResource("1_vgysa")
+bindings = [{
+"node_index": 2,
+"node_path": "./support/FactoryGenerated_0000_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn::Shader_q2rau"
+}, {
+"node_index": 3,
+"node_path": "./support/FactoryGenerated_0001_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn::Shader_0lcka"
+}, {
+"node_index": 4,
+"node_path": "./support/FactoryGenerated_0002_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn::Shader_2dufa"
+}, {
+"node_index": 5,
+"node_path": "./support/FactoryGenerated_0003_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/aa922e3744f366318581d225cf8284afe9c03794b86a510e982406e765f5544e.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn",
+"scene_sha256": "213047fd7035f6720a01f14c6d26a51176acb3a8ca2eb1e23cd4df74de1bf5b0",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn::Shader_q2rau",
+"source_sha256": "18e304487ab1894ad7e6c9c795e9d17c280642ce68f3c3eec32c94ae1c7095d8",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn::Shader_0lcka",
+"source_sha256": "18e304487ab1894ad7e6c9c795e9d17c280642ce68f3c3eec32c94ae1c7095d8",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_aura_of_life_benefit_persistent/prepared.scn::Shader_2dufa",
+"source_sha256": "18e304487ab1894ad7e6c9c795e9d17c280642ce68f3c3eec32c94ae1c7095d8",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/aa922e3744f366318581d225cf8284afe9c03794b86a510e982406e765f5544e.res",
+"source_sha256": "18e304487ab1894ad7e6c9c795e9d17c280642ce68f3c3eec32c94ae1c7095d8",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}],
+"source_program_equations_changed": false
+}

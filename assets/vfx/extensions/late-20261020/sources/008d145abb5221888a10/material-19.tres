@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/9656c4bca60b528d8586/program-6a237c8b85226ddb51df.gdshader" id="1_1nivn"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/3351216f60e082ef6e78/texture-46504497caea2886b35a.res" id="2_wmx4u"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_1nivn")
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -0.8, 0, -0.5, 1)
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/noise_tex = ExtResource("2_wmx4u")
+shader_parameter/impact_age = 0.0
+shader_parameter/visible_hit = false
+shader_parameter/front = false
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_1nivn")
+metadata/factory_opacity_prepared_shader = ExtResource("1_1nivn")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true

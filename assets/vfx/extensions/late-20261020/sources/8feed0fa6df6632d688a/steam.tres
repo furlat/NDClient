@@ -1,0 +1,1238 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/extensions/late-20261020/sources/97fb9af256ceebde4f0f/steam.gd" id="1_ngw04"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/dfede27521212082b57d/texture.res" id="2_lo3ij"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/738a590d656da53091f0/texture.res" id="3_sa1eg"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/c1ada9b4a6fbb2429509/program-1d72d4cbf498d082.gdshader" id="4_hrvvx"]
+[ext_resource type="PackedScene" path="res://assets/vfx/extensions/late-20261020/sources/3f2e396b4ef0485b9ac0/steam.tscn" id="5_jjin4"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/late-20261020/sources/7075f79362fda4ba90da/bank.gd" id="6_t1l64"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ewto"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x6r05"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sqaq5"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3gk1a"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0d8g"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8553"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6f3nc"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdvxg"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hfth7"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ollc"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l2s0s"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jslbf"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wquyy"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0q565"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_evetc"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7dkwp"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_opef4"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dq85n"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q7yvs"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c0p5w"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fyouh"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e1hup"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cwoqb"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_04o3f"]
+render_priority = 1
+shader = ExtResource("4_hrvvx")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_surface_source_clock = 0.0
+shader_parameter/surface_source_clock = 0.0
+shader_parameter/emitter_envelope = 0.0
+shader_parameter/Color = Color(0.7176471, 0.6784314, 0.627451, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/LOD_min = 0.0
+shader_parameter/LOD_max = 9.0
+shader_parameter/smoke_texture = ExtResource("2_lo3ij")
+shader_parameter/smake_mask = ExtResource("3_sa1eg")
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["surface_source_clock"]
+metadata/factory_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_opacity_prepared_shader = ExtResource("4_hrvvx")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[resource]
+script = ExtResource("6_t1l64")
+static_settings = {
+"emitter_count": 24,
+"particle_scale_max": 1.65,
+"particle_scale_min": 1.05,
+"particles_per_emitter": 28
+}
+scene = ExtResource("5_jjin4")
+adapter_script = ExtResource("1_ngw04")
+source_script = "res://assets/vfx/extensions/late-20261020/sources/ebb0b7e0e5d4e00b112f/steam_cloud.gd"
+material_paths = Array[NodePath]([NodePath("SourceSteam0"), NodePath("SourceSteam1"), NodePath("SourceSteam2"), NodePath("SourceSteam3"), NodePath("SourceSteam4"), NodePath("SourceSteam5"), NodePath("SourceSteam6"), NodePath("SourceSteam7"), NodePath("SourceSteam8"), NodePath("SourceSteam9"), NodePath("SourceSteam10"), NodePath("SourceSteam11"), NodePath("SourceSteam12"), NodePath("SourceSteam13"), NodePath("SourceSteam14"), NodePath("SourceSteam15"), NodePath("SourceSteam16"), NodePath("SourceSteam17"), NodePath("SourceSteam18"), NodePath("SourceSteam19"), NodePath("SourceSteam20"), NodePath("SourceSteam21"), NodePath("SourceSteam22"), NodePath("SourceSteam23")])
+material_templates = Array[ShaderMaterial]([SubResource("ShaderMaterial_2ewto"), SubResource("ShaderMaterial_x6r05"), SubResource("ShaderMaterial_sqaq5"), SubResource("ShaderMaterial_3gk1a"), SubResource("ShaderMaterial_n0d8g"), SubResource("ShaderMaterial_e8553"), SubResource("ShaderMaterial_6f3nc"), SubResource("ShaderMaterial_wdvxg"), SubResource("ShaderMaterial_hfth7"), SubResource("ShaderMaterial_6ollc"), SubResource("ShaderMaterial_l2s0s"), SubResource("ShaderMaterial_jslbf"), SubResource("ShaderMaterial_wquyy"), SubResource("ShaderMaterial_0q565"), SubResource("ShaderMaterial_evetc"), SubResource("ShaderMaterial_7dkwp"), SubResource("ShaderMaterial_opef4"), SubResource("ShaderMaterial_dq85n"), SubResource("ShaderMaterial_q7yvs"), SubResource("ShaderMaterial_c0p5w"), SubResource("ShaderMaterial_fyouh"), SubResource("ShaderMaterial_e1hup"), SubResource("ShaderMaterial_cwoqb"), SubResource("ShaderMaterial_04o3f")])
+material_settings = Array[Dictionary]([{
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["surface_source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_prepared_shader": ExtResource("4_hrvvx"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"Color": Color(0.7176471, 0.6784314, 0.627451, 1),
+"Enable_Proximity_Fade": false,
+"LOD_max": 9.0,
+"LOD_min": 0.0,
+"ProximityFade": 1.0,
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"emitter_envelope": 0.0,
+"smake_mask": ExtResource("3_sa1eg"),
+"smoke_texture": ExtResource("2_lo3ij"),
+"surface_source_clock": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}])
+particle_paths = Array[NodePath]([NodePath("SourceSteam0"), NodePath("SourceSteam1"), NodePath("SourceSteam2"), NodePath("SourceSteam3"), NodePath("SourceSteam4"), NodePath("SourceSteam5"), NodePath("SourceSteam6"), NodePath("SourceSteam7"), NodePath("SourceSteam8"), NodePath("SourceSteam9"), NodePath("SourceSteam10"), NodePath("SourceSteam11"), NodePath("SourceSteam12"), NodePath("SourceSteam13"), NodePath("SourceSteam14"), NodePath("SourceSteam15"), NodePath("SourceSteam16"), NodePath("SourceSteam17"), NodePath("SourceSteam18"), NodePath("SourceSteam19"), NodePath("SourceSteam20"), NodePath("SourceSteam21"), NodePath("SourceSteam22"), NodePath("SourceSteam23")])
+particle_initial_emitting = Array[bool]([false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false])
+process_receipts = Array[Dictionary]([{
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam0"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam1"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam2"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam3"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam4"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam5"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam6"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam7"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam8"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam9"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam10"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam11"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam12"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam13"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam14"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam15"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam16"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam17"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam18"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam19"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam20"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam21"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam22"),
+"source_immutable": true
+}, {
+"local_coords": true,
+"native_program_sha256": "4d58f37933ef0a38203871035d0665c87938499c5979306b70b61493f8489aa5",
+"path": NodePath("SourceSteam23"),
+"source_immutable": true
+}])
+verified_stable_paths = true
+provenance = {
+"draw_layers": 24,
+"immutable_process_audit": "No controllers/players/process mutations; source uses local_coords and only emission/visibility/draw clocks at runtime",
+"native_particle_layers": 24,
+"original_emitter_factory": "res://assets/vfx/extensions/late-20261020/sources/640361420840ef7d5319/source_emitters.gd",
+"owner_cells_events_or_time_saved": false,
+"private_draw_materials": true,
+"source_phase": "res://assets/vfx/extensions/late-20261020/sources/0eb1d51908db097c5772/86f1e0ee93f3df70.tres",
+"source_script": "res://assets/vfx/extensions/late-20261020/sources/ebb0b7e0e5d4e00b112f/steam_cloud.gd",
+"source_sha256": "d66104b8e64d475d5f538d4dafb3b17b21fb5aa6cffeb04d16ef6ffea147ef02"
+}

@@ -1,0 +1,49 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_irresistible_dance_persistent/prepared.scn" id="1_svddq"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_qlmf2"]
+
+[resource]
+script = ExtResource("2_qlmf2")
+scene = ExtResource("1_svddq")
+bindings = [{
+"node_index": 2,
+"node_path": "./receiving/ReceivingForm0Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_irresistible_dance_persistent/prepared.scn::Shader_f3si5"
+}, {
+"node_index": 3,
+"node_path": "./receiving/ReceivingForm1Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_irresistible_dance_persistent/prepared.scn::Shader_xxp3m"
+}, {
+"node_index": 4,
+"node_path": "./receiving/ReceivingForm2Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/556adb166a7056ca2b21d8ad38e1dc06109c07ee727699f8db37d49f89a903e9.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_irresistible_dance_persistent/prepared.scn",
+"scene_sha256": "ada4b4d1b7df016de82f2cb43a585b756a808d5c5f3198c0c9b710314c5ccd0c",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_irresistible_dance_persistent/prepared.scn::Shader_f3si5",
+"source_sha256": "147cc75b29ce01b5eea47c6293e7a4ba07e340eaeea0851250a67df74768c5cd",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_irresistible_dance_persistent/prepared.scn::Shader_xxp3m",
+"source_sha256": "147cc75b29ce01b5eea47c6293e7a4ba07e340eaeea0851250a67df74768c5cd",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/556adb166a7056ca2b21d8ad38e1dc06109c07ee727699f8db37d49f89a903e9.res",
+"source_sha256": "147cc75b29ce01b5eea47c6293e7a4ba07e340eaeea0851250a67df74768c5cd",
+"unused_original_clock_declarations": ["control_clock"]
+}],
+"source_program_equations_changed": false
+}

@@ -1,0 +1,31 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/e1e80c4eca20d8956f27/program-5436fa22aaaee10411af.gdshader" id="1_mufqp"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/f560f181655d9929d734/texture-36c91f1d1e8986dfc50d.res" id="2_avvje"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/ac726512d10264d1f7e4/texture-00958465bb0d62505355.res" id="3_uh1qx"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/ee9d84bb9c401a8d03e9/texture-00d6429085464e11ce55.res" id="4_m7nhq"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/deb8b9a36c042f4ed716/texture-e9606a8b33195ada4008.res" id="5_tfrwj"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_mufqp")
+shader_parameter/factory_world_to_source = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/factory_occurrence_alpha = 1.0
+shader_parameter/front = false
+shader_parameter/fresnelpower = 1.36
+shader_parameter/AddTexture = ExtResource("2_avvje")
+shader_parameter/BreakFactorGlobal = 0.0
+shader_parameter/Texture_add2_offset = Vector2(2.875, 1.02)
+shader_parameter/AddTexture2 = ExtResource("3_uh1qx")
+shader_parameter/Details_scale = Vector2(1, 1)
+shader_parameter/Details_speed = Vector2(0, 0)
+shader_parameter/DetailsTexture = ExtResource("5_tfrwj")
+shader_parameter/Color1DGradient = ExtResource("4_m7nhq")
+shader_parameter/ColorIntensity = 1.35
+metadata/factory_occurrence_alpha = true
+metadata/factory_prepared_shader = ExtResource("1_mufqp")
+metadata/factory_opacity_prepared_shader = ExtResource("1_mufqp")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = true

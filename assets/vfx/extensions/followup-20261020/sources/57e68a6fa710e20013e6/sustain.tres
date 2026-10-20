@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script=ExtResource("component")
+component_id="effect"
+constructor_script="res://assets/vfx/extensions/followup-20261020/sources/a01bb3f08fae76f1f8fd/sustain.gd"
+input={}
+provenance="Exact original res://assets/vfx/conditions/condition_irresistible_dance_persistent/sustain.gd; same retained scene/material/Clock and lifecycle. Explicit opt-in immutable optical table only."
+[resource]
+script=ExtResource("phase")
+clip_id="conditions/continuation/condition_irresistible_dance_persistent/sustain"
+label="condition_irresistible_dance_persistent sustain"
+phase="sustain"
+variant="prepared_pose_table"
+source_recipe="tools/runtime_cost/condition_pose_tables.py"
+components=Array[Resource]([SubResource("visual")])
+bindings=[{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+seconds=18.4799567858223
+simulation_hz=0.0
+options={"qualification":"Unselected source-equivalent receiving-table candidate; unseen-pose budget and public packaged execution remain separate.","condition_lifecycle":{"body_channel_included":true,"complete_visual_channels":true,"concurrent_layers":[],"marker":{},"overlap":{"application_sustain":false,"body_effects_continue":true,"sustain_removal":false},"owner_ids":["condition.spell.irresistible_dance"],"owner_kind":"condition","phases":{"application":"conditions/continuation/condition_irresistible_dance_persistent/application","removal":"conditions/continuation/condition_irresistible_dance_persistent/removal","sustain":"conditions/continuation/condition_irresistible_dance_persistent/sustain"},"registration":{"anchor":"ground","attachment":"recipient_ground","offset":[0.0,0.0,0.0],"orientation":"world","origin_path":".","role":"attached","scale":1.0},"removal":{"continue_from_owner_age":true,"strategy":"retain current loop phase and fade","crossfade_seconds":0.0},"revision":"conditions-continuation-v1","schema":"vfxfactory.condition_lifecycle.v1","source":{"offline_constructor_override":{},"phase":"res://assets/vfx/extensions/followup-20261020/sources/4e85dc42a93367e0107b/57d04aa5709e1d8a.tres","retained_entries":"whole selected source phase","sha256":"af65062cd4eb4735ae3269470a1cf3d2522932cf564c77a83c6645859bb3c8ee"},"sustain":{"indefinite":true,"loop_seconds":18.4799567858223,"steady_artwork":false,"animation":"original shader flow, recorded GPU particle motion and authored orbit tracks; no generic glyph rocking"},"visibility":{"activities":["idle","move","attack","cast","hit","jump","forced_move","act"],"hide_with_invisible_actor":true,"life_states":["alive","dying","stable"]},"visual_acceptance":"preserved source; persistent conversion pending visual review","when":{},"seek":{"direct_time_sampling":true,"gpu_particles":"none"}},"original_public_wrapper":"res://assets/vfx/extensions/followup-20261020/sources/d9cb9f0a5729f55c801e/sustain.gd","public_input_setters":{"owner_state":"set_owner_state","root_path":"set_root_path","entity_geometry":"set_entity_geometry","targets":"set_targets","live_endpoints":"set_live_endpoints"}}

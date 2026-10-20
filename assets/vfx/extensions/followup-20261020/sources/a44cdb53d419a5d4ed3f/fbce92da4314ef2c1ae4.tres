@@ -1,0 +1,33 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_sio2q"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_kg4ld"]
+
+[sub_resource type="Resource" id="Resource_u7ie5"]
+script = ExtResource("1_sio2q")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/06bb26236b05e7e93a58/fbce92da4314ef2c1ae4.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_kg4ld")
+clip_id = "projectile-windups/acid_splash/default/cast/windup"
+label = "Windup — existing recorded geometry"
+phase = "cast"
+source_recipe = "recipes/projectile-windups/acid_splash.json"
+components = Array[Resource]([SubResource("Resource_u7ie5")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 0.46
+simulation_hz = 144.0
+options = {
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat"
+}

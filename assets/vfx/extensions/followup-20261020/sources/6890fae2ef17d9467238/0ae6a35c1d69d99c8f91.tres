@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_8ikh8"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_37cgp"]
+
+[sub_resource type="Resource" id="Resource_vbqqp"]
+script = ExtResource("1_8ikh8")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/c157c28e9f7119904b0a/0ae6a35c1d69d99c8f91.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_37cgp")
+clip_id = "native/fear/condition/source-d5b9835f83255ebe"
+label = "Condition — existing recorded geometry"
+phase = "condition"
+variant = "condition_back"
+source_recipe = "recipes/spells/fear.json"
+components = Array[Resource]([SubResource("Resource_vbqqp")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 4.0
+simulation_hz = 144.0
+options = {
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat"
+}

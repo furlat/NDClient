@@ -1,0 +1,60 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_phantasmal_killer_persistent/prepared.scn" id="1_3mr1t"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_d4g8y"]
+
+[resource]
+script = ExtResource("2_d4g8y")
+scene = ExtResource("1_3mr1t")
+bindings = [{
+"node_index": 2,
+"node_path": "./receiving/ReceivingForm0Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_phantasmal_killer_persistent/prepared.scn::Shader_pjk6e"
+}, {
+"node_index": 3,
+"node_path": "./receiving/ReceivingForm1Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/475298f2f7d50f28f2d2e2306482b334d7ffd0a154ffdd73f6e11ab278cf10ba.res"
+}, {
+"node_index": 4,
+"node_path": "./receiving/ReceivingForm0Layer1",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_phantasmal_killer_persistent/prepared.scn::Shader_bc100"
+}, {
+"node_index": 5,
+"node_path": "./receiving/ReceivingForm1Layer1",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/bf90126d679405d59632defc462b41cf841e3a721cbd42b4f381b79626accf89.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_phantasmal_killer_persistent/prepared.scn",
+"scene_sha256": "73673a94c93c35d0b0d2a98a216de90eb9cd06e55b250a3bfdd4a33f78b59ac6",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_phantasmal_killer_persistent/prepared.scn::Shader_pjk6e",
+"source_sha256": "020dc10e88b6764f05201a0a69f945cbe865fe45dc2f2510766dd916cb0194da",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/475298f2f7d50f28f2d2e2306482b334d7ffd0a154ffdd73f6e11ab278cf10ba.res",
+"source_sha256": "020dc10e88b6764f05201a0a69f945cbe865fe45dc2f2510766dd916cb0194da",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_phantasmal_killer_persistent/prepared.scn::Shader_bc100",
+"source_sha256": "96776a1c23d1f2ec84cfc973568ed423631d9e6d0f587b1a96faa0ecf522036e",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/bf90126d679405d59632defc462b41cf841e3a721cbd42b4f381b79626accf89.res",
+"source_sha256": "96776a1c23d1f2ec84cfc973568ed423631d9e6d0f587b1a96faa0ecf522036e",
+"unused_original_clock_declarations": ["control_clock"]
+}],
+"source_program_equations_changed": false
+}

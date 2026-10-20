@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_5bmsi"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_kg4ra"]
+
+[sub_resource type="Resource" id="Resource_bk4lh"]
+script = ExtResource("1_5bmsi")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/2cd710be3201c544db8f/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/87c8c46b950f14dcd695/4e16ed8cab1607ec6797.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_kg4ra")
+clip_id = "live/eyebite/sickened/shared_overhead"
+label = "Steady overhead sickened — existing recorded geometry"
+phase = "sustain"
+variant = "sickened"
+source_recipe = "recipes/data/overhead_markers.json"
+components = Array[Resource]([SubResource("Resource_bk4lh")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 2.6
+simulation_hz = 60.0
+options = {
+"recorded_source_rate": 60.0,
+"runtime_candidate": "prepared_existing_recorded_geometry"
+}

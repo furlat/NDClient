@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "moonbeam"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/fa78086573c97162c403/field.gd"
+input = {"moonbeam_bank": "res://assets/vfx/extensions/followup-20261020/sources/9d67265639e73020400a/hold-bank.res"}
+options = {}
+provenance = "Pinned native selection; recipes/data/bg3-36/moonbeam.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/moonbeam/hold"
+label = "Hold"
+phase = "hold"
+variant = "default"
+source_recipe = "recipes/data/bg3-36/moonbeam.json"
+bindings = [{"component": "moonbeam", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {}

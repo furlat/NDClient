@@ -1,0 +1,35 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_n3r26"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_7g5yv"]
+
+[sub_resource type="Resource" id="Resource_2p1wp"]
+script = ExtResource("1_n3r26")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/075b2bf066f3fcab98db/1cbbb22f1c5fc640de2a.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_7g5yv")
+clip_id = "original-repairs/fire-shield-contact/chill/lifecycle"
+label = "Lifecycle — existing recorded geometry"
+phase = "lifecycle"
+variant = "chill_back"
+source_recipe = "recipes/spells/fire_shield.json"
+components = Array[Resource]([SubResource("Resource_2p1wp")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 4.0
+simulation_hz = 144.0
+options = {
+&"opacity_uniform": "factory_occurrence_alpha",
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat_readonly_native_materials"
+}

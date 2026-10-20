@@ -1,0 +1,1585 @@
+{
+  "schema": "factory.additive_successor.source_licenses.v1",
+  "version": "runtime-continuation42-20261020-ecdf1a60ae59ee03",
+  "predecessor": "runtime-followup-64551452f4a0deec",
+  "license_catalog_sha256": "836192bc22d71a8b3b0b532f58d00b073c8e59918ca19ff6b2d081d7231dc8c4",
+  "retained_provenance_sha256": "874715426e525c237e521ac204bb70b11171d35b82621170921a9a1cd1de437c",
+  "closure_sha256": "87ec0888ebd3fca447115bc88cbd5af0de681d1046cbd3a4f6a703ad499eb925",
+  "packs": [
+    {
+      "package": "pack_binbun_statusfxfull",
+      "author": "binbun",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_binbun_statusfxfull",
+        "storageAuthor": "binbun",
+        "title": "StatusFXFull",
+        "embeddedLicenseEvidence": [
+          {
+            "resourceId": "pack_binbun_statusfxfull::StatusFXFull/assets/BinbunVFX_Vol2/StatusFX/license.txt",
+            "path": "StatusFXFull/assets/BinbunVFX_Vol2/StatusFX/license.txt",
+            "text": "Stylized Status FX is licensed under Creative Commons Zero (CC0)\nhttps://creativecommons.org/publicdomain/zero/1.0/\n\nYou're free to use the assets in this pack for personal, educational and commercial projects with no attribution required.\n\n---\n\nTo support me you can mention me 'Binbun3D' or 'bun3d.com'\n",
+            "scope": "file_or_subtree_evidence; do not apply an addon license to the whole VFX pack"
+          }
+        ],
+        "officialAuthorEvidence": "docs/licenses/binbun/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/StatusFX/effects/status/vfx_status_dark.tscn",
+          "prepared_resource": "res://assets/vfx/sources/f87bd2df04923a0732d5/vfx_status_dark.tscn",
+          "source_sha256": "a32a42eb75a1dc25cd51ab3af758e7669f9f00cbb0c2bb14f60512c468fb940b",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/StatusFX/effects/status/vfx_status_green.tscn",
+          "prepared_resource": "res://assets/vfx/sources/cae7aebb8d36f0170ce0/vfx_status_green.tscn",
+          "source_sha256": "874c283cb29f9391e49cda264dfc9eb492d2dd824c778ddc755f07d1b38a6d60",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/StatusFX/script/VFXStatusBB.gd",
+          "prepared_resource": "res://assets/vfx/sources/f9ee6a8c6e4a152e8639/VFXStatusBB.gd",
+          "source_sha256": "fd11b382201a302bb65dc9087d9ea85b7127df889ff4a068afa84757edbd5f38",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/StatusFX/shader/aura_particle.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/86776d58d72b4b07737c/aura_particle.gdshader",
+          "source_sha256": "3cd13b894eafa4b2107cd68a8f4d09e5bdd327d967978b9416073fe83da21e99",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/StatusFX/shader/aura_sphere.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/b5bc895b480082f8ba67/aura_sphere.gdshader",
+          "source_sha256": "2106b69860c04bbdadd3574bb82402159abe6202a85c293480a2818b2041c9c9",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/StatusFX/shader/noise_particle.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/8a3ea0a59454c9211095/noise_particle.gdshader",
+          "source_sha256": "fc212c1c627cac4d0ca2bdcb8a52fd36c3a8c3c4fbe884698ab6fe42d36f5ed3",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/StatusFX/shader/streaks.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/ebf5a8feec9f8201a4e1/streaks.gdshader",
+          "source_sha256": "9204c490da8d00c2c2abdd11ed3b0bd352da3d8a917e3f0b8060d3ad590a45ee",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/binbun/pack_binbun_statusfxfull/assets/BinbunVFX_Vol2/shared/script/VFXEmitterBB.gd",
+          "prepared_resource": "res://assets/vfx/sources/c9a24c9f0dd17d95064b/VFXEmitterBB.gd",
+          "source_sha256": "a592245030aa6a6d594bfa63d905330fecf16c8e98aadeccac0fc09d0960005d",
+          "reused_from_predecessor": true
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_blood_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_blood_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Blood (Premium)",
+        "embeddedLicenseEvidence": [],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+          "prepared_resource": "res://assets/vfx/sources/96cabb853d47f2b050e2/Decal_Blood_Animated_A1.tscn",
+          "source_sha256": "33639e05a422bab5ef19e4c1b47146eeb6c39fa837c3c9b7a2666d5830382b7a",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+          "prepared_resource": "res://assets/vfx/sources/f298e36e39e7498520a2/VFX_Blood_Hit_A1.tscn",
+          "source_sha256": "f621aad24921fffeb7988413bb861ab51dcedea5ff249fecef60a6f23fb07195",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+          "prepared_resource": "res://assets/vfx/sources/6f493d4e3a33fcfefd89/VFX_Blood_Hit_A2.tscn",
+          "source_sha256": "f0e2a479e0c03f2540a743c813c60e61ce6d94213e759d5cb00d9454cedc745b",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+          "prepared_resource": "res://assets/vfx/sources/dc2c16f85588a185070d/VFX_Blood_Mark_J1.tscn",
+          "source_sha256": "68c97270042bccea62ea5d5b22b8bc1753342803eafda4be698177ed8a951eb0",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+          "prepared_resource": "res://assets/vfx/sources/dc2c2ac759835f66af0b/sm_plane_coned_spiked_waved1.res",
+          "source_sha256": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+          "prepared_resource": "res://assets/vfx/sources/8fc586b0f8a85ba8cd81/s_Disolver_small_Liquid.tres",
+          "source_sha256": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+          "prepared_resource": "res://assets/vfx/sources/6a708884992a63efa2d1/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+          "source_sha256": "77e3bc50180da87bd76ed9f4808e69a30e87dd7dc8861aeeacc1e043152b0a88",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/404b9e919cf626661ace/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+          "source_sha256": "5cd8214ed58b515189f1aafd77aba17b99dbf57a86571c0885f8070ab1db3778",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/af05dbb590f2d9420e65/ss_decal3double_treshold.gdshader",
+          "source_sha256": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+          "prepared_resource": "res://assets/vfx/sources/68ee2643fe401e02a28e/texture.res",
+          "source_sha256": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+          "prepared_resource": "res://assets/vfx/sources/1e8fdb62cf96bd3b631e/texture.res",
+          "source_sha256": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+          "prepared_resource": "res://assets/vfx/sources/01080724dd6b8a11ea03/texture.res",
+          "source_sha256": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+          "prepared_resource": "res://assets/vfx/sources/eb3b31b84652471d6c70/texture.res",
+          "source_sha256": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+          "prepared_resource": "res://assets/vfx/sources/718ba1a347fbf32fcae3/texture.res",
+          "source_sha256": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+          "prepared_resource": "res://assets/vfx/sources/85ebdc53b869510cade1/texture.res",
+          "source_sha256": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+          "prepared_resource": "res://assets/vfx/sources/103fcb03e0420d33b267/texture.res",
+          "source_sha256": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+          "prepared_resource": "res://assets/vfx/sources/33a1b5146ac72a518c62/texture.res",
+          "source_sha256": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+          "prepared_resource": "res://assets/vfx/sources/e2597a3c095800b8b6a2/texture.res",
+          "source_sha256": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+          "prepared_resource": "res://assets/vfx/sources/b764bf13226545915475/texture.res",
+          "source_sha256": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+          "prepared_resource": "res://assets/vfx/sources/f9c8e2fa1dcc62f85965/texture.res",
+          "source_sha256": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+          "prepared_resource": "res://assets/vfx/sources/2cc94f51b380b6eab0f5/texture.res",
+          "source_sha256": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/Decal_Blood_Animated_A1.tscn",
+          "prepared_resource": "res://assets/vfx/sources/e052b52bc03bff39e7bc/Decal_Blood_Animated_A1.tscn",
+          "source_sha256": "8b542bcc993654d88c4e007aaafec8be67e59b9f492221e0e769c160fa8784f8",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A1.tscn",
+          "prepared_resource": "res://assets/vfx/sources/b38546b6717e504707cf/VFX_Blood_Hit_A1.tscn",
+          "source_sha256": "cb3a53c2b298625f603a6638a4ee8f00323255d196dc142cb43dd5c153255be5",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Hit_A2.tscn",
+          "prepared_resource": "res://assets/vfx/sources/141504d2e175f788746d/VFX_Blood_Hit_A2.tscn",
+          "source_sha256": "b31656c3b83e5006e23dcc08e043e1125b0c4d8bac50934fec83bd72f4a3144e",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/Scenes/VFX_Blood_Mark_J1.tscn",
+          "prepared_resource": "res://assets/vfx/sources/551691819f4d081cb0c0/VFX_Blood_Mark_J1.tscn",
+          "source_sha256": "5c3993df8e3a7f329dbf5abc034ec39fc5acfa1ff014871cdc5af341dce09428",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/objects/sm_plane_coned_spiked_waved1.obj",
+          "prepared_resource": "res://assets/vfx/sources/c2e5aa5f8f8854bcdb2b/sm_plane_coned_spiked_waved1.res",
+          "source_sha256": "0d08c64ea3173f8860d1cadec0b3005d1df7681ebe45b0876e8ff770460a50cc",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid.tres",
+          "prepared_resource": "res://assets/vfx/sources/c4ff638f423dac72df74/s_Disolver_small_Liquid.tres",
+          "source_sha256": "07ac62b3c3371f7d9f7c845626ec10f5455b58387dc21d9b836749af01483e05",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+          "prepared_resource": "res://assets/vfx/sources/2b57f02c9dd86b2bbd9c/s_Disolver_small_Liquid_p_Treshold_ds.tres",
+          "source_sha256": "022adcea7620dc32f7aa8948751927d4deec60544a3b708ca7b520dee6fb5c8d",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/26c1cbff375f6b494329/ss_Disolver_subUV_small_Liquid_Treshold_p.gdshader",
+          "source_sha256": "e5167e8b5cb2eb000a31c3349d69463b3c3a3fd8c28d6cacb9bd95bea58432fd",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/shaders/ss_decal3double_treshold.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/160e3b4a4b5cc2b23a8d/ss_decal3double_treshold.gdshader",
+          "source_sha256": "0b6eff740399f012f86c493150fae48916e2a03f63be281a40a1795762957529",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4.png",
+          "prepared_resource": "res://assets/vfx/sources/68ee2643fe401e02a28e/texture.res",
+          "source_sha256": "68ee2643fe401e02a28ee3e49867125212759feb88f5615ddb7d7153df8f5a2d",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x.png",
+          "prepared_resource": "res://assets/vfx/sources/1e8fdb62cf96bd3b631e/texture.res",
+          "source_sha256": "1e8fdb62cf96bd3b631eb92ec04163a4f8746f790ee2da2d6d2dbf54fdb98ad6",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_DECAL_g4x_N.png",
+          "prepared_resource": "res://assets/vfx/sources/01080724dd6b8a11ea03/texture.res",
+          "source_sha256": "01080724dd6b8a11ea03b34ef5c607319140c87501a591d13425700212c2c643",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3.png",
+          "prepared_resource": "res://assets/vfx/sources/eb3b31b84652471d6c70/texture.res",
+          "source_sha256": "eb3b31b84652471d6c7069b1e05eda310c07072d9f10bbf492b661f71b03c193",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_MultiUV_f3_N.png",
+          "prepared_resource": "res://assets/vfx/sources/718ba1a347fbf32fcae3/texture.res",
+          "source_sha256": "718ba1a347fbf32fcae370ee82f00a5aa0727fc4b96084d3ea3624569e1bc80c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter11_N.png",
+          "prepared_resource": "res://assets/vfx/sources/85ebdc53b869510cade1/texture.res",
+          "source_sha256": "85ebdc53b869510cade1d5b97f4cc433bc84b38f2d1d06d1e1f5430f7d735f91",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Blood_Splatter77.png",
+          "prepared_resource": "res://assets/vfx/sources/103fcb03e0420d33b267/texture.res",
+          "source_sha256": "103fcb03e0420d33b2670f87bf66844bfc823b5da1a6325ff417afb7265f96f3",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45k.png",
+          "prepared_resource": "res://assets/vfx/sources/33a1b5146ac72a518c62/texture.res",
+          "source_sha256": "33a1b5146ac72a518c62811aae2057004aee85517980574711a34c232551607d",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Decal_BloodSplatter45ki_N.png",
+          "prepared_resource": "res://assets/vfx/sources/e2597a3c095800b8b6a2/texture.res",
+          "source_sha256": "e2597a3c095800b8b6a29cd248fa7f7bb1c0787e2712c372908bf58056282f19",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_Gib_Red_C.PNG",
+          "prepared_resource": "res://assets/vfx/sources/b764bf13226545915475/texture.res",
+          "source_sha256": "b764bf132265459154759a08791f3eeaf242b1d5593b0971badedd045c73ee22",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_NP41.PNG",
+          "prepared_resource": "res://assets/vfx/sources/f9c8e2fa1dcc62f85965/texture.res",
+          "source_sha256": "f9c8e2fa1dcc62f85965e5a7f3a48cbe4739b01dbbecb9298e9f1da43ec13af2",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_blood_premium/VFX/textures/T_smoke_K97.png",
+          "prepared_resource": "res://assets/vfx/sources/2cc94f51b380b6eab0f5/texture.res",
+          "source_sha256": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+          "reused_from_predecessor": true
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_elementary_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_elementary_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Elementary (Premium)",
+        "embeddedLicenseEvidence": [],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/Scenes/VFX_Dark_ShadowRing.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/6053c7112539ebb3da8d/VFX_Dark_ShadowRing.tscn",
+          "source_sha256": "44e910fde35b85c87583601d68e4b90cd920134b1b570a7b055aa551fbbc5617",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/objects/sm_sphere3sp.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/57a4ebdcaaa64994299b/sm_sphere3sp.res",
+          "source_sha256": "257d109a0f4e096fca2c246dd2515b437f132c4b6d51012f8b65aee73744bf97",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/shaders/s_Disolver_Treshold_masked.tres",
+          "prepared_resource": "res://assets/vfx/sources/0de6aa6eb6cc1324faa1/s_Disolver_Treshold_masked.tres",
+          "source_sha256": "9f10e708d56ed8da1d4069865e8e92bf7ff3a4596a75f764188ab3e05c1abc94",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/shaders/s_master_explosion_X2.tres",
+          "prepared_resource": "res://assets/vfx/sources/704a3112516decfe9784/s_master_explosion_X2.tres",
+          "source_sha256": "4dad1235a98d28b32995501fb13aff227f1ee603bf0dea54f733d7a0b6703569",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/shaders/s_stylized_smoke_t1_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/a4abdd04de550d967822/s_stylized_smoke_t1_p.tres",
+          "source_sha256": "6f96724c9d2c9fc6ce8f0083cd3259f0a352caef3527e37963fac0aac10752e8",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_NHU85.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/a5f322c9a0afd0417634/texture.res",
+          "source_sha256": "a5f322c9a0afd0417634967b8059fa0c00940e45f217d61a1d9a936e5f65daff",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_NKQ443.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/034a813a00401ef59f6b/texture.res",
+          "source_sha256": "034a813a00401ef59f6badc933483f766ebd27f7483d14e2d9be09781a0e856e",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_Noise_01.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/cec990abb6644bc8a611/texture.res",
+          "source_sha256": "cec990abb6644bc8a611daea541a8fe31ad114c53d1d349fac2bb0dd1529b9d8",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Noise_44xainv.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/2ba09d4fe424054dba7e/texture.res",
+          "source_sha256": "2ba09d4fe424054dba7e08460b7461eba9d0742fe43144f71ec88403418b1aa0",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_SparkDak14.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/c2756711fa2fda9b3fa8/texture.res",
+          "source_sha256": "c2756711fa2fda9b3fa82e672771ca6089307435acdcc254e569ac08e20ed194",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_VFX_Trail_211.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/188d2eccc3b1c4b78a39/texture.res",
+          "source_sha256": "188d2eccc3b1c4b78a39ff466d11bc477fe5a25f33aa9e737b9a9a201f0cbccf",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_elementary_premium/VFX/textures/T_wavesKI96.png",
+          "prepared_resource": "res://assets/vfx/sources/2459ed37cb0fa31767ac/texture.res",
+          "source_sha256": "2459ed37cb0fa31767ac4ad1f1253bddefba5c79527278534b91abc26c9e975d",
+          "reused_from_predecessor": true
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_fire_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_fire_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Fire (Premium)",
+        "embeddedLicenseEvidence": [
+          {
+            "resourceId": "pack_lelu_godot_fire_premium::VFX_Fire_Pack_(PREMIUM)/addons/GPUTrail-main/README.md",
+            "path": "VFX_Fire_Pack_(PREMIUM)/addons/GPUTrail-main/README.md",
+            "text": "# GPUTrail\n\nGPUTrail is a GPU-based trail plugin for Godot 4, offering an efficient alternative to CPU-based trails for creating ribbon trail effects in your games and applications.\n![heart](https://github.com/celyk/GPUTrail/assets/50609684/a190fee3-682b-42b9-9bef-cd49a5e3b99c)\n\n## Features\n\n- GPU-accelerated trail rendering for improved performance\n- Customizable trail length, texture, and color\n- Support for color ramps and width curves\n- Options for texture orientation and alpha channel handling\n- Billboard mode for camera-facing trails\n- Dewiggle and clip overlaps features for improved trail appearance\n\n## Installation\n\n1. Clone or download this repository\n2. Copy the `addons/GPUTrail` folder into your Godot project's `addons` folder\n3. Enable the plugin in your project settings: Project -> Project Settings -> Plugins -> GPUTrail\n\n## Usage\n\n1. Add a new `GPUTrail3D` node to your scene\n2. Customize the trail properties in the Inspector panel\n3. Attach the `GPUTrail3D` node to the object you want to trail\n\n## Properties\n\n- `length`: Number of steps in the trail\n- `texture`: Main texture of the trail\n- `color_ramp`: Color gradient along the trail's length\n- `curve`: Width modulation along the trail's length\n- `vertical_texture`: Adjust texture orientation\n- `use_red_as_alpha`: Use the red channel of the texture as alpha\n- `billboard`: Make the trail face the camera (experimental)\n- `dewiggle`: Improve texture mapping to the trail\n- `clip_overlaps`: Prevent trail self-intersectionis\n- `snap_to_transform`: Snap the trail start to the node's position, and regardless of the particles own framerate\n\n## Example\n\n```gdscript\nvar trail = GPUTrail3D.new()\ntrail.length = 100\ntrail.texture = preload(\"res://trail_texture.png\")\nadd_child(trail)\n```\n\n## Contributing\n\nContributions are welcome! Please feel free to submit a Pull Request.\n\n## License\n\nThis project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.\n\n## Acknowledgements\n\n- Tutorial by Le Lu: [YouTube Video](https://www.youtube.com/watch?v=0VsEfP4XFCM)\n\n## TODO\n\n- Add flipbook support\n- Hide the actual GPUParticles3D node\n- Restructure code, use enums for flags\n- Add more polygons, make trail smoother\n- Add an acceleration parameter\n- Port to Godot 3.5\n- Port to 2D\n- Allow custom material\n",
+            "scope": "file_or_subtree_evidence; do not apply an addon license to the whole VFX pack"
+          }
+        ],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/Scenes/VFX_FireBall_K1.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/a683ff6d7af76bf1a716/VFX_FireBall_K1.tscn",
+          "source_sha256": "15d935b73f5825f13fbe4cf716cd1c3c00032349ae54823745b8862a04596dd3",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/materials/m_fireflameth4.tres",
+          "prepared_resource": "res://assets/vfx/sources/c5ad74ab3c07ce02119f/m_fireflameth4.tres",
+          "source_sha256": "81c4d4ce2494d4b8936c44ada0ffab4a40aa4a10c5c8cc4fd6071eeb80540790",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/objects/sm_flamethrower_l2.obj",
+          "prepared_resource": "res://assets/vfx/sources/90363fadea5df270b1fb/sm_flamethrower_l2.res",
+          "source_sha256": "f64ac41c9a2130e060933e5ca9e8c52d739f244bcf6e8fa81502a840ac509acd",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/shaders/s_Disolver_Firex_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/d089f356c92fcb668610/s_Disolver_Firex_p.tres",
+          "source_sha256": "56cbd06320d188ce7d57b05e7821ad2246c776cf8602783da3159905bbd8238c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/shaders/s_Disolver_Treshold_p_fc.tres",
+          "prepared_resource": "res://assets/vfx/sources/a30763be8a5da4f40441/s_Disolver_Treshold_p_fc.tres",
+          "source_sha256": "0990ca7896cb4a874290263cce67ca98929abad1a6e42e831017975aa86aa855",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/shaders/s_master_fire_fresnel_add.tres",
+          "prepared_resource": "res://assets/vfx/sources/d9f48c8baa15ec32f335/s_master_fire_fresnel_add.tres",
+          "source_sha256": "b4c28dd56aad2ca2f394a323589e0390c6292705f73ebc4b9dc46b45fe76b539",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/shaders/ss_fireTorch_T1_ds.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/c96e09e9ea741a6845ee/ss_fireTorch_T1_ds.gdshader",
+          "source_sha256": "b1176a708793d04086301cfdc27c4352668a9966a3e77e6ee03d043846fdd16a",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/textures/T_FireTrail_Desat.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/b03dcc0a94ec669f5bb7/texture.res",
+          "source_sha256": "b03dcc0a94ec669f5bb7ac5cfb81d611990192d0a01da6d404bd1f505d2d0aa3",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/textures/T_Noise1_tiled.png",
+          "prepared_resource": "res://assets/vfx/sources/506744103c5bc9adef59/texture.res",
+          "source_sha256": "506744103c5bc9adef599458fa9f18b6ac61fd037725491ae849729741c70388",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/textures/T_VFX_KFiRE5.png",
+          "prepared_resource": "res://assets/vfx/sources/6b4ca463577cb0f0f9f4/texture.res",
+          "source_sha256": "6b4ca463577cb0f0f9f41ef75459568147bcfa31302173a509b15fadfad4b568",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/textures/T_VFX_Noise_075.png",
+          "prepared_resource": "res://assets/vfx/sources/900721c102c94ad02849/texture.res",
+          "source_sha256": "900721c102c94ad02849da1619429cefd7dc62031c9c1c52a7044a457a3d6b79",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/textures/T_VFX_Noise_44xainv.png",
+          "prepared_resource": "res://assets/vfx/extensions/late-20261020/sources/2ba09d4fe424054dba7e/texture.res",
+          "source_sha256": "2ba09d4fe424054dba7e08460b7461eba9d0742fe43144f71ec88403418b1aa0",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/VFX/textures/T_smoke_bb1fa_b.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/61f33b97ba2fc4c32353/texture.res",
+          "source_sha256": "61f33b97ba2fc4c32353023ca358e082438abc49e20e1362f1b59ed730cc04ef",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/addons/GPUTrail-main/GPUTrail3D.gd",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/24b2128a6f0029adfe71/GPUTrail3D.gd",
+          "source_sha256": "32e44782743cba755da438942a93648b72c008e7018a7a10d8c7d30e4172620c",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/addons/GPUTrail-main/bounce.svg",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/89addd8135ebc8b543ca/texture.res",
+          "source_sha256": "89addd8135ebc8b543ca7b95cbd9c6f82aeb009a8af29ae71d1a124b93b642fe",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/addons/GPUTrail-main/defaults/curve.tres",
+          "prepared_resource": "res://assets/vfx/sources/3f8cddbb170435f866c8/curve.tres",
+          "source_sha256": "4e3dd9761546a953a38b1e964d1e7dc7b697e3053390baaa8b774e053354e454",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/addons/GPUTrail-main/defaults/texture.tres",
+          "prepared_resource": "res://assets/vfx/sources/05b9e7f6bd6ed96c4a50/texture.tres",
+          "source_sha256": "01709d93d9a51ed28a8f206a34f5237e9d4dad926a8eeaf16b3224e25f4fd01e",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/addons/GPUTrail-main/shaders/trail.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/953520610a9aaf639cf8/trail.gdshader",
+          "source_sha256": "7577cb71d78759ed591804daab7ce0301ac78b0b044fed0467fdf008bbf28233",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_fire_premium/addons/GPUTrail-main/shaders/trail_draw_pass.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/d3ab83b12478f43faa1b/trail_draw_pass.gdshader",
+          "source_sha256": "04dbc17073210613dbf541561576f316fd3c825e4f712b56f9dd0c809e425557",
+          "reused_from_predecessor": true
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_healing_protection_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_healing_protection_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Healing & Protection (Premium)",
+        "embeddedLicenseEvidence": [],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/Scenes/VFX_Healing_Area.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/bcfda69605aac6c52b74/VFX_Healing_Area.tscn",
+          "source_sha256": "c5d38e09de4a2bab991315875dd347e6f9c6ff6b49cfb6ff86bb77cd6bada111",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/Scenes/VFX_Healing_Flower.tscn",
+          "prepared_resource": "res://assets/vfx/sources/e1686bb48a6190ecc3ae/VFX_Healing_Flower.tscn",
+          "source_sha256": "e3cc2a88f5d6233782ae8a304beab592f1c71fec5a38a6cf127bfb30a1f76e22",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/Scenes/VFX_Healing_Ring_A.tscn",
+          "prepared_resource": "res://assets/vfx/sources/d6654b791469c50248d5/VFX_Healing_Ring_A.tscn",
+          "source_sha256": "0c75eca832b45c9fb6d7424d5520ed5ee38978928344d0c1b9d823ee405eca30",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/Scenes/VFX_Healing_W1.tscn",
+          "prepared_resource": "res://assets/vfx/sources/175451f651f42e72f567/VFX_Healing_W1.tscn",
+          "source_sha256": "bf5b9035bc9c0f5cb226753c2fa96b6bc00a115251ee45eb6b958225d41a9004",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/objects/sm_circle_cylinder.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/e40c2d0bde5f56e4738b/sm_circle_cylinder.res",
+          "source_sha256": "0fe912e7ad1cae41c612b91b27c1d3d12ac8531225dc5a1e8160bd5f4745a29f",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/objects/sm_cone_inverted_tap1.obj",
+          "prepared_resource": "res://assets/vfx/sources/a057fe63ccca3bc06f84/sm_cone_inverted_tap1.res",
+          "source_sha256": "ab161930ef007de7fef993eed68a1e0d22c555104b6cb1115a01bc42ff4d94c1",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/objects/sm_cylinder.obj",
+          "prepared_resource": "res://assets/vfx/extensions/followup-20261020/sources/9901c71f681d672fce03/sm_cylinder.res",
+          "source_sha256": "f1ff550a3cd746fa8892de3513db30c1dec62a4546c4a03c069528150d05498c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/objects/sm_cylinder_vulkano2.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/d584883ce30a469af2c6/sm_cylinder_vulkano2.res",
+          "source_sha256": "80f4481451457ee0d648091cbd272572f940a833b3574fa96bdbbda1266d9af5",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/objects/sm_cylinder_wave_twisted1.obj",
+          "prepared_resource": "res://assets/vfx/sources/5269a2a8cd43462a70bc/sm_cylinder_wave_twisted1.res",
+          "source_sha256": "30096740b9e9d643116f9b8cbde690ec45e918e573ced609540f853594ad0b63",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/objects/sm_muzzle_crossplanes.obj",
+          "prepared_resource": "res://assets/vfx/sources/b04072b06cc45b91c490/sm_muzzle_crossplanes.res",
+          "source_sha256": "90d53b4353cdfe29481227740e963047b908ed3970a96b3a7476aa4b6c2dbd16",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_GoldenFire.tres",
+          "prepared_resource": "res://assets/vfx/sources/a131a1f62c5eb8179424/s_GoldenFire.tres",
+          "source_sha256": "eb52a389c02d4348e0405d5c754f0de08f0fbb9f0f89e3cdccf5fef178a70180",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_PolarPanning.tres",
+          "prepared_resource": "res://assets/vfx/sources/7f6f434b3ef62a766f59/s_PolarPanning.tres",
+          "source_sha256": "d4d78a42c5f621f97c12d4f7d95911a313f80559df9deffdb455bf6c9bc7b2d8",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_PolarPanning_manualD.tres",
+          "prepared_resource": "res://assets/vfx/sources/d9fc803a9ee705b79e8c/s_PolarPanning_manualD.tres",
+          "source_sha256": "5020dfa07fce9756b3658866f16b14f3a20489ea58baf0fb67e96fa0ec9f93b4",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_aura_cylinder_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/9f4b596b231411166d4b/s_aura_cylinder_p.tres",
+          "source_sha256": "6f0c4380b05190c50710fa717b29a6f9fede5fdbba6efef183acc54b163e2087",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_master_fire.tres",
+          "prepared_resource": "res://assets/vfx/sources/917774fae3cf719e2de9/s_master_fire.tres",
+          "source_sha256": "17a76587759660352cd2899edb5ba2dbd558eacfbb2929c777778f92a4a68b03",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_master_fire2_distortion_add.tres",
+          "prepared_resource": "res://assets/vfx/sources/59ec2bcff49eb92e8828/s_master_fire2_distortion_add.tres",
+          "source_sha256": "13e8638b06432b8545e7fa47b7d3a8a23e9ebdc0c8441134efb34c4ccd969ba3",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_simple_blink_unlit_fc.tres",
+          "prepared_resource": "res://assets/vfx/sources/47f317bdf3d761819a16/s_simple_blink_unlit_fc.tres",
+          "source_sha256": "f72e0abbc78c852c305c9a29f5893e9849efd8531dbee7a894b0665f94c6462f",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_simple_disolver3_ds.tres",
+          "prepared_resource": "res://assets/vfx/sources/d58ccd5cd307e1973335/s_simple_disolver3_ds.tres",
+          "source_sha256": "7a7024ab6e29995564c6511e6ed0190d1934b5be741700853cb37b564e650d99",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_simple_pfc_2.tres",
+          "prepared_resource": "res://assets/vfx/sources/a53dd8c56a55168e8683/s_simple_pfc_2.tres",
+          "source_sha256": "f3e2a03d47dbaafd87854e831198b1e49968826d12ba2795fc1e0e67e872117c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/s_windflow_pY.tres",
+          "prepared_resource": "res://assets/vfx/sources/1caeb91ecaced31ca23f/s_windflow_pY.tres",
+          "source_sha256": "ad49a5825472433221374cb98dcb66a19c957435466e238fb3f665c9d608eeea",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/shaders/ss_godrays_add.gdshader",
+          "prepared_resource": "res://assets/vfx/sources/6e5f6bdceb8165750bf6/ss_godrays_add.gdshader",
+          "source_sha256": "20060c04634455da6f5c7e5894191eccda9ea7390c6590f54b2df367413d7863",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_BlastUi7t.png",
+          "prepared_resource": "res://assets/vfx/sources/d3d71cea9e2f30660531/texture.res",
+          "source_sha256": "d3d71cea9e2f3066053153bfda2a9e5ea1e04c74fe7718d0a4d0b24cccc7c684",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_Leaf_001.png",
+          "prepared_resource": "res://assets/vfx/sources/a45c09f25ed6570f7b8f/texture.res",
+          "source_sha256": "a45c09f25ed6570f7b8f8e8cce461ed5e8bcb5541e1d887359ea6ba3c2ceb65a",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_Leaf_001gray.png",
+          "prepared_resource": "res://assets/vfx/sources/08fdfe261849c907a0c7/texture.res",
+          "source_sha256": "08fdfe261849c907a0c748b62b1cd1f1c4d29150227b475de652c7b61bd5d546",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_NHU85.png",
+          "prepared_resource": "res://assets/vfx/sources/a5f322c9a0afd0417634/texture.res",
+          "source_sha256": "a5f322c9a0afd0417634967b8059fa0c00940e45f217d61a1d9a936e5f65daff",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_NHU85_bM.png",
+          "prepared_resource": "res://assets/vfx/sources/6631c8f47a74f6e8b3ee/texture.res",
+          "source_sha256": "6631c8f47a74f6e8b3ee8f0b6c34c005b05e98cc5702394ee27710df94c56398",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_Noise1_tiled.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/506744103c5bc9adef59/texture.res",
+          "source_sha256": "506744103c5bc9adef599458fa9f18b6ac61fd037725491ae849729741c70388",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_Noise_6Yu1.png",
+          "prepared_resource": "res://assets/vfx/sources/c0a2515abc39856316d0/texture.res",
+          "source_sha256": "c0a2515abc39856316d03015657fddfe3b50314c01aa959754e31d44d1cd554a",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_Flare_2.PNG",
+          "prepared_resource": "res://assets/vfx/sources/4e49a21bae56d28a3b19/texture.res",
+          "source_sha256": "4e49a21bae56d28a3b19404ef8e8dd3e296ed0d1e609f4a09712f45794a61d27",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_Flare_251.jpg",
+          "prepared_resource": "res://assets/vfx/sources/fd7566461f35d1fcf6e2/texture.res",
+          "source_sha256": "fd7566461f35d1fcf6e26e314dcc623bec90e81130416a4d2fd1099521d1f351",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_Flare_4.PNG",
+          "prepared_resource": "res://assets/vfx/sources/e031b0e7487453c4abe6/texture.res",
+          "source_sha256": "e031b0e7487453c4abe6357656e5f04ec00df0da3c9ab5f8887a5e10de7789da",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_N35.png",
+          "prepared_resource": "res://assets/vfx/sources/a02e62c059c89f4070a7/texture.res",
+          "source_sha256": "a02e62c059c89f4070a72c45314f9a5aeb8815fb6cb66a82558e97009d2b8e31",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_Noise_14.PNG",
+          "prepared_resource": "res://assets/vfx/sources/0192fe4611a9a46ad6b2/texture.res",
+          "source_sha256": "0192fe4611a9a46ad6b2dc1fc1b2451985e43f13742ea5a814fe007f4069b262",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_Noise_3.PNG",
+          "prepared_resource": "res://assets/vfx/sources/7f341087427abd458e59/texture.res",
+          "source_sha256": "7f341087427abd458e59e502b5f2b7c0166fe8282a36cd75b6619b855eda23e4",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_Noise_3c.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/7dc4a0d0a4e179211c56/texture.res",
+          "source_sha256": "7dc4a0d0a4e179211c569e5917776b806c73fba0da8f546023aa3ce712ecc15c",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_VFX_WindNoise1.png",
+          "prepared_resource": "res://assets/vfx/sources/f66d1ab459238535a9d0/texture.res",
+          "source_sha256": "f66d1ab459238535a9d072c05b5fc55c2638b4cbd5e62f485f64dfc3612f319f",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_disort_test2.PNG",
+          "prepared_resource": "res://assets/vfx/sources/b9cd94c9aec82115b5b7/texture.res",
+          "source_sha256": "b9cd94c9aec82115b5b76875e54cecfef38b8c6285b5586de6d2a22431224a09",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_flower_004.png",
+          "prepared_resource": "res://assets/vfx/sources/50320d6b6f38074f15bb/texture.res",
+          "source_sha256": "50320d6b6f38074f15bb64747bb1746d6b7a3af0829cb00857aa6710f4d5a933",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_magic_circle_leaf.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/62557bc96ccb6a4801a3/texture.res",
+          "source_sha256": "62557bc96ccb6a4801a3a6977445ff7d7428ee52c22d4985e53b891c2afb443b",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_healing_protection_premium/VFX/textures/T_smoke_K97.png",
+          "prepared_resource": "res://assets/vfx/sources/2cc94f51b380b6eab0f5/texture.res",
+          "source_sha256": "2cc94f51b380b6eab0f5cde5c64a5de8176f07e3f5ce3c79878598cc5834e2a6",
+          "reused_from_predecessor": true
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_magic_projectiles_premium_demo_project",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_magic_projectiles_premium_demo_project",
+        "storageAuthor": "lelu",
+        "title": "GODOT  - Magic Projectiles (Premium) [demo project]",
+        "embeddedLicenseEvidence": [
+          {
+            "resourceId": "pack_lelu_godot_magic_projectiles_premium_demo_project::credits.txt",
+            "path": "credits.txt",
+            "text": "\r\nHi,\r\nHere is the Magic Projectiles Premium edition file.. \r\nwhich includes 19 VFX effects (7 Magic projectiles, 7 Hit effects, 5 Muzzle effects) that I've created for the tutorial \"GODOT 4 - Magic Projectiles (fire ball)\"\r\nincluding also all the textures i've used. \r\n\r\nI haven't dont all the assets (3D models, and addons), here you can find the sources i've used:\r\n\r\n\r\nCREDITS:\r\n\r\n\"Magic Witch\" (https://skfb.ly/6yJvG) by Catarina Cerqueira is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\r\n\r\n\"Animated Training Dummy\" (https://skfb.ly/6TFJo) by FunkyDealer is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).\r\n\r\n\"Simple Free-Look Camera for Godot 4\" Submitted by user AlanRichard; MIT; 2022-12-04  (https://godotengine.org/asset-library/asset/1561)\r\n\r\n\"Motion Trail Plugin\" by metanoia with help of aboudaladdin and emirthab  (https://github.com/metanoia83/Godot-4.0-Motion-Trail)\r\n\r\n\r\n\r\nTHANK YOU SO MUCH !!  :3",
+            "scope": "file_or_subtree_evidence; do not apply an addon license to the whole VFX pack"
+          },
+          {
+            "resourceId": "pack_lelu_godot_magic_projectiles_premium_demo_project::readme2.txt",
+            "path": "readme2.txt",
+            "text": "NOTE: Maybe you need to restart the project 2 times, since it has a pre build-tool.",
+            "scope": "file_or_subtree_evidence; do not apply an addon license to the whole VFX pack"
+          }
+        ],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+          "prepared_resource": "res://assets/vfx/sources/2595e978eb6dfe63a7e6/sm_box2.res",
+          "source_sha256": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+          "prepared_resource": "res://assets/vfx/sources/a296b5edb817983cbbc5/sm_box2_rotated.res",
+          "source_sha256": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+          "prepared_resource": "res://assets/vfx/sources/69100dbfe6986b310faa/VFX_Cube_projectile.tscn",
+          "source_sha256": "e3dc3d912d7f6c07f3649aed17877fd09f146945b212aac7487ccd851296a89e",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+          "prepared_resource": "res://assets/vfx/sources/3248014594a743d48512/VFX_Hit_cyber.tscn",
+          "source_sha256": "14f16f90110769de3f5d98850a4005242cbf72f8274555cd972520804f880520",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+          "prepared_resource": "res://assets/vfx/sources/bd7a6ef40f1c3a637d37/s_dualColor_masked.tres",
+          "source_sha256": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/bdaad187ae44d9b7263d/s_simple_p.tres",
+          "source_sha256": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/1d75c06542f2bc1be933/s_single_masked_p.tres",
+          "source_sha256": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+          "prepared_resource": "res://assets/vfx/sources/572afc50e3faed1b246c/texture.res",
+          "source_sha256": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+          "prepared_resource": "res://assets/vfx/sources/5d3b3f9353c0acb6e7ca/texture.res",
+          "source_sha256": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+          "prepared_resource": "res://assets/vfx/sources/0d1962a4dce132b6e332/texture.res",
+          "source_sha256": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+          "prepared_resource": "res://assets/vfx/sources/cb1bb8e1d32b8ba5c28c/texture.res",
+          "source_sha256": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://integrations/ndclient/assets/native_effects/factory/library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG",
+          "prepared_resource": "res://assets/vfx/sources/cc6ba7e8e8459eb301a3/texture.res",
+          "source_sha256": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2.obj",
+          "prepared_resource": "res://assets/vfx/sources/9daf065b617596f6f264/sm_box2.res",
+          "source_sha256": "219430b5f1dfc7211212f026d4977d04d772925e08c8c7322fea7f40e09ae598",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Objects/sm_box2_rotated.obj",
+          "prepared_resource": "res://assets/vfx/sources/490c73c87921934d616e/sm_box2_rotated.res",
+          "source_sha256": "464b76e43d36a2fb2007abe8e913cc2bc761dfc779b8073b20543e4732f7d300",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Cube_projectile.tscn",
+          "prepared_resource": "res://assets/vfx/sources/4551586894554a766d06/VFX_Cube_projectile.tscn",
+          "source_sha256": "d5efdfa957e96b684c03e8706e1e83c3d2fc288a8679ef24cef7c43e065e5583",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Scenes/VFX_Hit_cyber.tscn",
+          "prepared_resource": "res://assets/vfx/sources/257794fe3958137a1539/VFX_Hit_cyber.tscn",
+          "source_sha256": "9eaad456e2aa4cfc91b1dbd2463e8fb84e51f8363233c498d0aac5a59f1cbfa3",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_dualColor_masked.tres",
+          "prepared_resource": "res://assets/vfx/sources/efba3f21e67862958ab7/s_dualColor_masked.tres",
+          "source_sha256": "07e2521b9373c5f6decd4c62b49401a7d2cc8ff55433fb72f1a2c999b3a7cf54",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_simple_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/e8fe2132479b86f5e9eb/s_simple_p.tres",
+          "source_sha256": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Shaders/s_single_masked_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/3e6ba2a91f42f9ebb05f/s_single_masked_p.tres",
+          "source_sha256": "4f0afc3129be1c9c233abd11309d77096a39129dc5e277ed0cfc0a904f280ca2",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Sqart2.jpg",
+          "prepared_resource": "res://assets/vfx/sources/572afc50e3faed1b246c/texture.res",
+          "source_sha256": "572afc50e3faed1b246c465b57b2b07877031eda3feda1fbfaeb23afb9aa196c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Square_22Edge.PNG",
+          "prepared_resource": "res://assets/vfx/sources/5d3b3f9353c0acb6e7ca/texture.res",
+          "source_sha256": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_Srt1.jpg",
+          "prepared_resource": "res://assets/vfx/sources/0d1962a4dce132b6e332/texture.res",
+          "source_sha256": "0d1962a4dce132b6e3322aa79e4df4fa0d6b53396a35e7eeebb34e294d6cd4de",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_VFX_hit22.jpg",
+          "prepared_resource": "res://assets/vfx/sources/cb1bb8e1d32b8ba5c28c/texture.res",
+          "source_sha256": "cb1bb8e1d32b8ba5c28cd12f51a7dccb0c804a89d81e040e3039030a54628f2c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_demo_project/VFX/Textures/T_basic1_vfx.PNG",
+          "prepared_resource": "res://assets/vfx/sources/cc6ba7e8e8459eb301a3/texture.res",
+          "source_sha256": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+          "reused_from_predecessor": true
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_magic_projectiles_premium_vfx_only",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_magic_projectiles_premium_vfx_only",
+        "storageAuthor": "lelu",
+        "title": "GODOT  - Magic Projectiles (Premium) [VFX only]",
+        "embeddedLicenseEvidence": [
+          {
+            "resourceId": "pack_lelu_godot_magic_projectiles_premium_vfx_only::readme.txt",
+            "path": "readme.txt",
+            "text": "\r\nHi,\r\nHere is the Magic Projectiles Premium edition file.. \r\nwhich includes 19 VFX effects (7 Magic projectiles, 7 Hit effects, 5 Muzzle effects) that I've created for the tutorial \"GODOT 4 - Magic Projectiles (fire ball)\"\r\nincluding also all the textures i've used. \r\n\r\nTHANK YOU SO MUCH !!  :3\r\n\r\nNOTE: Maybe you need to restart the project 2 times, since it has a pre build-tool.",
+            "scope": "file_or_subtree_evidence; do not apply an addon license to the whole VFX pack"
+          }
+        ],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Misc/Trail3D.gd",
+          "prepared_resource": "res://assets/vfx/sources/6bcfe59d4fc365c5d444/Trail3D.gd",
+          "source_sha256": "f9711abd9d51f3f75c612c355c71f760fcbfbd75dc7320178bfe57b1fe0ac7c1",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Objects/fireball_mesh_st.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/25b98ed95a80456adf7c/fireball_mesh_st.res",
+          "source_sha256": "d8dc45405e42df0a608362c715be576bb06db66d968f9c2d7f147a1c2b072f34",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Objects/m_fireTrail1.tres",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/909df2a67ef4ddd2e4ff/m_fireTrail1.tres",
+          "source_sha256": "127df1dee3ff1e3c5522204f806b019dbf099a2bfb53c706445f2fdbc8a20bee",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Objects/m_fireb_blast.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/7100f9a6db7101e128a6/m_fireb_blast.res",
+          "source_sha256": "3b8c32ebfe937426cdef7d5b9abe90d4f6f9f7403f8ce50c77a6b9dec60b41e7",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Objects/sm_half_sphere.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/f42624218ef0d36e743e/sm_half_sphere.res",
+          "source_sha256": "633967b5093be4836c54a2f0bb608263f4b0ab0c10b8d80f320481b99b5121bb",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Scenes/VFX_Darkness_projectile.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/ad27e34ccc3251fedf28/VFX_Darkness_projectile.tscn",
+          "source_sha256": "dc70936321862b5bed92c10aa83aeaa9a7485a2f9c7ce9eb3df93aba2d3cf803",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Scenes/VFX_Fire_ball_standar.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/743a74035cd215eb0188/VFX_Fire_ball_standar.tscn",
+          "source_sha256": "6c42f7e1715f6ea30f10ec878ccef5bb0dd3286b3b2be7da23cfb2d9c2ed3b2c",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Scenes/VFX_Hit_dark.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/5991cf7e3e0a286577ae/VFX_Hit_dark.tscn",
+          "source_sha256": "229d26d2300bee93839ac2cdde5f5136e657b37406a1137aa9fc19d8a4aaaa69",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_Disolver_advanced.tres",
+          "prepared_resource": "res://assets/vfx/sources/97527effc4872638e5eb/s_Disolver_advanced.tres",
+          "source_sha256": "c4cc7da572a10fb926400e27456c15be36226c766fa3a32f53c157f0c269d5e8",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_FireHead_TypeK.tres",
+          "prepared_resource": "res://assets/vfx/sources/1bc8effb38d6d8aed28c/s_FireHead_TypeK.tres",
+          "source_sha256": "fb036f6b04c83dad848ec3422f4714c1e970d9f9db317db4d7946ce1893ea64c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_FireHeader.tres",
+          "prepared_resource": "res://assets/vfx/sources/36ce4be1840d1021f467/s_FireHeader.tres",
+          "source_sha256": "32e26dbf1c2de9b2bd6bdabded2ff2c24fee18cabaf60f3bd757bcb6fb1237a7",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_FireHeader_shader.tres",
+          "prepared_resource": "res://assets/vfx/sources/fca91222d0bda59134a9/s_FireHeader_shader.tres",
+          "source_sha256": "6f62ed0eff28fb231cb43e6ac5b501e65c9b38db085d4585b145ba9221bd0349",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_Trail_Fire_shader.tres",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/73317b5d3d8465a55859/s_Trail_Fire_shader.tres",
+          "source_sha256": "6f5ab79443e9a8929c287c344355565573e95db29efbcab0c380a2e3a468ccdf",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_Trail_dynamic.tres",
+          "prepared_resource": "res://assets/vfx/sources/3b9604560182ae533db2/s_Trail_dynamic.tres",
+          "source_sha256": "8e45884bca727507873aad3d28321354fdc49ec226ffe1a03a6e850dd0fe8e7e",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_fireball_shader.tres",
+          "prepared_resource": "res://assets/vfx/sources/e833de1d7b781590894d/s_fireball_shader.tres",
+          "source_sha256": "6b77fe3d923a66b25870939a87b9698ca457c021b89045c50fbc255d3b82eb5b",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Shaders/s_simple_p.tres",
+          "prepared_resource": "res://assets/vfx/sources/73ec47d87d4dc5082377/s_simple_p.tres",
+          "source_sha256": "31c9ea5b51962959ff51414f1012c7a4659bcfcc1ed8ffd9c2ea99eb8382eed1",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_FireTrail.jpg",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/6b9314168dccc2cf7394/texture.res",
+          "source_sha256": "6b9314168dccc2cf7394bac1f7300a9fc01313c82d5aba9f5bf9c1be7f465ec9",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_VFX_Ex1d.jpg",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/ef5c68317e3e127c3045/texture.res",
+          "source_sha256": "ef5c68317e3e127c3045ae3319872bab74e457162121730eaef1cc90d8df5251",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_VFX_Flare_15.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/f3b4261d0a805a9749da/texture.res",
+          "source_sha256": "f3b4261d0a805a9749da6bfcb42d222d0d21b04e6793ce5888a6dbf564b8ba84",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_VFX_Noise_075.png",
+          "prepared_resource": "res://assets/vfx/sources/6961d971113968c3631f/texture.res",
+          "source_sha256": "6961d971113968c3631f2180bd0e012341ad37ca486b6436137cbde74134b84e",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_VFX_Noise_531.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/bbbefac0deb7154eff4b/texture.res",
+          "source_sha256": "bbbefac0deb7154eff4bb3296c1818cdd638f9afaaa04e53df2516620bfd8091",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_magic_projectiles_premium_vfx_only/VFX/Textures/T_basic1_vfx.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/cc6ba7e8e8459eb301a3/texture.res",
+          "source_sha256": "cc6ba7e8e8459eb301a332e62d4c369dd4cdfcdadc613caf72624aba12bbd471",
+          "reused_from_predecessor": false
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_portal_effects_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_portal_effects_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Portal Effects (Premium)",
+        "embeddedLicenseEvidence": [
+          {
+            "resourceId": "pack_lelu_godot_portal_effects_premium::readme (credits).txt",
+            "path": "readme (credits).txt",
+            "text": "\r\n\r\nTHANK YOU SO MUCH !!  :3\r\n\r\nHere is the Portal VFX Premium edition.. \r\nwhich includes the 4 main portal effects i present at the beggining of my tutorial.\r\n\r\n\r\nbut WAIT!.. this project also contains a beutyfull portal frame, i didn't created the frame...\r\nthe frame was created by Soidev, and this is a modified version of it.  If you want to use this forest please mention him in the credits..\r\nyou can see the original frame file here:\r\n\r\n\r\nPortal Frame by Soidev. Free Download:\r\n\r\n\"Portal Frame\" (https://skfb.ly/6CxTF) by soidev is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\r\n",
+            "scope": "file_or_subtree_evidence; do not apply an addon license to the whole VFX pack"
+          }
+        ],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Scenes/VFX_Portal_TypeA.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/33ffc4322e4d3d7fe893/VFX_Portal_TypeA.tscn",
+          "source_sha256": "5cbcb1325c8bda63ad4d28c9ea00b6521311569baa98ed0f232d027c615d7921",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Scenes/VFX_Portal_TypeB.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/89195b97d2b19d37b858/VFX_Portal_TypeB.tscn",
+          "source_sha256": "5f14f119c420816dbad61fdd48eff757bd395a6b3400d60e5980fc54b0c05f58",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Shaders/T_port1_shader.tres",
+          "prepared_resource": "res://assets/vfx/sources/a2519112aef88cc35f2f/T_port1_shader.tres",
+          "source_sha256": "bbfe4d1bf495ec52d9710d1d4e6f51435f22ee05d4ffea932d3eb5fce37809e1",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Shaders/T_port1_shader_additive.tres",
+          "prepared_resource": "res://assets/vfx/sources/6c93a2a12adaba734684/T_port1_shader_additive.tres",
+          "source_sha256": "86cc00c98bf65db8739ce958d07f1f89dc8b54d6a9c5d0ce8b67ef3ff5a3bbc2",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Shaders/T_shader_squared.tres",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/92935592795f7d2b95b0/T_shader_squared.tres",
+          "source_sha256": "712650a86ee01c85c55d42124ddfdf9d8d34932414a7fdb0c52d5ac2bab9a4eb",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Shaders/s_simple_shader_K0.tres",
+          "prepared_resource": "res://assets/vfx/sources/e87976c6b7b01f7517f9/s_simple_shader_K0.tres",
+          "source_sha256": "13613bab3faed23179d1eb81c0f64c5d3d25e01bdc5a9521ee40718fcacdc2a7",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Shaders/s_simple_shader_no_face_cam.tres",
+          "prepared_resource": "res://assets/vfx/sources/97be486d842ac83cd3c2/s_simple_shader_no_face_cam.tres",
+          "source_sha256": "f7b89b929a2640f87623291ce311069426e42cee8045d03fd3b84746c662aecd",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_PerlinNoise_Tiled.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/8bc8bf311494b7cec395/texture.res",
+          "source_sha256": "8bc8bf311494b7cec3951453d4f73787b278b4b585239650dd448c9aab10924c",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_VFX_Ci52.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/93f59b9661abf1c98e3f/texture.res",
+          "source_sha256": "93f59b9661abf1c98e3f1d3304f01f7b5717482ef62cfcceba3eab86a6f5ee3e",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_VFX_Glo31.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/ed5c16ee4c8ffccad493/texture.res",
+          "source_sha256": "ed5c16ee4c8ffccad4937631b597a0cee48106a49992169517dea99565a1876d",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_VFX_lelu1_tiled.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/ed6f200121742475d523/texture.res",
+          "source_sha256": "ed6f200121742475d5232c43b3d0272ad947c4151341dd1e518f2d9af77ad881",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_VFX_sqrt4.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/5d3b3f9353c0acb6e7ca/texture.res",
+          "source_sha256": "5d3b3f9353c0acb6e7caa4c13e947e7e81d6361fa3e44d0ec16d45f7f99329bb",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_Vre1.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/8ed072b3dfe154003091/texture.res",
+          "source_sha256": "8ed072b3dfe1540030913622daf5b584c556ec06dcde4e27984c6b19777a4557",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_files_12.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/dec4af4c09b69f38a775/texture.res",
+          "source_sha256": "dec4af4c09b69f38a77545b623341a2b1ffd7d984932b92a6ead20f4158e21f1",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_grid1x.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/d5d50bba1ba09536b64f/texture.res",
+          "source_sha256": "d5d50bba1ba09536b64fbba3bde37bcc6c6e280ca2725c9ad13378cdda76c4c3",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_grid2.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/d6f87ce1418aa9329d23/texture.res",
+          "source_sha256": "d6f87ce1418aa9329d23d0f73229cbcb8520c1417379ce1b7c7a1caba6b30678",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_mark_t2.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/d462d60675e0f16c8b11/texture.res",
+          "source_sha256": "d462d60675e0f16c8b116c159e28e1a25c726cce8358f923b2622b5b8e6f66de",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_mask_white1.jpg",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/92061995bd10015484d4/texture.res",
+          "source_sha256": "92061995bd10015484d492e5f0b239e84c3b3166c074f7f887dd98ca9bbe3c0a",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_portal_effects_premium/VFX/Textures/T_votex1.jpg",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/7267348c7f179ed6875c/texture.res",
+          "source_sha256": "7267348c7f179ed6875c07719f403fb5699ed5a1cc16d32f5fcce6a40d534dbc",
+          "reused_from_predecessor": false
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_stylized_smoke_effects_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_stylized_smoke_effects_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Stylized Smoke Effects (PREMIUM)",
+        "embeddedLicenseEvidence": [],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_stylized_smoke_effects_premium/VFX/Textures/T_PerlinNoise_Tiled11_inv.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/8b50d862e875547c4693/texture.res",
+          "source_sha256": "8b50d862e875547c469399d5a9f60ee9a2fc50a1b4a96cdb49e107362c840cfd",
+          "reused_from_predecessor": false
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_vertical_beam_effects_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_vertical_beam_effects_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Vertical Beam Effects  (Premium)",
+        "embeddedLicenseEvidence": [],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Misc/laser_activator.gd",
+          "prepared_resource": "res://assets/vfx/sources/54ac2a4d3be5404b2de7/laser_activator.gd",
+          "source_sha256": "50a660809420bc4ea48a72358b2485537a66a2be8f2b613c5e1d01e1c6da303e",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Objects/sm_cylinder_based.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/0b366ef723919c0ebcd3/sm_cylinder_based.res",
+          "source_sha256": "2fb97897e778e2b01e86ee3739fa5faa6e9a2dd8d87663605ad5db4d8c897cee",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Objects/sm_cylinder_based_inverted.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/8be713c6900fca5859ac/sm_cylinder_based_inverted.res",
+          "source_sha256": "032fb152f91eae8b39d6b315c549205fe805ca996cc52c6e7b47bfdeb6775a7d",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Objects/sm_planeLaser1.obj",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/4f826563ce4df7fc7b77/sm_planeLaser1.res",
+          "source_sha256": "0ea3c2240eb3caab5d4dfe1c4737a742d50d250e05fc9eda9cb83901f52b57f3",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Scenes/VFX_Vertical_Hell_beam_blue.tscn",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/d1b1783631dc9ae1a7da/VFX_Vertical_Hell_beam_blue.tscn",
+          "source_sha256": "5826fd9c40a71312aee132b7f44a07e348a49c1d26bcba5078efdf80aa770501",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_PolarPanning.tres",
+          "prepared_resource": "res://assets/vfx/sources/0ffe6cd7a6dec0867bd1/s_PolarPanning.tres",
+          "source_sha256": "d4d78a42c5f621f97c12d4f7d95911a313f80559df9deffdb455bf6c9bc7b2d8",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_PolarPanning_manualD.tres",
+          "prepared_resource": "res://assets/vfx/sources/775f2ad9b92f873839b7/s_PolarPanning_manualD.tres",
+          "source_sha256": "5020dfa07fce9756b3658866f16b14f3a20489ea58baf0fb67e96fa0ec9f93b4",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_dual_master_disolver_ds.tres",
+          "prepared_resource": "res://assets/vfx/sources/282810357a94fcb22a8c/s_dual_master_disolver_ds.tres",
+          "source_sha256": "19399f052a04c12ebbb451552502f018b5a000e07e94dff10d0555626e13e8f2",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_fresnel_laser1.tres",
+          "prepared_resource": "res://assets/vfx/sources/8dcf5cf16567a180ba1c/s_fresnel_laser1.tres",
+          "source_sha256": "968ee79c7858d9d51c352b5bdfa90c20b91cd47ad37a358c98d67413e3cac223",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_simple_blink_unlit_fc.tres",
+          "prepared_resource": "res://assets/vfx/sources/13c48b33f7574df6c6f3/s_simple_blink_unlit_fc.tres",
+          "source_sha256": "426a7ba0ad91eee094e4ebc39bdbe732ffdb0975dc0ade8e9ca856df816a4ddb",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_simple_pY.tres",
+          "prepared_resource": "res://assets/vfx/sources/88feb14ad0cc657df782/s_simple_pY.tres",
+          "source_sha256": "ed518996d31dd09da2da0f4dbe4f55f09a408e4e6dfb65c1e8d7a888cfd9bbe6",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_simple_p_2.tres",
+          "prepared_resource": "res://assets/vfx/sources/be84f0635151e5746ec9/s_simple_p_2.tres",
+          "source_sha256": "5765bb7cab7571b5c3a7f77b5b7f80b25b6f50250caa707c8a1b8209c249a2d3",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Shaders/s_simple_pfc.tres",
+          "prepared_resource": "res://assets/vfx/sources/ca047fd83e28feb638da/s_simple_pfc.tres",
+          "source_sha256": "dfa57db30fae3547749c84ef9bd245655fb786bbbc473f5016904e953a1679cd",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_CloudNoise_Tiled.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/79ea8307f7adab9ec44f/texture.res",
+          "source_sha256": "79ea8307f7adab9ec44fa4adc7b2f12969e9ae56afbd262c7f646b77fb660223",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_Groundmark22.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/ae262c263e50866e69b1/texture.res",
+          "source_sha256": "ae262c263e50866e69b1e6a050cfa7494e0e6497bc169ba489e8b49ff6db7e0d",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_Groundmark22_e.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/147c418348c782ac9b4b/texture.res",
+          "source_sha256": "147c418348c782ac9b4b98def2d06a6c70cc59dfc8777b51611c0ff1850dec0d",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_PerlinNoise_Tiled.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/8bc8bf311494b7cec395/texture.res",
+          "source_sha256": "8bc8bf311494b7cec3951453d4f73787b278b4b585239650dd448c9aab10924c",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_VFX_Flare_2.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/4e49a21bae56d28a3b19/texture.res",
+          "source_sha256": "4e49a21bae56d28a3b19404ef8e8dd3e296ed0d1e609f4a09712f45794a61d27",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_VFX_N35.png",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/a02e62c059c89f4070a7/texture.res",
+          "source_sha256": "a02e62c059c89f4070a72c45314f9a5aeb8815fb6cb66a82558e97009d2b8e31",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_VFX_Noise_5.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/e1a0e0dfc4cb8c8bc962/texture.res",
+          "source_sha256": "e1a0e0dfc4cb8c8bc962f969500508369eae3aabc5484daa6906d6d63506562a",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_VFX_Noise_7.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/5b0a18fdc09c1fcdd677/texture.res",
+          "source_sha256": "5b0a18fdc09c1fcdd67737a2fe6f7a758122ff191575cc581bb5cc6b53e946a6",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_VFX_Noise_a13.PNG",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/59848ac6d6b42d4ce850/texture.res",
+          "source_sha256": "59848ac6d6b42d4ce850210201ecc145be20793522f3ec1716010d64ba3777d4",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/T_vfx_hit122.jpg",
+          "prepared_resource": "res://assets/vfx/extensions/continuation42-20261020/sources/0beca05d71551fc50a9e/texture.res",
+          "source_sha256": "0beca05d71551fc50a9eb0f07414a96237e2f149d6487daa4a3c210f11e8f028",
+          "reused_from_predecessor": false
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/curves/c_hell_inner_base_x.tres",
+          "prepared_resource": "res://assets/vfx/sources/f182970cd53bc513f5ac/c_hell_inner_base_x.tres",
+          "source_sha256": "574bd98594e33bd4486fc0352102634e74e70652054b320244a2a39629c0cd0b",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/curves/c_hell_inner_ray_x.tres",
+          "prepared_resource": "res://assets/vfx/sources/cba6b01597d0485d4e4d/c_hell_inner_ray_x.tres",
+          "source_sha256": "3b364f791fc4404b2ac138dc3825bcfdafc72326e6426d3d907c8e6c91daf4a9",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/curves/c_hell_outter_fresnel_x.tres",
+          "prepared_resource": "res://assets/vfx/sources/30122ef68beda0443e1f/c_hell_outter_fresnel_x.tres",
+          "source_sha256": "4e9fac03b9308a4a69f52e9b23efbccb7c5861676e57dee6dbcaab1b18c0562c",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/curves/c_hell_outter_ray2_x.tres",
+          "prepared_resource": "res://assets/vfx/sources/e83ff1eb55e8cfdbc48e/c_hell_outter_ray2_x.tres",
+          "source_sha256": "698c0bfaacd886ff31064929d47a4d66d090d69b323d4b98e592bddd86dbe243",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_vertical_beam_effects_premium/VFX/Textures/curves/c_hell_outter_ray_x.tres",
+          "prepared_resource": "res://assets/vfx/sources/b0708d7acd4d92c0624b/c_hell_outter_ray_x.tres",
+          "source_sha256": "99bd7cdd89ab6a1a4997b930f91fd1000395b3c3d781d009fb093a5510d41051",
+          "reused_from_predecessor": true
+        }
+      ]
+    },
+    {
+      "package": "pack_lelu_godot_weapon_effects_premium",
+      "author": "lelu",
+      "license_status": "unresolved; do not inherit terms from a different pack",
+      "retained_provenance_entry": true,
+      "evidence": {
+        "package": "pack_lelu_godot_weapon_effects_premium",
+        "storageAuthor": "lelu",
+        "title": "GODOT - Weapon Effects (Premium)",
+        "embeddedLicenseEvidence": [
+          {
+            "resourceId": "pack_lelu_godot_weapon_effects_premium::readme (credits).txt",
+            "path": "readme (credits).txt",
+            "text": "\r\nHi,\r\nHere is the Weapon Effect Tutorial premium edition file.. \r\nwhich includes 3 sword VFX effects (fire, poison, electric) that I've created for the tutorial \"Weapon Effect Tutorial\"\r\nincluding also all the textures i've used. \r\n\r\nREMEMBER!! I didn't made these swords, so please if you're going to use them in your project.. please credit:\r\n\r\nCREDITS:\r\n\r\n\"Lowpoly Stylized Scimitar\" (https://skfb.ly/VTJU) by Krystian Zem is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\r\n\r\n\"Sword of Gainu - Weaponcraft\" (https://skfb.ly/oGItq) by KwintenH is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\r\n\r\n\"Wolven blade - Stylized sword\" (https://skfb.ly/o6TZJ) by MeguMeme is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).\r\n\r\n\r\nTHANK YOU SO MUCH !!  :3",
+            "scope": "file_or_subtree_evidence; do not apply an addon license to the whole VFX pack"
+          }
+        ],
+        "officialAuthorEvidence": "docs/licenses/lelu/official-evidence.json",
+        "productMapping": "unresolved; requires product-specific identity check",
+        "officialProduct": null,
+        "rightsAssignment": "unresolved; do not inherit terms from a different pack"
+      },
+      "resources": [
+        {
+          "source": "res://library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Shaders/s_magic_aura.tres",
+          "prepared_resource": "res://assets/vfx/sources/95d9c64322a82e35653e/s_magic_aura.tres",
+          "source_sha256": "cb71de779e60c3b9f1034f61168562bddbc3fe4a791a0ab0d7e4f6877acdf977",
+          "reused_from_predecessor": true
+        },
+        {
+          "source": "res://library/lelu/pack_lelu_godot_weapon_effects_premium/VFX/Textures/T_VFX_PerlinNoise_Tiled.png",
+          "prepared_resource": "res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res",
+          "source_sha256": "8bc8bf311494b7cec3951453d4f73787b278b4b585239650dd448c9aab10924c",
+          "reused_from_predecessor": true
+        }
+      ]
+    }
+  ],
+  "native_conversion_policy": {
+    "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-continuation42-20261020/conversion-policy.json",
+    "sha256": "eb41447be0e39c37121994f75a0e4aa6b33318ce7c8a321ecbcd5b1a5c8039f5",
+    "facts": {
+      "version": "runtime-continuation42-20261020-ecdf1a60ae59ee03",
+      "policy": "Explicit native CurveTexture/CurveXYZTexture Resource storage preservation; no image fallback.",
+      "source_runtime_resources_modified": false,
+      "old_manifests_default_policy_changed": false,
+      "actual_gpu_texture_probe_sha256": "02b3c1346248acaef654d846bd64d69a06fce1eafc794cd3aeadf61a4168e640",
+      "prior_tool_sha256": {
+        "runtime_followup_convert.gd": "47e7e14230e852e799dd5f63774026b9ae65bb8ba81129f25779a36ef947e455",
+        "factory/packaging/convert_resources.gd": "f991a892bd6695e2ec22ad1ee19efad8bc70f63862322384dc31d6887105941d"
+      },
+      "current_tool_sha256": {
+        "runtime_followup_convert.gd": "7ecdf7ab9eecc4fa99f5d1f6cdbbafb1fa10dd7d521845f4164602f1423007cb",
+        "factory/packaging/convert_resources.gd": "9544496d9bda20376a24e984162037c3e3f22ef68763290b2b1ae963f0fe15c6"
+      },
+      "partial_outputs_qualified": 0,
+      "retry_scope": "Only155 new cohort roots; no completed per-root journal exists for the aborted attempt. Retained203 sources are never converted."
+    }
+  },
+  "native_curve_resource_policy_enabled": true,
+  "native_curve_resources_preserved": 388,
+  "scope": "Exact pack-folder associations in the actual frozen closure. Folder membership is provenance, not a rights grant; unresolved product/subtree evidence remains unresolved.",
+  "retained_provenance_modified": false,
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

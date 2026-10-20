@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/extensions/continuation42-20261020/sources/e8a6016779c40c17dd0a/field.gd"
+input = {"source_material": "res://assets/vfx/sources/3d39f89464c28e96d282/fire_ground_torch.tres", "patches": [{"owner_uuid": "fixture.fire.old_cell.0", "surface_kind": "spatial_effect.material.fire", "position": [0, 0, 0], "cells": [[0, 0]], "birth_seconds": 0.8, "remove_seconds": 3.6, "present": true, "observed": true, "suppressed": false}, {"owner_uuid": "fixture.fire.old_cell.1", "surface_kind": "spatial_effect.material.fire", "position": [1, 0, 0], "cells": [[0, 0]], "birth_seconds": 1.35, "remove_seconds": 3.2, "present": true, "observed": true, "suppressed": false}], "fire_trail_bank": "res://assets/vfx/extensions/continuation42-20261020/sources/18e2254e402b0976ad16/native-bank.res"}
+options = {}
+provenance = "Exact new36 card/backend and selected native LeLu/Binbun fire sources; explicit observed state fixture."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/flaming-sphere/concentration_end_old_cell_trail"
+label = "concentration_end_old_cell_trail"
+phase = "concentration_end_old_cell_trail"
+variant = "native"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.flaming_sphere"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.8
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Engineering candidate; source/art/native event qualification pending"}

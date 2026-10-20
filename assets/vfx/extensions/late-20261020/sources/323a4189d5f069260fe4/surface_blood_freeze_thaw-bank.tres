@@ -1,0 +1,215 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/late-20261020/sources/ef4a041575fdc22e31f4/frames-fb92ec00cc9c4763270a0110b467bb515bc90b4b9bcce82e566c5e484c5a0f5a.res" id="1_0tm1j"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/896b69b9845468437d9c/420215e2ce297610ca9d12ba5ed3089ffd60c4719dab3c851cddcd2d718f33e3.gdshader" id="2_64o46"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/d9693b7f9e0749d03a88/texture.res" id="3_3n0uq"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/9dc4b7d695e6d2225d58/texture-591d0e3185d948eb06e782f3f3ea0e3cbd73882ff44d9c9c949cae0ba0f36f41.res" id="4_nsqmd"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/dc34147c18fc7fd105af/2dc0a6ec71c5545f4a4e469e3ada80432de6381f170bd642604ef81f724bccdd.gdshader" id="5_gyfge"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/late-20261020/sources/72ee338b84017a10ff17/surface_blood_freeze_thaw-construct.gd" id="6_wgrvp"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/late-20261020/sources/351fb89f9a8612e8af0d/bank.gd" id="7_kj1ay"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e581v"]
+size = Vector2(4, 4)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_urv4o"]
+render_priority = 0
+shader = ExtResource("2_64o46")
+shader_parameter/marble = ExtResource("3_3n0uq")
+shader_parameter/material_kind = 2
+shader_parameter/dark = Color(0.1882353, 0.047058824, 0.07058824, 1)
+shader_parameter/mid = Color(0.4627451, 0.08627451, 0.13333334, 1)
+shader_parameter/light = Color(0.6509804, 0.15686275, 0.19607843, 1)
+shader_parameter/body_alpha = 0.65
+shader_parameter/frost = ExtResource("4_nsqmd")
+shader_parameter/freeze_fraction = 0.0
+shader_parameter/thaw_fraction = 0.0
+shader_parameter/transition_seconds = 0.0
+shader_parameter/contact_point = Vector2(0, 0)
+shader_parameter/frozen_blood = true
+shader_parameter/retirement = 1.0
+metadata/factory_prepared_shader = ExtResource("2_64o46")
+metadata/factory_opacity_prepared_shader = ExtResource("2_64o46")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+metadata/factory_liquid_field_input = true
+metadata/factory_liquid_clock_input = true
+metadata/factory_liquid_link_input = false
+metadata/factory_liquid_contact_alpha_input = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pxhvh"]
+render_priority = 0
+shader = ExtResource("5_gyfge")
+shader_parameter/gpu_drop_colour = Color(0.4627451, 0.08627451, 0.13333334, 1)
+metadata/factory_prepared_shader = ExtResource("5_gyfge")
+metadata/factory_opacity_prepared_shader = ExtResource("5_gyfge")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+metadata/factory_liquid_field_input = true
+metadata/factory_liquid_clock_input = false
+metadata/factory_liquid_link_input = false
+metadata/factory_liquid_contact_alpha_input = false
+
+[sub_resource type="SphereMesh" id="SphereMesh_m620u"]
+radius = 0.04
+height = 0.08
+radial_segments = 8
+rings = 4
+
+[resource]
+script = ExtResource("7_kj1ay")
+source_phase = "res://assets/vfx/extensions/late-20261020/sources/d351f6cdae212a4e88ce/phase-0.tres"
+source_hash = "10a3a6b6277a20bf0e395562aa8b67174783a7854b486458b227325e35df6cfd"
+source_script = "res://assets/vfx/extensions/late-20261020/sources/4417f42a4a44367964ba/liquid_state.gd"
+settings = {
+"colours": ["300c12", "761622", "a62832"],
+"freeze_at": 6.0,
+"kind": "blood",
+"remove_at": 10.0,
+"simulation": "res://assets/vfx/extensions/late-20261020/sources/0cba64e0e9147e7a7575/fb92ec00cc9c4763270a0110b467bb515bc90b4b9bcce82e566c5e484c5a0f5a.json",
+"thaw_at": 8.0
+}
+frames = ExtResource("1_0tm1j")
+program = ExtResource("6_wgrvp")
+operands = [Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0), 2, 0, SubResource("PlaneMesh_e581v"), 2, 0, AABB(-32, -32, -32, 64, 64, 64), SubResource("ShaderMaterial_urv4o"), SubResource("ShaderMaterial_pxhvh"), 1, false, false, 160, -1, SubResource("SphereMesh_m620u"), PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0)]
+node_specs = Array[Dictionary]([{
+"class": "Node3D",
+"name": "surface",
+"parent": "root",
+"path": ".",
+"properties": []
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0000_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0000_MeshInstance3D",
+"properties": [{
+"field": "transform",
+"operand": {
+"kind": "immutable_value",
+"value": Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 0,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": SubResource("PlaneMesh_e581v")
+}
+}]
+}, {
+"class": "MultiMeshInstance3D",
+"name": "FactoryGenerated_0001_MultiMeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0001_MultiMeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-32, -32, -32, 64, 64, 64)
+}
+}]
+}])
+material_specs = Array[Dictionary]([{
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_liquid_clock_input": true,
+&"factory_liquid_contact_alpha_input": false,
+&"factory_liquid_field_input": true,
+&"factory_liquid_link_input": false,
+&"factory_opacity_prepared_shader": ExtResource("2_64o46"),
+&"factory_prepared_shader": ExtResource("2_64o46"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"body_alpha": 0.65,
+"dark": Color(0.1882353, 0.047058824, 0.07058824, 1),
+"frost": ExtResource("4_nsqmd"),
+"frozen_blood": true,
+"light": Color(0.6509804, 0.15686275, 0.19607843, 1),
+"marble": ExtResource("3_3n0uq"),
+"material_kind": 2,
+"mid": Color(0.4627451, 0.08627451, 0.13333334, 1)
+},
+"render_priority": 0,
+"shader": ExtResource("2_64o46")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_liquid_clock_input": false,
+&"factory_liquid_contact_alpha_input": false,
+&"factory_liquid_field_input": true,
+&"factory_liquid_link_input": false,
+&"factory_opacity_prepared_shader": ExtResource("5_gyfge"),
+&"factory_prepared_shader": ExtResource("5_gyfge"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"gpu_drop_colour": Color(0.4627451, 0.08627451, 0.13333334, 1)
+},
+"render_priority": 0,
+"shader": ExtResource("5_gyfge")
+}])
+layout = {
+&"family": "liquid_state"
+}
+templates = Array[ShaderMaterial]([SubResource("ShaderMaterial_urv4o"), SubResource("ShaderMaterial_pxhvh")])
+stable_paths_verified = true
+receipt = {
+"clock_transport": "exact float32 owner-private texture",
+"committed_events_baked": false,
+"field_transport": "exact float32 live field; source density equation unchanged",
+"geometry": 2,
+"instance_parameters_explicit_after_material": true,
+"material_aliases": [0, 1],
+"materials": 2,
+"multimesh_instances": 160,
+"multimesh_transform_bytes": 7680,
+"multimesh_transform_sha256": "24a007972bcc6c6a5cc8273b8875f42e137c1b0f289efe3785dcbc2089191259",
+"native_geometry_removed": false,
+"nodes": 3,
+"particle_count": 160,
+"preparation_us": 87532,
+"private_materials": 2,
+"runtime_multimesh_buffer_readback": false,
+"shape_atlas_byte_exact": true,
+"source_frames": 864,
+"source_sample_bytes": 1658880,
+"source_sample_serialization_byte_exact": true,
+"source_sample_storage": "res://assets/vfx/extensions/late-20261020/sources/ef4a041575fdc22e31f4/frames-fb92ec00cc9c4763270a0110b467bb515bc90b4b9bcce82e566c5e484c5a0f5a.res",
+"source_storage_bytes": 660950
+}

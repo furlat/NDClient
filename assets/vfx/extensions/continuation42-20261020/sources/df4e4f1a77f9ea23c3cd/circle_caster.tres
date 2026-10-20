@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase_script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component_script"]
+
+[sub_resource type="Resource" id="contact"]
+script = ExtResource("component_script")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/extensions/continuation42-20261020/sources/72db46647dc04b79d0ca/assembly.gd"
+input = {"components": [{"id": "received", "script": "res://assets/vfx/extensions/continuation42-20261020/sources/d217e369c7659aa78a33/circle.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"source": "LeLu VFX_Hit_dark contact plus native dissolving coating and emissive fractured seal", "cell": 384, "ortho": 8, "targetY": 1, "frames": 52, "fps": 32, "neutralPalette": ["17232c", "344955", "607784", "8c9ba1", "b4beb8", "e3d9bf", "fff2d2"], "redPalette": ["58232a", "943e3c", "c94b46", "e97561", "ffb79c", "fff2d2"], "palette": ["17232c", "344955", "607784", "8c9ba1", "b4beb8", "e3d9bf", "fff2d2", "58232a", "943e3c", "c94b46", "e97561", "ffb79c"], "revision": "native-colored-aim-v4", "kind": "blight", "animation": "", "name": "blight", "pack": "authored", "hue": 0.008}, "side": "full", "seed": 61702, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false, "application": {"application_id": "04494277-c4ab-561c-ad61-acd276cd2e76", "target_actor": "caster", "target_entity_uuid": "b9bf6d9f-e73d-5cb8-8292-be4edcb2720a", "damage_applied": true, "save_succeeded": false, "damage_type": "necrotic", "start_after_release_seconds": 0.375}, "solar_contact_bank": "res://assets/vfx/extensions/continuation42-20261020/sources/8e3d9cc7cab7385bb70b/5bdf7f869da752c07b4e.res"}, "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "received", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+
+[resource]
+script = ExtResource("phase_script")
+clip_id = "review/circle_of_death/whole/circle_of_death__whole.receive_caster"
+label = "Committed receiving contact caster"
+phase = "impact"
+variant = "whole"
+source_recipe = "recipes/spells/circle_of_death.json"
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 1.625
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("contact")])
+options = {"qualification": "Original Circle selected per-application necrotic.blight receiving source; actual current surface fit, not whole Blight spell reuse; no production or artistic approval", "source_revision": "gpu-circle-v393-20261018"}

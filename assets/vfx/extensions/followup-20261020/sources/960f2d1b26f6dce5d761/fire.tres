@@ -1,0 +1,3675 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/bb5417627eee0f7621a4/lifecycle.gd" id="1_jg676"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/59848ac6d6b42d4ce850/texture.res" id="2_owrpp"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/559b1693b71c46410b7d/program-666f679e600945f4.gdshader" id="3_rqfrf"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/ffaf2087b4c137339417/texture.res" id="4_tjvwn"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/19dba962f39627ff943d/program-4cbd9cea021a47cc.gdshader" id="5_6y3gl"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/3d24d084a73f4c2a3de8/program-2d4a00717743cb45.gdshader" id="6_kidpe"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/cc6ba7e8e8459eb301a3/texture.res" id="7_qf7m8"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/ca28b1db6482e29992da/program-4d2cafb40a20eb7d.gdshader" id="8_p3ran"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/a135e4a547ad45a0cf32/texture.res" id="9_4sotu"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/8cc043e4916a0d928eb8/texture.res" id="10_up5yj"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/b8e04c776b0067481388/program-cc48b9d98c2c300e.gdshader" id="11_7n64g"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/e301ab97e18bd11082f6/program-574d83f9a077956e.gdshader" id="12_b7m1c"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/630a3f8412b53b50c32f/program-297bdb39982218a9.gdshader" id="13_bdda3"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/01236149d61d432c399a/program-fc92bdb04d0b4db5.gdshader" id="14_irm0b"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/5424902310ba9c9cca29/program-5c5254df5fe6651c.gdshader" id="15_tluah"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/1cddd52376d342ec0a78/program-404e8b184c2023d8.gdshader" id="16_ag840"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/00621fa464f79ae05226/program-ee842af5d758851f.gdshader" id="17_gknbt"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/0de5192f91b8201be589/program-0beddd7003de186a.gdshader" id="18_y5sp6"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/fb39a4fcc6342bf50db6/program-1fba497eb8a0446b.gdshader" id="19_wk66c"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/7029f217b51544c9f533/program-836a6f8495cabcf3.gdshader" id="20_0er7e"]
+[ext_resource type="PackedScene" path="res://assets/vfx/extensions/followup-20261020/sources/1ef02f05d250d18e0d52/fire.tscn" id="21_g7bbi"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/ac04a634e3380f5e3d4a/bank.gd" id="22_6bj7y"]
+
+[sub_resource type="Gradient" id="Gradient_bahx2"]
+offsets = PackedFloat32Array(0.111498, 0.243902)
+colors = PackedColorArray(10, 10, 10, 1, 2, 0.8, 0.25, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2beqg"]
+gradient = SubResource("Gradient_bahx2")
+use_hdr = true
+
+[sub_resource type="Gradient" id="Gradient_7asvg"]
+offsets = PackedFloat32Array(0.00334448, 0.759197)
+colors = PackedColorArray(0.838211, 0.483362, 0, 1, 0.26, 0.16354, 0.1222, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4ebvr"]
+gradient = SubResource("Gradient_7asvg")
+
+[sub_resource type="Gradient" id="Gradient_yurud"]
+offsets = PackedFloat32Array(0, 0.558442, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.893507, 0.893507, 0.893507, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jcfbn"]
+noise_type = 2
+frequency = 0.004
+fractal_octaves = 1
+fractal_lacunarity = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ciw4x"]
+noise = SubResource("FastNoiseLite_jcfbn")
+color_ramp = SubResource("Gradient_yurud")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="Gradient" id="Gradient_hm67w"]
+offsets = PackedFloat32Array(0.212987, 0.706493)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_75gy1"]
+gradient = SubResource("Gradient_hm67w")
+
+[sub_resource type="Gradient" id="Gradient_r1aet"]
+offsets = PackedFloat32Array(0.237458, 0.45485, 0.886288, 1)
+colors = PackedColorArray(4, 0.5, 0.1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0.2, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_to4fj"]
+gradient = SubResource("Gradient_r1aet")
+use_hdr = true
+
+[sub_resource type="Gradient" id="Gradient_xlwik"]
+offsets = PackedFloat32Array(0.214047, 0.35786, 0.809365, 1)
+colors = PackedColorArray(2, 1, 0, 1, 0.28, 0.207, 0.19, 1, 0.326954, 0.244384, 0.22515, 1, 0.28, 0.207, 0.19, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kovdd"]
+gradient = SubResource("Gradient_xlwik")
+
+[sub_resource type="Curve" id="Curve_uw663"]
+_data = [Vector2(0, 0.001526), 0.0, 0.0659502, 0, 0, Vector2(0.488275, 0), 0.0, 0.0, 0, 0, Vector2(0.506596, 0.47762), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ie6uj"]
+texture_mode = 1
+curve = SubResource("Curve_uw663")
+
+[sub_resource type="Gradient" id="Gradient_vfa3o"]
+offsets = PackedFloat32Array(0.170569, 0.394649, 0.608696)
+colors = PackedColorArray(4, 1.5, 0.1, 1, 0.892858, 0.334822, 0.0223214, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0vcb0"]
+gradient = SubResource("Gradient_vfa3o")
+use_hdr = true
+
+[sub_resource type="Gradient" id="Gradient_jv14h"]
+offsets = PackedFloat32Array(0.00334448, 0.759197)
+colors = PackedColorArray(0.838211, 0.483362, 0, 1, 0.26, 0.16354, 0.1222, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_komqb"]
+gradient = SubResource("Gradient_jv14h")
+
+[sub_resource type="Gradient" id="Gradient_v5xqo"]
+offsets = PackedFloat32Array(0, 0.558442, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.893507, 0.893507, 0.893507, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7710q"]
+noise_type = 2
+frequency = 0.004
+fractal_octaves = 1
+fractal_lacunarity = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dbiqd"]
+noise = SubResource("FastNoiseLite_7710q")
+color_ramp = SubResource("Gradient_v5xqo")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="Gradient" id="Gradient_xa6r0"]
+offsets = PackedFloat32Array(0.212987, 0.706493)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_c2ct7"]
+gradient = SubResource("Gradient_xa6r0")
+
+[sub_resource type="Gradient" id="Gradient_l3bgt"]
+offsets = PackedFloat32Array(0.237458, 0.45485, 0.886288, 1)
+colors = PackedColorArray(4, 0.5, 0.1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0.2, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_73pwj"]
+gradient = SubResource("Gradient_l3bgt")
+use_hdr = true
+
+[sub_resource type="Gradient" id="Gradient_3tjxe"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tsqkq"]
+gradient = SubResource("Gradient_3tjxe")
+use_hdr = true
+
+[sub_resource type="Gradient" id="Gradient_t8tc6"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_yjk5f"]
+gradient = SubResource("Gradient_t8tc6")
+
+[sub_resource type="Gradient" id="Gradient_ts37o"]
+offsets = PackedFloat32Array(0, 0.81039)
+colors = PackedColorArray(0.114897, 0.114897, 0.114897, 1, 0.589599, 0.298998, 0.0998442, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_no2je"]
+gradient = SubResource("Gradient_ts37o")
+
+[sub_resource type="Gradient" id="Gradient_1qp7w"]
+offsets = PackedFloat32Array(0, 0.342857, 0.966234)
+colors = PackedColorArray(0, 0, 0, 1, 0.77957, 0.77957, 0.77957, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xeqbs"]
+noise_type = 2
+frequency = 0.0047
+offset = Vector3(0, 552.24, 0)
+fractal_octaves = 2
+fractal_lacunarity = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_spall"]
+noise = SubResource("FastNoiseLite_xeqbs")
+color_ramp = SubResource("Gradient_1qp7w")
+seamless = true
+seamless_blend_skirt = 0.628
+
+[sub_resource type="Gradient" id="Gradient_uugae"]
+offsets = PackedFloat32Array(0.358442, 0.612987)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_it4vt"]
+gradient = SubResource("Gradient_uugae")
+
+[sub_resource type="Gradient" id="Gradient_g84k6"]
+offsets = PackedFloat32Array(0, 0.122078, 1)
+colors = PackedColorArray(3, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1u0x5"]
+gradient = SubResource("Gradient_g84k6")
+
+[sub_resource type="Gradient" id="Gradient_fwc0k"]
+offsets = PackedFloat32Array(0.111498, 0.243902)
+colors = PackedColorArray(0.8181818, 0.8181818, 0.8181818, 1, 0.6, 0.24000001, 0.075, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_s7rhv"]
+gradient = SubResource("Gradient_fwc0k")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_syklq"]
+_data = [Vector2(0.47619, 1), 0.0, -3.17679, 0, 0, Vector2(0.603175, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4v63h"]
+texture_mode = 1
+curve = SubResource("Curve_syklq")
+
+[sub_resource type="Curve" id="Curve_1cbj8"]
+_data = [Vector2(0, 0.170038), 0.0, 2.49605, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_alpsl"]
+curve = SubResource("Curve_1cbj8")
+
+[sub_resource type="Curve" id="Curve_1bqaf"]
+_data = [Vector2(0, 0), 0.0, 0.912611, 0, 0, Vector2(0.996825, 1), 0.776552, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_x3t58"]
+texture_mode = 1
+curve = SubResource("Curve_1bqaf")
+
+[sub_resource type="Curve" id="Curve_lg2ur"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.671302), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dvprv"]
+curve = SubResource("Curve_lg2ur")
+
+[sub_resource type="Curve" id="Curve_f22be"]
+_data = [Vector2(0, 0.843868), 0.0, 0.0663708, 0, 0, Vector2(1, 0.301517), -0.986094, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ujkel"]
+curve = SubResource("Curve_f22be")
+
+[sub_resource type="Gradient" id="Gradient_3oxlo"]
+offsets = PackedFloat32Array(0, 0.229965, 0.543554, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0.5, 0, 1, 0.5, 0.7, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hs6j3"]
+gradient = SubResource("Gradient_3oxlo")
+
+[sub_resource type="Curve" id="Curve_fqi3o"]
+_data = [Vector2(0.457143, 0), 0.0, 0.0, 0, 0, Vector2(0.879365, 1), 2.87611, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ggpwj"]
+texture_mode = 1
+curve = SubResource("Curve_fqi3o")
+
+[sub_resource type="Curve" id="Curve_jd5vw"]
+_data = [Vector2(0, 0.868521), 0.0, 0.0719017, 0, 0, Vector2(1, 0.539823), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yih6x"]
+curve = SubResource("Curve_jd5vw")
+
+[sub_resource type="Curve" id="Curve_s6vwp"]
+_data = [Vector2(0, 1), 0.0, 0.215707, 0, 0, Vector2(0.650794, 0.19469), -1.53692, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_s58as"]
+curve = SubResource("Curve_s6vwp")
+
+[sub_resource type="Gradient" id="Gradient_chels"]
+offsets = PackedFloat32Array(0, 0.229965, 0.543554, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0.5, 0, 1, 0.5, 0.7, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ivv61"]
+gradient = SubResource("Gradient_chels")
+
+[sub_resource type="Curve" id="Curve_yot3i"]
+_data = [Vector2(0.457143, 0), 0.0, 0.0, 0, 0, Vector2(0.879365, 1), 2.87611, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_krm8a"]
+texture_mode = 1
+curve = SubResource("Curve_yot3i")
+
+[sub_resource type="Curve" id="Curve_d0bom"]
+_data = [Vector2(0, 0.868521), 0.0, 0.0719017, 0, 0, Vector2(1, 0.539823), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xcem4"]
+curve = SubResource("Curve_d0bom")
+
+[sub_resource type="Curve" id="Curve_l123e"]
+_data = [Vector2(0, 1), 0.0, 0.0606036, 0, 0, Vector2(0.536508, 0.235777), -1.169, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hle4n"]
+curve = SubResource("Curve_l123e")
+
+[sub_resource type="Gradient" id="Gradient_1wxtd"]
+offsets = PackedFloat32Array(0, 0.229965, 0.543554, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0.5, 0, 1, 0.5, 0.7, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_e1jgs"]
+gradient = SubResource("Gradient_1wxtd")
+
+[sub_resource type="Curve" id="Curve_jppjg"]
+_data = [Vector2(0.457143, 0), 0.0, 0.0, 0, 0, Vector2(0.879365, 1), 2.87611, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xkdvr"]
+texture_mode = 1
+curve = SubResource("Curve_jppjg")
+
+[sub_resource type="Curve" id="Curve_ppdbf"]
+_data = [Vector2(0, 0.868521), 0.0, 0.0719017, 0, 0, Vector2(1, 0.539823), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0idfu"]
+curve = SubResource("Curve_ppdbf")
+
+[sub_resource type="Curve" id="Curve_hjo07"]
+_data = [Vector2(0, 0), 0.0, 2.19595, 0, 0, Vector2(1, 1), 0.0681189, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7ylo3"]
+curve = SubResource("Curve_hjo07")
+
+[sub_resource type="Gradient" id="Gradient_vdjpc"]
+offsets = PackedFloat32Array(0, 0.229965, 0.543554, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0.5, 0, 1, 0.5, 0.7, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dauer"]
+gradient = SubResource("Gradient_vdjpc")
+
+[sub_resource type="Curve" id="Curve_mkipl"]
+_data = [Vector2(0.457143, 0), 0.0, 0.0, 0, 0, Vector2(0.879365, 1), 2.87611, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_roxqd"]
+texture_mode = 1
+curve = SubResource("Curve_mkipl")
+
+[sub_resource type="Curve" id="Curve_d5o62"]
+_data = [Vector2(0, 0.868521), 0.0, 0.0719017, 0, 0, Vector2(1, 0.539823), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_bcmod"]
+curve = SubResource("Curve_d5o62")
+
+[sub_resource type="Curve" id="Curve_vr3ej"]
+_data = [Vector2(0, 0.416561), 0.0, 0.215707, 0, 0, Vector2(1, 1), 0.194137, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2mg8n"]
+curve = SubResource("Curve_vr3ej")
+
+[sub_resource type="Curve" id="Curve_hsw8j"]
+_data = [Vector2(0, 0.441214), 0.0, 0.0, 0, 0, Vector2(0.844444, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_7gfyq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.88254, 0.465866), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_swta3"]
+_data = [Vector2(0, 0.506953), 0.0, 0.0, 0, 0, Vector2(0.857143, 0.983565), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_a633p"]
+curve_x = SubResource("Curve_hsw8j")
+curve_y = SubResource("Curve_7gfyq")
+curve_z = SubResource("Curve_swta3")
+
+[sub_resource type="Curve" id="Curve_i0c10"]
+_data = [Vector2(0, 1), 0.0, -1.5884, 0, 0, Vector2(1, 0), -1.04939, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_oehbp"]
+curve = SubResource("Curve_i0c10")
+
+[sub_resource type="Curve" id="Curve_fuiqa"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.742857, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_m4ihh"]
+texture_mode = 1
+curve = SubResource("Curve_fuiqa")
+
+[sub_resource type="Curve" id="Curve_w1a5f"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.572693), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_l8vwk"]
+curve = SubResource("Curve_w1a5f")
+
+[sub_resource type="Curve" id="Curve_b0fwt"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yi0go"]
+curve = SubResource("Curve_b0fwt")
+
+[sub_resource type="Gradient" id="Gradient_vvexp"]
+offsets = PackedFloat32Array(0, 0.229965, 0.543554, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0.5, 0, 1, 0.5, 0.7, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hpund"]
+gradient = SubResource("Gradient_vvexp")
+
+[sub_resource type="Curve" id="Curve_bkydl"]
+_data = [Vector2(0.457143, 0), 0.0, 0.0, 0, 0, Vector2(0.879365, 1), 2.87611, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ndh4p"]
+texture_mode = 1
+curve = SubResource("Curve_bkydl")
+
+[sub_resource type="Curve" id="Curve_mf4cy"]
+_data = [Vector2(0, 0.355577), 0.0, 0.0719017, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nrc6m"]
+curve = SubResource("Curve_mf4cy")
+
+[sub_resource type="Gradient" id="Gradient_5hhex"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4fgnt"]
+gradient = SubResource("Gradient_5hhex")
+
+[sub_resource type="Curve" id="Curve_d5gw5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_67g21"]
+texture_mode = 1
+curve = SubResource("Curve_d5gw5")
+
+[sub_resource type="Curve" id="Curve_e8wn5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.34938), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_snuh1"]
+curve = SubResource("Curve_e8wn5")
+
+[sub_resource type="Curve" id="Curve_klhhn"]
+_data = [Vector2(0, 0.442326), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.00943, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1r483"]
+curve = SubResource("Curve_klhhn")
+
+[sub_resource type="Curve" id="Curve_fjl0v"]
+_data = [Vector2(0, 1), 0.0, -2.82747, 0, 0, Vector2(0.399002, 0.120114), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dgudr"]
+curve = SubResource("Curve_fjl0v")
+
+[sub_resource type="Gradient" id="Gradient_1gbvi"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_e32a6"]
+gradient = SubResource("Gradient_1gbvi")
+
+[sub_resource type="Curve" id="Curve_82q6u"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.641225, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gxhai"]
+texture_mode = 1
+curve = SubResource("Curve_82q6u")
+
+[sub_resource type="Curve" id="Curve_8use1"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 9.95264, 0, 0, Vector2(1, 4), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_5jgvy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.36797), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_2dv62"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 9.95315, 0, 0, Vector2(1, 4), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_mqftw"]
+curve_x = SubResource("Curve_8use1")
+curve_y = SubResource("Curve_5jgvy")
+curve_z = SubResource("Curve_2dv62")
+
+[sub_resource type="Gradient" id="Gradient_nooo4"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_u6drw"]
+gradient = SubResource("Gradient_nooo4")
+
+[sub_resource type="Curve" id="Curve_bxuxw"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.987607), 1.62794, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rl720"]
+texture_mode = 1
+curve = SubResource("Curve_bxuxw")
+
+[sub_resource type="Curve" id="Curve_tusww"]
+_limits = [0.0, 2.5, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 5.20841, 0, 0, Vector2(1, 2.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_we0uo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.36797), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_d8sos"]
+_limits = [0.0, 2.5, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 5.34858, 0, 0, Vector2(0.992519, 2.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_j6oom"]
+curve_x = SubResource("Curve_tusww")
+curve_y = SubResource("Curve_we0uo")
+curve_z = SubResource("Curve_d8sos")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ritpl"]
+render_priority = 0
+shader = ExtResource("3_rqfrf")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_fireball_detail_age = 0.0
+shader_parameter/vfx_package_offset_fireball_detail_thin_start_seconds = 0.0
+shader_parameter/vfx_package_offset_fireball_detail_thin_end_seconds = 0.0
+shader_parameter/vfx_package_offset_fireball_detail_clear_start_seconds = 0.0
+shader_parameter/vfx_package_offset_fireball_detail_clear_end_seconds = 0.0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/fireball_detail_age = 0.0
+shader_parameter/fireball_detail_flow_scale = 2.0
+shader_parameter/fireball_detail_fine_scale = 5.0
+shader_parameter/fireball_detail_flow_motion = 1.4
+shader_parameter/fireball_detail_fine_motion = 0.7
+shader_parameter/fireball_detail_fine_weight = 0.25
+shader_parameter/fireball_detail_noise_low = 0.035
+shader_parameter/fireball_detail_noise_high = 0.42
+shader_parameter/fireball_detail_albedo_low = 0.4
+shader_parameter/fireball_detail_albedo_high = 1.2
+shader_parameter/fireball_detail_emission_low = 0.3
+shader_parameter/fireball_detail_emission_high = 1.05
+shader_parameter/fireball_detail_porosity_floor = 0.65
+shader_parameter/fireball_detail_peak_opacity = 0.96
+shader_parameter/fireball_detail_tail_opacity = 0.65
+shader_parameter/fireball_detail_thin_start_seconds = 0.1
+shader_parameter/fireball_detail_thin_end_seconds = 0.3
+shader_parameter/fireball_detail_clear_start_seconds = 0.35
+shader_parameter/fireball_detail_clear_end_seconds = 0.6
+shader_parameter/repair_ignition_gradient = SubResource("GradientTexture1D_2beqg")
+shader_parameter/source_clock = 0.0
+shader_parameter/Displacement_Speed = Vector2(0, 0.6)
+shader_parameter/Dissplacement_texture = ExtResource("2_owrpp")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_4ebvr")
+shader_parameter/Disapear_Noise = SubResource("NoiseTexture2D_ciw4x")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_75gy1")
+shader_parameter/ProximityFade = 1.0
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_to4fj")
+shader_parameter/Hard_Shadow_min = -0.2
+shader_parameter/Hard_Shadow_max = 0.65
+shader_parameter/Shadow_Min = 0.15
+shader_parameter/Shadow_Max = 1.0
+metadata/factory_clock_names = ["fireball_detail_age", "fireball_detail_thin_start_seconds", "fireball_detail_thin_end_seconds", "fireball_detail_clear_start_seconds", "fireball_detail_clear_end_seconds", "source_clock"]
+metadata/factory_prepared_shader = ExtResource("3_rqfrf")
+metadata/factory_opacity_prepared_shader = ExtResource("3_rqfrf")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dhxst"]
+render_priority = 0
+shader = ExtResource("5_6y3gl")
+shader_parameter/Linear_Color_1D = SubResource("GradientTexture1D_kovdd")
+shader_parameter/curve_frg_16 = SubResource("CurveTexture_ie6uj")
+shader_parameter/Alpha_Texture = ExtResource("4_tjvwn")
+shader_parameter/ProximityFade = 0.5
+shader_parameter/Emission_color_1D = SubResource("GradientTexture1D_0vcb0")
+metadata/factory_prepared_shader = ExtResource("5_6y3gl")
+metadata/factory_opacity_prepared_shader = ExtResource("5_6y3gl")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rxr38"]
+render_priority = 0
+shader = ExtResource("6_kidpe")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/source_clock = 0.0
+shader_parameter/Displacement_Speed = Vector2(0, 0.6)
+shader_parameter/Dissplacement_texture = ExtResource("2_owrpp")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_komqb")
+shader_parameter/Disapear_Noise = SubResource("NoiseTexture2D_dbiqd")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_c2ct7")
+shader_parameter/ProximityFade = 1.0
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_73pwj")
+shader_parameter/Hard_Shadow_min = 0.0
+shader_parameter/Hard_Shadow_max = 0.1
+shader_parameter/Shadow_Min = 0.1
+shader_parameter/Shadow_Max = 1.0
+metadata/factory_clock_names = ["source_clock"]
+metadata/factory_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_opacity_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nw8w4"]
+render_priority = 0
+shader = ExtResource("6_kidpe")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/source_clock = 0.0
+shader_parameter/Displacement_Speed = Vector2(0, 0.6)
+shader_parameter/Dissplacement_texture = ExtResource("2_owrpp")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_komqb")
+shader_parameter/Disapear_Noise = SubResource("NoiseTexture2D_dbiqd")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_c2ct7")
+shader_parameter/ProximityFade = 1.0
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_tsqkq")
+shader_parameter/Hard_Shadow_min = 0.0
+shader_parameter/Hard_Shadow_max = 0.3
+shader_parameter/Shadow_Min = 0.1
+shader_parameter/Shadow_Max = 1.0
+metadata/factory_clock_names = ["source_clock"]
+metadata/factory_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_opacity_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j8mev"]
+render_priority = 0
+shader = ExtResource("6_kidpe")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/source_clock = 0.0
+shader_parameter/Displacement_Speed = Vector2(0, 0.6)
+shader_parameter/Dissplacement_texture = ExtResource("2_owrpp")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_komqb")
+shader_parameter/Disapear_Noise = SubResource("NoiseTexture2D_dbiqd")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_c2ct7")
+shader_parameter/ProximityFade = 1.0
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_tsqkq")
+shader_parameter/Hard_Shadow_min = 0.0
+shader_parameter/Hard_Shadow_max = 0.3
+shader_parameter/Shadow_Min = 0.1
+shader_parameter/Shadow_Max = 1.0
+metadata/factory_clock_names = ["source_clock"]
+metadata/factory_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_opacity_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r44fl"]
+render_priority = 1
+shader = ExtResource("6_kidpe")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/source_clock = 0.0
+shader_parameter/Displacement_Speed = Vector2(0, 0.6)
+shader_parameter/Dissplacement_texture = ExtResource("2_owrpp")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_komqb")
+shader_parameter/Disapear_Noise = SubResource("NoiseTexture2D_dbiqd")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_c2ct7")
+shader_parameter/ProximityFade = 1.0
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_73pwj")
+shader_parameter/Hard_Shadow_min = 0.0
+shader_parameter/Hard_Shadow_max = 0.1
+shader_parameter/Shadow_Min = 0.1
+shader_parameter/Shadow_Max = 1.0
+metadata/factory_clock_names = ["source_clock"]
+metadata/factory_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_opacity_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g4s6b"]
+render_priority = 1
+shader = ExtResource("8_p3ran")
+shader_parameter/Alpha_Texture = ExtResource("7_qf7m8")
+shader_parameter/ProximityFade = 0.2
+metadata/factory_prepared_shader = ExtResource("8_p3ran")
+metadata/factory_opacity_prepared_shader = ExtResource("8_p3ran")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ckgsf"]
+render_priority = 0
+shader = ExtResource("6_kidpe")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/source_clock = 0.0
+shader_parameter/Displacement_Speed = Vector2(0, 0.6)
+shader_parameter/Dissplacement_texture = ExtResource("2_owrpp")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_komqb")
+shader_parameter/Disapear_Noise = SubResource("NoiseTexture2D_dbiqd")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_c2ct7")
+shader_parameter/ProximityFade = 1.0
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_tsqkq")
+shader_parameter/Hard_Shadow_min = 0.0
+shader_parameter/Hard_Shadow_max = 0.3
+shader_parameter/Shadow_Min = 0.1
+shader_parameter/Shadow_Max = 1.0
+metadata/factory_clock_names = ["source_clock"]
+metadata/factory_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_opacity_prepared_shader = ExtResource("6_kidpe")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fw4sd"]
+render_priority = 1
+shader = ExtResource("11_7n64g")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/source_clock = 0.0
+shader_parameter/Color = Color(1, 0.6, 0.403, 1)
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0.2, 0.2)
+shader_parameter/smoke_texture = ExtResource("9_4sotu")
+shader_parameter/dissolver_radial_uv = false
+shader_parameter/Mask_Zoom_Strenght = 1.0
+shader_parameter/Mask_repeat = 1.0
+shader_parameter/Mask_Scale = Vector2(1, 1)
+shader_parameter/Mask_pivot = Vector2(1, 1)
+shader_parameter/smake_mask = ExtResource("10_up5yj")
+shader_parameter/ProximityFade = 1.0
+metadata/factory_clock_names = ["source_clock"]
+metadata/factory_prepared_shader = ExtResource("11_7n64g")
+metadata/factory_opacity_prepared_shader = ExtResource("11_7n64g")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sbp2k"]
+render_priority = 0
+shader = ExtResource("12_b7m1c")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_source_clock = 0.0
+shader_parameter/source_clock = 0.0
+shader_parameter/Displacement_Speed = Vector2(0, 0)
+shader_parameter/Dissplacement_texture = SubResource("GradientTexture2D_yjk5f")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_no2je")
+shader_parameter/Texture_Speed = Vector2(0.7, 0.5)
+shader_parameter/Disapear_Noise = SubResource("NoiseTexture2D_spall")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_it4vt")
+shader_parameter/ProximityFade = 0.5
+shader_parameter/Roughness = 0.0
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_1u0x5")
+shader_parameter/Hard_Shadow_min = 0.0
+shader_parameter/Hard_Shadow_max = 0.1
+shader_parameter/Shadow_Min = 0.1
+shader_parameter/Shadow_Max = 1.0
+metadata/factory_clock_names = ["source_clock"]
+metadata/factory_prepared_shader = ExtResource("12_b7m1c")
+metadata/factory_opacity_prepared_shader = ExtResource("12_b7m1c")
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c51ac"]
+shader = ExtResource("13_bdda3")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 45.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 6.5
+shader_parameter/scale_max = 6.5
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_s7rhv")
+shader_parameter/alpha_curve = SubResource("CurveTexture_4v63h")
+shader_parameter/scale_curve = SubResource("CurveTexture_alpsl")
+metadata/factory_prepared_shader = ExtResource("13_bdda3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("13_bdda3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c3qf3"]
+shader = ExtResource("14_irm0b")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 20.0
+shader_parameter/radial_velocity_max = 25.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 5.0
+shader_parameter/scale_max = 7.0
+shader_parameter/hue_variation_min = -1.0
+shader_parameter/hue_variation_max = 1.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.1
+shader_parameter/emission_ring_inner_radius = 0.1
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_x3t58")
+shader_parameter/scale_curve = SubResource("CurveTexture_dvprv")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_ujkel")
+metadata/factory_prepared_shader = ExtResource("14_irm0b")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("14_irm0b")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rxdea"]
+shader = ExtResource("15_tluah")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 6.49998
+shader_parameter/radial_velocity_max = 6.99998
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 0.8
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.3
+shader_parameter/emission_ring_radius = 0.5
+shader_parameter/emission_ring_inner_radius = 0.5
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_hs6j3")
+shader_parameter/alpha_curve = SubResource("CurveTexture_ggpwj")
+shader_parameter/scale_curve = SubResource("CurveTexture_yih6x")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_s58as")
+metadata/factory_prepared_shader = ExtResource("15_tluah")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("15_tluah")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nvje3"]
+shader = ExtResource("15_tluah")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 0.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 6.49998
+shader_parameter/radial_velocity_max = 6.99998
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 0.8
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.3
+shader_parameter/emission_ring_radius = 0.5
+shader_parameter/emission_ring_inner_radius = 0.5
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_ivv61")
+shader_parameter/alpha_curve = SubResource("CurveTexture_krm8a")
+shader_parameter/scale_curve = SubResource("CurveTexture_xcem4")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_hle4n")
+metadata/factory_prepared_shader = ExtResource("15_tluah")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("15_tluah")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_282s7"]
+shader = ExtResource("15_tluah")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 10.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 3.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.999978
+shader_parameter/radial_velocity_max = 1.99998
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.2
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 2.5
+shader_parameter/emission_ring_radius = 0.0
+shader_parameter/emission_ring_inner_radius = 1.2
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_e1jgs")
+shader_parameter/alpha_curve = SubResource("CurveTexture_xkdvr")
+shader_parameter/scale_curve = SubResource("CurveTexture_0idfu")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_7ylo3")
+metadata/factory_prepared_shader = ExtResource("15_tluah")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("15_tluah")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2hecf"]
+shader = ExtResource("16_ag840")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 10.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 1.2
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.999978
+shader_parameter/radial_velocity_max = 2.99998
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.5
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 1.0
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_dauer")
+shader_parameter/alpha_curve = SubResource("CurveTexture_roxqd")
+shader_parameter/scale_curve = SubResource("CurveTexture_bcmod")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_2mg8n")
+metadata/factory_prepared_shader = ExtResource("16_ag840")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("16_ag840")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ien1p"]
+shader = ExtResource("17_gknbt")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 30.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 5.0
+shader_parameter/initial_linear_velocity_max = 9.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 3.99998
+shader_parameter/radial_velocity_max = 8.99998
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.5
+shader_parameter/scale_max = 1.1
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_sphere_radius = 0.1
+shader_parameter/color_value = Color(4, 0.8, 0.3, 1)
+shader_parameter/gravity = Vector3(0, -15, 0)
+shader_parameter/scale_curve = SubResource("CurveXYZTexture_a633p")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_oehbp")
+metadata/factory_prepared_shader = ExtResource("17_gknbt")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("17_gknbt")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j3q56"]
+shader = ExtResource("18_y5sp6")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 30.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 12.0
+shader_parameter/initial_linear_velocity_max = 16.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 1.99998
+shader_parameter/radial_velocity_max = 4.99998
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 0.5
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 0, 1)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 0.2
+shader_parameter/emission_ring_inner_radius = 1.0
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/sub_emitter_frequency = 0.018964536317087048
+shader_parameter/sub_emitter_keep_velocity = false
+shader_parameter/color_value = Color(3, 1.4, 0.1, 1)
+shader_parameter/gravity = Vector3(0, -30, 0)
+shader_parameter/alpha_curve = SubResource("CurveTexture_m4ihh")
+shader_parameter/scale_curve = SubResource("CurveTexture_l8vwk")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_yi0go")
+shader_parameter/collision_friction = 0.05
+shader_parameter/collision_bounce = 0.4
+metadata/factory_prepared_shader = ExtResource("18_y5sp6")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("18_y5sp6")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wt425"]
+shader = ExtResource("19_wk66c")
+shader_parameter/direction = Vector3(0, 1, 0)
+shader_parameter/spread = 10.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 1.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 0.2
+shader_parameter/scale_max = 0.3
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/sub_emitter_frequency = 2.5
+shader_parameter/sub_emitter_keep_velocity = true
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_hpund")
+shader_parameter/alpha_curve = SubResource("CurveTexture_ndh4p")
+shader_parameter/scale_curve = SubResource("CurveTexture_nrc6m")
+metadata/factory_prepared_shader = ExtResource("19_wk66c")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("19_wk66c")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v4nqe"]
+shader = ExtResource("20_0er7e")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 45.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = -300.0
+shader_parameter/angular_velocity_max = -1.60933e-05
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 9.99998
+shader_parameter/radial_velocity_max = 9.99998
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 2.0
+shader_parameter/initial_angle_min = -180.0
+shader_parameter/initial_angle_max = 180.0
+shader_parameter/scale_min = 7.0
+shader_parameter/scale_max = 10.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/emission_ring_axis = Vector3(0, 1, 0)
+shader_parameter/emission_ring_height = 0.0
+shader_parameter/emission_ring_radius = 2.0
+shader_parameter/emission_ring_inner_radius = 2.0
+shader_parameter/emission_ring_cone_angle = 90.0
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, 1, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_4fgnt")
+shader_parameter/alpha_curve = SubResource("CurveTexture_67g21")
+shader_parameter/angular_velocity_texture = SubResource("CurveTexture_snuh1")
+shader_parameter/scale_curve = SubResource("CurveTexture_1r483")
+shader_parameter/radial_velocity_curve = SubResource("CurveTexture_dgudr")
+metadata/factory_prepared_shader = ExtResource("20_0er7e")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("20_0er7e")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fiet1"]
+shader = ExtResource("13_bdda3")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 45.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_e32a6")
+shader_parameter/alpha_curve = SubResource("CurveTexture_gxhai")
+shader_parameter/scale_curve = SubResource("CurveXYZTexture_mqftw")
+metadata/factory_prepared_shader = ExtResource("13_bdda3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("13_bdda3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pd16x"]
+shader = ExtResource("13_bdda3")
+shader_parameter/direction = Vector3(1, 0, 0)
+shader_parameter/spread = 45.0
+shader_parameter/flatness = 0.0
+shader_parameter/inherit_emitter_velocity_ratio = 0.0
+shader_parameter/initial_linear_velocity_min = 0.0
+shader_parameter/initial_linear_velocity_max = 0.0
+shader_parameter/directional_velocity_min = 1.0
+shader_parameter/directional_velocity_max = 1.0
+shader_parameter/angular_velocity_min = 0.0
+shader_parameter/angular_velocity_max = 0.0
+shader_parameter/orbit_velocity_min = 0.0
+shader_parameter/orbit_velocity_max = 0.0
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
+shader_parameter/linear_accel_min = 0.0
+shader_parameter/linear_accel_max = 0.0
+shader_parameter/radial_accel_min = 0.0
+shader_parameter/radial_accel_max = 0.0
+shader_parameter/tangent_accel_min = 0.0
+shader_parameter/tangent_accel_max = 0.0
+shader_parameter/damping_min = 0.0
+shader_parameter/damping_max = 0.0
+shader_parameter/initial_angle_min = 0.0
+shader_parameter/initial_angle_max = 0.0
+shader_parameter/scale_min = 1.0
+shader_parameter/scale_max = 1.0
+shader_parameter/hue_variation_min = 0.0
+shader_parameter/hue_variation_max = 0.0
+shader_parameter/anim_speed_min = 0.0
+shader_parameter/anim_speed_max = 0.0
+shader_parameter/anim_offset_min = 0.0
+shader_parameter/anim_offset_max = 0.0
+shader_parameter/lifetime_randomness = 0.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
+shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
+shader_parameter/velocity_pivot = Vector3(0, 0, 0)
+shader_parameter/color_value = Color(1, 1, 1, 1)
+shader_parameter/gravity = Vector3(0, -1e-06, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_u6drw")
+shader_parameter/alpha_curve = SubResource("CurveTexture_rl720")
+shader_parameter/scale_curve = SubResource("CurveXYZTexture_j6oom")
+metadata/factory_prepared_shader = ExtResource("13_bdda3")
+metadata/factory_clock_names = []
+metadata/factory_opacity_prepared_shader = ExtResource("13_bdda3")
+metadata/factory_native_process_source = "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process"
+metadata/factory_zero_gravity_native_operand = Vector3(0, -1e-06, 0)
+metadata/factory_world_space_uniform = false
+metadata/factory_clock_pool_required = false
+
+[resource]
+script = ExtResource("22_6bj7y")
+sites = Array[Dictionary]([{
+"kind": "override",
+"node": NodePath("ball")
+}, {
+"kind": "override",
+"node": NodePath("streaks2")
+}, {
+"kind": "override",
+"node": NodePath("smokeball3")
+}, {
+"kind": "override",
+"node": NodePath("smokeball4")
+}, {
+"kind": "override",
+"node": NodePath("smokeball5")
+}, {
+"kind": "override",
+"node": NodePath("smokeball6")
+}, {
+"kind": "override",
+"node": NodePath("little_sparks2")
+}, {
+"kind": "override",
+"node": NodePath("sub_Ribbon_trails_B")
+}, {
+"kind": "override",
+"node": NodePath("smoke")
+}, {
+"kind": "override",
+"node": NodePath("shockwave_1")
+}, {
+"kind": "override",
+"node": NodePath("shockwave_2")
+}, {
+"kind": "process",
+"node": NodePath("ball")
+}, {
+"kind": "process",
+"node": NodePath("streaks2")
+}, {
+"kind": "process",
+"node": NodePath("smokeball3")
+}, {
+"kind": "process",
+"node": NodePath("smokeball4")
+}, {
+"kind": "process",
+"node": NodePath("smokeball5")
+}, {
+"kind": "process",
+"node": NodePath("smokeball6")
+}, {
+"kind": "process",
+"node": NodePath("little_sparks2")
+}, {
+"kind": "process",
+"node": NodePath("Ribbon_trails_B")
+}, {
+"kind": "process",
+"node": NodePath("sub_Ribbon_trails_B")
+}, {
+"kind": "process",
+"node": NodePath("smoke")
+}, {
+"kind": "process",
+"node": NodePath("shockwave_1")
+}, {
+"kind": "process",
+"node": NodePath("shockwave_2")
+}])
+canonical_indices = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22])
+clock_indices = Array[int]([0, 2, 3, 4, 5, 7, 8, 9])
+detail_indices = Array[int]([0])
+world_process_units = Array[Dictionary]([{
+"index": 11,
+"operator": {
+"active_scalar_indices": PackedInt32Array(8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 6.5,
+"scale_min": 6.5,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_velocity_max",
+"minimum": "radial_velocity_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 6.5, 6.5, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 6.5,
+"scale_min": 6.5,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 12,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 25.0,
+"radial_velocity_min": 20.0,
+"scale_max": 7.0,
+"scale_min": 5.0,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(20, 25, 0, 0, 0, 0, 0, 0, 5, 7, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 25.0,
+"radial_velocity_min": 20.0,
+"scale_max": 7.0,
+"scale_min": 5.0,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 13,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 6.99998,
+"radial_velocity_min": 6.49998,
+"scale_max": 1.0,
+"scale_min": 0.8,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(6.49998, 6.99998, 0, 0, 0, 0, 0, 0, 0.8, 1, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 6.99998,
+"radial_velocity_min": 6.49998,
+"scale_max": 1.0,
+"scale_min": 0.8,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 14,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 6.99998,
+"radial_velocity_min": 6.49998,
+"scale_max": 1.0,
+"scale_min": 0.8,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(6.49998, 6.99998, 0, 0, 0, 0, 0, 0, 0.8, 1, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 6.99998,
+"radial_velocity_min": 6.49998,
+"scale_max": 1.0,
+"scale_min": 0.8,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 15,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 1.99998,
+"radial_velocity_min": 0.999978,
+"scale_max": 1.2,
+"scale_min": 1.0,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(0.999978, 1.99998, 0, 0, 0, 0, 0, 0, 1, 1.2, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 1.99998,
+"radial_velocity_min": 0.999978,
+"scale_max": 1.2,
+"scale_min": 1.0,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 16,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 2.99998,
+"radial_velocity_min": 0.999978,
+"scale_max": 1.5,
+"scale_min": 1.0,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(0.999978, 2.99998, 0, 0, 0, 0, 0, 0, 1, 1.5, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 2.99998,
+"radial_velocity_min": 0.999978,
+"scale_max": 1.5,
+"scale_min": 1.0,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 17,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": true,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, -15, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 8.99998,
+"radial_velocity_min": 3.99998,
+"scale_max": 1.1,
+"scale_min": 0.5,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(3.99998, 8.99998, 0, 0, 0, 0, 0, 0, 0.5, 1.1, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, 0, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, -15, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 8.99998,
+"radial_velocity_min": 3.99998,
+"scale_max": 1.1,
+"scale_min": 0.5,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 18,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": true,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, -30, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 4.99998,
+"radial_velocity_min": 1.99998,
+"scale_max": 1.0,
+"scale_min": 0.5,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(1.99998, 4.99998, 0, 0, 0, 0, 0, 0, 0.5, 1, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, 0, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, -30, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 4.99998,
+"radial_velocity_min": 1.99998,
+"scale_max": 1.0,
+"scale_min": 0.5,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 19,
+"operator": {
+"active_scalar_indices": PackedInt32Array(8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 0.3,
+"scale_min": 0.2,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_velocity_max",
+"minimum": "radial_velocity_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0.2, 0.3, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 0.3,
+"scale_min": 0.2,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 20,
+"operator": {
+"active_scalar_indices": PackedInt32Array(0, 1, 8, 9, 10, 11, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": true,
+"initial": {
+"damping_max": 2.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 1, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 9.99998,
+"radial_velocity_min": 9.99998,
+"scale_max": 10.0,
+"scale_min": 7.0,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(9.99998, 9.99998, 0, 0, 0, 0, 0, 0, 7, 10, 0, 2, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, 0, 0)
+},
+"values": {
+"damping_max": 2.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 1, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 9.99998,
+"radial_velocity_min": 9.99998,
+"scale_max": 10.0,
+"scale_min": 7.0,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 21,
+"operator": {
+"active_scalar_indices": PackedInt32Array(8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 1.0,
+"scale_min": 1.0,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_velocity_max",
+"minimum": "radial_velocity_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 1.0,
+"scale_min": 1.0,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}, {
+"index": 22,
+"operator": {
+"active_scalar_indices": PackedInt32Array(8, 9, 12, 13),
+"fields": ["radial_velocity_min", "radial_velocity_max", "gravity", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"],
+"gravity_active": false,
+"initial": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"gravity": Vector3(0, 0, 0),
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 1.0,
+"scale_min": 1.0,
+"tangential_accel_max": 0.0,
+"tangential_accel_min": 0.0
+},
+"invariant_zero_ranges": [{
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_velocity_max",
+"minimum": "radial_velocity_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "linear_accel_max",
+"minimum": "linear_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "radial_accel_max",
+"minimum": "radial_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "tangential_accel_max",
+"minimum": "tangential_accel_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}, {
+"initial_float32_bits": "0000000000000000",
+"maximum": "damping_max",
+"minimum": "damping_min",
+"operator_proof": "Private exact zero pair; no admitted source/player writes; restore, positive finite scale and peer clamps preserve zero bits"
+}],
+"scalar_fields": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangential_accel_min", "tangential_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_peers": PackedInt32Array(1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 13, 12),
+"scalar_roles": PackedInt32Array(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2),
+"scalar_uniforms": PackedStringArray("radial_velocity_min", "radial_velocity_max", "linear_accel_min", "linear_accel_max", "radial_accel_min", "radial_accel_max", "tangent_accel_min", "tangent_accel_max", "scale_min", "scale_max", "damping_min", "damping_max", "directional_velocity_min", "directional_velocity_max"),
+"scalar_values": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1),
+"uniforms": {
+"damping_max": "damping_max",
+"damping_min": "damping_min",
+"directional_velocity_max": "directional_velocity_max",
+"directional_velocity_min": "directional_velocity_min",
+"gravity": "gravity",
+"linear_accel_max": "linear_accel_max",
+"linear_accel_min": "linear_accel_min",
+"radial_accel_max": "radial_accel_max",
+"radial_accel_min": "radial_accel_min",
+"radial_velocity_max": "radial_velocity_max",
+"radial_velocity_min": "radial_velocity_min",
+"scale_max": "scale_max",
+"scale_min": "scale_min",
+"tangential_accel_max": "tangent_accel_max",
+"tangential_accel_min": "tangent_accel_min"
+},
+"zero_gravity": Vector3(0, -1e-06, 0)
+},
+"values": {
+"damping_max": 0.0,
+"damping_min": 0.0,
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"linear_accel_max": 0.0,
+"linear_accel_min": 0.0,
+"radial_accel_max": 0.0,
+"radial_accel_min": 0.0,
+"radial_velocity_max": 0.0,
+"radial_velocity_min": 0.0,
+"scale_max": 1.0,
+"scale_min": 1.0,
+"tangent_accel_max": 0.0,
+"tangent_accel_min": 0.0
+}
+}])
+runtime_values = {
+"corrected_layers": ["streaks2", "shockwave_1", "shockwave_2"],
+"detail_layers": Array[String](["ball"]),
+"material_profile": {
+"ignition": {
+"albedo_high": 1.2,
+"albedo_low": 0.4,
+"clear_end_seconds": 0.6,
+"clear_start_seconds": 0.35,
+"emission_high": 1.05,
+"emission_low": 0.3,
+"fine_motion": 0.7,
+"fine_scale": 5.0,
+"fine_weight": 0.25,
+"flow_motion": 1.4,
+"flow_scale": 2.0,
+"lighting_floor": 0.15,
+"lighting_high": 0.65,
+"lighting_low": -0.2,
+"noise_high": 0.42,
+"noise_low": 0.035,
+"peak_opacity": 0.96,
+"porosity_floor": 0.65,
+"tail_opacity": 0.65,
+"thin_end_seconds": 0.3,
+"thin_start_seconds": 0.1
+},
+"lobe": {
+"albedo_high": 1.12,
+"albedo_low": 0.32,
+"clear_end_seconds": 1.85,
+"clear_start_seconds": 1.2,
+"emission_high": 0.72,
+"emission_low": 0.12,
+"fine_motion": 0.55,
+"fine_scale": 6.5,
+"fine_weight": 0.32,
+"flow_motion": 1.6,
+"flow_scale": 2.4,
+"lighting_floor": 0.12,
+"lighting_high": 0.85,
+"lighting_low": -0.3,
+"noise_high": 0.42,
+"noise_low": 0.035,
+"peak_opacity": 0.86,
+"porosity_floor": 0.38,
+"tail_opacity": 0.3,
+"thin_end_seconds": 0.95,
+"thin_start_seconds": 0.3
+},
+"smoke": {
+"clear_end_seconds": 1.9,
+"clear_start_seconds": 1.35,
+"peak_opacity": 0.9,
+"tail_opacity": 0.25,
+"thin_end_seconds": 1.05,
+"thin_start_seconds": 0.35
+},
+"variant": "Fireball: turbulent flame and porous smoke; intentional artwork derivative"
+},
+"native_ignition_rgb": true,
+"varied_layers": ["ball"]
+}
+seed_records = [{
+"path": "Donor/ball",
+"seed": 47291
+}, {
+"path": "Donor/streaks2",
+"seed": 47292
+}, {
+"path": "Donor/smokeball3",
+"seed": 47293
+}, {
+"path": "Donor/smokeball4",
+"seed": 47294
+}, {
+"path": "Donor/smokeball5",
+"seed": 47295
+}, {
+"path": "Donor/smokeball6",
+"seed": 47296
+}, {
+"path": "Donor/little_sparks2",
+"seed": 47297
+}, {
+"path": "Donor/Ribbon_trails_B",
+"seed": 47298
+}, {
+"path": "Donor/sub_Ribbon_trails_B",
+"seed": 47299
+}, {
+"path": "Donor/smoke",
+"seed": 47300
+}, {
+"path": "Donor/shockwave_1",
+"seed": 47301
+}, {
+"path": "Donor/shockwave_2",
+"seed": 47302
+}]
+player_paths = Array[NodePath]([NodePath("AnimationPlayer")])
+light_paths = Array[NodePath]([NodePath("OmniLight3D")])
+scene = ExtResource("21_g7bbi")
+adapter_script = ExtResource("1_jg676")
+source_script = "res://assets/vfx/sources/7449f867b8ff0e78c354/fireball_turbulence.gd"
+material_templates = Array[ShaderMaterial]([SubResource("ShaderMaterial_ritpl"), SubResource("ShaderMaterial_dhxst"), SubResource("ShaderMaterial_rxr38"), SubResource("ShaderMaterial_nw8w4"), SubResource("ShaderMaterial_j8mev"), SubResource("ShaderMaterial_r44fl"), SubResource("ShaderMaterial_g4s6b"), SubResource("ShaderMaterial_ckgsf"), SubResource("ShaderMaterial_fw4sd"), SubResource("ShaderMaterial_sbp2k"), SubResource("ShaderMaterial_sbp2k"), SubResource("ShaderMaterial_c51ac"), SubResource("ShaderMaterial_c3qf3"), SubResource("ShaderMaterial_rxdea"), SubResource("ShaderMaterial_nvje3"), SubResource("ShaderMaterial_282s7"), SubResource("ShaderMaterial_2hecf"), SubResource("ShaderMaterial_ien1p"), SubResource("ShaderMaterial_j3q56"), SubResource("ShaderMaterial_wt425"), SubResource("ShaderMaterial_v4nqe"), SubResource("ShaderMaterial_fiet1"), SubResource("ShaderMaterial_pd16x")])
+material_settings = Array[Dictionary]([{
+"metadata": {
+&"factory_clock_names": ["fireball_detail_age", "fireball_detail_thin_start_seconds", "fireball_detail_thin_end_seconds", "fireball_detail_clear_start_seconds", "fireball_detail_clear_end_seconds", "source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_rqfrf"),
+&"factory_prepared_shader": ExtResource("3_rqfrf"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Shadow_Max": "0000803f",
+"fireball_detail_age": "00000000",
+"source_clock": "00000000"
+},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_4ebvr"),
+"Disapear_Noise": SubResource("NoiseTexture2D_ciw4x"),
+"Displacement_Speed": Vector2(0, 0.6),
+"Dissplacement_texture": ExtResource("2_owrpp"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_to4fj"),
+"Gradient_1D": SubResource("GradientTexture1D_75gy1"),
+"Hard_Shadow_max": 0.65,
+"Hard_Shadow_min": -0.2,
+"ProximityFade": 1.0,
+"Shadow_Min": 0.15,
+"fireball_detail_albedo_high": 1.2,
+"fireball_detail_albedo_low": 0.4,
+"fireball_detail_clear_end_seconds": 0.6,
+"fireball_detail_clear_start_seconds": 0.35,
+"fireball_detail_emission_high": 1.05,
+"fireball_detail_emission_low": 0.3,
+"fireball_detail_fine_motion": 0.7,
+"fireball_detail_fine_scale": 5.0,
+"fireball_detail_fine_weight": 0.25,
+"fireball_detail_flow_motion": 1.4,
+"fireball_detail_flow_scale": 2.0,
+"fireball_detail_noise_high": 0.42,
+"fireball_detail_noise_low": 0.035,
+"fireball_detail_peak_opacity": 0.96,
+"fireball_detail_porosity_floor": 0.65,
+"fireball_detail_tail_opacity": 0.65,
+"fireball_detail_thin_end_seconds": 0.3,
+"fireball_detail_thin_start_seconds": 0.1,
+"repair_ignition_gradient": SubResource("GradientTexture1D_2beqg"),
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("5_6y3gl"),
+&"factory_prepared_shader": ExtResource("5_6y3gl"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"ProximityFade": "0000003f"
+},
+"parameters": {
+"Alpha_Texture": ExtResource("4_tjvwn"),
+"Emission_color_1D": SubResource("GradientTexture1D_0vcb0"),
+"Linear_Color_1D": SubResource("GradientTexture1D_kovdd"),
+"curve_frg_16": SubResource("CurveTexture_ie6uj")
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("6_kidpe"),
+&"factory_prepared_shader": ExtResource("6_kidpe"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Hard_Shadow_max": "cdcccc3d",
+"Hard_Shadow_min": "00000000",
+"Shadow_Max": "0000803f",
+"Shadow_Min": "cdcccc3d",
+"source_clock": "00000000"
+},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_komqb"),
+"Disapear_Noise": SubResource("NoiseTexture2D_dbiqd"),
+"Displacement_Speed": Vector2(0, 0.6),
+"Dissplacement_texture": ExtResource("2_owrpp"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_73pwj"),
+"Gradient_1D": SubResource("GradientTexture1D_c2ct7"),
+"ProximityFade": 1.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("6_kidpe"),
+&"factory_prepared_shader": ExtResource("6_kidpe"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Hard_Shadow_min": "00000000",
+"Shadow_Max": "0000803f",
+"Shadow_Min": "cdcccc3d",
+"source_clock": "00000000"
+},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_komqb"),
+"Disapear_Noise": SubResource("NoiseTexture2D_dbiqd"),
+"Displacement_Speed": Vector2(0, 0.6),
+"Dissplacement_texture": ExtResource("2_owrpp"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_tsqkq"),
+"Gradient_1D": SubResource("GradientTexture1D_c2ct7"),
+"Hard_Shadow_max": 0.3,
+"ProximityFade": 1.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("6_kidpe"),
+&"factory_prepared_shader": ExtResource("6_kidpe"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Hard_Shadow_min": "00000000",
+"Shadow_Max": "0000803f",
+"Shadow_Min": "cdcccc3d",
+"source_clock": "00000000"
+},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_komqb"),
+"Disapear_Noise": SubResource("NoiseTexture2D_dbiqd"),
+"Displacement_Speed": Vector2(0, 0.6),
+"Dissplacement_texture": ExtResource("2_owrpp"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_tsqkq"),
+"Gradient_1D": SubResource("GradientTexture1D_c2ct7"),
+"Hard_Shadow_max": 0.3,
+"ProximityFade": 1.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("6_kidpe"),
+&"factory_prepared_shader": ExtResource("6_kidpe"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Hard_Shadow_max": "cdcccc3d",
+"Hard_Shadow_min": "00000000",
+"Shadow_Max": "0000803f",
+"Shadow_Min": "cdcccc3d",
+"source_clock": "00000000"
+},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_komqb"),
+"Disapear_Noise": SubResource("NoiseTexture2D_dbiqd"),
+"Displacement_Speed": Vector2(0, 0.6),
+"Dissplacement_texture": ExtResource("2_owrpp"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_73pwj"),
+"Gradient_1D": SubResource("GradientTexture1D_c2ct7"),
+"ProximityFade": 1.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("8_p3ran"),
+&"factory_prepared_shader": ExtResource("8_p3ran"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {},
+"parameters": {
+"Alpha_Texture": ExtResource("7_qf7m8"),
+"ProximityFade": 0.2
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("6_kidpe"),
+&"factory_prepared_shader": ExtResource("6_kidpe"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Hard_Shadow_min": "00000000",
+"Shadow_Max": "0000803f",
+"Shadow_Min": "cdcccc3d",
+"source_clock": "00000000"
+},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_komqb"),
+"Disapear_Noise": SubResource("NoiseTexture2D_dbiqd"),
+"Displacement_Speed": Vector2(0, 0.6),
+"Dissplacement_texture": ExtResource("2_owrpp"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_tsqkq"),
+"Gradient_1D": SubResource("GradientTexture1D_c2ct7"),
+"Hard_Shadow_max": 0.3,
+"ProximityFade": 1.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("11_7n64g"),
+&"factory_prepared_shader": ExtResource("11_7n64g"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Mask_Zoom_Strenght": "0000803f",
+"Mask_repeat": "0000803f",
+"ProximityFade": "0000803f",
+"source_clock": "00000000"
+},
+"parameters": {
+"Color": Color(1, 0.6, 0.403, 1),
+"Mask_Scale": Vector2(1, 1),
+"Mask_pivot": Vector2(1, 1),
+"Scale": Vector2(1, 1),
+"Speed": Vector2(0.2, 0.2),
+"dissolver_radial_uv": false,
+"smake_mask": ExtResource("10_up5yj"),
+"smoke_texture": ExtResource("9_4sotu"),
+"vfx_package_clock_slot": 0
+},
+"render_priority": 1
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("12_b7m1c"),
+&"factory_prepared_shader": ExtResource("12_b7m1c"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"Hard_Shadow_max": "cdcccc3d",
+"Hard_Shadow_min": "00000000",
+"ProximityFade": "0000003f",
+"Roughness": "00000000",
+"Shadow_Max": "0000803f",
+"Shadow_Min": "cdcccc3d",
+"source_clock": "00000000"
+},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_no2je"),
+"Disapear_Noise": SubResource("NoiseTexture2D_spall"),
+"Displacement_Speed": Vector2(0, 0),
+"Dissplacement_texture": SubResource("GradientTexture2D_yjk5f"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_1u0x5"),
+"Gradient_1D": SubResource("GradientTexture1D_it4vt"),
+"Texture_Speed": Vector2(0.7, 0.5),
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["source_clock"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("12_b7m1c"),
+&"factory_prepared_shader": ExtResource("12_b7m1c"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {},
+"parameters": {
+"Dark_Color_Gradient_1D": SubResource("GradientTexture1D_no2je"),
+"Disapear_Noise": SubResource("NoiseTexture2D_spall"),
+"Displacement_Speed": Vector2(0, 0),
+"Dissplacement_texture": SubResource("GradientTexture2D_yjk5f"),
+"Emission_Gradient_1D": SubResource("GradientTexture1D_1u0x5"),
+"Gradient_1D": SubResource("GradientTexture1D_it4vt"),
+"Texture_Speed": Vector2(0.7, 0.5),
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("13_bdda3"),
+&"factory_prepared_shader": ExtResource("13_bdda3"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_angle_max": "00000000",
+"initial_angle_min": "00000000",
+"initial_linear_velocity_max": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"radial_velocity_max": "00000000",
+"radial_velocity_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_4v63h"),
+"color_ramp": SubResource("GradientTexture1D_s7rhv"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"scale_curve": SubResource("CurveTexture_alpsl"),
+"scale_max": 6.5,
+"scale_min": 6.5,
+"spread": 45.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("14_irm0b"),
+&"factory_prepared_shader": ExtResource("14_irm0b"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"emission_ring_height": "00000000",
+"flatness": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_angle_max": "00000000",
+"initial_angle_min": "00000000",
+"initial_linear_velocity_max": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"spread": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_x3t58"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(1, 0, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 1, 0),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_inner_radius": 0.1,
+"emission_ring_radius": 0.1,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"hue_variation_max": 1.0,
+"hue_variation_min": -1.0,
+"radial_velocity_curve": SubResource("CurveTexture_ujkel"),
+"radial_velocity_max": 25.0,
+"radial_velocity_min": 20.0,
+"scale_curve": SubResource("CurveTexture_dvprv"),
+"scale_max": 7.0,
+"scale_min": 5.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("15_tluah"),
+&"factory_prepared_shader": ExtResource("15_tluah"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_linear_velocity_max": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"spread": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_ggpwj"),
+"color_ramp": SubResource("GradientTexture1D_hs6j3"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 1, 0),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_height": 0.3,
+"emission_ring_inner_radius": 0.5,
+"emission_ring_radius": 0.5,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"radial_velocity_curve": SubResource("CurveTexture_s58as"),
+"radial_velocity_max": 6.99998,
+"radial_velocity_min": 6.49998,
+"scale_curve": SubResource("CurveTexture_yih6x"),
+"scale_max": 1.0,
+"scale_min": 0.8,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("15_tluah"),
+&"factory_prepared_shader": ExtResource("15_tluah"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_linear_velocity_max": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"spread": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_krm8a"),
+"color_ramp": SubResource("GradientTexture1D_ivv61"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 1, 0),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_height": 0.3,
+"emission_ring_inner_radius": 0.5,
+"emission_ring_radius": 0.5,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"radial_velocity_curve": SubResource("CurveTexture_hle4n"),
+"radial_velocity_max": 6.99998,
+"radial_velocity_min": 6.49998,
+"scale_curve": SubResource("CurveTexture_xcem4"),
+"scale_max": 1.0,
+"scale_min": 0.8,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("15_tluah"),
+&"factory_prepared_shader": ExtResource("15_tluah"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"emission_ring_radius": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_xkdvr"),
+"color_ramp": SubResource("GradientTexture1D_e1jgs"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 1, 0),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_height": 2.5,
+"emission_ring_inner_radius": 1.2,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"initial_linear_velocity_max": 3.0,
+"radial_velocity_curve": SubResource("CurveTexture_7ylo3"),
+"radial_velocity_max": 1.99998,
+"radial_velocity_min": 0.999978,
+"scale_curve": SubResource("CurveTexture_0idfu"),
+"scale_max": 1.2,
+"scale_min": 1.0,
+"spread": 10.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("16_ag840"),
+&"factory_prepared_shader": ExtResource("16_ag840"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_roxqd"),
+"color_ramp": SubResource("GradientTexture1D_dauer"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"emission_sphere_radius": 1.0,
+"gravity": Vector3(0, -1e-06, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"initial_linear_velocity_max": 1.2,
+"radial_velocity_curve": SubResource("CurveTexture_2mg8n"),
+"radial_velocity_max": 2.99998,
+"radial_velocity_min": 0.999978,
+"scale_curve": SubResource("CurveTexture_bcmod"),
+"scale_max": 1.5,
+"scale_min": 1.0,
+"spread": 10.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("17_gknbt"),
+&"factory_prepared_shader": ExtResource("17_gknbt"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_angle_max": "00000000",
+"initial_angle_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"color_value": Color(4, 0.8, 0.3, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"emission_sphere_radius": 0.1,
+"gravity": Vector3(0, -15, 0),
+"initial_linear_velocity_max": 9.0,
+"initial_linear_velocity_min": 5.0,
+"radial_velocity_curve": SubResource("CurveTexture_oehbp"),
+"radial_velocity_max": 8.99998,
+"radial_velocity_min": 3.99998,
+"scale_curve": SubResource("CurveXYZTexture_a633p"),
+"scale_max": 1.1,
+"scale_min": 0.5,
+"spread": 30.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("18_y5sp6"),
+&"factory_prepared_shader": ExtResource("18_y5sp6"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"emission_ring_height": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_angle_max": "00000000",
+"initial_angle_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_m4ihh"),
+"collision_bounce": 0.4,
+"collision_friction": 0.05,
+"color_value": Color(3, 1.4, 0.1, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 0, 1),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_inner_radius": 1.0,
+"emission_ring_radius": 0.2,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -30, 0),
+"initial_linear_velocity_max": 16.0,
+"initial_linear_velocity_min": 12.0,
+"radial_velocity_curve": SubResource("CurveTexture_yi0go"),
+"radial_velocity_max": 4.99998,
+"radial_velocity_min": 1.99998,
+"scale_curve": SubResource("CurveTexture_l8vwk"),
+"scale_max": 1.0,
+"scale_min": 0.5,
+"spread": 30.0,
+"sub_emitter_frequency": 0.018964536317087048,
+"sub_emitter_keep_velocity": false,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("19_wk66c"),
+&"factory_prepared_shader": ExtResource("19_wk66c"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"radial_velocity_max": "00000000",
+"radial_velocity_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_ndh4p"),
+"color_ramp": SubResource("GradientTexture1D_hpund"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(0, 1, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"initial_linear_velocity_max": 1.0,
+"scale_curve": SubResource("CurveTexture_nrc6m"),
+"scale_max": 0.3,
+"scale_min": 0.2,
+"spread": 10.0,
+"sub_emitter_frequency": 2.5,
+"sub_emitter_keep_velocity": true,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("20_0er7e"),
+&"factory_prepared_shader": ExtResource("20_0er7e"),
+&"factory_world_space_uniform": false
+},
+"omitted_exact_scalar_program_defaults": {
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_min": "00000000",
+"emission_ring_height": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_linear_velocity_max": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_67g21"),
+"angular_velocity_max": -1.60933e-05,
+"angular_velocity_min": -300.0,
+"angular_velocity_texture": SubResource("CurveTexture_snuh1"),
+"color_ramp": SubResource("GradientTexture1D_4fgnt"),
+"color_value": Color(1, 1, 1, 1),
+"damping_max": 2.0,
+"direction": Vector3(1, 0, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_ring_axis": Vector3(0, 1, 0),
+"emission_ring_cone_angle": 90.0,
+"emission_ring_inner_radius": 2.0,
+"emission_ring_radius": 2.0,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, 1, 0),
+"initial_angle_max": 180.0,
+"initial_angle_min": -180.0,
+"radial_velocity_curve": SubResource("CurveTexture_dgudr"),
+"radial_velocity_max": 9.99998,
+"radial_velocity_min": 9.99998,
+"scale_curve": SubResource("CurveTexture_1r483"),
+"scale_max": 10.0,
+"scale_min": 7.0,
+"spread": 45.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("13_bdda3"),
+&"factory_prepared_shader": ExtResource("13_bdda3"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_angle_max": "00000000",
+"initial_angle_min": "00000000",
+"initial_linear_velocity_max": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"radial_velocity_max": "00000000",
+"radial_velocity_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_gxhai"),
+"color_ramp": SubResource("GradientTexture1D_e32a6"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(1, 0, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"scale_curve": SubResource("CurveXYZTexture_mqftw"),
+"scale_max": 1.0,
+"scale_min": 1.0,
+"spread": 45.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_native_process_source": "Godot4.7.2 ParticleProcessMaterial exact generated program/uniforms; immutable local-coordinate process",
+&"factory_opacity_prepared_shader": ExtResource("13_bdda3"),
+&"factory_prepared_shader": ExtResource("13_bdda3"),
+&"factory_world_space_uniform": false,
+&"factory_zero_gravity_native_operand": Vector3(0, -1e-06, 0)
+},
+"omitted_exact_scalar_program_defaults": {
+"angular_velocity_max": "00000000",
+"angular_velocity_min": "00000000",
+"anim_offset_max": "00000000",
+"anim_offset_min": "00000000",
+"anim_speed_max": "00000000",
+"anim_speed_min": "00000000",
+"damping_max": "00000000",
+"damping_min": "00000000",
+"flatness": "00000000",
+"hue_variation_max": "00000000",
+"hue_variation_min": "00000000",
+"inherit_emitter_velocity_ratio": "00000000",
+"initial_angle_max": "00000000",
+"initial_angle_min": "00000000",
+"initial_linear_velocity_max": "00000000",
+"initial_linear_velocity_min": "00000000",
+"lifetime_randomness": "00000000",
+"linear_accel_max": "00000000",
+"linear_accel_min": "00000000",
+"orbit_velocity_max": "00000000",
+"orbit_velocity_min": "00000000",
+"radial_accel_max": "00000000",
+"radial_accel_min": "00000000",
+"radial_velocity_max": "00000000",
+"radial_velocity_min": "00000000",
+"tangent_accel_max": "00000000",
+"tangent_accel_min": "00000000"
+},
+"parameters": {
+"alpha_curve": SubResource("CurveTexture_rl720"),
+"color_ramp": SubResource("GradientTexture1D_u6drw"),
+"color_value": Color(1, 1, 1, 1),
+"direction": Vector3(1, 0, 0),
+"directional_velocity_max": 1.0,
+"directional_velocity_min": 1.0,
+"emission_shape_offset": Vector3(0, 0, 0),
+"emission_shape_scale": Vector3(1, 1, 1),
+"gravity": Vector3(0, -1e-06, 0),
+"scale_curve": SubResource("CurveXYZTexture_j6oom"),
+"scale_max": 1.0,
+"scale_min": 1.0,
+"spread": 45.0,
+"velocity_pivot": Vector3(0, 0, 0)
+},
+"render_priority": 0
+}])
+particle_paths = Array[NodePath]([NodePath("ball"), NodePath("streaks2"), NodePath("smokeball3"), NodePath("smokeball4"), NodePath("smokeball5"), NodePath("smokeball6"), NodePath("little_sparks2"), NodePath("Ribbon_trails_B"), NodePath("sub_Ribbon_trails_B"), NodePath("smoke"), NodePath("shockwave_1"), NodePath("shockwave_2")])
+particle_initial_emitting = Array[bool]([false, false, false, false, false, false, false, false, false, false, false, false])
+process_receipts = Array[Dictionary]([{
+"local_coords": false,
+"native_program_sha256": "297bdb39982218a9a59c1be746667ab276a1d7428d50a57908a4fa0a18982d0a",
+"path": NodePath("ball"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "fc92bdb04d0b4db5bc31454ccd07fab43a8a6a888e9353ce43fe967a09588a20",
+"path": NodePath("streaks2"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "5c5254df5fe6651c16ed64f48ff22c655691d8d556c20401f22197678ef9e2a0",
+"path": NodePath("smokeball3"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "5c5254df5fe6651c16ed64f48ff22c655691d8d556c20401f22197678ef9e2a0",
+"path": NodePath("smokeball4"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "5c5254df5fe6651c16ed64f48ff22c655691d8d556c20401f22197678ef9e2a0",
+"path": NodePath("smokeball5"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "404e8b184c2023d8a82c0cdc8f381861fc2c9a06bc5a650c34da53cfbea2db8f",
+"path": NodePath("smokeball6"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "ee842af5d758851f550a0d0d5a5e261418921b9beef622eb8e8db6845122bca3",
+"path": NodePath("little_sparks2"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "0beddd7003de186a71d0fd3c192f8fb4dd19b94a9db6baaa9ed3122d6779b564",
+"path": NodePath("Ribbon_trails_B"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "1fba497eb8a0446b2cd264e90f66a3aafb1405236db8f9d83030a35198097823",
+"path": NodePath("sub_Ribbon_trails_B"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "836a6f8495cabcf350451a4a17efa58c2a3422c7b9799fcd7f2b31977e6a044a",
+"path": NodePath("smoke"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "297bdb39982218a9a59c1be746667ab276a1d7428d50a57908a4fa0a18982d0a",
+"path": NodePath("shockwave_1"),
+"private_mutable_unit_uniforms": true
+}, {
+"local_coords": false,
+"native_program_sha256": "297bdb39982218a9a59c1be746667ab276a1d7428d50a57908a4fa0a18982d0a",
+"path": NodePath("shockwave_2"),
+"private_mutable_unit_uniforms": true
+}])
+verified_stable_paths = true
+provenance = {
+"draw_materials": 11,
+"material_ownership": "Explicit private canonical ShaderMaterials; exact-default scalar setters omitted offline; immutable programs/meshes/textures/curves shared",
+"native_particle_layers": 12,
+"native_process_private": true,
+"owner_unit_scale_live": true,
+"retained_native_lights": Array[NodePath]([NodePath("OmniLight3D")]),
+"retained_native_players": Array[NodePath]([NodePath("AnimationPlayer")]),
+"source_clock": "144Hz monotonic; source_clock/fireball_detail_age final writes, original Init/GPU delta retained",
+"source_constructor": "res://assets/vfx/sources/7449f867b8ff0e78c354/fireball_turbulence.gd",
+"source_history_or_owner_saved": false,
+"source_phase": "res://assets/vfx/extensions/followup-20261020/sources/a20c207cb994c0ce6dd4/00.tres",
+"source_script_sha256": "4ba1c727647ebe53d8020dfd26a5d1df0f728d223f97ad56483cf3e65e3859f9",
+"source_sha256": "84dde014975bd6b76312fecd13a637b297e4629a030fba0b842ae7a68d034b64"
+}

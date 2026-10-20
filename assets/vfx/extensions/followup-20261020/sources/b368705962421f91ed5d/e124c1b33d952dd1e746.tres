@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_bbh27"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_1yne1"]
+
+[sub_resource type="Resource" id="Resource_18ufk"]
+script = ExtResource("1_bbh27")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/9f465076ab964fa94a92/e124c1b33d952dd1e746.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_1yne1")
+clip_id = "review/beacon_of_hope/back/lifecycle"
+label = "Lifecycle — existing recorded geometry"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/beacon_of_hope.json"
+components = Array[Resource]([SubResource("Resource_18ufk")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 6.0
+simulation_hz = 144.0
+options = {
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat"
+}

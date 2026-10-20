@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "lights"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/b886461c95443c086930/field.gd"
+input = {"phase": "hold", "source_time_offset": 0.5, "palette": ["233b4c", "4c7a92", "81b3c7", "afd4e2", "d2e8ed"], "palette_options": {"quantize": false, "emission_gain": 0.7}, "owner_uuid": "fixture-dancing-A", "optical_source_uuid": "fixture-light-A", "state": {"owner_uuid": "fixture-dancing-A", "present": true, "observed": true, "suppressed": false, "visibility": 1.0}, "dancing_lights_bank": "res://assets/vfx/extensions/followup-20261020/sources/a2edc0e2cc34f5ee65de/lights.res"}
+options = {}
+provenance = "Pinned native selection; agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#dancing-lights"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/dancing-lights/scenarios/move_cleanup/hold"
+label = "move_cleanup hold"
+phase = "hold"
+variant = "default"
+source_recipe = "agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#dancing-lights"
+bindings = [{"component": "lights", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {}

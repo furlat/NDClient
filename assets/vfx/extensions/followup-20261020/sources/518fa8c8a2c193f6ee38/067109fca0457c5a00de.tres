@@ -1,0 +1,34 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_5c1v2"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_33m1o"]
+
+[sub_resource type="Resource" id="Resource_gwbm3"]
+script = ExtResource("1_5c1v2")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/afa5365263a15531b188/067109fca0457c5a00de.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_33m1o")
+clip_id = "spells/bless/back/lifecycle"
+label = "Native application — existing recorded geometry"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/bless.json"
+components = Array[Resource]([SubResource("Resource_gwbm3")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 5.1
+simulation_hz = 144.0
+options = {
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat"
+}

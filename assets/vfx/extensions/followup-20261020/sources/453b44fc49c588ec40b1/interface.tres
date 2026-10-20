@@ -1,0 +1,60 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_feeblemind_persistent/prepared.scn" id="1_1hlgc"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_ctjip"]
+
+[resource]
+script = ExtResource("2_ctjip")
+scene = ExtResource("1_1hlgc")
+bindings = [{
+"node_index": 2,
+"node_path": "./receiving/ReceivingForm0Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_feeblemind_persistent/prepared.scn::Shader_ol28r"
+}, {
+"node_index": 3,
+"node_path": "./receiving/ReceivingForm1Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/b438fd3b5c8bb74a688e81d8bf72200cb64a51e1dc7ca4c5968fb6bd3f1aa0bf.res"
+}, {
+"node_index": 4,
+"node_path": "./receiving/ReceivingForm0Layer1",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_feeblemind_persistent/prepared.scn::Shader_1qps0"
+}, {
+"node_index": 5,
+"node_path": "./receiving/ReceivingForm1Layer1",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/ea0554a42386ffeb1317226d6d16cd04ab203c5b2507da8dd3de52b2bfef6767.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_feeblemind_persistent/prepared.scn",
+"scene_sha256": "6086bf96cc9947b8c3bf1505f8d3b694ea518f165d513d499c4d4ef4fc13e932",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_feeblemind_persistent/prepared.scn::Shader_ol28r",
+"source_sha256": "204fc20fb629d166bf4bd8a8556d79f58f673f4b4a71835a08ad697693fc61f6",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/b438fd3b5c8bb74a688e81d8bf72200cb64a51e1dc7ca4c5968fb6bd3f1aa0bf.res",
+"source_sha256": "204fc20fb629d166bf4bd8a8556d79f58f673f4b4a71835a08ad697693fc61f6",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_feeblemind_persistent/prepared.scn::Shader_1qps0",
+"source_sha256": "d35891ba193ba46c8f680123b86f567fbc03c4fcd1d83f7c92a830466b1171b0",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/ea0554a42386ffeb1317226d6d16cd04ab203c5b2507da8dd3de52b2bfef6767.res",
+"source_sha256": "d35891ba193ba46c8f680123b86f567fbc03c4fcd1d83f7c92a830466b1171b0",
+"unused_original_clock_declarations": ["control_clock"]
+}],
+"source_program_equations_changed": false
+}

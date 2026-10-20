@@ -1,0 +1,1355 @@
+[gd_resource type="Resource" format=4]
+
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/e47f4ee632ee35a1aeb7/program-16281b186a6145d9348a0e372505a571f4ac22aa36160d972f52929c3921340f.gdshader" id="1_wabae"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/1e7ee3642c6bda21bd2d/texture-ab3c8f452b99f539fe715ef0b6dfa5bc75786a821d92ca070de5c92952b097ee.res" id="2_1dnfr"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/eda459c3f1aa02bae0b6/texture-72f5b700624116f6e6cf8c8f63b7653a45c3d30c5af2b06bc84474a30f26bbd2.res" id="3_s1alg"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/400e13409a1c71c48444/program-86d618939357e5c4c62927898446c2e3b20e6951d5a5cbde44db7fa2e177ce5d.gdshader" id="4_gw478"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/d80a42f8dea0952a1fda/texture-fe2c5d9510d531962bb4ff8da39e4ed294115200bddcba0eae02c0608b416ce5.res" id="5_a6qr5"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/f10af58df8f689c59d53/program-05cb66599a55640baebf9c56e5d2ec3b9085337ae8b0368bfd8d2d7ea601e1a3.gdshader" id="6_qikdf"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/followup-20261020/sources/a57678bbfbe2c98d4e17/texture-54ea6f7b49ceb449c89dd65e9807b4aaeb9115437bf97f58a7c481d3096f9e66.res" id="7_rjjge"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/58e399ede4cc3ae23944/program-858b9280282fd8607d886a65244c46ce2223c594e0d0a842a5728c2140bce862.gdshader" id="8_ap7p2"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/followup-20261020/sources/31d4f9fc7323e4a536e1/program-bd064c92653aabade46064fe5800b4000c672603586a2d3e7d2bb6afc9198177.gdshader" id="9_8o2as"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/33a49af5fbfca3c6ad50/texture.res" id="10_kugvj"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/96d99f9415c238207665/texture.res" id="11_1tanv"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/7ba83c1f7b0e9719534f/texture.res" id="12_4q4nm"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/extensions/followup-20261020/sources/4befeeb1567fd306a086/mesh-032.res" id="13_el0jw"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/extensions/followup-20261020/sources/834b3ca248913c7467c1/mesh-033.res" id="14_h417q"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/extensions/followup-20261020/sources/c66e1fea67fee22d6f8c/mesh-003.res" id="15_l0yus"]
+[ext_resource type="ArrayMesh" path="res://assets/vfx/extensions/followup-20261020/sources/f55ec88595d552acd98b/mesh-004.res" id="16_j7018"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/124102cfe686518829f3/mesh-040.res" id="17_c1emy"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/779535a7d06609e2f86d/mesh-041.res" id="18_8wwg2"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/844be412516ecde941b3/mesh-042.res" id="19_q3663"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/ed8e39c317e6dacffb7d/mesh-043.res" id="20_uposj"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/f22e8a8ee0593b9c9a8f/mesh-044.res" id="21_ey8i1"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/5682f8ba20fa179cf36d/mesh-045.res" id="22_i5blm"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/277c510100a3271f4913/mesh-046.res" id="23_bwe6k"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/f40719208cc39b713363/mesh-047.res" id="24_4nwsj"]
+[ext_resource type="QuadMesh" path="res://assets/vfx/extensions/followup-20261020/sources/eaf12b0f89788b234f09/mesh-048.res" id="25_k4jhy"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/84da5589dc412e3f6c3b/call_live_strike-construct.gd" id="26_r8lj7"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/beaa4b2661d8dfa3ec02/bank.gd" id="27_4keub"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res" id="28_uharg"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res" id="29_t3ix2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_161mh"]
+render_priority = 0
+shader = ExtResource("1_wabae")
+shader_parameter/core_color = Color(0.09803922, 0.56078434, 0.88235295, 1)
+shader_parameter/glow_color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.82
+shader_parameter/alpha_mult = 1.0
+shader_parameter/noise_tex = ExtResource("2_1dnfr")
+shader_parameter/noise_scale = 3.5
+shader_parameter/noise_scroll = 1.6
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_shape_atlas = ExtResource("3_s1alg")
+shader_parameter/gpu_primary_segments = 140
+shader_parameter/gpu_primary_lanes = 5
+shader_parameter/gpu_fork_count = 39
+shader_parameter/gpu_fork_samples = 13
+shader_parameter/gpu_variations = 32
+shader_parameter/gpu_link_from = Vector3(0, 0, 0)
+shader_parameter/gpu_link_to = Vector3(0, 0, 1)
+shader_parameter/gpu_edge_delay = 0.0
+shader_parameter/gpu_speed = 26.0
+shader_parameter/gpu_width = 0.44
+shader_parameter/gpu_opacity = 1.0
+shader_parameter/gpu_persistent = false
+shader_parameter/gpu_glow = false
+shader_parameter/gpu_secondary_mode = true
+shader_parameter/gpu_secondary_windows = PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0)
+shader_parameter/gpu_link_width_gain = 1.0
+shader_parameter/gpu_fork_width_gain = 1.0
+shader_parameter/gpu_plane_y = 1e+20
+metadata/factory_prepared_shader = ExtResource("1_wabae")
+metadata/factory_opacity_prepared_shader = ExtResource("1_wabae")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lyx0g"]
+render_priority = 0
+shader = ExtResource("4_gw478")
+shader_parameter/color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.7
+shader_parameter/alpha_mult = 1.0
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_shape_atlas = ExtResource("3_s1alg")
+shader_parameter/gpu_primary_segments = 140
+shader_parameter/gpu_primary_lanes = 5
+shader_parameter/gpu_fork_count = 39
+shader_parameter/gpu_fork_samples = 13
+shader_parameter/gpu_variations = 32
+shader_parameter/gpu_link_from = Vector3(0, 0, 0)
+shader_parameter/gpu_link_to = Vector3(0, 0, 1)
+shader_parameter/gpu_edge_delay = 0.0
+shader_parameter/gpu_speed = 26.0
+shader_parameter/gpu_width = 0.44
+shader_parameter/gpu_opacity = 1.0
+shader_parameter/gpu_persistent = false
+shader_parameter/gpu_glow = true
+shader_parameter/gpu_secondary_mode = true
+shader_parameter/gpu_secondary_windows = PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0)
+shader_parameter/gpu_link_width_gain = 1.0
+shader_parameter/gpu_fork_width_gain = 1.0
+shader_parameter/gpu_plane_y = 1e+20
+metadata/factory_prepared_shader = ExtResource("4_gw478")
+metadata/factory_opacity_prepared_shader = ExtResource("4_gw478")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4m8l7"]
+render_priority = 0
+shader = ExtResource("1_wabae")
+shader_parameter/core_color = Color(0.09803922, 0.56078434, 0.88235295, 1)
+shader_parameter/glow_color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.82
+shader_parameter/alpha_mult = 1.0
+shader_parameter/noise_tex = ExtResource("2_1dnfr")
+shader_parameter/noise_scale = 3.5
+shader_parameter/noise_scroll = 1.6
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_shape_atlas = ExtResource("5_a6qr5")
+shader_parameter/gpu_primary_segments = 140
+shader_parameter/gpu_primary_lanes = 5
+shader_parameter/gpu_fork_count = 39
+shader_parameter/gpu_fork_samples = 13
+shader_parameter/gpu_variations = 32
+shader_parameter/gpu_link_from = Vector3(0, 0, 0)
+shader_parameter/gpu_link_to = Vector3(0, 0, 1)
+shader_parameter/gpu_edge_delay = 0.0
+shader_parameter/gpu_speed = 26.0
+shader_parameter/gpu_width = 0.44
+shader_parameter/gpu_opacity = 1.0
+shader_parameter/gpu_persistent = false
+shader_parameter/gpu_glow = false
+shader_parameter/gpu_secondary_mode = true
+shader_parameter/gpu_secondary_windows = PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0)
+shader_parameter/gpu_link_width_gain = 1.0
+shader_parameter/gpu_fork_width_gain = 1.0
+shader_parameter/gpu_plane_y = 1e+20
+metadata/factory_prepared_shader = ExtResource("1_wabae")
+metadata/factory_opacity_prepared_shader = ExtResource("1_wabae")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0tlfg"]
+render_priority = 0
+shader = ExtResource("4_gw478")
+shader_parameter/color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.7
+shader_parameter/alpha_mult = 1.0
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_shape_atlas = ExtResource("5_a6qr5")
+shader_parameter/gpu_primary_segments = 140
+shader_parameter/gpu_primary_lanes = 5
+shader_parameter/gpu_fork_count = 39
+shader_parameter/gpu_fork_samples = 13
+shader_parameter/gpu_variations = 32
+shader_parameter/gpu_link_from = Vector3(0, 0, 0)
+shader_parameter/gpu_link_to = Vector3(0, 0, 1)
+shader_parameter/gpu_edge_delay = 0.0
+shader_parameter/gpu_speed = 26.0
+shader_parameter/gpu_width = 0.44
+shader_parameter/gpu_opacity = 1.0
+shader_parameter/gpu_persistent = false
+shader_parameter/gpu_glow = true
+shader_parameter/gpu_secondary_mode = true
+shader_parameter/gpu_secondary_windows = PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0)
+shader_parameter/gpu_link_width_gain = 1.0
+shader_parameter/gpu_fork_width_gain = 1.0
+shader_parameter/gpu_plane_y = 1e+20
+metadata/factory_prepared_shader = ExtResource("4_gw478")
+metadata/factory_opacity_prepared_shader = ExtResource("4_gw478")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ofcr3"]
+render_priority = 0
+shader = ExtResource("6_qikdf")
+shader_parameter/core_color = Color(0.09803922, 0.56078434, 0.88235295, 1)
+shader_parameter/glow_color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.82
+shader_parameter/alpha_mult = 0.0
+shader_parameter/noise_tex = ExtResource("2_1dnfr")
+shader_parameter/noise_scale = 3.5
+shader_parameter/noise_scroll = 1.6
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_contact_random = ExtResource("7_rjjge")
+shader_parameter/gpu_contact_count = 0
+shader_parameter/gpu_contact_origin = Vector3(0, 0, 0)
+shader_parameter/gpu_contact_to_local = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/gpu_contact_age = 0.0
+metadata/factory_prepared_shader = ExtResource("6_qikdf")
+metadata/factory_opacity_prepared_shader = ExtResource("6_qikdf")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pow3w"]
+render_priority = 0
+shader = ExtResource("8_ap7p2")
+shader_parameter/core_color = Color(0.09803922, 0.56078434, 0.88235295, 1)
+shader_parameter/glow_color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.82
+shader_parameter/alpha_mult = 0.0
+shader_parameter/noise_tex = ExtResource("2_1dnfr")
+shader_parameter/noise_scale = 3.5
+shader_parameter/noise_scroll = 1.6
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_hand_origin = Vector3(0, 0, 0)
+metadata/factory_prepared_shader = ExtResource("8_ap7p2")
+metadata/factory_opacity_prepared_shader = ExtResource("8_ap7p2")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bjqhg"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("10_kugvj")
+shader_parameter/color = Color(0.09411765, 0.4862745, 0.8666667, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tp3ce"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("11_1tanv")
+shader_parameter/color = Color(0.9372549, 0.7254902, 0.33333334, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b26yd"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("12_4q4nm")
+shader_parameter/color = Color(0.9372549, 0.7254902, 0.33333334, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ddvh5"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("10_kugvj")
+shader_parameter/color = Color(0.09411765, 0.4862745, 0.8666667, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ppn37"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("11_1tanv")
+shader_parameter/color = Color(0.9372549, 0.7254902, 0.33333334, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hkxy7"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("12_4q4nm")
+shader_parameter/color = Color(0.9372549, 0.7254902, 0.33333334, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ba24d"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("10_kugvj")
+shader_parameter/color = Color(0.09411765, 0.4862745, 0.8666667, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ub6n"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("11_1tanv")
+shader_parameter/color = Color(0.9372549, 0.7254902, 0.33333334, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6tk14"]
+render_priority = 0
+shader = ExtResource("9_8o2as")
+shader_parameter/tex = ExtResource("12_4q4nm")
+shader_parameter/color = Color(0.9372549, 0.7254902, 0.33333334, 1)
+shader_parameter/alpha_mult = 0.0
+shader_parameter/emission = 0.75
+shader_parameter/billboard = true
+metadata/factory_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_opacity_prepared_shader = ExtResource("9_8o2as")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vhc33"]
+render_priority = 0
+shader = ExtResource("6_qikdf")
+shader_parameter/core_color = Color(0.09803922, 0.56078434, 0.88235295, 1)
+shader_parameter/glow_color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.82
+shader_parameter/alpha_mult = 0.0
+shader_parameter/noise_tex = ExtResource("2_1dnfr")
+shader_parameter/noise_scale = 3.5
+shader_parameter/noise_scroll = 1.6
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_contact_random = ExtResource("7_rjjge")
+shader_parameter/gpu_contact_count = 0
+shader_parameter/gpu_contact_origin = Vector3(0, 0, 0)
+shader_parameter/gpu_contact_to_local = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/gpu_contact_age = 0.0
+metadata/factory_prepared_shader = ExtResource("6_qikdf")
+metadata/factory_opacity_prepared_shader = ExtResource("6_qikdf")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trv5i"]
+render_priority = 0
+shader = ExtResource("6_qikdf")
+shader_parameter/core_color = Color(0.09803922, 0.56078434, 0.88235295, 1)
+shader_parameter/glow_color = Color(0.02745098, 0.28627452, 0.62352943, 1)
+shader_parameter/emission = 0.82
+shader_parameter/alpha_mult = 0.0
+shader_parameter/noise_tex = ExtResource("2_1dnfr")
+shader_parameter/noise_scale = 3.5
+shader_parameter/noise_scroll = 1.6
+shader_parameter/electric_clock = 0.0
+shader_parameter/gpu_contact_random = ExtResource("7_rjjge")
+shader_parameter/gpu_contact_count = 0
+shader_parameter/gpu_contact_origin = Vector3(0, 0, 0)
+shader_parameter/gpu_contact_to_local = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/gpu_contact_age = 0.0
+metadata/factory_prepared_shader = ExtResource("6_qikdf")
+metadata/factory_opacity_prepared_shader = ExtResource("6_qikdf")
+metadata/factory_clock_names = []
+metadata/factory_clock_pool_required = false
+metadata/factory_world_space_uniform = false
+
+[resource]
+script = ExtResource("27_4keub")
+source_phase = "res://assets/vfx/extensions/followup-20261020/sources/511b48487f093345b692/phase-0.tres"
+source_sha256 = "c427893f390071b91dd27cce5310abad2da432c0f6090a118bde0e127c02f571"
+settings = {
+"contact_schedule": [{
+"at": 0.55,
+"endpoint": 2
+}, {
+"at": 1.6,
+"endpoint": 2
+}],
+"core_color": "198fe1",
+"edges": [{
+"delay": 0.28,
+"from": 0,
+"to": 1
+}, {
+"delay": 1.33,
+"from": 0,
+"to": 1
+}],
+"emission": 0.82,
+"endpoint_count": 3,
+"glow_color": "07499f",
+"gpu_shape_banks": ["res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res", "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res"],
+"heavy": true,
+"secondary_windows": [[0.12, 0.38, 0.85], [0.31, 0.59, 0.7], [0.48, 0.81, 0.9], [0.68, 0.94, 0.55]],
+"seed": 47291,
+"speed": 26.0,
+"width": 0.44
+}
+program = ExtResource("26_r8lj7")
+operands = [false, 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("13_el0jw"), false, 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("14_h417q"), false, 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("13_el0jw"), false, 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("14_h417q"), false, 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("15_l0yus"), 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("16_j7018"), 2, 0, ExtResource("17_c1emy"), 2, 0, ExtResource("18_8wwg2"), 2, 0, ExtResource("19_q3663"), 2, 0, ExtResource("20_uposj"), 2, 0, ExtResource("21_ey8i1"), 2, 0, ExtResource("22_i5blm"), 2, 0, ExtResource("23_bwe6k"), 2, 0, ExtResource("24_4nwsj"), 2, 0, ExtResource("25_k4jhy"), false, 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("15_l0yus"), false, 2, 0, AABB(-70, -70, -70, 140, 140, 140), ExtResource("15_l0yus"), SubResource("ShaderMaterial_161mh"), SubResource("ShaderMaterial_lyx0g"), SubResource("ShaderMaterial_4m8l7"), SubResource("ShaderMaterial_0tlfg"), SubResource("ShaderMaterial_ofcr3"), SubResource("ShaderMaterial_pow3w"), SubResource("ShaderMaterial_bjqhg"), SubResource("ShaderMaterial_tp3ce"), SubResource("ShaderMaterial_b26yd"), SubResource("ShaderMaterial_ddvh5"), SubResource("ShaderMaterial_ppn37"), SubResource("ShaderMaterial_hkxy7"), SubResource("ShaderMaterial_ba24d"), SubResource("ShaderMaterial_6ub6n"), SubResource("ShaderMaterial_6tk14"), SubResource("ShaderMaterial_vhc33"), SubResource("ShaderMaterial_trv5i")]
+shapes = Array[Resource]([ExtResource("28_uharg"), ExtResource("29_t3ix2")])
+templates = Array[ShaderMaterial]([SubResource("ShaderMaterial_161mh"), SubResource("ShaderMaterial_lyx0g"), SubResource("ShaderMaterial_4m8l7"), SubResource("ShaderMaterial_0tlfg"), SubResource("ShaderMaterial_ofcr3"), SubResource("ShaderMaterial_pow3w"), SubResource("ShaderMaterial_bjqhg"), SubResource("ShaderMaterial_tp3ce"), SubResource("ShaderMaterial_b26yd"), SubResource("ShaderMaterial_ddvh5"), SubResource("ShaderMaterial_ppn37"), SubResource("ShaderMaterial_hkxy7"), SubResource("ShaderMaterial_ba24d"), SubResource("ShaderMaterial_6ub6n"), SubResource("ShaderMaterial_6tk14"), SubResource("ShaderMaterial_vhc33"), SubResource("ShaderMaterial_trv5i")])
+node_specs = Array[Dictionary]([{
+"class": "Node3D",
+"name": "network",
+"parent": "root",
+"path": ".",
+"properties": []
+}, {
+"class": "MeshInstance3D",
+"name": "ElectricCore0",
+"parent": ".",
+"path": "ElectricCore0",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 0,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("13_el0jw")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "ElectricGlow0",
+"parent": ".",
+"path": "ElectricGlow0",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 1,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("14_h417q")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "ElectricCore1",
+"parent": ".",
+"path": "ElectricCore1",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 2,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("13_el0jw")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "ElectricGlow1",
+"parent": ".",
+"path": "ElectricGlow1",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 3,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("14_h417q")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "MeasuredContactArcs0",
+"parent": ".",
+"path": "MeasuredContactArcs0",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 4,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("15_l0yus")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "SourceHandCoils",
+"parent": ".",
+"path": "SourceHandCoils",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 5,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("16_j7018")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0006_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0006_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 6,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("17_c1emy")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0007_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0007_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 7,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("18_8wwg2")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0008_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0008_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 8,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("19_q3663")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0009_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0009_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 9,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("20_uposj")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0010_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0010_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 10,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("21_ey8i1")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0011_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0011_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 11,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("22_i5blm")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0012_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0012_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 12,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("23_bwe6k")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0013_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0013_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 13,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("24_4nwsj")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "FactoryGenerated_0014_MeshInstance3D",
+"parent": ".",
+"path": "FactoryGenerated_0014_MeshInstance3D",
+"properties": [{
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 14,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("25_k4jhy")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "MeasuredContactArcs1",
+"parent": ".",
+"path": "MeasuredContactArcs1",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 15,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("15_l0yus")
+}
+}]
+}, {
+"class": "MeshInstance3D",
+"name": "MeasuredContactArcs2",
+"parent": ".",
+"path": "MeasuredContactArcs2",
+"properties": [{
+"field": "visible",
+"operand": {
+"kind": "immutable_value",
+"value": false
+}
+}, {
+"field": "layers",
+"operand": {
+"kind": "immutable_value",
+"value": 2
+}
+}, {
+"field": "material_override",
+"operand": {
+"index": 16,
+"kind": "private_material"
+}
+}, {
+"field": "cast_shadow",
+"operand": {
+"kind": "immutable_value",
+"value": 0
+}
+}, {
+"field": "custom_aabb",
+"operand": {
+"kind": "immutable_value",
+"value": AABB(-70, -70, -70, 140, 140, 140)
+}
+}, {
+"field": "mesh",
+"operand": {
+"kind": "immutable_value",
+"value": ExtResource("15_l0yus")
+}
+}]
+}])
+material_specs = Array[Dictionary]([{
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("1_wabae"),
+&"factory_prepared_shader": ExtResource("1_wabae"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"core_color": Color(0.09803922, 0.56078434, 0.88235295, 1),
+"emission": 0.82,
+"glow_color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"gpu_fork_count": 39,
+"gpu_primary_lanes": 5,
+"gpu_primary_segments": 140,
+"gpu_secondary_mode": true,
+"gpu_secondary_windows": PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0),
+"gpu_shape_atlas": ExtResource("3_s1alg"),
+"gpu_width": 0.44,
+"noise_tex": ExtResource("2_1dnfr")
+},
+"render_priority": 0,
+"shader": ExtResource("1_wabae")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("4_gw478"),
+&"factory_prepared_shader": ExtResource("4_gw478"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"emission": 0.7,
+"gpu_fork_count": 39,
+"gpu_glow": true,
+"gpu_primary_lanes": 5,
+"gpu_primary_segments": 140,
+"gpu_secondary_mode": true,
+"gpu_secondary_windows": PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0),
+"gpu_shape_atlas": ExtResource("3_s1alg"),
+"gpu_width": 0.44
+},
+"render_priority": 0,
+"shader": ExtResource("4_gw478")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("1_wabae"),
+&"factory_prepared_shader": ExtResource("1_wabae"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"core_color": Color(0.09803922, 0.56078434, 0.88235295, 1),
+"emission": 0.82,
+"glow_color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"gpu_fork_count": 39,
+"gpu_primary_lanes": 5,
+"gpu_primary_segments": 140,
+"gpu_secondary_mode": true,
+"gpu_secondary_windows": PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0),
+"gpu_shape_atlas": ExtResource("5_a6qr5"),
+"gpu_width": 0.44,
+"noise_tex": ExtResource("2_1dnfr")
+},
+"render_priority": 0,
+"shader": ExtResource("1_wabae")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("4_gw478"),
+&"factory_prepared_shader": ExtResource("4_gw478"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"emission": 0.7,
+"gpu_fork_count": 39,
+"gpu_glow": true,
+"gpu_primary_lanes": 5,
+"gpu_primary_segments": 140,
+"gpu_secondary_mode": true,
+"gpu_secondary_windows": PackedVector4Array(0.12, 0.38, 0.85, 0, 0.31, 0.59, 0.7, 0, 0.48, 0.81, 0.9, 0, 0.68, 0.94, 0.55, 0),
+"gpu_shape_atlas": ExtResource("5_a6qr5"),
+"gpu_width": 0.44
+},
+"render_priority": 0,
+"shader": ExtResource("4_gw478")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("6_qikdf"),
+&"factory_prepared_shader": ExtResource("6_qikdf"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"core_color": Color(0.09803922, 0.56078434, 0.88235295, 1),
+"emission": 0.82,
+"glow_color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"gpu_contact_random": ExtResource("7_rjjge"),
+"noise_tex": ExtResource("2_1dnfr")
+},
+"render_priority": 0,
+"shader": ExtResource("6_qikdf")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("8_ap7p2"),
+&"factory_prepared_shader": ExtResource("8_ap7p2"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"core_color": Color(0.09803922, 0.56078434, 0.88235295, 1),
+"emission": 0.82,
+"glow_color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"noise_tex": ExtResource("2_1dnfr")
+},
+"render_priority": 0,
+"shader": ExtResource("8_ap7p2")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.09411765, 0.4862745, 0.8666667, 1),
+"emission": 0.75,
+"tex": ExtResource("10_kugvj")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.9372549, 0.7254902, 0.33333334, 1),
+"emission": 0.75,
+"tex": ExtResource("11_1tanv")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.9372549, 0.7254902, 0.33333334, 1),
+"emission": 0.75,
+"tex": ExtResource("12_4q4nm")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.09411765, 0.4862745, 0.8666667, 1),
+"emission": 0.75,
+"tex": ExtResource("10_kugvj")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.9372549, 0.7254902, 0.33333334, 1),
+"emission": 0.75,
+"tex": ExtResource("11_1tanv")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.9372549, 0.7254902, 0.33333334, 1),
+"emission": 0.75,
+"tex": ExtResource("12_4q4nm")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.09411765, 0.4862745, 0.8666667, 1),
+"emission": 0.75,
+"tex": ExtResource("10_kugvj")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.9372549, 0.7254902, 0.33333334, 1),
+"emission": 0.75,
+"tex": ExtResource("11_1tanv")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("9_8o2as"),
+&"factory_prepared_shader": ExtResource("9_8o2as"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"color": Color(0.9372549, 0.7254902, 0.33333334, 1),
+"emission": 0.75,
+"tex": ExtResource("12_4q4nm")
+},
+"render_priority": 0,
+"shader": ExtResource("9_8o2as")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("6_qikdf"),
+&"factory_prepared_shader": ExtResource("6_qikdf"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"core_color": Color(0.09803922, 0.56078434, 0.88235295, 1),
+"emission": 0.82,
+"glow_color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"gpu_contact_random": ExtResource("7_rjjge"),
+"noise_tex": ExtResource("2_1dnfr")
+},
+"render_priority": 0,
+"shader": ExtResource("6_qikdf")
+}, {
+"immutable_native_process": false,
+"metadata": {
+&"factory_clock_names": [],
+&"factory_clock_pool_required": false,
+&"factory_opacity_prepared_shader": ExtResource("6_qikdf"),
+&"factory_prepared_shader": ExtResource("6_qikdf"),
+&"factory_world_space_uniform": false
+},
+"parameters": {
+"alpha_mult": 0.0,
+"core_color": Color(0.09803922, 0.56078434, 0.88235295, 1),
+"emission": 0.82,
+"glow_color": Color(0.02745098, 0.28627452, 0.62352943, 1),
+"gpu_contact_random": ExtResource("7_rjjge"),
+"noise_tex": ExtResource("2_1dnfr")
+},
+"render_priority": 0,
+"shader": ExtResource("6_qikdf")
+}])
+stable_paths_verified = true
+receipt = {
+"actual_endpoints_or_pose_saved": false,
+"geometry": 17,
+"live_endpoint_and_contact_sample_inherited": true,
+"nodes": 18,
+"private_materials": 17,
+"runtime_source_compilation": false,
+"shape_metadata_correction_explicit": true,
+"source_shader_and_native_mesh_equations_unchanged": true
+}

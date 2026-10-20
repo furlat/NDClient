@@ -1,0 +1,33 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_i2oyb"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_wufap"]
+
+[sub_resource type="Resource" id="Resource_udl6e"]
+script = ExtResource("1_i2oyb")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/followup-20261020/sources/1d0fb3f4a40d1c380fae/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/followup-20261020/sources/39a1dc1a782b9e3b1b9c/ab05721fc3ab28666c1e.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_wufap")
+clip_id = "greater_invisibility_native/application"
+label = "Finite local receiving application — existing recorded geometry"
+phase = "application"
+variant = "native"
+source_recipe = "recipes/runtime_spells/invisibility.json"
+components = Array[Resource]([SubResource("Resource_udl6e")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+simulation_hz = 144.0
+options = {
+"recorded_source_rate": 144.0,
+"runtime_candidate": "prepared_existing_static_vat_sparse_private_native_materials"
+}

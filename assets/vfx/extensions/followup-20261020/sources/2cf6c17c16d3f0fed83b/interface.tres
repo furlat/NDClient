@@ -1,0 +1,27 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_shocked_persistent/prepared.scn" id="1_ctn0s"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_ty27b"]
+
+[resource]
+script = ExtResource("2_ty27b")
+scene = ExtResource("1_ctn0s")
+bindings = [{
+"node_index": 2,
+"node_path": "./network/MeasuredContactArcs1",
+"property_index": 1,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/6ddb99e4e5e30dfa2dab78714479fcd43c57f1d22f0db00611410a565e6ccae6.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_shocked_persistent/prepared.scn",
+"scene_sha256": "81b53d6471598c14d82f788ebcd79332cba30a5d0b5702835bb0452ba0bdc582",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/6ddb99e4e5e30dfa2dab78714479fcd43c57f1d22f0db00611410a565e6ccae6.res",
+"source_sha256": "2e20522c7faa9dd1f3b5931c280b19f2b569c1467a8012b68ab91ff3498390a1",
+"unused_original_clock_declarations": ["electric_clock", "gpu_contact_age"]
+}],
+"source_program_equations_changed": false
+}

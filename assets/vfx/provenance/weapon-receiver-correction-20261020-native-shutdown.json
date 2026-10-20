@@ -1,0 +1,203 @@
+{
+  "packaged": {
+    "log": ".runtime/vfx-package-20261018/weapon-receiver-correction-packaged-current-v1.log",
+    "log_sha256": "283d9c66d04f29eb0ffb8221b727c6775db3a295737a227af81bc7d6b332f8e5",
+    "shutdown": ".runtime/weapon-receiver-correction-20261020/actual-context-project/receiver-current-output/static-shutdown.json",
+    "shutdown_sha256": "cd42036a1d15eb037a1689271a7a876e8e27d56c87b50eea4c736033377fd075",
+    "actual_shutdown_state": {
+      "frame_post_draw": [],
+      "frame_pre_draw": [],
+      "process_frame": [],
+      "scope": "Actual full-preparation state after explicit shutdown. Diagnostic arguments temporarily add references; this is not a retained graph or a leak-free exit verdict.",
+      "script_owners": {
+        "Clock": {
+          "class": "GDScript",
+          "id": -9223372002344041011,
+          "object_metadata": {},
+          "path": "res://factory/packaging/occurrence_clock.gd",
+          "references_including_diagnostic": 15
+        },
+        "Program": {
+          "class": "GDScript",
+          "id": -9223372002629253685,
+          "object_metadata": {},
+          "path": "res://factory/components/weapon_appearance/program.gd",
+          "references_including_diagnostic": 11
+        },
+        "SourceMaterials": {
+          "class": "GDScript",
+          "id": -9223372002914466359,
+          "object_metadata": {},
+          "path": "res://factory/core/source_materials.gd",
+          "references_including_diagnostic": 42
+        }
+      },
+      "static_values": {
+        "clock_image": null,
+        "clock_programs": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "clock_texture": null,
+        "direct_claims": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "expanded_sources": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "free_slots": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Array"
+        },
+        "shader_interfaces": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "uniform_names": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "weapon_programs": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        }
+      }
+    },
+    "exact_engine_exit_errors": [
+      "ERROR: 3 resources still in use at exit."
+    ],
+    "retained_resources": [
+      {
+        "path": "res://factory/core/source_materials.gd",
+        "type": "GDScript"
+      },
+      {
+        "path": "res://factory/components/weapon_appearance/program.gd",
+        "type": "GDScript"
+      },
+      {
+        "path": "res://factory/packaging/occurrence_clock.gd",
+        "type": "GDScript"
+      }
+    ],
+    "objectdb_classes": {
+      "GDScriptNativeClass": 5,
+      "GDScript": 3
+    },
+    "engine_shutdown_clean": false,
+    "engine_errors_filtered": false,
+    "scope": "Three exact static GDScript class resources plus five builtin class references at engine exit. Actual native rendering/ownership checks pass; no live Nodes, Shaders, Materials, images or textures are retained. This is not a clean-exit certificate."
+  },
+  "source_cleanup": {
+    "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/weapon-receiver-cleanup-verbose-v1.log",
+    "log_sha256": "f7a25b367caf8dd9838e1d34b773cdd4bda1f480bf6e4a6b9ae15847061100d7",
+    "shutdown": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/evidence/weapon-appearance-20261020/receiver-cleanup-verbose-v1/static-shutdown.json",
+    "shutdown_sha256": "cd42036a1d15eb037a1689271a7a876e8e27d56c87b50eea4c736033377fd075",
+    "actual_shutdown_state": {
+      "frame_post_draw": [],
+      "frame_pre_draw": [],
+      "process_frame": [],
+      "scope": "Actual full-preparation state after explicit shutdown. Diagnostic arguments temporarily add references; this is not a retained graph or a leak-free exit verdict.",
+      "script_owners": {
+        "Clock": {
+          "class": "GDScript",
+          "id": -9223372002344041011,
+          "object_metadata": {},
+          "path": "res://factory/packaging/occurrence_clock.gd",
+          "references_including_diagnostic": 15
+        },
+        "Program": {
+          "class": "GDScript",
+          "id": -9223372002629253685,
+          "object_metadata": {},
+          "path": "res://factory/components/weapon_appearance/program.gd",
+          "references_including_diagnostic": 11
+        },
+        "SourceMaterials": {
+          "class": "GDScript",
+          "id": -9223372002914466359,
+          "object_metadata": {},
+          "path": "res://factory/core/source_materials.gd",
+          "references_including_diagnostic": 42
+        }
+      },
+      "static_values": {
+        "clock_image": null,
+        "clock_programs": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "clock_texture": null,
+        "direct_claims": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "expanded_sources": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "free_slots": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Array"
+        },
+        "shader_interfaces": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "uniform_names": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        },
+        "weapon_programs": {
+          "first_entries": [],
+          "size": 0,
+          "type": "Dictionary"
+        }
+      }
+    },
+    "exact_engine_exit_errors": [
+      "ERROR: 3 resources still in use at exit."
+    ],
+    "retained_resources": [
+      {
+        "path": "res://factory/core/source_materials.gd",
+        "type": "GDScript"
+      },
+      {
+        "path": "res://factory/components/weapon_appearance/program.gd",
+        "type": "GDScript"
+      },
+      {
+        "path": "res://factory/packaging/occurrence_clock.gd",
+        "type": "GDScript"
+      }
+    ],
+    "objectdb_classes": {
+      "GDScriptNativeClass": 5,
+      "GDScript": 3
+    },
+    "engine_shutdown_clean": false,
+    "engine_errors_filtered": false,
+    "scope": "Three exact static GDScript class resources plus five builtin class references at engine exit. Actual native rendering/ownership checks pass; no live Nodes, Shaders, Materials, images or textures are retained. This is not a clean-exit certificate."
+  },
+  "cleanup_receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/evidence/weapon-appearance-20261020/receiver-cleanup-verbose-v1/receipt.json",
+  "cleanup_receipt_sha256": "64235071a4a39669b8389558858e86629a99b42d4f736ce5c6cbbbc49b84c1d9",
+  "cleanup_checks": 64,
+  "packaged_checks": 118,
+  "engine_shutdown_clean": false
+}

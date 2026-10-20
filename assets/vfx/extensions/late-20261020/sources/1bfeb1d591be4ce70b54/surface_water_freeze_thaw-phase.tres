@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "surface"
+constructor_script = "res://assets/vfx/extensions/late-20261020/sources/161f0610c6995cab5fde/liquid.gd"
+input = {"liquid_bank": "res://assets/vfx/extensions/late-20261020/sources/4242a01edcdcc222e60a/surface_water_freeze_thaw-bank.tres"}
+options = {}
+provenance = "Pinned native selection; authored_liquid_material_review"
+
+[resource]
+script = ExtResource("script")
+clip_id = "surface_water_freeze_thaw"
+label = "Original physical spill with native freeze/thaw"
+phase = "lifecycle"
+variant = "water"
+source_recipe = "authored_liquid_material_review"
+bindings = [{"component": "surface", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 10.6
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-liquids-v375-20261018"}

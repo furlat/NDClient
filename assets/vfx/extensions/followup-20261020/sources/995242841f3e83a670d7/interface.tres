@@ -1,0 +1,82 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_weird_persistent/prepared.scn" id="1_15imn"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_rkvak"]
+
+[resource]
+script = ExtResource("2_rkvak")
+scene = ExtResource("1_15imn")
+bindings = [{
+"node_index": 2,
+"node_path": "./receiving/ReceivingForm0Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_0htxj"
+}, {
+"node_index": 3,
+"node_path": "./receiving/ReceivingForm1Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_hyyne"
+}, {
+"node_index": 4,
+"node_path": "./receiving/ReceivingForm2Layer0",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/96d8a99ec5f400cbb0344a2cf4957d2bd2d1986e2ebe6e186d651f7006b892b7.res"
+}, {
+"node_index": 5,
+"node_path": "./receiving/ReceivingForm0Layer1",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_0gqwq"
+}, {
+"node_index": 6,
+"node_path": "./receiving/ReceivingForm1Layer1",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_4aslu"
+}, {
+"node_index": 7,
+"node_path": "./receiving/ReceivingForm2Layer1",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/58bb56f0bc3ccd5b7bc509c4db9a0296c49da0b0f00c1dcb0525cecc46f0cc4e.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn",
+"scene_sha256": "67dc2087bf3e830531e4b5fd8fe4e6246e6b718a7b1af46590d7c222189de329",
+"shaders": [{
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_0htxj",
+"source_sha256": "7964b0b44104a1dde0e20e2481dcb6829847ab4641134a30e9761318c1120783",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_hyyne",
+"source_sha256": "7964b0b44104a1dde0e20e2481dcb6829847ab4641134a30e9761318c1120783",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/96d8a99ec5f400cbb0344a2cf4957d2bd2d1986e2ebe6e186d651f7006b892b7.res",
+"source_sha256": "7964b0b44104a1dde0e20e2481dcb6829847ab4641134a30e9761318c1120783",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_0gqwq",
+"source_sha256": "8987d0a3e76beb601d8f4bcf1cf178a7b9b7300124c692ef91bfd7cd50acbb3c",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/conditions/condition_weird_persistent/prepared.scn::Shader_4aslu",
+"source_sha256": "8987d0a3e76beb601d8f4bcf1cf178a7b9b7300124c692ef91bfd7cd50acbb3c",
+"unused_original_clock_declarations": ["control_clock"]
+}, {
+"fixed_original_operands": {},
+"resource": "res://assets/vfx/shared/resources/58bb56f0bc3ccd5b7bc509c4db9a0296c49da0b0f00c1dcb0525cecc46f0cc4e.res",
+"source_sha256": "8987d0a3e76beb601d8f4bcf1cf178a7b9b7300124c692ef91bfd7cd50acbb3c",
+"unused_original_clock_declarations": ["control_clock"]
+}],
+"source_program_equations_changed": false
+}

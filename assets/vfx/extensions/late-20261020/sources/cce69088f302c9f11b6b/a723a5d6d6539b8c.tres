@@ -1,0 +1,651 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/extensions/late-20261020/sources/3b0ef7cdc60d128f9eb0/strands.gd" id="1_ms30y"]
+[ext_resource type="Texture2D" path="res://assets/vfx/extensions/late-20261020/sources/ed6f200121742475d523/texture.res" id="2_1dafr"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/2cbeb7107041fdcdb8c8/program-13a4aa724d4fb91a.gdshader" id="3_gjq8o"]
+[ext_resource type="Shader" path="res://assets/vfx/extensions/late-20261020/sources/bc82f5828ae250c66799/program-894d03766f0d0a36.gdshader" id="4_jms4w"]
+[ext_resource type="PackedScene" path="res://assets/vfx/extensions/late-20261020/sources/036d7bb549e2620a91a1/a723a5d6d6539b8c.tscn" id="5_xmn35"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/late-20261020/sources/8ef97fae50a8f44d8d3f/bank.gd" id="6_d44h6"]
+
+[sub_resource type="Image" id="Image_o8tvi"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_tfxn8"]
+image = SubResource("Image_o8tvi")
+
+[sub_resource type="Image" id="Image_fcq3h"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_hy8v4"]
+image = SubResource("Image_fcq3h")
+
+[sub_resource type="Image" id="Image_vi3pp"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_memia"]
+image = SubResource("Image_vi3pp")
+
+[sub_resource type="Image" id="Image_js4w2"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_lc5gw"]
+image = SubResource("Image_js4w2")
+
+[sub_resource type="Image" id="Image_ojuds"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_m34h0"]
+image = SubResource("Image_ojuds")
+
+[sub_resource type="Image" id="Image_stfy2"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_86egw"]
+image = SubResource("Image_stfy2")
+
+[sub_resource type="Image" id="Image_0rxsd"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_igagi"]
+image = SubResource("Image_0rxsd")
+
+[sub_resource type="Image" id="Image_6stys"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_7st0d"]
+image = SubResource("Image_6stys")
+
+[sub_resource type="Image" id="Image_wxnt8"]
+data = {
+"data": PackedByteArray(39, 30, 36, 255, 74, 39, 48, 255, 116, 50, 60, 255, 165, 74, 66, 255, 201, 104, 78, 255, 227, 142, 99, 255, 237, 185, 139, 255, 244, 221, 186, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 8
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_ts4ad"]
+image = SubResource("Image_wxnt8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2uu28"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_tfxn8")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 0
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ljle0"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_hy8v4")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.317
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 1
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_80tph"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_memia")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.634
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 2
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nx0l0"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_lc5gw")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 3
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f5ext"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_m34h0")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.317
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 4
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xnek0"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_86egw")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.634
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 5
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vog4r"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_igagi")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 6
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1cbm2"]
+render_priority = 0
+shader = ExtResource("3_gjq8o")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_age = null
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_7st0d")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/noise_tex = ExtResource("2_1dafr")
+shader_parameter/age = 0.0
+shader_parameter/strength = 0.0
+shader_parameter/seed = 0.317
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_piece = 7
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_time = 0.0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_opacity_prepared_shader = ExtResource("3_gjq8o")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["age", "gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nq1y7"]
+render_priority = 0
+shader = ExtResource("4_jms4w")
+shader_parameter/vfx_package_clock_slot = 0
+shader_parameter/vfx_package_offset_gpu_summon_time = null
+shader_parameter/factory_world_to_source = null
+shader_parameter/neutral_family = SubResource("ImageTexture_ts4ad")
+shader_parameter/neutral_levels = PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/neutral_count = 8
+shader_parameter/neutral_gain = 1.45
+shader_parameter/neutral_albedo_is_encoded = true
+shader_parameter/strength = 1.0
+shader_parameter/side = 0.0
+shader_parameter/camera_ground = Vector2(0.70710677, 0.70710677)
+shader_parameter/gpu_summon_time = 0.0
+shader_parameter/gpu_summon_kind = 3
+shader_parameter/gpu_summon_camera_quadrant = 0
+metadata/neutral_family_palette = true
+metadata/factory_prepared_shader = ExtResource("4_jms4w")
+metadata/factory_opacity_prepared_shader = ExtResource("4_jms4w")
+metadata/factory_world_space_uniform = true
+metadata/factory_clock_names = ["gpu_summon_time"]
+metadata/factory_clock_pool_required = true
+
+[resource]
+script = ExtResource("6_d44h6")
+scene = ExtResource("5_xmn35")
+adapter_script = ExtResource("1_ms30y")
+material_nodes = Array[NodePath]([NodePath("Ribbon00"), NodePath("Ribbon01"), NodePath("Ribbon02"), NodePath("Ribbon03"), NodePath("Ribbon04"), NodePath("Ribbon05"), NodePath("Ribbon06"), NodePath("Ribbon07"), NodePath("AnalyticalSourceMotes")])
+material_templates = Array[ShaderMaterial]([SubResource("ShaderMaterial_2uu28"), SubResource("ShaderMaterial_ljle0"), SubResource("ShaderMaterial_80tph"), SubResource("ShaderMaterial_nx0l0"), SubResource("ShaderMaterial_f5ext"), SubResource("ShaderMaterial_xnek0"), SubResource("ShaderMaterial_vog4r"), SubResource("ShaderMaterial_1cbm2"), SubResource("ShaderMaterial_nq1y7")])
+material_settings = Array[Dictionary]([{
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 0,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_tfxn8"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.0,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 1,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_hy8v4"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.317,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 2,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_memia"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.634,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 3,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_lc5gw"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.0,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 4,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_m34h0"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.317,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 5,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_86egw"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.634,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 6,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_igagi"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.0,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["age", "gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_prepared_shader": ExtResource("3_gjq8o"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"age": 0.0,
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_kind": 3,
+"gpu_summon_piece": 7,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_7st0d"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"noise_tex": ExtResource("2_1dafr"),
+"seed": 0.317,
+"side": 0.0,
+"strength": 0.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}, {
+"metadata": {
+&"factory_clock_names": ["gpu_summon_time"],
+&"factory_clock_pool_required": true,
+&"factory_opacity_prepared_shader": ExtResource("4_jms4w"),
+&"factory_prepared_shader": ExtResource("4_jms4w"),
+&"factory_world_space_uniform": true,
+&"neutral_family_palette": true
+},
+"parameters": {
+"camera_ground": Vector2(0.70710677, 0.70710677),
+"gpu_summon_camera_quadrant": 0,
+"gpu_summon_kind": 3,
+"gpu_summon_time": 0.0,
+"neutral_albedo_is_encoded": true,
+"neutral_count": 8,
+"neutral_family": SubResource("ImageTexture_ts4ad"),
+"neutral_gain": 1.45,
+"neutral_levels": PackedFloat32Array(0.1254902, 0.24313726, 0.36862746, 0.5019608, 0.6392157, 0.76862746, 0.88235295, 0.95686275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"side": 0.0,
+"strength": 1.0,
+"vfx_package_clock_slot": 0
+},
+"render_priority": 0
+}])
+world_material_indices = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8])
+ribbon_paths = Array[NodePath]([NodePath("Ribbon00"), NodePath("Ribbon01"), NodePath("Ribbon02"), NodePath("Ribbon03"), NodePath("Ribbon04"), NodePath("Ribbon05"), NodePath("Ribbon06"), NodePath("Ribbon07")])
+mote_path = NodePath("AnalyticalSourceMotes")
+camera_ground = Vector2(0.70710677, 0.70710677)
+material_canonical_indices = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8])
+provenance = {
+"native_simulation_hz": 144,
+"reference_leaf_script": "res://assets/vfx/extensions/late-20261020/sources/0c856fb8d39af4bbf481/summoning_strands.gd",
+"source_age": 0.0,
+"source_endpoint_or_owner_saved": false,
+"source_input": {
+"neutral_family_palette": {
+"albedo_is_encoded_srgb": true,
+"colors": ["271e24", "4a2730", "74323c", "a54a42", "c9684e", "e38e63", "edb98b", "f4ddba"],
+"gain": 1.45,
+"neutral_levels": [32, 62, 94, 128, 163, 196, 225, 244]
+},
+"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn",
+"seed": 47291,
+"settings": {
+"animation": "",
+"camera_quadrant": 0,
+"kind": "cast"
+},
+"shaders": {
+"ground": "res://assets/vfx/extensions/late-20261020/sources/c464c97e2ebb61e0e97c/ground.gdshader",
+"mote": "res://assets/vfx/extensions/late-20261020/sources/ca3d4358a92bac67683f/mote.gdshader",
+"wisp": "res://assets/vfx/extensions/late-20261020/sources/45c91e9033764f175fb0/wisp.gdshader"
+},
+"side": "full",
+"simulation_hz": 144
+},
+"source_material_roles": Array[NodePath]([NodePath("Ribbon00"), NodePath("Ribbon01"), NodePath("Ribbon02"), NodePath("Ribbon03"), NodePath("Ribbon04"), NodePath("Ribbon05"), NodePath("Ribbon06"), NodePath("Ribbon07"), NodePath("AnalyticalSourceMotes")]),
+"source_phase": "res://assets/vfx/extensions/late-20261020/sources/2037077a213c0ef89eaf/phase-0.tres",
+"source_script": "res://assets/vfx/extensions/late-20261020/sources/0c856fb8d39af4bbf481/summoning_strands.gd",
+"source_script_sha256": "176c06eddb8d014f9f8f9d827408746ed2625cf221eeed306c8067816d3d17fd",
+"source_tick": 0
+}
+verified_stable_paths = true

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "surface"
+constructor_script = "res://assets/vfx/extensions/late-20261020/sources/3c38ae43b109802734cd/reactive_web_lit.gd"
+input = {"remove_at": 8.2, "events": [{"operation": "ignite", "at": 2.6, "cells": [[-1, -1], [-1, 0], [-1, 1]], "contact": [-1, 0], "front_seconds": 0.35}, {"operation": "ignite", "at": 4.0, "cells": [[0, -1], [1, -1], [0, 0], [1, 0], [0, 1], [1, 1]], "contact": [1, 0], "front_seconds": 0.35}, {"operation": "douse", "at": 5.5, "cells": [[-1, -1], [-1, 0], [-1, 1]], "contact": [-1, 0], "front_seconds": 0.35}, {"operation": "clear", "at": 7.5, "cells": [[-1, -1], [-1, 0], [-1, 1], [0, -1], [1, -1], [0, 0], [1, 0], [0, 1], [1, 1]], "contact": [0, 0], "front_seconds": 0.35}]}
+options = {}
+provenance = "Pinned native selection; authored_liquid_material_review / original ContinuousWeb / LeLu fire and smoke"
+
+[resource]
+script = ExtResource("script")
+clip_id = "web-local-fire"
+label = "Web-Local-Fire"
+phase = "lifecycle"
+variant = "web-local-fire"
+source_recipe = "authored_liquid_material_review / original ContinuousWeb / LeLu fire and smoke"
+bindings = [{"component": "surface", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 8.8
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

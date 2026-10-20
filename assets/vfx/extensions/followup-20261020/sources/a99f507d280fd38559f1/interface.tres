@@ -1,0 +1,101 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn" id="1_5l81d"]
+[ext_resource type="Script" path="res://assets/vfx/extensions/followup-20261020/sources/0fb7351681180386b03a/condition_pose_interface.gd" id="2_c6v41"]
+
+[resource]
+script = ExtResource("2_c6v41")
+scene = ExtResource("1_5l81d")
+bindings = [{
+"node_index": 2,
+"node_path": "./support/FactoryGenerated_0000_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_2pfl8"
+}, {
+"node_index": 3,
+"node_path": "./support/FactoryGenerated_0001_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_exgyc"
+}, {
+"node_index": 4,
+"node_path": "./support/FactoryGenerated_0002_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_7jrnx"
+}, {
+"node_index": 5,
+"node_path": "./support/FactoryGenerated_0003_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_46qmt"
+}, {
+"node_index": 6,
+"node_path": "./support/FactoryGenerated_0004_MeshInstance3D",
+"property_index": 2,
+"property_name": "material_override",
+"shader_path": "res://assets/vfx/shared/resources/2494a0dd3554445867300767be7e8ff42f8443228d452249ac712cb3989c004b.res"
+}]
+receipt = {
+"construction_or_actor_sampled": false,
+"scene": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn",
+"scene_sha256": "5b9385259fbd251197a57b326c461b2e5cfd4661ccfe34c67f64e70308e2203d",
+"shaders": [{
+"fixed_original_operands": {
+"phase": {
+"meaning": "Original authored fixed material phase offset, added to separately condition-clocked flow/scroll/pulse equations. It is not an elapsed-time input.",
+"source_evidence": "library/Boringdev/pack_boringdev_stylized_shield_vfx_bundle/vfx_1/shield/variants/shield_arcane.tscn",
+"value": 0.0
+}
+},
+"resource": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_2pfl8",
+"source_sha256": "af26937ed6c9418936b8829cd6b924ab6d94941bb4399efcab68b7d41065ec86",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {
+"phase": {
+"meaning": "Original authored fixed material phase offset, added to separately condition-clocked flow/scroll/pulse equations. It is not an elapsed-time input.",
+"source_evidence": "library/Boringdev/pack_boringdev_stylized_shield_vfx_bundle/vfx_1/shield/variants/shield_arcane.tscn",
+"value": 0.0
+}
+},
+"resource": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_exgyc",
+"source_sha256": "af26937ed6c9418936b8829cd6b924ab6d94941bb4399efcab68b7d41065ec86",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {
+"phase": {
+"meaning": "Original authored fixed material phase offset, added to separately condition-clocked flow/scroll/pulse equations. It is not an elapsed-time input.",
+"source_evidence": "library/Boringdev/pack_boringdev_stylized_shield_vfx_bundle/vfx_1/shield/variants/shield_arcane.tscn",
+"value": 0.0
+}
+},
+"resource": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_7jrnx",
+"source_sha256": "af26937ed6c9418936b8829cd6b924ab6d94941bb4399efcab68b7d41065ec86",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {
+"phase": {
+"meaning": "Original authored fixed material phase offset, added to separately condition-clocked flow/scroll/pulse equations. It is not an elapsed-time input.",
+"source_evidence": "library/Boringdev/pack_boringdev_stylized_shield_vfx_bundle/vfx_1/shield/variants/shield_arcane.tscn",
+"value": 0.0
+}
+},
+"resource": "res://assets/vfx/conditions/condition_foresight_persistent/prepared.scn::Shader_46qmt",
+"source_sha256": "af26937ed6c9418936b8829cd6b924ab6d94941bb4399efcab68b7d41065ec86",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}, {
+"fixed_original_operands": {
+"phase": {
+"meaning": "Original authored fixed material phase offset, added to separately condition-clocked flow/scroll/pulse equations. It is not an elapsed-time input.",
+"source_evidence": "library/Boringdev/pack_boringdev_stylized_shield_vfx_bundle/vfx_1/shield/variants/shield_arcane.tscn",
+"value": 0.0
+}
+},
+"resource": "res://assets/vfx/shared/resources/2494a0dd3554445867300767be7e8ff42f8443228d452249ac712cb3989c004b.res",
+"source_sha256": "af26937ed6c9418936b8829cd6b924ab6d94941bb4399efcab68b7d41065ec86",
+"unused_original_clock_declarations": ["support_clock", "gpu_support_seconds"]
+}],
+"source_program_equations_changed": false
+}
