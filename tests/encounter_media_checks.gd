@@ -1,341 +1,234 @@
 extends SceneTree
-const Reference = preload("res://tests/media_demand_reference.gd")
-const Media = preload("res://presentation/media_warmup.gd")
-const Encounter = preload("res://presentation/encounter_media.gd")
-const EnvironmentMedia = preload("res://presentation/environment_media.gd")
-const Characters = preload("res://presentation/characters.gd")
-const Catalog = preload("res://source_catalog.gd")
-const Protocol = preload("res://sdk/protocol.gd")
-var checks = 0
-var failures: Array = []
-
-func check(ok: bool, label: String) -> void:
-    checks += 1
-    if not ok: failures.append(label); print("ENCOUNTER_MEDIA_FAIL ",label)
-
-func _initialize() -> void: run.call_deferred()
-
-func accounting(data: Dictionary, label: String) -> void:
-    for category in [false,true]:
-        var cpu = 0; var gpu = 0; var sheets = 0; var pinned = 0; var pending = 0
-        for path in data.resident:
-            var row: Dictionary = data.resident[path]
-            if row.environment!=category: continue
-            sheets += 1; cpu += int(row.cpu_bytes); gpu += int(row.gpu_bytes)
-            if data.wanted.has(path) or data.preload_selected.has(path): pinned += int(row.bytes)
-        var requests: Array = data.pending.duplicate()
-        requests.append_array(data.decode_jobs)
-        for request in requests:
-            var environment: bool = data.environment.has(request.path) or data.encounter.get("environment",{}).has(request.path)
-            if environment==category: pending += 1
-        var actual = Media.diagnostics(data,category)
-        check(actual.cpu_bytes==cpu and actual.gpu_estimated_bytes==gpu and actual.estimated_bytes==cpu+gpu and actual.pinned_bytes==pinned and actual.pending==pending and actual.resident_sheets==sheets,
-            label+" incremental category accounting equals independent residency/queue sum "+str(category))
-
-func load_one(data: Dictionary) -> Dictionary:
-    var deadline = Time.get_ticks_msec()+20000
-    while Time.get_ticks_msec()<deadline:
-        var loaded = Media.poll(data)
-        if not loaded.is_empty(): return loaded
-        await process_frame
-    return {}
-
-func subset(full: Dictionary, paths: Array) -> Dictionary:
-    var result = {"revision":paths.size(),"paths":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"estimates":{},"errors":[]}
-    for path in paths:
-        result.paths[path] = full.paths[path]
-        result.estimates[path] = full.estimates[path]
-        for role in ["environment","fixtures","gpu_only","cpu_required"]:
-            if full[role].has(path): result[role][path] = true
-    result.estimate_summary = Encounter.estimate_summary(result)
-    return result
-
-func compare_selection(full: Dictionary, colour: String, companion: String, later: String) -> void:
-    # The fallback retains the original exhaustive budget selection. Compare
-    # the summary fast path against it, including a frozen unfinished boot.
-    var fast = Media.create()
-    var exhaustive = Media.create()
-    var both = subset(full,[colour,companion])
-    var next = subset(full,[later])
-    var unknown = subset(full,[companion,later])
-    unknown.estimates = unknown.estimates.duplicate()
-    unknown.estimates[companion] = {"error":"Unknown header fixture"}
-    unknown.estimate_summary = Encounter.estimate_summary(unknown)
-    var scenarios = [
-        {"plan":both,"required":{colour:full.paths[colour]},"budget":Media.BUDGET_BYTES,"label":"Full family fits"},
-        {"plan":next,"required":{later:full.paths[later]},"budget":Media.BUDGET_BYTES,"label":"Frozen boot outside new family"},
-        {"plan":both,"required":{later:full.paths[later]},"budget":int(full.estimates[later].bytes),"label":"Required extra exceeds optional budget"},
-        {"plan":unknown,"required":{companion:full.paths[companion]},"budget":Media.BUDGET_BYTES,"label":"Unknown required estimate"},
-    ]
-    for i in range(scenarios.size()):
-        var scenario: Dictionary = scenarios[i]
-        var exact: Dictionary = scenario.plan.duplicate()
-        exact.revision = i+100
-        var fallback: Dictionary = exact.duplicate()
-        fallback.erase("estimate_summary")
-        fast.budget_bytes = scenario.budget; exhaustive.budget_bytes = scenario.budget
-        Media.adopt_encounter(fast,exact,1); Media.adopt_encounter(exhaustive,fallback,1)
-        Media.demand(fast,scenario.required); Media.demand(exhaustive,scenario.required)
-        check(fast.preload_selected==exhaustive.preload_selected and fast.preload_skipped==exhaustive.preload_skipped
-            and fast.preload_estimated_bytes==exhaustive.preload_estimated_bytes and fast.boot_paths==exhaustive.boot_paths,
-            scenario.label+": summary selection agrees with original exhaustive budget policy")
-        check(fast.pending.slice(0,scenario.required.size()).map(func(row):return row.path)==scenario.required.keys(),
-            scenario.label+": mandatory request retains first priority")
-    Media.close(fast); Media.close(exhaustive)
-
-func compare_authored_demand(full: Dictionary, state: Dictionary, environment: Dictionary, cache: Dictionary) -> void:
-    var fast = Media.create()
-    var original = Media.create()
-    var accepted = full.duplicate()
-    # Keep the frozen original demand comparison on its legacy queue policy.
-    # Authored priority enqueue/retention is covered by preload_priority_checks.
-    accepted.erase("priority")
-    accepted.estimate_bytes = Encounter.estimate_bytes(accepted.estimates)
-    accepted.estimate_summary = Encounter.estimate_summary(accepted)
-    for data in [fast,original]: Media.adopt_encounter(data,accepted,1)
-    # Real registered clip paths and byte headers; residency acknowledgements
-    # below are typed uploaded-cache fixtures, not claimed native allocations.
-    for clip in ["Idle","Run","Attack1","Idle","Run"]:
-        var paths: Dictionary = environment.required.duplicate()
-        var cpu = environment.required.duplicate()
-        var gpu = {}
-        for actor in state.actors.values():
-            var sources = Characters.sheet_paths(actor,[clip],cache)
-            check(sources.ok,"Authored differential clip resolves: "+clip)
-            if not sources.ok: continue
-            paths.merge(sources.value); cpu.merge(sources.cpu_required); gpu.merge(sources.gpu_only)
-        var absolute = {}
-        for path in paths: absolute[path] = Catalog.media_path(path)
-        original.demand_snapshot = {}
-        Media.demand(fast,absolute,environment.required,environment.fixtures,gpu,cpu)
-        Reference.demand(original,absolute,environment.required,environment.fixtures,gpu,cpu)
-        check(fast.preload_selected==original.preload_selected and fast.preload_selected.keys()==original.preload_selected.keys()
-            and fast.pending==original.pending and fast.boot_paths==original.boot_paths
-            and fast.preload_estimated_bytes==original.preload_estimated_bytes and fast.required_estimated_bytes==original.required_estimated_bytes
-            and fast.preload_skipped==original.preload_skipped and fast.unknown_required==original.unknown_required,
-            "Actual "+clip+": capped greedy selection/order/queue/boot/bytes match frozen 927a55b")
-        check(fast.ready_paths==original.ready_paths and fast.selected_ready==original.selected_ready
-            and fast.selected_failed==original.selected_failed and fast.boot_waiting==original.boot_waiting,
-            "Actual "+clip+": incremental readiness/error/boot state matches frozen owner")
-        for category in [false,true]:
-            var actual = Media.diagnostics(fast,category)
-            var expected = Media.diagnostics(original,category)
-            for field in ["pending","resident_sheets","estimated_bytes","pinned_bytes","cpu_bytes","gpu_estimated_bytes"]:
-                check(actual[field]==expected[field],"Actual "+clip+": exact residency accounting "+str(category)+"/"+field)
-        for data in [fast,original]:
-            var pending: Array = data.pending
-            data.pending = []; data.queued.clear(); data.stats = {}
-            for request in pending:
-                var size: Dictionary = full.estimates[request.path]
-                var loaded = {"path":request.path,"cpu_bytes":size.cpu_bytes,"gpu_bytes":size.gpu_bytes}
-                if request.fixture: loaded.merge({"energy":.1,"emission_centroid":Vector2(32,40)})
-                Media.published(data,loaded)
-            Media.release_cold_images(data,-1) # Model the complete acknowledged batch between demands.
-            Media.boot_ready(data)
-            Media.prune(data)
-        check(fast.ready_paths==original.ready_paths and fast.resident.keys()==original.resident.keys(),
-            "Actual "+clip+": publication, CPU release and pruning preserve original eligibility")
-    Media.close(fast); Media.close(original)
-
-func run() -> void:
-    var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
-    check(parsed.ok,"Actual disclosed Crypt initialization parses")
-    if not parsed.ok: quit(1); return
-    var state: Dictionary = parsed.value
-    var before = state.duplicate(true)
-    var cache = {}
-    var current = Media.plan(state,[],cache)
-    var environment = EnvironmentMedia.plan(state,[],cache)
-    var encounter = Encounter.plan(state,environment.disclosed,environment.fixtures,cache)
-    encounter.estimates = Encounter.estimates(encounter.paths,encounter.cpu_required,encounter.gpu_only,cache)
-    encounter.estimate_summary = Encounter.estimate_summary(encounter)
-    var expected = environment.required.duplicate()
-    var index: Dictionary = Characters._read("catalog-index.json",cache)
-    var rigs: Dictionary = Characters._read(index.rigs,cache)
+## Independent typed-authoring closure plus actual original PNG publication.
+## Native texture assertions require the manifest's GPU lane.
+const Media=preload("res://presentation/media_warmup.gd")
+const Encounter=preload("res://presentation/encounter_media.gd")
+const EnvironmentMedia=preload("res://presentation/environment_media.gd")
+const Characters=preload("res://presentation/characters.gd")
+const Catalog=preload("res://source_catalog.gd")
+const Protocol=preload("res://sdk/protocol.gd")
+const Reducer=preload("res://sdk/reducer.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+var checks:int=0
+var failures:Array=[]
+var source_root:Resource
+var appearance:Resource
+var entries:Dictionary={}
+func _initialize()->void:run.call_deferred()
+func check(ok:bool,label:String)->void:
+    checks+=1
+    if not ok:failures.append(label);printerr("ENCOUNTER_MEDIA_FAIL ",label)
+func entry(section:String,id:String)->Resource:
+    var path:String=source_root.sections[section][id]
+    if not entries.has(path):entries[path]=load(path)
+    return entries[path]
+func raw_layers(actor:Dictionary,state:Dictionary,set_name:String)->Dictionary:
+    var selected:Dictionary={"body":actor.appearance.body_category}
+    if actor.appearance.head_category!=null:selected.head=actor.appearance.head_category
+    if actor.appearance.has_beard:selected.beard=appearance.flag_parts.has_beard
+    for layer in actor.visual_loadout.layers:
+        if not appearance.equipment_slots.has(layer.slot):continue
+        if appearance.weapon_sets.has(layer.slot) and appearance.weapon_sets[layer.slot]!=set_name:continue
+        var item:Dictionary=layer.duplicate();item.merge(state.items.get(layer.item_uuid,{}).get("look",{}),true)
+        if item.get("equipped_visual_policy")=="hidden":continue
+        var gear:Resource=entry("gear",str(item.item_id))
+        if not gear.family.is_empty():gear=entry("gear",gear.family)
+        var slot:String=appearance.equipment_slots[layer.slot]
+        var variant:Variant=item.get("visual_variant_id")
+        var hand_key:String="" if variant==null else str(variant)
+        var rows:Array=[]
+        if gear.hands.get(slot,{}).has(hand_key):rows=gear.hands[slot][hand_key]
+        else:
+            var look:Dictionary=gear.slots.get(slot,{})
+            check(not look.is_empty(),"Actual gear has raw authored slot "+str(item.item_id)+"/"+slot)
+            if look.is_empty():continue
+            rows=look.layers if variant==null else look.get("variants",{}).get(variant,[])
+            check(not rows.is_empty(),"Actual visual variant has raw authored layers "+str(item.item_id))
+        for row in rows:
+            if row.slot not in appearance.effect_slots:selected[row.slot]=row.part
+    return selected
+func add_art(paths:Dictionary,path:String,surface:Resource,geometry:bool,profile:String,modular:bool)->void:
+    if not path.is_empty():paths["res://assets/"+path]=true
+    if not geometry or surface==null or surface.encoding=="none":return
+    # These are the exact authored receiving inputs: no source selector,
+    # built descriptor, or runtime companion planner is its own oracle.
+    for value in [surface.depth,surface.normals.original,surface.masks.get("support",""),surface.masks.get("normal_valid","")]:
+        if not value.is_empty():paths["res://assets/"+value]=true
+    for name in surface.normals:
+        if modular and not profile.is_empty() and name!=profile:
+            paths.erase("res://assets/"+surface.normals[name]);continue
+        paths["res://assets/"+surface.normals[name]]=true
+func expected(state:Dictionary,environment:Dictionary,profile:String)->Dictionary:
+    var result:Dictionary=environment.duplicate()
     for actor in state.actors.values():
-        var rig: String = Characters.rig_id(actor,cache)
-        for weapon_set in ["melee","ranged"]:
-            var variant: Dictionary = actor.duplicate()
-            variant.visual_loadout = actor.visual_loadout.duplicate()
-            variant.visual_loadout.active_weapon_set = weapon_set
-            var exact = Characters.sheet_paths(variant,rigs[rig].clips.keys(),cache)
-            check(exact.ok,"Existing disclosed weapon set resolves every authored rig clip")
-            if exact.ok: expected.merge(exact.value)
-    check(encounter.errors.is_empty() and encounter.paths.size()==expected.size() and expected.keys().all(func(path):return encounter.paths.has(path)),
-        "Encounter source closure equals existing authored clips and both already-disclosed equipment sets, deduplicated by original path")
-    check(state==before,"Warmup metadata leaves canonical actors and source appearance data untouched")
-    check(encounter.estimates.values().all(func(row):return row.has("bytes") and row.bytes>0),"All known sources have inspectable PNG dimensions without allocating pixel images")
-    var conservative = 0
-    for estimate in encounter.estimates.values(): conservative += int(estimate.bytes)
-    check(conservative>Media.BUDGET_BYTES,
-        "All three normal treatments across every party clip exceed16GiB and must remain optional beyond current demand")
-    var initial = Media.create()
-    Media.adopt_encounter(initial,encounter,1)
-    var mandatory = {}
-    for paths in [current.required,environment.required]:
-        for path in paths: mandatory[path] = Catalog.media_path(path)
-    Media.demand(initial,mandatory,environment.required,environment.fixtures,current.gpu_only,current.cpu_required)
-    check(initial.preload_skipped>0 and initial.pending.size()+initial.preload_skipped==encounter.paths.size()
-        and initial.preload_estimated_bytes<=initial.budget_bytes,"Initial exact triplets plus budgeted optional all-clips warmup queue each selected source once")
-    check(initial.pending.slice(0,mandatory.size()).map(func(request):return request.path)==mandatory.keys(),"Current and upcoming mandatory paths retain queue priority")
-    accounting(initial,"Initial selection")
-    check(not Media.boot_ready(initial) and not Media.ready(initial,mandatory),"Neither unuploaded optional startup sources nor mandatory sources report readiness")
-    var full_progress = Media.preload_progress(initial)
-    check(full_progress.selected==initial.preload_selected.size() and full_progress.ready==0,"Loading progress counts the budgeted encounter union without duplicating mandatory sources")
-    Media.close(initial)
-
-    # Already-received packets authorize prefetch, but never displayed state.
-    # The additional real outfit is only introduced by this prepared group.
-    var single: Dictionary = state.duplicate()
-    single.actors = {state.actors.keys()[0]:state.actors.values()[0]}
-    var single_plan = Encounter.plan(single,{}, {},cache)
-    var absent: Dictionary = state.actors.values()[1]
-    var absent_sources = Characters.sheet_paths(absent,["Idle"],cache).value
-    var absent_only: Array = absent_sources.keys().filter(func(path):return not single_plan.paths.has(path))
-    check(not absent_only.is_empty(),"Actual second outfit has distinct sources outside first actor closure")
-    var future = {"actor_tracks":[{"actor_uuid":absent.uuid,"rig":Characters.rig_id(absent,cache),"clip":"Idle"}],
-        "staged_actors":{absent.uuid:absent},"commits":[]}
-    var exact_future = Media.plan(single,[future],cache)
-    var received_plan = Encounter.plan(single,{}, {},cache,[future])
-    check(absent_only.all(func(path):return exact_future.required.has(path) and received_plan.paths.has(path)),
-        "Received upcoming actor prepares its full authored family before displayed arrival")
-    check(single.actors.size()==1 and not single.actors.has(absent.uuid),"Prefetch neither publishes the received actor nor invents unreceived actor state")
-
-    # Real PNG publication and source alpha, in a deliberately small budget.
-    var colour: String = current.cpu_required.keys()[0]
-    var companion: String = current.gpu_only.keys()[0]
-    var later: String = current.gpu_only.keys()[1]
-    var tiny = subset(encounter,[colour,companion])
-    var data = Media.create()
-    data.budget_bytes = tiny.estimates[colour].bytes+tiny.estimates[companion].bytes
-    Media.adopt_encounter(data,tiny,7)
-    Media.demand(data,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    check(data.pending.size()==2 and data.pending[0].path==colour,"Budgeted optional geometry follows required original colour")
-    var original = await load_one(data)
-    check(original.has("image") and original.path==colour,"Worker decodes actual required colour first")
-    if not original.has("image"): Media.close(data); quit(1); return
-    var original_pixels: PackedByteArray = original.image.get_data()
-    var textures = {colour:ImageTexture.create_from_image(original.image)}
-    Media.published(data,original)
-    accounting(data,"First colour publication")
-    check(Media.ready(data,{colour:true}) and Media.boot_ready(data) and not Media.ready(data,{companion:true}),"Required colour starts play while optional companion remains background work")
-    var geometry = await load_one(data)
-    check(geometry.has("image") and geometry.path==companion,"Worker decodes exact optional companion")
-    if not geometry.has("image"): Media.close(data); quit(1); return
-    check(Media.boot_ready(data) and not Media.ready(data,{companion:true}),"Decoded but unpublished optional image does not block startup or count as render-ready")
-    textures[companion] = ImageTexture.create_from_image(geometry.image)
+        if actor.get("last_visual_position")==null:continue
+        check(actor.life_state=="alive" and actor.conditions.is_empty(),"Actual initial actor has ordinary idle source semantics")
+        var rig:Resource=entry("rigs",appearance.rig) if actor.creature_content_ref==null else entry("rigs",entry("characters",actor.creature_content_ref.content_id).rig)
+        if rig.kind!="layered":
+            for clip in rig.clips:
+                add_art(result,clip.art.body,clip.surface,true,profile,false)
+            continue
+        for set_name in ["melee","ranged"]:
+            var layers:Dictionary=raw_layers(actor,state,set_name)
+            for slot in layers:
+                var part:Resource=entry("parts",layers[slot])
+                for clip in rig.clips:
+                    if set_name!=actor.visual_loadout.active_weapon_set and clip.name!="Idle":continue
+                    if not part.actions.has(clip.source_clip):continue
+                    var art:Resource=part.actions[clip.source_clip]
+                    add_art(result,art.path,art.surface,slot in part.slots,profile,true)
+    return result
+func settle(data:Dictionary)->void:
+    var owner:Dictionary=Media.physical(data)
+    var deadline:int=Time.get_ticks_msec()+10000
+    while Time.get_ticks_msec()<deadline:
+        Media.prepare_optional(data)
+        if not Media._families_pending(owner) and owner.changed_paths.is_empty() and owner.selection_task<0 \
+            and (owner.selection_publication.is_empty() or owner.selection_publication.cursor==owner.selection_publication.paths.size()) \
+            and owner.selection_applied_revision==owner.selection_revision:return
+        await process_frame
+    check(false,"Current bounded physical source owner finishes optional metadata admission")
+func loaded(data:Dictionary)->Dictionary:
+    var deadline:int=Time.get_ticks_msec()+20000
+    while Time.get_ticks_msec()<deadline:
+        var value:Dictionary=Media.poll(data)
+        if not value.is_empty():return value
+        await process_frame
+    check(false,"Actual original source worker completes");return {}
+func accounting(data:Dictionary,label:String)->void:
+    var owner:Dictionary=Media.physical(data)
+    for category in [false,true]:
+        var cpu:int=0;var gpu:int=0;var pins:int=0;var sheets:int=0;var pending:int=0
+        for path in owner.resident:
+            var row:Dictionary=owner.resident[path]
+            if row.environment!=category:continue
+            cpu+=int(row.cpu_bytes);gpu+=int(row.gpu_bytes);sheets+=1
+            if owner.wanted.has(path) or owner.preload_selected.has(path):
+                pins+=int(row.gpu_bytes)
+                if owner.interests.get(path,[0,0,0])[2]>0:pins+=int(row.cpu_bytes)
+        for request in owner.pending:
+            if (owner.interests.get(request.path,[0,0,0,0,0])[4]>0)==category:pending+=1
+        for job in owner.decode_jobs:
+            for path in job.get("paths",[job.path]):
+                if (owner.interests.get(path,[0,0,0,0,0])[4]>0)==category:pending+=1
+        var actual:Dictionary=Media.diagnostics(data,category)
+        check(actual.cpu_bytes==cpu and actual.gpu_estimated_bytes==gpu and actual.resident_sheets==sheets \
+            and actual.pinned_bytes==pins and actual.pending==pending,label+" independent physical byte/pin/queue accounting "+str(category))
+func run()->void:
+    source_root=load("res://authoring/characters.tres");appearance=entry("appearance","modular")
+    var protocol:RefCounted=Protocol.new()
+    var packet:Dictionary=protocol.decode_server("InitializationResponse",FileAccess.get_file_as_bytes(Fixtures.journal("door","amber").path_join("0000000000000000.json")))
+    check(packet.ok,"Original current-schema Door initialization decodes")
+    if not packet.ok:finish({});return
+    var reduced:Dictionary=Reducer.reduce_initialization(packet.value.initialization,packet.value.content_additions)
+    check(reduced.ok,"Actual initialization reduces through canonical SDK")
+    if not reduced.ok:finish({});return
+    var state:Dictionary=reduced.value;var original:PackedByteArray=var_to_bytes(state);var cache:Dictionary={}
+    var surrounding:Dictionary=EnvironmentMedia.plan(state,[],cache)
+    var default_plan:Dictionary={}
+    for profile in ["reference","gentle","original"]:
+        var plan:Dictionary=Encounter.plan(state,surrounding.disclosed,surrounding.fixtures,cache,[],profile)
+        var want:Dictionary=expected(state,surrounding.disclosed,profile)
+        var absent:Array=want.keys().filter(func(path):return not plan.paths.has(path))
+        var extra:Array=plan.paths.keys().filter(func(path):return not want.has(path))
+        if not absent.is_empty() or not extra.is_empty():printerr("ENCOUNTER_CLOSURE_DIFF ",profile," missing=",absent," extra=",extra)
+        check(plan.errors.is_empty() and plan.paths.keys().all(func(path):return want.has(path)) and want.keys().all(func(path):return plan.paths.has(path)),"Full exact source closure agrees with independent typed categories/gear/rig clips and selected "+profile+" normals")
+        if profile=="reference":default_plan=plan
+    check(var_to_bytes(state)==original,"Optional source planning never mutates canonical actors/items")
+    var actors:Array=state.actors.values().filter(func(actor):return actor.get("last_visual_position")!=null)
+    check(actors.size()>=2,"Actual recording has two independently disclosed outfits")
+    if actors.size()>=2:
+        var one:Dictionary=state.duplicate();one.actors={actors[0].uuid:actors[0]}
+        var before:Dictionary=Encounter.plan(one,{},{},{},[],"reference")
+        var future:Dictionary={"id":"received-existing-outfit","actor_tracks":[],"commits":[],"staged_actors":{actors[1].uuid:actors[1]}}
+        var after:Dictionary=Encounter.plan(one,{},{},{},[future],"reference")
+        var received:Dictionary=one.duplicate();received.actors=one.actors.duplicate();received.actors[actors[1].uuid]=actors[1]
+        var want:Dictionary=expected(received,{},"reference")
+        check(want.keys().all(func(path):return after.paths.has(path)) and after.paths.keys().all(func(path):return want.has(path)),"Already-received outfit prepares its exact raw-authored family")
+        check(one.actors.size()==1 and not one.actors.has(actors[1].uuid) and after.paths.size()>=before.paths.size(),"Preparation publishes neither a future actor nor a fabricated source")
+    if "--closure-only" not in OS.get_cmdline_user_args():await png_publication(state)
+    finish({"known_unique_sources":default_plan.get("paths",{}).size(),"native":DisplayServer.get_name()!="headless",
+        "scope":"Independent current typed source closure and original PNG/texture/publication/role/budget boundaries. Native pixel ownership requires GPU default invocation; --closure-only checks no artwork or texture allocation."})
+func png_publication(state:Dictionary)->void:
+    check(DisplayServer.get_name()!="headless","The actual texture/alpha gate runs on its native GPU lane")
+    if DisplayServer.get_name()=="headless":return
+    var actor:Dictionary=state.actors.values().filter(func(row):return row.creature_content_ref==null and row.get("last_visual_position")!=null)[0]
+    var part:Resource=entry("parts",actor.appearance.body_category)
+    var art:Resource=part.actions.Idle
+    var colour:String="res://assets/"+art.path
+    var companion:String="res://assets/"+art.surface.depth
+    var later:String="res://assets/"+part.actions.TakeDamage.path
+    var paths:Dictionary={colour:Catalog.media_path(colour),companion:Catalog.media_path(companion)}
+    var gpu:Dictionary={companion:true};var cpu:Dictionary={colour:true}
+    var cache:Dictionary={};var sizes:Dictionary=Encounter.estimates(paths,cpu,gpu,cache)
+    var family:Dictionary={"paths":paths,"cpu_required":cpu,"gpu_only":gpu,"estimates":sizes}
+    var data:Dictionary=Media.create();data.budget_bytes=int(sizes[colour].bytes)+int(sizes[companion].bytes)
+    Media.adopt_required(data,1);Media.adopt_encounter(data,family,1)
+    Media.demand_records(data,[Media.source_record({colour:paths[colour]},{},{},{},{colour:true})]);await settle(data)
+    check(Media.physical(data).pending[0].path==colour and not Media.boot_ready(data),"Required original precedes its optional geometry; unpublished bytes cannot start play")
+    var decoded:Dictionary=await loaded(data)
+    check(decoded.has("image") and decoded.path==colour,"Worker decodes the exact raw-authored original colour first")
+    if not decoded.has("image"):Media.close(data);return
+    var independent:Image=Image.load_from_file(paths[colour])
+    var bytes:PackedByteArray=independent.get_data()
+    check(decoded.image.get_data()==bytes,"Worker image preserves independently loaded original colour and alpha bytes")
+    var texture:Texture2D=ImageTexture.create_from_image(decoded.image)
+    check(texture.get_image().get_data()==bytes,"Actual native texture upload preserves original source pixels and alpha")
+    Media.published(data,decoded);accounting(data,"Original publication")
+    check(Media.ready(data,{colour:true}) and Media.boot_ready(data) and not Media.ready(data,{companion:true}),"Original required receipt starts play while its optional companion remains unavailable")
+    var geometry:Dictionary=await loaded(data)
+    check(geometry.has("image") and geometry.path==companion,"Optional geometry worker uses its exact original physical source")
+    if not geometry.has("image"):Media.close(data);return
+    check(not Media.ready(data,{companion:true}),"Decoded but unpublished geometry does not grant render readiness")
+    var geometry_texture:Texture2D=ImageTexture.create_from_image(geometry.image)
+    check(geometry_texture.get_image().get_data()==geometry.image.get_data(),"Native geometry texture retains exact original bytes")
     Media.published(data,geometry)
-    check(Media.release_cold_images(data)==[companion] and Media.boot_ready(data),"Original uploaded texture completes warmup; companion CPU copy releases while original colour remains")
-    accounting(data,"GPU companion CPU release")
-    var decoded_before: int = data.decoded
-    var selections_before: int = data.selection_jobs
-    Media.demand(data,{companion:Catalog.media_path(companion)}, {}, {},{companion:true},{})
-    Media.demand(data,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    check(data.pending.is_empty() and Media.prune(data).is_empty() and data.decoded==decoded_before,
-        "Repeated actions within the encounter budget neither evict nor redecode already-uploaded original sources")
-    check(data.selection_jobs==selections_before,"Changing exact actions inside the selected family does not reselect the full encounter cache")
-    accounting(data,"Action revisit")
-    check(original.image.get_data()==original_pixels and data.resident[colour].cpu_bytes==original_pixels.size(),"Retained source colour and original alpha remain byte-identical for picking")
-    var outside_family = Media.create()
-    Media.adopt_encounter(outside_family,subset(encounter,[companion]),1)
-    Media.demand(outside_family,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    check(not Media.boot_ready(outside_family) and Media.preload_progress(outside_family).startup_required==1
-        and Media.preload_progress(outside_family).startup_ready==0,"Exact required source outside optional family still blocks startup until published")
-    Media.published(outside_family,original)
-    check(Media.boot_ready(outside_family) and not Media.ready(outside_family,{companion:true}),"Non-family mandatory publication starts play without optional family upload")
-    Media.close(outside_family)
-    var expanded = subset(encounter,[colour,companion,later])
-    data.budget_bytes += expanded.estimates[later].bytes
-    Media.adopt_encounter(data,expanded,7)
-    Media.demand(data,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    check(Media.boot_ready(data) and data.pending.size()==1 and data.pending[0].path==later,
-        "Newly known outfit media warms in background without resetting completed initial readiness")
-    check(not Media.ready(data,{later:true}),"A later exact action still waits for its own unpublished source")
-    data.budget_bytes = int(expanded.estimates[colour].bytes)
-    Media.demand(data,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    check(data.preload_selected.keys()==[colour] and data.preload_skipped==2 and data.pending.is_empty(),"Lower configurable budget drops optional work before any mandatory source")
-    check(Media.prune(data)==[companion] and data.resident.has(colour),"Pressure retires only unpinned optional texture and preserves required colour")
-    accounting(data,"Eviction")
-    Media.adopt_encounter(data,tiny,8)
-    Media.demand(data,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    check(Media.boot_ready(data),"A new epoch with no optional budget has a finite empty warmup")
+    check(Media.release_cold_images(data,-1)==[companion] and Media.ready(data,{companion:true}),"Never-CPU-used GPU companion releases its decode copy without losing actual residency")
+    accounting(data,"Companion CPU release")
+    var count:int=Media.physical(data).decoded
+    Media.demand(data,{companion:paths[companion]},{},{},{companion:true});await settle(data)
+    Media.demand(data,{colour:paths[colour]},{},{},{},{colour:true});await settle(data)
+    check(Media.physical(data).pending.is_empty() and Media.physical(data).decoded==count,"Revisiting prepared originals queues no redundant decode")
+    check(decoded.image.get_data()==bytes and data.resident[colour].cpu_bytes==bytes.size(),"Original picking pixels stay unchanged and owned")
+    var expanded:Dictionary=family.duplicate(true);expanded.paths[later]=Catalog.media_path(later)
+    expanded.estimates=Encounter.estimates(expanded.paths,cpu,gpu,cache);data.budget_bytes+=int(expanded.estimates[later].bytes)
+    var boot:Dictionary=data.boot_paths.duplicate()
+    Media.adopt_encounter(data,expanded,1);Media.demand(data,{colour:paths[colour]},{},{},{},{colour:true});await settle(data)
+    check(Media.boot_ready(data) and data.boot_paths==boot and not Media.ready(data,{later:true}),"Accepted family growth stays background work without enlarging completed startup")
+    check(Media.physical(data).pending.size()==1 and Media.physical(data).pending[0].path==later,"New exact source joins optional work once")
+    Media.demand(data,{colour:paths[colour]},{colour:true},{colour:true},{},{colour:true});await settle(data)
+    check(not Media.ready(data,{colour:true}),"A new fixture role cannot borrow old colour-only readiness")
+    Media.demand(data,{colour:paths[colour]},{},{},{},{colour:true});await settle(data)
+    check(Media.ready(data,{colour:true}) and texture.get_image().get_data()==bytes,"Removing fixture role restores the same uploaded original without changing its alpha")
+    accounting(data,"Role withdrawal")
+    data.budget_bytes=int(sizes[colour].bytes)
+    Media.demand(data,{colour:paths[colour]},{},{},{},{colour:true});await settle(data)
+    var owner:Dictionary=Media.physical(data)
+    check(not owner.preload_selected.has(companion) and not owner.preload_selected.has(later),"Finite budget withdraws both optional selections")
+    check(owner.wanted.keys()==[colour] and Media.ready(data,{colour:true}) and data.resident[colour].cpu_bytes==bytes.size(),"Required original stays pinned, ready and owns its unchanged picking bytes")
+    check(not Media._requested(owner,companion) and not Media._requested(owner,later),"Unselected optional sources have no current physical admission")
+    # The earlier fixture promotion can retain a required colour request even
+    # after colour-only readiness returns. Budget withdrawal owns optional
+    # work; it is not an eager global pending-queue-empty contract.
+    print("ENCOUNTER_BUDGET_BOUNDARY ",JSON.stringify({"selected":owner.preload_selected.keys(),"required":owner.wanted.keys(),
+        "pending":owner.pending.map(func(job):return {"path":job.path,"required":job.required,"fixture":job.fixture})}))
+    var received:Dictionary=Media.poll(data)
+    check(received.is_empty() or received.path==colour,"Ordinary polling cannot admit a withdrawn optional source")
+    check(owner.pending.all(func(job):return job.path==colour and job.required) \
+        and owner.decode_jobs.all(func(job):return job.get("paths",[job.path]).all(func(path):return path==colour)),"Actual pending/worker ownership contains only the still-required original")
+    check(not data.resident.has(later),"Withdrawn background source never gains residency")
+    check(Media.prune(data)==[companion] and data.resident.has(colour),"Pressure evicts only the unpinned optional source and retains original picking pixels")
+    accounting(data,"Optional pressure retirement")
     Media.close(data)
-    # Reuse the two genuinely decoded/uploaded sources above to exercise the
-    # accepted-plan interleaving without a second allocation of the same art.
-    var held = Media.create()
-    held.budget_bytes = tiny.estimates[colour].bytes+tiny.estimates[companion].bytes
-    Media.adopt_encounter(held,tiny,9)
-    Media.demand(held,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    var boot: Dictionary = held.boot_paths.duplicate()
-    Media.published(held,original)
-    check(Media.boot_ready(held),"Initial mandatory source completes startup without its optional companion")
-    held.budget_bytes += expanded.estimates[later].bytes
-    Media.adopt_encounter(held,expanded,9)
-    Media.demand(held,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
-    check(held.boot_paths==boot and held.preload_selected.has(later),"Received family expansion is background work and never enlarges an in-progress boot selection")
-    Media.published(held,geometry)
-    check(Media.boot_ready(held) and not Media.ready(held,{later:true}),"Finishing original boot sources does not wait for newly received background media")
-    Media.demand(held,{colour:Catalog.media_path(colour)},{colour:true},{colour:true},{},{colour:true})
-    check(not Media.ready(held,{colour:true}),"A newly required fixture reduction invalidates prior colour-only readiness")
-    accounting(held,"Fixture role arrival")
-    Media.demand(held,{})
-    check(Media.ready(held,{colour:true}),"Dropping the fixture requirement restores original texture readiness without a decode")
-    accounting(held,"Fixture role departure")
-    var unavailable: Dictionary = original.duplicate()
-    unavailable.gpu_bytes = 0
-    Media.published(held,unavailable)
-    check(not Media.ready(held,{colour:true}) and Media.preload_progress(held).ready==1,"GPU residency loss invalidates readiness and selected-progress membership")
-    Media.published(held,original)
-    check(Media.ready(held,{colour:true}) and Media.preload_progress(held).ready==2,"Republishing restores readiness and progress exactly once")
-    accounting(held,"Source replacement")
-    Media.close(held)
-
-    # Family-only role changes must invalidate the same source even when the
-    # exact command demand and selected source membership do not change.
-    var roles = Media.create()
-    Media.adopt_encounter(roles,tiny,1)
-    Media.demand(roles,{})
-    Media.published(roles,original); Media.published(roles,geometry)
-    Media.demand(roles,{})
-    check(Media.boot_ready(roles) and roles.pending.is_empty(),"Uploaded family starts ready with no duplicate queued source")
-    var promoted = tiny.duplicate()
-    promoted.revision = 100
-    promoted.fixtures = {colour:true}
-    Media.adopt_encounter(roles,promoted,1); Media.demand(roles,{})
-    check(not Media.ready(roles,{colour:true}) and roles.pending.size()==1 and roles.pending[0].path==colour,
-        "Family-only fixture promotion holds readiness and queues missing preprocessing once")
-    accounting(roles,"Family role promotion")
-    Media.adopt_encounter(roles,tiny,1); Media.demand(roles,{})
-    check(Media.ready(roles,{colour:true}) and roles.pending.is_empty(),"Family-only fixture removal restores readiness without decoding")
-    accounting(roles,"Family role removal")
-    var refreshed: int = roles.selection_refreshed
-    Media.adopt_encounter(roles,expanded,1); Media.demand(roles,{})
-    check(roles.selection_refreshed==refreshed+1 and roles.pending.size()==1 and roles.pending[0].path==later,
-        "Fitting family growth refreshes and queues only its one new source")
-    var removed = subset(encounter,[colour])
-    Media.adopt_encounter(roles,removed,1); Media.demand(roles,{})
-    check(not roles.preload_selected.has(companion) and roles.resident.has(companion) and Media.preload_progress(roles).ready==1,
-        "Family departure removes progress membership while keeping an unpressured uploaded source")
-    accounting(roles,"Family source removal")
-    Media.adopt_encounter(roles,tiny,1); Media.demand(roles,{})
-    check(Media.ready(roles,{companion:true}) and roles.pending.is_empty() and Media.preload_progress(roles).ready==2,
-        "Removed then readded family source reuses its upload without redecode or duplicate progress")
-    accounting(roles,"Family source readdition")
-    Media.close(roles)
-    compare_selection(encounter,colour,companion,later)
-    compare_authored_demand(encounter,state,environment,cache)
-    var failure = Media.create()
-    var missing_path = "res://tests/no-such-optional-source.png"
-    Media.adopt_encounter(failure,{"revision":1,"paths":{missing_path:missing_path},"estimates":{missing_path:{"bytes":4}},"errors":[]},1)
-    Media.demand(failure,{})
-    check(Media.boot_ready(failure) and not Media.ready(failure,{missing_path:true}),"Missing optional source does not prevent startup and remains unavailable")
-    var failed = await load_one(failure)
-    check(failed.has("error") and Media.boot_ready(failure) and Media.preload_progress(failure).failed.has(missing_path) and not Media.ready(failure,{missing_path:true}),
-        "Optional preparation failure completes startup wait, remains reported, and never becomes render-ready")
-    accounting(failure,"Worker failure")
-    Media.close(failure)
-    var report = {"checks":checks,"failures":failures,"known_unique_sources":encounter.paths.size(),
-        "conservative_combined_bytes":conservative,"configured_combined_budget_bytes":Media.BUDGET_BYTES,
-        "original_colour_cpu_bytes":original_pixels.size(),"scope":"Actual disclosed Crypt authoring closure; finite-budget/source-publication fixtures. RGBA8 estimates are not measured hardware residency."}
+    var missing:String="res://tests/no-such-optional-source.png"
+    var failed:Dictionary=Media.create()
+    Media.adopt_required(failed,1);Media.adopt_encounter(failed,{"paths":{missing:missing},"source_sizes":{missing:4},"gpu_only":{missing:true}},1)
+    Media.demand(failed,{});await settle(failed)
+    check(Media.boot_ready(failed) and not Media.ready(failed,{missing:true}),"Missing optional bytes cannot hold startup or become ready")
+    var error:Dictionary=await loaded(failed)
+    check(error.has("error") and failed.failed.has(missing) and Media.boot_ready(failed) and not Media.ready(failed,{missing:true}),"Actual optional PNG failure remains explicit without blocking required startup")
+    accounting(failed,"Original optional source failure");Media.close(failed)
+func finish(extra:Dictionary)->void:
+    var report:Dictionary={"checks":checks,"failures":failures};report.merge(extra)
     FileAccess.open("res://generated/encounter_media_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
-    print(JSON.stringify(report)); quit(0 if failures.is_empty() else 1)
+    print("ENCOUNTER_MEDIA ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

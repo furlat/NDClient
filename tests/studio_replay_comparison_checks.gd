@@ -29,19 +29,29 @@ func run()->void:
             check(compared.views==bundle.views,name+": identical presentations retain the single-view path")
             continue
         if name=="oa-jump-late-lethal":
-            var arrivals={};var starts={};var lengths={}
+            var arrivals={};var starts={};var lengths={};var originals={};var causes={}
             for view in compared.views:
-                for item in compared.views[view].groups:
-                    for track in item.group.actor_tracks:
-                        if track.source_event_uuid!="a70ba8a2-4f46-4a1c-998f-22494304d4ab":continue
-                        starts[view]=item.start_ms+track.start_ms
-                        lengths[view]=track.duration_ms
+                var disclosed:Array=Fixtures.fact_rows(name,"step",view).filter(func(row):return row.fact.get("committed",false) and row.fact.trajectory=="direct_arc")
+                check(not disclosed.is_empty(),"Late lethal "+view+": original journal discloses its committed arc step")
+                if disclosed.is_empty():continue
+                var occurrence:String=str(int(disclosed[0].node.occurrence))
+                causes[view]=Recording.event_key(bundle.views[view],occurrence)
+                for g in compared.views[view].groups.size():
+                    var item:Dictionary=compared.views[view].groups[g]
+                    for t in item.group.actor_tracks.size():
+                        var track:Dictionary=item.group.actor_tracks[t]
+                        if track.source_event_uuid!=occurrence or not track.get("motion",false):continue
+                        originals[view]=bundle.views[view].groups[g].group.actor_tracks[t].duration_ms
+                        starts[view]=item.start_ms+track.start_ms;lengths[view]=track.duration_ms
                         arrivals[view]=starts[view]+lengths[view]
                         for commit in item.group.commits:
                             if commit.get("event_uuid")==track.source_event_uuid:
-                                check(absf(arrivals[view]-item.start_ms-commit.at_ms)<.00001,"Late lethal "+view+": native jump arrives at its shared authoritative commit")
-            check(absf(lengths.get("amber",0)-425.0)<.00001 and absf(lengths.get("blue",0)-416.666666666667)<.00001,"Late lethal: original independently compiled 425ms/416.667ms jump durations are unchanged")
-            check(absf(arrivals.amber-arrivals.blue)<.00001 and absf(starts.blue-starts.amber-8.333333333333)<.00001,"Late lethal: shorter native jump holds before starting and both views reach the same arrival")
+                                check(absf(arrivals[view]-item.start_ms-commit.at_ms)<.00001,"Late lethal "+view+": native arc reaches its actual shared step commit")
+            check(lengths.size()==2 and originals.size()==2,"Late lethal: both original native arc tracks are exercised")
+            if lengths.size()==2 and originals.size()==2:
+                check(causes.amber.begins_with("shared:") and causes.amber==causes.blue,"Late lethal: correspondence proves these actual source operands share one cause")
+                check(lengths==originals and not is_equal_approx(originals.amber,originals.blue),"Late lethal: independently compiled asymmetric source durations remain unchanged")
+                check(absf(arrivals.amber-arrivals.blue)<.00001 and absf((starts.blue-starts.amber)-(originals.amber-originals.blue))<.00001,"Late lethal: shorter native source holds before playing, and both actual steps reach the same authoritative arrival")
         var times={0.0:true,compared.presentation_end_ms:true}
         var shared={}
         for cut in compared.schedule:
@@ -136,10 +146,27 @@ func run()->void:
         for commit in item.group.commits:commit.source_index+=10000
     var independent=Compare.build(renumbered)
     check(independent.ok and independent.duration_ms==baseline.duration_ms and independent.blocks==baseline.blocks,"Alignment joins actual event/lineage identities, not audience packet sequences or local reducer cursor numbers")
-    var conflicting=bundle.duplicate(true)
-    var swap=conflicting.views.blue.groups[1]
-    conflicting.views.blue.groups[1]=conflicting.views.blue.groups[2];conflicting.views.blue.groups[2]=swap
-    check(not Compare.build(conflicting).ok,"Conflicting recorded causal order is rejected instead of reordering a view or stretching source animation")
+    var peer_groups={}
+    for n in bundle.views.amber.groups.size():
+        for event in bundle.views.amber.groups[n].group.events:
+            var key:String=Recording.event_key(bundle.views.amber,str(event.event_uuid))
+            if key.begins_with("shared:"):peer_groups[key]=n
+    var shared_groups:Array=[]
+    for n in bundle.views.blue.groups.size():
+        for event in bundle.views.blue.groups[n].group.events:
+            var key:String=Recording.event_key(bundle.views.blue,str(event.event_uuid))
+            if peer_groups.has(key):shared_groups.append({"own":n,"peer":peer_groups[key]});break
+    var pair:Array=[]
+    for a in shared_groups:
+        for b in shared_groups:
+            if a.own<b.own and a.peer<b.peer and (bundle.views.amber.groups[a.peer].group.duration_ms>0 or bundle.views.amber.groups[b.peer].group.duration_ms>0):pair=[a.own,b.own];break
+        if not pair.is_empty():break
+    check(pair.size()==2,"Original journals disclose two ordered shared causal blocks for the conflict control")
+    if pair.size()==2:
+        var conflicting=bundle.duplicate(true)
+        var swap=conflicting.views.blue.groups[pair[0]]
+        conflicting.views.blue.groups[pair[0]]=conflicting.views.blue.groups[pair[1]];conflicting.views.blue.groups[pair[1]]=swap
+        check(not Compare.build(conflicting).ok,"Conflicting recorded causal order is rejected instead of reordering a view or stretching source animation")
     var report={"checks":checks,"failures":failures,"evidence":evidence,"max_source_sample_error_seconds":max_source_sample_error,"scope":"Pure real-journal common schedule and independent prefix/animation/source inspection; no native dual-pane rendering claim."}
     FileAccess.open("res://generated/studio_replay_comparison_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_REPLAY_COMPARISON ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

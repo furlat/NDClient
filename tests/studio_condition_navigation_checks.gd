@@ -75,5 +75,5 @@ func _initialize()->void:
 
 func _finish()->void:
     FileAccess.open("res://generated/studio_condition_navigation_checks.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,"scope":"Real condition-owner faction navigation values; no pixel or renderer qualification."},"  "))
-    print("STUDIO_CONDITION_NAVIGATION ",checks," checks; ",failures.size()," failures")
+    print("STUDIO_CONDITION_NAVIGATION ",JSON.stringify({"checks":checks,"failures":failures}))
     quit(0 if failures.is_empty() else 1)

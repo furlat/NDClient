@@ -386,14 +386,16 @@ static func sample(handle:Dictionary,seconds:float)->void:
 
 ## Supplies a declared input through the clip's setter (no-op when the clip
 ## does not declare it).
-static func set_input(handle:Dictionary,input:String,value:Variant)->void:
+static func set_input(handle:Dictionary,input:String,value:Variant,extra_arguments:Array=[])->void:
     if input not in handle.clip.get("inputs",[]) or not is_instance_valid(handle.get("occurrence")):return
     var method:String=handle.clip.input_setters[input]
     # Public generic construction keeps the shared geometry/clock adapters;
     # source-only setters belong to the child source, not a generated wrapper.
     if handle.clip.has("construction_inputs") and method not in ["set_targets","set_live_endpoints","set_recipient_geometry", "set_entity_geometry","set_owner_state","set_lifecycle_context","set_root_path"]:
-        handle.occurrence.forward(method,value)
-    else:handle.occurrence.call(method,value)
+        if extra_arguments.is_empty():handle.occurrence.forward(method,value)
+        else:handle.occurrence.forward_arguments(method,[value]+extra_arguments)
+    elif extra_arguments.is_empty():handle.occurrence.call(method,value)
+    else:handle.occurrence.callv(method,[value]+extra_arguments)
 
 static func stop_emission(handle:Dictionary,source_seconds:float)->void:
     if handle.get("baked",false):Baked.stop_emission(handle,source_seconds)

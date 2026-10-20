@@ -340,6 +340,21 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             else:unavailable[channel]=packet.reason
         if component.has("native_propagation") and packet.reason.is_empty():
             source_contact_seconds=PropagationInputs.optical_contact(component,packet.rows,handle.root.global_transform)
+    if "removed_cells" in requested:
+        if not component.get("spatial_owner",false) or not component.has("spatial_observed_removals"):
+            unavailable.removed_cells="spatial_retirement_observations_not_bound"
+        else:
+            # Empty means no observed permanent retirement. In particular,
+            # changing subjective visibility never becomes a burn operation.
+            var observations:Array=component.spatial_observed_removals
+            if not handle.has("removed_cells_input") or handle.removed_cells_input!=observations:
+                if observations.is_empty():
+                    Effects.set_input(handle,"removed_cells",[],[maxf(0.0,float(component.age_ms))/1000.0])
+                else:
+                    for observation in observations:
+                        Effects.set_input(handle,"removed_cells",observation.cells,[float(observation.source_seconds)])
+                handle.removed_cells_input=observations
+            supplied.append("removed_cells")
     if "admitted_cells" in requested:
         var reason:String=cell_membership(handle,component,cell_endpoints)
         if reason.is_empty():supplied.append("admitted_cells")

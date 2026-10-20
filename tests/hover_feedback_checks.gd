@@ -1,6 +1,7 @@
 extends SceneTree
 # Named native GUI boundary: physical opaque artwork + admitted compact choices.
 # This is not a backend gameplay outcome or performance claim.
+const SourceMaterial=preload("res://presentation/source_material.gd")
 const Choices=preload("res://sdk/choices.gd")
 class Peer extends RefCounted:
     var responses={}
@@ -13,7 +14,7 @@ class HUD extends "res://play_hud.gd":
     func _ready() -> void:
         mouse_filter=Control.MOUSE_FILTER_IGNORE
         loot_panel.hud=self;history_panel.hud=self;settings_panel.hud=self
-        for control in [actor_hud,top,notice,notice_row,copy_notice,metrics,bar,history_button,grid_button,normals_button,loot_panel,history_panel,settings_panel,confirm_button,cancel_button,panel,panel_body,equipment,inventory_grid,inventory_summary,search,item_details,item_commands,popup,hover_info]:
+        for control in [actor_hud,top,notice,notice_row,copy_notice,loading,metrics,bar,history_button,grid_button,normals_button,loot_panel,history_panel,settings_panel,confirm_button,cancel_button,panel,panel_body,equipment,inventory_grid,inventory_summary,search,item_details,item_commands,popup,hover_info]:
             add_child(control);control.hide()
         set_process(false)
     func pointer_over_controls(_point:Vector2=Vector2.INF) -> bool: return false
@@ -26,7 +27,8 @@ class Player extends "res://play.gd":
         add_child(context_menu);context_menu.hide()
     func command_ready() -> bool: return true
     func pick_cell(_point:Vector2) -> Dictionary: return {"position":[9,9]}
-    func choose_target(position:Array,identity:String="") -> void: clicks.append({"position":position,"id":identity})
+    func choose_target(position:Array,identity:String="",_scope:String="") -> bool:
+        clicks.append({"position":position,"id":identity});return true
 var checks=0
 var failures=[]
 var scene:Player
@@ -55,7 +57,9 @@ func source(id:String,kind:String,x:float,texture:Texture2D) -> Dictionary:
     var material=ShaderMaterial.new();material.shader=shader;material.set_shader_parameter("sheet",texture);material.set_shader_parameter("frame_uv",Vector4(0,0,1,1));material.set_shader_parameter("highlighted",false)
     var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2(1,1.5);node.position.x=x;node.material_override=material;scene.add_child(node)
     var row={"id":id,"kind":kind,"position":[int(x),0],"base_height_steps":0,"rig":"fixture"}
-    return {"id":id,"node":node,"material":material,"placement":row,"role":"body","layer":1,"texture_path":"fixture","actor_layer":{"slot":"body","alpha":1.0},"record":{"path":"fixture","native_size":[16,24]},"cell":Vector2(16,24),"source_role":1}
+    var entry={"id":id,"node":node,"material":material,"placement":row,"role":"body","layer":1,"texture_path":"fixture","actor_layer":{"slot":"body","alpha":1.0},"record":{"path":"fixture","native_size":[16,24]},"cell":Vector2(16,24),"source_role":1}
+    SourceMaterial.apply(entry,{"sheet":texture,"frame_uv":Vector4(0,0,1,1),"highlighted":false})
+    return entry
 func run() -> void:
     root.size=Vector2i(640,480)
     if "--background-check" in OS.get_cmdline_user_args():root.unfocusable=true;root.position=Vector2i(-16000,-16000)
@@ -74,7 +78,7 @@ func run() -> void:
     scene.timeline.state={"current_actor_uuid":"player","actors":{"actor":{"name":"Character"}},"objects":{"object":{"item":{"name":"Chest","item_id":"fixture"}},"remembered":{"item":{"name":"Remembered chest","item_id":"fixture"}}},"tiles":{"0,0":{"position":[0,0],"elevation_steps":0},"9,9":{"position":[9,9],"elevation_steps":0}}}
     var row={"discovery_index":0,"discovery_generation":"hover-ui","display_name":"Target","target_type":"multi_entity","target_set":0}
     var ground=row.duplicate();ground.target_type="position";ground.target_set=1
-    scene.available_actions={"entity_uuid":"player","discovery_generation":"hover-ui","entity_actions":[row],"position_actions":[ground],"subjects":[{"uuid":"actor"},{"uuid":"object"}],"positions":[[0,0],[3,0]],"target_sets":[[{"kind":"subject","subject":0,"position":0,"index":0},{"kind":"subject","subject":1,"position":1,"index":1}],[{"kind":"position","position":0,"index":0}]],"world_interactions":[{"subject_uuid":"object"},{"subject_uuid":"remembered"}]}
+    scene.available_actions={"entity_uuid":"player","discovery_generation":"hover-ui","entity_actions":[row],"position_actions":[ground],"subjects":[{"uuid":"actor","kind":"creature"},{"uuid":"object","kind":"object"}],"positions":[[0,0],[3,0]],"target_sets":[[{"kind":"subject","subject":0,"position":0,"index":0},{"kind":"subject","subject":1,"position":1,"index":1}],[{"kind":"position","position":0,"index":0}]],"world_interactions":[{"subject_uuid":"object"},{"subject_uuid":"remembered"}]}
     scene.action_revision="hover-ui";scene.selected_action=row;scene.target_selection={"action_index":0,"target_indices":[],"extra_target_positions":[],"prefer_safe":true}
     await process_frame
     var point=scene.camera.unproject_position(actor.node.position)
@@ -105,8 +109,13 @@ func run() -> void:
     check(not object.material.get_shader_parameter("highlighted"),"Actual Alt release restores original object material")
     if DisplayServer.get_name()!="headless":
         scene.selected_action=row;motion(point);refresh()
-        await process_frame;await process_frame;refresh();scene._sort_draws();await RenderingServer.frame_post_draw
-        check(hud.hover_outline.owners.actor.entry.node.visible,"Native assembled hover contour is drawn after real frame submission")
+        # The real HUD samples each frame, including after its private alpha
+        # viewport has submitted. A process-frame wait alone is not that fence.
+        var deadline:int=Time.get_ticks_msec()+2000
+        while (not hud.hover_outline.owners.has("actor") or not hud.hover_outline.owners.actor.entry.node.visible) and Time.get_ticks_msec()<deadline:
+            await process_frame;await RenderingServer.frame_post_draw;motion(point);refresh()
+        scene._sort_draws();await RenderingServer.frame_post_draw
+        check(hud.hover_outline.owners.has("actor") and hud.hover_outline.owners.actor.entry.node.visible,"Native assembled hover contour is drawn after real frame submission")
         var pixels=viewport.get_texture().get_image()
         var contour_pixels=0
         for y in range(204,276):

@@ -230,7 +230,7 @@ static func observe_spatial(owners:Dictionary,effects:Dictionary,at_ms:float,ini
     var changed:bool=false
     for id in effects:
         if not owners.has(id):
-            owners[id]={"id":id,"start_ms":at_ms,"end_ms":INF,"initial":initial,"effect":effects[id]}
+            owners[id]={"id":id,"start_ms":at_ms,"end_ms":INF,"initial":initial,"effect":effects[id],"source_effect":effects[id]}
             changed=true
         else:
             changed=changed or not is_same(owners[id].effect,effects[id]) or not is_inf(owners[id].end_ms)
@@ -273,10 +273,16 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
                 "start_ms":common.start_ms,"absolute_start_ms":common.absolute_start_ms,"duration_ms":common.duration_ms,
                 "from_position":anchor,"to_position":anchor,"from_elevation_feet":common.elevation_feet,"to_elevation_feet":common.elevation_feet,
                 "ground_target":true,"spatial_content_id":SpatialInputs.content_id(effect),"sample_hz":60.0},true)
-            var construction:Dictionary=SpatialInputs.construction(str(id),effect,phase.native_cue)
+            var construction:Dictionary=SpatialInputs.construction(str(id),effect,phase.native_cue,owner.get("source_effect",{}))
             if construction.ready:
                 row.native_constructor_inputs=construction.operands
                 row.native_constructor_evidence=construction.evidence
+                if construction.has("source_anchor"):
+                    var source_anchor:Array=construction.source_anchor
+                    var elevation:float=float(construction.source_elevation_steps)*5.0 if construction.source_elevation_steps!=null else 0.0
+                    row.merge({"position":source_anchor,"from_position":source_anchor,"to_position":source_anchor,
+                        "elevation_feet":elevation,"from_elevation_feet":elevation,"to_elevation_feet":elevation,
+                        "spatial_source_cells":construction.source_cells,"spatial_observed_removals":construction.observed_removals},true)
             else:
                 row.status="missing";row.reason=construction.reason;row.native_input_gaps=[construction.reason]
             row.trace_keys=[row.id]

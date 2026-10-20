@@ -88,6 +88,8 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
         environment = dict(os.environ, PYTHONPATH=f"{ENGINE}:{ENGINE}/sdk/python/src")
         if row.get("runner")=="studio_spell_batch":
             command=[PYTHON,"tools/studio_cases/live.py","--engine",str(ENGINE),"--out",str(report/"live-spells"),*row.get("args",[])]
+        elif row.get("runner")=="storage_loot":
+            command=[PYTHON,"tools/loot_scenario.py","--engine",str(ENGINE),"--output",str(report/"loot-live"),*row.get("args",[])]
         else:
             command = [PYTHON, "tools/play.py", "--engine", str(ENGINE), "--test-script", row["script"], *row.get("args", [])]
     else:
@@ -121,7 +123,7 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
     godot_log = text
     if row["mode"] == "live":
         found = re.findall(r"/[^ ]*\.runtime/player-runs/[0-9TZ.]+", text)
-        run = report/"live-spells" if row.get("runner")=="studio_spell_batch" else (Path(found[0]) if found else None)
+        run = report/"loot-live" if row.get("runner")=="storage_loot" else (report/"live-spells" if row.get("runner")=="studio_spell_batch" else (Path(found[0]) if found else None))
         if run is not None and (run / "godot.log").exists():
             godot_log = (run / "godot.log").read_text(encoding="utf-8", errors="replace")
         checks, failures = None, None
@@ -130,8 +132,8 @@ def run_one(row: dict, report: Path, worktree: str, allowed: list[str]) -> dict:
             checks=sum(case.get("checks",0) for case in value.get("cases",[]))
             failures=sum(not case.get("ok",False) for case in value.get("cases",[]))+len(value.get("native_errors",[]))
             if not value.get("ok",False):failures=max(1,failures)
-        elif run is not None and (run / "player-live-checks.json").exists():
-            value = json.loads((run / "player-live-checks.json").read_text(encoding="utf-8"))
+        elif run is not None and (run / ("loot-checks.json" if row.get("runner")=="storage_loot" else "player-live-checks.json")).exists():
+            value = json.loads((run / ("loot-checks.json" if row.get("runner")=="storage_loot" else "player-live-checks.json")).read_text(encoding="utf-8"))
             checks, failures = value.get("checks"), len(value.get("failures", [])) if isinstance(value.get("failures"), list) else value.get("failures")
         if checks is None:
             checks, failures = parse_result(godot_log)

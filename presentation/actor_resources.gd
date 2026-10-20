@@ -8,8 +8,10 @@ const QuadShapes=preload("res://presentation/quad_shapes.gd")
 
 static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictionary,declared:Dictionary,output:Dictionary)->void:
     var started:int=Time.get_ticks_usec();var rows:Dictionary={};var count:int=0
+    output.rows=rows
     for id in inputs:
         var actor:Dictionary=inputs[id];var packets:Dictionary={}
+        rows[id]=packets
         var condition_parameters:Dictionary=Construction.Conditions.parameters(Construction.Conditions.material(id,[]),textures,resources)
         condition_parameters.make_read_only()
         for index in actor.layers:
@@ -53,5 +55,4 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             entry.node=node
             var packet:Dictionary={"entry":entry,"mesh":mesh,"aabb":bounds,"pending_textures":pending,"noise_path":noise,"condition_parameters":condition_parameters}
             packets[index]=packet;count+=1
-        rows[id]=packets
     output.merge({"complete":true,"error":"","rows":rows,"draw_count":count,"worker_ms":(Time.get_ticks_usec()-started)/1000.0})

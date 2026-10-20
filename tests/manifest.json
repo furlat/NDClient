@@ -495,12 +495,12 @@
   {
    "name": "compact_interaction_checks",
    "script": "res://tests/compact_interaction_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Current canonical native-choice values and Control layout ownership; no draw, pixel, backend-outcome or PCM claim."
   },
   {
    "name": "compiler_join_parity_checks",
@@ -534,12 +534,12 @@
   {
    "name": "component_trace_checks",
    "script": "res://tests/component_trace_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Current schema16 original-journal semantic/trace gate; inspects derived metadata and order without GPU draw or PCM witness."
   },
   {
    "name": "composition_equivalence",
@@ -574,12 +574,12 @@
   {
    "name": "condition_coverage_checks",
    "script": "res://tests/condition_coverage_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Complete current typed/native condition source requirements and exact semantic evidence; native submitted frames and visual acceptance remain separate."
   },
   {
    "name": "condition_handover_checks",
@@ -753,12 +753,12 @@
   {
    "name": "draw_merge_checks",
    "script": "res://tests/draw_merge_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Passive painter-order/rank oracle with native node properties; no framebuffer or GPU timing assertion. Explicit static source invalidation matches current publication ownership."
   },
   {
    "name": "effect_package_checks",
@@ -950,12 +950,18 @@
   {
    "name": "exploration_checks",
    "script": "res://tests/exploration_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "ok",
-   "reason": ""
+   "status": "retired",
+   "reason": "Removed demo/workshop renderer: no longer an executable production path. Replaced by current native2D/canonical-player gates; retirement is not a passing test.",
+   "replaced_by": [
+    "player_view_checks",
+    "chest_live_checks",
+    "architectural_lighting_checks",
+    "frame_profile_checks"
+   ]
   },
   {
    "name": "fireball_layer_ownership_checks",
@@ -1052,12 +1058,18 @@
   {
    "name": "grid_render_checks",
    "script": "res://tests/grid_render_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "ok",
-   "reason": ""
+   "status": "retired",
+   "reason": "Removed demo/workshop renderer: no longer an executable production path. Replaced by current native2D/canonical-player gates; retirement is not a passing test.",
+   "replaced_by": [
+    "native_floor_batch_checks",
+    "ground_visibility_checks",
+    "player_view_checks",
+    "light_table_checks"
+   ]
   },
   {
    "name": "ground_geometry_changes_checks",
@@ -1328,12 +1340,12 @@
   {
    "name": "lighting_2d_checks",
    "script": "res://tests/lighting_2d_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Current original schema16 optical membership and native node projection/value contract; actual framebuffer parity stays separately gated in light_table/native_2d_source."
   },
   {
    "name": "lighting_checks",
@@ -1361,15 +1373,22 @@
   {
    "name": "lighting_render_checks",
    "script": "res://tests/lighting_render_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--background-check"
    ],
-   "status": "ok",
-   "reason": ""
+   "status": "retired",
+   "reason": "Removed demo/workshop renderer: no longer an executable production path. Replaced by current native2D/canonical-player gates; retirement is not a passing test.",
+   "replaced_by": [
+    "native_2d_source_checks",
+    "architectural_lighting_checks",
+    "lighting_2d_checks",
+    "light_table_checks",
+    "door_overlap_checks"
+   ]
   },
   {
    "name": "lit_shader_compile_checks",
@@ -1494,12 +1513,13 @@
   {
    "name": "loot_live_checks",
    "script": "res://tests/loot_live_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "live",
+   "tier": "live",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Real five-item Field Cache fixture through existing tools/loot_scenario.py frozen-engine launcher and production HUD; original retained closed contents plus actual Open receipt.",
+   "runner": "storage_loot"
   },
   {
    "name": "map_benchmark",
@@ -1525,12 +1545,12 @@
   {
    "name": "media_demand_checks",
    "script": "res://tests/media_demand_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Durable current-schema recordings and typed sources; semantic gate requires no native framebuffer. Existing renderer/GUI gates remain separate."
   },
   {
    "name": "media_demand_precompute_checks",
@@ -1635,12 +1655,12 @@
   {
    "name": "media_recording_demand_checks",
    "script": "res://tests/media_recording_demand_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Durable current-schema recordings and typed sources; semantic gate requires no native framebuffer. Existing renderer/GUI gates remain separate."
   },
   {
    "name": "media_role_race_checks",
@@ -2555,7 +2575,8 @@
    "args": [
     "--cases=default",
     "--gallery=res://tests/fixtures/schema16/scenarios/gallery/amber",
-    "--play-frames=120"
+    "--play-frames=120",
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
    ],
    "timeout": 600,
    "options": [
@@ -3823,12 +3844,12 @@
   {
    "name": "shield_reaction_cast_checks",
    "script": "res://tests/shield_reaction_cast_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "status": "ok",
-   "reason": ""
+   "reason": "Current schema16 original-journal semantic/trace gate; inspects derived metadata and order without GPU draw or PCM witness."
   },
   {
    "name": "source_catalog_static_owner_checks",
@@ -3942,8 +3963,8 @@
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --recording=<real SDK case journal> (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Durable current-schema recordings and typed sources; semantic gate requires no native framebuffer. Existing renderer/GUI gates remain separate."
   },
   {
    "name": "studio_capture",
@@ -4215,21 +4236,21 @@
    "options": [
     "--recording"
    ],
-   "status": "known-red",
-   "reason": "red in the coordinator's sweep; not investigated"
+   "status": "ok",
+   "reason": "Durable current-schema recordings and typed sources; semantic gate requires no native framebuffer. Existing renderer/GUI gates remain separate."
   },
   {
    "name": "studio_native_condition_checks",
    "script": "res://tests/studio_native_condition_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --recording=<actual Hide amber journal> (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Durable current-schema recordings and typed sources; semantic gate requires no native framebuffer. Existing renderer/GUI gates remain separate."
   },
   {
    "name": "studio_native_preview_resource_checks",
@@ -4281,8 +4302,8 @@
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Durable current-schema recordings and typed sources; semantic gate requires no native framebuffer. Existing renderer/GUI gates remain separate."
   },
   {
    "name": "studio_recording_media_checks",
@@ -4336,7 +4357,9 @@
    "script": "res://tests/studio_replay_native_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/oa-walk/amber"
+   ],
    "timeout": 600,
    "status": "ok",
    "reason": ""
@@ -4391,7 +4414,8 @@
    "mode": "gpu",
    "tier": "gate",
    "args": [
-    "--native"
+    "--native",
+    "--recording=res://tests/fixtures/schema16/scenarios/hide-light/amber"
    ],
    "timeout": 600,
    "options": [
@@ -4525,8 +4549,8 @@
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Durable current-schema recordings and typed sources; semantic gate requires no native framebuffer. Existing renderer/GUI gates remain separate."
   },
   {
    "name": "studio_transport_checks",
@@ -5422,6 +5446,46 @@
    "timeout": 300,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "frame_profile_checks",
+   "script": "res://tests/frame_profile_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "status": "ok",
+   "reason": "Actual headless process callbacks preserve recorded versus rolling dump histories; no GPU performance claim."
+  },
+  {
+   "name": "prepared_world_fixture",
+   "script": "res://tests/prepared_world_fixture.gd",
+   "mode": "none",
+   "tier": "none",
+   "args": [],
+   "timeout": 0,
+   "status": "helper",
+   "reason": "Named renderer after-values use the actual Timeline prepared publication boundary; never a backend gameplay outcome."
+  },
+  {
+   "name": "plant_growth_input_checks",
+   "script": "res://tests/plant_growth_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": "Actual two-seat schema16 Plant Growth spatial owner, stable cells and source clock; source/output/performance/visual acceptance are separate."
+  },
+  {
+   "name": "native_plant_growth_render_checks",
+   "script": "res://tests/native_plant_growth_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": "Actual two-seat schema16 Plant Growth spatial owner, stable cells and source clock; source/output/performance/visual acceptance are separate."
   }
  ]
 }

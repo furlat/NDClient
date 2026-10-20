@@ -1,6 +1,7 @@
 extends SceneTree
 # Actual recorded fixture and original flame frames. Activation/visibility
 # after-values below are named presentation fixtures, not gameplay commands.
+const FixturePublication=preload("res://tests/prepared_world_fixture.gd")
 const Player = preload("res://play.tscn")
 var checks = 0
 var failures: Array = []
@@ -28,11 +29,15 @@ func run() -> void:
     var scene = Player.instantiate()
     scene.timeline.paused = true
     root.add_child(scene)
-    var deadline = Time.get_ticks_msec()+60000
-    while not scene.session.recording_ready and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
-    scene.session.close()
-    while (not scene._environment_media_ready() or not scene.MediaWarmup.ready(scene.media_warmup,scene.media_plan.required)) and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline: await scene.presentation_updated
-    await scene.presentation_updated
+    var opened:Dictionary=FixturePublication.open(scene)
+    check(opened.ok,"Durable original schema16 Crypt/Door recording opens")
+    if not opened.ok:scene.queue_free();await process_frame;quit(1);return
+    var initialized:bool=await FixturePublication.initial_ready(scene)
+    check(initialized,"Original fixture media, actor sources and prepared world admit before reader shutdown: "+str(scene.session.issue)+" "+str(scene.media_issue))
+    if not initialized:scene.queue_free();await process_frame;quit(1);return
+    scene.session.close();await scene.presentation_updated
+    # Renderer fixtures use the initialization cut, not the queued replay route.
+    scene.timeline.current={};scene.timeline.queue=[]
     scene.hud.hide()
     scene.set_process(false)
     # Exercise flicker deliberately; never change the user's saved setting.
@@ -74,25 +79,28 @@ func run() -> void:
     check(scene.fixture_energy==held,"Paused displayed time freezes both flame and light")
     check(scene.fixture_heights==held_heights,"Paused displayed time freezes original flame optical elevation")
     # Named extinguished after-values include the independently disclosed optical set.
-    scene.timeline.state=original.duplicate(true)
+    var extinguished:Dictionary=original.duplicate(true)
     var fixtures:Dictionary={}
     for entry in scene.fixture_entries:fixtures[entry.placement.id]=true
-    for id in scene.timeline.state.light_sources.keys():
-        if fixtures.has(scene.timeline.state.light_sources[id].anchor_item_uuid):scene.timeline.state.light_sources.erase(id)
-    for object in scene.timeline.state.objects.values():
+    for id in extinguished.light_sources.keys():
+        if fixtures.has(extinguished.light_sources[id].anchor_item_uuid):extinguished.light_sources.erase(id)
+    for object in extinguished.objects.values():
         if object.item.item_id=="environment.wall_torch": object.item.is_lit = false
-    scene.timeline.world_revision+=1;scene.timeline.revision+=1
-    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws();publish_lighting(scene)
+    var extinguished_ready:bool=await FixturePublication.replace(scene,extinguished,"fixture-extinguished")
+    check(extinguished_ready,"Extinguished fixture after-values publish through prepared optical/world ownership")
+    if not extinguished_ready:scene.queue_free();await process_frame;quit(1);return
+    scene._sample_fixtures();scene._sort_draws();publish_lighting(scene)
     check(scene.fixture_entries.is_empty() and scene.fixture_energy.is_empty(),"Displayed extinguishing removes flame and animated energy")
     check(scene.fixture_heights.is_empty(),"Extinguishing removes stale optical fixture elevations")
-    scene.timeline.state = original.duplicate(true)
-    scene.timeline.state.senses.objects.clear()
-    scene.timeline.world_revision+=1;scene.timeline.revision+=1
-    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws();publish_lighting(scene)
+    var remembered:Dictionary=original.duplicate(true)
+    remembered.senses.objects.clear()
+    var remembered_ready:bool=await FixturePublication.replace(scene,remembered,"fixture-remembered")
+    check(remembered_ready,"Remembered fixture after-values publish through prepared visibility ownership")
+    if not remembered_ready:scene.queue_free();await process_frame;quit(1);return
+    scene._sample_fixtures();scene._sort_draws();publish_lighting(scene)
     check(scene.fixture_entries.is_empty(),"Remembered torch has no active flame without visual contact")
-    scene.timeline.state = original
-    scene.timeline.world_revision+=1;scene.timeline.revision+=1
-    scene._sync_world(); scene._sample_fixtures(); scene._sort_draws(); scene.update_wall_visibility();publish_lighting(scene)
+    check(await FixturePublication.replace(scene,original,"fixture-restored"),"Original optical membership restores through prepared publication")
+    scene._sample_fixtures();scene._sort_draws();scene.update_wall_visibility();publish_lighting(scene)
     check(scene.fixture_entries.size()==2,"Restoring disclosed lit fixtures restores both flame layers")
     var restored = await capture()
     restored.save_png("res://.captures/player/fixture-lights.png")

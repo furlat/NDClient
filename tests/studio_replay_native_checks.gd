@@ -253,8 +253,12 @@ func run()->void:
             verify_prefix(studio,"Hide blue audience")
         if name=="invisibility":
             var cast:Dictionary={}
-            for item in studio.index.groups:
-                if int(item.group.operation_sequence)==6 and item.group.components.any(func(component):return component.kind=="sprite_layer"):cast=item;break
+            var declarations:Array=Fixtures.fact_rows("invisibility","spell").filter(func(row):return row.fact.get("behavior_id")=="spell.see_invisibility")
+            for declared in declarations:
+                var occurrence:String=str(int(declared.node.occurrence))
+                for item in studio.index.groups:
+                    if int(item.group.operation_sequence)==int(declared.sequence) and item.group.actor_tracks.any(func(track):return track.source_event_uuid==occurrence) and item.group.components.any(func(component):return component.kind=="sprite_layer" and component.source_event_uuid==occurrence):cast=item;break
+                if not cast.is_empty():break
             check(not cast.is_empty(),"Real See Invisibility cast is available for mid-cast seek")
             if not cast.is_empty():
                 var middle:float=cast.start_ms+cast.group.duration_ms*.5

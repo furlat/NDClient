@@ -35,3 +35,5 @@ The final native shadow rerun passes **1703/1703** with zero errors,
 Both original Goblin and explicitly admitted Chest14 sources retain the same
 shadow equations, contact/geometry and original tolerance. The failed old-path
 admission attempt remains retained separately.
+
+`blood_before_shape_cache.gd` is the byte-for-byte original `7faf78fb439173cd7f2d77024ad04b6a2da42f2c:presentation/blood.gd`, formerly stored only in the ignored blood-kernels-original.gd. The source-cache worker test compares the original kernel evaluator with the current prepared cache using actual Gallery releases, including eighteen-cell and overlapping/reverse controls. It performs no current-output export to create an oracle.

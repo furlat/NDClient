@@ -5,6 +5,7 @@ const Conditions=preload("res://presentation/conditions.gd")
 const Pose=preload("res://presentation/condition_pose.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
 const Coverage=preload("res://presentation/condition_coverage.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -16,7 +17,7 @@ func run()->void:
     var directory=""
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="):directory=arg.trim_prefix("--recording=")
-    if directory.is_empty():print("Usage: --recording=<actual Hide amber journal>");quit(2);return
+    if directory.is_empty():directory=Fixtures.journal("hide")
     var index=Recording.read(directory)
     check(index.ok,"Real current-SDK journal compiles with selected native authoring")
     if not index.ok:finish(directory);return
@@ -63,7 +64,10 @@ func run()->void:
     check(observed.has("idle") and observed.has("move"),"Actual recording exercises idle and movement crouch")
     var materials=index.rows.filter(func(row):return row.kind=="condition_material" and row.owner.condition.behavior_id=="condition.hidden")
     check(not materials.is_empty() and materials.all(func(row):return row.operations.get("alphaMultiplier")==.55 and row.source_fields.alphaMultiplier.ends_with("condition.hidden.tres::look/steps/0/alpha")),"Partial opacity is an exact native body filter, not magical invisibility")
-    var badges=index.rows.filter(func(row):return row.kind=="feedback_text" and row.component.get("legacy_source","").begins_with("catalog/condition_recipes.json:/condition.hidden/"))
+    var badge_sources:Array=[]
+    for phase in ["application","removal"]:
+        badge_sources.append(Recording.Compiler.Authoring.Catalog.source_pointer("catalog/condition_recipes.json","condition.hidden/"+phase+"/feedbackEnabled",index.cache))
+    var badges=index.rows.filter(func(row):return row.kind=="feedback_text" and row.source in badge_sources)
     check(not badges.is_empty(),"Recorded condition transition emits actual feedback-text badge rows")
     for row in badges:
         check(row.source.ends_with("_text/enabled") and row.component.text.contains("Hidden") and row.label==row.component.text,"Badge retains its Resource field and authored text")

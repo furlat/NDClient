@@ -6,6 +6,10 @@ func _initialize() -> void: run.call_deferred()
 func run() -> void:
     root.unfocusable = true; root.position = Vector2i(-16000,-16000); root.size = Vector2i(256,64)
     root.msaa_3d = Viewport.MSAA_DISABLED
+    RenderingServer.global_shader_parameter_set(&"light_count",0)
+    RenderingServer.global_shader_parameter_set(&"light_ambient",1.0)
+    RenderingServer.global_shader_parameter_set(&"light_cap",0.0)
+    RenderingServer.global_shader_parameter_set(&"light_normals",false)
     var camera := Camera3D.new(); camera.projection = Camera3D.PROJECTION_ORTHOGONAL
     camera.size = 1; camera.position.z = 10; root.add_child(camera)
     var node := MeshInstance3D.new(); var quad := QuadMesh.new(); quad.size = Vector2(4,1); node.mesh = quad

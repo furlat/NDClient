@@ -22,7 +22,7 @@ func source(x:float,z:float,appearance:String="torch",bright:float=15.0,dim:floa
         "anchor_entity_uuid":actor if not actor.is_empty() else null,"anchor_item_uuid":null,
         "actor_anchored":not actor.is_empty(),"very_bright_radius_feet":0.0,
         "bright_radius_feet":bright,"dim_radius_feet":dim}
-func state(selected:Dictionary)->Dictionary:return {"senses":{"light_sources":selected}}
+func state(selected:Dictionary)->Dictionary:return {"light_sources":selected}
 func make_side()->Dictionary:
     var view=SubViewport.new();view.size=Vector2i(256,256);view.own_world_3d=true
     view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(view)
@@ -55,7 +55,14 @@ func capture(a:Dictionary,b:Dictionary,label:String)->void:
     check(exact,label+" first native framebuffer equals ordinary Lighting.sync")
     check(image.get_used_rect().size==Vector2i(256,256),label+" native framebuffer contains the full normal-mapped source")
     evidence.append({"case":label,"first_frame_exact":exact})
+func prepare_cookies(lighting:RefCounted,desired:Dictionary)->void:
+    for spec in Lighting.resolve(desired).sources:
+        var deadline:int=Time.get_ticks_msec()+10000
+        while lighting.prepare_cookie(spec)==null and Time.get_ticks_msec()<deadline:await process_frame
+        check(lighting.prepare_cookie(spec)!=null,"Actual immutable range cookie prepares before its native source binding")
+
 func transition(a:Dictionary,b:Dictionary,desired:Dictionary,label:String,expected:Array,actors:Dictionary={})->void:
+    for side in [a,b]:await prepare_cookies(side.lighting,desired)
     var lighting:CountLighting=a.lighting
     var previous_sources:Array=lighting.sources
     var previous_colours:Dictionary=lighting._source_colours
@@ -101,13 +108,15 @@ func run()->void:
     root.position=Vector2i(-16000,-16000);root.unfocusable=true
     var a:Dictionary=make_side();var b:Dictionary=make_side()
     var initial:Dictionary=state({"a":source(-2,0),"b":source(2,0,"magic"),"d":source(0,2)})
-    for side in [a,b]:side.lighting.sync(initial);side.lighting.sample({});side.lighting.project(side.camera)
+    for side in [a,b]:
+        await prepare_cookies(side.lighting,initial)
+        side.lighting.sync(initial);side.lighting.sample({});side.lighting.project(side.camera)
     await capture(a,b,"initial")
     await transition(a,b,initial,"same-optics-new-array",[0,0,0])
     var changed:Dictionary=state({"a":source(-2,0,"magic",25,5),"c":source(1,0,"torch",10,10,"actor"),"d":source(0,2)})
     var actors={"actor":{"position":[-.5,1.0],"base_height_steps":1,"visual_height":.25}}
     await transition(a,b,changed,"add-remove-radius-colour",[1,1,1],actors)
-    var moved:Dictionary=changed.duplicate(true);moved.senses.light_sources.a.position=[-1,-1]
+    var moved:Dictionary=changed.duplicate(true);moved.light_sources.a.position=[-1,-1]
     await transition(a,b,moved,"position-only",[0,0,0],actors)
     await transition(a,b,state({}),"remove-all",[0,0,3])
     var retained:Dictionary=a.lighting.begin_preparation({"sources":a.lighting.sources,"issues":[]})

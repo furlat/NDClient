@@ -1614,6 +1614,7 @@ func release_handles() -> Array:
     handles_released=true
     var held = entries.duplicate()
     held.append_array(_unadopted_actor_layers())
+    held.append_array(_unadopted_environment_entries())
     if blood_renderer!=null:held.append_array(blood_renderer.release_world(blood_preparation))
     blood_preparation={"handles":{},"retired":[]}
     for record in light_preparation.get("nodes",[]):held.append({"node":record.node,"retire_external":true})
@@ -1637,9 +1638,23 @@ func _unadopted_actor_layers()->Array:
                 result.append({"node":node,"retire_external":true})
     return result
 
+func _unadopted_environment_entries()->Array:
+    var result:Array=[];var seen:Dictionary={}
+    for output in [environment_output,environment_batch_output]:
+        for row in output.get("rows",{}).values():
+            for entry in row:
+                if not is_instance_valid(entry.node):continue
+                var node:Node=entry.node
+                if node.get_parent()==null and not seen.has(node.get_instance_id()):
+                    seen[node.get_instance_id()]=true
+                    result.append({"node":node,"retire_external":true})
+    return result
+
 func _exit_tree()->void:
     join()
     # Worker-built nodes remain outside the tree until adopted. Their private
     # owner must free them on cancellation/shutdown; refcounting cannot do it.
     for entry in _unadopted_actor_layers():entry.node.free()
+    for entry in _unadopted_environment_entries():entry.node.free()
     actor_resource_output.clear()
+    environment_output.clear();environment_batch_output.clear()

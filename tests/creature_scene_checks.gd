@@ -20,17 +20,20 @@ func observe(scene: Node) -> bool:
             if packet.is_empty() or not packet.has("normal_profiles"):continue
             var key: String=path+"/"+str(scene.quarter)+"/"+scene.character_light_profile
             if sources.has(key):continue
-            sources[key]={"path":path,"family":packet.family,"quarter":scene.quarter,"sequence":scene.timeline.sequence,"profile":scene.character_light_profile}
+            var rig_id:String=visual.row.rig
+            sources[key]={"path":path,"rig_id":rig_id,"quarter":scene.quarter,"sequence":scene.timeline.sequence,"profile":scene.character_light_profile}
             check(entry.material.get_shader_parameter("has_component_geometry"),"Actual disclosed creature binds delivered geometry "+key)
             check(entry.geometry_cell_size==Vector2(packet.cell_size[0],packet.cell_size[1]),"Actual native creature size retained "+key)
             var profiles=Geometry.normal_paths(path,"body",scene.catalog_cache)
             check(entry.material.get_shader_parameter("component_normal")==scene.textures[profiles.value[scene.character_light_profile]],"Profile binds preuploaded exact normal "+key)
-            check(Geometry.paths(path,"body",scene.catalog_cache).keys().all(func(p):return scene.textures.has(p) and not scene.source_images.has(p)),"Companions are GPU-resident without CPU image retention "+key)
+            var companion_paths:Array=Geometry.paths(path,"body",scene.catalog_cache,scene.character_light_profile).keys()
+            var cpu_companions:Array=companion_paths.filter(func(p):return scene.source_images.has(p))
+            check(companion_paths.all(func(p):return scene.textures.has(p)) and cpu_companions.is_empty(),"Companions are GPU-resident without CPU image retention "+key+" retained="+str(cpu_companions))
             check(visual.entries.all(func(e):return e.actor_layer.slot!="shadow"),"No baked shadow doubles generated creature shadow "+key)
             var sheet: Texture2D=entry.material.get_shader_parameter("sheet")
             var frame: Vector4=entry.material.get_shader_parameter("frame_uv")
             check(Vector2i(roundi(frame.z*sheet.get_width()),roundi(frame.w*sheet.get_height()))==Vector2i(packet.cell_size[0],packet.cell_size[1]),"Animation sampling uses exact native cell "+key)
-            if not captures.has(packet.family):captures[packet.family]=true;capture_needed=true
+            if not captures.has(rig_id):captures[rig_id]=true;capture_needed=true
     return capture_needed
 func run() -> void:
     if DisplayServer.get_name()=="headless":quit(2);return
@@ -56,7 +59,7 @@ func run() -> void:
     check(not sources.is_empty(),"Real replay reveals creatures with delivered geometry")
     check(scene.timeline.state==scene.session.journal.state and not scene.timeline.busy() and scene.timeline.sequence==scene.session.latest_sequence,"All original causal groups drain to canonical backend state")
     check(scene.presentation_errors.is_empty() and scene.media_issue.is_empty() and scene.generated_shadows.issues.is_empty(),"No presentation/preparation/generated-shadow errors: "+str(scene.presentation_errors)+scene.media_issue)
-    var report={"checks":checks,"failures":failures,"sources":sources.values(),"groups":scene.timeline.completed_group_count,"sequence":scene.timeline.sequence,"steps":steps,"captured_families":captures.keys(),"scope":"Actual recorded subjective gameplay, including first creature disclosure, exact source profiles/native cells/GPU-only companions and canonical terminal equality. Pixel oracle is separate creature_source_checks."}
+    var report={"checks":checks,"failures":failures,"sources":sources.values(),"groups":scene.timeline.completed_group_count,"sequence":scene.timeline.sequence,"steps":steps,"captured_rigs":captures.keys(),"scope":"Actual recorded subjective gameplay, including first creature disclosure, exact source profiles/native cells/GPU-only companions and canonical terminal equality. Pixel oracle is separate creature_source_checks."}
     FileAccess.open("res://generated/creature_scene_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
-    print("CREATURE_SCENE_CHECKS ",JSON.stringify({"checks":checks,"failures":failures,"groups":scene.timeline.completed_group_count,"families":captures.keys()}))
+    print("CREATURE_SCENE_CHECKS ",JSON.stringify({"checks":checks,"failures":failures,"groups":scene.timeline.completed_group_count,"rigs":captures.keys()}))
     scene.queue_free();await process_frame;quit(0 if failures.is_empty() else 1)

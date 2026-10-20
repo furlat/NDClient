@@ -75,7 +75,13 @@ func modular()->Dictionary:
     var material=ShaderMaterial.new();material.shader=Body
     var entry=make_entry("modular-Chest14",material,Vector2(128,128),Vector2(64,87));entry.actor_layer.slot="chest"
     SourceMaterial.set_parameter(entry,"sheet",texture(path));SourceMaterial.set_parameter(entry,"frame_uv",Vector4(0,0,1.0/15,.125))
-    Geometry.bind(entry,path,cache,texture,true,true,"reference")
+    # The original sheet remains the optical input. Admit its registered
+    # immutable metadata before the passive production geometry bind.
+    var source:String="res://assets/art/media/smallscale/modular/Chest14/Idle.png"
+    var admitted:Dictionary=Geometry.BodySources.prepare_descriptor(source,"chest",cache)
+    check(not admitted.is_empty(),"Actual modular Chest14 native source metadata admits before geometry binding")
+    Geometry.bind(entry,source,cache,texture,true,true,"reference")
+    check(SourceMaterial.value(entry,"has_component_geometry") and SourceMaterial.value(entry,"component_depth")!=null and SourceMaterial.value(entry,"component_support")!=null,"Prepared modular source publishes its actual depth and support operands")
     entry.frames=15
     return entry
 

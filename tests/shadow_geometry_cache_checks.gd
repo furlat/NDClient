@@ -20,18 +20,6 @@ func visibility_matches(current:Dictionary,previous:Dictionary)->bool:
         if delta>0:differing+=1;largest_delta=maxi(largest_delta,delta)
     differing_samples+=differing;compared_samples+=a.size()/stride
     return differing*200<=a.size()/stride
-func modular()->Dictionary:
-    # The original painted sheet is unchanged. Its current metadata owner is
-    # the registered native source path and must be explicitly prepared before
-    # Geometry.bind's passive descriptor read (as in the gameplay media lane).
-    var entry:Dictionary=super.modular()
-    var path:String="res://assets/art/media/smallscale/modular/Chest14/Idle.png"
-    var admitted:Dictionary=Geometry.BodySources.prepare_descriptor(path,"chest",cache)
-    check(not admitted.is_empty(),"Actual modular Chest14 native source metadata admits before geometry binding")
-    Geometry.bind(entry,path,cache,texture,true,true,"reference")
-    check(SourceMaterial.value(entry,"has_component_geometry") and SourceMaterial.value(entry,"component_depth")!=null and SourceMaterial.value(entry,"component_support")!=null,"Prepared modular source publishes its actual depth and support operands")
-    return entry
-
 func run()->void:
     if DisplayServer.get_name()=="headless":quit(2);return
     create_timer(90).timeout.connect(func():printerr("Shadow cache qualification deadline");quit(2))

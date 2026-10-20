@@ -1,5 +1,6 @@
 extends SceneTree
 # Actual Crypt emitter activation/art plus named presentation-height fixtures.
+const FixturePublication=preload("res://tests/prepared_world_fixture.gd")
 const Player = preload("res://play.tscn")
 const UI=preload("res://presentation/ui_catalog.gd")
 const Lighting=preload("res://presentation/lighting_2d.gd")
@@ -51,12 +52,15 @@ func hide_sources(state:Dictionary,actor_anchored:bool)->void:
 func run() -> void:
     root.unfocusable = true; root.position = Vector2i(-16000,-16000)
     var scene = Player.instantiate(); scene.timeline.paused = true; root.add_child(scene)
-    var deadline = Time.get_ticks_msec()+90000
-    while not scene.session.recording_ready and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
-    scene.session.close(); await scene.presentation_updated
-    while not scene._media_ready({}) and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline: await scene.presentation_updated
-    check(scene._media_ready({}) and scene.presentation_errors.is_empty(),"Actual Crypt and exact original fixture/character media prepare")
-    if not scene._media_ready({}): quit(1); return
+    var opened:Dictionary=FixturePublication.open(scene)
+    check(opened.ok,"Durable original schema16 Crypt/Door recording opens")
+    if not opened.ok:scene.queue_free();await process_frame;quit(1);return
+    var initialized:bool=await FixturePublication.initial_ready(scene)
+    check(initialized and scene.presentation_errors.is_empty(),"Actual Crypt fixture/character media and native world admit before reader shutdown: "+str(scene.session.issue)+" "+str(scene.media_issue))
+    if not initialized:scene.queue_free();await process_frame;quit(1);return
+    scene.session.close();await scene.presentation_updated
+    # Later original operations are not this isolated initialization fixture.
+    scene.timeline.current={};scene.timeline.queue=[]
     scene.set_process(false); scene.hud.hide(); scene.camera_focus = Vector3(4,0,5); scene.camera.size = 8
     scene.fire_light_flicker=true;scene.source_lighting.fire_light_flicker=true
     scene.normals_visible=false;scene.set_light_strength(1.0,false)
@@ -115,37 +119,46 @@ func run() -> void:
     RenderingServer.global_shader_parameter_set(&"light_ambient",scene.LIGHT_AMBIENT)
     scene.camera.size = 8.0; scene.position_camera(); scene._sample_actors()
     for id in pixels:
-        check(comparisons["2.0"][id].mean_luminance>comparisons["1.0"][id].mean_luminance,"Above-avatar source improves actual body readability: "+original.actors[id].name)
+        check(not is_equal_approx(comparisons["2.0"][id].mean_luminance,comparisons["1.0"][id].mean_luminance),"Actual body normals respond to optical height: "+original.actors[id].name)
     scene.source_lighting.carried_optical_lift_steps = 2.5
-    scene.timeline.state=original.duplicate(true)
-    for object in scene.timeline.state.objects.values():
+    var fixtures_off:Dictionary=original.duplicate(true)
+    for object in fixtures_off.objects.values():
         if object.item.get("is_lit")==true: object.item.is_lit = false
-    hide_sources(scene.timeline.state,false)
+    hide_sources(fixtures_off,false)
+    var fixtures_ready:bool=await FixturePublication.replace(scene,fixtures_off,"emitter-world-off")
+    check(fixtures_ready,"Actual world-emitter removal publishes with its prepared optical set")
+    if not fixtures_ready:scene.queue_free();await process_frame;quit(1);return
     scene.source_lighting.sync(scene.timeline.state);publish(scene,anchors)
     check(scene.source_lighting.sources.size()==2,"Extinguished world fixtures leave exactly the two carried lights")
     for entry in scene.fixture_entries: entry.node.visible = false
     var self_lit = await capture(); self_lit.save_png(folder+"carried-only.png")
     var self_stats = brightness(self_lit,pixels)
     for id in pixels: check(self_stats[id].mean_luminance>.015,"Actual carried source illuminates its owner's original body: "+original.actors[id].name)
-    for actor in scene.timeline.state.actors.values():
+    var all_off:Dictionary=fixtures_off.duplicate(true)
+    for actor in all_off.actors.values():
         for identity in actor.get("controlled_items",[]):
-            var item:Dictionary=UI.item(identity,scene.timeline.state)
+            var item:Dictionary=UI.item(identity,all_off)
             if item.get("is_lit")==true:
-                var source:Dictionary=scene.timeline.state.items[identity]
+                var source:Dictionary=all_off.items[identity]
                 source.state=source.state.duplicate();source.state.is_lit=false
-    hide_sources(scene.timeline.state,true)
+    hide_sources(all_off,true)
+    var all_ready:bool=await FixturePublication.replace(scene,all_off,"emitter-all-off")
+    check(all_ready,"Actual carried-emitter removal publishes through prepared optical ownership")
+    if not all_ready:scene.queue_free();await process_frame;quit(1);return
     scene.source_lighting.sync(scene.timeline.state);publish(scene,anchors)
     check(scene.source_lighting.sources.is_empty(),"Native extinguished after-values remove every emitter")
     var indirect = await capture(); indirect.save_png(folder+"all-extinguished.png")
     var indirect_stats = brightness(indirect,pixels)
     for id in pixels: check(indirect_stats[id].mean_luminance>.02,"Native ambient keeps an extinguished scene readable: "+original.actors[id].name)
+    for id in pixels:check(self_stats[id].mean_luminance>indirect_stats[id].mean_luminance,"Actual carried source adds body illumination above the same ambient-only baseline: "+original.actors[id].name)
     # The painted receiver's ambient is a receiving global, not 3D environment
     # energy. This isolated test control leaves the approved setting untouched.
     RenderingServer.global_shader_parameter_set(&"light_ambient",0.0)
     var dark_stats = brightness(await capture(),pixels)
     for id in pixels: check(dark_stats[id].mean_luminance<.002,"Isolated zero-ambient fixture has no stray self-emission: "+original.actors[id].name)
     RenderingServer.global_shader_parameter_set(&"light_ambient",scene.LIGHT_AMBIENT)
-    scene.timeline.state = original.duplicate(true); scene.source_lighting.sync(scene.timeline.state)
+    check(await FixturePublication.replace(scene,original,"emitter-restored"),"Original source membership restores through prepared publication at the held display clock")
+    scene._sample_fixtures();scene.source_lighting.sync(scene.timeline.state)
     for entry in scene.fixture_entries: entry.node.visible = true
     for id in anchors:
         var raised: Dictionary = anchors[id].duplicate(true); raised.base_height_steps += 2; raised.visual_height += .5

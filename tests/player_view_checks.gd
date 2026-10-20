@@ -10,10 +10,10 @@ func check(value: bool,message: String) -> void:
 func check_painted_order(scene: Node) -> void:
     # The optimization must retain the established painter order at actual
     # movement, visibility and quarter-view boundaries.
-    var expected: Array = scene.entries.filter(func(entry):return entry.node.visible)
+    var expected: Array = (scene.static_entries+scene.actor_entries+scene.ground_overlay.ordered).filter(func(entry):return entry.node.visible)
     expected.sort_custom(func(a,b):
-        var ak = scene.Order.key(a.placement,a.role,a.layer,scene.quarter)
-        var bk = scene.Order.key(b.placement,b.role,b.layer,scene.quarter)
+        var ak = scene.Order.key(a.placement,a.role,a.layer,scene.quarter,scene.ground_is_background)
+        var bk = scene.Order.key(b.placement,b.role,b.layer,scene.quarter,scene.ground_is_background)
         return scene.Order.less(ak,bk) if ak != bk else a.id < b.id)
     check(scene.draw_order.map(func(entry):return entry.id) == expected.map(func(entry):return entry.id),
         "Displayed painter order matches uncached source ordering")

@@ -1,5 +1,6 @@
 extends SceneTree
 const Quarter=preload("res://presentation/quarter_view.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 # Original authored floor pixels: production MultiMesh versus independent single
 # draws in exactly the original per-material source order, in all four views.
 class Probe extends "res://play.gd":
@@ -45,7 +46,7 @@ func run()->void:
             var id="%d,%d"%[x,y]
             rows.append({"id":id,"kind":"terrain","material":"stone","position":[x,y],"base_height_steps":0,"layer":0,"orientation":"east","boundaries":[]})
             tiles[id]={"tile_uuid":id,"position":[x,y],"elevation_steps":0}
-    scene.timeline.state={"tiles":tiles,"objects":{},"actors":{},"audience":{"controlled":[]},"senses":{"visible":[]}}
+    scene.timeline.state={"tiles":tiles,"objects":{},"actors":{},"audience":{"controlled":[]},"senses":{"visible":Cells.mask([])}}
     var background=await capture()
     for quarter in range(4):
         scene.quarter=quarter;scene.world_quarter=quarter;scene.position_camera()
@@ -62,7 +63,7 @@ func run()->void:
             scene._environment_row(row.duplicate(true));singles.append(scene.static_entries.back())
         for i in range(singles.size()):scene._apply_draw_rank(singles[i],i,-scene.camera.global_basis.z)
         for visible in [rows.map(func(row):return row.position),[],[[0,0],[1,0]]]:
-            scene.timeline.state.senses.visible=visible;scene.timeline.revision+=1;scene._sync_scenery(true)
+            scene.timeline.state.senses.visible=Cells.mask(visible);scene.timeline.revision+=1;scene._sync_scenery(true)
             for entry in singles:entry.node.visible=false
             batch.node.visible=true
             var actual=await capture()

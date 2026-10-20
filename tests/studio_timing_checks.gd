@@ -5,6 +5,7 @@ const Timeline=preload("res://presentation/timeline.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Compiler=preload("res://presentation/compiler.gd")
 const Conditions=preload("res://presentation/conditions.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -73,7 +74,7 @@ func _recording(directory:String)->Dictionary:
     check(raw.ok,directory+" independently compiles original ordered prefix")
     if not raw.ok:return {}
     check(index.groups.size()==raw.groups.size(),"Inspection spacing adds no fake group or event")
-    var previous_end=500.0
+    var previous_end:float=Recording.PREVIEW_LEAD_IN_MS
     var previous_operation=-1
     var gaps=0
     for n in index.groups.size():
@@ -81,12 +82,12 @@ func _recording(directory:String)->Dictionary:
         var group=item.group.duplicate();group.erase("preview_start_ms")
         check(group==raw.groups[n],"Original complete compiler group remains exact: "+str(group.id))
         var gap:float=item.start_ms-previous_end
-        check(is_zero_approx(gap) or is_equal_approx(gap,350),"Only bounded inspection spacing precedes "+str(group.id))
+        check(is_zero_approx(gap) or is_equal_approx(gap,Recording.PREVIEW_OPERATION_GAP_MS),"Only the declared inspection spacing precedes "+str(group.id))
         if group.operation_sequence==previous_operation:check(is_zero_approx(gap),"No delay between lineages of one operation")
         if gap>0:gaps+=1
         previous_operation=group.operation_sequence;previous_end=item.start_ms+group.duration_ms
-    check(is_equal_approx(index.groups[0].start_ms,500),"First operation starts after500ms real-state lead-in")
-    for at in [0.0,250.0,499.0]:
+    check(is_equal_approx(index.groups[0].start_ms,Recording.PREVIEW_LEAD_IN_MS),"First operation retains the declared real-state lead-in")
+    for at in [0.0,Recording.PREVIEW_LEAD_IN_MS*.5,maxf(0,Recording.PREVIEW_LEAD_IN_MS-1)]:
         var value=Recording.restore(index,at)
         check(value.state==index.initialization.state and value.sequence==0,"Lead-in retains exact initialization at "+str(at))
         check(value.actor_samples().is_empty() and value.current.is_empty(),"Lead-in has no early body/event at "+str(at))
@@ -120,7 +121,7 @@ func _recording(directory:String)->Dictionary:
         check(not next_moves.is_empty(),"Actual Hide recording includes subsequent crouched movement")
         if next_moves.is_empty():continue
         var movement:Dictionary=next_moves[0]
-        check(is_equal_approx(movement.start_ms-body.end_ms,350),"Hidden has350ms inspectable idle before the next movement")
+        check(is_equal_approx(movement.start_ms-body.end_ms,Recording.PREVIEW_OPERATION_GAP_MS),"Hidden idle before movement retains the shared declared inspection interval")
         for at in [body.start_ms,lerpf(body.start_ms,applied,.5),applied-1]:
             var value=Recording.restore(index,at)
             check(not _hidden(value,actor),"No early Hidden state during the action at "+str(at))
@@ -135,9 +136,9 @@ func _recording(directory:String)->Dictionary:
         var moving=Recording.restore(index,lerpf(movement.start_ms,movement.end_ms,.5))
         check(moving.actor_samples().get(actor,{}).get("clip")=="CrouchRun","Next actual movement uses crouched source")
         var forward=_timeline(index)
-        var targets=[250.0,body.start_ms,applied-1,applied,idle_at,movement.start_ms,lerpf(movement.start_ms,movement.end_ms,.5)]
+        var targets=[Recording.PREVIEW_LEAD_IN_MS*.5,body.start_ms,applied-1,applied,idle_at,movement.start_ms,lerpf(movement.start_ms,movement.end_ms,.5)]
         for at in targets:
-            forward.advance(at-forward.display_ms)
+            check(_advance_to(forward,at),"Continuous ordered publication reaches target "+str(at))
             check(_same_at(forward,Recording.restore(index,at)),"Continuous playback equals exact seek at "+str(at))
         var prepared=_timeline(index)
         prepared.world_ready=func(_candidate):return true
@@ -145,13 +146,22 @@ func _recording(directory:String)->Dictionary:
             check(_advance_to(prepared,at),"Prepared world boundary reaches target "+str(at))
             check(_same_at(prepared,Recording.restore(index,at)),"Prepared production clock agrees with seek at "+str(at))
         var gate={"ready":false}
-        var held=Recording.restore(index,applied-1);held.paused=false
+        # A pure condition-uniform commit needs no world reconstruction. Hold
+        # the actual received source-preparation cut of this action instead of
+        # inventing a geometry boundary at its later Hidden membership commit.
+        var hold_at:float=maxf(0,body.start_ms-1)
+        var held=Recording.restore(index,hold_at);held.paused=false
         held.world_ready=func(_candidate):return gate.ready
-        held.advance(2)
-        check(held.waiting_for_world and not _hidden(held,actor) and is_equal_approx(held.display_ms,applied-1),"Unprepared effect boundary exposes no future Hidden state")
-        gate.ready=true;held.advance(2)
-        check(_hidden(held,actor),"Prepared effect publishes the original Hidden after-value")
-        var rewind=Recording.restore(index,250)
+        held.advance(applied-hold_at+1)
+        var candidate:Dictionary=held.pending_world
+        check(not candidate.is_empty() and candidate.source_group_id==body.group_id and is_equal_approx(candidate.display_ms,body.start_ms) and candidate.actor_samples.get(actor,{}).get("trace_track_id")==body.track.trace_track_id,"Actual received Hide source is prepared before action publication, after genuine earlier zero-duration turns")
+        check(held.waiting_for_world and not _hidden(held,actor) and is_equal_approx(held.display_ms,body.start_ms),"Unprepared actual source boundary exposes no future Hidden state")
+        var held_state:Dictionary=held.state.duplicate(true);var held_trace:Dictionary=held.trace.duplicate(true)
+        held.advance(applied-held.display_ms+1)
+        check(held.state==held_state and held.trace==held_trace and is_equal_approx(held.display_ms,body.start_ms) and is_same(held.pending_world,candidate),"Retrying actual source preparation publishes no state/event and accrues no waiting time")
+        gate.ready=true
+        check(_advance_to(held,applied) and _hidden(held,actor),"Prepared source permits the original Hidden after-value at its exact authored application time")
+        var rewind=Recording.restore(index,Recording.PREVIEW_LEAD_IN_MS*.5)
         check(not _hidden(rewind,actor) and rewind.state==index.initialization.state,"Reverse seek returns to normal pre-action state")
         evidence.append({"directory":directory,"hide_start_ms":body.start_ms,"effect_ms":applied,"idle_sample_ms":idle_at,"movement_start_ms":movement.start_ms,"duration_ms":index.duration_ms,"presentation_end_ms":index.presentation_end_ms,"tail_ms":index.presentation_end_ms-index.duration_ms,"operation_gaps":gaps})
     return index
@@ -160,7 +170,8 @@ func run()->void:
     var paths:Array=[]
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--recording="):paths.append(argument.trim_prefix("--recording="))
-    if paths.is_empty():printerr("Requires explicit --recording=<real journal>");quit(2);return
+    if paths.is_empty():
+        for seat in ["amber","blue"]:paths.append(Fixtures.journal("hide",seat))
     var indexes:Array=[]
     for directory in paths:
         var index=_recording(directory)

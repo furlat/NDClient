@@ -658,7 +658,7 @@ func _condition_witnesses(world: Node,actor_id: String,samples: Array) -> void:
     var selected=Conditions.select_recipes(actor_id,samples)
     for sample in samples:
         if sample.kind!="condition" or sample.actor_uuid!=actor_id:continue
-        if not selected.any(func(value):return value.recipe.get("definitionRef")==sample.recipe.get("definitionRef")):continue
+        if not selected.any(func(value):return value.condition_uuid==sample.condition_uuid):continue
         var persistent: Dictionary=sample.recipe.get("persistent",{})
         var poses:Array=persistent.get("activityPoses",[])
         if not poses.is_empty():

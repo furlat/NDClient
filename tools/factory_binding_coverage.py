@@ -205,6 +205,8 @@ def report() -> dict:
                 supplied = PROVIDERS | (EVENT_PROVIDERS if constructor in {"observed_event", "creation_admission"} else set())
                 if constructor == "spatial_owner":
                     supplied = supplied | {"surface_presence"}
+                    if cue["constructor_input"].get("cell_input") == "cells":
+                        supplied = supplied | {"removed_cells"}
                 if constructor == "propagation_links":
                     supplied = supplied | {"link_edges"}
                 if constructor == "spell_strike":

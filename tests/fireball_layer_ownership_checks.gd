@@ -1,6 +1,5 @@
 extends "res://tests/global_publication_checks.gd"
 const Recording=preload("res://studio/recording.gd")
-const Fixtures=preload("res://tests/recording_fixtures.gd")
 
 func prepare_cast(scene:Node)->void:
     var deadline:int=Time.get_ticks_msec()+30000

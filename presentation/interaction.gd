@@ -194,7 +194,8 @@ static func idle_intent(choices: Dictionary, state: Dictionary, hit: Dictionary,
     if hit.get("kind")=="actor" or force_attack:
         var attack = main_attack(choices,id,preference)
         return {"kind":"attack","label":attack.action.display_name,"value":attack} if not attack.is_empty() else {}
-    if state.get("objects",{}).get(id,{}).get("contained_items") != null:
+    var object:Dictionary=state.get("objects",{}).get(id,{})
+    if object.get("contained_items") != null and object.get("item",{}).get("is_open")!=false:
         return {"kind":"storage","label":"Open storage","id":id}
     var options = world_options(choices,id)
     if options.is_empty(): return {}

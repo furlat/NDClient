@@ -4,13 +4,18 @@
  "kind": "interaction",
  "seed": 2,
  "subjects": {
-  "spell": [],
+  "spell": [
+   "spell.protection_from_poison"
+  ],
   "action": [
    "action.move",
    "action.attack",
    "action.item.potion_healing.drink"
   ],
-  "condition": [],
+  "condition": [
+   "condition.poisoned",
+   "condition.spell.protection_from_poison"
+  ],
   "creature": [],
   "environment_object": [],
   "spatial_effect": [],
@@ -39,6 +44,9 @@
      "id": "consumable.healing_potion",
      "heal_amount": 7
     }
+   ],
+   "conditions": [
+    "condition.poisoned"
    ]
   },
   {
@@ -46,7 +54,21 @@
    "side": "blue",
    "creature": "creature.knight",
    "at": [
-    8,
+    7,
+    5
+   ]
+  },
+  {
+   "role": "restorer",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.protection_from_poison"
+   ],
+   "at": [
+    5,
     5
    ]
   }
@@ -56,7 +78,7 @@
    "do": "action.move",
    "by": "caster",
    "target": [
-    7,
+    6,
     5
    ]
   },
@@ -91,11 +113,20 @@
    "target": "target",
    "weapon_slot": "RANGED_MAIN",
    "capture_choices": true
+  },
+  {
+   "do": "spell.protection_from_poison",
+   "by": "restorer",
+   "target": "caster"
   }
  ],
  "required_behaviors": [
   "action.move",
   "action.attack",
-  "action.item.potion_healing.drink"
+  "action.item.potion_healing.drink",
+  "spell.protection_from_poison"
+ ],
+ "required_condition_ends": [
+  "condition.poisoned"
  ]
 }

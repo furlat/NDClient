@@ -2879,7 +2879,7 @@ func _sample_actors() -> void:
 # cap/Normals storage and ambient, and the terrain supports.
 func _publish_receiving() -> void:
     if not publishes_receiving: return
-    light_table.publish(source_lighting.canvas_sources(),generated_shadows.cookie_image)
+    light_table.publish(source_lighting.canvas_sources(),generated_shadows.cookie_image,source_lighting.canvas_directionals())
     var cap:float=1.0 if light_cap_enabled else 0.0
     var receiving:Array=[cap,normals_visible]
     if receiving!=receiving_globals:
@@ -3546,7 +3546,7 @@ func confirm_selection() -> void:
 func storage_view() -> Dictionary:
     if loot_object_uuid.is_empty(): return {}
     var object: Dictionary = timeline.state.get("objects",{}).get(loot_object_uuid,{})
-    if timeline.state.get("current_actor_uuid","") != loot_actor_uuid or object.get("contained_items") == null:
+    if timeline.state.get("current_actor_uuid","") != loot_actor_uuid or object.get("contained_items") == null or object.get("item",{}).get("is_open")==false:
         close_storage()
         return {}
     return object
@@ -3554,7 +3554,7 @@ func storage_view() -> Dictionary:
 func open_storage(object_uuid: String) -> void:
     if not command_ready(): return
     var object: Dictionary = timeline.state.objects.get(object_uuid,{})
-    if object.get("contained_items") == null: return
+    if object.get("contained_items") == null or object.get("item",{}).get("is_open")==false: return
     cancel_selection()
     loot_object_uuid = object_uuid
     loot_actor_uuid = timeline.state.current_actor_uuid

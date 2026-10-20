@@ -1,4 +1,5 @@
 extends SceneTree
+const FixturePublication=preload("res://tests/prepared_world_fixture.gd")
 const ViewPublication=preload("res://tests/view_publication.gd")
 # Actual Crypt wall/door rows and their original source packets through play.gd.
 const Player = preload("res://play.tscn")
@@ -35,12 +36,18 @@ func alpha_changes(a:Image,b:Image)->int:
 func run() -> void:
     root.unfocusable = true; root.position = Vector2i(-16000,-16000); root.size = Vector2i(640,480)
     var scene = Player.instantiate(); scene.timeline.paused = true; root.add_child(scene)
+    var opened:Dictionary=FixturePublication.open(scene)
+    check(opened.ok,"Durable original schema16 Crypt/Door recording opens")
+    if not opened.ok:scene.queue_free();await process_frame;quit(1);return
     var initial_deadline:int=Time.get_ticks_msec()+90000
     while (not scene.session.recording_ready or not scene._media_ready({})) and scene.session.issue.is_empty() and Time.get_ticks_msec()<initial_deadline: await process_frame
     scene.session.close(); await scene.presentation_updated
     scene.set_process(false); scene.hud.hide()
     check(scene.session.issue.is_empty() and not scene.timeline.state.is_empty(),"Real recorded Crypt admits")
     if scene.timeline.state.is_empty():scene.queue_free();quit(1);return
+    # The fixture begins at the recorded initialization cut; later original
+    # operations are not its choreography or a claim about replay completion.
+    scene.timeline.current={};scene.timeline.queue=[]
     scene.grid_visible=false;scene.normals_visible=false
     scene.fire_light_flicker=false;scene.source_lighting.fire_light_flicker=false
     DirAccess.make_dir_recursive_absolute("res://.captures/walls")
@@ -55,16 +62,12 @@ func run() -> void:
         for sample in [["wall",[7,5],"closed"],["wall",[7,8],"closed"],["door",[7,6],"closed"],["door",[7,6],"inward"],["door",[7,6],"outward"]]:
             # Explicit presentation after-values exercise original open-state art;
             # these are not claimed as live backend command tests.
-            scene.timeline.state.objects[door_id]=scene.timeline.state.objects[door_id].duplicate(true)
-            scene.timeline.state.objects[door_id].item.is_open = sample[2]!="closed"
-            scene.timeline.state.objects[door_id].item.door_swing = sample[2] if sample[2]!="closed" else "inward"
-            scene.timeline.current={}; scene.timeline.queue=[]; scene.timeline.revision+=1; scene.timeline.world_revision+=1
-            scene._prepare_media()
-            var deadline=Time.get_ticks_msec()+60000
-            while not scene._environment_media_ready() and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline:
-                scene._warm_media();scene._prepare_media();await process_frame
-            check(scene._environment_media_ready(),"Exact authored door after-value sources prepare")
-            scene._sync_world(); scene._sync_scenery(true)
+            var after:Dictionary=scene.timeline.state.duplicate(true)
+            after.objects[door_id].item.is_open = sample[2]!="closed"
+            after.objects[door_id].item.door_swing = sample[2] if sample[2]!="closed" else "inward"
+            var ready:bool=await FixturePublication.replace(scene,after,"architecture-"+str(q)+"-"+str(sample))
+            check(ready,"Exact authored door after-value publishes through prepared media/world ownership")
+            if not ready:scene.queue_free();await process_frame;quit(1);return
             scene.camera_focus = Vector3(sample[1][0],0,sample[1][1]); scene.camera.size = 4
             check(await ViewPublication.finish(scene,q),"Requested camera quarter publishes")
             var selected = []
@@ -107,12 +110,19 @@ func run() -> void:
                 check(scene.source_lighting._directionals.size()==1,"The current 2D adapter admits the explicit directional source")
                 check("architectural-directional" in scene.light_table.ids,"Declared DirectionalLight2D reaches the production receiving table; missing directional publication is a renderer gap")
                 var directional = await capture()
-                check(delta(directional,dark)>.005,"Current native2D directional source illuminates the original door; source declaration alone is insufficient")
+                var light_pixels:int=0
+                for y in directional.get_height():
+                    for x in directional.get_width():
+                        var unlit_pixel:Color=dark.get_pixel(x,y)
+                        var directional_pixel:Color=directional.get_pixel(x,y)
+                        if maxf(directional_pixel.r-unlit_pixel.r,maxf(directional_pixel.g-unlit_pixel.g,directional_pixel.b-unlit_pixel.b))>2.0/255.0:light_pixels+=1
+                measurements.append({"case":"native_directional_original_door","lit_pixels":light_pixels,"whole_view_delta":delta(directional,dark)})
+                check(light_pixels>100,"Native directional illuminates actual original door pixels, independent of empty viewport area")
                 scene.source_lighting.set_directionals(scene.Catalog.environment_world(scene.catalog_cache).lighting)
                 scene.source_lighting.sync(scene.timeline.state);publish(scene)
             measurements.append({"case":label,"lit_delta":value,"normal_delta":normal_delta})
     check(normal_responses>0,"Original registered architectural normals affect native2D receiving")
-    scene.timeline.state = original
+    check(await FixturePublication.replace(scene,original,"architecture-restore"),"Original recorded state restores through prepared media/world ownership")
     publish(scene)
     check(scene.timeline.state==original,"Architectural comparisons restore the original canonical snapshot")
     var report = {"checks":checks,"failures":failures,"measurements":measurements,"policy":"Approved native2D max(N·L,0) receiving replaces retired3D abs-dot control; real wall/door normals, alpha, placement, restoration and directional contribution remain explicit checks. No production graphics changes."}

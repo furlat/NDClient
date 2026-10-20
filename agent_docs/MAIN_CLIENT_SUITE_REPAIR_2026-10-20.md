@@ -28,7 +28,7 @@ percentages in the19 October cohort ledger describe their named checkpoint.
 
 | Workstream | Estimate | Remaining responsibility |
 |---|---:|---|
-| Single main checkout/branch |100%|Checkpoints7ef2f3f8 throughaffb7a25 are committed; the current cohort is under qualification in the same checkout.|
+| Single main checkout/branch |100%|Checkpoints7ef2f3f8 through0fdaa552 are committed; the current cohort is under qualification in the same checkout.|
 | Canonical schema16 SDK/state|100%|Retain reference fold/COW/independent-seat checks.|
 | Ordering, preparation and publication|90%|Repeat native/live equipment and reveal boundaries after integration.|
 | Studio browser, replay and tracks|80%|Complete scenario depth and missing-provider visibility; broader native qualification.|
@@ -437,3 +437,16 @@ not covered by the118-test result. The source-only commit intentionally excludes
 all artwork, compiled resources, caches, captures and runtime/diagnostic reports.
 Five current live equipment sessions and final actual-command profiling remain
 required after this checkpoint; no final performance claim is made here.
+
+
+## Next shared-provider qualification checkpoint
+
+[Current detailed receipts, ownership changes, native source checks and remaining
+gates](SHARED_PROVIDER_QUALIFICATION_2026-10-20.md). The complete fast lane now passes124/124
+(`.runtime/tests/20261020T024525.194818Z/`). This supersedes the old57-fast-failure
+receipt for that lane; native/live/Factory failures remain separate, explicit
+gates. No excluded, retired or unexecuted script is counted as passing.
+
+Native/shared qualification and four fresh live gates now pass at the linked
+checkpoint: chest15, loot95, equipment34, idle1. First equipment run has zero
+world/media holds; the five-run gate and final large-room profiling remain open.

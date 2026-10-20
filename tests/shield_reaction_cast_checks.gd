@@ -12,15 +12,15 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);print("SHIELD_REACTION_FAIL ",label)
 
-func inspect_case(path:String)->void:
+func inspect_case(path:String,sequence:int)->void:
     var journal=Journal.new()
     var opened=journal.open(path,true,false)
     check(opened.ok,path+": original server journal admitted")
     if not opened.ok:return
-    var replayed=journal.replay(1)
+    var replayed=journal.replay(sequence-1)
     check(replayed.ok,path+": actual pre-action state reduced")
     if not replayed.ok:return
-    var decoded=journal.protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(path.path_join("0000000000000002.json")))
+    var decoded=journal.protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(path.path_join("%016d.json"%sequence)))
     check(decoded.ok,path+": actual reaction operation admitted")
     if not decoded.ok:return
     var packet:Dictionary=journal.protocol.normalize("PlayerOperation",decoded.value)
@@ -85,7 +85,7 @@ func inspect_case(path:String)->void:
             check(trace.size()==1 and trace[0].components.any(func(component):return component.kind=="body" and component.get("reaction_cast_binding")=="spell.shield" and component.trace_track_id==track.trace_track_id),path+": reaction body registers its own exact event witness")
             check(trace[0].components.all(func(component):return component.status!="missing"),path+": Shield event has no unprocessed authored body/hand requirement")
             check(group.duration_ms>=track.start_ms+track.duration_ms,path+": authored recovery stays inside presentation duration")
-            crop_boundary(node,track,body,cache)
+            crop_boundary(node,track,body,cache,journal.state.items)
             observations.append({"journal":path,"condition_uuid":track.condition_uuid,"actor":track.actor_uuid,"clip":track.clip,"start_ms":track.start_ms,"release_ms":track.contact_ms,"end_ms":track.start_ms+track.duration_ms,"target_position":track.target_position,"hand_layers":track.effect_layers.map(func(layer):return layer.category)})
     check(reactions.size()==1,path+": exactly one reaction gesture, no removal recast")
     check(state==compiled.value.final_state and compiled.value.final_state==baseline.value.final_state,path+": presentation still reaches the exact SDK final state")
@@ -94,10 +94,10 @@ func inspect_case(path:String)->void:
     var binding:Array=report.entries[0].requirements.filter(func(requirement):return requirement.mechanism=="cast_binding")
     check(binding.size()==1 and binding[0].status=="unexercised" and binding[0].evidence.is_empty() and not binding[0].rendered,path+": catalog alone does not claim the reaction played")
 
-func crop_boundary(node:Dictionary,source:Dictionary,cast:Dictionary,cache:Dictionary)->void:
+func crop_boundary(node:Dictionary,source:Dictionary,cast:Dictionary,cache:Dictionary,items:Dictionary)->void:
     # Reuse the actual actor/event and exact authored clip to test a group
     # boundary. This is a timing-unit case, not another fabricated recording.
-    var graph={"positions":{source.actor_uuid:source.from_position},"contacts":{source.actor_uuid:{"from_elevation_feet":0,"to_elevation_feet":0}}}
+    var graph={"item_inputs":{node.id:items},"positions":{source.actor_uuid:source.from_position},"contacts":{source.actor_uuid:{"from_elevation_feet":0,"to_elevation_feet":0}}}
     for release in [0.0,125.0]:
         var group={"operation_sequence":2,"actor_tracks":[],"skipped":[]}
         var track=Compiler._cast_track(group,node,source.presentation_actor,{"cast":cast},"spell.shield",0.0,source.target_position,graph,cache,release)
@@ -122,7 +122,10 @@ func crop_boundary(node:Dictionary,source:Dictionary,cast:Dictionary,cache:Dicti
     check(group.actor_tracks.size()==1 and group.actor_tracks[0].from_position==source.from_position and group.actor_tracks[0].to_position==source.from_position and group.actor_tracks[0].from_elevation_feet==contact.from_elevation_feet,"Reaction contact remains at its actual sampled position/elevation when later group movement changes the graph")
 
 func run()->void:
-    for faction in ["amber","blue"]:inspect_case(Fixtures.journal("shield",faction))
+    for faction in ["amber","blue"]:
+        var applications:Array=Fixtures.fact_rows("shield","actor_change",faction).filter(func(row):return row.fact.actors.any(func(actor):return actor.rows.any(func(changed):return changed.field=="condition" and changed.get("member",{}).get("behavior_id")=="condition.spell.shield")))
+        check(applications.size()==1,"Original "+faction+" recording has one actual Shield membership application")
+        if applications.size()==1:inspect_case(Fixtures.journal("shield",faction),int(applications[0].sequence))
     var report={"checks":checks,"failures":failures,"observations":observations,"scope":"Actual two-perspective Shield recording; shared cast-track timing, real recipient/condition ownership, unchanged commits and SDK state. Headless semantic coverage, not native pixel qualification."}
     FileAccess.open("res://.runtime/shield-reaction-cast-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SHIELD_REACTION_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

@@ -78,6 +78,10 @@ func run() -> void:
     check(Interaction.idle_intent(choices,{},object_hit,false,"MELEE_MAIN","action.move").kind=="interaction","Ordinary object hover resolves the same default open verb")
     check(Interaction.idle_intent(choices,{},object_hit,true,"MELEE_MAIN","action.move").value.selection.target_indices==[91],"Force attack overrides object default using exact admitted target")
     check(Interaction.idle_intent(choices,{"objects":{"wall":{"contained_items":[]}}},object_hit,false,"MELEE_MAIN","action.move").kind=="storage","Storage cursor and ordinary open-storage click share precedence")
+    var closed_memory:Dictionary={"objects":{"wall":{"contained_items":[],"item":{"is_open":false}}}}
+    check(Interaction.idle_intent(choices,closed_memory,object_hit,false,"MELEE_MAIN","action.move")==Interaction.idle_intent(choices,{"objects":{}},object_hit,false,"MELEE_MAIN","action.move"),"Remembered contents of a closed chest retain the native interaction instead of a local popup")
+    closed_memory.objects.wall.item.is_open=true
+    check(Interaction.idle_intent(choices,closed_memory,object_hit,false,"MELEE_MAIN","action.move").kind=="storage","Actual open after-value permits local reopening of known empty storage")
     check(Interaction.idle_intent(choices,{},ground_hit,false,"MELEE_MAIN","action.move").value.selection.target_indices==[23],"Movement cursor preview resolves same actual walking destination")
     var distant = choices.duplicate(true)
     distant.world_interactions=[{"subject_uuid":"distant","behavior_id":"action.open","label":"Open","contact_positions":[[4,5]]}]
@@ -242,22 +246,30 @@ func content_ref_cases() -> void:
     # Actual authored owner/icon metadata, with the integer version retained by
     # canonical state and a native-JSON copy as delivered by trusted choices.
     var cache = {}
-    var choice: Dictionary = UI.authored(cache).choices[0]
-    var canonical: Dictionary = choice.owner.duplicate()
+    var packet:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/schema16/scenarios/gallery/amber/0000000000000000.json"))
+    var descriptor:Dictionary=packet.content_additions.filter(func(value):return value.ref.content_id=="spell.fireball")[0]
+    var canonical: Dictionary = descriptor.ref.duplicate()
     canonical.content_version=int(canonical.content_version)
     var native: Dictionary = JSON.parse_string(JSON.stringify(canonical))
-    var state = {"content":[{"ref":canonical,"presentation":{"icon_key":"fixture.base"}}]}
+    descriptor=descriptor.duplicate();descriptor.ref=canonical
+    var state = {"content":[descriptor]}
     var action = row(canonical.content_id,"self",0)
     action.configured_action_ref=native
     var snapshot = action.duplicate(true)
     check(typeof(native.content_version)==TYPE_FLOAT and typeof(canonical.content_version)==TYPE_INT and native!=canonical,"Native configured reference reproduces strict dictionary numeric mismatch")
-    check(UI.action_key(action,state,cache)=="fixture.base","Native configured reference resolves the canonical base icon")
-    action.variant_facets=[{"key":choice.facet,"value":choice.value,"label":choice.label}]
-    for field in choice.requirements:
-        action.variant_facets.append({"key":field,"value":choice.requirements[field],"label":field})
-    check(UI.action_key(action,state,cache,true)==choice.icon_key,"Native configured owner retains the actual authored variant icon")
+    check(UI.descriptor(state,canonical.content_id,native)==descriptor,"Exact descriptor admission matches canonical and JSON numeric representations")
+    check(UI.action_key(action,state,cache)==canonical.content_id and UI.authored(cache).maps.icons.has(canonical.content_id),"Native content identity resolves the current built base icon")
+    var discovery:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/schema16/scenarios/gallery/choices.json"))
+    var spell:Dictionary=discovery.position_actions.filter(func(value):return value.behavior_id==canonical.content_id)[0]
+    # Explicit icon-map unit boundary: current delivery has no per-rank icons.
+    # Retain the real owner, rank and image; do not claim a delivered variant.
+    action.variant_facets=[{"key":"rank","value":str(int(spell.cast_at_level)),"label":"Level "+str(int(spell.cast_at_level))}]
+    check(UI.action_key(action,state,cache,true)==canonical.content_id,"A currently unassigned variant retains its actual base icon")
+    var variant:String=canonical.content_id+"#rank="+action.variant_facets[0].value
+    UI.authored(cache).maps.icons[variant]=UI.authored(cache).maps.icons[canonical.content_id]
+    check(UI.action_key(action,state,cache,true)==variant,"An explicitly authored icon-map variant resolves under the actual content owner")
     action.erase("configured_action_ref")
-    check(UI.action_key(action,state,cache,true)==choice.icon_key,"Canonical fallback owner matches authored native-JSON variant metadata")
+    check(UI.action_key(action,state,cache,true)==variant,"Omitted optional configured reference retains canonical variant identity")
     check(Interaction.same_content_ref(null,null) and not Interaction.same_content_ref(null,native) and not Interaction.same_content_ref(canonical,null),"Only jointly absent optional references compare equal")
     for field in ["pack_id","definition_kind","content_id","content_version","definition_contract_hash"]:
         var changed = canonical.duplicate()
@@ -268,7 +280,7 @@ func content_ref_cases() -> void:
     check(Interaction.same_option(option,native_option),"World rediscovery compares configured identity by value across number representations")
     var opened = row("action.open","object",0)
     opened.configured_action_ref=native;opened.interaction_affordance={"surface":"world"}
-    var discovery = {"object_actions":[opened],"subjects":[{"kind":"object","uuid":"wall"}],"target_sets":[[{"kind":"subject","subject":0,"index":17}]]}
-    var admitted = Interaction.admitted(discovery,option)
+    var object_discovery = {"object_actions":[opened],"subjects":[{"kind":"object","uuid":"wall"}],"target_sets":[[{"kind":"subject","subject":0,"index":17}]]}
+    var admitted = Interaction.admitted(object_discovery,option)
     check(admitted.size()==1 and admitted[0].selection.target_indices==[17],"Mixed configured-reference representations preserve exact world action admission")
     check(native==snapshot.configured_action_ref and typeof(native.content_version)==TYPE_FLOAT,"Content matching leaves raw query metadata untouched")

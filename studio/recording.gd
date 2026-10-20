@@ -611,7 +611,7 @@ static func navigation_anchor(index:Dictionary,at_ms:float,selected:Dictionary={
     # A collapsed (unseen) phase has no inverse timestamp. Preserve the causal
     # coordinate while the selected occurrence and displayed instant are held.
     if not previous.is_empty() and is_equal_approx(at_ms,previous.get("mapped_time_ms",-1.0)):
-        if key==previous.get("row_key","") or (not _row_cause(selected).is_empty() and _row_cause(selected)==previous.get("event_key","")):return previous.duplicate()
+        if key==previous.get("row_key","") or (selected.is_empty() and not previous.get("event_key","").is_empty()):return previous.duplicate()
     var chosen=selected
     if chosen.is_empty() or at_ms<chosen.start_ms or at_ms>chosen.end_ms:
         chosen={}

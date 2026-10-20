@@ -5,6 +5,9 @@ const Thumbnails=preload("res://studio/thumbnail_cache.gd")
 const Palette=preload("res://presentation/palette.gd")
 const NativePersistent=preload("res://presentation/native_persistent.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const ComponentRenderer=preload("res://presentation/component_renderer.gd")
+class WitnessWorld extends Node:
+    var timeline={"display_ms":600.0}
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -45,6 +48,7 @@ func run()->void:
     for component in applied:
         check(NativePersistent.lifecycle_state(component,0).phase=="application","Actual application owner begins at its native application, not an invented fade")
     var recipes:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache)
+    _native_owner_witnesses(raw)
     for id in ["class_feature.sorcerer.elemental_affinity.resistance","class_feature.sorcerer.metamagic_active","condition.spell.enhance_ability","condition.spell.enlarge_reduce"]:
         if not recipes.has(id):continue
         for layer in recipes[id].persistent.layers:
@@ -107,3 +111,39 @@ func run()->void:
     var result={"checks":checks,"failures":failures,"original_source":oracle.source,"recordings":oracle.recordings,"scope":"Original marker operator and authored composition/state predicates; current exact native lifecycle source clocks/registration and thumbnail jobs; no native pixel claim"}
     FileAccess.open("res://generated/condition_selection_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("CONDITION_SELECTION_CHECKS ",JSON.stringify(result));quit(0 if failures.is_empty() else 1)
+
+func _native_owner_witnesses(recorded:Array)->void:
+    # Private composition-policy control, using actual recorded owners and
+    # their typed body adjustments; this is not a simultaneous gameplay claim.
+    var samples:Array=[]
+    for source in recorded:
+        if source.kind!="condition" or source.condition.behavior_id not in ["condition.poisoned","class_feature.barbarian.raging"]:continue
+        var sample:Dictionary=source.duplicate(true)
+        sample.recipe.erase("definitionRef")
+        sample.recipe.persistent={"bodyColor":sample.recipe.persistent.bodyColor}
+        sample.recipe.composition={"exclusiveGroup":"witness-policy-control","priority":samples.size()}
+        samples.append(sample)
+    check(samples.size()==2,"Witness control retains two actual recorded UUIDs and typed body adjustments")
+    if samples.size()!=2:return
+    var held:Array=samples.duplicate(true)
+    var renderer=ComponentRenderer.new();var world=WitnessWorld.new()
+    renderer._condition_witnesses(world,"actor",samples)
+    check(renderer.pending_evidence.size()==1 and renderer.pending_evidence[0].trace_track_id=="condition:"+samples[1].condition_uuid+":bodyColor","Missing definitionRef cannot give the suppressed native owner a body witness: "+JSON.stringify(renderer.pending_evidence))
+    renderer.pending_evidence.clear()
+    renderer._condition_witnesses(world,"actor",[samples[0]])
+    check(renderer.pending_evidence.size()==1 and renderer.pending_evidence[0].trace_track_id=="condition:"+samples[0].condition_uuid+":bodyColor","Previously suppressed actual owner receives its own witness after the winning owner ends")
+    check(samples==held,"Witness selection never mutates real owner or typed-source inputs")
+    # The same explicit legacy recipe also selects one strongest UUID. Equal
+    # recipe keys do not mean the weaker owner's requested alpha was rendered.
+    var source:Dictionary=recorded.filter(func(sample):return sample.kind=="condition" and sample.condition.behavior_id=="condition.poisoned")[0]
+    var shared:Dictionary=source.recipe.duplicate(true)
+    shared.persistent={"bodyColor":shared.persistent.bodyColor}
+    check(not shared.get("definitionRef",{}).is_empty(),"Legacy alias control retains its actual authored ContentRef")
+    var aliases:Array=samples.duplicate(true)
+    for sample in aliases:sample.recipe=shared
+    aliases[0].alpha=.3;aliases[1].alpha=.7
+    renderer.pending_evidence.clear();renderer._condition_witnesses(world,"actor",aliases)
+    check(renderer.pending_evidence.size()==1 and renderer.pending_evidence[0].trace_track_id=="condition:"+aliases[1].condition_uuid+":bodyColor","A shared explicit recipe cannot give the unselected weaker UUID a rendering witness")
+    renderer.pending_evidence.clear();renderer._condition_witnesses(world,"actor",[aliases[0]])
+    check(renderer.pending_evidence.size()==1 and renderer.pending_evidence[0].trace_track_id=="condition:"+aliases[0].condition_uuid+":bodyColor","The weaker actual UUID regains its own witness after the stronger instance ends")
+    world.free()

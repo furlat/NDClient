@@ -427,6 +427,10 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
             component=selected[0];input=component.input;components=input.get("components",[])
         if binding.get("kind") in ["application_result","reaction_observation"] and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
+        if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="cells":
+            if not input.get("cells") is Array or not input.get("observed_removals") is Array \
+                or use.orientation!="world" or use.scale!=1.0:
+                Common.error(report,where,"constructed spatial cells need supplied topology/removals and an unscaled world frame")
         if binding.get("kind")=="propagation_links":
             if input.get("edges",[]).size()!=1 or input.get("endpoint_count")!=2 \
                 or float(input.edges[0].delay)!=float(binding.source_launch) or float(input.get("speed",0))!=float(binding.speed_tiles_per_second):

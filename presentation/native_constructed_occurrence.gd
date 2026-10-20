@@ -23,3 +23,11 @@ static func clip_with_inputs(phase:Resource,operands:Array)->Dictionary:
 
 func construction_clip()->Dictionary:
     return clip_with_inputs(parameters.phase,parameters.operands)
+
+## Some sealed spatial sources require cells plus their observed source clock.
+## Reuse the occurrence's prepared receiver index; no traversal during sample.
+func forward_arguments(method:String,arguments:Array)->void:
+    if handle.is_empty() or not is_instance_valid(handle.get("root")):return
+    if inputs_dirty:refresh_input_bindings()
+    for node in input_receivers.get(method,[]):
+        if is_instance_valid(node):node.callv(method,arguments)

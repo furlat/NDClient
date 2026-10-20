@@ -4,6 +4,7 @@ extends SceneTree
 # production partitions the unchanged source texture on the GPU.
 const Catalog = preload("res://source_catalog.gd")
 const Placement = preload("res://placement.gd")
+const SourceMaterial=preload("res://presentation/source_material.gd")
 const Graphs = preload("res://animation/graphs.gd")
 class Probe extends "res://presentation/sprite_sources.gd":
     func _ready() -> void:
@@ -12,6 +13,24 @@ class Probe extends "res://presentation/sprite_sources.gd":
         camera.size = get_viewport().get_visible_rect().size.y / Placement.PIXELS_PER_UNIT
         add_child(camera); camera.current = true; position_camera()
     func _process(_delta: float) -> void: pass
+    func prepare_sources() -> Array:
+        # Preparation owns original physical pixels; texture() only borrows
+        # these admitted handles while the production material is sampled.
+        var missing:Array=[]
+        for entry in entries:
+            var row:Dictionary=entry.placement
+            var record:Dictionary=Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role==2 else record_for(row)
+            if record.is_empty():continue
+            var description:Dictionary=EnvironmentSource.describe(row,record,entry.source_role,quarter,camera.basis,source_depth,source_normals)
+            for path in description.texture_parameters.values():
+                if textures.has(path):continue
+                var image:Image=Image.load_from_file(Catalog.media_path(path))
+                if image==null or image.is_empty():missing.append(path);continue
+                source_images[path]=image;textures[path]=ImageTexture.create_from_image(image)
+        return missing
+    func texture(path:String) -> Texture2D:
+        assert(textures.has(path),"Native source probe requires its exact prepared physical texture: "+path)
+        return textures.get(path)
 
 var checks := 0
 var failures: Array = []
@@ -42,7 +61,11 @@ func delta(a: Image, b: Image) -> Dictionary:
 func oracle(row: Dictionary, quarter: int) -> Dictionary:
     var owner := Catalog.owner_for(row,cache)
     var bank := Catalog.bank_data(owner.openings["inward" if row.state=="open.inward" else "outward"],cache)
-    var pose: String = Placement.POSES[posmod(Placement.POSES.find(Placement.pose(row.orientation,quarter))-int(owner.pose_offset),4)]
+    # The retired runtime owner no longer carries source measurement prose.
+    # Read the exact delivered registration independently of Catalog.pose_for.
+    var source:Resource=load("res://authoring/environment/objects/environment.directional_door.tres")
+    var registration:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/"+source.measurements))
+    var pose: String = Placement.POSES[posmod(Placement.POSES.find(Placement.pose(row.orientation,quarter))-int(registration.pose_offset),4)]
     var frame: int = 0 if row.state=="closed" else int(bank.frame_count)-1
     var region: Dictionary = bank.frames_by_pose[pose][frame]
     var depth_region: Dictionary = bank.depth_frames_by_pose[pose][frame]
@@ -73,15 +96,22 @@ func oracle(row: Dictionary, quarter: int) -> Dictionary:
 
 func prepare(world: Node, quarter: int) -> void:
     world.quarter = quarter; world.position_camera()
+    check(world.prepare_sources().is_empty(),"Exact original leaf/frame/partition/depth/normal source operands are physically prepared")
     for entry in world.entries:
+        # CPU oracle replaced texture uniforms directly; discard that fixture
+        # ledger before rebuilding the unchanged production descriptor.
+        SourceMaterial.initialize(entry)
         world.initialize_entry(entry)
-        entry.material.set_shader_parameter("source_unlit",true)
         entry.material.render_priority = entry.layer
 
 func run() -> void:
     if DisplayServer.get_name()=="headless": print("DOOR_OVERLAP_CHECKS requires native graphics"); quit(2); return
     root.unfocusable = true; root.position = Vector2i(-16000,-16000); root.size = Vector2i(512,512)
     root.msaa_3d = Viewport.MSAA_DISABLED
+    RenderingServer.global_shader_parameter_set(&"light_count",0)
+    RenderingServer.global_shader_parameter_set(&"light_ambient",1.0)
+    RenderingServer.global_shader_parameter_set(&"light_cap",0.0)
+    RenderingServer.global_shader_parameter_set(&"light_normals",false)
     var environment := WorldEnvironment.new(); environment.environment = Environment.new()
     environment.environment.background_mode = Environment.BG_COLOR
     environment.environment.background_color = Color.BLACK
@@ -115,6 +145,7 @@ func run() -> void:
                 pair[0].material.set_shader_parameter("door_leaf_partition",0)
                 pair[0].material.set_shader_parameter("colour_texture",pair[1])
                 pair[0].material.set_shader_parameter("colour_rect",Vector4(0,0,256,256))
+                pair[0].material.set_shader_parameter("colour_size",Vector2(256,256))
             var reference := await capture()
             var comparison := delta(actual,reference)
             check(comparison.different_pixels==0,"GPU assembly equals independently decoded original pixels: %s q%d" % [state,quarter])
@@ -158,5 +189,5 @@ func run() -> void:
         "scope":"Local intact legacy-registered door leaf/frame overlap only; unchanged original art, alpha, pivot and light packets."}
     var file := FileAccess.open("res://generated/door_overlap_checks.json",FileAccess.WRITE)
     file.store_string(JSON.stringify(report,"  ")); file.close()
-    print("DOOR_OVERLAP_CHECKS ",checks," checks; ",failures.size()," failures")
+    print("DOOR_OVERLAP_CHECKS ",JSON.stringify({"checks":checks,"failures":failures,"cases":evidence}))
     quit(0 if failures.is_empty() else 1)

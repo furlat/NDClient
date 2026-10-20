@@ -367,7 +367,10 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if component.get("spatial_owner",false) and "admitted_cells" not in handle.clip.get("inputs",[]):
             var mask=AreaMask.publish(handle,component.get("resolved_area_positions",[]))
             if not mask.ready:
-                Effects.hide(handle);ready=false;_missing(component,"; ".join(mask.errors));continue
+                Effects.hide(handle);ready=false
+                if mask.errors==["native_area_not_prepared"]:_pending(component,"native_area_not_prepared")
+                else:_missing(component,"; ".join(mask.errors))
+                continue
         # The bounded pass is only for a cold/seek history. Ordinary live
         # samples must follow the requested component clock at any frame rate.
         var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))

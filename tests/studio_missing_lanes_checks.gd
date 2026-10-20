@@ -3,6 +3,7 @@ extends SceneTree
 const Recording=preload("res://studio/recording.gd")
 const Coverage=preload("res://presentation/condition_coverage.gd")
 const TimelineView=preload("res://studio/timeline_view.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -17,7 +18,8 @@ func _initialize()->void:
     var directories:Array=[]
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--recording="):directories.append(argument.trim_prefix("--recording="))
-    if directories.is_empty():print("Usage: --recording=<actual SDK journal> [--recording=<another actual journal>]");quit(2);return
+    if directories.is_empty():
+        for id in ["hold-person","interaction-media","gallery"]:directories.append(Fixtures.journal(id))
     var observed={"requirements":0,"authored_timing":0,"unresolved_timing":0,"missing_audio":0,"condition_lifecycle":0,"inspection_gaps":0,"unassessed_operations":0}
     for directory in directories:
         var index=Recording.read(directory)

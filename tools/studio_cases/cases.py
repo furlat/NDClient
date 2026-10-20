@@ -586,10 +586,11 @@ def passive_handler_cohort():
     ]
 
 
+
 def interaction_media_study():
     """Legal native input controls; initial Poisoned is not an application claim."""
     return {'id': 'interaction.media_inputs/stride_unarmed_potion_ranged',
-     'title': 'Native inputs: stride, unarmed strike, potion, shortbow and Poisoned removal',
+     'title': 'Actual stride contacts, unarmed strike, potion and ranged weapon',
      'kind': 'interaction',
      'seed': 2,
      'subjects': {'spell': ['spell.protection_from_poison'],
@@ -608,15 +609,15 @@ def interaction_media_study():
                  'items': [{'id': 'weapon.shortbow', 'slot': 'RANGED_MAIN'},
                            {'id': 'consumable.healing_potion', 'heal_amount': 7}],
                  'conditions': ['condition.poisoned']},
-                {'role': 'target', 'side': 'blue', 'creature': 'creature.knight', 'at': [8, 5]},
+                {'role': 'target', 'side': 'blue', 'creature': 'creature.knight', 'at': [7, 5]},
                 {'role': 'restorer',
                  'side': 'amber',
                  'creature': 'creature.generic_caster',
                  'level': 20,
                  'caster_level': 20,
                  'spells': ['spell.protection_from_poison'],
-                 'at': [6, 5]}],
-     'steps': [{'do': 'action.move', 'by': 'caster', 'target': [7, 5]},
+                 'at': [5, 5]}],
+     'steps': [{'do': 'action.move', 'by': 'caster', 'target': [6, 5]},
                {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
                {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'name': 'Unarmed', 'capture_choices': True},
                {'do': 'end_turn', 'by': 'caster'},

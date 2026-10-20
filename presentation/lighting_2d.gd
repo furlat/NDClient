@@ -32,6 +32,7 @@ var _resource_issues: Array = []
 var _directional_issues: Array = []
 var _projection_issues: Array = []
 var _canvas_sources: Array = []
+var _canvas_directionals: Array = []
 var _cookie_attempted := false
 var _range_cookies: Dictionary = {}
 
@@ -148,6 +149,7 @@ func clear_pages() -> void:
     nodes={}
     directional_nodes={}
     _canvas_sources.clear()
+    _canvas_directionals.clear()
 
 func _free_page(page: Dictionary) -> void:
     for collection in [page.nodes,page.directionals]:
@@ -284,6 +286,7 @@ func sync(state: Dictionary) -> void:
 
 func _sync_resolved(resolved: Dictionary) -> void:
     _canvas_sources.clear()
+    _canvas_directionals.clear()
     sources=resolved.sources
     _resolver.sources=sources
     _resolver.issues=resolved.issues
@@ -345,6 +348,7 @@ func set_directionals(policy: Dictionary) -> void:
 func project(camera: Camera3D, source_scale: float = 2.0) -> void:
     _projection_issues.clear()
     _canvas_sources.clear()
+    _canvas_directionals.clear()
     if camera.projection!=Camera3D.PROJECTION_ORTHOGONAL:
         _projection_issues.append("The native 2D receiving atlas requires the existing orthographic camera")
         _disable_pages()
@@ -399,10 +403,16 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
         if not active:
             _projection_issues.append("Authored directional light is behind the native 2D receiving plane: "+source.id)
         var native_height: float=maxf(towards.z,0.0)/(planar.length()+maxf(towards.z,0.0)) if active else 0.0
+        var rotation:float=atan2(planar.x,-planar.y) if not planar.is_zero_approx() else 0.0
+        # The renderer reads -normalized(node.transform.y), not a finite point
+        # source. Keep it separate from point-cookie/shadow selection inputs.
+        _canvas_directionals.append({"id":source.id,"direction":-Transform2D(rotation,Vector2.ZERO).y.normalized(),
+            "height":native_height,"color":source.colour,"energy":source.energy*light_strength,
+            "enabled":active and light_strength>0})
         for page in _pages:
             if not is_instance_valid(page.parent): continue
             var node: DirectionalLight2D=page.directionals[source.id]
-            node.rotation=atan2(planar.x,-planar.y) if not planar.is_zero_approx() else 0.0
+            node.rotation=rotation
             node.height=native_height
             node.energy=source.energy*light_strength
             node.enabled=active and light_strength>0
@@ -416,3 +426,6 @@ func _disable_pages() -> void:
 
 func canvas_sources() -> Array:
     return _canvas_sources
+
+func canvas_directionals() -> Array:
+    return _canvas_directionals

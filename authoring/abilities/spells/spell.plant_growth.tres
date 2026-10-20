@@ -83,7 +83,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -99,5 +99,4 @@ staging_unported = {
 "selection": "plant_growth_native",
 "source": "assets/vfx/index.json:/selections/plant_growth_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "Cast body retains the authored Attack5/release7 gesture pending visual review. The former default ground probe is excluded: actual spatial membership owns the one constructed vegetation source via spatial_effect.spell.plant_growth. The partial-burn variant remains a probe requiring a real removal recording; it is not automatically selected or accepted art."

@@ -7,8 +7,12 @@ const QuadShapes=preload("res://presentation/quad_shapes.gd")
 
 static func build_private(packets:Dictionary,texture_refs:Dictionary,declared_names:Dictionary,output:Dictionary)->void:
     var started:int=Time.get_ticks_usec();var rows:Dictionary={};var count:int=0
+    # The joined owner must retain every allocated node, including a partial
+    # row when a later source fails. Consumers only read this after join().
+    output.rows=rows
     for id in packets:
         var entries:Array=[]
+        rows[id]=entries
         for selected in packets[id].entries:
             var descriptor:Dictionary=selected.descriptor
             var entry:Dictionary=selected.duplicate();entry.erase("descriptor")
@@ -39,12 +43,11 @@ static func build_private(packets:Dictionary,texture_refs:Dictionary,declared_na
             material.get_rid()
             # The finished sprite node, outside any tree: the scene owner only attaches it.
             var node:=MeshInstance3D.new()
+            entry.node=node;entries.append(entry)
             node.mesh=mesh;node.material_override=material
             node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
             node.sorting_use_aabb_center=false
             node.position=descriptor.position;node.basis=descriptor.basis;node.visible=descriptor.visible
             if not descriptor.get("empty",false):node.custom_aabb=descriptor.aabb
-            entry.node=node
-            entries.append(entry);count+=1
-        rows[id]=entries
+            count+=1
     output.merge({"complete":true,"error":"","rows":rows,"worker_ms":(Time.get_ticks_usec()-started)/1000.0,"draw_count":count})

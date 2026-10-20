@@ -27,7 +27,12 @@ func run()->void:
     var adapter=Lighting.new();adapter.attach(actual)
     var source={"item_uuid":"calibration","item_id":"equipment.portable_torch","actor_uuid":"actor", "base_height_steps":0.0,
         "position":Vector3.ZERO,"very_bright_radius_feet":10.0,"bright_radius_feet":20.0,"dim_radius_feet":20.0,"very":2.0,"bright":4.0,"outer":8.0}
-    adapter.sources=[source];adapter._source_colours[source.item_uuid]=Lighting.TORCH_COLOUR;adapter._sync_pages()
+    adapter.sources=[source];adapter._source_colours[source.item_uuid]=Lighting.TORCH_COLOUR
+    var deadline:int=Time.get_ticks_msec()+10000
+    while adapter.prepare_cookie(source)==null and Time.get_ticks_msec()<deadline:await process_frame
+    check(adapter.prepare_cookie(source)!=null,"Exact calibrated range cookie is prepared before projection")
+    if adapter.prepare_cookie(source)==null:quit(1);return
+    adapter._sync_pages()
     var white=Image.create(256,256,false,Image.FORMAT_RGBA8);white.fill(Color.WHITE)
     var native_control=PointLight2D.new();native_control.texture=ImageTexture.create_from_image(white)
     native_control.texture_scale=8;native_control.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR;reference.add_child(native_control)

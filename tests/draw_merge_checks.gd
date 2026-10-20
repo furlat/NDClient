@@ -127,8 +127,11 @@ func run() -> void:
     logical=static_a.order_key.duplicate()
     var static_offset: float=static_a.node.sorting_offset
     static_a.node.position.y+=0.125
-    scene.draw_order_dirty=true; scene._sort_draws(); physical_rank(scene,"same-key displaced static")
-    check(static_a.order_key==logical and not is_equal_approx(static_a.node.sorting_offset,static_offset),"Dirty merge retains full static physical-position polling")
+    # Static source publication invalidates the static proof once. An ordinary
+    # moving-draw update deliberately does not poll every unchanged static node.
+    scene.static_order_dirty=true; scene.draw_order_dirty=true
+    scene._sort_draws(); physical_rank(scene,"same-key displaced static")
+    check(static_a.order_key==logical and not is_equal_approx(static_a.node.sorting_offset,static_offset),"Static source invalidation republishes exact physical depth without changing its logical owner key")
     hidden.node.visible=true; actor.node.visible=false
     scene.static_order_dirty=true; scene._sort_draws(); physical_rank(scene,"native visibility changed")
     check(scene.draw_order.any(func(value):return is_same(value,hidden)) and not scene.draw_order.any(func(value):return is_same(value,actor)),"Native visibility changes replace the visible subsequences")

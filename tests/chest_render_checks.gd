@@ -12,6 +12,24 @@ class Probe extends "res://presentation/sprite_sources.gd":
         camera.size = get_viewport().get_visible_rect().size.y / Placement.PIXELS_PER_UNIT
         add_child(camera); camera.current = true; position_camera()
     func _process(_delta: float) -> void: pass
+    func prepare_sources() -> Array:
+        # Preparation owns original physical pixels; texture() only borrows
+        # these admitted handles while the production material is sampled.
+        var missing:Array=[]
+        for entry in entries:
+            var row:Dictionary=entry.placement
+            var record:Dictionary=Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role==2 else record_for(row)
+            if record.is_empty():continue
+            var description:Dictionary=EnvironmentSource.describe(row,record,entry.source_role,quarter,camera.basis,source_depth,source_normals)
+            for path in description.texture_parameters.values():
+                if textures.has(path):continue
+                var image:Image=Image.load_from_file(Catalog.media_path(path))
+                if image==null or image.is_empty():missing.append(path);continue
+                source_images[path]=image;textures[path]=ImageTexture.create_from_image(image)
+        return missing
+    func texture(path:String) -> Texture2D:
+        assert(textures.has(path),"Native source probe requires its exact prepared physical texture: "+path)
+        return textures.get(path)
 
 var checks := 0
 var failures: Array = []
@@ -34,12 +52,13 @@ func capture() -> Image:
     await RenderingServer.frame_post_draw
     return root.get_texture().get_image()
 
-func native_srgb(value: float) -> float:
-    # Godot GLES3 tonemap_inc.glsl uses these approximations even for unlit
-    # spatial output; its dark channels differ from the CanvasItem pipeline.
-    # https://github.com/godotengine/godot/blob/master/drivers/gles3/shaders/tonemap_inc.glsl
-    var linear := value*(value*(value*.305306011+.682171111)+.012522878)
-    return maxf(1.055*pow(linear,.416666667)-.055,0)
+func native_srgb(value: float, alpha: float) -> float:
+    # Independent vendor-byte oracle for Forward+'s linear 3D blending on
+    # black followed by standard sRGB output, with unchanged source alpha.
+    # https://docs.godotengine.org/en/stable/engine_details/architecture/internal_rendering_architecture.html
+    var linear:float=value/12.92 if value<=0.04045 else pow((value+0.055)/1.055,2.4)
+    linear*=alpha
+    return linear*12.92 if linear<=0.0031308 else 1.055*pow(linear,1.0/2.4)-0.055
 
 func _initialize() -> void: run.call_deferred()
 
@@ -47,6 +66,12 @@ func run() -> void:
     if DisplayServer.get_name()=="headless": print("CHEST_RENDER_CHECKS requires native graphics"); quit(2); return
     root.size = Vector2i(1280,800)
     root.msaa_3d = Viewport.MSAA_DISABLED
+    # source_unlit names the source-shadow pass in the production shader.
+    # Identity receiving keeps the actual colour pass, with no scene lights.
+    RenderingServer.global_shader_parameter_set(&"light_count",0)
+    RenderingServer.global_shader_parameter_set(&"light_ambient",1.0)
+    RenderingServer.global_shader_parameter_set(&"light_cap",0.0)
+    RenderingServer.global_shader_parameter_set(&"light_normals",false)
     var environment := WorldEnvironment.new(); environment.environment = Environment.new()
     environment.environment.background_mode = Environment.BG_COLOR
     environment.environment.background_color = Color.BLACK
@@ -91,10 +116,10 @@ func run() -> void:
             var matching = library.samples.filter(func(sample):return sample.colour.path==record.path)[0]
             check(record.geometry==matching.surface.geometry and record.normal==matching.surface.normal,"Original colour uses its matching registered depth and normal")
             check(matching.source_view==Placement.pose(row.orientation,quarter),"Open and closed states retain the same original camera facing")
+            check(world.prepare_sources().is_empty(),"All original colour/depth/normal source operands are physically prepared")
             for entry in world.entries:
                 world.initialize_entry(entry)
                 entry.node.position += world.camera.basis.x * (200.0/Placement.PIXELS_PER_UNIT)
-                entry.material.set_shader_parameter("source_unlit",true)
                 entry.material.render_priority = -1 if entry.source_role==0 else 0
             reference.texture = ImageTexture.create_from_image(original)
             var center := Vector2(root.size)*.5
@@ -114,13 +139,13 @@ func run() -> void:
                     var left_pixel := frame.get_pixel(int(reference.position.x)+x,int(reference.position.y)+y)
                     var delta := maxf(absf(left_pixel.r-right_pixel.r),maxf(absf(left_pixel.g-right_pixel.g),absf(left_pixel.b-right_pixel.b)))
                     max_delta = maxf(max_delta,delta); sum_delta += delta; count += 1
-                    var expected := Vector3(native_srgb(source_pixel.r),native_srgb(source_pixel.g),native_srgb(source_pixel.b))*source_pixel.a
+                    var expected := Vector3(native_srgb(source_pixel.r,source_pixel.a),native_srgb(source_pixel.g,source_pixel.a),native_srgb(source_pixel.b,source_pixel.a))
                     var native_delta := maxf(absf(expected.x-right_pixel.r),maxf(absf(expected.y-right_pixel.g),absf(expected.z-right_pixel.b)))
                     max_native_delta = maxf(max_native_delta,native_delta)
                     if native_delta>2.0/255: changed += 1
             var result := {"opened":opened,"quarter":quarter,"path":record.path,"visible_pixels":count,"canvas_vs_spatial_max_pixel_delta":max_delta,"canvas_vs_spatial_mean_pixel_delta":sum_delta/maxi(count,1),"native_transfer_max_pixel_delta":max_native_delta,"changed_over_two_bytes_after_native_transfer":changed,"unexpected_opaque_pixels":outside_alpha}
             evidence.append(result)
-            check(count>1000 and changed==0,"Native unlit pixels match original sprite through Godot's documented native colour transfer")
+            check(count>1000 and changed==0,"Native identity-lit pixels match original bytes through Forward+ linear-alpha/sRGB transfer")
             check(outside_alpha==0,"Transparent source pixels remain empty in the production render")
             frame.save_png(output.path_join("chest-original-%s-q%d.png" % ["open" if opened else "closed",quarter]))
         check(seen_views.size()==4,"Camera quarters use all four original authored views")

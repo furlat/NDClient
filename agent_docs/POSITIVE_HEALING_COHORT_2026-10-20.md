@@ -64,3 +64,9 @@ Read-only review covered `Components.native_spell` / `Components.compile`, the e
 - The original Divine Arm replay callback regression independently passed **75/75**, no errors (`.runtime/tests/20261020T015415.644918Z/dynamic_item_effect_checks.log`). It covers exact candidate identity/clock, consumed-plan rejection, an unready world candidate, false-return full-world publication and no-boundary advance. It does not claim GPU visibility.
 
 No additional correctness or anti-OOP blocker was found within this bounded review. No new projection, schedule/body reorder, renderer, validation layer, gameplay queue or source position inference was added. Native output remains the separate root-owned GPU gate.
+
+## Native output qualification
+
+Root's serialized Forward+ gate passed **148/148 checks, zero failures**, in `.runtime/tests/20261020T015752.094638Z/native_positive_healing_render_checks.log`. It exercised both independent seats and two seek/loop epochs for each unchanged finite source. Source-specific present/hidden controls produced positive framebuffer contributions in all eight samples: Amber full restoration 41/504 pixels and cross 26/327; Blue full restoration 45/504 and cross 27/327. Root inspected the saved captures.
+
+This qualifies the bounded native finite healing path, measured recipient geometry, input admission and seek/loop lifetime. It does not change PWH's partial family status, qualify the unused condition demonstration probes, establish performance acceptance or imply user visual approval.

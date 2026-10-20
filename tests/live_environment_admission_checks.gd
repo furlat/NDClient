@@ -4,6 +4,7 @@ extends SceneTree
 const Player=preload("res://play.gd")
 const Preparation=preload("res://presentation/world_preparation.gd")
 const Media=preload("res://presentation/media_warmup.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 const WorldRows=preload("res://presentation/world.gd")
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 const CURRENT="/fixture/current-view.png"
@@ -42,12 +43,12 @@ func source_cache(fixture:bool)->Dictionary:
 
 func state_before()->Dictionary:
     return {"actors":{},"tiles":{},"objects":{},"spatial_commit_cursors":{},"combat_log_appends":[],
-        "senses":{"visible":[],"objects":{},"light_sources":{},"spatial_effects":{}}}
+        "senses":{"visible":Cells.mask([]),"objects":{},"light_sources":{},"spatial_effects":{}}}
 
 func group(fixture:bool)->Dictionary:
     var object={"placement":{"kind":"cell","position":[0,0],"base_height_steps":0,"orientation":"east"},
         "item":{"item_id":"test.prop","is_lit":fixture}}
-    var sight={"visible":[[0,0]],"objects":{"new":{"visual":true}},"light_sources":{},"spatial_effects":{}}
+    var sight={"visible":Cells.mask([[0,0]]),"objects":{"new":{"visual":true}},"light_sources":{},"spatial_effects":{}}
     var event={"id":"1:cut","event_uuid":"cut","sequence":1,"source_index":0,
         "components":[],"status":"state_only","reasons":[],"committed":false,"completed":false,
         "_log":null,"_admit_ms":10.0,"_end_ms":10.0}

@@ -5,10 +5,18 @@ extends SceneTree
 const Lighting=preload("res://presentation/lighting_2d.gd")
 const LightTable=preload("res://presentation/light_table.gd")
 const Recording=preload("res://studio/recording.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 const Placement=preload("res://placement.gd")
 const Modular=preload("res://modular.gdshader")
 const AMBIENT=.18
-const DIRECTORY="res://.runtime/studio-cases/hide-light-seed3/blue"
+# Original schema16 Blue observations at [4,6], with the same disclosed torch
+# moving [10,6] -> [7,6] -> [6,6]. Values are the original world/light_levels
+# columns (LightLevel DIM=2, BRIGHT=3, VERY_BRIGHT=4), not inferred radiance.
+const PROBES=[
+    {"label":"dim","sequence":8,"source_position":[10,6],"world_resolved_light":2,"observer_effective_light":2},
+    {"label":"bright","sequence":13,"source_position":[7,6],"world_resolved_light":3,"observer_effective_light":3},
+    {"label":"very_bright","sequence":14,"source_position":[6,6],"world_resolved_light":4,"observer_effective_light":4}]
 var checks=0
 var failures:Array=[]
 var samples:Array=[]
@@ -34,20 +42,31 @@ func capture(view:SubViewport)->Image:
     return view.get_texture().get_image()
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
-    var index=Recording.read(DIRECTORY+"/journal")
-    check(index.ok,"Original server journal admitted through shared reducer/compiler")
+    var directory:String=Fixtures.journal("hide-light","blue")
+    var index:Dictionary=Recording.read(directory)
+    check(index.ok,"Durable original schema16 Blue Hide/light journal admits through shared reducer/compiler")
     if not index.ok:quit(1);return
-    var descriptor:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(DIRECTORY+"/case.json"))
-    var declared:Array=descriptor.light_probes.filter(func(row):return row.label in ["dim","bright","very_bright"])
+    var declared:Array=PROBES
     var states:Array=[]
+    var frozen_states:Array=[]
     for probe in declared:
-        var boundary=0.0
-        for item in index.groups:
-            if item.group.operation_sequence==probe.sequence:boundary=maxf(boundary,item.start_ms+item.group.duration_ms)
-        var timeline=Recording.restore(index,boundary+.01)
-        check(timeline.state.tiles["4,6"].resolved_light==probe.world_resolved_light,"Actual objective observation at "+probe.label)
-        check(timeline.state.senses.effective_light_levels.get("4,6")==probe.observer_effective_light,"Actual perceived observation at "+probe.label)
-        states.append(timeline.state)
+        var group_index:int=-1
+        for i in index.groups.size():
+            var group:Dictionary=index.groups[i].group
+            if group.operation_sequence==probe.sequence and group.operation_end:group_index=i
+        check(group_index>=0,"Original journal has the exact operation-ending boundary for "+probe.label)
+        if group_index<0:quit(1);return
+        var actual_group:Dictionary=index.groups[group_index].group
+        var timeline:RefCounted=Recording.restore_boundary(index,group_index,actual_group.commits.size())
+        var state:Dictionary=timeline.state
+        check(timeline.sequence==probe.sequence,"Restore retains the exact real subjective cursor for "+probe.label)
+        check(state.tiles["4,6"].resolved_light==probe.world_resolved_light,"Actual objective observation at "+probe.label)
+        var perceived:Dictionary=Cells.values_map(state.senses.effective_light_levels)
+        check(Cells.contains(state.senses.visible,[4,6]) and perceived.get("4,6")==probe.observer_effective_light,"Actual current perceived observation decodes through the SDK mask at "+probe.label)
+        check(state.light_sources.size()==1,"Original "+probe.label+" boundary discloses one optical source")
+        if state.light_sources.size()!=1:quit(1);return
+        check(state.light_sources.values()[0].position==probe.source_position,"Probe uses the exact original disclosed optical position at "+probe.label)
+        states.append(state);frozen_states.append(var_to_bytes(state))
     var canvas=SubViewport.new();canvas.size=Vector2i(256,256);canvas.disable_3d=true;canvas.use_hdr_2d=true
     canvas.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(canvas)
     var ambient=CanvasModulate.new();ambient.color=Color(.18,.18,.18).linear_to_srgb();canvas.add_child(ambient)
@@ -77,6 +96,7 @@ func run()->void:
                 check(lighting.sources.size()==1,"Only real disclosed lit Blue torch at "+declared[i].label)
                 if lighting.sources.size()!=1:continue
                 var source:Dictionary=lighting.sources[0]
+                check(source.item_uuid==states[i].light_sources.keys()[0],"Native PointLight2D retains the original optical source UUID")
                 var at:Vector3=lighting.sampled[source.item_uuid].position
                 source_camera.size=size;source_camera.position=at+Basis(Vector3.UP,q*PI*.5)*Vector3(10,10/sqrt(3.0),10)
                 source_camera.look_at(at);lighting.project(source_camera)
@@ -100,8 +120,11 @@ func run()->void:
                 else:check(abs(c.r8-references[key].r8)<=1 and abs(c.g8-references[key].g8)<=1,"Equal native optical radius is rotation invariant")
                 if q==0 and size==32:
                     capped.save_png("res://.captures/light-ranges/"+declared[i].label+"-cap.png")
-            check(intensities[0]<intensities[1] and intensities[1]<intensities[2],"Native dim/bright/very-bright profile samples remain distinct with cap, quarter%d size%d"%[q,size])
-    # Actual multiple-source additivity remains native, and the existing cap still bounds it.
+            check(intensities.size()==3,"Every original level produces an actual receiver sample, quarter%d size%d"%[q,size])
+            if intensities.size()==3:
+                check(intensities[0]<intensities[1] and intensities[1]<intensities[2],"Native dim/bright/very-bright profile samples remain distinct with cap, quarter%d size%d"%[q,size])
+    # Named renderer overlap control, not a recorded second gameplay source:
+    # native PointLight2D adds irradiance and the existing receiving cap bounds it.
     var sources:Array=lighting.canvas_sources()
     publish(sources,1.0)
     var one=await capture(output)
@@ -118,7 +141,8 @@ func run()->void:
     var restored=await capture(output)
     check(restored.get_data()==one.get_data(),"Removing second light restores original pixels")
     lighting.clear_pages()
-    var report={"checks":checks,"failures":failures,"renderer":RenderingServer.get_current_rendering_method(),"samples":samples,
-        "scope":"Real observed DIM/BRIGHT/VERY_BRIGHT source ratios through the light table and a flat lit modular receiver with the production light cap; the native PointLight2D page measures irradiance. All four quarters/two zooms. Ground projection, occlusion and backend MAX are not claimed by this optical-plane fixture."}
+    for i in states.size():check(var_to_bytes(states[i])==frozen_states[i],"Native projection/cap/overlap controls preserve original "+declared[i].label+" state")
+    var report={"checks":checks,"failures":failures,"renderer":RenderingServer.get_current_rendering_method(),"recording":directory,"recorded_probes":declared,"samples":samples,
+        "scope":"Real observed DIM/BRIGHT/VERY_BRIGHT source ratios through the light table and a flat lit modular receiver with the production light cap; the native PointLight2D page measures irradiance. Source/category evidence is the unchanged current-schema Blue original; duplicated-light overlap is an explicit renderer control. All four quarters/two zooms. Ground projection, occlusion and backend MAX are not claimed by this optical-plane fixture."}
     FileAccess.open("res://generated/light_range_render_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("LIGHT_RANGE_RENDER ",JSON.stringify({"checks":checks,"failures":failures}));quit(0 if failures.is_empty() else 1)

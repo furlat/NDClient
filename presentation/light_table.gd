@@ -33,10 +33,22 @@ var _cookie_images: Array[Image] = [] # Compatibility path only: one image per l
 ## returns the RGBA8 image of a cookie texture; it is only used where there is no
 ## RenderingDevice (Compatibility). A cookie not generated yet leaves its light
 ## out for that frame and is reported.
-func publish(sources: Array, cookie_image: Callable) -> void:
+func publish(sources: Array, cookie_image: Callable, directionals: Array = []) -> void:
     issues.clear()
     var next := PackedFloat32Array()
     var next_ids := PackedStringArray()
+    # Native canvas.glsl accumulates directionals before positional lights.
+    # Their normalized canvas direction and 0..1 height have no cookie/position.
+    for source in directionals:
+        if not source.enabled:continue
+        var direction:Vector2=source.direction
+        var colour:Color=source.color
+        var energy:float=PackedFloat32Array([float(source.energy)])[0]
+        var weight:float=PackedFloat32Array([colour.a*energy])[0]
+        next.append_array([direction.x,direction.y,float(source.height),weight,
+            0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+            colour.r,colour.g,colour.b,1.0])
+        next_ids.append(str(source.id))
     for source in sources:
         if not source.enabled or source.texture == null: continue
         var layer: int = _cookie_layer(source.texture, cookie_image)

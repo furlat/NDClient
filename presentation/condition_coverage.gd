@@ -66,6 +66,9 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
                 "expected_source":entry.source+"/persistent","related_source":"authoring/environment/surfaces",
                 "note":"Indicator ownership unresolved between this ground condition and world spatial media. Review authoring; this is not evidence of absent VFX."})
         return
+    # Assignment and execution are separate. A real package lifecycle or typed
+    # held source owns an indicator even when its runtime inputs remain absent.
+    if not persistent.get("nativeEffects",[]).is_empty() or not Effects.conditions(str(entry.id)).is_empty():return
     _require(entry,"persistent","persistent_indicator",entry.source+"/persistent",false,
         "persistent_visual_assignment_missing","not_assigned",{
             "gap_kind":"authoring_assignment","implementation":"not_applicable",
@@ -150,6 +153,8 @@ static func _native(entry:Dictionary,recipe:Dictionary,selected:Dictionary,cache
         "duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false}
     for phase in Persistent.lifecycle_samples(common,Effects.conditions(str(entry.id)),cache):
         _native_phase(entry,phase,"persistent","native:"+str(phase.source_id))
+    for phase in Persistent.authored_phases(recipe,str(entry.id),cache,str(entry.source)):
+        _native_phase(entry,phase,"persistent","native_authored:"+str(phase.native_cue.source_index))
     var index=0
     for phase in NativeSpells.contact_phases(selected):
         _native_phase(entry,phase,"interception","native_contact:"+str(index))
@@ -164,17 +169,24 @@ static func _native_phase(entry:Dictionary,phase:Dictionary,owner_phase:String,m
         lifecycle[name]=str(phase.lifecycle_phases[name].id)
         for path in Effects.resource_paths(phase.lifecycle_phases[name]):
             if not FileAccess.file_exists(path) and path not in missing:missing.append(path)
-    var present=not phase.native_clip.is_empty() and missing.is_empty() and phase.get("status")!="missing"
-    _require(entry,owner_phase,mechanism,phase.source,true,
-        "" if present else phase.get("reason","selected_native_source_missing"),"available" if present else "missing",
+    var present=not phase.native_clip.is_empty() and missing.is_empty()
+    var unavailable_inputs:Array=phase.get("unbound_constructor_inputs",[])
+    var requirement:Dictionary=_require(entry,owner_phase,mechanism,phase.source,true,
+        phase.get("reason","") if present else "selected_native_source_missing","available" if present else "missing",
         {"component_kind":"native_effect","source_id":phase.source_id,"missing_paths":missing,
-        "lifecycle":lifecycle,
+        "lifecycle":lifecycle,"unbound_constructor_inputs":unavailable_inputs.duplicate(),
+        "input_status":"unavailable" if not unavailable_inputs.is_empty() else "not_assessed",
         "label":("Lifecycle · " if phase.has("lifecycle_phases") else str(phase.native_cue.role).capitalize()+" · ")+str(phase.source_id)})
+    if phase.get("status")=="missing":requirement.status="missing"
 
 static func _recorded(entry: Dictionary,rows: Array) -> void:
     for row in rows:
         if row.kind in ["condition","condition_exit","condition_state"]:continue
         var persistent=row.get("owner",{}).get("condition",{}).get("behavior_id")==entry.id
+        var component:Dictionary=row.get("component",{})
+        var owner:Dictionary=row.get("owner",{})
+        var spatial:bool=owner.get("effect",{}).get("content_ref",{}).get("content_id")==entry.id \
+            and component.get("spatial_effect_uuid")!=null and component.spatial_effect_uuid==owner.get("id")
         var component_source:String=row.get("component",{}).get("source",row.get("track",{}).get("source",""))
         if not persistent and not entry.requirements.any(func(requirement):return component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]):continue
         for requirement in entry.requirements:
@@ -183,6 +195,8 @@ static func _recorded(entry: Dictionary,rows: Array) -> void:
                 matched=row.kind=="native_effect" and row.get("component",{}).has("intercepted_by_condition_uuid") and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]
             elif requirement.mechanism=="cast_binding":
                 matched=row.kind=="body" and row.get("track",{}).get("reaction_cast_binding")==requirement.binding and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]
+            elif row.kind=="native_effect" and component.get("native_spell",false) and (requirement.mechanism.begins_with("native:") or requirement.mechanism.begins_with("native_authored:")):
+                matched=(persistent or spatial) and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]
             elif not persistent:
                 matched=component_source in [requirement.source,requirement.get("legacy_source",requirement.source)] and requirement.mechanism==row.kind
             elif row.kind=="condition_material":matched=requirement.mechanism in row.get("operations",{})
@@ -190,14 +204,14 @@ static func _recorded(entry: Dictionary,rows: Array) -> void:
                 matched=requirement.mechanism in ["bodyPose","frozenPose"]
                 if requirement.mechanism.begins_with("activityPoses:"):
                     matched=row.get("pose",{}).get("source")==requirement.source
-            elif row.get("component",{}).get("native_spell",false):
-                matched=requirement.mechanism.begins_with("native:") and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)] and row.kind=="native_effect"
             else:
                 var layer:Dictionary=row.get("component",{}).get("layer",{})
                 matched=requirement.mechanism=="layer:"+str(layer.get("id",""))
             if not matched or (persistent and requirement.phase!="persistent"):continue
-            requirement.evidence.append({"kind":"indexed_candidate" if row.get("selection_policy")=="sampled" else "resolved_recording","recording":row.get("recording",""),"row_id":row.id,
-                "condition_uuid":row.get("component",{}).get("intercepted_by_condition_uuid",row.get("track",{}).get("condition_uuid",row.get("owner",{}).get("id"))),"start_ms":row.start_ms,"end_ms":row.end_ms,"source_start_ms":row.get("source_start_ms",row.start_ms)})
+            var evidence:Dictionary={"kind":"indexed_candidate" if row.get("selection_policy")=="sampled" else "resolved_recording","recording":row.get("recording",""),"row_id":row.id,
+                "condition_uuid":null if spatial else component.get("intercepted_by_condition_uuid",row.get("track",{}).get("condition_uuid",owner.get("id"))),"start_ms":row.start_ms,"end_ms":row.end_ms,"source_start_ms":row.get("source_start_ms",row.start_ms)}
+            if spatial:evidence.spatial_effect_uuid=component.spatial_effect_uuid
+            requirement.evidence.append(evidence)
             if requirement.status!="missing" and row.get("selection_policy")!="sampled":requirement.status="implemented"
 
 static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Dictionary={}) -> Dictionary:
@@ -283,7 +297,7 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
         for requirement in entry.requirements:
             requirement.legacy_source=requirement.source
             var boundary:int=requirement.source.find(":/")
-            if boundary>=0:
+            if boundary>=0 and not requirement.source.begins_with("res://"):
                 requirement.source=Catalog.source_pointer(requirement.source.substr(0,boundary),requirement.source.substr(boundary+2),cache)
         _recorded(entry,recorded_rows)
         if entry.requirements.is_empty():entry.status="state_only" if entry.disposition=="state_only" else "missing"

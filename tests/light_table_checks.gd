@@ -103,7 +103,7 @@ func lights() -> Array:
             "diameter": 200.0, "ellipse": 1.0, "height": 20.0, "energy": 2.0, "color": Color.WHITE, "enabled": false}),
     ]
 
-func page(hdr: bool, shader_code: String, sources: Array, native: bool) -> SubViewport:
+func page(hdr: bool, shader_code: String, sources: Array, native: bool, directionals: Array = []) -> SubViewport:
     # The canvas shader sees CanvasModulate after Godot's HDR conversion.
     var modulate := Color(AMBIENT, AMBIENT, AMBIENT).linear_to_srgb() if hdr else Color(AMBIENT, AMBIENT, AMBIENT)
     var view := SubViewport.new()
@@ -116,6 +116,12 @@ func page(hdr: bool, shader_code: String, sources: Array, native: bool) -> SubVi
         # As the receiving pages: Godot converts CanvasModulate under HDR only.
         ambient.color = modulate
         view.add_child(ambient)
+        for source in directionals:
+            var light:=DirectionalLight2D.new()
+            light.rotation=Vector2.UP.angle_to(source.direction)
+            light.height=source.height;light.color=source.color
+            light.energy=source.energy;light.enabled=source.enabled
+            view.add_child(light)
         for source in sources:
             var light := PointLight2D.new()
             var texture: Texture2D = source.texture
@@ -239,6 +245,43 @@ func run() -> void:
     check(specular.lit_samples > specular.samples / 3 and specular.brightest > 1.0, "Native specular-map page is lit")
     check(specular.pixels_over_limit == 0, "Table irradiance with linear cookies equals the native specular-map receiving page")
     native_view.queue_free(); plain_view.queue_free(); table_view.queue_free()
+    await process_frame
+    var original_rows:PackedFloat32Array=table.rows.duplicate()
+    var original_ids:PackedStringArray=table.ids.duplicate()
+    var directions:Array=[
+        {"id":"side","direction":Vector2(.6,-.8),"height":0.0,"color":Color(.7,.35,.9,.8),"energy":.6,"enabled":true},
+        {"id":"front","direction":Vector2.UP,"height":1.0,"color":Color(.5,.8,.3),"energy":.55,"enabled":true},
+        {"id":"off-directional","direction":Vector2.RIGHT,"height":.4,"color":Color.WHITE,"energy":4.0,"enabled":false}]
+    var cookie_image:Callable=func(texture:Texture2D)->Image:return retained.get(texture.get_rid())
+    for points in [[],sources]:
+        table.publish(points,cookie_image,directions)
+        check(table.ids.slice(0,2)==PackedStringArray(["side","front"]),"Only enabled native directional rows precede points")
+        if not points.is_empty():check(table.rows.slice(2*LightTable.FLOATS)==original_rows,"Directional publication preserves every original positional row byte")
+        for hdr in [true,false]:
+            var expected:=page(hdr,NATIVE,points,true,directions)
+            var actual:=page(hdr,TABLE,points,false)
+            # Native effect receiving uses HDR for its linear-filtered page.
+            var linear:SubViewport=page(hdr,TABLE_SPECULAR,points,false) if hdr else null
+            # The linear oracle needs linear point-cookie sampling too.
+            var native_linear:SubViewport
+            if hdr and not points.is_empty():
+                native_linear=page(hdr,NATIVE,points,true,directions)
+                native_linear.canvas_item_default_texture_filter=Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR
+            for i in 2:await process_frame
+            await RenderingServer.frame_post_draw
+            var pixels:Image=expected.get_texture().get_image()
+            var result:Dictionary=compare(hdr,pixels,actual.get_texture().get_image())
+            result.directionals=true;result.point_count=points.size();results.append(result)
+            check(result.lit_samples>0 and result.pixels_over_limit==0,"Directional plus positional irradiance equals native Godot, HDR="+str(hdr)+" points="+str(points.size()))
+            if linear!=null:
+                var filtered:Dictionary=compare(hdr,native_linear.get_texture().get_image() if native_linear!=null else pixels,linear.get_texture().get_image())
+                filtered.directionals=true;filtered.linear=true;filtered.point_count=points.size();results.append(filtered)
+                check(filtered.pixels_over_limit==0,"HDR linear receiving includes the same native directional term, points="+str(points.size()))
+                linear.queue_free()
+            expected.queue_free();actual.queue_free()
+            if native_linear!=null:native_linear.queue_free()
+    table.publish(sources,cookie_image)
+    check(table.rows==original_rows and table.ids==original_ids,"Removing directionals restores the exact original point table")
     report = {"checks": checks, "failures": failures, "comparisons": results}
     print("LIGHT_TABLE_REPORT ", JSON.stringify(report))
     quit(0 if failures.is_empty() else 1)

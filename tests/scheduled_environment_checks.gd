@@ -5,6 +5,7 @@ const Journal=preload("res://sdk/journal.gd")
 const Compiler=preload("res://presentation/compiler.gd")
 const Media=preload("res://presentation/media_warmup.gd")
 const Player=preload("res://play.gd")
+const Preparation=preload("res://presentation/world_preparation.gd")
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -29,7 +30,19 @@ func qualify(before:Dictionary,groups:Array,world_path:bool,sequence:int)->void:
     var at:float=change.at_ms
     var missing:String=change.paths.keys().filter(func(path):return not schedule.initial.has(path))[0]
     check(at>0 and not schedule.initial.has(missing),"Missing path is first used after cast start")
-    for path in player.media_environment_required:player.media_warmup.ready_paths[path]=true
+    # Native construction readiness is an explicit unit input here, as the
+    # original world_ready callback was. Real draws are qualified separately
+    # by world_preparation_render_checks. The candidate, paths, key and epoch
+    # below are genuine received preparation operands, never gameplay facts.
+    var candidate:Dictionary=player.timeline.preview_world()
+    check(not candidate.is_empty() and candidate.source_group_id==groups[0].id,"Actual received world candidate owns this source group")
+    if candidate.is_empty():player.context_menu.free();player.free();return
+    var owner=Preparation.new();player.add_child(owner);player.pending_world=owner
+    owner.epoch=player.timeline.initialization_revision;owner.quarter=player.quarter;owner.boundary=candidate
+    owner.result={"environment_paths":change.paths}
+    owner.environment_source_record=Media.source_record(change.paths,change.paths)
+    player._publish_media_interest(player.timeline.display_ms)
+    for path in change.paths:player.media_warmup.ready_paths[path]=true
     player.media_warmup.ready_paths.erase(missing)
     var wanted:Dictionary=player.media_warmup.wanted.duplicate()
     check(wanted.has(missing),"Full received source stays demanded while readiness is deferred")
@@ -49,24 +62,34 @@ func qualify(before:Dictionary,groups:Array,world_path:bool,sequence:int)->void:
     check(player.timeline.waiting_for_media and player.timeline.display_ms==clock,"Exact environment first-use boundary holds the display clock")
     check(var_to_bytes(player.timeline.state)==state and var_to_bytes(player.timeline.trace)==trace,"Missing source publishes no world/event/log changes")
     check(player.media_warmup.wanted==wanted,"Time-specific readiness never drops full received source demand")
-    var boundary={"source_group_id":groups[0].id,"source_local_ms":at}
-    check(not player._prepared_world_sources_ready(boundary),"World binding checks the candidate boundary's time")
+    var boundary:Dictionary=candidate
+    check(not player._prepared_world_sources_ready(boundary),"Unprepared actual owner cannot satisfy its matching boundary")
+    owner.prepared=true
+    check(not player._prepared_world_sources_ready(boundary),"Prepared owner still requires its exact receiving source roles")
     player.media_warmup.ready_paths[missing]=true
     for turn in 4:player.timeline.advance(at-player.timeline.display_ms)
     check(not player.timeline.waiting_for_media and player.timeline.display_ms>=at,"Original boundary resumes after actual source readiness")
-    check(player._prepared_world_sources_ready(boundary),"Ready source satisfies the same candidate boundary")
+    check(player._prepared_world_sources_ready(boundary),"Ready source satisfies the same candidate owner boundary")
+    owner.epoch+=1
+    check(not player._prepared_world_sources_ready(boundary),"Another preparation epoch cannot release this boundary")
+    owner.epoch-=1;owner.quarter=(owner.quarter+1)%4
+    check(not player._prepared_world_sources_ready(boundary),"Another camera quarter cannot release this boundary")
+    owner.quarter=player.quarter
+    var wrong:Dictionary=boundary.duplicate();wrong.preparation_key=["different_received_owner"]
+    check(not player._prepared_world_sources_ready(wrong),"Another preparation key cannot release this boundary")
     player.media_warmup.ready_paths.erase(missing)
     player.external_playback=true
     check(not player._environment_sources_ready(groups[0],0),"Replay retains full received environment readiness")
+    player.pending_world=null;owner.free()
     Media.close(player.media_warmup)
     player.component_renderer.audio.close()
     player.context_menu.free();player.free()
 func run()->void:
-    for case_id in ["gallery","fireball"]:
-        var directory:String=Fixtures.journal(case_id)
+    for seat in ["amber","blue"]:
+        var directory:String=Fixtures.journal("gallery",seat)
         var journal=Journal.new()
         check(journal.open(directory,true,false).ok,"Actual live journal opens without network")
-        var casts:Array=Fixtures.fact_rows(case_id,"spell").filter(func(row):return row.fact.get("behavior_id")=="spell.fireball")
+        var casts:Array=Fixtures.fact_rows("gallery","spell",seat).filter(func(row):return row.fact.get("behavior_id")=="spell.fireball")
         check(not casts.is_empty(),"Original recording contains its actual Fireball")
         if casts.is_empty():continue
         var sequence:int=int(casts[0].sequence)
@@ -78,6 +101,6 @@ func run()->void:
         check(compiled.ok and compiled.value.groups.size()==1,"Actual Fireball compiles to its original group")
         if not compiled.ok:continue
         for world_path in [false,true]:qualify(before,compiled.value.groups,world_path,sequence)
-    var report={"checks":checks,"failures":failures,"scope":"Actual two Fireballs, full demanded source closure, scheduled Play/Timeline readiness, exact first-use world/event fence and replay fallback. No GPU or live latency claim."}
+    var report={"checks":checks,"failures":failures,"scope":"Original Gallery Fireball from both independent seat journals; actual candidate/epoch/quarter/key/source ownership, scheduled source and ordered publication fences. Native constructor readiness is an explicit unit input. No GPU or live latency qualification."}
     FileAccess.open("res://.runtime/scheduled-environment-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SCHEDULED_ENVIRONMENT_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
