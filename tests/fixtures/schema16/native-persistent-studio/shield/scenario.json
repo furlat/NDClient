@@ -1,0 +1,110 @@
+{
+ "id": "spell.shield/studio_uuid_lifecycle",
+ "title": "Shield: actual missile interception, next-turn expiration and restored movement",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [],
+   "at": [
+    3,
+    7
+   ],
+   "behaviors": [
+    "reaction.spell.shield"
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    7
+   ],
+   "caster_level": 20,
+   "spells": [
+    "spell.magic_missile"
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    8
+   ]
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.shield",
+   "spell.magic_missile"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.shield"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "steps": [
+  {
+   "do": "spell.magic_missile",
+   "by": "target",
+   "target": "caster",
+   "recipients": [
+    "caster",
+    "caster",
+    "caster"
+   ],
+   "track": true,
+   "track_condition": "condition.spell.shield"
+  },
+  {
+   "do": "end_tracked",
+   "prefer_turns": true,
+   "max_turns": 12
+  },
+  {
+   "do": "tail_walk",
+   "by": "caster",
+   "offset": [
+    -1,
+    0
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.shield"
+ ],
+ "required_condition_ends": [
+  "condition.spell.shield"
+ ]
+}

@@ -1,0 +1,115 @@
+{
+ "id": "spell.banishment/departure_and_return",
+ "title": "Banishment: original idle departure, held caster movement, return and restored target movement",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.banishment"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.banishment"
+  ],
+  "action": [
+   "action.move",
+   "action.drop_concentration"
+  ],
+  "condition": [
+   "condition.spell.banishment"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "steps": [
+  {
+   "do": "spell.banishment",
+   "by": "caster",
+   "target": "target",
+   "level": 4,
+   "track": true,
+   "track_condition": "condition.spell.banishment"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "end_tracked",
+   "strategy": "concentration"
+  },
+  {
+   "do": "tail_walk",
+   "by": "target",
+   "offset": [
+    1,
+    0
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.banishment",
+  "action.move",
+  "action.drop_concentration"
+ ],
+ "required_conditions": [
+  "condition.spell.banishment"
+ ],
+ "required_condition_ends": [
+  "condition.spell.banishment"
+ ],
+ "required_facts": [
+  "spell",
+  "movement"
+ ],
+ "purpose": "Actual two-seat departure/return input for immutable pre-admission pose/outfit capture. The absent actor is never moved or made visible by the recorder; concentration ends through an offered action, then the returned target moves legally. No departure shader/rendering qualification is claimed."
+}

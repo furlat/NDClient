@@ -1,0 +1,174 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 7,
+ "tracked": {
+  "condition_id": "condition.spell.mage_armor",
+  "condition_uuid": "33d040dd-0326-475d-94f2-57c606c085e8",
+  "holder_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+  "holder": "Amber caster",
+  "occurrence": 47,
+  "sequence": 8
+ },
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "f625521c-a54d-442f-bc25-8b5a7e5c26c5": "Amber caster",
+  "f3df40e0-d9aa-4dfe-af08-02b6d1eaa622": "Amber ally",
+  "2fc8a3d8-5f2f-4ffc-9faa-2adecd086457": "Blue target",
+  "4287eddd-354d-4394-a615-4b988abd8ddb": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.mage_armor \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "equip \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 3,
+   "spell": 1,
+   "spatial": 6,
+   "sensory": 3,
+   "step": 3,
+   "movement": 2
+  },
+  "behaviors": {
+   "spell.mage_armor": 1,
+   "action.move": 2
+  },
+  "conditions": [
+   "condition.spell.mage_armor"
+  ],
+  "ended_conditions": [
+   "condition.spell.mage_armor"
+  ],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.mage_armor",
+   "kind": "actor_change",
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "condition_uuid": "33d040dd-0326-475d-94f2-57c606c085e8",
+   "condition_id": "condition.spell.mage_armor",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.mage_armor",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 74,
+   "lineage": 49,
+   "event_offset": 8,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 78,
+   "lineage": 75,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.mage_armor",
+   "kind": "actor_change",
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "condition_uuid": "33d040dd-0326-475d-94f2-57c606c085e8",
+   "condition_id": "condition.spell.mage_armor",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 94,
+   "lineage": 80,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.mage_armor",
+   "kind": "actor_change",
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "condition_uuid": "33d040dd-0326-475d-94f2-57c606c085e8",
+   "condition_id": "condition.spell.mage_armor",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.mage_armor",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 74,
+   "lineage": 49,
+   "event_offset": 8,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 78,
+   "lineage": 75,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.mage_armor",
+   "kind": "actor_change",
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "condition_uuid": "33d040dd-0326-475d-94f2-57c606c085e8",
+   "condition_id": "condition.spell.mage_armor",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 94,
+   "lineage": 80,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

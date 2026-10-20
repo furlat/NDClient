@@ -1,0 +1,109 @@
+{
+ "id": "spell.command/studio_uuid_lifecycle",
+ "title": "Command: actual owner application, held action and authoritative end",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.command"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.command",
+   "by": "caster",
+   "target": "target",
+   "track": true,
+   "track_condition": "condition.spell.command.grovel"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    8
+   ]
+  },
+  {
+   "do": "end_tracked",
+   "prefer_turns": true,
+   "max_turns": 16
+  },
+  {
+   "do": "tail_walk",
+   "by": "target",
+   "offset": [
+    -1,
+    0
+   ]
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.command"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.command.grovel"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "required_behaviors": [
+  "spell.command",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.command.grovel"
+ ],
+ "required_condition_ends": [
+  "condition.spell.command.grovel"
+ ],
+ "purpose": "Current native Studio lifecycle input: retain original faction streams and exact UUID removal; no synthetic expiration or cast-only substitute."
+}

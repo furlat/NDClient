@@ -1,0 +1,272 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "f3df40e0-d9aa-4dfe-af08-02b6d1eaa622",
+   "state_revision": "18593218-1a0c-47cb-8bfe-61a68c6ab572",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+   "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+   "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+    "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+    "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "4287eddd-354d-4394-a615-4b988abd8ddb",
+   "state_revision": "c2893dd5-edda-4805-b9fe-c5cb611ee4c5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+   "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+   "audience_id": "3a2520fa-6796-402a-aa48-9044a8c2dbbb",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+    "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+    "audience_id": "3a2520fa-6796-402a-aa48-9044a8c2dbbb",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "2fc8a3d8-5f2f-4ffc-9faa-2adecd086457",
+   "state_revision": "20aa5435-ef95-49d4-b6b0-8e8fa7f8af4b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+   "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+   "audience_id": "3a2520fa-6796-402a-aa48-9044a8c2dbbb",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+    "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+    "audience_id": "3a2520fa-6796-402a-aa48-9044a8c2dbbb",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.mage_armor",
+   "by": "caster",
+   "target": "self",
+   "track": true,
+   "track_condition": "condition.spell.mage_armor"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "fed01e59-f7a7-4315-b70c-0fcb67b56492",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.mage_armor",
+   "display_name": "Mage Armor (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "state_revision": "fed01e59-f7a7-4315-b70c-0fcb67b56492",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+   "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+   "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+    "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+    "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "phase": "hold",
+   "to": [
+    3,
+    9
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "state_revision": "66840189-453a-4655-8b4c-bc2d35975037",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      7
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+   "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+   "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+    "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+    "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "slot": "Body",
+   "item": "armor.chain_mail"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "state_revision": "fdba5c55-61a8-4736-a359-2f95161f6dde",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "b9f2d6dd-73b2-4f3a-9c62-38c259ff5bac",
+     "slot": "Body"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+   "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+   "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+    "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+    "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "phase": "tail",
+   "to": [
+    4,
+    9
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "f625521c-a54d-442f-bc25-8b5a7e5c26c5",
+   "state_revision": "dab7f1d4-3b3c-4418-afde-15988ea2f654",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+   "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+   "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_mage_armor_studio_uuid_lifecycle",
+    "game_epoch": "326a8923-b59a-421a-a239-a5315b765c49",
+    "audience_id": "52e4cdcd-0884-4b80-9fe9-754b3cd72b0f",
+    "sequence": 11
+   }
+  }
+ }
+]

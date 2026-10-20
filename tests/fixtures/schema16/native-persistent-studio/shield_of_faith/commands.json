@@ -1,0 +1,382 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a47b8c69-ea76-4b0e-a3a7-27f2a2e2316d",
+   "state_revision": "74dc2449-a214-475b-8fcb-d99340902ca1",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "143f09af-1c38-445f-943f-8b85cc323719",
+   "state_revision": "bf1e237f-3c70-48ae-b873-7cf0a18c4b05",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "90907132-7e00-43c1-ae55-c7fb361fabed",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "90907132-7e00-43c1-ae55-c7fb361fabed",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.shield_of_faith",
+   "by": "caster",
+   "target": "ally"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.shield_of_faith",
+   "display_name": "Shield of Faith (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "7cb02ae3-02ae-4a7b-8d0f-ec6a9d33c3b1",
+   "state_revision": "f4ca4c2c-7860-4b9b-a412-aef244c20f5c",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+    "sequence": 6
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "7cb02ae3-02ae-4a7b-8d0f-ec6a9d33c3b1",
+   "state_revision": "2dd4b3b0-52f1-47ff-8d04-6107843e2490",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+    "sequence": 7
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "a47b8c69-ea76-4b0e-a3a7-27f2a2e2316d",
+   "state_revision": "ae8a4025-e46d-42ee-8bc2-3e68ab30d5aa",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+    "sequence": 9
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "target",
+   "target": "ally",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "143f09af-1c38-445f-943f-8b85cc323719",
+   "state_revision": "59f46d8f-fcc3-4e83-9845-75401d5c6c33",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 7,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "90907132-7e00-43c1-ae55-c7fb361fabed",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "90907132-7e00-43c1-ae55-c7fb361fabed",
+    "sequence": 11
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "143f09af-1c38-445f-943f-8b85cc323719",
+   "state_revision": "30d73463-f796-4d35-82f5-4be379ea954b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "90907132-7e00-43c1-ae55-c7fb361fabed",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "90907132-7e00-43c1-ae55-c7fb361fabed",
+    "sequence": 12
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "7cb02ae3-02ae-4a7b-8d0f-ec6a9d33c3b1",
+   "state_revision": "445c30ca-5f48-45bd-89c7-e255b64247b1",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+    "sequence": 14
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "7cb02ae3-02ae-4a7b-8d0f-ec6a9d33c3b1",
+   "state_revision": "a5efbec2-d97c-41c5-b529-03eee2007666",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+    "sequence": 15
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "target": [
+    4,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "a47b8c69-ea76-4b0e-a3a7-27f2a2e2316d",
+   "state_revision": "e25671b1-c304-4490-b01d-3693fdee2938",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+   "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+   "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shield_of_faith_defend_then_remove",
+    "game_epoch": "da087d94-5b73-41a4-9a7e-7fd37e9dd303",
+    "audience_id": "aed85da8-083d-4a37-8eaf-938041c9bb39",
+    "sequence": 17
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ }
+]

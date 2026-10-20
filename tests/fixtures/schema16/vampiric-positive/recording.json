@@ -1,0 +1,688 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 13,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "34430787-4e2a-465b-aa1a-076ea3a07199": "Amber caster",
+  "ea4db867-b98f-4961-ba83-b33530d001e1": "Amber ally",
+  "28afd8d7-0e9a-45e0-ac33-51ebeb02f251": "Blue target",
+  "6b598d84-2ac8-4ebc-b060-af60046cf73f": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "action.move \u00b7 Amber caster",
+  "spell.vampiric_touch \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "action.spell.vampiric_touch.strike \u00b7 Amber caster",
+  "action.drop_concentration \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 17,
+   "actor_change": 11,
+   "attack": 3,
+   "spatial": 6,
+   "sensory": 3,
+   "step": 3,
+   "movement": 3,
+   "damage": 8,
+   "heal": 2,
+   "spell": 2,
+   "action": 1
+  },
+  "behaviors": {
+   "reaction.opportunity_attack": 3,
+   "reaction.spell.shield": 1,
+   "action.move": 3,
+   "spell.vampiric_touch": 1,
+   "action.spell.vampiric_touch.strike": 1,
+   "action.drop_concentration": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.shield",
+   "condition.spell.vampiric_touch"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.spell.shield",
+   "condition.spell.vampiric_touch"
+  ],
+  "positive_applied_damage_types": [
+   "Necrotic",
+   "Piercing"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 54,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "6139a833-84c9-4581-a11c-78a1ae2b4282",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 54,
+   "event_offset": 1,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "triggering_occurrence": 61,
+   "triggering_lineage": 58,
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 54,
+   "event_offset": 1,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 79,
+   "lineage": 54,
+   "event_offset": 6,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 89,
+   "lineage": 80,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 90,
+   "lineage": 80,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 107,
+   "lineage": 80,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 108,
+   "lineage": 80,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 112,
+   "lineage": 80,
+   "event_offset": 6,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 113,
+   "lineage": 80,
+   "event_offset": 7,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 114,
+   "lineage": 80,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.vampiric_touch",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 129,
+   "lineage": 115,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 168,
+   "lineage": 163,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "6139a833-84c9-4581-a11c-78a1ae2b4282",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 169,
+   "lineage": 163,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "amber"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 190,
+   "lineage": 172,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 191,
+   "lineage": 172,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 195,
+   "lineage": 172,
+   "event_offset": 4,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 196,
+   "lineage": 172,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell action.spell.vampiric_touch.strike",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 205,
+   "lineage": 197,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 206,
+   "lineage": 197,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 208,
+   "lineage": 197,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "amber"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 233,
+   "lineage": 209,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 234,
+   "lineage": 209,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 236,
+   "lineage": 209,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 253,
+   "lineage": 209,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 254,
+   "lineage": 209,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 256,
+   "lineage": 209,
+   "event_offset": 8,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 267,
+   "lineage": 209,
+   "event_offset": 13,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 54,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "6139a833-84c9-4581-a11c-78a1ae2b4282",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 54,
+   "event_offset": 1,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "triggering_occurrence": 61,
+   "triggering_lineage": 58,
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 54,
+   "event_offset": 1,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 78,
+   "lineage": 54,
+   "event_offset": 5,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "6b598d84-2ac8-4ebc-b060-af60046cf73f",
+   "triggering_occurrence": 57,
+   "triggering_lineage": 57,
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 79,
+   "lineage": 54,
+   "event_offset": 6,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 89,
+   "lineage": 80,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 90,
+   "lineage": 80,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 107,
+   "lineage": 80,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 108,
+   "lineage": 80,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 112,
+   "lineage": 80,
+   "event_offset": 6,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 113,
+   "lineage": 80,
+   "event_offset": 7,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 114,
+   "lineage": 80,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.vampiric_touch",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 129,
+   "lineage": 115,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 168,
+   "lineage": 163,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "6139a833-84c9-4581-a11c-78a1ae2b4282",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 169,
+   "lineage": 163,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "blue"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 190,
+   "lineage": 172,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 191,
+   "lineage": 172,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 195,
+   "lineage": 172,
+   "event_offset": 4,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 19,
+   "occurrence": 196,
+   "lineage": 172,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell action.spell.vampiric_touch.strike",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 205,
+   "lineage": 197,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 206,
+   "lineage": 197,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 208,
+   "lineage": 197,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 233,
+   "lineage": 209,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 234,
+   "lineage": 209,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 236,
+   "lineage": 209,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 253,
+   "lineage": 209,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 254,
+   "lineage": 209,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 256,
+   "lineage": 209,
+   "event_offset": 8,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 266,
+   "lineage": 209,
+   "event_offset": 12,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "28afd8d7-0e9a-45e0-ac33-51ebeb02f251",
+   "triggering_occurrence": 212,
+   "triggering_lineage": 212,
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 266,
+   "lineage": 209,
+   "event_offset": 12,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "6b598d84-2ac8-4ebc-b060-af60046cf73f",
+   "triggering_occurrence": 212,
+   "triggering_lineage": 212,
+   "faction": "blue"
+  },
+  {
+   "sequence": 21,
+   "occurrence": 267,
+   "lineage": 209,
+   "event_offset": 13,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Necrotic",
+  "Piercing"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

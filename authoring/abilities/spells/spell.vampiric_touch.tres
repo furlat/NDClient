@@ -99,10 +99,17 @@ extra = {
 [sub_resource type="Resource" id="Resource_jpoi6"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/healing"
-unbound_constructor_inputs = PackedStringArray("actual_positive_heal_projection_not_bound")
 role = "attached"
-at = "release"
-delay = 0.28
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "healing_return",
+"outcome": "heal",
+"geometry_actor": "target",
+"component_path": ["owned_contact"],
+"input_field": ""
+}
+at = "cast"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -114,10 +121,16 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"input_policies": {
+"owner_input": {"mode": "not_applicable", "reason": "positive_healing_return_does_not_consume_owner_or_strike_inputs"},
+"strike_input": {"mode": "not_applicable", "reason": "positive_healing_return_does_not_consume_owner_or_strike_inputs"},
+"condition_input": {"mode": "not_applicable", "reason": "positive_healing_return_does_not_consume_owner_or_strike_inputs"},
+"tick_input": {"mode": "not_applicable", "reason": "positive_healing_return_does_not_consume_owner_or_strike_inputs"}
+},
 "dynamic_geometry": true,
 "entity_geometry": {
-"actor": "caster",
-"slots": ["weapon"]
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
 },
 "live_endpoints": [{
 "actor": "caster",
@@ -132,7 +145,6 @@ extra = {
 [sub_resource type="Resource" id="Resource_6cdpq"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/condition"
-unbound_constructor_inputs = PackedStringArray("retained_owner_lifecycle_not_bound")
 role = "attached"
 at = "release"
 delay = 0.62
@@ -165,7 +177,6 @@ extra = {
 [sub_resource type="Resource" id="Resource_6d33v"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/retire"
-unbound_constructor_inputs = PackedStringArray("retained_owner_lifecycle_not_bound")
 role = "attached"
 at = "release"
 delay = 2.78
@@ -213,8 +224,9 @@ effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
-owner_ids = PackedStringArray()
-owner_cues = PackedInt32Array()
+owner_kind = "condition"
+owner_ids = PackedStringArray("condition.spell.vampiric_touch")
+owner_cues = PackedInt32Array(3, 4)
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
@@ -227,4 +239,4 @@ staging_unported = {
 "selection": "vampiric_touch_native",
 "source": "assets/vfx/index.json:/selections/vampiric_touch_native/staging"
 }
-notes = "First-cast impact consumes its actual native Hit/Crit and same-lineage positive Necrotic result. Its private constructor replaces review actor/result identities and clears unused owner/heal/tick packets; source material is unchanged. Held/repeat owner activity, healing and removal remain explicit gaps. Cast body/timing and native pixels still need visual review."
+notes = "First-cast impact consumes actual native Hit/Crit and its own positive Necrotic result. Finite healing consumes each real positive self HealFact at its own result clock; the drained enemy remains the optical endpoint and activation identity is that HealFact's actual parent occurrence. Held/retire probes 3 and 4 delegate to the existing condition.spell.vampiric_touch UUID hand lifecycle, preserving owner age instead of constructing a duplicate. Pre-application windup and repeat-impact owner activity remain explicit missing inputs; no idle contribution-active state is inferred. Source availability, native qualification and visual acceptance remain separate."

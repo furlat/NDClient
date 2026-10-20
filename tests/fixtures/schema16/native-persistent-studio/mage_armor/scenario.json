@@ -1,0 +1,115 @@
+{
+ "id": "spell.mage_armor/studio_uuid_lifecycle",
+ "title": "Mage Armor: actual owner application, held action and authoritative end",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.mage_armor"
+   ],
+   "at": [
+    3,
+    7
+   ],
+   "items": [
+    {
+     "id": "armor.chain_mail",
+     "placement": "inventory"
+    }
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.mage_armor",
+   "by": "caster",
+   "target": "self",
+   "track": true,
+   "track_condition": "condition.spell.mage_armor"
+  },
+  {
+   "do": "hold_walk",
+   "offset": [
+    0,
+    2
+   ]
+  },
+  {
+   "do": "equip",
+   "by": "caster",
+   "slot": "Body",
+   "item": "armor.chain_mail"
+  },
+  {
+   "do": "tail_walk",
+   "by": "caster",
+   "offset": [
+    1,
+    0
+   ]
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.mage_armor"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.mage_armor"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "required_behaviors": [
+  "spell.mage_armor",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.mage_armor"
+ ],
+ "required_condition_ends": [
+  "condition.spell.mage_armor"
+ ],
+ "purpose": "Current native Studio lifecycle input: retain original faction streams and exact UUID removal; no synthetic expiration or cast-only substitute."
+}

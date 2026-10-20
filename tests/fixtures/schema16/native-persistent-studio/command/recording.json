@@ -1,0 +1,248 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 12,
+ "tracked": {
+  "condition_id": "condition.spell.command.grovel",
+  "condition_uuid": "414f668c-d28b-400e-86e5-c99278ece648",
+  "holder_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+  "holder": "Blue target",
+  "occurrence": 51,
+  "sequence": 8
+ },
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "2b7045f0-ad98-4372-b035-78bfb7a88ee9": "Amber caster",
+  "1318da52-f974-4ec4-afe4-816bb27651dc": "Amber ally",
+  "225ec1e5-909e-4837-8237-be07b907cf1a": "Blue second target",
+  "8c83942c-3d2d-496a-b242-3f9b5b01cc08": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.command \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "action.move \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 25,
+   "saving_throw": 1,
+   "actor_change": 4,
+   "spell": 1,
+   "spatial": 4,
+   "sensory": 2,
+   "step": 2,
+   "movement": 2
+  },
+  "behaviors": {
+   "spell.command": 1,
+   "action.move": 2
+  },
+  "conditions": [
+   "condition.prone",
+   "condition.spell.command.grovel"
+  ],
+  "ended_conditions": [
+   "condition.prone",
+   "condition.spell.command.grovel"
+  ],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 46,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.command.grovel",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "414f668c-d28b-400e-86e5-c99278ece648",
+   "condition_id": "condition.spell.command.grovel",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 52,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.command",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 67,
+   "lineage": 53,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 99,
+   "lineage": 93,
+   "event_offset": 0,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "214717e2-2754-4bb2-8fb4-69ce950ab7e1",
+   "condition_id": "condition.prone",
+   "faction": "amber"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 107,
+   "lineage": 101,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.command.grovel",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "414f668c-d28b-400e-86e5-c99278ece648",
+   "condition_id": "condition.spell.command.grovel",
+   "faction": "amber"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 144,
+   "lineage": 138,
+   "event_offset": 0,
+   "label": "condition ended condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "214717e2-2754-4bb2-8fb4-69ce950ab7e1",
+   "condition_id": "condition.prone",
+   "faction": "amber"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 160,
+   "lineage": 146,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 46,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.command.grovel",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "414f668c-d28b-400e-86e5-c99278ece648",
+   "condition_id": "condition.spell.command.grovel",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 52,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.command",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 67,
+   "lineage": 53,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 99,
+   "lineage": 93,
+   "event_offset": 0,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "214717e2-2754-4bb2-8fb4-69ce950ab7e1",
+   "condition_id": "condition.prone",
+   "faction": "blue"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 107,
+   "lineage": 101,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.command.grovel",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "414f668c-d28b-400e-86e5-c99278ece648",
+   "condition_id": "condition.spell.command.grovel",
+   "faction": "blue"
+  },
+  {
+   "sequence": 22,
+   "occurrence": 144,
+   "lineage": 138,
+   "event_offset": 0,
+   "label": "condition ended condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "8c83942c-3d2d-496a-b242-3f9b5b01cc08",
+   "condition_uuid": "214717e2-2754-4bb2-8fb4-69ce950ab7e1",
+   "condition_id": "condition.prone",
+   "faction": "blue"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 160,
+   "lineage": 146,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -1,0 +1,259 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 8,
+ "tracked": {
+  "condition_id": "condition.spell.sanctuary",
+  "condition_uuid": "61e54958-745b-4932-8a65-b0d7f45f09a6",
+  "holder_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+  "holder": "Amber ally",
+  "occurrence": 47,
+  "sequence": 8
+ },
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "a408c0ea-a710-422a-8d66-9d06f330b5af": "Amber caster",
+  "2d117d10-d00a-4a0e-ab61-1d84fc994b8a": "Amber ally",
+  "1a5ccaf4-20bf-486e-858c-b71b8113282a": "Blue second target",
+  "527014ff-b4d4-478d-8419-e736d96ba738": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.sanctuary \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.move \u00b7 Amber ally",
+  "spell.fire_bolt \u00b7 Amber ally",
+  "action.move \u00b7 Amber ally"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 11,
+   "actor_change": 4,
+   "spell": 2,
+   "spatial": 6,
+   "sensory": 3,
+   "step": 3,
+   "movement": 2,
+   "damage": 2
+  },
+  "behaviors": {
+   "spell.sanctuary": 1,
+   "action.move": 2,
+   "spell.fire_bolt": 1
+  },
+  "conditions": [
+   "condition.spell.sanctuary"
+  ],
+  "ended_conditions": [
+   "condition.spell.sanctuary"
+  ],
+  "positive_applied_damage_types": [
+   "Fire"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.sanctuary",
+   "kind": "actor_change",
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "condition_uuid": "61e54958-745b-4932-8a65-b0d7f45f09a6",
+   "condition_id": "condition.spell.sanctuary",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.sanctuary",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 60,
+   "lineage": 58,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.sanctuary",
+   "kind": "actor_change",
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "condition_uuid": "61e54958-745b-4932-8a65-b0d7f45f09a6",
+   "condition_id": "condition.spell.sanctuary",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 88,
+   "lineage": 63,
+   "event_offset": 8,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 95,
+   "lineage": 89,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.sanctuary",
+   "kind": "actor_change",
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "condition_uuid": "61e54958-745b-4932-8a65-b0d7f45f09a6",
+   "condition_id": "condition.spell.sanctuary",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 119,
+   "lineage": 89,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 120,
+   "lineage": 89,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 121,
+   "lineage": 89,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 136,
+   "lineage": 122,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.sanctuary",
+   "kind": "actor_change",
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "condition_uuid": "61e54958-745b-4932-8a65-b0d7f45f09a6",
+   "condition_id": "condition.spell.sanctuary",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.sanctuary",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 60,
+   "lineage": 58,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.sanctuary",
+   "kind": "actor_change",
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "condition_uuid": "61e54958-745b-4932-8a65-b0d7f45f09a6",
+   "condition_id": "condition.spell.sanctuary",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 88,
+   "lineage": 63,
+   "event_offset": 8,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 95,
+   "lineage": 89,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.sanctuary",
+   "kind": "actor_change",
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "condition_uuid": "61e54958-745b-4932-8a65-b0d7f45f09a6",
+   "condition_id": "condition.spell.sanctuary",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 119,
+   "lineage": 89,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 120,
+   "lineage": 89,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 121,
+   "lineage": 89,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 136,
+   "lineage": 122,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Fire"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -41,6 +41,9 @@ float spell_pattern(float value,vec2 cell_uv,sampler2D pattern_texture,float fra
 }
 vec4 character_material(vec4 source,vec2 cell_uv,vec3 untinted_source) {
     vec4 result=source;
+    // Visibility belongs to the actual layer, including a palette-painted
+    // casting layer. Choosing its spell colours must not bypass Hidden alpha.
+    result.a*=condition_alpha;
     if(effect_palette_enabled && effect_palette_count>0) {
         float luminance=dot(source.rgb,vec3(.2126,.7152,.0722));
         float value=pow(clamp((luminance-effect_range.x)/max(effect_range.y-effect_range.x,1.0/255.0),0.0,1.0),effect_gamma);
@@ -51,7 +54,6 @@ vec4 character_material(vec4 source,vec2 cell_uv,vec3 untinted_source) {
     } else {
         float value=(result.r+result.g+result.b)/3.0;
         result.rgb=mix(vec3(value),result.rgb,condition_saturation)*condition_tint*condition_brightness;
-        result.a*=condition_alpha;
         if(condition_film_enabled) {
             result.rgb=round(clamp(result.rgb,vec3(0.0),vec3(1.0))*255.0)/255.0;
             float scalar=texture(condition_film,vec2(cell_uv.x,(float(condition_film_frame%condition_film_frames)+cell_uv.y)/float(condition_film_frames))).r*255.0/239.0;

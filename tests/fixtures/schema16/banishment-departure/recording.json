@@ -1,0 +1,550 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 10,
+ "tracked": {
+  "condition_id": "condition.spell.banishment",
+  "condition_uuid": "ecf7b3e2-db29-4bd1-a409-db454c273679",
+  "holder_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+  "holder": "Blue target",
+  "occurrence": 58,
+  "sequence": 8
+ },
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "42c9cde4-fc03-4aa4-9360-3fa1acb57db8": "Amber caster",
+  "a09423b6-e144-4f3f-bfe6-2c09c2323300": "Amber ally",
+  "624b4c84-d297-4a3e-9b17-f267b7c4ce81": "Blue target",
+  "fddba4d1-866d-43f2-9045-0637ce5b8eac": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.banishment \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "action.drop_concentration \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "action.move \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 15,
+   "saving_throw": 2,
+   "actor_change": 8,
+   "spell": 2,
+   "sensory": 4,
+   "damage": 4,
+   "attack": 3,
+   "spatial": 5,
+   "step": 2,
+   "movement": 2,
+   "action": 1
+  },
+  "behaviors": {
+   "spell.banishment": 2,
+   "reaction.opportunity_attack": 4,
+   "action.move": 2,
+   "action.drop_concentration": 1,
+   "reaction.spell.shield": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.banishment",
+   "condition.spell.shield"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.spell.banishment"
+  ],
+  "positive_applied_damage_types": [
+   "Piercing"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 57,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "condition_uuid": "dc10ce5a-9a4b-4a00-9fe1-e8253b886d02",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 58,
+   "lineage": 41,
+   "event_offset": 2,
+   "label": "condition applied condition.spell.banishment",
+   "kind": "actor_change",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "condition_uuid": "ecf7b3e2-db29-4bd1-a409-db454c273679",
+   "condition_id": "condition.spell.banishment",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "condition_uuid": "dc10ce5a-9a4b-4a00-9fe1-e8253b886d02",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.banishment",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 90,
+   "lineage": 63,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 91,
+   "lineage": 63,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 92,
+   "lineage": 63,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 94,
+   "lineage": 63,
+   "event_offset": 5,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 105,
+   "lineage": 63,
+   "event_offset": 10,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 119,
+   "lineage": 106,
+   "event_offset": 2,
+   "label": "condition ended condition.spell.banishment",
+   "kind": "actor_change",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "condition_uuid": "ecf7b3e2-db29-4bd1-a409-db454c273679",
+   "condition_id": "condition.spell.banishment",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 120,
+   "lineage": 106,
+   "event_offset": 3,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "condition_uuid": "dc10ce5a-9a4b-4a00-9fe1-e8253b886d02",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 122,
+   "lineage": 106,
+   "event_offset": 4,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 163,
+   "lineage": 152,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "condition_uuid": "ee5af25c-f259-4244-bffc-7ca6845f899e",
+   "condition_id": "condition.spell.shield",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 166,
+   "lineage": 152,
+   "event_offset": 1,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "triggering_occurrence": 159,
+   "triggering_lineage": 156,
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 166,
+   "lineage": 152,
+   "event_offset": 1,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 187,
+   "lineage": 152,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 188,
+   "lineage": 152,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 190,
+   "lineage": 152,
+   "event_offset": 6,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 200,
+   "lineage": 152,
+   "event_offset": 10,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "triggering_occurrence": 155,
+   "triggering_lineage": 155,
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 200,
+   "lineage": 152,
+   "event_offset": 10,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "a09423b6-e144-4f3f-bfe6-2c09c2323300",
+   "triggering_occurrence": 155,
+   "triggering_lineage": 155,
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 201,
+   "lineage": 152,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "condition_uuid": "dc10ce5a-9a4b-4a00-9fe1-e8253b886d02",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 3,
+   "label": "condition applied condition.spell.banishment",
+   "kind": "actor_change",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "condition_uuid": "ecf7b3e2-db29-4bd1-a409-db454c273679",
+   "condition_id": "condition.spell.banishment",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 63,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 6,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "condition_uuid": "dc10ce5a-9a4b-4a00-9fe1-e8253b886d02",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.banishment",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 94,
+   "lineage": 67,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 95,
+   "lineage": 67,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 96,
+   "lineage": 67,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 98,
+   "lineage": 67,
+   "event_offset": 5,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 107,
+   "lineage": 67,
+   "event_offset": 8,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "fddba4d1-866d-43f2-9045-0637ce5b8eac",
+   "triggering_occurrence": 70,
+   "triggering_lineage": 70,
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 108,
+   "lineage": 67,
+   "event_offset": 9,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 122,
+   "lineage": 109,
+   "event_offset": 2,
+   "label": "condition ended condition.spell.banishment",
+   "kind": "actor_change",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "condition_uuid": "ecf7b3e2-db29-4bd1-a409-db454c273679",
+   "condition_id": "condition.spell.banishment",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 123,
+   "lineage": 109,
+   "event_offset": 3,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "condition_uuid": "dc10ce5a-9a4b-4a00-9fe1-e8253b886d02",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 125,
+   "lineage": 109,
+   "event_offset": 4,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 166,
+   "lineage": 155,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shield",
+   "kind": "actor_change",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "condition_uuid": "ee5af25c-f259-4244-bffc-7ca6845f899e",
+   "condition_id": "condition.spell.shield",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 169,
+   "lineage": 155,
+   "event_offset": 1,
+   "kind": "reaction_handler",
+   "label": "Shield",
+   "behavior_id": "reaction.spell.shield",
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "triggering_occurrence": 162,
+   "triggering_lineage": 159,
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 169,
+   "lineage": 155,
+   "event_offset": 1,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 190,
+   "lineage": 155,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 191,
+   "lineage": 155,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 193,
+   "lineage": 155,
+   "event_offset": 6,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 204,
+   "lineage": 155,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Piercing"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

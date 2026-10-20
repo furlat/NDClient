@@ -207,7 +207,7 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study()]
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies()
 
 
 def gallery_sorcerer():
@@ -634,3 +634,119 @@ def interaction_media_study():
                             'action.item.potion_healing.drink',
                             'spell.protection_from_poison'],
      'required_condition_ends': ['condition.poisoned']}
+
+
+def vampiric_positive_study():
+    """Lawful initial wounds; native first/repeat healing and concentration end."""
+    roster=actors(['spell.vampiric_touch'])
+    roster[0]['damage']=40
+    return {'id':'spell.vampiric_touch/positive_healing_lifecycle',
+        'title':'Vampiric Touch: wounded caster, initial/repeat strike healing and restoration',
+        'kind':'spell','seed':2,'actors':roster,
+        'subjects':subjects(['spell.vampiric_touch'],
+            ['action.move','action.spell.vampiric_touch.strike','action.drop_concentration'],
+            ['condition.spell.vampiric_touch']),
+        'steps':[{'do':'action.move','by':'caster','target':[3,6]},
+                 {'do':'spell.vampiric_touch','by':'caster','target':'target','level':3},
+                 {'do':'action.move','by':'caster','target':[3,7]},
+                 {'do':'end_turn','by':'caster'},
+                 {'do':'action.spell.vampiric_touch.strike','by':'caster','target':'target','capture_choices':True},
+                 {'do':'action.drop_concentration','by':'caster','target':'self'},
+                 {'do':'action.move','by':'caster','target':[2,7]}],
+        'required_behaviors':['spell.vampiric_touch','action.spell.vampiric_touch.strike','action.move','action.drop_concentration'],
+        'required_conditions':['condition.spell.vampiric_touch'],
+        'required_condition_ends':['condition.spell.vampiric_touch'],
+        'required_facts':['spell','damage','heal','movement'],
+        'purpose':'Original two-seat facts qualify actual positive self-healing separately from zero-heal baseline. No damage-to-healing arithmetic or fabricated result; starting wounds are setup, not an in-record damage claim.'}
+
+
+def native_persistent_studio_studies():
+    """Real UUID application/authoritative end for the native Studio families.
+
+    These are legal player commands, not lifetime overrides. Shield of Faith's
+    existing defend_then_remove study already supplies its full lifecycle.
+    """
+    result=[]
+    for name in ('bane','guidance','light','resistance','mage_armor','sanctuary','command'):
+        spell='spell.'+name
+        roster=actors([spell])
+        roster[1]['at']=[4,7]
+        roster[2]['at']=[9,7]
+        roster[3]['at']=[9,8]
+        condition='condition.spell.'+name+('.grovel' if name=='command' else '')
+        recipient='target' if name in ('bane','command') else 'self' if name=='mage_armor' else 'ally'
+        steps=[{'do':spell,'by':'caster','target':recipient,'track':True,'track_condition':condition}]
+        required=[spell,'action.move']
+        if name=='command':
+            steps += [{'do':'action.move','by':'caster','target':[3,8]},
+                      {'do':'end_tracked','prefer_turns':True,'max_turns':16},
+                      {'do':'tail_walk','by':'target','offset':[-1,0]}]
+        else:
+            steps.append({'do':'hold_walk','offset':[0,2]})
+            if name=='mage_armor':
+                roster[0]['items']=[{'id':'armor.chain_mail','placement':'inventory'}]
+                steps.append({'do':'equip','by':'caster','slot':'Body','item':'armor.chain_mail'})
+            elif name=='sanctuary':
+                roster[1]['caster_level']=20
+                roster[1]['spells']=['spell.fire_bolt']
+                steps.append({'do':'spell.fire_bolt','by':'ally','target':'target'})
+                required.append('spell.fire_bolt')
+            else:
+                steps.append({'do':'end_tracked','strategy':'concentration'})
+                required.append('action.drop_concentration')
+            steps.append({'do':'tail_walk','by':'caster' if recipient=='self' else recipient,'offset':[1,0]})
+        result.append({'id':spell+'/studio_uuid_lifecycle',
+            'title':name.replace('_',' ').title()+': actual owner application, held action and authoritative end',
+            'kind':'spell','seed':2,'actors':roster,'steps':steps,
+            'subjects':subjects([spell],['action.move'],[condition]),
+            'required_behaviors':required,'required_conditions':[condition],
+            'required_condition_ends':[condition],
+            'purpose':'Current native Studio lifecycle input: retain original faction streams and exact UUID removal; no synthetic expiration or cast-only substitute.'})
+    roster=actors()
+    roster[2]['at']=[9,7];roster[3]['at']=[9,8]
+    roster[0]['behaviors']=['reaction.spell.shield']
+    roster[2]['caster_level']=20;roster[2]['spells']=['spell.magic_missile']
+    result.append({'id':'spell.shield/studio_uuid_lifecycle',
+        'title':'Shield: actual missile interception, next-turn expiration and restored movement',
+        'kind':'spell','seed':2,'actors':roster,
+        'subjects':subjects(['spell.shield','spell.magic_missile'],['action.move'],['condition.spell.shield']),
+        'steps':[{'do':'spell.magic_missile','by':'target','target':'caster','recipients':['caster']*3,
+                  'track':True,'track_condition':'condition.spell.shield'},
+                 {'do':'end_tracked','prefer_turns':True,'max_turns':12},
+                 {'do':'tail_walk','by':'caster','offset':[-1,0]}],
+        'required_behaviors':['action.move'],'required_conditions':['condition.spell.shield'],
+        'required_condition_ends':['condition.spell.shield']})
+    roster=actors(['spell.web'])
+    roster[2]['at']=[9,7];roster[3]['at']=[9,8]
+    result.append({'id':'spell.web/studio_uuid_lifecycle',
+        'title':'Web: actual area and restrained owners, turn exposure and concentration end',
+        'kind':'spell','seed':2,'actors':roster,
+        'subjects':subjects(['spell.web'],['action.move','action.drop_concentration'],['condition.spell.web.restrained']),
+        'steps':[{'do':'spell.web','by':'caster','target':[9,7]},
+                 {'do':'action.move','by':'caster','target':[3,6]},
+                 {'do':'end_turn','by':'caster'},
+                 {'do':'action.drop_concentration','by':'caster','target':'self'},
+                 {'do':'action.move','by':'target','target':[8,7]}],
+        'required_behaviors':['spell.web','action.move','action.drop_concentration'],
+        'required_conditions':['condition.spell.web.restrained'],
+        'required_condition_ends':['condition.spell.web.restrained']})
+    return result
+
+
+def banishment_departure_study():
+    """Actual departure, live held owner and authoritative concentration return."""
+    roster=actors(['spell.banishment'])
+    return {'id':'spell.banishment/departure_and_return',
+        'title':'Banishment: original idle departure, held caster movement, return and restored target movement',
+        'kind':'spell','seed':2,'actors':roster,
+        'subjects':subjects(['spell.banishment'],['action.move','action.drop_concentration'],['condition.spell.banishment']),
+        'steps':[{'do':'spell.banishment','by':'caster','target':'target','level':4,
+                  'track':True,'track_condition':'condition.spell.banishment'},
+                 {'do':'action.move','by':'caster','target':[3,6]},
+                 {'do':'end_tracked','strategy':'concentration'},
+                 {'do':'tail_walk','by':'target','offset':[1,0]}],
+        'required_behaviors':['spell.banishment','action.move','action.drop_concentration'],
+        'required_conditions':['condition.spell.banishment'],
+        'required_condition_ends':['condition.spell.banishment'],
+        'required_facts':['spell','movement'],
+        'purpose':'Actual two-seat departure/return input for immutable pre-admission pose/outfit capture. The absent actor is never moved or made visible by the recorder; concentration ends through an offered action, then the returned target moves legally. No departure shader/rendering qualification is claimed.'}

@@ -1,5 +1,6 @@
 extends RefCounted
 const Occurrences=preload("res://presentation/occurrences.gd")
+const SpellDelivery=preload("res://presentation/spell_delivery.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const ApplicationResults=preload("res://presentation/application_results.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
@@ -230,7 +231,7 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
                 actual.start_ms=float(graph.starts[projected.node.id])+float(phase.start_ms)-float(markers["event.start"])
                 actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
                 actual.native_constructor_evidence=projected.evidence
-                _native_action_component(group,node,projected.node,actual,{"values":{"lease_input":{},"event_input":projected.event},"gaps":[],"evidence":projected.evidence},graph,projected.target_uuid)
+                _native_action_component(group,node,projected.node,actual,{"values":projected.inputs,"gaps":[],"evidence":projected.evidence},graph,projected.target_uuid)
         else:
             _native_action_component(group,node,node,phase,NativeActions.inputs(node,binding,phase,graph,observations),graph)
 
@@ -429,7 +430,9 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
             else:
                 _bound_audio(group,node,sounds.get("attack_sources",{}),str(fact.attack_source_kind),audio_markers,fact.source_entity_uuid,"attack_sources",cache,audio_track)
         elif fact.kind=="spell":
-            _bound_audio(group,node,sounds.get("spells",{}),fact.behavior_id,audio_markers,fact.source_entity_uuid,"spells",cache,audio_track)
+            var caster:Dictionary=graph.get("casts",{}).get(SpellDelivery.cast_key(node,graph),{})
+            if caster.get("source_event_uuid",node.id)==node.id:
+                _bound_audio(group,node,sounds.get("spells",{}),fact.behavior_id,audio_markers,fact.source_entity_uuid,"spells",cache,audio_track)
         elif fact.kind=="equipment":
             _bound_audio(group,node,sounds.get("equipment",{}),"change",audio_markers,fact.source_entity_uuid,"equipment",cache,audio_track)
         elif fact.kind=="heal" and fact.get("actual_healing",0)>0:

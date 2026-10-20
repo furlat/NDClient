@@ -1,0 +1,399 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a09423b6-e144-4f3f-bfe6-2c09c2323300",
+   "state_revision": "400c0517-9c3e-4826-98c5-fe26346c0790",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "fddba4d1-866d-43f2-9045-0637ce5b8eac",
+   "state_revision": "2a3a2020-087c-49fd-94b8-4bc1c0a95c2c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "state_revision": "486f398e-d5c3-4f28-8738-36c9a7b81cb4",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.banishment",
+   "by": "caster",
+   "target": "target",
+   "level": 4,
+   "track": true,
+   "track_condition": "condition.spell.banishment"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "9438d762-bf14-453e-97f0-4349e1e57e0d",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.banishment",
+   "display_name": "Banishment (Level 4)",
+   "cast_at_level": 4,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "state_revision": "9438d762-bf14-453e-97f0-4349e1e57e0d",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 4
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "e8a33c67-75c0-43ed-a3e7-3f7a62e12095",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "state_revision": "e8a33c67-75c0-43ed-a3e7-3f7a62e12095",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self",
+   "optional": false
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "652208b8-4686-4afc-a260-22435c3105bd",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "state_revision": "652208b8-4686-4afc-a260-22435c3105bd",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "42c9cde4-fc03-4aa4-9360-3fa1acb57db8",
+   "state_revision": "97b40581-a63c-4bc0-ba0a-67d374ea2e48",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "a09423b6-e144-4f3f-bfe6-2c09c2323300",
+   "state_revision": "1e00a389-a0e9-404e-9561-d81e61ea7180",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "5ded5926-49a6-4f93-b7ef-f76d2fbb3016",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "fddba4d1-866d-43f2-9045-0637ce5b8eac",
+   "state_revision": "a42cc11d-b946-49db-aa58-d3dc51d0ebcd",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "phase": "tail",
+   "to": [
+    5,
+    7
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "624b4c84-d297-4a3e-9b17-f267b7c4ce81",
+   "state_revision": "16fefa2a-3f52-40a3-a9b5-7ad5d2505bd2",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_banishment_departure_and_return",
+   "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+   "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_banishment_departure_and_return",
+    "game_epoch": "db918256-6873-4ffe-b37d-5fba7e859eb1",
+    "audience_id": "a042ab3c-8643-4b65-a356-7045b5b6e822",
+    "sequence": 17
+   }
+  }
+ }
+]

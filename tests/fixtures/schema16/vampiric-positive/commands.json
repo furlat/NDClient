@@ -1,0 +1,561 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "ea4db867-b98f-4961-ba83-b33530d001e1",
+   "state_revision": "d267ac2e-27a0-4964-92a1-015464691caf",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "6b598d84-2ac8-4ebc-b060-af60046cf73f",
+   "state_revision": "c1df8b14-3e06-447c-aeb1-c9ad6aedeb5c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "28afd8d7-0e9a-45e0-ac33-51ebeb02f251",
+   "state_revision": "6cab6738-1596-4303-801a-02fb9ffe4082",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "31d0e0ee-0a68-4d04-82d6-1d92eff8abe3",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "state_revision": "31d0e0ee-0a68-4d04-82d6-1d92eff8abe3",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.vampiric_touch",
+   "by": "caster",
+   "target": "target",
+   "level": 3
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2d76b65c-06c0-4c52-a05a-3c4821ca59a5",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.vampiric_touch",
+   "display_name": "Vampiric Touch (Level 3)",
+   "cast_at_level": 3,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "state_revision": "2d76b65c-06c0-4c52-a05a-3c4821ca59a5",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 3
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "9db0a3ec-6454-4c3d-9f1d-bd1bb4157323",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "state_revision": "9db0a3ec-6454-4c3d-9f1d-bd1bb4157323",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 12,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "state_revision": "f06736fc-ba7e-454b-bbb2-21b0a2a98336",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "ea4db867-b98f-4961-ba83-b33530d001e1",
+   "state_revision": "6aadde6f-1dd9-42b9-b04a-088caa803397",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "6b598d84-2ac8-4ebc-b060-af60046cf73f",
+   "state_revision": "e9c1ea9a-1b31-4308-a654-49da70364b7b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "28afd8d7-0e9a-45e0-ac33-51ebeb02f251",
+   "state_revision": "204d530c-6286-4516-83c6-25640b767c66",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "296dc718-55f0-42d8-a08d-937783086a9e",
+    "sequence": 17
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.spell.vampiric_touch.strike",
+   "by": "caster",
+   "target": "target",
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "9502c6d8-6519-4a70-a226-51e6e33fbec8",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.spell.vampiric_touch.strike",
+   "display_name": "Vampiric Touch Strike",
+   "cast_at_level": 3,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "state_revision": "9502c6d8-6519-4a70-a226-51e6e33fbec8",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a680f71e-0c91-4b68-8830-ca437e5ad99a",
+  "discovery_generation": 5,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "state_revision": "a680f71e-0c91-4b68-8830-ca437e5ad99a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 5,
+    "selection": {
+     "action_index": 27,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 20
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    2,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ffb6ea3f-9c83-4a8e-95f3-5a19c9c24408",
+  "discovery_generation": 6,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+   "state_revision": "ffb6ea3f-9c83-4a8e-95f3-5a19c9c24408",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 6,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+   "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+   "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_positive_healing_lifecycle",
+    "game_epoch": "f6dfd700-f905-4254-ad6f-3443024d79aa",
+    "audience_id": "68b1e606-d367-4978-a61f-70577e573636",
+    "sequence": 21
+   }
+  }
+ }
+]

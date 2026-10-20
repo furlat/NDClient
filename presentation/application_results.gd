@@ -136,6 +136,30 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
         # the native parent lineage instead; it has no invented source fact.
         if kind in ["heal","damage"] and row.node.fact.get("source_entity_uuid")!=source:continue
         if kind=="damage" and descriptor.has("damage_type") and row.node.fact.damage_type!=descriptor.damage_type:continue
+        if projection=="healing_return":
+            # The actual self-heal returns optically from the drained enemy.
+            # Preserve the different factual recipient in the packet/evidence.
+            if kind!="heal" or node.fact.get("kind") not in ["spell","action"] \
+                or node.fact.get("target_entity_uuid")==null or row.target_uuid!=source \
+                or row.node.get("parent_event")==null:continue
+            var donor:String=str(node.fact.target_entity_uuid)
+            var healing:Dictionary={"observed":true,"actual_healing":row.node.fact.actual_healing,
+                "was_blocked":row.node.fact.was_blocked,"healing_fact_uuid":str(row.node.id),
+                "source_actor_uuid":source,"recipient_uuid":row.target_uuid,
+                "parent_event_uuid":str(row.node.parent_event)}
+            var returned:Dictionary={"source_actor_uuid":source,"recipient_uuid":donor,
+                "activation_event_uuid":str(row.node.parent_event),"behavior_id":str(node.fact.behavior_id),
+                "healing":healing,"owner":{},"strike":{},"condition":{},"tick":{},
+                "item_uuid":"","equipment_slot":"","render_slot":"","attack_uuid":"",
+                "condition_uuid":"","condition_id":"","owner_uuid":"","owner_id":""}
+            result.append({"node":row.node,"target_uuid":donor,"values":returned,
+                "inputs":{"healing_input":healing},"event":row.event,
+                "evidence":{"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),
+                    "result_occurrence":str(row.node.id),"result_lineage":str(row.node.lineage_id),
+                    "activation_parent_occurrence":str(row.node.parent_event),"source_uuid":source,
+                    "target_uuid":donor,"healed_target_uuid":row.target_uuid,"actual_healing":row.node.fact.actual_healing,
+                    "outcome":"heal"}})
+            continue
         var target:String=str(row.target_uuid)
         var event:Dictionary=row.event.merged({"uuid":str(row.node.id),"source_entity_uuid":source,
             "target_entity_uuid":target,"canceled":false,"effect_admitted":true},true)

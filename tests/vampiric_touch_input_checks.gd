@@ -59,7 +59,8 @@ func run()->void:
     var record:Resource=built.native.records[ID]
     var descriptor:Dictionary=entry.effects[1].constructor_input
     check(entry.effects[1].clip==IMPACT and entry.effects[1].scope=="recipient" and entry.effects[1].role=="impact","Only the native single-recipient first impact owns this constructor")
-    for i in [0,2,3,4]:check(not entry.effects[i].unbound_constructor_inputs.is_empty(),"Unimplemented windup/healing/held/removal phase stays explicit: "+str(i))
+    check(not entry.effects[0].unbound_constructor_inputs.is_empty(),"Unimplemented pre-application windup stays explicit")
+    check(entry.effects[2].constructor_input.projection=="healing_return" and entry.owner_cues==PackedInt32Array([3,4]),"Healing has its own factual projection; held/retire probes delegate to the real UUID lifecycle")
     var cue:Dictionary=Records.cue_from_effect(entry.effects[1],1)
     check(cue.input_policies.size()==4 and cue.input_policies.keys().all(func(name):return name in ["owner_input","healing_input","condition_input","tick_input"]),"Only four exact impact-branch inputs are inapplicable")
     var clip:Dictionary=Effects.clip(IMPACT)

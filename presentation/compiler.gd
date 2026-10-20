@@ -369,6 +369,12 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         graph.recipes[node.id]=recipe
         var cast: Dictionary=recipe.get("cast",{})
         var application: bool=Occurrences.application(node)
+        var has_applications=false
+        for child in children:
+            if child.get("fact")!=null and child.fact.kind=="spell" and Occurrences.application(child):has_applications=true
+        var selected:Dictionary=sources.selection
+        var selected_delivery:Dictionary={}
+        if not selected.is_empty():selected_delivery=SpellDelivery.for_occurrence(SpellDelivery.selected_for(selected,fact),node,has_applications)
         var cast_key: String=SpellDelivery.cast_key(node,graph)
         var contact=start
         if not graph.casts.has(cast_key) and not cast.is_empty() and cast.get("enabled",true):
@@ -381,12 +387,6 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             graph.casts[cast_key]={"start":start,"prepare":preparation,"release":contact,"finish":finish,"recipe":recipe,"source_event_uuid":node.id}
         var owner: Dictionary=graph.casts.get(cast_key,{"release":start,"finish":start,"start":start})
         contact=maxf(start,owner.release)
-        var has_applications=false
-        for child in children:
-            if child.get("fact")!=null and child.fact.kind=="spell" and Occurrences.application(child): has_applications=true
-        var selected:Dictionary=sources.selection
-        var selected_delivery:Dictionary={}
-        if not selected.is_empty():selected_delivery=SpellDelivery.for_occurrence(SpellDelivery.selected_for(selected,fact),node,has_applications)
         var shared_area:bool=not selected_delivery.is_empty() and selected_delivery.get("delivery",{}).get("scope")=="area"
         if not selected_delivery.is_empty():
             if SpellDelivery.owns_delivery(node,graph,selected_delivery,has_applications):

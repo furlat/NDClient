@@ -384,17 +384,18 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
 
 static func _check_constructor(use:Resource,where:String,clips:Dictionary,report:Dictionary)->void:
     var binding:Dictionary=use.constructor_input
-    if not use.extra.get("input_policies",{}).is_empty() and binding.get("kind") not in ["propagation_links","spell_strike"]:
+    if not use.extra.get("input_policies",{}).is_empty() and binding.get("kind") not in ["propagation_links","spell_strike","observed_event"]:
         Common.error(report,where,"explicit input policy has no qualified source constructor");return
     if binding.is_empty():return
     if binding.get("kind")=="observed_event":
         if binding.get("outcome") not in ["cast","heal","damage","removal","revival"] or use.scope not in ["source","recipient","cast"] or binding.get("geometry_actor") not in ["caster","target"]:
             Common.error(report,where,"observed event needs an outcome, declared event scope and actual geometry role");return
         var projection:String=str(binding.get("projection","event"))
-        if projection not in ["event","applied_contact","cast_completion"] \
-            or projection!="event" and use.scope!="cast" \
+        if projection not in ["event","applied_contact","cast_completion","healing_return"] \
+            or projection in ["applied_contact","cast_completion"] and use.scope!="cast" \
             or projection=="applied_contact" and (binding.outcome!="damage" or str(binding.get("damage_type","")).is_empty() or use.at!="cast" or use.delay!=0.0) \
-            or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target"):
+            or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target") \
+            or projection=="healing_return" and (binding.outcome!="heal" or binding.geometry_actor!="target" or use.at!="cast" or use.delay!=0.0):
             Common.error(report,where,"observed projection must match its actual result, source clock and recipient contract");return
     elif binding.get("kind")=="reaction_observation":
         if use.scope!="source" or binding.get("trigger_kind")!="spell" or not binding.get("succeeded") is bool or binding.get("input_field")!="observation":
@@ -439,6 +440,11 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 Common.error(report,where,"applied contact needs its supplied state member and native_state setter")
             elif projection=="cast_completion" and (not input.get("owner") is Dictionary or not input.get("observation") is Dictionary or "observation" not in clips[use.clip].get("inputs",[])):
                 Common.error(report,where,"cast completion needs supplied owner/observation members and observation setter")
+            elif projection=="healing_return":
+                _check_healing_return_input_policies(use,component,where,report)
+                if "healing_input" not in clips[use.clip].get("inputs",[]):Common.error(report,where,"healing return requires its actual healing_input setter")
+            elif not use.extra.get("input_policies",{}).is_empty():
+                Common.error(report,where,"observed input policy has no exact source-branch proof")
         if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="cells":
             if not input.get("cells") is Array or not input.get("observed_removals") is Array \
                 or use.orientation!="world" or use.scale!=1.0:
@@ -473,6 +479,23 @@ static func _check_vampiric_input_policies(use:Resource,component:Dictionary,whe
         or component.get("script")!="res://assets/vfx/sources/8d17316149890f77c98b/vampiric_touch.gd" \
         or component.input.get("phase")!="impact" or component.input.get("behavior_id")!="spell.vampiric_touch":
         Common.error(report,where,"first-cast input policy is restricted to the exact initial Vampiric Touch impact source")
+
+
+## The sealed healing branch admits the actual HealFact independently of the
+## owner/strike/condition/tick review packets. This is build-time source proof.
+static func _check_healing_return_input_policies(use:Resource,component:Dictionary,where:String,report:Dictionary)->void:
+    var policies:Dictionary={}
+    for name in ["owner_input","strike_input","condition_input","tick_input"]:
+        policies[name]={"mode":"not_applicable","reason":"positive_healing_return_does_not_consume_owner_or_strike_inputs"}
+    var input:Dictionary=component.get("input",{})
+    if use.clip!="bg3-36/vampiric-touch/vampiric_touch_native/healing" \
+        or use.constructor_input.component_path!=["owned_contact"] or use.extra.get("input_policies",{})!=policies \
+        or component.get("script")!="res://assets/vfx/sources/8d17316149890f77c98b/vampiric_touch.gd" \
+        or input.get("phase")!="healing" or not input.get("healing") is Dictionary:
+        Common.error(report,where,"healing return input policy is restricted to its exact native source/phase");return
+    var source:String=FileAccess.get_file_as_string(str(component.script))
+    if not source.contains('if phase == "healing":\n\t\tadmitted = healing_admitted()'):
+        Common.error(report,where,"sealed healing-return admission branch changed; review explicit input policy")
 
 static func _in(value: float, low: float, high: float) -> bool:
     return is_finite(value) and value >= low and value <= high

@@ -1,0 +1,318 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "state_revision": "89838092-bce0-4c12-80ae-0309a54f815b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "1a5ccaf4-20bf-486e-858c-b71b8113282a",
+   "state_revision": "1cbd50a9-96ae-4a0f-b57d-2883d34db3c9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "ac3fc11d-3efd-45ca-9bde-5ac49813b324",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "ac3fc11d-3efd-45ca-9bde-5ac49813b324",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "527014ff-b4d4-478d-8419-e736d96ba738",
+   "state_revision": "8a9990ee-1509-4793-8de7-80d061a9cb3d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "ac3fc11d-3efd-45ca-9bde-5ac49813b324",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "ac3fc11d-3efd-45ca-9bde-5ac49813b324",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.sanctuary",
+   "by": "caster",
+   "target": "ally",
+   "track": true,
+   "track_condition": "condition.spell.sanctuary"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "387a057e-f14a-4b7a-9d8e-a6e7a87cbbc7",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.sanctuary",
+   "display_name": "Sanctuary (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "a408c0ea-a710-422a-8d66-9d06f330b5af",
+   "state_revision": "387a057e-f14a-4b7a-9d8e-a6e7a87cbbc7",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "a408c0ea-a710-422a-8d66-9d06f330b5af",
+   "state_revision": "c6e1f154-eab0-40ce-bf7b-a73110b59dba",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "hold",
+   "to": [
+    4,
+    9
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "state_revision": "a9fcfa1e-da36-4a35-8c41-7a962344c1c1",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      7
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.fire_bolt",
+   "by": "ally",
+   "target": "target"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "b153ad5a-1de3-44fa-8035-d59ec36e291f",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "spell.fire_bolt",
+   "display_name": "Fire Bolt",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "state_revision": "b153ad5a-1de3-44fa-8035-d59ec36e291f",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 5,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "tail",
+   "to": [
+    5,
+    9
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "2d117d10-d00a-4a0e-ab61-1d84fc994b8a",
+   "state_revision": "70ddd4d8-c99c-44e2-8b8c-682f51cb2be8",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+   "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+   "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sanctuary_studio_uuid_lifecycle",
+    "game_epoch": "733ff2e3-1e44-4ed8-823b-1edd13f84e70",
+    "audience_id": "d136344f-4c2c-4ab3-8e46-c5a9ad55c5c9",
+    "sequence": 13
+   }
+  }
+ }
+]

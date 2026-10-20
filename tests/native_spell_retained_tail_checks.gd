@@ -28,16 +28,19 @@ func run()->void:
             var deadline:int=Time.get_ticks_msec()+60000
             while not loading.ready and loading.errors.is_empty() and Time.get_ticks_msec()<deadline:
                 await process_frame;loading=Effects.prepare([phase.native_clip],cache)
+            check(loading.ready,id+": actual selected source preparation completes: "+str(loading))
+            if not loading.ready:continue
             var handle=Effects.make(owner,phase.native_clip.duplicate(false),1<<19)
             check(handle.error.is_empty() and handle.effect_kind=="native",id+": actual selected source constructs "+str(handle.error))
-            if not handle.error.is_empty():Effects.close(handle);continue
+            if not handle.error.is_empty() or handle.effect_kind!="native":Effects.close(handle);continue
             var donor:Dictionary=handle.inner
             var emitters=Bounds.emitters(donor)
             var bounds={"emitters":emitters}
             var cutoff:float=cue.contact if cue.get("stop_emission_at_contact",false) else cue.launch
             var tail=Spells.retained_particle_tail(bounds,cue,cutoff)
             check(phase.duration_ms/1000.0+0.00001>=cutoff+tail,id+": actual retained particles survive the compiled retirement")
-            var stored=selected.source_bounds[cue.staged_clip]
+            check(selected.source_bounds.has(cue.staged_clip),id+": exact staged clip has measured source intake: "+str(cue.staged_clip)+" (stored keys: "+str(selected.source_bounds.keys())+")")
+            var stored:Dictionary=selected.source_bounds.get(cue.staged_clip,{})
             check(is_equal_approx(Spells.retained_particle_tail(stored,cue,cutoff),tail),id+": serialized source intake agrees with the actual donor")
             for emitter in emitters:
                 if emitter.kind=="gpu_trail":
@@ -56,7 +59,7 @@ func run()->void:
                 var sparks:GPUParticles3D=handle.root.get_node("effect/Donor/smallparticles_constant")
                 sparks.lifetime=6.0
                 check(is_equal_approx(Spells.retained_particle_tail({"emitters":Bounds.emitters(donor)},cue,cutoff),6.0),"A real six-second retained emitter remains six seconds; no blanket duration cap")
-            evidence.append({"spell_id":id,"clip":phase.native_clip.id,"retained_tail":tail,"duration_ms":phase.duration_ms,"emitters":emitters})
+            evidence.append({"spell_id":id,"clip":phase.native_clip.id,"staged_clip":cue.staged_clip,"stored_intake_present":selected.source_bounds.has(cue.staged_clip),"retained_tail":tail,"cutoff_seconds":cutoff,"required_retirement_seconds":cutoff+tail,"duration_ms":phase.duration_ms,"emitters":emitters})
             Effects.close(handle)
             await process_frame
     var report={"checks":checks,"failed":failures.size(),"failures":failures,"sources":evidence}

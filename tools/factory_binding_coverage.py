@@ -122,6 +122,8 @@ def qualified_input_policies(cue: dict, clip: dict) -> dict:
     """Explicit consumer choice, distinct from a supplied Factory operand."""
     if cue.get("constructor_input", {}).get("kind") == "spell_strike":
         return qualified_vampiric_input_policies(cue, clip)
+    if cue.get("constructor_input", {}).get("projection") == "healing_return":
+        return qualified_healing_return_input_policies(cue, clip)
     expected = {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}}
     if cue.get("input_policies") != expected or clip.get("clip_id") != "live-electric/chain_live_single":
         return {}
@@ -162,6 +164,33 @@ def qualified_vampiric_input_policies(cue: dict, clip: dict) -> dict:
         settings = value(inputs[1], {})
         if settings.get("phase") != "impact" or settings.get("behavior_id") != "spell.vampiric_touch":
             return {}
+    return dict.fromkeys(policies, reason)
+
+
+def qualified_healing_return_input_policies(cue: dict, clip: dict) -> dict:
+    reason = "positive_healing_return_does_not_consume_owner_or_strike_inputs"
+    policies = {name: {"mode": "not_applicable", "reason": reason}
+                for name in ("owner_input", "strike_input", "condition_input", "tick_input")}
+    descriptor = cue.get("constructor_input", {})
+    if clip.get("clip_id") != "bg3-36/vampiric-touch/vampiric_touch_native/healing" or cue.get("input_policies") != policies:
+        return {}
+    if descriptor.get("kind") != "observed_event" or descriptor.get("component_path") != ["owned_contact"] \
+            or descriptor.get("outcome") != "heal" or descriptor.get("geometry_actor") != "target":
+        return {}
+    for approach in clip.get("approaches", []):
+        if not approach.get("source_phase"):
+            return {}
+        text = (ROOT / approach["source_phase"].removeprefix("res://")).read_text()
+        script = re.search(r'^constructor_script = (.+)$', text, re.M)
+        inputs = re.search(r'^input = (.+)$', text, re.M)
+        if not script or value(script[1]) != "res://assets/vfx/sources/8d17316149890f77c98b/vampiric_touch.gd" or not inputs:
+            return {}
+        settings = value(inputs[1], {})
+        if settings.get("phase") != "healing" or not isinstance(settings.get("healing"), dict):
+            return {}
+    source = (ROOT / "assets/vfx/sources/8d17316149890f77c98b/vampiric_touch.gd").read_text()
+    if 'if phase == "healing":\n\t\tadmitted = healing_admitted()' not in source:
+        return {}
     return dict.fromkeys(policies, reason)
 
 
@@ -209,6 +238,8 @@ def report() -> dict:
                         event_channels = {"native_state"}
                     elif projection == "cast_completion":
                         event_channels = {"observation"}
+                    elif projection == "healing_return":
+                        event_channels = {"healing_input"}
                 supplied = PROVIDERS | event_channels
                 if constructor == "spatial_owner":
                     supplied = supplied | {"surface_presence"}

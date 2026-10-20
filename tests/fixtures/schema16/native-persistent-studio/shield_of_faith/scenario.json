@@ -1,0 +1,99 @@
+{
+ "id": "spell.shield_of_faith/defend_then_remove",
+ "title": "Shield of Faith: recipient application, real attack, concentration removal",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.shield_of_faith"
+  ],
+  "action": [
+   "action.attack",
+   "action.drop_concentration",
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.shield_of_faith"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.shield_of_faith"
+   ],
+   "at": [
+    3,
+    6
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.shield_of_faith",
+   "by": "caster",
+   "target": "ally"
+  },
+  {
+   "do": "action.attack",
+   "by": "target",
+   "target": "ally",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "ally",
+   "target": [
+    4,
+    7
+   ]
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "spell.shield_of_faith",
+  "action.attack",
+  "action.drop_concentration",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.shield_of_faith"
+ ],
+ "required_condition_ends": [
+  "condition.spell.shield_of_faith"
+ ],
+ "required_facts": [
+  "attack"
+ ]
+}

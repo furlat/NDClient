@@ -33,7 +33,7 @@ static func spell(node:Dictionary,graph:Dictionary)->Dictionary:
     if resolution.get("application_id")==null:return fact
     var declaration:Dictionary=graph.get("nodes",{}).get(str(resolution.lineage),{}).get("fact",{})
     var result:Dictionary=fact.duplicate()
-    for key in ["source_entity_uuid","behavior_id","name","source_position","declared_target_entity_uuids","cast_origin","source_item_uuid","area_propagation"]:
+    for key in ["source_entity_uuid","behavior_id","name","source_position","declared_target_entity_uuids","cast_origin","source_item_uuid","area_propagation","effect_id"]:
         if declaration.has(key):result[key]=declaration[key]
     graph.spell_facts[node.id]=result
     return result

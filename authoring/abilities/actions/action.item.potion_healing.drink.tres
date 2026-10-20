@@ -29,6 +29,11 @@ native_size = Vector2i(48, 48)
 reuses = "item.potion-of-healing"
 source = "ui/resources.json icon:item.potion-of-healing"
 
+[sub_resource type="Resource" id="Resource_drink_sound"]
+script = ExtResource("4_ex83q")
+cue = "potion_drink"
+at = "body.contact"
+
 [resource]
 script = ExtResource("3_nruuh")
 id = "action.item.potion_healing.drink"
@@ -39,6 +44,7 @@ disposition = "authored"
 body = SubResource("Resource_nqki8")
 effect_sources = PackedStringArray()
 feedback = SubResource("Resource_o3jig")
+sounds = Array[ExtResource("4_ex83q")]([SubResource("Resource_drink_sound")])
 status = "ready"
 unported = {
 "actionFeedback": {},

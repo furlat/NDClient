@@ -1,0 +1,267 @@
+{
+ "source": ".runtime/scenario-vampiric-positive/20261020T043844.513424Z",
+ "engine_commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+ "schema": 16,
+ "seed": 2,
+ "copy": "Complete unchanged original two-seat journals, scenario, command/receipt trace, exact offered choices and recorder report. No server configs, credentials, logs, captures or fabricated facts.",
+ "verification": "Copied byte-for-byte; original public positive HealFacts and exact owner removal inspected. Independent frozen SDK reduction confirms caster HP120 before commands,125 after initial hit,137 after repeat,137 after removal,126 after actual departure opportunity damage.",
+ "qualification": "Legal recording evidence only; provider binding, native output and visual approval remain separate.",
+ "evidence": {
+  "amber": {
+   "packets": 22,
+   "positive_heals": [
+    {
+     "sequence": 9,
+     "occurrence": 112,
+     "parent_event": 91,
+     "lineage": 80,
+     "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "target_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "actual_healing": 5,
+     "resulting_normal_hp": 125
+    },
+    {
+     "sequence": 19,
+     "occurrence": 195,
+     "parent_event": 174,
+     "lineage": 172,
+     "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "target_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "actual_healing": 12,
+     "resulting_normal_hp": 137
+    }
+   ],
+   "actual_casts": [
+    {
+     "sequence": 9,
+     "occurrence": 114,
+     "parent_event": null,
+     "lineage": 80,
+     "behavior_id": "spell.vampiric_touch",
+     "attack_outcome": "Hit"
+    },
+    {
+     "sequence": 19,
+     "occurrence": 196,
+     "parent_event": null,
+     "lineage": 172,
+     "behavior_id": "action.spell.vampiric_touch.strike",
+     "attack_outcome": "Crit"
+    }
+   ],
+   "vampiric_owner_updates": [
+    {
+     "sequence": 9,
+     "occurrence": 90,
+     "parent_event": 82,
+     "lineage": 80,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45"
+    },
+    {
+     "sequence": 18,
+     "occurrence": 169,
+     "parent_event": 164,
+     "lineage": 163,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45"
+    }
+   ],
+   "actual_removals": [
+    {
+     "sequence": 18,
+     "occurrence": 168,
+     "parent_event": 164,
+     "lineage": 163,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "6139a833-84c9-4581-a11c-78a1ae2b4282"
+    },
+    {
+     "sequence": 20,
+     "occurrence": 205,
+     "parent_event": 201,
+     "lineage": 197,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45"
+    },
+    {
+     "sequence": 20,
+     "occurrence": 206,
+     "parent_event": 198,
+     "lineage": 197,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2"
+    }
+   ],
+   "movements": [
+    {
+     "sequence": 8,
+     "occurrence": 79,
+     "parent_event": null,
+     "lineage": 54,
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+      "trajectory": "path",
+      "movement_mode": "walking",
+      "start_layer": "ground",
+      "end_layer": "ground"
+     }
+    },
+    {
+     "sequence": 10,
+     "occurrence": 129,
+     "parent_event": null,
+     "lineage": 115,
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+      "trajectory": "path",
+      "movement_mode": "walking",
+      "start_layer": "ground",
+      "end_layer": "ground"
+     }
+    },
+    {
+     "sequence": 21,
+     "occurrence": 267,
+     "parent_event": null,
+     "lineage": 209,
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+      "trajectory": "path",
+      "movement_mode": "walking",
+      "start_layer": "ground",
+      "end_layer": "ground"
+     }
+    }
+   ]
+  },
+  "blue": {
+   "packets": 22,
+   "positive_heals": [
+    {
+     "sequence": 9,
+     "occurrence": 112,
+     "parent_event": 91,
+     "lineage": 80,
+     "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "target_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "actual_healing": 5,
+     "resulting_normal_hp": 125
+    },
+    {
+     "sequence": 19,
+     "occurrence": 195,
+     "parent_event": 174,
+     "lineage": 172,
+     "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "target_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "actual_healing": 12,
+     "resulting_normal_hp": 137
+    }
+   ],
+   "actual_casts": [
+    {
+     "sequence": 9,
+     "occurrence": 114,
+     "parent_event": null,
+     "lineage": 80,
+     "behavior_id": "spell.vampiric_touch",
+     "attack_outcome": "Hit"
+    },
+    {
+     "sequence": 19,
+     "occurrence": 196,
+     "parent_event": null,
+     "lineage": 172,
+     "behavior_id": "action.spell.vampiric_touch.strike",
+     "attack_outcome": "Crit"
+    }
+   ],
+   "vampiric_owner_updates": [
+    {
+     "sequence": 9,
+     "occurrence": 90,
+     "parent_event": 82,
+     "lineage": 80,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45"
+    },
+    {
+     "sequence": 18,
+     "occurrence": 169,
+     "parent_event": 164,
+     "lineage": 163,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45"
+    }
+   ],
+   "actual_removals": [
+    {
+     "sequence": 18,
+     "occurrence": 168,
+     "parent_event": 164,
+     "lineage": 163,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "6139a833-84c9-4581-a11c-78a1ae2b4282"
+    },
+    {
+     "sequence": 20,
+     "occurrence": 205,
+     "parent_event": 201,
+     "lineage": 197,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "aebf2ad6-b8cc-4717-82ae-d185ed446e45"
+    },
+    {
+     "sequence": 20,
+     "occurrence": 206,
+     "parent_event": 198,
+     "lineage": 197,
+     "actor_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+     "condition_uuid": "10a31335-02e0-47a5-8eff-521fae6e08a2"
+    }
+   ],
+   "movements": [
+    {
+     "sequence": 8,
+     "occurrence": 79,
+     "parent_event": null,
+     "lineage": 54,
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+      "trajectory": "path",
+      "movement_mode": "walking"
+     }
+    },
+    {
+     "sequence": 10,
+     "occurrence": 129,
+     "parent_event": null,
+     "lineage": 115,
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+      "trajectory": "path",
+      "movement_mode": "walking"
+     }
+    },
+    {
+     "sequence": 21,
+     "occurrence": 267,
+     "parent_event": null,
+     "lineage": 209,
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "34430787-4e2a-465b-aa1a-076ea3a07199",
+      "trajectory": "path",
+      "movement_mode": "walking"
+     }
+    }
+   ]
+  }
+ }
+}

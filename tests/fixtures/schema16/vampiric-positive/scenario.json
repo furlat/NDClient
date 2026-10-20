@@ -1,0 +1,137 @@
+{
+ "id": "spell.vampiric_touch/positive_healing_lifecycle",
+ "title": "Vampiric Touch: wounded caster, initial/repeat strike healing and restoration",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.vampiric_touch"
+   ],
+   "at": [
+    3,
+    7
+   ],
+   "damage": 40
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.vampiric_touch"
+  ],
+  "action": [
+   "action.move",
+   "action.spell.vampiric_touch.strike",
+   "action.drop_concentration"
+  ],
+  "condition": [
+   "condition.spell.vampiric_touch"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "steps": [
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "spell.vampiric_touch",
+   "by": "caster",
+   "target": "target",
+   "level": 3
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    7
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.spell.vampiric_touch.strike",
+   "by": "caster",
+   "target": "target",
+   "capture_choices": true
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    2,
+    7
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.vampiric_touch",
+  "action.spell.vampiric_touch.strike",
+  "action.move",
+  "action.drop_concentration"
+ ],
+ "required_conditions": [
+  "condition.spell.vampiric_touch"
+ ],
+ "required_condition_ends": [
+  "condition.spell.vampiric_touch"
+ ],
+ "required_facts": [
+  "spell",
+  "damage",
+  "heal",
+  "movement"
+ ],
+ "purpose": "Original two-seat facts qualify actual positive self-healing separately from zero-heal baseline. No damage-to-healing arithmetic or fabricated result; starting wounds are setup, not an in-record damage claim."
+}

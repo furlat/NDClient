@@ -14,9 +14,23 @@ static func ancestor(node:Dictionary,graph:Dictionary)->Dictionary:
         parent=candidate.get("parent_lineage")
     return {}
 
-static func cast_key(node:Dictionary,_graph:Dictionary)->String:
+static func cast_key(node:Dictionary,graph:Dictionary)->String:
     var resolution:Dictionary=node.get("resolution_record",{})
-    return str(resolution.lineage) if resolution.get("lineage")!=null else node.lineage_id
+    var key:String=str(resolution.lineage) if resolution.get("lineage")!=null else node.lineage_id
+    var declaration:Dictionary=graph.get("nodes",{}).get(key,node)
+    var fact:Variant=declaration.get("fact")
+    if fact==null or fact.get("kind")!="spell":return key
+    var selected:Dictionary=graph.get("spell_sources",{}).get(str(fact.get("behavior_id","")),{}).get("selection",{})
+    var effect:Dictionary=selected.get("delivery",{}).get("effects",{}).get(str(fact.get("effect_id","")),{})
+    # An explicitly authored secondary effect plays its own area/contact, not
+    # another casting body. Only its real same-caster spell ancestor can own
+    # that cast. Root area spells and unrelated/native child casts stay private.
+    if not effect.has("roles") or "cast" in effect.roles:return key
+    var source:Dictionary=ancestor(declaration,graph)
+    if source.is_empty():return key
+    var original:Dictionary=Occurrences.spell(source,graph)
+    if original.get("behavior_id")!=fact.get("behavior_id") or original.get("source_entity_uuid")==null or original.source_entity_uuid!=fact.get("source_entity_uuid"):return key
+    return cast_key(source,graph)
 
 static func selected_for(selected:Dictionary,fact:Dictionary)->Dictionary:
     var result=selected.duplicate()
