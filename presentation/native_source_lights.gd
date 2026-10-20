@@ -58,6 +58,7 @@ func prepare_native_handles(handles:Dictionary,budget:Dictionary={})->bool:
             if wanted.has(id):continue
             _release_effect_node(page.effect_nodes[id]);page.effect_nodes.erase(id)
     _prepared_effect_ids=wanted;native_preparation_ready=ready
+    _trim_effect_cookies()
     if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     return ready
 
@@ -157,18 +158,29 @@ func _attenuation_gradient(attenuation: float) -> Gradient:
 func _trim_effect_cookies()->void:
     var active:Dictionary={}
     for source in effect_sources:active[source.native_attenuation]=true
+    # Prepared future occurrences own their exact cookie even before their
+    # authored optical cue. Sampling only the currently visible set cannot
+    # retire those inputs between preparation and publication.
+    for entries in _effect_roots.values():
+        for entry in entries:
+            if is_instance_valid(entry.node):active[entry.node.omni_attenuation if entry.node is OmniLight3D else 0.0]=true
     var inactive:int=0
     for attenuation in _effect_cookies:
         if not active.has(attenuation):inactive+=1
     while inactive>RETAINED_EFFECT_COOKIES:
         var oldest:Variant=null;var use:int=9223372036854775807
         for attenuation in _effect_cookies:
-            if not active.has(attenuation) and _effect_cookies[attenuation].used<use:
+            var cookie:Dictionary=_effect_cookies[attenuation].cookie
+            var complete:bool=cookie.task<0 or WorkerThreadPool.is_task_completed(cookie.task)
+            if complete and not active.has(attenuation) and _effect_cookies[attenuation].used<use:
                 oldest=attenuation;use=_effect_cookies[attenuation].used
+        if oldest==null:break
+        LightCookies.release(_effect_cookies[oldest].cookie)
         _effect_cookies.erase(oldest);inactive-=1
 
 func clear_pages()->void:
     super.clear_pages()
+    for entry in _effect_cookies.values():LightCookies.release(entry.cookie)
     _effect_cookies.clear();_effect_cookie_use=0;_prepared_effect_ids.clear();_pending_attenuations.clear();native_preparation_ready=true
 
 func project(camera: Camera3D, source_scale: float = 2.0) -> void:

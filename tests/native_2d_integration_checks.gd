@@ -4,6 +4,10 @@ extends SceneTree
 const Player=preload("res://play.tscn")
 const Settings=preload("res://presentation/render_settings.gd")
 const Geometry=preload("res://presentation/character_geometry.gd")
+class ProfilePlayer extends "res://play.gd":
+    var persist_profile:bool=true
+    func _save_character_light_profile(name:String)->Error:
+        return super._save_character_light_profile(name) if persist_profile else OK
 var checks := 0
 var failures: Array=[]
 var receipts: Array=[]
@@ -33,6 +37,14 @@ func press(key: Key) -> void:
     root.push_input(event,true)
     event=event.duplicate(); event.pressed=false
     root.push_input(event,true)
+
+func profile_ready(scene:Node,name:String)->void:
+    var deadline:int=Time.get_ticks_msec()+90000
+    while not scene.requested_character_light_profile.is_empty() and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline:
+        await process_frame
+    await scene.presentation_updated
+    check(scene.requested_character_light_profile.is_empty() and scene.character_light_profile==name,
+        "Exact requested normal sources publish before sampling "+name+": "+scene.media_issue)
 
 func receiver_nodes(node: Node,counts: Dictionary,helper: bool=false) -> void:
     # Native 3D shadow-measurement worlds are explicitly allowed. A main-world
@@ -111,7 +123,7 @@ func run() -> void:
     root.position=Vector2i(-16000,-16000)
     root.size=Vector2i(960,640)
     if FileAccess.file_exists(Settings.PATH): prior_settings=FileAccess.get_file_as_bytes(Settings.PATH)
-    var scene=Player.instantiate()
+    var scene=ProfilePlayer.new()
     scene.timeline.paused=true
     root.add_child(scene)
     var last_progress=Time.get_ticks_msec()
@@ -133,7 +145,8 @@ func run() -> void:
     var counts={"main_3d":0,"helper_3d":0,"point_2d":0,"directional_2d":0}
     receiver_nodes(scene,counts)
     check(counts.main_3d==0,"Main world has no receiving Light3D nodes")
-    check(counts.point_2d>0,"Actual disclosed sources create enabled native PointLight2D nodes")
+    check(scene.source_lighting.canvas_sources().any(func(source):return source.enabled),
+        "Actual disclosed native2D source operands reach the painted receiving table")
     check(scene.camera is Camera3D and scene.camera.projection==Camera3D.PROJECTION_ORTHOGONAL,"Production retains native orthographic3D camera")
     var images_before={}
     for visual in scene.visual_actors.values():
@@ -156,7 +169,7 @@ func run() -> void:
     for index in option.item_count:
         if option.get_item_metadata(index)==menu_profile:
             option.select(index); option.item_selected.emit(index); break
-    await scene.presentation_updated
+    await profile_ready(scene,menu_profile)
     check(scene.character_light_profile==menu_profile and Settings.read().profile==menu_profile,
         "Native profile option applies and persists the exact selected profile")
     var original_zoom: float=scene.camera.size
@@ -171,6 +184,7 @@ func run() -> void:
     check(not scene.hud.settings_open(),"Escape closes settings without altering the paused game clock")
     scene.hud.hide()
     scene.grid_visible=false
+    scene.persist_profile=false
     var profile_changed := 0
     for quarter in range(4):
         print("NATIVE_2D_PHASE quarter=",quarter)
@@ -190,8 +204,8 @@ func run() -> void:
             print("NATIVE_2D_PHASE quarter=",quarter," profile=",profile_name)
             # The menu callback is checked once above; the image matrix changes
             # only the in-memory preference and leaves the saved setting alone.
-            scene.character_light_profile=profile_name
-            await scene.presentation_updated
+            check(scene.set_character_light_profile(profile_name),"Production profile request accepts "+profile_name)
+            await profile_ready(scene,profile_name)
             rendered[profile_name]=await capture("q%d-%s-native2d"%[quarter,profile_name])
             check(scene.character_light_profile==profile_name and Settings.read().profile==menu_profile,"Image matrix applies "+profile_name+" without rewriting saved settings")
             check(signature(scene)==before,"Profile changes preserve source placement/frame/tint/alpha/clock q%d %s"%[quarter,profile_name])

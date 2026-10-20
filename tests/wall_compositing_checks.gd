@@ -32,7 +32,7 @@ func compare(a: Image, b: Image, base: Image = null, opacity: float = 1.0) -> Di
             if base != null:
                 var background = base.get_pixel(x,y)
                 if Vector3(expected.r-background.r,expected.g-background.g,expected.b-background.b).length() < .04: continue
-                expected = background.lerp(expected,opacity)
+                expected = background.srgb_to_linear().lerp(expected.srgb_to_linear(),opacity).linear_to_srgb()
             var delta = maxf(absf(actual.r-expected.r),maxf(absf(actual.g-expected.g),absf(actual.b-expected.b)))
             error += delta; maximum = maxf(maximum,delta); samples += 1
             if delta > .025: bad += 1

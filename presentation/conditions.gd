@@ -248,6 +248,7 @@ static func material(actor_id: String, samples: Array) -> Dictionary:
 
 static func scale_operation(sample:Dictionary)->Dictionary:
     var factors:Dictionary=sample.recipe.get("persistent",{}).get("bodyScale",{})
+    if factors.is_empty():return {}
     var state:Dictionary=sample.condition.get("state",{}) if sample.condition.get("state")!=null else {}
     var change:Variant=state.get("size_change")
     if change==null or not factors.has(change):return {}

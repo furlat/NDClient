@@ -27,26 +27,54 @@ func original(attenuation:float)->GradientTexture2D:
     texture.gradient.offsets=offsets;texture.gradient.colors=colours
     return texture
 
+func ready_cookie(lights:RefCounted,attenuation:float)->Texture2D:
+    var deadline:int=Time.get_ticks_msec()+10000
+    var texture:Texture2D=lights._effect_cookie("fixture",attenuation)
+    while texture==null and Time.get_ticks_msec()<deadline:
+        await process_frame
+        texture=lights._effect_cookie("fixture",attenuation)
+    check(texture!=null,"Existing asynchronous cookie preparation completes for attenuation "+str(attenuation))
+    return texture
+
 func passive()->void:
     var lights=Lights.new()
-    var first:GradientTexture2D=lights._effect_cookie("first",1.0)
-    var first_colours:PackedColorArray=first.gradient.colors.duplicate()
+    var first:Texture2D=await ready_cookie(lights,1.0)
+    if first==null:lights.clear_pages();return
+    var first_pixels:PackedByteArray=first.get_meta(&"cookie_image").get_data().duplicate()
     for id in 40:check(is_same(first,lights._effect_cookie(str(id),1.0)),"Identical attenuation shares immutable pixels across occurrences "+str(id))
-    var changed:GradientTexture2D=lights._effect_cookie("first",.8)
+    var changed:Texture2D=await ready_cookie(lights,.8)
+    if changed==null:lights.clear_pages();return
     check(changed!=first and changed.get_rid()!=first.get_rid(),"An attenuation change has a new texture registration identity")
-    check(first.gradient.colors==first_colours,"Changing another source cannot mutate the admitted cookie")
+    check(first.get_meta(&"cookie_image").get_data()==first_pixels,"Changing another source cannot mutate the admitted cookie")
     check(is_same(first,lights._effect_cookie("first",1.0)),"Restoring attenuation reuses the exact prior image")
-    var near:GradientTexture2D=lights._effect_cookie("first",1.000001)
+    var near:Texture2D=await ready_cookie(lights,1.000001)
     check(near!=first,"Attenuation keys are exact, without quantization")
     lights.effect_sources=[]
     for value in 24:
         lights.effect_sources.append({"native_attenuation":float(value)})
-        lights._effect_cookie(str(value),float(value))
+        await ready_cookie(lights,float(value))
     lights._trim_effect_cookies()
     for value in 24:check(lights._effect_cookies.has(float(value)),"Required active attenuation is never evicted "+str(value))
     lights.sample_handles({})
+    lights.prepare_native_handles({})
     check(lights._effect_cookies.size()==lights.RETAINED_EFFECT_COOKIES,"Inactive native cookies have an exact bounded lifetime")
+    var future_root:=Node3D.new();root.add_child(future_root)
+    var future_light:=OmniLight3D.new();future_light.omni_attenuation=37.0;future_root.add_child(future_light)
+    var future_handles:Dictionary={"received_future_occurrence":{"root":future_root}}
+    var deadline:int=Time.get_ticks_msec()+10000
+    while not lights.prepare_native_handles(future_handles) and Time.get_ticks_msec()<deadline:await process_frame
+    check(lights.native_preparation_ready and lights._effect_cookies.has(37.0),"Prepared future occurrence owns its exact cookie before optical publication")
+    for value in 12:await ready_cookie(lights,float(value)+50.0)
+    lights.prepare_native_handles(future_handles)
+    check(lights.effect_sources.is_empty() and lights._effect_cookies.has(37.0) and lights._effect_cookies.size()==lights.RETAINED_EFFECT_COOKIES+1,
+        "Inactive trimming preserves the prepared future input in addition to the bounded reusable cache")
+    lights.prepare_native_handles({})
+    check(lights._effect_cookies.size()==lights.RETAINED_EFFECT_COOKIES,"Retiring the future occurrence returns its cookie to the same bounded cache")
+    lights._effect_cookie("canceled_unfinished",99.0)
+    var unfinished:Dictionary=lights._effect_cookies[99.0].cookie
     lights.clear_pages();check(lights._effect_cookies.is_empty(),"Page teardown releases retained native cookies")
+    check(unfinished.task==-1,"Teardown joins its own unfinished cookie job without uploading a retired texture")
+    future_root.queue_free();await process_frame
     var shadows=Shadows.new()
     # Shadows use the image a cookie carries and never read a texture back.
     check(shadows.cookie_image(GradientTexture2D.new())==null and not shadows.issues.is_empty(),"A cookie without its generated image is refused, never read back")
@@ -61,7 +89,8 @@ func native_pixels()->void:
     # additional boundary/changed values without rounding their native floats.
     for attenuation in [-0.280000001192093,0.0,0.800000011920929,1.0,1.13199996948242,2.0,5.0]:
         var before:GradientTexture2D=original(attenuation)
-        var after:GradientTexture2D=lights._effect_cookie("fixture",attenuation)
+        var after:Texture2D=await ready_cookie(lights,attenuation)
+        if after==null:continue
         await process_frame;await RenderingServer.frame_post_draw
         var old_image:Image=before.get_image();var new_image:Image=after.get_image()
         var equal:bool=old_image!=null and new_image!=null and old_image.get_data()==new_image.get_data()
@@ -85,7 +114,7 @@ func native_pixels()->void:
 
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(160,120);Engine.max_fps=120
-    passive()
+    await passive()
     var native:bool=DisplayServer.get_name()!="headless"
     if native:await native_pixels()
     var report={"checks":checks,"failures":failures,"native_pixels":native,"raster":raster_rows,

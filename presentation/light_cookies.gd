@@ -22,6 +22,13 @@ static func texture(cookie: Dictionary) -> Texture2D:
         cookie.texture = made
     return cookie.texture
 
+## Retirement joins this cookie's own job. Live trimming calls this only after
+## completion; teardown also owns unfinished jobs and joins them before release.
+static func release(cookie:Dictionary)->void:
+    if cookie.task>=0:
+        WorkerThreadPool.wait_for_task_completion(cookie.task)
+        cookie.task=-1
+
 static func _generate(cookie: Dictionary) -> void:
     var gradient: Gradient = cookie.gradient
     var data := PackedByteArray()
