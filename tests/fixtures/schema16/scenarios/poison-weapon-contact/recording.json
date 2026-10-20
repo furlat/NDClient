@@ -1,0 +1,406 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 37,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "55ac4cc3-bb81-4dd2-9df2-2db401d30b3c": "Amber caster",
+  "c5853fe4-f7ff-40ae-aafd-de29938bdeb7": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.item.weapon_coat.apply \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.attack \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 91,
+   "attack": 6,
+   "actor_change": 16,
+   "item_charge": 1,
+   "action": 1,
+   "saving_throw": 2,
+   "damage": 8
+  },
+  "behaviors": {
+   "action.attack": 6,
+   "action.item.weapon_coat.apply": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Slashing"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 16,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 49,
+   "lineage": 43,
+   "event_offset": 1,
+   "kind": "item_charge",
+   "label": "item_charge ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 55,
+   "lineage": 43,
+   "event_offset": 3,
+   "kind": "action",
+   "label": "action action.item.weapon_coat.apply",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 86,
+   "lineage": 78,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 97,
+   "lineage": 78,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 98,
+   "lineage": 78,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 100,
+   "lineage": 78,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 131,
+   "lineage": 123,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 142,
+   "lineage": 123,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 143,
+   "lineage": 123,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 145,
+   "lineage": 123,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 372,
+   "lineage": 367,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 63,
+   "occurrence": 409,
+   "lineage": 394,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 63,
+   "occurrence": 410,
+   "lineage": 394,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 63,
+   "occurrence": 412,
+   "lineage": 394,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 68,
+   "occurrence": 449,
+   "lineage": 434,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 68,
+   "occurrence": 450,
+   "lineage": 434,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 68,
+   "occurrence": 452,
+   "lineage": 434,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 16,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 50,
+   "lineage": 43,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.item.weapon_coat.apply",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 81,
+   "lineage": 73,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 92,
+   "lineage": 73,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 93,
+   "lineage": 73,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 95,
+   "lineage": 73,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 125,
+   "lineage": 117,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 136,
+   "lineage": 117,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 137,
+   "lineage": 117,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 139,
+   "lineage": 117,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 58,
+   "occurrence": 359,
+   "lineage": 354,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 63,
+   "occurrence": 396,
+   "lineage": 381,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 63,
+   "occurrence": 397,
+   "lineage": 381,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 63,
+   "occurrence": 399,
+   "lineage": 381,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 68,
+   "occurrence": 436,
+   "lineage": 421,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 68,
+   "occurrence": 437,
+   "lineage": 421,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 68,
+   "occurrence": 439,
+   "lineage": 421,
+   "event_offset": 3,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Slashing"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

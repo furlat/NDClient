@@ -10,6 +10,7 @@ const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Recording=preload("res://studio/recording.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Construction=preload("res://presentation/actor_construction.gd")
+const NativeActions=preload("res://presentation/native_action_authoring.gd")
 const ITEM="4df65b6b-e8c4-42e6-928d-26e74b579ea1"
 const EFFECT="f13a6583-c3c4-42d8-9fb9-eeff69686626"
 class State extends RefCounted:
@@ -240,6 +241,72 @@ func replay_callback_checks(index:Dictionary)->void:
     var calls:Array=[];idle.world_published=func(candidate):calls.append(candidate);return true
     var plan:Dictionary=idle.replay_plan(index.presentation_end_ms+.01)
     check(not plan.boundary and idle.replay_prepare(plan) and idle.replay_publish(plan) and calls.is_empty(),"A no-boundary replay advance has no prepared owner callback")
+
+func conditional_impact_checks(compiled:Dictionary)->void:
+    # Explicit value controls, not a fabricated original replay or poison
+    # damage proof. The ordinary coating/hit/removal recording is separate.
+    var gear:Resource=load("res://authoring/characters/gear/weapon.longsword.tres")
+    check(gear.impact_effects.size()==1,"Plain Longsword has one authored conditional contact, without inheriting Ember Fire")
+    var use:Resource=gear.impact_effects[0]
+    check(use.clip=="weapons/contact/poison/medium" and use.item_effect_behavior_id=="condition.consumable.weapon_coat.basic_poison" \
+        and use.item_effect_damage_type=="Poison" and not use.follow,"Candidate uses exact Basic Poison membership and finite recipient contact")
+    var staged:Resource=Support.BodyIndex.new()
+    Builder._equipment({"index":staged},{gear.id:gear})
+    var index:Resource=compiled[Support.Sources.KEY].index.duplicate(false)
+    index.item_impact_effects=staged.item_impact_effects
+    var cache:Dictionary={Support.Sources.KEY:{"index":index,"loaded":compiled[Support.Sources.KEY].loaded}}
+    var cues:Array=index.item_impact_effects[gear.id]
+    check(cues.size()==1 and cues[0].item_effect_behavior_id==use.item_effect_behavior_id \
+        and cues[0].item_effect_damage_type=="Poison","Current builder preserves exact membership selectors on finite contact cues")
+    var attack:Dictionary={"kind":"attack","behavior_id":"action.attack","source_entity_uuid":"contract-wielder", \
+        "target_entity_uuid":"contract-recipient","source_item_id":"weapon.longsword","source_item_uuid":"contract-coated-sword", \
+        "weapon_slot":"MELEE_MAIN","attack_source_kind":"equipped","attack_outcome":"Hit","damage_types":["Slashing"]}
+    var member:Dictionary={"effect_uuid":"contract-basic-poison-owner","contribution_uuid":"contract-poison-contribution", \
+        "behavior_id":"condition.consumable.weapon_coat.basic_poison","damage_type":"Poison", \
+        "duration":{"duration_type":"rounds","remaining_rounds":10}}
+    check(Items.impact_binding(attack,cache).is_empty(),"Uncoated successful attack cannot borrow poison contact from an item look or damage type")
+    attack.item_effects=[member]
+    var original:PackedByteArray=var_to_bytes([attack,cues])
+    var selected:Dictionary=Items.impact_binding(attack,cache)
+    check(selected.get("effect_cues",[]).size()==1 and selected.effect_cues[0].item_effect_members==[member] \
+        and selected.effect_cues[0].item_effect_source_item_uuid==attack.source_item_uuid,"Contact keeps its attack-time exact item and all matching public effect evidence")
+    check(not selected.effect_cues[0].has("condition_uuid") and not selected.effect_cues[0].has("item_effect_owner") \
+        and attack.damage_types==["Slashing"],"Membership-qualified contact invents no condition owner, Poisoned result or applied Poison damage")
+    var phases:Array=NativeActions.phases(selected,attack,{}, {},{"event.start":0.0,"body.impact":100.0},cache)
+    check(phases.size()==1 and phases[0].native_cue.item_effect_members==[member] \
+        and phases[0].native_cue.item_effect_source_item_uuid==attack.source_item_uuid \
+        and is_equal_approx(phases[0].start_ms,100.0),"Existing finite phase compiler retains exact member evidence on the authored contact clock")
+    var after_retirement:Dictionary=attack.duplicate(false);after_retirement.item_effects=[]
+    check(Items.impact_binding(after_retirement,cache).is_empty() and not Items.impact_binding(attack,cache).is_empty(),"A later retired-membership attack has no contact; earlier attack replay retains its own snapshot")
+    var critical:Dictionary=attack.duplicate(false);critical.attack_outcome="Crit"
+    check(Items.impact_binding(critical,cache).effect_cues.size()==1,"Critical contact remains one authored use, independently of damage amount")
+    for outcome in ["Miss","Crit Miss",null]:
+        var wrong:Dictionary=attack.duplicate(false);wrong.attack_outcome=outcome
+        check(Items.impact_binding(wrong,cache).is_empty(),"Missing or missed contact does not render an admitted coating: "+str(outcome))
+    for field in ["behavior_id","damage_type"]:
+        var foreign:Dictionary=member.duplicate(false);foreign[field]="contract-other"
+        var wrong:Dictionary=attack.duplicate(false);wrong.item_effects=[foreign]
+        check(Items.impact_binding(wrong,cache).is_empty(),"Foreign attack-time "+field+" cannot satisfy this authored poison selector")
+    for field in ["source_item_uuid","source_item_id"]:
+        var missing:Dictionary=attack.duplicate(false);missing.erase(field)
+        check(Items.impact_binding(missing,cache).is_empty(),"Exact attack item identity remains required: "+field)
+    for kind in ["natural","unarmed"]:
+        var wrong:Dictionary=attack.duplicate(false);wrong.attack_source_kind=kind
+        check(Items.impact_binding(wrong,cache).is_empty(),"Coating cannot lend a weapon contact to "+kind+" attacks")
+    var different_item:Dictionary=attack.duplicate(false);different_item.source_item_id="weapon.roster.ember_longsword"
+    check(Items.impact_binding(different_item,cache).is_empty(),"Gear-family look reuse cannot inherit the plain sword's conditional poison cue")
+    var other:Dictionary=member.duplicate(false);other.effect_uuid="contract-second-owner";other.contribution_uuid="contract-second-contribution"
+    var stacked:Dictionary=attack.duplicate(false);stacked.item_effects=[member,other]
+    var stack_binding:Dictionary=Items.impact_binding(stacked,cache)
+    check(stack_binding.effect_cues.size()==1 and stack_binding.effect_cues[0].item_effect_members==[member,other],"Multiple matching contributions retain exact evidence without multiplying the authored contact")
+    var unconditional:Dictionary=cues[0].duplicate(false)
+    unconditional.erase("item_effect_behavior_id");unconditional.erase("item_effect_damage_type")
+    unconditional.source_index=1;unconditional.source="test-only-unconditional-contact"
+    index.item_impact_effects={gear.id:[cues[0],unconditional]}
+    check(Items.impact_binding(after_retirement,cache).effect_cues==[unconditional] \
+        and Items.impact_binding(attack,cache).effect_cues.size()==2,"Conditional membership never suppresses a separately authored unconditional contact")
+    check(var_to_bytes([attack,cues])==original,"Selecting/compiling contact evidence leaves original facts and shared authored cues immutable")
+
 func run()->void:
     var compiled:Dictionary=Support.cache()
     var fixture:Resource=load("res://tests/fixtures/dynamic_weapon_overlay.tres")
@@ -252,7 +319,10 @@ func run()->void:
     Builder._check_item_effect_selector(invalid,"test",report)
     check(report.errors.size()==1,"Damage-only selection is rejected offline rather than guessed at runtime")
     report.errors=[];Builder._check_item_effect_selector(fixture.effects[0],"test",report,true)
-    check(report.errors.size()==1,"Membership selectors cannot claim elemental hit attribution")
+    check(report.errors.is_empty(),"Finite contact may select exact attack-time membership without claiming applied rider damage")
+    report.errors=[];Builder._check_item_effect_selector(invalid,"test",report,true)
+    check(report.errors.size()==1,"Impact damage-type selector still requires the explicit member behavior")
+    conditional_impact_checks(compiled)
     var journal:RefCounted=Journal.new();var opened:Dictionary=journal.open(Fixtures.journal("divine-arm","party"),true)
     check(opened.ok,"Original single-seat Divine Arm journal folds without changing its wire data")
     if opened.ok:

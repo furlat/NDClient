@@ -158,9 +158,9 @@ static func _check_characters(state: Dictionary, characters: Dictionary) -> Dict
     elif state.rigs[result.root].kind != "layered":Common.error(report, "characters", "the player body needs the layered rig")
     return result
 
-static func _check_item_effect_selector(use:Resource,where:String,report:Dictionary,impact:bool=false)->void:
-    if impact and (not use.item_effect_behavior_id.is_empty() or not use.item_effect_damage_type.is_empty()):
-        Common.error(report,where,"dynamic item membership selectors do not qualify elemental impact attribution")
+static func _check_item_effect_selector(use:Resource,where:String,report:Dictionary,_impact:bool=false)->void:
+    # Impacts may select from the actual AttackFact.item_effects snapshot.
+    # This is membership-qualified contact, never an applied damage verdict.
     if use.item_effect_behavior_id.is_empty() and not use.item_effect_damage_type.is_empty():
         Common.error(report,where,"item-effect damage selector requires its actual behavior id")
     if not use.item_effect_damage_type.is_empty() and use.item_effect_damage_type not in ["Acid","Bludgeoning","Cold","Fire","Force","Lightning","Necrotic","Piercing","Poison","Psychic","Radiant","Slashing","Thunder"]:

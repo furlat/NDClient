@@ -2,6 +2,29 @@
 
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2wj00"]
 [ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_amli1"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="EmberSustain"]
+script = ExtResource("effect")
+clip = "weapons/equipped/fire/ember_sheath/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory weapon delivery candidate on the exact equipped item; receiver corrected in runtime-weapon-receiver-46b8f47014566e6d. Visual acceptance pending."
+
+[sub_resource type="Resource" id="EmberContact"]
+script = ExtResource("effect")
+clip = "weapons/contact/fire/medium"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+follow = false
+light_multiplier = 0.0
+staging_from = "Factory weapon contact candidate on the actual accepted equipped Hit/Crit; no invented fire damage or extra impact. Visual acceptance pending."
 
 [sub_resource type="Resource" id="Resource_qpk5r"]
 script = ExtResource("1_2wj00")
@@ -14,4 +37,7 @@ script = ExtResource("2_amli1")
 id = "weapon.roster.ember_longsword"
 kind = "weapon"
 family = "weapon.longsword"
+effects = Array[ExtResource("effect")]([SubResource("EmberSustain")])
+impact_effects = Array[ExtResource("effect")]([SubResource("EmberContact")])
 icon = SubResource("Resource_qpk5r")
+notes = "First intrinsic main-hand candidate. Preserve the Longsword/Melee2 sheet; corrected receiver sustains actual equipped appearance, contact uses the existing finite result path. No artistic approval inferred."

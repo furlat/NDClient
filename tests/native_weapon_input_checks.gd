@@ -29,7 +29,7 @@ class OpticalSources extends RefCounted:
         var points:Array=[]
         for y in 3:
             for x in 3:points.append({"position":origin+Vector3(x*.02,1+y*.02,0),"normal":Vector3.BACK,"pixel":Vector2i(x,y),"slot":slots[0]})
-        return {"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"origin":origin,"points":points,"ready":true,"reason":"","gpu_geometry_key":["one-shared-physical-sheet",revision]}
+        return {"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"origin":origin,"optical_anchor":origin,"points":points,"ready":true,"reason":"","gpu_geometry_key":["one-shared-physical-sheet",revision]}
     func prepare(_world:Node,actors:Array,slots:Array,priority:bool)->void:interests.append([actors,slots,priority])
     func clear()->void:pass
 var checks:int=0
@@ -147,8 +147,60 @@ func run()->void:
     check(b_handle.occurrence.receiving.current_surface.actor=="b" and b_handle.occurrence.receiving.current_surface.item_uuid=="item-b","Shared source pose cannot borrow another recipient's private weapon packet")
     check(handle.occurrence.receiving.current_surface.item_uuid=="item-a","Updating the second recipient does not mutate the first recipient")
     check(world.timeline.state.items["item-a"]==original.items["item-a"] and a.condition.state.affected_item_uuid=="item-a","Provider/setter flow leaves canonical item and condition identity unchanged")
+    equipped_contract(world,bridge,a,offhand)
     for value in handles:value.occurrence.free()
     check(world.get_child_count()==children_before and source_nodes.all(func(node):return is_instance_valid(node) and node.visible),"Removing all coating owners frees private effects and retains the actual physical weapon layers")
     world.free();await process_frame
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Actual current item/loadout identity and Factory setter admission/restoration; no native output or undeclared gameplay ownership claim"}))
     quit(0 if failures.is_empty() else 1)
+
+func equipped_contract(world:World,bridge:RefCounted,current:Dictionary,offhand:Dictionary)->void:
+    # This headless contract never installs the known-stale receiver program.
+    # Blank material owners exercise packet routing without claiming pixels.
+    for visual in world.visual_actors.values():
+        for entry in visual.entries:entry.material=ShaderMaterial.new()
+    var clip:Dictionary=Effects.clip("weapons/equipped/fire/ember_sheath/medium/sustain")
+    check(not Effects.choice(clip).approaches[0].get("condition_prepared",false),"Delivered equipped source does not borrow the prepared-condition flag")
+    var handle:Dictionary=Effects.make(world,clip,0)
+    check(handle.error.is_empty(),"Actual packaged equipped occurrence constructs: "+str(handle.error))
+    if not handle.error.is_empty():Effects.close(handle);return
+    check(Weapons.equipped_source(handle),"Instantiated public equipped_weapon component selects its own admission contract")
+    var source:Node3D=handle.occurrence.handle.components.equipped_weapon
+    var registration:Dictionary=bridge.weapon_registration(world,handle,current)
+    var placed:Dictionary=Inputs.Sockets.endpoints(world,current,{},true,registration)
+    placed.erase("weapon_registration") # Later controls use their own current membership.
+    var result:Dictionary=bridge.sync(world,handle,current,placed)
+    check(not result.unavailable.has("weapon_binding") and source._binding_valid(),"Exact actual member is admitted without unused legacy contribution/decoration fields")
+    check(not source.binding.has("contribution_active") and not source.binding.has("decoration_admitted"),"Adapter fabricates no legacy gameplay operands")
+    var hands:Dictionary=world.rigs["shared-knight"].pose_sockets.hand
+    world.rigs["shared-knight"].pose_sockets.hand={}
+    registration=bridge.weapon_registration(world,handle,current)
+    check(registration.ready and registration.has("optical_anchor") and not registration.packet.binding.has("hand"),"Equipped source can use the exact optical registration without inventing a grip or axis")
+    var explicit_grip:Dictionary=current.duplicate(true)
+    explicit_grip.native_cue.live_endpoints=[{"actor":"caster","socket":"hand"}]
+    check(not bridge.weapon_registration(world,handle,explicit_grip).ready,"An explicitly authored grip remains required")
+    check(not bridge.weapon_registration(world,handle,offhand).ready,"New main-hand contract cannot admit the unsupported offhand")
+    world.rigs["shared-knight"].pose_sockets.hand=hands
+    var hidden:Dictionary=current.duplicate(true);hidden.native_inputs={"weapon_binding":{"suppressed":true}}
+    bridge.sync(world,handle,hidden,placed)
+    check(not source._binding_valid(),"Real suppression is still delivered to source admission")
+    bridge.sync(world,handle,current,placed)
+    check(source._binding_valid(),"Clearing actual suppression restores only the exact member")
+    var bad:Dictionary=source.binding.duplicate();bad.item_uuid="other-item"
+    source.set_weapon_binding(bad)
+    check(not source._receiver_identity_valid(),"A different item cannot retain the original exact optical receiver")
+    var item:Dictionary=current.duplicate(true)
+    item.native_item=true;item.intrinsic_item_effect=true;item.item_owner_uuid="item-a"
+    item.source="res://authoring/characters/gear/weapon.roster.ember_longsword.tres::effects/0"
+    item.start_ms=0.0;item.age_ms=42000.0
+    handle.started=false;handle.weapon_source_age=Weapons.source_time(handle,42.0)
+    bridge.sync(world,handle,item,placed);Effects.sample(handle,handle.weapon_source_age)
+    check(source.owner_state.owner_age_seconds==42.0 and source.owner_state.source_age_seconds==0.0 \
+        and handle.occurrence.previous_age==0.0,"Cold optical admission preserves actual membership age and starts no invented earlier motion")
+    handle.started=true;item.age_ms=42016.0
+    handle.weapon_source_age=Weapons.source_time(handle,42.016)
+    bridge.sync(world,handle,item,placed);Effects.sample(handle,handle.weapon_source_age)
+    check(is_equal_approx(source.owner_state.owner_age_seconds,42.016) and is_equal_approx(source.owner_state.source_age_seconds,.016) \
+        and is_equal_approx(handle.occurrence.previous_age,.016),"Observed pose advances component and occurrence on the same private source clock")
+    check(not Weapons.equipped_source({"baked":true}) and not Weapons.equipped_source({"inner":{"components":{}}}),"Recorded and unrelated sources cannot acquire the equipped history policy")
+    Effects.close(handle)

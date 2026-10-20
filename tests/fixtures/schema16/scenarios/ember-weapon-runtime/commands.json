@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "62da368c-646c-4b91-92b0-cf3a9e908e53",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "62da368c-646c-4b91-92b0-cf3a9e908e53",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "4ddf7f16-90d0-4152-9210-cb87e639d883",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Ember Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "4ddf7f16-90d0-4152-9210-cb87e639d883",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "e38b6b3a-03e4-4c7c-8d35-af04254f377e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "61500c8c-59b1-46f5-a4b9-f03122f81535",
+   "state_revision": "3e958fa6-9092-49e7-8692-78ee2ca0bf88",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "5fb4de3c-f51e-4906-ba5a-ec69ee97505e",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Ember Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "5fb4de3c-f51e-4906-ba5a-ec69ee97505e",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "7f1c44e6-1f0d-4c92-b34b-0b10355127d6",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "61500c8c-59b1-46f5-a4b9-f03122f81535",
+   "state_revision": "72205874-1976-4062-8db9-44cfc198dca0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "c7b67cd3-960a-4d3b-b284-a4f7847a130b",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "89550fef-84a5-4cb0-8298-222f4a02bfd0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "61500c8c-59b1-46f5-a4b9-f03122f81535",
+   "state_revision": "04750c55-d2b3-4d7b-b420-caea6483061e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "cecb43d8-01bb-4522-aab8-b03abdad5ce7",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "c2f5633c-8346-4d65-a5f6-40b42ed76565",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "0e573593-acfb-4e45-9e36-d64d7e3049bf",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "61500c8c-59b1-46f5-a4b9-f03122f81535",
+   "state_revision": "b42d8e30-2c2f-4524-a175-fc56c30595e4",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "5c7c34c8-fc51-4f7d-94bd-dadab0ba3855",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2b300a50-e306-4af6-8959-3568c0e6532a",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "4578087c-5886-4bd5-ac52-f3e4fa4c4bd2",
+   "state_revision": "2b300a50-e306-4af6-8959-3568c0e6532a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+   "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+   "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_longsword_equipped_use_retire_replace",
+    "game_epoch": "5b34e07f-da5c-436d-bd17-c6dcebc9b35e",
+    "audience_id": "8d980c37-f891-4d80-91c6-51559e301f94",
+    "sequence": 23
+   }
+  }
+ }
+]

@@ -160,16 +160,33 @@ static func samples(owners:Dictionary,_state:Dictionary,at_ms:float)->Array:
             "trace_keys":[owner.id],"source_event_uuid":owner.source_event_uuid}
         if dynamic:
             row.dynamic_item_effect=true;row.item_effect_uuid=str(owner.member.effect_uuid);row.item_effect_member=owner.member
+        var unbound:Array=cue.get("unbound_constructor_inputs",[])
+        if not unbound.is_empty():
+            row.status="missing";row.unbound_constructor_inputs=unbound
+            row.reason="native_constructor_inputs_unbound:"+",".join(unbound)
         result.append(row)
     return result
 
 
 ## Selection is from the actual attack, never the weapon currently held later.
-## Default semantics are hit-contact, not an inferred positive damage rider.
+## Conditional contacts use that attack's disclosed item-effect membership.
+## Neither membership nor a successful contact asserts positive rider damage.
 static func impact_binding(fact:Dictionary,cache:Dictionary)->Dictionary:
     if fact.get("attack_source_kind")!="equipped" or fact.get("attack_outcome") not in ["Hit","Crit"]:return {}
     if fact.get("source_item_uuid")==null or fact.get("source_item_id")==null:return {}
     var index:Resource=Bodies.index(cache)
     var cues:Array=[] if index==null else index.item_impact_effects.get(fact.source_item_id,[])
-    if cues.is_empty():return {}
-    return {"effect_cues":cues,"source":str(cues[0].source).get_base_dir()}
+    var selected:Array=[]
+    for cue in cues:
+        if str(cue.get("item_effect_behavior_id","")).is_empty():
+            selected.append(cue);continue
+        var members:Array=fact.get("item_effects",[]).filter(func(member):return _matches(cue,member))
+        if members.is_empty():continue
+        # One contact per authored use, even when several actual contributions
+        # match. Keep all exact members as evidence, not another held owner.
+        var actual:Dictionary=cue.duplicate(false)
+        actual.item_effect_members=members
+        actual.item_effect_source_item_uuid=fact.source_item_uuid
+        selected.append(actual)
+    if selected.is_empty():return {}
+    return {"effect_cues":selected,"source":str(selected[0].source).get_base_dir()}

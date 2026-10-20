@@ -1,0 +1,189 @@
+{
+ "id": "consumable.weapon_coat.basic_poison/equipped_hit_expiry_hit",
+ "title": "Basic Poison: coat held longsword, contact, expiry and later contact",
+ "kind": "item",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.attack",
+   "action.item.weapon_coat.apply"
+  ],
+  "condition": [
+   "condition.consumable.weapon_coat.basic_poison"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": [
+   "weapon.longsword",
+   "consumable.weapon_coat.basic_poison"
+  ]
+ },
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ],
+   "items": [
+    {
+     "id": "weapon.longsword",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "id": "consumable.weapon_coat.basic_poison",
+     "placement": "inventory"
+    }
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.ogre",
+   "at": [
+    6,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.item.weapon_coat.apply",
+   "by": "caster",
+   "target": "self",
+   "item": "consumable.weapon_coat.basic_poison",
+   "name": "Coat Main Hand",
+   "capture_choices": true
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "end_turn"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "required_behaviors": [
+  "action.attack",
+  "action.item.weapon_coat.apply"
+ ],
+ "required_facts": [
+  "attack",
+  "damage"
+ ],
+ "purpose": "Actual AttackFact.item_effects on the same equipped longsword before, during and after the authored ten-round item-coating lifetime. No Poisoned condition or successful poison saving-throw outcome is required for the contact membership."
+}

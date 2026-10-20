@@ -107,6 +107,7 @@ static func feedback_to(record: Dictionary, path: String, feedback: Feedback, ke
 const CUE_FIELDS := [
     ["clip", "clip", "string", true], ["role", "role", "string", true], ["scale", "scale", "float", true],
     ["at", "at", "string", false], ["delay_seconds", "delay", "float", false],
+    ["approach", "approach", "string", false],
     ["sampling", "sampling", "string", false], ["scope", "scope", "string", false], ["constructor_input", "constructor_input", "same", false],
     ["endpoint_actor_uuids", "endpoint_actor_uuids", "bool", false],
     ["attachment", "attachment", "string", false], ["orientation", "orientation", "string", false],

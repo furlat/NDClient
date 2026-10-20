@@ -6,6 +6,7 @@ extends SceneTree
 ## package bench; native occurrence teardown is not a dummy-renderer contract.
 const Effects=preload("res://presentation/effect_package.gd")
 const Baked=preload("res://presentation/baked_effect.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -38,6 +39,11 @@ func run()->void:
     check(Effects.resource_paths(combined)==[primary.path,primary.source_phase],"Default dependency closure contains only its original constructor and phase")
     check(Effects.key(combined)==default_key,"Appending an unselected source does not invalidate the original warm identity")
     var exact:Dictionary=combined.duplicate(false);exact.approach_id=alternative.id
+    var use:Resource=Records.effect_from_cue({"clip":combined.id,"role":"attached","approach":alternative.id},"test-only exact source control")
+    var cue:Dictionary=Records.cue_from_effect(use,0)
+    check(use.approach==alternative.id and not use.extra.has("approach") and cue.approach==alternative.id,"Existing typed EffectUse approach round-trips through the ordinary authored cue")
+    var authored:Dictionary=Effects.occurrence_clip({"native_clip":combined,"native_cue":cue})
+    check(authored.approach_id==alternative.id and Effects.choice(authored).approaches==[alternative],"Authored exact approach reaches runtime source selection without changing shared clip defaults")
     Effects.set_requested("recorded")
     check(Effects.choice(exact).approaches==[alternative] and Effects.choice(exact).kind=="native","Exact source assignment takes precedence over the global kind")
     check(Effects.resource_paths(exact)==[alternative.path,alternative.source_phase],"Exact dependency closure names only its actual constructor and phase")

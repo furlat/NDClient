@@ -533,7 +533,10 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
     else:
         Common.error(report,where,"constructor input projection or scope is unsupported");return
     if binding.get("component_path",[]).is_empty():Common.error(report,where,"constructor input lacks component path");return
-    var candidates:Array=clips.get(use.clip,{}).get("approaches",[]).filter(func(approach):return approach.has("source_phase"))
+    # Match the runtime's explicit selection boundary. Delivered, unselected
+    # studies are not constructors this production use has opted into.
+    var candidates:Array=clips.get(use.clip,{}).get("approaches",[]).filter(func(approach):return approach.has("source_phase") \
+        and (str(approach.id)==use.approach if not use.approach.is_empty() else not str(approach.get("runtime_selection","")).begins_with("Unselected alternative")))
     if candidates.is_empty():Common.error(report,where,"constructor input has no public source phase: "+use.clip);return
     for approach in candidates:
         var phase:Resource=load(approach.source_phase)

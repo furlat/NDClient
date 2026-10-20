@@ -376,6 +376,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         handle.component=component
         var cue:Dictionary=component.native_cue.duplicate(false)
         var age:float=maxf(0,float(component.age_ms)/1000.0)
+        var equipped:bool=Inputs.Weapons.equipped_source(handle)
         var registration:Dictionary=inputs.weapon_registration(world,handle,component)
         var points=Sockets.endpoints(world,component,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch),registration)
         if not points.ready:
@@ -390,11 +391,16 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         cue.merge({"from":points.from,"to":points.to,"ground":points.ground,"caster_ground":points.caster_ground},true)
         if not cue.get("bend",Vector2.ZERO) is Vector2:
             cue.bend=Vector2(cue.bend[0],cue.bend[1])
-        if age+0.000001<float(handle.sample_time) and not handle.get("seekable",false):
+        var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))
+        var pose_gap:bool=equipped and handle.started and age-float(handle.requested_time)>expected_step*2.0+0.000001
+        if age+0.000001<float(handle.sample_time) and not handle.get("seekable",false) or pose_gap:
             # Normal replay seeks use a fresh presentation epoch. An explicit
             # backwards sample still clears its own particles/trails honestly.
+            # A missing interval of weapon poses likewise starts a new private
+            # simulation; warming the destination pose would invent a swing.
             Inputs.release_departure(handle);Effects.close(handle);handles.erase(id);preparation_revision+=1
             ready=false;_pending(component,"native_spell_source_reset_pending");continue
+        if equipped:handle.weapon_source_age=Inputs.Weapons.source_time(handle,age)
         Effects.set_layer(handle,int(groups[key].layer_mask))
         handle.group_key=key
         handle.optical=_optical(component.get("optical",{}))
@@ -407,9 +413,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
                 continue
         # The bounded pass is only for a cold/seek history. Ordinary live
         # samples must follow the requested component clock at any frame rate.
-        var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))
         # A seekable approach draws any age directly; only a simulation has history.
-        if handle.get("seekable",false) or ("actor_context" in handle.clip.get("inputs",[]) and (Inputs.current_pose_history(handle) or Inputs.departure_history(handle) or Inputs.rolling_history(handle))):handle.warming=false
+        if equipped or handle.get("seekable",false) or ("actor_context" in handle.clip.get("inputs",[]) and (Inputs.current_pose_history(handle) or Inputs.departure_history(handle) or Inputs.rolling_history(handle))):handle.warming=false
         elif not handle.started and age>expected_step+0.000001:handle.warming=true
         elif handle.started and not handle.warming and age-float(handle.requested_time)>expected_step*2.0+0.000001:handle.warming=true
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
@@ -440,12 +445,13 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             Baked.stop_emission(handle,_emission_stop(cue));handle.emission_stop_set=true
         if lifecycle:
             var state:Dictionary=Persistent.lifecycle_state(component,sample_time)
+            if equipped:state.source_age_seconds=handle.weapon_source_age
             if state!=handle.get("owner_state",{}):Effects.set_input(handle,"owner_state",state);handle.owner_state=state
-            Effects.sample(handle,state.owner_age_seconds)
+            Effects.sample(handle,float(handle.weapon_source_age) if equipped else state.owner_age_seconds)
             handle.lifecycle_phase=state.phase
         else:
             if input_bindings.has("source_contact_seconds"):cue.source_contact=input_bindings.source_contact_seconds
-            Effects.sample(handle,Playback.source_time(cue,sample_time))
+            Effects.sample(handle,float(handle.weapon_source_age) if equipped else Playback.source_time(cue,sample_time))
         if cue.has("origin_path"):
             var anchor=Effects.node(handle,cue.origin_path)
             if anchor==null:
@@ -468,9 +474,14 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if caught_up:handle.warming=false
         var drawn:bool=handle.rendered_once
         var submitted_bounds:bool=submitted_geometry(handle,frustum,int(groups[key].layer_mask))
+        if equipped:
+            submitted_bounds=submitted_bounds or submitted_geometry({"geometry":Inputs.Weapons.receivers(world,handle)},frustum,world.camera.cull_mask)
         diagnostics[id]={"id":id,"status":"rendered" if drawn else "prepared", "reason":"" if caught_up else "native_spell_history_preparing", "age_ms":sample_time*1000.0,"requested_age_ms":age*1000.0,"source_age":handle.age,"group":key,"layer":groups[key].layer_mask,"attachment_support":points.surfaces,"submitted_bounds":submitted_bounds,
             "effect_clip":str(component.lifecycle_phases[handle.lifecycle_phase].id) if lifecycle else str(handle.clip.get("id","")),"effect_kind":handle.effect_kind,"effect_fallback":handle.effect_reason,"missing_staged_paths":handle.missing_paths}
         diagnostics[id].input_bindings=input_bindings
+        if equipped:
+            diagnostics[id].history_policy="observed_weapon_poses_only"
+            diagnostics[id].observed_from_age_seconds=handle.weapon_source_origin
         if not input_bindings.unavailable.is_empty():
             diagnostics[id].status="partial";diagnostics[id].reason="native_input_unavailable"
         if lifecycle:diagnostics[id].lifecycle_phase=handle.lifecycle_phase

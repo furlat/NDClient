@@ -6320,6 +6320,51 @@
    "timeout": 180,
    "status": "ok",
    "reason": "Actual equipped/use/retire/replace two-seat recordings and exact public item/condition membership; native output separate."
+  },
+  {
+   "name": "weapon_runtime_delivery_checks",
+   "script": "res://tests/weapon_runtime_delivery_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "status": "ok",
+   "args": [],
+   "timeout": 180,
+   "reason": "Original production intrinsic/coating item ownership and finite contact membership, natural expiry, independent canonical seeks/loops."
+  },
+  {
+   "name": "weapon_runtime_delivery_render_checks",
+   "script": "res://tests/wielded_weapon_impact_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "status": "ok",
+   "args": [
+    "--production-case=ember-weapon-runtime"
+   ],
+   "timeout": 180,
+   "reason": "Real production Ember contact and corrected receiver through Play/Studio; native pixels and finite seek/loop/retirement."
+  },
+  {
+   "name": "weapon_coating_contact_render_checks",
+   "script": "res://tests/wielded_weapon_impact_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "status": "ok",
+   "args": [
+    "--production-case=poison-weapon-contact",
+    "--expected-contacts=2"
+   ],
+   "timeout": 180,
+   "reason": "Two actual poison-coated Hits, exact attack-time membership, natural expiry and finite production native contact replay."
+  },
+  {
+   "name": "weapon_runtime_receiver_render_checks",
+   "script": "res://tests/weapon_runtime_receiver_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "status": "ok",
+   "args": [],
+   "timeout": 300,
+   "reason": "Corrected complete receiver package: actual equipped Ember sustain, movement/attack/removal/seek/loop and lighting/opacity regressions."
   }
  ]
 }

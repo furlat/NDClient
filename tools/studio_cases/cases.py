@@ -208,7 +208,70 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies()
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies()
+
+
+def equipped_weapon_study():
+    """Real intrinsic item, movement/contact, unequip and plain-item replacement."""
+    inventory = subjects(actions=['action.move', 'action.attack'])
+    inventory['item'] = ['weapon.roster.ember_longsword', 'weapon.longsword']
+    return {
+        'id': 'weapon.roster.ember_longsword/equipped_use_retire_replace',
+        'title': 'Ember Longsword: equipped movement, hit, removal and replacement',
+        'kind': 'item', 'subjects': inventory, 'seed': 2,
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'at': [4, 6],
+             'items': [{'id': 'weapon.roster.ember_longsword', 'slot': 'MELEE_MAIN'},
+                       {'id': 'weapon.longsword', 'placement': 'inventory'}]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.ogre', 'at': [6, 6]}],
+        'steps': [
+            {'do': 'action.move', 'by': 'caster', 'target': [5, 6]},
+            {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'equip', 'by': 'caster', 'item': 'weapon.longsword', 'slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'}],
+        'required_behaviors': ['action.move', 'action.attack'],
+        'required_facts': ['movement', 'attack', 'damage'],
+        'purpose': 'Exact intrinsic Gear ownership and one finite accepted weapon contact. '
+                   'The sustain stays visibly blocked until Factory regenerates receiver includes; '
+                   'this original never asserts art approval or fabricates an effect membership.'}
+
+
+def poison_weapon_contact_study():
+    """One carried dose, exact held-weapon contacts and ordinary round expiry."""
+    inventory = subjects(actions=['action.attack', 'action.item.weapon_coat.apply'],
+                         conditions=['condition.consumable.weapon_coat.basic_poison'])
+    inventory['item'] = ['weapon.longsword', 'consumable.weapon_coat.basic_poison']
+    attack = {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'}
+    return {
+        'id': 'consumable.weapon_coat.basic_poison/equipped_hit_expiry_hit',
+        'title': 'Basic Poison: coat held longsword, contact, expiry and later contact',
+        'kind': 'item', 'subjects': inventory, 'seed': 2,
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'premade': 'fighter', 'at': [5, 6],
+             'items': [{'id': 'weapon.longsword', 'slot': 'MELEE_MAIN'},
+                       {'id': 'consumable.weapon_coat.basic_poison', 'placement': 'inventory'}]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.ogre', 'at': [6, 6]}],
+        'steps': [dict(attack), {'do': 'end_turn', 'by': 'caster'},
+                  {'do': 'action.item.weapon_coat.apply', 'by': 'caster',
+                   'target': 'self', 'item': 'consumable.weapon_coat.basic_poison',
+                   'name': 'Coat Main Hand', 'capture_choices': True},
+                  {'do': 'end_turn', 'by': 'caster'}, dict(attack),
+                  {'do': 'end_turn', 'by': 'caster'}, dict(attack)]
+                 + [{'do': 'end_turn'} for _ in range(20)]
+                 + [dict(attack), {'do': 'end_turn', 'by': 'caster'}, dict(attack),
+                    {'do': 'end_turn', 'by': 'caster'}, dict(attack)],
+        'required_behaviors': ['action.attack', 'action.item.weapon_coat.apply'],
+        'required_facts': ['attack', 'damage'],
+        'purpose': 'Actual AttackFact.item_effects on the same equipped longsword before, during and after '
+                   'the authored ten-round item-coating lifetime. No Poisoned condition or successful '
+                   'poison saving-throw outcome is required for the contact membership.'}
 
 
 def gallery_sorcerer():

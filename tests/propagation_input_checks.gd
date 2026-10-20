@@ -42,6 +42,13 @@ func run()->void:
     var clip:Dictionary=Effects.clip(entry.effects[0].clip)
     Build._check_constructor(entry.effects[0],ID,{clip.id:clip},report)
     check(report.errors.is_empty(),"Offline source, capacity, launch/speed and exact disabled-density policy checks pass")
+    var exact:Resource=entry.effects[0].duplicate(true);exact.approach=Effects.choice(clip).approaches[0].id
+    report=Common.report();Build._check_constructor(exact,ID,{clip.id:clip},report)
+    check(report.errors.is_empty(),"Explicit selection of the existing production source retains its exact constructor contract")
+    var study:Resource=entry.effects[0].duplicate(true);study.approach="runtime-prepared-followup-20261020"
+    check(clip.approaches.any(func(approach):return approach.id==study.approach),"New complete package retains the separate unselected Chain Lightning study")
+    report=Common.report();Build._check_constructor(study,ID,{clip.id:clip},report)
+    check(not report.errors.is_empty(),"Opting into the incompatible study still requires its real constructor adaptation")
     var invalid:Resource=entry.effects[0].duplicate(true);invalid.clip="live-electric/chain_live_hops"
     report=Common.report();Build._check_constructor(invalid,ID,{invalid.clip:Effects.clip(invalid.clip)},report)
     check(not report.errors.is_empty(),"An input opt-out cannot silently spread to another Factory clip")

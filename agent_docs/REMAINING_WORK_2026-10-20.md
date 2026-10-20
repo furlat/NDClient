@@ -1,6 +1,6 @@
 # Everything remaining: client, Factory migration and Studio
 
-**Current task authority — 20 October 2026. Snapshot: client `fb3a3760`, branch `codex-authoring-schemabump`.**
+**Current task authority — 20 October 2026, branch `codex-authoring-schemabump`. Original migration snapshot: `fb3a3760`; the R2 weapon cohort below supersedes its affected counts and evidence.**
 
 This is the single current remaining-work list. It supersedes remaining-task
 claims and percentages in the older progress/checklist/handoff documents. Those
@@ -21,7 +21,7 @@ What is already established and should **not be restarted**:
 
 - One main Windows checkout and branch; frozen executable engine `211b71134`,
   protocol 1/schema 16. The official engine and Factory sources remain read-only.
-- The complete sealed Factory `runtime-e102c29dec58524b` is installed:
+- The complete sealed Factory `runtime-weapon-receiver-46b8f47014566e6d` is installed (R2 intake below supersedes e102):
   1,246 clips, 504 selections, 155 condition lifecycle families. The earlier two
   actor-history shader errors are fixed in this successor; they are not a
   current blocker.
@@ -43,7 +43,7 @@ What is already established and should **not be restarted**:
 - Water/Wet has real native output through both independent faction streams,
   four views, seek/loop and cleanup. Its actual creation/removal choreography is
   not established by that hold-only original.
-- Latest full fast run: 173/173 clean. Latest scoped native run: 444 checks clean.
+- Latest full fast run: **174/174 clean**, `.runtime/tests/20261020T135657.434699Z/summary.json`. The R2 native receiving evidence is below; the earlier shared-provider run passed 444 checks.
   Latest actual Gallery route: 313/313 clean. These are bounded receipts, **not
   a green complete suite or complete visual coverage**.
 
@@ -215,10 +215,11 @@ Source/public-field evidence and exact family definitions:
   native witness. These are recording/output tasks, not another variant system.
 - Production `Gear.effects` / `impact_effects` assignments remain to be authored
   for the required modular decorations. The receiving infrastructure and tests
-  exist; 87 unassigned delivered weapon clips do not assign themselves. Select
+  exist; the 87 delivered weapon clips do not assign themselves. The first R2
+  candidate/contact and its receiver correction are recorded below. Select
   actual compatible decorations, preserving the original weapon sheet, tint,
   actual item UUID/holder/slot and exact Hit/Crit impact ownership.
-- Qualify real offhand, unequip/re-equip, transfer/drop, replacement and overlap;
+- Keep offhand source-rejected. Qualify unequip/re-equip, transfer/drop, replacement and overlap;
   an inventory-only item or the wrong held sheet must not receive a proxy effect.
   New Shillelagh/Divine Favor journals prove logical retirement/replacement,
   not their complete native coating/positive-rider output.
@@ -226,6 +227,114 @@ Source/public-field evidence and exact family definitions:
   modular separate-sheet attachments are the current requested implementation.
   Six delivered native weapon-body consumers are **excluded by user policy**.
   Spiritual Weapon/summoned actors remain a separate actual actor case.
+
+### R2 weapon delivery integration
+
+Delivery: [Factory weapon runtime handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/NDCLIENT_WEAPON_RUNTIME_DELIVERY_HANDOFF_2026-10-20.md).
+All 87 weapon/contact clips are already installed (66 sustains, 21 contacts).
+The 26 proposals are 13 intrinsic item associations, six coatings, four buffs/
+enchantments and three smite contacts. They are candidates, not additional spells,
+automatic approvals or an obligation to select every artistic alternative.
+Use current typed gear/condition/event resources; no second assignment registry.
+
+| Actual owner | Existing integration home and boundary |
+|---|---|
+| Intrinsic appearance | Gear.effects → NativeItems → exact disclosed equipped item/current holder; preserve its sprite sheet. The first qualified candidate is main-hand Ember Longsword; visual acceptance remains separate. |
+| Six coatings | Gear.effects selected by actual item-effect behavior/damage type and effect UUID. Ordered public membership/removal owns lifetime; no permanent intrinsic coat or invented Poisoned condition. |
+| Shillelagh / Divine Favor | Shillelagh retains its actor condition and affected_item_uuid. Divine Favor retains actor-owned rider semantics/current eligible item; a generic Hit cannot prove its Radiant rider. |
+| Magic Weapon / Sacred Weapon | Existing exact-item consumer; missing public memberships remain R5 dependencies. Never infer ownership from cast/Concentrating. |
+| Finite contacts | Gear.impact_effects or the existing spell/action result path; one accepted actual event/contact. Searing/Branding/Divine Smite proposals remain unselected until their actual accepted result and replacement of the intended existing accent are qualified; never append a duplicate or create an indefinite coating. |
+
+Two concrete delivery defects govern the first family:
+
+- **R5 receiver bank, corrected delivery installed:** e102 and the advertised
+  continuation42 retained old character_material.gdshaderinc and
+  light_table.gdshaderinc despite equal root text. Factory delivered complete
+  `runtime-weapon-receiver-46b8f47014566e6d`; it now replaces the entire namespace.
+  One offline intake check matched the archive and all nine current shader
+  sources. Old namespace/new archive are preserved in `NDClientGodot-backups/`;
+  `.runtime/weapon-receiver-intake.json` records the intake. No renderer/include
+  rollback, loose-bank overlay or new runtime validation. Native qualification
+  is below; package presence is not output or artistic approval.
+- **Client adapter, corrected:** equipped sources lack condition_prepared and do not read
+  contribution_active/decoration_admitted. Use their actual instantiated
+  equipped_weapon component admission independently of prepared-condition
+  behavior. Keep real item/holder/slot/membership, suppression and source refusals;
+  do not invent legacy operands or repurpose the condition flag.
+
+Factory's correction witness remains two representative Scimitar/Greatsword
+poses (118 checks/24 pairs), with three retained static Script classes and
+`engine_shutdown_clean=false`. It is not all-66/history coverage, a clean-exit
+certificate or human art approval; current client evidence is separately below.
+
+Two bounded candidates are authored: exact-item Ember Longsword sustain/Fire
+contact and plain Longsword Basic Poison contact. The latter matches the actual
+AttackFact.item_effects behavior/type snapshot and retains exact effect and
+contribution evidence; one contact per authored use, never one per damage packet
+or matching contribution. No membership means no contact, including after expiry.
+It neither asserts applied Poison damage nor creates Poisoned. Remaining coating
+sustains/intrinsic alternatives and smites retain their existing ownership paths;
+this does not bulk-select the 26 proposals.
+
+Equipped simulations consume only actual observed sequential poses. Cold/seek
+admission starts a private source clock at that pose; owner membership keeps its
+real age. Missing pose intervals reset the occurrence. Generic destination-pose
+warm-up cannot manufacture a historical wake. Both source and wrapper receive
+that same private source age. The native cohort below qualifies these supported observations; it does not reconstruct arbitrary earlier history.
+The build also ignores explicitly unselected constructor studies unless the
+existing EffectUse.approach opts in; that existing field now survives typed cue
+serialization into clip.approach_id. Production default selections are unchanged.
+
+Actual completion evidence for these cohorts:
+
+- Contract/selector checks: native weapon 58, dynamic item effects 98, exact
+  approach 35, propagation 550, original production ownership/contact 114; all
+  pass. The source clock check uses the actual packaged wrapper; it is not
+  pixel evidence. Immutable original journals preserve both faction views.
+- `ember-weapon-runtime`: real equipped movement, Ember miss then hit, unequip
+  and plain-sword replacement hit. `poison-weapon-contact`: 37 committed legal
+  commands, two coated Hits, actual natural expiry at sequence 49, then Crit/Hit
+  on the same now-uncoated sword. Exact effect/contribution identities and
+  each seat's original nullable duration/provenance remain intact. Both are
+  reachable in Studio's existing Items category, using durable original files.
+- Native receiver gate: **5,108 checks pass**, both seats × four views through
+  actual Idle/Run/attack, removal/replacement, backward seek and looping. Actual
+  source-pixel changes are 389–1,571 per view. The **36 exact RGBA comparisons**
+  against unchanged modular.gdshader cover condition opacity 1/.55/0 × palette off/on ×
+  ambient/directional/point native2D receiving. Suppression/restoration preserves
+  the canonical state and source clock. Receipt:
+  `.runtime/tests/20261020T140310.618573Z/summary.json`.
+- Finite native gates: production Ember Fire **20/0** (889 changed pixels),
+  Basic Poison **19/0** (944), prior impact regression **19/0**. Receipt:
+  `.runtime/tests/20261020T140310.618573Z/summary.json`. These are bounded native
+  output proofs; complete family/pose coverage and artistic acceptance stay open.
+- Receiving-surface witnesses now include the actual current weapon material
+  draw when the native edge/particle meshes are empty. Exact source material
+  ownership and real mesh/camera submission are required; setter admission
+  alone never counts as output. Pixel proof remains independent above.
+- R6 contact construction: Fire 0.549 ms (ready .490, make .016, script .008,
+  adaptation .005, admission .002); Poison .612 ms (ready .558, make .014,
+  script .006, adaptation .004, admission .001). Totals include remaining wrapper
+  work. Sustain construction across eight actual seat/views is 0.687–1.125 ms.
+  Receiver receipts retain actual construction and completed CPU sample phases:
+  across 24 observed poses, native input binding median .048/max .070 ms;
+  inclusive native source sampling median .2545/max .388 ms. Do not add these
+  nested phases. Receipt `.runtime/tests/20261020T140617.293640Z/` and
+  `.runtime/weapon-runtime-receiver/result.json`.
+  These are isolated costs, not first-use preparation, command feedback or a
+  final gameplay/frame-time certificate.
+
+Flame Blade stays actual Scimitar/Melee4 with backend-owned light. Offhand remains
+source-rejected; only authored axes drive directional effects. A source-declared
+mask-only finish may remain, but unknown poses get no guessed axis. Concurrent direct treatments
+need an authored composition. Sequential weapon pose/particle history is not an
+absolute sampler and does not close R3's body-history overlap. Qualify each
+completed family in ordinary Play/Studio across equipped output, movement, actual
+contact, removal/replacement and relevant seek/loop; include receiver lighting/
+opacity regression checks after correction. Track preparation/construction/first
+binding/sample costs under R6 and artistic acceptance under R8. Later unpackaged
+Factory performance studies stay outside this immediate queue unless a selected
+consumer requires one. Focused checks follow each family; final suite remains R7.
 
 ## 4. R5: external blockers to resolve without stranding client work
 
@@ -265,14 +374,15 @@ Factory files, rerun from the mutable engine or add runtime checksum gates.
 
 ### Available complete successor; installation is not completion
 
-Read-only inspection found sealed
+The corrected complete `runtime-weapon-receiver-46b8f47014566e6d` is installed
+through R2 above. It includes the sealed continuation42 predecessor:
 `runtime-continuation42-20261020-ecdf1a60ae59ee03`:
 [Factory handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_CONTINUATION_PRODUCTION_HANDOFF_2026-10-20.md).
 Its archive retains 1,246 IDs/504 selections and adds the Sleep approach
 `runtime-prepared-followup-20261020`, explicitly opt-in and not seek-qualified.
-The client still has e102 installed; no package/default/art approval changed in
-this review. Adopt through the existing complete-package path, then qualify
-placement, actual timeline seeking/looping, pixels and costs before selecting it.
+Package replacement preserves the 504 existing selection dictionaries. The
+Sleep study remains unselected: qualify placement, actual timeline seeking/looping,
+pixels and costs before choosing it. No new art approval follows installation.
 
 Direct archive comparisons found actor_history.gd, item_flame.gd and
 interrupted_source.gd unchanged from the installed versions. The new
@@ -285,8 +395,8 @@ not new client benchmarks or proof the package is already cheap in gameplay.
 
 ## 5. R4: Studio, scenarios and full rendering-method visibility
 
-The local library at this snapshot has 267 cases: 253 recorded and 14 failed.
-These are cases, not capability completeness. All 267 index `studio_checked`
+The local library after the R2 cohorts has 269 cases: 255 recorded and 14 failed.
+These are cases, not capability completeness. All 269 index `studio_checked`
 flags are false; focused tests prove subsets separately. Therefore the index
 alone cannot establish either “none tested” or “all tested.” Finish the existing
 source/scenario/presentation/approval evidence join, rather than making another
@@ -368,7 +478,7 @@ from the game UI; retain diagnostics through the requested tools.
 
 Audio is already a real timeline/render consumer, with authored contact markers,
 stream/voice ownership and native replay tests. It is **not complete game audio**.
-The old coverage audit covers 57 audiences, not the current 267 cases. Finish the
+The old coverage audit covers 57 audiences, not the current 269 cases. Finish the
 current-corpus assignment/contact/mix audit and missing selected audio rather
 than drawing waveforms without a played source.
 
@@ -454,19 +564,19 @@ per-spell screenshot/measurement cycle while migration work remains untouched.
 
 ## 8. R7: the entire test inventory is not green
 
-Current `tests/manifest.json` has 538 rows:
+Current `tests/manifest.json` has 542 rows after the four R2 receiving gates:
 
 | Population | Count | What it means |
 |---|---:|---|
-| Eligible fast headless |173| All pass together at the latest checkpoint. |
-| Eligible gate |190| 163 GPU + 27 headless. Latest stored results are not one complete final-checkpoint run. |
+| Eligible fast headless |174| All pass together on this R2 checkpoint; receipt `.runtime/tests/20261020T135657.434699Z/`. |
+| Eligible gate |193| 166 GPU + 27 headless. Latest stored results are not one complete final-checkpoint run. |
 | Eligible live |11| One Gallery pass does not cover all 11. |
 | Excluded but executable |86| 53 needs-args, 17 known-red, 16 owned-by-migration. Each needs a current-contract decision, not a blanket exemption. |
 | Retired |52| Historical/removed contracts; not passes. |
 | Helpers |25| Not standalone tests. |
 | Other non-executable ok |1| Helper row, not another passed test. |
 
-Latest stored same-mode gate receipts: 188 clean and **2 still red**:
+Latest stored same-mode gate receipts: 191 clean and **2 still red**:
 
 - `effect_package_checks`: 3 failures in 3,896 checks, Insect Plague recorded output;
   latest stored receipt `.runtime/tests/20261020T061148.551252Z/`.
@@ -475,7 +585,7 @@ Latest stored same-mode gate receipts: 188 clean and **2 still red**:
   do not invent causes for the other failures or call this gate green.
   Latest stored receipt `.runtime/tests/20261020T062625.754126Z/`.
 
-These receipts span checkpoints/packages; 188 is **not** final current-native
+These receipts span checkpoints/packages; 191 is **not** final current-native
 qualification. Live receipts: 7 latest clean, `live_all_spells_checks` latest red
 (`.runtime/tests/20261020T002124.937788Z/`), and no same-mode runner receipt for
 `lighting_live_checks`, `live_gallery_checks`, `player_wait_checks` in the current

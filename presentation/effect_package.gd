@@ -166,6 +166,8 @@ static func key(value:Dictionary)->String:
 
 static func occurrence_clip(component:Dictionary)->Dictionary:
     var result:Dictionary=component.native_clip.duplicate(false)
+    var approach:String=str(component.get("native_cue",{}).get("approach",""))
+    if not approach.is_empty():result.approach_id=approach
     if component.has("native_constructor_inputs"):
         result.construction_inputs=component.native_constructor_inputs
         result.preparation_owner=component.id

@@ -1179,5 +1179,53 @@
    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
   },
   "scenario": "res://tests/fixtures/schema16/scenarios/plant-growth/scenario.json"
+ },
+ "ember-weapon-runtime": {
+  "id": "weapon.roster.ember_longsword/equipped_use_retire_replace",
+  "label": "Ember Longsword: equipped movement, hit, removal and replacement",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/ember-weapon-runtime/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/ember-weapon-runtime/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/ember-weapon-runtime/scenario.json"
+ },
+ "poison-weapon-contact": {
+  "id": "consumable.weapon_coat.basic_poison/equipped_hit_expiry_hit",
+  "label": "Basic Poison: coat held longsword, contact, expiry and later contact",
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/poison-weapon-contact/scenario.json",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/poison-weapon-contact/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/poison-weapon-contact/blue"
+   }
+  ]
  }
 }

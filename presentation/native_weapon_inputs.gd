@@ -2,6 +2,29 @@ extends RefCounted
 ## Actual equipped-item operands. Physical optical sources may share; item,
 ## holder, contribution and condition identities never come from a source rig.
 
+## Public component identity of the delivered equipped-sheet treatment. Its
+## admission reads exact item/holder/slot and observed membership, not the
+## legacy contribution_active/decoration_admitted preview operands.
+static func equipped_source(handle:Dictionary)->bool:
+    return handle.get("inner",{}).get("components",{}).has("equipped_weapon")
+
+## A current optical pose supplies no preceding motion. After a cold seek the
+## private simulation starts here; membership keeps its actual owner age.
+static func source_time(handle:Dictionary,age:float)->float:
+    if not handle.get("started",false):handle.weapon_source_origin=age
+    return maxf(0.0,age-float(handle.weapon_source_origin))
+
+## Direct material output is submitted by the actual weapon mesh, including
+## poses whose native edge/particle draws are empty. Setter acceptance alone
+## is not evidence: the source must have claimed this exact displayed material.
+static func receivers(world:Node,handle:Dictionary)->Array:
+    var source:Node=handle.inner.components.equipped_weapon
+    if source.bound_materials.is_empty():return []
+    var binding:Dictionary=source.binding
+    return world.visual_actors.get(binding.holder_uuid,{}).get("entries",[]).filter(func(entry):return \
+        entry.actor_layer.get("item_uuid")==binding.item_uuid and entry.actor_layer.slot==binding.render_slot \
+        and source.bound_materials.has(entry.material))
+
 static func slots(component:Dictionary)->Array:
     var cue:Dictionary=component.get("native_cue",{})
     var authored:Dictionary=cue.get("recipient_geometry",cue.get("entity_geometry",{}))

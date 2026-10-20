@@ -71,7 +71,8 @@ func weapon_registration(world:Node,handle:Dictionary,component:Dictionary)->Dic
     var cue:Dictionary=component.get("native_cue",{})
     var grip_required:bool=cue.get("live_endpoints",[]).any(func(endpoint):return endpoint.get("socket") in ["hand","cast_hand"])
     var absent:bool=hand.get("reason") in ["native_spell_hand_socket_missing","weapon_offhand_socket_not_authored"]
-    var surface_anchor:bool=measured and absent and cue.get("attachment") in ["recipient_weapon","item"] and not grip_required
+    var surface_owned:bool=measured or Weapons.equipped_source(handle) and weapon.render_slot=="weapon"
+    var surface_anchor:bool=surface_owned and absent and cue.get("attachment") in ["recipient_weapon","item"] and not grip_required
     var packet:Dictionary=Weapons.packet(weapon,hand,not surface_anchor)
     var result:Dictionary={"ready":packet.ready,"reason":packet.reason,"weapon":weapon,"hand":hand,"packet":packet,"surface":{},"measured":measured}
     if handle.clip.get("inputs",[]).any(func(channel):return channel in ["entity_geometry","recipient_geometry"]):
@@ -624,8 +625,11 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             supplied.append("owner_state")
         else:unavailable.owner_state=birth.reason
     if component.get("native_item",false) and "owner_state" in requested:
-        var age:float=maxf(0.0,float(world.timeline.display_ms)-float(component.start_ms))/1000.0
-        Effects.set_input(handle,"owner_state",{"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age})
+        var equipped:bool=Weapons.equipped_source(handle)
+        var age:float=maxf(0.0,float(component.age_ms) if equipped else float(world.timeline.display_ms)-float(component.start_ms))/1000.0
+        var owner_state:Dictionary={"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age}
+        if equipped:owner_state.source_age_seconds=float(handle.get("weapon_source_age",0.0))
+        Effects.set_input(handle,"owner_state",owner_state)
         supplied.append("owner_state")
     if "owner_visibility" in requested:
         var visibility:float=float(component.get("alpha",1.0)) if Sockets.displayed(world.visual_actors.get(actor,{})) else 0.0
@@ -668,7 +672,10 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             Effects.set_input(handle,"weapon_binding",packet.binding)
             handle.weapon_input_key=delivery_key
             handle.weapon_hand_key=hand_key
-        var required_gaps:Array=[] if prepared else weapon_gaps
+        # Prepared conditions and the delivered equipped-sheet source have
+        # different construction/clock contracts but neither consumes legacy
+        # contribution flags. Keep legacy ownership consumers strict.
+        var required_gaps:Array=[] if prepared or Weapons.equipped_source(handle) else weapon_gaps
         if not packet.ready:unavailable.weapon_binding=packet.reason
         elif not required_gaps.is_empty():unavailable.weapon_binding="weapon_legacy_admission_not_bound:"+", ".join(required_gaps)
         else:supplied.append("weapon_binding")

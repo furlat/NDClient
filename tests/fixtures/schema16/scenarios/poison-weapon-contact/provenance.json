@@ -1,0 +1,182 @@
+{
+ "source": ".runtime/poison-weapon-contact-20261020/cases/consumable.weapon_coat.basic_poison__equipped_hit_expiry_hit/20261020T133347.099965Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "capture": "Existing studio_cases record.py/worker.py/adapter.py with legal frozen-engine public SDK commands; seed2 unchanged.",
+ "originals": "Both original faction packet streams and scenario/recording/commands/choices copied byte-for-byte. No server configuration, credentials or logs copied.",
+ "command_count": 37,
+ "evidence": {
+  "amber": {
+   "packet_count": 69,
+   "coated_hits": [
+    {
+     "sequence": 12,
+     "occurrence": 100,
+     "outcome": "Hit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": [
+      {
+       "duration": {
+        "duration_type": "rounds",
+        "remaining_rounds": 9
+       },
+       "effect_uuid": "1e58fadf-8a84-45ff-9fcf-93bebbc510f9",
+       "contribution_uuid": "d97024e9-3c3f-4e26-9027-db6dae8b15ea",
+       "behavior_id": "condition.consumable.weapon_coat.basic_poison",
+       "display_name": "Basic Poison",
+       "description": "DC10 Constitution on hit, 1d4 poison on failure; no Poisoned condition.",
+       "damage_type": "Poison",
+       "applied_source_event_cursor": 55
+      }
+     ]
+    },
+    {
+     "sequence": 17,
+     "occurrence": 145,
+     "outcome": "Hit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": [
+      {
+       "duration": {
+        "duration_type": "rounds",
+        "remaining_rounds": 8
+       },
+       "effect_uuid": "1e58fadf-8a84-45ff-9fcf-93bebbc510f9",
+       "contribution_uuid": "d97024e9-3c3f-4e26-9027-db6dae8b15ea",
+       "behavior_id": "condition.consumable.weapon_coat.basic_poison",
+       "display_name": "Basic Poison",
+       "description": "DC10 Constitution on hit, 1d4 poison on failure; no Poisoned condition.",
+       "damage_type": "Poison",
+       "applied_source_event_cursor": 55
+      }
+     ]
+    }
+   ],
+   "retirement": {
+    "sequence": 49,
+    "occurrence": 322,
+    "field": "item_effects",
+    "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+    "effects": []
+   },
+   "later_uncoated_hits": [
+    {
+     "sequence": 63,
+     "occurrence": 412,
+     "outcome": "Crit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": []
+    },
+    {
+     "sequence": 68,
+     "occurrence": 452,
+     "outcome": "Hit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": []
+    }
+   ],
+   "pre_application_attack": {
+    "sequence": 2,
+    "occurrence": 21,
+    "outcome": "Miss",
+    "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+    "effects": []
+   }
+  },
+  "blue": {
+   "packet_count": 69,
+   "coated_hits": [
+    {
+     "sequence": 12,
+     "occurrence": 95,
+     "outcome": "Hit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": [
+      {
+       "duration": null,
+       "effect_uuid": "1e58fadf-8a84-45ff-9fcf-93bebbc510f9",
+       "contribution_uuid": "d97024e9-3c3f-4e26-9027-db6dae8b15ea",
+       "behavior_id": "condition.consumable.weapon_coat.basic_poison",
+       "display_name": "Basic Poison",
+       "description": "DC10 Constitution on hit, 1d4 poison on failure; no Poisoned condition.",
+       "damage_type": "Poison",
+       "applied_source_event_cursor": 50
+      }
+     ]
+    },
+    {
+     "sequence": 17,
+     "occurrence": 139,
+     "outcome": "Hit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": [
+      {
+       "duration": null,
+       "effect_uuid": "1e58fadf-8a84-45ff-9fcf-93bebbc510f9",
+       "contribution_uuid": "d97024e9-3c3f-4e26-9027-db6dae8b15ea",
+       "behavior_id": "condition.consumable.weapon_coat.basic_poison",
+       "display_name": "Basic Poison",
+       "description": "DC10 Constitution on hit, 1d4 poison on failure; no Poisoned condition.",
+       "damage_type": "Poison",
+       "applied_source_event_cursor": 50
+      }
+     ]
+    }
+   ],
+   "retirement": {
+    "sequence": 49,
+    "occurrence": 309,
+    "field": "item_effects",
+    "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+    "effects": []
+   },
+   "later_uncoated_hits": [
+    {
+     "sequence": 63,
+     "occurrence": 399,
+     "outcome": "Crit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": []
+    },
+    {
+     "sequence": 68,
+     "occurrence": 439,
+     "outcome": "Hit",
+     "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+     "effects": []
+    }
+   ],
+   "pre_application_attack": {
+    "sequence": 2,
+    "occurrence": 21,
+    "outcome": "Miss",
+    "item_uuid": "4b6990e0-3472-4184-9d53-5f4b1aa7e0b0",
+    "effects": []
+   }
+  }
+ },
+ "limits": [
+  "No renderer/native output qualification is claimed.",
+  "The original two coating saves succeeded; no positive Poison damage or Poisoned condition is claimed.",
+  "Blue duration and its applied-source cursor remain its actual disclosed values; no cross-faction occurrence identity is inferred."
+ ],
+ "prior_attempts": [
+  {
+   "source": ".runtime/poison-weapon-contact-20261020/cases/consumable.weapon_coat.basic_poison__equipped_hit_expiry_hit/20261020T133117.767464Z",
+   "failure": "CaseError: Not offered to Amber caster: action.consumable.weapon_coat.basic_poison.apply (no such action)"
+  },
+  {
+   "source": ".runtime/poison-weapon-contact-20261020/cases/consumable.weapon_coat.basic_poison__equipped_hit_expiry_hit/20261020T133208.558487Z",
+   "failure": "CaseError: Not offered to Amber caster: action.item.weapon_coat.apply (action.item.weapon_coat.apply:available, action.item.weapon_coat.apply:requirements_unmet)"
+  },
+  {
+   "source": ".runtime/poison-weapon-contact-20261020/cases/consumable.weapon_coat.basic_poison__equipped_hit_expiry_hit/20261020T133240.078444Z",
+   "failure": "required_facts absent from actual journal: item_effect"
+  }
+ ]
+}
