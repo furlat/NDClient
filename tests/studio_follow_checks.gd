@@ -121,24 +121,43 @@ func run()->void:
         view.collapsed[lane.id]=true;view.compact_projection={};view.rebuild_rows();view.origin_ms=0
         break
     check(evidence.expanded_delivery_count>1,"Real multishot sources exercise collapsed and expanded delivery inspection")
-    # These are the actual native checkpoint times where the header scrolled
-    # away and newer residue rows displaced the visible Fireball source.
+    # Resolve checkpoints from this recording's actual selected finite sources.
+    # Fixed milliseconds from an older authored schedule can now land in a later
+    # movement; that does not test whether Follow retains an active spell.
     evidence.context={}
-    for sample in [{"time":4330.0,"spell":"magic_missile"},{"time":26010.0,"spell":"fireball"}]:
+    var context_times:Array=[]
+    for spell in ["magic_missile","fireball"]:
+        var sources:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("status")!="missing" and row.get("visible_here",true) and row.end_ms>row.start_ms and row.component.get("spell_id")==spell and row.component.get("native_cue",{}).get("role") in ["flight","area","impact"])
+        check(not sources.is_empty(),"Original recording contains an actual finite native source checkpoint: "+spell)
+        if sources.is_empty():continue
+        var source:Dictionary=sources[0]
+        var at:float=(source.start_ms+source.end_ms)*.5
+        var residue_id:String=""
+        for phase in sources:
+            for residue in index.rows:
+                if residue.kind!="residue_deposit" or residue.start_ms<phase.start_ms or view.action_for.get(residue.id)!=view.action_for.get(phase.id):continue
+                var begin:float=maxf(phase.start_ms,residue.start_ms)
+                var end:float=minf(phase.end_ms,residue.end_ms)
+                if end<=begin:continue
+                source=phase;at=begin+minf(.1,(end-begin)*.5);residue_id=residue.id;break
+            if not residue_id.is_empty():break
+        var sample:Dictionary={"time":at,"spell":spell}
+        context_times.append(at)
         view.follow_from=INF
         var followed:String=view.follow_at(sample.time)
         var current:Dictionary=view.rows_by_id.get(followed,{})
         var owner:Dictionary=view._display_row(view.followed_action)
         check(owner.get("event",{}).get("behavior_id")=="spell."+sample.spell,"Checkpoint Follow retains its current causal cast: "+sample.spell)
-        check(current.get("kind")=="native_effect","Actual active spell source wins over newer residue: "+sample.spell)
+        check(current.get("kind")=="native_effect","Actual active spell source remains selected"+(" over newer recorded residue" if not residue_id.is_empty() else "")+": "+sample.spell)
         view.prepare_visible()
         check(view.followed_visible(),"Continuous export sees the published followed strip: "+sample.spell)
         check(view._x(sample.time)>=view.gutter and view._x(sample.time)<=view.size.x-20,"Playback follows the current time horizontally: "+sample.spell)
         var context:Array=view.context_labels(view.published_layout)
         check(context.size()==2 and context[0]==view._label(owner) and context[1]==view._label(view._display_row(view._display_id(followed))),"Sticky ruler identifies the actual visible cast and lane: "+sample.spell)
-        evidence.context[sample.spell]={"raw_id":followed,"labels":context,"time_ms":sample.time}
-    view.follow_at(4330.0);view.prepare_visible()
-    check(view._x(4330.0)>=view.gutter and view._x(4330.0)<=view.size.x-20,"Backward seek restores the current horizontal time window")
+        evidence.context[sample.spell]={"raw_id":followed,"labels":context,"time_ms":sample.time,"source_interval":[source.start_ms,source.end_ms],"competing_residue":residue_id}
+    if not context_times.is_empty():
+        view.follow_at(context_times[0]);view.prepare_visible()
+        check(view._x(context_times[0])>=view.gutter and view._x(context_times[0])<=view.size.x-20,"Backward seek restores the current horizontal time window")
     view.follow_at(0.0);view.prepare_visible()
     check(view.origin_ms==0.0,"Loop return restores the start of the time window")
     var stable_flight=false

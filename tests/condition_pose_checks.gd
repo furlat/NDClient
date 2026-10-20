@@ -23,7 +23,7 @@ func run()->void:
         if arg.begins_with("--recording="):directory=arg.trim_prefix("--recording=")
     if directory.is_empty():push_error("Use --recording=<actual Hide journal>");quit(2);return
     var cache={}
-    var rigs=Catalog.read_file("catalog/rigs.json",cache)
+    var rigs=Characters.rigs(cache)
     var rig:Dictionary=rigs["neuroclient.modular"]
     for name in ["CrouchIdle","CrouchRun"]:
         check(rig.clips.has(name),"Resource adopts actual "+name)
@@ -32,8 +32,12 @@ func run()->void:
         check(clip.frames==15 and clip.fps==12,"Explicit new 12 FPS source clock "+name)
         check(clip.sheets.size()==rig.clips.Idle.sheets.size(),"All current modular categories registered "+name)
         for category in clip.sheets:
-            var path:String=clip.sheets[category]
-            check(path=="/media/smallscale/modular/"+category+"/"+name+".png" and FileAccess.file_exists(Catalog.media_path(path)),"Installed original source "+category+"/"+name)
+            var key:String=clip.sheets[category]
+            var layer=Characters.BodySources.prepare_layer(Characters.BodySources.layer_path("neuroclient.modular",category,cache),cache)
+            var selected=Characters.BodySources.prepare_clip(layer,name,cache) if layer!=null else null
+            check(key=="/spritesheets/"+category+"/"+name+".png" and selected!=null,"Typed clip admits the exact original category/source "+category+"/"+name)
+            if selected!=null:
+                check(not selected.descriptors.is_empty() and selected.descriptors.values().all(func(value):return str(value.path).ends_with("/smallscale/modular/"+category+"/"+name+".png") and FileAccess.file_exists(Catalog.media_path(value.path))),"Installed original physical source "+category+"/"+name)
     var recipes=Catalog.read_file("catalog/condition_recipes.json",cache)
     var held_recipes=recipes.duplicate(true)
     var baseline_cache=cache.duplicate()
@@ -85,7 +89,7 @@ func run()->void:
     var idle=Pose.select(actor,"neuroclient.modular","idle",cache)
     var move=Pose.select(actor,"neuroclient.modular","move",cache)
     check(idle.clip=="CrouchIdle" and move.clip=="CrouchRun","Shared activity selectors resolve original clips")
-    check(idle.source.ends_with("hidden.tres::activity_poses/0") and move.source.ends_with("hidden.tres::activity_poses/1"),"Selected Resource property provenance is precise")
+    check(idle.source=="res://authoring/abilities/conditions/condition.hidden.tres::poses/0" and move.source=="res://authoring/abilities/conditions/condition.hidden.tres::poses/1","Selected typed Resource property provenance is precise: "+str([idle.source,move.source]))
     check(Pose.select(actor,"uncovered.rig","idle",cache).is_empty(),"No invented crouch for other rigs")
     var host=Graphs.build_character(root,rig,true)
     for age in [0.0,250.0,1250.0,1500.0,3750.0]:
@@ -118,9 +122,9 @@ func run()->void:
         check(Authoring.body("movement",actor,excluded,cache)==Authoring.body("movement",actor,excluded,baseline_cache),"Other movement arbitration remains exact: "+excluded.trajectory+"/"+excluded.movement_mode)
     for role in ["damage","death"]:
         check(Authoring.body(role,actor,{},cache)==Authoring.body(role,actor,{},baseline_cache),role+" source unchanged")
-    var state={"actors":{actor.uuid:actor},"tiles":{},"objects":{},"senses":null,"audience":{"controlled":[actor.uuid]}}
+    var state={"actors":{actor.uuid:actor},"items":journal.state.items,"tiles":{},"objects":{},"senses":null,"audience":{"controlled":[actor.uuid]}}
     var demand=Media.plan(state,[],cache)
-    var expected=Characters.sheet_paths(actor,["CrouchIdle","CrouchRun"],cache)
+    var expected=Characters.sheet_paths(actor,["CrouchIdle","CrouchRun"],cache,Characters.item_looks(actor,state))
     check(expected.ok and demand.errors.is_empty(),"Actual outfit resolves both pose source closures")
     if expected.ok:
         check(expected.value.keys().all(func(path):return demand.required.has(path)),"Hidden admission requires complete idle and move colour/normal/depth closure")

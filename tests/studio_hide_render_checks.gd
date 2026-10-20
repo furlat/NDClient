@@ -3,6 +3,8 @@ extends SceneTree
 const Studio=preload("res://studio/studio.gd")
 const Geometry=preload("res://presentation/character_geometry.gd")
 const Pose=preload("res://presentation/condition_pose.gd")
+const Characters=preload("res://presentation/characters.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -56,6 +58,47 @@ func actor_rect(studio:Control)->Rect2i:
                 if first:rect=Rect2(screen,Vector2.ZERO);first=false
                 else:rect=rect.expand(screen)
     return Rect2i(rect.grow(2)).intersection(Rect2i(Vector2i.ZERO,studio.viewport.size))
+func actor_source_snapshot(studio:Control)->Dictionary:
+    var world=studio.world
+    var visual:Dictionary=world.visual_actors[actor_id]
+    var layers:Array=[]
+    for entry in visual.entries:
+        if entry.role=="shadow" or not entry.node.is_visible_in_tree():continue
+        layers.append({"slot":entry.actor_layer.slot,"path":entry.texture_path,"transform":entry.node.global_transform,
+            "frame_uv":entry.material.get_shader_parameter("frame_uv"),
+            "condition_alpha":entry.material.get_shader_parameter("condition_alpha"),
+            "layer_alpha":entry.material.get_shader_parameter("layer_alpha"),
+            "wall_opacity":entry.material.get_shader_parameter("wall_opacity")})
+    return {"clock":world.timeline.display_ms,"quarter":world.quarter,"world_quarter":world.world_quarter,
+        "clip":world.playbacks[actor_id].clip,"source_seconds":world.playbacks[actor_id].sample_seconds,
+        "facing":visual.row.facing,"position":visual.row.position.duplicate(),"layers":layers}
+func actor_coverage(studio:Control)->Image:
+    # A source-cell rectangle also contains nearby actors and floor. Only this
+    # actor's actual native alpha support qualifies its framebuffer pixels.
+    var mask=Image.create_empty(studio.viewport.size.x,studio.viewport.size.y,false,Image.FORMAT_RGBA8)
+    for entry in studio.world.visual_actors[actor_id].entries:
+        if entry.role=="shadow" or not entry.node.is_visible_in_tree():continue
+        var layer:Image=await isolated_layer(studio.world,entry)
+        mask.blend_rect(layer,Rect2i(Vector2i.ZERO,layer.get_size()),Vector2i.ZERO)
+    return mask
+func masked_difference(first:Image,second:Image,mask:Image,bounds:Rect2i)->Dictionary:
+    var covered:int=0;var changed:int=0
+    for y in range(bounds.position.y,bounds.end.y):
+        for x in range(bounds.position.x,bounds.end.x):
+            if mask.get_pixel(x,y).a<=0.0:continue
+            covered+=1
+            if first.get_pixel(x,y)!=second.get_pixel(x,y):changed+=1
+    return {"covered_pixels":covered,"changed_pixels":changed}
+func pixel_difference(first:Image,second:Image,bounds:Rect2i)->Dictionary:
+    var changed:int=0;var maximum:int=0;var changed_rect:Rect2i=Rect2i()
+    for y in range(bounds.position.y,bounds.end.y):
+        for x in range(bounds.position.x,bounds.end.x):
+            var a:Color=first.get_pixel(x,y);var b:Color=second.get_pixel(x,y)
+            if a==b:continue
+            changed_rect=Rect2i(Vector2i(x,y),Vector2i.ONE) if changed==0 else changed_rect.merge(Rect2i(Vector2i(x,y),Vector2i.ONE))
+            changed+=1
+            maximum=maxi(maximum,maxi(abs(a.r8-b.r8),maxi(abs(a.g8-b.g8),maxi(abs(a.b8-b.b8),abs(a.a8-b.a8)))))
+    return {"changed_pixels":changed,"maximum_byte_error":maximum,"changed_bounds":str(changed_rect),"actor_bounds":str(bounds)}
 func inspect_badge(studio:Control)->void:
     var labels=studio.world.component_renderer.numbers.values().filter(func(label):return label.text=="−Hidden" or label.text=="-Hidden")
     check(labels.size()==1,"Recorded removal owns one actual text badge")
@@ -124,7 +167,7 @@ func inspect_actor(studio:Control,row:Dictionary,expected_clip:String,alpha:floa
     else:
         expected_seconds=fposmod(world.timeline.display_ms/1000.0,float(rig.clips[expected_clip].frames)/rig.clips[expected_clip].fps)
     check(frame==mini(int(expected_seconds*rig.clips[expected_clip].fps),int(rig.clips[expected_clip].frames)-1),"Source row clock and viewport frame agree "+label)
-    var count=0;var gear=0;var opaque=0;var coverage_mismatches=0;var max_alpha_error=0.0;var boundary=0;var covered=0
+    var count=0;var gear=0;var opaque=0;var coverage_mismatches=0;var max_alpha_error=0.0;var max_alpha_byte_error:int=0;var boundary=0;var covered=0
     for entry in visual.entries:
         if not entry.node.visible or entry.role=="shadow":continue
         count+=1
@@ -143,6 +186,16 @@ func inspect_actor(studio:Control,row:Dictionary,expected_clip:String,alpha:floa
         var layer_alpha=float(material.get_shader_parameter("layer_alpha"))
         var cell:Vector2=material.get_shader_parameter("material_cell_size")
         var painted:Image=await isolated_layer(world,entry)
+        # The native3D target stores half alpha before readback conversion.
+        # Image's real conversion truncates tiny values (even byte1 becomes
+        # zero after a half round-trip). Compare exact stored support, rather
+        # than demanding a nonzero byte for every positive mathematical alpha.
+        var stored_alpha=Image.create_empty(256,1,false,Image.FORMAT_RGBAH)
+        for byte in 256:
+            var value:float=float(byte)/255.0*layer_alpha*alpha
+            if not world.light_cap_enabled or world.normals_visible:value=roundf(value*255.0)/255.0
+            stored_alpha.set_pixel(byte,0,Color(0,0,0,value))
+        if stored_alpha.get_format()!=painted.get_format():stored_alpha.convert(painted.get_format())
         var mesh:QuadMesh=entry.node.mesh
         var inverse:Transform3D=entry.node.global_transform.affine_inverse()
         var normal:Vector3=entry.node.global_basis.z
@@ -170,7 +223,8 @@ func inspect_actor(studio:Control,row:Dictionary,expected_clip:String,alpha:floa
                         if texel not in candidates:candidates.append(texel)
                 var best:float=-1.0;var best_index:=0
                 for index in candidates.size():
-                    var value:float=original.get_pixel(start.x+candidates[index].x,start.y+candidates[index].y).a*layer_alpha*alpha
+                    var source_alpha:int=original.get_pixel(start.x+candidates[index].x,start.y+candidates[index].y).a8
+                    var value:float=stored_alpha.get_pixel(source_alpha,0).a
                     if best<0 or absf(value-received)<absf(best-received):best=value;best_index=index
                 if best_index>0:boundary+=1
                 var source=original.get_pixel(start.x+candidates[best_index].x,start.y+candidates[best_index].y)
@@ -178,32 +232,33 @@ func inspect_actor(studio:Control,row:Dictionary,expected_clip:String,alpha:floa
                 if expected>0:covered+=1
                 if (expected>0)!=(received>0):coverage_mismatches+=1
                 max_alpha_error=maxf(max_alpha_error,absf(expected-received))
+                max_alpha_byte_error=maxi(max_alpha_byte_error,absi(roundi(expected*255.0)-painted.get_pixel(x,y).a8))
                 if source.a==1:opaque+=1
     check(count>1 and gear>0 and opaque>0,"Assembled body and equipment contribute original pixels "+label)
     check(covered>0 and coverage_mismatches==0,"Lit layers preserve every source alpha support pixel "+label)
-    check(max_alpha_error<=1.0/255.0,"Native body/gear alpha equals source×condition opacity within one storage byte "+label)
-    evidence.append({"label":label,"time_ms":world.timeline.display_ms,"quarter":world.quarter,"clip":playback.clip,"frame":frame,"parts":count,"gear":gear,"condition_alpha":alpha,"alpha_max_error":max_alpha_error,"alpha_coverage_mismatches":coverage_mismatches,"covered_pixels":covered,"texel_boundary_flips":boundary,"source_profile":world.character_light_profile})
+    check(max_alpha_byte_error<=1,"Native body/gear alpha equals source×condition opacity within one storage byte "+label)
+    evidence.append({"label":label,"time_ms":world.timeline.display_ms,"quarter":world.quarter,"clip":playback.clip,"frame":frame,"parts":count,"gear":gear,"condition_alpha":alpha,"alpha_max_error":max_alpha_error,"alpha_max_byte_error":max_alpha_byte_error,"alpha_coverage_mismatches":coverage_mismatches,"covered_pixels":covered,"texel_boundary_flips":boundary,"source_profile":world.character_light_profile})
 ## This one displayed layer alone, drawn by the displayed camera with its own
 ## material over a transparent target: framebuffer alpha is the layer's ALPHA.
 func isolated_layer(world:Node,entry:Dictionary)->Image:
-    var bit:=1<<13
-    var original_mask:int=world.camera.cull_mask
-    world.camera.cull_mask&=~bit
     var viewport=SubViewport.new();viewport.size=world.get_viewport().size
-    viewport.world_3d=world.get_world_3d();viewport.transparent_bg=true
+    # The ordinary world reserves layer 13 for the native depth-copy quad.
+    # A private World3D admits exactly this actual layer/material and camera;
+    # it cannot accidentally count that full-screen quad as body alpha.
+    viewport.own_world_3d=true;viewport.transparent_bg=true
     viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
     world.add_child(viewport)
-    var camera=Camera3D.new();camera.cull_mask=bit;viewport.add_child(camera)
+    var camera=Camera3D.new();camera.cull_mask=1;viewport.add_child(camera)
     var clear=Environment.new();clear.background_mode=Environment.BG_COLOR;clear.background_color=Color(0,0,0,0);camera.environment=clear
     camera.global_transform=world.camera.global_transform
     for property in ["projection","keep_aspect","size","near","far"]:camera.set(property,world.camera.get(property))
-    var node=MeshInstance3D.new();node.mesh=entry.node.mesh;node.material_override=entry.node.get_active_material(0);node.layers=bit
+    var node=MeshInstance3D.new();node.mesh=entry.node.mesh;node.material_override=entry.node.get_active_material(0);node.layers=1
     node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-    world.add_child(node);node.global_transform=entry.node.global_transform
+    viewport.add_child(node);node.global_transform=entry.node.global_transform
     await process_frame;await RenderingServer.frame_post_draw
     await process_frame;await RenderingServer.frame_post_draw
     var image:Image=viewport.get_texture().get_image()
-    node.queue_free();viewport.queue_free();world.camera.cull_mask=original_mask
+    viewport.queue_free()
     return image
 func has_hidden(world:Node)->bool:
     return world.timeline.state.actors.get(actor_id,{}).get("conditions",[]).any(func(c):return c.behavior_id=="condition.hidden")
@@ -211,7 +266,9 @@ func inspect_hidden_state(studio:Control,expected:bool,label:String)->void:
     check(has_hidden(studio.world)==expected,"Canonical Hidden state matches displayed boundary "+label)
     check(studio.world.displayed_components.any(func(c):return c.kind=="condition" and c.get("actor_uuid")==actor_id and c.condition.behavior_id=="condition.hidden")==expected,"Persistent condition owner matches displayed boundary "+label)
     if not expected:
-        check(not studio.world.component_renderer.numbers.values().any(func(n):return n.text=="+Hidden"),"No premature Hidden badge "+label)
+        # Future presenters are prepared privately and cached while hidden.
+        # Only a drawn label is a premature disclosure, not its allocation.
+        check(not studio.world.component_renderer.numbers.values().any(func(n):return n.text=="+Hidden" and n.is_visible_in_tree()),"No premature visible Hidden badge "+label)
 func inspect_transition(studio:Control,hidden:Dictionary,poses:Array)->void:
     var events=studio.index.rows.filter(func(r):return r.kind=="event" and r.event.get("behavior_id")=="action.hide" and r.get("visible_here",true))
     check(events.size()==1,"Actual recording has one visible Hide action event")
@@ -223,7 +280,7 @@ func inspect_transition(studio:Control,hidden:Dictionary,poses:Array)->void:
     var body:Dictionary=bodies[0]
     var authoring=Studio.Recording.Compiler.Authoring
     var recipe=authoring.action({"kind":"action","behavior_id":"action.hide"},studio.index.cache)
-    var clip:Dictionary=authoring.load_data("catalog/rigs.json",studio.index.cache)[body.track.rig].clips[body.track.clip]
+    var clip:Dictionary=Characters.rigs(studio.index.cache)[body.track.rig].clips[body.track.clip]
     var actor:Dictionary=studio.index.initialization.state.actors[actor_id]
     var rate=float(recipe.actor.playbackSpeed)*authoring.playback_rate(actor,studio.index.cache)
     var expected_duration=float(clip.frames)/float(clip.fps)*1000.0/rate
@@ -244,11 +301,15 @@ func inspect_transition(studio:Control,hidden:Dictionary,poses:Array)->void:
         await capture(studio,"transition-normal-idle")
     var action_image:Image
     var action_bounds:Rect2i
+    var action_source:Dictionary={}
+    var action_mask:Image
     if await seek(studio,body,action_time):
         inspect_hidden_state(studio,false,"Hide action")
         await inspect_actor(studio,body,body.track.clip,1.0,"transition-hide-action")
         action_image=await capture(studio,"transition-hide-action")
         action_bounds=actor_rect(studio)
+        action_source=actor_source_snapshot(studio)
+        action_mask=await actor_coverage(studio)
         await source_capture(studio,body,"transition-hide-action")
     if await seek(studio,body,effect_time-1.0):
         inspect_hidden_state(studio,false,"last action frame before effect")
@@ -312,16 +373,37 @@ func inspect_transition(studio:Control,hidden:Dictionary,poses:Array)->void:
         evidence.append({"label":"hide-action-boundary","source_event_uuid":event.event.event_uuid,"action_start_ms":body.start_ms,"action_end_ms":body.end_ms,"effect_ms":effect_time,"source_clip":body.track.clip,"source_frames":clip.frames,"source_fps":clip.fps,"playback_speed":rate,"forward_frames":frames,"first_hidden_frame_ms":first_hidden,"violations":violations,"mismatch_frames":mismatch_frames})
     if action_image!=null and await seek(studio,body,action_time):
         inspect_hidden_state(studio,false,"reverse to action")
+        await inspect_actor(studio,body,body.track.clip,1.0,"transition-reverse-action")
         var restored=await capture(studio,"transition-reverse-action")
-        check(action_bounds.has_area() and action_image.get_region(action_bounds).get_data()==restored.get_region(action_bounds).get_data(),"Reverse seek restores exact opaque Hide-action actor pixels")
+        var restored_source:Dictionary=actor_source_snapshot(studio)
+        check(restored_source==action_source,"Reverse seek restores exact original action source/frame/outfit transform and opacity")
+        var restored_mask:Image=await actor_coverage(studio)
+        var selected_difference:Dictionary=masked_difference(action_image,restored,action_mask,action_bounds)
+        var coverage_changed:int=0
+        for y in action_mask.get_height():
+            for x in action_mask.get_width():
+                if action_mask.get_pixel(x,y).a!=restored_mask.get_pixel(x,y).a:coverage_changed+=1
+        check(coverage_changed==0,"Reverse seek restores exact assembled Hide-action alpha support")
+        evidence.append({"label":"transition-reverse-action-framebuffer","source_before":action_source,
+            "source_after":restored_source,"difference":pixel_difference(action_image,restored,action_bounds),
+            "actual_actor_pixels":selected_difference,"alpha_changed_pixels":coverage_changed})
+        check(action_bounds.has_area() and selected_difference.covered_pixels>0 and selected_difference.changed_pixels==0,"Reverse seek restores exact opaque Hide-action actor pixels")
     if await seek(studio,body,initial_time):inspect_hidden_state(studio,false,"reverse to normal idle")
 func run()->void:
     if not Array(OS.get_cmdline_user_args()).any(func(arg):return arg.begins_with("--recording=")):
         push_error("Use --recording=<actual Hide amber journal>");quit(2);return
     DirAccess.make_dir_recursive_absolute(CAPTURES)
+    root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_size(Vector2i(1280,720))
     var studio=Studio.new();root.add_child(studio)
+    # Bind the two unchanged durable originals through ordinary case selection.
+    # A direct --recording path need not be in an ignored local case index.
+    var original_case:Dictionary=Fixtures.public_case("hide")
+    studio.case_records=[original_case]
+    studio.select_case(original_case,"amber")
+    studio.loop_enabled=false;studio.loop_button.set_pressed_no_signal(false)
     if not await settle(studio):await finish(studio);return
+    check(studio.active_directory==Fixtures.journal("hide") and studio.active_perspective=="amber", "The actual durable Hide Amber original owns the displayed scene")
     var parents=studio.index.rows.filter(func(r):return r.kind=="condition" and r.owner.condition.behavior_id=="condition.hidden")
     check(not parents.is_empty(),"Actual Hidden lifetime exists")
     if parents.is_empty():await finish(studio);return
@@ -340,6 +422,7 @@ func run()->void:
         if not await seek(studio,idle,idle_time):break
         studio.world.request_view(q)
         if not await settle(studio):break
+        check(studio.world.quarter==q and studio.world.world_quarter==q,"Actual camera and prepared world publish quarter "+str(q))
         await inspect_actor(studio,idle,"CrouchIdle",.55,"idle-q"+str(q))
         await capture(studio,"idle-q"+str(q))
         if q==0:
@@ -360,13 +443,14 @@ func run()->void:
             check(not studio.world.displayed_components.any(func(c):return c.kind=="material_flash" and c.get("actor_uuid")==actor_id),"Hidden feedback creates no body-colour flash")
             root.get_texture().get_image().save_png(CAPTURES.path_join("application-badge-ui.png"))
             await capture(studio,"application-badge")
-    var attacks=studio.index.rows.filter(func(r):return r.kind=="body" and r.track.actor_uuid==actor_id and r.track.get("activity")=="attack")
-    check(not attacks.is_empty(),"Actual attack is present in the admitted recording")
+    var attacks=studio.index.rows.filter(func(r):return r.kind=="body" and r.track.actor_uuid==actor_id and r.track.get("activity") in ["attack","cast"])
+    check(not attacks.is_empty(),"Actual revealing attack/cast is present in the admitted recording")
     if not attacks.is_empty():
         var attack:Dictionary=attacks[0]
         if await seek(studio,attack,lerpf(attack.start_ms,attack.end_ms,.35)):
-            await inspect_actor(studio,attack,attack.track.clip,.55,"attack-before-removal")
-            await capture(studio,"attack-before-removal")
+            var at:float=lerpf(attack.start_ms,attack.end_ms,.35)
+            await inspect_actor(studio,attack,attack.track.clip,.55 if at<hidden.end_ms else 1.0,"revealing-action-original-cut")
+            await capture(studio,"revealing-action-original-cut")
         if await seek(studio,hidden,hidden.end_ms+25):
             await inspect_actor(studio,{},"Idle",1.0,"authoritative-removal")
             check(not studio.world.timeline.state.actors[actor_id].conditions.any(func(c):return c.behavior_id=="condition.hidden"),"Canonical removal owns return to normal opacity")
@@ -383,10 +467,10 @@ func run()->void:
         studio.select_perspective("blue")
         if await settle(studio):
             check(studio.active_perspective=="blue","Requested independent faction actually publishes")
-            check(not studio.world.visual_actors.has(actor_id) or not studio.world.visual_actors[actor_id].entries.any(func(entry):return entry.node.visible),"Unseen Blue faction has no target actor pixels")
-            check(not studio.world.displayed_components.any(func(c):return c.get("actor_uuid")==actor_id and c.kind=="feedback_text"),"Unseen Blue faction has no private Hidden badge")
-            await capture(studio,"blue-unseen")
-            var unseen_time=float(studio.world.timeline.display_ms)
+            check(studio.active_directory==Fixtures.journal("hide","blue"),"Blue scene uses its own original journal")
+            inspect_original_disclosure(studio,"Blue selected cut")
+            await capture(studio,"blue-original-cut")
+            var selected_time=float(studio.world.timeline.display_ms)
             var blue_row:Dictionary=studio.index.rows[0]
             var blue_start=float(studio.index.groups[0].start_ms)
             check(blue_start>0,"Independent Blue recording retains its initialization lead-in")
@@ -395,17 +479,24 @@ func run()->void:
                 inspect_hidden_state(studio,false,"Blue initialization")
                 await inspect_actor(studio,{},"Idle",1.0,"blue-before-hide")
                 await capture(studio,"blue-before-hide")
-                if await seek(studio,blue_row,unseen_time):
-                    check(not studio.world.visual_actors.has(actor_id) or not studio.world.visual_actors[actor_id].entries.any(func(entry):return entry.node.visible),"Blue's own admitted visibility boundary removes actor again after reverse seek")
-                    check(not studio.world.displayed_components.any(func(c):return c.get("actor_uuid")==actor_id and c.kind=="feedback_text"),"Blue visibility transition never acquires private Hidden feedback")
-                    await capture(studio,"blue-unseen-restored")
+                if await seek(studio,blue_row,selected_time):
+                    inspect_original_disclosure(studio,"Blue original restored cut")
+                    await capture(studio,"blue-original-restored")
+    # Return to the actual Amber source/time before testing retained thumbnail
+    # ownership. No Amber inspection row is sampled with a Blue world owner.
+    studio.select_perspective("amber")
+    if not await settle(studio):await finish(studio);return
+    if not await seek(studio,idle,idle_time):await finish(studio);return
+    studio.world.request_view(0)
+    if not await settle(studio):await finish(studio);return
     var displayed=studio.world
     var clock=displayed.timeline.display_ms
     var old_recipe=displayed.catalog_cache["catalog/condition_recipes.json"]["condition.hidden"].duplicate(true)
-    var previous=ProjectSettings.get_setting("source_data/presentation_catalog",Studio.Recording.Compiler.Authoring.Catalog.NativeAuthoring.INDEX)
-    ProjectSettings.set_setting("source_data/presentation_catalog","res://.runtime/not-an-authored-catalog.tres")
-    # Exercise the real index-to-thumbnail handoff, not a manually seeded cache.
-    # Reindexing must retain admitted authoring while future selection is invalid.
+    # The old presentation_catalog Resource overlay and its invalid-overlay
+    # subcheck are retired. Typed source-index/reload rejection is qualified by
+    # source_index_owner/body_source_reload, not by a fictional overlay here.
+    # This separate current control rejects an unavailable recording candidate
+    # while preserving the existing scene and its admitted thumbnail sources.
     var selected=studio.tracks.selection
     studio.tracks.set_index(studio.index);studio.tracks.reveal(selected)
     var thumbnails=studio.tracks.thumbnails
@@ -413,21 +504,35 @@ func run()->void:
     var thumbnail_deadline=Time.get_ticks_msec()+30000
     while not thumbnails.textures.has(key) and not thumbnails.errors.has(key) and Time.get_ticks_msec()<thumbnail_deadline:
         thumbnails.poll();await process_frame
-    check(thumbnails.textures.has(key) and thumbnails.errors.is_empty(),"Admitted crouch thumbnail decodes while a new selected catalog is missing")
+    check(thumbnails.textures.has(key) and thumbnails.errors.is_empty(),"Reindexing borrows admitted typed source owners for the actual crouch thumbnail")
     if thumbnails.textures.has(key):
         var reference=Image.load_from_file(CAPTURES.path_join("idle-q0-source.png"))
-        check(thumbnails.textures[key].get_image().get_data()==reference.get_data(),"Already indexed native source remains byte-identical despite rejected future authoring")
+        check(thumbnails.textures[key].get_image().get_data()==reference.get_data(),"Reindexed original native source remains byte-identical")
     check(studio.world==displayed and studio.world.timeline.display_ms==clock and studio.tracks.selection==selected,"Thumbnail reindex preserves selected row and displayed clock")
-    studio._load(studio.active_directory)
+    studio._load("res://.runtime/nonexistent-hide-recording-candidate")
     var rejection_deadline=Time.get_ticks_msec()+30000
     while studio.loader!=null and Time.get_ticks_msec()<rejection_deadline:await process_frame
-    ProjectSettings.set_setting("source_data/presentation_catalog",previous)
-    check(studio.world==displayed and studio.world.timeline.display_ms==clock and "rejected" in studio.status.text.to_lower(),"Invalid selected native Resource rejects reload without publishing a candidate")
+    check(studio.world==displayed and studio.world.timeline.display_ms==clock and "rejected" in studio.status.text.to_lower(),"Unavailable recording rejects its candidate without replacing the displayed scene or clock")
     check(studio.world.catalog_cache["catalog/condition_recipes.json"]["condition.hidden"]==old_recipe,"Rejected candidate preserves the displayed native recipe")
     await finish(studio)
+func inspect_original_disclosure(studio:Control,label:String)->void:
+    var index:Dictionary=studio.case_bundle.views[studio.active_perspective]
+    var original:RefCounted=Studio.Recording.restore(index,studio.world.timeline.display_ms)
+    var state:Dictionary=original.state
+    var actor:Dictionary=state.actors.get(actor_id,{})
+    var contacts:Dictionary=state.senses.get("entities",{}) if state.senses!=null else {}
+    var disclosed:bool=not actor.is_empty() and actor.get("present",true) and actor.get("last_visual_position")!=null \
+        and (actor_id in state.audience.controlled or contacts.get(actor_id,{}).get("visual",false))
+    var visible:bool=studio.world.visual_actors.has(actor_id) and studio.world.visual_actors[actor_id].entries.any(func(entry):return entry.role!="shadow" and entry.node.visible)
+    check(visible==disclosed,label+" rendered actor presence follows this audience's actual original visual disclosure")
+    var hidden:bool=actor.get("conditions",[]).any(func(member):return member.behavior_id=="condition.hidden")
+    check(has_hidden(studio.world)==hidden,label+" condition membership follows this audience's own original prefix")
+    if not disclosed:
+        check(not studio.world.displayed_components.any(func(c):return c.get("actor_uuid")==actor_id and c.kind=="feedback_text"),label+" absent visual disclosure cannot acquire actor feedback")
+    evidence.append({"label":label,"perspective":studio.active_perspective,"time_ms":studio.world.timeline.display_ms,"actual_original_visible":disclosed,"rendered_visible":visible,"actual_original_hidden":hidden})
 func finish(studio:Control)->void:
     check(studio.world.presentation_errors.is_empty(),"Final renderer errors remain empty")
     studio.queue_free();await process_frame;await process_frame
-    var report={"checks":checks,"failures":failures,"evidence":evidence,"captures":CAPTURES,"renderer":RenderingServer.get_current_rendering_method(),"scope":"Actual recorded normal idle -> finite authored Hide action -> effect-owned Hidden state, in forward playback and reverse seek; cold source demand, shared Graphs, original body+gear isolated lit-layer alpha/normal registration, four sustained views, native feedback/removal, faction visibility and isolated reload. Lighting unchanged; alpha allows native HDR storage error <=1/255 with exact support. CrouchIdle is existing crouched source, not a newly invented standing-to-crouching animation."}
+    var report={"checks":checks,"failures":failures,"evidence":evidence,"captures":CAPTURES,"renderer":RenderingServer.get_current_rendering_method(),"scope":"Unchanged two-seat schema16 Hide originals: normal idle -> finite authored Hide -> condition-owned crouch/opacity -> actual Fire Bolt and authoritative removal, forward playback and reverse seek; cold source demand, shared Graphs, original body+gear isolated alpha/normals, four published views, actual mixed audio, per-seat original disclosure and rejected-recording candidate ownership. Lighting unchanged; alpha allows native HDR storage error <=1/255 with exact support. CrouchIdle is the actual crouched source. Retired overlay rejection is not qualified by this test; typed source-index/reload rejection has separate current gates."}
     FileAccess.open("res://generated/studio_hide_render_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_HIDE_RENDER ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

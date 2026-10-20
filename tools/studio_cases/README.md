@@ -18,6 +18,21 @@ Use `--engine` to select a deliberately refreshed export, and `--out` for an
 independent library. One recorder owns one backend at a time. Each attempt gets
 a new directory; original Amber and Blue journal bytes are never rewritten.
 
+Publish the committed lifecycle captures into the normal Studio library without
+running or importing the engine:
+
+```sh
+python3 tools/studio_cases/record.py --import-recordings \
+  tests/fixtures/schema16/native-persistent-studio \
+  tests/fixtures/schema16/vampiric-positive \
+  tests/fixtures/schema16/banishment-departure
+```
+
+This merges the original case IDs, subjects, faction journals and occurrence
+markers into the existing index. It preserves capture failures and makes no
+playback/provider/visual approval claim. Use `--out` for a separate library;
+publishing the same originals twice does not duplicate its cases.
+
 The version-1 index retains failures and actual occurrence/lineage jump points.
 `recorded` proves only that the requested legal commands and factual witnesses
 were captured. It does not mark Studio playback, provider implementation or

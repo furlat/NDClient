@@ -11,11 +11,13 @@ func check(value:bool,label:String)->void:
     if not value:failures.append(label);printerr(label)
 func resident(count:int,pins:int)->Dictionary:
     var data=Media.create()
+    var wanted:Dictionary={}
     for i in count:
         var path="pressure/source-%04d.png"%i
         var bytes:int=(4+(i%3))*1024*1024
         data.resident[path]={"bytes":bytes,"cpu_bytes":bytes/2,"gpu_bytes":bytes/2,"used":(i*1297)%count,"environment":false,"cpu_required":true}
-        if i<pins:data.wanted[path]=path
+        if i<pins:wanted[path]=path
+    Media.demand(data,wanted)
     return data
 func oldest(data:Dictionary,count:int)->Array:
     # Whole sorted oracle defines the existing LRU policy independently of the
@@ -29,13 +31,18 @@ func oldest(data:Dictionary,count:int)->Array:
 func cpu_release_checks()->void:
     var data=Media.create()
     var images:Dictionary={}
+    var paths:Dictionary={}
     var original_bytes:int=0
     for i in 5:
         var path="pressure/companion-%d.png"%i
         images[path]=Image.create(32+i,32,false,Image.FORMAT_RGBA8)
+        paths[path]=path
+    # Consumer contributions publish the actual aggregate GPU/CPU roles. The
+    # consumer's convenience dictionaries are not the physical residency owner.
+    Media.demand(data,paths,{},{},paths)
+    for path in paths:
         var bytes:int=images[path].get_data().size()
         original_bytes+=bytes
-        data.gpu_only[path]=true;data.wanted[path]=path
         Media.published(data,{"path":path,"cpu_bytes":bytes,"gpu_bytes":bytes})
     var initial=Media.diagnostics(data)
     var released=Media.release_cold_images(data)
@@ -44,14 +51,14 @@ func cpu_release_checks()->void:
         "CPU retirement drains two actual Image owners and leaves the remaining queue intact")
     var remaining_bytes:int=0
     for image in images.values():remaining_bytes+=image.get_data().size()
-    check(Media.diagnostics(data).cpu_bytes==remaining_bytes and data.cpu_released_bytes_this_frame==original_bytes-remaining_bytes,
+    check(Media.diagnostics(data).cpu_bytes==remaining_bytes and Media.diagnostics(data).cpu_released_bytes_this_frame==original_bytes-remaining_bytes,
         "Pending CPU images remain counted until their own release")
     check(Media.ready(data,data.wanted) and Media.diagnostics(data).gpu_estimated_bytes==initial.gpu_estimated_bytes,
         "Bounded CPU retirement never changes GPU residency or mandatory readiness")
     check(Media.release_cold_images(data).is_empty() and images.size()==3,
         "Repeated maintenance in the same native frame cannot drain another CPU batch")
     var retained:String=images.keys()[0]
-    data.cpu_required[retained]=true
+    Media.demand(data,paths,{},{},paths,{retained:true})
     var prior_frame:int=Engine.get_process_frames()
     while Engine.get_process_frames()==prior_frame:await process_frame
     released=Media.release_cold_images(data)
@@ -62,14 +69,18 @@ func cpu_release_checks()->void:
         "Newly required picking/geometry image remains resident without a decode")
     check(Media.diagnostics(data).cpu_bytes==images[retained].get_data().size(),
         "Final residency accounting matches the one retained Image owner")
-    data.cpu_required.clear();Media._refresh_resident_role(data,retained)
+    Media.demand(data,paths,{},{},paths)
     check(Media.release_cold_images(data).is_empty(),"A second role change cannot bypass this frame's CPU release cap")
     prior_frame=Engine.get_process_frames()
     while Engine.get_process_frames()==prior_frame:await process_frame
     released=Media.release_cold_images(data)
+    check(released.is_empty() and images.has(retained),
+        "Previously required picking pixels remain cached under budget after CPU-role removal")
+    Media.physical(data).budget_bytes=0
+    released=Media.release_cold_images(data)
     for path in released:images.erase(path)
     check(released==[retained] and images.is_empty() and Media.diagnostics(data).cpu_bytes==0,
-        "The final no-longer-required image releases exactly once on the next frame")
+        "Under pressure the final unpinned CPU image releases once while required GPU residency survives")
 
 func run()->void:
     var elapsed:Array=[]

@@ -1,6 +1,6 @@
 # Authentic Banishment departure inputs
 
-Design only; no runtime, Factory, source-art or build changes in this cohort review. This is the actor-history row of `SCHEMA_AUTHORING_CONDITIONS_STUDIO_PLAN_2026-10-19.md`, not a second renderer/reducer/history manager. Native visual qualification remains blocked by the two installed Factory actor-history shaders below.
+Original design review; bounded implementation/input evidence is now in [BANISHMENT_DEPARTURE_IMPLEMENTATION_2026-10-20.md](BANISHMENT_DEPARTURE_IMPLEMENTATION_2026-10-20.md). This design review itself changed no runtime, Factory, source-art or build. This is the actor-history row of `SCHEMA_AUTHORING_CONDITIONS_STUDIO_PLAN_2026-10-19.md`, not a second renderer/reducer/history manager. Native visual qualification remains blocked by the two installed Factory actor-history shaders below.
 
 ## Actual evidence and present failure
 

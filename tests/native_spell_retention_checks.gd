@@ -105,12 +105,8 @@ func recording(path:String,label:String,benchmark:bool=false)->void:
 
 func run()->void:
     recording(Fixtures.journal("gallery"),"Gallery",true)
-    var inventory=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_spell_case_inventory.json"))
     for name in ["shield","web"]:
-        var specs:Array=inventory.cases.filter(func(item):return item.id=="native-spell-"+name)
-        check(specs.size()==1,name+" actual study exists")
-        if specs.is_empty():continue
-        for perspective in specs[0].perspectives:recording(perspective.journal,name+"/"+perspective.id)
+        for seat in ["amber","blue"]:recording(Fixtures.journal(name,seat),name+"/"+seat)
     var report={"checks":checks,"failures":failures,"cases":cases,"timings":timings,
         "scope":"Unchanged transient, current, queued, condition and spatial-owner retention on actual recordings; zero-instance work shortcut. No source/art/cadence change or GPU performance claim."}
     FileAccess.open("res://generated/native_spell_retention_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

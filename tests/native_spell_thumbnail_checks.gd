@@ -5,6 +5,8 @@ const Recording=preload("res://studio/recording.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
 const Preview=preload("res://studio/native_spell_preview.gd")
 const Playback=preload("res://presentation/native_spell_playback.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Spells=preload("res://presentation/native_spell_authoring.gd")
 const CAPTURES="res://.captures/native-spell-thumbnails"
 const REPORT="res://.runtime/native-spell-thumbnail-checks.json"
 var checks:int=0
@@ -145,24 +147,32 @@ func run()->void:
         DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED);Engine.max_fps=120
     DirAccess.make_dir_recursive_absolute(CAPTURES)
     var phase_count:int=0
-    for spec in [{"spell":"fire_bolt","path":"res://.runtime/compact-magic-missile-20261013/amber/journal"},
-        {"spell":"magic_missile","path":"res://.runtime/studio-cases/magic_missile-seed3/amber/journal"}]:
-        var index:Dictionary=Recording.read(spec.path)
-        check(index.ok,spec.spell+": real journal admits through Studio Recording")
+    for spec in [{"behavior":"spell.fire_bolt","case":"fire-bolt","sequence":8},
+        {"behavior":"spell.magic_missile","case":"magic-missile","sequence":2}]:
+        var index:Dictionary=Fixtures.read(spec.case)
+        var selected_source:Dictionary=Spells.selection(spec.behavior,index.get("cache",{}))
+        check(index.ok and not selected_source.is_empty(),spec.behavior+": original current journal and typed native source admit through Studio Recording")
         if not index.ok:print(index);continue
-        channels(index,spec.spell)
+        if selected_source.is_empty():continue
+        var spell:String=selected_source.id
+        var groups:Array=index.groups.filter(func(wrapped):return int(wrapped.group.operation_sequence)==spec.sequence)
+        check(not groups.is_empty(),spell+": source rows belong to the exact original cast operation")
+        var group_ids:Array=groups.map(func(wrapped):return wrapped.group.id)
+        channels(index,spell)
         var selected:Dictionary={}
         for row in index.rows:
-            if row.kind!="native_effect" or not row.component.get("native_spell",false) or row.component.spell_id!=spec.spell:continue
+            if row.kind!="native_effect" or not row.component.get("native_spell",false) or row.component.spell_id!=spell or row.group_id not in group_ids:continue
             if not selected.has(row.component.native_cue.role):selected[row.component.native_cue.role]=row
-        check(selected.size()==3 and selected.has("cast") and selected.has("flight") and selected.has("impact"),spec.spell+": real recording exposes all three actual native phases")
+        check(selected.size()==3 and selected.has("cast") and selected.has("flight") and selected.has("impact"),spell+": real recording exposes all three actual native phases")
+        for cue in Spells.event_cues(selected_source):
+            check(selected.has(cue.role) and selected[cue.role].component.native_cue.staged_clip==cue.clip,spell+": thumbnail names the exact current typed "+cue.role+" source")
         var immutable=var_to_bytes(selected)
         for phase in ["cast","flight","impact"]:
             if not selected.has(phase):continue
             phase_count+=1
             for quarter in 4:await thumbnail(selected[phase],index.cache,quarter)
         if selected.has("flight"):await tail_and_rotation(selected.flight)
-        check(var_to_bytes(selected)==immutable,spec.spell+": preparation/sampling/rotation do not mutate the indexed authoring or event rows")
+        check(var_to_bytes(selected)==immutable,spell+": preparation/sampling/rotation do not mutate the indexed authoring or event rows")
     check(phase_count==6,"Both real spells expose the six reviewed native phase sources")
     finish()
 

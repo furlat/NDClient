@@ -3,6 +3,8 @@ extends SceneTree
 ## exercises the trace contract only; this headless test makes no GPU claim.
 const Recording=preload("res://studio/recording.gd")
 const Trace=preload("res://presentation/event_trace.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Spells=preload("res://presentation/native_spell_authoring.gd")
 var checks:=0
 var failures:Array=[]
 var observations:Array=[]
@@ -48,56 +50,72 @@ func trace_channels(group:Dictionary,start:float,rows:Array,label:String)->void:
         Trace.record(trace,[{"trace_track_id":row.id,"display_ms":row.end_ms+1.0,"visible":true}])
         check(selected_component(trace,event_id,row.id).sample_count==1,label+": no witness beyond the component interval")
 
-func source_keys(row:Dictionary,label:String)->void:
-    var component:Dictionary=row.component
-    var phase:String=component.native_cue.role
-    var spell:String=component.spell_id
-    var light:Dictionary=component.native_light
-    check(light.node_type=="OmniLight3D" and is_equal_approx(light.range,5.0),label+": metadata preserves the actual native source type and range")
-    check(not row.has("light_keys"),label+": native source is not represented as authoritative gameplay light membership")
-    var expected:Dictionary={}
-    if spell=="fire_bolt" and phase=="impact":
-        expected={"light_energy":[[0.0,2.5],[.3,2.5],[.5,0.0]],"visible":[[0.0,true],[.4,true],[.6,false]]}
-    elif spell=="magic_missile" and phase=="cast" and str(light.path).begins_with("cast/"):
-        expected={"light_energy":[[0.0,8.0],[.3,8.0],[.6,0.0]],"visible":[[.1,true],[.6,true],[.8,false]]}
-    elif spell=="magic_missile" and phase=="impact":
-        expected={"light_energy":[[0.0,1.8],[.4,.5],[.6,0.0]],"visible":[[0.0,true],[.5,true],[.8,false]]}
-    if expected.is_empty():
-        check(light.tracks.is_empty() and row.markers.is_empty(),label+": static donor light has no invented animated keys")
-        return
-    check(light.tracks.size()==expected.size(),label+": exact active light-property tracks are exposed")
-    var total:=0
-    for track in light.tracks:
-        var property:String=str(track.path).get_slice(":",1)
-        check(expected.has(property),label+": track is a real selected source property")
-        if not expected.has(property):continue
-        var keys:Array=expected[property]
-        total+=keys.size()
-        check(track.active_animation and track.enabled,label+": inactive/reset source animations do not become Studio keys")
-        check(track.get("update_mode",-1)==(1 if property=="visible" else 0),label+": visibility is discrete and energy continuous")
-        check(track.keys.size()==keys.size(),label+": exact source key count for "+property)
-        for key in keys:
-            var matches:Array=track.keys.filter(func(actual):return absf(float(actual.time)-float(key[0]))<.00001)
-            check(matches.size()==1,label+": source key retained for "+property+" at "+str(key[0]))
-            if matches.is_empty():continue
-            check(matches[0].value==key[1] if key[1] is bool else absf(float(matches[0].value)-float(key[1]))<.00001,
-                label+": original property value retained for "+property)
-            # These selected cast/impact bindings are offset0/rate1. The
-            # independent source times above must become absolute track times.
-            var marker_source=str(track.player)+":"+str(track.animation)+"/"+str(track.path)
-            var markers:Array=row.markers.filter(func(marker):return marker.source==marker_source and absf(float(marker.source_seconds)-float(key[0]))<.00001)
-            check(markers.size()==1,label+": actual source key has one Studio marker for "+property+" at "+str(key[0]))
-            if not markers.is_empty():
-                check(absf(float(markers[0].at_ms)-(row.start_ms+float(key[0])*1000.0))<.002,
-                    label+": marker uses the phase clock and recording offset exactly once")
-    check(row.markers.size()==total,label+": no extra source-property markers are fabricated")
+func phase_time(cue:Dictionary,source:float)->float:
+    # Independent inverse of the authored formation/travel/tail clock.
+    if cue.role=="flight":
+        if source<float(cue.source_launch):return float(cue.begin)+(float(cue.launch)-float(cue.begin))*source/maxf(.001,float(cue.source_launch))
+        if source<float(cue.source_contact):return float(cue.launch)+(float(cue.contact)-float(cue.launch))*(source-float(cue.source_launch))/maxf(.001,float(cue.source_contact)-float(cue.source_launch))
+        return float(cue.contact)+source-float(cue.source_contact)
+    return float(cue.begin)+source/float(cue.get("source_rate",1.0))
 
-func recording(path:String,sequence:int,spell:String,phase_count:int,light_count:int,hit_count:int)->void:
+func source_keys(row:Dictionary,intakes:Dictionary,label:String)->void:
+    var component:Dictionary=row.component
+    var cue:Dictionary=component.native_cue
+    var light:Dictionary=component.native_light
+    var sources:Array=intakes.get(cue.staged_clip,{}).get("lights",[]).filter(func(value):return value.path==light.path)
+    check(sources.size()==1,label+": channel names exactly one light in the independently read typed source intake")
+    if sources.size()!=1:return
+    var original:Dictionary=sources[0]
+    check(light.node_type==original.node_type and is_equal_approx(float(light.range),float(original.range)),label+": metadata retains the selected donor type and exact range")
+    check(light.color==original.color and is_equal_approx(float(light.energy),float(original.energy)),label+": selected source colour and energy are unchanged")
+    check(not row.has("light_keys"),label+": decorative native source is not authoritative gameplay light membership")
+    var expected:Array=original.tracks.filter(func(track):return track.get("active_animation",true) and track.get("enabled",true))
+    check(light.tracks.size()==expected.size(),label+": exact active source-property track count; inactive RESET does not execute")
+    var total:int=0
+    for original_track in expected:
+        var matches:Array=light.tracks.filter(func(track):return track.player==original_track.player and track.animation==original_track.animation and track.path==original_track.path)
+        check(matches.size()==1,label+": actual selected property track retains player/animation/path identity")
+        if matches.size()!=1:continue
+        var track:Dictionary=matches[0]
+        check(track.active_animation and track.enabled,label+": only the active original animation supplies keys")
+        check(track.update_mode==original_track.update_mode and track.interpolation==original_track.interpolation,label+": original discrete/continuous and interpolation modes are retained")
+        check(track.keys.size()==original_track.keys.size(),label+": exact original property-key count")
+        var bindings:Array=original.bindings.filter(func(binding):return str(track.player).begins_with(str(binding.component)+"/"))
+        check(not bindings.is_empty() and float(bindings[0].rate)>0,label+": original source has a positive phase clock binding")
+        if bindings.is_empty() or float(bindings[0].rate)<=0:continue
+        var binding:Dictionary=bindings[0]
+        for key in original_track.keys:
+            var keys:Array=track.keys.filter(func(value):return absf(float(value.time)-float(key.time))<.00001)
+            check(keys.size()==1,label+": original property key time is retained")
+            if keys.size()!=1:continue
+            check(keys[0].value==key.value if key.value is bool else absf(float(keys[0].value)-float(key.value))<.00001,label+": original selected property value is retained")
+            var source:float=(float(key.time)-float(binding.offset_seconds))/float(binding.rate)
+            var at:float=phase_time(cue,source)
+            if at<float(cue.begin)-.000001 or at>float(cue.end)+.000001:continue
+            total+=1
+            var marker_source:String=str(track.player)+":"+str(track.animation)+"/"+str(track.path)
+            var markers:Array=row.markers.filter(func(marker):return marker.source==marker_source and absf(float(marker.source_seconds)-float(key.time))<.00001)
+            check(markers.size()==1,label+": one Studio marker for each in-range original source key")
+            if markers.size()==1:check(absf(float(markers[0].at_ms)-(row.start_ms+at*1000.0))<.002,label+": key uses the selected phase clock and recording offset exactly once")
+    check(row.markers.size()==total,label+": no source-property markers are invented or omitted")
+
+func recording(path:String,sequence:int,behavior:String,deliveries:int,hit_count:int)->void:
     var started=Time.get_ticks_usec()
     var index=Recording.read(path)
-    var label=spell+" sequence "+str(sequence)
+    var label=behavior+" sequence "+str(sequence)
     check(index.ok,label+": real SDK journal admits into Studio")
     if not index.ok:observations.append({"case":label,"error":index.get("error","")});return
+    var selected:Dictionary=Spells.selection(behavior,index.cache)
+    check(not selected.is_empty(),label+": current typed selection exists")
+    if selected.is_empty():return
+    var spell:String=selected.id
+    var root_source:Resource=load("res://authoring/abilities.tres")
+    var typed:Resource=load(root_source.sections.spells[behavior])
+    var intakes:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/"+typed.bounds))
+    var phase_count:int=0;var light_count:int=0
+    for cue in Spells.event_cues(selected):
+        var count:int=1 if cue.role=="cast" else deliveries
+        phase_count+=count;light_count+=count*intakes.get(str(cue.clip),{}).get("lights",[]).size()
     var groups:Array=index.groups.filter(func(item):return int(item.group.operation_sequence)==sequence)
     check(not groups.is_empty(),label+": actual operation appears in the index")
     var phases:Array=[];var lights:Array=[];var materials:Array=[];var hits:Array=[]
@@ -109,7 +127,7 @@ func recording(path:String,sequence:int,spell:String,phase_count:int,light_count
         check(not group.components.any(func(component):return component.kind in ["native_light","native_material"]),
             label+": inspection channels do not become extra scheduled gameplay components")
         var rows:Array=index.rows.filter(func(row):return row.get("group_id")==group.id)
-        var children:Array=rows.filter(func(row):return row.kind in ["native_light","native_material"])
+        var children:Array=rows.filter(func(row):return row.kind in ["native_light","native_material"] and row.component.get("spell_id",row.component.get("native_hit",{}).get("spell_id",""))==spell)
         for row in rows:
             var component:Dictionary=row.get("component",{})
             if row.kind=="native_effect" and component.get("native_spell",false) and component.spell_id==spell:
@@ -128,7 +146,7 @@ func recording(path:String,sequence:int,spell:String,phase_count:int,light_count
             if child.kind=="native_light":
                 lights.append(child)
                 check(parent.kind=="native_effect",label+": native source light stays below its native phase")
-                source_keys(child,label+" "+parent.component.native_cue.role+" "+child.component.native_light.path)
+                source_keys(child,intakes,label+" "+parent.component.native_cue.role+" "+child.component.native_light.path)
             else:
                 materials.append(child)
                 check(parent.kind=="material_flash" and child.component.actor_uuid==parent.component.actor_uuid,label+": body material stays below its actual damage recipient")
@@ -145,10 +163,12 @@ func recording(path:String,sequence:int,spell:String,phase_count:int,light_count
         "native_materials":materials.size(),"elapsed_ms":(Time.get_ticks_usec()-started)/1000.0})
 
 func run()->void:
-    recording("res://.runtime/compact-magic-missile-20261013/amber/journal",29,"fire_bolt",3,2,1)
-    recording("res://.runtime/studio-cases/magic_missile-seed3/amber/journal",2,"magic_missile",7,8,0)
-    recording("res://.runtime/gallery-route/journal",22,"magic_missile",7,8,3)
+    for seat in ["amber","blue"]:
+        recording(Fixtures.journal("fire-bolt",seat),8,"spell.fire_bolt",1,1)
+        recording(Fixtures.journal("shield",seat),6,"spell.magic_missile",3,0)
+        recording(Fixtures.journal("magic-missile",seat),2,"spell.magic_missile",3,3)
     var report={"checks":checks,"failures":failures,"observations":observations,
+        "retired_oracle":"Universal hardcoded donor range/energy/key values: current exact typed intake metadata is read independently instead; donor OmniLight metadata remains distinct from the PointLight2D renderer channel.",
         "scope":"Actual SDK journals through production compiler/Studio; phase-child hierarchy, native source key timing/update modes, real blocked-hit absence, passive trace registration and intentional inactive mode. Injected trace evidence is not a GPU rendering claim."}
     FileAccess.open("res://.runtime/native-spell-channel-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_SPELL_CHANNELS ",JSON.stringify(report))

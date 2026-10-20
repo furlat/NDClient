@@ -2861,25 +2861,7 @@ func _sample_actors() -> void:
                 if changes!=null and changes.size()==1 and changes.has(&"frame_uv"):sampling_counts.uv_only_changes+=1
                 else:sampling_counts.full_source_changes+=1
             var transform_started:int=Time.get_ticks_usec()
-            entry.node.basis = camera.basis.scaled_local(Vector3(row.get("scale_x",1.0),1,1))
-            entry.node.position = Placement.contact(row)
-            if sample.has("passage") and entry.role!="shadow":
-                var weight: float=sample.passage_weight
-                var passage: Dictionary=sample.passage
-                var sx=lerpf(1,passage.passageScale[0],weight)
-                var sy=lerpf(1,passage.passageScale[1],weight)
-                entry.node.basis=camera.basis.scaled_local(Vector3(row.get("scale_x",1.0)*sx,sy,1))
-                var points: Array=rig.get("pose_sockets",{}).get(passage.passageSocket,{}).get(playback.clip,{}).get(facing,[])
-                var socket: Variant=points[mini(frame,points.size()-1)] if not points.is_empty() else null
-                var unit=128.0/float(rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
-                entry.node.position+=camera.basis.y*float(passage.passageBodyHeightPx)*(1-sy)*unit
-                if socket!=null:
-                    entry.node.position+=camera.basis.x*(rig.cell_width*.5-socket.x)*row.get("scale_x",1.0)*sx*weight*unit
-                    entry.node.position-=camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-passage.passageBodyHeightPx-socket.y)*sy*weight*unit
-            if body_scale!=1.0:
-                entry.node.basis=entry.node.basis.scaled_local(Vector3.ONE*body_scale)
-                entry.node.position=Placement.contact(row)+(entry.node.position-Placement.contact(row))*body_scale
-            if entry.role != "shadow": entry.node.position.y += float(sample.get("lift_pixels",0))*(128.0/rig_config.TILE_W)/64.0*Placement.HEIGHT_UNIT
+            entry.node.transform=ActorConstruction.layer_transform(camera.basis,row,rig,sample,entry.role,playback.clip,facing,frame,float(rig_config.TILE_W),body_scale)
             entry.body_scale=body_scale
             update_bounds(entry)
             FrameProfile.end_phase(profile,"actor_sprite_transform",transform_started)

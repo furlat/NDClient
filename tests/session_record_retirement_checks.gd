@@ -44,35 +44,9 @@ func run() -> void:
     check(response==original and response.value==original.value,"Worker cleanup leaves caller-held admitted tables intact")
     check(session.diagnostics().retired_groups==0 and session.diagnostics().retirement_pending_records==0,"Record cleanup does not change presentation-group totals")
 
-    var media_player=Player.new()
-    media_player.session=session
-    media_player.timeline.state={"actors":{},"tiles":{},"objects":{},"senses":{},"audience":{}}
-    media_player.media_plan_epoch=media_player.timeline.initialization_revision
-    media_player.media_empty_key=[media_player.timeline.initialization_revision,[],media_player.timeline.revision]
-    media_player.media_empty_plan={"character":{},"environment":{},"fixtures":{},"errors":[],"gpu_only":{},"cpu_required":{},"normal_sets":{}}
-    var old_snapshot:Dictionary={"paths":{"old":"/test/old.png"},"order":["old"],"roles":[{},{},{},{}],
-        "headers":{"old":8},"encounter":{"paths":{"old":"/test/old.png"},
-            "estimates":{"old":{"bytes":16,"cpu_bytes":8,"gpu_bytes":8}},"estimate_bytes":{"old":16},
-            "estimate_summary":{"bytes":16,"unknown":0}}}
-    var frozen:PackedByteArray=var_to_bytes(old_snapshot)
-    media_player.media_warmup.demand_snapshot=old_snapshot
-    media_player._prepare_media()
-    check(session.diagnostics().retired_records==1 and session.diagnostics().retirement_pending_records==1 \
-        and is_same(session.retired_records_staged[0],old_snapshot),
-        "Actual Player media admission stages the exact passive prior ledger until next poll")
-    check(media_player.media_warmup.demand_snapshot.is_empty() and var_to_bytes(old_snapshot)==frozen,
-        "Required media demand replaces its ledger without mutating the retired caller-held family metadata")
-    await until(func():return session.diagnostics().retired_records==2,"Existing preparer releases passive media ledger after poll")
-    check(var_to_bytes(old_snapshot)==frozen and session.diagnostics().retired_groups==0,
-        "Media retirement preserves held source graph and presentation ordering")
-    media_player.session=null
-    media_player.media_plan_key=[]
-    media_player.media_warmup.demand_snapshot=old_snapshot
-    media_player._prepare_media()
-    check(session.diagnostics().retirement_pending_records==0 and var_to_bytes(old_snapshot)==frozen,
-        "Player without live Session keeps the original synchronous media fallback")
-    media_player.context_menu.free();media_player.free()
-
+    # Incremental source contributions replaced the former demand_snapshot
+    # ledger. There is no passive whole-ledger replacement left to retire;
+    # media_source_delta/recording_demand qualify that current producer.
     var player=Player.new()
     player.session=session
     var old: Dictionary=response.value.choices.duplicate(true)
@@ -110,7 +84,7 @@ func run() -> void:
     player.context_menu.free();player.free()
     session.close()
     var final=session.diagnostics()
-    check(final.retired_records==6 and final.retirement_pending_records==0,"Close drains the final scene's records before joining the existing worker")
+    check(final.retired_records==5 and final.retirement_pending_records==0,"Close drains the final scene's records before joining the existing worker")
     check(final.retired_groups==0 and response==original and old==original.value.choices,"Close preserves exact group counts and all still-owned source data")
     session.retire_record(untouched)
     check(session.diagnostics().retirement_pending_records==0,"Cancelled sessions do not retain new cleanup records")
@@ -118,6 +92,6 @@ func run() -> void:
     peer.close();peer=null
     for name in DirAccess.get_files_at(directory):DirAccess.remove_absolute(directory.path_join(name))
     DirAccess.remove_absolute(directory)
-    FileAccess.open("res://generated/session_record_retirement_checks.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures,"diagnostics":final},"  "))
+    FileAccess.open("res://generated/session_record_retirement_checks.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures,"diagnostics":final,"retired_contracts":["Play whole demand_snapshot ledger replacement; current incremental source contribution owners have separate gates"]},"  "))
     print("RECORD_RETIREMENT_CHECKS ",checks," failures=",failures)
     quit(0 if failures.is_empty() else 1)

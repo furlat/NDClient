@@ -306,6 +306,7 @@ func overlay_routes()->void:
 
 func synthetic()->void:
     var scene:=Probe.new();root.add_child(scene)
+    scene.timeline.state={"actors":{}}
     scene.wall_mode="solid";scene.ground_is_background=false
     var make=func(id:String,kind:String,role:String,layer:int,position:Array,height:float)->Dictionary:
         var node:=MeshInstance3D.new();node.mesh=QuadMesh.new();node.sorting_use_aabb_center=false;scene.add_child(node)

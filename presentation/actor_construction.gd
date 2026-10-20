@@ -167,3 +167,27 @@ static func adopt_private_layer(owner:Node,packet:Dictionary)->Dictionary:
     owner.entries.append(entry);owner.actor_entries.append(entry)
     owner._light_entry(entry)
     return entry
+
+static func layer_transform(camera_basis:Basis,row:Dictionary,rig:Dictionary,sample:Dictionary,role:String,clip_name:String,facing:String,frame:int,tile_width:float,body_scale:float)->Transform3D:
+    # Shared exact displayed-body math; capture-only layers supply immutable
+    # pre-cut operands and never enter published actor membership.
+    var basis = camera_basis.scaled_local(Vector3(row.get("scale_x",1.0),1,1))
+    var position = Placement.contact(row)
+    if sample.has("passage") and role!="shadow":
+        var weight: float=sample.passage_weight
+        var passage: Dictionary=sample.passage
+        var sx=lerpf(1,passage.passageScale[0],weight)
+        var sy=lerpf(1,passage.passageScale[1],weight)
+        basis=camera_basis.scaled_local(Vector3(row.get("scale_x",1.0)*sx,sy,1))
+        var points: Array=rig.get("pose_sockets",{}).get(passage.passageSocket,{}).get(clip_name,{}).get(facing,[])
+        var socket: Variant=points[mini(frame,points.size()-1)] if not points.is_empty() else null
+        var unit=128.0/float(tile_width)*row.scale/Placement.PIXELS_PER_UNIT
+        position+=camera_basis.y*float(passage.passageBodyHeightPx)*(1-sy)*unit
+        if socket!=null:
+            position+=camera_basis.x*(rig.cell_width*.5-socket.x)*row.get("scale_x",1.0)*sx*weight*unit
+            position-=camera_basis.y*(rig.cell_height-rig.origin_y_from_ground-passage.passageBodyHeightPx-socket.y)*sy*weight*unit
+    if body_scale!=1.0:
+        basis=basis.scaled_local(Vector3.ONE*body_scale)
+        position=Placement.contact(row)+(position-Placement.contact(row))*body_scale
+    if role != "shadow": position.y += float(sample.get("lift_pixels",0))*(128.0/tile_width)/64.0*Placement.HEIGHT_UNIT
+    return Transform3D(basis,position)

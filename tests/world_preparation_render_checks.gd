@@ -92,7 +92,7 @@ func compare_reference(scene:Node,label:String,pick_id:String="")->void:
 func run()->void:
     if DisplayServer.get_name()=="headless":quit(2);return
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(960,640)
-    var scene=Player.instantiate();scene.timeline.paused=true;scene.media_warmup.budget_bytes=0;root.add_child(scene)
+    var scene=Player.instantiate();scene.timeline.paused=true;scene.MediaWarmup.physical(scene.media_warmup).budget_bytes=0;root.add_child(scene)
     var deadline=Time.get_ticks_msec()+120000
     while (not scene.session.recording_ready or not scene._media_ready({}) or scene.world_revision<0) and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline:await process_frame
     check(scene.session.issue.is_empty() and scene.media_issue.is_empty() and scene.world_revision>=0,"Actual Crypt initialization publishes only after original media and native world preparation")
@@ -194,7 +194,9 @@ func run()->void:
         scene._prepare_media();scene._warm_media();await process_frame
     scene._world_ready(candidate)
     while not scene.pending_world.worker_finished():await process_frame
-    scene.pending_world.result={};scene.pending_world.frame=-1;scene._step_world_preparation()
+    scene.pending_world.result={}
+    await process_frame
+    scene._step_world_preparation()
     check(not scene.media_issue.is_empty() and not scene.pending_world.prepared,"Incomplete worker receipt fails explicitly before native publication")
     var unchanged:Dictionary=scene.timeline.state.duplicate(true);var clock:float=scene.timeline.display_ms
     scene.timeline.advance(5000)

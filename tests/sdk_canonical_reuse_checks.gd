@@ -1,8 +1,12 @@
 extends SceneTree
 # Real Gallery operations compare complete retained state/event captures with
-# the detached reducer, preserving every preceding committed/captured value.
+# the copying reducer, preserving every preceding committed/captured value.
+# The old post-transfer poisoning subchecks are retired: accepted packets and
+# private retained results transfer immutable ownership, including shared masks.
+# Journal.snapshot() is the detached public state boundary tested below.
 const Reducer=preload("res://sdk/reducer.gd")
 const Protocol=preload("res://sdk/protocol.gd")
+const Journal=preload("res://sdk/journal.gd")
 var checks:int=0
 var failures:Array=[]
 
@@ -19,7 +23,7 @@ func _poison(value:Variant)->void:
         value.append("canonical_reuse_mutation")
 
 func _initialize()->void:
-    var recording:String="res://.runtime/player-runs/20261016T121313.010271Z/journal"
+    var recording:String="res://tests/fixtures/schema16/scenarios/gallery/amber"
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
     var protocol=Protocol.new()
@@ -31,7 +35,7 @@ func _initialize()->void:
         var decoded:Dictionary=protocol.decode(root_name,raw)
         check(decoded.ok,"Real sequence strictly admitted: "+str(sequence))
         if not decoded.ok:break
-        var packet:Dictionary=protocol.normalize(root_name,decoded.value)
+        var packet:Dictionary=decoded.value
         if sequence==0:
             var initial:Dictionary=Reducer.reduce_initialization(packet.initialization,packet.content_additions)
             check(initial.ok,"Real initialization reduced")
@@ -53,12 +57,17 @@ func _initialize()->void:
         for index in held.size():check(held[index]==frozen[index],"Later real sequence preserves earlier state/captures: "+str(sequence)+"/"+str(index))
         state=retained.value;context=retained.sensory_context
         held.append(retained);frozen.append(retained.duplicate(true))
-        _poison(packet)
-        check(retained==frozen[-1],"Caller packet mutation cannot alter retained result: "+str(sequence))
-        _poison(reference)
-        check(retained==frozen[-1],"Detached public result mutation cannot alter retained result: "+str(sequence))
+        var journal=Journal.new();journal.state=retained.value
+        var snapshot:Dictionary=journal.snapshot()
+        check(snapshot==retained.value,"Public Journal snapshot contains the complete committed state: "+str(sequence))
+        _poison(snapshot)
+        check(snapshot.has("canonical_reuse_mutation"),"Detached public snapshot is caller-mutable: "+str(sequence))
+        check(retained==frozen[-1] and journal.state==retained.value,"Public snapshot mutation preserves retained state and captures: "+str(sequence))
+        for index in held.size():check(held[index]==frozen[index],"Public snapshot mutation preserves every earlier committed cut: "+str(sequence)+"/"+str(index))
     var report:Dictionary={"checks":checks,"failures":failures,"recording":recording,"measurements":measurements,
-        "scope":"Six actual Gallery operations; exact canonical/event-time parity and prior-state, input and public-result isolation. Isolated CPU timings only."}
+        "retired_subchecks":["Mutating a private admitted packet after its immutable ownership transfer","Mutating a private reducer result, including shared read-only masks"],
+        "public_mutation_boundary":"Journal.snapshot(): the actual complete detached caller snapshot",
+        "scope":"Six actual Gallery operations; exact canonical/event-time parity, reducer input/prior-cut immutability, and detached public Journal.snapshot isolation. Accepted private packets/results are immutable borrowed ownership, not a post-transfer mutation API. Isolated CPU timings only."}
     FileAccess.open("res://generated/sdk_canonical_reuse_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SDK_CANONICAL_REUSE_CHECKS ",JSON.stringify(report))
     quit(0 if failures.is_empty() else 1)

@@ -1,5 +1,4 @@
 extends "res://tests/ground_visibility_checks.gd"
-const Cells=preload("res://sdk/fold_cells.gd")
 # Named disclosed-tile after-values through the production world sync. Every
 # retained batch is compared to independent original single draws in old order.
 func _initialize()->void:run.call_deferred()

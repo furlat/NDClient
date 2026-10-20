@@ -93,6 +93,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     var preview_states={}
     var preview_tracks={}
     var previous_directions={}
+    var capture_retained:Array=[]
     for sequence in files.size():
         if canceled(token): return {"ok":false,"canceled":true,"error":"Superseded recording request"}
         if files[sequence] != "%016d.json" % sequence: return {"ok":false,"error":"Recording requires a complete contiguous prefix from initialization"}
@@ -159,7 +160,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             var nodes={}
             for event in group.events:nodes[event.event_uuid]=event
             for commit in group.commits:
-                var captures:Dictionary=Timeline.pose_admissions(commit,preview_state.actors,condition_history,group,offset,previous_directions,result.cache)
+                var captures:Dictionary=Timeline.pose_admissions(commit,preview_state,condition_history,group,offset,previous_directions,result.cache,capture_retained)
                 Compiler.apply_delta(preview_state,commit.delta)
                 if NativeItems.interested(item_owners,commit.delta,result.cache):
                     NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,result.cache,str(commit.get("event_uuid","")),commit.get("item_rows",[]))
@@ -253,6 +254,9 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                         "markers":NativeChannels.markers(channel,offset),
                         "coverage":{"implementation":"resolved","source":channel.status,"prepared":"not_examined","rendered":"not_witnessed"}})
             Timeline._directions(group.actor_tracks,INF,previous_directions)
+            capture_retained=capture_retained.filter(func(item):return float(item.group_start_ms)+float(item.component.start_ms)+float(item.component.duration_ms)>offset+float(group.duration_ms))
+            for component in group.get("components",[]):
+                if component.kind in ["sprite_layer","material_flash","body_surface"] and float(component.start_ms)+float(component.duration_ms)>float(group.duration_ms):capture_retained.append({"component":component,"group_start_ms":offset})
             offset += group.duration_ms
         result.operations += 1
         packet_profile.index_ms=(Time.get_ticks_usec()-phase_started)/1000.0

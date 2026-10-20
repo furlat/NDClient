@@ -171,13 +171,15 @@
    "script": "res://tests/audio_presenter_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 300,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --recording=<actual Studio journal> (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Actual complete Gallery original plus declared native audio source/ownership probes; headless voice ownership, native mixed audio separately required."
   },
   {
    "name": "base_audio_checks",
@@ -574,7 +576,7 @@
    "name": "component_trace_checks",
    "script": "res://tests/component_trace_checks.gd",
    "mode": "headless",
-   "tier": "gate",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -690,13 +692,15 @@
    "script": "res://tests/condition_pose_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/hide/amber"
+   ],
    "timeout": 300,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "642 current-schema checks: actual Hide original journal, exact UUID/pose clocks, typed Resource/category ownership and canonical parity; native output remains separate."
   },
   {
    "name": "condition_selection_checks",
@@ -931,12 +935,12 @@
   {
    "name": "environment_texture_layout_checks",
    "script": "res://tests/environment_texture_layout_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
-   "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "environment"
+   "timeout": 1200,
+   "status": "ok",
+   "reason": "Full original PNG-header and lossless cell/door-frame source inventory; native output is independently tested by native_environment_texture_layout_checks."
   },
   {
    "name": "equipment_boundary_checks",
@@ -1695,8 +1699,8 @@
   {
    "name": "media_prune_pressure_checks",
    "script": "res://tests/media_prune_pressure_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -1923,8 +1927,8 @@
   {
    "name": "native_asset_admission_checks",
    "script": "res://tests/native_asset_admission_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -2545,8 +2549,8 @@
    "tier": "fast",
    "args": [],
    "timeout": 300,
-   "status": "known-red",
-   "reason": "red in the sweep; not investigated"
+   "status": "ok",
+   "reason": "Current two-seat original schema16 spell ownership/trace/provenance qualified: 378 / 1418 / 143 checks at 20261020T055531.730908Z and 20261020T055600.299900Z; thumbnail headless lane makes no native pixel claim."
   },
   {
    "name": "native_spell_event_checks",
@@ -2555,8 +2559,8 @@
    "tier": "fast",
    "args": [],
    "timeout": 300,
-   "status": "known-red",
-   "reason": "1 failure in the sweep"
+   "status": "ok",
+   "reason": "Current two-seat original schema16 spell ownership/trace/provenance qualified: 378 / 1418 / 143 checks at 20261020T055531.730908Z and 20261020T055600.299900Z; thumbnail headless lane makes no native pixel claim."
   },
   {
    "name": "native_spell_feedback_checks",
@@ -2637,8 +2641,8 @@
   {
    "name": "native_spell_retention_checks",
    "script": "res://tests/native_spell_retention_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -2661,8 +2665,8 @@
    "tier": "fast",
    "args": [],
    "timeout": 300,
-   "status": "known-red",
-   "reason": "2 failures in the sweep"
+   "status": "ok",
+   "reason": "Current two-seat original schema16 spell ownership/trace/provenance qualified: 378 / 1418 / 143 checks at 20261020T055531.730908Z and 20261020T055600.299900Z; thumbnail headless lane makes no native pixel claim."
   },
   {
    "name": "native_spell_witness_checks",
@@ -2795,8 +2799,8 @@
   {
    "name": "palette_prepare_checks",
    "script": "res://tests/palette_prepare_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -2825,8 +2829,8 @@
   {
    "name": "player_effect_picking_checks",
    "script": "res://tests/player_effect_picking_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -3046,14 +3050,16 @@
    "script": "res://tests/producer_json_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 300,
    "options": [
     "--producer-oracle",
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current original Gallery qualified: strict/trusted producer parity and immutable retained/public snapshot contracts; receipt 20261020T053925.731356Z or 20261020T054026.881012Z."
   },
   {
    "name": "profile_run",
@@ -3627,8 +3633,8 @@
   {
    "name": "scenery_state_checks",
    "script": "res://tests/scenery_state_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -3781,13 +3787,15 @@
    "script": "res://tests/sdk_canonical_reuse_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 300,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current original Gallery qualified: strict/trusted producer parity and immutable retained/public snapshot contracts; receipt 20261020T053925.731356Z or 20261020T054026.881012Z."
   },
   {
    "name": "sdk_cell_checks",
@@ -3874,8 +3882,8 @@
   {
    "name": "sdk_pool_checks",
    "script": "res://tests/sdk_pool_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -4082,8 +4090,8 @@
   {
    "name": "session_record_retirement_checks",
    "script": "res://tests/session_record_retirement_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "status": "ok",
@@ -4409,13 +4417,15 @@
    "script": "res://tests/studio_condition_restore_native_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/hide-light/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Explicit unchanged schema16 Hide/light original; native restoration gate passed40 assertions."
   },
   {
    "name": "studio_effect_version_checks",
@@ -4486,14 +4496,16 @@
    "script": "res://tests/studio_hide_render_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/hide/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording",
     "--transition-only"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Original two-seat Hide: 824 native checks including exact source alpha support, one-byte stored opacity, restoration and four views; 20261020T054947.132114Z."
   },
   {
    "name": "studio_inventory_checks",
@@ -5929,6 +5941,36 @@
    "timeout": 120,
    "status": "ok",
    "reason": "Actual constructed-source setter/sample ownership: changed inputs at unchanged age reflow without particle/player delta changes; native output separately required."
+  },
+  {
+   "name": "banishment_departure_checks",
+   "script": "res://tests/banishment_departure_checks.gd",
+   "mode": "headless",
+   "tier": "gate",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Actual immutable pre-cut departure ownership"
+  },
+  {
+   "name": "environment_page_build_checks",
+   "script": "res://tests/environment_page_build_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "timeout": 120,
+   "args": [],
+   "status": "ok",
+   "reason": "Lossless whole-cell paging and original descriptor/pixel parity; no source-art changes."
+  },
+  {
+   "name": "native_environment_texture_layout_checks",
+   "script": "res://tests/native_environment_texture_layout_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "timeout": 600,
+   "args": [],
+   "status": "ok",
+   "reason": "Lossless whole-cell paging and original descriptor/pixel parity; no source-art changes."
   }
  ]
 }

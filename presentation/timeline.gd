@@ -1,6 +1,7 @@
 extends RefCounted
 # Absolute displayed time is independent of SDK consumption and wall-clock time.
 const Characters=preload("res://presentation/characters.gd")
+const ActorConstruction=preload("res://presentation/actor_construction.gd")
 const Tracks = preload("res://presentation/tracks.gd")
 const Compiler = preload("res://presentation/compiler.gd")
 const EventTrace = preload("res://presentation/event_trace.gd")
@@ -272,7 +273,7 @@ func _advance_immediate(delta_ms: float) -> void:
         while commit_index < commits.size() and float(commits[commit_index].at_ms) <= local + 0.000001:
             var delta: Dictionary = commits[commit_index].delta
             _append_membership_order(world_changes.order,delta,state)
-            var captures:Dictionary=pose_admissions(commits[commit_index],state.actors,condition_owners,current,group_start_ms,retained_directions,appearance_cache)
+            var captures:Dictionary=pose_admissions(commits[commit_index],state,condition_owners,current,group_start_ms,retained_directions,appearance_cache,retained_components)
             Compiler.apply_delta(state,delta)
             _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms,commits[commit_index].get("condition_rows",[]),str(commits[commit_index].get("event_uuid","")),captures,commits[commit_index].get("item_rows",[]))
             if commits[commit_index].has("event_uuid"):
@@ -299,13 +300,14 @@ func _advance_immediate(delta_ms: float) -> void:
 func _world_delta(delta: Dictionary) -> bool:
     return not delta.get("tiles_removed",[]).is_empty() or not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors")
 
-static func pose_admissions(commit:Dictionary,actors:Dictionary,owners:Dictionary,group:Dictionary,start_ms:float,directions:Dictionary,cache:Dictionary)->Dictionary:
+static func pose_admissions(commit:Dictionary,state:Dictionary,owners:Dictionary,group:Dictionary,start_ms:float,directions:Dictionary,cache:Dictionary,retained:Array=[])->Dictionary:
     var rows:Array=commit.get("condition_rows",[])
     var wanted:Dictionary={}
     for row in rows:
         if row.before==null and row.after!=null and Conditions.ConditionPose.capture_requested(row.after,cache):wanted[row.actor_uuid]=true
     if wanted.is_empty():return {}
     var inputs:Dictionary={}
+    var actors:Dictionary=state.actors
     var rigs:Dictionary=Characters.rigs(cache)
     for id in wanted:
         if not actors.has(id):continue
@@ -315,7 +317,45 @@ static func pose_admissions(commit:Dictionary,actors:Dictionary,owners:Dictionar
         var rest:Dictionary=Characters.rest_sample(actor,rigs[rig],cache)
         if not rest.ok:continue
         inputs[id]=actor.duplicate();inputs[id].presentation_rig=rig;inputs[id].presentation_rest=rest.value
-    return Conditions.ConditionPose.admissions(rows,inputs,owners,group,start_ms,float(commit.at_ms),directions,cache)
+    var departures:Dictionary={}
+    if rows.any(func(row):return row.before==null and row.after!=null and Conditions.ConditionPose.departure_requested(row.after,cache)):
+        var at_ms:float=start_ms+float(commit.at_ms)
+        var finite:Array=retained.duplicate()
+        for component in group.get("components",[]):finite.append({"component":component,"group_start_ms":start_ms})
+        var source_samples:Array=[];var seen:Dictionary={}
+        for item in finite:
+            var component:Dictionary=item.component
+            if component.kind not in ["material_flash","body_surface","sprite_layer"] or seen.has(component.id):continue
+            var begin:float=float(item.group_start_ms)+float(component.start_ms)
+            if at_ms<begin or at_ms>=begin+float(component.duration_ms):continue
+            var sample:Dictionary=component.duplicate(false);sample.age_ms=at_ms-begin
+            sample.absolute_start_ms=begin;source_samples.append(sample);seen[component.id]=true
+        var active:Dictionary=Tracks.samples(group.get("actor_tracks",[]),float(commit.at_ms))
+        var config:Dictionary=Characters.Catalog.read_file(Characters.Catalog.read_file("catalog-index.json",cache).rig,cache)
+        var ordered_actors:Dictionary=actors.duplicate();var ordered_owners:Dictionary=Appearance.copy_owners(owners)
+        for change in rows:
+            var id:String=change.actor_uuid
+            if not inputs.has(id):continue
+            if change.before==null and change.after!=null and Conditions.ConditionPose.departure_requested(change.after,cache):
+                var samples:Array=Conditions.samples(Appearance.copy_owners(ordered_owners),at_ms,cache,{},false)+source_samples
+                var loadouts:Dictionary=ActorConstruction.loadouts(active,samples)
+                var actor:Dictionary=ActorConstruction.actor_with_loadout(ordered_actors[id],loadouts)
+                var resolved:Dictionary=Characters.resolve(actor,state,cache)
+                if resolved.ok and resolved.value!=null and Compiler.WorldRows.visible_actor(actor,state):
+                    var material:Dictionary=Conditions.material(id,samples)
+                    var missing:String=""
+                    if samples.any(func(sample):return sample.get("actor_uuid")==id and "actor_layers" in sample.get("native_clip",{}).get("inputs",[])):missing="departure_native_body_treatment_not_bound"
+                    if samples.any(func(sample):return sample.get("actor_uuid")==id and not sample.get("native_hit",{}).is_empty()):missing="departure_native_hit_frame_not_bound"
+                    if resolved.value.equipment_layers.any(func(layer):return layer.get("effect",{}).get("kind")=="condition_appearance"):missing="departure_appearance_opacity_not_bound"
+                    departures[change.after.condition_uuid]={"actor":actor,"row":resolved.value,"item_looks":Characters.item_looks(actor,state),
+                        "material":material,"layer_samples":samples.filter(func(sample):return sample.kind=="sprite_layer" and sample.actor_uuid==id),
+                        "tile_width":float(config.TILE_W),"reason":missing}
+            var next:Dictionary=ordered_actors[id].duplicate(false)
+            next.conditions=next.get("conditions",[]).filter(func(condition):return condition.condition_uuid!=change.row.condition_uuid)
+            if change.after!=null:next.conditions.append(change.after)
+            ordered_actors[id]=next
+            Conditions.observe(ordered_owners,{id:next},at_ms,false,[change])
+    return Conditions.ConditionPose.admissions(rows,inputs,owners,group,start_ms,float(commit.at_ms),directions,cache,departures)
 
 func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_uuid:String="",captures:Dictionary={},item_rows:Array=[])->void:
     # These existing owner updates report actual resource-input changes. HP,
@@ -582,12 +622,13 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
     var next_revision = revision; var next_world_revision = world_revision; var next_sequence = sequence
     var appearance_owners:Dictionary=Appearance.copy_owners(condition_owners)
     var capture_directions:Dictionary=retained_directions.duplicate()
+    var capture_components:Array=retained_components.duplicate()
     for segment in plan.segments:
         for i in range(segment.first_commit,segment.end_commit):
             var delta: Dictionary = segment.group.commits[i].delta
             _append_membership_order(changes.order,delta,snapshot)
             var commit:Dictionary=segment.group.commits[i]
-            var captures:Dictionary=pose_admissions(commit,snapshot.actors,appearance_owners,segment.group,segment.start_ms,capture_directions,appearance_cache)
+            var captures:Dictionary=pose_admissions(commit,snapshot,appearance_owners,segment.group,segment.start_ms,capture_directions,appearance_cache,capture_components)
             Compiler.apply_delta(snapshot,delta)
             Conditions.observe(appearance_owners,delta.get("actors",{}),segment.start_ms+commit.at_ms,false,commit.get("condition_rows",[]),captures)
             for key in delta.get("tiles",{}): changes.tiles[key] = true
@@ -597,6 +638,10 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
             next_revision += 1
             if _world_delta(delta): next_world_revision += 1
         if segment.complete:
+            var completed_at:float=float(segment.start_ms)+float(segment.group.duration_ms)
+            capture_components=capture_components.filter(func(item):return float(item.group_start_ms)+float(item.component.start_ms)+float(item.component.duration_ms)>completed_at)
+            for component in segment.group.get("components",[]):
+                if component.kind in ["sprite_layer","material_flash","body_surface"] and float(component.start_ms)+float(component.duration_ms)>float(segment.group.duration_ms):capture_components.append({"component":component,"group_start_ms":segment.start_ms})
             _directions(segment.group.get("actor_tracks",[]),INF,capture_directions)
             if segment.group.get("operation_end",false):next_sequence=int(segment.group.operation_sequence)
     var last: Dictionary = _world_plan_tail(plan)
@@ -642,7 +687,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             var delta: Dictionary = commit.delta
             var started:int=Time.get_ticks_usec()
             _append_membership_order(world_changes.order,delta,state)
-            var captures:Dictionary=pose_admissions(commit,state.actors,condition_owners,current,group_start_ms,retained_directions,appearance_cache)
+            var captures:Dictionary=pose_admissions(commit,state,condition_owners,current,group_start_ms,retained_directions,appearance_cache,retained_components)
             Compiler.apply_delta(state,delta)
             FrameProfile.end_phase(profile,"timeline_apply_state",started)
             started=Time.get_ticks_usec()

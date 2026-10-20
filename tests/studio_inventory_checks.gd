@@ -1,6 +1,7 @@
 extends SceneTree
 ## Actual authored catalogs and public on-demand UI; no invented missing recipes.
 const Inventory=preload("res://studio/source_inventory.gd")
+const Catalog=preload("res://source_catalog.gd")
 var checks=0
 var failures:Array=[]
 var images:Array=[]
@@ -48,13 +49,22 @@ func run()->void:
     check(panel.installed_generation==latest and panel.report.generation==latest,"Superseded audit result cannot replace latest request")
     check(panel.bucket.get_item_text(panel.bucket.selected)=="Missing authoring","Worklist opens at absent authoring decisions/assignments")
     check(not panel.details.visible and not panel.detail_toggle.button_pressed,"No full JSON dump occupies the default worklist")
-    check(panel.report.condition_recipes==160,"Every current condition recipe is audited independently of recordings")
+    var recipes:Dictionary=Catalog.read_file("catalog/condition_recipes.json",{})
+    check(panel.report.condition_recipes==recipes.size(),"Every current condition recipe is audited independently of recordings")
     var migration:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/native_migration_inventory.json"))
     check(panel.report.referenced_media_identities==migration.assets.size(),"Distinct media identities retain the migration report's exact count")
     check(panel.report.authored_references==migration.totals.authored_references and panel.report.registration_references==migration.totals.registration_references,"Authored and registration references retain separate counts")
     check(rows(panel).all(func(row):return row.gap_kind in ["authoring_assignment","authoring_review"]),"Missing authoring never includes an unmapped native source or renderer limitation")
     var assignments=rows(panel).filter(func(row):return row.get("reason")=="persistent_visual_assignment_missing")
-    check(assignments.size()==18,"The eighteen remaining missing persistent condition assignments are visible")
+    var missing:Array=[]
+    for entry in panel.filtered:
+        if entry.requirements.any(func(row):return row.get("reason")=="persistent_visual_assignment_missing"):missing.append(entry.id)
+    missing.sort()
+    var expected_missing:Array=["condition.spell.blindness_deafness","condition.spell.color_spray","class_feature.sorcerer.draconic_presence",
+        "condition.concentrating","condition.spell.divine_word","condition.spell.ice_storm.terrain","trait.skeleton_archer_marked",
+        "condition.spell.prismatic_spray.restrained","condition.spell.silence.deafened","condition.underwater","condition.environment.wet"]
+    expected_missing.sort()
+    check(missing==expected_missing and assignments.size()==expected_missing.size(),"Every remaining exact persistent assignment gap is visible; implemented assignments cannot remain listed")
     check(assignments.all(func(row):return row.source.ends_with("/persistent") and row.availability=="not_assigned" and row.implementation=="not_applicable"),"Persistent gaps retain exact JSON owner, not a claimed missing file or renderer")
     check(rows(panel).any(func(row):return row.gap_kind=="authoring_review" and row.label.begins_with("Needs authoring decision")),"Unresolved ownership is explicitly a decision, not an invented missing effect")
     await capture(panel,"missing-authoring")

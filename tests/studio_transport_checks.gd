@@ -2,6 +2,7 @@ extends SceneTree
 ## Real track input, playback and asynchronous case publication in native Studio.
 const Studio=preload("res://studio/studio.gd")
 const Studies=preload("res://studio/study_catalog.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence={}
@@ -72,7 +73,9 @@ func run()->void:
     if had_layout:saved_layout=FileAccess.get_file_as_string(Studio.CONFIG)
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,720)
     var s=Studio.new();root.add_child(s)
+    s._load(Fixtures.journal("gallery"))
     if not await settle(s):await finish(s);return
+    check(s.active_directory==Fixtures.journal("gallery"),"Transport starts from the unchanged durable Gallery, independent of production library ordering")
     check(s.loop_enabled and s.loop_button.button_pressed,"Loop is enabled by default")
     var world=s.world
     s._seek(s.world.timeline.display_ms)
@@ -165,7 +168,7 @@ func run()->void:
                     if binding.available:record=binding.record;break
                 break
         if not record.is_empty():break
-    check(not record.is_empty(),"Study references an actual recorded melee example")
+    check(not record.is_empty(),"Current AT01 nonlethal study references a real production library recording; retired melee-seed3 cannot qualify it")
     if not record.is_empty():
         var previous_study=s.study_scenario;var previous_world=s.world
         s._open_study_recording(cap,scenario,record)

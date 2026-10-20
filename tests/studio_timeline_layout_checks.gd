@@ -26,7 +26,10 @@ func run()->void:
     var headers:Array=view.rows.filter(func(item):return item.row.kind=="light_group")
     check(headers.is_empty(),"Default Gallery hides environment history headers")
     check(view.rows.all(func(item):return not view.lighting_rows.has(item.row.id)),"Default Gallery hides all detailed lighting tracks")
-    check(view.rows.all(func(item):return item.row.kind!="event" or item.row.event.kind not in ["sensory","spatial","turn","undisclosed"]),"Default Gallery has no state-only exploration or turn bookkeeping rows")
+    check(view.rows.all(func(item):return item.row.kind!="event" or item.row.event.kind!="undisclosed"),"Default Gallery has no undisclosed-event placeholders")
+    for item in view.rows:
+        if item.row.kind=="event" and item.row.event.kind in ["sensory","spatial","turn"]:
+            check(meaningful_descendant(item.row,index.rows,view.rows_by_id),"Default exploration/turn header owns actual presentation or a named missing requirement: "+item.row.id)
     check(view.compact_projection.display.values().any(func(row):return row.kind=="missing_group" and not row.members.is_empty()),"Useful missing presentation work remains visible")
     var first_phase:Dictionary=index.rows.filter(func(row):return row.kind=="native_effect")[0]
     view.follow_at(first_phase.start_ms+.1)
@@ -34,13 +37,14 @@ func run()->void:
     check(view.rows.any(func(item):return item.row.kind=="native_effect"),"Actual VFX stays visible while its light details are hidden")
     view.show_lighting_tracks=true;view.rebuild_rows()
     headers=view.rows.filter(func(item):return item.row.kind=="light_group")
-    check(not headers.is_empty(),"Optional environment inspection presents source groups")
-    check(headers.all(func(item):return view.collapsed.get(item.row.id,false)),"Environment groups initially collapse")
+    check(not view.light_groups.is_empty(),"Optional environment inspection prepares actual source groups behind retained causal ancestry")
+    check(view.light_groups.values().all(func(id):return view.collapsed.get(id,false)),"Environment groups initially collapse")
     check(view.rows.all(func(item):return not view.environment_lights.has(item.row.id)),"Default grouping hides histories, not event-owned lanes")
     check(lights.any(func(row):return not view.environment_lights.has(row.id)),"Actual carried lights remain classified separately")
     for id in view.environment_lights:
         view.reveal(id)
         check(view.rows.any(func(item):return item.row.id==id),"Explicit source reveal opens "+id)
+        check(view.rows.any(func(item):return item.row.id==view.light_groups[id] and item.row.kind=="light_group"),"Explicit source reveal exposes its actual environment header: "+id)
         check(not view.collapsed[view.light_groups[id]],"Source reveal opens its own display group")
     view.filter="light";view.rebuild_rows()
     check(view.rows.all(func(item):return item.row.kind!="light_group"),"Filtering bypasses display groups")
@@ -98,12 +102,36 @@ func expected_follow(source:Array,environment:Dictionary,query:String,at:float,r
     for row in source:
         var matching=query.is_empty() or query.to_lower() in (row.label+" "+row.kind+" "+row.get("actor_name","")+" "+row.get("status","")+" "+row.get("reason","")+" "+row.get("source","")).to_lower()
         if row.id==retained:retained_matches=matching and not (query.is_empty() and environment.has(row.id))
-        if not matching or not row.get("visible_here",true) or row.kind=="part":continue
+        if not matching or not row.get("visible_here",true) or row.kind=="part" or row.get("status")=="missing":continue
         if query.is_empty() and environment.has(row.id):continue
         if row.kind not in Timeline.PREVIEW_KINDS and row.kind not in ["native_light","light"]:continue
         if at<row.start_ms or at>=row.end_ms:continue
-        if chosen.is_empty() or row.start_ms>chosen.start_ms or (row.start_ms==chosen.start_ms and row.id==retained):chosen=row
+        # These are nonempty raw-source filters, so there is no compact action
+        # projection. Independently rank actual intervals by start, then native
+        # phase/body priority, then retain the active sibling on an exact tie.
+        if chosen.is_empty() or row.start_ms>chosen.start_ms \
+                or (row.start_ms==chosen.start_ms and reference_priority(row)>reference_priority(chosen)) \
+                or (row.start_ms==chosen.start_ms and reference_priority(row)==reference_priority(chosen) and row.id==retained):chosen=row
     return str(chosen.id) if not chosen.is_empty() else (retained if retained_matches else "")
+
+func reference_priority(row:Dictionary)->int:
+    if row.kind=="native_effect":
+        if row.get("component",{}).get("native_spell",false):
+            return {"cast":3,"flight":4,"area":5,"impact":5,"spray":5,"attached":4}.get(row.component.get("native_cue",{}).get("role",""),3)
+        return 2
+    if row.kind in ["body","condition_pose","condition_restore"]:return 2
+    if row.kind in ["sprite_layer","condition_appearance","geometry_projectile","residue_deposit"]:return 1
+    return 0 if row.kind=="audio" else -1
+
+func meaningful_descendant(header:Dictionary,source:Array,by_id:Dictionary)->bool:
+    for row in source:
+        if not row.get("visible_here",true) or (row.get("status")!="missing" and row.kind not in Timeline.PREVIEW_KINDS):continue
+        if row.kind in ["event","part","parts"]:continue
+        var parent:String=row.parent
+        while by_id.has(parent):
+            if parent==header.id:return true
+            parent=by_id[parent].parent
+    return false
 
 func boundary_fixture(view:Control)->void:
     var sources:Array=[]

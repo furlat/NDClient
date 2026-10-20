@@ -12,7 +12,7 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
     for id in inputs:
         var actor:Dictionary=inputs[id];var packets:Dictionary={}
         rows[id]=packets
-        var condition_parameters:Dictionary=Construction.Conditions.parameters(Construction.Conditions.material(id,[]),textures,resources)
+        var condition_parameters:Dictionary=Construction.Conditions.parameters(actor.material if actor.has("material") else Construction.Conditions.material(id,[]),textures,resources)
         condition_parameters.make_read_only()
         for index in actor.layers:
             var source:Dictionary=actor.layers[index]

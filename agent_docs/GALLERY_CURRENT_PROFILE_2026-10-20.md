@@ -290,3 +290,61 @@ world/destruction cuts keep precedence and preparation; suppressing an optional
 variant must never omit a due source or defer the real destruction. Then repeat
 the same live command window and inspect upload/whole-frame tails. No paging,
 asset packing, runtime change or graphics acceptance occurred in this review.
+
+### Whole-cell numeric pages — implementation awaiting qualification
+
+The bounded follow-up now uses the existing environment builder for every
+oversized RGBA8 depth/original-normal or selected receiving-normal source,
+rather than the three manually selected banks. The independent header inventory
+contains **171 eligible physical files**; the independent grayscale support
+files remain separate. The threshold is strictly greater than16MiB of decoded
+RGBA8; cells retain every source byte and occupy pages of at most1536×768
+(**4.5MiB**). Color sheets, source files, source clocks, sampling transforms,
+normal selection and physical registration are unchanged. This is a transfer
+size bound, **not a demonstrated frame-time bound**.
+
+`source_catalog.gd` now applies the same address mapping to both door-frame
+branches and every matching current physical alias: geometry, normal, support,
+hit mask, door partition and role mask. Independent masks/support files keep
+their original paths. Door frames keep their existing original-normal policy;
+leaf/body sources keep their existing selected receiving-normal policy. The
+three existing layouts retain their output directories and addressing.
+
+The builder owns a small `texture_page_cache.res` output containing original
+length/mtime, cell/page-layout generation and derived-output length/mtime. An
+unchanged repeated build reuses its pages without decoding/repacking the sheets;
+changed source/registration or a missing/changed page requires packing again.
+No runtime reader, runtime stamp/hash check or source-art mutation is introduced.
+First generic build cost and output file count still need measurement.
+
+Qualification gates prepared for the exclusive build/native lane:
+
+- `environment_page_build_checks` (headless): independent9-cell RGBA control,
+  partial final page/transparent padding, original immutability, eligibility,
+  offline reuse invalidation and exact current physical aliases. This replaces
+  the same tiny control in the obsolete Python wrapper that imports the removed
+  `tools.prepare_environment_texture_layout` implementation; it does not claim
+  that obsolete Python implementation remains supported.
+- `environment_texture_layout_checks` (headless, full offline gate): independent
+  current typed-source/PNG-header eligibility, every original cell/page corner,
+  preserved original three layouts, actual all-frame/all-view bench plus prior
+  banks, finite/settled demand closure and door-frame original normals.
+- `native_environment_texture_layout_checks` (GPU): strict RGBA original-sheet
+  versus paged output through the production spatial material and light table,
+  lit/normals modes, all four views, bench finite/page-boundary/settled samples,
+  and directional/elegant/shabby-battens door leaf/frame/destruction. Existing
+  `door_overlap_checks` remains the independent original painter-partition oracle.
+
+No new build, native output or post-change live profile is claimed here yet.
+
+Offline control qualified: `environment_page_build_checks` **69checks/0failures**
+in `.runtime/tests/20261020T060222.303186Z`. The retired executable Python
+wrapper `tests/test_environment_texture_layout.py` imported the already removed
+`tools.prepare_environment_texture_layout.paginate`; it tested a9×6RGBA source,
+3×2cells and6×4pages (nine cells, three pages), exact cell bytes, transparent
+final-page padding and unchanged original file bytes. Those exact assertions
+are retained in the69-check current-builder gate, alongside eligibility,
+registration, reuse invalidation and alias controls. This is an explicit
+replacement of that obsolete implementation-bound wrapper, not a claim that
+its removed Python packer executes. Full source-cell/native/live qualification
+remains pending.

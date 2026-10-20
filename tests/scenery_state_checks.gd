@@ -4,6 +4,7 @@ const World = preload("res://presentation/world.gd")
 const Order = preload("res://grid_order.gd")
 const Placement = preload("res://placement.gd")
 const Reveal = preload("res://presentation/wall_reveal.gd")
+const Cells = preload("res://sdk/fold_cells.gd")
 var checks := 0
 var failures: Array = []
 func check(ok: bool, label: String) -> void:
@@ -18,7 +19,7 @@ func _initialize() -> void:
         "objects":{"seen":object([0,0]),"old":object([1,0]),"wall":object([1,0],"west"),
             "insert":object([1,0],"west","wall"),"special":object([0,0])},
         "actors":{},"audience":{"controlled":[]},
-        "senses":{"visible":[[0,0]],"objects":{"seen":{"visual":true},"special":{"visual":false}},"entities":{}}}
+        "senses":{"visible":Cells.mask([[0,0]]),"objects":{"seen":{"visual":true},"special":{"visual":false}},"entities":{}}}
     var original = state.duplicate(true)
     var actual = World.visibility(state)
     check(actual=={"current":true,"remembered":false,"seen":true,"old":false,"wall":true,"insert":false,"special":false},"Sight and incident-support grants style only known scenery; a hidden insert does not inherit its wall's sight")
@@ -27,7 +28,7 @@ func _initialize() -> void:
     state.senses = null
     check(World.visibility(state).values().all(func(value):return not value),"Absent senses never become full sight")
     state = original.duplicate(true)
-    state.senses.visible=[]; state.senses.objects={}
+    state.senses.visible=Cells.mask([]); state.senses.objects={}
     check(World.visibility(state).values().all(func(value):return not value),"Lost sight dims known ground and objects without reviving flames")
     check(World.ground_background(state),"Nonnegative known supports admit the background batching fast path")
     state.tiles["0,0"].elevation_steps=-1
@@ -57,7 +58,7 @@ func _initialize() -> void:
     # The server's projector (dnd/player/projection.py _DELTAS) puts north at +y:
     # a north boundary at (0,0) is also observed from (0,1), a south one from (0,-1).
     var edges={"tiles":{},"actors":{},"audience":{"controlled":[]},"objects":{"north":object([0,0],"north"),"south":object([0,0],"south")},
-        "senses":{"visible":[[0,1]],"objects":{},"entities":{}}}
+        "senses":{"visible":Cells.mask([[0,1]]),"objects":{},"entities":{}}}
     check(World.visibility(edges)=={"north":true,"south":false},"North boundary is observed from its +y incident cell, like the server's projector")
     check(World.boundary_index(edges).get("0,1",[])==["north"] and World.boundary_index(edges).get("0,-1",[])==["south"],"Boundary incident cells follow the server's north = +y")
     # An engaged trap selects the server's "activated" state, which its owner has.

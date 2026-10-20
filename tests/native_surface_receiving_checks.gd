@@ -35,7 +35,9 @@ func prop_entries(scene:Node)->Array:
 ## every neighbour comparison false: each skirt receives as an exposed return.
 func set_joins(scene:Node,enabled:bool)->void:
     if enabled:
-        scene.ground_supports_revision=-1;publish_receiving(scene);return
+        # The renderer keeps and updates one owned texture. Rebind it after the
+        # isolated control, rather than updating it behind the control binding.
+        scene._publish_ground_supports_texture();return
     var rect:Vector4=GroundReceiving.support_image(scene.entries).rect
     var image:=Image.create_empty(maxi(1,int(rect.z)),maxi(1,int(rect.w)),false,Image.FORMAT_RF)
     image.fill(Color(NAN,0,0))
@@ -69,7 +71,7 @@ func perturb_lights(scene:Node,perturbed:bool)->void:
         var copy:Dictionary=source.duplicate()
         if perturbed:copy.energy=8.0;copy.screen_position+=Vector2(331,173)
         sources.append(copy)
-    scene.light_table.publish(sources,scene.generated_shadows.cookie_image)
+    scene.light_table.publish(sources,scene.generated_shadows.cookie_image,scene.source_lighting.canvas_directionals())
 
 func lighting_receipt(scene:Node)->Dictionary:
     var actors=[]

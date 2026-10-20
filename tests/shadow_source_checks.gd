@@ -132,6 +132,7 @@ func run()->void:
                             if source.id==source_id:
                                 source.screen_position+=source.span*3.0
                                 source.shadow_rank_position+=source.span*3.0
+                                if source.has("cookie_position"):source.cookie_position+=source.span*3.0
                         shadows._prepare_sources(changed)
                         replacement=shadows._dominant(foot)
                         check(replacement<0 or shadows._source_ids[replacement]!=source_id,"Moving the selected native light beyond its footprint reranks immediately")

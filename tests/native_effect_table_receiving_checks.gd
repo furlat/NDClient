@@ -11,6 +11,7 @@ const Preview=preload("res://presentation/native_effect_preview.gd")
 const LightTable=preload("res://presentation/light_table.gd")
 const Lighting2D=preload("res://presentation/lighting_2d.gd")
 const NativeSourceLights=preload("res://presentation/native_source_lights.gd")
+const Sources=preload("res://presentation/native_effects.gd")
 const REFERENCE_RECEIVER='''shader_type canvas_item;
 render_mode blend_disabled;
 uniform sampler2D native_colour : filter_nearest, repeat_disable;
@@ -97,6 +98,17 @@ func run()->void:
     var main:=SubViewport.new();main.size=Vector2i(768,768);main.own_world_3d=true;main.transparent_bg=true
     main.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(main)
     var owner:=Node3D.new();main.add_child(owner)
+    # Native field deposits have their actual source/support/landing oracle
+    # in blood_kernel_cache_checks / blood_residue_checks (CPU) and
+    # studio_blood_residue_checks / blood_world_preparation_checks (native).
+    # These old IDs
+    # intentionally cannot reintroduce a per-impact client-invented decal.
+    for retired in ["blood.deposit_a1","blood.deposit_j1"]:
+        var source:Dictionary=Sources.source_record(retired,{})
+        var children:int=owner.get_child_count()
+        check(source.is_empty(),retired+" remains absent from current typed sources")
+        var refused:Dictionary=Sources.make(owner,source)
+        check(not refused.get("error","").is_empty() and owner.get_child_count()==children,retired+" cannot attach an invented ground effect")
     var camera:=Camera3D.new();owner.add_child(camera);camera.projection=Camera3D.PROJECTION_ORTHOGONAL
     camera.keep_aspect=Camera3D.KEEP_WIDTH;camera.size=6.0;camera.current=true
     var world:=Lighting2D.new();var spells:=NativeSourceLights.new()
@@ -115,15 +127,19 @@ func run()->void:
             light("spell",centre+Vector2(-25,10),centre+Vector2(-25,10),spell,180.0,1.0,31.3,3.5,Color(0.35,0.55,0.95))]
         table.publish(sources,func(_texture):return null)
         check(table.issues.is_empty() and table.count==2,"q"+str(quarter)+": the table holds both lights")
-        for id in ["blood.hit_a1","blood.hit_a2","blood.deposit_a1"]:
+        for id in ["blood.hit_a1","blood.hit_a2"]:
             var preview:=Preview.new();owner.add_child(preview)
-            check(preview.configure(id,{},73).is_empty() and preview.bind_receiving().is_empty(),id+" builds with table receiving")
+            var configured:String=preview.configure(id,{},73)
+            check(configured.is_empty(),id+" builds selected native source: "+configured)
+            if not configured.is_empty():preview.close();preview.free();continue
+            var receiving:String=preview.bind_receiving()
+            check(receiving.is_empty(),id+" binds table receiving: "+receiving)
+            if not receiving.is_empty():preview.close();preview.free();continue
             var record:Dictionary=preview.record;var ppu:=float(record.pixels_per_unit)
             var origin:=camera.unproject_position(basis*Vector3(-record.pivot[0]/ppu,record.pivot[1]/ppu,0))
             var pixel_scale:=(camera.unproject_position(basis*Vector3.RIGHT)-camera.unproject_position(Vector3.ZERO)).length()/ppu
-            var context:={"screen_origin":origin,"pixel_scale":pixel_scale,"light_cap":1.0,"source_basis":Basis(Vector3.UP,.4),
-                "supports":[Transform3D(Basis.from_scale(Vector3(3,1,3)),Vector3.ZERO)] if id=="blood.deposit_a1" else []}
-            var age:=2.0 if id=="blood.deposit_a1" else .2
+            var context:={"screen_origin":origin,"pixel_scale":pixel_scale,"light_cap":1.0,"source_basis":Basis(Vector3.UP,.4),"supports":[]}
+            var age:=.2
             var sample:Dictionary=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
             var deadline:=Time.get_ticks_msec()+10000
             while not sample.ready and sample.error.is_empty() and Time.get_ticks_msec()<deadline:
@@ -168,7 +184,7 @@ func run()->void:
             for twin in references:twin.free()
             for view in pages:view.free()
             preview.close();preview.free()
-    check(empty<=2,"At most two of twelve samples are empty native sprays ("+str(empty)+")")
+    check(empty<=2,"At most two of eight samples are empty native sprays ("+str(empty)+")")
     main.free()
     print("TABLE_RECEIVING_REPORT ",JSON.stringify({"checks":checks,"failed":failures.size(),"failures":failures}))
     quit(0 if failures.is_empty() else 1)

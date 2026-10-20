@@ -1,6 +1,7 @@
 extends SceneTree
 ## Real Dying/death-save/Dead sequence in the production Studio renderer.
 const Studio=preload("res://studio/studio.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -24,12 +25,18 @@ func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_size(Vector2i(1280,720));DirAccess.make_dir_recursive_absolute("res://.captures/studio/combat")
     var studio=Studio.new();root.add_child(studio)
+    var original:Dictionary=Fixtures.public_case("death-save")
+    studio.case_records=[original];studio.select_case(original,"amber")
+    studio.loop_enabled=false;studio.loop_button.set_pressed_no_signal(false)
     if not await settle(studio):await finish(studio);return
+    check(studio.active_directory==Fixtures.journal("death-save"),"Exact original Dying/death-save/Dead journal is selected, independent of library ordering")
+    check(studio.index.rows.any(func(row):return row.kind=="event" and row.event.kind=="death_save"),"The original sequence includes authoritative death-save outcomes")
     var dying=studio.index.rows.filter(func(row):return row.kind=="body" and row.track.clip=="Die" and row.track.duration_ms>0)
     var dead=studio.index.rows.filter(func(row):return row.kind=="body" and row.track.clip=="Die" and row.track.duration_ms==0)
     check(dying.size()==1 and dead.size()==1,"Actual recording has one fall and one terminal-pose death")
     if dying.size()!=1 or dead.size()!=1:await finish(studio);return
     var actor:String=dying[0].track.actor_uuid
+    check(dead[0].track.actor_uuid==actor,"One actual recipient owns both the fall and terminal death pose")
     for probe in [{"name":"alive","at":dying[0].start_ms-.01,"life":"alive"},{"name":"falling","at":lerpf(dying[0].start_ms,dying[0].end_ms,.5),"life":"dying"},{"name":"down","at":dying[0].end_ms+.01,"life":"dying"},{"name":"dead","at":dead[0].start_ms+.01,"life":"dead"}]:
         studio._seek(probe.at)
         if not await settle(studio):break

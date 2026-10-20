@@ -7,23 +7,24 @@ var checks=0
 var failures:Array=[]
 var evidence:Array=[]
 var runtime_gaps:Array=[]
-# Received events can have no admitted actor, or no qualified source socket.
-# These concrete current gaps stay in the evidence; they are not played coverage.
-const ATTACHMENT_GAPS={
-    "861682c7-c225-40ad-9e3b-955417655eb1:weapon_swing_heavy":"attachment_socket_unavailable"}
 func _initialize()->void:run.call_deferred()
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("STUDIO_AUDIO_FAIL ",label)
 func check_admission(row:Dictionary,diagnostics:Dictionary,context:String)->void:
     var diagnostic:Dictionary=diagnostics.rows.get(row.component.id,{})
-    var identity=str(row.component.source_event_uuid)+":"+str(row.component.cue_id)
-    if diagnostic.get("starts",0)==1:
-        check(true,context+": cue starts once: "+row.component.cue_id)
-    elif ATTACHMENT_GAPS.has(identity):
-        check(diagnostic.get("starts",0)==0 and diagnostic.get("state")=="skipped" and diagnostic.get("reason")==ATTACHMENT_GAPS[identity],context+": known unattached cue remains explicitly skipped")
-        runtime_gaps.append({"context":context,"component_id":row.component.id,"cue":row.component.cue_id,"source_ready":diagnostic.get("source_ready",false),"reason":diagnostic.get("reason","")})
-    else:check(false,context+": cue did not start once: "+row.component.cue_id)
+    check(diagnostic.get("starts",0)==1,context+": cue starts once: "+row.component.cue_id+" "+str(diagnostic))
+    if diagnostic.get("starts",0)!=1:
+        runtime_gaps.append({"context":context,"component_id":row.component.id,"source_event_uuid":row.component.source_event_uuid,
+            "cue":row.component.cue_id,"source_ready":diagnostic.get("source_ready",false),"reason":diagnostic.get("reason","")})
+func select_original(studio:Control,id:String)->void:
+    # A direct journal load intentionally has no paired case or peer index.
+    # Ordinary library selection owns the two untouched originals and lazily
+    # admits the requested listening audience through the production path.
+    var record:Dictionary=Fixtures.public_case(id)
+    studio.case_records=studio.case_records.filter(func(value):return value.id!=record.id)
+    studio.case_records.append(record)
+    studio.select_case(record,"amber")
 func settle(studio:Control)->bool:
     var deadline=Time.get_ticks_msec()+90000
     while (studio.index.is_empty() or studio.loader!=null or (not studio.preparing_loop and (studio.seeker!=null or studio.installing or studio.requested_seek>=0))) and Time.get_ticks_msec()<deadline:await process_frame
@@ -88,10 +89,14 @@ func collect(studio:Control,capture:AudioEffectCapture,label:String,stop_after_c
     evidence.append(result);return result
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,720)
-    var required_study_cues={"unarmed_swing":false,"potion_drink":false,"door_open":false}
+    var required_study_cues={"unarmed_swing":false,"potion_drink":false,"door_open":false,"equipment_handle":false,"torch_ignite":false}
     var studio=Studio.new();root.add_child(studio)
+    select_original(studio,"interaction-media")
     if not await settle(studio):await finish(studio);return
-    check(studio.active_directory==Fixtures.journal("interaction-media"),"Exact real Move recording loaded")
+    check(studio.active_directory==Fixtures.journal("interaction-media") and studio.active_perspective=="amber","Exact real interaction/movement case and its Amber audience loaded")
+    var deadline:int=Time.get_ticks_msec()+30000
+    while AudioServer.get_bus_index("SFX")<0 and Time.get_ticks_msec()<deadline:
+        await process_frame
     var bus=AudioServer.get_bus_index("SFX")
     check(bus>=0,"Actual prepared Studio creates SFX bus")
     if not failures.is_empty():await finish(studio);return
@@ -126,8 +131,9 @@ func run()->void:
         check(looped.starts.get(rows[0].component.id,0)==2,"Selected cue starts once on each of two real loop passes")
         studio.loop_enabled=false
     for path in ["jump","melee","hide-light","rage","interaction-media","action-surge","door"]:
-        studio._load(Fixtures.journal(path))
+        select_original(studio,path)
         if not await settle(studio):break
+        check(studio.active_directory==Fixtures.journal(path) and studio.active_perspective=="amber",path+": exact unchanged original and audience publish")
         studio.loop_enabled=false
         capture.clear_buffer();studio._play_study();await settle(studio)
         var played=await collect(studio,capture,path)
@@ -146,8 +152,19 @@ func run()->void:
             if path=="melee" and row.component.attachment in ["weapon","target_body"]:
                 check(played.attachments.get(row.component.id,{}).get("distance_from_ground_contact",0)>.01,"Melee "+row.component.attachment+" voice uses its authored body/hand anchor above ground contact")
         if path=="hide-light":
+            check(cues.any(func(row):return row.component.cue_id=="torch_ignite"),"Actual disclosed torch ignition owns its authored sound")
+        if path=="interaction-media":
             var equipment=cues.filter(func(row):return row.component.cue_id=="equipment_handle")
-            check(not equipment.is_empty() and cues.any(func(row):return row.component.cue_id=="torch_ignite"),"Previously silent equipment and torch ignition are exercised in real Studio")
+            # This original owns a real MELEE_MAIN layer removal at occurrence
+            # 112. hide-light changes is_lit, never equipment membership.
+            check(not equipment.is_empty(),"Actual recorded equipment change owns its authored sound")
+            var drinks=studio.index.rows.filter(func(row):return row.kind=="event" and row.event.get("behavior_id")=="action.item.potion_healing.drink")
+            check(drinks.size()==1,"Original interaction case exercises its actual healing-potion action")
+            if not drinks.is_empty():
+                var sounds=cues.filter(func(row):return row.component.cue_id=="potion_drink" and str(row.component.source_event_uuid)==str(drinks[0].event.event_uuid))
+                check(sounds.size()==1,"Actual healing-potion action has one authored drink cue")
+                if sounds.size()!=1:runtime_gaps.append({"context":path,"source_event_uuid":drinks[0].event.event_uuid,
+                    "behavior_id":"action.item.potion_healing.drink","cue":"potion_drink","reason":"actual_drink_audio_assignment_missing"})
             if not equipment.is_empty():
                 capture.clear_buffer();studio._play_clip(equipment[0]);await settle(studio)
                 var repeated=await collect(studio,capture,"equipment_selected_loop",equipment[0].component.id,2)
@@ -162,7 +179,7 @@ func run()->void:
         if path=="action-surge":
             check(cues.any(func(row):return row.component.cue_id=="action_surge" and row.component.clip.contains("/kenney/rpg/cloth")),"Action Surge replacement plays a real physical cloth source")
     for id in required_study_cues:check(required_study_cues[id],"Actual independent study recordings exercise "+id)
-    studio._load(Fixtures.journal("hide-light"))
+    select_original(studio,"hide-light")
     if await settle(studio):
         for listening in ["amber","blue"]:
             studio.select_perspective(listening)
@@ -181,6 +198,6 @@ func run()->void:
     await finish(studio)
 func finish(studio:Control)->void:
     studio.queue_free();await process_frame;await process_frame
-    var result={"checks":checks,"failures":failures,"evidence":evidence,"runtime_attachment_gaps":runtime_gaps,"audio_driver":AudioServer.get_driver_name(),"scope":"Actual Studio base cues, Move/Jump clocks, equipment seek/loop, Action Surge and separate listening factions; admitted native voice dispatch and captured SFX mixer PCM. Explicit skipped attachments are gaps, not played coverage or physical-speaker audibility."}
+    var result={"checks":checks,"failures":failures,"evidence":evidence,"runtime_audio_gaps":runtime_gaps,"audio_driver":AudioServer.get_driver_name(),"scope":"Unchanged two-seat original Studio cases: Move/Jump source clocks, actual equipment seek/loop, torch and healing-potion actions, Action Surge and independent listening audiences; native voice dispatch and captured SFX mixer PCM. Missing assignments or skipped attachments fail the gate and remain named gaps, not played coverage or physical-speaker audibility."}
     FileAccess.open("res://generated/studio_audio_transport_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("STUDIO_AUDIO_TRANSPORT ",JSON.stringify({"checks":checks,"failures":failures,"captures":evidence.size()}));quit(0 if failures.is_empty() else 1)

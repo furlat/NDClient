@@ -8,7 +8,7 @@ this intake. Native actor-history shader failures remain failures.
 
 ## Unchanged original corpus
 
-`tests/fixtures/schema 16/banishment-departure/` contains both complete original
+`tests/fixtures/schema16/banishment-departure/` contains both complete original
 Amber/Blue streams, **18 packets per seat**, original scenario, command/receipt
 trace, recording result and source provenance. Original runtime capture:
 `.runtime/scenario-banishment-departure/20261020T051654.893924Z/`.
@@ -79,7 +79,7 @@ made present are not permissible substitutes.
 
 ## Precise bounded implementation seams
 
-Production edits are held until root publishes its coherent checkpoint.
+The intake initially held production edits until root published its coherent checkpoint. Input/capture implementation evidence is now recorded in [BANISHMENT_DEPARTURE_IMPLEMENTATION_2026-10-20.md](BANISHMENT_DEPARTURE_IMPLEMENTATION_2026-10-20.md).
 The already approved design has these existing owners:
 
 - `PresentationCondition.capture_departure` and `ability_records.gd` round-trip

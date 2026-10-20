@@ -35,6 +35,7 @@ const ASSETS := "res://assets/"
 ## Numeric packets above this size are split into pages of PAGE_SIZE whole cells.
 const PAGE_SIZE := Vector2i(1536, 768)
 const PAGE_MIN_BYTES := 16 * 1024 * 1024
+const PAGE_CACHE_VERSION := 1
 
 static func build(source: Dictionary, out_dir: String, report: Dictionary) -> void:
     var started := Time.get_ticks_msec()
@@ -51,7 +52,13 @@ static func build(source: Dictionary, out_dir: String, report: Dictionary) -> vo
             if "status" in entries[section][id] and not entries[section][id].status in STATUSES: Common.error(report, "environment/" + section + "/" + id, "unknown status")
     DirAccess.make_dir_recursive_absolute(out_dir)
     var context := {"report": report, "entries": entries, "out": out_dir, "art": entries.art, "resources": {}, "animations": {},
-        "paths": {}, "banks": {}, "library": {}, "normals": {}, "layouts": {}, "selections": {}, "rests": {}}
+        "paths": {}, "banks": {}, "library": {}, "normals": {}, "layouts": {}, "selections": {}, "rests": {},
+        "packet_headers": {}, "page_cache": {}, "previous_layouts": {}, "previous_page_cache": {}}
+    for previous in [["texture_layouts.res", "previous_layouts", "layouts"], ["texture_page_cache.res", "previous_page_cache", "sources"]]:
+        var path: String = out_dir.path_join(previous[0])
+        if FileAccess.file_exists(path):
+            var record: Resource = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
+            if record != null: context[previous[1]] = record.value.get(previous[2], {})
     for id in entries.art:
         if not entries.art[id].rest_library.is_empty(): context.rests[entries.art[id].rest_library] = true
     var package: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
@@ -81,6 +88,8 @@ static func build(source: Dictionary, out_dir: String, report: Dictionary) -> vo
     _write(out_dir.path_join("index.res"), index, report)
     _write(out_dir.path_join("receiving_normals.res"), {"normals": context.normals}, report)
     _write(out_dir.path_join("texture_layouts.res"), {"version": 2.0, "operation": "lossless_frame_cell_pages", "layouts": context.layouts}, report)
+    # Offline output reuse only. The renderer consumes texture_layouts, never stamps.
+    _write(out_dir.path_join("texture_page_cache.res"), {"sources": context.page_cache}, report)
     print("ENVIRONMENT_BUILD ", JSON.stringify({"art": entries.art.size(), "banks": context.banks.size(), "library": context.library.size(),
         "resources": context.resources.size(), "paths_checked": context.paths.size(), "seconds": (Time.get_ticks_msec() - started) / 1000.0}))
 
@@ -170,7 +179,7 @@ static func _bank(context: Dictionary, art: Art, where: String) -> void:
         if bank.has("frames_by_pose") and bank.frames_by_pose.get(pose, []).size() != source.frames: Common.error(report, where, "pose " + pose + " does not hold " + str(source.frames) + " colour frames")
     if art.state_change_frame >= source.frames: Common.error(report, where, "state_change_frame outside the bank")
     _collect_paths(context, bank)
-    if art.paged: _page(context, art.id, bank, where)
+    _page(context, art.id, bank, where, art.paged)
     var path: String = context.out.path_join("banks/" + art.id + ".res")
     _write(path, bank, report)
     context.banks[art.id] = path
@@ -216,21 +225,40 @@ static func _receiving_normals(root: Resource, context: Dictionary) -> void:
         context.normals[original] = selection.normals[original]
         context.paths[selection.normals[original].path] = true
 
-static func _page(context: Dictionary, bank_id: String, bank: Dictionary, where: String) -> void:
+## Read only the PNG header to decide admission; small numeric banks are never decoded here.
+static func _packet_header(path: String) -> Dictionary:
+    var file := FileAccess.open(path, FileAccess.READ)
+    if file == null or file.get_length() < 26: return {}
+    if file.get_buffer(8) != PackedByteArray([137,80,78,71,13,10,26,10]): return {}
+    file.big_endian = true
+    file.seek(16)
+    var size := Vector2i(file.get_32(), file.get_32())
+    return {"size": size, "bits": file.get_8(), "colour_type": file.get_8()}
+
+static func _header(context: Dictionary, path: String) -> Dictionary:
+    if not context.packet_headers.has(path): context.packet_headers[path] = _packet_header(path)
+    return context.packet_headers[path]
+
+static func _page_eligible(header: Dictionary) -> bool:
+    return not header.is_empty() and header.bits == 8 and header.colour_type == 6 and \
+        header.size.x * header.size.y * 4 > PAGE_MIN_BYTES
+
+static func _page(context: Dictionary, bank_id: String, bank: Dictionary, where: String, explicitly_paged: bool = false) -> void:
     var report: Dictionary = context.report
     var regions := {}
     for frames in bank.surface_frames_by_pose.values():
         for frame in frames:
+            # Independent support masks keep their delivered R8 files. Aliases of
+            # these numeric sources are remapped by the catalog, not repacked twice.
             for region in [frame.get("geometry_region", {}), frame.get("normal", {}).get("region", {})]:
                 if region.is_empty(): continue
                 if not regions.has(region.path): regions[region.path] = []
                 regions[region.path].append(region.rect)
     var oversized: Array = []
     for path in regions:
-        var image := Image.load_from_file(ProjectSettings.globalize_path(path))
-        if image == null: Common.error(report, where, "cannot read packet " + path); continue
-        if image.get_width() * image.get_height() * 4 > PAGE_MIN_BYTES: oversized.append(path)
-    if oversized.is_empty(): Common.error(report, where, "paged, but no numeric packet is larger than 16 MiB"); return
+        var selected: String = context.normals.get(path, {}).get("path", path)
+        if _page_eligible(_header(context, path)) or _page_eligible(_header(context, selected)): oversized.append(path)
+    if explicitly_paged and oversized.is_empty(): Common.error(report, where, "paged, but no RGBA8 numeric packet is larger than 16 MiB")
     for i in oversized.size():
         var original: String = oversized[i]
         var sizes := {}
@@ -240,36 +268,81 @@ static func _page(context: Dictionary, bank_id: String, bank: Dictionary, where:
         var folder: String = bank_id.trim_prefix("prop.").replace(".", "-") + ("/source-%03d" % i if oversized.size() > 1 else "")
         var selected: String = context.normals.get(original, {}).get("path", original)
         for pair in [[original, "original-depth"], [selected, "selected-normal"]]:
-            if context.layouts.has(pair[0]): continue
-            var layout := _paginate(pair[0], cell, context.out.path_join("pages/" + folder + "/" + pair[1]), report, where)
-            if not layout.is_empty(): context.layouts[pair[0]] = layout
+            var path: String = pair[0]
+            var header := _header(context, path)
+            if not _page_eligible(header): continue
+            if not _whole_regions(header.size, cell, regions[original]):
+                Common.error(report, where, "numeric regions do not fit unchanged whole cells: " + path); continue
+            if context.layouts.has(path):
+                if Vector2i(context.layouts[path].cell[0], context.layouts[path].cell[1]) != cell:
+                    Common.error(report, where, "shared numeric source has inconsistent cell registration: " + path)
+                continue
+            var output: String = context.out.path_join("pages/" + folder + "/" + pair[1])
+            # Existing source addresses survive generic activation and shared-bank ordering.
+            if context.previous_layouts.has(path):
+                var previous: Dictionary = context.previous_layouts[path]
+                if previous.has("pages") and not previous.pages.is_empty(): output = str(previous.pages[0]).get_base_dir()
+            var stamp := _page_stamp(path, cell)
+            var cached: Dictionary = context.previous_page_cache.get(path, {})
+            var layout: Dictionary = cached.get("layout", {}) if _page_cache_matches(cached, stamp, output) else {}
+            if layout.is_empty(): layout = _paginate(path, cell, output, report, where)
+            if layout.is_empty(): continue
+            context.layouts[path] = layout
+            context.page_cache[path] = {"stamp": stamp, "layout": layout, "outputs": _page_outputs(layout)}
 
-static func _paginate(path: String, cell: Vector2i, folder: String, report: Dictionary, where: String) -> Dictionary:
+static func _whole_regions(size: Vector2i, cell: Vector2i, regions: Array) -> bool:
+    if cell.x <= 0 or cell.y <= 0 or cell.x > PAGE_SIZE.x or cell.y > PAGE_SIZE.y or size.x % cell.x != 0 or size.y % cell.y != 0: return false
+    for rect in regions:
+        if rect.size() != 4 or rect[0] < 0 or rect[1] < 0 or rect[0] != float(int(rect[0])) or rect[1] != float(int(rect[1])) or rect[2] != cell.x or rect[3] != cell.y or \
+                int(rect[0]) % cell.x != 0 or int(rect[1]) % cell.y != 0 or rect[0] + rect[2] > size.x or rect[1] + rect[3] > size.y: return false
+    return true
+
+static func _file_stamp(path: String) -> Array:
+    var file := FileAccess.open(path, FileAccess.READ)
+    return [FileAccess.get_modified_time(path), file.get_length()] if file != null else []
+
+static func _page_stamp(path: String, cell: Vector2i) -> Dictionary:
+    return {"version": PAGE_CACHE_VERSION, "source": _file_stamp(path), "cell": _floats(cell), "page_size": _floats(PAGE_SIZE)}
+
+static func _page_outputs(layout: Dictionary) -> Dictionary:
+    var outputs := {}
+    for path in layout.pages: outputs[path] = _file_stamp(path)
+    return outputs
+
+static func _page_cache_matches(cached: Dictionary, stamp: Dictionary, folder: String) -> bool:
+    if cached.get("stamp", {}) != stamp or cached.get("layout", {}).get("pages", []).is_empty(): return false
+    for path in cached.layout.pages:
+        if str(path).get_base_dir() != folder or not FileAccess.file_exists(path) or \
+                cached.get("outputs", {}).get(path, []) != _file_stamp(path): return false
+    return true
+
+static func _paginate(path: String, cell: Vector2i, folder: String, report: Dictionary, where: String, page_size: Vector2i = PAGE_SIZE) -> Dictionary:
+    if cell.x <= 0 or cell.y <= 0 or cell.x > page_size.x or cell.y > page_size.y:
+        Common.error(report, where, "cell does not fit numeric page: " + path); return {}
     var image := Image.load_from_file(ProjectSettings.globalize_path(path))
     if image == null or image.get_format() != Image.FORMAT_RGBA8 or image.get_width() % cell.x != 0 or image.get_height() % cell.y != 0:
         Common.error(report, where, "expected whole RGBA8 cells: " + path); return {}
     var source_columns := image.get_width() / cell.x
     var count := source_columns * (image.get_height() / cell.y)
-    var columns := PAGE_SIZE.x / cell.x
-    var rows := PAGE_SIZE.y / cell.y
+    var columns := page_size.x / cell.x
+    var rows := page_size.y / cell.y
     var per_page := columns * rows
     var size := Vector2i(columns * cell.x, rows * cell.y)
     DirAccess.make_dir_recursive_absolute(folder)
     var pages: Array = []
     for page in range(ceili(float(count) / per_page)):
         var result := Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+        result.fill(Color.TRANSPARENT)
         var used := mini(per_page, count - page * per_page)
         for local in used:
             var cell_index := page * per_page + local
             result.blit_rect(image, Rect2i(Vector2i(cell_index % source_columns * cell.x, cell_index / source_columns * cell.y), cell), Vector2i(local % columns * cell.x, local / columns * cell.y))
         var file := folder.path_join("page-%03d.png" % page)
-        result.save_png(file)
+        if result.save_png(file) != OK:
+            Common.error(report, where, "cannot save numeric page: " + file); return {}
         var saved := Image.load_from_file(ProjectSettings.globalize_path(file))
-        for local in used:
-            var cell_index := page * per_page + local
-            var from := Rect2i(Vector2i(cell_index % source_columns * cell.x, cell_index / source_columns * cell.y), cell)
-            if saved.get_region(Rect2i(Vector2i(local % columns * cell.x, local / columns * cell.y), cell)).get_data() != image.get_region(from).get_data():
-                Common.error(report, where, "paging changed cell " + str(cell_index) + " of " + path)
+        if saved == null or saved.get_data() != result.get_data():
+            Common.error(report, where, "saved numeric page changed RGBA bytes: " + file); return {}
         pages.append(file)
     return {"pages": pages, "source_size": [float(image.get_width()), float(image.get_height())], "size": _floats(size), "cell": _floats(cell),
         "source_columns": float(source_columns), "columns": float(columns), "cells_per_page": float(per_page), "verified_cells": float(count),

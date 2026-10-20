@@ -27,6 +27,59 @@ def resource(path):
     return 'res://'+str(path.resolve().relative_to(PROJECT))
 
 
+def entry_for(scenario,result,folder,inventory):
+    entry={key:scenario[key] for key in ('id','title','kind','subjects','seed')}
+    entry['subjects']={kind:list(ids) for kind,ids in entry['subjects'].items()}
+    actual_ids=list(result.get('summary',{}).get('behaviors',{}))+result.get('summary',{}).get('conditions',[])
+    actual_ids.extend(actor['creature'] for actor in scenario['actors'] if 'creature' in actor)
+    actual_ids.extend(item if isinstance(item,str) else item['id'] for actor in scenario['actors'] for item in actor.get('items',[]))
+    for kind,ids in inventory['ids'].items():
+        observed=[content for content in actual_ids if content in ids]
+        if observed:entry['subjects'][kind]=sorted(set(entry['subjects'].get(kind,[])+observed))
+    journals={}
+    for seat in result.get('perspectives',('party',) if scenario.get('player_builds_source') else ('amber','blue')):
+        path=folder/seat/'journal'
+        if not path.joinpath('0000000000000000.json').exists():path=folder/seat
+        journals[seat]=resource(path)
+    entry.update(journals=journals,moments=result.get('moments',[]),status='recorded' if result['ok'] else 'failed',
+        reason=result.get('failure') or '',scenario=resource(folder/'scenario.json'),studio_checked=False,errors=[])
+    return entry
+
+
+def import_recordings(roots,out):
+    """Publish preserved original captures; no backend, packet edits or review claims."""
+    inventory=json.loads((PROJECT/'authoring/server_ids.json').read_text())
+    identity={key:inventory['header'][key] for key in ('commit','protocol_version','player_schema_version','schema_digest')}
+    path=out/'index.json'
+    index=json.loads(path.read_text()) if path.exists() else {'version':1,'engine':{'path':str(ENGINE),**identity},'cases':[]}
+    if any(index['engine'].get(key)!=value for key,value in identity.items()):
+        raise ValueError('Existing library belongs to another engine; select a separate --out')
+    files=sorted({record.resolve() for root in roots for record in root.rglob('recording.json')})
+    if not files:raise ValueError('No preserved recording.json was found')
+    published=[]
+    for record in files:
+        result=json.loads(record.read_text());folder=record.parent
+        if any(result.get('engine',{}).get(key)!=value for key,value in identity.items()):
+            raise ValueError('Original recording engine does not match current authoring: '+str(record))
+        entry=entry_for(json.loads((folder/'scenario.json').read_text()),result,folder,inventory)
+        if entry['id'] in published:
+            raise ValueError('Multiple captures for one case; select one original directory: '+entry['id'])
+        if result['ok']:
+            for journal in entry['journals'].values():
+                if not (PROJECT/journal.removeprefix('res://')/'0000000000000000.json').exists():
+                    raise FileNotFoundError('Missing original initialization: '+journal)
+        previous=next((row for row in index['cases'] if row['id']==entry['id']),None)
+        if previous and all(previous.get(key)==entry[key] for key in ('journals','scenario','status')):
+            # Re-publishing the same immutable capture retains its separate
+            # playback/output/review evidence. A different capture resets it.
+            entry={**previous,**entry,'studio_checked':previous.get('studio_checked',False),'errors':previous.get('errors',[])}
+        index['cases']=[row for row in index['cases'] if row['id']!=entry['id']]+[entry]
+        published.append(entry['id'])
+    out.mkdir(parents=True,exist_ok=True)
+    path.write_text(json.dumps(index,indent=1)+'\n')
+    return {'imported':published,'index':str(path),'backend_started':False}
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--engine',type=Path,default=ENGINE)
@@ -34,7 +87,10 @@ def main():
     parser.add_argument('--only',default='cohort')
     parser.add_argument('--out',type=Path,default=PROJECT/'.runtime/studio-library')
     parser.add_argument('--timeout',type=int,default=300)
+    parser.add_argument('--import-recordings',type=Path,nargs='+',help='Publish preserved original capture directories without starting a backend')
     args=parser.parse_args();args.out=args.out.resolve()
+    if args.import_recordings:
+        print(json.dumps(import_recordings(args.import_recordings,args.out)));return
     if args.timeout<90:parser.error('--timeout must leave at least90s for bounded host/driver cleanup')
     args.out.mkdir(parents=True,exist_ok=True)
     environment=dict(os.environ,PYTHONPATH=f'{args.engine}:{args.engine}/sdk/python/src',PYTHONDONTWRITEBYTECODE='1',PYTHONHASHSEED='0')
@@ -75,17 +131,7 @@ def main():
                     try:os.killpg(int((folder/'host.pid').read_text()),signal.SIGTERM)
                     except ProcessLookupError:pass
                 result={'ok':False,'failure':f'{type(error).__name__}: {error}'}
-        entry={key:scenario[key] for key in ('id','title','kind','subjects','seed')}
-        entry['subjects']={kind:list(ids) for kind,ids in entry['subjects'].items()}
-        actual_ids=list(result.get('summary',{}).get('behaviors',{}))+result.get('summary',{}).get('conditions',[])
-        actual_ids.extend(actor['creature'] for actor in scenario['actors'] if 'creature' in actor)
-        actual_ids.extend(item if isinstance(item,str) else item['id'] for actor in scenario['actors'] for item in actor.get('items',[]))
-        for kind,ids in inventory['ids'].items():
-            observed=[content for content in actual_ids if content in ids]
-            if observed:entry['subjects'][kind]=sorted(set(entry['subjects'].get(kind,[])+observed))
-        entry.update(journals={seat:resource(folder/seat/'journal') for seat in result.get('perspectives',('party',) if scenario.get('player_builds_source') else ('amber','blue'))},
-            moments=result.get('moments',[]),status='recorded' if result['ok'] else 'failed',reason=result.get('failure') or '',
-            scenario=resource(scenario_path),studio_checked=False,errors=[])
+        entry=entry_for(scenario,result,folder,inventory)
         index['cases']=[row for row in index['cases'] if row['id']!=entry['id']]+[entry]
         index_path.write_text(json.dumps(index,indent=1)+'\n')
         failed+=not result['ok'];print(f"{entry['status']:8} {entry['id']} {entry['reason']}",flush=True)

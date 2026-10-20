@@ -4,6 +4,7 @@ extends SceneTree
 const Catalog=preload("res://source_catalog.gd")
 const Placement=preload("res://placement.gd")
 const PlayerScript=preload("res://play.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
 var checks:=0
 var failures:Array=[]
 func check(ok:bool,label:String)->void:
@@ -42,19 +43,32 @@ func run()->void:
     var entry={"node":mesh,"material":material,"placement":row,"source_role":1,"role":"terrain","layer":0,"id":"water"}
     binding.set_environment(entry,Basis.IDENTITY)
     binding.static_entries=[entry];binding.world_revision=0;binding.world_quarter=0
-    binding.timeline.state={"tiles":{"0,0":{"tile_uuid":"water","position":[0,0],"elevation_steps":0}},"objects":{},"actors":{},"senses":{"visible":[[0,0]]},"audience":{"controlled":[]}}
+    binding.timeline.state={"tiles":{"0,0":{"tile_uuid":"water","position":[0,0],"elevation_steps":0}},"objects":{},"actors":{},"senses":{"visible":Cells.mask([[0,0]])},"audience":{"controlled":[]}}
     binding.timeline.paused=true;binding.timeline.display_ms=1250
     binding._sync_scenery(true)
     check(material.shader==load("res://water.gdshader"),"Production environment binding selects water material")
     check(material.get_shader_parameter("displayed_time_seconds")==1.25,"Production binding uses displayed seconds")
+    RenderingServer.global_shader_parameter_set(&"light_ambient",.12)
+    RenderingServer.global_shader_parameter_set(&"light_cap",0.0)
+    RenderingServer.global_shader_parameter_set(&"light_normals",false)
+    binding.light_table.publish([],Callable())
     var dark=await capture(view)
-    var omni=OmniLight3D.new();omni.position=Vector3(0,1.5,0);omni.omni_range=5;omni.light_energy=2;omni.shadow_enabled=false;view.add_child(omni)
+    var cookie_image=Image.create(256,256,false,Image.FORMAT_RGBA8);cookie_image.fill(Color.WHITE)
+    var cookie=ImageTexture.create_from_image(cookie_image);cookie.set_meta(&"cookie_image",cookie_image)
+    var point=PointLight2D.new();point.position=camera.unproject_position(Vector3.ZERO)
+    point.height=128.0;point.energy=2.0;point.texture=cookie;point.texture_scale=2.0;view.add_child(point)
+    var canvas_source={"id":"water-native-point","screen_position":point.position,"height":point.height,
+        "energy":point.energy,"color":point.color,"texture":point.texture,"texture_scale":point.texture_scale,
+        "cookie_scale":point.scale,"offset":point.offset,"enabled":point.enabled}
+    binding.light_table.publish([canvas_source],func(texture):return texture.get_meta(&"cookie_image"))
     var lit=await capture(view)
-    check(energy(lit)>energy(dark)+10,"Original water visibly receives native Omni light")
-    omni.visible=false
-    var directional=DirectionalLight3D.new();directional.rotation_degrees=Vector3(-90,0,0);directional.light_energy=1;view.add_child(directional)
+    check(energy(lit)>energy(dark)+10,"Original water visibly receives actual native PointLight2D operands")
+    point.enabled=false
+    var directional=DirectionalLight2D.new();directional.height=1.0;directional.energy=1.0;view.add_child(directional)
+    binding.light_table.publish([],Callable(),[{"id":"water-native-directional","direction":-directional.transform.y.normalized(),
+        "height":directional.height,"color":directional.color,"energy":directional.energy,"enabled":directional.enabled}])
     var sun=await capture(view)
-    check(energy(sun)>energy(dark)+10,"Original water visibly receives native directional light")
+    check(energy(sun)>energy(dark)+10,"Original water visibly receives actual native DirectionalLight2D operands")
     var held=await capture(view)
     binding.timeline.advance(5000);binding._sync_scenery()
     var paused=await capture(view)
@@ -67,7 +81,8 @@ func run()->void:
     check(material.get_shader_parameter("displayed_time_seconds")==4.0 and moved.get_data()!=paused.get_data(),"Only displayed advancement moves original ripple pixels")
     binding.timeline.display_ms=1250;binding._sync_scenery()
     check((await capture(view)).get_data()==paused.get_data(),"Replaying the same displayed timestamp restores exact water pixels")
-    binding.timeline.state.senses.visible=[];binding.timeline.revision+=1;binding._sync_scenery()
+    binding.timeline.state.senses.visible=Cells.mask([])
+    binding.timeline.revision+=1;binding.timeline.world_revision+=1;binding._sync_scenery()
     var memory=await capture(view)
     check(energy(memory)<energy(paused) and energy(memory)>0,"Remembered water remains readable and distinct")
     check(material.get_shader_parameter("current_visibility")==0.0,"Remembered water shares the source sight grant")

@@ -359,6 +359,7 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
                 if not clips.has(use.clip):Common.error(report, where, "variant " + variant.id + " clip not in the package: " + use.clip)
         for sound in e.sounds:_check_binding(report, where, bindings.get("spells", {}).get(id), sound)
     _check_appearance_definitions(entries.get("conditions",{}),report)
+    _check_departure_definitions(entries.get("conditions",{}),clips,report)
     for id in entries.get("conditions", {}):
         var e: Resource = entries.conditions[id]
         for use in e.effects:
@@ -516,6 +517,24 @@ static func _check_appearance_definitions(conditions:Dictionary,report:Dictionar
             if definitions.has(layer.id) and definitions[layer.id]!=layer:
                 Common.error(report,where,"appearance id has distinct definitions: "+str(layer.id))
             else:definitions[layer.id]=layer
+
+static func _check_departure_definitions(conditions:Dictionary,clips:Dictionary,report:Dictionary)->void:
+    var declarations:Array=JSON.parse_string(FileAccess.get_file_as_string(PACKAGE)).get("selections",[])
+    for id in conditions:
+        if not conditions[id].capture_departure:continue
+        var where:String="abilities/conditions/"+str(id)
+        var selected:Array=declarations.filter(func(selection):return id in selection.get("condition",{}).get("owner_ids",[]))
+        if selected.is_empty():Common.error(report,where,"departure capture has no delivered condition lifecycle");continue
+        for selection in selected:
+            var registration:Dictionary=selection.condition.registration
+            if registration.get("attachment")!="recipient_ground" or registration.get("anchor")!="ground":Common.error(report,where,"departure needs the actual delivered recipient-ground registration")
+            for clip_id in selection.condition.phases.values():
+                var approaches:Array=clips.get(clip_id,{}).get("approaches",[]).filter(func(value):return value.get("condition_prepared",false))
+                if approaches.is_empty():Common.error(report,where,"departure lifecycle is not a prepared source: "+str(clip_id));continue
+                var source:Node3D=load(approaches[0].path).make_component({})
+                var history:Dictionary=source.parameters.get("actor_history",{})
+                if not history.get("capture_departure",false) or history.get("mirror",false):Common.error(report,where,"departure capture must select a non-Mirror departure constructor: "+str(clip_id))
+                source.free()
 
 static func _validate_condition(e: Resource, where: String, report: Dictionary) -> void:
     if e.look != null:

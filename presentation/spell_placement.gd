@@ -79,6 +79,16 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
         var from:Vector3=Vector3(component.from_position[0],float(component.from_elevation_feet)/5.0*Placement.HEIGHT_UNIT,component.from_position[1])
         var ground:Vector3=Vector3(receipt.position[0],float(receipt.elevation_feet)/5.0*Placement.HEIGHT_UNIT,receipt.position[1])
         return {"ready":true,"from":from,"hand":from,"to":receipt.world_anchor,"ground":ground,"caster_ground":from,"fixed":{},"surfaces":[]}
+    # Only explicitly authored departure owners may register without a live
+    # recipient. Their immutable original support replaces no canonical row.
+    if persistent and component.get("recipe",{}).get("persistent",{}).get("actorHistory",{}).get("captureDeparture",false):
+        var capture:Dictionary=component.get("logical_pose",{})
+        if capture.get("actor_uuid")!=component.get("target_uuid") or capture.get("condition_uuid")!=component.get("condition_uuid") or not capture.has("departure"):
+            return {"ready":false,"unavailable":true,"reason":"condition_original_departure_not_observed"}
+        if not str(capture.departure.get("reason","")).is_empty():return {"ready":false,"unavailable":true,"reason":capture.departure.reason}
+        if attachment!="recipient_ground" or cue.get("anchor")!="ground":return {"ready":false,"unavailable":true,"reason":"departure_registration_not_authored"}
+        var ground:Vector3=Placement.contact(capture.departure.row)
+        return {"ready":true,"from":ground,"hand":ground,"to":ground,"ground":ground,"caster_ground":ground,"surfaces":[],"fixed":{}}
     # These registrations need actual head/equipment ownership. Never fall
     # through to an unrelated ground/body point or a missing transform key.
     if attachment=="item":

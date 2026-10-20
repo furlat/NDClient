@@ -192,6 +192,14 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     elif not optical_groups.is_empty() and (budget.is_empty() or budget.used_usec<budget.limit_usec):inputs.prepare(world,optical.values(),false,optical_groups)
     if allow_optional and (budget.is_empty() or budget.used_usec<budget.limit_usec):inputs.prepare(world,optional.values(),false)
     FrameProfile.end_phase(world.profile,"native_prepare_optical_surfaces",started)
+    for component in wanted.values()+(optional.values() if allow_optional else []):
+        if not handles.has(component.id) or not Inputs.departure_history(handles[component.id]):continue
+        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
+        started=Time.get_ticks_usec()
+        var departure:Dictionary=inputs.prepare_departure(world,handles[component.id],component)
+        if wanted.has(component.id) and departure.get("pending",false):result.ready=false;result.pending+=1
+        if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+        FrameProfile.end_phase(world.profile,"native_prepare_departure",started)
     started=Time.get_ticks_usec()
     # Future exact pose selection owns CPU-image demand before its measurement
     # can run. The existing media owner admits those bytes asynchronously.
@@ -201,7 +209,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
         if not handles.has(component.id):continue
         var handle:Dictionary=handles[component.id]
         if "actor_context" not in handle.clip.get("inputs",[]) or handle.get("history_allocated",false) or handle.root.is_visible_in_tree():continue
-        if not Inputs.current_pose_history(handle):continue
+        if not Inputs.current_pose_history(handle) and not (Inputs.departure_history(handle) and handle.has("departure_entries")):continue
         if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
         var points:Dictionary=Sockets.endpoints(world,component)
         if not points.ready:continue
@@ -329,7 +337,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     var retained=_queued_ids(world)
     for id in active:retained[id]=true
     for id in handles.keys():
-        if not retained.has(id):Effects.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
+        if not retained.has(id):Inputs.release_departure(handles[id]);Effects.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
         elif not active.has(id):Effects.hide(handles[id])
     FrameProfile.end_phase(world.profile,"native_sample_retention",sample_phase)
     sample_phase=Time.get_ticks_usec()
@@ -359,7 +367,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if age+0.000001<float(handle.sample_time) and not handle.get("seekable",false):
             # Normal replay seeks use a fresh presentation epoch. An explicit
             # backwards sample still clears its own particles/trails honestly.
-            Effects.close(handle);handles.erase(id);preparation_revision+=1
+            Inputs.release_departure(handle);Effects.close(handle);handles.erase(id);preparation_revision+=1
             ready=false;_pending(component,"native_spell_source_reset_pending");continue
         Effects.set_layer(handle,int(groups[key].layer_mask))
         handle.group_key=key
@@ -375,7 +383,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         # samples must follow the requested component clock at any frame rate.
         var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))
         # A seekable approach draws any age directly; only a simulation has history.
-        if handle.get("seekable",false) or ("actor_context" in handle.clip.get("inputs",[]) and Inputs.current_pose_history(handle)):handle.warming=false
+        if handle.get("seekable",false) or ("actor_context" in handle.clip.get("inputs",[]) and (Inputs.current_pose_history(handle) or Inputs.departure_history(handle))):handle.warming=false
         elif not handle.started and age>expected_step+0.000001:handle.warming=true
         elif handle.started and not handle.warming and age-float(handle.requested_time)>expected_step*2.0+0.000001:handle.warming=true
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
@@ -661,7 +669,7 @@ func close(world:Node=null)->void:
     # Immutable loaded Resources may survive a replay epoch; transient source
     # discovery carries private occurrence operands and must end with it.
     _resource_cache.erase("native_immutable_jobs")
-    for handle in handles.values():Effects.close(handle)
+    for handle in handles.values():Inputs.release_departure(handle);Effects.close(handle)
     handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear();preparation_state.clear()
     for layer in groups.values():Layer.close(layer)
     for layer in spare_layers:Layer.close(layer)
@@ -699,6 +707,10 @@ func _image_requirements(world:Node)->void:
     var inputs:Dictionary={}
     var optical_inputs:Dictionary={}
     var received_sources:Dictionary={}
+    var departure_paths:Dictionary={}
+    for id in _required_ids:
+        for path in handles.get(id,{}).get("departure_paths",{}):
+            key.append(["departure",path]);departure_paths[path]=true
     for source in self.inputs.surfaces.received_poses:received_sources[[source.path,source.slot]]=true
     for source in received_sources:
         key.append(["received",source[0],source[1]])
@@ -721,7 +733,7 @@ func _image_requirements(world:Node)->void:
     for input in inputs:key.append([input[0],input[1],inputs[input],Support.socket_samples_ready(input[0],input[1],world.catalog_cache)])
     if key==_image_key:return
     _image_key=key
-    var wanted:Dictionary=optical_inputs.duplicate()
+    var wanted:Dictionary=optical_inputs.duplicate();wanted.merge(departure_paths)
     var cpu:Dictionary=optical_inputs.duplicate()
     for input in inputs:
         if not _path_requirements.has(input):_path_requirements[input]=Support.required_paths(input[0],input[1],world.catalog_cache)

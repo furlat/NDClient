@@ -2,6 +2,7 @@ extends SceneTree
 const Preview=preload("res://presentation/native_effect_preview.gd")
 const Lighting=preload("res://presentation/lighting_2d.gd")
 const LightTable=preload("res://presentation/light_table.gd")
+const Sources=preload("res://presentation/native_effects.gd")
 var passed=0
 var failures:Array=[]
 var cases:Array=[]
@@ -25,6 +26,17 @@ func run()->void:
     var main=SubViewport.new();main.size=Vector2i(768,768);main.own_world_3d=true;main.transparent_bg=true
     main.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(main)
     var owner=Node3D.new();main.add_child(owner)
+    # Ground blood is the authoritative residue field, not an effect inferred
+    # at impact. Its native support/depth/landing pixels are qualified by
+    # blood_kernel_cache_checks / blood_residue_checks (CPU), and
+    # studio_blood_residue_checks / blood_world_preparation_checks (native),
+    # using actual original deposits.
+    for retired in ["blood.deposit_a1","blood.deposit_j1"]:
+        var source:Dictionary=Sources.source_record(retired,{})
+        var children:int=owner.get_child_count()
+        check(source.is_empty(),retired+" remains absent from current typed sources")
+        var refused:Dictionary=Sources.make(owner,source)
+        check(not refused.get("error","").is_empty() and owner.get_child_count()==children,retired+" cannot attach a client-invented deposit")
     var camera=Camera3D.new();owner.add_child(camera);camera.projection=Camera3D.PROJECTION_ORTHOGONAL
     camera.keep_aspect=Camera3D.KEEP_WIDTH;camera.size=6.0;camera.current=true
     # Room lights come from the shared light table, as in play.
@@ -37,10 +49,14 @@ func run()->void:
     for quarter in 4:
         var basis=Basis(Vector3.UP,quarter*PI*.5)*Basis.looking_at(Vector3(-6,-sqrt(24.0),-6))
         camera.basis=basis;camera.position=Vector3(0,.9*.816496580927726,0)+basis.z*12.
-        for id in ["blood.hit_a1","blood.hit_a2","blood.deposit_a1"]:
+        for id in ["blood.hit_a1","blood.hit_a2"]:
             var preview=Preview.new();owner.add_child(preview)
-            check(preview.configure(id,{},73).is_empty(),id+" selected source builds")
-            check(preview.bind_receiving().is_empty(),id+" source materials bind table receiving")
+            var configured:String=preview.configure(id,{},73)
+            check(configured.is_empty(),id+" selected source builds: "+configured)
+            if not configured.is_empty():preview.close();preview.free();continue
+            var receiving:String=preview.bind_receiving()
+            check(receiving.is_empty(),id+" source materials bind table receiving: "+receiving)
+            if not receiving.is_empty():preview.close();preview.free();continue
             var record=preview.record;var ppu=float(record.pixels_per_unit)
             var top_left=Vector3(-record.pivot[0]/ppu,record.pivot[1]/ppu,0)
             var origin=camera.unproject_position(basis*top_left)
@@ -51,11 +67,7 @@ func run()->void:
             var light={"id":"registered_fixture","screen_position":at,"texture":cookie,"texture_scale":2.0*300.0/cookie.get_width(),
                 "cookie_scale":Vector2.ONE*2.0,"offset":Vector2.ZERO,"height":56.0*pixel_scale,"energy":.9,"color":Lighting.TORCH_COLOUR,"enabled":true}
             table.publish([light],func(_texture):return null)
-            var age=.2 if id!="blood.deposit_a1" else 2.0
-            if id=="blood.deposit_a1":
-                var missing=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
-                check(not missing.ready and not missing.error.is_empty(),"Depth-reading source rejects missing published support")
-                context.supports=[Transform3D(Basis.from_scale(Vector3(3,1,3)),Vector3.ZERO)]
+            var age=.2
             var sample=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
             var deadline=Time.get_ticks_msec()+10000
             while not sample.ready and sample.error.is_empty() and Time.get_ticks_msec()<deadline:
@@ -92,6 +104,6 @@ func run()->void:
             cases.append({"id":id,"quarter":quarter,"source_covered_pixels":covered,"capture":name})
             preview.close();preview.free()
     main.free()
-    var report={"passed":passed,"failed":failures.size(),"failures":failures,"cases":cases,"renderer":RenderingServer.get_current_rendering_method(),"scope":"Selected native blood sources with controlled native2D lights and explicit flat support planes; original shader colour/coverage/normal/roughness, no donor light. Composition-normal/Canvas specular is an explicit receiving adaptation, not donor3D PBR equivalence."}
+    var report={"passed":passed,"failed":failures.size(),"failures":failures,"cases":cases,"renderer":RenderingServer.get_current_rendering_method(),"scope":"Current native A1/A2 blood sprays with controlled native2D lights; strict original shader colour/coverage/normal/roughness and alpha, no donor light. Retired client-invented deposits are refused; actual ground field/landing pixels belong to studio_blood_residue_checks and blood_world_preparation_checks, with CPU authority/kernel proof in blood_residue_checks and blood_kernel_cache_checks. Composition-normal/Canvas specular is a receiving adaptation, not donor3D PBR equivalence."}
     var file=FileAccess.open("res://generated/native_effect_receiving_checks.json",FileAccess.WRITE);file.store_string(JSON.stringify(report,"  "));file.close()
     print(JSON.stringify(report));quit(1 if failures.size() else 0)

@@ -47,7 +47,9 @@ approach when it has one, else `gpu`, else `native`. A Godot launch argument
 wherever a clip has it; Studio's **Inspect → Effect version** switches it at
 the current playhead, and an effect row's tooltip and inspector name the kind
 that plays and why when it falls back. `tests/effect_package_checks.gd` builds,
-samples and draws every approach of every clip the spells stage.
+samples and draws each context-free approach, checks rejection of missing
+constructor inputs, and lists adaptive approaches that need factual provider
+tests. Those approaches require their separate native rendering gates.
 
 ## Live player controls
 

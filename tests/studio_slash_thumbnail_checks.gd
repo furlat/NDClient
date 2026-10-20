@@ -21,13 +21,28 @@ func fitted(source:Image)->Image:
     return output
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(640,480)
-    var index=Fixtures.read("window-break")
-    check(index.ok,"Actual window-break attack journal independently admits")
+    # The ordinary melee hit intentionally has no native slash: authoring
+    # selects it for critical hits and extra attacks. This unchanged fighter
+    # journal contains both real qualified outcomes with an equipped sword.
+    var attacks:Array=Fixtures.fact_rows("action-surge","attack")
+    check(attacks.any(func(row):return row.fact.attack_outcome=="Crit" and row.fact.attack_source_kind=="equipped"),"Original fighter journal contains an actual equipped critical attack")
+    check(attacks.any(func(row):return row.fact.behavior_id=="action.feature.extra_attack" and row.fact.attack_source_kind=="equipped"),"Original fighter journal contains an actual equipped extra attack")
+    var index=Fixtures.read("action-surge")
+    check(index.ok,"Actual equipped melee attack journal independently admits")
     if not index.ok:finish();return
-    var rows=index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("source_id")=="class.martial.slash" and row.status=="available")
-    check(not rows.is_empty(),"Real equipped attack owns an authored native slash")
+    var qualified:Dictionary={}
+    for attack in attacks:
+        if attack.fact.attack_source_kind=="equipped" and (attack.fact.attack_outcome=="Crit" or attack.fact.behavior_id=="action.feature.extra_attack"):
+            # fact_rows reads unchanged JSON through Godot's JSON parser, whose
+            # numeric values are floats. Native occurrence identities are exact
+            # integers; "59.0" must not be compared with the compiler's "59".
+            qualified[str(int(attack.node.occurrence))]=attack
+    var rows=index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("source_id")=="class.martial.slash" and row.status=="available" and qualified.has(row.component.source_event_uuid))
+    check(not rows.is_empty(),"Real equipped critical/extra attack owns an authored native slash")
     if rows.is_empty():finish();return
     var row:Dictionary=rows[0];var component:Dictionary=row.component
+    var source:Dictionary=qualified[component.source_event_uuid]
+    check(source.fact.source_entity_uuid==component.actor_uuid and source.fact.source_item_uuid!=null and (source.fact.attack_outcome=="Crit" or source.fact.behavior_id=="action.feature.extra_attack"),"Native slash belongs to the actual authored critical/extra-attack selector and equipped item")
     var retained=var_to_bytes([component,row.actor])
     var rigs:Dictionary=Thumbnails.Catalog.read_file("catalog/rigs.json",index.cache)
     var cycle:Array=Thumbnails.Catalog.read_file("catalog/rig.json",index.cache).FACING_CYCLE

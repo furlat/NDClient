@@ -85,19 +85,23 @@ static func body_sample(rest:Dictionary,life:String,rig:Dictionary,pose:Dictiona
         if pose.get("captured",false):result.merge({"world_facing":pose.world_facing,"hidden_slots":pose.hidden_slots,"captured":true})
     return result
 
+static func departure_requested(condition:Dictionary,cache:Dictionary)->bool:
+    return Catalog.read_file(RECIPES,cache).get(condition.get("behavior_id",""),{}).get("persistent",{}).get("actorHistory",{}).get("captureDeparture",false)
+
 static func capture_requested(condition:Dictionary,cache:Dictionary)->bool:
-    return Catalog.read_file(RECIPES,cache).get(condition.get("behavior_id",""),{}).get("persistent",{}).get("frozenPose",{}).get("captureCurrent",false)
+    var persistent:Dictionary=Catalog.read_file(RECIPES,cache).get(condition.get("behavior_id",""),{}).get("persistent",{})
+    return persistent.get("frozenPose",{}).get("captureCurrent",false) or persistent.get("actorHistory",{}).get("captureDeparture",false)
 
 ## Called only at actual ordered admission, before the canonical after-value.
 ## Current actor materials, camera quarter and later bind time are not inputs.
-static func admissions(rows:Array,actors:Dictionary,owners:Dictionary,group:Dictionary,start_ms:float,local_ms:float,previous_directions:Dictionary,cache:Dictionary)->Dictionary:
+static func admissions(rows:Array,actors:Dictionary,owners:Dictionary,group:Dictionary,start_ms:float,local_ms:float,previous_directions:Dictionary,cache:Dictionary,departures:Dictionary={})->Dictionary:
     var result:Dictionary={};var before:Dictionary={};var prior_owners:Dictionary=owners.duplicate()
     var active:Dictionary={};var directions:Dictionary={};var rigs:Dictionary={};var cycle:Array=[]
     for change in rows:
         var actor_id:String=change.actor_uuid
         var actor:Dictionary=before.get(actor_id,actors.get(actor_id,{}))
         var after:Variant=change.after
-        if change.before==null and after!=null and capture_requested(after,cache) and not actor.is_empty():
+        if change.before==null and after!=null and capture_requested(after,cache) and not actor.is_empty() and (not departure_requested(after,cache) or departures.has(after.condition_uuid)):
             if rigs.is_empty():
                 rigs=Catalog.read_file("catalog/rigs.json",cache)
                 cycle=Catalog.read_file(Catalog.read_file("catalog-index.json",cache).rig,cache).FACING_CYCLE
@@ -127,6 +131,15 @@ static func admissions(rows:Array,actors:Dictionary,owners:Dictionary,group:Dict
                     var capture:Dictionary={"actor_uuid":actor_id,"condition_uuid":after.condition_uuid,"rig":rig_id,"clip":source.clip,
                         "source_seconds":source.source_seconds,"frame":mini(int(seconds*clip.fps),int(clip.frames)-1),"world_facing":facing,
                         "hidden_slots":source.get("hidden_slots",active.get(actor_id,{}).get("hidden_slots",[])).duplicate(),"admitted_at_ms":start_ms+local_ms}
+                    if departure_requested(after,cache) and departures.has(after.condition_uuid):
+                        var departure:Dictionary=departures[after.condition_uuid].duplicate(false)
+                        var row:Dictionary=departure.row.duplicate(false)
+                        var motion:Dictionary=active.get(actor_id,{})
+                        if motion.has("position"):row.position=motion.position;row.base_height_steps=motion.base_height_steps
+                        row.visual_height=float(motion.get("lift_pixels",0))*(128.0/float(departure.tile_width))/64.0
+                        row.facing=facing
+                        row.make_read_only();departure.row=row;departure.motion=motion.duplicate(true)
+                        departure.make_read_only();capture.departure=departure
                     capture.make_read_only();result[after.condition_uuid]=capture
                     prior_owners[after.condition_uuid]={"logical_pose":capture,"start_ms":start_ms+local_ms}
         if actor.is_empty():continue

@@ -77,9 +77,10 @@ func _run() -> void:
     # Diagnostic schema deliberately contains no address, request body or auth.
     var allowed=["stage","time_us","http_id","request_id","operation","purpose","schema","reused_connected",
         "reason","native_error","native_state","started_us","request_bytes","ok","declared_bytes","status","bytes",
-        "phase","sent","request_attempted","connection_replaced","transport_reason","failure_kind"]
+        "phase","sent","request_attempted","connection_replaced","transport_reason","failure_kind","validation"]
     for row in evidence:
         check(row.events.all(func(record):return record.keys().all(func(key):return key in allowed)),row.case+" diagnostic fields contain only labels, counts, phases and timing")
+        check(row.events.all(func(record):return not record.has("validation") or record.validation in ["current_server","full_schema"]),row.case+" admission diagnostics contain only the fixed policy label")
     var report={"checks":checks,"failures":failures,"evidence":evidence,
         "scope":"Native local TCP: hidden keep-alive expiry before request_raw replaces once and POST arrives once; received POST with dropped reply never resends, explicit receipt recovery retained. No backend or GPU."}
     FileAccess.open("res://generated/sdk_pool_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

@@ -9,6 +9,14 @@ var evidence:Array=[]
 var prefix_ordinals:Dictionary={}
 var report_path="res://generated/studio_replay_native_checks.json"
 func _initialize()->void:run.call_deferred()
+func register_case(studio:Control,record:Dictionary)->void:
+    # A durable original can share its scenario ID with the Library's later
+    # recording. Studio selection owns actual journal paths, not that label.
+    for perspective in record.perspectives:
+        var path=ProjectSettings.globalize_path(perspective.journal).replace("\\","/")
+        if not studio.case_records.any(func(existing):return existing.perspectives.any(func(view):return ProjectSettings.globalize_path(view.journal).replace("\\","/")==path)):
+            studio.case_records.append(record)
+            return
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("REPLAY_NATIVE_FAIL ",label)
@@ -204,9 +212,12 @@ func run()->void:
     var studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
     if not await settle(studio):await finish(studio);return
     var movement_directory=Fixtures.journal("oa-walk")
-    if studio.active_directory!=movement_directory:
+    var movement_record:Dictionary=Fixtures.public_case("oa-walk")
+    register_case(studio,movement_record)
+    if studio.active_directory!=movement_directory or studio.case_bundle.is_empty():
         studio._load(movement_directory)
         if not await settle(studio,0,movement_directory):await finish(studio);return
+    check(studio.active_case.get("id")==movement_record.id and studio.case_bundle.get("views",{}).has("amber"),"Movement/OA is an actual registered two-seat Library selection")
     check(studio.replay_diagnostics().panes.size()==1,"Real movement/OA recording opens one rendered audience")
     verify_prefix(studio,"initial movement/OA")
     var duration=float(studio.index.presentation_end_ms)
@@ -242,8 +253,12 @@ func run()->void:
     await measure_single(studio)
     for name in ["hide","hide-light","invisibility","oa-jump-lethal"]:
         var directory=Fixtures.journal(name)
+        var record:Dictionary=Fixtures.public_case(name)
+        register_case(studio,record)
         studio._load(directory)
         if not await settle(studio,0,directory):break
+        check(studio.active_case.get("id")==record.id and studio.case_bundle.get("views",{}).has("amber"),name+": exact original journal is a registered independent audience")
+        if not studio.case_bundle.get("views",{}).has("amber"):break
         check(studio.replay_diagnostics().panes.size()==1,name+": one selected renderer")
         if name=="hide":
             verify_prefix(studio,"Hide amber audience")

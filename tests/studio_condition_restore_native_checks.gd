@@ -18,13 +18,21 @@ func settle(studio:Control)->bool:
         await process_frame
     check(false,"Actual Studio prefix publishes: "+studio.status.text)
     return false
+func previews(studio:Control)->Dictionary:
+    var result:Dictionary={}
+    var deadline:int=Time.get_ticks_msec()+30000
+    while Time.get_ticks_msec()<deadline:
+        result=studio.tracks.prepare_visible()
+        if result.ready or not result.errors.is_empty():break
+        await process_frame
+    return result
 func capture(studio:Control,name:String)->void:
     await process_frame;await RenderingServer.frame_post_draw
     root.get_texture().get_image().save_png(CAPTURES.path_join(name+".png"))
     studio.viewport.get_texture().get_image().save_png(CAPTURES.path_join(name+"-world.png"))
 func run()->void:
     if not Array(OS.get_cmdline_user_args()).any(func(arg):return arg.begins_with("--recording=")):
-        printerr("Requires --recording=<actual hide-light-schema9 journal>");quit(2);return
+        printerr("Requires --recording=<unchanged schema16 hide-light/amber journal>");quit(2);return
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_size(Vector2i(1280,720));DirAccess.make_dir_recursive_absolute(CAPTURES)
     var studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
@@ -32,7 +40,8 @@ func run()->void:
     var rows=studio.index.rows.filter(func(row):return row.kind=="condition_restore" and row.owner.condition.behavior_id=="condition.hidden")
     check(rows.size()==2,"Actual Hidden removal has separate body-pose and opacity restoration lanes")
     if rows.size()!=2:await finish(studio);return
-    check(rows.all(func(row):return studio.tracks.rows.any(func(entry):return entry.row.id==row.id)),"Removal ancestry is open in the default timeline")
+    check(rows.all(func(row):return studio.tracks.display_row_for.has(row.id) and studio.tracks.display_rows.has(studio.tracks.display_row_for[row.id])),"Actual restoration rows belong to the current compact timeline projection")
+    check(rows.all(func(row):return row.owner.id==rows[0].owner.id and row.diagnostic_scope=="state_inspection" and row.coverage.rendered=="not_witnessed"),"Both restoration inspections retain one actual UUID without inventing a component/draw witness")
     studio.tracks.filter="condition_restore";studio.tracks.rebuild_rows();studio.tracks.fit()
     var actor:String=rows[0].actor_uuid
     var removed:float=rows[0].transition.condition_removed_ms
@@ -41,14 +50,15 @@ func run()->void:
         if not await settle(studio):await finish(studio);return
         check(is_equal_approx(studio.world.timeline.display_ms,point.time),"Displayed clock is the requested real boundary: "+point.name)
         check(studio.world.playbacks.get(actor,{}).get("clip")==point.clip,"Native body uses the correct source: "+point.name)
+        check(studio.world.timeline.state.actors[actor].conditions.any(func(member):return member.condition_uuid==rows[0].owner.id)==(point.time<removed),"Exact original membership owns the before/after cut: "+point.name)
         var layers=0
         for entry in studio.world.visual_actors.get(actor,{}).get("entries",[]):
             if not entry.node.visible or entry.role=="shadow":continue
             layers+=1
             check(is_equal_approx(float(entry.material.get_shader_parameter("condition_alpha")),point.alpha),"Real body/gear receives the composed opacity: "+point.name+" "+entry.actor_layer.slot)
         check(layers>1,"Assembled original body and equipment remain present")
-        var preview=studio.tracks.prepare_visible()
-        check(preview.ready and preview.errors.is_empty(),"Visible restoration swatches are prepared before publication: "+point.name)
+        var preview:Dictionary=await previews(studio)
+        check(not preview.is_empty() and preview.ready and preview.errors.is_empty(),"Asynchronous visible restoration swatches finish through their own source owner: "+point.name)
         check(studio.world.presentation_errors.is_empty() and studio.world.media_issue.is_empty(),"Native source/presentation pipeline has no error: "+point.name)
         await capture(studio,point.name)
         evidence.append({"phase":point.name,"time_ms":studio.world.timeline.display_ms,"clip":point.clip,"alpha":point.alpha,"preview":preview})
@@ -57,7 +67,9 @@ func run()->void:
         check(not cells.is_empty(),"Each restored method has an actual after-state source swatch")
         if cells.is_empty():continue
         var key=studio.tracks.thumbnails.request(row,cells[0].sample_ms,studio.world.quarter,false)
-        check(studio.tracks.thumbnails.textures.has(key),"Inspected restored-source image is already prepared")
+        var deadline:int=Time.get_ticks_msec()+30000
+        while not studio.tracks.thumbnails.textures.has(key) and not studio.tracks.thumbnails.errors.has(key) and Time.get_ticks_msec()<deadline:await process_frame
+        check(not key.is_empty() and studio.tracks.thumbnails.textures.has(key) and not studio.tracks.thumbnails.errors.has(key),"Inspected restored-source image publishes through the actual thumbnail queue")
         if studio.tracks.thumbnails.textures.has(key):studio.tracks.thumbnails.textures[key].get_image().save_png(CAPTURES.path_join(row.mechanism+"-source.png"))
     studio.selected_row=rows[0]
     check(studio._diagnostic_id().is_empty(),"Restoration is state inspection and creates no muteable extra effect")

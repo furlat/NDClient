@@ -1,10 +1,12 @@
 extends SceneTree
-## Every clip the spells stage (and every spell hit's clip), through the
-## client's package path: for each approach the clip has (each recorded
-## variant, gpu, native) prepare it, build an occurrence, sample it at 0, 25,
-## 50 and 75 % of its length and check that it builds, samples without error
-## and draws. Moving clips fly a short path. Every node path the client's
-## staging names must exist in every approach. Run with Forward+/Vulkan.
+## Inventory every selected spell cue/hit and every delivered approach.
+## Time-only/root-path effects retain the isolated constructor, source-path,
+## timed-sample and framebuffer oracle for every variant. An adaptive effect
+## needs an actual disclosed owner/geometry/event, not the Factory review
+## fixture: explicit missing construction operands must reject allocation;
+## other adaptive output remains unqualified and listed per clip/approach.
+## Real provider rendering gates supply that separate positive proof.
+## Run with Forward+/Vulkan.
 ##   --script res://tests/effect_package_checks.gd -- [--spells=a,b] [--clips=id,...] [--save=res://.captures/effect-package]
 const Effects=preload("res://presentation/effect_package.gd")
 const Baked=preload("res://presentation/baked_effect.gd")
@@ -14,9 +16,17 @@ const FrameProfile=preload("res://frame_profile.gd")
 const SIZE:=Vector2i(256,256)
 const LAYER:=1<<1
 const TIMES:=[0.0,0.25,0.5,0.75]
+# These two delivered programs explicitly contain only sample/pass. Their
+# phases are inspection clocks for the renderer's real actor treatment. A
+# blank interval is not a failed particle export or a rendered body witness.
+# Exact sealed program identities keep an arbitrary blank source a failure.
+const INSPECTION_PROGRAMS=["res://assets/vfx/sources/2fd2d9b87077a6008fc5/inspection_interval.gd",
+    "res://assets/vfx/sources/3cb7f9045c39d6e78ccd/pose_probe_clock.gd"]
 var checks:int=0
 var failures:Array=[]
 var report:Array=[]
+var inventory:Array=[]
+var authored_exclusions:Array=[]
 var view:Dictionary={}
 
 func _initialize()->void:run.call_deferred()
@@ -39,22 +49,34 @@ func run()->void:
     var cache:Dictionary={}
     var clips:Dictionary={}
     var index:Resource=Authoring.Sources.admission(cache).index
+    check(index!=null,"Typed native spell index is admitted")
+    if index==null:quit(1);return
+    var selected_spells:Dictionary={}
     for behavior in index.spells:
         var selected:Dictionary=Authoring.selection(behavior,cache)
         if not spells.is_empty() and str(selected.id) not in spells:continue
+        selected_spells[str(selected.id)]=true
         var cues:Array=selected.staging.cues
         for at in cues.size():
-            if at in selected.get("excluded_cue_indices",[]):continue
             var cue:Dictionary=cues[at]
+            if at in selected.get("excluded_cue_indices",[]):
+                authored_exclusions.append({"spell":selected.id,"cue_index":at,"clip":cue.clip,"role":cue.role,"source":selected.source+"/cues/"+str(at),"status":"authored_exclusion","draw_qualified":false})
+                continue
             var clip:Dictionary=Effects.resolve(str(cue.clip),str(selected.id),str(cue.role))
             check(not clip.is_empty(),"Package clip for %s cue %d (%s)"%[selected.id,at,cue.clip])
             if clip.is_empty():continue
-            if not clips.has(clip.id):clips[clip.id]={"clip":clip,"cues":[],"staged":{}}
+            if not clips.has(clip.id):clips[clip.id]={"clip":clip,"cues":[],"staged":{},"sources":[]}
             clips[clip.id].cues.append(cue);clips[clip.id].staged[str(cue.clip)]=str(selected.id)
+            clips[clip.id].sources.append({"spell":selected.id,"cue_index":at,"role":cue.role,"source":selected.source+"/cues/"+str(at),"constructor_input":cue.get("constructor_input",{}),"unbound_constructor_inputs":cue.get("unbound_constructor_inputs",[])})
         var hit:Dictionary=Authoring.hit(behavior,cache)
         if hit.get("definition",{}).get("status")=="available":
             check(hit.has("clip"),"Spell hit clip resolves in the package: "+str(selected.id))
-            if hit.has("clip") and not clips.has(hit.clip.id):clips[hit.clip.id]={"clip":hit.clip,"cues":[],"staged":{}}
+            if hit.has("clip"):
+                if not clips.has(hit.clip.id):clips[hit.clip.id]={"clip":hit.clip,"cues":[],"staged":{},"sources":[]}
+                clips[hit.clip.id].sources.append({"spell":selected.id,"role":"hit_material","source":hit.get("source",selected.source+"/hit")})
+    for spell in spells:check(selected_spells.has(spell),"Requested spell exists in the selected typed inventory: "+spell)
+    for id in ids:check(clips.has(id),"Requested clip exists in the selected typed inventory: "+id)
+    check(not clips.is_empty(),"Selected typed inventory contains package clips")
     view=_view()
     for id in clips:
         if not ids.is_empty() and id not in ids:continue
@@ -65,12 +87,23 @@ func run()->void:
         var kind:String=entry.kind
         if not kinds.has(kind):kinds[kind]={"approaches":0,"built":0,"sampled":0,"drew":0,"construction_ms":[]}
         kinds[kind].approaches+=1
-        if entry.error.is_empty():kinds[kind].built+=1;kinds[kind].construction_ms.append(entry.construction_ms)
+        if entry.contract=="context_free" and entry.error.is_empty():
+            kinds[kind].built+=1;kinds[kind].construction_ms.append(entry.construction_ms)
         if entry.get("sampled",false):kinds[kind].sampled+=1
         if entry.get("drawn_max",0)>0:kinds[kind].drew+=1
     for kind in kinds:kinds[kind].construction_ms=FrameProfile.distribution(kinds[kind].construction_ms)
-    var result={"checks":checks,"failures":failures,"clips":clips.size(),"kinds":kinds,"approaches":report,
-        "scope":"Package clips staged by the client's 30 spells and spell hits; each approach prepared, built, sampled at 0/25/50/75 % and drawn in an isolated world. Drawing is coverage only (alpha>0), not a look comparison."}
+    var partition:Dictionary={"context_free":0,"constructor_required":0,"runtime_bound":0,"renderer_owned_interval":0}
+    for entry in inventory:partition[entry.contract]+=1
+    check(inventory.size()==report.size(),"Every enumerated approach variant has one explicit contract result")
+    var expected:int=0
+    for id in clips:
+        if ids.is_empty() or id in ids:expected+=clips[id].clip.approaches.size()
+    check(inventory.size()==expected,"The contract partition exhausts every selected package approach/variant")
+    var adaptive:Array=report.filter(func(row):return row.contract!="context_free")
+    var result={"checks":checks,"failures":failures,"spells":selected_spells.size(),"clips":clips.size(),"requested_clips":ids,"partition":partition,"kinds":kinds,"approaches":report,
+        "authored_exclusions":authored_exclusions,"adaptive_output_qualified":adaptive.is_empty(),"adaptive_follow_up_required":adaptive.map(func(row):return {"clip":row.clip,"kind":row.kind,"variant":row.variant,"inputs":row.inputs,"status":row.status,"sources":row.sources}),
+        "scope":"Exhaustive selected typed spell cue/hit approach inventory. Context-free/root-path approaches retain constructor, staged paths, finite samples and isolated nonzero-alpha output assertions; that is pixel coverage, not a look comparison. Adaptive rows are not construction/sample/draw passes: explicit construction-required rows test allocation rejection only, and all actual adaptive outputs still require their real recording/provider gates. Authored exclusions are listed separately; this gate does not qualify all spells or providers."}
+    DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://.runtime"))
     FileAccess.open("res://.runtime/effect-package-checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("EFFECT_PACKAGE_KINDS ",JSON.stringify(kinds))
     print("EFFECT_PACKAGE_CHECKS ",JSON.stringify({"checks":checks,"failures":failures}))
@@ -103,6 +136,35 @@ func clip_checks(entry:Dictionary,save_dir:String)->void:
     var rows:Array=[]
     for kind in kinds:
         Effects.set_requested(kind)
+        var chosen:Dictionary=Effects.choice(clip)
+        check(chosen.kind==kind,"The exact requested package approach is selected: "+clip.id+" "+kind)
+        var contextual:Array=[]
+        for input in clip.inputs:
+            if input!="root_path" and input not in contextual:contextual.append(input)
+        var construction:bool=Effects.requires_construction(clip) or entry.cues.any(func(cue):return not cue.get("constructor_input",{}).is_empty() or not cue.get("unbound_constructor_inputs",[]).is_empty())
+        var contract:String="constructor_required" if construction else "runtime_bound" if not contextual.is_empty() else "renderer_owned_interval" if inspection_interval(clip) else "context_free"
+        if contract!="context_free":
+            # No source preparation/discovery or review-fixture allocation for
+            # an adaptive occurrence whose factual inputs this bench lacks.
+            for approach in chosen.approaches:
+                var variant:int=int(approach.get("variant",0))
+                var row:Dictionary={"clip":clip.id,"kind":kind,"variant":variant,"contract":contract,"inputs":clip.inputs,"staged":entry.staged,"sources":entry.sources,
+                    "source_phase":approach.get("source_phase",""),"constructor":approach.path,"status":"requires_factual_provider","error":"","sampled":false,"draw_qualified":false}
+                inventory.append({"clip":clip.id,"kind":kind,"variant":variant,"contract":contract})
+                check(FileAccess.file_exists(approach.path) and (kind=="recorded" or FileAccess.file_exists(approach.source_phase)),"Adaptive program retains its delivered program/phase: "+clip.id+" "+kind)
+                check(contextual.all(func(input):return not str(clip.input_setters.get(input,"")).is_empty()),"Adaptive input declarations retain their named public setters: "+clip.id)
+                if construction:
+                    var raw:Dictionary=clip.duplicate(false);raw.requires_constructor_input=true
+                    var before:int=view.holder.get_child_count()
+                    var rejected:Dictionary=Effects.make(view.holder,raw,LAYER,variant)
+                    check(rejected.error=="Native construction operands unavailable: "+str(clip.id),"Missing actual construction operands reject explicitly: "+clip.id)
+                    check(rejected.root==null and rejected.get("occurrence")==null and view.holder.get_child_count()==before,"Rejected construction allocates no occurrence or draw: "+clip.id)
+                    row.status="missing_construction_rejected_output_unqualified"
+                    row.admission_error=rejected.error
+                elif contract=="renderer_owned_interval":row.status="inspection_clock_only_actor_treatment_requires_separate_output_proof"
+                report.append(row)
+                print("EFFECT_PACKAGE_CONTEXT_REQUIRED ",JSON.stringify(row))
+            continue
         var cache:Dictionary={}
         var deadline:int=Time.get_ticks_msec()+120000
         var prepared:Dictionary=Effects.prepare([clip],cache)
@@ -114,9 +176,15 @@ func clip_checks(entry:Dictionary,save_dir:String)->void:
             while Time.get_ticks_msec()<deadline and not (Baked.request(clip) is Array and Baked.request(clip).size()==count):await frame()
         var prepare_ms:float=(Time.get_ticks_usec()-started)/1000.0
         check(prepared.ready,"Prepared %s %s: %s"%[clip.id,kind,str(prepared.errors)])
-        if not prepared.ready:continue
+        if not prepared.ready:
+            for variant in count:
+                inventory.append({"clip":clip.id,"kind":kind,"variant":variant,"contract":"context_free"})
+                report.append({"clip":clip.id,"kind":kind,"variant":variant,"contract":"context_free","inputs":clip.inputs,"staged":entry.staged,"sources":entry.sources,
+                    "status":"preparation_failed","error":"Package preparation did not become ready: "+str(prepared),"sampled":false,"draw_qualified":false})
+            continue
         for variant in count:
             var row:Dictionary=await approach_checks(entry,kind,variant,prepare_ms)
+            inventory.append({"clip":clip.id,"kind":kind,"variant":variant,"contract":"context_free"})
             report.append(row);rows.append(row)
     if not save_dir.is_empty() and not rows.is_empty():
         var sheet:=Image.create_empty(SIZE.x*TIMES.size(),SIZE.y*rows.size(),false,Image.FORMAT_RGBA8)
@@ -128,6 +196,17 @@ func clip_checks(entry:Dictionary,save_dir:String)->void:
         sheet.save_png(ProjectSettings.globalize_path(save_dir.path_join(str(clip.id).replace("/","__")+".png")))
     for row in rows:row.erase("images")
 
+static func inspection_interval(clip:Dictionary)->bool:
+    var phases:int=0
+    for approach in clip.approaches:
+        if not approach.has("source_phase"):continue
+        var phase:Resource=load(approach.source_phase)
+        if phase==null or not phase.emitters.is_empty() or phase.components.is_empty():return false
+        for part in phase.components:
+            if part.constructor_script not in INSPECTION_PROGRAMS:return false
+        phases+=1
+    return phases>0
+
 func approach_checks(entry:Dictionary,kind:String,variant:int,prepare_ms:float)->Dictionary:
     var clip:Dictionary=entry.clip
     var label:String="%s %s%s"%[clip.id,kind,("-"+str(variant)) if kind=="recorded" else ""]
@@ -136,12 +215,12 @@ func approach_checks(entry:Dictionary,kind:String,variant:int,prepare_ms:float)-
     var built:Variant=Effects.make(view.holder,clip,LAYER,variant)
     var handle:Dictionary=built if built is Dictionary and built.has("error") else {"root":null,"error":"construction raised a script error","clip":clip}
     var construction_ms:float=(Time.get_ticks_usec()-started)/1000.0
-    var row:Dictionary={"clip":clip.id,"kind":kind,"variant":variant,"error":str(handle.get("error","")),"construction_ms":construction_ms,"prepare_ms":prepare_ms,
-        "effect_kind":handle.get("effect_kind",""),"staged":entry.staged,"drawn":[],"sample_us":[],"images":[]}
+    var row:Dictionary={"clip":clip.id,"kind":kind,"variant":variant,"contract":"context_free","inputs":clip.inputs,"status":"construction_failed","draw_qualified":false,"error":str(handle.get("error","")),"construction_ms":construction_ms,"prepare_ms":prepare_ms,
+        "effect_kind":handle.get("effect_kind",""),"staged":entry.staged,"sources":entry.sources,"drawn":[],"sample_us":[],"images":[]}
     check(row.error.is_empty(),"Builds: "+label+" "+row.error)
     check(row.effect_kind==kind,"Plays the requested kind: "+label)
     if not row.error.is_empty():
-        if is_instance_valid(handle.get("root")):Effects.close(handle)
+        if is_instance_valid(handle.get("occurrence")) or is_instance_valid(handle.get("root")):Effects.close(handle)
         return row
     for cue in entry.cues:
         var missing:Array=Effects.resolve_paths(handle,cue,str(entry.staged.get(str(cue.clip),"")))
@@ -179,6 +258,8 @@ func approach_checks(entry:Dictionary,kind:String,variant:int,prepare_ms:float)-
         row.drawn.append(drawn);row.images.append(image)
     row.sampled=true
     row.drawn_max=row.drawn.max()
+    row.draw_qualified=row.drawn_max>0 and row.get("missing_paths",[]).is_empty()
+    row.status="context_free_draw_passed" if row.draw_qualified else "context_free_draw_failed"
     row.compiles=0
     var compiles_after:Dictionary=FrameProfile.pipeline_compilations()
     for field in compiles_after:row.compiles+=int(compiles_after[field])-int(compiles_before.get(field,0))

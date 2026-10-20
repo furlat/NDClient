@@ -241,7 +241,7 @@ static func door_frame(row: Dictionary, quarter: int, cache: Dictionary) -> Dict
     var owner = owner_for(row,cache)
     var boundary = Placement.pose(row.orientation,quarter)
     if not owner.frame_resource_by_pose.is_empty():
-        return environment_resources(cache).resources[owner.frame_resource_by_pose[boundary]]
+        return texture_layout(environment_resources(cache).resources[owner.frame_resource_by_pose[boundary]],cache)
     var bank = bank_data(bank_for(row,false,cache),cache)
     var pose = pose_for(bank,row.orientation,quarter)
     if not bank.has("frame_regions_by_pose"): return {}
@@ -249,7 +249,7 @@ static func door_frame(row: Dictionary, quarter: int, cache: Dictionary) -> Dict
     var result: Dictionary = bank.surface_frames_by_pose[pose][0].duplicate(true)
     result.merge({"path":region.path,"rect":region.rect,"native_size":bank.cell,
         "pivot":bank.get("physical_source_contact_by_pose",bank.pivots_by_pose)[pose],"scale":bank.scale})
-    return result
+    return texture_layout(result,cache)
 
 static func receiving_normal(record: Dictionary, cache: Dictionary) -> Dictionary:
     if not record.has("normal"): return record
@@ -313,23 +313,39 @@ static func texture_layouts(cache: Dictionary) -> Dictionary:
 static func texture_layout(record: Dictionary, cache: Dictionary) -> Dictionary:
     if record.is_empty(): return record
     var layouts: Dictionary = texture_layouts(cache)
-    var geometry: Dictionary = record.get("geometry_region",{})
-    var normal: Dictionary = record.get("normal",{}).get("region",{})
-    var remap_geometry = layouts.has(geometry.get("path",""))
-    var remap_normal = layouts.has(normal.get("path",""))
-    if not remap_geometry and not remap_normal: return record
-    var result = record.duplicate()
-    if remap_geometry:
-        result.geometry_region = _layout_region(geometry,layouts)
-        if result.geometry_region.is_empty():
-            push_error("Invalid environment texture layout region: "+str(geometry))
-            return {}
-    if remap_normal:
-        result.normal = record.normal.duplicate()
-        result.normal.region = _layout_region(normal,layouts)
-        if result.normal.region.is_empty():
-            push_error("Invalid environment texture layout region: "+str(normal))
-            return {}
+    var result: Dictionary = record
+    # These are physical texture aliases, not a recursive rewrite of metadata.
+    # Independent support/mask files and normal.original_path retain their sources.
+    for field in ["geometry_region", "hit_mask", "door_partition"]:
+        var region: Dictionary = record.get(field,{})
+        if not layouts.has(region.get("path","")): continue
+        if is_same(result,record): result = record.duplicate()
+        result[field] = _layout_region(region,layouts)
+        if result[field].is_empty():
+            push_error("Invalid environment texture layout region: "+str(region)); return {}
+    for field in ["normal", "support"]:
+        var value: Dictionary = record.get(field,{})
+        var region: Dictionary = value.get("region",{})
+        if not layouts.has(region.get("path","")): continue
+        if is_same(result,record): result = record.duplicate()
+        result[field] = value.duplicate()
+        result[field].region = _layout_region(region,layouts)
+        if result[field].region.is_empty():
+            push_error("Invalid environment texture layout region: "+str(region)); return {}
+    var roles: Array = record.get("roles",[])
+    for i in roles.size():
+        var selection: Dictionary = roles[i].get("selection",{})
+        var mask: Dictionary = selection.get("mask",{})
+        var region: Dictionary = mask.get("region",{})
+        if not layouts.has(region.get("path","")): continue
+        if is_same(result,record): result = record.duplicate()
+        if is_same(result.get("roles"),roles): result.roles = roles.duplicate()
+        result.roles[i] = roles[i].duplicate()
+        result.roles[i].selection = selection.duplicate()
+        result.roles[i].selection.mask = mask.duplicate()
+        result.roles[i].selection.mask.region = _layout_region(region,layouts)
+        if result.roles[i].selection.mask.region.is_empty():
+            push_error("Invalid environment texture layout region: "+str(region)); return {}
     return result
 
 static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:

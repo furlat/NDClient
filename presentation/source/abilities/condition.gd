@@ -26,6 +26,9 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 ## the coverage report says whether the installed package has one. False
 ## keeps the package's lifecycle from playing for this condition.
 @export var play_package_lifecycle: bool = true
+## Retain the actual pre-admission body for a delivered departure compositor.
+## This does not freeze the displayed body or supply delayed live history.
+@export var capture_departure: bool = false
 ## The spell whose staging names this condition as its lifecycle owner.
 @export var owner_spell: String = ""
 ## Native held effects not supplied by a package condition selection. These

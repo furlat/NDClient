@@ -92,6 +92,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             "source":"catalog/condition_recipes.json:/"+str(owner.condition.behavior_id),"source_event_uuid":"",
             "status":"available","start_ms":owner.start_ms,"absolute_start_ms":owner.start_ms,"duration_ms":owner.end_ms-owner.start_ms,
             "age_ms":age,"initial":owner.initial,"alpha":alpha,"recipe":config,"condition":owner.condition,"sample_hz":32.0}
+        if owner.has("logical_pose"):common.logical_pose=owner.logical_pose
         common.removal_age_ms=null if is_inf(owner.end_ms) else maxf(0,at_ms-owner.end_ms)
         result.append(common)
         if is_inf(owner.end_ms) and float(persistent.get("alphaMultiplier",1.0))<1.0:invisible[owner.actor_uuid]=true

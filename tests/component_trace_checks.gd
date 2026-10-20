@@ -276,9 +276,14 @@ func run()->void:
     check(charm_missing[0].source_pointer=="catalog/condition_recipes.json:/condition.charmed/application/effects/2","Missing expected effect points at exact canonical authoring field")
     check(unmatched.rows[0].components.filter(func(c):return c.kind=="weapon_trail")[0].timing.resolved==false,"Missing timing is unresolved rather than fabricated at default zero")
     var unsupported={"components":[],"actor_uuid":change.actor_uuid,"target_uuid":change.actor_uuid,"_admit_ms":0.0}
-    Trace._persistent_condition(unsupported,condition,{"bodyScale":{"enlarge":2,"reduce":.5},"equipmentModifiers":[]},cache,"neuroclient.modular")
+    # Private authoring controls only: bodyScale is implemented and this actual
+    # Paralyzed member has no size selector. Still-unimplemented structured and
+    # array mechanisms must each remain missing, independent of that neutral arm.
+    Trace._persistent_condition(unsupported,condition,{"bodyScale":{"enlarge":2,"reduce":.5},"bodyDistortion":{"amount":.1},"equipmentModifiers":[{"id":"trace-unit-equipment-modifier"}]},cache,"neuroclient.modular")
     var authored:Callable=func(components:Array)->Array:return components.filter(func(c):return not str(c.get("id","")).contains(":lifecycle:"))
-    check(authored.call(unsupported.components).size()==1 and authored.call(unsupported.components)[0].reason=="authored_condition_bodyScale_not_implemented","Structured and array authoring requirements retain independent missing mechanisms")
+    var unsupported_fields:Array=authored.call(unsupported.components)
+    check(unsupported_fields.size()==2 and unsupported_fields.any(func(c):return c.reason=="authored_condition_bodyDistortion_not_implemented") and unsupported_fields.any(func(c):return c.reason=="authored_condition_equipmentModifiers_not_implemented"),"Structured and array authoring requirements retain independent missing mechanisms")
+    check(not unsupported_fields.any(func(c):return c.get("mechanism")=="bodyScale"),"Supported bodyScale without this actual member's public selector does not invent an output requirement")
     var selected_recipe_case=compile(application,[],{"persistent":{},"application":{"feedbackEnabled":false}},false)
     check(authored.call(selected_recipe_case.rows[0].components).is_empty(),"Trace consumes compiler-selected recipe rather than reselecting catalog recipe")
     check(selected_recipe_case.rows[0].components.any(func(c):return c.id.begins_with("condition:"+condition.condition_uuid+":lifecycle:") and c.persistent),"Actual native condition id owns package lifecycle independent of selected recipe")

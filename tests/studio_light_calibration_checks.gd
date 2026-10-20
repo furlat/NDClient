@@ -5,6 +5,12 @@ const Studio=preload("res://studio/studio.gd")
 const RangeProfile=preload("res://presentation/resources/light_range_profile.gd")
 const Calibrated=preload("res://build/presentation/environment/light_ranges.res")
 const DIRECTORY="res://.captures/studio/light-calibration"
+# Exact current Blue observations in the unchanged durable Hide/light journal.
+# These are public source/category boundaries, not inferred rendered brightness.
+const LIGHT_PROBES=[
+    {"label":"dim","sequence":8,"world_resolved_light":2,"source_position":[10,6]},
+    {"label":"bright","sequence":13,"world_resolved_light":3,"source_position":[7,6]},
+    {"label":"very_bright","sequence":14,"world_resolved_light":4,"source_position":[6,6]}]
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -82,6 +88,7 @@ func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1600,900)
     DirAccess.make_dir_recursive_absolute(DIRECTORY)
     var studio=Studio.new();root.add_child(studio)
+    studio._load(Fixtures.journal("jump"))
     if not await settle(studio):await finish(studio);return
     check(studio.active_directory==Fixtures.journal("jump"),"Capture starts from the exact real Jump recording")
     if not failures.is_empty():await finish(studio);return
@@ -104,17 +111,19 @@ func run()->void:
     studio.world.camera.size=6;studio.world.position_camera()
     studio._seek(1087.0)
     if await settle(studio):await capture_pair(studio,"jump",Vector2i(4,6))
-    studio._load(Fixtures.journal("hide-light"))
+    studio._load(Fixtures.journal("hide-light","blue"))
     if not await settle(studio):await finish(studio);return
-    var descriptor:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(studio.active_directory.get_base_dir().path_join("case.json")))
-    for probe in descriptor.light_probes:
-        if probe.label not in ["dim","bright","very_bright"]:continue
-        var boundary=0.0
+    check(studio.active_directory==Fixtures.journal("hide-light","blue"),"Calibration uses the exact original Blue source/category observations")
+    for probe in LIGHT_PROBES:
+        var boundary:float=-1.0
         for item in studio.index.groups:
-            if item.group.operation_sequence==probe.sequence:boundary=maxf(boundary,item.start_ms+item.group.duration_ms)
+            if item.group.operation_sequence==probe.sequence and item.group.operation_end:boundary=maxf(boundary,item.start_ms+item.group.duration_ms)
+        check(boundary>=0.0,"Original operation-ending boundary exists for "+probe.label)
+        if boundary<0.0:continue
         studio._seek(boundary+.01)
         if not await settle(studio):break
         check(studio.world.timeline.state.tiles["4,6"].resolved_light==probe.world_resolved_light,"Real "+probe.label+" source boundary is unchanged")
+        check(studio.world.timeline.state.light_sources.size()==1 and studio.world.timeline.state.light_sources.values()[0].position==probe.source_position,"Real "+probe.label+" optical source retains its actual disclosed position")
         await capture_pair(studio,probe.label,Vector2i(4,6))
     await finish(studio)
 func finish(studio:Control)->void:

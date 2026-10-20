@@ -29,7 +29,10 @@ func run()->void:
     var host=Studio.new()
     var owner=FrameOwner.new();host.world=owner;host.candidate_world=owner
     owner.media_warmup.wanted={"current":"current","upcoming":"upcoming"}
-    owner.media_warmup.preload_selected={"current":"current","upcoming":"upcoming","later":"later"}
+    # Optional admission belongs to the existing physical source owner. The
+    # consumer's preload_selected is an alias, not a replaceable directory.
+    var physical:Dictionary=Media.physical(owner.media_warmup)
+    physical.preload_selected.merge({"current":"current","upcoming":"upcoming","later":"later"})
     owner.media_warmup.ready_paths={"current":true}
     host.candidate_preview_pending=9
     host.candidate_preview_errors=["Explicit unavailable source preview"]

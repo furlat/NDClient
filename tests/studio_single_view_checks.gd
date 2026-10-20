@@ -18,7 +18,10 @@ func frame()->void:
 func settle(studio:Control)->bool:
     var deadline=Time.get_ticks_msec()+90000
     while Time.get_ticks_msec()<deadline:
-        if not studio.index.is_empty() and studio.loader==null and studio.seeker==null and not studio.installing and studio.requested_seek<0 and studio.pending_directory.is_empty() and studio.world.playback_prepared():
+        # Preparing the next loop's private owner is ordinary forward work;
+        # it does not replace the already published selected world.
+        var published=studio.preparing_loop or (studio.seeker==null and not studio.installing and studio.requested_seek<0)
+        if not studio.index.is_empty() and studio.loader==null and published and studio.pending_directory.is_empty() and studio.world.playback_prepared():
             studio.world.timeline.paused=true;await frame()
             check(studio.world.presentation_errors.is_empty(),"Selected world has no presentation errors")
             return true
@@ -112,6 +115,10 @@ func headless_contract()->void:
 func native_controls()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1440,850);root.gui_embed_subwindows=true
     var studio=Studio.new();studio.loop_enabled=false;root.add_child(studio)
+    if not await settle(studio):await close(studio);return
+    var directory:String=record.perspectives[0].journal
+    if not studio.case_records.any(func(item):return item.perspectives.any(func(view):return view.journal==directory)):studio.case_records.append(record)
+    studio.select_case(record,"amber")
     if not await settle(studio):await close(studio);return
     check(studio.active_case.id==record.id,"Uses original registered Hide/light recording")
     verify(studio,"Initial")
