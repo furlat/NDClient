@@ -4,6 +4,23 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_rrrvm"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_mmts5"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_rrrvm"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_operation"]
+
+[sub_resource type="Resource" id="OperationAccepted"]
+script = ExtResource("3_operation")
+clip = "wizard-class-study/wizard_scroll_learning_accepted_study"
+selection = "wizard_scroll_learning_accepted_study"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_operation", "operation": "scribe", "component_path": ["wizard_operation"], "input_field": ""}
+endpoint_actor_uuids = true
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+duration_policy = "authored"
+light_multiplier = 0.0
+staging_from = "factory@runtime-e102c29dec58524b selection:wizard_scroll_learning_accepted_study"
+extra = {"live_endpoints": [{"actor": "caster", "socket": "cast_hand"}], "to_actor": "caster", "follow_attachment": true}
 
 [sub_resource type="Resource" id="Resource_mmts5"]
 script = ExtResource("1_rrrvm")
@@ -27,4 +44,6 @@ family = "class"
 icon = SubResource("Resource_fw8eo")
 body = SubResource("Resource_mmts5")
 effect_sources = PackedStringArray()
+effects = Array[ExtResource("3_operation")]([SubResource("OperationAccepted")])
+status = "partial"
 notes = "Body role from the server's body kind (use_item); the rig resolves it to a clip once roles are built (coverage fill)."

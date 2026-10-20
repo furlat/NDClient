@@ -513,3 +513,45 @@ Final frozen-source checkpoint gate: required fast tier **160/160 clean**,
 and owned leftovers. This adds the actual cold selected-worker ownership and
 terminal failed-audio-source regressions to the earlier158 gates. No all-status
 or full-package visual-approval claim. The interrupted080649run is not a receipt.
+
+
+## Second shared-provider batch — 20 October
+
+This batch closes common input obligations across compatible sources; it is not
+four separately patched spell effects. The current package remains e102 and all
+approved graphics/event order remain unchanged.
+
+- [Prepared weapon registration](WEAPON_SURFACE_ANCHOR_COHORT_2026-10-20.md):
+  45 prepared Measured/FlameBlade clips across15lifecycle selections admit the
+  exact weapon surface without inventing an unauthored grip. Real grips and
+  pending preparation retain their original ownership;17legacy clips retain
+  their distinct requirements. Logical77+44 and native71+83 assertions pass.
+- [Material/history transition](ACTOR_HISTORY_MATERIAL_TRANSITION_2026-10-20.md):
+  actual damage-flash overlap with rolling Blur passes94logical and4806native
+  assertions on original independent streams/all views/seek/removal/cleanup.
+  This qualifies the ordinary non-native flash path. Mutable native-hit texture
+  history and Factory global-clock treatment history remain separate gaps.
+- [Accepted-operation provider](ACCEPTED_OPERATION_PROVIDER_2026-10-20.md):
+  a small typed descriptor projects actual accepted ActionFacts, exact consumed
+  item ancestry and the own-operation sheet witness through the existing finite
+  path. Recovery and learning qualify109logical+196native checks, with genuine
+  peer disclosure gaps. No result, book item or restored slot is manufactured.
+- [Passive Resource ownership](PASSIVE_RESOURCE_OWNERSHIP_2026-10-20.md): physical
+  tables/phases/native sources now coalesce and retain their Resources in the
+  existing owners. Eight concurrent cold pool callers pass42assertions. A native
+  heap-corruption repeat is retained as failed; two subsequent live Gallery
+  runs pass313/0 each with zero script/engine errors and leftovers. Their
+  p99frame times are15.783/15.400ms, maxima62.541/70.469ms. The live ledger keeps
+  the full input/publication and nested frame breakdown; final performance is
+  not declared complete.
+
+The first combined fast run passed162/163gates; the remaining socket test used
+an incomplete fake native handle lacking its production-required `clip` field.
+Its corrected empty-input nonweapon fixture passes27/0 with no runtime fallback
+or added validation. Final combined fast repeat is **163/163 clean**,
+`.runtime/tests/20261020T084926.771996Z/summary.json`. Five fresh independent
+equip/publication runs pass34/0 each, zero script/engine errors and owned
+leftovers: `.runtime/tests/20261020T085202.318010Z/summary.json`.
+Bounded anti-slop/correctness review found no further blocker in these owner,
+weapon and operation changes. Every source/scenario/provider/approval fact stays
+separate; these gates do not mark all155families or189spell variants complete.

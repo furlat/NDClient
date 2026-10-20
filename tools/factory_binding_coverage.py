@@ -232,6 +232,8 @@ def report() -> dict:
                 required = set(clips.get(clip, {}).get("inputs", []))
                 constructor = cue["constructor_input"].get("kind")
                 event_channels = EVENT_PROVIDERS if constructor in {"observed_event", "creation_admission"} else set()
+                if constructor == "observed_operation":
+                    event_channels = {"operation_state"}
                 if constructor == "observed_event":
                     projection = cue["constructor_input"].get("projection", "event")
                     if projection == "applied_contact":

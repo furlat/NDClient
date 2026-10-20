@@ -43,13 +43,18 @@ static func read(path: String) -> Variant:
     var source := file(path)
     var exists := FileAccess.file_exists(source)
     var stamp := [FileAccess.get_modified_time(source), FileAccess.get_size(source)] if exists else []
-    _mutex.lock();var known: Array = _documents.get(source, []);_mutex.unlock()
-    if not known.is_empty() and known[0] == stamp:return known[1]
+    _mutex.lock()
+    var known:Array=_documents.get(source,[])
+    if not known.is_empty() and known[0]==stamp:
+        _mutex.unlock();return known[1]
     var data: Variant = null
     var document: Resource = Metadata.read(source, ResourceLoader.CACHE_MODE_IGNORE) if exists else null
     if document != null and document.get("is_list") != null:data = document.items if document.is_list else document.data
     else:push_error("The abilities build has no record table " + source + " (run tools/build_presentation.gd)")
-    _mutex.lock();_documents[source] = [stamp, data];_mutex.unlock()
+    # Keep the physical Resource with its borrowed data and coalesce cold
+    # admission. Independent workers must not load/drop the same Script graph.
+    _documents[source]=[stamp,data,document]
+    _mutex.unlock()
     return data
 
 static func invalidate() -> void:

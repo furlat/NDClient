@@ -6108,6 +6108,72 @@
    "args": [],
    "status": "ok",
    "reason": "Original two-seat actual authored gaze lifecycle: published camera directions, exact native input/source orientation and isolated framebuffer pixels through seek/loop/cleanup."
+  },
+  {
+   "name": "actor_history_material_transition_checks",
+   "script": "res://tests/actor_history_material_transition_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 120,
+   "options": [],
+   "status": "ok",
+   "reason": "Original Blur damage/body-material transition, actual delayed uniforms and current restoration."
+  },
+  {
+   "name": "native_actor_history_material_transition_checks",
+   "script": "res://tests/native_actor_history_material_transition_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "options": [],
+   "status": "ok",
+   "reason": "Both untouched Blur originals: private historical materials, all published views, strict same-clock native restoration/removal/seek."
+  },
+  {
+   "name": "weapon_surface_anchor_checks",
+   "script": "res://tests/weapon_surface_anchor_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 60,
+   "options": [],
+   "status": "ok",
+   "reason": "Exact prepared-source optical registration, original holdings, pending-known-grip preservation and strict legacy negatives."
+  },
+  {
+   "name": "native_weapon_surface_anchor_checks",
+   "script": "res://tests/native_weapon_surface_anchor_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "options": [],
+   "status": "ok",
+   "reason": "Original main/shield optical controls and actual native prepared output, authored-hand preservation, all four views and replay teardown."
+  },
+  {
+   "name": "accepted_operation_checks",
+   "script": "res://tests/accepted_operation_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 90,
+   "options": [],
+   "status": "ok",
+   "reason": "Shared accepted-operation inputs, actual original Wizard recovery/scribe journals, private source ownership and subjective gaps; native separately qualified."
+  },
+  {
+   "name": "native_accepted_operation_render_checks",
+   "script": "res://tests/native_accepted_operation_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 180,
+   "options": [],
+   "status": "ok",
+   "reason": "Shared accepted-operation inputs, actual original Wizard recovery/scribe journals, private source ownership and subjective gaps; native separately qualified."
   }
  ]
 }

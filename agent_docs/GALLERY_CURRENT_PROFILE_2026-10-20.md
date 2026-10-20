@@ -1,5 +1,8 @@
 # Gallery issued-command and Studio profile — 20 October
 
+The entries below are chronological evidence. The latest e102 ownership repeat
+is in the final section; the original c494 header describes only its baseline.
+
 Baseline runtime010343ab, sole `codex-authoring-schemabump` branch, installed
 Factory `production-bindings-c494177f9ef03e3d`, frozen engine211b71134/schema16.
 Three independent fresh game processes; Forward+/Vulkan/RTX5090; root1600×960,
@@ -475,3 +478,69 @@ this is not a no-spike or100fps-every-frame claim. The new Factory/provider
 qualification continues rather than reopening per-spell performance tuning.
 Full operands/compiler leaves and worst-frame scopes are in ignored machine
 report `.runtime/consolidation/shared-provider-live-gallery-20261020T080239.json`.
+
+
+## e102 passive-ownership repeat, second provider batch
+
+The first repeat failed with native heap corruption, not an assertion failure:
+`.runtime/tests/20261020T082151.393677Z/summary.json`. The dump contains concurrent
+passive GDScript reads. [The ownership change](PASSIVE_RESOURCE_OWNERSHIP_2026-10-20.md)
+serializes actual passive admission and retains/coalesces physical Resources in
+the existing owners. Exact heap-corruption causality is still unproven.
+
+After that change, two sequential fresh live processes pass313/0 each, with zero
+script/engine errors or owned leftovers:
+`.runtime/tests/20261020T083526.571661Z/summary.json`. Actual game directories are
+`.runtime/player-runs/20261020T083528.770523Z` and
+`.runtime/player-runs/20261020T083637.843781Z`. They issue the same27commands on the
+same frozen engine and installed e102 package; no concurrent owned GPU/profile
+jobs or recorder measurements ran during these windows.
+
+| Trial | Frames | p50 / p95 / p99 ms | Maximum ms | Frames >16.667 / >33.333 ms |
+|---|---:|---:|---:|---:|
+|1|7297|5.912 /12.200 /15.783|62.541|41 /2|
+|2|7702|5.613 /11.760 /15.400|70.469|46 /1|
+
+Exclusive intervals use only the client's monotonic clock. Sent→admission
+includes server/network/framing/queue; publication/gaps is remaining wall time,
+not a named CPU function. Full server execution is not newly instrumented here.
+
+| Action / trial | Input→send | Sent→admission | Admission | Fold | Compile | Opening | Publication/gaps | Total ms |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+|Door1|15.237|48.158|5.981|29.869|7.131|4.149|100.997|211.522|
+|Door2|18.202|64.742|6.530|30.714|9.860|4.787|77.833|212.668|
+|Room move1|2.824|62.567|2.809|68.764|6.128|8.117|19.849|171.058|
+|Room move2|2.471|66.723|2.893|73.051|6.506|8.280|15.076|175.000|
+|Opportunity move1|4.019|56.072|10.280|45.234|13.955|7.505|19.591|156.656|
+|Opportunity move2|4.119|57.847|10.460|44.047|13.931|6.924|23.246|160.574|
+|Fireball1|19.256|56.462|2.737|32.177|8.371|7.933|43.926|170.862|
+|Fireball2|19.961|80.885|2.130|35.422|8.452|7.404|48.416|202.670|
+
+The shared attack schedule stays at9.730/9.219ms, versus105–111ms before physical
+recipe sharing. Source read ownership does not claim an input-latency win.
+
+Worst-frame decomposition, with nested scopes kept separate:
+
+- Trial1 frame986,62.541ms: Play19.026ms and HUD.998ms; approximately42ms remains
+  outside those measured scopes. Nested inside Play are session11.911ms and
+  preparation7.429ms; media plan7.365ms includes demand4.484ms. These are not
+  independent extra addends.
+- Trial1 frame313,36.275ms: Play35.094ms and HUD.110ms. Its actual door-reveal
+  work includes world sync15.873ms (ground11.929ms), lighting9.265ms
+  (shadows7.541ms) and session4.547ms. This is measured client work, not an
+  unallocated server wait.
+- Trial2 frame1066,70.469ms: Play23.593ms and HUD.163ms leave approximately46ms
+  unallocated. Session15.569ms contains timeline13.528ms/media ready13.161ms.
+  Optional dispatch4.610ms, component preparation4.212ms and media sources3.248ms
+  are nested work. Last-available render CPU/GPU are.379/.705ms; their counters
+  may lag and do not prove a pipeline cause.
+- Trial2 frame1073,26.969ms: Play24.116ms and HUD.147ms. Session20.224ms contains
+  media plan12.266ms (demand8.208ms), timeline10.687ms/media ready9.847ms and
+  preparation9.318ms (component4.088ms). Parent/child scopes must not be summed.
+
+Machine decomposition is
+`.runtime/consolidation/passive-admission-gallery-repeats.json`. There is no
+recording eviction. These are two clean correctness repeats after containment,
+not a no-spike/permanent-crash-fix or100FPS-every-frame claim. Shared migration
+continues; the remaining frame and publication tails are explicit final-scale
+qualification work.

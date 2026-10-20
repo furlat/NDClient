@@ -4,6 +4,7 @@ const SpellDelivery=preload("res://presentation/spell_delivery.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const ApplicationResults=preload("res://presentation/application_results.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
+const OperationResults=preload("res://presentation/operation_results.gd")
 const ReactionInputs=preload("res://presentation/reaction_inputs.gd")
 const CreationInputs=preload("res://presentation/creation_inputs.gd")
 const ActorBirthInputs=preload("res://presentation/actor_birth_inputs.gd")
@@ -241,6 +242,14 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
                 actual.native_creation=projected.location
                 _native_action_component(group,node,projected.node,actual,{"values":{"lease_input":{},"event_input":projected.event},
                     "gaps":[],"evidence":projected.evidence},graph,projected.target_uuid)
+        elif descriptor.get("kind")=="observed_operation":
+            var projected:Dictionary=OperationResults.project(node,descriptor,graph)
+            var actual:Dictionary=phase.duplicate()
+            if projected.ready:
+                actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
+                actual.native_constructor_evidence=projected.evidence
+            _native_action_component(group,node,node,actual,{"values":projected.get("inputs",{}),
+                "gaps":[] if projected.ready else [projected.reason],"evidence":projected.get("evidence",{})},graph)
         elif descriptor.get("kind")=="observed_event":
             if Occurrences.application(node):continue
             for projected in ApplicationResults.observed(node,descriptor,graph):

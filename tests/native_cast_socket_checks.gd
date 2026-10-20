@@ -105,7 +105,7 @@ func run()->void:
     native._owner=world;native._epoch=0
     native.groups[Native._profile_key({})]={"layer_mask":2}
     current.recipe={"sourceSockets":{}}
-    native.handles.cast={"root":mesh,"component":current,"endpoint_views":{}}
+    native.handles.cast={"root":mesh,"clip":{"inputs":[]},"component":current,"endpoint_views":{}}
     native.sample(world,[current],1.0/60.0)
     check(native.ready and native.issues.size()==1 and not mesh.visible,"A permanent unsupported cue is diagnosed and hidden without holding the authoritative clock")
     current.recipe={};mesh.show();entry.actor_layer.paths.Attack5="res://not-admitted-cast-image.png"

@@ -343,7 +343,7 @@ report = {
     'handover': {'status': handover.get('status', 'reported'), 'source': handover_path, 'report': 'agent_docs/CONDITION_HANDOVER_MIGRATION_2026-10-19.md', 'errors': handover.get('errors', [])},
     'ui_summary': ui.get('summary', {}), 'ui_errors': ui.get('errors', []),
     'remaining_shared_gaps': {
-        'providers': ['weapon_binding_remaining_owner_offhand_and_legacy_contracts', 'appearance_provider_other_rigs_and_definitions_unqualified', 'actor_history_actual_gear_transition_and_live_readiness_qualification', 'event_state_exact_factual_attribution_and_receiving_regions', 'event_binding_exact_current_owner_readiness', 'created_item_identity_subjective_creation_ancestry_gaps'],
+        'providers': ['weapon_binding_remaining_owner_legacy_grip_and_actual_offhand_weapon_qualification', 'appearance_provider_other_rigs_and_definitions_unqualified', 'actor_history_actual_gear_transition_and_live_readiness_qualification', 'event_state_exact_factual_attribution_and_receiving_regions', 'event_binding_exact_current_owner_readiness', 'created_item_identity_subjective_creation_ancestry_gaps'],
         'partial_spatial_provider': provider_notes['admitted_cells'] + ' Actual Web membership/suppression and prepared surface-presence contracts are qualified separately; named burn/armed/payload/contact outcomes remain incomplete.',
         'public_selectors': public_gaps,
         'class_gates': ['Rage/Frenzy holds now use actual condition UUID ownership and unknown-removal clocks. Initial unobserved application, ordinary Rage native output and the separate body-film API remain unqualified.',

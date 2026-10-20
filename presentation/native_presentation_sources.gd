@@ -10,6 +10,7 @@ const CACHE_KEY="__native_spell_admission"
 static var _current:Resource
 static var _attempted:bool=false
 static var _admission_mutex:Mutex=Mutex.new()
+static var _sources:Dictionary={}
 
 ## The marker naming the current native spell index of the abilities build.
 static func current()->String:
@@ -17,7 +18,7 @@ static func current()->String:
 
 static func invalidate()->void:
     _admission_mutex.lock()
-    _current=null;_attempted=false
+    _current=null;_attempted=false;_sources={}
     _admission_mutex.unlock()
 
 static func _current_index()->Resource:
@@ -42,8 +43,16 @@ static func find(behavior_id:String,cache:Dictionary)->Resource:
     if owner.index==null or not owner.index.spells.has(behavior_id):return null
     if not owner.loaded.has(behavior_id):
         var path:String=owner.index.spells[behavior_id]
+        # Same physical owner as body metadata: snapshots borrow Resources
+        # from their actual admitted index, including across independent jobs.
+        _admission_mutex.lock()
+        if not _sources.has(owner.index):_sources[owner.index]={}
+        var physical:Dictionary=_sources[owner.index]
+        if not physical.has(path):physical[path]=Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
+        var resource:Resource=physical[path]
+        _admission_mutex.unlock()
         var loaded:Dictionary=owner.loaded.duplicate()
-        loaded[behavior_id]=Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
+        loaded[behavior_id]=resource
         cache[CACHE_KEY]=make_admission(owner.index,loaded)
         if loaded[behavior_id]==null:_load_error(cache,path)
         return loaded[behavior_id]

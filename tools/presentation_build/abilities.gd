@@ -413,6 +413,10 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target") \
             or projection=="healing_return" and (binding.outcome!="heal" or binding.geometry_actor!="target" or use.at!="cast" or use.delay!=0.0):
             Common.error(report,where,"observed projection must match its actual result, source clock and recipient contract");return
+    elif binding.get("kind")=="observed_operation":
+        if use.scope!="source" or binding.get("operation") not in ["accepted","scribe"] or binding.get("input_field")!="" \
+            or use.at!="event.start" or use.delay!=0.0 or use.extra.get("live_endpoints",[])!=[{"actor":"caster","socket":"cast_hand"}]:
+            Common.error(report,where,"accepted operation needs source scope, its actual completion clock and source-hand endpoint");return
     elif binding.get("kind")=="reaction_observation":
         if use.scope!="source" or binding.get("trigger_kind")!="spell" or not binding.get("succeeded") is bool or binding.get("input_field")!="observation":
             Common.error(report,where,"reaction observation needs source scope, spell trigger, observed outcome and observation member");return
@@ -455,6 +459,10 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
             component=selected[0];input=component.input;components=input.get("components",[])
         if binding.get("kind") in ["application_result","reaction_observation"] and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
+        if binding.get("kind")=="observed_operation":
+            if not input.get("state") is Dictionary or not input.has("operation_uuid") or "operation_state" not in clips[use.clip].get("inputs",[]) \
+                or binding.operation=="scribe" and (not input.has("item_uuid") or not input.has("learned_spell_id")):
+                Common.error(report,where,"accepted operation needs the public operation state and exact source item/book constructor members")
         if binding.get("kind")=="observed_event":
             var projection:String=str(binding.get("projection","event"))
             if projection=="applied_contact" and (not input.get("state") is Dictionary or "native_state" not in clips[use.clip].get("inputs",[])):

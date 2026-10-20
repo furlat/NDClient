@@ -5,6 +5,7 @@ const Journal=preload("res://sdk/journal.gd")
 const Selection=preload("res://presentation/selection_media.gd")
 const Documents=preload("res://presentation/ability_documents.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const Sources=preload("res://presentation/native_presentation_sources.gd")
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -19,6 +20,7 @@ static func read_sources(output:Dictionary)->void:
     output.clips=[]
     for selection in output.conditions:
         for id in selection.condition.phases.values():output.clips.append(Effects.clip(id))
+    output.source=Sources.find("spell.fireball",{})
 func settle(owner:Dictionary)->void:
     var deadline:int=Time.get_ticks_msec()+30000
     while owner.task>=0 and Time.get_ticks_msec()<deadline:
@@ -33,15 +35,26 @@ func run()->void:
     var actor:String=journal.state.audience.controlled[0]
     # Pool callers start cold. Source Resources stay passive and the caller's
     # task remains owned until this test joins it; no main-thread prewarm.
-    Documents.invalidate();Effects.invalidate()
-    var output:Dictionary={}
-    var task:int=WorkerThreadPool.add_task(read_sources.bind(output),false,"Cold selected typed metadata")
-    while not WorkerThreadPool.is_task_completed(task):await process_frame
-    WorkerThreadPool.wait_for_task_completion(task)
+    Documents.invalidate();Effects.invalidate();Sources.invalidate()
+    var readers:Array=[]
+    for caller in 8:
+        var result:Dictionary={}
+        readers.append({"task":WorkerThreadPool.add_task(read_sources.bind(result),false,"Concurrent cold selected metadata"),"result":result})
+    for job in readers:
+        while not WorkerThreadPool.is_task_completed(job.task):await process_frame
+        WorkerThreadPool.wait_for_task_completion(job.task)
+    var output:Dictionary=readers[0].result
     check(output.attacks is Dictionary and not output.attacks.is_empty(),"Cold pool admission reads actual built attacks")
     check(output.body is Dictionary and not output.body.is_empty(),"Cold pool admission reads actual body recipes")
     check(output.lifecycle is Dictionary and not output.conditions.is_empty() and not output.clips.is_empty(),"Cold pool admission resolves delivered lifecycle and phase metadata")
     check(is_same(output.attacks,Documents.read("catalog/attack_recipes.json")),"Later callers borrow the exact admitted table")
+    for job in readers:
+        check(is_same(job.result.attacks,output.attacks) and is_same(job.result.body,output.body),"Concurrent callers share one physical record table")
+        check(job.result.source!=null and is_same(job.result.source,output.source),"Concurrent cache shells borrow the same admitted native source Resource")
+        check(job.result.clips.size()==output.clips.size() and job.result.clips==output.clips,"Concurrent phase requests resolve identical selected metadata")
+    var source:WeakRef=weakref(output.source)
+    for job in readers:job.result.erase("source")
+    check(source.get_ref()!=null,"Native source survives short-lived worker shells until source-owner invalidation")
     for clip in output.clips:check(not clip.is_empty(),"Delivered phase has actual source metadata")
     var owner:Dictionary=Selection.create()
     var other:Dictionary=Selection.create()

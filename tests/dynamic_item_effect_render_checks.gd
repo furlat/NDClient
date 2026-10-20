@@ -56,15 +56,17 @@ func idle_cut(index:Dictionary,actor:String,begin:float,end:float)->Dictionary:
         if clip.begins_with("Idle") and not rig.get("pose_sockets",{}).get("hand",{}).get(clip,{}).is_empty():
             return {"ready":true,"at_ms":at,"clip":clip,"attempted":attempted}
     return {"ready":false,"reason":"original_held_interval_has_no_registered_idle_pose","attempted":attempted}
-func missing_grip(world:Node,ids:Array,actor:String)->void:
+func surface_registration(world:Node,ids:Array,actor:String)->void:
     var native:RefCounted=world.component_renderer.native_spells
     var clip:String=world.playbacks[actor].clip
     var rig:Dictionary=world.rigs[world.visual_actors[actor].row.rig]
     check(clip=="Taunt" and rig.get("pose_sockets",{}).get("hand",{}).get(clip,{}).is_empty(),"Original equip publishes the real Taunt pose with its missing authored weapon grip")
-    check(ids.all(func(id):return native.diagnostics.get(id,{}).get("status")=="missing" and native.diagnostics[id].reason=="native_spell_hand_socket_missing"),"Missing Taunt weapon registration remains an exact unavailable diagnostic")
-    check(ids.all(func(id):return not native.handles.has(id) or not native.handles[id].root.is_visible_in_tree()),"A pose with no real grip keeps both weapon effects hidden")
-    check(world.presentation_errors.is_empty() and not world.publication_failed,"An authored weapon registration gap does not poison ordinary replay publication")
-    evidence.append({"cut":"original-taunt-gap","at_ms":world.timeline.display_ms,"clip":clip,"reason":"native_spell_hand_socket_missing"})
+    check(ids.all(func(id):return native.diagnostics.get(id,{}).get("status")=="rendered" and native.diagnostics[id].input_bindings.unavailable.is_empty()),"Actual prepared measured sources render on the original Taunt surface without inventing a grip")
+    check(ids.all(func(id):return native.handles.has(id) and native.handles[id].root.is_visible_in_tree() and native.handles[id].endpoints.has("optical_anchor") \
+        and not native.handles[id].endpoints.has("hand") and not native.handles[id].occurrence.receiving.weapon_binding.has("hand")),"Each exact dynamic member keeps its own actual optical anchor with no made-up hand")
+    check(ids.all(func(id):return native.handles[id].occurrence.receiving.admitted_geometry and native.handles[id].occurrence.receiving.current_surface.item_uuid==Support.ITEM),"Original item UUID and actual displayed Mace support admit both prepared uses")
+    check(world.presentation_errors.is_empty() and not world.publication_failed,"Optical registration preserves ordinary replay publication")
+    evidence.append({"cut":"original-taunt-measured-surface","at_ms":world.timeline.display_ms,"clip":clip,"hand":"not_authored","anchor":"actual_optical_support_centroid"})
 func inspect(world:Node,current:Array,clock:float)->Array:
     var native:RefCounted=world.component_renderer.native_spells
     var result:Array=[]
@@ -134,8 +136,8 @@ func run()->void:
     if current.size()!=2:view.queue_free();await frame();finish();return
     var clock:float=float(current[0].start_ms)
     var actor:String=str(current[0].actor_uuid)
-    if not await settle(world):view.queue_free();await frame();finish();return
-    missing_grip(world,ids.keys(),actor)
+    if not await settle(world,ids.keys()):view.queue_free();await frame();finish();return
+    surface_registration(world,ids.keys(),actor)
     var first_idle:Dictionary=idle_cut(index,actor,world.timeline.display_ms,commits["239"]-.01)
     check(first_idle.ready,"Original first-held interval contains a registered Idle recovery: "+str(first_idle))
     if not first_idle.ready:view.queue_free();await frame();finish();return

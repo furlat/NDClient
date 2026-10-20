@@ -1,4 +1,15 @@
-# Factory follow-up: current receiver closure and weapon admission
+# Historical Factory follow-up: receiver closure and weapon admission
+
+**Status update20October:** the complete successor `runtime-e102c29dec58524b` is
+installed and committed as `ad26e594`; it supersedes the c494/5dc installation
+state below and contains corrected actor-history shaders. All three actor-history
+modes now pass native qualification. See [the current installation receipt](FACTORY_RUNTIME_E102_INSTALLATION_2026-10-20.md)
+and [remaining provider work](SHARED_PROVIDER_COMPLETION_CHECKLIST_2026-10-20.md).
+The earlier receiving/source observations below are historical evidence, not a
+request to reinstall5dc or redo shader repairs already delivered in e102.
+New87weapon clips remain unassigned; their specific rendering/source-history
+qualification is separate from the installed package and currently selected
+prepared weapon-surface cohort.
 
 Consumer: `C:/Users/tommaso/Documents/Dev/NDClientGodot`, sole branch
 `codex-authoring-schemabump`, committed renderer010343ab. Installed package

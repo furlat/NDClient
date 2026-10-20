@@ -1,0 +1,119 @@
+[
+ {
+  "request": {
+   "do": "spell.magic_missile",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "8b734274-6f68-4503-8fd1-0f8bfa391bd2",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.magic_missile",
+   "display_name": "Magic Missile (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "automatic",
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "e39985cd-6be4-49a6-96f6-daa9e576d304",
+   "state_revision": "8b734274-6f68-4503-8fd1-0f8bfa391bd2",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_action_class_wizard_arcane_recovery_accepted_outside_combat",
+   "game_epoch": "89dbf771-a167-4c7b-8104-6c845a7ac8c5",
+   "audience_id": "a5f90847-5789-400a-9906-4cbb942bc444",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_wizard_arcane_recovery_accepted_outside_combat",
+    "game_epoch": "89dbf771-a167-4c7b-8104-6c845a7ac8c5",
+    "audience_id": "a5f90847-5789-400a-9906-4cbb942bc444",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.class.wizard.arcane_recovery",
+   "by": "caster",
+   "target": "self",
+   "variant": {
+    "rank": "1"
+   }
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "05d44e01-fff8-48c4-a4b1-df6019383431",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.class.wizard.arcane_recovery",
+   "display_name": "Arcane Recovery (Level 1)",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "rank",
+     "value": "1",
+     "label": "Level 1"
+    }
+   ],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "e39985cd-6be4-49a6-96f6-daa9e576d304",
+   "state_revision": "05d44e01-fff8-48c4-a4b1-df6019383431",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_action_class_wizard_arcane_recovery_accepted_outside_combat",
+   "game_epoch": "89dbf771-a167-4c7b-8104-6c845a7ac8c5",
+   "audience_id": "a5f90847-5789-400a-9906-4cbb942bc444",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_wizard_arcane_recovery_accepted_outside_combat",
+    "game_epoch": "89dbf771-a167-4c7b-8104-6c845a7ac8c5",
+    "audience_id": "a5f90847-5789-400a-9906-4cbb942bc444",
+    "sequence": 3
+   }
+  }
+ }
+]

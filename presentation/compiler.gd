@@ -734,6 +734,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
     var stage_started:int=compile_started
     var target:Dictionary=Reducer._retained_target(before)
     var groups:Array=[]
+    var operation_sheets:Dictionary=Components.OperationResults.sheets(before,packet)
     if profile_enabled:stage_started=_profile_phase(compile_phases,"input_shell",stage_started)
     for lineage_index in packet.get("lineages",[]).size():
         var native:Dictionary=packet.lineages[lineage_index]
@@ -772,6 +773,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         for node in lineage.events:graph.nodes[node.lineage_id]=node
         var applications:Dictionary={}
         graph.item_rows={}
+        graph.operation_sheets=operation_sheets
         graph.application_results=Components.ApplicationResults.index(lineage.events)
         for node in lineage.events:
             var resolution:Dictionary=node.resolution_record

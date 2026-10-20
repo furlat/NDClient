@@ -376,7 +376,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         handle.component=component
         var cue:Dictionary=component.native_cue.duplicate(false)
         var age:float=maxf(0,float(component.age_ms)/1000.0)
-        var points=Sockets.endpoints(world,component,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch))
+        var registration:Dictionary=inputs.weapon_registration(world,handle,component)
+        var points=Sockets.endpoints(world,component,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch),registration)
         if not points.ready:
             if points.get("unavailable",false):Inputs.invalidate_history(handle)
             Effects.hide(handle)
@@ -420,7 +421,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             # geometry and materials seek; particles take one step).
             sample_time=age
         handle.root.show()
-        Effects.place(handle,Playback.transform(cue,sample_time,points.hand,1.0))
+        var optical_origin:Vector3=points.optical_anchor if points.has("optical_anchor") else points.hand
+        Effects.place(handle,Playback.transform(cue,sample_time,optical_origin,1.0))
         var input_bindings:Dictionary={"supplied":[],"unavailable":{}}
         if not handle.get("baked",false):
             var input_started:int=Time.get_ticks_usec()
@@ -448,15 +450,15 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             var anchor=Effects.node(handle,cue.origin_path)
             if anchor==null:
                 Effects.hide(handle);_missing(component,"native_spell_origin_missing");continue
-            handle.root.global_position+=Playback.transform(cue,sample_time,points.hand,1.0).origin-anchor.global_position
+            handle.root.global_position+=Playback.transform(cue,sample_time,optical_origin,1.0).origin-anchor.global_position
         Playback.controls(handle,cue,sample_time)
         if handle.get("baked",false) and handle.bundle.moving:
             # Path history for trailing particles and trails: frames a jump
             # skipped use the cue's placement, shifted like the current root.
-            var placed:Vector3=Playback.transform(cue,sample_time,points.hand,1.0).origin
+            var placed:Vector3=Playback.transform(cue,sample_time,optical_origin,1.0).origin
             var shift:Vector3=handle.root.global_position-placed
-            var hand:Vector3=points.hand
-            Baked.follow(handle,cue,sample_time,func(time:float)->Transform3D:return Playback.transform(cue,time,hand,1.0).translated(shift))
+            var path_origin:Vector3=optical_origin
+            Baked.follow(handle,cue,sample_time,func(time:float)->Transform3D:return Playback.transform(cue,time,path_origin,1.0).translated(shift))
         inputs.appearances.sampled(handle)
         handle.sample_time=sample_time;handle.requested_time=age;handle.started=true
         handle.attachment_support=points.surfaces

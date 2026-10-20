@@ -105,8 +105,9 @@ static func surface(value:Dictionary,resolved:Dictionary)->Dictionary:
     result.gpu_geometry_key=[value.get("gpu_geometry_key",[]),resolved.item_uuid,resolved.equipment_slot,resolved.render_slot]
     return result
 
-static func packet(resolved:Dictionary,hand:Dictionary)->Dictionary:
+static func packet(resolved:Dictionary,hand:Dictionary,requires_hand:bool=true)->Dictionary:
     if not resolved.ready:return {"ready":false,"reason":resolved.reason,"binding":{},"public_gaps":resolved.public_gaps}
-    if not hand.get("ready",false):return {"ready":false,"reason":hand.get("reason","weapon_hand_not_prepared"),"binding":{},"public_gaps":resolved.public_gaps}
-    var binding:Dictionary=resolved.binding.duplicate(false);binding.hand=hand.point
+    if requires_hand and not hand.get("ready",false):return {"ready":false,"reason":hand.get("reason","weapon_hand_not_prepared"),"binding":{},"public_gaps":resolved.public_gaps}
+    var binding:Dictionary=resolved.binding.duplicate(false)
+    if hand.get("ready",false):binding.hand=hand.point
     return {"ready":true,"reason":"","binding":binding,"public_gaps":resolved.public_gaps}

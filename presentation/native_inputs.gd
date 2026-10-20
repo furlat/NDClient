@@ -51,6 +51,42 @@ static func actor_uuid(component:Dictionary,selector:String)->String:
         var target:Variant=component.get("target_uuid");return "" if target==null else str(target)
     return str(component.get("native_actor_uuids",{}).get(selector,""))
 
+## Only the actual prepared Measured receiver (including its Flame Blade
+## subclass) admits exact item geometry without a grip. Legacy ownership and
+## authored caster-hand endpoints retain their separate physical obligations.
+static func measured_weapon_source(handle:Dictionary)->bool:
+    var selected:Dictionary=Effects.choice(handle.clip)
+    if selected.approaches.is_empty() or not selected.approaches[0].get("condition_prepared",false):return false
+    if handle.clip.has("construction_inputs"):return false
+    return handle.occurrence.parameters.get("adaptive_surface",{}).get("kind") in ["measured","flame_blade"]
+
+func weapon_registration(world:Node,handle:Dictionary,component:Dictionary)->Dictionary:
+    if "weapon_binding" not in handle.clip.get("inputs",[]):return {}
+    var weapon:Dictionary=Weapons.resolve(world,component)
+    var hand:Dictionary={"ready":false,"reason":weapon.reason}
+    if weapon.ready:
+        hand=Sockets.pose_point(world,world.visual_actors[weapon.actor].row,"hand") if weapon.render_slot=="weapon" \
+            else {"ready":false,"reason":"weapon_offhand_socket_not_authored"}
+    var measured:bool=measured_weapon_source(handle)
+    var cue:Dictionary=component.get("native_cue",{})
+    var grip_required:bool=cue.get("live_endpoints",[]).any(func(endpoint):return endpoint.get("socket") in ["hand","cast_hand"])
+    var absent:bool=hand.get("reason") in ["native_spell_hand_socket_missing","weapon_offhand_socket_not_authored"]
+    var surface_anchor:bool=measured and absent and cue.get("attachment") in ["recipient_weapon","item"] and not grip_required
+    var packet:Dictionary=Weapons.packet(weapon,hand,not surface_anchor)
+    var result:Dictionary={"ready":packet.ready,"reason":packet.reason,"weapon":weapon,"hand":hand,"packet":packet,"surface":{},"measured":measured}
+    if handle.clip.get("inputs",[]).any(func(channel):return channel in ["entity_geometry","recipient_geometry"]):
+        result.surface=geometry_sample(world,component,"entity_geometry",weapon)
+    if not packet.ready:
+        result.pending=hand.get("pending",false);result.unavailable=not result.pending;return result
+    if hand.get("ready",false):return result
+    # No manufactured binding.hand: this is the optical support frame already
+    # assembled/cached with the exact selected weapon points, not its hilt.
+    if not result.surface.get("ready",false):
+        result.ready=false;result.reason=result.surface.get("reason","weapon_surface_not_prepared")
+        result.pending=true;return result
+    result.optical_anchor=result.surface.optical_anchor
+    return result
+
 static func geometry_interests(component:Dictionary,world:Node=null)->Array:
     var requested:Array=component.get("native_clip",{}).get("inputs",[])
     var result:Array=[]
@@ -394,7 +430,8 @@ static func endpoints(component:Dictionary,points:Dictionary,surface:Dictionary)
     # second actor's body on the source endpoint of a recipient occurrence.
     var target:Dictionary={"actor_uuid":recipient(component),"role":"recipient","point":points.to}
     if not surface.is_empty():target.surface=surface
-    return [{"actor_uuid":str(component.get("actor_uuid","")),"role":"source","point":points.hand},target]
+    var source:Vector3=points.optical_anchor if points.has("optical_anchor") else points.hand
+    return [{"actor_uuid":str(component.get("actor_uuid","")),"role":"source","point":source},target]
 
 func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,surface:Dictionary)->Dictionary:
     var cue:Dictionary=component.get("native_cue",{})
@@ -578,13 +615,10 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             Effects.set_input(handle,"owner_visibility",visibility);handle.owner_visibility_input=visibility
         supplied.append("owner_visibility")
     if "weapon_binding" in requested:
-        weapon=Weapons.resolve(world,component)
-        var hand:Dictionary={"ready":false,"reason":weapon.reason}
-        if weapon.ready:
-            # Main/offhand pixels are distinct optical channels. An absent
-            # offhand socket cannot borrow the main hand's authored position.
-            hand=Sockets.pose_point(world,world.visual_actors[weapon.actor].row,"hand") if weapon.render_slot=="weapon" else {"ready":false,"reason":"weapon_offhand_socket_not_authored"}
-        var packet:Dictionary=Weapons.packet(weapon,hand)
+        var registration:Dictionary=points.get("weapon_registration",{})
+        if registration.is_empty():registration=weapon_registration(world,handle,component)
+        weapon=registration.weapon
+        var packet:Dictionary=registration.packet
         if "created_item_identity" in requested:
             var creation:Dictionary=CreationInputs.lifetime_packet(component,world.timeline.state,weapon)
             if creation.ready:
@@ -600,7 +634,7 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
                 unavailable.created_item_identity=creation.reason
         weapon_gaps=packet.public_gaps
         if requested.any(func(name):return name in ["entity_geometry","recipient_geometry"]):
-            weapon_surface=receiver_surface(geometry_sample(world,component,"entity_geometry",weapon),handle.root.global_transform)
+            weapon_surface=receiver_surface(registration.surface,handle.root.global_transform)
         var selected:Dictionary=Effects.choice(handle.clip)
         var prepared:bool=not selected.approaches.is_empty() and selected.approaches[0].get("condition_prepared",false)
         var key:Dictionary=packet.binding.duplicate(false)

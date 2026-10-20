@@ -1,0 +1,56 @@
+[
+ {
+  "request": {
+   "do": "action.wizard.learn_scroll",
+   "by": "caster",
+   "target": "self",
+   "item": "spell_item.scroll_hold_person"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "c1a2bcc0-9570-45a5-97c2-bbc9c14f5336",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.wizard.learn_scroll",
+   "display_name": "Learn Spell (Scroll of Hold Person)",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b825199e-b151-4e58-a881-4b6327ab6862",
+   "state_revision": "c1a2bcc0-9570-45a5-97c2-bbc9c14f5336",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 33,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_action_wizard_learn_scroll_accepted_knowledge",
+   "game_epoch": "760e17c0-38fd-4964-b980-bb3b7f26d01c",
+   "audience_id": "3f8336f2-b434-4019-9341-5b77126bc920",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_wizard_learn_scroll_accepted_knowledge",
+    "game_epoch": "760e17c0-38fd-4964-b980-bb3b7f26d01c",
+    "audience_id": "3f8336f2-b434-4019-9341-5b77126bc920",
+    "sequence": 2
+   }
+  }
+ }
+]

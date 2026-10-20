@@ -29,6 +29,7 @@ static var _clips:Dictionary={}
 static var _selections:Dictionary={}
 static var _conditions:Dictionary={}
 static var _client:Dictionary={}
+static var _phases:Dictionary={}
 static var _clock:Script
 static var _immutable_preparation:String=""
 static var _loaded:bool=false
@@ -48,7 +49,7 @@ static func set_requested(kind:String)->void:
 ## Reload: the next request reads the package index again.
 static func invalidate()->void:
     _mutex.lock()
-    _loaded=false;_clips={};_selections={};_conditions={};_client={};_immutable_preparation=""
+    _loaded=false;_clips={};_selections={};_conditions={};_client={};_phases={};_immutable_preparation=""
     _mutex.unlock()
 
 static func _load()->void:
@@ -118,17 +119,19 @@ static func clip(id:String)->Dictionary:
     _load()
     _mutex.lock()
     var result:Dictionary=_client.get(id,{})
-    _mutex.unlock()
-    if not result.is_empty() or not _clips.has(id):return result
+    if not result.is_empty() or not _clips.has(id):
+        _mutex.unlock();return result
     var entry:Dictionary=_clips[id]
     var bounded:bool=false
     for approach in entry.approaches:
         if approach.has("source_phase"):
-            var phase:Resource=Metadata.read(approach.source_phase,ResourceLoader.CACHE_MODE_REUSE)
+            var path:String=approach.source_phase
+            if not _phases.has(path):_phases[path]=Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
+            var phase:Resource=_phases[path]
             bounded=phase!=null and bool(phase.get("options").get("bounded_formation",false));break
     result={"id":id,"spell":entry.spell,"stage":entry.stage,"seconds":float(entry.seconds),"loop":entry.loop,"inputs":entry.inputs,
         "input_setters":entry.input_setters,"approaches":entry.approaches,"bounded_formation":bounded,"content_hash":entry.content_hash}
-    _mutex.lock();_client[id]=result;_mutex.unlock()
+    _client[id]=result;_mutex.unlock()
     return result
 
 ## Optional approach_id is an exact source assignment, ahead of the global

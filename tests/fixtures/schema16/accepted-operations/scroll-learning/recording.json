@@ -1,0 +1,74 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 1,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "b825199e-b151-4e58-a881-4b6327ab6862": "Amber caster",
+  "8c2b4e86-e270-4e8e-9e45-b28505d8c528": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.wizard.learn_scroll \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 1,
+   "actor_change": 1,
+   "item_charge": 1,
+   "action": 1
+  },
+  "behaviors": {
+   "action.wizard.learn_scroll": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 31,
+   "lineage": 25,
+   "event_offset": 1,
+   "kind": "item_charge",
+   "label": "item_charge ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 33,
+   "lineage": 25,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.wizard.learn_scroll",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 28,
+   "lineage": 25,
+   "event_offset": 0,
+   "kind": "action",
+   "label": "action action.wizard.learn_scroll",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -1,0 +1,57 @@
+{
+ "id": "action.wizard.learn_scroll/accepted_knowledge",
+ "title": "Real offered Hold Person scroll learning and own book after-value",
+ "kind": "interaction",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "wizard",
+   "at": [
+    3,
+    7
+   ],
+   "items": [
+    "spell_item.scroll_hold_person"
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.goblin",
+   "at": [
+    6,
+    7
+   ],
+   "damage": 6
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.wizard.learn_scroll",
+   "by": "caster",
+   "target": "self",
+   "item": "spell_item.scroll_hold_person"
+  }
+ ],
+ "required_behaviors": [
+  "action.wizard.learn_scroll"
+ ],
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.wizard.learn_scroll"
+  ],
+  "condition": [],
+  "creature": [
+   "creature.goblin"
+  ],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": [
+   "spell_item.scroll_hold_person"
+  ]
+ }
+}

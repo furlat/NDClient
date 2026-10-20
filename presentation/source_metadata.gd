@@ -1,10 +1,18 @@
 extends RefCounted
 ## Passive metadata only. A pool preparation may await this one read without
 ## scheduling another pool task; no scene, texture or presentation clock lives here.
+static var _read_mutex:=Mutex.new()
 static func _read(path:String,cache_mode:ResourceLoader.CacheMode,profile:Dictionary)->Resource:
     var began:int=Time.get_ticks_usec() if not profile.is_empty() else 0
+    # All passive domains share native Resource/Script admission. Acquire on
+    # the actual reader, never on a pool caller waiting for that reader.
+    _read_mutex.lock()
+    var admitted:int=Time.get_ticks_usec() if began>0 else 0
     var value:Resource=ResourceLoader.load(path,"",cache_mode)
-    if began>0:profile.native_read_usec=Time.get_ticks_usec()-began
+    _read_mutex.unlock()
+    if began>0:
+        profile.native_reader_wait_usec=admitted-began
+        profile.native_read_usec=Time.get_ticks_usec()-admitted
     return value
 
 static func read(path:String,cache_mode:ResourceLoader.CacheMode,profile:Dictionary={})->Resource:

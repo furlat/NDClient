@@ -260,16 +260,19 @@ func sample(world:Node,actor:String,slots:Array=BODY_SLOTS)->Dictionary:
     var owner_key:Array=[actor,slots]
     var world_key:Array=[revision,origin]
     if packets.has(owner_key) and packets[owner_key].revision==world_key:return packets[owner_key].packet.duplicate(false)
-    var owned:Dictionary={}
+    var owned:Dictionary={};var centre:=Vector3.ZERO
     for description in selected:
         var transform:Transform3D=description.entry.node.global_transform
         var normal_basis:Basis=transform.basis.inverse().transposed()
         for point in sources[description.key]:
             if owned.has(point.pixel):continue
             owned[point.pixel]=true
-            result.points.append({"position":transform*point.local,"normal":(normal_basis*point.normal).normalized(),"uv":point.uv,"pixel":point.pixel,"slot":description.slot})
+            var position:Vector3=transform*point.local
+            result.points.append({"position":position,"normal":(normal_basis*point.normal).normalized(),"uv":point.uv,"pixel":point.pixel,"slot":description.slot})
+            centre+=position
     result.gpu_geometry_key=revision
     result.ready=not result.points.is_empty();result.reason="" if result.ready else "no_admitted_optical_points"
+    if result.ready:result.optical_anchor=centre/float(result.points.size())
     packet_builds+=1
     if not packets.has(owner_key):packet_order.append(owner_key)
     packets[owner_key]={"revision":world_key,"packet":result}

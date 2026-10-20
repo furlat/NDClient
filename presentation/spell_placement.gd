@@ -83,7 +83,7 @@ static func has_socket(world: Node,row: Dictionary,socket: String) -> bool:
     var frame=mini(int((playback.sample_seconds if playback!=null else 0.0)*rig.clips[clip].fps),int(rig.clips[clip].frames)-1)
     return points[mini(frame,points.size()-1)]!=null
 
-static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},preparing:bool=true)->Dictionary:
+static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},preparing:bool=true,weapon_registration:Dictionary={})->Dictionary:
     var cue:Dictionary=component.native_cue
     var persistent:bool=component.get("persistent_owner",false)
     var source:Dictionary=world.visual_actors.get(component.get("actor_uuid"),{})
@@ -111,9 +111,21 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
     if attachment=="item":
         if component.get("native_item",false):
             var attached:Dictionary=component.duplicate(false);attached.native_cue=cue.duplicate(false);attached.native_cue.attachment="recipient_weapon"
-            return endpoints(world,attached)
+            return endpoints(world,attached,fixed,preparing,weapon_registration)
         return {"ready":false,"unavailable":true,"reason":"native_item_registration_not_bound"}
     if attachment=="recipient_weapon":
+        if not weapon_registration.is_empty():
+            if not weapon_registration.ready:return weapon_registration
+            var resolved:Dictionary=weapon_registration.weapon
+            var ground:Vector3=Placement.contact(world.visual_actors[resolved.actor].row)
+            var known:Dictionary=weapon_registration.hand
+            var optical:Vector3=known.point if known.get("ready",false) else weapon_registration.optical_anchor
+            var result:Dictionary={"ready":true,"from":optical,"to":optical,"ground":ground,"caster_ground":ground,
+                "surfaces":[known] if known.get("ready",false) else [],"fixed":{},"item_uuid":resolved.item_uuid,
+                "holder_uuid":resolved.actor,"equipment_slot":resolved.equipment_slot,"weapon_registration":weapon_registration}
+            if known.get("ready",false):result.hand=known.point
+            else:result.optical_anchor=optical
+            return result
         var weapon:Dictionary=Weapons.resolve(world,component)
         if not weapon.ready:return {"ready":false,"unavailable":true,"reason":weapon.reason}
         if weapon.render_slot!="weapon":return {"ready":false,"unavailable":true,"reason":"weapon_offhand_socket_not_authored"}
