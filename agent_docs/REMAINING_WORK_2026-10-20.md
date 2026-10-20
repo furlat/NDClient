@@ -21,7 +21,7 @@ What is already established and should **not be restarted**:
 
 - One main Windows checkout and branch; frozen executable engine `211b71134`,
   protocol 1/schema 16. The official engine and Factory sources remain read-only.
-- The complete sealed Factory `runtime-weapon-receiver-46b8f47014566e6d` is installed (R2 intake below supersedes e102):
+- The complete sealed Factory `runtime-heavy-effects-20261020-fa024e4e027bf708` is installed (R2 intake below retains the corrected weapon receiver):
   1,246 clips, 504 selections, 155 condition lifecycle families. The earlier two
   actor-history shader errors are fixed in this successor; they are not a
   current blocker.
@@ -43,7 +43,7 @@ What is already established and should **not be restarted**:
 - Water/Wet has real native output through both independent faction streams,
   four views, seek/loop and cleanup. Its actual creation/removal choreography is
   qualified separately by the R2 Water DRY cohort below.
-- Latest full fast run: **182/182 clean**, `.runtime/tests/20261020T161653.162607Z/summary.json`, including the final position-only motion cohort. The R2 native receiving evidence is below; the earlier shared-provider run passed 444 checks.
+- Latest full fast run: **183/183 clean**, `.runtime/tests/20261020T163620.423896Z/summary.json`, including the heavy selection/preparation identity and motion cohorts. The R2 native receiving evidence is below; the earlier shared-provider run passed 444 checks.
   Latest actual Gallery route: 313/313 clean. These are bounded receipts, **not
   a green complete suite or complete visual coverage**.
 
@@ -232,6 +232,19 @@ Source/public-field evidence and exact family definitions:
   modular separate-sheet attachments are the current requested implementation.
   Six delivered native weapon-body consumers are **excluded by user policy**.
   Spiritual Weapon/summoned actors remain a separate actual actor case.
+
+The bounded Miss review identifies presentation authoring, not a new engine
+contract: the actual Ray of Sickness Miss original already discloses source,
+recipient and outcome, but its delivered Miss source aims directly at the
+provided endpoint and the imported endpoint is fixed review data. Author and
+qualify an explicit optical miss endpoint before selecting it; aiming at the
+body is not automatically a miss. Acid Arrow's finite Miss delivery/splash
+has the same optical endpoint issue, and no durable actual Acid Miss original
+is qualified. Its finite splash does not consume the patch's geometry/cell
+channels; its separate patch still requires 1–32 actual disclosed cells. The
+Hit baseline, installed heavy Miss alternative and target floor cannot prove
+that branch or manufacture a residue. Keep these dispositions explicit under
+R2/R4/R8; no new factual provider or producer request follows from this review.
 
 ### R2 weapon delivery integration
 
@@ -481,8 +494,10 @@ the foundation, rather than a reason to restore the old renderer.
 #### R2 heavy-effects successor intake
 
 New delivery: [Factory heavy-effects handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/HEAVY_EFFECTS_PRODUCTION_HANDOFF_2026-10-20.md),
-complete `runtime-heavy-effects-20261020-fa024e4e027bf708`. Intake/consumer
-qualification is in progress; this is not yet an installed or selected receipt.
+complete `runtime-heavy-effects-20261020-fa024e4e027bf708`. The complete namespace
+is installed, with its predecessor preserved outside the checkout. One offline
+intake retains all 1,246 clip IDs and exact 504 selection dictionaries; receipt
+`.runtime/heavy-effects-intake.json`. This is installation, not output proof.
 It retains the corrected receiver and all existing IDs/selections and adds 16
 explicit alternatives through the existing `EffectUse.approach` mechanism.
 Use the complete namespace, preserve actual phase simulation rates and owner/
@@ -500,6 +515,69 @@ and unqualified first Fire Wall input; packaged smoke is not whole-game timing.
 `engine_shutdown_clean=false` and static-resource retention remain explicit.
 R8 has no new human approval. Later unpackaged source optimizations remain
 outside the immediate queue unless a selected consumer needs them.
+
+Five existing default cues explicitly select the delivered heavy approach:
+Conjure Elemental, Summon Dragon, Planar Ally, Ice Storm and Acid Arrow. Their original owners/endpoints/body/source timings
+are unchanged. Acid uses its exact followup immutable coordinator; the other
+four use the root contract. Inactive Acid variants are untouched. Shared
+selected-capability preparation now preserves the same authored physical
+approach/coordinator as the compiled occurrence and deduplicates by existing
+`Effects.key`, rather than dropping those fields and warming an old default.
+The five-source native gate passes **767/0** through both original streams,
+actual constructors/declared source rates, canonical prefixes and framebuffer
+pixels, receipt `.runtime/tests/20261020T163453.822020Z/`. The exact current
+receiver still passes **5,132/0**, and actual actor-birth rendering **522/0**,
+receipt `.runtime/tests/20261020T162630.346954Z/`. This is scoped source output,
+not all Acid Arrow phases or general spell completion. An unrelated imported
+Acid residue phase remains outside the heavy delivery gate; its absent runtime
+diagnostic/45s inspection wait stays a named R1/R4 inspection gap rather than
+an excuse to change the approved residue renderer.
+
+R6's thirty observed production constructions in this fixture measured:
+
+| Actual source | Median total ms | Maximum total ms | Ready phase at the maximum ms |
+|---|---:|---:|---:|
+| Air Elemental admission |1.817|2.656|2.528|
+| Draconic Spirit admission |1.915|2.622|2.535|
+| Deva admission |1.752|2.163|2.052|
+| Ice Storm |1.869|2.125|2.037|
+| Acid Arrow delivery |1.796|1.864|1.787|
+
+Totals include the nested ready phase. Other maximum phases were admission
+.001–.004 ms, make .017–.027, script .014–.029 and adaptation .005–.008;
+do not add a nested phase to the total. Receipt
+`.runtime/tests/20261020T163453.822020Z/native-heavy-effects-observations.json`
+preserves those thirty actual observations separately from later run output. These exclude whole-command/server time, resource
+readiness/first GPU pipelines and live frame targets; the Factory's 61.497ms
+readiness-step limit remains open. Final five-source backward-seek/loop gate passes **847/0**, receipt
+`.runtime/tests/20261020T164307.227223Z/summary.json`; exact selection/neutral
+preparation/original controls pass **125/0** within the full fast run. The GPU
+inspector now polls required preparation at `process_frame` before Play's
+shared budget is spent and rechecks after drawing, as ordinary Studio does.
+The earlier post-draw-only test could starve its damage-number presenter;
+this correction neither resets the production budget nor holds/reorders a
+clock, and it changes no rendering source. The precise earlier budget spender
+was not captured and is not assigned to Factory/concurrency by inference.
+Plan-adherence and antislop/ownership reviews found no remaining material
+finding in this bounded intake. This closes installation, five explicit source
+selections and their receiving/replay qualification, not the eleven other
+bindings, final live R6 measurements or R8 acceptance. The full fast run now passes **183/183**, receipt
+`.runtime/tests/20261020T163620.423896Z/summary.json`.
+
+The other eleven alternatives are installed and unselected. Conjure Animals/
+Fey/Fiend have real descendant body/entry admissions, but their old recipient
+cues are not joined to those actual births. No target is invented from the
+empty SpellFact target. Their assembled source also includes timed review
+sections rather than a terminal-owner setter; qualify an actual admission/
+finite phase with the existing ActorBirthInputs seam before selecting it.
+This is remaining client/source phase work, not a request for an engine field.
+Guardian still
+needs observed response/swing inputs; delayed-blast retirement its actual
+blast/item/footprint; Frigid Air its child spatial owner; Feast's scene is not
+the delegated production condition consumer; Acid miss/ground retain their
+existing unselected gameplay dispositions; Fire Wall ring retains fixed form/
+geometry limits; Darkness's changed optical reference remains unaccepted.
+Installation alone closes none of those bindings or R5/R6/R8 qualifications.
 
 R6 costs remain bounded receipts, not a final live frame-time certificate.
 The 274 actual intrinsic/contact constructions measured median **0.374 ms**,
@@ -747,12 +825,12 @@ per-spell screenshot/measurement cycle while migration work remains untouched.
 
 ## 8. R7: the entire test inventory is not green
 
-Current `tests/manifest.json` has 562 rows after the R2/shared-consumer cohort:
+Current `tests/manifest.json` has 564 rows after the heavy-consumer additions:
 
 | Population | Count | What it means |
 |---|---:|---|
-| Eligible fast headless |182| All pass together, `.runtime/tests/20261020T161653.162607Z/summary.json`, including the current motion cohort. |
-| Eligible gate |205| 178 GPU + 27 headless. Focused current-cohort output passes are recorded under R2; no claim of a complete final-checkpoint run. |
+| Eligible fast headless |183| All pass together, `.runtime/tests/20261020T163620.423896Z/summary.json`, including heavy selection/preparation identity. |
+| Eligible gate |206| 179 GPU + 27 headless. Focused current-cohort output passes are recorded under R2; no claim of a complete final-checkpoint run. |
 | Eligible live |11| One Gallery pass does not cover all 11. |
 | Excluded but executable |86| 53 needs-args, 17 known-red, 16 owned-by-migration. Each needs a current-contract decision, not a blanket exemption. |
 | Retired |52| Historical/removed contracts; not passes. |

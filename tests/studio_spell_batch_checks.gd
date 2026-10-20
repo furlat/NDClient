@@ -12,18 +12,26 @@ const EXTRA_CASES=["spell.shield/reaction"]
 var unexercised:Array=[]
 var selected_cases:Array=[]
 var only_case:String=""
+## A consumer-specific gate may inspect its changed sources without claiming
+## qualification of unrelated phases. Empty preserves the complete old cohort.
+var source_filter:Array=[]
+var sample_fractions:Array=[.10,.35,.65]
 
 # Keep the production readiness contract intact. Failure reporting reads the
 # last completed preparation/sample state; it never calls prepare() to diagnose.
 func settle(world:Node,component_id:String="")->bool:
     var deadline:int=Time.get_ticks_msec()+45000
     while Time.get_ticks_msec()<deadline and not world.publication_failed and world.presentation_errors.is_empty() and world.media_issue.is_empty():
+        # Match Studio's external-clock controller: ask for required work at
+        # process_frame, before Play spends this frame's shared allowance.
+        # A post-draw-only poll can indefinitely starve a required presenter.
+        await process_frame
         var bindings:Dictionary=world.component_renderer.native_spells.diagnostics.get(component_id,{}).get("input_bindings",{})
         var inputs_ready:bool=component_id.is_empty() or (not bindings.is_empty() and bindings.unavailable.is_empty())
         if world.playback_prepared() and inputs_ready:
-            await frame()
+            await RenderingServer.frame_post_draw
             if world.playback_prepared():return true
-        await frame()
+        else:await RenderingServer.frame_post_draw
     var diagnostic:Dictionary=readiness_diagnostic(world,component_id)
     evidence.append({"kind":"preparation_timeout","diagnostic":diagnostic})
     print("STUDIO_SPELL_PREPARATION_TIMEOUT ",JSON.stringify(diagnostic))
@@ -151,7 +159,8 @@ func inspect_case(record:Dictionary,perspective:Dictionary,spell:String)->void:
             "approval_status":"rejected","gaps":[{"reason":"user_rejected_presentation_not_migrated"}]})
         return
     check(not selected.is_empty(),label+": engine spell resolves its actual typed presentation selection")
-    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==selected.get("id"))
+    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==selected.get("id") \
+        and (source_filter.is_empty() or row.component.get("native_clip",{}).get("id") in source_filter))
     check(not rows.is_empty(),label+": actual spell exposes indexed native source work")
     var sources:Dictionary={};var roles:Dictionary={};var owners:Dictionary={};var gaps:Array=[]
     var view=SubViewport.new();view.size=Vector2i(800,600);view.own_world_3d=true;view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(view)
@@ -177,7 +186,7 @@ func inspect_case(record:Dictionary,perspective:Dictionary,spell:String)->void:
         # Source envelopes can have authored leading/tail silence. Both sample
         # clocks are inside this actual indexed interval; no source is replaced
         # merely because one legitimate phase sample has empty native pixels.
-        for fraction in [.10,.35,.65]:
+        for fraction in sample_fractions:
             var at:float=lerpf(float(row.start_ms),end,fraction)
             world.install_playback(Recording.restore(index,at))
             if not await settle(world,component.id):break

@@ -1,0 +1,35 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="1_tug2b"]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="2_m7v0o"]
+
+[sub_resource type="Resource" id="Resource_winob"]
+script = ExtResource("1_tug2b")
+component_id = "recording"
+constructor_script = "res://assets/vfx/extensions/heavy-effects-20261020/sources/2cd710be3201c544db8f/field.gd"
+input = {
+"recorded_geometry_bank": "res://assets/vfx/extensions/heavy-effects-20261020/sources/98a3c0b5bad2789289eb/539e28282bce20b6bbb2.res"
+}
+provenance = "Existing exact recorded source; original variant/rate/aliases retained; no target layout recording"
+
+[resource]
+script = ExtResource("2_m7v0o")
+clip_id = "assembled/heroes_feast_native"
+label = "Whole native assembly — existing recorded geometry"
+phase = "lifecycle"
+variant = "heroes_feast_native"
+source_recipe = "recipes/spell.heroes_feast.json"
+components = Array[Resource]([SubResource("Resource_winob")])
+bindings = [{
+"component": "recording",
+"kind": "sample",
+"offset_seconds": 0.0,
+"rate": 1.0
+}]
+seconds = 4.5
+simulation_hz = 60.0
+options = {
+&"opacity_uniform": "factory_occurrence_alpha",
+"recorded_source_rate": 60.0,
+"runtime_candidate": "prepared_existing_recorded_geometry"
+}

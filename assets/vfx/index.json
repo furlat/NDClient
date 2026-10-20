@@ -1,6 +1,6 @@
 {
   "schema": "vfxfactory.production_package.v1",
-  "version": "runtime-weapon-receiver-46b8f47014566e6d",
+  "version": "runtime-heavy-effects-20261020-fa024e4e027bf708",
   "status": "Complete isolated runtime successor candidate; source cost/visual evidence separate from packaged/client qualification",
   "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
   "namespace": "res://assets/vfx/",
@@ -14932,9 +14932,61 @@
           "rate": 144.0,
           "frames": 2085,
           "measurement_player": "Factory reference playback; client assigns equivalent shaders and benchmarks independently"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/e8809f2377a0d80b09ded269/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/6b28556fea54d020a8e7/darkness-phase.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/6b0b5328d10fb4997cce/darkness-bank.tres"
+          ],
+          "disk_bytes": 459,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 11.6597222222222,
+          "retained_lifecycle_seconds": 11.6597222222222,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/darkness_cloud/assets-v3-stable/darkness-phase.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "cloud4_alternatives",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/darkness_cloud/assets-v3-stable/darkness-phase.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": false
+              },
+              "scope": "Named stable cohort +0.0001 sorting offset; eight exact stabilized-reference pairs. Raw-original pixel parity false; changed-root cost and arbitrary native particle seeking not qualified.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": false,
+            "art_revision": "Explicit stable-cohort sorting offset +0.0001; raw original parity false; human visual review required",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "2d58e11297899874fa04a70f04769e70419069ad2c9232f5341f39aa848eb44d",
+      "content_hash": "e097eb237661e283d83b186fc91f77ae6b924c9221f8e5ca7997eb0322657eff",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 144.0,
       "recording_required": true,
@@ -34801,9 +34853,63 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/b5f4d68018456317898e735e/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/16d564fdfe6c94c23c0d/phase.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/a166ab54dbf7332710cd/bank.tres"
+          ],
+          "disk_bytes": 450,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 3.5,
+          "retained_lifecycle_seconds": 3.5,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/ice_storm_typed_v7/phase.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "ice_storm_recorded",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/ice_storm_typed_v7/phase.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Original finite211frame60Hz geometry/material recording; original144Hz physics source;14exactpairs. No independent physics replay or arbitrary solver seek claim.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "2c787f890857d16ade16a0f5dcc057d4db1939da3f6f59fe6e6831cafe113a7d",
+      "content_hash": "f7e10c79493fe9b7e4c7a639459e915a72e0d172ffb022f25a8c357607d1edb5",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": false,
@@ -36408,9 +36514,65 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/233a994bf9528a0d23dbbaf8/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/62acdb2f299514b70cd9/374f3823781bd261.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/74517ad9a83e83799801/042bc6064cf91c96a597.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/9bb228244ee3459254b6/dee7751e50f0eadc0add.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/b5f6443a1fb435cddb40/35a38cdf924014b5d1c1.res"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 4.6,
+          "retained_lifecycle_seconds": 4.6,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/374f3823781bd261.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "typed_summoning6",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/374f3823781bd261.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Six exact native sources; fresh complete warm-process owners after immutable readiness, not first-ever process-cold proof. Actual arbitrary endpoints/mote order unchanged.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "ed16f6259b7cfc5c80d635a07d417686a4573ec8af201e708f6133003f5d8c4c",
+      "content_hash": "e78a6d93da66512e19f93e271be11d5b1b8f99a5db34842945b35251fbcec20e",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": false,
@@ -36562,9 +36724,65 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/bd45dcb77cecb041678de43e/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/0416cf5ba862a2da81e4/d145bd82264f092d.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/19a15c289124869519c1/ed2ad56142cab12822d9.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/a7014b55e7684a952e24/9073fcd4a1636aa8d660.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/ae59e636108e8d402c94/d8b7e29d3ec562ee87ab.res"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 4.6,
+          "retained_lifecycle_seconds": 4.6,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/d145bd82264f092d.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "typed_summoning6",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/d145bd82264f092d.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Six exact native sources; fresh complete warm-process owners after immutable readiness, not first-ever process-cold proof. Actual arbitrary endpoints/mote order unchanged.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "83d0ab2ce0f932d2fa662da9085a8498eb4659ed62dc9eeab097906d8b14ae3d",
+      "content_hash": "286d70614930be0b3a720aec1afd7c2d9c8476f6482c8329f0429dff0b96c964",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": false,
@@ -36716,9 +36934,65 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/b52cd344b64d579c1914936e/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/4d18629e4b2ff85eda7e/2037077a213c0ef8.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/039e43da2f937e3f6cba/b0fb108f93f4fc9af808.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/920b32f8a0d660caad97/cce69088f302c9f11b6b.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/ae9ec51a8e1f95ce9f4e/effc0865e39d6ed7e5b2.res"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 4.6,
+          "retained_lifecycle_seconds": 4.6,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/2037077a213c0ef8.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "typed_summoning6",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/2037077a213c0ef8.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Six exact native sources; fresh complete warm-process owners after immutable readiness, not first-ever process-cold proof. Actual arbitrary endpoints/mote order unchanged.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "299d9dfb8d8c1edcfd2c68c39d19738b60813c8a0c6d8c07819c462efce3c5e0",
+      "content_hash": "8969698f2547349356e5e77f335e3c3eb0449fc37fd2bf89ea49d8a6eb164a35",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": false,
@@ -42922,9 +43196,63 @@
           "measurement_status": "measured in Factory isolated Forward+ Vulkan fixture",
           "source_phase": "res://assets/vfx/sources/2ff5e2eb286f9b1d94bf/00.tres",
           "clock_slot_count": 1
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/88bb55b31be887b815383d6d/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/c356a7f5b5fa219b088b/guardian.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/c996ca8f7347c0245ad5/guardian.res"
+          ],
+          "disk_bytes": 453,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 3.0,
+          "retained_lifecycle_seconds": 3.0,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/guardian_response_cached/phases-v4/guardian.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "guardian_response",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/guardian_response_cached/phases-v4/guardian.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Combined synchronous and naturally deferred p95238us; maximum304us retained;12exacttriplets and866actual native ticks. View2 deferred cost not separately measured.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "4ae1dc9e46fbc9a456465b46bf7583d49940ba2d888f2530648c50218509af19",
+      "content_hash": "81eb55cc395f400443847e65e5cdea3c51764fc61c6667367fccb80599d54928",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 144.0,
       "recording_required": false,
@@ -43409,9 +43737,61 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/cc2d2db68f338ce0ba41d646/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/a18c6e704793d513c19b/539e28282bce20b6bbb2.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/98a3c0b5bad2789289eb/539e28282bce20b6bbb2.res"
+          ],
+          "disk_bytes": 465,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 4.5,
+          "retained_lifecycle_seconds": 4.5,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/recorded_typed/phases/539e28282bce20b6bbb2.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "fixed_recorded_geometry",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/recorded_typed/phases/539e28282bce20b6bbb2.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Feast conservative labelled profiled constructor; Frigid actual-default constructors. Original finite recorded source, eight exact pairs and exhaustive exact sample tables; no independent physics equivalence inferred.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "19c6916e703fb5d7d10a399e72bc34d92d5a32a9ab4dc7bdd9f7dcb51271d745",
+      "content_hash": "1256731752110ea9e60e379e470e2c4298362deef658afacad808735a6abd65d",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": true,
@@ -49062,9 +49442,61 @@
           "rate": 60.0,
           "frames": 216,
           "measurement_player": "Factory reference playback; client assigns equivalent shaders and benchmarks independently"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/fb472299e6a8bfe81f6f6d40/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/be5e68d474ca065c7149/ring-phase.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/d14dc470d416e00a0e7d/ring-bank.tres"
+          ],
+          "disk_bytes": 455,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 3.5,
+          "retained_lifecycle_seconds": 3.5,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/fire_wall/ring-phase.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "fire_wall_ring",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/fire_wall/ring-phase.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": false,
+              "optical": {
+                "strict_threshold_pass": false
+              },
+              "scope": "Two actual-default complete constructors<=1832us and advancingp95<=164us;9136exactstatechecks. First6ticks excluded so first-input cost unqualified. Prior native/control optical limits retained; no fresh raw-original parity claim.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": false,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": false,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "4811feb17b3d5f36f5ee2e68ccc954e6bbeac7ccc6e96423458fdcbe092035ae",
+      "content_hash": "b764a7caba75f4b9dbfae4e478ced7671a87198c499e5bb9f4f94c77a27deac0",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": true,
@@ -49374,9 +49806,61 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/37635ac3c18beeaf91198c2e/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/935caba24c4020825bc9/f70dee5d5f1ac81d2e45.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/a85b6bf7160ffdac4595/f70dee5d5f1ac81d2e45.res"
+          ],
+          "disk_bytes": 465,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 7.0,
+          "retained_lifecycle_seconds": 7.0,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/recorded_typed/phases-v2/f70dee5d5f1ac81d2e45.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "fixed_recorded_geometry",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/recorded_typed/phases-v2/f70dee5d5f1ac81d2e45.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Feast conservative labelled profiled constructor; Frigid actual-default constructors. Original finite recorded source, eight exact pairs and exhaustive exact sample tables; no independent physics equivalence inferred.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "ba0ab2445883a4cf898a47785ea4dc33dd9d578271a335be8d69787e70540bda",
+      "content_hash": "4e0427cf2c533aad8e01ba276d85a6fe2ea72fa138aaa8c3113d28e284f89c68",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 144.0,
       "recording_required": true,
@@ -54823,9 +55307,64 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/936271e70e0bda60091dffaa/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/eb85e00fe1fc5057f6a4/ce3c998664cc27f4.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/7de63f0cd15b0e6f2b47/eba550b33dcbf9d5.tres"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 1.07,
+          "retained_lifecycle_seconds": 1.07,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/acid_arrow/phases/ce3c998664cc27f4.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "acid_arrow",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/acid_arrow/phases/ce3c998664cc27f4.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Thirty earlier exact pairs plus fresh exact source/material/station-texture/state checks after invariant-only bow coefficient preparation. Actual hand, projectile, endpoints and cast timing remain live.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "delivery_timing",
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "b120cf2f7fd3e2071864a43bef04fd7e31516f62053aeb63ca38554107cf102d",
+      "content_hash": "a8fcefebd421ff82225cbcf5f1c3f5ed4e85ed26d3d8811e00dbfaed5ed03a3f",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 144.0,
       "recording_required": false,
@@ -55547,9 +56086,64 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/8632878542137d265352c992/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/aea8f3f23c6a51b06400/74438c285178fd24.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/0db3952f6a3f08563d8c/85a696e7dc4cb5a8.tres"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 1.07,
+          "retained_lifecycle_seconds": 1.07,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/acid_arrow/phases/74438c285178fd24.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "acid_arrow",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/acid_arrow/phases/74438c285178fd24.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Thirty earlier exact pairs plus fresh exact source/material/station-texture/state checks after invariant-only bow coefficient preparation. Actual hand, projectile, endpoints and cast timing remain live.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "delivery_timing",
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "e6a2e7c91496706f2413b2cefa2526eac2dd4ae9663a2a783a81d9536c8df48a",
+      "content_hash": "306e3f7b45368059035df909171d6ba0ceeea42b5a2ef68252cf7442b5e9cacd",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 144.0,
       "recording_required": false,
@@ -55845,9 +56439,64 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/e6cf2da1b3b98d58baaa9a45/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/8985928da30f56aa25db/93b918e56007d248.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/dedaaa73ca54b0c3c523/c24d8f2461d4b73b.tres"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 1.07,
+          "retained_lifecycle_seconds": 1.07,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/acid_arrow/phases/93b918e56007d248.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "acid_arrow",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/acid_arrow/phases/93b918e56007d248.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Thirty earlier exact pairs plus fresh exact source/material/station-texture/state checks after invariant-only bow coefficient preparation. Actual hand, projectile, endpoints and cast timing remain live.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "delivery_timing",
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "736e52150a051cac78b62230899bb2992419ef24658771c424ebef208d56548d",
+      "content_hash": "970869864e4f0dfbf1afad1fd3bb83ffad1402f71d4b0091b3906a705fe438ec",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 144.0,
       "recording_required": false,
@@ -97266,9 +97915,65 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/c4f721f61b3ad23490081f41/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/fba2bf14259f9a14824e/2a949241e705dc45.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/2bb3caf9d66635ecb250/a08639741a9b611b98eb.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/60e1f1f1e71ae7f339ac/0473f3615f24b27d93c1.res"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 4.6,
+          "retained_lifecycle_seconds": 4.6,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/2a949241e705dc45.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "typed_summoning6",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/2a949241e705dc45.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Six exact native sources; fresh complete warm-process owners after immutable readiness, not first-ever process-cold proof. Actual arbitrary endpoints/mote order unchanged.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "owner_state",
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "ad8b7345a696ca3d6975f39505c9e2d2bf14383992b96249f6c5dffbecfefc99",
+      "content_hash": "2557ffc2aa2aa40d4ec43ef777e65a5be8e6806888fb056f187a971883bdde4a",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": false,
@@ -98172,9 +98877,65 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/bab22641eba5590b5fb3457b/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/52224cb5bec326dda05d/8707802032558736.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/2bb3caf9d66635ecb250/a08639741a9b611b98eb.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/60e1f1f1e71ae7f339ac/0473f3615f24b27d93c1.res"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 4.6,
+          "retained_lifecycle_seconds": 4.6,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/8707802032558736.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "typed_summoning6",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/8707802032558736.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Six exact native sources; fresh complete warm-process owners after immutable readiness, not first-ever process-cold proof. Actual arbitrary endpoints/mote order unchanged.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "owner_state",
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "212f093661cb00c8ff3eb0744c0b8fe724d908e8572e22c157e705b9c6a77ad1",
+      "content_hash": "754bfa7049d44297e74a08063cde67915faa5046382155050aa1e66701e51eed",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": false,
@@ -99065,9 +99826,65 @@
           },
           "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
           "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/ae7e184b77c1acb39fa9d7fb/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/3b2c7cc38fdb10537d7a/cc851aacc5b40e0a.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/2bb3caf9d66635ecb250/a08639741a9b611b98eb.res",
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/60e1f1f1e71ae7f339ac/0473f3615f24b27d93c1.res"
+          ],
+          "disk_bytes": 461,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 60.0,
+          "source_seconds": 4.6,
+          "retained_lifecycle_seconds": 4.6,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/cc851aacc5b40e0a.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "typed_summoning6",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/summoning_typed/phases/cc851aacc5b40e0a.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Six exact native sources; fresh complete warm-process owners after immutable readiness, not first-ever process-cold proof. Actual arbitrary endpoints/mote order unchanged.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "owner_state",
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "40a932cc2b00251bb984e0cc35f78101199337c17b8aaaa12d26187fa2eff913",
+      "content_hash": "2b14daf83396d1b3681d7a02827e5236bcf314f5eeb9517bfb15cfca157ecd1b",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": false,
@@ -99282,9 +100099,64 @@
           "measurement_status": "measured in Factory isolated Forward+ Vulkan fixture",
           "source_phase": "res://assets/vfx/sources/c9d1c8128c2f32f85ec3/e1954c9de764ba18.tres",
           "clock_slot_count": 1
+        },
+        {
+          "id": "runtime-prepared-heavy-effects-20261020",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/52665668589a6a2bd67b40b4/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/heavy-effects-20261020/sources/4fec0660cc26f49b59f7/c9d1c8128c2f32f8.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/heavy-effects-20261020/sources/9a01f3aa97a0e9236807/retirement_fire.res"
+          ],
+          "disk_bytes": 543,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 1.9,
+          "retained_lifecycle_seconds": 1.9,
+          "source_duration_matches_retained_lifecycle": true,
+          "factory_source_phase": "res://authoring/runtime-cost-repair-20261020/payload_contacts/phases/c9d1c8128c2f32f8.tres",
+          "factory_source_revision": "fa024e4e027bf708",
+          "factory_source_evidence": [
+            {
+              "group": "retirement_footprint",
+              "candidate_phase": "res://authoring/runtime-cost-repair-20261020/payload_contacts/phases/c9d1c8128c2f32f8.tres",
+              "active_art_context_qualified": true,
+              "complete_constructor_and_update_budget_pass": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "scope": "Actual original source chronology, all5layers, current arbitrary supplied footprint up to128cells. Event/restart/Init/player semantics unchanged.",
+              "human_approval_inferred": false
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [
+              "blast_event",
+              "targets"
+            ],
+            "phase_declares_input_contract": false,
+            "candidate_declared_inputs": null,
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": true,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "source_equations_retained; see strict comparison evidence",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections"
         }
       ],
-      "content_hash": "2dd32b8f8bc267a8f1e329ad2e2681d57bb58dfb9d3050c19fe200cea8cfb822",
+      "content_hash": "1341d596bb149ee61762b56f432148af0c348db770e2ae7ee310db9ed16042a4",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 144.0,
       "recording_required": false,

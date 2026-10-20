@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/heavy-effects-20261020/sources/a7cd7e8bec03d73e1fe0/composition.gd"
+input = {"opacity_control": true, "components": [{"script": "res://assets/vfx/extensions/heavy-effects-20261020/sources/8c0f7de15cd6d11e943d/guardian_blade_arc_trail.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "source_material": {"capture_encoding": "gl_compatibility_unshaded_albedo"}, "blade_response": {"arc_trail": {"profile": "observed_endpoints_shortest_direction_arc", "max_segment_degrees": 5.0, "tail": {"profile": "oldest_history_smoothstep", "fraction": 0.25}}, "history_coverage": {"sample_hz": 144, "source_fps": 32, "window_source_frames": 4, "missing_tick_policy": "omit_unobserved_pairs", "rewind_policy": "clear_history_require_source_replay", "coverage": {"profile": "bounded_cross_width_smoothstep", "fraction": 0.25}}, "source_energy": {"encoding": "encoded_source_alpha_energy", "stroke_profile": "accepted_review_js_0p16", "inherited_stroke_multiplier": 0.6, "stroke_multiplier": 0.16, "shader": "res://assets/vfx/sources/737407772678341f333c/guardian_blade_source_energy.gdshader"}, "palette": ["d6ad57", "fff0bb", "ffe6a1"], "historical_blend": "screen", "native_blend": "add", "first_trail_frame": 9, "last_trail_frame": 20, "taper_begin_frame": 16, "taper_end_frame": 21, "contact_source_tick": 348, "stroke_width_cells": 0.0390625, "continuation_width_cells": 0.0625, "continuation_bend_cells": 0.25}}, "side": "full", "simulation_hz": 144, "seed": 47291, "model": "res://assets/vfx/extensions/heavy-effects-20261020/sources/0a7bab746ebc4d1ca4c4/guardian-upper.scn"}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "prepared_native_composition_bank": "res://assets/vfx/extensions/heavy-effects-20261020/sources/c996ca8f7347c0245ad5/guardian.res"}
+options = {}
+provenance = "Pinned native selection; recipes/spells/guardian_of_faith.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "native/guardian/sentinel"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "sentinel"
+source_recipe = "recipes/spells/guardian_of_faith.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "factory_occurrence_alpha", "qualification": "Native-context visual review; not production approval"}

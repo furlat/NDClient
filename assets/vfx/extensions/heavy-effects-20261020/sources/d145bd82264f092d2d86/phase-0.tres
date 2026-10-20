@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/extensions/heavy-effects-20261020/sources/f95a9864b1f165d83f44/timed_assembly.gd"
+input = {"entries": [{"id": "cast", "composition": {"components": [{"script": "res://assets/vfx/extensions/heavy-effects-20261020/sources/0c856fb8d39af4bbf481/summoning_strands.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "cast", "camera_quadrant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "shaders": {"ground": "res://assets/vfx/extensions/late-20261020/sources/c464c97e2ebb61e0e97c/ground.gdshader", "wisp": "res://assets/vfx/extensions/late-20261020/sources/45c91e9033764f175fb0/wisp.gdshader", "mote": "res://assets/vfx/extensions/late-20261020/sources/ca3d4358a92bac67683f/mote.gdshader"}, "neutral_family_palette": {"colors": ["142c49", "244768", "356a8c", "4695ba", "72bdd5", "a0d7e6", "c2e6ed", "e2f3f1"], "neutral_levels": [32, 62, 94, 128, 163, 196, 225, 244], "gain": 1.45, "albedo_is_encoded_srgb": true}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 0.7291666666666666, "position": [0, 0, 0], "scale": 1.0, "endpoint_index": 0}, {"id": "arrival", "composition": {"components": [{"script": "res://assets/vfx/extensions/heavy-effects-20261020/sources/0c856fb8d39af4bbf481/summoning_strands.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "arrival", "camera_quadrant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "shaders": {"ground": "res://assets/vfx/extensions/late-20261020/sources/c464c97e2ebb61e0e97c/ground.gdshader", "wisp": "res://assets/vfx/extensions/late-20261020/sources/45c91e9033764f175fb0/wisp.gdshader", "mote": "res://assets/vfx/extensions/late-20261020/sources/ca3d4358a92bac67683f/mote.gdshader"}, "neutral_family_palette": {"colors": ["142c49", "244768", "356a8c", "4695ba", "72bdd5", "a0d7e6", "c2e6ed", "e2f3f1"], "neutral_levels": [32, 62, 94, 128, 163, 196, 225, 244], "gain": 1.45, "albedo_is_encoded_srgb": true}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.4, "seconds": 1.7291666666666667, "position": [0, 0, 0], "scale": 1.0}, {"id": "departure", "composition": {"components": [{"script": "res://assets/vfx/extensions/heavy-effects-20261020/sources/0c856fb8d39af4bbf481/summoning_strands.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "departure", "camera_quadrant": 0}, "side": "full", "simulation_hz": 144, "seed": 47291, "shaders": {"ground": "res://assets/vfx/extensions/late-20261020/sources/c464c97e2ebb61e0e97c/ground.gdshader", "wisp": "res://assets/vfx/extensions/late-20261020/sources/45c91e9033764f175fb0/wisp.gdshader", "mote": "res://assets/vfx/extensions/late-20261020/sources/ca3d4358a92bac67683f/mote.gdshader"}, "neutral_family_palette": {"colors": ["142c49", "244768", "356a8c", "4695ba", "72bdd5", "a0d7e6", "c2e6ed", "e2f3f1"], "neutral_levels": [32, 62, 94, 128, 163, 196, 225, 244], "gain": 1.45, "albedo_is_encoded_srgb": true}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 3.0, "seconds": 1.4791666666666667, "position": [0.45, 0, 0.25], "scale": 1.0}]}
+options = {}
+provenance = "Pinned native selection; recipes/spell.conjure_fey.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "assembled/conjure_fey_native"
+label = "Whole native assembly"
+phase = "lifecycle"
+variant = "conjure_fey_native"
+source_recipe = "recipes/spell.conjure_fey.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.6
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-summoning-v374-20261018"}

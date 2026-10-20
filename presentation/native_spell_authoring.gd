@@ -88,10 +88,12 @@ static func _effect_clips(selected:Dictionary,result:Array,seen:Dictionary)->voi
         if at in selected.get("excluded_cue_indices",[]) or at in persistent:continue
         if not cues[at].get("unbound_constructor_inputs",[]).is_empty():continue
         var clip:Dictionary=Effects.resolve(str(cues[at].clip),str(selected.get("id","")),str(cues[at].get("role","")))
-        if not clip.is_empty() and not seen.has(clip.id):
-            clip=clip.duplicate()
-            if not cues[at].get("constructor_input",{}).is_empty():clip.requires_constructor_input=true
-            seen[clip.id]=true;result.append(clip)
+        if clip.is_empty():continue
+        clip=Effects.occurrence_clip({"native_clip":clip,"native_cue":cues[at]})
+        var identity:String=Effects.key(clip)
+        if seen.has(identity):continue
+        if not cues[at].get("constructor_input",{}).is_empty():clip.requires_constructor_input=true
+        seen[identity]=true;result.append(clip)
 
 ## Staged cues an owner plays instead of the cast: a spatial owner's cue, and
 ## the spell's attached visual when the package's lifecycle of its condition
