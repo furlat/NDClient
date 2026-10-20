@@ -1,5 +1,7 @@
 # Shared-provider completion checklist — 20 October 2026
 
+**Current remaining-task authority:** [Everything remaining](REMAINING_WORK_2026-10-20.md), snapshot `fb3a3760`. Counts/statuses in older chronological sections below are historical; they do not override that reconciled task list.
+
 This is the finite capability worklist for completing the selected Factory migration, not a spell-calibration queue. It follows Phase 4–6 of [the active plan](SCHEMA_AUTHORING_CONDITIONS_STUDIO_PLAN_2026-10-19.md). The audit is offline; it does not qualify rendering, scenario outcomes, frame time or user approval.
 
 ## Inventory and evidence boundary

@@ -1,5 +1,7 @@
 # Production integration closure — 20 October 2026
 
+**Current remaining-task authority:** [Everything remaining](REMAINING_WORK_2026-10-20.md), snapshot `fb3a3760`. Counts/statuses in older chronological sections below are historical; they do not override that reconciled task list.
+
 All work is in the sole main Windows checkout, branch
 `codex-authoring-schemabump`. Frozen executable engine211b71134 uses protocol1,
 schema16; sealed Factory package is `runtime-e102c29dec58524b` (1246clips,

@@ -1,6 +1,7 @@
 # Schema 16 — complete Factory migration progress
 
-**Current receipt, 20 October:** [production integration closure](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
+**Current remaining work, 20 October:** [Everything remaining](REMAINING_WORK_2026-10-20.md).
+[Current bounded receipts](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md) remain evidence, not a second task list.
 All percentage estimates below are withdrawn as current progress measures. They
 did not have a fixed denominator and repeatedly mixed infrastructure with actual
 integration. The installed package is `runtime-e102c29dec58524b`; the earlier
@@ -14,12 +15,12 @@ cohorts, including logical capture and modular weapon effects, are merged here;
 all secondary historical checkouts are inactive. Do not move implementation or
 qualification back to `codex/schema16-unit-a`.
 
-Current whole sealed package: `production-bindings-c494177f9ef03e3d`. Frozen
+Current whole sealed package: `runtime-e102c29dec58524b`. Frozen
 engine: `211b71134`, protocol1/player schema16; official engine and Factory
-sources remain read-only. The required actor-context GPU gate fails with two
-Factory shader errors; the human deferred that blocker while independent client
-repair continues. No invalid-shader pixels or historical partial gates certify
-full coverage. [Current main suite repair and receipts](MAIN_CLIENT_SUITE_REPAIR_2026-10-20.md).
+sources remain read-only. The former two Factory actor-history shader errors
+were repaired in this complete successor. Remaining native capture/input/output
+work is listed in the current remaining-work document; older failures below
+remain historical receipts, not current blockers. [Current main suite repair and receipts](MAIN_CLIENT_SUITE_REPAIR_2026-10-20.md).
 
 The table below is a historical record of the withdrawn19 October estimates.
 Use exact later receipts for suite repair and provider qualification.

@@ -1,5 +1,7 @@
 # Schema 16, native conditions and the complete Studio
 
+**Current remaining-task authority:** [Everything remaining](REMAINING_WORK_2026-10-20.md), snapshot `fb3a3760`. Counts/statuses in older chronological sections below are historical; they do not override that reconciled task list.
+
 19 October 2026 — revised execution plan. **Canonical base committed; complete Factory integration and shared-provider qualification active.** Requested branch: `codex-authoring-schemabump`; single active implementation branch/worktree: `codex-authoring-schemabump` / `NDClientGodot`, from committed plan `9b73f29a`. [Execution evidence and remaining gates](SCHEMA16_UNIT_A_PROGRESS_2026-10-19.md).
 
 Read the execution checklists first. The single appendix holds the design rationale, contracts and detailed acceptance rules. Phase numbers are unchanged so existing reviews remain traceable.
