@@ -221,7 +221,7 @@ static func pose(actor: Dictionary, rig_id: String, cache: Dictionary,owners:Dic
     return ConditionPose.select(actor,rig_id,"idle",cache,owners)
 
 static func material(actor_id: String, samples: Array) -> Dictionary:
-    var value={"tint":Vector3.ONE,"saturation":1.0,"brightness":1.0,"alpha":1.0,"outline":{},"ramp":{},"flash":{},"body_surfaces":BodySurfaces.compose(actor_id,samples),"time_ms":0.0}
+    var value={"tint":Vector3.ONE,"saturation":1.0,"brightness":1.0,"alpha":1.0,"outline":{},"ramp":{},"flash":{},"body_surfaces":BodySurfaces.compose(actor_id,samples),"body_scale":{"factor":1.0,"owners":[]},"time_ms":0.0}
     for sample in samples:
         if sample.get("actor_uuid")!=actor_id: continue
         if sample.kind=="material_flash":
@@ -229,6 +229,10 @@ static func material(actor_id: String, samples: Array) -> Dictionary:
     var has_color=false
     for sample in select_recipes(actor_id,samples):
         var persistent: Dictionary=sample.recipe.get("persistent",{})
+        var scale:Dictionary=scale_operation(sample)
+        if not scale.is_empty():
+            value.body_scale.factor*=scale.factor
+            value.body_scale.owners.append(scale)
         var color: Dictionary=persistent.get("bodyColor",{}) if persistent.get("bodyColor")!=null else {}
         if not has_color and not color.is_empty():
             value.tint=Vector3.ONE.lerp(Palette.rgb(int(color.get("tintRgb",0xffffff))),sample.alpha)
@@ -241,6 +245,16 @@ static func material(actor_id: String, samples: Array) -> Dictionary:
         if value.ramp.is_empty() and persistent.has("bodyRamp"):
             value.ramp=persistent.bodyRamp;value.time_ms=sample.age_ms;value.ramp_alpha=sample.alpha;value.ramp_initial=sample.initial
     return value
+
+static func scale_operation(sample:Dictionary)->Dictionary:
+    var factors:Dictionary=sample.recipe.get("persistent",{}).get("bodyScale",{})
+    var state:Dictionary=sample.condition.get("state",{}) if sample.condition.get("state")!=null else {}
+    var change:Variant=state.get("size_change")
+    if change==null or not factors.has(change):return {}
+    var authored:float=float(factors[change])
+    var factor:float=lerpf(1.0,authored,float(sample.alpha))
+    if is_equal_approx(factor,1.0):return {}
+    return {"condition_uuid":sample.condition_uuid,"size_change":change,"authored_factor":authored,"factor":factor,"source":sample.source+"/persistent/bodyScale"}
 
 static func recipe_key(sample:Dictionary)->String:
     var reference:Variant=sample.recipe.get("definitionRef")

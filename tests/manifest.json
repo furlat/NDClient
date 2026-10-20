@@ -355,6 +355,26 @@
    "reason": ""
   },
   {
+   "name": "body_scale_checks",
+   "script": "res://tests/body_scale_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 120,
+   "status": "ok",
+   "reason": "Original schema16 Enlarge/Reduce selectors, exact UUID/factor/removal and shared source invariants."
+  },
+  {
+   "name": "body_scale_render_checks",
+   "script": "res://tests/body_scale_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 240,
+   "status": "ok",
+   "reason": "Actual outfit transforms, source reuse, socket/picking/shadow and native pixels through genuine Enlarge/Reduce lifecycles, views, seek and loop."
+  },
+  {
    "name": "body_source_parity_checks",
    "script": "res://tests/body_source_parity_checks.gd",
    "mode": "gpu",
@@ -2184,6 +2204,16 @@
    "reason": "red in the sweep; not investigated"
   },
   {
+   "name": "native_recorded_preparation_checks",
+   "script": "res://tests/native_recorded_preparation_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Actual raw recorded vs worker-prepared source native pixels at three ages, private clock/material owner isolation, unchanged immutable scenes and complete teardown; not a timing threshold or visual approval."
+  },
+  {
    "name": "native_requirement_templates_checks",
    "script": "res://tests/native_requirement_templates_checks.gd",
    "mode": "headless",
@@ -2197,6 +2227,16 @@
    ],
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "native_restoration_owner_checks",
+   "script": "res://tests/native_restoration_owner_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "status": "ok",
+   "args": [],
+   "timeout": 300,
+   "reason": "Both original Power Word Heal journals retain one exact-UUID Paralyzed lifecycle through native application, sustain, removal, four-view pixels, seek/loop and teardown; duplicate diagnostic probes are excluded."
   },
   {
    "name": "native_rig_admission_checks",
@@ -3862,6 +3902,16 @@
    "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
   },
   {
+   "name": "source_cut_reuse_checks",
+   "script": "res://tests/source_cut_reuse_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original Gallery prepared source cuts/profile maps and actual component resource operands reuse across turn-only packets; new actor tracks, lifecycle changes and optional temporal horizon still prepare."
+  },
+  {
    "name": "source_index_owner_checks",
    "script": "res://tests/source_index_owner_checks.gd",
    "mode": "headless",
@@ -4774,11 +4824,12 @@
    "timeout": 600,
    "options": [
     "--background-check",
-    "--capture",
+    "--recording",
+    "--choices",
     "--screenshot"
    ],
    "status": "ok",
-   "reason": ""
+   "reason": "Unchanged durable schema16 Gallery initialization and original same-generation Choices, supplied independently to production UI."
   },
   {
    "name": "unity_capture",
@@ -5039,12 +5090,19 @@
   {
    "name": "workshop_checks",
    "script": "res://tests/workshop_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "ok",
-   "reason": ""
+   "status": "retired",
+   "reason": "Removed offline workshop/main.tscn and client-owned destruction demo; current authoritative object state/door/chest/wall-fragment and live interaction gates replace its product behavior. Not counted as a pass.",
+   "replaced_by": [
+    "door_overlap_checks",
+    "chest_render_checks",
+    "wall_fragment_checks",
+    "chest_live_checks",
+    "player_interaction_checks"
+   ]
   },
   {
    "name": "world_authority_checks",

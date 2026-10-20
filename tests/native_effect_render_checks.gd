@@ -9,7 +9,7 @@ func run()->void:
     var preview=Preview.new();owner.add_child(preview)
     var error=preview.configure("class.action_surge")
     if not error.is_empty():push_error(error);quit(1);return
-    var reference_script:Script=load("res://.runtime/native-effects/reference/ClassComponents.gd")
+    var reference_script:Script=load("res://tests/oracles/native_class_original/ClassComponents.gd")
     var refs:Array=[]
     for half in ["back","front"]:
         var view=SubViewport.new();view.size=Vector2i(384,384);view.own_world_3d=true
@@ -19,6 +19,7 @@ func run()->void:
         var source:Node3D=reference_script.new();source.kind="burst";source.side_name=half;view.add_child(source)
         refs.append({"view":view,"source":source,"camera":camera,"half":half})
     DirAccess.make_dir_recursive_absolute("res://.captures/native-effects")
+    DirAccess.make_dir_recursive_absolute("res://.runtime/native-effects")
     for quarter in 4:
         var rotation=Basis(Vector3.UP,quarter*PI*.5)
         var camera_basis=rotation*Basis.looking_at(Vector3(-6,-sqrt(24.0),-6))

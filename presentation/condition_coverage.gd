@@ -261,7 +261,10 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
             _require(entry,"persistent","appearanceLayers:"+str(n),source+"/persistent/appearanceLayers/"+str(n),appearance_bound,
                 "" if appearance_bound else "condition_appearance_provider_not_authored","assigned",
                 {"layer":persistent.appearanceLayers[n],"renderer":"res://presentation/condition_appearance.gd","qualification":"Current modular outfit; native witness and compatible actual rig remain separate."})
-        for field in ["bodyScale","bodyDistortion","liveCopies","absenceEcho"]:
+        if persistent.get("bodyScale")!=null:
+            _require(entry,"persistent","bodyScale",source+"/persistent/bodyScale",true,"","not_required",
+                {"renderer":"res://play.gd::_sample_actors","selection":"Public size_change selects this authored factor; exact owner draw evidence remains separate."})
+        for field in ["bodyDistortion","liveCopies","absenceEcho"]:
             if persistent.get(field)!=null:_require(entry,"persistent",field,source+"/persistent/"+field,false,"condition_"+field+"_not_implemented")
         if persistent.get("liveCopies")!=null:
             for field in ["applicationEffects","removalEffects"]:_effects(entry,"persistent",persistent.liveCopies.get(field,[]),source+"/persistent/liveCopies/"+field,cache,availability)

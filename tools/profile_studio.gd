@@ -3,7 +3,6 @@ extends SceneTree
 ## screenshots, texture readbacks or output writes inside the measured window.
 const Studio=preload("res://studio/studio.gd")
 const Profile=preload("res://frame_profile.gd")
-const CASE="res://generated/studio_gallery_spell_case.json"
 
 class ObservedStudio extends Studio:
     var measured_process_ms:float=0
@@ -41,6 +40,8 @@ var hide_timeline:bool=false
 var no_follow:bool=false
 var keep_open:bool=false
 var profile_max_fps:int=0
+var profile_view_size:float=12.0
+var follow_name:String="Expedition sorcerer"
 var started_usec:int=0
 var previous_usec:int=0
 var first_display_ms:float=0
@@ -185,14 +186,21 @@ func run()->void:
         elif arg=="--no-follow":no_follow=true
         elif arg=="--keep-open":keep_open=true
         elif arg.begins_with("--profile-max-fps="):profile_max_fps=maxi(0,int(arg.trim_prefix("--profile-max-fps=")))
+        elif arg.begins_with("--profile-view-size="):profile_view_size=float(arg.trim_prefix("--profile-view-size="))
+        elif arg.begins_with("--profile-follow-name="):follow_name=arg.trim_prefix("--profile-follow-name=")
     if directory.is_empty() or DisplayServer.get_name()=="headless":printerr("Requires native renderer and --recording=res://journal");quit(2);return
     root.size=Vector2i(1600,960);root.position=Vector2i(40,40);root.unfocusable=true
     Engine.max_fps=profile_max_fps;DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     node_added.connect(observe_node);observe_node(root)
-    var fixture:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(CASE))
-    studio=ObservedStudio.new();studio.follow_actor_id=fixture.caster_uuid;studio.follow_tracks=true;studio.initial_view_size=12
+    studio=ObservedStudio.new();studio.follow_tracks=true;studio.initial_view_size=profile_view_size
     studio.loop_enabled=false;studio.no_prewarm=no_prewarm;root.add_child(studio)
     if not await wait_ready():await finish();return
+    # Follow this recording's real controlled actor, never a UUID retained from
+    # the deleted pre-schema16 Gallery capture.
+    var candidates:Array=studio.world.timeline.state.audience.controlled.filter(func(id):return studio.world.timeline.state.actors.get(id,{}).get("name")==follow_name)
+    if candidates.size()!=1:
+        failures.append("Recording has no unique controlled actor named "+follow_name);await finish();return
+    studio.follow_actor_id=candidates[0]
     var first_publication_ms:float=(Time.get_ticks_usec()-startup_started)/1000.0
     var first_sources:Dictionary=studio.world.media_warmup.preload_selected
     var first_resident:int=0
@@ -222,7 +230,7 @@ func run()->void:
     while studio.world.timeline.display_ms<end_ms and (Time.get_ticks_usec()-started_usec)/1000000.0<max_wall_seconds:
         await process_frame;await RenderingServer.frame_post_draw
         sample(Time.get_ticks_usec())
-        if studio.world.timeline.paused:failures.append("Unexpected pause at "+str(studio.world.timeline.display_ms));break
+        if studio.world.timeline.paused and studio.world.timeline.display_ms<end_ms:failures.append("Unexpected pause at "+str(studio.world.timeline.display_ms));break
     studio.world.timeline.paused=true
     if studio.world.timeline.display_ms<end_ms:failures.append("Timed window did not reach requested display end")
     await finish()

@@ -152,6 +152,37 @@ static func _prototype(bundle:Resource)->Dictionary:
     _prototypes[bundle]={"systems":systems,"trails":trails}
     return _prototypes[bundle]
 
+## Prepare the actual recorded scene's programs, including the generated
+## StandardMaterial3D variants. The manifest's warm list describes live effects;
+## it cannot stand in for the recorded scene. No nodes or clocks are created.
+static func material_programs(bundle:Resource)->Array[Material]:
+    var prototype:Dictionary=_prototype(bundle)
+    if not prototype.has("programs"):
+        var programs:Array[Material]=[]
+        var seen:Dictionary={}
+        _scene_programs(bundle.scene,programs,seen)
+        for material in prototype.systems+prototype.trails:_material_program(material,programs,seen)
+        prototype.programs=programs
+    return prototype.programs
+
+static func _material_program(material:Material,programs:Array[Material],seen:Dictionary)->void:
+    if material==null or seen.has(material):return
+    seen[material]=true;programs.append(material)
+    _material_program(material.next_pass,programs,seen)
+
+static func _scene_programs(scene:PackedScene,programs:Array[Material],seen:Dictionary)->void:
+    if scene==null or seen.has(scene):return
+    seen[scene]=true
+    var state:SceneState=scene.get_state()
+    for node in state.get_node_count():
+        _scene_programs(state.get_node_instance(node),programs,seen)
+        for property in state.get_node_property_count(node):
+            var value:Variant=state.get_node_property_value(node,property)
+            if value is Material:_material_program(value,programs,seen)
+            elif value is Mesh and not seen.has(value):
+                seen[value]=true
+                for surface in value.get_surface_count():_material_program(value.surface_get_material(surface),programs,seen)
+
 static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->Dictionary:
     _ensure_clock()
     var handle={"root":null,"components":{},"players":[],"emitters":[],"scripts":[],"carriers":[],"clocks":[],"geometry":[],
@@ -162,20 +193,32 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
     if _free_slots.is_empty():
         handle.error="Recorded effect clock slots exhausted";return handle
     var started:int=Time.get_ticks_usec()
+    var phases:Dictionary={}
+    var phase_started:int=started
     handle.slot=_free_slots.pop_back()
     _clock_image.set_pixel(handle.slot,0,Color(0,0,0,0));_clock_dirty=true
     var root:Node3D=bundle.scene.instantiate()
+    phases.baked_scene_instantiate=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     root.hide()
     parent.add_child(root)
     handle.root=root
+    phases.baked_attach=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     var materials:Array=material_locations(root)
+    phases.baked_material_locations=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     var copies:Dictionary={}
     for index in bundle.private_materials:
         var copy:Material=materials[index].material.duplicate()
         copies[index]=copy
         for location in materials[index].locations:_bind(root,location,copy)
+    phases.baked_private_materials=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     if _still_path==null:_still_path=ImageTexture.create_from_image(Image.create_from_data(1,3,false,Image.FORMAT_RGBAF,PackedFloat32Array([1,0,0,0, 0,1,0,0, 0,0,1,0]).to_byte_array()))
     var prototype:Dictionary=_prototype(bundle)
+    phases.baked_prototypes=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     for index in bundle.systems.size():
         var system:Dictionary=bundle.systems[index]
         var particles:GPUParticles3D=root.get_node(system.path)
@@ -194,10 +237,14 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
         node.emitting=true
         handle.path_materials.append(process)
         handle.trail_draws.append({"node":node,"scroll":trail.scroll,"motion":trail.motion,"process":process})
+    phases.baked_particle_materials=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     for track in bundle.tracks:
         var target:Object=root.get_node(track.path) if track.kind in ["node","bone"] else copies.get(int(track.material))
         if target==null:handle.error="Recorded track target missing: "+str(track);return handle
         handle.tracks.append({"target":target,"track":track})
+    phases.baked_tracks=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     for node in root.find_children("*","",true,false):
         if node is Light3D:
             var shown:bool=node.visible;node.hide()
@@ -207,6 +254,8 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
         if node is GeometryInstance3D:
             handle.geometry.append({"node":node,"path":str(root.get_path_to(node)),"selected":node.visible and node.layers!=0,"layer_enabled":node.layers!=0})
             if node.layers!=0:node.layers=layer_mask
+    phases.baked_geometry_lights=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     var opacity_uniform:String=clip.get("opacity_uniform","")
     if not opacity_uniform.is_empty():
         for index in materials.size():
@@ -218,10 +267,14 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
             var value=material.get_shader_parameter(opacity_uniform)
             handle.opacity_bindings.append({"material":material,"uniform":opacity_uniform,"native":1.0 if value==null else float(value)})
         if handle.opacity_bindings.is_empty():handle.error="Missing opacity control: "+str(clip.get("id",""))+" / "+opacity_uniform
+    phases.baked_opacity_bindings=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
     for draw in handle.trail_draws:
         var mesh:Mesh=draw.node.get_draw_pass_mesh(0)
         draw.material=draw.node.material_override if draw.node.material_override!=null else mesh.surface_get_material(0) if mesh!=null else null
-    handle.construction_phases={"baked_instantiate":(Time.get_ticks_usec()-started)/1000.0}
+    phases.baked_trail_materials=(Time.get_ticks_usec()-phase_started)/1000.0
+    phases.baked_instantiate=(Time.get_ticks_usec()-started)/1000.0
+    handle.construction_phases=phases
     return handle
 
 ## A moving occurrence's path: the root's world transform per presentation

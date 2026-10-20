@@ -172,9 +172,9 @@ static func resource_paths(value:Dictionary)->Array:
 ## A recording is one file whose textures are created one per frame; a live
 ## approach loads its constructor, phase and every file the phase names, and
 ## compiles its `warm` materials on a worker. Nothing is constructed here.
-## A recording's `warm` list names the live approach's clocked materials, not
-## the recorded scene's own; those compile in the private warm-up draw
-## (native_source_startup.gd), like every pipeline an approach draws with.
+## A recording's `warm` list names live materials. Its actual scene/prototype
+## programs use the same worker admission; native first-draw pipelines still
+## belong to native_source_startup.gd and the actual drawing viewport.
 static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
     _ensure_clock()
     var pending:int=0;var errors:Array=[];var paths:Dictionary={};var live:Array=[]
@@ -186,6 +186,7 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
             var bundle:Variant=Baked.ready_for(value,0,urgent)
             if bundle==null:pending+=1
             elif not bundle is Resource:errors.append("Recording cannot be loaded: "+str(value.id))
+            elif not Admission.prepare_materials(bundle,Baked.material_programs(bundle),cache):pending+=1
             continue
         var approach:Dictionary=chosen.approaches[0]
         live.append(approach)
@@ -210,7 +211,7 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
             if not _immutable_preparation.is_empty():
                 var prepared:Dictionary=_prepare_immutable(clips,cache)
                 pending+=prepared.pending;errors.append_array(prepared.errors)
-        if not Admission.can_mutate():pending+=1
+    if not clips.is_empty() and not Admission.can_mutate():pending+=1
     return {"ready":pending==0 and errors.is_empty(),"pending":pending,"errors":errors}
 
 ## Source-owned bounded resource discovery. This cache belongs to the existing

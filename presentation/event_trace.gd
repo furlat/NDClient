@@ -123,6 +123,8 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
     var replaced:Array=NativePersistent.replaced_media(str(condition.behavior_id),{"persistent":persistent})
     for field in ["bodyColor","bodyRamp","bodyOutline","bodyPose","frozenPose"]:
         if persistent.get(field)!=null:mechanisms.append(field)
+    var size_change:Variant=condition.get("state",{}).get("size_change") if condition.get("state")!=null else null
+    if persistent.get("bodyScale",{}).has(size_change) and persistent.bodyScale[size_change]!=1.0:mechanisms.append("bodyScale")
     if persistent.get("alphaMultiplier",1.0)!=1.0:mechanisms.append("alphaMultiplier")
     var natives:Dictionary={}
     for record in Authoring.load_data("native_effects/index.json",cache).get("sources",{}).values():
@@ -158,7 +160,7 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
         var component:Dictionary=_component("condition_appearance","appearance_not_observed",source+".appearanceLayers/"+str(layer.id))
         component.merge({"id":identity,"trace_track_id":identity,"actor_uuid":row.actor_uuid,"status":"playing","persistent":true},true)
         row.components.append(component)
-    for field in ["bodyScale","bodyDistortion","liveCopies","absenceEcho"]:
+    for field in ["bodyDistortion","liveCopies","absenceEcho"]:
         if persistent.get(field)!=null:row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
 
 ## The package lifecycles this applied condition plays (one occurrence each).

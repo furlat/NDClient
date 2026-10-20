@@ -2,7 +2,8 @@ extends SceneTree
 const Media = preload("res://presentation/media_warmup.gd")
 const Encounter = preload("res://presentation/encounter_media.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
-const Protocol = preload("res://sdk/protocol.gd")
+const Journal = preload("res://sdk/journal.gd")
+const Fixtures = preload("res://tests/recording_fixtures.gd")
 const Catalog = preload("res://source_catalog.gd")
 var checks = 0
 var failures: Array = []
@@ -38,8 +39,8 @@ func parallel_sources(environment: Dictionary) -> void:
     var data = Media.create()
     Media.demand(data,wanted,wanted)
     check(not Media.ready(data,wanted),"Queued original sources are not render-ready")
-    check(Media.poll(data).is_empty() and Media.diagnostics(data).decode_jobs==4,
-        "Six real PNG requests dispatch exactly four owned workers before any publication")
+    check(Media.poll(data).is_empty() and Media.diagnostics(data).decode_jobs==wanted.size(),
+        "Six real PNG requests dispatch six single-image workers inside the current eight-worker limit before any publication")
     var published = []
     var peak = int(Media.diagnostics(data).decode_jobs)
     for _index in wanted.size():
@@ -55,19 +56,19 @@ func parallel_sources(environment: Dictionary) -> void:
         Media.published(data,result)
         check(Media.ready(data,{expected:true}),"Caller publication makes only its completed source ready: "+expected)
         published.append(result.path)
-        check(int(Media.diagnostics(data).decode_jobs)<=4,"Concurrent worker count remains bounded through refill")
-    check(published.size()==wanted.size() and published.all(func(path):return wanted.has(path)) and data.decoded==6 and data.pending.is_empty() and data.decode_jobs.is_empty()
+        check(int(Media.diagnostics(data).decode_jobs)<=Media.DECODE_WORKERS,"Concurrent worker count remains bounded through refill")
+    check(published.size()==wanted.size() and published.all(func(path):return wanted.has(path)) and Media.physical(data).decoded==6 and data.pending.is_empty() and data.decode_jobs.is_empty()
         and Media.ready(data,wanted),"Every original request publishes once with complete final readiness")
     Media.close(data)
     var closing = Media.create()
     Media.demand(closing,wanted,wanted)
     Media.poll(closing)
-    check(Media.diagnostics(closing).decode_jobs==4 and Media.diagnostics(closing,true).pending==wanted.size(),"Close fixture owns bounded workers and accounts for every unpublished request")
+    check(Media.diagnostics(closing).decode_jobs==wanted.size() and Media.diagnostics(closing,true).pending==wanted.size(),"Close fixture owns bounded workers and accounts for every unpublished request")
     var started = Time.get_ticks_msec()
     Media.close(closing)
     check(closing.decode_jobs.is_empty() and closing.pending.is_empty() and closing.queued.is_empty()
         and Media.poll(closing).is_empty() and not Media.ready(closing,wanted),"Close joins every owned worker and never publishes unfinished sources")
-    parallel_evidence = {"sources":wanted.keys(),"publication_order":published,"worker_limit":4,
+    parallel_evidence = {"sources":wanted.keys(),"publication_order":published,"worker_limit":Media.DECODE_WORKERS,
         "observed_peak":peak,"close_ms":Time.get_ticks_msec()-started}
 
 func finite_batches(environment:Dictionary)->void:
@@ -83,8 +84,8 @@ func finite_batches(environment:Dictionary)->void:
     while not data.decode_jobs.all(func(job):return WorkerThreadPool.is_task_completed(job.task)) and Time.get_ticks_msec()<deadline:await process_frame
     var completed:int=0
     for job in data.decode_jobs:completed+=job.result.get("images",[]).size()
-    check(completed==16 and data.pending.size()==2 and data.decode_jobs.size()==4,
-        "Four finite workers decode sixteen real PNGs without a scene publication or per-image redispatch")
+    check(completed==16 and data.pending.size()==2 and data.decode_jobs.size()==Media.DECODE_WORKERS,
+        "Eight finite workers decode sixteen real PNGs without a scene publication or per-image redispatch")
     check(data.resident.is_empty() and not Media.ready(data,wanted) and Media.diagnostics(data,true).pending==18,
         "Completed batches preserve exact unpublished readiness and pending accounting")
     # Cancellation can discard later members of an already completed batch.
@@ -109,23 +110,26 @@ func held_decode(request: Dictionary, result: Dictionary, release: Semaphore) ->
     Media._decode(request,result)
 
 func completed_later(environment: Dictionary, optional_slots: bool) -> void:
-    # Hold one genuine PNG worker, rather than relying on scheduler timing or
-    # image size. The other three complete before any publication is attempted.
-    var paths: Array = environment.required.keys().slice(0,6)
+    # Fill the actual pool and hold one genuine PNG worker, rather than relying
+    # on scheduler timing or image size. The other seven complete first.
+    var paths: Array = environment.required.keys().slice(0,Media.DECODE_WORKERS+2)
+    check(paths.size()==Media.DECODE_WORKERS+2,"Original environment provides ten distinct full-pool/queued-worker sources")
+    if paths.size()!=Media.DECODE_WORKERS+2:return
     var all_paths = {}; var wanted = {}
     for i in paths.size():
         all_paths[paths[i]] = Catalog.media_path(paths[i])
-        if not optional_slots or i in [0,4,5]: wanted[paths[i]] = all_paths[paths[i]]
+        if not optional_slots or i in [0,Media.DECODE_WORKERS,Media.DECODE_WORKERS+1]: wanted[paths[i]] = all_paths[paths[i]]
     var data = Media.create()
     Media.adopt_encounter(data,{"revision":1,"paths":all_paths,"environment":all_paths,
         "estimates":Encounter.estimates(all_paths,all_paths,{},{}),"errors":[]},1)
     Media.demand(data,wanted,all_paths)
+    Media.prepare_optional(data)
     var requests = {}
     for request in data.pending: requests[request.path] = request
     data.pending.clear()
-    for i in [4,5]: data.pending.append(requests[paths[i]])
+    for i in [Media.DECODE_WORKERS,Media.DECODE_WORKERS+1]: data.pending.append(requests[paths[i]])
     var release = Semaphore.new()
-    for i in range(4):
+    for i in range(Media.DECODE_WORKERS):
         var result = {}
         var request: Dictionary = requests[paths[i]]
         var work = held_decode.bind(request,result,release) if i==0 else Media._decode.bind(request,result)
@@ -141,8 +145,8 @@ func completed_later(environment: Dictionary, optional_slots: bool) -> void:
         # Full decode slots contain completed optional results, while two
         # required requests wait. The existing priority contract reclaims one
         # completed slot; withholding publication must still preserve it.
-        check(not data.worker_upload,"Role fixture uses the original CPU-only worker path")
-        check(Media.poll(data,true,false).is_empty() and data.decode_jobs.size()==4 and data.pending.size()==2,
+        check(not Media.physical(data).worker_upload,"Role fixture uses the original CPU-only worker path")
+        check(Media.poll(data,true,false).is_empty() and data.decode_jobs.size()==Media.DECODE_WORKERS and data.pending.size()==2,
             prefix+": no publication allowance leaves completed optional slots owned")
         next=Media.poll(data,true)
         check(next.get("path")==paths[1] and next.has("image"),
@@ -152,14 +156,14 @@ func completed_later(environment: Dictionary, optional_slots: bool) -> void:
     check(next.get("path")==paths[1] and next.has("image"),prefix+": ready later worker publishes without the held first worker")
     var published:Dictionary={}
     if next.has("image"): Media.published(data,next);published[next.path]=true
-    check(data.decode_jobs.size()==4 and data.decode_jobs.any(func(job):return job.path==paths[4]),prefix+": freed slot immediately admits queued required work")
+    check(data.decode_jobs.size()==Media.DECODE_WORKERS and data.decode_jobs.any(func(job):return job.path==paths[Media.DECODE_WORKERS]),prefix+": freed slot immediately admits queued required work")
     check(not Media.ready(data,wanted) and not Media.boot_ready(data),prefix+": missing required image still holds exact readiness and boot")
     if optional_slots:
         deadline=Time.get_ticks_msec()+10000
-        while data.decode_jobs.any(func(job):return job.path==paths[4] and not WorkerThreadPool.is_task_completed(job.task)) and Time.get_ticks_msec()<deadline:
+        while data.decode_jobs.any(func(job):return job.path==paths[Media.DECODE_WORKERS] and not WorkerThreadPool.is_task_completed(job.task)) and Time.get_ticks_msec()<deadline:
             await process_frame
         var required = Media.poll(data,true)
-        check(required.get("path")==paths[4] and required.has("image"),prefix+": newly ready required result precedes completed optional results")
+        check(required.get("path")==paths[Media.DECODE_WORKERS] and required.has("image"),prefix+": newly ready required result precedes completed optional results")
         if required.has("image"): Media.published(data,required);published[required.path]=true
     release.post()
     while not data.decode_jobs.is_empty() or not data.pending.is_empty():
@@ -170,7 +174,7 @@ func completed_later(environment: Dictionary, optional_slots: bool) -> void:
         if result.has("image"):
             check(result.image.get_data()==Image.load_from_file(all_paths[result.path]).get_data(),prefix+": original image bytes preserved")
             Media.published(data,result)
-    check(Media.ready(data,wanted) and Media.boot_ready(data) and data.decoded==6,prefix+": final required gate completes after all originals publish once")
+    check(Media.ready(data,wanted) and Media.boot_ready(data) and Media.physical(data).decoded==paths.size(),prefix+": final required gate completes after all originals publish once")
     Media.close(data)
 
 func externally_satisfied_worker(path:String) -> void:
@@ -207,7 +211,7 @@ func removed_optional_cpu(path:String) -> void:
     var estimates:Dictionary=Encounter.estimates({path:absolute},{path:true},{},{})
     for synthetic in ["a","c","outside"]:estimates[synthetic]={"bytes":16}
     var family:Dictionary={"revision":1,"paths":{"a":"/test/a.png",path:absolute,"c":"/test/c.png"},
-        "environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"errors":[],"estimates":estimates}
+        "environment":{},"fixtures":{},"gpu_only":{path:true},"cpu_required":{},"errors":[],"estimates":estimates}
     family.estimate_bytes=Encounter.estimate_bytes(estimates)
     family.estimate_summary=Encounter.estimate_summary(family)
     for field in ["paths","environment","fixtures","gpu_only","cpu_required","estimate_bytes","estimate_summary"]:family[field].make_read_only()
@@ -223,22 +227,29 @@ func removed_optional_cpu(path:String) -> void:
     check(original.has("image") and original.path==path,"Removed-role fixture decodes actual original PNG with initial CPU ownership")
     if not original.has("image"):Media.close(data);return
     Media.published(data,original);Media.boot_ready(data);Media.demand(data,old)
+    # Used colour pixels are retained under budget. Explicit pressure, with no
+    # current CPU role, is what now permits their retirement; optional source
+    # ownership must not be mistaken for permission to discard required pixels.
+    data.budget_bytes=int(original.gpu_bytes)+48
     Media.demand(data,old,{},{},{path:true})
+    Media.prepare_optional(data)
     check(Media.release_cold_images(data,-1)==[path] and data.resident[path].cpu_bytes==0,
-        "Actual GPU-only role releases CPU bytes while original resident fallback remains CPU-retaining")
+        "Actual GPU-only role under explicit byte pressure releases only its unrequired CPU copy")
     var current:Dictionary={"a":"/test/a.png"}
-    Media.demand(data,current)
-    check(data.demand_counts.selection_deferred and data.preload_selected.has(path) and Media.ready(data,current),
-        "Removed GPU role retains capped optional source without holding current received source")
-    check(not data.selected_ready.has(path) and data.pending.size()==1 and data.pending[0].path==path,
-        "Removed non-priority GPU role truthfully queues missing optional CPU even with no old backlog")
-    var completed:Dictionary={}
-    while completed.is_empty():
-        completed=Media.poll_plan(data)
-        if completed.is_empty():await process_frame
-    data.demand_precomputation=completed.value.demand_precomputation
+    var cpu_family:Dictionary=family.duplicate(true)
+    cpu_family.gpu_only={};cpu_family.cpu_required={path:true};cpu_family.make_read_only()
+    data.budget_bytes=int(original.gpu_bytes)+int(original.cpu_bytes)+48
+    Media.adopt_encounter(data,cpu_family,1)
     Media.demand(data,current)
     Media.published(data,{"path":"c","cpu_bytes":8,"gpu_bytes":8})
+    var deadline:int=Time.get_ticks_msec()+10000
+    while not data.pending.any(func(request):return request.path==path) and Time.get_ticks_msec()<deadline:
+        Media.prepare_optional(data)
+        if not data.pending.any(func(request):return request.path==path):await process_frame
+    check(data.preload_selected.has(path) and Media.ready(data,current),
+        "Actual CPU-family replacement retains capped optional source without holding current received source")
+    check(not data.selected_ready.has(path) and data.pending.size()==1 and data.pending[0].path==path,
+        "A newly required optional CPU role truthfully queues its missing image even with no old backlog")
     var restored:Dictionary=await loaded(data)
     check(restored.has("image") and restored.path==path and restored.image.get_data()==original.image.get_data(),
         "Optional CPU recovery preserves exact original PNG pixels")
@@ -249,10 +260,14 @@ func removed_optional_cpu(path:String) -> void:
     Media.close(data)
 
 func run() -> void:
-    var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
-    check(parsed.ok,"Actual disclosed fixture source state parses")
-    if not parsed.ok: quit(1); return
-    var environment = EnvironmentMedia.plan(parsed.value,[],{})
+    var journal=Journal.new()
+    var opened:Dictionary=journal.open(Fixtures.journal("door"),true,false)
+    check(opened.ok,"Durable original schema16 door journal opens")
+    if not opened.ok:quit(1);return
+    var folded:Dictionary=journal.replay(0)
+    check(folded.ok,"Original disclosed fixture sources fold through the current SDK")
+    if not folded.ok:quit(1);return
+    var environment = EnvironmentMedia.plan(journal.state,[],{})
     var path: String = environment.fixtures.keys()[0]
     var data = Media.create()
     var exact = {path:Catalog.media_path(path)}
@@ -277,19 +292,20 @@ func run() -> void:
     check(Media.diagnostics(data,true).pending==1,"Replacement work is accounted once")
     var noops: int = data.demand_noops
     Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
-    check(data.demand_noops==noops and data.pending.size()==1 and data.pending[0].fixture,
-        "Corrective fixture requeue invalidates no-op and retains exact mandatory priority")
+    var corrective:Dictionary=data.pending[0]
+    check(data.demand_noops==noops+1 and data.pending.size()==1 and corrective.fixture and not Media.ready(data,{path:true}),
+        "Identical immutable demand preserves the exact corrective fixture request and truthful not-ready state")
     Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
-    check(data.demand_noops==noops+1 and data.pending.size()==1,"Repeated corrective demand does not duplicate its exact worker request")
+    check(data.demand_noops==noops+2 and data.pending.size()==1 and is_same(data.pending[0],corrective),"Repeated corrective demand does not duplicate or replace its exact worker request")
     var second = await loaded(data)
     check(second.has("image") and second.has("energy") and second.has("emission_centroid"),"Existing worker completes the upgraded role without a new scene plan")
     if second.has("image"):
         Media.published(data,second)
         Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
-        check(data.demand_noops==noops+2,"Complete fixture publication keeps the exact demand no-op eligible")
+        check(data.demand_noops==noops+3,"Complete fixture publication keeps the exact demand no-op eligible")
         check(second.image.get_data()==first.image.get_data(),"Role preprocessing preserves original source pixels")
         check(Media.ready(data,{path:true}) and data.pending.is_empty() and data.queued.is_empty(),"Newest mandatory role becomes ready with no repeat loop")
-        check(data.decoded==2 and Media.diagnostics(data,true).pending==0 and Media.diagnostics(data,true).resident_sheets==1,
+        check(Media.physical(data).decoded==2 and Media.diagnostics(data,true).pending==0 and Media.diagnostics(data,true).resident_sheets==1,
             "Two worker requests retain one original source residency and truthful queue accounting")
     Media.close(data)
     await removed_optional_cpu(path)

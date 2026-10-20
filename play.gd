@@ -452,6 +452,7 @@ func set_character_light_profile(profile_name: String) -> bool:
 
 func _requested_profile_normals(profile_name: String) -> Dictionary:
     var sets: Dictionary=media_normal_sets.duplicate()
+    sets.merge(media_plan.get("projection",{}).get("upcoming",{}).get("normal_sets",{}))
     for entry in actor_entries:
         var path: String=entry.get("texture_path","")
         if path.is_empty() or entry.get("generated_shadow",false):continue
@@ -2096,21 +2097,22 @@ func _prepare_media(first: Dictionary = {}) -> void:
     # in selection hints or current optical samples do not rebuild its source
     # paths, normal-profile projection, or environment/fixture role unions.
     var projection:Dictionary=media_plan.get("projection",{})
-    if projection.is_empty() or projection.epoch!=timeline.initialization_revision or projection.profile!=character_light_profile \
-            or not is_same(projection.ready,ready) or (not upcoming.is_empty() and not is_same(projection.upcoming,upcoming)) \
-            or projection.upcoming.is_empty()!=upcoming.is_empty():
-        var required_normal_sets:Dictionary=ready.get("normal_sets",{})
-        var next_normal_sets:Dictionary=upcoming.get("normal_sets",{})
-        media_normal_sets=required_normal_sets
-        if not next_normal_sets.is_empty() and not is_same(required_normal_sets,next_normal_sets):
-            media_normal_sets=required_normal_sets.duplicate();media_normal_sets.merge(next_normal_sets);media_normal_sets.make_read_only()
-        var required_paths:Dictionary=CharacterGeometry.for_profile(ready.character,media_normal_sets,character_light_profile,catalog_cache,"required")
-        var next_paths:Dictionary=CharacterGeometry.for_profile(upcoming.get("character",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming")
-        projection={"epoch":timeline.initialization_revision,"profile":character_light_profile,"ready":ready,"upcoming":upcoming,
-            "required":required_paths,"next":next_paths}
-    var character_required:Dictionary=projection.required.duplicate()
-    character_required.merge(media_condition_paths)
-    character_required.merge(native_media_paths)
+    media_normal_sets=ready.get("normal_sets",{})
+    var required_paths:Dictionary=ready.get("character_profiles",{}).get(character_light_profile,{})
+    if not ready.get("character_profiles",{}).has(character_light_profile):
+        required_paths=CharacterGeometry.for_profile(ready.character,media_normal_sets,character_light_profile,catalog_cache,"required")
+    var next_paths:Dictionary=upcoming.get("character_profiles",{}).get(character_light_profile,{})
+    if not upcoming.get("character_profiles",{}).has(character_light_profile):
+        next_paths=CharacterGeometry.for_profile(upcoming.get("character",{}),upcoming.get("normal_sets",{}),character_light_profile,catalog_cache,"upcoming")
+    var character_required:Dictionary=projection.get("combined",{})
+    if projection.is_empty() or projection.get("epoch")!=timeline.initialization_revision or projection.get("profile")!=character_light_profile \
+            or not is_same(projection.get("required"),required_paths) or not is_same(projection.get("conditions"),media_condition_paths) \
+            or not is_same(projection.get("native"),native_media_paths):
+        character_required=required_paths.duplicate()
+        character_required.merge(media_condition_paths);character_required.merge(native_media_paths)
+        character_required.make_read_only()
+    projection={"epoch":timeline.initialization_revision,"profile":character_light_profile,"ready":ready,"upcoming":upcoming,
+        "required":required_paths,"next":next_paths,"conditions":media_condition_paths,"native":native_media_paths,"combined":character_required}
     var error_start:float=timeline.group_start_ms if not timeline.current.is_empty() and not ids.is_empty() and ids[0]==timeline.current.id else timeline.display_ms
     var due_errors:Array=MediaWarmup.errors_at(ready,maxf(timeline.display_ms,timeline.media_target_ms)-error_start)
     media_plan = {"projection":projection,"required":character_required,"upcoming":projection.next,
@@ -2142,6 +2144,7 @@ func _prepare_media(first: Dictionary = {}) -> void:
 static func _same_source_refs(a:Array,b:Array)->bool:
     if a.size()!=b.size():return false
     for i in a.size():
+        if a[i].is_empty() and b[i].is_empty():continue
         if not is_same(a[i],b[i]):return false
     return true
 
@@ -2359,7 +2362,7 @@ func _character_source_paths(group:Dictionary={},at_ms:float=-1.0)->Dictionary:
             start_ms=maxf(start_ms,float(group.get("preview_start_ms",start_ms)))
             var local_ms:float=(timeline.display_ms if at_ms<0 else at_ms)-start_ms
             var due:Dictionary=MediaWarmup.required_at(plan.get("character_timeline",{}),local_ms,plan.get("character",paths))
-            paths=CharacterGeometry.for_profile(due,media_normal_sets,character_light_profile,catalog_cache,"character_due")
+            paths=CharacterGeometry.for_profile(due,plan.get("normal_sets",media_normal_sets),character_light_profile,catalog_cache,"character_due")
     return paths
 
 func _character_sources_ready(group:Dictionary={},at_ms:float=-1.0)->bool:
@@ -2439,14 +2442,14 @@ func _prioritized_media(at_ms:float)->Dictionary:
         var future:Dictionary=media_group_plans.get(boundary.get("source_group_id",""),EMPTY_PATHS)
         if not future.is_empty():
             var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",EMPTY_PATHS),float(boundary.get("source_local_ms",0)),future.get("character",EMPTY_PATHS))
-            future_characters.append(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"prepared_character_due"))
+            future_characters.append(CharacterGeometry.for_profile(paths,future.get("normal_sets",media_normal_sets),character_light_profile,catalog_cache,"prepared_character_due"))
     if prepare_future and future_forecast:
         var boundary:Dictionary=static_forecast.boundary
         if static_forecast.task<0 and static_forecast.output.get("complete",false):future_environment.append(static_forecast.output.static_result.environment_paths)
         var future:Dictionary=media_group_plans.get(boundary.source_group_id,EMPTY_PATHS)
         if not future.is_empty():
             var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",EMPTY_PATHS),float(boundary.source_local_ms),future.get("character",EMPTY_PATHS))
-            future_characters.append(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"forecast_character_due"))
+            future_characters.append(CharacterGeometry.for_profile(paths,future.get("normal_sets",media_normal_sets),character_light_profile,catalog_cache,"forecast_character_due"))
     # The displayed/onset cut above keeps strict priority. Once it is ready,
     # the next cut's actor and environment producers are independent: missing
     # future actor pixels must not hold unrelated room resources behind them.
@@ -2510,6 +2513,7 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
     var first = {"character":value.required,"environment":value.environment_required,"errors":value.errors,"fixtures":first_fixtures,
         "source_records":value.get("source_records",{}).get(ids[0] if not ids.is_empty() else "",{}),
         "source_cuts":value.get("source_cuts",{}).get(ids[0] if not ids.is_empty() else "",{}),
+        "character_profiles":value.get("character_profiles",{}).get(ids[0] if not ids.is_empty() else "",{}),
         "source_families":value.get("source_families",{}).get(ids[0] if not ids.is_empty() else "",{})}
     if completed.has("coverage_until_ms"):first.coverage_until_ms=completed.coverage_until_ms
     if not ids.is_empty():first.error_timeline=value.get("character_error_timeline",{}).get(ids[0],[])
@@ -2525,6 +2529,7 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
             media_group_plans[ids[1]] = {"character":value.upcoming,"environment":value.environment_upcoming,"errors":value.upcoming_errors,"fixtures":next_fixtures,
                 "source_records":value.get("source_records",{}).get(ids[1],{}),
                 "source_cuts":value.get("source_cuts",{}).get(ids[1],{}),
+                "character_profiles":value.get("character_profiles",{}).get(ids[1],{}),
                 "source_families":value.get("source_families",{}).get(ids[1],{})}
             media_group_plans[ids[1]].environment_timeline=value.get("environment_timeline",{}).get(ids[1],{})
             media_group_plans[ids[1]].character_timeline=value.get("character_timeline",{}).get(ids[1],{})
@@ -2721,6 +2726,7 @@ func _sample_actors() -> void:
         var resting = Characters.rest_sample(actor,rig,catalog_cache)
         var condition_pose=Conditions.pose(actor,row.rig,catalog_cache,timeline.condition_owners)
         var material_state=Conditions.material(id,material_samples.get(id,[]))
+        var body_scale:float=material_state.body_scale.factor
         # Material values are independently clocked from the sprite frame. In
         # particular, damage/body surfaces must keep sampling between frames,
         # while an unchanged resting body need not resend every shader uniform.
@@ -2779,7 +2785,7 @@ func _sample_actors() -> void:
         var facing: String = cycle[posmod(cycle.find(row.facing)+quarter*2,8)]
         var frame = mini(int(playback.sample_seconds*clip.fps),int(clip.frames)-1)
         var pose_key:Array=[playback.clip,frame,facing,row.position,row.base_height_steps,row.visual_height,
-            row.get("scale_x",1.0),row.scale,camera.basis,quarter,source_depth,source_normals,character_light_profile,
+            row.get("scale_x",1.0),row.scale,body_scale,material_state.body_scale.owners,camera.basis,quarter,source_depth,source_normals,character_light_profile,
             sample.get("hidden_slots",[]),sample.get("passage_weight",0.0),
             sample.get("passage",{}).get("passageSocket"),sample.get("passage",{}).get("passageBodyHeightPx"),
             sample.get("passage",{}).get("passageScale"),world_generation,MediaWarmup.physical(media_warmup).source_revision]
@@ -2790,7 +2796,7 @@ func _sample_actors() -> void:
             sampling_counts.retained_poses+=1
             FrameProfile.end_phase(profile,"actor_sprite_outfit",outfit_started)
             continue
-        visual.sampled_pose={"key":pose_key,"parameters":material_parameters}
+        visual.sampled_pose={"key":pose_key,"parameters":material_parameters,"body_scale":material_state.body_scale}
         var binding_key:Array=[playback.clip,character_light_profile,MediaWarmup.physical(media_warmup).source_revision]
         var check_outfit:bool=layer_sample_actors.has(id) or visual.get("outfit_binding",[])!=binding_key
         var complete_outfit = true
@@ -2870,7 +2876,11 @@ func _sample_actors() -> void:
                 if socket!=null:
                     entry.node.position+=camera.basis.x*(rig.cell_width*.5-socket.x)*row.get("scale_x",1.0)*sx*weight*unit
                     entry.node.position-=camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-passage.passageBodyHeightPx-socket.y)*sy*weight*unit
+            if body_scale!=1.0:
+                entry.node.basis=entry.node.basis.scaled_local(Vector3.ONE*body_scale)
+                entry.node.position=Placement.contact(row)+(entry.node.position-Placement.contact(row))*body_scale
             if entry.role != "shadow": entry.node.position.y += float(sample.get("lift_pixels",0))*(128.0/rig_config.TILE_W)/64.0*Placement.HEIGHT_UNIT
+            entry.body_scale=body_scale
             update_bounds(entry)
             FrameProfile.end_phase(profile,"actor_sprite_transform",transform_started)
             if not effect.is_empty() and component_renderer._entry_visible(self,entry):component_renderer.pending_evidence.append({"trace_track_id":effect.id,"display_ms":timeline.display_ms,"visible":true})

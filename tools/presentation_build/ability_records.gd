@@ -381,6 +381,7 @@ static func condition_from_recipe(e: Resource, recipe: Dictionary) -> void:
     moved = F.move(raw, "persistent/bodyColor/tintRgb", adjust, "rgb", "colour") or moved
     moved = F.move(raw, "persistent/bodyColor/saturation", adjust, "saturation", "float") or moved
     moved = F.move(raw, "persistent/bodyColor/brightness", adjust, "brightness", "float") or moved
+    moved = F.move(raw, "persistent/bodyScale", adjust, "scale_by_size_change", "same") or moved
     if moved:look.steps.append(adjust)
     if F.value_at(raw, "persistent/bodyRamp") is Dictionary:
         var film := LookStep.new();film.kind = "body_film"
@@ -421,7 +422,9 @@ static func condition_from_recipe(e: Resource, recipe: Dictionary) -> void:
         F.erase_path(raw, "persistent/activityPoses")
     raw = F.plain(raw)
     F.move(raw, "persistent/layers", e, "layers", "same", true)
-    F.move(raw, "persistent/appearanceLayers", e, "appearance_layers", "same", true)
+    # The empty default is not emitted below: retain its original presence in
+    # the record instead of moving it into a field that writes nothing back.
+    F.move(raw, "persistent/appearanceLayers", e, "appearance_layers", "same")
     for phase in ["application", "removal"]:
         e.set(phase + "_text", feedback_from(raw, phase, CONDITION_TEXT))
         if F.value_at(raw, phase + "/bodyAnimation") is Dictionary:
@@ -447,6 +450,7 @@ static func condition_recipe(e: Resource) -> Dictionary:
         F.emit(record, "persistent/bodyColor/tintRgb", adjust, "rgb", "colour")
         F.emit(record, "persistent/bodyColor/saturation", adjust, "saturation", "float")
         F.emit(record, "persistent/bodyColor/brightness", adjust, "brightness", "float")
+        F.emit(record, "persistent/bodyScale", adjust, "scale_by_size_change", "same")
     var film := step_of(e.look, "body_film")
     if film != null:
         if not F.has_path(record, "persistent/bodyRamp"):F.put(record, "persistent/bodyRamp", {})

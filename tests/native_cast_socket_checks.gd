@@ -5,6 +5,7 @@ const Characters=preload("res://presentation/characters.gd")
 const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Native=preload("res://presentation/native_spell_renderer.gd")
 const Timeline=preload("res://presentation/timeline.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
 class Lighting extends RefCounted:
     var native_preparation_ready:bool=true
     func sample_handles(_handles:Dictionary)->void:pass
@@ -49,9 +50,13 @@ func run()->void:
     check(world.rigs.has(rig_id),"Test uses the actual shipping modular rig")
     if not world.rigs.has(rig_id):finish(world);return
     var rig:Dictionary=world.rigs[rig_id]
-    var mesh:MeshInstance3D=MeshInstance3D.new();mesh.mesh=QuadMesh.new();world.add_child(mesh)
-    var entry:Dictionary={"id":"caster:body","node":mesh,"role":"body","actor_layer":{"slot":"body","effect":{},"paths":{}}}
-    world.visual_actors.caster={"valid":true,"row":{"id":"caster","rig":rig_id,"position":[3,4],"base_height_steps":2.0,"scale":1.0,"facing":"SW"},"entries":[entry]}
+    var row:Dictionary={"id":"caster","rig":rig_id,"position":[3,4],"base_height_steps":2.0,"scale":1.0,"facing":"SW"}
+    var shape:Dictionary=Construction.layer_shape(rig,128.0/float(world.rig_config.TILE_W)*row.scale)
+    var mesh:MeshInstance3D=MeshInstance3D.new();mesh.mesh=Construction.QuadShapes.mesh(shape.mesh_size,shape.mesh_center);world.add_child(mesh)
+    world.camera.transform=Sockets.Placement.camera_transform(Vector3.ZERO,world.quarter)
+    mesh.basis=world.camera.basis;mesh.position=Sockets.Placement.contact(row)
+    var entry:Dictionary={"id":"caster:body","node":mesh,"role":"body","pivot":shape.pivot,"scale":shape.scale,"actor_layer":{"slot":"body","effect":{},"paths":{}}}
+    world.visual_actors.caster={"valid":true,"row":row,"entries":[entry]}
     var body:Playback=Playback.new();world.add_child(body);world.playbacks.caster=body
     var current:Dictionary={}
     for id in ["acid_arrow","aid","animal_friendship","arcane_sword"]:
@@ -74,10 +79,12 @@ func run()->void:
         check(release.ready and release.point.is_equal_approx(projected(world,rig.pose_sockets.hand.Attack5[view][7])),"Exact measured casting view "+view)
     world.visual_actors.caster.row.facing="SW"
     world.quarter=1
+    world.camera.transform=Sockets.Placement.camera_transform(Vector3.ZERO,world.quarter);mesh.basis=world.camera.basis
     var rotated:Dictionary=Sockets.endpoints(world,current,{},false)
     var rotated_view:String=Sockets.facing(world,world.visual_actors.caster.row)
     check(rotated.ready and rotated.from.is_equal_approx(projected(world,rig.pose_sockets.hand.Attack5[rotated_view][7])),"Camera rotation selects the actual pose's corresponding view")
     world.quarter=0
+    world.camera.transform=Sockets.Placement.camera_transform(Vector3.ZERO,world.quarter);mesh.basis=world.camera.basis
     current.recipe={"sourceSockets":{"release":{"SW":{"x":36.0,"y":45.0}}}}
     var explicit:Dictionary=Sockets.cast_point(world,current,"release",7,"SW")
     check(explicit.ready and explicit.point.is_equal_approx(projected(world,Vector2(36,45))),"Explicit measured spell socket retains precedence over the rig hand")

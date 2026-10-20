@@ -37,3 +37,27 @@ shadow equations, contact/geometry and original tolerance. The failed old-path
 admission attempt remains retained separately.
 
 `blood_before_shape_cache.gd` is the byte-for-byte original `7faf78fb439173cd7f2d77024ad04b6a2da42f2c:presentation/blood.gd`, formerly stored only in the ignored blood-kernels-original.gd. The source-cache worker test compares the original kernel evaluator with the current prepared cache using actual Gallery releases, including eighteen-cell and overlapping/reverse controls. It performs no current-output export to create an oracle.
+
+The Studio optical-light gate uses durable original schema16 Hide/light journals
+and current cell masks. Native receipt
+`.runtime/tests/20261020T041209.004924Z/studio_optical_light_checks.log` exposed
+ten stale test assumptions: production Play publishes native-compatible canvas
+source records into its GPU light table and deliberately has no attached
+PointLight2D page, so the retired `nodes` collection is empty. The test now
+checks exact source identities/counts, enabled cookies and optical parameters,
+plus the actual uploaded table identities/count/rows. It creates no unused light
+nodes or replacement receiving page and changes no production lighting.
+
+That same receipt's two dim-category assertions failed solely on its requested
+sequence8 versus actual sequence12. Both actual categories were already2;
+bright/very-bright were3/4. Several zero-duration turn operations share the
+movement-ending clock. Ordinary Recording.restore chooses the representable
+cursor, while an independent SDK Journal replay of that original cursor is the
+value oracle. Full published canonical state and original categories remain
+asserted; the test no longer demands an impossible intermediate timestamp.
+Backwards seeks also compare against an independent original initialization.
+The corrected serialized gate passes **120checks, zero failures, zero script/
+engine errors in8.2seconds**, receipt
+`.runtime/tests/20261020T041640.276061Z/studio_optical_light_checks.log`.
+Both audiences pass full independent SDK prefix equality, exact current source/
+GPU table identities and optical parameters, and initial-state restoration.

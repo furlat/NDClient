@@ -1,0 +1,111 @@
+{
+ "id": "spell.enlarge_reduce/enlarge_lifecycle",
+ "title": "Enlarge: actual size owner, movement, attack and restoration",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.enlarge_reduce"
+  ],
+  "action": [
+   "action.move",
+   "action.attack",
+   "action.drop_concentration"
+  ],
+  "condition": [
+   "condition.spell.enlarge_reduce"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.enlarge_reduce"
+   ],
+   "at": [
+    3,
+    6
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [],
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.enlarge_reduce",
+   "by": "caster",
+   "target": "ally",
+   "variant": {
+    "form": "enlarge"
+   }
+  },
+  {
+   "do": "action.move",
+   "by": "ally",
+   "target": [
+    4,
+    7
+   ]
+  },
+  {
+   "do": "action.attack",
+   "by": "ally",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "ally",
+   "target": [
+    4,
+    8
+   ]
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "spell.enlarge_reduce",
+  "action.move",
+  "action.attack",
+  "action.drop_concentration"
+ ],
+ "required_conditions": [
+  "condition.spell.enlarge_reduce"
+ ],
+ "required_condition_ends": [
+  "condition.spell.enlarge_reduce"
+ ],
+ "required_facts": []
+}

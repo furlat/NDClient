@@ -20,6 +20,7 @@ source = "ui/resources.json icon:condition.dnd-spells-transmutation-enlargereduc
 [sub_resource type="Resource" id="Resource_0wwdv"]
 script = ExtResource("3_sxy8t")
 kind = "body_adjust"
+scale_by_size_change = Dictionary[String, float]({"enlarge": 1.175, "reduce": 0.75})
 colours = PackedColorArray()
 replace_from = PackedColorArray()
 hide = PackedStringArray()
@@ -119,10 +120,6 @@ unported = {
 "persistent": {
 "appearanceLayers": [],
 "bodyColor": null,
-"bodyScale": {
-"enlarge": 1.175,
-"reduce": 0.75
-},
 "equipmentModifiers": []
 },
 "relationships": {

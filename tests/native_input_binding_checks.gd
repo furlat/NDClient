@@ -3,6 +3,7 @@ extends SceneTree
 const Inputs=preload("res://presentation/native_inputs.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Body=preload("res://modular.gdshader")
+const Construction=preload("res://presentation/actor_construction.gd")
 class OwnerTimeline extends RefCounted:
     var condition_owners:Dictionary={}
 class World extends Node3D:
@@ -78,6 +79,9 @@ func actor(world:World,id:String)->Dictionary:
     material.set_shader_parameter("frame_uv",Vector4(.25,0,.25,.125));material.set_shader_parameter("tint",Vector3(.6,.3,.2))
     var entry:Dictionary={"id":id+":body","node":node,"material":material,"role":"body","actor_layer":{"slot":"body","effect":{},"paths":{}},"source_binding_revision":1,"source_version":1}
     var row:Dictionary={"id":id,"rig":"fixture","position":[10,0] if id=="b" else [0,0],"base_height_steps":0,"scale":1.0,"facing":"SW"}
+    var shape:Dictionary=Construction.layer_shape(world.rigs[row.rig],128.0/float(world.rig_config.TILE_W)*row.scale)
+    node.mesh=Construction.QuadShapes.mesh(shape.mesh_size,shape.mesh_center)
+    entry.pivot=shape.pivot;entry.scale=shape.scale;node.basis=world.camera.basis
     node.position=Inputs.Sockets.Placement.contact(row)
     world.visual_actors[id]={"valid":true,"row":row,"entries":[entry]}
     return entry
@@ -141,7 +145,7 @@ func run()->void:
     # Contract probes use disclosed values explicitly. These do not claim a
     # real server count transition; the native replay gate checks actual art.
     world.camera.free();world.camera=Camera3D.new();world.add_child(world.camera)
-    for entry in [a,b]:entry.pivot=Vector3(0,.5,0);entry.geometry_ground_pixels=23.0
+    for entry in [a,b]:entry.geometry_ground_pixels=23.0;entry.node.basis=world.camera.basis
     world.visual_actors.b.sampled_pose={"key":["Idle",2,"SW"]}
     var history_probe:HistoryProbe=HistoryProbe.new();world.add_child(history_probe)
     var history_handle:Dictionary={"clip":{"inputs":["actor_context","history_state"],"input_setters":{"actor_context":"set_actor_context","history_state":"set_history_state"}},"occurrence":history_probe,"root":history_probe}

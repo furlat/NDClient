@@ -453,19 +453,23 @@ static func _snapshots(entries: Array,camera: Camera3D,previous: Array=[]) -> Ar
     for entry in entries:
         if entry.role=="shadow" or not entry.node.visible: continue
         var position:Vector3=entry.node.global_position
+        var baseline:Basis=camera.global_basis.scaled_local(Vector3(entry.placement.get("scale_x",1.0),1,1))
+        # Keep the established neutral caster operands exact. Node3D basis
+        # decomposition may round the same camera basis on assignment.
+        var model:Basis=Basis.IDENTITY if entry.get("body_scale",1.0)==1.0 else entry.node.global_basis*baseline.inverse()
         var version:int=entry.get("source_version",0)
         var cell:=Vector2(entry.get("geometry_cell_size",Vector2(128,128)))
         var ground_pixels:=float(entry.get("geometry_ground_pixels",19.0))
         if cursor<previous.size() and is_same(previous[cursor].entry,entry):
             var last:Dictionary=previous[cursor];cursor+=1
-            if last.id==entry.id and last.position==position and last.basis==camera.global_basis \
+            if last.id==entry.id and last.position==position and last.basis==camera.global_basis and last.model==model \
                 and last.pivot==entry.pivot and last.scale_x==entry.placement.get("scale_x",1.0) \
                 and last.component_cell_size==cell and last.ground_pixels==ground_pixels \
                 and (last.version==version or _frame_only(entry.source_parameters,last)):
                 last.version=version;result.append(last);continue
         if not SourceMaterial.value(entry,"has_component_geometry"): continue
         var snapshot: Dictionary={"id":entry.id,"pivot":entry.pivot,"position":position,
-            "scale_x":entry.placement.get("scale_x",1.0),"basis":camera.global_basis,
+            "scale_x":entry.placement.get("scale_x",1.0),"basis":camera.global_basis,"model":model,
             "component_cell_size":cell,"ground_pixels":ground_pixels,"entry":entry,"version":version}
         var complete := true
         for parameter in CASTER_PARAMETERS:
@@ -473,7 +477,7 @@ static func _snapshots(entries: Array,camera: Camera3D,previous: Array=[]) -> Ar
             if snapshot[parameter]==null: complete=false
         if not complete: continue
         # Everything the footprint depends on; sampled frames and sheets are not.
-        snapshot.geometry=[entry.id,position,entry.pivot,snapshot.scale_x,snapshot.basis,cell,ground_pixels,
+        snapshot.geometry=[entry.id,position,entry.pivot,snapshot.scale_x,snapshot.basis,model,cell,ground_pixels,
             snapshot.component_depth_range,snapshot.component_units,snapshot.component_reconstruction_origin,snapshot.component_elevation]
         result.append(snapshot)
     return result
@@ -489,7 +493,7 @@ static func _frame_only(parameters: Dictionary,last: Dictionary) -> bool:
     if frame!=last.frame_uv: last.frame_uv=frame;last.frame_changed=true
     return true
 
-static func _caster_point(snapshot: Dictionary,x: float,y: float,depth: float,ground: float) -> Vector3:
+static func _caster_local_point(snapshot: Dictionary,x: float,y: float,depth: float,ground: float) -> Vector3:
     var units: float=snapshot.component_units
     var elevation: float=snapshot.component_elevation
     var height: float=((snapshot.component_reconstruction_origin.y-y)*cos(elevation)+depth*sin(elevation))*units
@@ -497,22 +501,37 @@ static func _caster_point(snapshot: Dictionary,x: float,y: float,depth: float,gr
     var painted: Vector3=snapshot.basis*Vector3((x-snapshot.pivot.x)*snapshot.scale_x,snapshot.pivot.y-y,0)*units
     return painted+snapshot.basis.z*((height-painted.y)/snapshot.basis.z.y)
 
+static func _caster_model_point(snapshot:Dictionary,original:Vector3,ground:float)->Vector3:
+    var model:Basis=snapshot.get("model",Basis.IDENTITY)
+    if model==Basis.IDENTITY:return original
+    var support:Vector3=Vector3.UP*ground
+    return support+model*(original-support)
+
+static func _caster_point(snapshot: Dictionary,x: float,y: float,depth: float,ground: float) -> Vector3:
+    return _caster_model_point(snapshot,_caster_local_point(snapshot,x,y,depth,ground),ground)
+
 func _caster_shape(snapshot:Dictionary,ground:float)->Dictionary:
     # Local reconstructed bounds depend on source geometry and camera basis,
     # not animation UVs, a moving light, or the actor's world contact.
-    var key:Array=[snapshot.basis,snapshot.component_cell_size,snapshot.component_depth_range,
+    var key:Array=[snapshot.basis,snapshot.get("model",Basis.IDENTITY),snapshot.component_cell_size,snapshot.component_depth_range,
         snapshot.component_units,snapshot.component_elevation,snapshot.component_reconstruction_origin,
         snapshot.pivot,snapshot.scale_x,ground]
     var previous:Dictionary=_caster_shapes.get(snapshot.id,{})
     if previous.get("key",[])==key:return previous
-    var points:Array=[]
+    var points:Array=[];var local_points:Array=[]
     for x in [0.0,snapshot.component_cell_size.x]:
         for y in [0.0,snapshot.component_cell_size.y]:
             for depth in [snapshot.component_depth_range.x,snapshot.component_depth_range.y]:
-                points.append(_caster_point(snapshot,x,y,depth,ground))
+                var local:Vector3=_caster_local_point(snapshot,x,y,depth,ground)
+                local_points.append(local);points.append(_caster_model_point(snapshot,local,ground))
     var bounds:=AABB(points[0],Vector3.ZERO)
     for point in points:bounds=bounds.expand(point)
-    var shape:Dictionary={"key":key,"points":points,"bounds":bounds.grow(0.001)}
+    var local_bounds:=AABB(local_points[0],Vector3.ZERO)
+    for point in local_points:local_bounds=local_bounds.expand(point)
+    # CPU footprint points already include the model. Native custom_aabb is
+    # local to its caster node and receives that model from caster.basis once.
+    var shape:Dictionary={"key":key,"points":points,"bounds":bounds.grow(0.001),
+        "local_points":local_points,"local_bounds":local_bounds.grow(0.001)}
     _caster_shapes[snapshot.id]=shape
     return shape
 
@@ -747,7 +766,7 @@ func _update_casters(state: Dictionary,snapshots: Array,camera: Camera3D,origin:
         snapshot.erase("frame_changed")
         var parameters:Array=[]
         for parameter in CASTER_PARAMETERS:parameters.append(snapshot[parameter])
-        var sample_key:Array=[parameters,snapshot.component_cell_size,camera.global_basis,snapshot.pivot,
+        var sample_key:Array=[parameters,snapshot.component_cell_size,camera.global_basis,snapshot.get("model",Basis.IDENTITY),snapshot.pivot,
             snapshot.scale_x,ground,snapshot.position-origin,caster.material_override,caster.material_override.shader]
         var previous:Array=state.caster_samples.get(snapshot.id,[])
         if previous==sample_key:continue
@@ -768,7 +787,10 @@ func _update_casters(state: Dictionary,snapshots: Array,camera: Camera3D,origin:
             continue
         _last_counts.caster_full_copies=int(_last_counts.get("caster_full_copies",0))+1
         caster.mesh=_caster_mesh(snapshot.component_cell_size)
+        caster.basis=snapshot.get("model",Basis.IDENTITY)
+        var support:Vector3=Vector3.UP*ground
         caster.position=snapshot.position-origin
+        if caster.basis!=Basis.IDENTITY:caster.position+=support-caster.basis*support
         for parameter in CASTER_PARAMETERS: caster.material_override.set_shader_parameter(parameter,snapshot[parameter])
         caster.material_override.set_shader_parameter("component_cell_size",snapshot.component_cell_size)
         caster.material_override.set_shader_parameter("display_basis",camera.global_basis)
@@ -777,7 +799,7 @@ func _update_casters(state: Dictionary,snapshots: Array,camera: Camera3D,origin:
         caster.material_override.set_shader_parameter("ground_height",ground)
         _writes+=CASTER_PARAMETERS.size()+5
         var shape:Dictionary=snapshot.caster_shape if snapshot.has("caster_shape") else _caster_shape(snapshot,ground)
-        caster.custom_aabb=shape.bounds
+        caster.custom_aabb=shape.local_bounds
         RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
     for id in state.casters:
         if not wanted.has(id) and state.casters[id].visible:state.casters[id].hide();written=true

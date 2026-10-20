@@ -5,6 +5,7 @@ const Sockets=preload("res://presentation/spell_placement.gd")
 const Inputs=preload("res://presentation/native_inputs.gd")
 const Authoring=preload("res://presentation/authoring.gd")
 const Placement=preload("res://placement.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
 class Playback extends Node:
     var clip:String="Taunt"
     var sample_seconds:float=0.0
@@ -51,7 +52,9 @@ func run()->void:
         "facing":"SW","scale":1.0,"scale_x":1.0}
     # An explicit painted-only fixture exercises attachment math. It contains
     # no source images or substitute depth maps and makes no draw assertion.
-    world.visual_actors.actual_actor={"valid":true,"row":row,"entries":[{"role":"body","node":drawn,"actor_layer":{"slot":"body","paths":{}}}]}
+    var shape:Dictionary=Construction.layer_shape(rig,128.0/float(world.rig_config.TILE_W)*row.scale)
+    drawn.position=Placement.contact(row)
+    world.visual_actors.actual_actor={"valid":true,"row":row,"entries":[{"role":"body","node":drawn,"pivot":shape.pivot,"scale":shape.scale,"actor_layer":{"slot":"body","paths":{}}}]}
     var component={"actor_uuid":"actual_actor","target_uuid":"actual_actor","from_position":[10,10],"to_position":[10,10],
         "from_elevation_feet":10.0,"to_elevation_feet":10.0,"cast_recipe":{"enabled":false},
         "native_cue":{"role":"attached","attachment":"recipient_ground","live_endpoints":arm.effects[0].extra.live_endpoints}}
@@ -59,6 +62,7 @@ func run()->void:
     for quarter in 4:
         world.quarter=quarter
         world.camera.transform=Placement.camera_transform(Vector3.ZERO,quarter)
+        drawn.basis=world.camera.basis.scaled_local(Vector3(row.scale_x,1,1))
         for facing in resource.direction_order:
             row.facing=facing
             var view:String=Sockets.facing(world,row)

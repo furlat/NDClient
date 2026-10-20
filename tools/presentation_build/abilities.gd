@@ -488,6 +488,9 @@ static func _validate_condition(e: Resource, where: String, report: Dictionary) 
             match step.kind:
                 "body_adjust":
                     if not _in(step.alpha, 0, 1) or not _in(step.saturation, 0, 2) or not _in(step.brightness, 0, 2) or not _colour(step.rgb):Common.error(report, where, "body adjust out of range")
+                    for change in step.scale_by_size_change:
+                        var factor:float=step.scale_by_size_change[change]
+                        if change not in ["enlarge","reduce"] or not is_finite(factor) or factor<=0:Common.error(report,where,"body scale needs a known public size_change and positive finite factor")
                 "outline":
                     if not _in(step.alpha, 0, 1) or not _in(step.fade_in, 0, 10) or not _colour(step.rgb) or not _colour(step.pulse_colour):Common.error(report, where, "outline out of range")
                     var outline: Dictionary = e.unported.get("persistent", {}).get("bodyOutline", {})
@@ -554,7 +557,7 @@ static func condition_coverage(e: Resource, lifecycle: bool, drawn: Dictionary) 
 static func _visible_look(look: Resource) -> bool:
     if look == null:return false
     for step in look.steps:
-        if step.kind != "body_adjust" or step.alpha < 1.0 or step.rgb != Color.WHITE or step.saturation != 1.0 or step.brightness != 1.0:return true
+        if step.kind != "body_adjust" or step.alpha < 1.0 or step.rgb != Color.WHITE or step.saturation != 1.0 or step.brightness != 1.0 or not step.scale_by_size_change.is_empty():return true
     return false
 
 static func _check_binding(report: Dictionary, where: String, binding: Variant, sound: Resource) -> void:

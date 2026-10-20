@@ -5,7 +5,8 @@ const Media = preload("res://presentation/media_warmup.gd")
 const Characters = preload("res://presentation/characters.gd")
 const Timeline = preload("res://presentation/timeline.gd")
 const Catalog = preload("res://source_catalog.gd")
-const Protocol = preload("res://sdk/protocol.gd")
+const Journal = preload("res://sdk/journal.gd")
+const Fixtures = preload("res://tests/recording_fixtures.gd")
 const Player = preload("res://play.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 var checks = 0
@@ -46,9 +47,9 @@ func run() -> void:
     Media.validate_upload_dimensions(rejected,fitting,2)
     check(not fitting.has("error") and fitting.image.get_size()==Vector2i(2,2),"A supported image retains its exact dimensions")
     Media.close(rejected)
-    # Completed optional PNG jobs must not monopolize all four decode slots
-    # when the next actual required request arrives. No GPU publication is
-    # implied by freeing a worker slot.
+    # Current optional work owns four single-image jobs; required work owns
+    # eight finite two-image jobs. Test spare urgent capacity, then an actual
+    # full required pool whose completed requests were withdrawn to optional.
     var slot_image:Image=Image.create(8,8,false,Image.FORMAT_RGBA8)
     slot_image.fill(Color(.2,.4,.6,1))
     var slot_file:String="user://media-required-decode-slot.png"
@@ -64,46 +65,82 @@ func run() -> void:
     Media.prepare_optional(slot_data)
     Media.poll(slot_data,true,false)
     while not slot_data.decode_jobs.all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
-    check(slot_data.decode_jobs.size()==Media.DECODE_WORKERS and Media.poll(slot_data,true).is_empty(),
-        "Required-only polling leaves completed optional jobs untouched when no required decode is blocked")
+    check(slot_data.decode_jobs.size()==Media.OPTIONAL_DECODE_WORKERS and Media.poll(slot_data,true).is_empty(),
+        "Required-only polling preserves the exact completed optional cap and leaves urgent worker capacity unused")
     Media.demand(slot_data,{slot_required:slot_file})
-    check(slot_data.pending.size()==1 and slot_data.decode_jobs.size()==Media.DECODE_WORKERS,
-        "New required PNG waits behind the actual full worker slots")
+    check(slot_data.pending.any(func(request):return request.path==slot_required) and slot_data.decode_jobs.size()==Media.OPTIONAL_DECODE_WORKERS,
+        "New required PNG retains exact queued ownership while optional results await publication")
     var reclaimed:Dictionary=Media.poll(slot_data,true)
-    check(reclaimed.has("image") and family.paths.has(reclaimed.path) and slot_data.pending.is_empty()
+    check(reclaimed.is_empty() and slot_data.decode_jobs.size()==Media.OPTIONAL_DECODE_WORKERS+1 \
         and slot_data.decode_jobs.any(func(job):return job.path==slot_required),
-        "Required-only poll reclaims one completed optional image and immediately dispatches the blocked required PNG")
-    check(not Media.ready(slot_data,{slot_required:true}) and not Media.ready(slot_data,{reclaimed.get("path","missing"):true}) and slot_data.resident.is_empty(),
-        "Slot reclamation cannot publish either image or satisfy readiness early")
+        "Urgent PNG immediately uses spare required capacity without harvesting an unrelated optional result")
+    check(not Media.ready(slot_data,{slot_required:true}) and slot_data.resident.is_empty(),
+        "Dispatching a required PNG cannot publish an optional or required image early")
     while not slot_data.decode_jobs.filter(func(job):return job.path==slot_required).all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
     var required_image:Dictionary=Media.poll(slot_data,true)
     check(required_image.get("path")==slot_required and required_image.has("image"),
         "Required image completes without any later optional turn")
     Media.published(slot_data,required_image)
-    check(Media.ready(slot_data,{slot_required:true}) and not Media.ready(slot_data,{reclaimed.get("path","missing"):true}),
+    check(Media.ready(slot_data,{slot_required:true}) and not Media.ready(slot_data,{"optional-slot-0":true}),
         "Only the explicit required publication establishes readiness")
-    Media.close(slot_data);DirAccess.remove_absolute(ProjectSettings.globalize_path(slot_file))
+    Media.close(slot_data)
+    var full:Dictionary=Media.create()
+    var full_family:Dictionary={"revision":1,"paths":{},"estimates":{},"errors":[]}
+    var original_required:Dictionary={}
+    for i in Media.DECODE_WORKERS*Media.DECODE_BATCH_IMAGES:
+        var path:String="withdrawn-required-"+str(i)
+        original_required[path]=slot_file;full_family.paths[path]=slot_file;full_family.estimates[path]={"bytes":512}
+    full_family.paths[slot_required]=slot_file;full_family.estimates[slot_required]={"bytes":512}
+    Media.adopt_encounter(full,full_family,1);Media.demand(full,original_required);Media.prepare_optional(full)
+    Media.poll(full,true,false)
+    while not full.decode_jobs.all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
+    check(full.decode_jobs.size()==Media.DECODE_WORKERS and full.decode_jobs.all(func(job):return job.paths.size()==Media.DECODE_BATCH_IMAGES),
+        "Actual required demand fills all eight bounded two-image worker owners")
+    Media.demand(full,{slot_required:slot_file})
+    var recovered:Array=[]
+    for i in Media.DECODE_BATCH_IMAGES:
+        var prior:Dictionary=Media.poll(full,true)
+        if not prior.is_empty():recovered.append(prior)
+        if full.decode_jobs.any(func(job):return slot_required in job.paths):break
+    check(recovered.size()==Media.DECODE_BATCH_IMAGES and recovered.all(func(image):return image.has("image") and original_required.has(image.path)) \
+        and full.decode_jobs.any(func(job):return slot_required in job.paths),
+        "A full withdrawn required pool reclaims one bounded completed batch and dispatches the new exact urgent PNG")
+    check(full.resident.is_empty() and not Media.ready(full,{slot_required:true}),"Reclaimed worker images remain private until explicit publication")
+    while not full.decode_jobs.filter(func(job):return slot_required in job.paths).all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
+    var urgent:Dictionary=Media.poll(full,true)
+    check(urgent.get("path")==slot_required and urgent.has("image"),"The urgent result wins over every remaining completed optional image")
+    Media.published(full,urgent)
+    check(Media.ready(full,{slot_required:true}) and original_required.keys().all(func(path):return not Media.ready(full,{path:true})),
+        "Only the actual urgent publication satisfies readiness; no reclaimed optional image is falsely resident")
+    Media.close(full);DirAccess.remove_absolute(ProjectSettings.globalize_path(slot_file))
     var cache = {}
-    var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
-    check(parsed.ok,"Captured canonical outfit state parses")
-    if not parsed.ok: quit(1); return
-    var state: Dictionary = parsed.value
+    var source:String=Fixtures.journal("door")
+    var journal=Journal.new()
+    var opened:Dictionary=journal.open(source,true,false)
+    check(opened.ok,"Durable original schema16 door journal opens")
+    if not opened.ok:quit(1);return
+    var folded:Dictionary=journal.replay(0)
+    check(folded.ok,"Original door initialization folds through the current SDK")
+    if not folded.ok:quit(1);return
+    var state: Dictionary = journal.state
     var before: Dictionary = state.duplicate(true)
     var resting = Media.plan(state,[],cache)
     check(resting.errors.is_empty() and not resting.required.is_empty(),"Exact current resting sheets resolve")
     check(not resting.gpu_only.is_empty() and resting.gpu_only.keys().all(func(path):return resting.required.has(path) and not resting.cpu_required.has(path)),
         "Only exact registered geometry companions opt out of CPU picking residency")
     var exact = {}
-    for actor in state.actors.values(): exact.merge(Characters.sheet_paths(actor,["Idle"],cache).value)
-    check(resting.required==exact and resting.upcoming.is_empty(),"No eager unrelated clips or outfits")
+    # The current source contract admits the actual resting and equipment
+    # context together. Spell/locomotion families remain outside this closure.
+    for actor in state.actors.values():exact.merge(Characters.sheet_paths(actor,["Idle","Taunt"],cache,Characters.item_looks(actor,state)).value)
+    check(resting.required==exact and resting.upcoming.is_empty(),"No eager unrelated clips or outfits: "+str({"unexpected":resting.required.keys().filter(func(path):return not exact.has(path)),"missing":exact.keys().filter(func(path):return not resting.required.has(path)),"value_differences":exact.keys().filter(func(path):return resting.required.has(path) and exact[path]!=resting.required[path])}))
     var unsensed: Dictionary = state.duplicate(true)
     unsensed.senses = null
     var unsensed_plan = Media.plan(unsensed,[],cache)
     var controlled = {}
     for actor in state.actors.values():
-        if actor.uuid in state.audience.controlled: controlled.merge(Characters.sheet_paths(actor,["Idle"],cache).value)
-    check(unsensed_plan.errors.is_empty() and unsensed_plan.required==controlled,"Nullable canonical senses retains only controlled actor preparation")
-    var fighter: Dictionary = state.actors.values().filter(func(actor):return actor.name=="Shield Fighter")[0]
+        if actor.uuid in state.audience.controlled: controlled.merge(Characters.sheet_paths(actor,["Idle","Taunt"],cache,Characters.item_looks(actor,state)).value)
+    check(unsensed_plan.errors.is_empty() and unsensed_plan.required==controlled,"Nullable canonical senses retains only controlled actor preparation: "+str({"unexpected":unsensed_plan.required.keys().filter(func(path):return not controlled.has(path)),"missing":controlled.keys().filter(func(path):return not unsensed_plan.required.has(path)),"errors":unsensed_plan.errors}))
+    var fighter: Dictionary = state.actors[state.observer_uuid]
     var ranged: Dictionary = fighter.duplicate(true)
     ranged.visual_loadout.active_weapon_set = "ranged"
     var rig = Characters.rig_id(fighter,cache)
@@ -112,9 +149,9 @@ func run() -> void:
         [{"actor_uuid":fighter.uuid,"rig":rig,"clip":"Run"}])
     var plan = Media.plan(state,[current,next],cache)
     check(plan.errors.is_empty(),"Current and queued authored outfits resolve")
-    var ranged_attack = Characters.sheet_paths(ranged,["Attack1"],cache).value
+    var ranged_attack = Characters.sheet_paths(ranged,["Attack1"],cache,Characters.item_looks(ranged,state)).value
     check(ranged_attack.keys().all(func(path):return plan.required.has(path)),"Attack track's exact ranged visual_loadout is prepared before entry")
-    var ranged_run = Characters.sheet_paths(ranged,["Run"],cache).value
+    var ranged_run = Characters.sheet_paths(ranged,["Run"],cache,Characters.item_looks(ranged,state)).value
     check(ranged_run.keys().all(func(path):return plan.upcoming.has(path)),"Queued equipment after-value and next Run are prepared")
     check(state==before,"Demand planning never mutates canonical state")
     check(plan.required.keys().all(func(path):return not "Rolling" in path),"Unrequested jump sheets stay out of demand")
@@ -126,7 +163,7 @@ func run() -> void:
     arrival.staged_actors[visitor.uuid] = visitor
     arrival.staged_at_ms[visitor.uuid] = 50.0
     var arrival_plan = Media.plan(state,[arrival],cache)
-    check(Characters.sheet_paths(visitor,["Rolling"],cache).value.keys().all(func(path):return arrival_plan.required.has(path)),"Delayed staged actor's exact action is ready before group staging")
+    check(Characters.sheet_paths(visitor,["Rolling"],cache,Characters.item_looks(visitor,state)).value.keys().all(func(path):return arrival_plan.required.has(path)),"Delayed staged actor's exact action is ready before group staging")
     check(not state.actors.has(visitor.uuid),"Preparing staged actor does not disclose it")
     var sources = EnvironmentMedia.plan(state,[],cache)
     check(not sources.required.is_empty() and sources.upcoming.is_empty(),"Captured disclosed world resolves exact four-view environment sources")
@@ -151,8 +188,8 @@ func run() -> void:
         check(published_files.has("catalog-index.json") and published_files.has("res://build/presentation/environment/index.res")
             and body_sources.get("index")!=null and not body_sources.get("loaded",{}).is_empty(),
             "Completed worker publishes original documents and admitted native body geometry before scene binding")
-        check(published_files.keys().all(func(path):return ((path is String and path.ends_with(".json") and not path.begins_with("__"))
-            or path in [Characters.BodySources.KEY,"__native_spell_admission","__environment_source_records","native_references_validated","native_authoring_errors"]))
+        check(published_files.keys().all(func(path):return ((path is String and (path.ends_with(".json") or path.begins_with(Catalog.ENVIRONMENT)) and not path.begins_with("__"))
+            or path in [Characters.BodySources.KEY,"__native_spell_admission","native_references_validated","native_authoring_errors"]))
             and body_sources.is_read_only() and body_sources.loaded.is_read_only()
             and not published_files.has("__environment_demand_index") and not published_files.has("__required_headers"),
             "Published source revision shares immutable native admissions while excluding mutable planner indexes and selector caches")
@@ -316,7 +353,7 @@ func run() -> void:
         check(Media.prune(environment_data).is_empty(),"Known environment source remains resident under the combined encounter budget")
         check(Media.prune(environment_data,0)==[flame],"Unpinned environment source participates in the combined soft budget")
     Media.close(environment_data)
-    var report = {"checks":checks,"failures":failures,"captured_state":"20261011T223103.996259Z/state.json",
+    var report = {"checks":checks,"failures":failures,"captured_state":source+":sequence0",
         "companion_cpu_bytes_released":removed_cpu_bytes,"companion_sources":companions,
         "scope":"Exact authored media and typed presentation boundary fixtures; released bytes are decoded-image accounting, not process RSS or VRAM savings; no invented game outcomes"}
     FileAccess.open("res://generated/media_warmup_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

@@ -98,7 +98,18 @@ func run()->void:
         while not preparation.ready and preparation.errors.is_empty() and Time.get_ticks_msec()<deadline:
             await process_frame;preparation=Package.prepare([clip],cache)
         check(preparation.ready and preparation.errors.is_empty(),"Selected Factory phase prepares: "+phase)
-        if not preparation.ready:continue
+        if not preparation.ready:
+            var job:Dictionary=Package.Admission._material_job
+            print("FACTORY_PREPARATION_WAIT ",JSON.stringify({"phase":phase,"kind":Package.choice(clip).kind,"result":preparation,
+                "source":clip.get("id"),"loading":Package.Admission.loading_path,"settling":Package.Admission.settling,
+                "material_job":not job.is_empty(),"material_task_done":WorkerThreadPool.is_task_completed(job.task) if not job.is_empty() else true,
+                "material_worker_ms":job.get("elapsed_ms",0.0),"material_count":job.get("materials",[]).size(),
+                "last_worker":Package.Admission.material_profile}))
+            # A failed phase leaves its genuine admission pending; later native
+            # constructors cannot qualify while that same owner is occupied.
+            Package.set_requested("");parent.free()
+            print(JSON.stringify({"checks":passed+failures.size(),"failures":failures}))
+            quit(1);return
         var first_spell:Dictionary=Package.make(parent,clip,1,91)
         var second_spell:Dictionary=Package.make(parent,clip,1,92)
         check(first_spell.error.is_empty() and second_spell.error.is_empty(),"Selected Factory phase constructs: "+phase)

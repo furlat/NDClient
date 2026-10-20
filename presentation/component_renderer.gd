@@ -29,6 +29,7 @@ var _prepared_resource_scope:Array=[]
 var _prepared_resource_groups:Array=[]
 var _prepared_resource_result:Dictionary={}
 var _next_resource_cue_ms:float=-INF
+var _next_optional_cue_ms:float=INF
 var _resource_membership_revision:int=0
 
 func invalidate_preparation()->void:
@@ -38,18 +39,23 @@ func invalidate_preparation()->void:
 
 func _resource_scope(world:Node)->Array:
     var timeline:RefCounted=world.timeline
-    var tail:String=str(timeline.queue.back().get("id","")) if not timeline.queue.is_empty() else ""
-    return [timeline.initialization_revision,timeline.resource_revision,timeline.group_start_ms,
-        timeline.queue.size(),tail,world.quarter,world.get_viewport().get_visible_rect().size,
+    return [timeline.initialization_revision,timeline.resource_revision,
+        world.quarter,world.get_viewport().get_visible_rect().size,
         world.native_spell_hit_material,_resource_membership_revision,native_spells.preparation_revision]
 
 func _same_resource_groups(groups:Array)->bool:
-    if groups.size()!=_prepared_resource_groups.size():return false
-    for index in groups.size():
-        # Idle readiness passes a fresh empty group every frame; empty groups
-        # carry no identity, so they match. Owner changes bump resource_revision.
-        if groups[index].is_empty() and _prepared_resource_groups[index].is_empty():continue
-        if not is_same(groups[index],_prepared_resource_groups[index]):return false
+    var previous:int=0
+    for group in groups:
+        if group.get("components",[]).is_empty() and group.get("native_requirements",[]).is_empty() and group.get("actor_tracks",[]).is_empty():continue
+        while previous<_prepared_resource_groups.size() and _prepared_resource_groups[previous].get("components",[]).is_empty() \
+                and _prepared_resource_groups[previous].get("native_requirements",[]).is_empty() \
+                and _prepared_resource_groups[previous].get("actor_tracks",[]).is_empty():previous+=1
+        if previous>=_prepared_resource_groups.size() or not is_same(group,_prepared_resource_groups[previous]):return false
+        previous+=1
+    while previous<_prepared_resource_groups.size():
+        var group:Dictionary=_prepared_resource_groups[previous]
+        if not group.get("components",[]).is_empty() or not group.get("native_requirements",[]).is_empty() or not group.get("actor_tracks",[]).is_empty():return false
+        previous+=1
     return true
 
 func _next_resource_cue(groups:Array,world:Node,through_ms:float)->float:
@@ -63,13 +69,16 @@ func _next_resource_cue(groups:Array,world:Node,through_ms:float)->float:
                 var at:float=start+float(component.preparation_at_ms) if component.has("preparation_at_ms") else float(component.get("absolute_start_ms",start+float(component.get("start_ms",0.0))))
                 if at>through_ms+0.000001:next=minf(next,at)
         start+=float(group.get("duration_ms",0.0))
-    start=world.timeline.group_start_ms+float(world.timeline.current.get("duration_ms",0.0))
+    return next
+
+func _next_optional_cue(world:Node)->float:
+    var start:float=world.timeline.group_start_ms+float(world.timeline.current.get("duration_ms",0.0))
     for group in world.timeline.queue:
         start=maxf(start,float(group.get("preview_start_ms",start)))
         var admission:float=start-NATIVE_PREFETCH_MS
-        if admission>through_ms+0.000001:next=minf(next,admission);break
+        if admission>world.timeline.display_ms+0.000001:return admission
         start+=float(group.get("duration_ms",0.0))
-    return next
+    return INF
 var epoch=-1
 var ready=true
 var readiness:Dictionary={}
@@ -78,6 +87,8 @@ var pending_evidence: Array=[]
 var _native_prepare_groups:Array=[]
 var _native_optical_groups:Array=[]
 var _native_prepare_components:Array=[]
+var _native_base_groups:Array=[]
+var _native_persistent:Array=[]
 const NATIVE_PREFETCH_MS=4000.0
 const NATIVE_CONSTRUCTION_USEC=2000
 var _native_budget:Dictionary={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
@@ -171,6 +182,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         if not _prepared_resource_result.is_empty() and _prepared_resource_scope==_resource_scope(world) and _same_resource_groups(groups) \
                 and (is_inf(through_ms) and is_inf(_next_resource_cue_ms) or through_ms<_next_resource_cue_ms-0.000001) \
                 and world.source_lighting.native_preparation_ready:
+            _native_base_groups=groups.duplicate()
             if allow_optional:prepare_optional(world,cache,budget)
             budget.used_usec+=maxi(0,Time.get_ticks_usec()-prepare_started-(budget.used_usec-charged_before))
             FrameProfile.end_phase(world.profile,"component_prepare_reuse",prepare_started)
@@ -218,6 +230,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         var persistent:Array=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
         persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
         persistent.append_array(NativeItems.samples(world.timeline.item_effect_owners,world.timeline.state,world.timeline.display_ms))
+        _native_base_groups=groups.duplicate();_native_persistent=persistent
         var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent),world)
         var required:Array=live_requirements(preparation_groups(required_groups,persistent),world)
         var due:Array=due_groups(required,world,through_ms)
@@ -239,17 +252,8 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         # its stream arrives, at its offset into the clip (AudioCues).
         result.ready=result.ready and presentation_ready and outline_ready
         result.errors.append_array(audio_errors)
-        var required_ids:Dictionary={}
-        for component in due_components:required_ids[component.get("preparation_key",component.id)]=true
-        var optional:Array=[];var seen:Dictionary={}
-        for future_group in future:
-            for component in future_group.get("components",[]):
-                var key:String=component.get("preparation_key",component.id)
-                if required_ids.has(key) or seen.has(key):continue
-                if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty() and component.get("kind") not in ["condition_outline","geometry_projectile","damage_number","feedback_text","audio"]:continue
-                optional.append(component);seen[key]=true
-        _optional_components=optional
-        _optional_owner=[world.timeline.initialization_revision,world.timeline.resource_revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
+        _select_optional(world,future)
+        var optional:Array=_optional_components
         var retained_presenters:Dictionary={}
         for group in future:
             for component in group.get("components",[]):retained_presenters[component.id]=true
@@ -377,7 +381,18 @@ func prepare_optional(world:Node,cache:Dictionary,admission:Dictionary={})->void
     var budget:Dictionary=_native_budget if admission.is_empty() else admission
     if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
     if budget.used_usec>=budget.limit_usec:return
-    if _optional_owner.is_empty() or _optional_owner!=[world.timeline.initialization_revision,world.timeline.resource_revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue]:return
+    if _optional_owner.is_empty():return
+    var owner:Array=[world.timeline.initialization_revision,world.timeline.resource_revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue]
+    if _optional_owner!=owner or world.timeline.display_ms>=_next_optional_cue_ms-0.000001:
+        # A different lookahead changes optional opportunity, not the already
+        # admitted current sources. Refresh only this background projection.
+        if _prepared_resource_result.is_empty() or _prepared_resource_scope!=_resource_scope(world):return
+        var required:Array=_native_base_groups.filter(func(group):return not group.is_empty())
+        if not world.timeline.current.is_empty() and not required.any(func(group):return group.get("id")==world.timeline.current.id):required.push_front(world.timeline.current)
+        _optional_blood_groups=_native_prefetch(_native_base_groups,world)
+        var future:Array=live_requirements(preparation_groups(_native_prefetch(required,world),_native_persistent),world)
+        _native_optical_groups=live_requirements(preparation_groups(required,_native_persistent),world)
+        _select_optional(world,future)
     var started:int=Time.get_ticks_usec();var charged_before:int=budget.used_usec
     if not _optional_blood_groups.is_empty():blood.prepare(world,_optional_blood_groups,budget)
     if not _optional_components.is_empty() and budget.used_usec<budget.limit_usec:
@@ -389,6 +404,20 @@ func prepare_optional(world:Node,cache:Dictionary,admission:Dictionary={})->void
         native_hits.prepare(world,_native_prepare_components,cache,_optional_components,budget)
     budget.used_usec+=maxi(0,Time.get_ticks_usec()-started-(budget.used_usec-charged_before))
     FrameProfile.end_phase(world.profile,"component_prepare_prefetch",started)
+
+func _select_optional(world:Node,future:Array)->void:
+    var required_ids:Dictionary={}
+    for component in _native_prepare_components:required_ids[component.get("preparation_key",component.id)]=true
+    var optional:Array=[];var seen:Dictionary={}
+    for group in future:
+        for component in group.get("components",[]):
+            var key:String=component.get("preparation_key",component.id)
+            if required_ids.has(key) or seen.has(key):continue
+            if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty() and component.get("kind") not in ["condition_outline","geometry_projectile","damage_number","feedback_text","audio"]:continue
+            optional.append(component);seen[key]=true
+    _optional_components=optional
+    _optional_owner=[world.timeline.initialization_revision,world.timeline.resource_revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
+    _next_optional_cue_ms=_next_optional_cue(world)
 
 func decorate(world:Node,samples:Array)->void:
     native_hits.decorate(world,samples,world.native_spell_hit_material)
@@ -660,6 +689,11 @@ func _condition_witnesses(world: Node,actor_id: String,samples: Array) -> void:
         if sample.kind!="condition" or sample.actor_uuid!=actor_id:continue
         if not selected.any(func(value):return value.condition_uuid==sample.condition_uuid):continue
         var persistent: Dictionary=sample.recipe.get("persistent",{})
+        var scale:Dictionary=Conditions.scale_operation(sample)
+        if not scale.is_empty():
+            var observed:Dictionary=world.visual_actors[actor_id].get("sampled_pose",{}).get("body_scale",{})
+            if observed.get("owners",[]).any(func(owner):return owner==scale):
+                _witness(world,{"id":"condition:"+sample.condition_uuid+":bodyScale"},true)
         var poses:Array=persistent.get("activityPoses",[])
         if not poses.is_empty():
             var actor:Dictionary=world.timeline.presentation_state().actors.get(actor_id,{})
@@ -699,7 +733,7 @@ func close(world: Node) -> void:
     native_hits.close()
     blood.close(world)
     outlines.close(world)
-    _prepared_resource_scope=[];_prepared_resource_groups=[];_prepared_resource_result={};_next_resource_cue_ms=-INF
+    _prepared_resource_scope=[];_prepared_resource_groups=[];_prepared_resource_result={};_next_resource_cue_ms=-INF;_next_optional_cue_ms=INF
     _resource_membership_revision+=1
     for id in handles.keys(): _release(world,id)
     for label in numbers.values(): label.queue_free()
@@ -707,6 +741,6 @@ func close(world: Node) -> void:
     for entry in media_handles.values():world.actor_entries.erase(entry);entry.node.queue_free()
     media_handles.clear();audio.close()
     prepared_groups.clear();pending_evidence=[]
-    _native_prepare_groups=[];_native_optical_groups=[];_native_prepare_components=[]
+    _native_prepare_groups=[];_native_optical_groups=[];_native_prepare_components=[];_native_base_groups=[];_native_persistent=[]
     _native_budget={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
     _optional_components=[];_optional_blood_groups=[];_optional_owner=[]

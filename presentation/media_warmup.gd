@@ -738,13 +738,15 @@ static func _combine_source_families(parts:Array)->Dictionary:
 static func _source_publications(plan:Dictionary,cache:Dictionary,initial_only:bool=false)->void:
     # The metadata producer computes cuts once. The scene thread selects an
     # already-owned array and hands later work to the existing bounded lane.
-    var cuts:Dictionary={};var families:Dictionary={}
+    var cuts:Dictionary={};var families:Dictionary={};var character_profiles:Dictionary={}
     var reuse:Dictionary={"previous":cache.get("__source_cut_partitions",[]),"current":[]}
     var sizes:Dictionary=plan.source_sizes;sizes.make_read_only()
+    var group_index:int=0
     for id in plan.source_records:
+        var character_paths:Dictionary=plan.get("required",{}) if group_index==0 else plan.get("upcoming",{})
         var character_times:Dictionary={} if initial_only else _source_first_use(plan.get("character_timeline",{}).get(id,{}))
         var environment_times:Dictionary={} if initial_only else _source_first_use(plan.get("environment_timeline",{}).get(id,{}))
-        var profile_cuts:Dictionary={};var profile_families:Dictionary={}
+        var profile_cuts:Dictionary={};var profile_families:Dictionary={};var profile_paths:Dictionary={}
         for profile in plan.source_records[id]:
             var records:Array=plan.source_records[id][profile]
             if initial_only:
@@ -753,10 +755,27 @@ static func _source_publications(plan:Dictionary,cache:Dictionary,initial_only:b
                 profile_cuts[profile]=opening
             else:profile_cuts[profile]=_source_cut_schedule(records,character_times,environment_times,reuse)
             profile_families[profile]=_retained_source_family(records,sizes,cache)
-        profile_cuts.make_read_only();profile_families.make_read_only()
+            # The existing union owner also owns its profile projection. Turn,
+            # HP and log packets can select the same immutable source union;
+            # their distinct operation clocks need no new path-map identity.
+            var projection_owner:Dictionary={}
+            for kind in ["opening","complete"]:
+                for row in cache.get("__source_record_sets",{}).get(kind,[]):
+                    if not is_same(row.records,records):continue
+                    projection_owner=row;break
+                if not projection_owner.is_empty():break
+            var projected:Dictionary=projection_owner.get("character_paths",{})
+            if not projection_owner.has("character_paths"):
+                projected=CharacterGeometry.for_profile(character_paths,plan.get("normal_sets",{}),profile,cache,"publication")
+                projected.make_read_only()
+                if not projection_owner.is_empty():projection_owner.character_paths=projected
+            projected.make_read_only();profile_paths[profile]=projected
+        profile_cuts.make_read_only();profile_families.make_read_only();profile_paths.make_read_only()
         cuts[id]=profile_cuts;families[id]=profile_families
+        character_profiles[id]=profile_paths;group_index+=1
     cuts.make_read_only();families.make_read_only()
-    plan.source_cuts=cuts;plan.source_families=families
+    character_profiles.make_read_only()
+    plan.source_cuts=cuts;plan.source_families=families;plan.character_profiles=character_profiles
     # Opening has no late partition work. Its empty local list cannot retire
     # the previous complete source owner before this operation's continuation
     # has reused/replaced those real immutable partition refs.

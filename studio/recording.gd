@@ -18,6 +18,7 @@ const PREVIEW_OPERATION_GAP_MS = 350.0
 ## Inspection links to the existing finite material mechanisms. Availability
 ## comes from ConditionCoverage; these links do not qualify rendering.
 const MATERIAL_METHODS = {
+    "bodyScale":{"label":"Body scale","surface":"whole outfit","renderer":"res://presentation/conditions.gd::material + res://play.gd::_sample_actors"},
     "bodyColor":{"label":"Body color filter","surface":"body","renderer":"res://presentation/conditions.gd::bind","shader":"res://presentation/character_material.gdshaderinc::character_material"},
     "bodyRamp":{"label":"Body material ramp","surface":"body","renderer":"res://presentation/conditions.gd::bind","shader":"res://presentation/character_material.gdshaderinc::character_material"},
     "bodyOutline":{"label":"Body outline","surface":"outline","renderer":"res://presentation/condition_outline.gd::sample","shader":"res://presentation/condition_outline.gdshaderinc::condition_outline_colour"},
@@ -417,7 +418,11 @@ static func _condition_presentation_at(states:Array,tracks:Array,at_ms:float,cac
     for sample in Timeline.Conditions.select_recipes(state.actor.id,materials):
         var persistent:Dictionary=sample.recipe.get("persistent",{})
         for field in MATERIAL_METHODS:
-            if field=="alphaMultiplier":
+            if field=="bodyScale":
+                if not Timeline.Conditions.scale_operation(sample).is_empty():
+                    if not method_owners.has(field):method_owners[field]=[]
+                    method_owners[field].append(sample.condition_uuid)
+            elif field=="alphaMultiplier":
                 if persistent.get(field,1.0)!=1.0:
                     if not method_owners.has(field):method_owners[field]=[]
                     method_owners[field].append(sample.condition_uuid)
@@ -431,6 +436,7 @@ static func _condition_presentation_at(states:Array,tracks:Array,at_ms:float,cac
 
 static func _material_operation(value:Dictionary,field:String)->Variant:
     match field:
+        "bodyScale":return value.body_scale.factor
         "alphaMultiplier":return value.alpha
         "bodyColor":return {"tint":value.tint,"saturation":value.saturation,"brightness":value.brightness}
         "bodyOutline":return value.outline
@@ -1080,6 +1086,8 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                         "preview_scope":"appearance_asset_current_pose","diagnostic_scope":"condition_owner"},true))
                 var persistent:Dictionary=sample.recipe.get("persistent",{})
                 var operations={}
+                var scale:Dictionary=Timeline.Conditions.scale_operation(sample)
+                if not scale.is_empty():operations.bodyScale=scale
                 for field in ["bodyColor","bodyRamp","bodyOutline"]:
                     if persistent.get(field)!=null and not persistent[field].is_empty():operations[field]=persistent[field]
                 if persistent.get("alphaMultiplier",1.0)!=1.0:operations.alphaMultiplier=persistent.alphaMultiplier
@@ -1099,6 +1107,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                             "status":"missing" if missing else sample.status,"reason":requirement.get("reason",""),
                             "missing_category":("implementation" if requirement.get("implementation")=="missing" else "source") if missing else "",
                             "coverage":{"implementation":requirement.get("implementation","not_examined"),"source":requirement.get("availability","not_examined"),"prepared":"not_examined","rendered":"not_witnessed"}},true)
+                        if field=="bodyScale":material.label="Body scale × "+String.num(scale.factor,3)
                         rows.append(material)
                 if selected_pose.get("condition_uuid")==owner.id:
                     var pose=common.duplicate();pose.merge({"id":prefix+"pose","kind":"condition_pose","label":("Captured · "+selected_pose.clip+" · frame "+str(selected_pose.frame)) if selected_pose.get("captured",false) else pose_activity.capitalize()+" · "+selected_pose.clip,

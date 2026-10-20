@@ -9,6 +9,7 @@ const Builder=preload("res://tools/presentation_build/characters.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Recording=preload("res://studio/recording.gd")
 const Journal=preload("res://sdk/journal.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
 const ITEM="4df65b6b-e8c4-42e6-928d-26e74b579ea1"
 const EFFECT="f13a6583-c3c4-42d8-9fb9-eeff69686626"
 class State extends RefCounted:
@@ -179,6 +180,9 @@ func weapon_binding(state:Dictionary,component:Dictionary)->void:
     world.camera=Node3D.new();world.add_child(world.camera)
     var playback:Playback=Playback.new();world.add_child(playback);world.playbacks[holder]=playback
     world.visual_actors[holder].row={"id":holder,"rig":"contract-rig","facing":"SW","position":[0,0],"base_height_steps":0,"scale":1.0}
+    var shape:Dictionary=Construction.layer_shape(world.rigs["contract-rig"],128.0/float(world.rig_config.TILE_W))
+    var entry:Dictionary=world.visual_actors[holder].entries[0]
+    entry.pivot=shape.pivot;entry.scale=shape.scale;node.basis=world.camera.basis;node.position=Placement.Placement.contact(world.visual_actors[holder].row)
     world.visual_actors[holder].entries[0].actor_layer.paths={"Idle":"contract:missing-colour"}
     var unavailable:Dictionary=Placement.endpoints(world,component)
     check(not unavailable.ready and unavailable.get("unavailable",false) and not unavailable.get("pending",false) and unavailable.reason=="native_spell_hand_socket_missing","Missing authored weapon grip is unavailable rather than a fatal program error or substitute anchor")

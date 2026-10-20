@@ -1,0 +1,60 @@
+{
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "original_recorder_index": "res://.runtime/body-scale-recordings/index.json",
+ "cases": [
+  {
+   "id": "spell.enlarge_reduce/enlarge_lifecycle",
+   "label": "Enlarge: actual size owner, movement, attack and restoration",
+   "engine": {
+    "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+    "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+    "protocol_version": 1,
+    "player_schema_version": 16,
+    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+   },
+   "perspectives": [
+    {
+     "id": "amber",
+     "label": "Amber",
+     "journal": "res://tests/fixtures/schema16/body-scale/enlarge/amber"
+    },
+    {
+     "id": "blue",
+     "label": "Blue",
+     "journal": "res://tests/fixtures/schema16/body-scale/enlarge/blue"
+    }
+   ],
+   "scenario": "res://tests/fixtures/schema16/body-scale/enlarge/scenario.json"
+  },
+  {
+   "id": "spell.enlarge_reduce/reduce_lifecycle",
+   "label": "Reduce: actual size owner, movement, attack and restoration",
+   "engine": {
+    "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+    "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+    "protocol_version": 1,
+    "player_schema_version": 16,
+    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+   },
+   "perspectives": [
+    {
+     "id": "amber",
+     "label": "Amber",
+     "journal": "res://tests/fixtures/schema16/body-scale/reduce/amber"
+    },
+    {
+     "id": "blue",
+     "label": "Blue",
+     "journal": "res://tests/fixtures/schema16/body-scale/reduce/blue"
+    }
+   ],
+   "scenario": "res://tests/fixtures/schema16/body-scale/reduce/scenario.json"
+  }
+ ]
+}

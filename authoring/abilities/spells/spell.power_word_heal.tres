@@ -328,7 +328,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(3, 4)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -344,4 +344,5 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/power_word_heal_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Paralyzed existing/retire cues 3 and 4 are excluded demonstration copies. The actual condition.paralyzed / condition.spell.hold_person UUID owner already draws its package lifecycle, including its ordered 0.25-second removal; Power Word Heal must not create a second glyph or replace that owner's age/source. These exclusions delegate only those two demonstrations to the existing condition owner, not a newly applied condition.
+Spoken word and both positive-healing sources retain their actual event bindings. Poisoned existing/retire cues 5 and 6 remain unresolved: no matching Power Word Heal poison-removal recording or exact held lease is qualified. Source availability, factual/native qualification and user visual approval remain separate."

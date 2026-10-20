@@ -21,7 +21,7 @@ static func projectile_point(world: Node,component: Dictionary,fraction: float) 
         var facing=facing(world,row)
         var socket: Variant=recipe.get("sourceSockets",recipe.get("sourceSocketsByRig",{}).get(row.rig,{})).get("release",{}).get(facing)
         var unit=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
-        if socket!=null:a+=world.camera.basis.x*(socket.x-rig.cell_width*.5)*unit*row.get("scale_x",1.0)+world.camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-socket.y)*unit
+        if socket!=null:a+=Surfaces.painted_point(world,row,Vector2(socket.x,socket.y))-Placement.contact(row)
         else:a+=world.camera.basis.x*float(recipe.get("originX",0))*unit-world.camera.basis.y*float(recipe.get("originY",recipe.get("sourceAnchor",{}).get("liftY",0)))*unit
     var target: Dictionary=world.visual_actors.get(component.target_uuid,{})
     if not target.is_empty():
@@ -55,8 +55,7 @@ static func socket(world: Node,row: Dictionary,socket: String) -> Vector3:
     var point: Variant=points[mini(frame,points.size()-1)] if not points.is_empty() else null
     if point==null: point=rig.get("body_anchor") if socket=="body_center" else null
     if point==null: return base
-    var unit=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
-    return base+world.camera.basis.x*(point.x-rig.cell_width*.5)*unit*row.get("scale_x",1.0)+world.camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-point.y)*unit+Vector3.UP*row.get("visual_height",0.0)*Placement.HEIGHT_UNIT
+    return Surfaces.painted_point(world,row,Vector2(point.x,point.y))
 
 static func has_socket(world: Node,row: Dictionary,socket: String) -> bool:
     var rig: Dictionary=world.rigs[row.rig]
@@ -254,8 +253,7 @@ static func body_anchor(world:Node,row:Dictionary)->Dictionary:
     if point==null or not rig.clips.has("Idle"):
         return {"ready":false,"reason":"native_spell_body_anchor_missing"}
     var view:String=facing(world,row)
-    var unit:float=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
-    var painted:Vector3=Placement.contact(row)+world.camera.basis.x*(point.x-rig.cell_width*.5)*unit*row.get("scale_x",1.0)+world.camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-point.y)*unit
+    var painted:Vector3=Surfaces.painted_point(world,row,Vector2(point.x,point.y))
     var surface=Surfaces.resolve(world,row.id,"Idle",0,view,Vector2(point.x,point.y),painted)
     if str(surface.reason).ends_with("not_prepared"):
         return {"ready":false,"pending":true,"reason":"native_spell_"+surface.reason}

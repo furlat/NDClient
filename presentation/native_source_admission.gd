@@ -15,6 +15,13 @@ static var material_profile:Dictionary={}
 static func _drawn()->void:
     settling=false
 
+static func _settle_resources()->void:
+    # The headless dummy server has no draw submission to flush and does not
+    # emit this fence. Resource/clock tests still join the real loading job;
+    # native rendering keeps its ordinary post-draw compiler fence.
+    settling=DisplayServer.get_name()!="headless"
+    if settling:RenderingServer.frame_post_draw.connect(_drawn,CONNECT_ONE_SHOT)
+
 static func _poll()->void:
     if not _material_job.is_empty():
         if not WorkerThreadPool.is_task_completed(_material_job.task):return
@@ -24,8 +31,7 @@ static func _poll()->void:
         _prepared_material_owners[_material_job.packet.get_instance_id()]=weakref(_material_job.packet)
         material_profile={"materials":_material_job.materials.size(),"worker_ms":_material_job.elapsed_ms}
         _material_job={}
-        settling=true
-        RenderingServer.frame_post_draw.connect(_drawn,CONNECT_ONE_SHOT)
+        _settle_resources()
     if loading_path.is_empty():return
     var status:int=ResourceLoader.load_threaded_get_status(loading_path)
     if status==ResourceLoader.THREAD_LOAD_IN_PROGRESS:return
@@ -38,8 +44,7 @@ static func _poll()->void:
     loading_path="";loading_owner={}
     # A loaded scene may leave generated particle materials on Godot's dirty
     # list. Let its normal draw flush complete before construction/adaptation.
-    settling=true
-    RenderingServer.frame_post_draw.connect(_drawn,CONNECT_ONE_SHOT)
+    _settle_resources()
 
 static func can_mutate()->bool:
     _poll()

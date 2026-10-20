@@ -34,12 +34,14 @@ static func plan(index:Dictionary)->Dictionary:
             "fixtures":surroundings.fixtures,"errors":character.errors}
         exact.merge(MediaWarmup.roles_for(character,character.required))
         var publication:Dictionary={"source_records":MediaWarmup.source_records(character,surroundings,[group],cache),
+            "required":character.required,"normal_sets":character.normal_sets,
             "character_timeline":character.character_timeline,"environment_timeline":surroundings.environment_timeline,
             "source_sizes":{}}
         MediaWarmup._source_publications(publication,cache)
         exact.source_records=publication.source_records[group.id]
         exact.source_cuts=publication.source_cuts[group.id]
         exact.source_families=publication.source_families[group.id]
+        exact.character_profiles=publication.character_profiles[group.id]
         exact.character_timeline=character.character_timeline[group.id]
         exact.environment_timeline=surroundings.environment_timeline[group.id]
         exact.cpu_required.merge(surroundings.required)

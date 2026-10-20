@@ -3,7 +3,8 @@ extends SceneTree
 # This checks its real UI projection; it does not submit backend commands.
 const HUD = preload("res://play_hud.gd")
 const UI = preload("res://presentation/ui_catalog.gd")
-const JSONReader = preload("res://sdk/strict_json.gd")
+const Journal = preload("res://sdk/journal.gd")
+const Fixtures = preload("res://tests/recording_fixtures.gd")
 const FixtureWorld = preload("res://tests/ui_fixture_world.gd")
 var checks = 0
 var failures: Array = []
@@ -15,11 +16,20 @@ func _initialize() -> void: call_deferred("run")
 func run() -> void:
     if "--background-check" in OS.get_cmdline_user_args():
         root.unfocusable = true; root.position = Vector2i(-16000,-16000)
-    var directory = "res://.runtime/player-runs/20261011T222502.988278Z"
+    var directory = Fixtures.journal("gallery")
+    var choices_path:String="res://tests/fixtures/schema16/scenarios/gallery/choices.json"
     for argument in OS.get_cmdline_user_args():
-        if argument.begins_with("--capture="): directory = argument.trim_prefix("--capture=")
-    var state = JSONReader.new().parse(FileAccess.get_file_as_string(directory.path_join("state.json"))).value
-    var discovery = JSONReader.new().parse(FileAccess.get_file_as_string(directory.path_join("discovery.json"))).value
+        if argument.begins_with("--recording="): directory = argument.trim_prefix("--recording=")
+        if argument.begins_with("--choices="): choices_path = argument.trim_prefix("--choices=")
+    var journal=Journal.new()
+    var opened:Dictionary=journal.open(directory,true,false)
+    check(opened.ok,"Durable original schema16 sorcerer journal opens")
+    if not opened.ok:quit(1);return
+    var folded:Dictionary=journal.replay(1)
+    check(folded.ok,"Actual sorcerer initialization and native turn start fold through the current SDK")
+    if not folded.ok:quit(1);return
+    var state:Dictionary=journal.state
+    var discovery:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(choices_path))
     var original = state.duplicate(true)
     var original_discovery: Dictionary = discovery.duplicate(true)
     var identifiers_match = true
@@ -31,6 +41,7 @@ func run() -> void:
         identifiers_match = identifiers_match and UI.descriptor(state,ref.content_id)==seen_content[ref.content_id] and UI.descriptor(state,identity)==descriptor and UI.descriptor(state,"",ref)==descriptor
     check(identifiers_match,"Every admitted short ID, qualified ContentRef identity and exact reference resolves its original descriptor")
     check(discovery.entity_uuid == state.current_actor_uuid,"captured choices belong to displayed actor")
+    check(discovery.entity_actions.all(func(row):return row.discovery_runtime==state.generation),"Original choices belong to this exact recorded encounter generation")
     root.size = Vector2i(1280,720)
     var world = FixtureWorld.new()
     world.timeline.state = state
@@ -38,8 +49,8 @@ func run() -> void:
     root.add_child(world)
     var hud = HUD.new(); hud.world = world; root.add_child(hud)
     await settle_action_bar(hud)
-    check(hud.groups.Base.size()==10,"native base family count")
-    check(hud.groups.Class.size()==4,"slot conversion and metamagic families")
+    check(hud.groups.Base.size()==12,"All twelve actual base families, including summon dismissal and concentration removal")
+    check(hud.groups.Class.size()==8,"All eight actual slot-conversion ranks and metamagic families")
     check(hud.groups.Spells.size()==11,"all eleven admitted spell families")
     check(hud.groups.Items.size()==3,"three carried item action families")
     var icons = 0
@@ -73,7 +84,12 @@ func run() -> void:
         check_bar_alignment(hud,"resized %s" % viewport_size)
     var magic: Dictionary = hud.groups.Spells.filter(func(f):return f.rows[0].behavior_id=="spell.magic_missile")[0]
     check(hud._choices(magic.rows).size()==3,"actual magic missile ranks preserve exact rows")
-    for row in hud._choices(magic.rows): check(row in discovery.entity_actions,"rank is an unchanged native entity choice")
+    for row in hud._choices(magic.rows):
+        var native:Dictionary=row.get("_native_action",row)
+        var base:Dictionary=native.duplicate();base.cast_at_level=row.cast_at_level
+        var view:Dictionary=row.duplicate();view.erase("_native_action")
+        check(discovery.entity_actions.any(func(value):return is_same(value,native)) and view==base \
+            and native.cast_levels.any(func(level):return int(level)==int(row.cast_at_level)),"Rank view retains the exact real entity choice and every source/target field; only an offered cast level changes")
     var inventory_started = Time.get_ticks_usec()
     hud.toggle_inventory()
     var inventory_open_ms = (Time.get_ticks_usec()-inventory_started)/1000.0
@@ -81,7 +97,7 @@ func run() -> void:
     await process_frame
     var actor: Dictionary = state.actors[state.current_actor_uuid]
     check(hud.inventory_buttons.size()==actor.controlled_items.size(),"actual carried inventory projects exactly")
-    var potion: Dictionary = actor.controlled_items.filter(func(item):return item.item_id=="consumable.healing_potion")[0]
+    var potion: Dictionary = UI.inventory(actor,"",state).filter(func(item):return item.item_id=="consumable.healing_potion")[0]
     hud.inventory_buttons[potion.item_uuid].emit_signal("pressed")
     check(hud.item_commands.get_child_count()==2,"native use and native drop both appear for healing potion")
     check(not "<null>" in hud.item_details.text,"nullable native description is omitted from visible details")
@@ -110,7 +126,8 @@ func run() -> void:
     check(discovery==original_discovery,"Recorded discovery and all native target rows remain unchanged through HUD use")
     root.remove_child(hud); hud.free(); root.remove_child(world); world.free()
     await process_frame
-    var report = {"kind":"recorded_live_ui_projection","capture":directory,"checks":checks,"failures":failures,"icons":icons,"inventory_open_cpu_ms":inventory_open_ms,"bar_layouts":bar_layouts,"ok":failures.is_empty()}
+    var report = {"kind":"recorded_live_ui_projection","capture":directory+":sequence1","choices":choices_path,"checks":checks,"failures":failures,"icons":icons,"inventory_open_cpu_ms":inventory_open_ms,"bar_layouts":bar_layouts,"ok":failures.is_empty()}
+    DirAccess.make_dir_recursive_absolute("res://.runtime/ui")
     var file = FileAccess.open("res://.runtime/ui/recorded-checks.json",FileAccess.WRITE)
     file.store_string(JSON.stringify(report,"  ")); file.close()
     print(JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

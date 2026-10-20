@@ -141,6 +141,21 @@ func update_bounds(entry: Dictionary) -> void:
     var row: Dictionary = entry.placement
     var origin = Placement.project(v2(row.position), row.base_height_steps, quarter)
     entry.screen_rect = Rect2(origin - entry.pivot * entry.scale, entry.cell * entry.scale)
+    if row.kind!="actor" or entry.get("body_scale",1.0)==1.0:return
+    # These rectangles use canonical painter pixels, not viewport/zoom pixels.
+    # The actual model owns body scale, mirroring and any passage composition.
+    var mesh:QuadMesh=entry.node.mesh
+    var inverse:Basis=camera.global_basis.inverse()
+    var bounds:Rect2
+    var first:bool=true
+    for x in [-.5,.5]:
+        for y in [-.5,.5]:
+            var local:Vector3=mesh.center_offset+Vector3(x*mesh.size.x,y*mesh.size.y,0)
+            var projected:Vector3=inverse*(entry.node.global_transform*local-Placement.contact(row))
+            var point:Vector2=origin+Vector2(projected.x,-projected.y)*Placement.PIXELS_PER_UNIT
+            bounds=Rect2(point,Vector2.ZERO) if first else bounds.expand(point)
+            first=false
+    entry.screen_rect=bounds
 
 func _register_water_clock(entry:Dictionary)->void:
     if entry.get("water_clock_registered",false):return

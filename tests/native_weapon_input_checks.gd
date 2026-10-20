@@ -5,6 +5,7 @@ extends SceneTree
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
 const Inputs=preload("res://presentation/native_inputs.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
 class State extends RefCounted:
     var state:Dictionary={"actors":{},"items":{}}
 class World extends Node3D:
@@ -39,8 +40,11 @@ func check(value:bool,label:String)->void:
     if not value:failures.append(label);printerr("WEAPON_INPUT_FAIL "+label)
 func add_actor(world:World,id:String,item:String,x:int)->void:
     var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.position=Vector3(x,0,0);world.add_child(node)
-    var entry={"id":id+":weapon","node":node,"role":"body","actor_layer":{"slot":"weapon","item_uuid":item,"paths":{},"effect":{}},"texture_path":"same-knight-weapon-sheet"}
-    world.visual_actors[id]={"valid":true,"entries":[entry],"row":{"id":id,"rig":"shared-knight","position":[x,0],"base_height_steps":0,"scale":1.0,"facing":"SW"}}
+    var row:Dictionary={"id":id,"rig":"shared-knight","position":[x,0],"base_height_steps":0,"scale":1.0,"facing":"SW"}
+    var shape:Dictionary=Construction.layer_shape(world.rigs[row.rig],128.0/float(world.rig_config.TILE_W)*row.scale)
+    node.mesh=Construction.QuadShapes.mesh(shape.mesh_size,shape.mesh_center);node.basis=world.camera.basis;node.position=Inputs.Sockets.Placement.contact(row)
+    var entry={"id":id+":weapon","node":node,"role":"body","pivot":shape.pivot,"scale":shape.scale,"actor_layer":{"slot":"weapon","item_uuid":item,"paths":{},"effect":{}},"texture_path":"same-knight-weapon-sheet"}
+    world.visual_actors[id]={"valid":true,"entries":[entry],"row":row}
     world.timeline.state.actors[id]={"uuid":id,"present":true,"visual_loadout":{"active_weapon_set":"melee","layers":[{"slot":"MELEE_MAIN","item_uuid":item,"item_id":"weapon.club"}]}}
     world.timeline.state.items[item]={"item_uuid":item,"look":{"item_id":"weapon.club"},"effects":[]}
 func component(actor:String,item:Variant,clip:Dictionary)->Dictionary:
@@ -71,7 +75,9 @@ func run()->void:
     var favor:Dictionary=component("a",null,clip)
     check(Weapons.resolve(world,favor).binding.item_uuid=="item-a","Actor-owned coating uses authored current render slot rather than a guessed first item")
     var off=MeshInstance3D.new();off.mesh=QuadMesh.new();world.add_child(off)
-    world.visual_actors.a.entries.append({"id":"a:offhand","node":off,"role":"body","actor_layer":{"slot":"offhand","item_uuid":"offhand-a","paths":{},"effect":{}}})
+    var off_shape:Dictionary=Construction.layer_shape(world.rigs[world.visual_actors.a.row.rig],128.0/float(world.rig_config.TILE_W)*world.visual_actors.a.row.scale)
+    off.mesh=Construction.QuadShapes.mesh(off_shape.mesh_size,off_shape.mesh_center);off.basis=world.camera.basis;off.position=Inputs.Sockets.Placement.contact(world.visual_actors.a.row)
+    world.visual_actors.a.entries.append({"id":"a:offhand","node":off,"role":"body","pivot":off_shape.pivot,"scale":off_shape.scale,"actor_layer":{"slot":"offhand","item_uuid":"offhand-a","paths":{},"effect":{}}})
     world.timeline.state.actors.a.visual_loadout.layers.append({"slot":"MELEE_OFF","item_uuid":"offhand-a","item_id":"weapon.dagger"})
     world.timeline.state.items["offhand-a"]={"item_uuid":"offhand-a","look":{"item_id":"weapon.dagger"},"effects":[]}
     var ambiguous:Dictionary=favor.duplicate(true);ambiguous.native_cue.entity_geometry={"slots":["weapon","offhand"]}

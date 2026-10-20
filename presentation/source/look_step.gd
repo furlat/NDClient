@@ -24,6 +24,8 @@ extends Resource
 @export_range(0.0, 4.0) var saturation: float = 1.0
 @export_range(0.0, 4.0) var brightness: float = 1.0
 @export_range(0.0, 1.0) var alpha: float = 1.0
+## body_adjust: exact presentation factors selected by public ConditionState.
+@export var scale_by_size_change: Dictionary[String, float] = {}
 ## body_film: texture path relative to res://assets/, its frames, fps, gain, weight, mapping.
 @export var texture: String = ""
 @export var texture_frames: int = 0

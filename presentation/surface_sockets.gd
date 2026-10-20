@@ -7,6 +7,20 @@ const Characters = preload("res://presentation/characters.gd")
 const Placement = preload("res://placement.gd")
 const Samples = preload("res://presentation/surface_socket_samples.gd")
 
+## A socket's source pixel uses the very same quad pivot/model as the body.
+## A finite event may retain a different contact; translate the model to that
+## actual requested contact without borrowing a later live actor position.
+static func painted_point(world:Node,row:Dictionary,pixel:Vector2)->Vector3:
+    var visual:Dictionary=world.visual_actors.get(row.id,{})
+    for entry in visual.get("entries",[]):
+        if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
+        var local:Vector3=Vector3(pixel.x-entry.pivot.x,entry.pivot.y-pixel.y,0.0)*float(entry.scale)/Placement.PIXELS_PER_UNIT
+        var lift:float=float(row.get("visual_height",0.0))-float(visual.row.get("visual_height",0.0))
+        return entry.node.global_transform*local+Placement.contact(row)-Placement.contact(visual.row)+Vector3.UP*lift*Placement.HEIGHT_UNIT
+    var rig:Dictionary=world.rigs[row.rig]
+    var units:float=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
+    return Placement.contact(row)+world.camera.basis.x*(pixel.x-rig.cell_width*.5)*units*row.get("scale_x",1.0)+world.camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-pixel.y)*units+Vector3.UP*row.get("visual_height",0.0)*Placement.HEIGHT_UNIT
+
 static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         facing: String, socket_pixel: Vector2, painted_point: Vector3,
         hidden_slots: Array = []) -> Dictionary:

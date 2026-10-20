@@ -4,6 +4,8 @@ extends SceneTree
 const HUD = preload("res://play_hud.gd")
 const UI = preload("res://presentation/ui_catalog.gd")
 const FixtureWorld = preload("res://tests/ui_fixture_world.gd")
+const Journal = preload("res://sdk/journal.gd")
+const Fixtures = preload("res://tests/recording_fixtures.gd")
 var checks = 0
 var failures = 0
 var world: Node3D
@@ -18,8 +20,14 @@ func run() -> void:
     root.size = Vector2i(1280,720)
     world = FixtureWorld.new()
     root.add_child(world)
-    var recorded = "C:/Users/tommaso/AppData/Local/Temp/ndclient-presentation-attack/amber/states/0000000000000000.json"
-    var state: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(recorded))
+    var journal=Journal.new()
+    var opened:Dictionary=journal.open(Fixtures.journal("interaction-media"),true,false)
+    check(opened.ok,"Durable original schema16 fighter journal opens")
+    if not opened.ok:quit(1);return
+    var folded:Dictionary=journal.replay(0)
+    check(folded.ok,"Actual fighter initialization folds through the current SDK")
+    if not folded.ok:quit(1);return
+    var state: Dictionary = journal.state.duplicate(true)
     # Choose the actually disclosed controlled fighter for this UI boundary.
     var actor_id: String = state.observer_uuid
     state.current_actor_uuid = actor_id
@@ -45,7 +53,7 @@ func run() -> void:
     var upcast = spell.duplicate(true); upcast.discovery_index = 51; upcast.cast_at_level = 2; rows.append(upcast)
     var unavailable = spell.duplicate(true); unavailable.discovery_index = 52; unavailable.cast_at_level = 3; unavailable.availability_status = "source_unaffordable"; unavailable.can_afford = false; rows.append(unavailable)
     var wall = fixture_row("action.open",60,actor_id); wall.interaction_affordance.surface = "world"; rows.append(wall)
-    var carried: Dictionary = state.actors[actor_id].controlled_items[0]
+    var carried: Dictionary = UI.item(state.actors[actor_id].controlled_items[0],state)
     var item = fixture_row("action.item.use",70,actor_id); item.source_item_uuid = carried.item_uuid; item.action_category = "ability"; rows.append(item)
     var class_row = fixture_row("action.class.fighter.second_wind",80,actor_id); class_row.provided_by_id = "class_feature.fighter.second_wind"; rows.append(class_row)
     world.available_actions = {"discovery_generation":"ui-boundary-a","entity_uuid":actor_id,"self_actions":rows,"target_sets":[[{"kind":"self","index":0}]]}
@@ -59,7 +67,7 @@ func run() -> void:
     check(hud.actor_hud.party_buttons[actor_id].tooltip_text.contains("AC "+str(state.actors[actor_id].armor_class)),"Portrait inspect includes disclosed armor class")
     var image: Texture2D=hud.actor_hud.party_buttons[actor_id].portrait
     if image!=null: check(image.changed.is_connected(hud.actor_hud.party_buttons[actor_id].queue_redraw),"Async portrait image arrival refreshes source crop and redraw")
-    var enemy: String=state.hud_snapshot.initiative[1]
+    var enemy: String=state.hud_snapshot.initiative.filter(func(id):return id not in state.audience.controlled)[0]
     hud.actor_hud.initiative_buttons[enemy].emit_signal("pressed")
     check(hud._inspect_actor().uuid==enemy and hud._action_actor().uuid==actor_id and world.issued.is_empty(),"Enemy portrait inspection cannot change command owner or issue a command")
     hud._inspect_portrait(actor_id)
@@ -212,7 +220,7 @@ func run() -> void:
     check(world.issued.size()==before,"search focus captures action hotkeys")
     hud.search.text = "javelin"; hud.search.emit_signal("text_changed",hud.search.text)
     check(hud.inventory_buttons.size()==1,"search filters actual native inventory names")
-    var javelin: Dictionary = UI.inventory(state.actors[actor_id],"javelin")[0]
+    var javelin: Dictionary = UI.inventory(state.actors[actor_id],"javelin",state)[0]
     hud.inventory_buttons[javelin.item_uuid].emit_signal("pressed")
     var compatible = UI.compatible_slots(UI.sheet(state,actor_id),javelin.item_uuid)
     check(compatible==["MELEE_MAIN"],"native compatibility restricts exact disclosed slot")

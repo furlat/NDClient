@@ -101,6 +101,46 @@ func _issue_input(selected:Dictionary,record:Dictionary)->void:
         record.ui_markers.append({"kind":"confirm_click","time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames()})
         _ui_click(scene.hud.confirm_button.get_global_rect().get_center())
 
+func _profile_opponent(target:Dictionary,prop_rows:Dictionary)->Dictionary:
+    var subject:Variant=Choices.binding_subject(scene.available_actions,target)
+    if subject==null or subject.uuid in scene.timeline.state.audience.controlled:return {}
+    var state:Dictionary=scene.timeline.state
+    var actor:Dictionary=state.actors.get(subject.uuid,{})
+    var public:Dictionary={"uuid":subject.uuid,"offered_binding_index":target.index,"sequence":scene.timeline.sequence}
+    if not actor.is_empty():
+        var caster:Dictionary=state.actors[scene.available_actions.entity_uuid]
+        if not actor.get("present",false) or actor.get("normal_hp",0)<=0 or actor.faction==caster.faction:return {}
+        public.merge({"kind":"creature","name":actor.name,"position":actor.last_visual_position,
+            "normal_hp":actor.normal_hp,"faction":actor.faction,"item_id":""})
+    else:
+        var object:Dictionary=state.objects.get(subject.uuid,{})
+        if object.is_empty() or not prop_rows.has(subject.uuid):return {}
+        var item:Dictionary=object.item
+        # Registered wall art can use a prop source. Its physical boundary
+        # semantics and current published row must both identify a real prop.
+        if item.get("boundary_structure")!=null or item.get("integrity")!="intact":return {}
+        if item.get("current_hit_points")==null or item.current_hit_points<=0:return {}
+        if item.get("maximum_hit_points")==null or item.maximum_hit_points<=0:return {}
+        public.merge({"kind":"prop","name":item.name,"position":object.placement.position,
+            "item_id":item.item_id,"render_kind":prop_rows[subject.uuid].kind,
+            "integrity":item.integrity,"current_hit_points":item.current_hit_points,
+            "maximum_hit_points":item.maximum_hit_points,"boundary_structure":item.boundary_structure})
+    var origin:Array=state.actors[scene.available_actions.entity_uuid].last_visual_position
+    var dx:int=public.position[0]-origin[0];var dy:int=public.position[1]-origin[1]
+    public.distance_squared=dx*dx+dy*dy
+    return {"target":target,"public_target":public}
+
+func _profile_opponent_before(left:Dictionary,right:Dictionary)->bool:
+    var a:Dictionary=left.public_target;var b:Dictionary=right.public_target
+    if a.kind!=b.kind:return a.kind=="prop"
+    if a.distance_squared!=b.distance_squared:return a.distance_squared<b.distance_squared
+    if a.name!=b.name:return a.name<b.name
+    if a.position[0]!=b.position[0]:return a.position[0]<b.position[0]
+    if a.position[1]!=b.position[1]:return a.position[1]<b.position[1]
+    if a.item_id!=b.item_id:return a.item_id<b.item_id
+    # UUID is only the final tie-break for otherwise identical public targets.
+    return a.uuid<b.uuid
+
 func _selected_step(step:Dictionary)->Dictionary:
     var offered:Array=rows().filter(func(row):return row.behavior_id==step.behavior and (not step.has("display_name") or row.display_name==step.display_name))
     offered.sort_custom(func(a,b):
@@ -118,17 +158,17 @@ func _selected_step(step:Dictionary)->Dictionary:
                 var subject:Variant=Choices.binding_subject(scene.available_actions,target)
                 return subject!=null and subject.get("name")==step.subject_name)
         if step.get("offered_opponent",false):
-            targets=targets.filter(func(target):
-                var subject:Variant=Choices.binding_subject(scene.available_actions,target)
-                if subject==null or subject.uuid in scene.timeline.state.audience.controlled:return false
-                var actor:Dictionary=scene.timeline.state.actors.get(subject.uuid,{})
-                return actor.is_empty() or (actor.get("present",false) and actor.get("normal_hp",0)>0))
-            # Prefer a disclosed destructible object for the repeated cantrip,
-            # using the server's offered eligibility, never an invented target.
-            targets.sort_custom(func(a,b):
-                var left:Variant=Choices.binding_subject(scene.available_actions,a)
-                var right:Variant=Choices.binding_subject(scene.available_actions,b)
-                return int(scene.timeline.state.actors.has(left.uuid))<int(scene.timeline.state.actors.has(right.uuid)))
+            var prop_rows:Dictionary={}
+            for row in scene.world_visual_rows:
+                if row.kind=="prop":prop_rows[row.id]=row
+            var candidates:Array=[]
+            for target in targets:
+                var candidate:Dictionary=_profile_opponent(target,prop_rows)
+                if not candidate.is_empty():candidates.append(candidate)
+            candidates.sort_custom(_profile_opponent_before)
+            if candidates.is_empty():continue
+            var chosen:Dictionary=candidates[0]
+            return {"action":action,"target":chosen.target,"recipient_uuid":chosen.public_target.uuid,"public_target":chosen.public_target}
         if not targets.is_empty():
             return {"action":action,"target":targets[0],"recipient_uuid":_subject_uuid(scene.available_actions,targets[0])}
     return {}
@@ -248,6 +288,7 @@ func _run()->void:
         var success:bool=await issue(selected)
         if not command_trace.is_empty():
             command_trace.back().request=step.duplicate(true)
+            if selected.has("public_target"):command_trace.back().selected_public_target=selected.public_target
             if step.behavior.begins_with("spell."):
                 spell_occurrences[step.behavior]=spell_occurrences.get(step.behavior,0)+1
                 command_trace.back().spell_occurrence=spell_occurrences[step.behavior]
