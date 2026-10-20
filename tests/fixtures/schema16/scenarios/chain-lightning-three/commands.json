@@ -1,0 +1,65 @@
+[
+ {
+  "request": {
+   "do": "spell.chain_lightning",
+   "by": "caster",
+   "target": "target",
+   "recipients": [
+    "target",
+    "second_target",
+    "third_target"
+   ],
+   "level": 6,
+   "capture_choices": true
+  },
+  "previews": 3,
+  "stage": "preview_3",
+  "query_revision": "d3cc45e4-f286-4504-a181-8f08183182ac",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.chain_lightning",
+   "display_name": "Chain Lightning (Level 6)",
+   "cast_at_level": 6,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0f669da9-5cff-43d4-92cc-e72b99f6c452",
+   "state_revision": "d3cc45e4-f286-4504-a181-8f08183182ac",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0,
+      1,
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 6
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_chain_lightning_three_recipients",
+   "game_epoch": "4273a3e9-2b9c-4cea-9c77-f7b477d94013",
+   "audience_id": "fb3ce4ec-0262-493c-a6f9-33dded26c59e",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chain_lightning_three_recipients",
+    "game_epoch": "4273a3e9-2b9c-4cea-9c77-f7b477d94013",
+    "audience_id": "fb3ce4ec-0262-493c-a6f9-33dded26c59e",
+    "sequence": 2
+   }
+  }
+ }
+]

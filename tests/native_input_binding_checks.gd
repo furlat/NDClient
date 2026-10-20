@@ -59,8 +59,13 @@ class HistoryProbe extends Node3D:
     var parameters:Dictionary={"actor_history":{"mirror":true,"specifications":[{"delay":0.0}]}}
     var packet:Dictionary={}
     var state:Dictionary={}
+    var state_calls:int=0
     func set_actor_context(value:Dictionary)->bool:packet=value;return not value.is_empty()
-    func set_history_state(value:Dictionary)->void:state=value
+    func set_history_state(value:Dictionary)->void:state_calls+=1;state=value
+class SelectorProbe extends Node3D:
+    var calls:int=0
+    var value:Variant
+    func set_selector(selected:Variant)->void:calls+=1;value=selected
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -92,6 +97,16 @@ func run()->void:
     var component:Dictionary={"actor_uuid":"a","target_uuid":"b","native_cue":{"attachment":"recipient_ground"},"lifecycle_phases":{},"condition":{"state":{}}}
     var points:Dictionary={"hand":Vector3.ZERO,"to":Vector3.ONE}
     var result:Dictionary=bridge.sync(world,handle,component,points)
+    var selector:SelectorProbe=SelectorProbe.new()
+    var selector_handle:Dictionary={"clip":{"inputs":["energy_type"],"input_setters":{"energy_type":"set_selector"}},"occurrence":selector}
+    var selector_component:Dictionary={"native_cue":{},"condition":{"state":{"energy_type":null}}}
+    var selected:Dictionary=bridge.sync(world,selector_handle,selector_component,points)
+    check(selector.calls==0 and selected.unavailable.get("energy_type")=="provider_not_bound","Canonical null selector stays undisclosed instead of reaching a typed Factory setter")
+    for value in [false,0,"Fire"]:
+        selector_component.condition.state.energy_type=value
+        selected=bridge.sync(world,selector_handle,selector_component,points)
+        check(selected.unavailable.is_empty() and selector.value==value,"A disclosed selector retains its exact value, including false/zero: "+str(value))
+    selector.free()
     check(result.unavailable.is_empty(),"Ordinary delivered body treatment needs no fabricated pose-capture provider")
     check(a.material.shader==Body and b.material.shader!=Body,"Factory binds only the real recipient's private material")
     check(b.material.get_shader_parameter("frame_uv")==Vector4(.25,0,.25,.125) and b.material.get_shader_parameter("tint")==Vector3(.6,.3,.2),"Binding retains actual frame and ordinary outfit tint")
@@ -143,10 +158,21 @@ func run()->void:
         history_component.condition.state.duplicate_count=count
         bridge.sync(world,history_handle,history_component,points,depth)
         check(history_probe.state=={"duplicate_count":count},"History state preserves disclosed count "+str(count))
-    history_component.erase("condition")
-    history_component.native_preparation_inputs={"history_state":{"duplicate_count":2}}
+    var state_calls:int=history_probe.state_calls
+    history_component.condition={"behavior_id":"condition.spell.blur","state":{"duplicate_count":null}}
+    history_component.native_preparation_inputs={"history_state":{"duplicate_count":3}}
     history_result=bridge.sync(world,history_handle,history_component,points,depth)
-    check(history_result.unavailable.is_empty() and history_probe.state.duplicate_count==2,"Future preparation uses the exact small disclosed count without a full condition snapshot")
+    check(history_result.unavailable.get("history_state")=="duplicate_count_not_disclosed" and "history_state" not in history_result.supplied,"Blur's canonical null count remains unavailable instead of borrowing a future Mirror count")
+    check(history_probe.state_calls==state_calls and history_probe.state=={"duplicate_count":0},"A canonical null never reaches the native integer consumer or overwrites the last actual count")
+    history_component.erase("condition")
+    for count in [2,0]:
+        history_component.native_preparation_inputs={"history_state":{"duplicate_count":count}}
+        history_result=bridge.sync(world,history_handle,history_component,points,depth)
+        check(history_result.unavailable.is_empty() and history_probe.state.duplicate_count==count,"Future preparation preserves the exact disclosed count including zero: "+str(count))
+    state_calls=history_probe.state_calls
+    history_component.native_preparation_inputs={"history_state":{"duplicate_count":null}}
+    history_result=bridge.sync(world,history_handle,history_component,points,depth)
+    check(history_result.unavailable.get("history_state")=="duplicate_count_not_disclosed" and history_probe.state_calls==state_calls,"A null preparation count never forwards to the native setter")
     history_component.erase("native_preparation_inputs");history_component.condition={"state":{}}
     history_result=bridge.sync(world,history_handle,history_component,points,depth)
     check(history_result.unavailable.get("history_state")=="duplicate_count_not_disclosed","No default three copies when the server did not disclose a count")

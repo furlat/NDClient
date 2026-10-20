@@ -20,6 +20,7 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_wyktx"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/windup"
+unbound_constructor_inputs = PackedStringArray("retained_owner_lifecycle_not_bound")
 role = "attached"
 at = "release"
 delay = -0.72
@@ -52,8 +53,16 @@ extra = {
 [sub_resource type="Resource" id="Resource_tggx5"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/impact"
-role = "attached"
-at = "release"
+role = "impact"
+scope = "recipient"
+constructor_input = {
+"kind": "spell_strike",
+"behavior_id": "spell.vampiric_touch",
+"damage_type": "Necrotic",
+"component_path": ["owned_contact"],
+"input_field": ""
+}
+at = "contact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.44
@@ -65,11 +74,17 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"input_policies": {
+"owner_input": {"mode": "not_applicable", "reason": "first_cast_impact_does_not_consume_owner_or_repeat_inputs"},
+"healing_input": {"mode": "not_applicable", "reason": "first_cast_impact_does_not_consume_owner_or_repeat_inputs"},
+"condition_input": {"mode": "not_applicable", "reason": "first_cast_impact_does_not_consume_owner_or_repeat_inputs"},
+"tick_input": {"mode": "not_applicable", "reason": "first_cast_impact_does_not_consume_owner_or_repeat_inputs"}
+},
 "delay_seconds": 0.0,
 "dynamic_geometry": true,
 "entity_geometry": {
-"actor": "caster",
-"slots": ["weapon"]
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
 },
 "live_endpoints": [{
 "actor": "caster",
@@ -84,6 +99,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_jpoi6"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/healing"
+unbound_constructor_inputs = PackedStringArray("actual_positive_heal_projection_not_bound")
 role = "attached"
 at = "release"
 delay = 0.28
@@ -116,6 +132,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_6cdpq"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/condition"
+unbound_constructor_inputs = PackedStringArray("retained_owner_lifecycle_not_bound")
 role = "attached"
 at = "release"
 delay = 0.62
@@ -148,6 +165,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_6d33v"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/retire"
+unbound_constructor_inputs = PackedStringArray("retained_owner_lifecycle_not_bound")
 role = "attached"
 at = "release"
 delay = 2.78
@@ -209,5 +227,4 @@ staging_unported = {
 "selection": "vampiric_touch_native",
 "source": "assets/vfx/index.json:/selections/vampiric_touch_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "First-cast impact consumes its actual native Hit/Crit and same-lineage positive Necrotic result. Its private constructor replaces review actor/result identities and clears unused owner/heal/tick packets; source material is unchanged. Held/repeat owner activity, healing and removal remain explicit gaps. Cast body/timing and native pixels still need visual review."

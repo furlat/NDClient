@@ -187,12 +187,16 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
                 if pair[1] and not mask.ready:result.ready=false;result.errors.append_array(mask.errors)
     for id in handles:AreaMask.retain(handles[id],mask_interests.get(id,[]))
     started=Time.get_ticks_usec()
-    _image_requirements(world)
-    FrameProfile.end_phase(world.profile,"native_prepare_images",started)
-    started=Time.get_ticks_usec()
     inputs.prepare(world,wanted.values())
+    if optical.is_empty():inputs.surfaces.prepare_received_tracks(world,[],[])
+    elif not optical_groups.is_empty() and (budget.is_empty() or budget.used_usec<budget.limit_usec):inputs.prepare(world,optical.values(),false,optical_groups)
     if allow_optional and (budget.is_empty() or budget.used_usec<budget.limit_usec):inputs.prepare(world,optional.values(),false)
     FrameProfile.end_phase(world.profile,"native_prepare_optical_surfaces",started)
+    started=Time.get_ticks_usec()
+    # Future exact pose selection owns CPU-image demand before its measurement
+    # can run. The existing media owner admits those bytes asynchronously.
+    _image_requirements(world)
+    FrameProfile.end_phase(world.profile,"native_prepare_images",started)
     for component in wanted.values()+(optional.values() if allow_optional else []):
         if not handles.has(component.id):continue
         var handle:Dictionary=handles[component.id]
@@ -401,7 +405,9 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             if state!=handle.get("owner_state",{}):Effects.set_input(handle,"owner_state",state);handle.owner_state=state
             Effects.sample(handle,state.owner_age_seconds)
             handle.lifecycle_phase=state.phase
-        else:Effects.sample(handle,Playback.source_time(cue,sample_time))
+        else:
+            if input_bindings.has("source_contact_seconds"):cue.source_contact=input_bindings.source_contact_seconds
+            Effects.sample(handle,Playback.source_time(cue,sample_time))
         if cue.has("origin_path"):
             var anchor=Effects.node(handle,cue.origin_path)
             if anchor==null:
@@ -689,6 +695,11 @@ func _image_requirements(world:Node)->void:
     var key:Array=[world.character_light_profile,geometry_actors]
     var inputs:Dictionary={}
     var optical_inputs:Dictionary={}
+    var received_sources:Dictionary={}
+    for source in self.inputs.surfaces.received_poses:received_sources[[source.path,source.slot]]=true
+    for source in received_sources:
+        key.append(["received",source[0],source[1]])
+        optical_inputs.merge(Inputs.Surface.required_paths(source[0],source[1],world.catalog_cache,world.character_light_profile))
     if not _required_ids.is_empty():
         for id in world.visual_actors:
             var visual:Dictionary=world.visual_actors[id]

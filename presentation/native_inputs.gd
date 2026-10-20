@@ -10,6 +10,7 @@ const ConditionPose=preload("res://presentation/condition_pose.gd")
 const Appearances=preload("res://presentation/condition_appearance.gd")
 const SpatialInputs=preload("res://presentation/spatial_inputs.gd")
 const CreationInputs=preload("res://presentation/creation_inputs.gd")
+const PropagationInputs=preload("res://presentation/propagation_inputs.gd")
 var appearances:RefCounted=Appearances.new()
 var surfaces:RefCounted=Surface.new()
 
@@ -19,13 +20,14 @@ static func recipient(component:Dictionary)->String:
     var target:Variant=component.get("target_uuid")
     return "" if target==null else str(target)
 
-func prepare(world:Node,components:Array,priority:bool=true)->void:
+func prepare(world:Node,components:Array,priority:bool=true,received_groups:Array=[])->void:
     var interests:Dictionary={}
     for component in components:
         if Effects.choice(component.get("native_clip",{})).kind=="recorded":continue
         for request in geometry_interests(component,world):
             if not request.actor.is_empty():interests[[request.actor,request.slots]]=request
     for request in interests.values():surfaces.prepare(world,[request.actor],request.slots,priority)
+    if not received_groups.is_empty():surfaces.prepare_received_tracks(world,received_groups,interests.values())
 
 static func geometry_request(component:Dictionary,channel:String)->Dictionary:
     var cue:Dictionary=component.get("native_cue",{})
@@ -145,6 +147,7 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
         var socket:String=str(authored.get("socket",""));var resolved:Dictionary={"ready":true}
         var pose_socket:String=str(authored.get("pose_socket",socket))
         if socket=="ground":resolved.point=Sockets.Placement.contact(visual.row)
+        elif selector=="caster" and cue.has("source_socket") and socket==cue.source_socket:resolved.point=points.from
         elif selector=="caster" and socket in ["cast_hand","hand"]:resolved.point=points.hand
         else:resolved=Sockets.pose_point(world,visual.row,pose_socket,authored.get("pose_socket_by_clip",{}))
         if not resolved.ready:return {"rows":[],"reason":resolved.reason}
@@ -230,12 +233,19 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
     var supplied:Array=["root_path","binding_owners"]
     if component.has("lifecycle_phases"):supplied.append("owner_state")
     var unavailable:Dictionary={}
+    var not_applicable:Dictionary={}
+    # Offline-qualified client choices remain distinct from Factory-required
+    # operands actually supplied. No synthetic empty density field is sent.
+    for name in component.get("native_cue",{}).get("input_policies",{}):
+        var policy:Dictionary=component.native_cue.input_policies[name]
+        if policy.mode=="not_applicable":not_applicable[name]=policy.reason
     var actor:String=recipient(component)
     var surface:Dictionary={}
     var cell_endpoints:Array=[]
     var weapon:Dictionary={}
     var weapon_gaps:Array=[]
     var weapon_surface:Dictionary={}
+    var source_contact_seconds:float=-1.0
     if "actor_context" in requested:
         if not current_pose_history(handle):unavailable.actor_context="authentic_actor_history_not_bound"
         else:
@@ -249,7 +259,7 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             else:unavailable.actor_context=context.reason
     if "history_state" in requested:
         var state:Variant=component.get("condition",{}).get("state",component.get("native_preparation_inputs",{}).get("history_state"))
-        if state is Dictionary and state.has("duplicate_count"):
+        if state is Dictionary and state.get("duplicate_count")!=null:
             var packet:Dictionary={"duplicate_count":state.duplicate_count}
             if packet!=handle.get("history_state_input",{}):
                 Effects.set_input(handle,"history_state",packet);handle.history_state_input=packet
@@ -328,6 +338,8 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             if channel not in requested:continue
             if packet.reason.is_empty():supplied.append(channel)
             else:unavailable[channel]=packet.reason
+        if component.has("native_propagation") and packet.reason.is_empty():
+            source_contact_seconds=PropagationInputs.optical_contact(component,packet.rows,handle.root.global_transform)
     if "admitted_cells" in requested:
         var reason:String=cell_membership(handle,component,cell_endpoints)
         if reason.is_empty():supplied.append("admitted_cells")
@@ -397,7 +409,7 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
     var packets:Dictionary=handle.get("native_input_packets",{})
     for name in values:
         if name=="weapon_binding":continue # Exact item provider owns the complete packet.
-        if unavailable.has(name):continue
+        if unavailable.has(name) or not_applicable.has(name):continue
         if name in requested:
             if not packets.has(name) or packets[name]!=values[name]:
                 Effects.set_input(handle,name,values[name])
@@ -408,10 +420,13 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
     # Other channels need a provider; their names alone do not supply evidence.
     var state:Dictionary=component.get("condition",{}).get("state",{}) if component.get("condition",{}).get("state") is Dictionary else {}
     for name in requested:
-        if name in supplied or unavailable.has(name):continue
-        if state.has(name):Effects.set_input(handle,name,state[name]);supplied.append(name)
+        if name in supplied or unavailable.has(name) or not_applicable.has(name):continue
+        if state.get(name)!=null:Effects.set_input(handle,name,state[name]);supplied.append(name)
         else:unavailable[name]="provider_not_bound"
-    return {"supplied":supplied.filter(func(name):return name in requested),"unavailable":unavailable,"weapon_public_gaps":weapon_gaps}
+    var result:Dictionary={"supplied":supplied.filter(func(name):return name in requested),"unavailable":unavailable,
+        "not_applicable":not_applicable,"weapon_public_gaps":weapon_gaps}
+    if source_contact_seconds>=0.0:result.source_contact_seconds=source_contact_seconds
+    return result
 
 func clear()->void:
     surfaces.clear()

@@ -1,10 +1,20 @@
 # Modular weapon effects — implemented client contract
 
-20 October 2026. Client implementation worktree:
-`C:/Users/tommaso/Documents/Dev/NDClientGodot-authoring-schema`, branch
-`codex/schema16-unit-a`. This is a working first contract for the Factory author,
-not a claim that every enhancement or spell has been migrated or visually approved.
-The receiving checkout has not yet received this cohort.
+20 October 2026. Integrated client checkout:
+`C:/Users/tommaso/Documents/Dev/NDClientGodot`, sole active/local branch
+`codex-authoring-schemabump`. The former implementation worktrees were merged
+into this checkout. This is the implemented receiving contract, not a claim that
+every enhancement or spell has been migrated or visually approved.
+
+The Factory's newer
+[20 October weapon delivery study](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/NDCLIENT_MODULAR_WEAPON_EFFECTS_DELIVERY_HANDOFF_2026-10-20.md)
+is work in progress, not an installed sealed successor. Its66 sustain phases
+and21 contacts are candidates; source-geometry coverage is currently limited to
+specific Scimitar/Melee4 and Greatsword/Melee8 poses. Mace/wood/offhand coverage,
+composition and constructor qualification remain separate. Current installed
+client package stays `production-bindings-c494177f9ef03e3d`. Do not import loose
+Factory files over that package or treat a two-sword demonstration as coverage
+of every actual equipped weapon.
 
 ## The user's boundary
 

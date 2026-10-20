@@ -95,6 +95,18 @@ async def run(args):
                     result=await adapter.hosted(args.engine,config,folder,case,timeout=args.timeout+30,port=available_port())
                 except Exception as error:
                     result={'id':scenario['id'],'ok':False,'failure':f'{type(error).__name__}: {error}'}
+                    # The other seat can report a server failure just after
+                    # Godot has completed this case. That real completion is
+                    # sufficient ownership evidence for the next fresh case;
+                    # preserve the driver failure rather than abandon a live
+                    # request consumer or discard its actual command receipt.
+                    report=folder/'result.json'
+                    if native_turn['submitted'] and report.exists():
+                        try:completed=json.loads(report.read_text())
+                        except ValueError:pass
+                        else:
+                            native_turn['completed']=True
+                            result={**completed,'ok':False,'failure':result['failure']}
                     if native_turn['submitted'] and not native_turn['completed']:
                         result['native_turn_abandoned']=True
                 with (args.out/'godot.log').open(errors='replace') as observed:

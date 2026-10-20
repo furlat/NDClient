@@ -38,19 +38,31 @@ ramp = PackedColorArray()
 
 [sub_resource type="Resource" id="Resource_gjfnn"]
 script = ExtResource("3_0t0rm")
-clip = "live-electric/chain_live_hops"
-role = "attached"
+clip = "live-electric/chain_live_single"
+role = "flight"
+scope = "application"
 at = "release"
-delay = -0.28
 attachment = "caster_ground"
 orientation = "world"
-source_end = 1.8
+source_launch = 0.28
+source_contact = 0.325
+source_end = 1.53
+charge_seconds = 0.28
 duration_policy = "authored"
 hide_at_contact = PackedStringArray()
 hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
+constructor_input = {
+"kind": "propagation_links",
+"component_path": ["network"],
+"input_field": "",
+"source_launch": 0.28,
+"speed_tiles_per_second": 26.0,
+"minimum_travel_seconds": 0.045,
+"secondary_source_socket": "body_center"
+}
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "live_endpoints": [{
@@ -60,11 +72,10 @@ extra = {
 "actor": "target",
 "socket": "body_center",
 "surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
-}, {
-"actor": "target2",
-"socket": "body_center",
-"surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
 }],
+"input_policies": {
+"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}
+},
 "source_rate": 1.0
 }
 
@@ -146,6 +157,7 @@ hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
+unbound_constructor_inputs = PackedStringArray("propagation_variant_not_qualified")
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "live_endpoints": [{
@@ -189,6 +201,7 @@ hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
+unbound_constructor_inputs = PackedStringArray("propagation_variant_not_qualified")
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "live_endpoints": [{
@@ -220,7 +233,8 @@ body = SubResource("Resource_rhppk")
 hand_layers = Array[ExtResource("4_0atwv")]([SubResource("Resource_dwwk2"), SubResource("Resource_o6ej4")])
 sockets = "measured/abilities/spells/spell.chain_lightning.sockets.json"
 effects = Array[ExtResource("3_0t0rm")]([SubResource("Resource_gjfnn")])
-effect_scope = "single"
+native_staging = true
+effect_scope = "application"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
@@ -237,8 +251,8 @@ summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
-"selection": "chain_live_hops",
-"source": "assets/vfx/index.json:/selections/chain_live_hops/staging"
+"selection": "chain_live_single",
+"source": "assets/vfx/index.json:/selections/chain_live_single/staging"
 }
 unported = {
 "arcs": {
@@ -263,5 +277,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Not played in the game: its Factory live-electric clips need live target endpoints the client does not supply (their live approaches assert in electric_network.gd); the imported staging stays as review data.
-Plays its imported Factory staging (coverage fill)."
+notes = "Actual native propagation applications, predecessor-owned branch clocks, private source inputs and measured actor sockets. Density is an explicit client not_applicable policy because this exact Factory source disables its density mask; no density field is supplied. The same one-link source is reused per actual application; independent branch art variants and broader outcomes remain unqualified, not inferred from recipient order. Native visual review is separate from source/provider admission."

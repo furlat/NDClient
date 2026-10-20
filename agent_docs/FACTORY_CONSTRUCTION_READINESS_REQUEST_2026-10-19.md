@@ -44,3 +44,32 @@ Client artifacts (same local disk):
 - Each `player-live-checks.json` has `evidence.native_startup.construction_ms`; native source/frame phases are retained in its full profile. Each run passed83 live checks, with both actual Fireball commands and final canonical state. Exit ObjectDB warnings remain.
 
 Work in Factory, preserve the sealed release and original source art, deliver another complete staged replacement with its public contracts and measured costs. Do not patch the client checkout or its package while tests run. No other-chat communication is needed; the user can hand this file to the Factory author.
+
+
+## Current main follow-up —20 October
+
+The old worktree measurements above are historical evidence. All client work is
+now merged in `C:/Users/tommaso/Documents/Dev/NDClientGodot`, branch
+`codex-authoring-schemabump`; installed complete package is c494177f9ef03e3d.
+The nine prepared class approaches do not qualify all unrelated Baked sources.
+
+The actual player Gallery run
+`.runtime/player-runs/20261020T001245.877194Z/` passes313 assertions/27commands,
+including door reveal, movement, Shield and seven spell families. Its full
+profile is `generated/profiles/2026-10-20T02-13-56-gallery-live-spells.json`.
+The remaining in-play57.849ms frame correlates with optional native preparation:
+`native_startup_construct`52.616ms for
+`original-repairs/chill-touch/contact-layers`; its nested `baked_instantiate`
+receipt is52.572ms. This identifies the indivisible scene instantiation boundary,
+not yet the decomposition of its node/material/resource internals. The phase
+measurements overlap and must not be summed. First Magic Missile Baked
+instantiation is21.083ms; Ray of Frost donor10.422ms. Startup separately has a
+126.442ms frame, including108.893ms native resource preparation.
+
+These are observed remaining limits, not a request to change the approved art,
+turn effects off, insert a presentation wait or preload the entire catalog.
+The client already supplies selected/received requirements ahead of publication;
+a single expensive native registration still exceeds a frame budget. Factory's
+current broader runtime repair remains separate and its unsealed WIP is not
+installed. Preserve the actual source when exposing prepared resources or bounded
+construction steps; qualify the eventual successor in this same live route.

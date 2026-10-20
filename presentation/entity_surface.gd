@@ -4,6 +4,9 @@ extends RefCounted
 ## Uses admitted CPU images, never texture readback or a playback disk loader.
 const Geometry=preload("res://presentation/character_geometry.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
+const Characters=preload("res://presentation/characters.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
+const Tracks=preload("res://presentation/tracks.gd")
 const Placement=preload("res://placement.gd")
 const SOURCE_LIMIT=128
 const ACTOR_LIMIT=32
@@ -22,6 +25,13 @@ var jobs:Dictionary={}
 var pending:Dictionary={}
 var pending_order:Array=[]
 var discarded:int=0
+var received_groups:Array=[]
+var received_scope:Array=[]
+var received_admission:Dictionary={}
+var received_poses:Array=[]
+var received_requested:Dictionary={}
+var received_until_ms:float=INF
+var received_scans:int=0
 
 static func required_paths(path:String,slot:String,cache:Dictionary,profile:String="")->Dictionary:
     var source:Dictionary=Geometry.record(path,slot,cache)
@@ -78,6 +88,132 @@ static func _source_key(path:String,profile:String,images:Dictionary,pose:Array)
 func prepare(world:Node,actors:Array,slots:Array=BODY_SLOTS,priority:bool=true)->void:
     for actor in actors:_capture(world,str(actor),slots,priority)
 
+## Native preparation already owns these received groups. Select only the next
+## actual source transition per interested actor; this never samples a future
+## Node/material or publishes a pose. Current measurements keep queue priority.
+func prepare_received_tracks(world:Node,groups:Array,interests:Array)->void:
+    poll()
+    var admission:Dictionary=world.catalog_cache.get(Geometry.BodySources.KEY,{})
+    if admission.is_empty():return
+    var scope:Array=[world.character_light_profile,world.camera.global_basis,world.quarter,world.rig_config.TILE_W,interests,world.timeline.retained_directions.duplicate()]
+    var same:bool=received_scope==scope and is_same(received_admission,admission) and received_groups.size()==groups.size() and world.timeline.display_ms<received_until_ms
+    if same:
+        for index in groups.size():
+            if not is_same(received_groups[index],groups[index].get("actor_tracks")):same=false;break
+    if not same:
+        received_groups=groups.map(func(group):return group.get("actor_tracks"))
+        received_scope=scope;received_admission=admission;received_poses=[];received_requested={};received_until_ms=INF;received_scans+=1
+        var selected:Dictionary={}
+        var directions:Dictionary=world.timeline.retained_directions.duplicate()
+        var start:float=world.timeline.group_start_ms if not world.timeline.current.is_empty() else world.timeline.display_ms
+        for group in groups:
+            start=maxf(start,float(group.get("preview_start_ms",start)))
+            var tracks:Array=group.get("actor_tracks",[])
+            var cuts:Dictionary={}
+            for track in tracks:
+                for cut in [float(track.start_ms),float(track.start_ms)+float(track.duration_ms)]:
+                    if not cuts.has(cut):cuts[cut]={}
+                    cuts[cut][track.actor_uuid]=true
+            var times:Array=cuts.keys();times.sort()
+            for local in times:
+                var at:float=start+float(local)
+                if at<=world.timeline.display_ms+0.000001:continue
+                var requests:Array=interests.filter(func(request):return cuts[local].has(request.actor) and not selected.has([request.actor,request.slots]))
+                if requests.is_empty():continue
+                var samples:Dictionary=Tracks.samples(tracks,float(local))
+                for request in requests:
+                    if not samples.has(request.actor):continue
+                    var track:Dictionary=samples[request.actor]
+                    selected[[request.actor,request.slots]]=true
+                    received_until_ms=minf(received_until_ms,at)
+                    _received_track(world,admission,track,group,directions,float(local),request)
+            world.timeline._directions(tracks,INF,directions)
+            start+=float(group.get("duration_ms",0.0))
+    for source in received_poses:
+        var packet:Dictionary=admitted_images(world,source.path,source.slot)
+        if not packet.reason.is_empty():continue
+        var size:Vector2=Vector2(packet.images.colour.get_width(),packet.images.colour.get_height())
+        var p:Dictionary=source.parameters
+        for frame in source.frames:
+            var uv:=Vector4(frame*source.rig.cell_width/size.x,source.rig.facing_rows[source.facing]*source.rig.cell_height/size.y,float(source.rig.cell_width)/size.x,float(source.rig.cell_height)/size.y)
+            var pose:Array=[uv,p.component_units,p.component_elevation,p.component_reconstruction_origin,p.component_depth_range,source.pivot,source.ground,world.camera.global_basis]
+            var key:Array=_source_key(source.path,world.character_light_profile,packet.images,pose)
+            if received_requested.has(key):continue
+            _request(key,packet.images,pose,false)
+            # Retry a rejected optional request when capacity becomes free;
+            # never requeue an evicted result forever under the same owner.
+            if sources.has(key) or jobs.has(key) or pending.has(key):received_requested[key]=true
+    _start()
+
+func _received_track(world:Node,admission:Dictionary,track:Dictionary,group:Dictionary,directions:Dictionary,local:float,request:Dictionary)->void:
+    var actor:Dictionary=track.get("presentation_actor",{}).duplicate(false)
+    if actor.is_empty():return
+    actor.presentation_layers=track.get("effect_layers",[])
+    if track.has("visual_loadout"):actor.visual_loadout=track.visual_loadout
+    var structure:Dictionary=Characters.structure(actor,world.catalog_cache,track.get("presentation_item_looks",{}))
+    if not structure.ok:return
+    var rig:Dictionary=admission.index.rigs.get(track.rig,{})
+    if not rig.clips.has(track.clip):return
+    var local_directions:Dictionary=directions.duplicate()
+    world.timeline._directions(group.get("actor_tracks",[]),local,local_directions)
+    var facing:String="SW"
+    var path:Array=local_directions.get(track.actor_uuid,[])
+    var cycle:Array=world.rig_config.FACING_CYCLE
+    if path.size()==2:facing=Placement.facing(Vector2(path[1][0]-path[0][0],path[1][1]-path[0][1]),cycle)
+    facing=cycle[posmod(cycle.find(facing)+world.quarter*2,8)]
+    for layer in structure.value.equipment_layers:
+        if layer.slot not in request.slots or layer.slot in track.get("hidden_slots",[]) or not layer.get("effect",{}).is_empty():continue
+        var source:Resource=Geometry.BodySources.prepared_layer(layer.source_path,world.catalog_cache)
+        if source==null:continue
+        var path_name:String=source.paths_by_slot.get(layer.slot,{}).get(track.clip,"")
+        if path_name.is_empty():continue
+        var scale:float=128.0/float(world.rig_config.TILE_W)*float(actor.appearance.visual_scale)
+        var binding:Dictionary=Geometry.prepare_binding(path_name,layer.slot,world.catalog_cache,true,true,world.character_light_profile,scale,float(actor.appearance.visual_scale_x))
+        if not binding.parameters.get("has_component_geometry",false):continue
+        received_poses.append({"actor":request.actor,"clip":track.clip,"path":path_name,"slot":layer.slot,"rig":rig,"facing":facing,
+            "frames":initial_frames(track,rig,local),"parameters":binding.parameters,"pivot":Construction.layer_shape(rig,scale).pivot,"ground":binding.ground})
+
+## The exact authored starting frame and at most the next two crossed frames.
+## Reverse/keyed/looping tracks use their own source range, never extra clips.
+static func initial_frames(track:Dictionary,rig:Dictionary,local:float=-1.0)->Array:
+    var clip:Dictionary=rig.clips[track.clip]
+    var fraction:float=clampf((local-float(track.start_ms))/maxf(.000001,float(track.duration_ms)),0.0,1.0) if local>=0.0 else 0.0
+    var sampled_track:Dictionary=Tracks.samples([track],local).get(track.actor_uuid,track) if local>=0.0 else track
+    var values:Array=[float(sampled_track.get("source_seconds",track.get("source_start_seconds",0.0)))]
+    for key in track.get("source_time_keys",[]):
+        if float(key[0])>fraction:values.append(float(key[1]))
+    values.append(float(track.get("source_end_seconds",values[0])))
+    var length:float=maxf(float(clip.frames)/float(clip.fps),.001)
+    var loop:bool=Tracks.character_loops(rig,track.clip)
+    var sampled:float=Tracks.sample_seconds(values[0],length,loop)
+    var result:Array=[mini(int(sampled*clip.fps),int(clip.frames)-1)]
+    for index in range(1,values.size()):
+        var first:int=floori(float(values[index-1])*float(clip.fps))
+        var last:int=floori(float(values[index])*float(clip.fps))
+        var direction:int=1 if last>=first else -1
+        var frame:int=first
+        while frame!=last:
+            frame+=direction
+            var selected:int=posmod(frame,int(clip.frames)) if loop else clampi(frame,0,int(clip.frames)-1)
+            if selected not in result:result.append(selected)
+            if result.size()>FRAME_LEAD:return result
+    return result
+
+static func admitted_images(world:Node,path:String,slot:String)->Dictionary:
+    var source:Dictionary=Geometry.record(path,slot,world.catalog_cache)
+    if source.is_empty():return {"reason":"source_geometry_not_registered"}
+    var normals:Dictionary=Geometry.normal_paths(path,slot,world.catalog_cache).value
+    if not normals.has(world.character_light_profile):return {"reason":"normal_profile_not_registered"}
+    var root:String=Geometry._root(source)
+    var paths:Dictionary={"colour":path,"depth":root.path_join(source.files.depth),"support":root.path_join(source.files.support),"normal_valid":root.path_join(source.files.normal_valid),"normal":normals[world.character_light_profile]}
+    var images:Dictionary={}
+    var missing:Dictionary={}
+    for name in paths:
+        if not world.source_images.has(paths[name]):missing[name]=paths[name]
+        else:images[name]=world.source_images[paths[name]]
+    if not missing.is_empty():return {"reason":"source_"+str(missing.keys()[0])+"_not_prepared","missing_paths":missing,"paths":paths}
+    return {"reason":"","images":images}
+
 func _capture(world:Node,actor:String,slots:Array,priority:bool=true)->Dictionary:
     poll()
     var result:Dictionary={"selected":[],"revision":[],"pose_key":[],"origin":Vector3.ZERO,"reason":"actor_not_displayed"}
@@ -93,16 +229,9 @@ func _capture(world:Node,actor:String,slots:Array,priority:bool=true)->Dictionar
         if slot not in slots or entry.role=="shadow" or not entry.node.is_visible_in_tree():continue
         if not entry.actor_layer.get("effect",{}).is_empty():continue
         var frame:Vector4=SourceMaterial.value(entry,"frame_uv")
-        var source:Dictionary=Geometry.record(entry.texture_path,slot,world.catalog_cache)
-        if source.is_empty():result.reason="source_geometry_not_registered";return result
-        var normals:Dictionary=Geometry.normal_paths(entry.texture_path,slot,world.catalog_cache).value
-        if not normals.has(world.character_light_profile):result.reason="normal_profile_not_registered";return result
-        var root:String=Geometry._root(source)
-        var paths:Dictionary={"colour":entry.texture_path,"depth":root.path_join(source.files.depth),"support":root.path_join(source.files.support),"normal_valid":root.path_join(source.files.normal_valid),"normal":normals[world.character_light_profile]}
-        var images:Dictionary={}
-        for name in paths:
-            if not world.source_images.has(paths[name]):result.reason="source_"+name+"_not_prepared";return result
-            images[name]=world.source_images[paths[name]]
+        var packet:Dictionary=admitted_images(world,entry.texture_path,slot)
+        if not packet.reason.is_empty():result.reason=packet.reason;return result
+        var images:Dictionary=packet.images
         var pose:Array=[frame,SourceMaterial.value(entry,"component_units"),SourceMaterial.value(entry,"component_elevation"),SourceMaterial.value(entry,"component_reconstruction_origin"),SourceMaterial.value(entry,"component_depth_range"),entry.pivot,float(entry.get("geometry_ground_pixels",19.0)),world.camera.global_basis]
         var key:Array=_source_key(entry.texture_path,world.character_light_profile,images,pose)
         _request(key,images,pose,priority)
@@ -177,3 +306,4 @@ func clear()->void:
     for job in jobs.values():WorkerThreadPool.wait_for_task_completion(job.task)
     jobs.clear();pending.clear();pending_order.clear()
     sources.clear();source_order.clear();packets.clear();packet_order.clear()
+    received_groups.clear();received_scope.clear();received_admission={};received_poses.clear();received_requested.clear();received_until_ms=INF

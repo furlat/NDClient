@@ -5,6 +5,7 @@ const ApplicationResults=preload("res://presentation/application_results.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
 const ReactionInputs=preload("res://presentation/reaction_inputs.gd")
 const CreationInputs=preload("res://presentation/creation_inputs.gd")
+const PropagationInputs=preload("res://presentation/propagation_inputs.gd")
 const NativeItems=preload("res://presentation/native_items.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
 const Authoring=preload("res://presentation/authoring.gd")
@@ -138,17 +139,39 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
     var cast_id:String=owner.get("source_event_uuid",node.id)
     var include_cast=not group.components.any(func(row):return row.get("native_cast_id")==cast_id and row.get("native_cue",{}).get("role")=="cast")
     var index:int=application_index
-    for phase in NativeSpells.phases(selected,owner,start,duration,index,include_cast):
+    var propagation:Dictionary=PropagationInputs.descriptor(selected)
+    var linked:Dictionary=PropagationInputs.project(node,propagation,graph) if not propagation.is_empty() else {}
+    var delivery:Dictionary=selected
+    if linked.get("ready",false) and not linked.primary:
+        delivery=selected.duplicate();delivery.staging=selected.staging.duplicate()
+        delivery.staging.cues=selected.staging.cues.map(func(original):
+            var cue:Dictionary=original.duplicate(true)
+            if cue.get("constructor_input",{}).get("kind")=="propagation_links":
+                cue.charge_seconds=0.0;cue.source_socket=str(propagation.secondary_source_socket)
+                cue.live_endpoints[0].socket=cue.source_socket
+            return cue)
+    for phase in NativeSpells.phases(delivery,owner,start,duration,index,include_cast):
         if phase.native_cue.role=="impact" and fact.get("attack_outcome","") in ["Miss","Crit Miss"]:continue
         var parameters:Dictionary=common.duplicate()
         parameters.merge(phase,true)
         parameters.merge({"native_spell":true,"cast_recipe":cast,"native_cast_id":cast_id},true)
         var constructor:Dictionary=phase.native_cue.get("constructor_input",{})
         if not constructor.is_empty() and parameters.get("status")!="missing":
-            var observed:Dictionary=ApplicationResults.project(node,constructor,graph.get("application_results",{}))
+            var observed:Dictionary={}
+            if constructor.get("kind")=="propagation_links":observed=linked
+            elif constructor.get("kind")=="spell_strike":observed=ApplicationResults.spell_strike(node,constructor,graph)
+            else:observed=ApplicationResults.project(node,constructor,graph.get("application_results",{}))
             if observed.ready:
                 parameters.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":constructor.input_field,"values":observed.values}]
                 parameters.native_constructor_evidence=observed.evidence
+                if observed.has("inputs"):parameters.native_inputs=observed.inputs
+                if constructor.get("kind")=="propagation_links":
+                    parameters.native_propagation=observed.link
+                    parameters.native_rule_caster_uuid=fact.source_entity_uuid
+                    parameters.actor_uuid=str(observed.link.source.uuid)
+                    if not observed.primary:parameters.cast_recipe={"enabled":false}
+                    parameters.native_cue=parameters.native_cue.duplicate()
+                    parameters.native_cue.source_contact=float(constructor.source_launch)+duration/1000.0
             else:
                 parameters.status="missing";parameters.reason=observed.reason
                 parameters.unbound_constructor_inputs=[constructor.input_field]

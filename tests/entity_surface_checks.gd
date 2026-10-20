@@ -4,12 +4,16 @@ const Surface=preload("res://presentation/entity_surface.gd")
 const Index=preload("res://presentation/resources/body_source_index.gd")
 const Layer=preload("res://presentation/resources/body_source_layer.gd")
 const Clip=preload("res://presentation/resources/body_source_clip.gd")
+const NativeRenderer=preload("res://presentation/native_spell_renderer.gd")
 class World extends Node3D:
     var visual_actors:Dictionary={}
     var source_images:Dictionary={}
     var catalog_cache:Dictionary={}
     var character_light_profile:String="reference"
     var camera:Node3D
+    var timeline:RefCounted=preload("res://presentation/timeline.gd").new()
+    var quarter:int=0
+    var rig_config:Dictionary={"TILE_W":128,"FACING_CYCLE":["SW"]}
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -31,6 +35,73 @@ func ready(surface:RefCounted,world:World,id:String)->Dictionary:
     while not packet.ready and Time.get_ticks_msec()<deadline:
         await process_frame;packet=surface.sample(world,id)
     return packet
+func future_tracks(world:World,index:Resource,layer:Resource,descriptor:Dictionary)->void:
+    # Small optical fixture, not additional game or wire evidence. Actual
+    # received first-hit tracks are exercised by the native rendering gate.
+    var rig:Dictionary={"cell_width":2,"cell_height":2,"origin_y_from_ground":0,"facing_rows":{"SW":0},
+        "slot_order":["body","helmet"],"slot_categories":{"body":["part"],"helmet":["part"]},
+        "clips":{"Idle":{"frames":2,"fps":2},"TakeDamage":{"frames":2,"fps":2,"loop":false}}}
+    index.root_rig="other";index.creature_rigs={"fixture":"fixture-rig"};index.rigs={"fixture-rig":rig}
+    index.layers={"fixture-rig":{"part":"fixture:layer"}}
+    layer.paths_by_slot={"body":{"Idle":"fixture:colour","TakeDamage":"fixture:future"},"helmet":{"Idle":"fixture:colour","TakeDamage":"fixture:future"}}
+    var future:Resource=Clip.new();var geometry:Dictionary=descriptor.duplicate(true)
+    geometry.geometry.merge({"status":"exact","depth_range":[-1,1],"cell_size":[2,2],"optical_ground_pixels":0.0,
+        "optical_camera":{"origin":[1,2],"elevation_degrees":30.0}},true)
+    future.descriptors={"*":geometry};index.source_owners["fixture:future"]=["fixture:layer","TakeDamage"]
+    layer.clip_sources.TakeDamage="fixture:future-clip"
+    world.catalog_cache[Surface.Geometry.BodySources.KEY].loaded["fixture:future-clip"]=future
+    var tracks:Array=[];var interests:Array=[]
+    for id in ["knight_a","knight_b"]:
+        tracks.append({"actor_uuid":id,"rig":"fixture-rig","clip":"TakeDamage","start_ms":500.0,"duration_ms":1000.0,"priority":30,
+            "source_start_seconds":0.0,"source_end_seconds":1.0,"presentation_item_looks":{},
+            "presentation_actor":{"uuid":id,"creature_content_ref":"core:creature:fixture@1","life_state":"alive",
+                "appearance":{"visual_scale":Surface.Placement.PIXELS_PER_UNIT*.1,"visual_scale_x":1.0}}})
+        interests.append({"actor":id,"slots":["body","helmet"],"reason":""})
+    var lower:Dictionary=tracks[0].duplicate(true);lower.priority=10;lower.source_start_seconds=.5
+    tracks.push_front(lower)
+    var group:Dictionary={"id":"private-source-fixture","duration_ms":1500.0,"actor_tracks":tracks}
+    world.timeline.current=group;world.timeline.state={"fixture_prefix":"before_hit"}
+    var canonical:PackedByteArray=var_to_bytes(world.timeline.state)
+    var producer:RefCounted=Surface.new()
+    producer.prepare_received_tracks(world,[group],interests)
+    check(producer.jobs.is_empty() and producer.pending.is_empty(),"Missing future media waits for the existing admission lane, without fallback images or disk work")
+    check(producer.received_poses.size()==4 and producer.received_poses.all(func(row):return row.path=="fixture:future" and row.frames==[0,1]),"Only exact received TakeDamage source frames are selected for the two actual optical slot sets")
+    check(producer.received_poses[0].frames[0]==0,"Existing Tracks.samples arbitration rejects an overlapping lower-priority source clock")
+    var native:RefCounted=NativeRenderer.new();native.inputs.surfaces=producer
+    native._image_requirements(world)
+    var required:Dictionary=Surface.required_paths("fixture:future","body",world.catalog_cache,"reference")
+    check(required.size()==5 and required.keys().all(func(path):return native.required_images.has(path) and native.required_cpu_images.has(path)),"Exact future colour, depth, support, valid-normal mask and selected normal enter the existing async media demand before their images exist")
+    producer.prepare_received_tracks(world,[],[]);native._image_requirements(world)
+    check(native.required_cpu_images.is_empty(),"Changing only future optical interests invalidates image ownership and retires their CPU demand")
+    producer.prepare_received_tracks(world,[group],interests);native._image_requirements(world)
+    check(required.keys().all(func(path):return native.required_cpu_images.has(path)),"Restored future source interest reuses the normal image owner without a loader or readiness gate")
+    var scans:int=producer.received_scans
+    world.source_images["fixture:future"]=world.source_images["fixture:colour"]
+    var deadline:int=Time.get_ticks_msec()+4000
+    while producer.source_builds<2 and Time.get_ticks_msec()<deadline:
+        producer.prepare_received_tracks(world,[group],interests);await process_frame
+    producer.poll()
+    check(producer.source_builds==2 and producer.sources.size()==2,"Both actors and their overlapping slots share one worker result per exact future physical source frame")
+    check(producer.received_scans==scans,"Unchanged received owner retries media without rescanning every track each frame")
+    producer.prepare_received_tracks(world,[],[])
+    check(producer.received_poses.is_empty() and producer.sources.size()==2,"An empty received owner retires only future interest and preserves shared completed optical measurements")
+    producer.prepare_received_tracks(world,[group],interests)
+    scans=producer.received_scans
+    world.timeline.retained_directions.knight_a=[[0,0],[1,0]]
+    producer.prepare_received_tracks(world,[group],interests)
+    check(producer.received_scans==scans+1,"In-place retained direction publication invalidates the small preparation snapshot")
+    check(world.timeline.display_ms==0.0 and var_to_bytes(world.timeline.state)==canonical and world.visual_actors.knight_a.entries[0].texture_path=="fixture:colour","Future optical work neither publishes a pose nor advances the canonical prefix/clock")
+    var built:int=producer.source_builds
+    for id in ["knight_a","knight_b"]:
+        for shown in world.visual_actors[id].entries:shown.texture_path="fixture:future"
+        var packet:Dictionary=producer.sample(world,id)
+        check(packet.ready and producer.source_builds==built and producer.jobs.is_empty() and producer.pending.is_empty(),"The exact first displayed TakeDamage frame is immediately shared with zero new source work: "+id)
+    check(producer.sources.size()<=Surface.SOURCE_LIMIT and producer.pending.size()<=Surface.PENDING_LIMIT,"Received preparation retains the existing finite cache/queue bounds")
+    producer.clear()
+    check(producer.received_groups.is_empty() and producer.received_poses.is_empty() and producer.jobs.is_empty(),"Epoch cleanup retires its future operands and joins only owned finite work")
+    for id in ["knight_a","knight_b"]:
+        for shown in world.visual_actors[id].entries:shown.texture_path="fixture:colour"
+    world.source_images.erase("fixture:future")
 func run()->void:
     var world:World=World.new();root.add_child(world)
     world.camera=Node3D.new();world.add_child(world.camera);world.camera.basis=Basis.from_euler(Vector3(-PI/6,PI/4,0))
@@ -96,5 +167,6 @@ func run()->void:
     var body_only:Dictionary=producer.sample(world,"knight_b",["body"])
     var helmet_only:Dictionary=producer.sample(world,"knight_b",["helmet"])
     check(body_only.ready and helmet_only.ready and body_only.gpu_geometry_key!=helmet_only.gpu_geometry_key,"Recipient slot ownership participates in upload identity even when two layers share a physical source pose")
+    await future_tracks(world,index,layer,descriptor)
     bounded.clear();producer.clear();world.free()
     print(JSON.stringify({"checks":checks,"failures":failures}));quit(0 if failures.is_empty() else 1)

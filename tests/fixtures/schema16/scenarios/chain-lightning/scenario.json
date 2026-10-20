@@ -1,0 +1,81 @@
+{
+ "id": "spell.chain_lightning/baseline",
+ "title": "Chain Lightning: legal baseline",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.chain_lightning"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [
+   "creature.generic_caster"
+  ],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.chain_lightning"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.chain_lightning",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  }
+ ],
+ "seed": 2,
+ "required_behaviors": [
+  "spell.chain_lightning"
+ ],
+ "purpose": "Current-engine baseline cast/reaction safety; visual/lifecycle qualification is separate."
+}

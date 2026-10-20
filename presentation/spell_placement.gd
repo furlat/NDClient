@@ -98,13 +98,14 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
             "surfaces":[received],"fixed":{},"item_uuid":weapon.item_uuid,"holder_uuid":weapon.actor,"equipment_slot":weapon.equipment_slot}
     if attachment=="recipient_head" and (target.is_empty() or not has_socket(world,target.row,"head")):
         return {"ready":false,"unavailable":true,"reason":"native_head_registration_not_bound"}
-    var needs_hand:bool=role in ["cast","flight","spray"] or attachment in ["caster_hand","caster_release"]
+    var source_socket:String=str(cue.get("source_socket",""))
+    var needs_hand:bool=source_socket.is_empty() and (role in ["cast","flight","spray"] or attachment in ["caster_hand","caster_release"])
     var hand_endpoint:Dictionary={}
     for endpoint in cue.get("live_endpoints",[]):
         if endpoint.get("actor")=="caster" and endpoint.get("socket") in ["hand","cast_hand"]:
             needs_hand=true;hand_endpoint=endpoint;break
     var needs_body:bool=not component.get("ground_target",false) and (role in ["flight","impact","strike"] or attachment in ["recipient_body","recipient_head"])
-    if needs_hand and not displayed(source):return {"ready":false,"unavailable":true,"reason":"native_spell_actor_not_displayed"}
+    if (needs_hand or not source_socket.is_empty()) and not displayed(source):return {"ready":false,"unavailable":true,"reason":"native_spell_actor_not_displayed"}
     if (needs_body or persistent and not component.get("spatial_owner",false)) and not displayed(target):return {"ready":false,"unavailable":true,"reason":"native_spell_recipient_not_displayed"}
     var from_position:Array=component.get("from_position",[0,0])
     var to_position:Array=component.get("to_position",from_position)
@@ -118,10 +119,15 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
     var direction=Vector2(to_position[0]-from_position[0],to_position[1]-from_position[1])
     var geometry:Dictionary=component.get("area_geometry",{})
     if geometry.get("direction")!=null:direction=Vector2(geometry.direction[0],geometry.direction[1])
-    if not direction.is_zero_approx():row.facing=world._facing(direction)
+    if source_socket.is_empty() and not direction.is_zero_approx():row.facing=world._facing(direction)
     var released:Dictionary={"ready":true,"point":Placement.contact(row)}
     var hand:Dictionary=released
-    if needs_hand:
+    if not source_socket.is_empty():
+        released=fixed.get("release",{})
+        if released.is_empty():released=pose_point(world,row,source_socket)
+        if not released.ready:return released
+        hand=released
+    elif needs_hand:
         var cast:Dictionary=component.get("cast_recipe",{})
         if cast.get("enabled",true):
             var view:String=facing(world,row)

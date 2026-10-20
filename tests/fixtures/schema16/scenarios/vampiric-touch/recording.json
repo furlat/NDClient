@@ -1,0 +1,196 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "575909c1-8d91-40b8-a558-66003560a769": "Amber caster",
+  "aac06abb-4095-4b6d-aa72-38f787530977": "Amber ally",
+  "43680d6b-54e2-4e61-8fbd-dc7a4c6ed7d5": "Blue target",
+  "7acba7e7-1182-4823-94f6-6d7b561e9b3e": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.vampiric_touch \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 4,
+   "damage": 2,
+   "heal": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.vampiric_touch": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.vampiric_touch"
+  ],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 50,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "575909c1-8d91-40b8-a558-66003560a769",
+   "condition_uuid": "a075a009-24e3-40f7-8d5a-a0bccf41e3ae",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "575909c1-8d91-40b8-a558-66003560a769",
+   "condition_uuid": "fe6f9c74-7e00-4f9c-b6e6-397e6f636b84",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 73,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 74,
+   "lineage": 41,
+   "event_offset": 7,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "575909c1-8d91-40b8-a558-66003560a769",
+   "condition_uuid": "a075a009-24e3-40f7-8d5a-a0bccf41e3ae",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 75,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.vampiric_touch",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 50,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "575909c1-8d91-40b8-a558-66003560a769",
+   "condition_uuid": "a075a009-24e3-40f7-8d5a-a0bccf41e3ae",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.vampiric_touch",
+   "kind": "actor_change",
+   "actor_uuid": "575909c1-8d91-40b8-a558-66003560a769",
+   "condition_uuid": "fe6f9c74-7e00-4f9c-b6e6-397e6f636b84",
+   "condition_id": "condition.spell.vampiric_touch",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 73,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 74,
+   "lineage": 41,
+   "event_offset": 7,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "575909c1-8d91-40b8-a558-66003560a769",
+   "condition_uuid": "a075a009-24e3-40f7-8d5a-a0bccf41e3ae",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 75,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.vampiric_touch",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

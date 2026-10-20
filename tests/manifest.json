@@ -5224,6 +5224,26 @@
    "reason": ""
   },
   {
+      "name": "actor_row_requirement_checks",
+      "script": "res://tests/actor_row_requirement_checks.gd",
+      "mode": "headless",
+      "tier": "fast",
+      "args": [],
+      "timeout": 300,
+      "status": "ok",
+      "reason": "Canonical per-row ActorChange requirements and exact existing Studio owners, original independent recordings and metadata negative controls."
+    },
+    {
+   "name": "studio_spatial_owner_checks",
+   "script": "res://tests/studio_spatial_owner_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original two-seat Orb authored-only spatial source tracks, exact admission, lifetime and canonical seek/loop."
+  },
+  {
    "name": "native_spatial_owner_checks",
    "script": "res://tests/native_spatial_owner_checks.gd",
    "mode": "gpu",
@@ -5272,6 +5292,46 @@
    "timeout": 300,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "vampiric_touch_input_checks",
+   "script": "res://tests/vampiric_touch_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 120,
+   "status": "ok",
+   "reason": "Original independent schema16 first-cast Hit/Necrotic result, exact lineage/source/recipient constructor projection and negative controls; held/repeat/healing/pixels remain explicit gaps."
+  },
+  {
+   "name": "propagation_input_checks",
+   "script": "res://tests/propagation_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original two-seat native propagation ownership, immutable constructor operands, exact contact ordering and explicit disabled-density policy."
+  },
+  {
+   "name": "native_propagation_render_checks",
+   "script": "res://tests/native_propagation_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original two-seat single-link source: actual sockets, ribbon/contact pixels, recipient damage clock, camera and canonical seek; multi-hop remains unqualified."
+  },
+  {
+   "name": "native_vampiric_touch_render_checks",
+   "script": "res://tests/native_vampiric_touch_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original independent first-cast Vampiric Touch: actual strike setter/admission, measured hand/recipient, native pixels and seek/loop/cleanup; retained/repeat/healing remain explicit gaps."
   }
  ]
 }

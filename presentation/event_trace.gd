@@ -174,21 +174,6 @@ static func _lifecycle_components(row:Dictionary,condition:Dictionary,actor_uuid
         component.persistent=true
         row.components.append(component)
 
-static func _native_persistent_components(row:Dictionary,selected:Dictionary,owner_id:String,actor_uuid:Variant,cache:Dictionary)->void:
-    var native_index=0
-    for phase in NativeSpells.condition_phases(selected):
-        var sample=phase.duplicate()
-        sample.merge({"id":owner_id+":native:"+str(native_index),"kind":"native_effect","native_spell":true,
-            "actor_uuid":actor_uuid,"start_ms":row.get("_commit_ms",row._admit_ms),"duration_ms":INF},true)
-        var component=_compiled_component(sample,cache)
-        component.persistent=true
-        row.components.append(component)
-        for channel in NativeChannels.channels(sample):
-            var child=_compiled_component(channel,cache)
-            child.persistent=true
-            row.components.append(child)
-        native_index+=1
-
 static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dictionary:
     var row=_component(component.kind,component.get("reason",""),component.get("source",""))
     row.merge({"id":component.id,"trace_track_id":component.id,"actor_uuid":component.get("actor_uuid",""),
@@ -218,11 +203,10 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
     if fact.is_empty(): row.reasons = ["fact_not_disclosed"]; return
     match row.kind:
         "sensory":
-            # The disclosed after-value owns this diagnostic requirement. It
-            # creates no effect and requires no private source actor identity.
-            for id in fact.get("spatial_effects_changed",{}):
-                var selected=NativePersistent.spatial_selection(fact.spatial_effects_changed[id],cache)
-                _native_persistent_components(row,selected,"spatial:"+str(id),null,cache)
+            # Schema16's indexed sensory rows are folded once by the SDK.
+            # Existing Recording spatial/light histories inspect the exact
+            # commit after-values; the envelope creates no duplicate effect.
+            row.reasons=["sensory_publication_visuals_belong_to_disclosed_owners"]
         "movement": row.reasons = ["movement_container_visuals_belong_to_steps"]
         "step":
             if not fact.get("committed",false): row.components = []; row.reasons = ["uncommitted_step"]; return
@@ -343,6 +327,7 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
         row.components = []; row.status = "not_visible"; row.reasons = ["actor_not_visually_disclosed"]
 
 static func _operation_requirements(row:Dictionary,node:Dictionary,recipe:Dictionary,cache:Dictionary)->void:
+    if row.kind=="actor_change":return # Ordered per-row assessment runs after condition cue projection.
     var source:String=recipe.get("_legacy_source","")
     if source.is_empty():
         if row.kind=="spell":source="spells/"+str(node.fact.get("behavior_id",""))+".json:"
@@ -375,6 +360,43 @@ static func _operation_requirements(row:Dictionary,node:Dictionary,recipe:Dictio
         required.trace_track_id=""
         row.components.append(required)
         pointers[[required.get("source_pointer",required.source),required.kind]]=true
+
+static func _actor_requirements(row:Dictionary,node:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    row._actor_rows=[]
+    for declaration in Requirements.actor_rows(node.fact):
+        var expected:Dictionary=declaration.duplicate()
+        expected.id=row.id+":"+declaration.id
+        expected.occurrence=row.event_uuid
+        expected.commit_ms=row._commit_ms
+        expected.trace_track_id=""
+        var actor:Dictionary=graph.actor_inputs.get(node.id,{}).get(expected.actor_uuid,{})
+        expected.visibility="not_disclosed" if actor.get("last_visual_position")==null else "disclosed"
+        if expected.actor_field in ["layer","active_weapon_set"]:
+            var recipe:Dictionary=Authoring.body("equipment",actor,{},cache) if not actor.is_empty() else {}
+            expected.authoring=recipe.get("source","")
+            var tracks:Array=row.components.filter(func(component):return component.kind=="body" and component.actor_uuid==expected.actor_uuid and component.get("equipment_change",false))
+            expected.inspection_links=tracks.map(func(component):return component.trace_track_id)
+            if expected.visibility=="disclosed" and recipe.get("actor",{}).get("enabled",false) and tracks.is_empty():
+                expected.status="missing";expected.implementation="missing";expected.gap_kind="renderer"
+                expected.reason="Enabled authored equipment body has no track for this exact changed actor."
+        elif expected.actor_field=="condition":
+            var wire:Dictionary=node.fact.actors[expected.actor_index].rows[expected.row_index]
+            for cue in graph.condition_cues.get(node.id,[]):
+                if cue.actor_uuid==expected.actor_uuid and is_same(cue.row,wire):expected.phase=cue.phase;break
+            if expected.phase=="set":expected.phase="update"
+            expected.owner_id="condition:"+expected.condition_uuid
+            expected.inspection_links=row.components.filter(func(component):return component.actor_uuid==expected.actor_uuid and str(component.trace_track_id).begins_with(expected.owner_id+":")).map(func(component):return component.trace_track_id)
+        elif expected.actor_field=="condition_duration":expected.owner_id="condition:"+expected.condition_uuid
+        # Missing requirements remain independent from any working sibling.
+        # Classified/delegated rows are inspection metadata, never fabricated
+        # draw components or evidence of a body/material sample.
+        if expected.status=="missing":
+            var required:Dictionary=_component(expected.kind,expected.reason,expected.source)
+            required.merge(expected,true)
+            required.timing={"resolved":true,"start_ms":row._commit_ms,"end_ms":row._commit_ms,"reason":"actual_ordered_actor_row_commit; no animation duration inferred"}
+            row.components.append(required)
+        row._actor_rows.append(expected)
+    if row.components.is_empty():row.reasons=["ordered_actor_rows_no_independent_animation_claim"]
 
 static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictionary, cache: Dictionary) -> Array:
     var result: Array = []
@@ -413,7 +435,7 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
             var component = _component("body","", "catalog/rigs.json:"+track.rig+".clips."+track.clip)
             component.merge({"id":track.trace_track_id,"trace_track_id":track.trace_track_id,"actor_uuid":track.actor_uuid,
                 "rig":track.rig,"clip":track.clip,"start_ms":track.start_ms,"end_ms":track.start_ms+track.duration_ms,
-                "status":"playing","holding_pose":track.get("holding_pose",false),"motion":track.get("motion",false)},true)
+                "status":"playing","holding_pose":track.get("holding_pose",false),"motion":track.get("motion",false),"equipment_change":track.get("equipment_change",false)},true)
             if track.has("motion_fraction_from"):
                 component.motion_phase={"from":track.motion_fraction_from,"to":track.motion_fraction_to}
             if track.has("reaction_cast_binding"):
@@ -439,9 +461,13 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
             if cue.phase=="application":
                 var owner:Dictionary=graph.actor_inputs.get(node.id,{}).get(cue.actor_uuid,{})
                 var original_target:Variant=row.target_uuid
+                var original_actor:Variant=row.actor_uuid
                 row.target_uuid=cue.actor_uuid
+                row.actor_uuid=cue.actor_uuid
                 _persistent_condition(row,condition,recipe.get("persistent",{}),cache,Authoring.rig_id(owner,cache))
                 row.target_uuid=original_target
+                row.actor_uuid=original_actor
+        if row.kind=="actor_change" and not node.get("canceled",false):_actor_requirements(row,node,graph,cache)
         if row.components.is_empty(): row._admit_ms = commits.get(node.id,group.duration_ms)
         result.append(row)
     result.sort_custom(func(a,b): return a.source_index < b.source_index)
@@ -607,6 +633,7 @@ static func _public(row: Dictionary, detailed: bool) -> Dictionary:
         result[key] = row[key]
     var coverage = _coverage(row)
     for key in ["status","reasons","components","completed"]: result[key] = coverage[key]
+    if detailed and row.committed and row.has("_actor_rows"):result.actor_rows=row._actor_rows
     return result.duplicate(true)
 
 static func _coverage(row: Dictionary) -> Dictionary:

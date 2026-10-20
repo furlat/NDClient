@@ -94,6 +94,7 @@ def typed_source(path: Path, section: str) -> dict:
             result.append({"clip": value(fields.get("clip"), ""), "selection": value(fields.get("selection"), ""),
                 "role": value(fields.get("role"), ""), "scope": value(fields.get("scope"), ""),
                 "at": value(fields.get("at"), ""), "constructor_input": value(fields.get("constructor_input"), {}),
+                "input_policies": value(fields.get("extra"), {}).get("input_policies", {}),
                 "unbound_constructor_inputs": value(fields.get("unbound_constructor_inputs"), []),
                 "source_index": len(result)})
         return result
@@ -115,6 +116,53 @@ def typed_source(path: Path, section: str) -> dict:
         row["variants"].append({"id": value(fields.get("id"), ""), "kind": value(fields.get("kind"), ""),
             "selection": value(fields.get("selection"), ""), "effects": cues(fields.get("effects"))})
     return row
+
+
+def qualified_input_policies(cue: dict, clip: dict) -> dict:
+    """Explicit consumer choice, distinct from a supplied Factory operand."""
+    if cue.get("constructor_input", {}).get("kind") == "spell_strike":
+        return qualified_vampiric_input_policies(cue, clip)
+    expected = {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}}
+    if cue.get("input_policies") != expected or clip.get("clip_id") != "live-electric/chain_live_single":
+        return {}
+    if cue.get("constructor_input", {}).get("kind") != "propagation_links":
+        return {}
+    for approach in clip.get("approaches", []):
+        path = approach.get("source_phase")
+        if not path:
+            return {}
+        text = (ROOT / path.removeprefix("res://")).read_text()
+        script = re.search(r'^constructor_script = (.+)$', text, re.M)
+        inputs = re.search(r'^input = (.+)$', text, re.M)
+        if not script or value(script[1]) != "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd" or not inputs:
+            return {}
+        if value(inputs[1], {}).get("density_mask", False) is not False:
+            return {}
+    source = (ROOT / "assets/vfx/sources/038f154b06649f707e70/live_network.gd").read_text()
+    return {"density_field": expected["density_field"]["reason"]} if 'if settings.get("density_mask", false):' in source else {}
+
+
+def qualified_vampiric_input_policies(cue: dict, clip: dict) -> dict:
+    reason = "first_cast_impact_does_not_consume_owner_or_repeat_inputs"
+    policies = {name: {"mode": "not_applicable", "reason": reason}
+                for name in ("owner_input", "healing_input", "condition_input", "tick_input")}
+    descriptor = cue.get("constructor_input", {})
+    if clip.get("clip_id") != "bg3-36/vampiric-touch/vampiric_touch_native/impact" or cue.get("input_policies") != policies:
+        return {}
+    if descriptor.get("component_path") != ["owned_contact"] or descriptor.get("behavior_id") != "spell.vampiric_touch":
+        return {}
+    for approach in clip.get("approaches", []):
+        if not approach.get("source_phase"):
+            return {}
+        text = (ROOT / approach["source_phase"].removeprefix("res://")).read_text()
+        script = re.search(r'^constructor_script = (.+)$', text, re.M)
+        inputs = re.search(r'^input = (.+)$', text, re.M)
+        if not script or value(script[1]) != "res://assets/vfx/sources/8d17316149890f77c98b/vampiric_touch.gd" or not inputs:
+            return {}
+        settings = value(inputs[1], {})
+        if settings.get("phase") != "impact" or settings.get("behavior_id") != "spell.vampiric_touch":
+            return {}
+    return dict.fromkeys(policies, reason)
 
 
 def report() -> dict:
@@ -157,14 +205,23 @@ def report() -> dict:
                 supplied = PROVIDERS | (EVENT_PROVIDERS if constructor in {"observed_event", "creation_admission"} else set())
                 if constructor == "spatial_owner":
                     supplied = supplied | {"surface_presence"}
+                if constructor == "propagation_links":
+                    supplied = supplied | {"link_edges"}
+                if constructor == "spell_strike":
+                    supplied = supplied | {"strike_input"}
+                inapplicable = qualified_input_policies(cue, clips.get(clip, {}))
                 cue["declared_inputs"] = sorted(required)
-                cue["missing_provider_channels"] = sorted(required - supplied)
+                cue["provided_channels"] = sorted(required & supplied)
+                cue["not_applicable_channels"] = inapplicable
+                cue["missing_provider_channels"] = sorted(required - supplied - set(inapplicable))
                 cue["source_present"] = clip in clips
                 disabled = row["section"] == "spells" and not row["native_staging"]
                 excluded = cue["source_index"] in row["excluded_cues"]
                 handed_over = cue["source_index"] in row["owner_cues"] and (row["owner_kind"] == "spatial_effect" or any(s["condition"].get("body_channel_included", False) for owner in row["owner_ids"] for s in owners[owner]))
                 cue["dispatch"] = "authored_disabled" if disabled else "variant_requires_actual_selector" if variant != "default" else "excluded_probe" if excluded else "owner_handover" if handed_over else "not_selected_for_event" if row["explicit_event_cues"] and cue["source_index"] not in row["event_cues"] else "explicit_gap" if cue["unbound_constructor_inputs"] else "bound_provider_gap" if cue["missing_provider_channels"] else "bound_provider_present_unqualified"
-                references[clip].append({"id": row["id"], "variant": variant, "source_index": cue["source_index"], "dispatch": cue["dispatch"]})
+                references[clip].append({"id": row["id"], "variant": variant, "source_index": cue["source_index"], "dispatch": cue["dispatch"],
+                    "provided_channels": cue["provided_channels"], "not_applicable_channels": inapplicable,
+                    "missing_provider_channels": cue["missing_provider_channels"]})
         row["engine_kind"] = engine_ids.get(row["id"], "typed_only")
         row["visual_approval"] = "not_user_accepted" if row["id"] in UNACCEPTED else "not_inferred_from_source_status"
         row["scenario_coverage"] = "not_measured_by_this_offline_binding_join"

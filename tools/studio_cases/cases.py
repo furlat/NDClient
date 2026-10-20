@@ -378,6 +378,14 @@ def interaction_cohort():
         rows.append(study(spell+'/split_recipients',spell.removeprefix('spell.').replace('_',' ').title()+': three actual deliveries across two recipients',
                     [mage('caster','amber',[3,7],[spell]),fighter('target','blue',[9,7]),fighter('second_target','blue',[9,8])],
                     [command(spell,target='target',recipients=['target','second_target','target'])],spells=[spell],facts=['damage']))
+    rows.append(study('spell.chain_lightning/three_recipients',
+                'Chain Lightning: primary contact and two independently selected branches',
+                [mage('caster','amber',[3,7],['spell.chain_lightning']),
+                 mage('target','blue',[8,7]),mage('second_target','blue',[9,9]),mage('third_target','blue',[11,6])],
+                [command('spell.chain_lightning',target='target',
+                         recipients=['target','second_target','third_target'],level=6,capture_choices=True)],
+                spells=['spell.chain_lightning'],facts=['saving_throw','damage'],seed=3,
+                purpose='One legal level6 cast from ordinary visible actors. Select the primary and two distinct nearby secondaries through Preview; inspect native application propagation rather than infer sequential hops from recipient order.'))
     for change in ('enlarge','reduce'):
         rows.append(study('spell.enlarge_reduce/'+change+'_lifecycle',change.title()+': actual size owner, movement, attack and restoration',
                     [mage('caster','amber',[3,6],['spell.enlarge_reduce']),fighter('ally','amber',[4,6]),mage('target','blue',[5,6])],

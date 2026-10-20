@@ -28,11 +28,11 @@ percentages in the19 October cohort ledger describe their named checkpoint.
 
 | Workstream | Estimate | Remaining responsibility |
 |---|---:|---|
-| Single main checkout/branch |100%|Repair changes still need their own commit.|
+| Single main checkout/branch |100%|Checkpoints7ef2f3f8, f489896f,4ec905b2 and8b9a05fc are committed; next cohort is under qualification.|
 | Canonical schema16 SDK/state|100%|Retain reference fold/COW/independent-seat checks.|
 | Ordering, preparation and publication|90%|Repeat native/live equipment and reveal boundaries after integration.|
 | Studio browser, replay and tracks|80%|Complete scenario depth and missing-provider visibility; broader native qualification.|
-| All-spell crash safety|96%|Last complete189-attempt native sweep had182 passes/seven failures; rerun current repaired main.|
+| All-spell crash safety|In progress|Current-main partitions cover59/189 IDs:57 safe and two named producer failures; remaining130 must run. Historical182/189 is not current qualification.|
 | Complete Factory integration|75%|Whole c494 is installed; family/variant runtime and visual coverage is incomplete.|
 | Shared native client providers|65%|History/capture shader qualification, remaining event/owner inputs and weapon variants.|
 | Complete scenario/capability coverage|45%|More genuine interactions, lifecycle/outcome variants and class/condition studies.|
@@ -249,3 +249,67 @@ processes original packet filenames in order.
   A native case coroutine that aborts without publishing now ends its owned
   batch with truthful partial evidence; later partitions resume in a fresh
   process rather than timing out every remaining case in an abandoned owner.
+
+
+### New provider/Studio checkpoint in qualification
+
+The spatial/creation/cache-view cohort is committed at8b9a05fc. All work
+continues in the same sole main checkout and branch. The following received
+changes are under qualification for the next explicit source-only checkpoint:
+
+- Chain Lightning projects each disclosed application into one existing native
+  single-link source. A genuine three-recipient cast proves primary→two branches
+  with per-link optical clocks and original rule-caster identity. Headless547
+  and native268 checks pass. Source art, materials and gameplay state are
+  unchanged. Three exit-only RefCounted warnings remain in that GPU harness.
+- Vampiric Touch binds the actual first-cast positive Necrotic result to its
+  finite impact source. Headless121 and existing native68 checks pass; held,
+  repeat, healing and removal phases remain missing. The newly added stronger
+  pre-contact preparation proof initially failed on both original seats because
+  future pose CPU companions were not requested before contact. The existing
+  async image owner now includes exact bounded future source paths:82 native
+  checks pass, with source counts33→33 and30→30 at contact. The36-check
+  headless gate also proves those future pins retire without flushing shared
+  sources. This paused-prefix proof is not actual short-queue lead qualification.
+- Studio inspects canonical ordered ActorChange rows with exact original
+  identities/operands, and shows authored spatial-owner lifetimes through the
+  existing persistent path.817 ordered-row and48 spatial checks pass; no
+  invented animation or private future state becomes a display row.
+- Optional canonical null selector/count fields are no longer forwarded to
+  integer Factory setters. Actual zero/false remain preserved.83 input-binding
+  checks pass, and the corrected Blur real-command retry is safe. This does not
+  fix the deferred temporal-history shaders or qualify the whole Blur family.
+
+The latest full fast run has116 rows:115 pass, one stale ActorChange frozen
+expectation. Its focused migration now passes1,579 assertions with explicit
+current expectations and all other frozen cases unchanged. A fresh full pass
+is required after the future-source fix; the combined partial receipts are
+not advertised as a green full run. Receipts:
+`.runtime/tests/20261020T005404.517956Z/` and
+`.runtime/tests/20261020T005726.563866Z/`.
+
+The actual live safety partitions currently cover59 unique spell IDs,57 safe.
+Branding Smite and Ensnaring Strike retain original server `game_failed`
+failures; a prior Blur client crash is retained as an older attempt and
+superseded only by its corrected actual retry. The native batch stops when a
+request consumer is abandoned, and resumes in a fresh owner. The remaining
+partition starts after `spell.ensnaring_strike/baseline`; it is not complete.
+The completed Gallery313-assertion/27-command receipt above remains the latest
+current gameplay performance evidence.
+
+
+Future source proof receipts:
+`.runtime/tests/20261020T010218.651770Z/` (native82/82) and
+`.runtime/tests/20261020T010322.980431Z/` (headless36/36).
+The bounded plan/anti-slop/anti-OOP review found one retirement omission,
+corrected through the same preparation owner; no remaining material finding.
+No future pose is published and the contact clock is unchanged.
+
+
+The integrated checkpoint now passes the complete116-test fast lane in one
+fresh run: `.runtime/tests/20261020T010341.189226Z/`, zero failed assertions,
+script/resource errors or owned process leftovers. The source-index test
+rebuilt all three typed domains before its readers. The116-test receipt
+supersedes the earlier115/116 partial run, without erasing its failed evidence.
+The current executable native/live inventory and named upstream producer/Factory
+gaps remain separate from that fast-lane result.

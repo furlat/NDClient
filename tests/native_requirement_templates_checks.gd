@@ -26,7 +26,16 @@ func run()->void:
     check(index.fact_requirements.size()==kinds.size(),"Offline contract templates cover every current discriminator")
     for kind in kinds:
         var actual:Dictionary=Requirements.fact(kind,cache)
-        check(actual==oracle.fact(kind),"Exact contract description: "+kind)
+        if kind=="actor_change":
+            # This canonical container's row policy intentionally supersedes
+            # the frozen pre-cache extractor's generic unassessed demand.
+            # actor_row_requirement_checks qualifies every ordered field.
+            check(actual.kind=="fact:actor_change" and actual.participant=="container" \
+                and actual.get("disposition")=="ordered_rows" and actual.implementation=="implemented" \
+                and actual.inspection=="projected" and actual.status=="unexercised" and not actual.rendered \
+                and actual.event_kinds==["actor_change"] and actual.source.ends_with("/mapping/actor_change"),
+                "Canonical ActorChange template delegates ordered rows without claiming body/render coverage")
+        else:check(actual==oracle.fact(kind),"Exact contract description: "+kind)
         check(is_same(actual,index.fact_requirements[kind]),"Contract description borrows its admitted revision: "+kind)
     var rows:int=0;var conditional:int=0
     for behavior in index.spells:

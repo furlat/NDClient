@@ -632,5 +632,77 @@
   },
   "scenario": "res://tests/fixtures/schema16/scenarios/divine-generosity/scenario.json",
   "scope": "Original lawful party stream. Creation-prefix qualification only; Arm Healing Incense follow-up remains a failed separate gap."
+ },
+ "chain-lightning": {
+  "id": "spell.chain_lightning/baseline",
+  "label": "Chain Lightning: actual single propagation link",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/chain-lightning/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/chain-lightning/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/chain-lightning/scenario.json"
+ },
+ "vampiric-touch": {
+  "id": "spell.vampiric_touch/baseline",
+  "label": "Vampiric Touch: legal baseline",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/vampiric-touch/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/vampiric-touch/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/vampiric-touch/scenario.json"
+ },
+ "chain-lightning-three": {
+  "id": "spell.chain_lightning/three_recipients",
+  "label": "Chain Lightning: actual primary and two branch recipients",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/chain-lightning-three/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/chain-lightning-three/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/chain-lightning-three/scenario.json"
  }
 }

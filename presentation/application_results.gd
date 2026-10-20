@@ -35,6 +35,43 @@ static func project(node:Dictionary,descriptor:Dictionary,results:Dictionary)->D
             "save_occurrence":saves[0].occurrence,"save_lineage":saves[0].lineage,
             "damage_occurrences":damage.map(func(row):return row.occurrence),"damage_lineages":damage.map(func(row):return row.lineage),"applied_damage":amount}}
 
+## A first-cast spell strike consumes its own native descendant result. The
+## Factory's *_uuid aliases below are opaque seat-local occurrence keys,
+## never private damage-roll UUIDs or a fabricated held-condition owner.
+static func spell_strike(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Dictionary:
+    var fact:Variant=node.get("fact")
+    if node.get("canceled",false):return {"ready":false,"reason":"spell_strike_canceled"}
+    if fact==null or fact.get("kind")!="spell" or fact.get("behavior_id")!=descriptor.get("behavior_id"):
+        return {"ready":false,"reason":"spell_strike_first_cast_not_observed"}
+    if fact.get("attack_outcome") not in ["Hit","Crit"]:
+        return {"ready":false,"reason":"spell_strike_hit_not_observed"}
+    var source:Variant=fact.get("source_entity_uuid")
+    var target:Variant=fact.get("target_entity_uuid")
+    if source==null or target==null:return {"ready":false,"reason":"spell_strike_recipient_not_disclosed"}
+    var rows:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):
+        return row.kind=="damage" and row.target_uuid==str(target) and row.node.fact.get("source_entity_uuid")==source \
+            and row.node.fact.damage_type==descriptor.damage_type)
+    if rows.size()!=1:return {"ready":false,"reason":"spell_strike_exact_damage_not_observed"}
+    var damage:Dictionary=rows[0].node
+    var strike:Dictionary={"source_actor_uuid":str(source),"recipient_uuid":str(target),"attack_uuid":str(node.id),
+        "behavior_id":str(fact.behavior_id),"attack_kind":"spell","source_kind":"spell",
+        "outcome":"critical" if fact.attack_outcome=="Crit" else "hit","payload_applied":true,
+        "damage_type":str(damage.fact.damage_type).to_lower(),"damage_fact_uuid":str(damage.id)}
+    var evidence:Dictionary={"source_occurrence":str(node.id),"source_lineage":str(node.lineage_id),
+        "result_occurrence":str(damage.id),"result_lineage":str(damage.lineage_id),"source_uuid":source,"target_uuid":target,
+        "applied_damage":damage.fact.applied_damage,"damage_type":damage.fact.damage_type,
+        "damage_fact_identity":"native_applied_result_occurrence","resolution":node.get("resolution_record",{})}
+    for field in ["source_condition_uuid","effect_id"]:
+        if damage.fact.get(field)!=null:strike[field]=damage.fact[field];evidence[field]=damage.fact[field]
+    # This finite source branch never reads owner, condition, tick or healing.
+    # Clear their review packets and unused review identities in the private
+    # source input; its sealed phase/material/art settings are retained.
+    var values:Dictionary={"source_actor_uuid":str(source),"recipient_uuid":str(target),"attack_uuid":str(node.id),
+        "behavior_id":str(fact.behavior_id),"strike":strike,"owner":{},"condition":{},"tick":{},"healing":{},
+        "item_uuid":"","equipment_slot":"","render_slot":"","activation_event_uuid":"",
+        "condition_uuid":"","condition_id":"","owner_uuid":"","owner_id":""}
+    return {"ready":true,"reason":"","values":values,"inputs":{"strike_input":strike},"evidence":evidence}
+
 ## Index committed outcomes once per received group. An ancestor consumes only
 ## its native descendants; neither recipient proximity nor art chooses results.
 static func observed_index(events:Array,graph:Dictionary)->Dictionary:

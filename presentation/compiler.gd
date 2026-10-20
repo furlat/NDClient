@@ -392,10 +392,20 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             if SpellDelivery.owns_delivery(node,graph,selected_delivery,has_applications):
                 var points=SpellDelivery.endpoints(fact,graph,state,selected_delivery)
                 if not points.is_empty():
-                    if application:contact+=float(Occurrences.application_index(node,graph))*recipe.get("projectile",{}).get("missileStaggerMs",0)
+                    var propagation:Dictionary=Components.PropagationInputs.descriptor(selected_delivery)
+                    if application and not propagation.is_empty():
+                        var linked:Dictionary=Components.PropagationInputs.project(node,propagation,graph)
+                        if linked.ready and not linked.predecessor.is_empty():
+                            var predecessor:Dictionary=linked.predecessor
+                            if not graph.visited.has(predecessor.lineage_id):_schedule(predecessor,owner.start,state,group,graph,cache)
+                            contact=maxf(contact,float(graph.propagation_contacts[predecessor.id]))
+                    elif application:contact+=float(Occurrences.application_index(node,graph))*recipe.get("projectile",{}).get("missileStaggerMs",0)
                     var travel=SpellDelivery.travel_ms(selected_delivery,recipe,points,cache)
                     Components.native_spell(group,node,recipe,selected_delivery,contact,travel,points,cache,owner,fact,Occurrences.application_index(node,graph),graph)
                     contact+=travel
+                    if application and not propagation.is_empty():
+                        if not graph.has("propagation_contacts"):graph.propagation_contacts={}
+                        graph.propagation_contacts[node.id]=contact
             elif shared_area:
                 # The carrier already scheduled the single ground effect. Every
                 # recipient applies its actual outcome at that carrier contact.
@@ -566,7 +576,7 @@ static func _native_requirement_cut(group: Dictionary, previous: Dictionary, own
         # publication. Never retain the whole condition or its owner clock.
         if "history_state" in row.get("native_clip",{}).get("inputs",[]):
             var state:Variant=sample.get("condition",{}).get("state")
-            if state is Dictionary and state.has("duplicate_count"):
+            if state is Dictionary and state.get("duplicate_count")!=null:
                 row.native_preparation_inputs={"history_state":{"duplicate_count":state.duplicate_count}}
         if sample.has("native_cue"):
             row.native_cue = sample.native_cue.duplicate()

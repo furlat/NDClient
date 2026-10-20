@@ -384,6 +384,8 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
 
 static func _check_constructor(use:Resource,where:String,clips:Dictionary,report:Dictionary)->void:
     var binding:Dictionary=use.constructor_input
+    if not use.extra.get("input_policies",{}).is_empty() and binding.get("kind") not in ["propagation_links","spell_strike"]:
+        Common.error(report,where,"explicit input policy has no qualified source constructor");return
     if binding.is_empty():return
     if binding.get("kind")=="observed_event":
         if binding.get("outcome") not in ["cast","heal","damage","removal","revival"] or use.scope not in ["source","recipient"] or binding.get("geometry_actor") not in ["caster","target"]:
@@ -397,6 +399,16 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
     elif binding.get("kind")=="creation_admission":
         if use.scope!="recipient" or binding.get("admission") not in ["inventory","placed_object"] or binding.get("geometry_actor")!="caster" or str(binding.get("item_id","")).is_empty() or binding.get("input_field")!="":
             Common.error(report,where,"creation admission needs an exact ordinary item kind, admission source and caster geometry");return
+    elif binding.get("kind")=="propagation_links":
+        if use.scope!="application" or use.role!="flight" or binding.get("input_field")!="" \
+            or binding.get("source_launch")!=use.source_launch or float(binding.get("speed_tiles_per_second",0.0))<=0.0 \
+            or float(binding.get("minimum_travel_seconds",0.0))!=0.045 \
+            or binding.get("secondary_source_socket")!="body_center" \
+            or use.extra.get("live_endpoints",[]).size()!=2:
+            Common.error(report,where,"propagation links need application flight scope, native launch and positive optical travel");return
+    elif binding.get("kind")=="spell_strike":
+        if use.scope!="recipient" or use.role!="impact" or binding.get("behavior_id")!="spell.vampiric_touch" or binding.get("input_field")!="":
+            Common.error(report,where,"spell strike needs recipient impact scope and the exact first-cast Vampiric Touch contract");return
     elif binding.get("kind")=="application_result" and use.scope=="application":
         if str(binding.get("save_effect_id","")).is_empty() or str(binding.get("damage_type","")).is_empty():
             Common.error(report,where,"application result lacks save effect or damage type");return
@@ -409,11 +421,42 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
         var phase:Resource=load(approach.source_phase)
         var components:Array=phase.to_clip().components
         var input:Dictionary={}
+        var component:Dictionary={}
         for id in binding.component_path:
             var selected:Array=components.filter(func(component):return component.id==id)
             if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
-            input=selected[0].input;components=input.get("components",[])
+            component=selected[0];input=component.input;components=input.get("components",[])
         if binding.get("kind") in ["application_result","reaction_observation"] and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
+        if binding.get("kind")=="propagation_links":
+            if input.get("edges",[]).size()!=1 or input.get("endpoint_count")!=2 \
+                or float(input.edges[0].delay)!=float(binding.source_launch) or float(input.get("speed",0))!=float(binding.speed_tiles_per_second):
+                Common.error(report,where,"single-link projection must match the delivered endpoint/ribbon/launch/speed contract")
+            _check_input_policies(use,component,where,report)
+        elif binding.get("kind")=="spell_strike":_check_vampiric_input_policies(use,component,where,report)
+
+## One explicit client choice, not an optional-input claim about the Factory.
+## Its source condition is checked offline; no shader/source inspection in play.
+static func _check_input_policies(use:Resource,component:Dictionary,where:String,report:Dictionary)->void:
+    var expected:Dictionary={"density_field":{"mode":"not_applicable","reason":"selected_factory_density_mask_disabled"}}
+    if use.clip!="live-electric/chain_live_single" or use.extra.get("input_policies",{})!=expected \
+        or component.get("script")!="res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd" \
+        or component.input.get("density_mask",false)!=false:
+        Common.error(report,where,"density not_applicable is qualified only for the exact unmasked single-chain source");return
+    var parent_source:String=FileAccess.get_file_as_string("res://assets/vfx/sources/038f154b06649f707e70/live_network.gd")
+    if not parent_source.contains('if settings.get("density_mask", false):'):
+        Common.error(report,where,"qualified Factory density-mask default changed; review this explicit client input policy")
+
+## A finite initial impact does not claim held-owner, repeat-strike, healing or
+## condition coverage. Their declared channels stay explicit consumer omissions.
+static func _check_vampiric_input_policies(use:Resource,component:Dictionary,where:String,report:Dictionary)->void:
+    var policies:Dictionary={}
+    for name in ["owner_input","healing_input","condition_input","tick_input"]:
+        policies[name]={"mode":"not_applicable","reason":"first_cast_impact_does_not_consume_owner_or_repeat_inputs"}
+    if use.clip!="bg3-36/vampiric-touch/vampiric_touch_native/impact" \
+        or use.constructor_input.component_path!=["owned_contact"] or use.extra.get("input_policies",{})!=policies \
+        or component.get("script")!="res://assets/vfx/sources/8d17316149890f77c98b/vampiric_touch.gd" \
+        or component.input.get("phase")!="impact" or component.input.get("behavior_id")!="spell.vampiric_touch":
+        Common.error(report,where,"first-cast input policy is restricted to the exact initial Vampiric Touch impact source")
 
 static func _in(value: float, low: float, high: float) -> bool:
     return is_finite(value) and value >= low and value <= high

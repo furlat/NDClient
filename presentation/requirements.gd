@@ -6,6 +6,8 @@ const Sources=preload("res://presentation/native_presentation_sources.gd")
 const SCHEMA="res://sdk/player-api-v1.schema.json"
 const REFERENCE="dnd_engine/game_obsolete/"
 const STATE_ONLY=["temporary_hit_points","spatial","turn","sensory","item_charge","faction"]
+const ACTOR_ACCOUNTING=["normal_hp","maximum_hp","temporary_hp","temporary_hp_grant","armor_class","inventory","condition_duration"]
+const ITEM_ACCOUNTING=["stack_count","charges","concentration_slots","is_lit"]
 const ACCEPTED_ACTION_STRIPS=["action.item.potion_greater_invisibility.drink","action.item.potion_haste.drink","action.item.potion_healing.drink"]
 const FACT_OWNERS={
     "action":"body action and actual child outcomes", "attack":"attack and recipient contact",
@@ -66,6 +68,10 @@ static func fact(kind:String,cache:Dictionary={})->Dictionary:
     var index:Resource=cache.get(Sources.CACHE_KEY,{}).get("index")
     if index!=null and index.fact_requirements.has(kind):return index.fact_requirements[kind]
     var source=SCHEMA+":/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/"+pointer(kind)
+    if kind=="actor_change":
+        var container=row("fact:actor_change","Ordered actor rows",source,"implemented","projected",[kind],"container","The container owns ordered publication only; each actual row has a separate declared owner and assessment. No body or render witness follows from this classification.")
+        container.disposition="ordered_rows"
+        return container
     if kind in STATE_ONLY:
         return row("fact:"+kind,"State publication · "+kind,source,"not_applicable","projected",[kind],"state","Canonical publication; no separate actor animation is required. State changes can still affect lights, visibility, or other retained owners.")
     var implementation="unassessed" if not FACT_OWNERS.has(kind) or kind in FACT_UNASSESSED else "implemented"
@@ -82,6 +88,88 @@ static func facts(cache:Dictionary)->Array:
         cache[KEY]=schema["$defs"].PlayerNode.properties.fact.anyOf[0].discriminator.mapping.keys()
     var result:Array=[]
     for kind in cache[KEY]:result.append(fact(kind,cache))
+    const ROW_KEY="presentation:actor_row_discriminators"
+    if not cache.has(ROW_KEY):
+        var schema:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(SCHEMA))
+        cache[ROW_KEY]=schema["$defs"].ActorRows.properties.rows.items.discriminator.mapping.keys()
+    for field in cache[ROW_KEY]:result.append(actor_field(field))
+    return result
+
+static func actor_field(field:String)->Dictionary:
+    var source=SCHEMA+":/$defs/ActorRows/properties/rows/items/discriminator/mapping/"+pointer(field)
+    var implementation="implemented";var inspection="projected";var participant="state"
+    var reason="Ordered canonical field publication; no independent body or effect is required."
+    var disposition="state_only"
+    if field in ["layer","active_weapon_set"]:
+        participant="equipment";disposition="delegated"
+        reason="Actual loadout publication and its enabled equipment body belong to this actor's existing equipment/appearance consumer."
+    elif field=="condition":
+        participant="condition";disposition="delegated"
+        reason="Actual condition UUID membership delegates to its existing lifetime, phase and independently authored visual requirements."
+    elif field=="spatial_disposition":
+        participant="visibility";disposition="delegated"
+        reason="Current disclosed body visibility and light/audio eligibility consume disposition; departure/echo art remains separately authored."
+    elif field in ["item_effects","item_effect_duration"]:
+        participant="item_effect";disposition="unresolved";implementation="unassessed";inspection="missing"
+        reason="Dynamic item-effect membership/duration has no established shared owner inspection; intrinsic Gear effects cannot qualify it."
+    elif field=="resolved_size":
+        participant="size";disposition="unresolved";implementation="unassessed";inspection="missing"
+        reason="Resolved mechanical size is stored; the mapping to authored sprite/condition scale remains unassessed."
+    elif field=="item_state":
+        participant="item";disposition="per_key"
+        reason="Assess the actual item-state keys; canonical item accounting does not imply an emitted body, light or construction effect."
+    elif field not in ACTOR_ACCOUNTING:
+        disposition="unresolved";implementation="unassessed";inspection="missing"
+        reason="Current actor row has no classified presentation owner; it is not implicitly state-only."
+    if disposition=="state_only":implementation="not_applicable"
+    var result=row("actor_row:"+field,"Actor field · "+field,source,implementation,inspection,["actor_change"],participant,reason)
+    result.disposition=disposition;result.actor_field=field
+    return result
+
+static func actor_rows(value:Dictionary)->Array:
+    var result:Array=[]
+    var actors:Array=value.get("actors",[])
+    for actor_index in actors.size():
+        var actor:Dictionary=actors[actor_index]
+        for row_index in actor.rows.size():
+            var change:Dictionary=actor.rows[row_index]
+            var expected:Dictionary=actor_field(str(change.field))
+            expected.id="actor-row:%d:%d:%s"%[actor_index,row_index,str(change.field)]
+            expected.actor_uuid=str(actor.actor_uuid);expected.actor_index=actor_index;expected.row_index=row_index
+            expected.wire_path="actors/%d/rows/%d"%[actor_index,row_index]
+            expected.inspection_links=[]
+            for field in ["item_uuid","condition_uuid"]:
+                if change.has(field):expected[field]=str(change[field])
+            if change.field=="condition_duration":expected.condition_uuid=str(change.key)
+            elif change.field=="item_effect_duration":expected.effect_uuid=str(change.key)
+            elif change.field=="item_effects":expected.effect_uuids=change.effects.map(func(effect):return str(effect.effect_uuid))
+            elif change.field=="condition":expected.phase="removal" if change.get("member")==null else "set"
+            elif change.field=="layer":
+                expected.equipment_slot=str(change.slot)
+                if change.get("layer")!=null:expected.item_uuid=str(change.layer.item_uuid)
+            elif change.field=="item_state":
+                expected.changed_keys=change.changes.keys()
+                var unsupported:Array=expected.changed_keys.filter(func(key):return key not in ITEM_ACCOUNTING)
+                if unsupported.is_empty():
+                    expected.implementation="not_applicable";expected.disposition="state_only";expected.status="explicit_none";expected.gap_kind="explicit_none"
+                else:
+                    expected.implementation="unassessed";expected.inspection="missing";expected.status="missing";expected.gap_kind="unassessed"
+                    expected.reason="Item-state presentation is unassessed for actual keys: "+", ".join(unsupported)
+            result.append(expected)
+    # Item records may disclose dynamic effect membership independently of a
+    # body row. That evidence names the exact item/effects, never its holder or
+    # current equipment admission. Empty metadata ingress has no visual claim.
+    var records:Array=value.get("items",[])
+    for item_index in records.size():
+        var item:Dictionary=records[item_index]
+        if item.get("effects",[]).is_empty():continue
+        var expected:Dictionary=actor_field("item_effects")
+        expected.merge({"id":"item-record:%d:effects"%item_index,"actor_uuid":"","actor_index":-1,"row_index":item_index,
+            "wire_path":"items/%d/effects"%item_index,"item_uuid":str(item.item_uuid),"inspection_links":[],
+            "effect_uuids":item.effects.map(func(effect):return str(effect.effect_uuid)),"membership_source":"item_record",
+            "label":"Item record effects","source":SCHEMA+":/$defs/ItemRecord/properties/effects",
+            "source_pointer":SCHEMA+":/$defs/ItemRecord/properties/effects"},true)
+        result.append(expected)
     return result
 
 static func _active(value:Variant)->bool:
@@ -218,6 +306,7 @@ static func _prepared_recipe(selected:Dictionary,source:String,kind:String,behav
 
 static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,cache:Dictionary)->Array:
     var kind:String=fact_value.get("kind","")
+    if kind=="actor_change":return actor_rows(fact_value)
     # Native facts may deliberately omit their behavior identity to this seat.
     var behavior:String="" if fact_value.get("behavior_id")==null else fact_value.behavior_id
     var result=_prepared_recipe(selected,source,kind,behavior,cache)

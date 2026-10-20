@@ -264,7 +264,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         var fade=Timeline.Conditions.fade_ms(owner.condition,result.cache)
         if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+fade)
     for owner in spatial_owners.values():
-        if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+NativePersistent.fade_ms(NativePersistent.spatial_selection(owner.effect,result.cache)))
+        if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+_spatial_presentation(owner.effect,result.cache).close_ms)
     var condition_ids={}
     for owner in condition_history.values():condition_ids[owner.condition.behavior_id]=true
     var condition_requirements={}
@@ -318,6 +318,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         _persistent_native_channels(result.rows,span,component)
     result.rows.append_array(LightTracks.rows(light_history,result,preview_tracks))
     _spatial_rows(result,spatial_history,spatial_owners,occurrence_ids)
+    _actor_row_links(result)
     for row in result.rows:
         var actor_value:Variant=row.get("track",row.get("component",{})).get("actor_uuid",row.get("actor_uuid",row.get("owner",{}).get("actor_uuid","")))
         var actor_id:String="" if actor_value==null else str(actor_value)
@@ -341,6 +342,45 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     result.compile_ms = (Time.get_ticks_usec()-started)/1000.0
     result.read_profile=read_profile
     return result
+
+static func _actor_row_links(index:Dictionary)->void:
+    # Offline links reuse the already indexed owners. They neither emit an
+    # operation nor qualify pixels, and never borrow another perspective.
+    var conditions:Dictionary={};var items:Dictionary={};var lights:Dictionary={};var tracks:Dictionary={}
+    for row in index.rows:
+        var track:String=str(row.get("trace_track_id",row.get("track",{}).get("trace_track_id","")))
+        if not track.is_empty():
+            if not tracks.has(track):tracks[track]=[]
+            tracks[track].append(row.id)
+        if row.kind=="condition":conditions[[str(row.owner.id),str(row.owner.actor_uuid)]]=row.id
+        elif row.kind=="native_effect" and row.get("component",{}).get("intrinsic_item_effect",false):
+            var component:Dictionary=row.component
+            var key:Array=[str(component.item_owner_uuid),str(component.actor_uuid)]
+            if not items.has(key):items[key]=[]
+            items[key].append(row.id)
+        elif row.kind=="light":
+            for key in row.light_keys:
+                var identity:Array=[str(key.operation_sequence),str(key.source_event_uuid),str(row.anchor_item_uuid)]
+                if not lights.has(identity):lights[identity]=[]
+                lights[identity].append(row.id)
+    for row in index.rows:
+        if row.kind!="event" or not row.event.has("_actor_rows"):continue
+        row.actor_rows=row.event._actor_rows.duplicate(true)
+        for expected in row.actor_rows:
+            expected.trace_track_ids=expected.inspection_links
+            expected.inspection_links=[]
+            for track in expected.trace_track_ids:
+                for linked in tracks.get(track,[]):
+                    if linked not in expected.inspection_links:expected.inspection_links.append(linked)
+            if expected.has("condition_uuid"):
+                var owner:Array=[str(expected.condition_uuid),expected.actor_uuid]
+                if conditions.has(owner) and conditions[owner] not in expected.inspection_links:expected.inspection_links.append(conditions[owner])
+            if expected.has("item_uuid") and expected.actor_field in ["inventory","layer","active_weapon_set"]:
+                for linked in items.get([expected.item_uuid,expected.actor_uuid],[]):
+                    if linked not in expected.inspection_links:expected.inspection_links.append(linked)
+            if expected.actor_field=="item_state" and "is_lit" in expected.changed_keys:
+                for linked in lights.get([str(row.event.sequence),str(row.event.event_uuid),expected.item_uuid],[]):
+                    if linked not in expected.inspection_links:expected.inspection_links.append(linked)
 
 static func _actor_name_at(states:Array,at_ms:float)->String:
     var name=""
@@ -1096,16 +1136,27 @@ static func _observe_spatial_history(history:Dictionary,owners:Dictionary,effect
         if not keys.is_empty() and keys.back().owner==owner:continue
         keys.append({"at_ms":at_ms,"source_event_uuid":event_uuid,"owner":owner.duplicate(true)})
 
+static func _spatial_presentation(effect:Dictionary,cache:Dictionary)->Dictionary:
+    # Match the existing production sampler's three source arms. A typed held
+    # source needs neither a spell handover nor a package condition lifecycle.
+    var selected:Dictionary=NativePersistent.spatial_selection(effect,cache)
+    var lifecycles:Array=NativePersistent.spatial_lifecycles(effect)
+    var identity:String=NativePersistent.SpatialInputs.content_id(effect)
+    var config:Dictionary=Compiler.Authoring.load_data("catalog/condition_recipes.json",cache).get(identity,{})
+    var authored:Array=NativePersistent.authored_phases(config,identity,cache) if not config.get("persistent",{}).get("nativeEffects",[]).is_empty() else []
+    var close_ms:float=NativePersistent.removal_ms(lifecycles) if not lifecycles.is_empty() else NativePersistent.fade_ms(selected)
+    return {"selected":selected,"eligible":not selected.is_empty() or not lifecycles.is_empty() or not authored.is_empty(),
+        "close_ms":maxf(close_ms,NativePersistent.authored_removal_ms(config))}
+
 static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,events:Dictionary)->void:
     # Record the disclosed after-values once. The same NativePersistent sampler
     # used by Timeline owns source age, footprint and actual removal behavior.
     for id in history:
         var owner:Dictionary=owners[id]
-        var selected=NativePersistent.spatial_selection(owner.effect,index.cache)
-        var lifecycles:Array=NativePersistent.spatial_lifecycles(owner.effect)
-        if selected.is_empty() and lifecycles.is_empty():continue
-        var close_ms:float=NativePersistent.removal_ms(lifecycles) if not lifecycles.is_empty() else NativePersistent.fade_ms(selected)
-        var end=minf(index.presentation_end_ms,float(owner.end_ms)+close_ms)
+        var presentation:Dictionary=_spatial_presentation(owner.effect,index.cache)
+        if not presentation.eligible:continue
+        var selected:Dictionary=presentation.selected
+        var end=minf(index.presentation_end_ms,float(owner.end_ms)+presentation.close_ms)
         var life={"id":"spatial:"+str(id),"parent":events.get(history[id].source_event_uuid,""),
             "kind":"spatial_effect","label":str(owner.effect.get("name",selected.get("id",owner.effect.get("content_ref",{}).get("content_id","")))),
             "start_ms":owner.start_ms,"end_ms":end,"owner":owner,
@@ -1121,6 +1172,10 @@ static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,
             var sampled_owner:Dictionary=key.owner.duplicate()
             sampled_owner.end_ms=owner.end_ms
             for sample in NativePersistent.spatial_samples({id:sampled_owner},start,index.cache):
+                # Successful native phases omit a status override; the live
+                # renderer admits them unless explicitly missing. Retain that
+                # same source status on the private inspection component.
+                sample.status=sample.get("status","available")
                 var row={"id":life.id+":member:"+str(n)+":"+sample.id,"parent":life.id,
                     "kind":sample.kind,"label":str(sample.native_cue.role).capitalize(),
                     "start_ms":start,"end_ms":interval_end,"source_start_ms":sample.absolute_start_ms,

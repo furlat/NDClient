@@ -1,0 +1,88 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "640d6434-0b1e-4a81-81c8-f1ae2eb9fd32": "Amber caster",
+  "00ae3a50-73dd-4046-beb5-354cb1b2b091": "Amber ally",
+  "1aead514-57fa-44a8-ae1b-40fd07271cf4": "Blue target",
+  "73414648-a673-4b1f-8833-6581bd9735f0": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.chain_lightning \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 1,
+   "actor_change": 1,
+   "damage": 2,
+   "spell": 2
+  },
+  "behaviors": {
+   "spell.chain_lightning": 1
+  },
+  "conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.chain_lightning"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

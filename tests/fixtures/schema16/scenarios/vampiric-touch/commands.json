@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "aac06abb-4095-4b6d-aa72-38f787530977",
+   "state_revision": "9e5f4deb-c3f4-4f6c-a12d-0577a4c80f53",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_baseline",
+   "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+   "audience_id": "f69cfaff-b020-4c03-80dc-e844101078ca",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_baseline",
+    "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+    "audience_id": "f69cfaff-b020-4c03-80dc-e844101078ca",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "7acba7e7-1182-4823-94f6-6d7b561e9b3e",
+   "state_revision": "201a08ab-b1be-4860-86ed-a605a8963909",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_baseline",
+   "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+   "audience_id": "64b2cf51-b533-4518-a9ec-e5919a58dbeb",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_baseline",
+    "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+    "audience_id": "64b2cf51-b533-4518-a9ec-e5919a58dbeb",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "43680d6b-54e2-4e61-8fbd-dc7a4c6ed7d5",
+   "state_revision": "cf306954-dc4d-4a4a-8805-cb3106eedceb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_baseline",
+   "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+   "audience_id": "64b2cf51-b533-4518-a9ec-e5919a58dbeb",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_baseline",
+    "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+    "audience_id": "64b2cf51-b533-4518-a9ec-e5919a58dbeb",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.vampiric_touch",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.vampiric_touch",
+   "display_name": "Vampiric Touch (Level 3)",
+   "cast_at_level": 3,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "575909c1-8d91-40b8-a558-66003560a769",
+   "state_revision": "31be31a4-0513-45f1-af5b-54f16c1f0c61",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vampiric_touch_baseline",
+   "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+   "audience_id": "f69cfaff-b020-4c03-80dc-e844101078ca",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vampiric_touch_baseline",
+    "game_epoch": "4c6c8daa-a89c-46bf-b653-a7274a38d1f8",
+    "audience_id": "f69cfaff-b020-4c03-80dc-e844101078ca",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

@@ -3,6 +3,7 @@ const Occurrences=preload("res://presentation/occurrences.gd")
 ## Select a visual delivery from a real spell occurrence. Geometry and recipient
 ## counts come from facts; the catalog only selects which source roles display.
 const Authoring=preload("res://presentation/authoring.gd")
+const PropagationInputs=preload("res://presentation/propagation_inputs.gd")
 
 static func ancestor(node:Dictionary,graph:Dictionary)->Dictionary:
     var parent:Variant=node.get("parent_lineage")
@@ -79,11 +80,21 @@ static func endpoints(fact:Dictionary,graph:Dictionary,state:Dictionary,selectio
     if fact.get("target_base_height_steps")!=null:target_height=float(fact.target_base_height_steps)*5.0
     elif fact.get("aoe_position")!=null:
         target_height=float(state.tiles.get("%d,%d"%target,{}).get("elevation_steps",source_height/5.0))*5.0
-    return {"from_position":source,"to_position":target,"from_elevation_feet":source_height,"to_elevation_feet":target_height,
+    var result:Dictionary={"from_position":source,"to_position":target,"from_elevation_feet":source_height,"to_elevation_feet":target_height,
         "area_geometry":geometry,"aim_position":aim_position(fact,graph),"resolved_area_positions":fact.get("resolved_area_positions"),"ground_target":fact.get("target_entity_uuid")==null or selection.get("delivery",{}).get("scope")=="area",
         "target_kind":fact.get("target_kind","creature")}
+    if not PropagationInputs.descriptor(selection).is_empty():
+        result.propagation=fact.get("propagation",{})
+        if result.propagation!=null and not result.propagation.is_empty():
+            result.from_position=result.propagation.source.position
+            result.to_position=result.propagation.target.position
+            result.from_elevation_feet=float(result.propagation.source.base_height_steps)*5.0
+            result.to_elevation_feet=float(result.propagation.target.base_height_steps)*5.0
+    return result
 
 static func travel_ms(selected:Dictionary,recipe:Dictionary,points:Dictionary,cache:Dictionary)->float:
+    var propagation:Dictionary=PropagationInputs.descriptor(selected)
+    if not propagation.is_empty():return PropagationInputs.travel_ms(points.get("propagation",{}),propagation)
     if not selected.staging.cues.any(func(cue):return cue.role=="flight"):return 0.0
     var config:Dictionary=recipe.get("projectile",{}) if recipe.get("projectile")!=null else {}
     var distance=Vector2(points.from_position[0]-points.to_position[0],points.from_position[1]-points.to_position[1]).length()*float(Authoring.load_data("catalog/rig.json",cache).TILE_W)
