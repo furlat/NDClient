@@ -29,6 +29,11 @@ What is already established and should **not be restarted**:
   shared compiler/preparation/publication and working Studio replay exist.
   Equipment publication has a five-run live acceptance receipt. We need
   regression qualification, not a second SDK/reducer/scheduler.
+- Dynamic item-effect membership also exists: ordered before/after rows retain
+  apply/remove/reapply, exact item/effect ownership and the original membership
+  clock independently of holder/disclosure. Missing production assignments,
+  source holder support or absent backend memberships do not require rebuilding
+  that shared path. See [the implemented cohort](DYNAMIC_ITEM_MEMBERSHIP_COHORT_2026-10-20.md).
 - Geometry, exact modular weapon surfaces, body treatment/pose, Fly appearance,
   basic authentic history/departure, spatial owners/transitions, creation,
   observed results, propagation, and generic native/audio channels exist.
@@ -73,6 +78,17 @@ source-changing authoring after the final test/performance pass. Do not pause al
 blocked. Do not end implementation at each small checkpoint while independent
 items in this list remain executable. This snapshot is documentation only and does not change the standing
 implementation authorization.
+
+**Testing must follow the work, not displace it.** Each completed consumer batch
+gets focused current-contract correctness/output checks; a real regression in
+that batch is repaired before building on it. The obsolete-test backlog is not
+a prerequisite for unrelated R1–R4 integration. Repair or retire old tests with
+their replacement contracts; run final applicable whole-inventory qualification
+under R7 after integration. The older
+[main suite checklist](MAIN_CLIENT_SUITE_REPAIR_2026-10-20.md) put broad test
+migration before continuing provider/family coverage; that execution order is
+superseded. This does not excuse current production regressions or allow a
+partial suite to be described as complete.
 
 ## 3. Exact remaining production input/binding work
 
@@ -247,6 +263,17 @@ prevent playback of other ready capabilities.
   filters/counts. Display source, factual/provider, scenario/output and human
   review separately. Persist/link native test witnesses where they actually
   qualify a case; never colour a case green because a source was loaded.
+- Reconcile the existing offline coverage report's evidence inputs. Its safety
+  lookup hardcodes historical paths and omits the explicit current
+  `shared-provider-recording-safety-second-checkpoint/report.json` path; its UI
+  input is the older generated report already qualified in §6. Select the actual
+  intended receipt with its engine/package/completeness, keeping reader safety,
+  native pixels, live gestures and visual approval separate. This is an offline
+  reporting correction, not a new runtime validator or a prerequisite for
+  integrating effects. The saved aggregate incorrectly reports safety as
+  `not_available`; the script's current fallback now contains the newer result.
+  Refresh the stale aggregate from explicit receipts rather than rerunning
+  completed gameplay merely to recreate evidence. See Appendix C.
 - Complete tracks for each actual caster **and recipient**: body/pose/motion,
   material/flash/opacity/outline, geometry/history/appearance, weapon/item,
   native VFX/source clocks, authored contacts/audio and meaningful light on/off.
@@ -413,6 +440,24 @@ usage exit as a product failure. See the old
 its 33-headless / 89-total numbers are historical. Today's exclusions are 24 headless
 and 62 GPU.
 
+Two concrete dispositions make the execution boundary explicit:
+
+- `sdk_reducer_checks` still dispatches retired observer APIs and schema-9
+  expectations. Its old `.runtime/sdk-study/reducer-oracle.json` exists locally;
+  restoring that file is not the task. Assess/retire the obsolete arm against
+  `sdk_protocol_parity`, `schema16_fold_vectors_checks` and
+  `schema16_spool_oracle_checks`; preserve any uncovered current responsibility.
+  The latter already compares 32 original records across four independent seat
+  streams with checked-in Python canonical states. Do not resurrect removed
+  observer APIs to make the old harness pass.
+- `preload_priority_checks` still reads `catalog/rigs.json`, while production
+  `Characters.rigs()` uses the built body-source index. It also requires an
+  actual recording. Migrate its still-useful independent queue/priority,
+  membership, CPU/GPU-role and budget assertions against the current sources
+  when qualifying that media path; neither a missing argument nor its old
+  reader alone proves broken live preloading. This repair does not block
+  unrelated consumer integration.
+
 Final batch uses the existing runner/manifest and exact recorded arguments.
 Source builds precede readers, GPU/profile jobs are serialized, captures/readbacks
 stay outside timing windows, and only owned processes are cleaned up. Recheck
@@ -530,6 +575,20 @@ not extra independent systems, and original successful prefixes remain usable.
   missing Water/Wet, c494 shader-blocker and old manifest-count claims. The
   existing design and completed cohorts remain valid; their old remaining-task
   prose does not override this snapshot.
+- The subsequently supplied external analysis correctly identified the old
+  test-first execution order and fragile offline evidence selection. Direct
+  inspection confirms that the saved aggregate
+  `generated/reports/factory-integration-coverage.json` reports reader safety as
+  `not_available`. However, the script's currently selected
+  `.runtime/schema16-recording-safety.json` and the named second-checkpoint
+  report currently have identical parsed contents: 189 inventoried, 184 passed,
+  five unavailable baselines, zero script errors, `complete=true` but
+  `qualified=false`, current sealed e102 package. The saved report is stale and
+  the explicit path omission is real; the underlying evidence is not absent,
+  and the omission alone does not explain a failure to read today's fallback.
+  Its other named producer, native-output and performance gaps are already
+  represented above. No new benchmark, application or report-generation run
+  was made for this reconciliation.
 - Review and implementation must stay on the sole main branch. Do not restart
   the earlier private worktrees or spread integration across branches. Keep
   assets/build/runtime/captures ignored and checkpoint only meaningful explicit

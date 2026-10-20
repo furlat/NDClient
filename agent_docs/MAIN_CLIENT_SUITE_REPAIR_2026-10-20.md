@@ -1,10 +1,18 @@
 # Main client recovery and active work — 20 October 2026
 
-**Current status:** [production integration closure](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
+**Current remaining-task authority:** [Everything remaining](REMAINING_WORK_2026-10-20.md).
+Production receipts remain in [production integration closure](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
 The percentage table below is withdrawn; it mixed unrelated evidence and had no
 fixed completion denominator. The current installed sealed package is
 `runtime-e102c29dec58524b`, including the repaired actor-history shaders. This
 document's older package, failures and totals are historical receipts only.
+
+**Execution correction:** continue production provider/family/scenario
+integration with focused current-contract checks per completed batch. Repair or
+retire obsolete tests with their replacement contracts; do not make the broad
+legacy test backlog a prerequisite for unrelated integration. Final applicable
+whole-suite qualification remains required. The old execution order below is
+superseded, not another active work queue.
 
 ## Authority and recovered scope
 
@@ -101,7 +109,7 @@ Among historical migration rows48 scripts have been deleted. Those inventory
 entries need explicit retirement/replacement mapping; excluded or missing tests
 cannot be counted as passes. A full-fast pass alone is not the complete suite.
 
-## Active TODO, in execution order
+## Historical execution sequence — superseded
 
 1. Root owns shared rendering/provider integration. Parallel workers own compatible
    Factory source bindings and meaningful original two-faction scenario expansion.
