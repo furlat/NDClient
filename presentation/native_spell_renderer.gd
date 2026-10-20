@@ -739,6 +739,10 @@ func _image_requirements(world:Node)->void:
         if not _path_requirements.has(input):_path_requirements[input]=Support.required_paths(input[0],input[1],world.catalog_cache)
         var paths:Dictionary=_path_requirements[input]
         if inputs[input]:
+            # Socket ownership reads this exact pose's colour before consulting
+            # measured geometry. A pose without optical maps still needs its
+            # colour; a completed body track no longer owns that source lease.
+            wanted[input[0]]=true;cpu[input[0]]=true
             for value in paths.values():wanted[value]=true
             cpu.merge(Support.cpu_required_paths(input[0],input[1],world.catalog_cache))
         elif not paths.is_empty():wanted[paths.solid]=true

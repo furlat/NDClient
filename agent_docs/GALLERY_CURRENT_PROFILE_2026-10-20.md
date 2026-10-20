@@ -348,3 +348,53 @@ registration, reuse invalidation and alias controls. This is an explicit
 replacement of that obsolete implementation-bound wrapper, not a claim that
 its removed Python packer executes. Full source-cell/native/live qualification
 remains pending.
+
+### Post-paging issued-command runs — measured transfer benefit and remaining gaps
+
+Original runs `.runtime/player-runs/20261020T062223.103394Z`, `062335.893012Z` and `062448.928047Z` each pass **313checks/0failures**, with zero script/engine errors or owned leftovers in `.runtime/tests/20261020T062220.033956Z`. The complete machine report is `.runtime/consolidation/paged-gallery-three-analysis.json`; it retains every >16.667ms frame, disjoint measured scopes, exact overlapping worker clocks/paths/bytes, and the client/server stage operands.
+
+**Comparison limit:** these supplied runs use camera size **12**, while all three previous0410/0413/0415 runs used **18**. Both use1600×960, Forward+/Vulkan/RTX5090 and ordinary issued commands. The following distributions cannot establish an isolated paging A/B improvement. A matched zoom18 repeat remains required. No GPU capacity is inferred from the configured cache budget.
+
+All frames from first command input through final command completion are included, including inter-command intervals; startup, test validation/export and readback are excluded. Selection uses `first_input_us <= interval_end_us <= final_command_end_us`, matching the prior report; the first interval straddles the input boundary.
+
+|Trial / run suffix|Frames|p50 /p95 /p99 ms|Max ms|>16.667 / >33.333ms|
+|---|---:|---:|---:|---:|
+|1 /062223.103394Z|7538|5.973 /12.424 /16.180|35.566|66 /1|
+|2 /062335.893012Z|7643|5.993 /12.046 /15.603|36.266|53 /1|
+|3 /062448.928047Z|7705|5.752 /11.896 /15.584|41.900|52 /1|
+
+The previous zoom18 maxima were135.961/59.376/38.360ms. Each new run has one >33.333ms frame, all during the first end-turn, rather than the later bench transfer. Remaining tails are still real; the no-spike target is not met.
+
+**The specific large numeric transfer changed.** No new measured-window worker load/upload uses either153MiB whole bench numeric source. All68 unique bench pages are actually admitted (34depth +34selected-normal); each unchanged RGBA8 page is4.5MiB and the complete unique pair remains306MiB. Worst observed page PNG-load times are9.231/9.432/9.200ms; worst page worker-upload times are **2.540/2.678/11.623ms**, versus prior whole-sheet uploads up to83.082ms and PNG-load around288ms. These are actual source/worker measurements, not a page-size-derived frame-time promise.
+
+Optional residency still churns:95/134/136 page **decode admissions** occur for those68 unique paths. Actual `created=true` texture counts are74/95/99, totaling333/427.5/445.5MiB of conservative created-texture estimates; some decodes rehydrate CPU data while reusing a GPU texture. Before paging, the original pair also decoded twice per run; actual GPU creations were3/4/2 ×153MiB. Therefore neither repeated decoding nor every published `gpu_estimated_bytes` row is automatically a new GPU transfer.
+
+The repeat witnesses are at the configured **16GiB combined cache budget**: about17.17GB estimated residency,15,321,792,512bytes of character pins plus0.84–1.04GB environment pins, with eviction counts rising (trial1:1576→1714). This establishes a retained-family/residency pressure gap; it does not establish which individual repeated admission was unnecessary or the GPU's physical capacity. Source-specific clocks and the residency snapshots are in the machine report.
+
+**Remaining long-frame decomposition:** measured main-thread scopes below are mutually exclusive; inclusive parents are not added to their children. Renderer values are the last available viewport counters and may lag.
+
+- Trial1 frame1171:35.566ms =7.590ms Play +0.117ms HUD +0.215ms profile diagnostics +**27.644ms unallocated wall**. Largest disjoint Play scopes: component sampling1.536, lighting1.349, optional component owner1.050, native output0.857ms. A7.5MiB modular `Melee1/CrouchRun.png` worker upload (31.410ms total) overlaps26.567ms of the frame; its depth companion overlaps14.007ms. Last render CPU/GPU .327/.396ms; pipeline counters unchanged. This is overlap evidence, not a complete stall attribution.
+
+- Trial2 frame1055:36.266ms =17.143ms Play +1.100ms HUD +0.186ms diagnostics +**17.837ms unallocated wall**. Preparation-step7.315 and timeline advance4.471ms are disjoint. Nested `media_plan`7.653/`media_plan_demand`4.684ms explain part of those envelopes and are **not extra addends**. No published worker load/upload interval intersects this frame. Last render CPU/GPU .361/.384ms; counters unchanged.
+
+- Trial3 frame1063:41.900ms =8.268ms Play +0.178ms HUD +0.197ms diagnostics +**33.257ms unallocated wall**. Component sample1.816, lighting1.441, optional component owner1.115 and native output0.865ms dominate the disjoint measured scopes. The7.5MiB `modular-profiles/reference/Melee1/Attack6.png` loads for13.186ms and uploads for19.211ms; overlap is12.940/19.211ms. Last render CPU/GPU .309/.416ms; counters unchanged. No blanket CPU/GPU/driver attribution is justified.
+
+Other >16.667ms frames are retained rather than discarded: e.g. trial1 move5 frame1528 is26.725ms with13.916ms preparation-step (nested media planning11.078ms, demand9.573ms); trial2 room-move frame637 is26.533ms with8.664ms lighting (nested modular shadows8.159ms); trial3 post-ready frame1091 is23.735ms with6.248ms preparation and6.096ms HUD. No worker intersection is needed to explain these measured scopes.
+
+**Input→first animation decomposition:** all following intervals use the same Godot monotonic clock and add to the observed total. Input→send includes the actual preview round trip for door/Fireball; movement submits directly without waiting for preview. Fold/compile/opening are client preparation elapsed intervals, not an assertion that the display thread was blocked for their duration. The final publication/observation remainder is not a single CPU function.
+
+|Action / trial|Input→send|Sent→framed|Admission|Fold|Compile|Opening|Publication/observe|Total ms|
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+|Door1|16.742|62.245|4.997|31.831|7.115|5.549|51.704|180.183|
+|Door2|20.516|62.354|4.889|32.859|8.440|4.935|43.790|177.783|
+|Door3|16.436|58.419|4.553|35.128|9.232|6.653|50.186|180.607|
+|Room move1|3.179|85.706|3.327|85.122|5.210|8.432|18.284|209.260|
+|Room move2|4.204|74.616|3.695|83.978|8.101|10.666|22.514|207.774|
+|Room move3|2.972|73.086|2.441|75.330|5.544|8.208|21.453|189.034|
+|Fireball1|25.220|70.668|1.921|33.720|10.761|9.780|48.944|201.014|
+|Fireball2|21.728|69.905|1.922|35.085|7.822|7.411|56.503|200.376|
+|Fireball3|20.400|66.475|2.011|33.774|8.678|7.631|45.248|184.217|
+
+Independent server dispatch durations (same actor + actual command number) are30.261/30.321/30.150ms for door,51.028/48.062/48.874ms for room move and45.970/50.783/46.026ms for Fireball. They are server-clock durations, **not extra addends or client/server timestamp subtraction**. Full server execution/audience components are retained in JSON.
+
+Client work still dominates particular movement responses: room move canonical folding is85.122/83.978/75.330ms (nested reduce83.430/82.681/73.988ms, chiefly fact/world folding). Move5 folds122.594/84.675/82.396ms; trial1 includes27.294ms commit. Move8 reaches279.521/293.090/272.750ms: its compile interval124.335/124.343/118.245ms contains **schedule_delivery110.529/110.744/105.019ms**; the other compiler leaves total roughly13ms. This is the next named client latency leaf to decompose, separately from remaining frame/transfer gaps and Factory integration. No runtime/source change follows from this report alone.

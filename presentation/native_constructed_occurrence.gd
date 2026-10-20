@@ -39,19 +39,31 @@ func forward_arguments(method:String,arguments:Array)->void:
     var forwarded:bool=false
     for node in input_receivers.get(method,[]):
         if is_instance_valid(node):node.callv(method,arguments);forwarded=true
-    if forwarded:source_input_revision+=1
+    if forwarded:
+        source_input_revision+=1
+        handle.source_inputs_dirty=true
 
 func sample(seconds:float)->void:
     if not construction_error.is_empty():return
     var same_clock:bool=handle.get("initialized",false) and is_equal_approx(seconds,float(handle.age))
-    if same_clock and source_input_revision!=sampled_input_revision:
+    var placement_changed:bool=handle.has("last_sample_transform") and handle.last_sample_transform!=handle.root.global_transform
+    if same_clock and (source_input_revision!=sampled_input_revision or placement_changed):
         # Restore the source-owned envelope before component sampling, then
         # retain its new value for the caller's ordinary attenuation. Never
         # advance/restart particles, players or native callbacks a second time.
         for binding in handle.opacity_bindings:binding.material.set_shader_parameter(binding.uniform,binding.native)
         for binding in handle.clip.bindings:
-            if binding.kind=="sample":handle.components[binding.component].sample(seconds*float(binding.rate)+float(binding.offset_seconds))
+            if binding.kind!="sample":continue
+            var component:Node=handle.components[binding.component]
+            var source_age:float=seconds*float(binding.rate)+float(binding.offset_seconds)
+            # The complete successor's public refresh hook owns audited source
+            # updates. Retained sources without it keep the proven equation-only
+            # reflow; neither arm steps particles/players or runs the other arm.
+            if component.has_method("refresh_live_inputs"):component.refresh_live_inputs(source_age)
+            else:component.sample(source_age)
         for binding in handle.opacity_bindings:binding.native=float(binding.material.get_shader_parameter(binding.uniform))
+        handle.source_inputs_dirty=false
+        handle.last_sample_transform=handle.root.global_transform
         _ensure_material_bindings()
         clock.sample(seconds)
         previous_age=seconds

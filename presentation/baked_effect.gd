@@ -39,6 +39,27 @@ static var _still_path:ImageTexture
 const PATH_RATE:=60.0
 const MAX_PATH_SECONDS:=40.0
 
+## The same recorded seed family shares its physical loader even when a caller
+## selects one exact approach. A replaced recording path owns another cache.
+static func recording_key(clip:Dictionary)->String:
+    var recorded:Array=_recorded_approaches(clip)
+    return JSON.stringify([str(clip.get("id","")),recorded.map(func(approach):return [str(approach.id),str(approach.path)])])
+
+static func _recorded_approaches(clip:Dictionary)->Array:
+    var result:Array=clip.get("approaches",[]).filter(func(approach):return approach.kind=="recorded")
+    result.sort_custom(func(a,b):return int(a.get("variant",0))<int(b.get("variant",0)))
+    return result
+
+static func _selected_recordings(clip:Dictionary,bundles:Array,complete:bool)->Variant:
+    var exact:String=str(clip.get("approach_id",""))
+    if exact.is_empty():return bundles if not bundles.is_empty() else null
+    for approach in _recorded_approaches(clip):
+        if str(approach.id)!=exact:continue
+        for bundle in bundles:
+            if str(bundle.resource_path)==str(approach.path):return [bundle]
+        return false if complete else null
+    return false
+
 ## Threaded load of a clip's recorded variants (the package records three
 ## seeds per clip). Files load one at a time: each carries megabytes of
 ## states, and several finishing together stall the frame that uploads them.
@@ -47,11 +68,10 @@ const MAX_PATH_SECONDS:=40.0
 ## clip needed now (`urgent`) moves to the front. Returns the usable bundles,
 ## null while none is ready yet, and false when the clip has no recording.
 static func request(clip:Dictionary,urgent:bool=false)->Variant:
-    var id:String=clip.get("id","")
-    if _bundles.has(id):return _bundles[id]
+    var id:String=recording_key(clip)
+    if _bundles.has(id):return _selected_recordings(clip,_bundles[id],true) if _bundles[id] is Array else _bundles[id]
     if not _requested.has(id):
-        var recorded:Array=clip.get("approaches",[]).filter(func(approach):return approach.kind=="recorded")
-        recorded.sort_custom(func(a,b):return int(a.get("variant",0))<int(b.get("variant",0)))
+        var recorded:Array=_recorded_approaches(clip)
         var paths:Array=recorded.map(func(approach):return str(approach.path))
         if paths.is_empty():_bundles[id]=false;return false
         _requested[id]={"paths":paths,"loaded":[],"done":0}
@@ -69,7 +89,7 @@ static func request(clip:Dictionary,urgent:bool=false)->Variant:
     var usable:Array=owner.loaded.filter(func(bundle):return _uploaded([bundle]))
     if not usable.is_empty():
         if usable.size()==owner.paths.size():_bundles[id]=usable
-        return usable
+        return _selected_recordings(clip,usable,owner.done==owner.paths.size() and _uploaded(owner.loaded))
     if owner.done==owner.paths.size() and owner.loaded.is_empty():_bundles[id]=false;return false
     return null
 

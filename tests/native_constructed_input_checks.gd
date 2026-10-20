@@ -17,6 +17,11 @@ class ComponentProbe extends Node3D:
     func sample(seconds:float)->void:
         calls.append(seconds);seen_envelopes.append(material.get_shader_parameter("opacity"))
         material.set_shader_parameter("opacity",envelope);show()
+class RefreshComponentProbe extends ComponentProbe:
+    var refresh_calls:Array=[]
+    func refresh_live_inputs(seconds:float)->void:
+        refresh_calls.append(seconds)
+        material.set_shader_parameter("opacity",envelope);show()
 var checks:int=0
 var failures:Array=[]
 func check(ok:bool,label:String)->void:
@@ -67,6 +72,18 @@ func run()->void:
     wrapper.forward("set_missing",{});wrapper.sample(.25)
     check(wrapper.source_input_revision==revision and component.calls.size()==3,"An absent source receiver does not invalidate or manufacture an input")
     check(emitter.speed_scale==1.75 and is_equal_approx(player.current_animation_position,.3),"All same-clock reflows preserve the original pending native delta")
+    var refreshed:=RefreshComponentProbe.new();refreshed.material=material;source.add_child(refreshed)
+    wrapper.handle.components.body=refreshed;wrapper.inputs_dirty=true
+    wrapper.set_recipient_geometry({"envelope":.7});wrapper.sample(.25)
+    check(refreshed.refresh_calls==[.6] and refreshed.calls.is_empty(),"An opted-in source uses its public same-age refresh exactly once without fallback sampling")
+    check(not wrapper.handle.source_inputs_dirty and wrapper.handle.last_sample_transform==source.global_transform,"Same-age refresh consumes actual dirty inputs and placement at the shared source boundary")
+    wrapper.sample(.25)
+    check(refreshed.refresh_calls.size()==1 and refreshed.calls.is_empty(),"A repeated unchanged pause cannot run either source-refresh arm twice")
+    source.position=Vector3(2,0,3);wrapper.sample(.25)
+    check(refreshed.refresh_calls==[.6,.6] and refreshed.calls.is_empty(),"Actual changed root placement refreshes an opted-in source at the unchanged declared age")
+    check(emitter.speed_scale==1.75 and is_equal_approx(player.current_animation_position,.3),"Public hook and root placement refresh preserve the pending native particle/player delta")
+    wrapper.forward_arguments("set_pair",["delivery",2]);wrapper.sample(.25)
+    check(refreshed.pair==["delivery",2] and refreshed.refresh_calls.size()==3 and refreshed.calls.is_empty(),"A two-argument receiver invalidates the exact public refresh once")
     wrapper.free();source.free()
     print("CONSTRUCTED_INPUTS ",JSON.stringify({"checks":checks,"failures":failures,
         "scope":"Actual client wrapper and sealed paused-source boundary with explicit setter/material/emitter/player probes; framebuffer and performance qualification remain separate."}))

@@ -1,0 +1,147 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "4b9e8e2f-9b6e-43c0-965d-081270b80649",
+   "state_revision": "5a696c75-a0d3-4ccc-a4d3-ad1fbb717e77",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+   "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+   "audience_id": "728cd569-80f0-44d2-bd37-e620e7dc4881",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+    "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+    "audience_id": "728cd569-80f0-44d2-bd37-e620e7dc4881",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "2fef5b18-407f-4333-8843-6b0f62757219",
+   "state_revision": "cc4ec374-d10f-4373-a9b9-81b413e9cbeb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+   "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+   "audience_id": "1c869cd6-10eb-45d1-a0f0-08e0617c82ff",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+    "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+    "audience_id": "1c869cd6-10eb-45d1-a0f0-08e0617c82ff",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "1cc664b4-f509-4973-8eb7-9f8354ca6c09",
+   "state_revision": "793cdd3c-58e9-44a6-b57e-8677b93b54a0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+   "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+   "audience_id": "728cd569-80f0-44d2-bd37-e620e7dc4881",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+    "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+    "audience_id": "728cd569-80f0-44d2-bd37-e620e7dc4881",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.dissonant_whispers",
+   "by": "target",
+   "target": "caster",
+   "level": 1
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "66ea22fd-977a-4040-ba4d-8de9c90d7f36",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.dissonant_whispers",
+   "display_name": "Dissonant Whispers (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "b59a86dd-f7cd-4769-9b95-1b135a090232",
+   "state_revision": "66ea22fd-977a-4040-ba4d-8de9c90d7f36",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+   "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+   "audience_id": "1c869cd6-10eb-45d1-a0f0-08e0617c82ff",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_reaction_hellish_rebuke_dissonant_single_target_probe",
+    "game_epoch": "f24852e9-6e11-4368-84ad-c7fd98b94226",
+    "audience_id": "1c869cd6-10eb-45d1-a0f0-08e0617c82ff",
+    "sequence": 8
+   }
+  }
+ }
+]

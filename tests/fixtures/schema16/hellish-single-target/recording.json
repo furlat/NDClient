@@ -1,0 +1,260 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "4b9e8e2f-9b6e-43c0-965d-081270b80649": "Amber caster",
+  "1cc664b4-f509-4973-8eb7-9f8354ca6c09": "Amber ally",
+  "2fef5b18-407f-4333-8843-6b0f62757219": "Blue second target",
+  "b59a86dd-f7cd-4769-9b95-1b135a090232": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Amber ally",
+  "spell.dissonant_whispers \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 2,
+   "actor_change": 2,
+   "damage": 4,
+   "action": 1,
+   "sensory": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "reaction.spell.hellish_rebuke": 2,
+   "spell.dissonant_whispers": 1
+  },
+  "conditions": [
+   "condition.spell.dissonant_whispers"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Fire",
+   "Psychic"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 55,
+   "lineage": 49,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 49,
+   "event_offset": 1,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 82,
+   "lineage": 49,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 83,
+   "lineage": 49,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 84,
+   "lineage": 49,
+   "event_offset": 6,
+   "kind": "action",
+   "label": "action reaction.spell.hellish_rebuke",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 88,
+   "lineage": 49,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 89,
+   "lineage": 49,
+   "event_offset": 8,
+   "kind": "reaction_handler",
+   "label": "Hellish Rebuke",
+   "behavior_id": "reaction.spell.hellish_rebuke",
+   "actor_uuid": "4b9e8e2f-9b6e-43c0-965d-081270b80649",
+   "triggering_occurrence": 59,
+   "triggering_lineage": 57,
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 89,
+   "lineage": 49,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 94,
+   "lineage": 49,
+   "event_offset": 10,
+   "label": "condition applied condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "4b9e8e2f-9b6e-43c0-965d-081270b80649",
+   "condition_uuid": "af444022-e2c6-435f-a12f-c148881e8873",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 95,
+   "lineage": 49,
+   "event_offset": 11,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 58,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 74,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 75,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 76,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "action",
+   "label": "action reaction.spell.hellish_rebuke",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 80,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 81,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "reaction_handler",
+   "label": "Hellish Rebuke",
+   "behavior_id": "reaction.spell.hellish_rebuke",
+   "actor_uuid": "4b9e8e2f-9b6e-43c0-965d-081270b80649",
+   "triggering_occurrence": 51,
+   "triggering_lineage": 49,
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 81,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 85,
+   "lineage": 41,
+   "event_offset": 9,
+   "label": "condition applied condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "4b9e8e2f-9b6e-43c0-965d-081270b80649",
+   "condition_uuid": "af444022-e2c6-435f-a12f-c148881e8873",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 86,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Fire",
+  "Psychic"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

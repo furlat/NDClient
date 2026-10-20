@@ -130,15 +130,22 @@ static func clip(id:String)->Dictionary:
     _mutex.lock();_client[id]=result;_mutex.unlock()
     return result
 
-## {kind, approaches, reason}: what plays this clip (recorded variants in
-## seed order) and, when it is not the requested kind, why.
+## Optional approach_id is an exact source assignment, ahead of the global
+## kind preference. Otherwise keep the original first live program in package
+## order; recorded approaches retain their seed-ordered variant family.
 static func choice(value:Dictionary)->Dictionary:
+    var exact:String=str(value.get("approach_id",""))
+    if not exact.is_empty():
+        for approach in value.get("approaches",[]):
+            if str(approach.id)==exact:return {"kind":approach.kind,"approaches":[approach],"reason":"explicit package approach "+exact}
+        return {"kind":"","approaches":[],"reason":"the package has no approach "+exact+" for "+str(value.get("id",""))}
     var order:Array=KINDS.duplicate()
     if not requested.is_empty():order.erase(requested);order.push_front(requested)
     for kind in order:
-        var found:Array=value.get("approaches",[]).filter(func(approach):return approach.kind==kind)
+        var found:Array=value.get("approaches",[]).filter(func(approach):return approach.kind==kind and not str(approach.get("runtime_selection","")).begins_with("Unselected alternative"))
         if found.is_empty():continue
-        found.sort_custom(func(a,b):return int(a.get("variant",0))<int(b.get("variant",0)))
+        if kind=="recorded":found.sort_custom(func(a,b):return int(a.get("variant",0))<int(b.get("variant",0)))
+        else:found=[found[0]]
         var reason:String="" if requested.is_empty() or kind==requested else "no "+LABELS[requested]+" approach in the package; "+LABELS[kind]+" plays"
         return {"kind":kind,"approaches":found,"reason":reason}
     return {"kind":"","approaches":[],"reason":"the package has no approach for "+str(value.get("id",""))}
@@ -149,7 +156,9 @@ static func requires_construction(value:Dictionary)->bool:
     return value.get("requires_constructor_input",false) or choice(value).approaches.any(func(approach):return approach.get("construction_required",false))
 
 static func key(value:Dictionary)->String:
-    return str(value.get("id",""))+"|"+str(choice(value).kind)+"|"+str(value.get("opacity_uniform",""))
+    var selected:Dictionary=choice(value)
+    var sources:Array=selected.approaches.map(func(approach):return [str(approach.id),str(approach.path),str(approach.get("source_phase",""))])
+    return JSON.stringify([str(value.get("id","")),selected.kind,sources,str(value.get("opacity_uniform",""))])
 
 static func occurrence_clip(component:Dictionary)->Dictionary:
     var result:Dictionary=component.native_clip.duplicate(false)
@@ -272,6 +281,12 @@ static func make(parent:Node3D,value:Dictionary,layer_mask:int,seed:int=0)->Dict
     elif chosen.kind.is_empty():handle={"root":null,"error":chosen.reason,"clip":value}
     else:handle=_live(parent,value,chosen.approaches[0],layer_mask)
     handle.effect_kind=chosen.kind;handle.effect_reason=chosen.reason;handle.effect_revision=revision
+    var actual:Dictionary=chosen.approaches[0] if not chosen.approaches.is_empty() else {}
+    if chosen.kind=="recorded" and handle.get("bundle") is Resource:
+        for approach in chosen.approaches:
+            if str(approach.path)==str(handle.bundle.resource_path):actual=approach;break
+    handle.effect_approach_id=str(actual.get("id",""));handle.effect_approach_path=str(actual.get("path",""))
+    handle.effect_source_phase=str(actual.get("source_phase",""));handle.effect_key=key(value)
     if not handle.has("construction_phases"):handle.construction_phases={}
     handle.construction_phases.total=(Time.get_ticks_usec()-started)/1000.0
     return handle

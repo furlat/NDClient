@@ -64,11 +64,12 @@ def spell_baselines(inventory):
             # Its native creature owns a real learned-source innate reaction.
             # Frozen encounter behavior grants cannot install this reaction.
             roster[0]={'role':'caster','side':'amber','creature':'creature.spell.fire_myrmidon','at':[3,7]}
-            roster[2]['spells']=['spell.ice_storm']
-            # An actual save-for-half area hit tests the native reaction
-            # without a missed weapon hit or a grouped missile trigger.
-            step={'do':'spell.ice_storm','by':'target','target':[3,7]}
-            required=['reaction.spell.hellish_rebuke']
+            roster[2]['spells']=['spell.dissonant_whispers']
+            # The original single-recipient Psychic hit produces the real
+            # reaction and positive Fire result. The older area/group trigger
+            # consumes its resource without that result and remains a gap.
+            step={'do':'spell.dissonant_whispers','by':'target','target':'caster','level':1}
+            required=['spell.dissonant_whispers','reaction.spell.hellish_rebuke']
         if spell in ('spell.magic_missile','spell.scorching_ray'):
             step['recipients']=['target']*3
         if spell in ('spell.shield','spell.counterspell'):
