@@ -116,6 +116,8 @@ def typed_source(path: Path, section: str) -> dict:
         row["variants"].append({"id": value(fields.get("id"), ""), "kind": value(fields.get("kind"), ""),
             "selection": value(fields.get("selection"), ""), "when": value(fields.get("when"), {}),
             "save_effect_id": value(fields.get("save_effect_id"), ""),
+            "override_owner_cues": value(fields.get("override_owner_cues"), False),
+            "owner_cues": value(fields.get("owner_cues"), []),
             "dispatch_gap": value(fields.get("dispatch_gap"), ""), "effects": cues(fields.get("effects"))})
     return row
 
@@ -263,7 +265,8 @@ def report() -> dict:
                 cue["source_present"] = clip in clips
                 disabled = row["section"] == "spells" and not row["native_staging"]
                 excluded = cue["source_index"] in row["excluded_cues"]
-                handed_over = cue["source_index"] in row["owner_cues"] and (row["owner_kind"] == "spatial_effect" or any(s["condition"].get("body_channel_included", False) for owner in row["owner_ids"] for s in owners[owner]))
+                owner_cues = variant_record.get("owner_cues", []) if variant_record.get("override_owner_cues", False) else row["owner_cues"]
+                handed_over = cue["source_index"] in owner_cues and (row["owner_kind"] == "spatial_effect" or any(s["condition"].get("body_channel_included", False) for owner in row["owner_ids"] for s in owners[owner]))
                 cue["dispatch"] = "authored_disabled" if disabled else variant_gap if variant != "default" and variant_gap else "excluded_probe" if excluded else "owner_handover" if handed_over else "not_selected_for_event" if row["explicit_event_cues"] and cue["source_index"] not in row["event_cues"] else "explicit_gap" if cue["unbound_constructor_inputs"] else "bound_provider_gap" if cue["missing_provider_channels"] else "bound_provider_present_unqualified"
                 cue["variant_when"] = variant_record.get("when", {})
                 references[clip].append({"id": row["id"], "variant": variant, "source_index": cue["source_index"], "dispatch": cue["dispatch"],

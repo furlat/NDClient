@@ -455,7 +455,11 @@ static func _check_variants(e:Resource,where:String,report:Dictionary)->void:
             for value in values:
                 if value not in VARIANT_FIELDS[field]:Common.error(report,where,"variant "+variant.id+" has noncanonical "+field+" value: "+str(value))
         if variant.when.is_empty() or not variant.dispatch_gap.is_empty():continue
-        if not variant.effects.is_empty() and (not e.owner_cues.is_empty() or not e.contact_cues.is_empty() or not e.excluded_cues.is_empty() or e.explicit_event_cues):
+        if variant.override_owner_cues:
+            var cue_count:int=variant.effects.size() if not variant.effects.is_empty() else e.effects.size()
+            for cue_index in variant.owner_cues:
+                if cue_index<0 or cue_index>=cue_count:Common.error(report,where,"variant "+variant.id+" owner cue outside its own cue list")
+        if not variant.effects.is_empty() and ((not e.owner_cues.is_empty() and not variant.override_owner_cues) or not e.contact_cues.is_empty() or not e.excluded_cues.is_empty() or e.explicit_event_cues):
             Common.error(report,where,"variant "+variant.id+" cannot inherit base cue-index ownership over a replaced cue list")
         if variant.recipe.has("cast") and variant.recipe.cast!=raw_recipe(e).get("cast",{}):
             Common.error(report,where,"variant "+variant.id+" changes the shared caster body; outcome dispatch owns only recipient delivery")

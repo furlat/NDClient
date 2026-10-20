@@ -1,0 +1,148 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "dd8571df-518a-4520-b182-71a7a898ea2b",
+   "state_revision": "afb4267a-dffd-45d8-877a-d762e788eafe",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shillelagh_baseline",
+   "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+   "audience_id": "39c2da73-642a-414c-a5eb-d9d2bdaac1fd",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shillelagh_baseline",
+    "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+    "audience_id": "39c2da73-642a-414c-a5eb-d9d2bdaac1fd",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "4d3d5774-d708-40a8-9eac-950ab696f092",
+   "state_revision": "53417f18-5b6f-451e-ac77-2eaeefcc9e7b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shillelagh_baseline",
+   "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+   "audience_id": "91b4df0f-515f-4846-a024-5418a18bdb11",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shillelagh_baseline",
+    "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+    "audience_id": "91b4df0f-515f-4846-a024-5418a18bdb11",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "1150dc54-e816-4875-9ad7-18995f76f0be",
+   "state_revision": "b39021f8-64b3-465b-8196-632091080266",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shillelagh_baseline",
+   "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+   "audience_id": "91b4df0f-515f-4846-a024-5418a18bdb11",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shillelagh_baseline",
+    "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+    "audience_id": "91b4df0f-515f-4846-a024-5418a18bdb11",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.shillelagh",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.shillelagh",
+   "display_name": "Shillelagh (main hand)",
+   "cast_at_level": 0,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "MELEE_MAIN",
+     "label": "Main hand"
+    }
+   ],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "eff2408a-c3b0-46b0-a182-10f0dd33db9a",
+   "state_revision": "dc030a74-a730-4128-9bb2-b9c935d9e73e",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_shillelagh_baseline",
+   "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+   "audience_id": "39c2da73-642a-414c-a5eb-d9d2bdaac1fd",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_shillelagh_baseline",
+    "game_epoch": "b4c60bf1-3e6b-43ca-acd0-dabd475568bc",
+    "audience_id": "39c2da73-642a-414c-a5eb-d9d2bdaac1fd",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

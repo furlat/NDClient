@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "de509d05-41de-4257-8a82-cc7c5af2e719",
+   "state_revision": "05a85d55-73c0-4b18-bc0f-285b8db4cc30",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hunters_mark_baseline",
+   "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+   "audience_id": "78e3f49c-213d-4cbd-9e44-046dc76c003e",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hunters_mark_baseline",
+    "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+    "audience_id": "78e3f49c-213d-4cbd-9e44-046dc76c003e",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8b7195e9-bb7a-48e8-9c41-10dd1d98fcea",
+   "state_revision": "a74c78f4-3b60-43af-a205-ba12c33442cb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hunters_mark_baseline",
+   "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+   "audience_id": "09b51be3-0080-43a7-814c-09484a399a60",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hunters_mark_baseline",
+    "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+    "audience_id": "09b51be3-0080-43a7-814c-09484a399a60",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "fd1d7b11-e17f-48eb-9261-268dcf3447e9",
+   "state_revision": "28af28c1-a821-4d8d-9d67-0fcaa386f968",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hunters_mark_baseline",
+   "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+   "audience_id": "09b51be3-0080-43a7-814c-09484a399a60",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hunters_mark_baseline",
+    "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+    "audience_id": "09b51be3-0080-43a7-814c-09484a399a60",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.hunters_mark",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.hunters_mark",
+   "display_name": "Hunter's Mark (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "4f5f35e6-cdd1-4d69-a966-a09d35cfc3de",
+   "state_revision": "75a75f3c-6d23-4855-ac08-3eae28fdd245",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_hunters_mark_baseline",
+   "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+   "audience_id": "78e3f49c-213d-4cbd-9e44-046dc76c003e",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_hunters_mark_baseline",
+    "game_epoch": "6fb5d296-7e20-468b-a216-e9d69de80a6f",
+    "audience_id": "78e3f49c-213d-4cbd-9e44-046dc76c003e",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

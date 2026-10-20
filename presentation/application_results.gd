@@ -5,29 +5,55 @@ static func key(node:Dictionary)->Array:
     var resolution:Dictionary=node.get("resolution_record",{})
     return [] if resolution.get("application_id")==null else [str(resolution.lineage),str(resolution.application_id)]
 
-static func index(events:Array)->Dictionary:
+## A target cast can have a real resolution lineage without an application ID.
+## Preserve that null scope; constructor project() still requires key() above.
+static func scope_key(node:Dictionary)->Array:
+    var resolution:Dictionary=node.get("resolution_record",{})
+    if resolution.get("lineage")==null:return []
+    return [str(resolution.lineage),null if resolution.get("application_id")==null else str(resolution.application_id)]
+
+static func _save_owner(node:Dictionary,nodes:Dictionary)->Dictionary:
+    var parent:Variant=node.get("parent_lineage")
+    while parent!=null:
+        var owner:Dictionary=nodes.get(str(parent),{})
+        if owner.is_empty() or owner.get("canceled",false):return {}
+        var fact:Variant=owner.get("fact")
+        if fact!=null and fact.kind in ["spell","action","attack"]:return owner
+        parent=owner.get("parent_lineage")
+    return {}
+
+static func index(events:Array,nodes:Dictionary={})->Dictionary:
+    if nodes.is_empty():
+        nodes={}
+        for node in events:nodes[str(node.lineage_id)]=node
     var result:Dictionary={}
     for node in events:
-        var identity:Array=key(node)
+        var identity:Array=scope_key(node)
         if identity.is_empty() or node.get("canceled",false) or node.get("fact")==null:continue
         var fact:Dictionary=node.fact
         if fact.kind!="saving_throw" and not (fact.kind=="damage" and fact.get("stage")=="applied"):continue
         if not result.has(identity):result[identity]={"saves":[],"damage":[]}
-        result[identity]["saves" if fact.kind=="saving_throw" else "damage"].append({"occurrence":str(node.id),"lineage":str(node.lineage_id),"fact":fact})
+        var row:Dictionary={"occurrence":str(node.id),"lineage":str(node.lineage_id),"fact":fact}
+        if fact.kind=="saving_throw":
+            var owner:Dictionary=_save_owner(node,nodes)
+            row.owner_occurrence=owner.get("id","");row.owner_lineage=owner.get("lineage_id","")
+        result[identity]["saves" if fact.kind=="saving_throw" else "damage"].append(row)
     return result
 
 ## Variant operands belong to one actual application and recipient. A false
 ## result is disclosed data; absence, a null effect, or duplicate saves is not.
 static func save_context(node:Dictionary,results:Dictionary)->Dictionary:
     if node.get("canceled",false):return {"ready":false,"reason":"application_save_canceled","by_effect":{}}
-    var identity:Array=key(node)
+    var identity:Array=scope_key(node)
     if identity.is_empty():return {"ready":false,"reason":"application_result_identity_unavailable","by_effect":{}}
     var fact:Variant=node.get("fact")
     var target:Variant=null if fact==null else fact.get("target_entity_uuid")
+    if identity[1]==null and (fact==null or fact.get("kind")!="spell" or node.get("phase")!="completion" or target==null):
+        return {"ready":false,"reason":"application_result_identity_unavailable","by_effect":{}}
     if target==null:return {"ready":false,"reason":"application_result_target_unavailable","by_effect":{}}
     var grouped:Dictionary={}
     for row in results.get(identity,{}).get("saves",[]):
-        if row.fact.get("target_entity_uuid")!=target:continue
+        if row.get("owner_occurrence")!=str(node.id) or row.fact.get("target_entity_uuid")!=target:continue
         var effect:Variant=row.fact.get("effect_id")
         if effect==null or effect=="":continue
         if not grouped.has(effect):grouped[effect]=[]
@@ -38,6 +64,7 @@ static func save_context(node:Dictionary,results:Dictionary)->Dictionary:
         var evidence:Dictionary={"cast_lineage":identity[0],"application_id":identity[1],
             "application_occurrence":str(node.id),"application_lineage":str(node.lineage_id),
             "target_uuid":target,"effect_id":effect}
+        if identity[1]==null:evidence.scope="target_cast"
         if rows.size()!=1:
             evidence.save_occurrences=rows.map(func(row):return row.occurrence)
             evidence.save_lineages=rows.map(func(row):return row.lineage)

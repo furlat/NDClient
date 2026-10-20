@@ -1,0 +1,128 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "5f4d3764-6f84-44d9-8e4a-f4cb96a63435": "Amber caster",
+  "ae8fe592-2915-4517-aa73-260777b14b26": "Amber ally",
+  "052d1e96-f821-4b15-a6a5-a4513be0da51": "Blue target",
+  "867d111e-eb96-48e3-8d62-78d9a325e3dd": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.acid_arrow \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 5,
+   "damage": 2,
+   "sensory": 2,
+   "spatial_effect_state": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.acid_arrow": 1
+  },
+  "conditions": [
+   "condition.spell.acid_arrow",
+   "condition.spell.acid_surface"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 60,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 64,
+   "lineage": 41,
+   "event_offset": 4,
+   "label": "condition applied condition.spell.acid_arrow",
+   "kind": "actor_change",
+   "actor_uuid": "052d1e96-f821-4b15-a6a5-a4513be0da51",
+   "condition_uuid": "7f972fc8-77ea-44d0-aade-974a16ad225e",
+   "condition_id": "condition.spell.acid_arrow"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 74,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.acid_surface",
+   "kind": "actor_change",
+   "actor_uuid": "052d1e96-f821-4b15-a6a5-a4513be0da51",
+   "condition_uuid": "692c0a4d-460b-4dd2-909d-f12c1cdae7e5",
+   "condition_id": "condition.spell.acid_surface"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 78,
+   "lineage": 41,
+   "event_offset": 6,
+   "label": "condition applied condition.spell.acid_surface",
+   "kind": "actor_change",
+   "actor_uuid": "5f4d3764-6f84-44d9-8e4a-f4cb96a63435",
+   "condition_uuid": "a1a1fb7d-2d64-4923-8392-54c7368d018a",
+   "condition_id": "condition.spell.acid_surface"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 82,
+   "lineage": 41,
+   "event_offset": 7,
+   "label": "condition applied condition.spell.acid_surface",
+   "kind": "actor_change",
+   "actor_uuid": "867d111e-eb96-48e3-8d62-78d9a325e3dd",
+   "condition_uuid": "6860ef0e-64ce-476e-9f46-d43c8ca73d3c",
+   "condition_id": "condition.spell.acid_surface"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 85,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 87,
+   "lineage": 41,
+   "event_offset": 12,
+   "kind": "spell",
+   "label": "spell spell.acid_arrow"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

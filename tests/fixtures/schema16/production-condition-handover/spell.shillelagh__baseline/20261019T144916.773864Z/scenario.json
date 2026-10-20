@@ -1,0 +1,85 @@
+{
+ "id": "spell.shillelagh/baseline",
+ "title": "Shillelagh: legal baseline",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.shillelagh"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.shillelagh"
+   ],
+   "at": [
+    3,
+    7
+   ],
+   "items": [
+    {
+     "id": "weapon.quarterstaff",
+     "slot": "MELEE_MAIN"
+    }
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.shillelagh",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  }
+ ],
+ "seed": 2,
+ "required_behaviors": [
+  "spell.shillelagh"
+ ],
+ "purpose": "Current-engine baseline cast/reaction safety; visual/lifecycle qualification is separate."
+}

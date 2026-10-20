@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b5092cf4-1e79-49a5-a9f8-39accce47cbb",
+   "state_revision": "b7ce9cfc-ca87-41f2-8f54-e84b42f4aac5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vicious_mockery_baseline",
+   "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+   "audience_id": "d2f70ce9-d888-4d28-b934-6b8961d23db0",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vicious_mockery_baseline",
+    "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+    "audience_id": "d2f70ce9-d888-4d28-b934-6b8961d23db0",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "40147c94-f3c2-4024-a606-0d8cb6ce1502",
+   "state_revision": "3509c7ab-47a0-4e26-b586-8938ecb72650",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vicious_mockery_baseline",
+   "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+   "audience_id": "670762b8-b622-4931-b4a6-6ed56f517d50",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vicious_mockery_baseline",
+    "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+    "audience_id": "670762b8-b622-4931-b4a6-6ed56f517d50",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "a128cb5c-9fad-43cb-84df-462aba0ba77d",
+   "state_revision": "10a3a08b-fbf2-4dee-ad82-28e9eaac4f05",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vicious_mockery_baseline",
+   "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+   "audience_id": "670762b8-b622-4931-b4a6-6ed56f517d50",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vicious_mockery_baseline",
+    "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+    "audience_id": "670762b8-b622-4931-b4a6-6ed56f517d50",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.vicious_mockery",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.vicious_mockery",
+   "display_name": "Vicious Mockery",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "6a07ac11-1969-4f52-aa3a-d4a5b1b511af",
+   "state_revision": "ec006fbe-519e-4e10-bcb8-36a4cc5ae5f1",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vicious_mockery_baseline",
+   "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+   "audience_id": "d2f70ce9-d888-4d28-b934-6b8961d23db0",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vicious_mockery_baseline",
+    "game_epoch": "f09b15de-3a30-47fe-8926-d5dc4c1c19bf",
+    "audience_id": "d2f70ce9-d888-4d28-b934-6b8961d23db0",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

@@ -179,6 +179,8 @@ extra = {
 [sub_resource type="Resource" id="Resource_m0g4v"]
 script = ExtResource("6_gu6nl")
 id = "ray_of_sickness_hit_saved_native"
+when = {"attack_outcome": ["Hit", "Crit"], "save_succeeded": [true]}
+save_effect_id = "spell.ray_of_sickness.saving_throw"
 kind = "outcome"
 selection = "ray_of_sickness_hit_saved_native"
 effects = Array[ExtResource("1_lrijx")]([SubResource("Resource_0mmwg"), SubResource("Resource_f8lfd")])

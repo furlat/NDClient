@@ -2,6 +2,13 @@
 
 20 October 2026. Existing master plan phases 4–5. This is a shared source/dispatch/preparation implementation; it does not accept the imported alternative artwork or complete its gameplay branches.
 
+**Superseding production receipt:** [integration closure](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
+Three actual saved-outcome predicates are now authored. The zero-predicate
+statements below describe this document's earlier infrastructure checkpoint.
+The130 imported alternatives are not130 missing gameplay implementations: many
+are already condition/spatial/item/event-owned, review alternatives or rejected
+native weapon bodies. Their count is not a completion denominator.
+
 ## Implemented ownership
 
 - `PresentationSpellVariant.when` is an explicit conjunction of exact disclosed `SpellFact` values. Initial supported fields are `attack_outcome` (`Hit`, `Miss`, `Crit`, `Crit Miss`) and `target_kind` (`creature`, `object`), each with an authored nonempty array of alternatives. Unknown or null values keep the baseline. `kind`, `value`, IDs and titles never select an effect.

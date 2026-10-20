@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "954a4692-3b75-4e11-b0a1-5abade5ac86c",
+   "state_revision": "5adf98c5-e884-424f-acd8-8b83def407dd",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_baseline",
+   "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+   "audience_id": "ec184cf3-3678-4d05-83e8-eaacf2a760c0",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_baseline",
+    "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+    "audience_id": "ec184cf3-3678-4d05-83e8-eaacf2a760c0",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a77d0a1e-b3f2-4634-ae2b-032eff22d64a",
+   "state_revision": "95ecf04c-522f-4ffe-b950-b4ec66d707da",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_baseline",
+   "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+   "audience_id": "a0811f04-c2a1-44db-a053-e8e15ba433ec",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_baseline",
+    "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+    "audience_id": "a0811f04-c2a1-44db-a053-e8e15ba433ec",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "154b7428-a8bb-4d45-8590-69c8939c9393",
+   "state_revision": "dcd67238-a9e4-4cf8-99a9-ae33f9d32950",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_baseline",
+   "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+   "audience_id": "a0811f04-c2a1-44db-a053-e8e15ba433ec",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_baseline",
+    "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+    "audience_id": "a0811f04-c2a1-44db-a053-e8e15ba433ec",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.dissonant_whispers",
+   "display_name": "Dissonant Whispers (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "62f4ab69-465f-4fde-af2c-5c88188f3b8b",
+   "state_revision": "f6ed1643-3730-4f94-90a4-98a223734385",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_baseline",
+   "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+   "audience_id": "ec184cf3-3678-4d05-83e8-eaacf2a760c0",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_baseline",
+    "game_epoch": "35a6b191-858b-410c-bc1b-3e664d02708d",
+    "audience_id": "ec184cf3-3678-4d05-83e8-eaacf2a760c0",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

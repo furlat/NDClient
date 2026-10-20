@@ -1,5 +1,11 @@
 # Main client recovery and active work — 20 October 2026
 
+**Current status:** [production integration closure](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
+The percentage table below is withdrawn; it mixed unrelated evidence and had no
+fixed completion denominator. The current installed sealed package is
+`runtime-e102c29dec58524b`, including the repaired actor-history shaders. This
+document's older package, failures and totals are historical receipts only.
+
 ## Authority and recovered scope
 
 All implementation is in `C:/Users/tommaso/Documents/Dev/NDClientGodot`, sole
@@ -21,10 +27,10 @@ useful capability-organized Studio scenarios/tracks; icons/portraits; native
 safety and actual issued-command performance. A green subset does not complete
 that scope. Aid, Bless, False Life and Sacred Flame remain user-rejected.
 
-## Implementation estimates, not visual acceptance
+## Withdrawn historical estimates
 
-These are work estimates, not a measured fraction of accepted effects. The old
-percentages in the19 October cohort ledger describe their named checkpoint.
+These estimates must not be repeated as current progress. Concrete source,
+scenario, native-output and visual-approval facts remain separate.
 
 | Workstream | Estimate | Remaining responsibility |
 |---|---:|---|

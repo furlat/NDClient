@@ -251,14 +251,15 @@ func _capture(world:Node,actor:String,slots:Array,priority:bool=true)->Dictionar
     result.reason="" if result.selected.all(func(row):return sources.has(row.key)) else "surface_source_preparing"
     return result
 
-func sample(world:Node,actor:String,slots:Array=BODY_SLOTS)->Dictionary:
+func sample(world:Node,actor:String,slots:Array=BODY_SLOTS,region:Dictionary={})->Dictionary:
     var captured:Dictionary=_capture(world,actor,slots)
     var result:Dictionary={"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"points":[],"origin":Vector3.ZERO,"pose_key":[],"gpu_geometry_key":[],"ready":false,"reason":"actor_not_displayed"}
     result.reason=captured.reason;result.origin=captured.origin;result.pose_key=captured.pose_key
     if not captured.reason.is_empty():return result
     var selected:Array=captured.selected;var revision:Array=captured.revision;var origin:Vector3=captured.origin
-    var owner_key:Array=[actor,slots]
+    var owner_key:Array=[actor,slots,region.get("socket",""),region.get("radius",0.0)]
     var world_key:Array=[revision,origin]
+    if not region.is_empty():world_key.append(region.point)
     if packets.has(owner_key) and packets[owner_key].revision==world_key:return packets[owner_key].packet.duplicate(false)
     var owned:Dictionary={};var centre:=Vector3.ZERO
     for description in selected:
@@ -268,9 +269,10 @@ func sample(world:Node,actor:String,slots:Array=BODY_SLOTS)->Dictionary:
             if owned.has(point.pixel):continue
             owned[point.pixel]=true
             var position:Vector3=transform*point.local
+            if not region.is_empty() and position.distance_squared_to(region.point)>float(region.radius)*float(region.radius):continue
             result.points.append({"position":position,"normal":(normal_basis*point.normal).normalized(),"uv":point.uv,"pixel":point.pixel,"slot":description.slot})
             centre+=position
-    result.gpu_geometry_key=revision
+    result.gpu_geometry_key=revision if region.is_empty() else [revision,region]
     result.ready=not result.points.is_empty();result.reason="" if result.ready else "no_admitted_optical_points"
     if result.ready:result.optical_anchor=centre/float(result.points.size())
     packet_builds+=1

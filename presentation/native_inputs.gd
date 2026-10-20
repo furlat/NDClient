@@ -43,7 +43,7 @@ static func geometry_request(component:Dictionary,channel:String)->Dictionary:
     if not selector.is_empty():
         actor=actor_uuid(component,selector)
         if actor.is_empty():reason="authored_actor_binding_not_bound:"+selector
-    return {"actor":actor,"slots":Array(authored.get("slots",Surface.BODY_SLOTS)),"reason":reason}
+    return {"actor":actor,"slots":Array(authored.get("slots",Surface.BODY_SLOTS)),"reason":reason,"region":authored.get("region",{})}
 
 static func actor_uuid(component:Dictionary,selector:String)->String:
     if selector=="caster":return str(component.get("actor_uuid",""))
@@ -111,7 +111,15 @@ func geometry_sample(world:Node,component:Dictionary,channel:String,weapon:Dicti
         return Weapons.surface(surfaces.sample(world,weapon.actor,weapon.slots),weapon)
     var request:Dictionary=geometry_request(component,channel)
     if not request.reason.is_empty():return {"actor":"","actor_uuid":"","ready":false,"reason":request.reason,"points":[],"origin":Vector3.ZERO,"gpu_geometry_key":[]}
-    var result:Dictionary=surfaces.sample(world,request.actor,request.slots)
+    var region:Dictionary={}
+    if not request.region.is_empty():
+        var visual:Dictionary=world.visual_actors.get(request.actor,{})
+        if not Sockets.displayed(visual):return {"actor":request.actor,"ready":false,"reason":"actor_not_displayed","points":[],"origin":Vector3.ZERO,"gpu_geometry_key":[]}
+        var socket:Dictionary=Sockets.pose_point(world,visual.row,request.region.socket)
+        if not socket.ready:return {"actor":request.actor,"ready":false,"reason":socket.reason,"points":[],"origin":Vector3.ZERO,"gpu_geometry_key":[]}
+        var body_scale:float=visual.get("sampled_pose",{}).get("body_scale",{}).get("factor",1.0)
+        region={"socket":request.region.socket,"point":socket.point,"radius":float(request.region.radius_cells)*float(visual.row.scale)*body_scale}
+    var result:Dictionary=surfaces.sample(world,request.actor,request.slots,region)
     result.geometry_slots=request.slots
     return result
 

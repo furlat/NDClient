@@ -6,6 +6,8 @@ const Occurrences=preload("res://presentation/occurrences.gd")
 const Protocol=preload("res://sdk/protocol.gd")
 const EFFECT="spell.circle_of_death.saving_throw"
 const BASE="res://tests/fixtures/schema16/circle-of-death/"
+const ROOT_BASE="res://tests/fixtures/schema16/root-target-save/ray-of-sickness/"
+const ROOT_EFFECT="spell.ray_of_sickness.saving_throw"
 const EXPECTED={
     "e3f92f4a-a9ca-5d7b-9ce9-477567e6968a":{"target":"fdaef6f2-e48d-4d77-b5b2-7b7badfa0ce2","application":"67","application_lineage":"44","save":"48","save_lineage":"45","succeeded":false},
     "1b0663af-0e31-5010-8ffe-4376aaa1c867":{"target":"7edcd4f5-1daf-4454-a96d-be84140d87d5","application":"91","application_lineage":"68","save":"72","save_lineage":"69","succeeded":true},
@@ -18,7 +20,9 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);printerr("APPLICATION_SAVE_CONTEXT_FAIL "+label)
 func run()->void:
-    for seat in ["amber","blue"]:original(seat)
+    for seat in ["amber","blue"]:
+        original(seat)
+        target_cast(seat)
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Exact disclosed application/save context; no native or visual qualification"}))
     quit(0 if failures.is_empty() else 1)
 func original(seat:String)->void:
@@ -99,3 +103,87 @@ func project_rows(node:Dictionary,identity:Array,rows:Array)->Dictionary:
     return Results.save_context(node,{identity:{"saves":rows,"damage":[]}})
 func absent(context:Dictionary,reason:String,label:String)->void:
     check(not context.ready and context.reason==reason and context.by_effect.is_empty(),label)
+
+func target_cast(seat:String)->void:
+    var path:String=ROOT_BASE+seat+"/journal/0000000000000008.json"
+    var decoded:Dictionary=Protocol.new().decode_server("PlayerOperation",FileAccess.get_file_as_bytes(path))
+    check(decoded.ok,seat+" original target-bearing Ray cast uses the real SDK reader")
+    if not decoded.ok:return
+    var packet:Dictionary=decoded.value
+    var original_bytes:PackedByteArray=var_to_bytes(packet)
+    var found:bool=false
+    for raw in packet.lineages:
+        var group:Dictionary=Occurrences.group(raw)
+        var owners:Dictionary={}
+        for event in group.events:owners[event.lineage_id]=event
+        var results:Dictionary=Results.index(group.events,owners)
+        check(results==Results.index(group.events),seat+" an existing native owner map and standalone indexing agree")
+        for node in group.events:
+            if node.get("fact")==null or node.fact.get("kind")!="spell" or node.fact.get("behavior_id")!="spell.ray_of_sickness":continue
+            found=true
+            check(str(node.id)=="67" and str(node.lineage_id)=="41" and node.phase=="completion" \
+                and node.fact.attack_outcome=="Hit",seat+" actual root cast is the original completed Hit")
+            check(not Occurrences.application(node) and Results.key(node).is_empty() \
+                and Results.scope_key(node)==["41",null],seat+" real null application remains null, not a forged constructor identity")
+            var context:Dictionary=Results.save_context(node,results)
+            check(context.ready and context.by_effect.has(ROOT_EFFECT),seat+" actual target cast consumes its own disclosed save")
+            if not context.by_effect.has(ROOT_EFFECT):continue
+            var row:Dictionary=context.by_effect[ROOT_EFFECT]
+            check(row.ready and row.save_succeeded==true and row.evidence=={
+                "cast_lineage":"41","application_id":null,"application_occurrence":"67","application_lineage":"41",
+                "target_uuid":"b6d87955-ade7-482d-8775-3829f91d7071","effect_id":ROOT_EFFECT,
+                "scope":"target_cast","save_occurrence":"65","save_lineage":"62"},
+                seat+" original target-cast evidence preserves exact native identities and successful outcome")
+            var indexed:Dictionary=results[Results.scope_key(node)].saves[0]
+            check(indexed.owner_occurrence=="67" and indexed.owner_lineage=="41",seat+" save belongs to its actual nearest native owner")
+            check(Results.project(node,{"save_effect_id":ROOT_EFFECT,"damage_type":"Poison"},results).reason=="application_result_identity_unavailable",
+                seat+" application-only constructors cannot acquire a synthetic root application")
+            target_controls(node,group.events,results)
+    check(found,seat+" original Ray target-cast witness was exercised")
+    check(var_to_bytes(packet)==original_bytes,seat+" root-save projection leaves original packets unchanged")
+
+func target_controls(owner:Dictionary,events:Array,results:Dictionary)->void:
+    var original:PackedByteArray=var_to_bytes(events)
+    var save:Dictionary=events.filter(func(node):return str(node.id)=="65")[0]
+    var identity:Array=Results.scope_key(owner)
+    var indexed:Dictionary=results[identity].saves[0]
+    var opposite:Dictionary=indexed.duplicate(true);opposite.fact.succeeded=false
+    check(project_rows(owner,identity,[opposite]).by_effect[ROOT_EFFECT].save_succeeded==false,
+        "Private root value control preserves a disclosed false independently from the original true")
+    var canceled:Array=events.duplicate(true)
+    canceled.filter(func(node):return node.id==save.id)[0].canceled=true
+    absent(Results.save_context(owner,Results.index(canceled)),"save_effect_unavailable","Private canceled root save cannot select")
+    var unresolved:Dictionary=owner.duplicate(true);unresolved.phase="request"
+    absent(Results.save_context(unresolved,results),"application_result_identity_unavailable","Private unresolved target cast cannot select")
+    var no_target:Dictionary=owner.duplicate(true);no_target.fact.target_entity_uuid=null
+    absent(Results.save_context(no_target,results),"application_result_identity_unavailable","Private targetless carrier cannot borrow a target save")
+    var other_owner:Dictionary=owner.duplicate(true);other_owner.id="private-other-owner"
+    absent(Results.save_context(other_owner,results),"save_effect_unavailable","Matching resolution and target cannot replace exact native owner identity")
+    var other_cast:Dictionary=owner.duplicate(true);other_cast.resolution_record.lineage="private-other-cast"
+    absent(Results.save_context(other_cast,results),"save_effect_unavailable","Private foreign cast cannot borrow a root result")
+    var other_target:Dictionary=owner.duplicate(true);other_target.fact.target_entity_uuid="private-other-target"
+    absent(Results.save_context(other_target,results),"save_effect_unavailable","Private foreign target cannot borrow a root result")
+    # Private metadata controls keep the original save/resolution but interpose
+    # a nearer boundary. These are not recorded game sequences or new facts.
+    for kind in ["spell","action","attack"]:
+        for stopped in [false,true]:
+            var copied:Array=events.duplicate(true)
+            var boundary:Dictionary=owner.duplicate(true)
+            boundary.id="private-nested-owner";boundary.lineage_id="private-nested-lineage"
+            boundary.parent_lineage=owner.lineage_id;boundary.canceled=stopped;boundary.fact.kind=kind
+            copied.append(boundary)
+            copied.filter(func(node):return node.id==save.id)[0].parent_lineage=boundary.lineage_id
+            var projected:Dictionary=Results.index(copied)
+            absent(Results.save_context(owner,projected),"save_effect_unavailable",
+                "Private nearer "+kind+" boundary cannot leak its save to the outer cast; canceled="+str(stopped))
+            var actual:Dictionary=projected[identity].saves[0]
+            check(actual.owner_occurrence==("" if stopped else boundary.id),
+                "Private save retains only its actual nearest uncanceled "+kind+" owner")
+    var blocked:Array=events.duplicate(true)
+    blocked.filter(func(node):return node.id==owner.id)[0].canceled=true
+    absent(Results.save_context(owner,Results.index(blocked)),"save_effect_unavailable","Private canceled ancestor cannot lend its descendant result")
+    var foreign:Dictionary=indexed.duplicate(true);foreign.fact.effect_id="private-concentration-effect"
+    var separated:Dictionary=project_rows(owner,identity,[foreign])
+    check(separated.ready and not separated.by_effect.has(ROOT_EFFECT) and separated.by_effect.has(foreign.fact.effect_id),
+        "Private independent effect remains separately keyed, never a Ray save")
+    check(var_to_bytes(events)==original,"Private owner-boundary controls leave actual original events unchanged")

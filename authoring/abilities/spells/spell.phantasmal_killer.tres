@@ -38,7 +38,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "id": "phantasmal_killer-application-caster-0.0",
@@ -73,7 +74,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "id": "phantasmal_killer-application-target-0.0",
@@ -108,7 +110,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "id": "phantasmal_killer-held-target-0.0",
@@ -166,7 +169,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "id": "phantasmal_killer-psychic_contact-target-1.35",

@@ -1,0 +1,74 @@
+{
+ "id": "spell.saved_head_programs/cleric_resistance",
+ "title": "Saved head effects: two legal spells against an actually resistant Cleric",
+ "kind": "spell",
+ "seed": 2,
+ "first": "blue",
+ "subjects": {
+  "spell": [
+   "spell.dissonant_whispers",
+   "spell.vicious_mockery",
+   "spell.resistance"
+  ],
+  "action": [],
+  "condition": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 1,
+   "caster_level": 1,
+   "spells": [
+    "spell.dissonant_whispers",
+    "spell.vicious_mockery"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "cleric",
+   "at": [
+    6,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  {
+   "do": "spell.vicious_mockery",
+   "by": "caster",
+   "target": "target"
+  }
+ ],
+ "required_behaviors": [
+  "spell.resistance",
+  "spell.dissonant_whispers",
+  "spell.vicious_mockery"
+ ],
+ "required_facts": [
+  "saving_throw"
+ ],
+ "purpose": "One fixed-seed legal sequence, with real Wisdom-proficient Life Cleric and actually cast Resistance before each incoming spell; outcomes are recorded without alteration or retries."
+}

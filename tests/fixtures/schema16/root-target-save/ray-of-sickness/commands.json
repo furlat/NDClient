@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "5d46adfc-9bfa-4817-ad98-2e1c148974f0",
+   "state_revision": "1f1a9580-285e-4afa-8257-02314f9b0d8b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_baseline",
+   "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+   "audience_id": "fac93f85-bba9-4ed0-86ca-49813d78bb11",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_baseline",
+    "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+    "audience_id": "fac93f85-bba9-4ed0-86ca-49813d78bb11",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8660846b-9534-4d12-8ce8-d8b02c52486e",
+   "state_revision": "ff79c63c-db4b-4849-8370-bcb22ae9b7fb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_baseline",
+   "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+   "audience_id": "794541a6-f7e1-48a8-a6cc-e583aecf3019",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_baseline",
+    "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+    "audience_id": "794541a6-f7e1-48a8-a6cc-e583aecf3019",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "b6d87955-ade7-482d-8775-3829f91d7071",
+   "state_revision": "a8e008dc-799e-422a-9557-575dcef42429",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_baseline",
+   "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+   "audience_id": "794541a6-f7e1-48a8-a6cc-e583aecf3019",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_baseline",
+    "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+    "audience_id": "794541a6-f7e1-48a8-a6cc-e583aecf3019",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.ray_of_sickness",
+   "display_name": "Ray of Sickness (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "ce90d4e3-073d-4163-b309-411aec45b87d",
+   "state_revision": "ee7538a8-c7ee-4b1e-98b7-e4a7cfe8dc78",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_ray_of_sickness_baseline",
+   "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+   "audience_id": "fac93f85-bba9-4ed0-86ca-49813d78bb11",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_ray_of_sickness_baseline",
+    "game_epoch": "6a8d1dae-113b-4b23-931d-2bcd7a69db04",
+    "audience_id": "fac93f85-bba9-4ed0-86ca-49813d78bb11",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

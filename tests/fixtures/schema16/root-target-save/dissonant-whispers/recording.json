@@ -1,0 +1,93 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "62f4ab69-465f-4fde-af2c-5c88188f3b8b": "Amber caster",
+  "954a4692-3b75-4e11-b0a1-5abade5ac86c": "Amber ally",
+  "154b7428-a8bb-4d45-8590-69c8939c9393": "Blue target",
+  "a77d0a1e-b3f2-4634-ae2b-032eff22d64a": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.dissonant_whispers \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 1,
+   "actor_change": 2,
+   "damage": 2,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.dissonant_whispers": 1
+  },
+  "conditions": [
+   "condition.spell.dissonant_whispers"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 64,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "154b7428-a8bb-4d45-8590-69c8939c9393",
+   "condition_uuid": "60c39d4b-6d63-46f7-890b-54da4389828f",
+   "condition_id": "condition.spell.dissonant_whispers"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 70,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

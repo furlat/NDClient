@@ -19,6 +19,10 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 ## A save predicate consumes this exact disclosed SavingThrowFact.effect_id
 ## within the same cast/application/recipient; never a spell-name inference.
 @export var save_effect_id: String = ""
+## Replacement cue lists explicitly declare their condition-owner indices.
+## An empty override keeps finite saved/failed feedback on the spell event.
+@export var override_owner_cues: bool = false
+@export var owner_cues: PackedInt32Array = []
 ## A known source/input limitation can keep an authored predicate non-active.
 @export var dispatch_gap: String = ""
 ## Factory selection key whose staging it carries.

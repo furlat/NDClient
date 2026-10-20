@@ -145,11 +145,12 @@ static func _spell_sources(behavior: String, graph: Dictionary, cache: Dictionar
 
 ## One immutable choice per actual application. Rendering and Studio borrow it
 ## together, including the exact disclosed save evidence or its named gap.
-static func _spell_choice(node:Dictionary,fact:Dictionary,graph:Dictionary,cache:Dictionary)->Dictionary:
+static func _spell_choice(node:Dictionary,fact:Dictionary,graph:Dictionary,cache:Dictionary,has_applications:bool)->Dictionary:
     if not graph.spell_choices.has(node.id):
         var source:Dictionary=_spell_sources(str(fact.behavior_id),graph,cache)
         var context:Dictionary={"applicable":false}
-        if Occurrences.application(node) and source.variants.any(func(variant):return variant.when.has("save_succeeded") and variant.dispatch_gap.is_empty()):
+        var target_cast:bool=not has_applications and node.get("phase")=="completion" and fact.get("target_entity_uuid")!=null
+        if (Occurrences.application(node) or target_cast) and source.variants.any(func(variant):return variant.when.has("save_succeeded") and variant.dispatch_gap.is_empty()):
             context=Components.ApplicationResults.save_context(node,graph.application_results)
         graph.spell_choices[node.id]=Components.NativeSpells.selected(source,fact,context)
     return graph.spell_choices[node.id]
@@ -376,14 +377,14 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         for child in children:finish=maxf(finish,_schedule(child,start,state,group,graph,cache))
     elif kind == "spell" and not node.canceled:
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
-        var sources:Dictionary=_spell_choice(node,fact,graph,cache)
-        var recipe: Dictionary = sources.recipe
-        graph.recipes[node.id]=recipe
-        var cast: Dictionary=recipe.get("cast",{})
         var application: bool=Occurrences.application(node)
         var has_applications=false
         for child in children:
             if child.get("fact")!=null and child.fact.kind=="spell" and Occurrences.application(child):has_applications=true
+        var sources:Dictionary=_spell_choice(node,fact,graph,cache,has_applications)
+        var recipe: Dictionary = sources.recipe
+        graph.recipes[node.id]=recipe
+        var cast: Dictionary=recipe.get("cast",{})
         var selected:Dictionary=sources.selection
         var selected_delivery:Dictionary={}
         if not selected.is_empty():selected_delivery=SpellDelivery.for_occurrence(SpellDelivery.selected_for(selected,fact),node,has_applications)
@@ -792,7 +793,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         var applications:Dictionary={}
         graph.item_rows={}
         graph.operation_sheets=operation_sheets
-        graph.application_results=Components.ApplicationResults.index(lineage.events)
+        graph.application_results=Components.ApplicationResults.index(lineage.events,graph.nodes)
         for node in lineage.events:
             var resolution:Dictionary=node.resolution_record
             if resolution.get("application_id")==null:continue

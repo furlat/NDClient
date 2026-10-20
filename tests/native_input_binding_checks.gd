@@ -29,10 +29,11 @@ class SurfaceProvider extends RefCounted:
     var calls:int=0
     var origin:Vector3=Vector3.ZERO
     var selected:Array=[]
+    var selected_region:Dictionary={}
     var prepared:Array=[]
-    func sample(_world:Node,actor:String,slots:Array=[])->Dictionary:
+    func sample(_world:Node,actor:String,slots:Array=[],region:Dictionary={})->Dictionary:
         calls+=1
-        selected=[actor,slots]
+        selected=[actor,slots];selected_region=region
         return {"actor":actor,"actor_uuid":actor,"entity_uuid":actor,"ready":true,"reason":"","points":[],"origin":origin,"gpu_geometry_key":["same-source-pose"]}
     func prepare(_world:Node,actors:Array,slots:Array,priority:bool)->void:prepared.append([actors,slots,priority])
     func clear()->void:pass
@@ -221,6 +222,15 @@ func run()->void:
     aimed.native_cue.entity_geometry={"actor":"caster","slots":["weapon"]}
     bridge.sync(world,prepared_handle,aimed,exact)
     check(optical.selected==["a",["weapon"]],"Actual authored actor and weapon-only slot operands reach the optical provider unchanged")
+    var regional:Dictionary=aimed.duplicate(true)
+    regional.native_cue.entity_geometry={"actor":"caster","slots":["body","head","helmet"],"region":{"socket":"head","radius_cells":.18}}
+    world.visual_actors.a.row.scale=1.5
+    for factor in [.5,2.0]:
+        world.visual_actors.a.sampled_pose={"body_scale":{"factor":factor}}
+        bridge.geometry_sample(world,regional,"entity_geometry")
+        check(is_equal_approx(optical.selected_region.radius,.18*1.5*factor),"Head region follows source scale and actual published Reduce/Enlarge once: "+str(factor))
+        check(optical.selected==["a",["body","head","helmet"]] and optical.selected_region.point==Inputs.Sockets.pose_point(world,world.visual_actors.a.row,"head").point,"Region admission uses the actual source actor head socket and body support, independently of cosmetic head membership")
+    world.visual_actors.a.row.scale=1.0;world.visual_actors.a.erase("sampled_pose")
     aimed.native_cue.entity_geometry.actor="target2"
     result=bridge.sync(world,prepared_handle,aimed,exact)
     check(result.unavailable.get("entity_geometry")=="authored_actor_binding_not_bound:target2","An unbound second recipient cannot silently borrow the first recipient's body")

@@ -1,5 +1,12 @@
 # Schema 16 — complete Factory migration progress
 
+**Current receipt, 20 October:** [production integration closure](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
+All percentage estimates below are withdrawn as current progress measures. They
+did not have a fixed denominator and repeatedly mixed infrastructure with actual
+integration. The installed package is `runtime-e102c29dec58524b`; the earlier
+actor-history shader errors are repaired in that sealed successor. Current
+remaining evidence and gaps are in the linked receipt, not the old table.
+
 **20 October — current implementation authority:**
 `C:/Users/tommaso/Documents/Dev/NDClientGodot`, sole active/local branch
 `codex-authoring-schemabump`, consolidation commit `7ef2f3f8`. Former private
@@ -14,9 +21,8 @@ Factory shader errors; the human deferred that blocker while independent client
 repair continues. No invalid-shader pixels or historical partial gates certify
 full coverage. [Current main suite repair and receipts](MAIN_CLIENT_SUITE_REPAIR_2026-10-20.md).
 
-The table below retains the19 October implementation estimates. It is not a
-fresh measured acceptance percentage; suite repair and provider qualification
-must be read from their exact later receipts, not inferred from these numbers.
+The table below is a historical record of the withdrawn19 October estimates.
+Use exact later receipts for suite repair and provider qualification.
 
 This ledger records successive cohorts. The current shared-provider implementation,
 exact native evidence, remaining gaps and live spike ledger are in

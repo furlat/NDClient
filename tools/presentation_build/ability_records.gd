@@ -357,6 +357,15 @@ static func variant_selection(base:Dictionary,variant:Resource)->Dictionary:
     if not variant.effects.is_empty():
         selected.staging.cues=[]
         for i in variant.effects.size():selected.staging.cues.append(cue_from_effect(variant.effects[i],i))
+    if variant.override_owner_cues:
+        selected.lifecycle=base.lifecycle.duplicate()
+        selected.lifecycle.cue_ids=Array(variant.owner_cues)
+        if not variant.effects.is_empty():
+            selected.lifecycle.erase("cues")
+            var windows:Dictionary={}
+            for i in variant.effects.size():
+                if not variant.effects[i].lifecycle.is_empty():windows[str(i)]=variant.effects[i].lifecycle.duplicate()
+            if not windows.is_empty():selected.lifecycle.cues=windows
     selected.variant={"id":variant.id,"when":F.deep(variant.when),"save_effect_id":variant.save_effect_id,"selection":variant.selection,"replaces_effects":not variant.effects.is_empty()}
     return selected
 

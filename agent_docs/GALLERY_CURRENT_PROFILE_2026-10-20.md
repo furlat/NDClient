@@ -640,3 +640,48 @@ No source, driver or scheduler cause is asserted without a matching measurement.
 
 Exact stage derivation, compiler/fold leaves and complete two-worst-frame scopes:
 `.runtime/consolidation/shared-save-variant-live-analysis.json`.
+
+## Post-production routing and anatomical-region regression receipt
+
+Actual issued-command Gallery313/0, clean script/engine logs and no owned
+leftovers: `.runtime/tests/20261020T105026.539610Z/summary.json`. Source and
+headless/native suites had finished before this run. One3.6second offline read
+of the previous profile occurred near startup, so this is a functional/timing
+receipt, not a quiet controlled A/B performance experiment.
+
+Run `.runtime/player-runs/20261020T105029.248040Z`; full dump
+`generated/profiles/2026-10-20T12-51-27-gallery-live-spells.json`. All27commands'
+interaction window has7017frames, zero evictions. Sorted-floor percentiles
+p50/p95/p99/max are **6.398/12.799/17.026/65.025ms**;80frames exceed16.667ms and
+two exceed33.333ms. Prior71.206ms and current65.025ms maxima do not prove an
+optimization; this batch integrates production ownership, not performance work.
+
+Exclusive input-to-first-animation stages, milliseconds:
+
+| Command | Input→sent | Sent→admission | Admission | Fold | Compile | Opening | Publication/gaps | Total |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Door1 |15.865|63.621|4.980|29.426|10.151|5.046|86.631|215.720|
+| Room move2 |3.592|92.103|2.524|76.146|6.492|7.836|14.760|203.453|
+| Opportunity move8 |3.145|69.957|10.573|48.367|14.867|7.098|21.138|175.145|
+| Fireball13 |35.336|57.951|1.912|32.786|8.937|7.793|24.401|169.116|
+
+Sent→admission includes server/transport/queue; it is not server execution alone.
+Publication/gaps is an observed remainder, not an invented named CPU cost. Room
+move's nested reduce74.387ms includes48.965facts/19.389world. Fireball reduce
+31.011ms includes11.883facts/15.804world; stage1.058/commit0.669. Its compiler
+reports trace2.553, lineage1.482, shell1.247, actor cuts1.054, delivery0.919,
+components0.710, requirements0.459, ending0.284ms. Opportunity delivery is10.500ms.
+
+Worst frame3418 is65.025ms: Play16.208/HUD+diagnostics0.569, leaving48.248ms
+unallocated. Play includes optional preparation8.184, residency5.199, CPU-media
+release3.812, session3.045, actor sample2.931, owner preparation2.885 and component
+prefetch2.629ms; these scopes nest and must not be added. Latest render CPU/GPU
+samples0.384/0.685ms do not explain the remainder. Frame1069 is41.796ms:
+Play8.222/HUD+diagnostics0.373 leave33.201ms; largest nested scopes are actor
+sample3.279, components2.256/native1.974, lighting1.625 and session1.248ms.
+No driver/source/scheduler cause is assigned without matching evidence.
+
+Exact complete source:
+`.runtime/consolidation/production-closure-live-analysis.json`. This preserves
+the open frame/latency work without interrupting the production migration for
+another optimization detour.

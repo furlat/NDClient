@@ -1,0 +1,91 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "eff2408a-c3b0-46b0-a182-10f0dd33db9a": "Amber caster",
+  "dd8571df-518a-4520-b182-71a7a898ea2b": "Amber ally",
+  "1150dc54-e816-4875-9ad7-18995f76f0be": "Blue target",
+  "4d3d5774-d708-40a8-9eac-950ab696f092": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.shillelagh \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.shillelagh": 1
+  },
+  "conditions": [
+   "condition.spell.shillelagh"
+  ],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "eff2408a-c3b0-46b0-a182-10f0dd33db9a",
+   "condition_uuid": "cdd5a0b6-1ff1-4036-8a24-5b46f752a2db",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.shillelagh",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.shillelagh",
+   "kind": "actor_change",
+   "actor_uuid": "eff2408a-c3b0-46b0-a182-10f0dd33db9a",
+   "condition_uuid": "cdd5a0b6-1ff1-4036-8a24-5b46f752a2db",
+   "condition_id": "condition.spell.shillelagh",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.shillelagh",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

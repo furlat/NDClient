@@ -36,7 +36,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -67,7 +68,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -99,7 +101,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -136,7 +139,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -167,7 +171,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -182,6 +187,10 @@ extra = {
 [sub_resource type="Resource" id="Resource_2ba33"]
 script = ExtResource("6_73mky")
 id = "vicious_mockery_saved_native"
+when = {"save_succeeded": [true]}
+save_effect_id = "spell.vicious_mockery.saving_throw"
+override_owner_cues = true
+owner_cues = PackedInt32Array()
 kind = "outcome"
 selection = "vicious_mockery_saved_native"
 effects = Array[ExtResource("1_pl2fp")]([SubResource("Resource_jxbst"), SubResource("Resource_7b0bx")])
@@ -207,7 +216,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -238,7 +248,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -270,7 +281,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -310,7 +322,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -341,7 +354,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -373,7 +387,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{

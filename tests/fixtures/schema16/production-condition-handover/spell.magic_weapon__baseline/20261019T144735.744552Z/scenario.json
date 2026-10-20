@@ -1,0 +1,79 @@
+{
+ "id": "spell.magic_weapon/baseline",
+ "title": "Magic Weapon: legal baseline",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.magic_weapon"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.magic_weapon"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.magic_weapon",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  }
+ ],
+ "seed": 2,
+ "required_behaviors": [
+  "spell.magic_weapon"
+ ],
+ "purpose": "Current-engine baseline cast/reaction safety; visual/lifecycle qualification is separate."
+}

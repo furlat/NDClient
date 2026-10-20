@@ -36,7 +36,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -67,7 +68,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -124,7 +126,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -155,7 +158,8 @@ extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
-"slots": ["head", "helmet"]
+"slots": ["body", "head", "helmet"],
+"region": {"socket": "head", "radius_cells": 0.18}
 },
 "follow_attachment": true,
 "live_endpoints": [{
@@ -170,6 +174,10 @@ extra = {
 [sub_resource type="Resource" id="Resource_3368w"]
 script = ExtResource("6_vvdlk")
 id = "dissonant_whispers_saved_native"
+when = {"save_succeeded": [true]}
+save_effect_id = "spell.dissonant_whispers.saving_throw"
+override_owner_cues = true
+owner_cues = PackedInt32Array()
 kind = "outcome"
 selection = "dissonant_whispers_saved_native"
 effects = Array[ExtResource("1_8yj1a")]([SubResource("Resource_dk1p3"), SubResource("Resource_fdi03")])

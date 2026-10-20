@@ -1,0 +1,148 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "ae8fe592-2915-4517-aa73-260777b14b26",
+   "state_revision": "00cb6cf7-4304-47b5-92b0-b49996eb213f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_baseline",
+   "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+   "audience_id": "332c35df-db26-448e-a63a-86c7eae05237",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_baseline",
+    "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+    "audience_id": "332c35df-db26-448e-a63a-86c7eae05237",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "867d111e-eb96-48e3-8d62-78d9a325e3dd",
+   "state_revision": "c055698d-2fad-470d-be49-74eb94ac9c4d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_baseline",
+   "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+   "audience_id": "9337dc81-5acb-4186-930a-89273788b36d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_baseline",
+    "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+    "audience_id": "9337dc81-5acb-4186-930a-89273788b36d",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "052d1e96-f821-4b15-a6a5-a4513be0da51",
+   "state_revision": "a632637c-23a1-48fa-88f1-9a5626f80ac9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_baseline",
+   "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+   "audience_id": "9337dc81-5acb-4186-930a-89273788b36d",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_baseline",
+    "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+    "audience_id": "9337dc81-5acb-4186-930a-89273788b36d",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.acid_arrow",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.acid_arrow",
+   "display_name": "Acid Arrow (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "side",
+     "value": "creature",
+     "label": "Creature"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "5f4d3764-6f84-44d9-8e4a-f4cb96a63435",
+   "state_revision": "3227d47a-c4ff-4a83-92ae-0538f54cfab7",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_baseline",
+   "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+   "audience_id": "332c35df-db26-448e-a63a-86c7eae05237",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_baseline",
+    "game_epoch": "f4867726-c095-410a-8783-d7d61d3d85a8",
+    "audience_id": "332c35df-db26-448e-a63a-86c7eae05237",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

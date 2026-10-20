@@ -2,6 +2,14 @@
 
 20 October 2026. The client now supports shared typed per-application variant dispatch. This handoff asks for authoring/source data, not a new renderer or a vendor edit in the client checkout.
 
+**Client production update:** Ray of Sickness hit/saved, Dissonant Whispers
+saved and Vicious Mockery saved now have exact client-authored predicates.
+Those assignments did not require new Factory artwork or permission. Their
+sources already supported actual endpoints and save feedback. Replacement cue
+lists can explicitly set `override_owner_cues = true` and `owner_cues` (including
+an empty list) to retain finite feedback without inheriting another cue list's
+condition indices. [Current qualification and remaining gaps](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
+
 For an alternative intended to replace the spell's finite event cues, provide an explicit typed predicate using actual current public facts, for example:
 
 ```gdscript
@@ -27,7 +35,12 @@ have no recipient-save requirement. Different save effects are independent, so
 opposite booleans on different effect IDs are not mutually exclusive predicates.
 Rendering and Studio borrow the same cached application choice and evidence.
 
-The Resource retains all 130 imported alternatives/240 cues across 43 current native owners, their metadata and gaps. No production alternative was automatically enabled. Source presence, input provider, recorded scenario, native output and user approval remain separate facts.
+The Resource retains all130 imported alternatives/240cues across43 current
+native owners, their metadata and gaps. Three explicitly authored outcome
+predicates are active. The remaining alternative count is not a count of missing
+gameplay branches: condition/spatial/item ownership, review-only choices and
+rejected artwork have separate meanings. Source presence, input provider,
+recorded scenario, native output and user approval remain separate facts.
 
 For each proposed predicate:
 

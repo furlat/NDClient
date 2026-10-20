@@ -1,0 +1,90 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "f3a23b4f-8eb3-4e02-87f1-14b42287523a": "Amber caster",
+  "76e15da8-658b-4ed5-8953-76bed0f06905": "Amber ally",
+  "2ee2722d-b006-4b7a-a8da-da543653356e": "Blue target",
+  "d44967d0-5739-4acd-992a-ee9b2347e755": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.divine_favor \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 3,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.divine_favor": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.divine_favor"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 50,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f3a23b4f-8eb3-4e02-87f1-14b42287523a",
+   "condition_uuid": "7aa96ed4-0368-4e46-8006-5ef657f298f8",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.divine_favor",
+   "kind": "actor_change",
+   "actor_uuid": "f3a23b4f-8eb3-4e02-87f1-14b42287523a",
+   "condition_uuid": "cf8a3cef-4e00-4c5d-b654-6a817ede9f2a",
+   "condition_id": "condition.spell.divine_favor"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 52,
+   "lineage": 41,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "f3a23b4f-8eb3-4e02-87f1-14b42287523a",
+   "condition_uuid": "7aa96ed4-0368-4e46-8006-5ef657f298f8",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 53,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.divine_favor"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -167,6 +167,18 @@ func run()->void:
     var body_only:Dictionary=producer.sample(world,"knight_b",["body"])
     var helmet_only:Dictionary=producer.sample(world,"knight_b",["helmet"])
     check(body_only.ready and helmet_only.ready and body_only.gpu_geometry_key!=helmet_only.gpu_geometry_key,"Recipient slot ownership participates in upload identity even when two layers share a physical source pose")
+    var shared:PackedByteArray=var_to_bytes(body_only)
+    var region:Dictionary={"socket":"head","point":body_only.points[0].position,"radius":.1}
+    var region_packet:Dictionary=producer.sample(world,"knight_b",["body"],region)
+    var count:int=producer.packet_builds
+    var repeated:Dictionary=producer.sample(world,"knight_b",["body"],region)
+    check(region_packet.ready and region_packet.points.size()==1,"An authored anatomical region can use actual bald body support without cosmetic hair or helmet")
+    check(is_same(repeated.points,region_packet.points) and producer.packet_builds==count,"Unchanged region anchor, radius and optical pose reuse the composed packet")
+    check(region_packet.gpu_geometry_key!=body_only.gpu_geometry_key,"The selected region has its own native geometry identity")
+    region=region.duplicate();region.point+=Vector3(4,0,0)
+    var empty:Dictionary=producer.sample(world,"knight_b",["body"],region)
+    check(not empty.ready and empty.points.is_empty(),"A moved region cannot borrow stale support or fall back to the torso")
+    check(var_to_bytes(body_only)==shared,"Region composition never mutates the shared unfiltered geometry")
     await future_tracks(world,index,layer,descriptor)
     bounded.clear();producer.clear();world.free()
     print(JSON.stringify({"checks":checks,"failures":failures}));quit(0 if failures.is_empty() else 1)

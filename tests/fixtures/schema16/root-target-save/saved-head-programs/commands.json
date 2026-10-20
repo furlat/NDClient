@@ -1,0 +1,306 @@
+[
+ {
+  "request": {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "333d5281-ed64-4de7-b6f9-292ac79b4979",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.resistance",
+   "display_name": "Resistance",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "688327f2-d434-457e-8f7a-c50af48ac539",
+   "state_revision": "333d5281-ed64-4de7-b6f9-292ac79b4979",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+   "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+   "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+    "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+    "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "688327f2-d434-457e-8f7a-c50af48ac539",
+   "state_revision": "4d30c451-29f3-46ca-bba8-7851c5ef2572",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+   "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+   "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+    "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+    "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "6730fa07-9434-48c3-a488-da4de4d19a4c",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.dissonant_whispers",
+   "display_name": "Dissonant Whispers (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b7601323-ac0b-4506-a684-0215a8e6948f",
+   "state_revision": "6730fa07-9434-48c3-a488-da4de4d19a4c",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+   "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+   "audience_id": "6df56c23-7234-4fa8-8d90-b085062b0477",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+    "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+    "audience_id": "6df56c23-7234-4fa8-8d90-b085062b0477",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "b7601323-ac0b-4506-a684-0215a8e6948f",
+   "state_revision": "bfa12fe6-86b9-48aa-8c88-368652fa20a9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+   "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+   "audience_id": "6df56c23-7234-4fa8-8d90-b085062b0477",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+    "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+    "audience_id": "6df56c23-7234-4fa8-8d90-b085062b0477",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a02d2a90-626b-4d77-8684-dafd2b664fa5",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.resistance",
+   "display_name": "Resistance",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "688327f2-d434-457e-8f7a-c50af48ac539",
+   "state_revision": "a02d2a90-626b-4d77-8684-dafd2b664fa5",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+   "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+   "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+    "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+    "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "688327f2-d434-457e-8f7a-c50af48ac539",
+   "state_revision": "03be93e2-0313-433a-8f71-4e31d35be8bf",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+   "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+   "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+    "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+    "audience_id": "fc1d289d-6d9e-4b80-b509-16b87a76334a",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.vicious_mockery",
+   "by": "caster",
+   "target": "target"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "74bf428e-bfb9-4c08-b7a3-a31a8531c636",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.vicious_mockery",
+   "display_name": "Vicious Mockery",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "b7601323-ac0b-4506-a684-0215a8e6948f",
+   "state_revision": "74bf428e-bfb9-4c08-b7a3-a31a8531c636",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+   "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+   "audience_id": "6df56c23-7234-4fa8-8d90-b085062b0477",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_saved_head_programs_cleric_resistance",
+    "game_epoch": "33551565-c583-4d46-b626-cce7a93fac9a",
+    "audience_id": "6df56c23-7234-4fa8-8d90-b085062b0477",
+    "sequence": 11
+   }
+  }
+ }
+]

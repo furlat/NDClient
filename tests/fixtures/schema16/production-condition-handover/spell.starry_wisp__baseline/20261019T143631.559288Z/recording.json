@@ -1,0 +1,129 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "0529552e-aaef-4e62-aceb-2ec9952777cf": "Amber caster",
+  "0e884687-40ed-4e79-ab0e-e5e6739ffcf0": "Amber ally",
+  "3337375c-3b23-4ec1-83b3-81a114bb0a2d": "Blue second target",
+  "36605545-7559-4961-9bd3-88f6ec0aa69c": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.starry_wisp \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 2,
+   "damage": 2,
+   "sensory": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.starry_wisp": 1
+  },
+  "conditions": [
+   "condition.spell.starry_wisp"
+  ],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 60,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.starry_wisp",
+   "kind": "actor_change",
+   "actor_uuid": "36605545-7559-4961-9bd3-88f6ec0aa69c",
+   "condition_uuid": "fb0b0d94-3e2c-479e-8eb5-5e73313c2512",
+   "condition_id": "condition.spell.starry_wisp",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.starry_wisp",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 60,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 6,
+   "label": "condition applied condition.spell.starry_wisp",
+   "kind": "actor_change",
+   "actor_uuid": "36605545-7559-4961-9bd3-88f6ec0aa69c",
+   "condition_uuid": "fb0b0d94-3e2c-479e-8eb5-5e73313c2512",
+   "condition_id": "condition.spell.starry_wisp",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 70,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.starry_wisp",
+   "faction": "blue"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

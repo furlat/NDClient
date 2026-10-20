@@ -232,7 +232,7 @@ func inventory()->void:
                 check(admitted.id==actual.id and is_same(admitted.recipe.get("cast"),physical.recipe.get("cast")),id+" loaded alternative shares its actual caster owner "+original.id)
                 if admitted.inherits_recipe:check(is_same(admitted.recipe,physical.recipe) and is_same(admitted.requirements,physical.requirements),id+" loaded inherited recipe and requirements share their base owner "+original.id)
             if original.when.is_empty():check(actual.dispatch_gap=="public_fact_predicate_not_authored",id+" no title/value inference for "+original.id)
-    check(emitted==count and active==0,"Complete currently imported alternatives inventory remains undispatched until explicit source-proven authoring")
+    check(emitted==count,"Every authored alternative survives the native build, including explicitly assigned production branches")
     evidence.append({"native_variant_owners":owners,"alternatives":count,"alternative_cues":cues,"active_production_predicates":active,"all_typed_alternatives_serialized":emitted})
 func originals()->void:
     var id:String="spell.ray_of_sickness";var entry:Resource=load("res://authoring/abilities/spells/"+id+".tres").duplicate(true)
