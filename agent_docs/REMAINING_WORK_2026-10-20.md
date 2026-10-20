@@ -60,7 +60,7 @@ close it. Existing explicit user exclusions remain excluded.
 
 | ID | Remaining deliverable | Owner/dependency | Concrete completion evidence |
 |---|---|---|---|
-| R1 | Finish factual event, payload, spatial, grant and rider consumers. | Client where actual facts suffice; named backend/Factory dependencies in §§3–4. | Every required production behavior uses actual identities/results/cells, has correct application/hold/contact/end ownership, and renders through ordinary Play/Studio. Invalid duplicate/wrong-owner cues are explicitly delegated/excluded with evidence; they are not forced to render. No fabricated trigger or duplicate persistent layer. |
+| R1 | Finish phase-correct input contracts and factual event, payload, spatial, grant and rider consumers. | Client adapters/authoring first; external changes only for proven missing semantics or source APIs (§§3–4). | Each selected phase requires only its actual operands, binds real identities/results/cells, has correct application/hold/contact/end ownership, and renders through ordinary Play/Studio. Invalid duplicate/wrong-owner cues are explicitly delegated/excluded with evidence. No fixture identities, fabricated trigger or duplicate persistent layer. |
 | R2 | Finish production binding/authoring decisions for delivered variants and modular decorations. | Client authoring plus Factory source contracts/art assignments. | Compatible required alternatives have exact predicates; every remaining alternative has a justified disposition, not an accidental empty predicate. Required modular coatings/impacts are assigned to actual sheets/items and tested. |
 | R3 | Finish history capture when native hits, body treatments or appearance leases overlap. | Factory immutable capture/clock contract, then client consumption. | Earlier captured pixels/materials stay unchanged when live clocks/owners move or retire; real overlapping journals pass four views, seek/loop/removal and bounded lifetime/memory checks. |
 | R4 | Complete the usable Studio and capability/scenario matrix, including audio/inspection. | Client plus genuine legal recordings; backend failures remain explicit. | Each required capability/branch is reachable, uses the production path, exposes all actual graphical/audio methods and missing work, and supports clean playback/seek/loop/follow without UI stalls. |
@@ -79,6 +79,11 @@ blocked. Do not end implementation at each small checkpoint while independent
 items in this list remain executable. This snapshot is documentation only and does not change the standing
 implementation authorization.
 
+Before assigning a missing input to the engine, inspect the selected phase and
+its actual call chain, then adapt existing public facts. A declared Factory
+input name is not a new gameplay requirement. Request producer changes only
+for a demonstrated missing observable value, result or causal relationship.
+
 **Testing must follow the work, not displace it.** Each completed consumer batch
 gets focused current-contract correctness/output checks; a real regression in
 that batch is repaired before building on it. The obsolete-test backlog is not
@@ -92,20 +97,29 @@ partial suite to be described as complete.
 
 ## 3. Exact remaining production input/binding work
 
-### R1: 57 default-cue gaps across 28 actual IDs
+### R1: 57 declaration-level default-cue flags across 28 actual IDs
 
-All 57 resolve to installed clips. Copying/reimporting the package again will not
-fix them. 39 lack an input provider; 18 are deliberately explicit factual/source
-gaps. Default-cue gaps and active variant predicates are different populations;
-do not add them as independent missing systems or infer that every other cue
-has native-output proof. Exact source/cue addresses
-are in Appendix A.
+All 57 resolve to installed clips. The static audit finds 39 cues with at least
+one declared channel lacking a provider and 18 explicit authoring refusals. It
+reads clip-level input declarations; it does **not** establish that every listed
+channel is needed by the selected phase. Inherited declarations overstate some
+requirements and can hide otherwise drawable phases: the renderer hides an
+effect when any requested binding is unavailable. The source examples below
+confirm this is actual client/source-contract work, not just untidy reporting.
 
-| Shared family | Actual owners | Default cues | Remaining work; factual boundary |
+Keep this raw snapshot reproducible, but do not turn 57 into a count of missing
+implementations or backend requests. First qualify the real phase contract,
+then classify the remaining exact operand as client adapter, genuine producer
+omission, source defect or missing demonstration. The 216 provider-present but
+output-unqualified cues remain separate work. These populations and the 20
+active variant predicates are not a completion percentage. Exact raw cue
+addresses are in Appendix A.
+
+| Shared family | Actual owners | Raw flagged cues | Remaining work; factual boundary |
 |---|---|---:|---|
-| Weapon smites/Ensnaring | Branding Smite, Divine Smite, Ensnaring Strike, Searing Smite |6| Bind exact strike/armed/recipient/tick/heal operands. Aggregated Slashing+Radiant attack damage is not an independently attributed rider. Three baselines also fail native lineage capture. |
-| Divine Favor hit | `spell.divine_favor` |3| Exact equipped attack plus attributed rider event; retain the existing held condition. New held attack genuinely misses and cannot prove positive Radiant output. |
-| Quarries | Hex, Hunter's Mark |6| Exact sustaining source owner, linked quarry UUID, effective attack/rider/tick/removal. Concentrating is not a substitute sustain-owner UUID. |
+| Weapon smites/Ensnaring | Branding Smite, Divine Smite, Ensnaring Strike, Searing Smite |6| Establish each phase's actual operands. Branding impact calls payload admission; its condition phase calls condition admission. A later tick is not required for that impact. Bind required exact strike/armed/recipient/tick/heal data only where consumed. Aggregated damage cannot invent an attributed rider. Three baseline capture failures remain independent backend defects. |
+| Divine Favor | `spell.divine_favor` |3| Windup/application do not gate on hit_input; only the hit phase does. Bind real weapon/owner/geometry for the former, exact equipped attack plus attributed result for the latter. Retain the existing held condition. The new held attack misses and cannot prove positive Radiant output. |
+| Quarries | Hex, Hunter's Mark |6| Windup admits its retained owner; application admits the actual quarry; hit additionally admits its rider. Do not require inherited healing/tick/hit channels on every phase. Bind actual sustain/quarry/strike/removal relationships; Concentrating cannot substitute for a sustain-owner UUID. |
 | Carried/delayed payloads | Delayed Blast Fireball, Freezing Sphere |10| Accepted later release, actual payload state/anchor, blast, per-recipient damage and real resulting surface. Current creation originals do not demonstrate detonation. Reuse existing operation/creation/spatial/result seams. |
 | Moving construct | Flaming Sphere |4| Actual body/patch/source presence and ram/end-turn contact. Record its meaningful movement/contact/end; source age cannot invent trail deposition or damage. |
 | Granted breath | Dragon's Breath |3| Actual grant UUID, caster/recipient/element/readiness, accepted recipient action and damage/face-cone endpoints. Concentration alone does not supply these facts. |
@@ -115,7 +129,7 @@ are in Appendix A.
 | Wall state/contact | Wall of Thorns, Wind Wall |2| Actual construction geometry and optical visual_state; Thorns also actual occupants/contact. Respect delivered APIs; remove fixed review inputs without inventing occupants or contact pulses. |
 | Permanent item decoration | Continual Flame |1| Actual item/effect/current-holder projection, held-original evidence, and source-qualified holder rebinding plus bounded seek. Current inventory-potion original is not a held output witness. |
 | Class passives | Blessed Healer, Destroy Undead, Divine Strike, Improved Divine Smite |4| Exact effective-handler→emitted-result linkage; strike passives additionally need actual applied rider components. Class level/heal amount/Radiant text cannot activate a passive. |
-| Recipient tiers | Divine Word |4| Actual recipient release/Deafened/Blinded/outcome observation. Proclamation already works; generic membership or private HP thresholds do not supply those tiers. |
+| Recipient outcomes | Divine Word |4| Record actual Deafened/Blinded/Stunned and lethal branches, inspect their public child/result ancestry, and connect those facts first. Proclamation already works; the generic-membership baseline does not prove these branches or establish a need for a new tier field. Never evaluate private HP thresholds in the client. |
 | Initial/delayed corrosion delivery | Vitriolic Sphere |4| Accepted release/targets, blast and two real delayed-END packets. Existing initial contacts and residue lifecycle are already separate qualified branches. |
 | Interrupted presentation | Reaction and declaration Counterspell resources |3| Actual interrupted incoming source/path/contact through a delivered source API. The current fixed Fireball donor/path cannot represent arbitrary canceled incoming spells. The invalid spell-declaration cue must be delegated/excluded in favor of the actual reaction owner, not forced to render. |
 | Sustained/repeated touch | Vampiric Touch and its strike action |2| Actual retained owner→activation→strike/heal/end joins. First hit and positive healing are implemented narrower paths; do not replay them for an unobserved repeat. |
@@ -126,6 +140,22 @@ Existing seams are `ApplicationResults`, `OperationResults`, `Components`,
 `NativeActionAuthoring`, `CreationInputs`, `SpatialInputs`, `NativePersistent`,
 `NativeItems` and `NativeInputs`. No new registry, manager, reducer or event bus
 is required to finish them.
+
+Factory names such as `damage_fact_uuid` can accept a documented opaque key for
+the exact public occurrence when that meets the source's identity contract.
+`ApplicationResults.spell_strike()` already supplies this adaptation; it does
+not request a private damage-roll UUID. Preserve seat scope and causal evidence.
+A genuinely absent rider result or parent relation cannot be repaired by
+renaming an aggregate. Constructors also retain some authoring-fixture defaults:
+removing an irrelevant phase requirement must not leave those defaults active.
+Use the existing authoring/input-policy seams, verify required positive and
+negative phase behavior, and avoid a new runtime validator or blanket bypass.
+
+Source evidence: [Divine Favor](../assets/vfx/sources/9e80f76781257e6a4d5d/divine_favor.gd),
+[Branding](../assets/vfx/sources/36d8596898bdb446e1e9/branding_smite.gd),
+[quarry admission](../assets/vfx/sources/1dc77e979e0f18992748/quarry_common.gd),
+[runtime refusal](../presentation/native_spell_renderer.gd),
+[existing occurrence adapter](../presentation/application_results.gd).
 
 ### Additional gaps not included in 57
 
@@ -199,13 +229,19 @@ Source/public-field evidence and exact family definitions:
 
 ## 4. R5: external blockers to resolve without stranding client work
 
+Only demonstrated producer/source omissions belong to external-blocked work.
+An unresolved setup or recording failure stays an R4 investigation until its
+cause is isolated; the observed failed case alone does not assign that cause
+to the engine.
+
 | Dependency | Exact required correction/delivery | Affected obligations |
 |---|---|---|
 | Backend terminal-lineage capture | Fix actual `lineage requires terminal root and child facts` in Branding/Searing Smite and Ensnaring Strike. Re-record the unchanged legal equipped cases on the promoted export. | Three baseline failures; related strike/tick proof. |
-| Backend target/discovery/setup | Spare the Dying excludes the actual 0 HP dying target; voluntary Drop Prone is not offered; Help Attack's second selection rejects stale_state; Devotee's Mace Healing Incense is absent after real creation/equip; developer Test Bless cannot be granted. | Required scenario/action safety, not artwork. |
-| Backend item-effect membership | Publish real Magic Weapon and Sacred Weapon membership/retirement through the appropriate existing public actor/item effect route. | Persistent exact-item VFX, not a lifetime inferred from cast or Concentrating. |
-| Backend typed event/condition semantics | Correct the proven selector/parent/handler omissions. For grant/recipient/rider branches, first establish whether the actual existing events/ancestry supply the required source operand; add public data only where that omission is demonstrated. Preserve subjective disclosure and real lineage. | The named groups in §3; not permission to dump private whole actor state. |
-| Factory Sleep recording | Deliver source-local placement/private-material binding. Current recorded Sleep draws at origin but translated source clips away. | Ordinary translated/rotated/scaled Sleep output. |
+| Discovery/setup: proven and unisolated cases | Spare the Dying's zero-HP target filtering and developer Test Bless's unregistered grant are proven engine/setup defects. Drop Prone not offered, Help Attack's stale second selection and absent Healing Incense after mace creation/equip are observed case failures: isolate current legal prerequisites, choices freshness and public results before assigning another engine change. | Required scenario/action safety; unresolved recording/setup work must not block unrelated client integration. |
+| Backend item-effect membership | Magic Weapon and Sacred Weapon mechanics exist, but their effects do not override snapshot_item_effect; the base returns null and item publication omits them. Populate that existing membership/retirement route. | Persistent exact-item VFX; client ordered membership/holder support already exists. |
+| Backend typed event/condition semantics | Correct proven selector/parent omissions. Populate the existing effective-handler/trigger/emitted-lineage transport for affected passives, plus any genuinely absent rider result. For grant/recipient/rider branches, inspect actual existing events/ancestry before requesting public data. | The named groups in §3; no new attribution framework or private actor-state dump. |
+| Backend Prismatic Spray result | Publish actual selected colour indices and their recipient/result ownership. Current execution keeps rolls locally and writes prose, not typed colour results. | Non-damaging and double-colour outcomes cannot be reconstructed from damage or parsed status text. |
+| Sleep playback/adoption | Installed recorded Sleep clips away when translated. A complete successor now includes an opt-in prepared approach: qualify it against the original translated/rotated/scaled case first; request further source repair only if that candidate cannot meet the contract. | Client adoption check available; installed defect is not silently fixed. |
 | Factory Insect Plague recording | Export actual swarm material-clock tracks and private-material ownership for all 3 recorded variants. | Three blank recorded outputs; do not silently switch the approved approach. |
 | Factory Counterspell | Supply a real arbitrary incoming-presentation/path/contact contract instead of the fixed study donor. | Three explicit interrupted-presentation cues. |
 | Factory held item | Current-holder rebinding for the same item/effect, plus source-qualified bounded permanent forward/back seek. | Continual Flame; actual transfer/holder changes without resetting owner age. |
@@ -226,6 +262,26 @@ engine/whole sealed Factory delivery: inspect the relevant change, use the
 matching frozen export/package, re-record affected originals, integrate the
 consumer and rerun its affected output/safety checks. Do not overlay loose
 Factory files, rerun from the mutable engine or add runtime checksum gates.
+
+### Available complete successor; installation is not completion
+
+Read-only inspection found sealed
+`runtime-continuation42-20261020-ecdf1a60ae59ee03`:
+[Factory handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_CONTINUATION_PRODUCTION_HANDOFF_2026-10-20.md).
+Its archive retains 1,246 IDs/504 selections and adds the Sleep approach
+`runtime-prepared-followup-20261020`, explicitly opt-in and not seek-qualified.
+The client still has e102 installed; no package/default/art approval changed in
+this review. Adopt through the existing complete-package path, then qualify
+placement, actual timeline seeking/looping, pixels and costs before selecting it.
+
+Direct archive comparisons found actor_history.gd, item_flame.gd and
+interrupted_source.gd unchanged from the installed versions. The new
+Counterspell-labelled choice is `private/finger-counterspell-v193/full_sequence`,
+not the general incoming-presentation API. Do not close history, holder-transfer
+or Counterspell blockers from installing this successor. Its handoff also
+retains readiness work up to 46.864 ms per step and 14 of 42 new constructors
+above 2 ms; these are source/package measurements to account for during R6,
+not new client benchmarks or proof the package is already cheap in gameplay.
 
 ## 5. R4: Studio, scenarios and full rendering-method visibility
 
@@ -486,14 +542,16 @@ work, then the applicable complete inventory at the final checkpoint.
   clean committed source checkpoint. No claim that all visuals are accepted or
   all performance targets met while the corresponding rows remain open.
 
-## Appendix A — exact default cue addresses (snapshot, 57)
+## Appendix A — exact declaration-level default cue flags (snapshot, 57)
 
-This is the complete 57-row default-gap population grouped by typed owner. Cue
+This is the complete 57-flag default population grouped by typed owner. Cue
 numbers are zero-based source indices. Channels/reasons are literal report data;
-§3 explains which are client work and which need source/public evidence. This
-static join does not inventory every runtime-conditional refusal or prove pixels.
+declared missing channels are not yet phase-qualified dependencies. Section 3
+records concrete overbroad declarations and the required ownership distinction.
+This static join does not inventory every runtime-conditional refusal or prove
+pixels, producer omissions, 57 separate implementations or completion.
 
-| Typed owner / source | Missing provider cue indices → channels | Explicit gap cue indices → reason |
+| Typed owner / source | Declared missing-provider cue indices → channels | Explicit refusal cue indices → reason |
 |---|---|---|
 | [action.spell.vampiric_touch.strike](../authoring/abilities/actions/action.spell.vampiric_touch.strike.tres) | — | 1: actual_repeat_owner_activity_not_bound |
 | [class_feature.barbarian.frenzied](../authoring/abilities/conditions/class_feature.barbarian.frenzied.tres) | — | 0: condition_parent_uuid |
