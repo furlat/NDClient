@@ -1,0 +1,227 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 8,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "ac0314f0-77ff-48d3-a1ee-78ea38c0cc9c": "Amber caster",
+  "6d6c6671-0b8d-45e1-aded-351764ee42df": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.move \u00b7 Amber caster",
+  "spell.create_or_destroy_water \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.move \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "spell.create_or_destroy_water \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.move \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 9,
+   "spatial": 6,
+   "sensory": 5,
+   "step": 3,
+   "movement": 3,
+   "actor_change": 1,
+   "spell": 4,
+   "spatial_effect_state": 1
+  },
+  "behaviors": {
+   "action.move": 3,
+   "spell.create_or_destroy_water": 4
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 26,
+   "lineage": 12,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 35,
+   "lineage": 27,
+   "event_offset": 0,
+   "label": "condition applied 22e098b8-f35d-4271-a96c-d7aba0dfe3d6",
+   "kind": "actor_change",
+   "actor_uuid": "6d6c6671-0b8d-45e1-aded-351764ee42df",
+   "condition_uuid": "22e098b8-f35d-4271-a96c-d7aba0dfe3d6",
+   "condition_id": null,
+   "faction": "amber"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 36,
+   "lineage": 27,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 50,
+   "lineage": 27,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.create_or_destroy_water",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 73,
+   "lineage": 59,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 92,
+   "lineage": 87,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 102,
+   "lineage": 87,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 106,
+   "lineage": 87,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.create_or_destroy_water",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 129,
+   "lineage": 115,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 26,
+   "lineage": 12,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 35,
+   "lineage": 27,
+   "event_offset": 0,
+   "label": "condition applied 22e098b8-f35d-4271-a96c-d7aba0dfe3d6",
+   "kind": "actor_change",
+   "actor_uuid": "6d6c6671-0b8d-45e1-aded-351764ee42df",
+   "condition_uuid": "22e098b8-f35d-4271-a96c-d7aba0dfe3d6",
+   "condition_id": null,
+   "faction": "blue"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 40,
+   "lineage": 27,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 54,
+   "lineage": 27,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.create_or_destroy_water",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 77,
+   "lineage": 63,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 96,
+   "lineage": 91,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 106,
+   "lineage": 91,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 110,
+   "lineage": 91,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.create_or_destroy_water",
+   "faction": "blue"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 133,
+   "lineage": 119,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

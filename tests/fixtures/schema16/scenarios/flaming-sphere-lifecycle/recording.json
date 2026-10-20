@@ -1,0 +1,593 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 6,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "ec1f2312-c161-48fd-b711-2d828582420e": "Amber caster",
+  "361a033a-73eb-4f4c-96bd-9380d7092591": "Blue target",
+  "9a7daae4-573e-4248-82ca-19eb9430cf2c": "Flaming Sphere"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "spell.flaming_sphere \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "action.drop_concentration \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 9,
+   "sensory": 25,
+   "spatial_effect_state": 8,
+   "spatial": 18,
+   "actor_change": 5,
+   "spell": 2,
+   "step": 8,
+   "movement": 8,
+   "saving_throw": 2,
+   "damage": 4,
+   "action": 1
+  },
+  "behaviors": {
+   "spell.flaming_sphere": 1,
+   "action.move": 8,
+   "action.spell.flaming_sphere.ram": 1,
+   "action.drop_concentration": 1
+  },
+  "conditions": [
+   "condition.concentrating"
+  ],
+  "ended_conditions": [
+   "condition.concentrating"
+  ],
+  "positive_applied_damage_types": [
+   "Fire"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 27,
+   "lineage": 12,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 41,
+   "lineage": 12,
+   "event_offset": 8,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "ec1f2312-c161-48fd-b711-2d828582420e",
+   "condition_uuid": "c24324b8-fb20-4fd0-a1c3-23b63eb3fd7e",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 42,
+   "lineage": 12,
+   "event_offset": 9,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "ec1f2312-c161-48fd-b711-2d828582420e",
+   "condition_uuid": "c24324b8-fb20-4fd0-a1c3-23b63eb3fd7e",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 43,
+   "lineage": 12,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell spell.flaming_sphere",
+   "faction": "amber"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 58,
+   "lineage": 44,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 81,
+   "lineage": 67,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 103,
+   "lineage": 67,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 118,
+   "lineage": 104,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 140,
+   "lineage": 104,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 147,
+   "lineage": 141,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 163,
+   "lineage": 141,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 164,
+   "lineage": 141,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 165,
+   "lineage": 141,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell action.spell.flaming_sphere.ram",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 180,
+   "lineage": 166,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 202,
+   "lineage": 166,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 217,
+   "lineage": 203,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 239,
+   "lineage": 203,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 254,
+   "lineage": 240,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 276,
+   "lineage": 240,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 291,
+   "lineage": 277,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 313,
+   "lineage": 277,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 335,
+   "lineage": 330,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 351,
+   "lineage": 330,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 352,
+   "lineage": 330,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 412,
+   "lineage": 389,
+   "event_offset": 3,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 416,
+   "lineage": 389,
+   "event_offset": 7,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "ec1f2312-c161-48fd-b711-2d828582420e",
+   "condition_uuid": "c24324b8-fb20-4fd0-a1c3-23b63eb3fd7e",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 418,
+   "lineage": 389,
+   "event_offset": 8,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 433,
+   "lineage": 419,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 27,
+   "lineage": 12,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 41,
+   "lineage": 12,
+   "event_offset": 8,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "ec1f2312-c161-48fd-b711-2d828582420e",
+   "condition_uuid": "c24324b8-fb20-4fd0-a1c3-23b63eb3fd7e",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 42,
+   "lineage": 12,
+   "event_offset": 9,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "ec1f2312-c161-48fd-b711-2d828582420e",
+   "condition_uuid": "c24324b8-fb20-4fd0-a1c3-23b63eb3fd7e",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 43,
+   "lineage": 12,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell spell.flaming_sphere",
+   "faction": "blue"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 58,
+   "lineage": 44,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 81,
+   "lineage": 67,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 103,
+   "lineage": 67,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 118,
+   "lineage": 104,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 140,
+   "lineage": 104,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 147,
+   "lineage": 141,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 163,
+   "lineage": 141,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 164,
+   "lineage": 141,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 165,
+   "lineage": 141,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell action.spell.flaming_sphere.ram",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 180,
+   "lineage": 166,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 202,
+   "lineage": 166,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 217,
+   "lineage": 203,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 239,
+   "lineage": 203,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 254,
+   "lineage": 240,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 276,
+   "lineage": 240,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 291,
+   "lineage": 277,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 313,
+   "lineage": 277,
+   "event_offset": 11,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 335,
+   "lineage": 330,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 351,
+   "lineage": 330,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 352,
+   "lineage": 330,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 411,
+   "lineage": 388,
+   "event_offset": 3,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 415,
+   "lineage": 388,
+   "event_offset": 7,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "ec1f2312-c161-48fd-b711-2d828582420e",
+   "condition_uuid": "c24324b8-fb20-4fd0-a1c3-23b63eb3fd7e",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 16,
+   "occurrence": 417,
+   "lineage": 388,
+   "event_offset": 8,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 432,
+   "lineage": 418,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Fire"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

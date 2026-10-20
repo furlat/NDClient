@@ -1,0 +1,773 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 11,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "bb873d61-fb25-47e5-abc6-f2cbece658bb": "Amber caster",
+  "33951bb2-236b-40d9-8d92-c67df9b6c9ea": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "spell.resistance \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "spell.dissonant_whispers \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "spell.resistance \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "spell.dissonant_whispers \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "spell.resistance \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "spell.dissonant_whispers \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 15,
+   "actor_change": 21,
+   "spell": 6,
+   "saving_throw": 3,
+   "damage": 6
+  },
+  "behaviors": {
+   "spell.resistance": 3,
+   "spell.dissonant_whispers": 3
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.dissonant_whispers",
+   "condition.spell.resistance"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.spell.dissonant_whispers",
+   "condition.spell.resistance"
+  ],
+  "positive_applied_damage_types": [
+   "Psychic"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 12,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "1747b0d4-433c-4f49-8aad-e103db473afb",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 22,
+   "lineage": 12,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "fd0d68a1-eef7-486a-bef5-890b7cab471a",
+   "condition_id": "condition.spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 23,
+   "lineage": 12,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "1747b0d4-433c-4f49-8aad-e103db473afb",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 24,
+   "lineage": 12,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 46,
+   "lineage": 33,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "1747b0d4-433c-4f49-8aad-e103db473afb",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 47,
+   "lineage": 33,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "fd0d68a1-eef7-486a-bef5-890b7cab471a",
+   "condition_id": "condition.spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 51,
+   "lineage": 33,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 68,
+   "lineage": 33,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 69,
+   "lineage": 33,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 73,
+   "lineage": 33,
+   "event_offset": 8,
+   "label": "condition applied condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "4dd96749-b87e-4d20-bbac-21e3036ff2e1",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 74,
+   "lineage": 33,
+   "event_offset": 9,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 97,
+   "lineage": 88,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "0d81426e-ba10-4d39-93f4-826606b165fa",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 98,
+   "lineage": 88,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "7a167627-65cb-4e6a-a4bb-0bf96070eac1",
+   "condition_id": "condition.spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 99,
+   "lineage": 88,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "0d81426e-ba10-4d39-93f4-826606b165fa",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 100,
+   "lineage": 88,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 122,
+   "lineage": 109,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "0d81426e-ba10-4d39-93f4-826606b165fa",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 123,
+   "lineage": 109,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "7a167627-65cb-4e6a-a4bb-0bf96070eac1",
+   "condition_id": "condition.spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 127,
+   "lineage": 109,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 144,
+   "lineage": 109,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 145,
+   "lineage": 109,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 146,
+   "lineage": 109,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 169,
+   "lineage": 160,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "6054bc66-759c-4ca7-a406-586a81884a2b",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 170,
+   "lineage": 160,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "e6da9b83-3485-41b0-9920-d6df7ff70f71",
+   "condition_id": "condition.spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 171,
+   "lineage": 160,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "6054bc66-759c-4ca7-a406-586a81884a2b",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 172,
+   "lineage": 160,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 179,
+   "lineage": 173,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "4dd96749-b87e-4d20-bbac-21e3036ff2e1",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 198,
+   "lineage": 185,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "6054bc66-759c-4ca7-a406-586a81884a2b",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 199,
+   "lineage": 185,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "e6da9b83-3485-41b0-9920-d6df7ff70f71",
+   "condition_id": "condition.spell.resistance",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 203,
+   "lineage": 185,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 220,
+   "lineage": 185,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 221,
+   "lineage": 185,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 225,
+   "lineage": 185,
+   "event_offset": 8,
+   "label": "condition applied condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "8f04d900-b101-46c3-ac4f-94bd16434bab",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 226,
+   "lineage": 185,
+   "event_offset": 9,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 21,
+   "lineage": 12,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "1747b0d4-433c-4f49-8aad-e103db473afb",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 22,
+   "lineage": 12,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "fd0d68a1-eef7-486a-bef5-890b7cab471a",
+   "condition_id": "condition.spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 23,
+   "lineage": 12,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "1747b0d4-433c-4f49-8aad-e103db473afb",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 24,
+   "lineage": 12,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 46,
+   "lineage": 33,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "1747b0d4-433c-4f49-8aad-e103db473afb",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 47,
+   "lineage": 33,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "fd0d68a1-eef7-486a-bef5-890b7cab471a",
+   "condition_id": "condition.spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 51,
+   "lineage": 33,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 68,
+   "lineage": 33,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 69,
+   "lineage": 33,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 74,
+   "lineage": 33,
+   "event_offset": 9,
+   "label": "condition applied condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "4dd96749-b87e-4d20-bbac-21e3036ff2e1",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "blue"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 75,
+   "lineage": 33,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 98,
+   "lineage": 89,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "0d81426e-ba10-4d39-93f4-826606b165fa",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 99,
+   "lineage": 89,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "7a167627-65cb-4e6a-a4bb-0bf96070eac1",
+   "condition_id": "condition.spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 100,
+   "lineage": 89,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "0d81426e-ba10-4d39-93f4-826606b165fa",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 101,
+   "lineage": 89,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 123,
+   "lineage": 110,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "0d81426e-ba10-4d39-93f4-826606b165fa",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 124,
+   "lineage": 110,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "7a167627-65cb-4e6a-a4bb-0bf96070eac1",
+   "condition_id": "condition.spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 128,
+   "lineage": 110,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 145,
+   "lineage": 110,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 146,
+   "lineage": 110,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 147,
+   "lineage": 110,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 170,
+   "lineage": 161,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "6054bc66-759c-4ca7-a406-586a81884a2b",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 171,
+   "lineage": 161,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "e6da9b83-3485-41b0-9920-d6df7ff70f71",
+   "condition_id": "condition.spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 172,
+   "lineage": 161,
+   "event_offset": 2,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "6054bc66-759c-4ca7-a406-586a81884a2b",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 173,
+   "lineage": 161,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 15,
+   "occurrence": 181,
+   "lineage": 174,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "4dd96749-b87e-4d20-bbac-21e3036ff2e1",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 200,
+   "lineage": 187,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "6054bc66-759c-4ca7-a406-586a81884a2b",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 201,
+   "lineage": 187,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.resistance",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "e6da9b83-3485-41b0-9920-d6df7ff70f71",
+   "condition_id": "condition.spell.resistance",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 205,
+   "lineage": 187,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 222,
+   "lineage": 187,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 223,
+   "lineage": 187,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 228,
+   "lineage": 187,
+   "event_offset": 9,
+   "label": "condition applied condition.spell.dissonant_whispers",
+   "kind": "actor_change",
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "condition_uuid": "8f04d900-b101-46c3-ac4f-94bd16434bab",
+   "condition_id": "condition.spell.dissonant_whispers",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 229,
+   "lineage": 187,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Psychic"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

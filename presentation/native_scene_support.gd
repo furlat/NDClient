@@ -23,6 +23,7 @@ var solid_masks:Dictionary={}
 # Inputs of the last adopt(): residency revision and selected (path, slot) pairs.
 var _adopt_key:Array=[]
 var _adopt_result:Dictionary={}
+var _adopt_admission:Dictionary={}
 var issues:Array=[]
 var ready:bool=true
 var _outputs:Array=[]
@@ -61,13 +62,14 @@ func adopt(host:Node)->Dictionary:
     # on which textures are resident. A host that tracks residency changes
     # skips the descriptor walk while neither changed.
     var revision:Variant=host.get("texture_revision")
+    var admitted:Dictionary=Geometry.BodySources.admission(host.catalog_cache)
     var key:Array=[revision]
     for visual in host.visual_actors.values():
         for entry in visual.entries:
             if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
             var path:String=entry.get("texture_path","")
             if not path.is_empty():key.append(path);key.append(entry.actor_layer.slot)
-    if revision!=null and key==_adopt_key:return _adopt_result
+    if revision!=null and key==_adopt_key and is_same(admitted,_adopt_admission):return _adopt_result
     var pending:Array=[]
     for index in range(1,key.size(),2):
         var path:String=key[index]
@@ -75,7 +77,7 @@ func adopt(host:Node)->Dictionary:
         if paths.is_empty():continue
         if not host.textures.has(paths.solid):pending.append(paths.solid);continue
         solid_masks[path]=host.textures[paths.solid]
-    _adopt_key=key;_adopt_result={"ready":pending.is_empty(),"pending":pending}
+    _adopt_key=key;_adopt_admission=admitted;_adopt_result={"ready":pending.is_empty(),"pending":pending}
     return _adopt_result
 
 func attach_shared(host:Node3D)->void:
@@ -114,7 +116,7 @@ func set_enabled(value:bool)->void:
         for material in _outputs:material.set_shader_parameter("native_scene_enabled",false)
         _outputs.clear()
         _source_bindings.clear()
-        solid_masks.clear();_adopt_key=[]
+        solid_masks.clear();_adopt_key=[];_adopt_admission={}
         for node in actors.values():
             for parameter in ["sheet","component_depth","component_support","component_solid"]:
                 node.material_override.set_shader_parameter(parameter,null)
@@ -376,7 +378,7 @@ func close()->void:
     for material in _outputs:material.set_shader_parameter("native_scene_enabled",false)
     _outputs.clear()
     _source_bindings.clear()
-    solid_masks.clear();_adopt_key=[]
+    solid_masks.clear();_adopt_key=[];_adopt_admission={}
     if is_instance_valid(depth_copy):depth_copy.free()
     if is_instance_valid(owner):owner.free()
     if is_instance_valid(viewport):viewport.free()

@@ -212,6 +212,9 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
         "movement": row.reasons = ["movement_container_visuals_belong_to_steps"]
         "step":
             if not fact.get("committed",false): row.components = []; row.reasons = ["uncommitted_step"]; return
+            if Authoring.Characters.effect_owned(actor,cache):
+                _need(row,"motion","missing_authored_spatial_movement","catalog/movement_context.json")
+                return
             _need(row,"body","missing_authored_movement", "catalog/movement_context.json")
             var phase:Dictionary={}
             for component in row.components:
@@ -449,10 +452,13 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
         if row.kind in ["damage","condition","heal","forced_movement"]: row.actor_uuid = row.target_uuid
         for track in tracks.get(node.id,[]):
             row._admit_ms = minf(row._admit_ms,float(track.start_ms))
-            var component = _component("body","", "catalog/rigs.json:"+track.rig+".clips."+track.clip)
+            var spatial:bool=track.get("spatial_only",false)
+            var component = _component("motion" if spatial else "body","", "catalog/movement_context.json" if spatial else "catalog/rigs.json:"+track.rig+".clips."+track.clip)
             component.merge({"id":track.trace_track_id,"trace_track_id":track.trace_track_id,"actor_uuid":track.actor_uuid,
-                "rig":track.rig,"clip":track.clip,"start_ms":track.start_ms,"end_ms":track.start_ms+track.duration_ms,
+                "start_ms":track.start_ms,"end_ms":track.start_ms+track.duration_ms,
                 "status":"playing","holding_pose":track.get("holding_pose",false),"motion":track.get("motion",false),"equipment_change":track.get("equipment_change",false)},true)
+            if spatial:component.spatial_only=true
+            else:component.merge({"rig":track.rig,"clip":track.clip},true)
             if track.has("motion_fraction_from"):
                 component.motion_phase={"from":track.motion_fraction_from,"to":track.motion_fraction_to}
             if track.has("reaction_cast_binding"):
@@ -658,7 +664,7 @@ static func _coverage(row: Dictionary) -> Dictionary:
     # A chosen attack recipe can encode a future hit/miss/critical result.
     # Before the native commit, expose only body tracks already scheduled for
     # presentation; even aggregate red/green counts must use this same view.
-    var visible = {"components":row.components.filter(func(c): return c.kind == "body" and not c.trace_track_id.is_empty()),
+    var visible = {"components":row.components.filter(func(c): return c.kind in ["body","motion"] and not c.trace_track_id.is_empty()),
         "status":"playing","reasons":[],"completed":false}
     _refresh(visible)
     return visible

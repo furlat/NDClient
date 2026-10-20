@@ -5,8 +5,14 @@ const PARALYSIS=["condition.paralyzed","condition.spell.hold_person"]
 const PROBES=["high-level-22/power-word-heal/paralyzed_existing","high-level-22/power-word-heal/paralyzed_retire"]
 const HEALING=["high-level-22/power-word-heal/full_restoration","high-level-22/power-word-heal/restoration_cross"]
 const LIFECYCLE="condition_paralyzed_native"
+const POISON_SOURCE="res://tests/fixtures/schema16/scenarios/power-word-heal-poison"
+const POISON_OWNER="776377a2-4c97-40e6-84fc-9c398b531225"
+const POISON_BEHAVIOR="condition.spell.ray_of_sickness.poison"
+const POISON_LIFECYCLE="condition_poisoned_native"
+const POISON_PROBES=["high-level-22/power-word-heal/poisoned_existing","high-level-22/power-word-heal/poisoned_retire"]
 const CAPTURES="res://.runtime/restoration-owner-captures"
 const RecordingMedia=preload("res://studio/recording_media.gd")
+const Journal=preload("res://sdk/journal.gd")
 func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr("NATIVE_RESTORATION_OWNER_FAIL ",label)
@@ -15,14 +21,15 @@ func run()->void:
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     DirAccess.make_dir_recursive_absolute(CAPTURES)
     var entry:Resource=load("res://authoring/abilities/spells/spell.power_word_heal.tres")
-    check(entry.excluded_cues==PackedInt32Array([3,4]),"Only existing/retiring Paralyzed demonstration copies are excluded")
+    check(entry.excluded_cues==PackedInt32Array([3,4,5,6]),"Existing/retiring Paralyzed and Poisoned demonstration copies are excluded")
     check(entry.effects[3].clip==PROBES[0] and entry.effects[4].clip==PROBES[1],"Exclusions name the exact delivered duplicate probes")
-    check(entry.effects[5].clip.ends_with("/poisoned_existing") and entry.effects[6].clip.ends_with("/poisoned_retire") \
-        and 5 not in entry.excluded_cues and 6 not in entry.excluded_cues and entry.status=="partial","Poison and other incomplete input requirements remain explicit")
+    check(entry.effects[5].clip==POISON_PROBES[0] and entry.effects[6].clip==POISON_PROBES[1] \
+        and entry.owner_cues.is_empty() and entry.status=="partial","Poisoned copies delegate to already-present UUID owners without a new spell-owned lease or visual approval")
     for seat in ["amber","blue"]:await owner_seat(seat)
+    for seat in ["amber","blue"]:await poison_seat(seat)
     finish()
-func packet(seat:String,sequence:int)->Dictionary:
-    return JSON.parse_string(FileAccess.get_file_as_string(SOURCE.path_join(seat).path_join("%016d.json"%sequence)))
+func packet(seat:String,sequence:int,source:String=SOURCE)->Dictionary:
+    return JSON.parse_string(FileAccess.get_file_as_string(source.path_join(seat).path_join("%016d.json"%sequence)))
 func memberships(record:Dictionary,present:bool)->Array:
     var result:Array=[]
     for lineage in record.lineages:
@@ -35,13 +42,13 @@ func memberships(record:Dictionary,present:bool)->Array:
                     result.append({"actor_uuid":actor.actor_uuid,"condition_uuid":row.condition_uuid,
                         "member":row.get("member"),"occurrence":str(int(node.occurrence))})
     return result
-func marker_id(owner_uuid:String)->String:
-    return "condition:"+owner_uuid+":lifecycle:"+LIFECYCLE
-func emitting(world:Node,owner_uuids:Array)->Array:
+func marker_id(owner_uuid:String,lifecycle:String=LIFECYCLE)->String:
+    return "condition:"+owner_uuid+":lifecycle:"+lifecycle
+func emitting(world:Node,owner_uuids:Array,lifecycle:String=LIFECYCLE)->Array:
     var result:Array=[]
     var native=world.component_renderer.native_spells
     for uuid in owner_uuids:
-        var id:String=marker_id(uuid)
+        var id:String=marker_id(uuid,lifecycle)
         if native.handles.has(id) and native.handles[id].root.is_visible_in_tree():result.append(id)
     return result
 func pose(world:Node,actor:String)->Dictionary:
@@ -129,8 +136,8 @@ func readiness_diagnostic(world:Node,target:float)->Dictionary:
         "native_startup":{"ready":startup.ready,"pending":startup.pending,"errors":startup.errors},
         "source_lighting_ready":world.source_lighting.native_preparation_ready,
         "frame_budget":world.preparation_admission.duplicate(true)}
-func native_owner(world:Node,owner:Dictionary,at:float,phase:String,label:String)->Dictionary:
-    var id:String=marker_id(owner.id)
+func native_owner(world:Node,owner:Dictionary,at:float,phase:String,label:String,lifecycle:String=LIFECYCLE)->Dictionary:
+    var id:String=marker_id(owner.id,lifecycle)
     var native=world.component_renderer.native_spells
     check(native.handles.has(id),label+" original condition UUID owns the prepared native lifecycle")
     if not native.handles.has(id):return {}
@@ -271,8 +278,117 @@ func owner_seat(seat:String)->void:
     check(world.presentation_errors.is_empty() and world.media_issue.is_empty(),seat+" real application/removal/seek/loop has no renderer errors")
     check(FileAccess.get_file_as_bytes(SOURCE.path_join(seat).path_join("0000000000000010.json"))==originals,seat+" original removal packets remain unchanged")
     view.queue_free();await frame();await frame()
+
+func poison_seat(seat:String)->void:
+    var directory:String=POISON_SOURCE.path_join(seat)
+    var removal_path:String=directory.path_join("0000000000000023.json")
+    var original:PackedByteArray=FileAccess.get_file_as_bytes(removal_path)
+    var application:Dictionary=packet(seat,13,POISON_SOURCE)
+    var removal:Dictionary=packet(seat,23,POISON_SOURCE)
+    var admitted:Array=memberships(application,true).filter(func(row):return row.condition_uuid==POISON_OWNER)
+    var removed:Array=memberships(removal,false).filter(func(row):return row.condition_uuid==POISON_OWNER)
+    check(admitted.size()==1 and removed.size()==1,seat+" Poisoned original admits and later removes the same actual UUID")
+    if admitted.size()!=1 or removed.size()!=1:return
+    var patient:String=str(admitted[0].actor_uuid)
+    check(admitted[0].member.behavior_id==POISON_BEHAVIOR and removed[0].actor_uuid==patient,seat+" actual Ray of Sickness member belongs to the healed patient")
+    var spec:Dictionary={"remove":"209","heal":"208","parent":"201","cast":"210"} if seat=="amber" else {"remove":"206","heal":"204","parent":"197","cast":"207"}
+    var removal_cause:Dictionary={};var heal:Dictionary={};var cast:Dictionary={}
+    for lineage in removal.lineages:
+        for node in lineage.events:
+            if str(int(node.occurrence))==spec.remove:removal_cause={"node":node,"lineage":lineage.lineage}
+            if str(int(node.occurrence))==spec.heal:heal={"node":node,"lineage":lineage.lineage}
+            if str(int(node.occurrence))==spec.cast:cast={"node":node,"lineage":lineage.lineage}
+    check(not removal_cause.is_empty() and not heal.is_empty() and not cast.is_empty(),seat+" retains its own exact removal, heal and completed spell occurrences")
+    if removal_cause.is_empty() or heal.is_empty() or cast.is_empty():return
+    check(str(int(removal_cause.node.parent_event))==spec.parent and str(int(heal.node.parent_event))==spec.parent \
+        and removal_cause.lineage==cast.lineage and heal.lineage==cast.lineage \
+        and cast.node.fact.behavior_id=="spell.power_word_heal" and cast.node.fact.target_entity_uuid==patient \
+        and heal.node.fact.target_entity_uuid==patient and int(heal.node.fact.actual_healing)==37 \
+        and not heal.node.fact.was_blocked,seat+" real37HP heal and exact Poisoned removal share this seat's actual Power Word Heal effect")
+    var selections:Array=Effects.conditions(POISON_BEHAVIOR).filter(func(selection):return selection.key==POISON_LIFECYCLE)
+    check(selections.size()==1 and not selections[0].condition.body_channel_included \
+        and selections[0].condition.marker.group=="poisoned",seat+" sealed lifecycle explicitly owns the real Poisoned behavior as a marker only")
+    var expected:RefCounted=Journal.new();var opened:Dictionary=expected.open(directory,true,true)
+    var index:Dictionary=Recording.read(directory)
+    check(opened.ok and index.ok,seat+" Poisoned original independently folds and ordinary Studio compiles")
+    if not opened.ok or not index.ok:return
+    var immutable:PackedByteArray=var_to_bytes([index.initialization,index.groups,index.rows])
+    var media_preload:Dictionary=RecordingMedia.plan(index)
+    check(media_preload.errors.is_empty(),seat+" Poisoned recording receives ordinary per-group source preparation")
+    if not media_preload.errors.is_empty():return
+    Play.Catalog.adopt_snapshot(index.cache,media_preload.source_files)
+    check(index.rows.filter(func(row):return row.get("component",{}).get("native_clip",{}).get("id") in PROBES+POISON_PROBES).is_empty(),seat+" no existing/retiring spell demonstration copy is compiled")
+    var healing:Array=index.rows.filter(func(row):return row.get("component",{}).get("native_clip",{}).get("id") in HEALING)
+    check(healing.size()==2 and healing.all(func(row):return row.component.status=="available"),seat+" exact positive-healing sources remain available alongside the real Poisoned removal")
+    var lives:Array=index.rows.filter(func(row):return row.kind=="condition" and row.owner.id==POISON_OWNER)
+    check(lives.size()==1,seat+" Studio retains one actual current Poisoned UUID lifetime")
+    if lives.size()!=1:return
+    var owner:Dictionary=lives[0].owner
+    check(not owner.initial and is_finite(float(owner.end_ms)) and owner.actor_uuid==patient \
+        and owner.condition.behavior_id==POISON_BEHAVIOR,seat+" actual later admission/removal retains the original Poisoned member data")
+    check(is_equal_approx(float(Effects.clip("conditions/native_v1/"+POISON_LIFECYCLE+"/default/removal").seconds),.25),seat+" actual Poisoned source has its original0.25second removal")
+    var id:String=marker_id(POISON_OWNER,POISON_LIFECYCLE)
+    var before:float=maxf(0.0,float(owner.start_ms)-2.0)
+    var at_application:float=float(owner.start_ms)+80.0
+    var held:float=minf(float(owner.end_ms)-1.0,float(owner.start_ms)+400.0)
+    var fade:float=float(owner.end_ms)+100.0
+    var ended:float=float(owner.end_ms)+251.0
+    check(at_application<held and held<float(owner.end_ms),seat+" actual Poisoned lifetime contains application and hold before Power Word Heal")
+    var view:=SubViewport.new();view.size=Vector2i(800,600);view.own_world_3d=true;view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(view)
+    var world=Play.new();world.external_playback=true;world.external_clock=true;world.media_warmup.budget_bytes=0
+    world.media_warmup.encounter_override=media_preload
+    world.native_startup_plan=Play.NativeStartup.recording_plan(index.rows);world.native_startup_requested_ms=before
+    world.catalog_cache=Play.Catalog.source_snapshot(index.cache);world.playback_end_ms=index.presentation_end_ms
+    world.component_renderer.audio.set_enabled(false);view.add_child(world)
+    world.install_playback(Recording.restore(index,before))
+    if not await settle(world):view.queue_free();await frame();return
+    check(not world.timeline.condition_owners.has(POISON_OWNER) and emitting(world,[POISON_OWNER],POISON_LIFECYCLE).is_empty(),seat+" before this actual admission its UUID/source is absent; earlier real Poisoned owners are not erased")
+    if not await advance(world,at_application,id):view.queue_free();await frame();return
+    var handle:Dictionary=native_owner(world,owner,at_application,"application",seat+" Poisoned application",POISON_LIFECYCLE)
+    if handle.is_empty():view.queue_free();await frame();return
+    var source_root:WeakRef=weakref(handle.root)
+    if not await advance(world,held,id):view.queue_free();await frame();return
+    handle=native_owner(world,owner,held,"sustain",seat+" Poisoned hold",POISON_LIFECYCLE)
+    check(not handle.is_empty() and source_root.get_ref()==handle.root \
+        and emitting(world,[POISON_OWNER],POISON_LIFECYCLE)==[id],seat+" one private UUID source continues from actual application into hold")
+    world.camera_focus=Play.Placement.contact(world.visual_actors[patient].row);world.camera.size=3.5;world.initial_focus=true;world.position_camera();world.grid_visible=false
+    for quarter in 4:
+        if quarter!=world.quarter:world.request_view(quarter)
+        var deadline:int=Time.get_ticks_msec()+15000
+        while world.rotation_pending() and Time.get_ticks_msec()<deadline:await frame()
+        check(world.quarter==quarter and world.world_quarter==quarter and not world.rotation_pending(),seat+" Poisoned native view publishes q"+str(quarter))
+        if world.quarter!=quarter or world.world_quarter!=quarter or world.rotation_pending():break
+        if not await settle(world,id):break
+        handle=native_owner(world,owner,held,"sustain",seat+" Poisoned q"+str(quarter),POISON_LIFECYCLE)
+        if not handle.is_empty():evidence.append({"seat":seat,"condition_uuid":POISON_OWNER,"quarter":quarter,"phase":"sustain", \
+            "changed_pixels":await pixels(world,view,handle,seat+"-poisoned-q"+str(quarter))})
+    handle=world.component_renderer.native_spells.handles.get(id,{})
+    source_root=weakref(handle.root) if not handle.is_empty() else null
+    if not await advance(world,fade,id):view.queue_free();await frame();return
+    handle=native_owner(world,owner,fade,"removal",seat+" Poisoned actual removal",POISON_LIFECYCLE)
+    check(not handle.is_empty() and source_root!=null and source_root.get_ref()==handle.root \
+        and not world.timeline.state.actors[patient].conditions.any(func(member):return member.condition_uuid==POISON_OWNER),seat+" canonical removal retains only the same native UUID's finite fade")
+    if not handle.is_empty():evidence.append({"seat":seat,"condition_uuid":POISON_OWNER,"phase":"removal", \
+        "removal_occurrence":spec.remove,"parent_event":spec.parent,"healing":37, \
+        "changed_pixels":await pixels(world,view,handle,seat+"-poisoned-removal")})
+    if not await advance(world,ended):view.queue_free();await frame();return
+    check(emitting(world,[POISON_OWNER],POISON_LIFECYCLE).is_empty() and not world.timeline.condition_owners.has(POISON_OWNER),seat+" Poisoned native owner retires exactly after its actual removal fade")
+    for at in [held,fade,ended,held]:
+        world.install_playback(Recording.restore(index,at))
+        if not await settle(world,id if at!=ended else ""):break
+        if at==ended:check(emitting(world,[POISON_OWNER],POISON_LIFECYCLE).is_empty(),seat+" seek after the real removal has no Poisoned marker")
+        else:
+            handle=native_owner(world,owner,at,"removal" if at==fade else "sustain",seat+" Poisoned seek/loop",POISON_LIFECYCLE)
+            check(not handle.is_empty() and emitting(world,[POISON_OWNER],POISON_LIFECYCLE)==[id],seat+" seek/loop reconstructs only the real UUID and its exact held/removal clock")
+    var final:RefCounted=Recording.restore(index,index.presentation_end_ms+1000.0)
+    check(final.state==expected.state and not final.state.actors[patient].conditions.any(func(member):return member.condition_uuid==POISON_OWNER),seat+" independent final journal agrees after actual restoration and later movement")
+    var native=world.component_renderer.native_spells;native.close(world)
+    check(native.handles.is_empty() and native.groups.is_empty() and native.prepared_layers.is_empty(),seat+" Poisoned private rendering owners release on teardown")
+    check(world.presentation_errors.is_empty() and world.media_issue.is_empty(),seat+" Poisoned original application/removal/seek/loop has no renderer errors")
+    check(FileAccess.get_file_as_bytes(removal_path)==original and var_to_bytes([index.initialization,index.groups,index.rows])==immutable,seat+" Poisoned source packets and compiled ownership remain immutable")
+    view.queue_free();await frame();await frame()
 func finish()->void:
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Both original PWH restoration journals: existing same-UUID Paralyzed/Hold Person lifecycle application, selection,0.25second native removal, marker pixels/restoration, four views and seek/loop/teardown. Duplicate probes are excluded; poison, source preparation performance and visual approval remain unqualified."}
+        "scope":"Independent original PWH restoration and Ray-of-Sickness-Poisoned journals: existing same-UUID Paralyzed/Hold Person/Poisoned lifecycle application, hold and0.25second native removal, marker pixels/restoration, four views and seek/loop/teardown. Spell demonstration copies are excluded. Poison proof uses actual37HP healing and the same native effect parent; source preparation performance and visual approval remain unqualified."}
     FileAccess.open("res://.runtime/native-restoration-owner-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_RESTORATION_OWNER ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

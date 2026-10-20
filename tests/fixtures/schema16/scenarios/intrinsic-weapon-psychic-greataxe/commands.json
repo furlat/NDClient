@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "fe285416-e381-49ca-9cec-28a0a10c52fb",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "fe285416-e381-49ca-9cec-28a0a10c52fb",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "36bc54b9-af59-4329-98d8-33e4f852aea9",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Mindcleaver Greataxe",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "36bc54b9-af59-4329-98d8-33e4f852aea9",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "1aa5e6c4-1b9e-4dd5-a1f1-12bb8146d489",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "17a54b5c-8e66-4ba6-86ab-75e3bafea497",
+   "state_revision": "9759120f-acdf-4c7e-adbd-eae6d6e07437",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "636d3f27-d6a5-4285-9ae5-9da02cebb736",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Mindcleaver Greataxe",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "636d3f27-d6a5-4285-9ae5-9da02cebb736",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "6a8e207e-dca6-4deb-9859-54acabe8d695",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "17a54b5c-8e66-4ba6-86ab-75e3bafea497",
+   "state_revision": "da4d820b-6e4f-4b85-b165-c7bf056d416e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "fb80a4f5-5bf0-4b1e-a8c4-2e4eb1aec704",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "9e7b1782-b507-4b28-92e5-5f15eb87cbe1",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "17a54b5c-8e66-4ba6-86ab-75e3bafea497",
+   "state_revision": "bce881b9-2b35-4cd8-9cf9-e9cd6238b1dc",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "a5a45356-0920-4408-ab23-78ef2b91aeda",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "0cd9a08e-5748-4b9b-89e7-fccd2f6a0d4c",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "6f57a73a-8f9c-4fd6-8620-47ed10865e8e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "17a54b5c-8e66-4ba6-86ab-75e3bafea497",
+   "state_revision": "fa307e47-88dd-4325-8b70-feacfef6edba",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "8f2ca02d-b66e-4813-8ec7-8f3814747486",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "5ddc36e4-4511-4e3b-a683-98a921fd2065",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "a5736139-6ec1-4e32-945c-917955333325",
+   "state_revision": "5ddc36e4-4511-4e3b-a683-98a921fd2065",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+   "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+   "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_greataxe_equipped_use_retire_replace",
+    "game_epoch": "c45d762a-c6f5-4665-bf93-f3bb062ca442",
+    "audience_id": "68777605-d8d6-4a64-8f24-0ba63ad1897e",
+    "sequence": 23
+   }
+  }
+ }
+]

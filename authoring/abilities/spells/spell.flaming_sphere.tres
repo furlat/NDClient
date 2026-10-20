@@ -565,21 +565,28 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
-owner_ids = PackedStringArray()
-owner_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(2, 3, 4, 5)
+owner_kind = "condition"
+owner_ids = PackedStringArray("condition.spell.flaming_sphere.aura")
+owner_cues = PackedInt32Array(1)
 contact_cues = PackedInt32Array()
 light_multiplier = 1.0
 feedback_ramp = PackedStringArray()
 variants = Array[ExtResource("6_xlpsi")]([SubResource("Resource_lgv4j"), SubResource("Resource_04hvk"), SubResource("Resource_cnw8u")])
-applies_conditions = PackedStringArray("condition.dashing", "condition.disengaging", "condition.summoned")
-applies_surfaces = PackedStringArray()
+applies_conditions = PackedStringArray("condition.dashing", "condition.disengaging", "condition.summoned", "condition.spell.flaming_sphere.aura")
+applies_surfaces = PackedStringArray("spatial_effect.spell.flaming_sphere.aura")
 summons = PackedStringArray("creature.spell.flaming_sphere")
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
+"deferred_event_consumers": {
+"2": "Authoritative engine light owns the actual sphere emitter; no timed decorative duplicate.",
+"3": "Old-cell trail must follow actual disclosed patch owners and positions, never the review trajectory.",
+"4": "Ram contact requires an actual granted action and its attributed applied result.",
+"5": "Turn-end contact requires its actual native event and attributed applied result."
+},
 "selection": "flaming_sphere_native",
 "source": "assets/vfx/index.json:/selections/flaming_sphere_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual condition.spell.flaming_sphere.aura owns the existing prepared native body on the disclosed effect-owned sphere actor. It follows that actor's current published ground/motion instead of requiring a nonexistent modular sprite. Timed review Ram/turn-end/trail and decorative-light copies are excluded; their real event/spatial consumers remain explicit. Preparation still needs its actual born-actor endpoint; no review ground point is accepted."

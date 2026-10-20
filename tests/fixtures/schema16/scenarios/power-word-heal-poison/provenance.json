@@ -1,0 +1,2361 @@
+{
+ "source": ".runtime/pwh-poison-r1-20261020/cases/spell.power_word_heal__ray_poisoned_restore_move/20261020T153548.700381Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 15,
+ "originals": "Complete independent Amber and Blue packet streams plus scenario/recording/commands/choices copied byte-for-byte. No credentials, host configuration, logs, art or invented facts.",
+ "ray_outcomes": [
+  "Hit; failed Constitution save; first Poisoned admission at sequence6",
+  "Crit; failed Constitution save; actual replacement Poisoned admission/removal at sequence13",
+  "Hit; successful Constitution save at sequence20; no new Poisoned application"
+ ],
+ "actual_poisoned_before_pwh_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+ "healer_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+ "patient_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+ "evidence": {
+  "amber": {
+   "packet_count": 27,
+   "native_events": [
+    {
+     "sequence": 6,
+     "occurrence": 57,
+     "lineage": 33,
+     "parent_event": 53,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "ability_name": "constitution",
+      "succeeded": false,
+      "effect_id": "spell.ray_of_sickness.saving_throw"
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 63,
+     "lineage": 33,
+     "parent_event": 58,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+          "member": {
+           "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+           "name": "Poisoned",
+           "category": "condition",
+           "behavior_id": "condition.spell.ray_of_sickness.poison",
+           "state": {
+            "duration": null,
+            "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+            "name": "Poisoned",
+            "category": "condition",
+            "semantic_key": "condition.spell.ray_of_sickness.poison",
+            "behavior_id": "condition.spell.ray_of_sickness.poison",
+            "tags": [
+             "magical",
+             "poison"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 64,
+     "lineage": 33,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.ray_of_sickness",
+      "name": "Ray of Sickness",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 118,
+     "lineage": 94,
+     "parent_event": 114,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "ability_name": "constitution",
+      "succeeded": false,
+      "effect_id": "spell.ray_of_sickness.saving_throw"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 127,
+     "lineage": 94,
+     "parent_event": 119,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+          "member": {
+           "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+           "name": "Poisoned",
+           "category": "condition",
+           "behavior_id": "condition.spell.ray_of_sickness.poison",
+           "state": {
+            "duration": null,
+            "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+            "name": "Poisoned",
+            "category": "condition",
+            "semantic_key": "condition.spell.ray_of_sickness.poison",
+            "behavior_id": "condition.spell.ray_of_sickness.poison",
+            "tags": [
+             "magical",
+             "poison"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 128,
+     "lineage": 94,
+     "parent_event": 123,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 129,
+     "lineage": 94,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.ray_of_sickness",
+      "name": "Ray of Sickness",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "attack_outcome": "Crit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 20,
+     "occurrence": 183,
+     "lineage": 159,
+     "parent_event": 179,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "ability_name": "constitution",
+      "succeeded": true,
+      "effect_id": "spell.ray_of_sickness.saving_throw"
+     }
+    },
+    {
+     "sequence": 20,
+     "occurrence": 185,
+     "lineage": 159,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.ray_of_sickness",
+      "name": "Ray of Sickness",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 23,
+     "occurrence": 208,
+     "lineage": 199,
+     "parent_event": 201,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "actual_healing": 37,
+      "was_blocked": false,
+      "resulting_normal_hp": 160,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 23,
+     "occurrence": 209,
+     "lineage": 199,
+     "parent_event": 201,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 23,
+     "occurrence": 210,
+     "lineage": 199,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.power_word_heal",
+      "name": "Power Word Heal",
+      "source_position": [
+       3,
+       8
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 26,
+     "occurrence": 232,
+     "lineage": 219,
+     "parent_event": 221,
+     "phase": "completion",
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "from_position": [
+       8,
+       7
+      ],
+      "to_position": [
+       9,
+       7
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        8,
+        7
+       ],
+       [
+        9,
+        7
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    },
+    {
+     "sequence": 26,
+     "occurrence": 233,
+     "lineage": 219,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "trajectory": "path",
+      "movement_mode": "walking"
+     }
+    }
+   ],
+   "actual_pwh_ancestry": {
+    "lineage": 199,
+    "version_rows": {
+     "occurrences": [
+      199,
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209,
+      210
+     ],
+     "lineages": [
+      199,
+      199,
+      199,
+      202,
+      202,
+      202,
+      205,
+      205,
+      205,
+      205,
+      202,
+      199
+     ]
+    }
+   },
+   "independent_frozen_sdk_fold": [
+    {
+     "sequence": 0,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 1,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 2,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 3,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 4,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 5,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 6,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 7,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 8,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 9,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 10,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 11,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 12,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 13,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 14,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 15,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 16,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 17,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 18,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 19,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 20,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 123,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 21,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 123,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 22,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": null,
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 123,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 23,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 24,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 25,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 26,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      9,
+      7
+     ]
+    }
+   ]
+  },
+  "blue": {
+   "packet_count": 27,
+   "native_events": [
+    {
+     "sequence": 6,
+     "occurrence": 52,
+     "lineage": 28,
+     "parent_event": 48,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "ability_name": "constitution",
+      "succeeded": false,
+      "effect_id": "spell.ray_of_sickness.saving_throw"
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 59,
+     "lineage": 28,
+     "parent_event": 53,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+          "member": {
+           "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+           "name": "Poisoned",
+           "category": "condition",
+           "behavior_id": "condition.spell.ray_of_sickness.poison",
+           "state": {
+            "duration": {
+             "duration_type": "permanent",
+             "remaining_rounds": null
+            },
+            "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+            "name": "Poisoned",
+            "category": "condition",
+            "semantic_key": "condition.spell.ray_of_sickness.poison",
+            "behavior_id": "condition.spell.ray_of_sickness.poison",
+            "tags": [
+             "magical",
+             "poison"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 60,
+     "lineage": 28,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.ray_of_sickness",
+      "name": "Ray of Sickness",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 114,
+     "lineage": 90,
+     "parent_event": 110,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "ability_name": "constitution",
+      "succeeded": false,
+      "effect_id": "spell.ray_of_sickness.saving_throw"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 123,
+     "lineage": 90,
+     "parent_event": 115,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+          "member": {
+           "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+           "name": "Poisoned",
+           "category": "condition",
+           "behavior_id": "condition.spell.ray_of_sickness.poison",
+           "state": {
+            "duration": {
+             "duration_type": "permanent",
+             "remaining_rounds": null
+            },
+            "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+            "name": "Poisoned",
+            "category": "condition",
+            "semantic_key": "condition.spell.ray_of_sickness.poison",
+            "behavior_id": "condition.spell.ray_of_sickness.poison",
+            "tags": [
+             "magical",
+             "poison"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 124,
+     "lineage": 90,
+     "parent_event": 119,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 125,
+     "lineage": 90,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.ray_of_sickness",
+      "name": "Ray of Sickness",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "attack_outcome": "Crit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 20,
+     "occurrence": 179,
+     "lineage": 155,
+     "parent_event": 175,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "ability_name": "constitution",
+      "succeeded": true,
+      "effect_id": "spell.ray_of_sickness.saving_throw"
+     }
+    },
+    {
+     "sequence": 20,
+     "occurrence": 181,
+     "lineage": 155,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.ray_of_sickness",
+      "name": "Ray of Sickness",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 23,
+     "occurrence": 204,
+     "lineage": 195,
+     "parent_event": 197,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "actual_healing": 37,
+      "was_blocked": false,
+      "resulting_normal_hp": 160,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 23,
+     "occurrence": 206,
+     "lineage": 195,
+     "parent_event": 197,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 23,
+     "occurrence": 207,
+     "lineage": 195,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+      "target_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "behavior_id": "spell.power_word_heal",
+      "name": "Power Word Heal",
+      "source_position": [
+       3,
+       8
+      ],
+      "declared_target_entity_uuids": [
+       "dbb40b0a-160f-4a3e-ac00-7c5d8142787c"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 26,
+     "occurrence": 229,
+     "lineage": 216,
+     "parent_event": 218,
+     "phase": "completion",
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "from_position": [
+       8,
+       7
+      ],
+      "to_position": [
+       9,
+       7
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        8,
+        7
+       ],
+       [
+        9,
+        7
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    },
+    {
+     "sequence": 26,
+     "occurrence": 230,
+     "lineage": 216,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+      "trajectory": "path",
+      "movement_mode": "walking",
+      "start_layer": "ground",
+      "end_layer": "ground"
+     }
+    }
+   ],
+   "actual_pwh_ancestry": {
+    "lineage": 195,
+    "version_rows": {
+     "occurrences": [
+      195,
+      196,
+      197,
+      198,
+      199,
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207
+     ],
+     "lineages": [
+      195,
+      195,
+      195,
+      198,
+      198,
+      198,
+      201,
+      201,
+      201,
+      201,
+      205,
+      198,
+      195
+     ]
+    }
+   },
+   "independent_frozen_sdk_fold": [
+    {
+     "sequence": 0,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 1,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 2,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 3,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 4,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 5,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 6,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 7,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 8,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 9,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 10,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 11,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 12,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 152,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 13,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 14,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 15,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 16,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 17,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 18,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 19,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 137,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 20,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 123,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 21,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 123,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 22,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [
+      {
+       "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+       "behavior_id": "condition.spell.ray_of_sickness.poison",
+       "state": {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+        "name": "Poisoned",
+        "category": "condition",
+        "semantic_key": "condition.spell.ray_of_sickness.poison",
+        "behavior_id": "condition.spell.ray_of_sickness.poison",
+        "tags": [
+         "magical",
+         "poison"
+        ],
+        "removal_triggers": [],
+        "agency_denial": "none",
+        "outcome_protections": [],
+        "applied_source_event_cursor": null,
+        "duplicate_count": null,
+        "size_change": null,
+        "energy_type": null,
+        "metamagic_mode": null,
+        "affected_item_uuid": null,
+        "enhanced_ability": null,
+        "concentration_slots": []
+       }
+      }
+     ],
+     "normal_hp": 123,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 23,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 24,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 25,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      8,
+      7
+     ]
+    },
+    {
+     "sequence": 26,
+     "target_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+     "poison_members": [],
+     "normal_hp": 160,
+     "position": [
+      9,
+      7
+     ]
+    }
+   ]
+  }
+ },
+ "qualification_limits": [
+  "The latest Poisoned UUID exists in independent original SDK folds through sequence22; Power Word Heal removes that same UUID and heals37HP in sequence23; normal movement occurs in sequence26.",
+  "The native removal row and HealFact share the actual Power Word Heal effect parent. Each original seat retains its own native occurrence/lineage IDs; none are borrowed across factions.",
+  "No private tick UUID, made-up damage UUID, Basic Poison/Poison Spray application, altered outcome or invented membership is used.",
+  "This is genuine scenario/producer evidence, not native renderer, source-input completeness, performance or visual approval qualification."
+ ]
+}

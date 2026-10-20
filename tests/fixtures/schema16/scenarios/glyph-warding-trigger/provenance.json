@@ -1,0 +1,1350 @@
+{
+ "source": ".runtime/glyph-trigger-r2-20261020/cases/spell.glyph_of_warding__arm_move_enter_trigger/20261020T153058.338180Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 7,
+ "originals": "Complete independent Amber and Blue packet streams plus scenario/recording/commands/choices copied byte-for-byte. No credentials, host configuration, logs, art or invented facts.",
+ "lifecycle": "Idle/movement before placement; glyph and sustain actually present in independent SDK folds at sequences3\u20137; caster and enemy move outside its footprint; enemy legally enters[8,7] at sequence8; actual owner removal precedes native save/damage result; movement continues after removal at sequence9.",
+ "actual_glyph_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+ "actual_sustain_condition_uuid": "0d10f307-fb96-46d9-ac4e-20f8bccce594",
+ "qualification_limits": [
+  "Public SpatialEffectStateFact state/previous_state remain null; ConditionState has no armed/payload fields. The legal Fire facet request is preserved but is not fabricated into native event state.",
+  "Glyph deactivates before its payload in the actual engine. Do not reverse native row order to match a visual narrative.",
+  "This genuine lifecycle recording is not native rendering, source-input completeness, performance or visual approval qualification."
+ ],
+ "evidence": {
+  "amber": {
+   "packet_count": 10,
+   "native_events": [
+    {
+     "sequence": 3,
+     "occurrence": 39,
+     "lineage": 27,
+     "parent_event": 34,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial_effect_state",
+      "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+      "positions": [
+       [
+        4,
+        7
+       ],
+       [
+        5,
+        6
+       ],
+       [
+        5,
+        7
+       ],
+       [
+        5,
+        8
+       ],
+       [
+        6,
+        5
+       ],
+       [
+        6,
+        6
+       ],
+       [
+        6,
+        7
+       ],
+       [
+        6,
+        8
+       ],
+       [
+        6,
+        9
+       ],
+       [
+        7,
+        6
+       ],
+       [
+        7,
+        7
+       ],
+       [
+        7,
+        8
+       ],
+       [
+        8,
+        7
+       ]
+      ],
+      "previous_state": null,
+      "state": null,
+      "operation": "created"
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 43,
+     "lineage": 27,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.glyph_of_warding",
+      "name": "Glyph of Warding",
+      "source_position": [
+       3,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 89,
+     "lineage": 82,
+     "parent_event": 85,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial",
+      "change_type": "entity_left",
+      "entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "position": [
+       9,
+       6
+      ],
+      "commit_occurrence": 86,
+      "previous_occupancy_layer": "ground",
+      "occupancy_layer": "ground"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 104,
+     "lineage": 82,
+     "parent_event": 95,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial_effect_state",
+      "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+      "previous_state": null,
+      "state": null,
+      "operation": "removed",
+      "removed_positions": [
+       [
+        4,
+        7
+       ],
+       [
+        5,
+        6
+       ],
+       [
+        5,
+        7
+       ],
+       [
+        5,
+        8
+       ],
+       [
+        6,
+        5
+       ],
+       [
+        6,
+        6
+       ],
+       [
+        6,
+        7
+       ],
+       [
+        6,
+        8
+       ],
+       [
+        6,
+        9
+       ],
+       [
+        7,
+        6
+       ],
+       [
+        7,
+        7
+       ],
+       [
+        7,
+        8
+       ],
+       [
+        8,
+        7
+       ]
+      ]
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 109,
+     "lineage": 82,
+     "parent_event": 92,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "ability_name": "dexterity",
+      "succeeded": false,
+      "effect_id": "spell.glyph_of_warding.payload"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 125,
+     "lineage": 82,
+     "parent_event": 112,
+     "phase": "completion",
+     "fact": {
+      "kind": "damage",
+      "stage": "applied",
+      "source_entity_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+      "target_entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "applied_damage": 23,
+      "resulting_normal_hp": 137,
+      "resulting_temporary_hp": 0,
+      "damage_type": "Fire",
+      "body_release": {
+       "release_id": "body.blood",
+       "position": [
+        8,
+        7
+       ],
+       "occupancy_layer": "ground",
+       "deposited_position": [
+        8,
+        7
+       ],
+       "pattern": "blunt",
+       "critical_hit": false,
+       "regions": [
+        {
+         "ellipse": {
+          "center": [
+           8.0,
+           7.0
+          ],
+          "radius_x": 1.5,
+          "radius_y": 1.5,
+          "angle": 0.0
+         },
+         "positions": [
+          [
+           7,
+           6
+          ],
+          [
+           7,
+           7
+          ],
+          [
+           7,
+           8
+          ],
+          [
+           8,
+           6
+          ],
+          [
+           8,
+           7
+          ],
+          [
+           8,
+           8
+          ],
+          [
+           9,
+           6
+          ],
+          [
+           9,
+           7
+          ],
+          [
+           9,
+           8
+          ]
+         ],
+         "elevation_steps": 0
+        }
+       ],
+       "primary_damage_type": "Fire",
+       "secondary_damage_type": null
+      }
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 126,
+     "lineage": 82,
+     "parent_event": 92,
+     "phase": "completion",
+     "fact": {
+      "kind": "damage",
+      "stage": "taken",
+      "source_entity_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+      "target_entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 135,
+     "lineage": 82,
+     "parent_event": 85,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial",
+      "change_type": "entity_entered",
+      "entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "position": [
+       8,
+       7
+      ],
+      "commit_occurrence": 90,
+      "previous_occupancy_layer": "ground",
+      "occupancy_layer": "ground"
+     }
+    }
+   ],
+   "independent_frozen_sdk_fold": [
+    {
+     "sequence": 0,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 1,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 2,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 3,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 4,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 5,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 6,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 7,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 8,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 9,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    }
+   ]
+  },
+  "blue": {
+   "packet_count": 10,
+   "native_events": [
+    {
+     "sequence": 3,
+     "occurrence": 39,
+     "lineage": 27,
+     "parent_event": 34,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial_effect_state",
+      "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+      "positions": [
+       [
+        4,
+        7
+       ],
+       [
+        5,
+        6
+       ],
+       [
+        5,
+        7
+       ],
+       [
+        5,
+        8
+       ],
+       [
+        6,
+        5
+       ],
+       [
+        6,
+        6
+       ],
+       [
+        6,
+        7
+       ],
+       [
+        6,
+        8
+       ],
+       [
+        6,
+        9
+       ],
+       [
+        7,
+        6
+       ],
+       [
+        7,
+        7
+       ],
+       [
+        7,
+        8
+       ],
+       [
+        8,
+        7
+       ]
+      ],
+      "previous_state": null,
+      "state": null,
+      "operation": "created"
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 43,
+     "lineage": 27,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+      "target_entity_uuid": null,
+      "behavior_id": "spell.glyph_of_warding",
+      "name": "Glyph of Warding",
+      "source_position": [
+       3,
+       6
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 89,
+     "lineage": 82,
+     "parent_event": 85,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial",
+      "change_type": "entity_left",
+      "entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "position": [
+       9,
+       6
+      ],
+      "commit_occurrence": 86,
+      "previous_occupancy_layer": "ground",
+      "occupancy_layer": "ground"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 103,
+     "lineage": 82,
+     "parent_event": 95,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial_effect_state",
+      "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+      "previous_state": null,
+      "state": null,
+      "operation": "removed",
+      "removed_positions": [
+       [
+        4,
+        7
+       ],
+       [
+        5,
+        6
+       ],
+       [
+        5,
+        7
+       ],
+       [
+        5,
+        8
+       ],
+       [
+        6,
+        5
+       ],
+       [
+        6,
+        6
+       ],
+       [
+        6,
+        7
+       ],
+       [
+        6,
+        8
+       ],
+       [
+        6,
+        9
+       ],
+       [
+        7,
+        6
+       ],
+       [
+        7,
+        7
+       ],
+       [
+        7,
+        8
+       ],
+       [
+        8,
+        7
+       ]
+      ]
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 109,
+     "lineage": 82,
+     "parent_event": 92,
+     "phase": "completion",
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "ability_name": "dexterity",
+      "succeeded": false,
+      "effect_id": "spell.glyph_of_warding.payload"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 125,
+     "lineage": 82,
+     "parent_event": 112,
+     "phase": "completion",
+     "fact": {
+      "kind": "damage",
+      "stage": "applied",
+      "source_entity_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+      "target_entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "applied_damage": 23,
+      "resulting_normal_hp": 137,
+      "resulting_temporary_hp": 0,
+      "damage_type": "Fire",
+      "body_release": {
+       "release_id": "body.blood",
+       "position": [
+        8,
+        7
+       ],
+       "occupancy_layer": "ground",
+       "deposited_position": [
+        8,
+        7
+       ],
+       "pattern": "blunt",
+       "critical_hit": false,
+       "regions": [
+        {
+         "ellipse": {
+          "center": [
+           8.0,
+           7.0
+          ],
+          "radius_x": 1.5,
+          "radius_y": 1.5,
+          "angle": 0.0
+         },
+         "positions": [
+          [
+           7,
+           6
+          ],
+          [
+           7,
+           7
+          ],
+          [
+           7,
+           8
+          ],
+          [
+           8,
+           6
+          ],
+          [
+           8,
+           7
+          ],
+          [
+           8,
+           8
+          ],
+          [
+           9,
+           6
+          ],
+          [
+           9,
+           7
+          ],
+          [
+           9,
+           8
+          ]
+         ],
+         "elevation_steps": 0
+        }
+       ],
+       "primary_damage_type": "Fire",
+       "secondary_damage_type": null
+      }
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 126,
+     "lineage": 82,
+     "parent_event": 92,
+     "phase": "completion",
+     "fact": {
+      "kind": "damage",
+      "stage": "taken",
+      "source_entity_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+      "target_entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 135,
+     "lineage": 82,
+     "parent_event": 85,
+     "phase": "completion",
+     "fact": {
+      "kind": "spatial",
+      "change_type": "entity_entered",
+      "entity_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+      "position": [
+       8,
+       7
+      ],
+      "commit_occurrence": 90,
+      "previous_occupancy_layer": "ground",
+      "occupancy_layer": "ground"
+     }
+    }
+   ],
+   "independent_frozen_sdk_fold": [
+    {
+     "sequence": 0,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 1,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 2,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 3,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 4,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 5,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 6,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 7,
+     "glyphs": [
+      {
+       "spatial_effect_uuid": "90b31c3c-9fd2-4fe1-b637-ee0e7fcb5f3a",
+       "positions": [
+        [
+         4,
+         7
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         5,
+         8
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         6,
+         6
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         6,
+         8
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         7,
+         7
+        ],
+        [
+         7,
+         8
+        ],
+        [
+         8,
+         7
+        ]
+       ]
+      }
+     ],
+     "sustain_condition_uuids": [
+      "0d10f307-fb96-46d9-ac4e-20f8bccce594"
+     ]
+    },
+    {
+     "sequence": 8,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    },
+    {
+     "sequence": 9,
+     "glyphs": [],
+     "sustain_condition_uuids": []
+    }
+   ]
+  }
+ }
+}

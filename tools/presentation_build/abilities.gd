@@ -281,7 +281,7 @@ static func native_records(spells: Dictionary, policy: Dictionary, conditions:Di
                     variant_recipe.damage=variant_recipe.damage.duplicate()
                     variant_recipe.damage.hitFlash=treatment.flash
             var reason:String=variant.dispatch_gap
-            if variant.when.is_empty():reason="public_fact_predicate_not_authored"
+            if variant.when.is_empty() and reason.is_empty():reason="public_fact_predicate_not_authored"
             spell.variants.append({"id":variant.id,"kind":variant.kind,"value":variant.value,
                 "when":F.plain(variant.when),"dispatch_gap":reason,"status":variant.status,
                 "save_effect_id":variant.save_effect_id,
@@ -486,7 +486,7 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             or use.role!="attached" or use.at!="owner_start" or use.delay!=0.0:
             Common.error(report,where,"membership input needs a declared boolean setter and actual condition owner_start clock");return
     var binding:Dictionary=use.constructor_input
-    if not use.extra.get("input_policies",{}).is_empty() and binding.get("kind") not in ["propagation_links","spell_strike","observed_event"]:
+    if not use.extra.get("input_policies",{}).is_empty() and binding.get("kind") not in ["propagation_links","spell_strike","observed_event","condition_application"]:
         Common.error(report,where,"explicit input policy has no qualified source constructor");return
     if binding.is_empty():return
     if binding.get("kind")=="observed_event":
@@ -499,10 +499,18 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target") \
             or projection=="healing_return" and (binding.outcome!="heal" or binding.geometry_actor!="target" or use.at!="cast" or use.delay!=0.0):
             Common.error(report,where,"observed projection must match its actual result, source clock and recipient contract");return
+    elif binding.get("kind")=="condition_application":
+        if use.scope!="cast" or use.at not in ["cast","release"] or use.delay!=0.0 \
+            or binding.get("owner_actor")!="caster" or str(binding.get("condition_id","")).is_empty() or binding.get("input_field")!="":
+            Common.error(report,where,"condition application needs a real actor-owned descendant member and cast scope");return
     elif binding.get("kind")=="observed_operation":
         if use.scope!="source" or binding.get("operation") not in ["accepted","scribe"] or binding.get("input_field")!="" \
             or use.at!="event.start" or use.delay!=0.0 or use.extra.get("live_endpoints",[])!=[{"actor":"caster","socket":"cast_hand"}]:
             Common.error(report,where,"accepted operation needs source scope, its actual completion clock and source-hand endpoint");return
+    elif binding.get("kind")=="item_consumption":
+        if use.scope!="source" or binding.get("input_field")!="" or use.at!="event.start" or use.delay!=0.0 \
+            or use.attachment!="caster_ground" or use.extra.get("live_endpoints",[])!=[{"actor":"caster","socket":"hand"},{"actor":"caster","socket":"face"}]:
+            Common.error(report,where,"item consumption needs the accepted source action and its actual hand/face endpoints");return
     elif binding.get("kind")=="reaction_observation":
         if use.scope!="source" or binding.get("trigger_kind")!="spell" or not binding.get("succeeded") is bool or binding.get("input_field")!="observation":
             Common.error(report,where,"reaction observation needs source scope, spell trigger, observed outcome and observation member");return
@@ -552,6 +560,9 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             if not input.get("state") is Dictionary or not input.has("operation_uuid") or "operation_state" not in clips[use.clip].get("inputs",[]) \
                 or binding.operation=="scribe" and (not input.has("item_uuid") or not input.has("learned_spell_id")):
                 Common.error(report,where,"accepted operation needs the public operation state and exact source item/book constructor members")
+        if binding.get("kind")=="item_consumption":
+            if input.get("mode")!="consume" or not input.get("item_uuids") is Array or not input.get("healing_admitted") is bool:
+                Common.error(report,where,"item consumption needs the supplied one-item/healing constructor contract")
         if binding.get("kind")=="observed_event":
             var projection:String=str(binding.get("projection","event"))
             if projection=="applied_contact" and (not input.get("state") is Dictionary or "native_state" not in clips[use.clip].get("inputs",[])):
@@ -568,6 +579,12 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
                 or not input.has("birth_event_uuid") or not input.has("owner_uuid") \
                 or "owner_state" not in clips[use.clip].get("inputs",[]):
                 Common.error(report,where,"actor birth requires the source's explicit owner/birth/state interface")
+        if binding.get("kind")=="condition_application":
+            if component.get("script")!="res://assets/vfx/sources/9e80f76781257e6a4d5d/divine_favor.gd" \
+                or input.get("phase") not in ["windup","application"] or not input.get("ownership") is Dictionary \
+                or input.ownership.get("owner_kind")!="caster" \
+                or use.extra.get("input_policies",{})!={"hit_input":{"mode":"not_applicable","reason":"selected_weapon_blessing_phase_does_not_consume_hit"}}:
+                Common.error(report,where,"condition application input policy needs the exact non-hit weapon blessing source branch")
         if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="cells":
             if not input.get("cells") is Array or not input.get("observed_removals") is Array \
                 or use.orientation!="world" or use.scale!=1.0:

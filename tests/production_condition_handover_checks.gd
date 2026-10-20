@@ -3,10 +3,10 @@ extends "res://tests/support_spell_event_checks.gd"
 const HANDOVERS={
     "acid_arrow":{"owner":"condition.spell.acid_arrow","cues":[2],"keep":[0,1,3,4],"lifecycle":"condition_acid_arrow_persistent"},
     "branding_smite":{"owner":"condition.spell.branding_smite","cues":[1,2],"keep":[0],"lifecycle":"condition_branding_smite_persistent","producer_gap":true},
-    "divine_favor":{"owner":"condition.spell.divine_favor","cues":[2,3],"keep":[0,1,4],"lifecycle":"condition_divine_favor_persistent"},
+    "divine_favor":{"owner":"condition.spell.divine_favor","cues":[1,2,3],"keep":[0],"lifecycle":"condition_divine_favor_persistent"},
     "ensnaring_strike":{"owner":"condition.spell.ensnaring_strike","cues":[1,3],"keep":[0,2],"lifecycle":"condition_ensnaring_vines_persistent","producer_gap":true},
-    "hex":{"owner":"condition.spell.hex.quarry","cues":[2,4],"keep":[0,1,3],"lifecycle":"condition_hex_persistent"},
-    "hunters_mark":{"owner":"condition.spell.hunters_mark.quarry","cues":[2,4],"keep":[0,1,3],"lifecycle":"condition_hunters_mark_persistent"},
+    "hex":{"owner":"condition.spell.hex.quarry","cues":[1,2,4],"keep":[0],"lifecycle":"condition_hex_persistent"},
+    "hunters_mark":{"owner":"condition.spell.hunters_mark.quarry","cues":[1,2,4],"keep":[0],"lifecycle":"condition_hunters_mark_persistent"},
     "magic_weapon":{"owner":"condition.spell.magic_weapon","cues":[2,3],"keep":[0,1],"lifecycle":"condition_magic_weapon_persistent","baseline_has_owner":false},
     "searing_smite":{"owner":"condition.spell.searing_smite","cues":[1,2],"keep":[0,3],"lifecycle":"condition_burning_persistent","producer_gap":true},
     "shillelagh":{"owner":"condition.spell.shillelagh","cues":[0],"keep":[],"lifecycle":"condition_shillelagh_persistent"},

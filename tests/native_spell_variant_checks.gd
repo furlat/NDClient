@@ -247,7 +247,7 @@ func inventory()->void:
                 var admitted:Dictionary=physical.variants[at]
                 check(admitted.id==actual.id and is_same(admitted.recipe.get("cast"),physical.recipe.get("cast")),id+" loaded alternative shares its actual caster owner "+original.id)
                 if admitted.inherits_recipe:check(is_same(admitted.recipe,physical.recipe) and is_same(admitted.requirements,physical.requirements),id+" loaded inherited recipe and requirements share their base owner "+original.id)
-            if original.when.is_empty():check(actual.dispatch_gap=="public_fact_predicate_not_authored",id+" no title/value inference for "+original.id)
+            if original.when.is_empty():check(actual.dispatch_gap==("public_fact_predicate_not_authored" if original.dispatch_gap.is_empty() else original.dispatch_gap),id+" no title/value inference; retain explicit disposition for "+original.id)
     check(emitted==count,"Every authored alternative survives the native build, including explicitly assigned production branches")
     evidence.append({"native_variant_owners":owners,"alternatives":count,"alternative_cues":cues,"active_production_predicates":active,"all_typed_alternatives_serialized":emitted})
 func originals()->void:

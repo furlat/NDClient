@@ -1,0 +1,70 @@
+{
+ "id": "spell.dissonant_whispers/deva_saving_throws",
+ "title": "Dissonant Whispers: actual saves against a Wisdom-proficient Deva",
+ "kind": "spell",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.dissonant_whispers"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 3,
+   "caster_level": 3,
+   "spells": [
+    "spell.dissonant_whispers"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.spell.deva",
+   "at": [
+    6,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1,
+   "capture_choices": true
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  }
+ ],
+ "required_behaviors": [
+  "spell.dissonant_whispers"
+ ],
+ "required_facts": [
+  "saving_throw",
+  "damage"
+ ],
+ "purpose": "Two fixed ordinary casts against the authored Wisdom-proficient Deva. Only actual saving-throw facts establish a saved branch; no rolled outcome is forced."
+}

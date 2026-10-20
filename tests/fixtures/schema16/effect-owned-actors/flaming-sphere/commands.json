@@ -1,0 +1,151 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "9593eeff-c87a-463a-a8e3-d6b9d4cda516",
+   "state_revision": "1fa4b179-bbef-450d-8ee5-93f7e0fbc033",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flaming_sphere_baseline",
+   "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+   "audience_id": "c08ad853-3fcb-457e-8c36-dfc27344b158",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flaming_sphere_baseline",
+    "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+    "audience_id": "c08ad853-3fcb-457e-8c36-dfc27344b158",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0c6a1ca2-2b7a-4678-9ca1-7b1e9f08b691",
+   "state_revision": "cab81f2f-8c9e-4cfe-a7d8-3e12984a10bb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flaming_sphere_baseline",
+   "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+   "audience_id": "391f9e66-1097-46fb-94be-503fdd6ac7a3",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flaming_sphere_baseline",
+    "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+    "audience_id": "391f9e66-1097-46fb-94be-503fdd6ac7a3",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "53b9dc6b-d8d0-4d65-bd62-e828e424da6f",
+   "state_revision": "3f731f1c-9648-4869-98cb-8fdbc198ab26",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flaming_sphere_baseline",
+   "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+   "audience_id": "391f9e66-1097-46fb-94be-503fdd6ac7a3",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flaming_sphere_baseline",
+    "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+    "audience_id": "391f9e66-1097-46fb-94be-503fdd6ac7a3",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.flaming_sphere",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.flaming_sphere",
+   "display_name": "Flaming Sphere (Level 2) \u00b7 Flaming Sphere",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "flaming_sphere",
+     "label": "Flaming Sphere"
+    }
+   ],
+   "target_type": "position",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "9a9f4b18-6736-49e4-9cb0-48beeb30fda8",
+   "state_revision": "e46ec7fb-b8b8-4707-952f-a71e0c3d4051",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 13,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_flaming_sphere_baseline",
+   "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+   "audience_id": "c08ad853-3fcb-457e-8c36-dfc27344b158",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_flaming_sphere_baseline",
+    "game_epoch": "c828e15a-3c51-4574-a741-588c80f4362a",
+    "audience_id": "c08ad853-3fcb-457e-8c36-dfc27344b158",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

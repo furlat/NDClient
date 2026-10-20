@@ -65,6 +65,18 @@ func poison_original(seat:String)->void:
     check(index.ok,label+": ordinary production source indexes the unchanged original")
     if not index.ok:return
     var immutable:PackedByteArray=var_to_bytes([index.initialization,index.groups,index.rows])
+    var held:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("dynamic_item_effect",false))
+    check(held.size()==1,label+": one production coating interval follows actual item-effect membership")
+    if held.size()==1:
+        var coat:Dictionary=held[0].component
+        check(coat.native_clip.id=="weapons/equipped/poison/viscous_film/medium/sustain" \
+            and coat.item_owner_uuid==POISON_ITEM and coat.item_effect_uuid==POISON_OWNER \
+            and coat.item_effect_member.contribution_uuid==POISON_CONTRIBUTION \
+            and held[0].source=="res://authoring/characters/gear/weapon.longsword.tres::effects/0",label+": sustain uses the exact actual item/effect/contribution and production Gear source")
+        for at in [held[0].start_ms-.01,held[0].start_ms+.01,held[0].end_ms-.01,held[0].end_ms+.01,held[0].start_ms+.01]:
+            var restored:RefCounted=Recording.restore(index,maxf(0.0,at))
+            var active:Array=restored.component_samples(index.cache).filter(func(value):return value.get("dynamic_item_effect",false))
+            check(active.size()==(1 if at>=held[0].start_ms and at<held[0].end_ms else 0),label+": actual membership controls optical sustain through seek and expiry at "+str(at))
     var attacks:Array=Fixtures.fact_rows("poison-weapon-contact","attack",seat)
     var coated:Array=attacks.filter(func(row):return int(row.sequence) in [12,17])
     var later:Array=attacks.filter(func(row):return int(row.sequence) in [63,68])

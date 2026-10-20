@@ -4,6 +4,25 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_pt3v1"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_pt3v1"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_lf8si"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="ConsumeBerry"]
+script = ExtResource("effect")
+clip = "bg3-36/goodberry/goodberry_eat_native"
+selection = "goodberry_eat_native"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "item_consumption", "component_path": ["nature"], "input_field": ""}
+endpoint_actor_uuids = true
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+follow = true
+duration_policy = "authored"
+source_end = 1.35
+light_multiplier = 0.0
+staging_from = "Factory Goodberry consumption; actual accepted item charge and heal replace the fixture identity/admission. Eating body pose remains unqualified."
+extra = {"live_endpoints": [{"actor": "caster", "socket": "hand"}, {"actor": "caster", "socket": "face"}], "follow_attachment": true}
 
 [sub_resource type="Resource" id="Resource_lf8si"]
 script = ExtResource("1_pt3v1")
@@ -24,5 +43,6 @@ kind = "action"
 family = "spell"
 icon = SubResource("Resource_aqm21")
 body = SubResource("Resource_lf8si")
+effects = Array[ExtResource("effect")]([SubResource("ConsumeBerry")])
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (consume); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Finite consumption follows actual ItemCharge and Heal descendants, including blocked healing. The creating spell owns only creation; no guessed consumption, inventory identity or light. The dedicated eating body pose remains unqualified."

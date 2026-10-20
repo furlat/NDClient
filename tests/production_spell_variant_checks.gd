@@ -16,7 +16,9 @@ const CASES=[
     {"spell":"vicious_mockery","folder":"saved-head-programs","variant":"vicious_mockery_saved_native","saved":true,
         "clips":["bg3-36/vicious-mockery/voice","bg3-36/vicious-mockery/saved"]},
     {"spell":"dissonant_whispers","folder":"saved-head-programs","variant":"dissonant_whispers_saved_native","saved":false,
-        "clips":["bg3-36/dissonant-whispers/voice"]}]
+        "clips":["bg3-36/dissonant-whispers/voice"]},
+    {"spell":"dissonant_whispers","journal":"res://tests/fixtures/schema16/option-identities/dissonant-whispers-saved-modular/", \
+        "variant":"dissonant_whispers_saved_native","outcomes":[false,true,false]}]
 var checks:int=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -47,7 +49,7 @@ func inspect(sample:Dictionary,seat:String)->void:
     if sample.spell=="ray_of_sickness":check(alternative.when.attack_outcome==["Hit","Crit"],label+" poison save cannot replace a missed attack")
     else:check(NativeSpells.owned_cues(record.selection)==[1,2],label+" baseline condition handover is retained")
     var immutable:PackedByteArray=var_to_bytes([record.recipe,record.selection,record.variants])
-    var directory:String="res://tests/fixtures/schema16/root-target-save/"+sample.folder+"/"+seat+"/journal"
+    var directory:String=str(sample.journal)+seat if sample.has("journal") else "res://tests/fixtures/schema16/root-target-save/"+sample.folder+"/"+seat+"/journal"
     var index:Dictionary=Recording.read(directory,{}, {},cache)
     check(index.get("ok",false),label+" complete original journal compiles")
     if not index.get("ok",false):return
@@ -58,10 +60,11 @@ func inspect(sample:Dictionary,seat:String)->void:
             if row.kind!="spell" or row.get("behavior_id")!=identity:continue
             found+=1
             bodies+=group.actor_tracks.filter(func(track):return track.get("activity")=="cast" and track.get("actor_uuid")==row.actor_uuid).size()
-            var expected:String=sample.variant if sample.saved else ""
+            var saved:bool=sample.outcomes[found-1] if sample.has("outcomes") else sample.saved
+            var expected:String=sample.variant if saved else ""
             check(row.get("native_variant",{}).get("id","")==expected,label+" original outcome selects the production branch")
             check(row.get("variant_dispatch_gaps",[]).is_empty(),label+" real null-application cast has no false missing-data warning")
-            if sample.saved:
+            if saved:
                 var proof:Dictionary=row.get("variant_evidence",{})
                 check(proof.get("scope")=="target_cast" and proof.get("application_id")==null,label+" actual null application identity is preserved")
                 check(proof.get("effect_id")==identity+".saving_throw" and proof.get("target_uuid")==row.target_uuid,label+" exact recipient/save evidence belongs to this cast")
@@ -71,10 +74,13 @@ func inspect(sample:Dictionary,seat:String)->void:
                 clips.append(component.native_clip.id)
                 check(component.get("native_variant",{}).get("id","")==expected,label+" native component and trace use the same choice")
                 check(not component.has("application_id"),label+" no artificial application UUID is introduced")
-            clips.sort();var wanted:Array=sample.clips.duplicate();wanted.sort()
+            clips.sort();var wanted:Array=sample.clips.duplicate() if sample.has("clips") else ["bg3-36/dissonant-whispers/voice"]
+            if sample.has("outcomes") and saved:wanted.append("bg3-36/dissonant-whispers/saved")
+            wanted.sort()
             check(clips==wanted,label+" exact finite phase list: "+str(clips))
             evidence.append({"spell":identity,"seat":seat,"event":row.event_uuid,"variant":expected,"clips":clips})
-    check(found==1 and bodies==1,label+" one actual target cast keeps one caster animation")
+    var cast_count:int=sample.outcomes.size() if sample.has("outcomes") else 1
+    check(found==cast_count and bodies==cast_count,label+" each actual target cast keeps one caster animation")
     var canonical:RefCounted=Journal.new()
     check(canonical.open(directory,false,true).ok,label+" independent canonical replay opens")
     var end:float=maxf(index.duration_ms,index.presentation_end_ms)+1.0

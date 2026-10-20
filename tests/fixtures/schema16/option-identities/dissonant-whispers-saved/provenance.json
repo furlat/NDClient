@@ -1,0 +1,169 @@
+{
+ "source": ".runtime/option-identities-20261020/cases/spell.dissonant_whispers__deva_saving_throws/20261020T144944.462831Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 4,
+ "originals": "Both original faction streams and scenario/recording/commands/choices copied byte-for-byte. No configuration, credentials or logs copied.",
+ "evidence": {
+  "amber": {
+   "packet_count": 8,
+   "casts": [
+    {
+     "sequence": 2,
+     "lineage": 12,
+     "occurrence": 30,
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "c9cac6a5-04c0-4973-bb13-fe21c8564188",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "behavior_id": "spell.dissonant_whispers",
+      "name": "Dissonant Whispers",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dd46962b-4a90-4769-b90a-9601b34caccd"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 7,
+     "lineage": 52,
+     "occurrence": 68,
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "c9cac6a5-04c0-4973-bb13-fe21c8564188",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "behavior_id": "spell.dissonant_whispers",
+      "name": "Dissonant Whispers",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dd46962b-4a90-4769-b90a-9601b34caccd"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    }
+   ],
+   "saving_throws": [
+    {
+     "sequence": 2,
+     "lineage": 12,
+     "occurrence": 18,
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "ability_name": "wisdom",
+      "succeeded": false,
+      "effect_id": "spell.dissonant_whispers.saving_throw"
+     }
+    },
+    {
+     "sequence": 7,
+     "lineage": 52,
+     "occurrence": 58,
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "ability_name": "wisdom",
+      "succeeded": true,
+      "effect_id": "spell.dissonant_whispers.saving_throw"
+     }
+    }
+   ]
+  },
+  "blue": {
+   "packet_count": 8,
+   "casts": [
+    {
+     "sequence": 2,
+     "lineage": 16,
+     "occurrence": 34,
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "c9cac6a5-04c0-4973-bb13-fe21c8564188",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "behavior_id": "spell.dissonant_whispers",
+      "name": "Dissonant Whispers",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dd46962b-4a90-4769-b90a-9601b34caccd"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 7,
+     "lineage": 56,
+     "occurrence": 72,
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "c9cac6a5-04c0-4973-bb13-fe21c8564188",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "behavior_id": "spell.dissonant_whispers",
+      "name": "Dissonant Whispers",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "dd46962b-4a90-4769-b90a-9601b34caccd"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    }
+   ],
+   "saving_throws": [
+    {
+     "sequence": 2,
+     "lineage": 16,
+     "occurrence": 22,
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "ability_name": "wisdom",
+      "succeeded": false,
+      "effect_id": "spell.dissonant_whispers.saving_throw"
+     }
+    },
+    {
+     "sequence": 7,
+     "lineage": 56,
+     "occurrence": 62,
+     "fact": {
+      "kind": "saving_throw",
+      "target_entity_uuid": "dd46962b-4a90-4769-b90a-9601b34caccd",
+      "ability_name": "wisdom",
+      "succeeded": true,
+      "effect_id": "spell.dissonant_whispers.saving_throw"
+     }
+    }
+   ]
+  }
+ },
+ "limits": [
+  "No native framebuffer/source-art approval or final performance is claimed.",
+  "Actual faction-specific occurrence IDs and disclosure remain unchanged.",
+  "Deva has authored Frightened immunity; this case proves actual unsuccessful/successful saves and damage, not a fear-owner lifecycle."
+ ]
+}

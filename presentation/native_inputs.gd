@@ -467,9 +467,15 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
             result.append({"point":points.from,"cue_point":"source"});continue
         var selector:String=str(authored.get("actor",""));var actor:String=actor_uuid(component,selector)
         if actor.is_empty():return {"rows":[],"reason":"authored_actor_binding_not_bound:"+selector}
+        var socket:String=str(authored.get("socket",""))
         var visual:Dictionary=world.visual_actors.get(actor,{})
+        if socket=="ground" and component.get("native_body_owner",false) and not Sockets.displayed(visual):
+            var actual:Dictionary=Sockets.effect_owned_ground(world,component,actor)
+            if actual.ready:
+                result.append({"actor":actor if cue.get("endpoint_actor_uuids",false) else selector,"actor_uuid":actor,"socket":socket,"point":actual.point})
+                continue
         if not Sockets.displayed(visual):return {"rows":[],"reason":"native_spell_endpoint_actor_not_displayed"}
-        var socket:String=str(authored.get("socket",""));var resolved:Dictionary={"ready":true}
+        var resolved:Dictionary={"ready":true}
         var pose_socket:String=str(authored.get("pose_socket",socket))
         if socket=="ground":resolved.point=Sockets.Placement.contact(visual.row)
         elif selector=="caster" and cue.has("source_socket") and socket==cue.source_socket:resolved.point=points.from
@@ -641,6 +647,14 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         if registration.is_empty():registration=weapon_registration(world,handle,component)
         weapon=registration.weapon
         var packet:Dictionary=registration.packet
+        # The finite cast names a real, causally observed actor condition.
+        # Contribution is that committed application; decoration admission is
+        # the current exact equipped optical surface, never a Factory default.
+        if component.has("native_condition_application") and packet.ready:
+            packet=packet.duplicate(false);packet.binding=packet.binding.duplicate(false)
+            packet.binding.contribution_active=true
+            packet.binding.decoration_admitted=bool(registration.surface.get("ready",false))
+            packet.public_gaps=[]
         if "created_item_identity" in requested:
             var creation:Dictionary=CreationInputs.lifetime_packet(component,world.timeline.state,weapon)
             if creation.ready:
@@ -676,6 +690,7 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         # different construction/clock contracts but neither consumes legacy
         # contribution flags. Keep legacy ownership consumers strict.
         var required_gaps:Array=[] if prepared or Weapons.equipped_source(handle) else weapon_gaps
+        weapon_gaps=required_gaps
         if not packet.ready:unavailable.weapon_binding=packet.reason
         elif not required_gaps.is_empty():unavailable.weapon_binding="weapon_legacy_admission_not_bound:"+", ".join(required_gaps)
         else:supplied.append("weapon_binding")

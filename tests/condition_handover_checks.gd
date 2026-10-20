@@ -49,7 +49,11 @@ func run()->void:
                 continue
             if effect.role=="attached" and effect.attachment.begins_with("recipient_") and index not in entry.excluded_cues and (not entry.explicit_event_cues or index in entry.event_cues):attached.append(index)
         if entry.delivery=="summon" or not entry.summons.is_empty():
-            check(entry.owner_kind.is_empty(),"Transitive summon rider conditions cannot suppress the summon-creation cast: "+id)
+            if id=="spell.flaming_sphere":
+                check(entry.owner_kind=="condition" and Array(entry.owner_cues)==[1] \
+                    and entry.effects[0].attachment=="caster_ground" and 0 not in entry.excluded_cues,
+                    "Actual aura owns only the effect body; finite caster preparation keeps its own event")
+            else:check(entry.owner_kind.is_empty(),"Transitive summon rider conditions cannot suppress the summon-creation cast: "+id)
             continue
         if not applicable.is_empty() and not attached.is_empty() and not baseline.existing.has(id):
             migrated+=1

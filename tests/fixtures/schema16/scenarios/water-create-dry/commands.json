@@ -1,0 +1,420 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "866179d4-c107-4824-9bbe-3a0fe03d1937",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "ac0314f0-77ff-48d3-a1ee-78ea38c0cc9c",
+   "state_revision": "866179d4-c107-4824-9bbe-3a0fe03d1937",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.create_or_destroy_water",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "level": 1,
+   "variant": {
+    "form": "create"
+   },
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "f9c28029-075a-42a7-a468-f6b5bb99ef92",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.create_or_destroy_water",
+   "display_name": "Create or Destroy Water (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "create",
+     "label": "Create"
+    }
+   ],
+   "target_type": "position_aoe",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "ac0314f0-77ff-48d3-a1ee-78ea38c0cc9c",
+   "state_revision": "f9c28029-075a-42a7-a468-f6b5bb99ef92",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "ac0314f0-77ff-48d3-a1ee-78ea38c0cc9c",
+   "state_revision": "8d2d8226-e503-4beb-97cf-9d64bf103b45",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    6,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a07ba4fa-821b-4a0a-af7c-52654219fa57",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "6d6c6671-0b8d-45e1-aded-351764ee42df",
+   "state_revision": "a07ba4fa-821b-4a0a-af7c-52654219fa57",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "cc884599-6012-4839-b6c0-b6de43eb9282",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "cc884599-6012-4839-b6c0-b6de43eb9282",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "6d6c6671-0b8d-45e1-aded-351764ee42df",
+   "state_revision": "0330ef8e-ad85-4e6a-a530-0a2fe9eb0d3b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "cc884599-6012-4839-b6c0-b6de43eb9282",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "cc884599-6012-4839-b6c0-b6de43eb9282",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.create_or_destroy_water",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "level": 1,
+   "variant": {
+    "form": "destroy"
+   },
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "13aa7deb-d191-4e91-94ab-e5cc0db741ed",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "spell.create_or_destroy_water",
+   "display_name": "Create or Destroy Water (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "destroy",
+     "label": "Destroy"
+    }
+   ],
+   "target_type": "position_aoe",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "ac0314f0-77ff-48d3-a1ee-78ea38c0cc9c",
+   "state_revision": "13aa7deb-d191-4e91-94ab-e5cc0db741ed",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 22,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "ac0314f0-77ff-48d3-a1ee-78ea38c0cc9c",
+   "state_revision": "904ea44e-b4f3-4bba-bd56-10451b49bca1",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "aee8ddde-1429-4084-add6-1477a057b5c0",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    7,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "85802e75-22e4-46d6-8343-c19bc4be3e46",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "6d6c6671-0b8d-45e1-aded-351764ee42df",
+   "state_revision": "85802e75-22e4-46d6-8343-c19bc4be3e46",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+   "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+   "audience_id": "cc884599-6012-4839-b6c0-b6de43eb9282",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_create_or_destroy_water_create_move_dry",
+    "game_epoch": "599ce1e8-e8eb-40b3-8219-b2ffcbe01646",
+    "audience_id": "cc884599-6012-4839-b6c0-b6de43eb9282",
+    "sequence": 12
+   }
+  }
+ }
+]

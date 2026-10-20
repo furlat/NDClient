@@ -1,0 +1,142 @@
+{
+ "id": "spell.goodberry/create_eat_blocked_restore",
+ "title": "Goodberry: created items, eat, blocked healing and restoration",
+ "kind": "spell",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.goodberry",
+   "spell.chill_touch"
+  ],
+  "action": [
+   "action.spell.goodberry.eat",
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.goodberry.batch",
+   "condition.spell.chill_touch"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": [
+   "consumable.goodberry"
+  ]
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.goodberry"
+   ],
+   "damage": 20,
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.chill_touch"
+   ],
+   "at": [
+    9,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.goodberry",
+   "by": "caster",
+   "target": "self",
+   "level": 1
+  },
+  {
+   "do": "action.spell.goodberry.eat",
+   "by": "caster",
+   "target": "self",
+   "item": "consumable.goodberry",
+   "capture_choices": true
+  },
+  {
+   "do": "spell.chill_touch",
+   "by": "target",
+   "target": "caster"
+  },
+  {
+   "do": "wait_condition",
+   "target": "caster",
+   "condition": "condition.spell.chill_touch",
+   "max_turns": 0
+  },
+  {
+   "do": "action.spell.goodberry.eat",
+   "by": "caster",
+   "target": "self",
+   "item": "consumable.goodberry",
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "end_turn",
+   "by": "target"
+  },
+  {
+   "do": "action.spell.goodberry.eat",
+   "by": "caster",
+   "target": "self",
+   "item": "consumable.goodberry",
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    5
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.goodberry",
+  "spell.chill_touch",
+  "action.spell.goodberry.eat",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.goodberry.batch",
+  "condition.spell.chill_touch"
+ ],
+ "required_condition_ends": [
+  "condition.spell.chill_touch"
+ ],
+ "required_facts": [
+  "item_charge",
+  "heal",
+  "damage",
+  "movement"
+ ],
+ "purpose": "Exact generated inventory items are selected through real offered item-use actions. Every consumed charge and actual positive/blocked healing result is retained. Chill Touch must actually apply and expire; neither healing admission nor private peer charge state is inferred from a request or fixture default."
+}

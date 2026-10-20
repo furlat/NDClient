@@ -1,0 +1,391 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "5108ebbc-bd83-4361-8b7f-ff9b07e98efa",
+   "state_revision": "85ef9af0-d986-4174-a6cc-d6b37a9391c9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "9c46a6c0-f3a5-423d-bf38-ba65ed2fe950",
+   "state_revision": "872b0d03-a518-4031-928c-1620dfb3ce7e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "8e7ef218-5d75-4363-832e-6cf87d76c82b",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "8e7ef218-5d75-4363-832e-6cf87d76c82b",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.enhance_ability",
+   "by": "caster",
+   "target": "ally",
+   "variant": {
+    "ability": "charisma"
+   },
+   "level": 2,
+   "capture_choices": true,
+   "track": true,
+   "track_condition": "condition.spell.enhance_ability"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "193d1ab8-57e2-40fd-92e1-ba55437f27ac",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.enhance_ability",
+   "display_name": "Enhance Ability (Level 2) \u00b7 Charisma",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "ability",
+     "value": "charisma",
+     "label": "Charisma"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "bf0d1025-1365-4a29-aff3-db4d99816184",
+   "state_revision": "193d1ab8-57e2-40fd-92e1-ba55437f27ac",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 15,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 2
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "bf0d1025-1365-4a29-aff3-db4d99816184",
+   "state_revision": "d1eaa4dd-1c1b-4103-af01-335f41e865f9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "hold",
+   "to": [
+    2,
+    8
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "5108ebbc-bd83-4361-8b7f-ff9b07e98efa",
+   "state_revision": "f4abcc89-4b47-4a9d-9dd8-fcbc13dfc1e2",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "5108ebbc-bd83-4361-8b7f-ff9b07e98efa",
+   "state_revision": "ad4bb119-fb8a-4d5d-a510-11585a0ac4c1",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "9c46a6c0-f3a5-423d-bf38-ba65ed2fe950",
+   "state_revision": "2390ffda-8920-4eb6-a8b4-0e5773de1d30",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "8e7ef218-5d75-4363-832e-6cf87d76c82b",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "8e7ef218-5d75-4363-832e-6cf87d76c82b",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self",
+   "optional": false
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "7da078ce-dccd-4a8f-aab9-73b77735984a",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "bf0d1025-1365-4a29-aff3-db4d99816184",
+   "state_revision": "7da078ce-dccd-4a8f-aab9-73b77735984a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 31,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "bf0d1025-1365-4a29-aff3-db4d99816184",
+   "state_revision": "c536db3e-7ef2-40be-86ce-e76f43d593b2",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "tail",
+   "to": [
+    2,
+    7
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "5108ebbc-bd83-4361-8b7f-ff9b07e98efa",
+   "state_revision": "107eaf73-31e3-4031-9883-28784da38b4f",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+   "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+   "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_charisma_lifecycle",
+    "game_epoch": "68478da7-2c5a-425a-9812-13a425e44fc9",
+    "audience_id": "73f18ec4-0b59-4994-b426-ae2c747f4377",
+    "sequence": 17
+   }
+  }
+ }
+]

@@ -1,0 +1,413 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "8cdf4888-b8bc-4f80-a3b6-a69de2e281ff",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+   "state_revision": "8cdf4888-b8bc-4f80-a3b6-a69de2e281ff",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+   "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+   "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+    "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+    "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.glyph_of_warding",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "level": 3,
+   "variant": {
+    "form": "fire"
+   },
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "1550f166-ddc7-4694-826d-db33e132495c",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.glyph_of_warding",
+   "display_name": "Glyph of Warding (Level 3)",
+   "cast_at_level": 3,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "fire",
+     "label": "Fire"
+    }
+   ],
+   "target_type": "position_los",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+   "state_revision": "1550f166-ddc7-4694-826d-db33e132495c",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 18,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false,
+     "cast_at_level": 3
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+   "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+   "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+    "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+    "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    5
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "e4dd2130-4b9b-48c1-a4d1-af7a54105cf0",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+   "state_revision": "e4dd2130-4b9b-48c1-a4d1-af7a54105cf0",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+   "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+   "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+    "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+    "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "9c8051d4-f1fa-4efd-9c75-6d602404f256",
+   "state_revision": "08c25819-17e1-4a1e-ab09-9db98d06132c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+   "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+   "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+    "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+    "audience_id": "4401bfed-256a-4dda-b364-8b6134198a0e",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    9,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "808ed369-bf64-4f4b-9bc3-b7fe58bb1cc9",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+   "state_revision": "808ed369-bf64-4f4b-9bc3-b7fe58bb1cc9",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+   "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+   "audience_id": "11939bd1-b5ab-4943-a68c-84c65eb7b0f8",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+    "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+    "audience_id": "11939bd1-b5ab-4943-a68c-84c65eb7b0f8",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    8,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "1edd8ba6-f902-4423-8ccc-af8f0d796a58",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+   "state_revision": "1edd8ba6-f902-4423-8ccc-af8f0d796a58",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      6
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+   "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+   "audience_id": "11939bd1-b5ab-4943-a68c-84c65eb7b0f8",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+    "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+    "audience_id": "11939bd1-b5ab-4943-a68c-84c65eb7b0f8",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    9,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "acf258b9-7757-4778-b4f7-f15a298aad19",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "b8dc3b00-d7da-4a02-8e35-7831d91ce430",
+   "state_revision": "acf258b9-7757-4778-b4f7-f15a298aad19",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+   "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+   "audience_id": "11939bd1-b5ab-4943-a68c-84c65eb7b0f8",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_glyph_of_warding_arm_move_enter_trigger",
+    "game_epoch": "89957e64-5085-4d9d-b257-17191fb5ddf0",
+    "audience_id": "11939bd1-b5ab-4943-a68c-84c65eb7b0f8",
+    "sequence": 9
+   }
+  }
+ }
+]

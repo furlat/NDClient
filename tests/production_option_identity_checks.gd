@@ -55,10 +55,15 @@ func run()->void:
             check(is_same(Spells.selected(source,fact).selection,record.selection),id+" absent/null/unknown identity remains the baseline")
         if name=="blindness_deafness":deaf_controls(source)
         for seat in ["amber","blue"]:original(name,seat,source,cache)
+        if name=="enhance_ability":
+            for ability in ["charisma","constitution","dexterity","intelligence","wisdom"]:
+                var spec:Dictionary={"folder":"enhance-ability-"+ability,"effect":"support.enhance_ability."+ability, \
+                    "owner":"condition.spell.enhance_ability","lifecycle":"condition_enhance_ability_"+ability+"_persistent","removed":true,"journal_suffix":""}
+                for seat in ["amber","blue"]:original(name,seat,source,cache,spec)
         check(var_to_bytes([record.recipe,record.selection,record.variants])==frozen,id+" selection/Studio/seek leave the shared production source immutable")
     check(count==17,"Exactly seventeen existing option identities are routed; no draft native alternative is implicitly activated")
     print("PRODUCTION_OPTION_IDENTITIES ",JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Seventeen actual typed predicates and four original two-seat option paths; existing fifteen condition forms are not new graphics. Native output, other option recordings and Deaf finite art remain separate."}))
+        "scope":"Seventeen actual typed predicates and nine original two-seat option paths, including five complete Enhance membership/move/remove/restoration journals; existing fifteen condition forms are not new graphics. Native output, eight unavailable public alternate choices and Deaf finite art remain separate."}))
     quit(0 if failures.is_empty() else 1)
 func deaf_controls(source:Dictionary)->void:
     # Selection-only policy controls, not an invented Deafness recording.
@@ -73,9 +78,9 @@ func deaf_controls(source:Dictionary)->void:
         and selection.condition.get("marker",{}).get("group")=="deafened" \
         and not selection.condition.get("body_channel_included",false)),
         "The already delivered condition marker remains distinct from missing finite Deafness art")
-func original(name:String,seat:String,source:Dictionary,cache:Dictionary)->void:
-    var spec:Dictionary=CASES[name];var label:String=name+"/"+seat
-    var directory:String=ROOT+spec.folder+"/"+seat+"/journal"
+func original(name:String,seat:String,source:Dictionary,cache:Dictionary,override:Dictionary={})->void:
+    var spec:Dictionary=CASES[name] if override.is_empty() else override;var label:String=spec.folder+"/"+seat
+    var directory:String=ROOT+spec.folder+"/"+seat+str(spec.get("journal_suffix","/journal"))
     var index:Dictionary=Recording.read(directory,{},{},cache)
     check(index.ok,label+" ordinary Studio indexes unchanged original operations")
     if not index.ok:return
@@ -121,6 +126,13 @@ func original(name:String,seat:String,source:Dictionary,cache:Dictionary)->void:
     var owners:Array=[]
     for actor in expected.state.actors.values():
         owners.append_array(actor.get("conditions",[]).filter(func(condition):return condition.behavior_id==spec.owner))
+    if spec.get("removed",false):
+        check(owners.is_empty(),label+" authoritative final state removed the actual condition")
+        for row in index.rows:
+            if row.kind=="condition" and row.get("owner",{}).get("condition",{}).get("behavior_id")==spec.owner:
+                owners.append(row.owner.condition)
+        var movement:Array=index.rows.filter(func(row):return row.kind=="body" and row.get("track",{}).get("trajectory")=="path")
+        check(movement.size()>=2,label+" actual movement is recorded before and after removal")
     check(not owners.is_empty(),label+" expected condition form was actually admitted")
     for owner in owners:
         check(Persistent.lifecycles(owner).any(func(selection):return selection.key==spec.lifecycle),label+" original condition state routes its already delivered form")

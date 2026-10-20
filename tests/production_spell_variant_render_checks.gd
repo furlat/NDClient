@@ -3,12 +3,13 @@ extends "res://tests/native_spell_variant_render_checks.gd"
 ## Reuse the ordinary native playback gate; no private predicate or art alias.
 const CASES=[
     {"spell":"ray_of_sickness","folder":"ray-of-sickness","variant":"ray_of_sickness_hit_saved_native","phase":"impact"},
-    {"spell":"vicious_mockery","folder":"saved-head-programs","variant":"vicious_mockery_saved_native","phase":"saved"}]
+    {"spell":"vicious_mockery","folder":"saved-head-programs","variant":"vicious_mockery_saved_native","phase":"saved"},
+    {"spell":"dissonant_whispers","journal":"res://tests/fixtures/schema16/option-identities/dissonant-whispers-saved-modular/","variant":"dissonant_whispers_saved_native","phase":"saved"}]
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(800,600)
     for sample in CASES:
         for seat in ["amber","blue"]:
-            var directory:String="res://tests/fixtures/schema16/root-target-save/"+sample.folder+"/"+seat+"/journal"
+            var directory:String=str(sample.journal)+seat if sample.has("journal") else "res://tests/fixtures/schema16/root-target-save/"+sample.folder+"/"+seat+"/journal"
             var index:Dictionary=Recording.read(directory)
             check(index.get("ok",false),sample.spell+" / "+seat+" actual production journal compiles")
             if not index.get("ok",false):continue
@@ -18,7 +19,7 @@ func run()->void:
             check(rows.size()==1,sample.spell+" / "+seat+" one actual saved receiver phase")
             if rows.size()==1:await inspect(index,rows[0],sample.spell+" / "+seat)
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Production Ray of Sickness and Vicious Mockery saved receiver output, both original seats, seeking/looping/cleanup. Dissonant successful-save recording and user visual approval remain open."}
+        "scope":"Production Ray of Sickness, Vicious Mockery and Dissonant Whispers successful-save receiver output, both original seats, seeking/looping/cleanup. User visual approval remains open."}
     FileAccess.open("res://.runtime/production-spell-variant-render-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PRODUCTION_SPELL_VARIANT_RENDER ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 func inspect(index:Dictionary,row:Dictionary,label:String)->void:

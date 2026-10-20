@@ -1,0 +1,827 @@
+[
+ {
+  "request": {
+   "do": "action.item.weapon_coat.apply",
+   "by": "caster",
+   "target": "self",
+   "item": "consumable.weapon_coat.concentration_fire",
+   "name": "Coat Main Hand",
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "dbad8fa3-72b7-4a41-bbbe-b980badc66de",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.item.weapon_coat.apply",
+   "display_name": "Coat Main Hand (Concentrated Weapon Coat of Flame)",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "dbad8fa3-72b7-4a41-bbbe-b980badc66de",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 33,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    5
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "d723f7e8-018d-4730-9bc9-2a6da3a9b65b",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "d723f7e8-018d-4730-9bc9-2a6da3a9b65b",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "35eb0eba-36c6-4e5f-80f9-9443a8f677a5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+   "state_revision": "6aee4323-5181-4c5c-a1c0-8c54a597319b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "635cad3e-4658-4c71-b725-c7fa730fab8d",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "635cad3e-4658-4c71-b725-c7fa730fab8d",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "3f15661e-7a4a-443a-bb4c-1657cc493eba",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+   "state_revision": "2d7b9322-898f-4fa7-af8f-b596680e15f5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "730c3641-0aca-481d-944b-3aeb264632a3",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "730c3641-0aca-481d-944b-3aeb264632a3",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "7a43b899-d26b-4521-92ba-799ef61185e7",
+  "discovery_generation": 5,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "7a43b899-d26b-4521-92ba-799ef61185e7",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 5,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "0983ed75-84ce-48ef-8d46-57ac5fea4d5d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+   "state_revision": "73d67288-8a9b-4c9e-9890-f1ff080a650b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+    "sequence": 17
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "66bf94ef-5830-4ccc-90e3-27792c97de7c",
+  "discovery_generation": 6,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "66bf94ef-5830-4ccc-90e3-27792c97de7c",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 6,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "805bbfcd-37cf-46f2-95f6-4745f85d679a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 20
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+   "state_revision": "2a45bbd6-e193-4846-ba01-86e27baec038",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+    "sequence": 22
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 11,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "76512182-7983-4b6b-91aa-4f9ac00e4b14",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 11,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 24
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 12,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "8acf7bc4-28fd-4415-9c6b-c18371008323",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 12,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 25
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+   "state_revision": "399fe45d-d09c-4ca3-b909-80577dcaf205",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+    "sequence": 27
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.scimitar",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 13,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "bc291c4c-2cb1-4705-8591-7fde6a08ee1f",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "4d11d725-d489-42ec-9548-7aea35213b4f",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 13,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 29
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 14,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "6a1d2d16-63be-49e4-bb69-8d1f1e417d43",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 14,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 30
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+   "state_revision": "fa43d920-dbdb-49e8-a580-fa3ebd9b1e52",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "1651d9ba-f014-4f32-b1b7-22cac40daf51",
+    "sequence": 32
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "cefc2327-311f-46e9-a8fc-2bf6221470ea",
+  "discovery_generation": 7,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Scimitar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 15,
+   "actor_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+   "state_revision": "cefc2327-311f-46e9-a8fc-2bf6221470ea",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 7,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+   "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+   "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+   "command_number": 15,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_concentration_fire_equipped_runtime",
+    "game_epoch": "f3a127bb-2389-4b74-8c8b-7deb3ddeb173",
+    "audience_id": "01f69bf5-f03f-4773-8b2c-312786dc929f",
+    "sequence": 34
+   }
+  }
+ }
+]

@@ -1,0 +1,402 @@
+{
+ "source": ".runtime/coating-weapons-r2-20261020/cases/consumable.weapon_coat.concentration_fire__equipped_runtime/20261020T151130.932079Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 21,
+ "originals": "Both complete original faction streams and scenario/recording/commands/choices copied byte-for-byte. No configuration, credentials or logs.",
+ "evidence": {
+  "amber": {
+   "packet_count": 35,
+   "actual_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+   "actual_effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+   "actual_contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+   "movement": {
+    "sequence": 3,
+    "occurrence": 51,
+    "lineage": 33
+   },
+   "item_effect_updates": [
+    {
+     "sequence": 2,
+     "occurrence": 31,
+     "lineage": 16,
+     "field": "item_effects",
+     "item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+     "effects": [
+      {
+       "duration": {
+        "duration_type": "permanent",
+        "remaining_rounds": null
+       },
+       "effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+       "contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+       "behavior_id": "condition.consumable.weapon_coat.concentration_fire",
+       "display_name": "Flaming Coat",
+       "description": "The coated weapon deals an extra 1d6 fire damage on a hit while its source maintains concentration.",
+       "damage_type": "Fire",
+       "applied_source_event_cursor": null
+      }
+     ]
+    },
+    {
+     "sequence": 14,
+     "occurrence": 140,
+     "lineage": 132,
+     "field": "item_effects",
+     "item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+     "effects": []
+    }
+   ],
+   "coated_hits": [
+    {
+     "sequence": 8,
+     "occurrence": 91,
+     "lineage": 73,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+      "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+        "contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+        "behavior_id": "condition.consumable.weapon_coat.concentration_fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit while its source maintains concentration.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 32
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 131,
+     "lineage": 113,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+      "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+        "contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+        "behavior_id": "condition.consumable.weapon_coat.concentration_fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit while its source maintains concentration.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 32
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "actual_membership_retirement": [
+    {
+     "sequence": 14,
+     "occurrence": 140,
+     "lineage": 132,
+     "field": "item_effects",
+     "item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+     "effects": []
+    }
+   ],
+   "post_retirement_same_sword_contacts": [
+    {
+     "sequence": 19,
+     "occurrence": 183,
+     "lineage": 165,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+      "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "layer_changes": [
+    {
+     "sequence": 24,
+     "occurrence": 205,
+     "lineage": 205,
+     "field": "layer",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "sequence": 29,
+     "occurrence": 227,
+     "lineage": 227,
+     "field": "layer",
+     "slot": "MELEE_MAIN",
+     "layer": {
+      "slot": "MELEE_MAIN",
+      "item_uuid": "4d11d725-d489-42ec-9548-7aea35213b4f",
+      "item_id": "weapon.scimitar",
+      "is_lit": null
+     }
+    }
+   ],
+   "plain_replacement_contact": {
+    "sequence": 34,
+    "occurrence": 267,
+    "lineage": 249,
+    "fact": {
+     "kind": "attack",
+     "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+     "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+     "behavior_id": "action.attack",
+     "name": "Attack_MELEE_MAIN",
+     "weapon_slot": "MELEE_MAIN",
+     "attack_outcome": "Crit",
+     "damage_types": [
+      "Slashing"
+     ],
+     "source_item_id": "weapon.scimitar",
+     "source_item_uuid": "4d11d725-d489-42ec-9548-7aea35213b4f",
+     "target_kind": "creature",
+     "attack_source_kind": "equipped"
+    }
+   },
+   "concurrent_contacts": []
+  },
+  "blue": {
+   "packet_count": 35,
+   "actual_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+   "actual_effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+   "actual_contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+   "movement": {
+    "sequence": 3,
+    "occurrence": 50,
+    "lineage": 32
+   },
+   "item_effect_updates": [
+    {
+     "sequence": 2,
+     "occurrence": 30,
+     "lineage": 20,
+     "field": "item_effects",
+     "item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+     "effects": [
+      {
+       "duration": null,
+       "effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+       "contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+       "behavior_id": "condition.consumable.weapon_coat.concentration_fire",
+       "display_name": "Flaming Coat",
+       "description": "The coated weapon deals an extra 1d6 fire damage on a hit while its source maintains concentration.",
+       "damage_type": "Fire",
+       "applied_source_event_cursor": null
+      }
+     ]
+    },
+    {
+     "sequence": 14,
+     "occurrence": 139,
+     "lineage": 131,
+     "field": "item_effects",
+     "item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+     "effects": []
+    }
+   ],
+   "coated_hits": [
+    {
+     "sequence": 8,
+     "occurrence": 90,
+     "lineage": 72,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+      "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+        "contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+        "behavior_id": "condition.consumable.weapon_coat.concentration_fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit while its source maintains concentration.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 31
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 130,
+     "lineage": 112,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+      "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "4e6cbeae-6580-4da8-92c4-b5e298977d46",
+        "contribution_uuid": "a6062981-9cdd-4d1c-85af-c6dd0abf3715",
+        "behavior_id": "condition.consumable.weapon_coat.concentration_fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit while its source maintains concentration.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 31
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "actual_membership_retirement": [
+    {
+     "sequence": 14,
+     "occurrence": 139,
+     "lineage": 131,
+     "field": "item_effects",
+     "item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+     "effects": []
+    }
+   ],
+   "post_retirement_same_sword_contacts": [
+    {
+     "sequence": 19,
+     "occurrence": 182,
+     "lineage": 164,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+      "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "5bd116e8-d52a-4686-b1a9-022fb1ab3302",
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "layer_changes": [
+    {
+     "sequence": 24,
+     "occurrence": 204,
+     "lineage": 204,
+     "field": "layer",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "sequence": 29,
+     "occurrence": 226,
+     "lineage": 226,
+     "field": "layer",
+     "slot": "MELEE_MAIN",
+     "layer": {
+      "slot": "MELEE_MAIN",
+      "item_uuid": "4d11d725-d489-42ec-9548-7aea35213b4f",
+      "item_id": "weapon.scimitar",
+      "is_lit": null
+     }
+    }
+   ],
+   "plain_replacement_contact": {
+    "sequence": 34,
+    "occurrence": 266,
+    "lineage": 248,
+    "fact": {
+     "kind": "attack",
+     "source_entity_uuid": "f8d38f0b-e6d9-4616-991d-36f9d2c620d2",
+     "target_entity_uuid": "16b5db7d-69d5-42fd-ac26-62c0897544b6",
+     "behavior_id": "action.attack",
+     "name": "Attack_MELEE_MAIN",
+     "weapon_slot": "MELEE_MAIN",
+     "attack_outcome": "Crit",
+     "damage_types": [
+      "Slashing"
+     ],
+     "source_item_id": "weapon.scimitar",
+     "source_item_uuid": "4d11d725-d489-42ec-9548-7aea35213b4f",
+     "target_kind": "creature",
+     "attack_source_kind": "equipped"
+    }
+   },
+   "concurrent_contacts": []
+  }
+ },
+ "retirement_policy": "Actual concentration removal or authored duration expiry while original sword is held.",
+ "limits": [
+  "No Poisoned condition, positive elemental damage, artificial lamp, source-pose/framebuffer output or artistic approval is inferred.",
+  "Actual target is Poison-immune Ogre Zombie, with authored zombiehulk1 optical ground9.899494936611665."
+ ]
+}

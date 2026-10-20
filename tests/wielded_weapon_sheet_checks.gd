@@ -22,7 +22,10 @@ func run()->void:
                  ["weapon.devotees_mace","weapon.mace","Melee9","Offhand2"]]:
         var gear=load("res://authoring/characters/gear/"+spec[0]+".tres")
         check(gear.family==spec[1],spec[0]+": authored sheet family replaces no body")
-        check(gear.effects.is_empty() and not index.item_effects.has(spec[0]),spec[0]+": unfinished native decoration is not silently assigned")
+        if spec[0]=="weapon.flame_blade":
+            check(gear.effects.is_empty() and not index.item_effects.has(spec[0]),spec[0]+": excluded native-body decoration is not silently assigned")
+        else:
+            check(gear.effects.size()==1 and index.item_effects[spec[0]][0].clip=="weapons/equipped/radiant/solar_bevel/medium/sustain",spec[0]+": explicit current main-hand candidate keeps the same modular sheet")
         for hand in [["weapon_melee_main",spec[2],"weapon"],["weapon_melee_off",spec[3],"offhand"]]:
             var selected:Dictionary=Sources.equipment({"item_id":spec[0],"visual_variant_id":null},hand[0],cache)
             check(selected.ok and selected.get("value",[]).any(func(layer):return layer.sprite_key==hand[1] and layer.render_layer==hand[2]),

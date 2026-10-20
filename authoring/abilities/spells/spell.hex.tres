@@ -21,6 +21,7 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_axywn")
 clip = "bg3-36/hex/hex_native/windup"
 role = "attached"
+unbound_constructor_inputs = PackedStringArray("retained_caster_sustain_uuid_not_disclosed")
 at = "release"
 delay = -0.64
 attachment = "caster_ground"
@@ -194,10 +195,10 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(3)
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.hex.quarry")
-owner_cues = PackedInt32Array(2, 4)
+owner_cues = PackedInt32Array(1, 2, 4)
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
@@ -208,7 +209,9 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
 "selection": "hex_native",
-"source": "assets/vfx/index.json:/selections/hex_native/staging"
+"source": "assets/vfx/index.json:/selections/hex_native/staging",
+"windup": "Selected source requires the retained caster sustain UUID. Public originals expose the recipient quarry and Concentrating only; neither is that owner.",
+"hit": "Cast-scheduled fixture hit excluded. Requires the real retained sustain, current quarry and exact attributed rider result."
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual recipient quarry application, hold and removal use its existing prepared UUID lifecycle. Legacy windup remains explicitly blocked on the absent caster sustain identity; no timed or inferred rider hit."

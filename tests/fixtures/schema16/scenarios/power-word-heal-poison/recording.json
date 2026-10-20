@@ -1,0 +1,452 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 15,
+ "tracked": null,
+ "gaps": [],
+ "notes": [
+  {
+   "step": "wait_condition",
+   "target": "target",
+   "condition": "condition.spell.ray_of_sickness.poison",
+   "ended_turns": 0
+  }
+ ],
+ "names": {
+  "010eab8e-b47a-4c68-9d36-6d86b29f7a5a": "Amber caster",
+  "663f70bd-c33b-454b-b524-9f2d02c70de8": "Amber healer",
+  "dbb40b0a-160f-4a3e-ac00-7c5d8142787c": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "healer": "Amber healer",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber healer",
+  "end_turn \u00b7 Blue target",
+  "spell.ray_of_sickness \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber healer",
+  "end_turn \u00b7 Blue target",
+  "spell.ray_of_sickness \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber healer",
+  "end_turn \u00b7 Blue target",
+  "spell.ray_of_sickness \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "spell.power_word_heal \u00b7 Amber healer",
+  "end_turn \u00b7 Amber healer",
+  "action.move \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 27,
+   "actor_change": 7,
+   "damage": 6,
+   "saving_throw": 3,
+   "spell": 4,
+   "heal": 1,
+   "spatial": 2,
+   "sensory": 1,
+   "step": 1,
+   "movement": 1
+  },
+  "behaviors": {
+   "spell.ray_of_sickness": 3,
+   "spell.power_word_heal": 1,
+   "action.move": 1
+  },
+  "conditions": [
+   "condition.spell.ray_of_sickness.poison"
+  ],
+  "ended_conditions": [
+   "condition.spell.ray_of_sickness.poison"
+  ],
+  "positive_applied_damage_types": [
+   "Poison"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 51,
+   "lineage": 33,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 52,
+   "lineage": 33,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 57,
+   "lineage": 33,
+   "event_offset": 4,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 63,
+   "lineage": 33,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 64,
+   "lineage": 33,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 112,
+   "lineage": 94,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 113,
+   "lineage": 94,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 118,
+   "lineage": 94,
+   "event_offset": 4,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 127,
+   "lineage": 94,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 128,
+   "lineage": 94,
+   "event_offset": 6,
+   "label": "condition ended condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 129,
+   "lineage": 94,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 177,
+   "lineage": 159,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 178,
+   "lineage": 159,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 183,
+   "lineage": 159,
+   "event_offset": 4,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 185,
+   "lineage": 159,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "amber"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 208,
+   "lineage": 199,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 209,
+   "lineage": 199,
+   "event_offset": 1,
+   "label": "condition ended condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "amber"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 210,
+   "lineage": 199,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.power_word_heal",
+   "faction": "amber"
+  },
+  {
+   "sequence": 26,
+   "occurrence": 233,
+   "lineage": 219,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 46,
+   "lineage": 28,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 47,
+   "lineage": 28,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 52,
+   "lineage": 28,
+   "event_offset": 4,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 59,
+   "lineage": 28,
+   "event_offset": 6,
+   "label": "condition applied condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 60,
+   "lineage": 28,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 108,
+   "lineage": 90,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 109,
+   "lineage": 90,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 114,
+   "lineage": 90,
+   "event_offset": 4,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 123,
+   "lineage": 90,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 124,
+   "lineage": 90,
+   "event_offset": 6,
+   "label": "condition ended condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "59571217-15ef-42a5-ba76-13c459dcbf1e",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "blue"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 125,
+   "lineage": 90,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 173,
+   "lineage": 155,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 174,
+   "lineage": 155,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 179,
+   "lineage": 155,
+   "event_offset": 4,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 20,
+   "occurrence": 181,
+   "lineage": 155,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.ray_of_sickness",
+   "faction": "blue"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 204,
+   "lineage": 195,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 206,
+   "lineage": 195,
+   "event_offset": 2,
+   "label": "condition ended condition.spell.ray_of_sickness.poison",
+   "kind": "actor_change",
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "condition_uuid": "776377a2-4c97-40e6-84fc-9c398b531225",
+   "condition_id": "condition.spell.ray_of_sickness.poison",
+   "faction": "blue"
+  },
+  {
+   "sequence": 23,
+   "occurrence": 207,
+   "lineage": 195,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.power_word_heal",
+   "faction": "blue"
+  },
+  {
+   "sequence": 26,
+   "occurrence": 230,
+   "lineage": 216,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Poison"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

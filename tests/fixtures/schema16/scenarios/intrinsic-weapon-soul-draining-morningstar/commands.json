@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "37bdfe75-ad6c-448b-a036-0b3039755dc6",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "37bdfe75-ad6c-448b-a036-0b3039755dc6",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2f445899-f5c8-4085-96d4-d619c57dfa31",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Soul-Draining Morningstar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "2f445899-f5c8-4085-96d4-d619c57dfa31",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "ec728906-1a1e-4c3f-b8c9-e904c965d115",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "92a58b87-ce56-4cad-a63a-299a296e65d9",
+   "state_revision": "190f24c0-1275-43f7-924e-e98b06f6fc1e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "24d3865e-59b7-483a-a0f4-8217c819cf29",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Soul-Draining Morningstar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "24d3865e-59b7-483a-a0f4-8217c819cf29",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "631acfb5-e45f-498b-92ef-985e9a77811f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "92a58b87-ce56-4cad-a63a-299a296e65d9",
+   "state_revision": "ae754ac0-9372-4109-95e2-c426a0b3826c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "0f6d8455-52bc-4ea9-818e-ddf1588305be",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "b45db6a8-42f8-4116-b14c-1bf9a235e702",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "92a58b87-ce56-4cad-a63a-299a296e65d9",
+   "state_revision": "4105ac71-fdf0-4b38-9944-af2b22b5b224",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "064d4596-af0f-4f82-bcf9-ef18ed75d6b3",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "46e153e2-10ad-44f5-8597-7d634bf8e08e",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "20bd2642-e095-4b80-8eb7-9f2acabdaf1d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "92a58b87-ce56-4cad-a63a-299a296e65d9",
+   "state_revision": "f4c92f0a-aca7-4f7a-887e-0a85a41b1654",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "520478f0-4428-4d7f-a6e0-14b72369511d",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2f8beffa-20ae-4b2c-8808-48eab935d4e2",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "8ae565b2-3ad4-41ff-9c5e-0437905cd25d",
+   "state_revision": "2f8beffa-20ae-4b2c-8808-48eab935d4e2",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+   "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+   "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_soul_draining_morningstar_equipped_use_retire_replace",
+    "game_epoch": "8b0935eb-c770-4580-807e-7b3a930aa059",
+    "audience_id": "8b2cecef-a953-4eb8-b66f-bf48706a4ce0",
+    "sequence": 23
+   }
+  }
+ }
+]

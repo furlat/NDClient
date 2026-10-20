@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "d0d2ecd7-1480-4e83-b161-55040d565a64",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "d0d2ecd7-1480-4e83-b161-55040d565a64",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "b3710e65-d08f-4843-8ea7-2fe8fbdca6c5",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Ember Greatsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "b3710e65-d08f-4843-8ea7-2fe8fbdca6c5",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "d8f32425-f445-436b-b19f-72c6c6626a78",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0c8a4aeb-8a5f-4c71-9a67-87d9efa56846",
+   "state_revision": "7b5a8620-4aeb-4193-ac33-228adfab50de",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2afb0d88-f4bb-44f0-8d09-eb9f93a96b5b",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Ember Greatsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "2afb0d88-f4bb-44f0-8d09-eb9f93a96b5b",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "a85fa81d-4ecb-4c3d-8c5d-06fe310258ff",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "0c8a4aeb-8a5f-4c71-9a67-87d9efa56846",
+   "state_revision": "b3805de9-e78c-4d17-9c18-b474dbc0d4da",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "ca32244f-2d6d-47c6-b43d-703dc7ddacf1",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "6ed696e5-2915-4b22-a63c-f5ede332d557",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "0c8a4aeb-8a5f-4c71-9a67-87d9efa56846",
+   "state_revision": "74cea387-c754-4657-8999-e3485a3bf875",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "9d448104-f33a-4916-ba26-70e6e7e7441a",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "0d8f94d9-a319-41cc-bbb9-c96d81b287c1",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "d0352c4d-67f0-4bf1-95c5-fcaa85fe7f23",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "0c8a4aeb-8a5f-4c71-9a67-87d9efa56846",
+   "state_revision": "48b95d8c-df4c-48f4-b9b7-20b4c334421f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "491b03ef-ead3-4a94-befa-4923f0306533",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "b6d062b6-251f-4bc9-8962-0dfa3ef87ec0",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "1fcf9a8a-2656-4d4c-be00-d445ac4ca009",
+   "state_revision": "b6d062b6-251f-4bc9-8962-0dfa3ef87ec0",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+   "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+   "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_ember_greatsword_equipped_use_retire_replace",
+    "game_epoch": "a5804ff1-f89a-4b00-8b5a-85df43c2c658",
+    "audience_id": "099b07aa-545c-4f53-9866-0e28c6e4da99",
+    "sequence": 23
+   }
+  }
+ }
+]

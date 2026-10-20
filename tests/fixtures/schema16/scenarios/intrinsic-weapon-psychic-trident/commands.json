@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "d2345708-bbef-4f81-a614-95c45fd0222d",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "d2345708-bbef-4f81-a614-95c45fd0222d",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "1aac4c31-2d20-4e7b-9ad9-fe936d8473c5",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Thoughtpiercer Trident",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "1aac4c31-2d20-4e7b-9ad9-fe936d8473c5",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "bba6e199-16a1-472c-b644-90dd57fb3013",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "d9e19b26-4d7c-42ac-bd8d-c435166269ae",
+   "state_revision": "ba1612a3-a566-40c5-acdd-2678b1f80e34",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a09319fe-d06c-4a64-8efb-5013fe0fcefa",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Thoughtpiercer Trident",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "a09319fe-d06c-4a64-8efb-5013fe0fcefa",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "381400f0-fbec-49e0-8805-22e28113e092",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "d9e19b26-4d7c-42ac-bd8d-c435166269ae",
+   "state_revision": "599f9f1c-17ef-47b4-9313-df0bf31e5681",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "6ef21d0d-75f9-4dc3-a036-99133d7c794d",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "e688d580-9fb1-4f6c-8949-8dd8ce63979b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "d9e19b26-4d7c-42ac-bd8d-c435166269ae",
+   "state_revision": "b5ad396f-068f-46df-8312-8a926984fff5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "b3798db5-2d29-41fc-90a4-e0dde1cf688c",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "75d18139-f0df-4cd8-8338-17017001895e",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "6cc00784-6de4-4c4c-911e-8240cfeb3bc5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "d9e19b26-4d7c-42ac-bd8d-c435166269ae",
+   "state_revision": "d40230d0-34c8-41ea-8cad-0e5e1eb52c00",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "7f89bd50-fe75-4885-825d-acff9000c870",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "96933baa-6167-4a84-a0d5-aa26222a7a42",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "30f4dd1f-ba5a-4d0e-9c3d-407d59380889",
+   "state_revision": "96933baa-6167-4a84-a0d5-aa26222a7a42",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+   "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+   "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_trident_equipped_use_retire_replace",
+    "game_epoch": "e57608c2-64e5-4f17-8be7-ee51bf9576fb",
+    "audience_id": "4e03bc5a-a109-4f56-b9bb-8d01b8f93030",
+    "sequence": 23
+   }
+  }
+ }
+]

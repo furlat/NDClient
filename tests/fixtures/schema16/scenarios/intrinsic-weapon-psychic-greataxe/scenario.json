@@ -1,0 +1,118 @@
+{
+ "id": "weapon.roster.psychic_greataxe/equipped_use_retire_replace",
+ "title": "Mindcleaver Greataxe: equipped movement, hit, removal and replacement",
+ "kind": "item",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.move",
+   "action.attack"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": [
+   "weapon.roster.psychic_greataxe",
+   "weapon.longsword"
+  ]
+ },
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    6
+   ],
+   "items": [
+    {
+     "id": "weapon.roster.psychic_greataxe",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "id": "weapon.longsword",
+     "placement": "inventory"
+    }
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.ogre_zombie",
+   "at": [
+    6,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "required_behaviors": [
+  "action.move",
+  "action.attack"
+ ],
+ "required_facts": [
+  "movement",
+  "attack",
+  "damage"
+ ],
+ "purpose": "Exact intrinsic Gear ownership and one finite accepted weapon contact. The original item appearance, UUID and legal equipment transition remain authoritative; this recording does not qualify native source poses or artistic acceptance."
+}

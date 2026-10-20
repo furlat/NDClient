@@ -65,6 +65,9 @@ const Look = preload("res://presentation/source/look.gd")
 @export var finish: Look
 ## recorded, gpu or native; empty means the client's default choice.
 @export var approach: String = ""
+## Exact source-owned begin/step coordinator for an explicitly selected package
+## approach. Empty retains the package's production preparation contract.
+@export var immutable_preparation: String = ""
 ## Qualified absolute material/geometry clocks have no particle history.
 ## Empty preserves the delivered approach's simulation policy.
 @export var sampling: String = ""

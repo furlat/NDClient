@@ -203,10 +203,15 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
             var observed:Dictionary={}
             if constructor.get("kind")=="propagation_links":observed=linked
             elif constructor.get("kind")=="spell_strike":observed=ApplicationResults.spell_strike(node,constructor,graph)
+            elif constructor.get("kind")=="condition_application":observed=ApplicationResults.condition_application(node,constructor,graph)
             else:observed=ApplicationResults.project(node,constructor,graph.get("application_results",{}))
             if observed.ready:
                 parameters.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":constructor.input_field,"values":observed.values}]
                 parameters.native_constructor_evidence=observed.evidence
+                if constructor.get("kind")=="condition_application":
+                    parameters.condition={"condition_uuid":observed.condition.condition_uuid,"state":observed.condition.state}
+                    parameters.condition_uuid=observed.condition.condition_uuid
+                    parameters.native_condition_application=observed.evidence
                 if observed.has("inputs"):parameters.native_inputs=observed.inputs
                 if constructor.get("kind")=="propagation_links":
                     parameters.native_propagation=observed.link
@@ -242,8 +247,8 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
                 actual.native_creation=projected.location
                 _native_action_component(group,node,projected.node,actual,{"values":{"lease_input":{},"event_input":projected.event},
                     "gaps":[],"evidence":projected.evidence},graph,projected.target_uuid)
-        elif descriptor.get("kind")=="observed_operation":
-            var projected:Dictionary=OperationResults.project(node,descriptor,graph)
+        elif descriptor.get("kind") in ["observed_operation","item_consumption"]:
+            var projected:Dictionary=OperationResults.item_consumption(node,graph) if descriptor.kind=="item_consumption" else OperationResults.project(node,descriptor,graph)
             var actual:Dictionary=phase.duplicate()
             if projected.ready:
                 actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
@@ -400,7 +405,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
             if track_node.fact.attack_outcome in ["Hit","Crit"]:
                 _source(group,track_node,"class.martial.impact",track.impact_ms,
                     {"actor_uuid":track.actor_uuid,"target_uuid":track.target_uuid,"attachment":"target_body","scale":track.presentation_actor.appearance.visual_scale,"palette":trail.palette},cache)
-        if track.get("motion",false) and track_node.fact.kind=="step":
+        if track.get("motion",false) and not track.get("spatial_only",false) and track_node.fact.kind=="step":
             _movement_audio(group,track_node,track,sounds,cache)
     var native_sources: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
     var action_bindings:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)

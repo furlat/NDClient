@@ -1,0 +1,391 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "4c04fb5a-7395-42da-8b72-99ef4c6cbd23",
+   "state_revision": "15f2a84f-025f-4e1c-92e0-3364f986e284",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0ac3ff7f-e0a6-40de-8cec-0b52a4aab213",
+   "state_revision": "166bc44c-f923-46ad-a4a2-ca451dc8be06",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "56816316-8182-4c87-815f-4bdbf18718ad",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "56816316-8182-4c87-815f-4bdbf18718ad",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.enhance_ability",
+   "by": "caster",
+   "target": "ally",
+   "variant": {
+    "ability": "wisdom"
+   },
+   "level": 2,
+   "capture_choices": true,
+   "track": true,
+   "track_condition": "condition.spell.enhance_ability"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a70e02bf-0076-4f60-a1a3-9906ed480c9e",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.enhance_ability",
+   "display_name": "Enhance Ability (Level 2) \u00b7 Wisdom",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "ability",
+     "value": "wisdom",
+     "label": "Wisdom"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "485e1063-5b75-4866-b74c-0693237f7118",
+   "state_revision": "a70e02bf-0076-4f60-a1a3-9906ed480c9e",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 14,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 2
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "485e1063-5b75-4866-b74c-0693237f7118",
+   "state_revision": "7a337eee-8d52-478b-9c39-5b488f2c07c7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "hold",
+   "to": [
+    2,
+    8
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "4c04fb5a-7395-42da-8b72-99ef4c6cbd23",
+   "state_revision": "c2b4a86c-c9c4-4bc0-9345-f596497cb881",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "4c04fb5a-7395-42da-8b72-99ef4c6cbd23",
+   "state_revision": "6f9293fb-06ca-4c7f-b313-34661fe43103",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "0ac3ff7f-e0a6-40de-8cec-0b52a4aab213",
+   "state_revision": "5a0c5db8-9070-4a30-9116-9f9ab9940250",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "56816316-8182-4c87-815f-4bdbf18718ad",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "56816316-8182-4c87-815f-4bdbf18718ad",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self",
+   "optional": false
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "c76ba5af-397e-4da4-9976-feb9ef6e20ba",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "485e1063-5b75-4866-b74c-0693237f7118",
+   "state_revision": "c76ba5af-397e-4da4-9976-feb9ef6e20ba",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 31,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "485e1063-5b75-4866-b74c-0693237f7118",
+   "state_revision": "d3da4edc-8034-422a-bc82-b55646e795d4",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "tail",
+   "to": [
+    2,
+    7
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "4c04fb5a-7395-42da-8b72-99ef4c6cbd23",
+   "state_revision": "4873cc79-c712-4c73-b6c6-1ed01555c6be",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+   "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+   "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_wisdom_lifecycle",
+    "game_epoch": "982f7c17-c7c0-4805-9c2a-ea55f457f716",
+    "audience_id": "5b653e6d-0ba7-4031-b86d-1aefa674d4b5",
+    "sequence": 17
+   }
+  }
+ }
+]

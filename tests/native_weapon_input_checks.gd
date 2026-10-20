@@ -171,6 +171,7 @@ func equipped_contract(world:World,bridge:RefCounted,current:Dictionary,offhand:
     placed.erase("weapon_registration") # Later controls use their own current membership.
     var result:Dictionary=bridge.sync(world,handle,current,placed)
     check(not result.unavailable.has("weapon_binding") and source._binding_valid(),"Exact actual member is admitted without unused legacy contribution/decoration fields")
+    check(result.weapon_public_gaps.is_empty(),"Equipped contract does not report unused legacy operands as missing public facts")
     check(not source.binding.has("contribution_active") and not source.binding.has("decoration_admitted"),"Adapter fabricates no legacy gameplay operands")
     var hands:Dictionary=world.rigs["shared-knight"].pose_sockets.hand
     world.rigs["shared-knight"].pose_sockets.hand={}

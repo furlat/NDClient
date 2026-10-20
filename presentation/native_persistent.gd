@@ -58,10 +58,18 @@ static func replaced_media(condition:Dictionary,recipe:Dictionary)->Array:
 static func authored_samples(common:Dictionary,cache:Dictionary)->Array:
     var result:Array=[]
     for phase in authored_phases(common.recipe,Authoring.Catalog.condition_key(common.condition),cache,str(common.source)):
+        var when:Dictionary=phase.native_cue.get("when",{})
+        var state:Dictionary=common.condition.state if common.condition.get("state") is Dictionary else {}
+        if not when.keys().all(func(field):return state.get(field)==when[field]):continue
+        var application:bool=phase.native_cue.authored_at=="application"
+        var start:float=float(common.start_ms)+float(phase.start_ms) if application else float(common.start_ms)
+        var duration:float=minf(float(phase.duration_ms),float(common.duration_ms)-float(phase.start_ms)) if application else float(common.duration_ms)
+        if application and (common.initial or float(common.age_ms)<float(phase.start_ms) or float(common.age_ms)>=float(phase.start_ms)+duration):continue
         var row:Dictionary=common.merged(phase,true)
         row.merge({"id":str(common.id)+":authored:"+str(phase.native_cue.source_index),"kind":"native_effect","native_spell":true,
             "persistent_owner":true,"target_uuid":common.actor_uuid,"cast_recipe":{"enabled":false},
-            "start_ms":common.start_ms,"absolute_start_ms":common.absolute_start_ms,"duration_ms":common.duration_ms,
+            "start_ms":start,"absolute_start_ms":float(common.absolute_start_ms)+float(phase.start_ms) if application else common.absolute_start_ms,
+            "duration_ms":duration,"age_ms":float(common.age_ms)-float(phase.start_ms) if application else common.age_ms,
             "from_position":[0,0],"to_position":[0,0],"from_elevation_feet":0.0,"to_elevation_feet":0.0,
             "ground_target":false,"sample_hz":60.0},true)
         # The authored setter observes this actual member's lifetime, not a
@@ -90,7 +98,15 @@ static func authored_phases(config:Dictionary,identity:String,cache:Dictionary,s
             phase.source=str(config.get("_resource_source",source))+"::effects/"+str(cue.source_index)
             phase.lifecycle={}
             phase.native_cue=phase.native_cue.duplicate()
-            phase.native_cue.begin=0.0;phase.native_cue.end=INF
+            phase.native_cue.begin=0.0
+            if cue.authored_at in ["application","spatial_removal"]:
+                # A witnessed application is a finite source on the actual
+                # member's clock, not another indefinite held visual.
+                phase.native_cue.erase("lifecycle")
+                var offset:float=float(cue.get("source_start",0.0))/float(cue.get("source_rate",1.0))
+                phase.duration_ms=maxf(0.0,float(phase.duration_ms)-offset*1000.0)
+                phase.native_cue.begin=-offset;phase.native_cue.end=float(phase.duration_ms)/1000.0
+            else:phase.native_cue.end=INF
             phase.removal_retention_ms=float(cue.get("fade_out_seconds",0.0))*1000.0
             # The source's observed owner projection owns its return. Generic
             # finite-clip fading would evaluate smoothstep(INF, INF, age).
@@ -102,7 +118,12 @@ static func authored_phases(config:Dictionary,identity:String,cache:Dictionary,s
 
 static func authored_removal_ms(config:Dictionary)->float:
     var result:float=0.0
-    for cue in config.get("persistent",{}).get("nativeEffects",[]):result=maxf(result,float(cue.get("fade_out_seconds",0.0))*1000.0)
+    for cue in config.get("persistent",{}).get("nativeEffects",[]):
+        if cue.get("at")=="application":continue
+        if cue.get("at")=="spatial_removal":
+            result=maxf(result,(float(cue.get("source_end",0.0))-float(cue.get("source_start",0.0)))/float(cue.get("source_rate",1.0))*1000.0)
+            continue
+        result=maxf(result,float(cue.get("fade_out_seconds",0.0))*1000.0)
     return result
 
 ## Lifecycle occurrences of one owner. `common` carries the owner's clock
@@ -142,6 +163,7 @@ static func lifecycle_samples(common:Dictionary,selections:Array,cache:Dictionar
             "target_uuid":common.get("actor_uuid"),"cast_recipe":{"enabled":false},"from_position":[0,0],"to_position":common.get("position",[0,0]),
             "from_elevation_feet":common.get("elevation_feet",0),"to_elevation_feet":common.get("elevation_feet",0),"ground_target":common.get("spatial_owner",false),
             "native_cue":cue,"native_clip":phases.application,"lifecycle_phases":phases,"lifecycle_key":key,
+            "native_body_owner":lifecycle.get("body_channel_included",false),
             "lifecycle_marker":lifecycle.get("marker",{}),"lifecycle_visibility":lifecycle.get("visibility",{}),
             "spell_id":str(spell.get("id","")),"finish_profile":spell.get("palette",{}) if lifecycle.get("body_channel_included",false) else {},
             "optical":optical,"native_lights":[],"source":source,"source_id":key,"sample_hz":60.0,"trace_keys":[id]},true)
@@ -268,6 +290,50 @@ static func observe_spatial(owners:Dictionary,effects:Dictionary,at_ms:float,ini
             owners[id].end_ms=at_ms;owners[id].observed=false;changed=true
     return changed
 
+## Project each new, factual retirement once in this private presentation
+## owner. Per-frame sampling visits only its still-active finite sources.
+static func spatial_removal_samples(owner:Dictionary,phase:Dictionary,at_ms:float)->Array:
+    if not owner.has("native_removal_sources"):owner.native_removal_sources={}
+    var key:int=int(phase.native_cue.source_index)
+    var projected:Dictionary=owner.native_removal_sources.get(key,{})
+    if projected.is_empty() or not is_same(projected.phase,phase):
+        projected={"phase":phase,"seen":0,"active":[]};owner.native_removal_sources[key]=projected
+    var removed:Array=owner.get("spatial_removals",[])
+    for observation in removed.slice(int(projected.seen)):
+        var when:Dictionary=phase.native_cue.get("spatial_removal_when",{})
+        if when.is_empty() or not when.keys().all(func(field):return observation.get(field)==when[field]):continue
+        if at_ms>=float(observation.at_ms)+float(phase.duration_ms):continue
+        var construction:Dictionary=SpatialInputs.removal_construction(str(owner.id),owner.source_effect,observation,phase.native_cue)
+        var anchor:Variant=owner.source_effect.get("anchor_position")
+        if anchor==null:anchor=owner.source_effect.positions[0]
+        var elevation:float=float(owner.source_effect.anchor_elevation_steps)*5.0 if owner.source_effect.get("anchor_elevation_steps")!=null else 0.0
+        var row:Dictionary=phase.duplicate()
+        row.merge({"id":"spatial:"+str(owner.id)+":authored:"+str(key)+":removal:"+str(observation.event_uuid)+":"+str(observation.lineage_uuid),
+            "kind":"native_effect","native_spell":true,"persistent_owner":true,"spatial_owner":true,
+            "spatial_removal":true,"spatial_effect_uuid":owner.id,"spatial_content_id":SpatialInputs.content_id(owner.source_effect),
+            "actor_uuid":null,"target_uuid":null,"cast_recipe":{"enabled":false},
+            "start_ms":observation.at_ms,"absolute_start_ms":observation.at_ms,"duration_ms":phase.duration_ms,
+            "initial":false,"alpha":1.0,"removal_age_ms":null,
+            "position":anchor,"from_position":anchor,"to_position":anchor,"elevation_feet":elevation,
+            "from_elevation_feet":elevation,"to_elevation_feet":elevation,
+            "ground_target":true,"resolved_area_positions":observation.positions,
+            "source_event_uuid":observation.event_uuid,"sample_hz":60.0},true)
+        if construction.ready:
+            row.native_constructor_inputs=construction.operands
+            row.native_constructor_evidence=construction.evidence
+            row.spatial_surface_records=construction.surface_records
+        else:row.status="missing";row.reason=construction.reason;row.native_input_gaps=[construction.reason]
+        row.trace_keys=[row.id];projected.active.append(row)
+    projected.seen=removed.size()
+    var active:Array=[];var result:Array=[]
+    for source in projected.active:
+        if at_ms>=float(source.start_ms)+float(source.duration_ms):continue
+        active.append(source)
+        if at_ms<float(source.start_ms):continue
+        result.append(source.merged({"age_ms":at_ms-float(source.start_ms)},true))
+    projected.active=active
+    return result
+
 static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Array:
     var result:Array=[]
     for id in owners.keys():
@@ -283,6 +349,8 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
         var retained_until:float=float(owner.end_ms)+close_ms
         if not owner.get("spatial_removals",[]).is_empty():retained_until=maxf(retained_until,float(owner.spatial_removals.back().at_ms)+close_ms)
         if at_ms>=retained_until:owners.erase(id);continue
+        for phase in authored:
+            if phase.native_cue.authored_at=="spatial_removal":result.append_array(spatial_removal_samples(owner,phase,at_ms))
         var positions:Array=SpatialInputs.admitted_cells(effect)
         if positions.is_empty():continue
         var anchor:Variant=effect.get("anchor_position")
@@ -298,6 +366,7 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
             result.append_array(lifecycle_samples(common,lifecycles,cache))
         elif not selected.is_empty():result.append_array(phase_samples(common,Spells.condition_phases(selected)))
         for phase in authored:
+            if phase.native_cue.authored_at=="spatial_removal":continue
             var row:Dictionary=common.merged(phase,true)
             row.merge({"id":str(common.id)+":authored:"+str(phase.native_cue.source_index),"kind":"native_effect","native_spell":true,
                 "persistent_owner":true,"target_uuid":null,"cast_recipe":{"enabled":false},

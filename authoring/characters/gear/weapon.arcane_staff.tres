@@ -3,15 +3,30 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_16h1x"]
 [ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_v8t0u"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_fctrh"]
 script = ExtResource("1_16h1x")
 path = "art/media/ui/icons/smooth48/item.quarterstaff.png"
 native_size = Vector2i(48, 48)
 source = "ui-icons-bg3-glyphs-2026-10-07"
 
+[sub_resource type="Resource" id="IntrinsicSustain"]
+script = ExtResource("effect")
+clip = "weapons/equipped/arcane/swept_glint/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory exact-item assignment proposal; one medium main-hand candidate. Actual source-mask/pose admission stays authoritative; artistic acceptance pending R8."
+
 [resource]
 script = ExtResource("2_v8t0u")
 id = "weapon.arcane_staff"
+effects = Array[ExtResource("effect")]([SubResource("IntrinsicSustain")])
 kind = "weapon"
 slots = Dictionary[String, Dictionary]({
 "weapon_melee_main": {
@@ -20,12 +35,23 @@ slots = Dictionary[String, Dictionary]({
 "slot": "weapon",
 "tint": "#5588cc"
 }],
-"variants": {}
+"variants": {
+"1000000f": [{
+"part": "Melee19",
+"slot": "weapon",
+"tint": "#5588cc"
+}]
+}
 }
 })
 hands = Dictionary[String, Dictionary]({
 "weapon_melee_off": {
 "": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5588cc"
+}],
+"1000000f": [{
 "part": "Offhand1",
 "slot": "offhand",
 "tint": "#5588cc"
@@ -45,6 +71,21 @@ ground = Array[Dictionary]([{
 "shadow_scale": 0.18,
 "tint": "#5588cc",
 "variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee19",
+"pivots_by_camera": [[58.5, 63.5], [71.0, 62.0], [72.0, 70.0], [60.0, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5588cc",
+"variant": "1000000f"
 }])
 icon = SubResource("Resource_fctrh")
 notes = "Visual name Arcane Staff; Ported from Quarterstaff/Arcane Staff sub-item; backend treats as first-class item"
+
+# R2 candidate only: retain the original sheet, tint, family, ground art and real item UUID. No source refusal is bypassed.

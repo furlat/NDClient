@@ -208,23 +208,24 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies()
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), glyph_warding_trigger_study(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + coating_weapon_studies()
 
 
-def equipped_weapon_study():
+def equipped_weapon_study(item_id='weapon.roster.ember_longsword', title='Ember Longsword',
+                          target_creature='creature.ogre'):
     """Real intrinsic item, movement/contact, unequip and plain-item replacement."""
     inventory = subjects(actions=['action.move', 'action.attack'])
-    inventory['item'] = ['weapon.roster.ember_longsword', 'weapon.longsword']
+    inventory['item'] = [item_id, 'weapon.longsword']
     return {
-        'id': 'weapon.roster.ember_longsword/equipped_use_retire_replace',
-        'title': 'Ember Longsword: equipped movement, hit, removal and replacement',
+        'id': item_id + '/equipped_use_retire_replace',
+        'title': title + ': equipped movement, hit, removal and replacement',
         'kind': 'item', 'subjects': inventory, 'seed': 2,
         'actors': [
             {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
              'level': 20, 'at': [4, 6],
-             'items': [{'id': 'weapon.roster.ember_longsword', 'slot': 'MELEE_MAIN'},
+             'items': [{'id': item_id, 'slot': 'MELEE_MAIN'},
                        {'id': 'weapon.longsword', 'placement': 'inventory'}]},
-            {'role': 'target', 'side': 'blue', 'creature': 'creature.ogre', 'at': [6, 6]}],
+            {'role': 'target', 'side': 'blue', 'creature': target_creature, 'at': [6, 6]}],
         'steps': [
             {'do': 'action.move', 'by': 'caster', 'target': [5, 6]},
             {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'},
@@ -239,8 +240,285 @@ def equipped_weapon_study():
         'required_behaviors': ['action.move', 'action.attack'],
         'required_facts': ['movement', 'attack', 'damage'],
         'purpose': 'Exact intrinsic Gear ownership and one finite accepted weapon contact. '
-                   'The sustain stays visibly blocked until Factory regenerates receiver includes; '
-                   'this original never asserts art approval or fabricates an effect membership.'}
+                   'The original item appearance, UUID and legal equipment transition remain authoritative; '
+                   'this recording does not qualify native source poses or artistic acceptance.'}
+
+
+def intrinsic_weapon_studies():
+    """One ordinary legal lifecycle for each selected exact intrinsic item."""
+    return [equipped_weapon_study(identity, title, 'creature.ogre_zombie') for identity, title in (
+        ('weapon.roster.ember_greatsword', 'Ember Greatsword'),
+        ('weapon.circus.flaming_scimitar', 'Flaming Scimitar'),
+        ('weapon.roster.psychic_scimitar', 'Mindreaver Scimitar'),
+        ('weapon.roster.psychic_greataxe', 'Mindcleaver Greataxe'),
+        ('weapon.roster.psychic_trident', 'Thoughtpiercer Trident'),
+        ('weapon.roster.psychic_longsword', 'Mindreaver Longsword'),
+        ('weapon.roster.psychic_longsword_greater', 'Soulbreaker Longsword'),
+        ('weapon.circus.soul_draining_morningstar', 'Soul-Draining Morningstar'),
+        ('weapon.devotees_mace', "Devotee's Mace"),
+        ('weapon.circus.longsword_plus_one', 'Longsword +1'),
+        ('weapon.arcane_staff', 'Arcane Staff'))]
+
+
+def coating_weapon_studies():
+    return [coating_weapon_study(kind) for kind in
+            ('fire', 'lightning', 'concentration_fire', 'timed_fire', 'assassin_poison')]
+
+
+def flaming_sphere_lifecycle_study():
+    """Ordinary summon controller, accepted native movement/Ram and retirement."""
+    inventory = subjects(['spell.flaming_sphere'],
+                         ['action.move', 'action.spell.flaming_sphere.ram', 'action.drop_concentration'],
+                         ['condition.concentrating', 'condition.spell.flaming_sphere.aura'])
+    inventory['creature'] = ['creature.spell.flaming_sphere']
+    inventory['spatial_effect'] = ['spatial_effect.spell.flaming_sphere.aura']
+    return {
+        'id': 'spell.flaming_sphere/summon_move_ram_retire',
+        'title': 'Flaming Sphere: held summon, autonomous move/Ram, aura and retirement',
+        'kind': 'spell', 'seed': 2, 'subjects': inventory,
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.flaming_sphere'], 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster',
+             'level': 20, 'at': [9, 7]}],
+        'steps': [
+            {'do': 'spell.flaming_sphere', 'by': 'caster', 'target': [6, 7], 'level': 2, 'capture_choices': True},
+            {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+            {'do': 'end_turn', 'by': 'caster'}, {'do': 'end_turn', 'by': 'target'},
+            {'do': 'action.drop_concentration', 'by': 'caster', 'target': 'self'},
+            {'do': 'action.move', 'by': 'caster', 'target': [3, 5]}],
+        'required_behaviors': ['spell.flaming_sphere', 'action.spell.flaming_sphere.ram',
+                               'action.move', 'action.drop_concentration'],
+        'required_conditions': ['condition.concentrating'],
+        'required_condition_ends': ['condition.concentrating'],
+        'required_facts': ['movement', 'spatial_effect_state', 'damage'],
+        'required_applied_damage_types': ['Fire'],
+        'purpose': 'The frozen engine assigns this real sphere to its NativeAIController, '
+                   'not the human audience. End-turn commands allow only its actual accepted '
+                   'movement/Ram; actual end-turn aura, fire surfaces and retirement remain '
+                   'native facts, never fabricated trail deposition or caster-issued Ram.'}
+
+
+def shillelagh_equipped_move_study():
+    """Exact enchanted staff through movement, release and genuine re-equipping."""
+    inventory = subjects(['spell.shillelagh'], ['action.move', 'action.attack'],
+                         ['condition.spell.shillelagh'])
+    inventory['item'] = ['weapon.quarterstaff', 'weapon.longsword']
+    attack = {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'}
+    return {
+        'id': 'spell.shillelagh/equipped_move_release_reequip_replace',
+        'title': 'Shillelagh: held movement, release, same staff re-equip and replacement',
+        'kind': 'spell', 'seed': 2, 'subjects': inventory,
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.shillelagh'], 'at': [4, 6],
+             'items': [{'id': 'weapon.quarterstaff', 'slot': 'MELEE_MAIN'},
+                       {'id': 'weapon.longsword', 'placement': 'inventory'}]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.ogre_zombie', 'at': [6, 6]}],
+        'steps': [
+            {'do': 'spell.shillelagh', 'by': 'caster', 'target': 'self',
+             'variant': {'form': 'MELEE_MAIN'}, 'capture_choices': True},
+            {'do': 'action.move', 'by': 'caster', 'target': [5, 6]}, dict(attack),
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'equip', 'by': 'caster', 'item': 'weapon.quarterstaff', 'slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'action.move', 'by': 'caster', 'target': [5, 5]}, dict(attack),
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'equip', 'by': 'caster', 'item': 'weapon.longsword', 'slot': 'MELEE_MAIN'},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'action.move', 'by': 'caster', 'target': [5, 6]}, dict(attack)],
+        'required_behaviors': ['spell.shillelagh', 'action.move', 'action.attack'],
+        'required_conditions': ['condition.spell.shillelagh'],
+        'required_condition_ends': ['condition.spell.shillelagh'],
+        'required_facts': ['movement', 'attack'],
+        'purpose': 'Original affected_item_uuid must identify the actual equipped Quarterstaff. '
+                   'Movement and accepted attacks preserve their actual outcomes. Unequip must '
+                   'really remove that UUID owner; re-equipping the same staff and replacing it '
+                   'with a plain Longsword cannot manufacture a new enchantment.'}
+
+
+def goodberry_consumption_study():
+    """Actual created items, use costs, positive/blocked healing and restoration."""
+    inventory = subjects(['spell.goodberry', 'spell.chill_touch'],
+                         ['action.spell.goodberry.eat', 'action.move'],
+                         ['condition.spell.goodberry.batch', 'condition.spell.chill_touch'])
+    inventory['item'] = ['consumable.goodberry']
+    eat = {'do': 'action.spell.goodberry.eat', 'by': 'caster', 'target': 'self',
+           'item': 'consumable.goodberry', 'capture_choices': True}
+    return {
+        'id': 'spell.goodberry/create_eat_blocked_restore',
+        'title': 'Goodberry: created items, eat, blocked healing and restoration',
+        'kind': 'spell', 'seed': 2, 'subjects': inventory,
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.goodberry'],
+             'damage': 20, 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.chill_touch'], 'at': [9, 7]}],
+        'steps': [
+            {'do': 'spell.goodberry', 'by': 'caster', 'target': 'self', 'level': 1}, dict(eat),
+            {'do': 'spell.chill_touch', 'by': 'target', 'target': 'caster'},
+            {'do': 'wait_condition', 'target': 'caster', 'condition': 'condition.spell.chill_touch', 'max_turns': 0},
+            dict(eat), {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+            {'do': 'end_turn', 'by': 'caster'}, {'do': 'end_turn', 'by': 'target'},
+            dict(eat), {'do': 'action.move', 'by': 'caster', 'target': [3, 5]}],
+        'required_behaviors': ['spell.goodberry', 'spell.chill_touch', 'action.spell.goodberry.eat', 'action.move'],
+        'required_conditions': ['condition.spell.goodberry.batch', 'condition.spell.chill_touch'],
+        'required_condition_ends': ['condition.spell.chill_touch'],
+        'required_facts': ['item_charge', 'heal', 'damage', 'movement'],
+        'purpose': 'Exact generated inventory items are selected through real offered item-use actions. '
+                   'Every consumed charge and actual positive/blocked healing result is retained. '
+                   'Chill Touch must actually apply and expire; neither healing admission nor '
+                   'private peer charge state is inferred from a request or fixture default.'}
+
+
+def power_word_heal_poison_study():
+    """Preserve real attack/save attempts, then cure an observed Poisoned member."""
+    condition = 'condition.spell.ray_of_sickness.poison'
+    return {
+        'id': 'spell.power_word_heal/ray_poisoned_restore_move',
+        'title': 'Power Word Heal: actual Ray poison, cure and restored movement',
+        'kind': 'spell', 'seed': 2,
+        'subjects': subjects(['spell.ray_of_sickness', 'spell.power_word_heal'],
+                             ['action.move'], [condition]),
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.ray_of_sickness'], 'at': [3, 7]},
+            {'role': 'healer', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.power_word_heal'], 'at': [3, 8]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster',
+             'level': 20, 'at': [8, 7]}],
+        'steps': [
+            {'do': 'spell.ray_of_sickness', 'by': 'caster', 'target': 'target', 'level': 1},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'spell.ray_of_sickness', 'by': 'caster', 'target': 'target', 'level': 1},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'spell.ray_of_sickness', 'by': 'caster', 'target': 'target', 'level': 1},
+            {'do': 'wait_condition', 'target': 'target', 'condition': condition, 'max_turns': 0},
+            {'do': 'spell.power_word_heal', 'by': 'healer', 'target': 'target', 'capture_choices': True},
+            {'do': 'action.move', 'by': 'target', 'target': [9, 7]}],
+        'required_behaviors': ['spell.ray_of_sickness', 'spell.power_word_heal', 'action.move'],
+        'required_conditions': [condition], 'required_condition_ends': [condition],
+        'required_facts': ['saving_throw', 'damage', 'heal', 'movement'],
+        'purpose': 'Fixed legal attack/save sequence, preserving every Miss/save/failure. '
+                   'A real observed Poisoned member must exist before the healer is asked '
+                   'to cure it. Exact native removal ancestry, rather than request success '
+                   'or positive Poison damage, proves Power Word Heal restoration.'}
+
+
+def glyph_warding_trigger_study():
+    """Keep a real glyph unoccupied, then enter its footprint as an enemy."""
+    inventory = subjects(['spell.glyph_of_warding'], ['action.move'],
+                         ['condition.spell.glyph_of_warding'])
+    inventory['spatial_effect'] = ['spatial_effect.spell.glyph_of_warding']
+    return {
+        'id': 'spell.glyph_of_warding/arm_move_enter_trigger',
+        'title': 'Glyph: placement, held movement, hostile entry and actual payload',
+        'kind': 'spell', 'seed': 2, 'subjects': inventory,
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.glyph_of_warding'], 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster',
+             'level': 20, 'at': [9, 7]}],
+        'steps': [
+            {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+            {'do': 'spell.glyph_of_warding', 'by': 'caster', 'target': [6, 7],
+             'level': 3, 'variant': {'form': 'fire'}, 'capture_choices': True},
+            {'do': 'action.move', 'by': 'caster', 'target': [3, 5]},
+            {'do': 'action.move', 'by': 'target', 'target': [9, 6]},
+            {'do': 'action.move', 'by': 'target', 'target': [8, 7]},
+            {'do': 'action.move', 'by': 'target', 'target': [9, 7]}],
+        'required_behaviors': ['spell.glyph_of_warding', 'action.move'],
+        'required_conditions': ['condition.spell.glyph_of_warding'],
+        'required_condition_ends': ['condition.spell.glyph_of_warding'],
+        'required_facts': ['movement', 'spatial_effect_state', 'saving_throw', 'damage'],
+        'required_applied_damage_types': ['Fire'],
+        'purpose': 'Actual ordinary hostile entry after a separately published held interval. '
+                   'The legal request selects Fire, but native armed/payload inputs are not '
+                   'manufactured from the request or from the name of the spell.'}
+
+
+def water_create_dry_study():
+    """Actual offered forms and the resulting same-owner water removal."""
+    return {
+        'id': 'spell.create_or_destroy_water/create_move_dry',
+        'title': 'Water: create, enter, actual Dry removal and movement after',
+        'kind': 'spell', 'seed': 2,
+        'subjects': subjects(['spell.create_or_destroy_water'], ['action.move']),
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 20, 'caster_level': 20, 'spells': ['spell.create_or_destroy_water'], 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster',
+             'level': 20, 'at': [6, 7]}],
+        'steps': [
+            {'do': 'action.move', 'by': 'caster', 'target': [3, 6]},
+            {'do': 'spell.create_or_destroy_water', 'by': 'caster', 'target': [6, 7],
+             'level': 1, 'variant': {'form': 'create'}, 'capture_choices': True},
+            {'do': 'action.move', 'by': 'target', 'target': [6, 6]},
+            {'do': 'spell.create_or_destroy_water', 'by': 'caster', 'target': [6, 7],
+             'level': 1, 'variant': {'form': 'destroy'}, 'capture_choices': True},
+            {'do': 'action.move', 'by': 'target', 'target': [7, 6]}],
+        'required_behaviors': ['spell.create_or_destroy_water', 'action.move'],
+        'required_facts': ['movement', 'spatial_effect_state'],
+        'purpose': 'Legal public create/destroy facets and actual disclosed DRY spatial transition. '
+                   'The request does not manufacture a SpellFact form or prove removal by itself; '
+                   'original same-owner removed positions must supply that evidence.'}
+
+
+def coating_weapon_study(kind):
+    """One real item member, motion/contact and its actual retirement policy."""
+    case = poison_weapon_contact_study()
+    item = 'consumable.weapon_coat.' + kind
+    condition = 'condition.consumable.weapon_coat.' + kind
+    case['id'] = item + '/equipped_runtime'
+    case['title'] = kind.replace('_', ' ').title() + ': held coat, movement, contact and retirement'
+    case['subjects'] = subjects(actions=['action.item.weapon_coat.apply', 'action.move', 'action.attack'],
+                                conditions=[condition])
+    case['subjects']['item'] = ['weapon.longsword', 'weapon.scimitar', item]
+    case['actors'][0]['items'] = [
+        {'id': 'weapon.longsword', 'slot': 'MELEE_MAIN'},
+        {'id': 'weapon.scimitar', 'placement': 'inventory'},
+        {'id': item, 'placement': 'inventory'}]
+    case['actors'][1]['creature'] = 'creature.ogre_zombie'
+    attack = {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'}
+    apply = {'do': 'action.item.weapon_coat.apply', 'by': 'caster', 'target': 'self',
+             'item': item, 'name': 'Coat Main Hand', 'capture_choices': True}
+    steps = [apply, {'do': 'action.move', 'by': 'caster', 'target': [5, 5]},
+             {'do': 'end_turn', 'by': 'caster'}, dict(attack),
+             {'do': 'end_turn', 'by': 'caster'}, dict(attack)]
+    if kind == 'concentration_fire':
+        steps.append({'do': 'action.drop_concentration', 'by': 'caster', 'target': 'self'})
+        case['subjects']['action'].append('action.drop_concentration')
+    elif kind in ('timed_fire', 'assassin_poison'):
+        steps += [{'do': 'end_turn'} for _ in range(6 if kind == 'timed_fire' else 20)]
+    elif kind == 'lightning':
+        # Different native condition names can coexist. Record that fact;
+        # the delivered single direct-material owner cannot compose them.
+        extra_item = 'consumable.weapon_coat.fire'
+        case['actors'][0]['items'].append({'id': extra_item, 'placement': 'inventory'})
+        case['subjects']['item'].append(extra_item)
+        case['subjects']['condition'].append('condition.consumable.weapon_coat.fire')
+        steps += [{'do': 'end_turn', 'by': 'caster'},
+                  {'do': 'action.item.weapon_coat.apply', 'by': 'caster', 'target': 'self',
+                   'item': extra_item, 'name': 'Coat Main Hand'}, dict(attack)]
+    steps += [{'do': 'end_turn', 'by': 'caster'}, dict(attack),
+              {'do': 'end_turn', 'by': 'caster'}, {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
+              {'do': 'end_turn', 'by': 'caster'},
+              {'do': 'equip', 'by': 'caster', 'item': 'weapon.scimitar', 'slot': 'MELEE_MAIN'},
+              {'do': 'end_turn', 'by': 'caster'}, dict(attack)]
+    case['steps'] = steps
+    case['required_behaviors'] = list(case['subjects']['action'])
+    case['required_facts'] = ['actor_change', 'movement', 'attack', 'damage']
+    case['purpose'] = ('Exact public coating membership on the actual longsword; only natural expiry, '
+                       'legal concentration removal or optical item replacement retires its treatment. '
+                       'The Ogre Zombie target has actual Poison immunity; Poisoned or positive poison '
+                       'damage is not claimed. Concurrent Fire/Lightning is evidence of the source '
+                       'composition gap, never permission to overwrite the first direct owner.')
+    return case
 
 
 def poison_weapon_contact_study():
@@ -272,6 +550,107 @@ def poison_weapon_contact_study():
         'purpose': 'Actual AttackFact.item_effects on the same equipped longsword before, during and after '
                    'the authored ten-round item-coating lifetime. No Poisoned condition or successful '
                    'poison saving-throw outcome is required for the contact membership.'}
+
+
+def option_identity_studies():
+    """Only forms exposed by the frozen public action facets, plus real saves."""
+    result = []
+    for ability in ('charisma', 'constitution', 'dexterity', 'intelligence', 'wisdom'):
+        result.append({
+            'id': 'spell.enhance_ability/' + ability + '_lifecycle',
+            'title': 'Enhance Ability: ' + ability.title() + ', movement and removal',
+            'kind': 'spell', 'seed': 2,
+            'subjects': subjects(['spell.enhance_ability'], ['action.move', 'action.drop_concentration'],
+                                 ['condition.spell.enhance_ability']),
+            'actors': [
+                {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+                 'level': 20, 'caster_level': 20, 'spells': ['spell.enhance_ability'], 'at': [3, 7]},
+                {'role': 'ally', 'side': 'amber', 'creature': 'creature.generic_caster',
+                 'level': 20, 'at': [3, 8]},
+                {'role': 'target', 'side': 'blue', 'creature': 'creature.generic_caster',
+                 'level': 20, 'at': [9, 7]}],
+            'steps': [
+                {'do': 'spell.enhance_ability', 'by': 'caster', 'target': 'ally',
+                 'variant': {'ability': ability}, 'level': 2, 'capture_choices': True,
+                 'track': True, 'track_condition': 'condition.spell.enhance_ability'},
+                {'do': 'hold_walk', 'offset': [-1, 0]},
+                {'do': 'end_tracked', 'strategy': 'concentration'},
+                {'do': 'tail_walk', 'by': 'ally', 'offset': [0, -1]}],
+            'required_behaviors': ['spell.enhance_ability', 'action.move', 'action.drop_concentration'],
+            'required_conditions': ['condition.spell.enhance_ability'],
+            'required_condition_ends': ['condition.spell.enhance_ability'],
+            'purpose': 'Exact offered ability facet, actual recipient membership/movement, '
+                       'legal concentration removal and restored movement; no new graphics approval.'})
+    result.append({
+        'id': 'spell.dissonant_whispers/deva_saving_throws',
+        'title': 'Dissonant Whispers: actual saves against a Wisdom-proficient Deva',
+        'kind': 'spell', 'seed': 2,
+        'subjects': subjects(['spell.dissonant_whispers']),
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 3, 'caster_level': 3, 'spells': ['spell.dissonant_whispers'], 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'creature': 'creature.spell.deva', 'at': [6, 7]}],
+        'steps': [
+            {'do': 'spell.dissonant_whispers', 'by': 'caster', 'target': 'target', 'level': 1,
+             'capture_choices': True},
+            {'do': 'end_turn', 'by': 'caster'},
+            {'do': 'spell.dissonant_whispers', 'by': 'caster', 'target': 'target', 'level': 1}],
+        'required_behaviors': ['spell.dissonant_whispers'],
+        'required_facts': ['saving_throw', 'damage'],
+        'purpose': 'Two fixed ordinary casts against the authored Wisdom-proficient Deva. '
+                   'Only actual saving-throw facts establish a saved branch; no rolled outcome is forced.'})
+    result.append({
+        'id': 'spell.dissonant_whispers/modular_cleric_saves',
+        'title': 'Dissonant Whispers: actual saves and Resistance on a modular Cleric',
+        'kind': 'spell', 'seed': 2, 'first': 'blue',
+        'subjects': subjects(['spell.dissonant_whispers', 'spell.resistance']),
+        'actors': [
+            {'role': 'caster', 'side': 'amber', 'creature': 'creature.generic_caster',
+             'level': 3, 'caster_level': 3, 'spells': ['spell.dissonant_whispers'], 'at': [3, 7]},
+            {'role': 'target', 'side': 'blue', 'premade': 'cleric', 'at': [6, 7]}],
+        'steps': [step for _ in range(3) for step in (
+            {'do': 'spell.resistance', 'by': 'target', 'target': 'self'},
+            {'do': 'spell.dissonant_whispers', 'by': 'caster', 'target': 'target', 'level': 1,
+             'capture_choices': True})],
+        'required_behaviors': ['spell.dissonant_whispers', 'spell.resistance'],
+        'required_facts': ['saving_throw', 'damage'],
+        'purpose': 'Fixed lawful casts against a real Wisdom-proficient Life Cleric with actual Resistance. '
+                   'The target uses the existing modular body with authored optical ground; '
+                   'successful-save evidence comes only from unchanged original facts.'})
+    return result
+
+
+def poison_weapon_runtime_study():
+    """The same finite coat survives actual movement and item-slot transitions."""
+    case = poison_weapon_contact_study()
+    case['id'] = 'consumable.weapon_coat.basic_poison/move_reequip_replace_expire'
+    case['title'] = 'Basic Poison: movement, same-sword re-equip, replacement and expiry'
+    case['subjects']['action'] += ['action.move']
+    case['subjects']['item'] += ['weapon.scimitar']
+    case['actors'][0]['items'].append({'id': 'weapon.scimitar', 'placement': 'inventory'})
+    attack = {'do': 'action.attack', 'by': 'caster', 'target': 'target', 'weapon_slot': 'MELEE_MAIN'}
+    case['steps'] = [
+        {'do': 'action.item.weapon_coat.apply', 'by': 'caster', 'target': 'self',
+         'item': 'consumable.weapon_coat.basic_poison', 'name': 'Coat Main Hand', 'capture_choices': True},
+        {'do': 'action.move', 'by': 'caster', 'target': [5, 5]},
+        {'do': 'end_turn', 'by': 'caster'}, dict(attack),
+        {'do': 'end_turn', 'by': 'caster'}, dict(attack),
+        {'do': 'end_turn', 'by': 'caster'}, {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
+        {'do': 'end_turn', 'by': 'caster'},
+        {'do': 'equip', 'by': 'caster', 'item': 'weapon.longsword', 'slot': 'MELEE_MAIN'},
+        {'do': 'action.move', 'by': 'caster', 'target': [5, 6]},
+        {'do': 'end_turn', 'by': 'caster'}, dict(attack),
+        {'do': 'end_turn', 'by': 'caster'}, {'do': 'unequip', 'by': 'caster', 'slot': 'MELEE_MAIN'},
+        {'do': 'end_turn', 'by': 'caster'},
+        {'do': 'equip', 'by': 'caster', 'item': 'weapon.scimitar', 'slot': 'MELEE_MAIN'},
+        {'do': 'end_turn', 'by': 'caster'}, dict(attack)
+    ] + [{'do': 'end_turn'} for _ in range(20)] + [dict(attack)]
+    case['required_behaviors'] += ['action.move']
+    case['required_facts'] += ['movement', 'actor_change']
+    case['purpose'] = ('One actual item-coating UUID across movement and unequip/re-equip of the same longsword; '
+                       'a different uncoated weapon is equipped and used before the original coat expires '
+                       'through ordinary turns. No membership, expiry or native graphics is fabricated.')
+    return case
 
 
 def gallery_sorcerer():

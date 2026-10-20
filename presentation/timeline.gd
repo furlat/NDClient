@@ -491,6 +491,7 @@ func _history_frame_times(cuts:Array,lower:float,upper:float,times:Dictionary)->
             var fps:float=float(rig.clips[rest.value.clip].fps)
             for frame in range(int(ceil(first*fps/1000.0)),int(floor(last*fps/1000.0))+1):times[float(frame)*1000.0/fps]=true
         for track in cut.tracks:
+            if track.get("spatial_only",false):continue
             var duration:float=float(track.duration_ms)
             if duration<=0.0:continue
             var fps:float=float(rig.clips[track.clip].fps)

@@ -246,7 +246,7 @@ func conditional_impact_checks(compiled:Dictionary)->void:
     # Explicit value controls, not a fabricated original replay or poison
     # damage proof. The ordinary coating/hit/removal recording is separate.
     var gear:Resource=load("res://authoring/characters/gear/weapon.longsword.tres")
-    check(gear.impact_effects.size()==1,"Plain Longsword has one authored conditional contact, without inheriting Ember Fire")
+    check(gear.impact_effects.size()==6 and gear.impact_effects.all(func(cue):return not cue.item_effect_behavior_id.is_empty()),"Plain Longsword has six actual-membership contacts, without inheriting intrinsic Ember Fire")
     var use:Resource=gear.impact_effects[0]
     check(use.clip=="weapons/contact/poison/medium" and use.item_effect_behavior_id=="condition.consumable.weapon_coat.basic_poison" \
         and use.item_effect_damage_type=="Poison" and not use.follow,"Candidate uses exact Basic Poison membership and finite recipient contact")
@@ -256,7 +256,7 @@ func conditional_impact_checks(compiled:Dictionary)->void:
     index.item_impact_effects=staged.item_impact_effects
     var cache:Dictionary={Support.Sources.KEY:{"index":index,"loaded":compiled[Support.Sources.KEY].loaded}}
     var cues:Array=index.item_impact_effects[gear.id]
-    check(cues.size()==1 and cues[0].item_effect_behavior_id==use.item_effect_behavior_id \
+    check(cues.size()==6 and cues[0].item_effect_behavior_id==use.item_effect_behavior_id \
         and cues[0].item_effect_damage_type=="Poison","Current builder preserves exact membership selectors on finite contact cues")
     var attack:Dictionary={"kind":"attack","behavior_id":"action.attack","source_entity_uuid":"contract-wielder", \
         "target_entity_uuid":"contract-recipient","source_item_id":"weapon.longsword","source_item_uuid":"contract-coated-sword", \

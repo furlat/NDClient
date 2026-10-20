@@ -42,8 +42,8 @@ What is already established and should **not be restarted**:
   branches. The 130 imported alternatives are not 130 missing spells.
 - Water/Wet has real native output through both independent faction streams,
   four views, seek/loop and cleanup. Its actual creation/removal choreography is
-  not established by that hold-only original.
-- Latest full fast run: **174/174 clean**, `.runtime/tests/20261020T135657.434699Z/summary.json`. The R2 native receiving evidence is below; the earlier shared-provider run passed 444 checks.
+  qualified separately by the R2 Water DRY cohort below.
+- Latest full fast run: **182/182 clean**, `.runtime/tests/20261020T161653.162607Z/summary.json`, including the final position-only motion cohort. The R2 native receiving evidence is below; the earlier shared-provider run passed 444 checks.
   Latest actual Gallery route: 313/313 clean. These are bounded receipts, **not
   a green complete suite or complete visual coverage**.
 
@@ -97,9 +97,9 @@ partial suite to be described as complete.
 
 ## 3. Exact remaining production input/binding work
 
-### R1: 57 declaration-level default-cue flags across 28 actual IDs
+### R1: declaration-level snapshot and remaining consumer families
 
-All 57 resolve to installed clips. The static audit finds 39 cues with at least
+The original snapshot contained 57 flags across 28 IDs, all resolving to installed clips. That static audit found 39 cues with at least
 one declared channel lacking a provider and 18 explicit authoring refusals. It
 reads clip-level input declarations; it does **not** establish that every listed
 channel is needed by the selected phase. Inherited declarations overstate some
@@ -113,18 +113,19 @@ then classify the remaining exact operand as client adapter, genuine producer
 omission, source defect or missing demonstration. The 216 provider-present but
 output-unqualified cues remain separate work. These populations and the 20
 active variant predicates are not a completion percentage. Exact raw cue
-addresses are in Appendix A.
+addresses are in Appendix A. The later R2 consumer receipts below supersede
+completed work in this snapshot; 57 is not today's remaining count.
 
 | Shared family | Actual owners | Raw flagged cues | Remaining work; factual boundary |
 |---|---|---:|---|
 | Weapon smites/Ensnaring | Branding Smite, Divine Smite, Ensnaring Strike, Searing Smite |6| Establish each phase's actual operands. Branding impact calls payload admission; its condition phase calls condition admission. A later tick is not required for that impact. Bind required exact strike/armed/recipient/tick/heal data only where consumed. Aggregated damage cannot invent an attributed rider. Three baseline capture failures remain independent backend defects. |
-| Divine Favor | `spell.divine_favor` |3| Windup/application do not gate on hit_input; only the hit phase does. Bind real weapon/owner/geometry for the former, exact equipped attack plus attributed result for the latter. Retain the existing held condition. The new held attack misses and cannot prove positive Radiant output. |
-| Quarries | Hex, Hunter's Mark |6| Windup admits its retained owner; application admits the actual quarry; hit additionally admits its rider. Do not require inherited healing/tick/hit channels on every phase. Bind actual sustain/quarry/strike/removal relationships; Concentrating cannot substitute for a sustain-owner UUID. |
+| Divine Favor | `spell.divine_favor` |3| Finite cast and actor-owned application/hold/removal are qualified below. Exact equipped attack plus attributed result remains required for the hit phase; the held original misses and cannot prove positive Radiant output. |
+| Quarries | Hex, Hunter's Mark |6| Recipient application/hold/removal are qualified below. Caster windup still lacks its publicly disclosed retained sustain UUID, and hit requires its actual attributed rider. Concentrating cannot substitute for the sustain owner. |
 | Carried/delayed payloads | Delayed Blast Fireball, Freezing Sphere |10| Accepted later release, actual payload state/anchor, blast, per-recipient damage and real resulting surface. Current creation originals do not demonstrate detonation. Reuse existing operation/creation/spatial/result seams. |
 | Moving construct | Flaming Sphere |4| Actual body/patch/source presence and ram/end-turn contact. Record its meaningful movement/contact/end; source age cannot invent trail deposition or damage. |
 | Granted breath | Dragon's Breath |3| Actual grant UUID, caster/recipient/element/readiness, accepted recipient action and damage/face-cone endpoints. Concentration alone does not supply these facts. |
 | Trap payload | Glyph of Warding |1| A legal armed→trigger→result study and exact state projection. Baseline creation/removal does not prove an armed interval. Determine from those real facts whether a producer addition is needed. |
-| Poison removal | Power Word Heal |2| Record a real poisoned before-member and PWH-caused removal; bind existing event/lease removal inputs. Other healing/restoration proof does not cover this branch. |
+| Poison removal | Power Word Heal |2| Closed for the actual Ray of Sickness Poisoned before-member/PWH removal original below; imported duplicate cues delegate to the existing exact UUID lifecycle. This does not qualify other poison arts or new restoration outcomes. |
 | Multicolour outcome | Prismatic Spray |1| Exact disclosed colour indices and recipient outcomes. Do not reverse-solve colours from damage or saves. |
 | Wall state/contact | Wall of Thorns, Wind Wall |2| Actual construction geometry and optical visual_state; Thorns also actual occupants/contact. Respect delivered APIs; remove fixed review inputs without inventing occupants or contact pulses. |
 | Permanent item decoration | Continual Flame |1| Actual item/effect/current-holder projection, held-original evidence, and source-qualified holder rebinding plus bounded seek. Current inventory-potion original is not a held output witness. |
@@ -208,21 +209,25 @@ Source/public-field evidence and exact family definitions:
   The raw typed inventory has 133 variants across 46 owners; three extra variants
   belong to native-disabled Bless/Call Lightning/False Life and do not change
   this 130 native-enabled denominator or automatically add required art.
-- Only 4 of 17 literal option IDs have original per-form witnesses. The other 13:
-  Bestow Curse options 2/3/4; Deafened; Enhance Ability charisma/constitution/
-  dexterity/intelligence/wisdom; Protection from Energy acid/cold/lightning/
-  thunder. Dissonant Whispers' new saved branch also lacks a real successful-save
-  native witness. These are recording/output tasks, not another variant system.
-- Production `Gear.effects` / `impact_effects` assignments remain to be authored
-  for the required modular decorations. The receiving infrastructure and tests
-  exist; the 87 delivered weapon clips do not assign themselves. The first R2
-  candidate/contact and its receiver correction are recorded below. Select
-  actual compatible decorations, preserving the original weapon sheet, tint,
-  actual item UUID/holder/slot and exact Hit/Crit impact ownership.
+- Nine of 17 literal option IDs now have original per-form witnesses. The five
+  additional Enhance Ability forms have actual application, held movement and
+  concentration removal in both original streams. The remaining eight are
+  Bestow Curse options 2/3/4, Deafened and Protection from Energy acid/cold/
+  lightning/thunder: the frozen action's public choice domain does not offer
+  these forms. They are proven R5 selection gaps, not permission to relabel
+  defaults. Dissonant Whispers now has genuine saved/failed original outcomes
+  and native saved-branch output on a supported modular recipient (R2 evidence
+  below). These use the existing selectors, not another variant system.
+- Production `Gear.effects` / `impact_effects` now select twelve intrinsic
+  candidates and six actual-membership coatings, qualified below. The 87 clips
+  do not all require assignments. Remaining proposals need their exact disposition
+  and any applicable owner/result or composition support; preserve the weapon
+  sheet, tint, item UUID/holder/slot and accepted Hit/Crit ownership.
 - Keep offhand source-rejected. Qualify unequip/re-equip, transfer/drop, replacement and overlap;
   an inventory-only item or the wrong held sheet must not receive a proxy effect.
-  New Shillelagh/Divine Favor journals prove logical retirement/replacement,
-  not their complete native coating/positive-rider output.
+  Shillelagh affected-item application/movement/Hit/removal/replacement and
+  Divine Favor actor-owned lifecycle have native evidence below. Divine Favor
+  positive rider output remains unproved by its Miss original.
 - Baked full-character weapon attachments remain explicitly deferred; only
   modular separate-sheet attachments are the current requested implementation.
   Six delivered native weapon-body consumers are **excluded by user policy**.
@@ -267,14 +272,14 @@ poses (118 checks/24 pairs), with three retained static Script classes and
 `engine_shutdown_clean=false`. It is not all-66/history coverage, a clean-exit
 certificate or human art approval; current client evidence is separately below.
 
-Two bounded candidates are authored: exact-item Ember Longsword sustain/Fire
+The initial two-candidate checkpoint authored exact-item Ember Longsword sustain/Fire
 contact and plain Longsword Basic Poison contact. The latter matches the actual
 AttackFact.item_effects behavior/type snapshot and retains exact effect and
 contribution evidence; one contact per authored use, never one per damage packet
 or matching contribution. No membership means no contact, including after expiry.
-It neither asserts applied Poison damage nor creates Poisoned. Remaining coating
-sustains/intrinsic alternatives and smites retain their existing ownership paths;
-this does not bulk-select the 26 proposals.
+It neither asserts applied Poison damage nor creates Poisoned. The continuing
+cohort below extends this to twelve intrinsic candidates and six coatings;
+smites remain separate accepted-result consumers. This does not bulk-select the 26 proposals.
 
 Equipped simulations consume only actual observed sequential poses. Cold/seek
 admission starts a private source clock at that pose; owner membership keeps its
@@ -336,6 +341,184 @@ binding/sample costs under R6 and artistic acceptance under R8. Later unpackaged
 Factory performance studies stay outside this immediate queue unless a selected
 consumer requires one. Focused checks follow each family; final suite remains R7.
 
+
+#### Continuing R2 delivery and shared consumers
+
+The next batch extends the same resources and providers; it creates no second
+assignment catalogue. The corrected receiver delivery and adapter above remain
+the foundation, rather than a reason to restore the old renderer.
+
+- **Intrinsic candidates:** eleven additional exact-item Resources select one
+  documented medium treatment each (Greatsword fire, Flaming Scimitar fire,
+  five psychic weapons, Soul-draining Morningstar necrotic, Devotee's Mace
+  radiant, +1 Longsword arcane, Arcane Staff glint). With the earlier Ember
+  Longsword this is twelve intrinsic candidates, not all artistic alternatives.
+  Nine new finite contacts use the existing accepted equipped Hit/Crit path;
+  the two arcane candidates add no contact. Actual item-look omissions found
+  in the originals are repaired with existing sheets/tints/family aliases.
+  Native family playback passes **59,205/0**, including real movement, attacks,
+  removal/replacement, seek/loop and contacts, receipt
+  `.runtime/tests/20261020T153000.006657Z/`. Eight source-refused pose observations
+  remain explicit, not output claims. This is not user approval.
+- **Six coatings:** conditional Gear sustain/contact cues match actual
+  `ItemRecord.effects` behavior/type and `AttackFact.item_effects` snapshots.
+  Real item/effect/contribution identity and ordered retirement own their
+  clocks. No Poisoned condition, elemental DamageFact or extra light is
+  manufactured. Basic Poison's complete original natural-expiry gate passes
+  **5,516/0**, and production assignment checks **128/0**, receipt
+  `.runtime/tests/20261020T145623.153142Z/`. Five additional genuine coating
+  originals plus re-equip/coexistence now pass the native family gate
+  **37,740/0**, receipt `.runtime/tests/20261020T154450.325097Z/`. Source refusals for unauthored axes/finishes and two direct
+  material owners remain `partial` in Studio, even after an earlier rendered
+  pose. Concurrent direct treatments still require authored composition.
+- **Divine Favor:** finite cast construction now receives the actual applied
+  actor/condition UUID and current eligible weapon; unused hit operands are
+  explicitly N/A. Application/hold/removal stay on the existing actor-owned
+  condition. The original attack misses, so the imported timed hit remains
+  excluded. Phase/ancestry ownership **163/0**, including nested/canceled-owner
+  controls, receipt `.runtime/tests/20261020T155818.235022Z/`. Both original
+  streams complete application/hold/removal, continuous playback to canonical
+  end and seek/loop: native **114/0**, receipt
+  `.runtime/tests/20261020T155856.193389Z/`. Magic Weapon/Sacred Weapon
+  still require their genuinely missing public memberships.
+- **Hex/Hunter's Mark:** actual recipient-child application/hold/end delegates
+  to the existing condition lifecycle. Logical **186/0**, actual both-seat
+  child pixels/seek/loop **52/0**, receipt
+  `.runtime/tests/20261020T150613.175217Z/`. Their retained caster sustain UUID
+  is an internal marker removed by the public projection: Concentrating is
+  not an alias. Imported finite windup/rider cues remain explicitly excluded
+  until their exact ownership/results exist (R5).
+- **Exact options/results:** five new Enhance Ability originals pass
+  **670/0** native checks through both seats × four views, source pixels,
+  actual movement/removal, seek/loop and cleanup. Per-form originals **794/0**;
+  actual spell variants **236/0**, saved Dissonant native **126/0**.
+  Receipts `.runtime/tests/20261020T150613.175217Z/` and
+  `.runtime/tests/20261020T151110.791196Z/`. The unsupported Deva original is
+  retained separately; its explicit unknown optical ground no longer enters
+  a worker with a null numeric argument or acquires a guessed ground plane.
+  Actual unknown-ground negative controls **43/0**, receipt
+  `.runtime/tests/20261020T150422.818033Z/`.
+- **Shared finite ownership:** typed condition applications can select exact
+  disclosed state and end on their own finite source clock. Enlarge/Reduce
+  inward/outward applications use the real owner admission, without a second
+  scale operation or snapshot replay; source/roundtrip gate **76/0**, actual
+  native applications **60/0**. Water DRY uses the same finite mechanism:
+  exact actual 13-cell whole-owner removal, pre-cut geometry and source clear
+  clock, native **56/0**; actual-row/labelled partial and sight-loss controls
+  **58/0**. Receipts `.runtime/tests/20261020T153000.006657Z/`,
+  `.runtime/tests/20261020T154450.325097Z/` and
+  `.runtime/tests/20261020T155210.196928Z/`. Runtime event-node lineages are
+  99/103; packet root lineages 87/91 remain distinct in provenance.
+  Disappearance alone cannot trigger DRY; held water stays a separate owner.
+- **Immutable source preparation:** an explicit typed optional coordinator
+  supports the delivered isolated readiness-bank API, without changing default
+  approaches (**40/0**). It removes a client construction blocker for the Sleep
+  alternative, but the actual Forward+/Vulkan probe still draws zero pixels at
+  translated `[6,0,7]` at all four tested source ages (origin 1,057–6,066).
+  `.runtime/consolidation/sleep-prepared-probe/report.json` remains a real R5
+  source-placement defect; that alternative is **not** selected.
+
+- **Further shared consumers:** Goodberry consumption now belongs to the real
+  accepted `action.spell.goodberry.eat`, using its exact descendant consumed
+  charge and `HealFact.was_blocked`; creation never triggers consumption.
+  The unchanged source receives real item UUIDs and hand/face endpoints.
+  Actual heal → blocked heal → restored heal native playback passes **67/0**,
+  both original streams/four views/seek/loop, receipt
+  `.runtime/tests/20261020T155856.193389Z/`. Blue's missing charge identities
+  stay unavailable. Logical original/control gate **39/0**, receipt
+  `.runtime/tests/20261020T155506.278937Z/`. Its two imported spell variants
+  explicitly delegate to the action; their empty predicates cannot dispatch.
+  The dedicated eating body pose remains R8, not a claimed new animation.
+- **Effect-owned actors:** a source-selected body lifecycle may register only
+  the visible canonical ground/motion of an actually authored `body_policy=effect`
+  actor. It needs no 2D proxy. Flaming Sphere's actual aura condition now owns
+  its delivered body, independently of the actual spatial aura; review trajectory,
+  timed Ram/end-turn contacts and decorative extra light are excluded.
+  Exact ground contract **32/0**, native baseline **58/0**, receipt
+  `.runtime/tests/20261020T155856.193389Z/`. Hidden preparation may exist before
+  admission, but no future canonical owner/visible source/witness may appear.
+  A new actual autonomous lifecycle now records six Steps, Ram, aura damage and
+  terminal dismissal. The original retains actor-condition membership on the
+  absent actor; the independent spatial aura actually retires. The existing
+  Timeline now compiles position-only Steps for explicitly authored effect bodies:
+  no sprite rig/Run/source-frame clock or fabricated footsteps. Ordinary Play
+  moves the same body/source clock and forwards an actual Step witness only
+  after its native draw at the requested age. Logical **200/0**, receipt
+  `.runtime/tests/20261020T161429.889807Z/`; native **236/0**, receipt
+  `.runtime/tests/20261020T161744.500474Z/`. Both original streams cover all six
+  real Steps, interpolated source transforms, framebuffer pixels, finite actual
+  dismissed departure, remembered membership, reverse seek/loop and cleanup.
+  Visibility-refusal evidence is explicitly distinguished from a rendered witness.
+  Ram/contact/trail integration remains open; motion is closed for this actual
+  supported lifecycle, not inferred from the earlier static body receipt.
+- **Real studies available for the next consumers:** Glyph now has seven legal
+  commands/10 packets per seat with actual held movement, hostile entry,
+  removal before payload and 23 Fire damage. Its public state remains null;
+  no armed/payload field is inferred. Power Word Heal has a genuine Poisoned
+  before-member/removal/heal original, and its duplicate imported marker probes
+  now delegate to the existing exact UUID lifecycle. The extended restoration
+  native gate passes **469/0**, both real seats/four views/seek/loop and actual
+  0.25s removal, receipt `.runtime/tests/20261020T155856.193389Z/`.
+  New Shillelagh movement/re-equip originals retain the actual removal and
+  prove same-staff re-equip does not reapply the effect. Its affected-item native
+  gate now passes **192/0**, both seats/four views through real movement, Hit,
+  actual removal/replacement and seek/loop, receipt
+  `.runtime/tests/20261020T160154.261087Z/`. The replacement proof selects the
+  actual movement/Hit cuts and retains the unmodified original journal.
+- **Shared image ownership (R1/R6):** a cold descriptor miss was cached as `{}`;
+  future preparation could also drop a receiver mask still needed by displayed
+  removal, while support adoption retained a stale metadata cache. The fix uses
+  current plus requested optical owners and existing immutable admission identity,
+  caches only positive path mappings, and retains current receiver-pass masks.
+  The real-source deterministic gate fails **3/9 before**, passes **12/12 after**,
+  receipt `.runtime/tests/20261020T155506.278937Z/`. Support adoption/readiness and
+  render shaders are not bypassed. After correction both original Divine streams
+  complete their canonical end (**114/0**) and the strict receiver regression
+  passes **5,132/0**, receipt `.runtime/tests/20261020T155856.193389Z/`.
+  No particular omitted mask is assigned as the sole cause of the earlier
+  contended race without its missing-path receipt.
+
+#### R2 heavy-effects successor intake
+
+New delivery: [Factory heavy-effects handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/HEAVY_EFFECTS_PRODUCTION_HANDOFF_2026-10-20.md),
+complete `runtime-heavy-effects-20261020-fa024e4e027bf708`. Intake/consumer
+qualification is in progress; this is not yet an installed or selected receipt.
+It retains the corrected receiver and all existing IDs/selections and adds 16
+explicit alternatives through the existing `EffectUse.approach` mechanism.
+Use the complete namespace, preserve actual phase simulation rates and owner/
+endpoint/event inputs, and finish immutable readiness before publication.
+No automatic bulk selection, second registry or new spell count.
+
+The cohort covers six summon manifestations, Guardian response, Darkness,
+Ice Storm, Heroes' Feast, Frigid Air, three Acid Arrow deliveries, Delayed Blast
+Fireball retirement and Fire Wall ring. Select only actual compatible consumers;
+retain explicit source/art limits for the others. R5 optical limits include
+Darkness's stabilized reference rather than raw-original equality and finite
+recorded geometry rather than independent physics. R6 retains the delivered
+**61.497 ms maximum readiness step**, **2.681 ms cold Air Elemental constructor**
+and unqualified first Fire Wall input; packaged smoke is not whole-game timing.
+`engine_shutdown_clean=false` and static-resource retention remain explicit.
+R8 has no new human approval. Later unpackaged source optimizations remain
+outside the immediate queue unless a selected consumer needs them.
+
+R6 costs remain bounded receipts, not a final live frame-time certificate.
+The 274 actual intrinsic/contact constructions measured median **0.374 ms**,
+maximum **1.065 ms**, including readiness (median .273/max .974), factory make
+(.020/.061), script (.014/.045), adaptation (.005/.020) and admission (.003/.010).
+These nested phases must not be added to their inclusive total; receipt
+`.runtime/intrinsic-weapon-batch/result.json`. They exclude startup/GPU warmup
+and whole-command feedback. All newly proposed intrinsic/coating art remains R8 review-pending; none changes
+the explicit Aid/Bless/False Life/Sacred Flame rejections. Sequential weapon
+history still does not close R3 historical-body overlap. Final applicable suite
+qualification remains R7, after executable integration rather than ahead of it.
+This batch has plan-adherence, antislop and ownership review with no remaining
+material finding. Closed bounded work is not reopened by the new heavy intake:
+receiver/admission defects, twelve intrinsic candidates, six coatings, Divine
+Favor lifecycle, quarry recipient lifecycles, five Enhance options, saved Dissonant,
+Enlarge/Reduce applications, Water DRY, Goodberry consumption, PWH Poisoned,
+Shillelagh and the real Flaming Sphere body/motion lifecycle. Each retains the
+limits and exact evidence above; R1–R8 are not declared globally complete.
+
 ## 4. R5: external blockers to resolve without stranding client work
 
 Only demonstrated producer/source omissions belong to external-blocked work.
@@ -395,8 +578,8 @@ not new client benchmarks or proof the package is already cheap in gameplay.
 
 ## 5. R4: Studio, scenarios and full rendering-method visibility
 
-The local library after the R2 cohorts has 269 cases: 255 recorded and 14 failed.
-These are cases, not capability completeness. All 269 index `studio_checked`
+The local library after the R2 cohorts has 299 cases: 285 recorded and 14 failed.
+These are cases, not capability completeness. All 299 index `studio_checked`
 flags are false; focused tests prove subsets separately. Therefore the index
 alone cannot establish either “none tested” or “all tested.” Finish the existing
 source/scenario/presentation/approval evidence join, rather than making another
@@ -478,7 +661,7 @@ from the game UI; retain diagnostics through the requested tools.
 
 Audio is already a real timeline/render consumer, with authored contact markers,
 stream/voice ownership and native replay tests. It is **not complete game audio**.
-The old coverage audit covers 57 audiences, not the current 269 cases. Finish the
+The old coverage audit covers 57 audiences, not the current 299 cases. Finish the
 current-corpus assignment/contact/mix audit and missing selected audio rather
 than drawing waveforms without a played source.
 
@@ -564,12 +747,12 @@ per-spell screenshot/measurement cycle while migration work remains untouched.
 
 ## 8. R7: the entire test inventory is not green
 
-Current `tests/manifest.json` has 542 rows after the four R2 receiving gates:
+Current `tests/manifest.json` has 562 rows after the R2/shared-consumer cohort:
 
 | Population | Count | What it means |
 |---|---:|---|
-| Eligible fast headless |174| All pass together on this R2 checkpoint; receipt `.runtime/tests/20261020T135657.434699Z/`. |
-| Eligible gate |193| 166 GPU + 27 headless. Latest stored results are not one complete final-checkpoint run. |
+| Eligible fast headless |182| All pass together, `.runtime/tests/20261020T161653.162607Z/summary.json`, including the current motion cohort. |
+| Eligible gate |205| 178 GPU + 27 headless. Focused current-cohort output passes are recorded under R2; no claim of a complete final-checkpoint run. |
 | Eligible live |11| One Gallery pass does not cover all 11. |
 | Excluded but executable |86| 53 needs-args, 17 known-red, 16 owned-by-migration. Each needs a current-contract decision, not a blanket exemption. |
 | Retired |52| Historical/removed contracts; not passes. |

@@ -14,6 +14,7 @@ class Playback extends Node:
     var sample_seconds:float=0.0
 class World extends Node3D:
     var visual_actors:Dictionary={}
+    var displayed_components:Array=[]
     var rigs:Dictionary={}
     var rig_config:Dictionary={"TILE_W":128,"FACING_CYCLE":["E","SE","S","SW","W","NW","N","NE"]}
     var playbacks:Dictionary={}

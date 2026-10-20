@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "f0252433-9744-4990-b543-866fdab663b4",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "f0252433-9744-4990-b543-866fdab663b4",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "c99c0089-4774-4c64-a919-065157551414",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Mindreaver Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "c99c0089-4774-4c64-a919-065157551414",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "0b02941f-99d6-4bc6-be2d-f1ac445b6a3a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0dcbf748-551b-4a81-99e3-3e0001ec129f",
+   "state_revision": "38fc23e3-a504-478c-9e45-ff645a902330",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "775fbc40-e56b-459a-a0cf-a93841de2511",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Mindreaver Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "775fbc40-e56b-459a-a0cf-a93841de2511",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "d88f77f1-6947-469d-8760-06dcb1bbe625",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "0dcbf748-551b-4a81-99e3-3e0001ec129f",
+   "state_revision": "93c921d8-04db-4469-9cde-bff912658471",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "a657f855-1ec3-4d62-b954-99d78d48c92e",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "2bcea768-a7a2-40c0-9f02-f2c400c12f1c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "0dcbf748-551b-4a81-99e3-3e0001ec129f",
+   "state_revision": "594d48d1-5e7b-4751-b3e9-3f632bd19636",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "b22e00ec-f0e7-4fd7-ad83-3706a5f5a6f9",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "f122cc3d-049f-4586-924f-cc18e5793525",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "c132c5eb-bdac-4e7a-9ba5-d9247682a527",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "0dcbf748-551b-4a81-99e3-3e0001ec129f",
+   "state_revision": "51f9e349-95b8-4eda-89f7-3cc3c0838773",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "08bd568e-53c8-483a-822a-812d85d591de",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "6ad2e657-e83c-4708-b034-649c279c2897",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "13661bd5-7df2-4ff6-b0b5-e70091a305d0",
+   "state_revision": "6ad2e657-e83c-4708-b034-649c279c2897",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+   "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+   "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_longsword_equipped_use_retire_replace",
+    "game_epoch": "771250fa-d5f1-4989-9b75-e5fdc214bea0",
+    "audience_id": "812a1c48-ed7f-4d4f-8097-e7f233c5b669",
+    "sequence": 23
+   }
+  }
+ }
+]

@@ -1,0 +1,844 @@
+{
+ "source": ".runtime/coating-weapons-r2-20261020/cases/consumable.weapon_coat.lightning__equipped_runtime/20261020T151119.441388Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 24,
+ "originals": "Both complete original faction streams and scenario/recording/commands/choices copied byte-for-byte. No configuration, credentials or logs.",
+ "evidence": {
+  "amber": {
+   "packet_count": 40,
+   "actual_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+   "actual_effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+   "actual_contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+   "movement": {
+    "sequence": 3,
+    "occurrence": 47,
+    "lineage": 29
+   },
+   "item_effect_updates": [
+    {
+     "sequence": 2,
+     "occurrence": 27,
+     "lineage": 16,
+     "field": "item_effects",
+     "item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+     "effects": [
+      {
+       "duration": {
+        "duration_type": "permanent",
+        "remaining_rounds": null
+       },
+       "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+       "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+       "behavior_id": "condition.consumable.weapon_coat.lightning",
+       "display_name": "Lightning Coat",
+       "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+       "damage_type": "Lightning",
+       "applied_source_event_cursor": null
+      }
+     ]
+    },
+    {
+     "sequence": 18,
+     "occurrence": 160,
+     "lineage": 149,
+     "field": "item_effects",
+     "item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+     "effects": [
+      {
+       "duration": {
+        "duration_type": "permanent",
+        "remaining_rounds": null
+       },
+       "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+       "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+       "behavior_id": "condition.consumable.weapon_coat.lightning",
+       "display_name": "Lightning Coat",
+       "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+       "damage_type": "Lightning",
+       "applied_source_event_cursor": 28
+      },
+      {
+       "duration": {
+        "duration_type": "permanent",
+        "remaining_rounds": null
+       },
+       "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+       "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+       "behavior_id": "condition.consumable.weapon_coat.fire",
+       "display_name": "Flaming Coat",
+       "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+       "damage_type": "Fire",
+       "applied_source_event_cursor": null
+      }
+     ]
+    },
+    {
+     "sequence": 29,
+     "occurrence": 242,
+     "lineage": 242,
+     "field": "item_effects",
+     "item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+     "effects": [
+      {
+       "duration": {
+        "duration_type": "permanent",
+        "remaining_rounds": null
+       },
+       "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+       "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+       "behavior_id": "condition.consumable.weapon_coat.lightning",
+       "display_name": "Lightning Coat",
+       "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+       "damage_type": "Lightning",
+       "applied_source_event_cursor": 28
+      },
+      {
+       "duration": {
+        "duration_type": "permanent",
+        "remaining_rounds": null
+       },
+       "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+       "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+       "behavior_id": "condition.consumable.weapon_coat.fire",
+       "display_name": "Flaming Coat",
+       "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+       "damage_type": "Fire",
+       "applied_source_event_cursor": 161
+      }
+     ]
+    }
+   ],
+   "coated_hits": [
+    {
+     "sequence": 8,
+     "occurrence": 87,
+     "lineage": 69,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 28
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 127,
+     "lineage": 109,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 28
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 19,
+     "occurrence": 180,
+     "lineage": 162,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 28
+       },
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 161
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 24,
+     "occurrence": 220,
+     "lineage": 202,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 28
+       },
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 161
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "actual_membership_retirement": [],
+   "post_retirement_same_sword_contacts": [],
+   "layer_changes": [
+    {
+     "sequence": 29,
+     "occurrence": 242,
+     "lineage": 242,
+     "field": "layer",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "sequence": 34,
+     "occurrence": 264,
+     "lineage": 264,
+     "field": "layer",
+     "slot": "MELEE_MAIN",
+     "layer": {
+      "slot": "MELEE_MAIN",
+      "item_uuid": "0ec6e3dd-dbaf-4679-971d-ad4935773984",
+      "item_id": "weapon.scimitar",
+      "is_lit": null
+     }
+    }
+   ],
+   "plain_replacement_contact": {
+    "sequence": 39,
+    "occurrence": 304,
+    "lineage": 286,
+    "fact": {
+     "kind": "attack",
+     "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+     "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+     "behavior_id": "action.attack",
+     "name": "Attack_MELEE_MAIN",
+     "weapon_slot": "MELEE_MAIN",
+     "attack_outcome": "Hit",
+     "damage_types": [
+      "Slashing"
+     ],
+     "source_item_id": "weapon.scimitar",
+     "source_item_uuid": "0ec6e3dd-dbaf-4679-971d-ad4935773984",
+     "target_kind": "creature",
+     "attack_source_kind": "equipped"
+    }
+   },
+   "concurrent_contacts": [
+    {
+     "sequence": 19,
+     "occurrence": 180,
+     "lineage": 162,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 28
+       },
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 161
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 24,
+     "occurrence": 220,
+     "lineage": 202,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 28
+       },
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 161
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ]
+  },
+  "blue": {
+   "packet_count": 40,
+   "actual_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+   "actual_effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+   "actual_contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+   "movement": {
+    "sequence": 3,
+    "occurrence": 46,
+    "lineage": 28
+   },
+   "item_effect_updates": [
+    {
+     "sequence": 2,
+     "occurrence": 26,
+     "lineage": 20,
+     "field": "item_effects",
+     "item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+     "effects": [
+      {
+       "duration": null,
+       "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+       "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+       "behavior_id": "condition.consumable.weapon_coat.lightning",
+       "display_name": "Lightning Coat",
+       "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+       "damage_type": "Lightning",
+       "applied_source_event_cursor": null
+      }
+     ]
+    },
+    {
+     "sequence": 18,
+     "occurrence": 154,
+     "lineage": 148,
+     "field": "item_effects",
+     "item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+     "effects": [
+      {
+       "duration": null,
+       "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+       "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+       "behavior_id": "condition.consumable.weapon_coat.lightning",
+       "display_name": "Lightning Coat",
+       "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+       "damage_type": "Lightning",
+       "applied_source_event_cursor": 27
+      },
+      {
+       "duration": null,
+       "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+       "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+       "behavior_id": "condition.consumable.weapon_coat.fire",
+       "display_name": "Flaming Coat",
+       "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+       "damage_type": "Fire",
+       "applied_source_event_cursor": null
+      }
+     ]
+    },
+    {
+     "sequence": 29,
+     "occurrence": 236,
+     "lineage": 236,
+     "field": "item_effects",
+     "item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+     "effects": [
+      {
+       "duration": null,
+       "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+       "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+       "behavior_id": "condition.consumable.weapon_coat.lightning",
+       "display_name": "Lightning Coat",
+       "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+       "damage_type": "Lightning",
+       "applied_source_event_cursor": 27
+      },
+      {
+       "duration": null,
+       "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+       "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+       "behavior_id": "condition.consumable.weapon_coat.fire",
+       "display_name": "Flaming Coat",
+       "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+       "damage_type": "Fire",
+       "applied_source_event_cursor": 155
+      }
+     ]
+    }
+   ],
+   "coated_hits": [
+    {
+     "sequence": 8,
+     "occurrence": 86,
+     "lineage": 68,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 27
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 13,
+     "occurrence": 126,
+     "lineage": 108,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 27
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 19,
+     "occurrence": 174,
+     "lineage": 156,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 27
+       },
+       {
+        "duration": null,
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 155
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 24,
+     "occurrence": 214,
+     "lineage": 196,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 27
+       },
+       {
+        "duration": null,
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 155
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "actual_membership_retirement": [],
+   "post_retirement_same_sword_contacts": [],
+   "layer_changes": [
+    {
+     "sequence": 29,
+     "occurrence": 236,
+     "lineage": 236,
+     "field": "layer",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "sequence": 34,
+     "occurrence": 258,
+     "lineage": 258,
+     "field": "layer",
+     "slot": "MELEE_MAIN",
+     "layer": {
+      "slot": "MELEE_MAIN",
+      "item_uuid": "0ec6e3dd-dbaf-4679-971d-ad4935773984",
+      "item_id": "weapon.scimitar",
+      "is_lit": null
+     }
+    }
+   ],
+   "plain_replacement_contact": {
+    "sequence": 39,
+    "occurrence": 298,
+    "lineage": 280,
+    "fact": {
+     "kind": "attack",
+     "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+     "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+     "behavior_id": "action.attack",
+     "name": "Attack_MELEE_MAIN",
+     "weapon_slot": "MELEE_MAIN",
+     "attack_outcome": "Hit",
+     "damage_types": [
+      "Slashing"
+     ],
+     "source_item_id": "weapon.scimitar",
+     "source_item_uuid": "0ec6e3dd-dbaf-4679-971d-ad4935773984",
+     "target_kind": "creature",
+     "attack_source_kind": "equipped"
+    }
+   },
+   "concurrent_contacts": [
+    {
+     "sequence": 19,
+     "occurrence": 174,
+     "lineage": 156,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 27
+       },
+       {
+        "duration": null,
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 155
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 24,
+     "occurrence": 214,
+     "lineage": 196,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "065ec5ba-f309-4664-854b-a6f90b328540",
+      "target_entity_uuid": "b8b4d192-b845-4008-a07b-5b7f5f291e40",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Slashing",
+       "Lightning",
+       "Fire"
+      ],
+      "source_item_id": "weapon.longsword",
+      "source_item_uuid": "6d2c3119-bf80-4ccf-920b-35d02466e715",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "e4e84638-2e44-4d98-aa6a-6f6b9e0e6f55",
+        "contribution_uuid": "5faa3def-c325-47c4-b193-6c8c34e177bb",
+        "behavior_id": "condition.consumable.weapon_coat.lightning",
+        "display_name": "Lightning Coat",
+        "description": "The coated weapon deals an extra 1d6 lightning damage on a hit.",
+        "damage_type": "Lightning",
+        "applied_source_event_cursor": 27
+       },
+       {
+        "duration": null,
+        "effect_uuid": "6335abf9-1198-4c90-bffc-57a0b43e3718",
+        "contribution_uuid": "8ecda184-a271-44db-9ce0-df41e3b20213",
+        "behavior_id": "condition.consumable.weapon_coat.fire",
+        "display_name": "Flaming Coat",
+        "description": "The coated weapon deals an extra 1d6 fire damage on a hit.",
+        "damage_type": "Fire",
+        "applied_source_event_cursor": 155
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ]
+  }
+ },
+ "retirement_policy": "Real permanent membership remains; actual unequip/replacement retires only optical eligibility.",
+ "limits": [
+  "No Poisoned condition, positive elemental damage, artificial lamp, source-pose/framebuffer output or artistic approval is inferred.",
+  "Actual target is Poison-immune Ogre Zombie, with authored zombiehulk1 optical ground9.899494936611665."
+ ],
+ "composition_limit": {
+  "actual_facts": "Different Fire/Lightning native condition names coexist on the same weapon. Neither removes the other.",
+  "source": "assets/vfx/sources/62383d07549e9c732af2/direct_blade_material.gd",
+  "rejection": "concurrent_direct_material_requires_authored_composition",
+  "scope": "Installed source ownership contract, not a fresh native rendering qualification. Second direct owner may not overwrite/clear the first; no composite is authored."
+ }
+}

@@ -30,8 +30,8 @@ static func samples(tracks: Array, local: float) -> Dictionary:
         if result.has(id) and int(result[id].priority) > int(track.get("priority",0)): continue
         var fraction = clampf((local-start)/maxf(0.000001,float(track.duration_ms)),0,1)
         var sample: Dictionary = track.duplicate()
-        sample.source_seconds = lerpf(track.get("source_start_seconds",0.0),track.get("source_end_seconds",0.0),fraction)
-        if track.has("source_time_keys"):
+        if not track.get("spatial_only",false):sample.source_seconds = lerpf(track.get("source_start_seconds",0.0),track.get("source_end_seconds",0.0),fraction)
+        if not track.get("spatial_only",false) and track.has("source_time_keys"):
             var keys: Array = track.source_time_keys
             for i in range(1,keys.size()):
                 if fraction <= float(keys[i][0]):
@@ -82,6 +82,12 @@ static func body(actor_id: String, rig: String, clip_name: String, clip: Diction
         "duration_ms":seconds*1000.0/speed,"source_start_seconds":0.0,"source_end_seconds":seconds,
         "priority":priority,"holding_pose":clip_name=="Die","trajectory":"stationary","motion":false,"loop":false}
 
+## A source-owned body still follows actual StepFacts, without claiming a
+## sprite rig, clip or source-frame clock. The same motion sampler owns it.
+static func spatial(actor_id:String,start:float,priority:int)->Dictionary:
+    return {"actor_uuid":actor_id,"start_ms":start,"duration_ms":0.0,"priority":priority,
+        "spatial_only":true,"holding_pose":false,"trajectory":"stationary","motion":false,"loop":false}
+
 static func jump_context(path: Array, motion: Dictionary, occurrence: String) -> Dictionary:
     var distance = Vector2(path[0][0],path[0][1]).distance_to(Vector2(path[-1][0],path[-1][1]))
     return {"occurrence":occurrence,"path":path,"count":maxi(1,path.size()-1),
@@ -104,14 +110,16 @@ static func movement(track: Dictionary, fact: Dictionary, motion: Dictionary, bo
         track.motion_fraction_from = float(maxi(0,edge))/context.count
         track.motion_fraction_to = float(maxi(0,edge)+1)/context.count
         track.arc_height_px = context.arc
-        track.source_start_seconds = motion.jumpBodyFrames/motion.jumpSourceFps*track.motion_fraction_from
-        track.source_end_seconds = motion.jumpBodyFrames/motion.jumpSourceFps*track.motion_fraction_to
+        if not track.get("spatial_only",false):
+            track.source_start_seconds = motion.jumpBodyFrames/motion.jumpSourceFps*track.motion_fraction_from
+            track.source_end_seconds = motion.jumpBodyFrames/motion.jumpSourceFps*track.motion_fraction_to
     else:
         var distance = Vector2(fact.from_position[0],fact.from_position[1]).distance_to(Vector2(fact.to_position[0],fact.to_position[1]))
         track.duration_ms = motion.walkStepDurationMs*distance/speed_scale
         if fact.trajectory=="path": track.occurrence = context.get("occurrence",track.occurrence)
-        if previous.get("occurrence")==track.occurrence and previous.get("clip")==track.clip:
-            track.source_start_seconds = previous.source_end_seconds
-        track.source_end_seconds = track.source_start_seconds+track.duration_ms/1000.0*rate
-        track.loop = true
-    body_keys(track,body_config,clip,track.motion_fraction_from,track.motion_fraction_to)
+        if not track.get("spatial_only",false):
+            if previous.get("occurrence")==track.occurrence and previous.get("clip")==track.clip:
+                track.source_start_seconds = previous.source_end_seconds
+            track.source_end_seconds = track.source_start_seconds+track.duration_ms/1000.0*rate
+            track.loop = true
+    if not track.get("spatial_only",false):body_keys(track,body_config,clip,track.motion_fraction_from,track.motion_fraction_to)

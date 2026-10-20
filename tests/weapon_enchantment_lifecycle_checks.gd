@@ -17,7 +17,7 @@ const CASES={
         "owner":"cb23fb5c-34ed-4488-a2eb-a6632d4a45e4","admission":22,"removal":{"amber":83,"blue":82},
         "staff":"fb2ced07-91a5-4c96-82c5-b8d377161d58","sword":"609052a9-b8fa-457f-9c24-240fde3439a1",
         "held_attack":52,"held_outcome":"Miss","last_attack":{"amber":197,"blue":196},
-        "unequip":18,"equip":23,"last":28,"commands":17,"owner_cues":[2,3]},
+        "unequip":18,"equip":23,"last":28,"commands":17,"owner_cues":[1,2,3]},
     "magic-weapon":{"spell":"magic_weapon","actor":"a4d3daa3-785a-42d4-beee-078b5a2fb450",
         "owner":"","admission":-1,"removal":{},
         "staff":"c9b7213a-ab09-4be2-a4a0-9cc6d2a17964","sword":"2bce8acb-6986-4941-aa85-65e062df960f",

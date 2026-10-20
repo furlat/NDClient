@@ -8,6 +8,12 @@ extends RefCounted
 static func equipped_source(handle:Dictionary)->bool:
     return handle.get("inner",{}).get("components",{}).has("equipped_weapon")
 
+## This source owns both direct material admission and its explicit refusal.
+## A prior drawn frame cannot conceal an unsupported pose or second owner.
+static func rejection(handle:Dictionary)->String:
+    var source:Node=handle.inner.components.equipped_weapon
+    return str(source.rejection) if source.bound_materials.is_empty() else ""
+
 ## A current optical pose supplies no preceding motion. After a cold seek the
 ## private simulation starts here; membership keeps its actual owner age.
 static func source_time(handle:Dictionary,age:float)->float:

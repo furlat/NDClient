@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2d921f63-1385-4f92-9b7d-2547fc746b65",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "2d921f63-1385-4f92-9b7d-2547fc746b65",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "722289b8-014f-4c6e-91d9-31dc2a1aa08f",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Devotee's Mace",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "722289b8-014f-4c6e-91d9-31dc2a1aa08f",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "0363d394-c5cd-4ad6-8676-ac7f4ebdf318",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+   "state_revision": "17e92512-cb44-4185-8356-e5ebf4b57332",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "e4f326d5-b9a5-4072-8d04-48eb4c130043",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Devotee's Mace",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "e4f326d5-b9a5-4072-8d04-48eb4c130043",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "f374154d-7ba2-4052-b70a-e61e888228ad",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+   "state_revision": "7d14aae2-f5c2-4fa1-ba21-589554826749",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "844da5e0-f8f6-4b5a-9c79-1d3c45a48a77",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "c137190b-5e3c-4eb2-b3a7-3d4108b4b877",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+   "state_revision": "c9ff4385-2d84-44ac-a19c-29cc2bf48e6b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "21531f6c-7086-415f-8dc6-e959b767c545",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "a87c27e8-59e1-4ba4-aded-eb265dd24271",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "8a5a5e28-0533-493e-990e-cb4bd364bcb2",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+   "state_revision": "572d3dce-b227-491f-a636-d607d68880de",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "83b6f6eb-1118-4c8c-bc20-00fa65f7dc96",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "6754500d-b77e-4808-a981-dd9af53e31e2",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+   "state_revision": "6754500d-b77e-4808-a981-dd9af53e31e2",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+   "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+   "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_devotees_mace_equipped_use_retire_replace",
+    "game_epoch": "11a19b15-b36c-4ba2-bfa6-10ff9dbb582e",
+    "audience_id": "8b04177e-ca85-495c-a572-742069229aba",
+    "sequence": 23
+   }
+  }
+ }
+]

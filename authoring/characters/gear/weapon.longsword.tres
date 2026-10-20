@@ -4,6 +4,20 @@
 [ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_nguwj"]
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="poison_contact"]
 
+[sub_resource type="Resource" id="BasicPoisonSustain"]
+script = ExtResource("poison_contact")
+clip = "weapons/equipped/poison/viscous_film/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+item_effect_behavior_id = "condition.consumable.weapon_coat.basic_poison"
+item_effect_damage_type = "Poison"
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory coating candidate on the actual disclosed Basic Poison item-effect UUID. Membership owns retirement; only audited weapon poses are supported. No Poisoned condition, poison damage or artistic acceptance is inferred."
+
 [sub_resource type="Resource" id="BasicPoisonContact"]
 script = ExtResource("poison_contact")
 clip = "weapons/contact/poison/medium"
@@ -22,11 +36,142 @@ path = "art/media/ui/icons/smooth48/item.longsword.png"
 native_size = Vector2i(48, 48)
 source = "ui-icons-bg3-glyphs-2026-10-07"
 
+[sub_resource type="Resource" id="FireCoatSustain"]
+script = ExtResource("poison_contact")
+clip = "weapons/equipped/fire/blade_tongues/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+item_effect_behavior_id = "condition.consumable.weapon_coat.fire"
+item_effect_damage_type = "Fire"
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory coating proposal selected by this actual disclosed item-effect UUID. Real membership/removal owns lifetime; concurrent direct materials require authored composition. Pose/output and artistic acceptance remain separate."
+
+[sub_resource type="Resource" id="FireCoatContact"]
+script = ExtResource("poison_contact")
+clip = "weapons/contact/fire/medium"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+item_effect_behavior_id = "condition.consumable.weapon_coat.fire"
+item_effect_damage_type = "Fire"
+follow = false
+light_multiplier = 0.0
+staging_from = "Factory contact proposal selected only by the actual equipped Hit/Crit item-effect snapshot. No positive elemental damage, Poisoned condition or extra lamp is inferred. Artistic acceptance pending."
+
+[sub_resource type="Resource" id="LightningCoatSustain"]
+script = ExtResource("poison_contact")
+clip = "weapons/equipped/electric/axial_forks/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+item_effect_behavior_id = "condition.consumable.weapon_coat.lightning"
+item_effect_damage_type = "Lightning"
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory coating proposal selected by this actual disclosed item-effect UUID. Real membership/removal owns lifetime; concurrent direct materials require authored composition. Pose/output and artistic acceptance remain separate."
+
+[sub_resource type="Resource" id="LightningCoatContact"]
+script = ExtResource("poison_contact")
+clip = "weapons/contact/electric/medium"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+item_effect_behavior_id = "condition.consumable.weapon_coat.lightning"
+item_effect_damage_type = "Lightning"
+follow = false
+light_multiplier = 0.0
+staging_from = "Factory contact proposal selected only by the actual equipped Hit/Crit item-effect snapshot. No positive elemental damage, Poisoned condition or extra lamp is inferred. Artistic acceptance pending."
+
+[sub_resource type="Resource" id="ConcentrationFireCoatSustain"]
+script = ExtResource("poison_contact")
+clip = "weapons/equipped/fire/blade_tongues/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+item_effect_behavior_id = "condition.consumable.weapon_coat.concentration_fire"
+item_effect_damage_type = "Fire"
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory coating proposal selected by this actual disclosed item-effect UUID. Real membership/removal owns lifetime; concurrent direct materials require authored composition. Pose/output and artistic acceptance remain separate."
+
+[sub_resource type="Resource" id="ConcentrationFireCoatContact"]
+script = ExtResource("poison_contact")
+clip = "weapons/contact/fire/medium"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+item_effect_behavior_id = "condition.consumable.weapon_coat.concentration_fire"
+item_effect_damage_type = "Fire"
+follow = false
+light_multiplier = 0.0
+staging_from = "Factory contact proposal selected only by the actual equipped Hit/Crit item-effect snapshot. No positive elemental damage, Poisoned condition or extra lamp is inferred. Artistic acceptance pending."
+
+[sub_resource type="Resource" id="TimedFireCoatSustain"]
+script = ExtResource("poison_contact")
+clip = "weapons/equipped/fire/blade_tongues/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+item_effect_behavior_id = "condition.consumable.weapon_coat.timed_fire"
+item_effect_damage_type = "Fire"
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory coating proposal selected by this actual disclosed item-effect UUID. Real membership/removal owns lifetime; concurrent direct materials require authored composition. Pose/output and artistic acceptance remain separate."
+
+[sub_resource type="Resource" id="TimedFireCoatContact"]
+script = ExtResource("poison_contact")
+clip = "weapons/contact/fire/medium"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+item_effect_behavior_id = "condition.consumable.weapon_coat.timed_fire"
+item_effect_damage_type = "Fire"
+follow = false
+light_multiplier = 0.0
+staging_from = "Factory contact proposal selected only by the actual equipped Hit/Crit item-effect snapshot. No positive elemental damage, Poisoned condition or extra lamp is inferred. Artistic acceptance pending."
+
+[sub_resource type="Resource" id="AssassinPoisonCoatSustain"]
+script = ExtResource("poison_contact")
+clip = "weapons/equipped/poison/viscous_film/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+item_effect_behavior_id = "condition.consumable.weapon_coat.assassin_poison"
+item_effect_damage_type = "Poison"
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory coating proposal selected by this actual disclosed item-effect UUID. Real membership/removal owns lifetime; concurrent direct materials require authored composition. Pose/output and artistic acceptance remain separate."
+
+[sub_resource type="Resource" id="AssassinPoisonCoatContact"]
+script = ExtResource("poison_contact")
+clip = "weapons/contact/poison/medium"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+item_effect_behavior_id = "condition.consumable.weapon_coat.assassin_poison"
+item_effect_damage_type = "Poison"
+follow = false
+light_multiplier = 0.0
+staging_from = "Factory contact proposal selected only by the actual equipped Hit/Crit item-effect snapshot. No positive elemental damage, Poisoned condition or extra lamp is inferred. Artistic acceptance pending."
+
 [resource]
 script = ExtResource("2_nguwj")
 id = "weapon.longsword"
 kind = "weapon"
-impact_effects = Array[ExtResource("poison_contact")]([SubResource("BasicPoisonContact")])
+effects = Array[ExtResource("poison_contact")]([SubResource("BasicPoisonSustain"), SubResource("FireCoatSustain"), SubResource("LightningCoatSustain"), SubResource("ConcentrationFireCoatSustain"), SubResource("TimedFireCoatSustain"), SubResource("AssassinPoisonCoatSustain")])
+impact_effects = Array[ExtResource("poison_contact")]([SubResource("BasicPoisonContact"), SubResource("FireCoatContact"), SubResource("LightningCoatContact"), SubResource("ConcentrationFireCoatContact"), SubResource("TimedFireCoatContact"), SubResource("AssassinPoisonCoatContact")])
 slots = Dictionary[String, Dictionary]({
 "weapon_melee_main": {
 "layers": [{

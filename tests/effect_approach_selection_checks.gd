@@ -44,6 +44,23 @@ func run()->void:
     check(use.approach==alternative.id and not use.extra.has("approach") and cue.approach==alternative.id,"Existing typed EffectUse approach round-trips through the ordinary authored cue")
     var authored:Dictionary=Effects.occurrence_clip({"native_clip":combined,"native_cue":cue})
     check(authored.approach_id==alternative.id and Effects.choice(authored).approaches==[alternative],"Authored exact approach reaches runtime source selection without changing shared clip defaults")
+    var isolated:String="res://assets/vfx/extensions/followup-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+    var prepared_use:Resource=Records.effect_from_cue({"clip":"spells/sleep/default/lifecycle","role":"area", \
+        "approach":"runtime-prepared-followup-20261020","immutable_preparation":isolated},"Factory documented isolated coordinator; source placement still unqualified")
+    var prepared_cue:Dictionary=Records.cue_from_effect(prepared_use,0)
+    var prepared_clip:Dictionary=Effects.occurrence_clip({"native_clip":Effects.clip(prepared_use.clip),"native_cue":prepared_cue})
+    check(prepared_use.immutable_preparation==isolated and not prepared_use.extra.has("immutable_preparation") \
+        and prepared_cue.immutable_preparation==isolated and prepared_clip.immutable_preparation==isolated,"Exact preparation coordinator round-trips as typed authoring into the ordinary consumer")
+    var root_prepared:Dictionary=prepared_clip.duplicate(false);root_prepared.erase("immutable_preparation")
+    check(Effects.key(prepared_clip)!=Effects.key(root_prepared) and isolated in Effects.resource_paths(prepared_clip),"Distinct preparation Scripts cannot share readiness or omit their source dependency")
+    var isolated_cache:Dictionary={}
+    var isolated_ready:Dictionary=await prepared(prepared_clip,isolated_cache)
+    check(isolated_ready.ready,"The documented isolated coordinator completes actual bounded Resource preparation: "+str(isolated_ready))
+    if isolated_ready.ready:
+        var phase:Resource=isolated_cache[Effects.choice(prepared_clip).approaches[0].source_phase]
+        var bank_path:String=phase.to_clip().components[0].input.recorded_geometry_bank
+        check(isolated_cache[isolated].resources.has(bank_path) and isolated_cache[isolated].resources[bank_path].interface_ready,"The exact source's own Resource bank is ready before any occurrence construction")
+    check(Effects.choice(Effects.clip(prepared_use.clip)).approaches.all(func(row):return row.id!=prepared_use.approach),"Preparation proof does not select the opt-in Sleep alternative in production")
     Effects.set_requested("recorded")
     check(Effects.choice(exact).approaches==[alternative] and Effects.choice(exact).kind=="native","Exact source assignment takes precedence over the global kind")
     check(Effects.resource_paths(exact)==[alternative.path,alternative.source_phase],"Exact dependency closure names only its actual constructor and phase")

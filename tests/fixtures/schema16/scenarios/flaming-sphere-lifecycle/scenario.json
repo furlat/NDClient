@@ -1,0 +1,117 @@
+{
+ "id": "spell.flaming_sphere/summon_move_ram_retire",
+ "title": "Flaming Sphere: held summon, autonomous move/Ram, aura and retirement",
+ "kind": "spell",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.flaming_sphere"
+  ],
+  "action": [
+   "action.move",
+   "action.spell.flaming_sphere.ram",
+   "action.drop_concentration"
+  ],
+  "condition": [
+   "condition.concentrating",
+   "condition.spell.flaming_sphere.aura"
+  ],
+  "creature": [
+   "creature.spell.flaming_sphere"
+  ],
+  "environment_object": [],
+  "spatial_effect": [
+   "spatial_effect.spell.flaming_sphere.aura"
+  ],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.flaming_sphere"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.flaming_sphere",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "level": 2,
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "end_turn",
+   "by": "target"
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    5
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.flaming_sphere",
+  "action.spell.flaming_sphere.ram",
+  "action.move",
+  "action.drop_concentration"
+ ],
+ "required_conditions": [
+  "condition.concentrating"
+ ],
+ "required_condition_ends": [
+  "condition.concentrating"
+ ],
+ "required_facts": [
+  "movement",
+  "spatial_effect_state",
+  "damage"
+ ],
+ "required_applied_damage_types": [
+  "Fire"
+ ],
+ "purpose": "The frozen engine assigns this real sphere to its NativeAIController, not the human audience. End-turn commands allow only its actual accepted movement/Ram; actual end-turn aura, fire surfaces and retirement remain native facts, never fabricated trail deposition or caster-issued Ram."
+}

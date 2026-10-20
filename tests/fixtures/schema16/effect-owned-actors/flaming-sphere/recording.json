@@ -1,0 +1,90 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "9a9f4b18-6736-49e4-9cb0-48beeb30fda8": "Amber caster",
+  "9593eeff-c87a-463a-a8e3-d6b9d4cda516": "Amber ally",
+  "0c6a1ca2-2b7a-4678-9ca1-7b1e9f08b691": "Blue second target",
+  "53b9dc6b-d8d0-4d65-bd62-e828e424da6f": "Blue target",
+  "f0dcbb26-c72b-4d7b-b8bd-2a87bc4ceff3": "Flaming Sphere"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.flaming_sphere \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "sensory": 2,
+   "spatial_effect_state": 1,
+   "spatial": 1,
+   "actor_change": 2,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.flaming_sphere": 1
+  },
+  "conditions": [
+   "condition.concentrating"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 56,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 70,
+   "lineage": 41,
+   "event_offset": 8,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "9a9f4b18-6736-49e4-9cb0-48beeb30fda8",
+   "condition_uuid": "45530042-4ea7-4386-a989-65c4d1adf829",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 71,
+   "lineage": 41,
+   "event_offset": 9,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "9a9f4b18-6736-49e4-9cb0-48beeb30fda8",
+   "condition_uuid": "45530042-4ea7-4386-a989-65c4d1adf829",
+   "condition_id": "condition.concentrating"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 72,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell spell.flaming_sphere"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

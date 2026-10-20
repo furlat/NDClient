@@ -15,12 +15,20 @@ clip = "Attack5"
 markers = Dictionary[String, float]({
 "release": 7.0
 })
-hidden_slots = PackedStringArray("weapon", "offhand")
+hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_pe8c0"]
 script = ExtResource("1_evxyo")
 clip = "bg3-36/divine-favor/divine_favor_native/windup"
 role = "attached"
+scope = "cast"
+constructor_input = {
+"kind": "condition_application",
+"owner_actor": "caster",
+"condition_id": "condition.spell.divine_favor",
+"component_path": ["weapon_blessing"],
+"input_field": ""
+}
 at = "cast"
 attachment = "caster_ground"
 orientation = "world"
@@ -34,6 +42,12 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delay_seconds": 0.0,
+"input_policies": {
+"hit_input": {
+"mode": "not_applicable",
+"reason": "selected_weapon_blessing_phase_does_not_consume_hit"
+}
+},
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
@@ -42,9 +56,6 @@ extra = {
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
-}, {
-"actor": "target",
-"socket": "body_center"
 }]
 }
 
@@ -353,10 +364,10 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(4)
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.divine_favor")
-owner_cues = PackedInt32Array(2, 3)
+owner_cues = PackedInt32Array(1, 2, 3)
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
@@ -368,7 +379,8 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
 staging_unported = {
 "selection": "divine_favor_native",
+"hit": "Excluded cast-scheduled contact: requires a real later equipped Hit/Crit and exactly attributed Divine Favor rider component. The original held attack misses.",
 "source": "assets/vfx/index.json:/selections/divine_favor_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Finite windup binds the actual committed descendant actor condition and current equipped weapon; application, hold and removal belong to its existing prepared lifecycle. No cast-scheduled or inferred Radiant hit."

@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "8f82f86c-2b3e-4d77-b616-51f4f2569bdc",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "8f82f86c-2b3e-4d77-b616-51f4f2569bdc",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "6924c337-d63b-4081-bce3-0ef51f08d7c0",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Flaming Scimitar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "6924c337-d63b-4081-bce3-0ef51f08d7c0",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "b4505c78-5fa6-4e2e-8599-052c9c69c547",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "3e861274-5dc9-49a3-918b-4640e9df6727",
+   "state_revision": "339d2577-6fb5-4962-ae09-016aaf7aff79",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "452ac2ea-16f9-46c2-9dbf-93883b199ce3",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Flaming Scimitar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "452ac2ea-16f9-46c2-9dbf-93883b199ce3",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "dc984b98-cf08-4335-9a91-82efe5d11508",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "3e861274-5dc9-49a3-918b-4640e9df6727",
+   "state_revision": "f6c2c36a-6aec-4464-9a49-5bb48217d4e0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "c7cdfec4-2152-4950-baae-52cebf40948b",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "d4480afa-4a48-473a-a3c1-2d0cb7d5bd9c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "3e861274-5dc9-49a3-918b-4640e9df6727",
+   "state_revision": "0a080e8d-6ce1-4f4c-b61b-2d0fce554129",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "1d6217e5-284b-4c1a-8c20-525e75811bea",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "a9bc7f99-019e-40f1-b4f1-0d09d3f49f8e",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "c261dabd-0b51-4ab8-aad6-c1ab885d70af",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "3e861274-5dc9-49a3-918b-4640e9df6727",
+   "state_revision": "0b0b73fa-1fab-4254-a9e2-aa1b32f3d26e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "51f31d2f-c3c1-4145-95df-1935a0ed7870",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "6820c48c-17cb-4a28-89e5-64839a5be319",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "29e34941-20cc-43e8-9410-b8d819370212",
+   "state_revision": "6820c48c-17cb-4a28-89e5-64839a5be319",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+   "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+   "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_circus_flaming_scimitar_equipped_use_retire_replace",
+    "game_epoch": "d3bb2d3e-481d-483b-89c9-a14cedf980af",
+    "audience_id": "f610c9f8-fdef-419f-b631-bba34f1d0030",
+    "sequence": 23
+   }
+  }
+ }
+]

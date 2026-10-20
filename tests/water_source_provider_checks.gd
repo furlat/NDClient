@@ -40,7 +40,7 @@ func run()->void:
     var spell_path:String="res://authoring/abilities/spells/spell.create_or_destroy_water.tres"
     var spell:Resource=load(spell_path)
     var tele:Resource=load("res://authoring/abilities/spells/spell.telekinesis.tres")
-    check(source.id==ID and source.effects.size()==1,"Typed actual spatial owner has one source")
+    check(source.id==ID and source.effects.size()==2 and source.effects[0].at=="owner_start" and source.effects[1].at=="spatial_removal","Typed spatial owner separates its one held source and actual finite DRY transition")
     check(source.effects[0].constructor_input.cell_input=="surface_groups" and source.effects[0].constructor_input.component_path==["surface"],"Exact preconstruction interface is authored")
     check(source.effects[0].scope=="spatial" and source.effects[0].scale==1.0 and source.effects[0].orientation=="world","Disclosed cells retain their unscaled world frame")
     check(0 in spell.excluded_cues,"Finite cast does not duplicate the actual spatial source")
@@ -157,7 +157,7 @@ func qualify(row:Dictionary,effect:Dictionary,owners:Dictionary,cache:Dictionary
     check(Persistent.spatial_samples(late,65500.0,cache).is_empty(),seat+" actual sensory loss releases the private source")
     Persistent.observe_spatial(late,{WATER:effect},66000.0)
     var readmitted:Array=Persistent.spatial_samples(late,66000.0,cache)
-    check(readmitted.size()==1 and not readmitted[0].spatial_creation_observed and readmitted[0].age_ms==3500.0,seat+" remembered owner readmission cannot replay rainfall")
+    check(readmitted.size()==1 and not readmitted[0].spatial_creation_observed and readmitted[0].start_ms==65000.0 and readmitted[0].age_ms==4500.0,seat+" remembered owner within the retained window keeps its first-disclosure clock and cannot replay rainfall")
     # Synthetic owner controls only: the original above has no created row.
     var native_birth:Dictionary={"spatial_effect_uuid":WATER,"event_uuid":"synthetic-native-created-control","lineage_uuid":"synthetic-native-lineage", "operation":"created","interaction_operation":null,"positions":EXPECTED,"removed_positions":[]}
     var created:Dictionary={};Persistent.observe_spatial(created,{WATER:effect},1000.0,false,[native_birth])

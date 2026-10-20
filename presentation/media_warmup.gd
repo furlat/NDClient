@@ -1937,6 +1937,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
             for witness in witnesses[id]:_add_actor_once(paths,witness.actor,[],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,witness.looks)
         var requested = {}
         for track in group.get("actor_tracks",[]):
+            if track.get("spatial_only",false):continue
             # This track's source outfit was captured by the compiler at its
             # occurrence. Later damage/death/outfit witnesses are demanded
             # ahead below, but cannot block this earlier authored source cue.

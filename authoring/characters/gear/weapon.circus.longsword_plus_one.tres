@@ -3,15 +3,30 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_qjf4i"]
 [ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_ed5jh"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_ptfha"]
 script = ExtResource("1_qjf4i")
 path = "art/media/ui/icons/smooth48/item.longsword.png"
 native_size = Vector2i(48, 48)
 source = "ui-icons-bg3-glyphs-2026-10-07"
 
+[sub_resource type="Resource" id="IntrinsicSustain"]
+script = ExtResource("effect")
+clip = "weapons/equipped/arcane/etched_steel/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory exact-item assignment proposal; one medium main-hand candidate. Actual source-mask/pose admission stays authoritative; artistic acceptance pending R8."
+
 [resource]
 script = ExtResource("2_ed5jh")
 id = "weapon.circus.longsword_plus_one"
+effects = Array[ExtResource("effect")]([SubResource("IntrinsicSustain")])
 kind = "weapon"
 slots = Dictionary[String, Dictionary]({
 "weapon_melee_main": {
@@ -48,3 +63,5 @@ ground = Array[Dictionary]([{
 }])
 icon = SubResource("Resource_ptfha")
 notes = "Visual name Longsword +1; Polished magical longsword"
+
+# R2 candidate only: retain the original sheet, tint, family, ground art and real item UUID. No source refusal is bypassed.

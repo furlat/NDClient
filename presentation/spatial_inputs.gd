@@ -30,10 +30,23 @@ static func removal(owner:Dictionary,row:Dictionary)->Dictionary:
     var anchor:Variant=owner.source_effect.get("anchor_position")
     if anchor==null:anchor=owner.source_effect.positions[0]
     return {"cells":row.removed_positions.map(func(position):return [position[0]-anchor[0],position[1]-anchor[1]]),
+        "positions":row.removed_positions,
         "source_seconds":maxf(0.0,float(row.at_ms)-float(owner.start_ms))/1000.0,
         "at_ms":row.at_ms,
         "event_uuid":row.event_uuid,"lineage_uuid":row.lineage_uuid,
         "operation":row.operation,"interaction_operation":row.interaction_operation}
+
+## A finite retirement source receives only this actual transition's removed
+## cells. The still-present owner and other spatial UUIDs are separate draws.
+static func removal_construction(identity:String,source_effect:Dictionary,row:Dictionary,cue:Dictionary)->Dictionary:
+    var subset:Dictionary=source_effect.duplicate()
+    subset.positions=row.positions
+    subset.suppressions=[]
+    var result:Dictionary=construction(identity,subset,cue,subset)
+    if result.ready:
+        result.evidence=result.evidence.merged({"event_uuid":row.event_uuid,"lineage_uuid":row.lineage_uuid,
+            "operation":row.operation,"interaction_operation":row.interaction_operation,"removed_positions":row.positions,"at_ms":row.at_ms})
+    return result
 
 ## Only recorded retired cells may outlive current sensory membership, for
 ## the source's authored removal interval. Unseen cells gain no such lease.

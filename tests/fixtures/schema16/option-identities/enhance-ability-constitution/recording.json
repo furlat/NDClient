@@ -1,0 +1,288 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 10,
+ "tracked": {
+  "condition_id": "condition.spell.enhance_ability",
+  "condition_uuid": "e56aafe7-db0e-4021-834c-3d3302dc21ca",
+  "holder_uuid": "72438d81-5598-477f-b825-2902ebdfeb2c",
+  "holder": "Amber ally",
+  "occurrence": 44,
+  "sequence": 6
+ },
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "c4570a7b-eebc-45dc-96fa-9e02c047bb0c": "Amber caster",
+  "72438d81-5598-477f-b825-2902ebdfeb2c": "Amber ally",
+  "a7b54054-9bd4-4348-ae31-531bb0da3d7b": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue target",
+  "spell.enhance_ability \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.move \u00b7 Amber ally",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue target",
+  "action.drop_concentration \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.move \u00b7 Amber ally"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 17,
+   "temporary_hit_points": 1,
+   "actor_change": 5,
+   "spell": 1,
+   "spatial": 4,
+   "sensory": 2,
+   "step": 2,
+   "movement": 2,
+   "action": 1
+  },
+  "behaviors": {
+   "spell.enhance_ability": 1,
+   "action.move": 2,
+   "action.drop_concentration": 1
+  },
+  "conditions": [
+   "condition.concentrating",
+   "condition.spell.enhance_ability"
+  ],
+  "ended_conditions": [
+   "condition.concentrating",
+   "condition.spell.enhance_ability"
+  ],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 42,
+   "lineage": 33,
+   "event_offset": 0,
+   "kind": "temporary_hit_points",
+   "label": "temporary_hit_points ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 43,
+   "lineage": 33,
+   "event_offset": 1,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "c4570a7b-eebc-45dc-96fa-9e02c047bb0c",
+   "condition_uuid": "4a20b15e-d298-46d0-a756-bf7b33071280",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 44,
+   "lineage": 33,
+   "event_offset": 2,
+   "label": "condition applied condition.spell.enhance_ability",
+   "kind": "actor_change",
+   "actor_uuid": "72438d81-5598-477f-b825-2902ebdfeb2c",
+   "condition_uuid": "e56aafe7-db0e-4021-834c-3d3302dc21ca",
+   "condition_id": "condition.spell.enhance_ability",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 45,
+   "lineage": 33,
+   "event_offset": 3,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "c4570a7b-eebc-45dc-96fa-9e02c047bb0c",
+   "condition_uuid": "4a20b15e-d298-46d0-a756-bf7b33071280",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 46,
+   "lineage": 33,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.enhance_ability",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 74,
+   "lineage": 60,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 99,
+   "lineage": 91,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.enhance_ability",
+   "kind": "actor_change",
+   "actor_uuid": "72438d81-5598-477f-b825-2902ebdfeb2c",
+   "condition_uuid": "e56aafe7-db0e-4021-834c-3d3302dc21ca",
+   "condition_id": "condition.spell.enhance_ability",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 100,
+   "lineage": 91,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "c4570a7b-eebc-45dc-96fa-9e02c047bb0c",
+   "condition_uuid": "4a20b15e-d298-46d0-a756-bf7b33071280",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 102,
+   "lineage": 91,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "amber"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 130,
+   "lineage": 116,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 37,
+   "lineage": 28,
+   "event_offset": 0,
+   "kind": "temporary_hit_points",
+   "label": "temporary_hit_points ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 38,
+   "lineage": 28,
+   "event_offset": 1,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "c4570a7b-eebc-45dc-96fa-9e02c047bb0c",
+   "condition_uuid": "4a20b15e-d298-46d0-a756-bf7b33071280",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 39,
+   "lineage": 28,
+   "event_offset": 2,
+   "label": "condition applied condition.spell.enhance_ability",
+   "kind": "actor_change",
+   "actor_uuid": "72438d81-5598-477f-b825-2902ebdfeb2c",
+   "condition_uuid": "e56aafe7-db0e-4021-834c-3d3302dc21ca",
+   "condition_id": "condition.spell.enhance_ability",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 40,
+   "lineage": 28,
+   "event_offset": 3,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "c4570a7b-eebc-45dc-96fa-9e02c047bb0c",
+   "condition_uuid": "4a20b15e-d298-46d0-a756-bf7b33071280",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 41,
+   "lineage": 28,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.enhance_ability",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 69,
+   "lineage": 55,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 94,
+   "lineage": 86,
+   "event_offset": 0,
+   "label": "condition ended condition.spell.enhance_ability",
+   "kind": "actor_change",
+   "actor_uuid": "72438d81-5598-477f-b825-2902ebdfeb2c",
+   "condition_uuid": "e56aafe7-db0e-4021-834c-3d3302dc21ca",
+   "condition_id": "condition.spell.enhance_ability",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 95,
+   "lineage": 86,
+   "event_offset": 1,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "c4570a7b-eebc-45dc-96fa-9e02c047bb0c",
+   "condition_uuid": "4a20b15e-d298-46d0-a756-bf7b33071280",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 14,
+   "occurrence": 97,
+   "lineage": 86,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "blue"
+  },
+  {
+   "sequence": 17,
+   "occurrence": 125,
+   "lineage": 111,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

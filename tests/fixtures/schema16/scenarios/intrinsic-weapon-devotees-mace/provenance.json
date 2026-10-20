@@ -1,0 +1,330 @@
+{
+ "source": ".runtime/intrinsic-weapons-r2-20261020/cases/weapon.devotees_mace__equipped_use_retire_replace/20261020T150258.827650Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 14,
+ "originals": "Complete independent original faction streams and scenario/recording/commands copied byte-for-byte; no configuration, credentials or logs.",
+ "evidence": {
+  "amber": {
+   "packet_count": 24,
+   "initial_item": {
+    "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+    "item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+    "look": {
+     "item_id": "weapon.devotees_mace",
+     "item_kind": "weapon",
+     "visual_item_name": "Mace",
+     "visual_variant_id": null,
+     "equipped_visual_policy": "visible",
+     "very_bright_radius_feet": null,
+     "bright_radius_feet": null,
+     "dim_radius_feet": null
+    },
+    "effects": [
+     {
+      "duration": {
+       "duration_type": "permanent",
+       "remaining_rounds": null
+      },
+      "effect_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+      "contribution_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+      "behavior_id": "item.property.additional_damage",
+      "display_name": "Value",
+      "description": "",
+      "damage_type": "Radiant",
+      "applied_source_event_cursor": null
+     }
+    ],
+    "layer": {
+     "slot": "MELEE_MAIN",
+     "item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+     "item_id": "weapon.devotees_mace",
+     "is_lit": null
+    }
+   },
+   "movement": {
+    "sequence": 2,
+    "occurrence": 26,
+    "lineage": 12
+   },
+   "intrinsic_attacks": [
+    {
+     "sequence": 3,
+     "occurrence": 45,
+     "lineage": 27,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+      "target_entity_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Bludgeoning",
+       "Radiant"
+      ],
+      "source_item_id": "weapon.devotees_mace",
+      "source_item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "contribution_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "behavior_id": "item.property.additional_damage",
+        "display_name": "Value",
+        "description": "",
+        "damage_type": "Radiant",
+        "applied_source_event_cursor": null
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 85,
+     "lineage": 67,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+      "target_entity_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Bludgeoning",
+       "Radiant"
+      ],
+      "source_item_id": "weapon.devotees_mace",
+      "source_item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+      "item_effects": [
+       {
+        "duration": {
+         "duration_type": "permanent",
+         "remaining_rounds": null
+        },
+        "effect_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "contribution_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "behavior_id": "item.property.additional_damage",
+        "display_name": "Value",
+        "description": "",
+        "damage_type": "Radiant",
+        "applied_source_event_cursor": null
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "unequip": {
+    "sequence": 13,
+    "occurrence": 111,
+    "lineage": 111,
+    "field": "layer",
+    "slot": "MELEE_MAIN"
+   },
+   "plain_replacement": {
+    "sequence": 18,
+    "occurrence": 137,
+    "lineage": 137,
+    "field": "layer",
+    "slot": "MELEE_MAIN",
+    "layer": {
+     "slot": "MELEE_MAIN",
+     "item_uuid": "a87c27e8-59e1-4ba4-aded-eb265dd24271",
+     "item_id": "weapon.longsword",
+     "is_lit": null
+    }
+   },
+   "replacement_attack": {
+    "sequence": 23,
+    "occurrence": 177,
+    "lineage": 159,
+    "fact": {
+     "kind": "attack",
+     "source_entity_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+     "target_entity_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+     "behavior_id": "action.attack",
+     "name": "Attack_MELEE_MAIN",
+     "weapon_slot": "MELEE_MAIN",
+     "attack_outcome": "Crit",
+     "damage_types": [
+      "Slashing"
+     ],
+     "source_item_id": "weapon.longsword",
+     "source_item_uuid": "a87c27e8-59e1-4ba4-aded-eb265dd24271",
+     "target_kind": "creature",
+     "attack_source_kind": "equipped"
+    }
+   }
+  },
+  "blue": {
+   "packet_count": 24,
+   "initial_item": {
+    "actor_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+    "item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+    "look": {
+     "item_id": "weapon.devotees_mace",
+     "item_kind": "weapon",
+     "visual_item_name": "Mace",
+     "visual_variant_id": null,
+     "equipped_visual_policy": "visible",
+     "very_bright_radius_feet": null,
+     "bright_radius_feet": null,
+     "dim_radius_feet": null
+    },
+    "effects": [
+     {
+      "duration": null,
+      "effect_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+      "contribution_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+      "behavior_id": "item.property.additional_damage",
+      "display_name": "Value",
+      "description": "",
+      "damage_type": "Radiant",
+      "applied_source_event_cursor": null
+     }
+    ],
+    "layer": {
+     "slot": "MELEE_MAIN",
+     "item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+     "item_id": "weapon.devotees_mace",
+     "is_lit": null
+    }
+   },
+   "movement": {
+    "sequence": 2,
+    "occurrence": 30,
+    "lineage": 16
+   },
+   "intrinsic_attacks": [
+    {
+     "sequence": 3,
+     "occurrence": 49,
+     "lineage": 31,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+      "target_entity_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Bludgeoning",
+       "Radiant"
+      ],
+      "source_item_id": "weapon.devotees_mace",
+      "source_item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "contribution_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "behavior_id": "item.property.additional_damage",
+        "display_name": "Value",
+        "description": "",
+        "damage_type": "Radiant",
+        "applied_source_event_cursor": null
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    },
+    {
+     "sequence": 8,
+     "occurrence": 89,
+     "lineage": 71,
+     "fact": {
+      "kind": "attack",
+      "source_entity_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+      "target_entity_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+      "behavior_id": "action.attack",
+      "name": "Attack_MELEE_MAIN",
+      "weapon_slot": "MELEE_MAIN",
+      "attack_outcome": "Hit",
+      "damage_types": [
+       "Bludgeoning",
+       "Radiant"
+      ],
+      "source_item_id": "weapon.devotees_mace",
+      "source_item_uuid": "3ad119be-6706-488d-841c-e51182a85df5",
+      "item_effects": [
+       {
+        "duration": null,
+        "effect_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "contribution_uuid": "30b63692-15ac-4a48-8cb6-06c95e8cdcdf",
+        "behavior_id": "item.property.additional_damage",
+        "display_name": "Value",
+        "description": "",
+        "damage_type": "Radiant",
+        "applied_source_event_cursor": null
+       }
+      ],
+      "target_kind": "creature",
+      "attack_source_kind": "equipped"
+     }
+    }
+   ],
+   "unequip": {
+    "sequence": 13,
+    "occurrence": 115,
+    "lineage": 115,
+    "field": "layer",
+    "slot": "MELEE_MAIN"
+   },
+   "plain_replacement": {
+    "sequence": 18,
+    "occurrence": 141,
+    "lineage": 141,
+    "field": "layer",
+    "slot": "MELEE_MAIN",
+    "layer": {
+     "slot": "MELEE_MAIN",
+     "item_uuid": "a87c27e8-59e1-4ba4-aded-eb265dd24271",
+     "item_id": "weapon.longsword",
+     "is_lit": null
+    }
+   },
+   "replacement_attack": {
+    "sequence": 23,
+    "occurrence": 181,
+    "lineage": 163,
+    "fact": {
+     "kind": "attack",
+     "source_entity_uuid": "8a94ec45-93c0-4852-b5f7-a620eb6bf4ed",
+     "target_entity_uuid": "2a52f0c0-317b-428a-8c3c-b1c5a4975f18",
+     "behavior_id": "action.attack",
+     "name": "Attack_MELEE_MAIN",
+     "weapon_slot": "MELEE_MAIN",
+     "attack_outcome": "Crit",
+     "damage_types": [
+      "Slashing"
+     ],
+     "source_item_id": "weapon.longsword",
+     "source_item_uuid": "a87c27e8-59e1-4ba4-aded-eb265dd24271",
+     "target_kind": "creature",
+     "attack_source_kind": "equipped"
+    }
+   }
+  }
+ },
+ "limits": [
+  "Native source pose admission/framebuffer and user artwork acceptance are unqualified by this recording.",
+  "Intrinsic visual ownership is the exact item; actual public additional-damage members remain unchanged and are not fabricated coating UUIDs.",
+  "No lamps, bonus elemental results, offhand axes, or replacement weapon bodies are inferred from the selected decoration."
+ ]
+}

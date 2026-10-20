@@ -24,11 +24,35 @@ constructor_input = {
 extra = {"initial_source_seconds": 3.5}
 staging_from = "client@schema16_observed_water_20261020"
 
+[sub_resource type="Resource" id="ObservedDry"]
+script = ExtResource("effect")
+clip = "bg3-36/create-or-destroy-water/destroy"
+role = "attached"
+scope = "spatial"
+at = "spatial_removal"
+attachment = "recipient_ground"
+orientation = "world"
+scale = 1.0
+source_start = 0.733333333333333
+source_end = 1.933333333333333
+duration_policy = "authored"
+sampling = "absolute"
+light_multiplier = 0.0
+constructor_input = {
+"kind": "spatial_owner",
+"component_path": ["surface"],
+"input_field": "",
+"content_id": "spatial_effect.material.water_surface",
+"cell_input": "surface_groups"
+}
+extra = {"spatial_removal_when": {"interaction_operation": "dry"}}
+staging_from = "client@schema16_observed_water_20261020"
+
 [resource]
 script = ExtResource("condition")
 id = "spatial_effect.material.water_surface"
 disposition = "authored"
 play_package_lifecycle = false
-effects = Array[ExtResource("effect")]([SubResource("ObservedWater")])
+effects = Array[ExtResource("effect")]([SubResource("ObservedWater"), SubResource("ObservedDry")])
 status = "partial"
-notes = "Actual disclosed water-surface UUID owns immutable native source coverage. Original cells are partitioned in groups of at most32, each with160 deterministic optical samples inside those same cells. Current admitted cells, visibility and suppression use the existing AreaMask. Rainfall starts only from an actual native created row at this owner admission cut; initial or later first disclosure begins after rainfall. Current original supplies no created row and qualifies held puddle coverage only. Permanent removal closes the actual owner; destroy choreography, null-behavior Wet lease and topology expansion remain separately unqualified. No gameplay cells, actor identities or expiry times are inferred. Native output and user visual acceptance remain separate."
+notes = "Actual disclosed water-surface UUID owns immutable native source coverage. Original cells are partitioned in groups of at most32, each with160 deterministic optical samples inside those same cells. Current admitted cells, visibility and suppression use the existing AreaMask. Rainfall starts only from an actual native created row at this owner admission cut; initial or later first disclosure begins after rainfall. An actual DRY row owns one finite destroy source over only its exact removed subset, starting at the supplied source clear clock after the authoritative cut. Visibility loss cannot trigger it; still-present cells and other owners remain independent. Current originals have no native created row or topology expansion. Native output and user visual acceptance remain separate."

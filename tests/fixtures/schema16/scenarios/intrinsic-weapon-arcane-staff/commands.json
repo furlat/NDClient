@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "b7a2b4ef-65c7-4202-846b-751e328edb4a",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "b7a2b4ef-65c7-4202-846b-751e328edb4a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "065c2391-d513-48a9-ad04-910f90ce5c51",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Arcane Staff",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "065c2391-d513-48a9-ad04-910f90ce5c51",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "64b14a13-69aa-4dde-98bf-9e5243664c0c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "5d7518e7-fa48-4d55-99e5-901a61d058f2",
+   "state_revision": "c86e5094-4aeb-4110-aa6f-4e3257cc2603",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ea3cc6f1-a78a-4e2c-9c24-b0426e67ffaf",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Arcane Staff",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "ea3cc6f1-a78a-4e2c-9c24-b0426e67ffaf",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "13ca8306-2e4c-4cd6-9ccd-54812dcd0868",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "5d7518e7-fa48-4d55-99e5-901a61d058f2",
+   "state_revision": "0ad9c28d-c3f1-4180-bd0e-2fd0df6574a0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "99869665-08ee-410a-bf2a-a9c8d0ba773a",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "ced2757e-a5b8-46f1-8b24-2f76e43af6f1",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "5d7518e7-fa48-4d55-99e5-901a61d058f2",
+   "state_revision": "b9468c96-390c-45d4-a78c-f8679da471dd",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "7ff2ea76-13cb-4428-9def-c15461f2a2e3",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "2dcba992-b269-4273-b84c-13c452118449",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "870d5229-3d8c-4705-bd0c-f64d75bb924b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "5d7518e7-fa48-4d55-99e5-901a61d058f2",
+   "state_revision": "65539d5e-c228-420c-b837-37b0e70a2177",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "93760467-bdc5-4aa4-9bc9-914975822808",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a1b6a90b-31ed-4a45-ad62-c634808ac54d",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "ccf3ea41-32cd-4330-8083-afee307d3550",
+   "state_revision": "a1b6a90b-31ed-4a45-ad62-c634808ac54d",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+   "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+   "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_arcane_staff_equipped_use_retire_replace",
+    "game_epoch": "3d9c8eb6-039b-4d0f-b0b1-2a93ef4deec7",
+    "audience_id": "a5325ca4-0373-4c20-a832-9c077352871d",
+    "sequence": 23
+   }
+  }
+ }
+]

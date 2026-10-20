@@ -1,0 +1,176 @@
+{
+ "id": "spell.shillelagh/equipped_move_release_reequip_replace",
+ "title": "Shillelagh: held movement, release, same staff re-equip and replacement",
+ "kind": "spell",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.shillelagh"
+  ],
+  "action": [
+   "action.move",
+   "action.attack"
+  ],
+  "condition": [
+   "condition.spell.shillelagh"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": [
+   "weapon.quarterstaff",
+   "weapon.longsword"
+  ]
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.shillelagh"
+   ],
+   "at": [
+    4,
+    6
+   ],
+   "items": [
+    {
+     "id": "weapon.quarterstaff",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "id": "weapon.longsword",
+     "placement": "inventory"
+    }
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.ogre_zombie",
+   "at": [
+    6,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.shillelagh",
+   "by": "caster",
+   "target": "self",
+   "variant": {
+    "form": "MELEE_MAIN"
+   },
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.quarterstaff",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    5
+   ]
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "required_behaviors": [
+  "spell.shillelagh",
+  "action.move",
+  "action.attack"
+ ],
+ "required_conditions": [
+  "condition.spell.shillelagh"
+ ],
+ "required_condition_ends": [
+  "condition.spell.shillelagh"
+ ],
+ "required_facts": [
+  "movement",
+  "attack"
+ ],
+ "purpose": "Original affected_item_uuid must identify the actual equipped Quarterstaff. Movement and accepted attacks preserve their actual outcomes. Unequip must really remove that UUID owner; re-equipping the same staff and replacing it with a plain Longsword cannot manufacture a new enchantment."
+}

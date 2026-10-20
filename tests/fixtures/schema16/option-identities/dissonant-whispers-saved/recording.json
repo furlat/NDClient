@@ -1,0 +1,198 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "c9cac6a5-04c0-4973-bb13-fe21c8564188": "Amber caster",
+  "dd46962b-4a90-4769-b90a-9601b34caccd": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "spell.dissonant_whispers \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Blue target",
+  "spell.dissonant_whispers \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 2,
+   "damage": 4,
+   "spell": 2
+  },
+  "behaviors": {
+   "spell.dissonant_whispers": 2
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Psychic"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 18,
+   "lineage": 12,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 26,
+   "lineage": 12,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 27,
+   "lineage": 12,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 30,
+   "lineage": 12,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 58,
+   "lineage": 52,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 66,
+   "lineage": 52,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 67,
+   "lineage": 52,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 68,
+   "lineage": 52,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 22,
+   "lineage": 16,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 30,
+   "lineage": 16,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 31,
+   "lineage": 16,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 34,
+   "lineage": 16,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 62,
+   "lineage": 56,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 70,
+   "lineage": 56,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 71,
+   "lineage": 56,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 72,
+   "lineage": 56,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.dissonant_whispers",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Psychic"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

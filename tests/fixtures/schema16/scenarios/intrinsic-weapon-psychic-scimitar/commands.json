@@ -1,0 +1,542 @@
+[
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "229ada9b-733b-402b-afd4-044bbf8a00ed",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "229ada9b-733b-402b-afd4-044bbf8a00ed",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "0a13814d-0652-4910-878e-a795af45ae2b",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Mindreaver Scimitar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "0a13814d-0652-4910-878e-a795af45ae2b",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "24640358-7f36-4938-acd5-b5161f0687c5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "f1fa2f86-daf7-4c1d-84b0-8f8b2e69a8d4",
+   "state_revision": "01ed3a67-140f-4afc-ac40-ca322fb9f3ed",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "358f73eb-367b-4fc8-af78-bf65b29c7e23",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Mindreaver Scimitar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "358f73eb-367b-4fc8-af78-bf65b29c7e23",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "a601661e-0155-4d91-9124-bed0cd17ac91",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "f1fa2f86-daf7-4c1d-84b0-8f8b2e69a8d4",
+   "state_revision": "f6305d86-c47b-406a-92e8-a5c61313ce19",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "4ea45aea-15f6-44d6-9944-6f39c8058efe",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "01dbceee-13b7-4539-92d5-e8ba8e9a7740",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "f1fa2f86-daf7-4c1d-84b0-8f8b2e69a8d4",
+   "state_revision": "cd9f9456-e052-4b09-8fa4-03f1d60ea834",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.longsword",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "d05d519b-a01b-4bbe-aa37-f3381c38c81a",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "812c10f1-7641-4ad6-8ce4-993c65a01577",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "d6efcdfd-5166-4405-ac33-278bdc0af5d0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 19
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "f1fa2f86-daf7-4c1d-84b0-8f8b2e69a8d4",
+   "state_revision": "9b130f67-0687-4cb0-aa1d-407d3e77cd17",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "47f1fabb-f21b-434f-a5ba-d2975bc7f098",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "79ac56b8-f224-4cde-bda9-0907097329d7",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "2e31700f-cf21-4bcc-a4ef-4374ef5b2c5f",
+   "state_revision": "79ac56b8-f224-4cde-bda9-0907097329d7",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+   "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+   "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_weapon_roster_psychic_scimitar_equipped_use_retire_replace",
+    "game_epoch": "b99a853f-2183-4bc8-9ae2-993f2e59d660",
+    "audience_id": "0e92b1d2-9315-4273-a1bd-5e4ff79075fb",
+    "sequence": 23
+   }
+  }
+ }
+]

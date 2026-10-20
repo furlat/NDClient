@@ -1,0 +1,479 @@
+[
+ {
+  "request": {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "8e4f77bf-87de-44a1-8aad-b25d1018634f",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.resistance",
+   "display_name": "Resistance",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "state_revision": "8e4f77bf-87de-44a1-8aad-b25d1018634f",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "state_revision": "c79b3378-5494-4dcb-9961-a9d5b1f82ba8",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1,
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a5aea55b-c853-4108-964a-14a279db37fa",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.dissonant_whispers",
+   "display_name": "Dissonant Whispers (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "bb873d61-fb25-47e5-abc6-f2cbece658bb",
+   "state_revision": "a5aea55b-c853-4108-964a-14a279db37fa",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "bb873d61-fb25-47e5-abc6-f2cbece658bb",
+   "state_revision": "4ffdbee0-385a-4181-95bf-0acda77306ac",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "959b85da-884f-4f3c-855b-ce36ab27f4d9",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.resistance",
+   "display_name": "Resistance",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "state_revision": "959b85da-884f-4f3c-855b-ce36ab27f4d9",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "state_revision": "6af41556-9e21-4064-98ed-02a36128db54",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1,
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2536ad05-e7c2-4040-8db3-dc53ff0099f5",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.dissonant_whispers",
+   "display_name": "Dissonant Whispers (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "bb873d61-fb25-47e5-abc6-f2cbece658bb",
+   "state_revision": "2536ad05-e7c2-4040-8db3-dc53ff0099f5",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "bb873d61-fb25-47e5-abc6-f2cbece658bb",
+   "state_revision": "7f264f61-e5ee-4cef-bbe5-f30e1d701e40",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "0509dca4-a522-4c4c-a360-128050791d49",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "spell.resistance",
+   "display_name": "Resistance",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "state_revision": "0509dca4-a522-4c4c-a360-128050791d49",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "33951bb2-236b-40d9-8d92-c67df9b6c9ea",
+   "state_revision": "fc2983bd-69ec-4b68-aee1-e7f392b4ecfa",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "faf4fc66-ed01-4a26-867b-4767dac7b2be",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1,
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "45df44b0-4934-4914-b592-f0632e31f407",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "spell.dissonant_whispers",
+   "display_name": "Dissonant Whispers (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "bb873d61-fb25-47e5-abc6-f2cbece658bb",
+   "state_revision": "45df44b0-4934-4914-b592-f0632e31f407",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+   "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+   "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dissonant_whispers_modular_cleric_saves",
+    "game_epoch": "944c08f6-e687-4b76-bc1b-04275f074102",
+    "audience_id": "a119c1cf-2e24-4d13-aa35-e6ff5ad542cb",
+    "sequence": 17
+   }
+  }
+ }
+]

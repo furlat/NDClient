@@ -162,12 +162,16 @@ static func requires_construction(value:Dictionary)->bool:
 static func key(value:Dictionary)->String:
     var selected:Dictionary=choice(value)
     var sources:Array=selected.approaches.map(func(approach):return [str(approach.id),str(approach.path),str(approach.get("source_phase",""))])
-    return JSON.stringify([str(value.get("id","")),selected.kind,sources,str(value.get("opacity_uniform",""))])
+    var identity:Array=[str(value.get("id","")),selected.kind,sources,str(value.get("opacity_uniform",""))]
+    if not str(value.get("immutable_preparation","")).is_empty():identity.append(value.immutable_preparation)
+    return JSON.stringify(identity)
 
 static func occurrence_clip(component:Dictionary)->Dictionary:
     var result:Dictionary=component.native_clip.duplicate(false)
     var approach:String=str(component.get("native_cue",{}).get("approach",""))
     if not approach.is_empty():result.approach_id=approach
+    var preparation:String=str(component.get("native_cue",{}).get("immutable_preparation",""))
+    if not preparation.is_empty():result.immutable_preparation=preparation
     if component.has("native_constructor_inputs"):
         result.construction_inputs=component.native_constructor_inputs
         result.preparation_owner=component.id
@@ -178,6 +182,7 @@ static func occurrence_clip(component:Dictionary)->Dictionary:
 ## Files this clip's playing approach reads (Studio preview dependencies).
 static func resource_paths(value:Dictionary)->Array:
     var result:Array=[]
+    if not str(value.get("immutable_preparation","")).is_empty():result.append(value.immutable_preparation)
     for approach in choice(value).approaches:
         result.append(approach.path)
         if approach.has("source_phase"):result.append(approach.source_phase)
@@ -206,7 +211,8 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
         var approach:Dictionary=chosen.approaches[0]
         live.append(approach)
         for path in [approach.path,approach.source_phase]+approach.warm:paths[path]=true
-        if not _immutable_preparation.is_empty():paths[_immutable_preparation]=true
+        var preparation:String=str(value.get("immutable_preparation",_immutable_preparation))
+        if not preparation.is_empty():paths[preparation]=true
         var phase:Resource=cache.get(approach.source_phase)
         if phase!=null:
             if not cache.has("effect_package_phase_paths"):cache.effect_package_phase_paths={}
@@ -223,9 +229,8 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
                 for path in approach.warm:
                     if cache.get(path) is Material:materials.append(cache[path])
                 if not Admission.prepare_materials(cache[approach.path],materials,cache):pending+=1
-            if not _immutable_preparation.is_empty():
-                var prepared:Dictionary=_prepare_immutable(clips,cache)
-                pending+=prepared.pending;errors.append_array(prepared.errors)
+            var prepared:Dictionary=_prepare_immutable(clips,cache)
+            pending+=prepared.pending;errors.append_array(prepared.errors)
     if not clips.is_empty() and not Admission.can_mutate():pending+=1
     return {"ready":pending==0 and errors.is_empty(),"pending":pending,"errors":errors}
 
@@ -237,13 +242,15 @@ static func _prepare_immutable(clips:Array,cache:Dictionary)->Dictionary:
     var jobs:Dictionary=cache.native_immutable_jobs
     var pending:int=0;var errors:Array=[]
     var stepped:bool=false
-    var preparation:Script=cache[_immutable_preparation]
     for value in clips:
         var selected:Dictionary=choice(value)
         if selected.kind=="recorded" or selected.approaches.is_empty():continue
         # Neutral construction templates can prepare ordinary dependencies,
         # but must not discover or build a successful review occurrence.
         if requires_construction(value) and not value.has("construction_inputs"):continue
+        var preparation_path:String=str(value.get("immutable_preparation",_immutable_preparation))
+        if preparation_path.is_empty():continue
+        var preparation:Script=cache[preparation_path]
         var identity:String=key(value)+"|"+str(selected.approaches[0].path)+"|"+str(value.get("preparation_owner","source"))
         if not jobs.has(identity):
             var phase:Resource=cache[selected.approaches[0].source_phase]

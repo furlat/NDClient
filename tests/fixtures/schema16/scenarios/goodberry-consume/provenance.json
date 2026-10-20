@@ -1,0 +1,2605 @@
+{
+ "source": ".runtime/goodberry-consume-r1-20261020/cases/spell.goodberry__create_eat_blocked_restore/20261020T153853.583777Z",
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ },
+ "commands": 11,
+ "originals": "Complete independent Amber and Blue packet streams and scenario/recording/commands/choices copied byte-for-byte. No credentials, host configuration, logs, art or invented facts.",
+ "actual_eater_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+ "actual_chill_caster_uuid": "73fed623-3ca1-440e-b9b1-8291da19b332",
+ "actual_chill_condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515",
+ "actual_berry_creation_sequence": 2,
+ "created_berries_amber": [
+  "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+  "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+  "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+  "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+ ],
+ "actual_consumption_sequences": [
+  3,
+  9,
+  15
+ ],
+ "evidence": {
+  "amber": {
+   "packet_count": 17,
+   "native_events": [
+    {
+     "sequence": 2,
+     "occurrence": 31,
+     "lineage": 25,
+     "parent_event": 27,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "18188934-d432-4bdf-9312-411dfd93c684",
+          "member": {
+           "condition_uuid": "18188934-d432-4bdf-9312-411dfd93c684",
+           "name": "Goodberry Batch:18188934-d432-4bdf-9312-411dfd93c684",
+           "category": "condition",
+           "behavior_id": "condition.spell.goodberry.batch",
+           "state": {
+            "duration": {
+             "duration_type": "until_long_rest",
+             "remaining_rounds": null
+            },
+            "condition_uuid": "18188934-d432-4bdf-9312-411dfd93c684",
+            "name": "Goodberry Batch:18188934-d432-4bdf-9312-411dfd93c684",
+            "category": "condition",
+            "semantic_key": "condition.spell.goodberry.batch",
+            "behavior_id": "condition.spell.goodberry.batch",
+            "tags": [
+             "magical"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 2,
+     "occurrence": 32,
+     "lineage": 25,
+     "parent_event": 27,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "inventory",
+          "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+          "held": true
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+        "look": {
+         "item_id": "consumable.goodberry",
+         "item_kind": "usable",
+         "visual_item_name": "Goodberry",
+         "visual_variant_id": null,
+         "equipped_visual_policy": "visible",
+         "very_bright_radius_feet": null,
+         "bright_radius_feet": null,
+         "dim_radius_feet": null
+        },
+        "profile": {
+         "name": "Goodberry",
+         "description": "A temporary magical berry. Eat as a bonus action to heal 1d4.",
+         "rarity": "common",
+         "weight": 0.01,
+         "value": 0,
+         "tags": [],
+         "is_pickable": true,
+         "is_equippable": false,
+         "is_usable": true,
+         "is_targetable": false,
+         "door_mechanism": null,
+         "door_swing": null,
+         "stack_id": null,
+         "damage_dice": null,
+         "damage_type": null,
+         "weapon_properties": [],
+         "armor_type": null,
+         "armor_ac": null,
+         "shield_ac_bonus": null,
+         "max_charges": 1,
+         "max_stack": 1,
+         "is_consumable": true,
+         "map_char": "\u03c6",
+         "include_in_senses_objects": true,
+         "include_in_adjacent_senses_objects": false,
+         "include_in_available_object_actions": true,
+         "maximum_hit_points": null,
+         "concentration_capacity": 0,
+         "boundary_structure": null
+        },
+        "state": {
+         "stack_count": 1,
+         "charges": 1,
+         "integrity": "intact",
+         "destruction_outcome": null,
+         "remnant_state": null,
+         "current_hit_points": null,
+         "concentration_slots": [],
+         "construction_owner_uuid": null,
+         "construction_geometry": null,
+         "construction_suppressions": [],
+         "known_to_creator": false,
+         "supported_by_uuid": null,
+         "contact_passage": "structural",
+         "surface_residues": [],
+         "linked_spatial_condition_uuid": null,
+         "is_open": null,
+         "is_engaged": null,
+         "blocks_movement": false,
+         "blocks_optics": false,
+         "blocks_propagation": false,
+         "is_lit": null
+        }
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 2,
+     "occurrence": 33,
+     "lineage": 25,
+     "parent_event": 27,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "inventory",
+          "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+          "held": true
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+        "look": {
+         "item_id": "consumable.goodberry",
+         "item_kind": "usable",
+         "visual_item_name": "Goodberry",
+         "visual_variant_id": null,
+         "equipped_visual_policy": "visible",
+         "very_bright_radius_feet": null,
+         "bright_radius_feet": null,
+         "dim_radius_feet": null
+        },
+        "profile": {
+         "name": "Goodberry",
+         "description": "A temporary magical berry. Eat as a bonus action to heal 1d4.",
+         "rarity": "common",
+         "weight": 0.01,
+         "value": 0,
+         "tags": [],
+         "is_pickable": true,
+         "is_equippable": false,
+         "is_usable": true,
+         "is_targetable": false,
+         "door_mechanism": null,
+         "door_swing": null,
+         "stack_id": null,
+         "damage_dice": null,
+         "damage_type": null,
+         "weapon_properties": [],
+         "armor_type": null,
+         "armor_ac": null,
+         "shield_ac_bonus": null,
+         "max_charges": 1,
+         "max_stack": 1,
+         "is_consumable": true,
+         "map_char": "\u03c6",
+         "include_in_senses_objects": true,
+         "include_in_adjacent_senses_objects": false,
+         "include_in_available_object_actions": true,
+         "maximum_hit_points": null,
+         "concentration_capacity": 0,
+         "boundary_structure": null
+        },
+        "state": {
+         "stack_count": 1,
+         "charges": 1,
+         "integrity": "intact",
+         "destruction_outcome": null,
+         "remnant_state": null,
+         "current_hit_points": null,
+         "concentration_slots": [],
+         "construction_owner_uuid": null,
+         "construction_geometry": null,
+         "construction_suppressions": [],
+         "known_to_creator": false,
+         "supported_by_uuid": null,
+         "contact_passage": "structural",
+         "surface_residues": [],
+         "linked_spatial_condition_uuid": null,
+         "is_open": null,
+         "is_engaged": null,
+         "blocks_movement": false,
+         "blocks_optics": false,
+         "blocks_propagation": false,
+         "is_lit": null
+        }
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 2,
+     "occurrence": 34,
+     "lineage": 25,
+     "parent_event": 27,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "inventory",
+          "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+          "held": true
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+        "look": {
+         "item_id": "consumable.goodberry",
+         "item_kind": "usable",
+         "visual_item_name": "Goodberry",
+         "visual_variant_id": null,
+         "equipped_visual_policy": "visible",
+         "very_bright_radius_feet": null,
+         "bright_radius_feet": null,
+         "dim_radius_feet": null
+        },
+        "profile": {
+         "name": "Goodberry",
+         "description": "A temporary magical berry. Eat as a bonus action to heal 1d4.",
+         "rarity": "common",
+         "weight": 0.01,
+         "value": 0,
+         "tags": [],
+         "is_pickable": true,
+         "is_equippable": false,
+         "is_usable": true,
+         "is_targetable": false,
+         "door_mechanism": null,
+         "door_swing": null,
+         "stack_id": null,
+         "damage_dice": null,
+         "damage_type": null,
+         "weapon_properties": [],
+         "armor_type": null,
+         "armor_ac": null,
+         "shield_ac_bonus": null,
+         "max_charges": 1,
+         "max_stack": 1,
+         "is_consumable": true,
+         "map_char": "\u03c6",
+         "include_in_senses_objects": true,
+         "include_in_adjacent_senses_objects": false,
+         "include_in_available_object_actions": true,
+         "maximum_hit_points": null,
+         "concentration_capacity": 0,
+         "boundary_structure": null
+        },
+        "state": {
+         "stack_count": 1,
+         "charges": 1,
+         "integrity": "intact",
+         "destruction_outcome": null,
+         "remnant_state": null,
+         "current_hit_points": null,
+         "concentration_slots": [],
+         "construction_owner_uuid": null,
+         "construction_geometry": null,
+         "construction_suppressions": [],
+         "known_to_creator": false,
+         "supported_by_uuid": null,
+         "contact_passage": "structural",
+         "surface_residues": [],
+         "linked_spatial_condition_uuid": null,
+         "is_open": null,
+         "is_engaged": null,
+         "blocks_movement": false,
+         "blocks_optics": false,
+         "blocks_propagation": false,
+         "is_lit": null
+        }
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 2,
+     "occurrence": 35,
+     "lineage": 25,
+     "parent_event": 27,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "inventory",
+          "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+          "held": true
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+        "look": {
+         "item_id": "consumable.goodberry",
+         "item_kind": "usable",
+         "visual_item_name": "Goodberry",
+         "visual_variant_id": null,
+         "equipped_visual_policy": "visible",
+         "very_bright_radius_feet": null,
+         "bright_radius_feet": null,
+         "dim_radius_feet": null
+        },
+        "profile": {
+         "name": "Goodberry",
+         "description": "A temporary magical berry. Eat as a bonus action to heal 1d4.",
+         "rarity": "common",
+         "weight": 0.01,
+         "value": 0,
+         "tags": [],
+         "is_pickable": true,
+         "is_equippable": false,
+         "is_usable": true,
+         "is_targetable": false,
+         "door_mechanism": null,
+         "door_swing": null,
+         "stack_id": null,
+         "damage_dice": null,
+         "damage_type": null,
+         "weapon_properties": [],
+         "armor_type": null,
+         "armor_ac": null,
+         "shield_ac_bonus": null,
+         "max_charges": 1,
+         "max_stack": 1,
+         "is_consumable": true,
+         "map_char": "\u03c6",
+         "include_in_senses_objects": true,
+         "include_in_adjacent_senses_objects": false,
+         "include_in_available_object_actions": true,
+         "maximum_hit_points": null,
+         "concentration_capacity": 0,
+         "boundary_structure": null
+        },
+        "state": {
+         "stack_count": 1,
+         "charges": 1,
+         "integrity": "intact",
+         "destruction_outcome": null,
+         "remnant_state": null,
+         "current_hit_points": null,
+         "concentration_slots": [],
+         "construction_owner_uuid": null,
+         "construction_geometry": null,
+         "construction_suppressions": [],
+         "known_to_creator": false,
+         "supported_by_uuid": null,
+         "contact_passage": "structural",
+         "surface_residues": [],
+         "linked_spatial_condition_uuid": null,
+         "is_open": null,
+         "is_engaged": null,
+         "blocks_movement": false,
+         "blocks_optics": false,
+         "blocks_propagation": false,
+         "is_lit": null
+        }
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 2,
+     "occurrence": 36,
+     "lineage": 25,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "spell.goodberry",
+      "name": "Goodberry",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "195a393d-3fa0-4024-81ce-ebd747722660"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 42,
+     "lineage": 37,
+     "parent_event": 40,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "inventory",
+          "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+          "held": false
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 43,
+     "lineage": 37,
+     "parent_event": 37,
+     "phase": "completion",
+     "fact": {
+      "kind": "item_charge",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+      "charges_after": 0,
+      "stack_count_after": 1,
+      "item_destroyed": true,
+      "resource_change": "consume"
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 48,
+     "lineage": 37,
+     "parent_event": 44,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "actual_healing": 1,
+      "was_blocked": false,
+      "resulting_normal_hp": 141,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 49,
+     "lineage": 37,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "action",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "action.spell.goodberry.eat",
+      "name": "Eat Goodberry"
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 81,
+     "lineage": 58,
+     "parent_event": 60,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515",
+          "member": {
+           "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515",
+           "name": "Chill Touch Effect",
+           "category": "condition",
+           "behavior_id": "condition.spell.chill_touch",
+           "state": {
+            "duration": {
+             "duration_type": "permanent",
+             "remaining_rounds": null
+            },
+            "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515",
+            "name": "Chill Touch Effect",
+            "category": "condition",
+            "semantic_key": "condition.spell.chill_touch",
+            "behavior_id": "condition.spell.chill_touch",
+            "tags": [
+             "magical"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 82,
+     "lineage": 58,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "73fed623-3ca1-440e-b9b1-8291da19b332",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "spell.chill_touch",
+      "name": "Chill Touch",
+      "source_position": [
+       9,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "195a393d-3fa0-4024-81ce-ebd747722660"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 9,
+     "occurrence": 101,
+     "lineage": 96,
+     "parent_event": 99,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "inventory",
+          "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+          "held": false
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 9,
+     "occurrence": 102,
+     "lineage": 96,
+     "parent_event": 96,
+     "phase": "completion",
+     "fact": {
+      "kind": "item_charge",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "charges_after": 0,
+      "stack_count_after": 1,
+      "item_destroyed": true,
+      "resource_change": "consume"
+     }
+    },
+    {
+     "sequence": 9,
+     "occurrence": 107,
+     "lineage": 96,
+     "parent_event": 103,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "actual_healing": 0,
+      "was_blocked": true,
+      "resulting_normal_hp": 124,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 9,
+     "occurrence": 108,
+     "lineage": 96,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "action",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "action.spell.goodberry.eat",
+      "name": "Eat Goodberry"
+     }
+    },
+    {
+     "sequence": 10,
+     "occurrence": 122,
+     "lineage": 109,
+     "parent_event": 111,
+     "phase": "completion",
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "from_position": [
+       3,
+       7
+      ],
+      "to_position": [
+       3,
+       6
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        3,
+        7
+       ],
+       [
+        3,
+        6
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    },
+    {
+     "sequence": 10,
+     "occurrence": 123,
+     "lineage": 109,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "trajectory": "path",
+      "movement_mode": "walking",
+      "start_layer": "ground",
+      "end_layer": "ground"
+     }
+    },
+    {
+     "sequence": 12,
+     "occurrence": 134,
+     "lineage": 128,
+     "parent_event": 130,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 15,
+     "occurrence": 154,
+     "lineage": 149,
+     "parent_event": 152,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "inventory",
+          "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+          "held": false
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 15,
+     "occurrence": 155,
+     "lineage": 149,
+     "parent_event": 149,
+     "phase": "completion",
+     "fact": {
+      "kind": "item_charge",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "charges_after": 0,
+      "stack_count_after": 1,
+      "item_destroyed": true,
+      "resource_change": "consume"
+     }
+    },
+    {
+     "sequence": 15,
+     "occurrence": 160,
+     "lineage": 149,
+     "parent_event": 156,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "actual_healing": 2,
+      "was_blocked": false,
+      "resulting_normal_hp": 126,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 15,
+     "occurrence": 161,
+     "lineage": 149,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "action",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "action.spell.goodberry.eat",
+      "name": "Eat Goodberry"
+     }
+    },
+    {
+     "sequence": 16,
+     "occurrence": 175,
+     "lineage": 162,
+     "parent_event": 164,
+     "phase": "completion",
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "from_position": [
+       3,
+       6
+      ],
+      "to_position": [
+       3,
+       5
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        3,
+        6
+       ],
+       [
+        3,
+        5
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    },
+    {
+     "sequence": 16,
+     "occurrence": 176,
+     "lineage": 162,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "trajectory": "path",
+      "movement_mode": "walking",
+      "start_layer": "ground",
+      "end_layer": "ground"
+     }
+    }
+   ],
+   "actual_lineage_versions": [
+    {
+     "sequence": 2,
+     "lineage": 25,
+     "version_rows": {
+      "occurrences": [
+       25,
+       26,
+       27,
+       28,
+       29,
+       30,
+       31,
+       32,
+       33,
+       34,
+       35,
+       36
+      ],
+      "lineages": [
+       25,
+       25,
+       25,
+       28,
+       28,
+       28,
+       28,
+       32,
+       33,
+       34,
+       35,
+       25
+      ]
+     }
+    },
+    {
+     "sequence": 3,
+     "lineage": 37,
+     "version_rows": {
+      "occurrences": [
+       37,
+       38,
+       39,
+       40,
+       41,
+       42,
+       43,
+       44,
+       45,
+       46,
+       47,
+       48,
+       49
+      ],
+      "lineages": [
+       37,
+       38,
+       38,
+       38,
+       37,
+       42,
+       38,
+       37,
+       45,
+       45,
+       45,
+       45,
+       37
+      ]
+     }
+    },
+    {
+     "sequence": 6,
+     "lineage": 58,
+     "version_rows": {
+      "occurrences": [
+       58,
+       59,
+       60,
+       61,
+       62,
+       63,
+       64,
+       65,
+       66,
+       67,
+       68,
+       69,
+       70,
+       71,
+       72,
+       73,
+       74,
+       75,
+       76,
+       77,
+       78,
+       79,
+       80,
+       81,
+       82
+      ],
+      "lineages": [
+       58,
+       58,
+       58,
+       61,
+       61,
+       61,
+       64,
+       64,
+       64,
+       67,
+       67,
+       67,
+       67,
+       71,
+       71,
+       71,
+       71,
+       64,
+       64,
+       61,
+       78,
+       78,
+       78,
+       78,
+       58
+      ]
+     }
+    },
+    {
+     "sequence": 9,
+     "lineage": 96,
+     "version_rows": {
+      "occurrences": [
+       96,
+       97,
+       98,
+       99,
+       100,
+       101,
+       102,
+       103,
+       104,
+       105,
+       106,
+       107,
+       108
+      ],
+      "lineages": [
+       96,
+       97,
+       97,
+       97,
+       96,
+       101,
+       97,
+       96,
+       104,
+       104,
+       104,
+       104,
+       96
+      ]
+     }
+    },
+    {
+     "sequence": 10,
+     "lineage": 109,
+     "version_rows": {
+      "occurrences": [
+       109,
+       110,
+       111,
+       112,
+       113,
+       114,
+       115,
+       116,
+       117,
+       118,
+       119,
+       120,
+       121,
+       122,
+       123
+      ],
+      "lineages": [
+       109,
+       109,
+       109,
+       112,
+       113,
+       113,
+       113,
+       113,
+       117,
+       117,
+       117,
+       120,
+       117,
+       112,
+       109
+      ]
+     }
+    },
+    {
+     "sequence": 12,
+     "lineage": 128,
+     "version_rows": {
+      "occurrences": [
+       128,
+       129,
+       130,
+       131,
+       132,
+       133,
+       134,
+       135
+      ],
+      "lineages": [
+       128,
+       128,
+       128,
+       131,
+       131,
+       131,
+       131,
+       128
+      ]
+     }
+    },
+    {
+     "sequence": 15,
+     "lineage": 149,
+     "version_rows": {
+      "occurrences": [
+       149,
+       150,
+       151,
+       152,
+       153,
+       154,
+       155,
+       156,
+       157,
+       158,
+       159,
+       160,
+       161
+      ],
+      "lineages": [
+       149,
+       150,
+       150,
+       150,
+       149,
+       154,
+       150,
+       149,
+       157,
+       157,
+       157,
+       157,
+       149
+      ]
+     }
+    },
+    {
+     "sequence": 16,
+     "lineage": 162,
+     "version_rows": {
+      "occurrences": [
+       162,
+       163,
+       164,
+       165,
+       166,
+       167,
+       168,
+       169,
+       170,
+       171,
+       172,
+       173,
+       174,
+       175,
+       176
+      ],
+      "lineages": [
+       162,
+       162,
+       162,
+       165,
+       166,
+       166,
+       166,
+       166,
+       170,
+       170,
+       170,
+       173,
+       170,
+       165,
+       162
+      ]
+     }
+    }
+   ],
+   "consumption_identity": "Exact descendant ItemCharge UUIDs disclosed",
+   "independent_frozen_sdk_fold": [
+    {
+     "sequence": 0,
+     "normal_hp": 140,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [],
+     "known_berries": []
+    },
+    {
+     "sequence": 1,
+     "normal_hp": 140,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [],
+     "known_berries": []
+    },
+    {
+     "sequence": 2,
+     "normal_hp": 140,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+      "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 3,
+     "normal_hp": 141,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 4,
+     "normal_hp": 141,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 5,
+     "normal_hp": 141,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 6,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": [
+      "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 7,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": [
+      "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 8,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": [
+      "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 9,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": [
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 10,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": [
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 11,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": [
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 12,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 13,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 14,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 15,
+     "normal_hp": 126,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    },
+    {
+     "sequence": 16,
+     "normal_hp": 126,
+     "position": [
+      3,
+      5
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": [
+      "6fd5e7f9-7f9d-446e-8316-a4452627aa8a"
+     ],
+     "known_berries": [
+      {
+       "item_uuid": "8a3c72c3-1956-4fc1-9ced-c62fb9299b65",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "dc58d55a-8eac-4518-b7f5-ac0a1d5f0711",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "64b6e3a3-6da5-4264-99d1-a89ad6652d0e",
+       "charges": 1,
+       "stack_count": 1
+      },
+      {
+       "item_uuid": "6fd5e7f9-7f9d-446e-8316-a4452627aa8a",
+       "charges": 1,
+       "stack_count": 1
+      }
+     ]
+    }
+   ]
+  },
+  "blue": {
+   "packet_count": 17,
+   "native_events": [
+    {
+     "sequence": 2,
+     "occurrence": 31,
+     "lineage": 25,
+     "parent_event": 27,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "18188934-d432-4bdf-9312-411dfd93c684",
+          "member": {
+           "condition_uuid": "18188934-d432-4bdf-9312-411dfd93c684",
+           "name": "Goodberry Batch:18188934-d432-4bdf-9312-411dfd93c684",
+           "category": "condition",
+           "behavior_id": "condition.spell.goodberry.batch",
+           "state": {
+            "duration": null,
+            "condition_uuid": "18188934-d432-4bdf-9312-411dfd93c684",
+            "name": "Goodberry Batch:18188934-d432-4bdf-9312-411dfd93c684",
+            "category": "condition",
+            "semantic_key": "condition.spell.goodberry.batch",
+            "behavior_id": "condition.spell.goodberry.batch",
+            "tags": [
+             "magical"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 2,
+     "occurrence": 32,
+     "lineage": 25,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "spell.goodberry",
+      "name": "Goodberry",
+      "source_position": [
+       3,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "195a393d-3fa0-4024-81ce-ebd747722660"
+      ],
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 39,
+     "lineage": 33,
+     "parent_event": 35,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "actual_healing": 1,
+      "was_blocked": false,
+      "resulting_normal_hp": 141,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 3,
+     "occurrence": 40,
+     "lineage": 33,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "action",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "action.spell.goodberry.eat",
+      "name": "Eat Goodberry"
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 72,
+     "lineage": 49,
+     "parent_event": 51,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515",
+          "member": {
+           "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515",
+           "name": "Chill Touch Effect",
+           "category": "condition",
+           "behavior_id": "condition.spell.chill_touch",
+           "state": {
+            "duration": null,
+            "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515",
+            "name": "Chill Touch Effect",
+            "category": "condition",
+            "semantic_key": "condition.spell.chill_touch",
+            "behavior_id": "condition.spell.chill_touch",
+            "tags": [
+             "magical"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [],
+            "applied_source_event_cursor": null,
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 6,
+     "occurrence": 73,
+     "lineage": 49,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "spell",
+      "source_entity_uuid": "73fed623-3ca1-440e-b9b1-8291da19b332",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "spell.chill_touch",
+      "name": "Chill Touch",
+      "source_position": [
+       9,
+       7
+      ],
+      "declared_target_entity_uuids": [
+       "195a393d-3fa0-4024-81ce-ebd747722660"
+      ],
+      "attack_outcome": "Hit",
+      "cast_origin": "actor",
+      "area_propagation": "line_of_effect",
+      "target_kind": "creature"
+     }
+    },
+    {
+     "sequence": 9,
+     "occurrence": 93,
+     "lineage": 87,
+     "parent_event": 89,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "actual_healing": 0,
+      "was_blocked": true,
+      "resulting_normal_hp": 124,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 9,
+     "occurrence": 94,
+     "lineage": 87,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "action",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "action.spell.goodberry.eat",
+      "name": "Eat Goodberry"
+     }
+    },
+    {
+     "sequence": 10,
+     "occurrence": 108,
+     "lineage": 95,
+     "parent_event": 97,
+     "phase": "completion",
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "from_position": [
+       3,
+       7
+      ],
+      "to_position": [
+       3,
+       6
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        3,
+        7
+       ],
+       [
+        3,
+        6
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    },
+    {
+     "sequence": 10,
+     "occurrence": 109,
+     "lineage": 95,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "trajectory": "path",
+      "movement_mode": "walking"
+     }
+    },
+    {
+     "sequence": 12,
+     "occurrence": 120,
+     "lineage": 114,
+     "parent_event": 116,
+     "phase": "completion",
+     "fact": {
+      "kind": "actor_change",
+      "actors": [
+       {
+        "actor_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+        "rows": [
+         {
+          "field": "condition",
+          "condition_uuid": "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "sequence": 15,
+     "occurrence": 141,
+     "lineage": 135,
+     "parent_event": 137,
+     "phase": "completion",
+     "fact": {
+      "kind": "heal",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "actual_healing": 2,
+      "was_blocked": false,
+      "resulting_normal_hp": 126,
+      "resulting_temporary_hp": 0
+     }
+    },
+    {
+     "sequence": 15,
+     "occurrence": 142,
+     "lineage": 135,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "action",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "target_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "behavior_id": "action.spell.goodberry.eat",
+      "name": "Eat Goodberry"
+     }
+    },
+    {
+     "sequence": 16,
+     "occurrence": 156,
+     "lineage": 143,
+     "parent_event": 145,
+     "phase": "completion",
+     "fact": {
+      "kind": "step",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "from_position": [
+       3,
+       6
+      ],
+      "to_position": [
+       3,
+       5
+      ],
+      "from_elevation_feet": 0,
+      "to_elevation_feet": 0,
+      "disclosed_path": [
+       [
+        3,
+        6
+       ],
+       [
+        3,
+        5
+       ]
+      ],
+      "trajectory": "path",
+      "provocation_policy": "ordinary_exit",
+      "committed": true,
+      "resolved_speed_feet": 30,
+      "movement_mode": "walking",
+      "from_layer": "ground",
+      "to_layer": "ground"
+     }
+    },
+    {
+     "sequence": 16,
+     "occurrence": 157,
+     "lineage": 143,
+     "parent_event": null,
+     "phase": "completion",
+     "fact": {
+      "kind": "movement",
+      "source_entity_uuid": "195a393d-3fa0-4024-81ce-ebd747722660",
+      "trajectory": "path",
+      "movement_mode": "walking"
+     }
+    }
+   ],
+   "actual_lineage_versions": [
+    {
+     "sequence": 2,
+     "lineage": 25,
+     "version_rows": {
+      "occurrences": [
+       25,
+       26,
+       27,
+       28,
+       29,
+       30,
+       31,
+       32
+      ],
+      "lineages": [
+       25,
+       25,
+       25,
+       28,
+       28,
+       28,
+       28,
+       25
+      ]
+     }
+    },
+    {
+     "sequence": 3,
+     "lineage": 33,
+     "version_rows": {
+      "occurrences": [
+       33,
+       34,
+       35,
+       36,
+       37,
+       38,
+       39,
+       40
+      ],
+      "lineages": [
+       33,
+       33,
+       33,
+       36,
+       36,
+       36,
+       36,
+       33
+      ]
+     }
+    },
+    {
+     "sequence": 6,
+     "lineage": 49,
+     "version_rows": {
+      "occurrences": [
+       49,
+       50,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56,
+       57,
+       58,
+       59,
+       60,
+       61,
+       62,
+       63,
+       64,
+       65,
+       66,
+       67,
+       68,
+       69,
+       70,
+       71,
+       72,
+       73
+      ],
+      "lineages": [
+       49,
+       49,
+       49,
+       52,
+       52,
+       52,
+       55,
+       55,
+       55,
+       58,
+       58,
+       58,
+       58,
+       62,
+       62,
+       62,
+       62,
+       55,
+       55,
+       52,
+       69,
+       69,
+       69,
+       69,
+       49
+      ]
+     }
+    },
+    {
+     "sequence": 9,
+     "lineage": 87,
+     "version_rows": {
+      "occurrences": [
+       87,
+       88,
+       89,
+       90,
+       91,
+       92,
+       93,
+       94
+      ],
+      "lineages": [
+       87,
+       87,
+       87,
+       90,
+       90,
+       90,
+       90,
+       87
+      ]
+     }
+    },
+    {
+     "sequence": 10,
+     "lineage": 95,
+     "version_rows": {
+      "occurrences": [
+       95,
+       96,
+       97,
+       98,
+       99,
+       100,
+       101,
+       102,
+       103,
+       104,
+       105,
+       106,
+       107,
+       108,
+       109
+      ],
+      "lineages": [
+       95,
+       95,
+       95,
+       98,
+       99,
+       99,
+       99,
+       99,
+       103,
+       103,
+       103,
+       106,
+       103,
+       98,
+       95
+      ]
+     }
+    },
+    {
+     "sequence": 12,
+     "lineage": 114,
+     "version_rows": {
+      "occurrences": [
+       114,
+       115,
+       116,
+       117,
+       118,
+       119,
+       120,
+       121
+      ],
+      "lineages": [
+       114,
+       114,
+       114,
+       117,
+       117,
+       117,
+       117,
+       114
+      ]
+     }
+    },
+    {
+     "sequence": 15,
+     "lineage": 135,
+     "version_rows": {
+      "occurrences": [
+       135,
+       136,
+       137,
+       138,
+       139,
+       140,
+       141,
+       142
+      ],
+      "lineages": [
+       135,
+       135,
+       135,
+       138,
+       138,
+       138,
+       138,
+       135
+      ]
+     }
+    },
+    {
+     "sequence": 16,
+     "lineage": 143,
+     "version_rows": {
+      "occurrences": [
+       143,
+       144,
+       145,
+       146,
+       147,
+       148,
+       149,
+       150,
+       151,
+       152,
+       153,
+       154,
+       155,
+       156,
+       157
+      ],
+      "lineages": [
+       143,
+       143,
+       143,
+       146,
+       147,
+       147,
+       147,
+       147,
+       151,
+       151,
+       151,
+       154,
+       151,
+       146,
+       143
+      ]
+     }
+    }
+   ],
+   "consumption_identity": "Not disclosed: no ItemCharge or source_item_uuid on final ActionFact; do not borrow Amber UUIDs",
+   "independent_frozen_sdk_fold": [
+    {
+     "sequence": 0,
+     "normal_hp": 140,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 1,
+     "normal_hp": 140,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 2,
+     "normal_hp": 140,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 3,
+     "normal_hp": 141,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 4,
+     "normal_hp": 141,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 5,
+     "normal_hp": 141,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 6,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 7,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 8,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 9,
+     "normal_hp": 124,
+     "position": [
+      3,
+      7
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 10,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 11,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [
+      "342ac5c7-a8b9-4c3f-aed9-d7b032d4a515"
+     ],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 12,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 13,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 14,
+     "normal_hp": 124,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 15,
+     "normal_hp": 126,
+     "position": [
+      3,
+      6
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    },
+    {
+     "sequence": 16,
+     "normal_hp": 126,
+     "position": [
+      3,
+      5
+     ],
+     "chill_touch_members": [],
+     "controlled_berry_uuids": null,
+     "known_berries": []
+    }
+   ]
+  }
+ },
+ "qualification_limits": [
+  "Genuine bonus-action uses select existing generated inventory items through actual offered Choices. Amber exact descendant consume identities are public there; Blue final action/HealFacts do not disclose berry identity.",
+  "Actual Chill Touch Hit applies before blocked consumption; exact source-turn removal at sequence12 precedes third positive consume. No healing_admitted flag is inferred solely from requested use or the condition name.",
+  "The source actor is authored creature.generic_caster with rig neuroclient.modular; no authored full-character replacement or fabricated eating animation is introduced.",
+  "One berry and the batch lifetime remain after this study; this does not claim full batch retirement, native output, performance or art approval."
+ ]
+}

@@ -7,6 +7,7 @@ const NativeItems=preload("res://presentation/native_items.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Layer=preload("res://presentation/native_effect_layer.gd")
 const Support=preload("res://presentation/native_scene_support.gd")
+const BodySources=preload("res://presentation/body_sources.gd")
 const Playback=preload("res://presentation/native_spell_playback.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
 const Components=preload("res://presentation/components.gd")
@@ -27,6 +28,7 @@ var issues:Array=[]
 var witnesses:Array=[]
 var required_images:Dictionary={}
 var required_cpu_images:Dictionary={}
+var _image_admission:Dictionary={}
 var preparation_state:Dictionary={}
 var _owner:Node3D
 var _support:RefCounted
@@ -482,6 +484,9 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if equipped:
             diagnostics[id].history_policy="observed_weapon_poses_only"
             diagnostics[id].observed_from_age_seconds=handle.weapon_source_origin
+            var rejection:String=Inputs.Weapons.rejection(handle)
+            if not rejection.is_empty():
+                diagnostics[id].status="partial";diagnostics[id].reason=rejection
         if not input_bindings.unavailable.is_empty():
             diagnostics[id].status="partial";diagnostics[id].reason="native_input_unavailable"
         if lifecycle:diagnostics[id].lifecycle_phase=handle.lifecycle_phase
@@ -489,6 +494,12 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if drawn and caught_up and submitted_bounds and input_bindings.unavailable.is_empty():
             var witness={"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())}
             witnesses.append(witness)
+            var motion:Dictionary=points.get("effect_owned_ground",{})
+            if not str(motion.get("motion_track_id","")).is_empty() and is_equal_approx(float(handle.drawn_time),sample_time):
+                var moved:Dictionary=witness.duplicate(false)
+                moved.merge({"id":motion.motion_track_id,"source_event_uuid":motion.motion_event_uuid,
+                    "native_body_owner_id":id,"ground":points.ground},true)
+                witnesses.append(moved)
             if component.get("native_item",false) and "weapon_binding" in input_bindings.supplied and input_bindings.supplied.any(func(name):return name in ["entity_geometry","recipient_geometry"]):
                 var receiver:Dictionary=witness.duplicate(false);receiver.id=id+":weapon_surface";witnesses.append(receiver)
         if float(handle.drawn_time)!=sample_time:
@@ -720,7 +731,7 @@ func close(world:Node=null)->void:
     if world!=null and is_instance_valid(world.camera) and _epoch>=0:
         world.camera.cull_mask=_camera_mask
         world.source_lighting.sample_handles({})
-    _image_key=[];_path_requirements.clear();_queued_key=[];_queued_cache.clear()
+    _image_key=[];_image_admission={};_path_requirements.clear();_queued_key=[];_queued_cache.clear()
     _epoch=-1;ready=true;_required_ids.clear();_prepare_failures.clear();preparation_revision+=1
     inputs.clear()
 
@@ -729,8 +740,17 @@ func _image_requirements(world:Node)->void:
     # occurrence. Gather each actor/clip once before resolving delivery metadata.
     var actor_clips:Dictionary={}
     var geometry_actors:Dictionary={}
-    for handle_id in _required_ids:
-        var component:Dictionary=_required_ids[handle_id]
+    var admitted:Dictionary=BodySources.admission(world.catalog_cache)
+    if not is_same(admitted,_image_admission):
+        if not is_same(admitted.get("index"),_image_admission.get("index")):_path_requirements.clear()
+        _image_admission=admitted;_image_key=[]
+    # Preparation can advance past a held source's end while its removal is
+    # still displayed. Both owners retain their exact optical operands.
+    var image_owners:Dictionary=_required_ids.duplicate(false)
+    for component in world.displayed_components:
+        if accepts(component) and component.get("status")!="missing":image_owners[component.id]=component
+    for handle_id in image_owners:
+        var component:Dictionary=image_owners[handle_id]
         if Effects.choice(component.native_clip).kind!="recorded":
             for request in Inputs.geometry_interests(component,world):
                 if not request.reason.is_empty() or request.actor.is_empty():continue
@@ -741,12 +761,12 @@ func _image_requirements(world:Node)->void:
             if id==component.actor_uuid:actor_clips[id][component.cast_recipe.get("actionClip","")]=true
             var playback:Node=world.playbacks.get(id)
             if playback!=null:actor_clips[id][playback.clip]=true
-    var key:Array=[world.character_light_profile,geometry_actors]
+    var key:Array=[world.character_light_profile,geometry_actors,not groups.is_empty()]
     var inputs:Dictionary={}
     var optical_inputs:Dictionary={}
     var received_sources:Dictionary={}
     var departure_paths:Dictionary={}
-    for id in _required_ids:
+    for id in image_owners:
         var retained_paths:Dictionary=handles.get(id,{}).get("departure_paths",{}).duplicate()
         retained_paths.merge(Inputs.history_paths(handles.get(id,{})))
         for path in retained_paths:
@@ -755,7 +775,7 @@ func _image_requirements(world:Node)->void:
     for source in received_sources:
         key.append(["received",source[0],source[1]])
         optical_inputs.merge(Inputs.Surface.required_paths(source[0],source[1],world.catalog_cache,world.character_light_profile))
-    if not _required_ids.is_empty():
+    if not image_owners.is_empty() or not groups.is_empty():
         for id in world.visual_actors:
             var visual:Dictionary=world.visual_actors[id]
             for entry in visual.entries:
@@ -776,8 +796,10 @@ func _image_requirements(world:Node)->void:
     var wanted:Dictionary=optical_inputs.duplicate();wanted.merge(departure_paths)
     var cpu:Dictionary=optical_inputs.duplicate()
     for input in inputs:
-        if not _path_requirements.has(input):_path_requirements[input]=Support.required_paths(input[0],input[1],world.catalog_cache)
-        var paths:Dictionary=_path_requirements[input]
+        var paths:Dictionary=_path_requirements.get(input,{})
+        if paths.is_empty():
+            paths=Support.required_paths(input[0],input[1],world.catalog_cache)
+            if not paths.is_empty():_path_requirements[input]=paths
         if inputs[input]:
             # Socket ownership reads this exact pose's colour before consulting
             # measured geometry. A pose without optical maps still needs its

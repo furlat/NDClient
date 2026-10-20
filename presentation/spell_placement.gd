@@ -3,6 +3,33 @@ extends RefCounted
 const Placement=preload("res://placement.gd")
 const Surfaces=preload("res://presentation/surface_sockets.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
+const Characters=preload("res://presentation/characters.gd")
+const WorldRows=preload("res://presentation/world.gd")
+
+## A source-owned body has no modular sprite to register. Its selected
+## ground-body lifecycle follows this actual visible actor and shared motion.
+## This never substitutes a ground point for an absent sprite/body socket.
+static func effect_owned_ground(world:Node,component:Dictionary,identity:String)->Dictionary:
+    if not component.get("native_body_owner",false) or not component.has("lifecycle_phases") \
+        or component.get("native_cue",{}).get("attachment")!="recipient_ground" \
+        or identity!=str(component.get("target_uuid","")):
+        return {"ready":false,"unavailable":true,"reason":"effect_owned_ground_registration_not_selected"}
+    var state:Dictionary=world.timeline.state
+    var actor:Dictionary=state.get("actors",{}).get(identity,{})
+    if actor.is_empty() or not Characters.effect_owned(actor,world.catalog_cache):
+        return {"ready":false,"unavailable":true,"reason":"effect_owned_body_not_authored"}
+    if not WorldRows.visible_actor(actor,state):
+        return {"ready":false,"unavailable":true,"reason":"effect_owned_actor_not_visible"}
+    var position:Array=actor.last_visual_position
+    var tile:Dictionary=world.timeline.presentation_state().tiles.get(WorldRows.cell_key(position),{})
+    if not tile.has("elevation_steps"):
+        return {"ready":false,"unavailable":true,"reason":"effect_owned_ground_support_not_disclosed"}
+    var motion:Dictionary=world.timeline.actor_samples().get(identity,{})
+    var row:Dictionary={"id":identity,"position":motion.get("position",position),
+        "base_height_steps":motion.get("base_height_steps",tile.elevation_steps)}
+    return {"ready":true,"point":Placement.contact(row),"actor_uuid":identity,
+        "source":"canonical_visible_effect_owned_ground","position":row.position,"base_height_steps":row.base_height_steps,
+        "motion_track_id":str(motion.get("trace_track_id","")),"motion_event_uuid":str(motion.get("source_event_uuid",""))}
 
 static func facing(world:Node,row:Dictionary)->String:
     var cycle:Array=world.rig_config.FACING_CYCLE
@@ -149,6 +176,13 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
             needs_hand=true;hand_endpoint=endpoint;break
     var needs_body:bool=not component.get("ground_target",false) and (role in ["flight","impact","strike"] or attachment in ["recipient_body","recipient_head"])
     if (needs_hand or not source_socket.is_empty()) and not displayed(source):return {"ready":false,"unavailable":true,"reason":"native_spell_actor_not_displayed"}
+    if persistent and component.get("native_body_owner",false) and attachment=="recipient_ground" and not displayed(target):
+        var actor:Dictionary=world.timeline.state.get("actors",{}).get(component.get("target_uuid"),{})
+        if not actor.is_empty() and Characters.effect_owned(actor,world.catalog_cache):
+            var actual:Dictionary=effect_owned_ground(world,component,str(component.target_uuid))
+            if not actual.ready:return actual
+            return {"ready":true,"from":actual.point,"hand":actual.point,"to":actual.point,
+                "ground":actual.point,"caster_ground":actual.point,"surfaces":[actual],"fixed":{},"effect_owned_ground":actual}
     if (needs_body or persistent and not component.get("spatial_owner",false)) and not displayed(target):return {"ready":false,"unavailable":true,"reason":"native_spell_recipient_not_displayed"}
     var from_position:Array=component.get("from_position",[0,0])
     var to_position:Array=component.get("to_position",from_position)

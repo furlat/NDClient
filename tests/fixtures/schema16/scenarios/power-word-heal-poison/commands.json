@@ -1,0 +1,585 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+   "state_revision": "285caccd-9621-493a-aa06-564159f5a3e6",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber healer",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "state_revision": "a2a78e63-290c-45e4-a726-54bb37fe73a9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "883f6264-f493-4e3e-9f8f-cb2db56bb758",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.ray_of_sickness",
+   "display_name": "Ray of Sickness (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+   "state_revision": "883f6264-f493-4e3e-9f8f-cb2db56bb758",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+   "state_revision": "dea5dbed-61ec-48f8-a566-1b256839259f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+   "state_revision": "d170c22f-7c11-479d-8bc8-ba712d46b6ca",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber healer",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "state_revision": "1cf0bd5e-835c-4726-8650-8787c75f1de4",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "37534389-a3f4-413a-9561-41bc0b3e7dbd",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.ray_of_sickness",
+   "display_name": "Ray of Sickness (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+   "state_revision": "37534389-a3f4-413a-9561-41bc0b3e7dbd",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+   "state_revision": "5167d0c4-8cec-4b14-848e-ebbab950c0f3",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+   "state_revision": "e97714b4-5711-4313-915b-40a794ca4d64",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber healer",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "state_revision": "f77a82e2-05f6-483e-b694-5066a031366e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2fd3e811-1219-4199-a971-f5361b461b48",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "spell.ray_of_sickness",
+   "display_name": "Ray of Sickness (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+   "state_revision": "2fd3e811-1219-4199-a971-f5361b461b48",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 1
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 20
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "healer"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "010eab8e-b47a-4c68-9d36-6d86b29f7a5a",
+   "state_revision": "d9c04afc-dd2a-4944-83fb-1510518c0efa",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 21
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.power_word_heal",
+   "by": "healer",
+   "target": "target",
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "e347eee0-b8b6-4679-aa1e-63382903dda1",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "spell.power_word_heal",
+   "display_name": "Power Word Heal (Level 9)",
+   "cast_at_level": 9,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+   "state_revision": "e347eee0-b8b6-4679-aa1e-63382903dda1",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber healer",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 23
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 11,
+   "actor_uuid": "663f70bd-c33b-454b-b524-9f2d02c70de8",
+   "state_revision": "a0319ac6-3fec-4ca7-9201-cdfac34df677",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber healer",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+   "command_number": 11,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "8bf825c9-3922-43e0-b7c0-31038302b1f3",
+    "sequence": 24
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    9,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "667fafd9-ebb9-4da4-a185-5a7a4d436d08",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "dbb40b0a-160f-4a3e-ac00-7c5d8142787c",
+   "state_revision": "667fafd9-ebb9-4da4-a185-5a7a4d436d08",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+   "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+   "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_power_word_heal_ray_poisoned_restore_move",
+    "game_epoch": "48ff3667-189a-4edd-bb28-698164c47fc1",
+    "audience_id": "fa0e572e-6982-4b94-8fb4-8b297b555224",
+    "sequence": 26
+   }
+  }
+ }
+]

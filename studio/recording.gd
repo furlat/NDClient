@@ -202,12 +202,13 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                 actor.presentation_layers=track.get("effect_layers",[])
                 var state: Dictionary = before if actor.last_visual_position!=null and before.tiles.has(Compiler.Reducer.Audience.point_key(actor.last_visual_position)) else journal.state
                 var resolved = Characters.resolve(actor,state,result.cache)
+                var spatial:bool=track.get("spatial_only",false)
                 var row = {"id":track.trace_track_id,"parent":"%s:%s" % [sequence,track.source_event_uuid],
-                    "kind":"body","label":"Body · "+track.clip,"depth":1,"start_ms":offset+track.start_ms,
+                    "kind":"motion" if spatial else "body","label":"Movement" if spatial else "Body · "+track.clip,"depth":1,"start_ms":offset+track.start_ms,
                     "end_ms":offset+track.start_ms+track.duration_ms,"track":track,"group_start_ms":offset,
                     "actor_name":before.actors.get(track.actor_uuid,journal.state.actors.get(track.actor_uuid,{})).get("name",""),
-                    "actor":resolved.value if resolved.ok and resolved.value!=null else {},"status":"available" if resolved.ok and resolved.value!=null else "missing","group_id":group.id,
-                    "source_fps":Compiler.Authoring.clip(track.presentation_actor,track.clip,result.cache).get("fps",0),
+                    "actor":resolved.value if resolved.ok and resolved.value!=null else {},"status":"available" if spatial or resolved.ok and resolved.value!=null else "missing","group_id":group.id,
+                    "source_fps":0 if spatial else Compiler.Authoring.clip(track.presentation_actor,track.clip,result.cache).get("fps",0),
                     "source_event_uuid":track.source_event_uuid}
                 row.markers=[]
                 if track.has("contact_ms"):row.markers.append({"kind":"contact","at_ms":offset+track.contact_ms,"source":"compiled.actor_tracks.contact_ms"})
@@ -1073,6 +1074,9 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
             if sample.has("lifecycle_phases") and not is_inf(owner.end_ms):
                 sample_end=minf(end,float(owner.end_ms)+float(sample.lifecycle_phases.removal.seconds)*1000.0)
                 if sample_end<=start:continue
+            elif sample.get("condition_authored",false) and sample.native_cue.authored_at=="application":
+                sample_end=minf(end,float(sample.absolute_start_ms)+float(sample.duration_ms))
+                if sample_end<=start:continue
             var common={"parent":parent.id,"start_ms":start,"end_ms":end,"owner":sampled_owner,
                 "component":sample,"source":sample.source,"status":sample.status,"source_fps":sample.get("sample_hz",0),
                 "condition_phase":parent.kind,"interval_causes":spans[n].causes,
@@ -1131,7 +1135,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                     component.lifecycle_phase=phase;component.effect_clip=str(sample.lifecycle_phases[phase].id)
                     component.label=phase.capitalize()+" · "+component.effect_clip
                 elif sample.get("condition_authored",false):
-                    component.label="Hold · "+str(sample.recipe.get("label",sample.condition.behavior_id))
+                    component.label=("Application" if sample.native_cue.authored_at=="application" else "Hold")+" · "+str(sample.recipe.get("label",sample.condition.behavior_id))
                     component.effect_clip=str(sample.native_clip.get("id",""))
                     component.reason=sample.get("reason","")
                 rows.append(component)
@@ -1201,10 +1205,13 @@ static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,
                 # renderer admits them unless explicitly missing. Retain that
                 # same source status on the private inspection component.
                 sample.status=sample.get("status","available")
+                var sample_end:float=minf(interval_end,float(sample.absolute_start_ms)+float(sample.duration_ms)) if sample.get("spatial_removal",false) else interval_end
+                if sample_end<=start:continue
                 var row={"id":life.id+":member:"+str(n)+":"+sample.id,"parent":life.id,
-                    "kind":sample.kind,"label":str(sample.native_cue.role).capitalize(),
-                    "start_ms":start,"end_ms":interval_end,"source_start_ms":sample.absolute_start_ms,
+                    "kind":sample.kind,"label":"Removal · "+str(sample.native_clip.id) if sample.get("spatial_removal",false) else str(sample.native_cue.role).capitalize(),
+                    "start_ms":start,"end_ms":sample_end,"source_start_ms":sample.absolute_start_ms,
                     "owner":sampled_owner,"component":sample,"trace_track_id":sample.id,
+                    "source_event_uuid":sample.get("source_event_uuid",""),
                     "source":sample.source,"source_fps":sample.sample_hz,"status":sample.status,
                     "interval_causes":["event:"+str(key.source_event_uuid)] if not key.source_event_uuid.is_empty() else ["initial:"+str(id)],
                     "coverage":{"implementation":"resolved","source":sample.status,"prepared":"not_examined","rendered":"not_witnessed"}}
@@ -1320,6 +1327,7 @@ static func step_time(index: Dictionary, row: Dictionary, time_ms: float, direct
         var hz: float=row.get("source_fps",0)
         return clampf(time_ms+direction*1000.0/(hz if hz>0 else 60.0),0,limit)
     var track: Dictionary=row.track
+    if track.get("spatial_only",false):return clampf(time_ms+direction*1000.0/60.0,0,limit)
     if (direction>0 and time_ms>=row.end_ms) or (direction<0 and time_ms<=row.start_ms):
         return clampf(time_ms+direction*1000.0/60.0,0,limit)
     var fps: float=row.get("source_fps",0)

@@ -1,0 +1,1374 @@
+[
+ {
+  "request": {
+   "do": "action.item.weapon_coat.apply",
+   "by": "caster",
+   "target": "self",
+   "item": "consumable.weapon_coat.assassin_poison",
+   "name": "Coat Main Hand",
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "afdab7c6-01c9-4d83-b662-404f492835a4",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.item.weapon_coat.apply",
+   "display_name": "Coat Main Hand (Assassin Poison)",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "afdab7c6-01c9-4d83-b662-404f492835a4",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 33,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    5
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "dfdbb3de-0c68-48f2-ba27-0d0128e819c0",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "dfdbb3de-0c68-48f2-ba27-0d0128e819c0",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 9,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 3
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "f35ab889-7062-4757-b775-56ed3b3efeed",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "a5a360fb-f9ad-468f-b5af-c5ef85d9c54e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "ec5a1722-729a-48c4-9435-eba55fe47516",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "ec5a1722-729a-48c4-9435-eba55fe47516",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "475045d4-720f-441c-a8da-4d7c48ceba26",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "3806945a-34f2-4ec8-91bb-2e712e7816a7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "7d00b44c-c988-472f-8d9a-33605c9347d6",
+  "discovery_generation": 4,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "7d00b44c-c988-472f-8d9a-33605c9347d6",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 13
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "4f38be11-03ad-4806-9543-e74a42c206bf",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "f654a9ab-3cea-477c-a7e6-7a8ef2d32168",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "c8e0a384-45ec-4d5a-a34d-ed8a9342da78",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 18
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "fdafd81f-7655-4d96-bfd6-1f797ddbc876",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 20
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "59806c3d-1b98-43c2-a70a-e1f0a7b229a9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 22
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "fed8243d-65cf-42eb-b026-74f87e57c6c8",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 24
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "bc359e36-af8e-447f-99e2-db5bbeeab378",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 26
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "84f9c49c-463a-46d1-985a-61946d8c3778",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 28
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 11,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "40669e31-f531-45ea-8431-279e45ea6043",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 11,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 30
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "68f8bb43-56fd-47a7-8586-e715d835b7a3",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 32
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 12,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "3e2f802f-780b-4464-bd15-595ba304eaab",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 12,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 34
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "68639e91-35fc-479e-b148-416901a45600",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 36
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 13,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "a5594f52-dcf0-4768-9dc6-0729b5bdcc43",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 13,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 38
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 9,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "4d3637c4-1249-4f94-8bf8-c9e46c7761d2",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 9,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 40
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 14,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "ea9dca5f-26de-4230-b190-f8455b3c5a81",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 14,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 42
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 10,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "c809f86d-4599-416e-b7d5-d6bef6d02c83",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 10,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 44
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 15,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "320dec03-aad7-4eea-8048-c4dca7b62755",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 15,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 46
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 11,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "9bb784d6-d52e-4c9c-bf1c-0ca38728870c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 11,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 48
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 16,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "8141b8de-e908-49bb-a442-411a8c8ba709",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 16,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 50
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 12,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "1796ea0c-a02d-4b11-8e71-a8521416615b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 12,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 52
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 17,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "6fc2fe78-b6a9-4895-9abe-66b39fb19e37",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 17,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 54
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 13,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "35612b8b-ad6a-4f85-9ffb-4a976a40d96e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 13,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 56
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "abeaabe7-43b4-4003-86bc-79bd147dd2b3",
+  "discovery_generation": 5,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Longsword",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 18,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "abeaabe7-43b4-4003-86bc-79bd147dd2b3",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 5,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 18,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 58
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 19,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "eec9c93e-02c8-4025-94f3-30b7336312b9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 19,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 59
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 14,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "61790513-9195-43ed-827b-db11ee3efb32",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 14,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 61
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 20,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "202d1c2e-4816-4467-b757-20f97c4faebd",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 20,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 63
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 21,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "b2823b0b-9f26-40b5-8fd0-755100169dfb",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 21,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 64
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 15,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "630fb105-e70d-4ebe-9fa0-dda59fa5a881",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 15,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 66
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.scimitar",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 22,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "c039c8e7-4aed-46d0-bb7c-0bb8461a0795",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "866a4b75-e777-4da6-acc3-358bfe0b562a",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 22,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 68
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 23,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "56b21e2c-e60c-4ccd-8041-2fbb7871c906",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 23,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 69
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 16,
+   "actor_uuid": "5c083263-60c4-4ee0-97a2-a0174861f4cc",
+   "state_revision": "167518f3-f194-4e72-9415-854f84d59562",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+   "command_number": 16,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "d2729173-6189-4619-9f96-099f8fcada76",
+    "sequence": 71
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "02e4223a-fb93-4c00-b584-46b34d8a31f9",
+  "discovery_generation": 6,
+  "selected_action": {
+   "behavior_id": "action.attack",
+   "display_name": "Scimitar",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 24,
+   "actor_uuid": "fd9593aa-dc44-4870-8101-25cd9e593ce8",
+   "state_revision": "02e4223a-fb93-4c00-b584-46b34d8a31f9",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 6,
+    "selection": {
+     "action_index": 8,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+   "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+   "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+   "command_number": 24,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_consumable_weapon_coat_assassin_poison_equipped_runtime",
+    "game_epoch": "9d8ec3d6-c3d5-45c6-b927-ba3cfb82f88f",
+    "audience_id": "a6d6fb34-0d8e-43e0-b3a5-44f8f828f67b",
+    "sequence": 73
+   }
+  }
+ }
+]

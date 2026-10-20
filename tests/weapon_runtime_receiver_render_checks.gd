@@ -13,13 +13,18 @@ const OUTPUT="res://.runtime/weapon-runtime-receiver"
 var checks:int=0
 var failures:Array=[]
 var evidence:Array=[]
+var case_id:String="ember-weapon-runtime"
+var item_id:String="weapon.roster.ember_longsword"
+var weapon_part:String="Melee2"
+var require_continuous_source:bool=true
+var source_refusals:Array=[]
 func _initialize()->void:run.call_deferred()
 func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);printerr("WEAPON_RECEIVER_FAIL ",label)
 func frame()->void:await NativeSupport.frame(self)
 func settle(world:Node,ids:Array=[])->bool:
-    var ok:bool=await NativeSupport.settle(self,world,ids)
+    var ok:bool=await NativeSupport.settle(self,world,ids,source_refusals)
     check(ok,"Actual replay/native preparation: "+str(ids if ok else {"errors":world.presentation_errors,"media":world.media_issue,"native":world.component_renderer.native_spells.diagnostics}))
     return ok
 func viewport()->SubViewport:
@@ -28,7 +33,7 @@ func viewport()->SubViewport:
     root.add_child(view);return view
 func cuts(index:Dictionary,owner:Dictionary,seat:String)->Array:
     var actor:String=owner.component.actor_uuid
-    var attacks:Array=Fixtures.fact_rows("ember-weapon-runtime","attack",seat).map(func(row):return str(int(row.node.occurrence)))
+    var attacks:Array=Fixtures.fact_rows(case_id,"attack",seat).map(func(row):return str(int(row.node.occurrence)))
     var result:Array=[];var idle_candidates:Array=[float(owner.start_ms)+.01]
     for row in index.rows:
         if row.kind!="body" or row.track.actor_uuid!=actor:continue
@@ -63,13 +68,19 @@ func inspect(world:Node,component:Dictionary,label:String)->Dictionary:
     var source:Node=handle.inner.components.equipped_weapon
     var binding:Dictionary=source.binding
     check(binding.item_uuid==component.item_owner_uuid and binding.owner_uuid==component.item_owner_uuid \
-        and binding.holder_uuid==component.actor_uuid and binding.item_id=="weapon.roster.ember_longsword" \
+        and binding.holder_uuid==component.actor_uuid and binding.item_id==item_id \
         and binding.owner_kind=="item" and binding.binding_origin=="intrinsic_authored_item" \
         and binding.equipment_slot=="MELEE_MAIN" and binding.render_slot=="weapon",label+": exact disclosed item/current holder/slot, without a temporary member")
     check(not binding.has("effect_uuid") and not binding.has("contribution_active") and not binding.has("decoration_admitted"),label+": no invented effect UUID or unused legacy admission flags")
+    var observation:Dictionary=source.capture_observation()
+    if observation.rejection in source_refusals:
+        check(source.bound_materials.is_empty() and not observation.admitted and native.diagnostics[component.id].status=="partial" \
+            and native.diagnostics[component.id].reason==observation.rejection,label+": unauthored source pose remains explicitly partial without guessed axes")
+        evidence.append({"cut":label,"source":observation,"rendered":false})
+        return {}
     check(not source.bound_materials.is_empty() and source.adapter_error.is_empty() and source.capture_observation().admitted,label+": actual receiver materials are bound, not merely setter-accepted")
     var entries:Array=world.visual_actors[component.actor_uuid].entries.filter(func(entry):return entry.actor_layer.get("item_uuid")==component.item_owner_uuid \
-        and entry.actor_layer.category=="Melee2" and entry.actor_layer.slot=="weapon" and entry.node.is_visible_in_tree())
+        and entry.actor_layer.category==weapon_part and entry.actor_layer.slot=="weapon" and entry.node.is_visible_in_tree())
     check(not entries.is_empty(),label+": original modular Melee2 sword remains the actual weapon body")
     check(native.witnesses.any(func(row):return row.id==component.id+":weapon_surface" and row.status=="rendered"),label+": Studio receives the actual surface draw witness")
     check(is_equal_approx(float(source.owner_state.source_age_seconds),float(handle.weapon_source_age)) \
@@ -132,7 +143,11 @@ func original_view(index:Dictionary,owner:Dictionary,poses:Array,seat:String,qua
         world.camera_focus=Play.Placement.contact(world.visual_actors[component.actor_uuid].row);world.initial_focus=true;world.position_camera()
         await frame();await frame()
         check(world.playbacks[component.actor_uuid].clip==pose.clip,label+": actual "+pose.kind+" body clip is unchanged")
-        check(world.timeline.initialization_revision==epoch and world.component_renderer.native_spells.handles[component.id].root==original_owner.get_ref(),label+": ordinary pose changes retain the same actual private item owner")
+        check(world.timeline.initialization_revision==epoch,label+": ordinary movement does not reset the replay")
+        if require_continuous_source:
+            check(world.component_renderer.native_spells.handles[component.id].root==original_owner.get_ref(),label+": continuously observed poses retain their private source")
+        else:
+            check(world.component_renderer.native_spells.handles[component.id].component.start_ms==component.start_ms,label+": optical pose gaps preserve actual item ownership age")
         var admitted:Dictionary=inspect(world,component,label+"/"+pose.kind)
         if admitted.is_empty() or admitted.entries.is_empty():continue
         if pose.kind=="idle":await receiver_pixels(world,view,admitted,label,quarter==0)
@@ -170,7 +185,7 @@ func receiver_pixels(world:Node,view:SubViewport,admitted:Dictionary,label:Strin
     source.sample(age);await frame();await frame()
     var plain:Image=view.get_texture().get_image()
     check(source.bound_materials.is_empty(),label+": suppressed source releases its actual receiver claims")
-    check(NativeSupport.changed(shown,plain)>0,label+": admitted Ember source contributes actual framebuffer pixels")
+    check(NativeSupport.changed(shown,plain)>0,label+": admitted equipped source contributes actual framebuffer pixels")
     evidence.append({"cut":label+"/actual-source-pixels","changed_pixels":NativeSupport.changed(shown,plain),"source_age_seconds":age,"owner_age_seconds":source.owner_state.owner_age_seconds})
     shown.save_png(OUTPUT+"/"+label.replace("/","-")+"-active.png")
     plain.save_png(OUTPUT+"/"+label.replace("/","-")+"-suppressed.png")

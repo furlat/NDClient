@@ -3,15 +3,41 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_jqlrf"]
 [ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_o0xwm"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_yb5ca"]
 script = ExtResource("1_jqlrf")
 path = "art/media/ui/icons/smooth48/item.scimitar.png"
 native_size = Vector2i(48, 48)
 source = "ui-icons-bg3-glyphs-2026-10-07"
 
+[sub_resource type="Resource" id="IntrinsicSustain"]
+script = ExtResource("effect")
+clip = "weapons/equipped/fire/blade_tongues/medium/sustain"
+role = "sustain"
+at = "owner_start"
+attachment = "recipient_weapon"
+recipient_slots = PackedStringArray("weapon")
+follow = true
+light_multiplier = 0.0
+extra = {"equipment_slots": ["weapon_melee_main"]}
+staging_from = "Factory exact-item assignment proposal; one medium main-hand candidate. Actual source-mask/pose admission stays authoritative; artistic acceptance pending R8."
+
+[sub_resource type="Resource" id="IntrinsicContact"]
+script = ExtResource("effect")
+clip = "weapons/contact/fire/medium"
+role = "impact"
+at = "body.impact"
+attachment = "recipient_body"
+follow = false
+light_multiplier = 0.0
+staging_from = "Factory exact-item contact proposal, once per actual equipped Hit/Crit. No inferred elemental DamageFact or additional lamp. Artistic acceptance pending R8."
+
 [resource]
 script = ExtResource("2_o0xwm")
 id = "weapon.circus.flaming_scimitar"
+effects = Array[ExtResource("effect")]([SubResource("IntrinsicSustain")])
+impact_effects = Array[ExtResource("effect")]([SubResource("IntrinsicContact")])
 kind = "weapon"
 slots = Dictionary[String, Dictionary]({
 "weapon_melee_main": {
@@ -20,7 +46,13 @@ slots = Dictionary[String, Dictionary]({
 "slot": "weapon",
 "tint": "#ff6600"
 }],
-"variants": {}
+"variants": {
+"30000017": [{
+"part": "Melee4",
+"slot": "weapon",
+"tint": "#ff6600"
+}]
+}
 },
 "weapon_melee_off": {
 "layers": [{
@@ -73,3 +105,5 @@ ground = Array[Dictionary]([{
 }])
 icon = SubResource("Resource_yb5ca")
 notes = "Visual name Flaming Scimitar; Scimitar with fiery aura"
+
+# R2 candidate only: retain the original sheet, tint, family, ground art and real item UUID. No source refusal is bypassed.

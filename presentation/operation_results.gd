@@ -72,23 +72,53 @@ static func project(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Dic
 static func _source_item(node:Dictionary,graph:Dictionary)->Dictionary:
     var disclosed:Variant=node.fact.get("source_item_uuid")
     if disclosed!=null:return {"ready":true,"item_uuid":str(disclosed),"evidence":{"item_identity":"action_source_item"}}
+    var charged:Dictionary=_consumptions(node,graph)
+    if charged.size()!=1:return {"ready":false,"reason":"operation_source_item_not_disclosed" if charged.is_empty() else "operation_source_item_ambiguous"}
+    var item:String=charged.keys()[0]
+    return {"ready":true,"item_uuid":item,"evidence":{"item_identity":"descendant_consumed_charge",
+        "item_charge_occurrences":charged[item].occurrences,"item_charge_lineages":charged[item].lineages}}
+
+## A finite consumption is the accepted action plus its own consumed charge
+## and heal, even when that charge has already retired from current inventory.
+static func item_consumption(node:Dictionary,graph:Dictionary)->Dictionary:
+    var fact:Variant=node.get("fact")
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null or fact.kind!="action":
+        return {"ready":false,"reason":"item_consumption_completion_not_observed"}
+    var charged:Dictionary=_consumptions(node,graph)
+    if charged.size()!=1:return {"ready":false,"reason":"item_consumption_charge_not_disclosed" if charged.is_empty() else "item_consumption_charge_ambiguous"}
+    var item:String=charged.keys()[0]
+    var disclosed:Variant=fact.get("source_item_uuid")
+    if disclosed!=null and str(disclosed)!=item:return {"ready":false,"reason":"item_consumption_charge_identity_mismatch"}
+    var heals:Array=graph.get("nodes",{}).values().filter(func(candidate):
+        var result:Variant=candidate.get("fact")
+        return not candidate.get("canceled",false) and candidate.get("phase")=="completion" and result!=null \
+            and result.kind=="heal" and result.get("source_entity_uuid")==fact.source_entity_uuid \
+            and result.get("target_entity_uuid")==fact.source_entity_uuid and _own_result(candidate,node,graph))
+    if heals.size()!=1:return {"ready":false,"reason":"item_consumption_heal_not_disclosed" if heals.is_empty() else "item_consumption_heal_ambiguous"}
+    var heal:Dictionary=heals[0]
+    return {"ready":true,"values":{"item_uuids":[item],"healing_admitted":not heal.fact.was_blocked},
+        "evidence":{"action_occurrence":str(node.id),"action_lineage":str(node.lineage_id),"actor_uuid":fact.source_entity_uuid,
+            "item_uuid":item,"item_charge_occurrences":charged[item].occurrences,"item_charge_lineages":charged[item].lineages,
+            "heal_occurrence":str(heal.id),"heal_lineage":str(heal.lineage_id),"actual_healing":heal.fact.actual_healing,"was_blocked":heal.fact.was_blocked}}
+
+static func _consumptions(node:Dictionary,graph:Dictionary)->Dictionary:
     var charged:Dictionary={}
     for candidate in graph.get("nodes",{}).values():
         var fact:Variant=candidate.get("fact")
         if candidate.get("canceled",false) or candidate.get("phase")!="completion" or fact==null \
             or fact.kind!="item_charge" or fact.get("source_entity_uuid")!=node.fact.source_entity_uuid \
-            or fact.get("resource_change")!="consume" or not Actions.descendant(candidate,node,graph):continue
-        var parent:Variant=candidate.get("parent_lineage")
-        while parent!=node.lineage_id:
-            var ancestor:Dictionary=graph.nodes.get(str(parent),{})
-            var action:Variant=ancestor.get("fact")
-            if ancestor.get("canceled",false) or action!=null and action.kind in ["action","spell","attack"]:break
-            parent=ancestor.get("parent_lineage")
-        if parent!=node.lineage_id:continue
+            or fact.get("resource_change")!="consume" or not _own_result(candidate,node,graph):continue
         var item:String=str(fact.item_uuid)
         if not charged.has(item):charged[item]={"occurrences":[],"lineages":[]}
         charged[item].occurrences.append(str(candidate.id));charged[item].lineages.append(str(candidate.lineage_id))
-    if charged.size()!=1:return {"ready":false,"reason":"operation_source_item_not_disclosed" if charged.is_empty() else "operation_source_item_ambiguous"}
-    var item:String=charged.keys()[0]
-    return {"ready":true,"item_uuid":item,"evidence":{"item_identity":"descendant_consumed_charge",
-        "item_charge_occurrences":charged[item].occurrences,"item_charge_lineages":charged[item].lineages}}
+    return charged
+
+static func _own_result(candidate:Dictionary,node:Dictionary,graph:Dictionary)->bool:
+    if not Actions.descendant(candidate,node,graph):return false
+    var parent:Variant=candidate.get("parent_lineage")
+    while parent!=node.lineage_id:
+        var ancestor:Dictionary=graph.nodes[str(parent)]
+        var fact:Variant=ancestor.get("fact")
+        if ancestor.get("canceled",false) or fact!=null and fact.kind in ["action","spell","attack"]:return false
+        parent=ancestor.get("parent_lineage")
+    return true

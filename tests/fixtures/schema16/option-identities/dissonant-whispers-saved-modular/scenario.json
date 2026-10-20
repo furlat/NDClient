@@ -1,0 +1,92 @@
+{
+ "id": "spell.dissonant_whispers/modular_cleric_saves",
+ "title": "Dissonant Whispers: actual saves and Resistance on a modular Cleric",
+ "kind": "spell",
+ "seed": 2,
+ "first": "blue",
+ "subjects": {
+  "spell": [
+   "spell.dissonant_whispers",
+   "spell.resistance"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 3,
+   "caster_level": 3,
+   "spells": [
+    "spell.dissonant_whispers"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "cleric",
+   "at": [
+    6,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1,
+   "capture_choices": true
+  },
+  {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1,
+   "capture_choices": true
+  },
+  {
+   "do": "spell.resistance",
+   "by": "target",
+   "target": "self"
+  },
+  {
+   "do": "spell.dissonant_whispers",
+   "by": "caster",
+   "target": "target",
+   "level": 1,
+   "capture_choices": true
+  }
+ ],
+ "required_behaviors": [
+  "spell.dissonant_whispers",
+  "spell.resistance"
+ ],
+ "required_facts": [
+  "saving_throw",
+  "damage"
+ ],
+ "purpose": "Fixed lawful casts against a real Wisdom-proficient Life Cleric with actual Resistance. The target uses the existing modular body with authored optical ground; successful-save evidence comes only from unchanged original facts."
+}

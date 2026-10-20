@@ -12,6 +12,7 @@ const NativeRenderer=preload("res://presentation/native_spell_renderer.gd")
 class OpticalWorld extends Node:
     var character_light_profile:String="reference"
     var visual_actors:Dictionary={}
+    var displayed_components:Array=[]
     var playbacks:Dictionary={}
     var catalog_cache:Dictionary={}
 var checks:int=0

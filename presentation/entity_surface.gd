@@ -170,6 +170,9 @@ func _received_track(world:Node,admission:Dictionary,track:Dictionary,group:Dict
         var scale:float=128.0/float(world.rig_config.TILE_W)*float(actor.appearance.visual_scale)
         var binding:Dictionary=Geometry.prepare_binding(path_name,layer.slot,world.catalog_cache,true,true,world.character_light_profile,scale,float(actor.appearance.visual_scale_x))
         if not binding.parameters.get("has_component_geometry",false):continue
+        # Library-only companions explicitly retain unknown ground registration.
+        # Normals may render without supplying a world-space optical surface.
+        if binding.ground==null:continue
         received_poses.append({"actor":request.actor,"clip":track.clip,"path":path_name,"slot":layer.slot,"rig":rig,"facing":facing,
             "frames":initial_frames(track,rig,local),"parameters":binding.parameters,"pivot":Construction.layer_shape(rig,scale).pivot,"ground":binding.ground})
 
@@ -231,8 +234,10 @@ func _capture(world:Node,actor:String,slots:Array,priority:bool=true)->Dictionar
         var frame:Vector4=SourceMaterial.value(entry,"frame_uv")
         var packet:Dictionary=admitted_images(world,entry.texture_path,slot)
         if not packet.reason.is_empty():result.reason=packet.reason;return result
+        if not entry.has("geometry_ground_pixels"):
+            result.reason="source_optical_ground_not_registered";return result
         var images:Dictionary=packet.images
-        var pose:Array=[frame,SourceMaterial.value(entry,"component_units"),SourceMaterial.value(entry,"component_elevation"),SourceMaterial.value(entry,"component_reconstruction_origin"),SourceMaterial.value(entry,"component_depth_range"),entry.pivot,float(entry.get("geometry_ground_pixels",19.0)),world.camera.global_basis]
+        var pose:Array=[frame,SourceMaterial.value(entry,"component_units"),SourceMaterial.value(entry,"component_elevation"),SourceMaterial.value(entry,"component_reconstruction_origin"),SourceMaterial.value(entry,"component_depth_range"),entry.pivot,float(entry.geometry_ground_pixels),world.camera.global_basis]
         var key:Array=_source_key(entry.texture_path,world.character_light_profile,images,pose)
         _request(key,images,pose,priority)
         result.selected.append({"entry":entry,"key":key,"slot":slot})

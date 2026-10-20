@@ -5,6 +5,31 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_sxy8t"]
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_sxy8t"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_6i7os"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="5_finite"]
+
+[sub_resource type="Resource" id="Resource_enlarge_application"]
+script = ExtResource("5_finite")
+clip = "enlarge_reduce_native/application"
+role = "attached"
+at = "application"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.72
+duration_policy = "authored"
+light_multiplier = 0.0
+extra = {"when": {"size_change": "enlarge"}}
+
+[sub_resource type="Resource" id="Resource_reduce_application"]
+script = ExtResource("5_finite")
+clip = "enlarge_reduce_reduce_native/application"
+role = "attached"
+at = "application"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.72
+duration_policy = "authored"
+light_multiplier = 0.0
+extra = {"when": {"size_change": "reduce"}}
 
 [sub_resource type="Resource" id="Resource_4ittd"]
 script = ExtResource("1_gex3e")
@@ -40,6 +65,7 @@ id = "condition.spell.enlarge_reduce"
 label = "Enlarge Reduce"
 icon = SubResource("Resource_6i7os")
 disposition = "authored"
+effects = Array[ExtResource("5_finite")]([SubResource("Resource_enlarge_application"), SubResource("Resource_reduce_application")])
 look = SubResource("Resource_8dwmb")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],

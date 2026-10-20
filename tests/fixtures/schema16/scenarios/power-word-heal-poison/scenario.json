@@ -1,0 +1,129 @@
+{
+ "id": "spell.power_word_heal/ray_poisoned_restore_move",
+ "title": "Power Word Heal: actual Ray poison, cure and restored movement",
+ "kind": "spell",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.ray_of_sickness",
+   "spell.power_word_heal"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.ray_of_sickness.poison"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.ray_of_sickness"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "healer",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.power_word_heal"
+   ],
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    8,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "spell.ray_of_sickness",
+   "by": "caster",
+   "target": "target",
+   "level": 1
+  },
+  {
+   "do": "wait_condition",
+   "target": "target",
+   "condition": "condition.spell.ray_of_sickness.poison",
+   "max_turns": 0
+  },
+  {
+   "do": "spell.power_word_heal",
+   "by": "healer",
+   "target": "target",
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    9,
+    7
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.ray_of_sickness",
+  "spell.power_word_heal",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.ray_of_sickness.poison"
+ ],
+ "required_condition_ends": [
+  "condition.spell.ray_of_sickness.poison"
+ ],
+ "required_facts": [
+  "saving_throw",
+  "damage",
+  "heal",
+  "movement"
+ ],
+ "purpose": "Fixed legal attack/save sequence, preserving every Miss/save/failure. A real observed Poisoned member must exist before the healer is asked to cure it. Exact native removal ancestry, rather than request success or positive Poison damage, proves Power Word Heal restoration."
+}

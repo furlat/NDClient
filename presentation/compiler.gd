@@ -49,11 +49,15 @@ static func _spell_actor_inputs(node:Dictionary,captured:Dictionary,state:Dictio
 
 static func _track(group: Dictionary, node: Dictionary, actor: Dictionary, clip_name: String,
         start: float, speed: float, priority: int, cache: Dictionary, graph:Dictionary) -> Dictionary:
-    var clip = Authoring.clip(actor, clip_name, cache)
-    if clip.is_empty():
-        group.skipped.append({"occurrence":node.lineage_id,"kind":node.fact.kind,"reason":"missing_authored_clip","clip":clip_name})
-        return {}
-    var row = Tracks.body(actor.uuid,Authoring.rig_id(actor,cache),clip_name,clip,speed,priority)
+    var row:Dictionary
+    if node.fact.kind=="step" and Authoring.Characters.effect_owned(actor,cache):
+        row=Tracks.spatial(actor.uuid,start,priority)
+    else:
+        var clip = Authoring.clip(actor, clip_name, cache)
+        if clip.is_empty():
+            group.skipped.append({"occurrence":node.lineage_id,"kind":node.fact.kind,"reason":"missing_authored_clip","clip":clip_name})
+            return {}
+        row=Tracks.body(actor.uuid,Authoring.rig_id(actor,cache),clip_name,clip,speed,priority)
     row.merge({"trace_track_id":"%s:%s:%s" % [group.operation_sequence,node.id,group.actor_tracks.size()],
         "occurrence":node.lineage_id,"source_event_uuid":node.id,"source_lineage":node.lineage_id,"start_ms":start},true)
     row.activity={"attack":"attack","spell":"cast","action":"act","shove":"act","condition":"act","damage":"hit","life":"hit","forced_movement":"forced_move"}.get(node.fact.kind,"idle")
@@ -204,8 +208,9 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             if not held.is_empty():
                 _held_contact(held,fact.source_entity_uuid,graph)
                 held.duration_ms = finish-start
-                held.source_start_seconds = previous.get("source_end_seconds",0.0)
-                held.source_end_seconds = held.source_start_seconds
+                if not held.get("spatial_only",false):
+                    held.source_start_seconds = previous.get("source_end_seconds",0.0)
+                    held.source_end_seconds = held.source_start_seconds
                 held.occurrence = previous.get("occurrence",held.occurrence)
         var end_motion = finish
         if not node.canceled and fact.committed and fact.trajectory in ["path","direct_arc","connector_transfer"]:

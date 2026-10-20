@@ -19,16 +19,30 @@ static func frame(tree:SceneTree)->void:
     await tree.process_frame
     await RenderingServer.frame_post_draw
 
-static func settle(tree:SceneTree,world:Node,ids:Array=[])->bool:
+static func settle(tree:SceneTree,world:Node,ids:Array=[],source_refusals:Array=[])->bool:
     var deadline:int=Time.get_ticks_msec()+45000
     while Time.get_ticks_msec()<deadline and not world.publication_failed and world.presentation_errors.is_empty() and world.media_issue.is_empty():
-        var native:RefCounted=world.component_renderer.native_spells
-        var ready:bool=ids.all(func(id):return native.diagnostics.get(id,{}).get("status")=="rendered" and native.diagnostics[id].get("input_bindings",{}).get("unavailable",{}).is_empty())
-        if world.playback_prepared() and ready:
+        # Drive ordinary preparation, but observe this published cut rather
+        # than waiting for an unrelated future queue entry while paused.
+        world.playback_prepared()
+        if displayed_ready(world,ids,source_refusals):
             await frame(tree)
-            if world.playback_prepared():return true
+            if displayed_ready(world,ids,source_refusals):return true
         await frame(tree)
     return false
+
+static func displayed_ready(world:Node,ids:Array,source_refusals:Array=[])->bool:
+    if world.timeline.state.is_empty() or world.world_prepare_epoch!=world.timeline.initialization_revision \
+        or world.world_revision!=world.timeline.world_revision or world.actor_revision!=world.timeline.revision \
+        or not world.component_renderer.ready:return false
+    var native:RefCounted=world.component_renderer.native_spells
+    return ids.all(func(id):
+        var diagnostic:Dictionary=native.diagnostics.get(id,{})
+        var current:Array=world.displayed_components.filter(func(component):return component.id==id)
+        return current.size()==1 and native.handles.has(id) and native.handles[id].root.is_visible_in_tree() \
+            and is_equal_approx(float(diagnostic.get("age_ms",-1.0)),float(current[0].age_ms)) \
+            and (diagnostic.get("status")=="rendered" or diagnostic.get("status")=="partial" and diagnostic.get("reason") in source_refusals) \
+            and diagnostic.get("input_bindings",{}).get("unavailable",{}).is_empty())
 
 static func changed(a:Image,b:Image)->int:
     a=a.duplicate();b=b.duplicate();a.convert(Image.FORMAT_RGBA8);b.convert(Image.FORMAT_RGBA8)

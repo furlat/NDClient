@@ -7,6 +7,7 @@ const Clip=preload("res://presentation/resources/body_source_clip.gd")
 const NativeRenderer=preload("res://presentation/native_spell_renderer.gd")
 class World extends Node3D:
     var visual_actors:Dictionary={}
+    var displayed_components:Array=[]
     var source_images:Dictionary={}
     var catalog_cache:Dictionary={}
     var character_light_profile:String="reference"
@@ -99,6 +100,17 @@ func future_tracks(world:World,index:Resource,layer:Resource,descriptor:Dictiona
     check(producer.sources.size()<=Surface.SOURCE_LIMIT and producer.pending.size()<=Surface.PENDING_LIMIT,"Received preparation retains the existing finite cache/queue bounds")
     producer.clear()
     check(producer.received_groups.is_empty() and producer.received_poses.is_empty() and producer.jobs.is_empty(),"Epoch cleanup retires its future operands and joins only owned finite work")
+    geometry.geometry.optical_ground_pixels=null
+    var unknown:RefCounted=Surface.new()
+    unknown.prepare_received_tracks(world,[group],interests)
+    check(unknown.received_poses.is_empty() and unknown.jobs.is_empty() and unknown.pending.is_empty(),"An explicitly unknown library ground never sends Nil to an optical worker or invents a future registration")
+    var current_entry:Dictionary=world.visual_actors.knight_a.entries[0]
+    current_entry.erase("geometry_ground_pixels")
+    var unavailable:Dictionary=unknown.sample(world,"knight_a")
+    check(not unavailable.ready and unavailable.reason=="source_optical_ground_not_registered" \
+        and unknown.jobs.is_empty(),"Unknown current ground is an explicit missing optical input, without fallback height or task failure")
+    current_entry.geometry_ground_pixels=0.0;geometry.geometry.optical_ground_pixels=0.0
+    unknown.clear()
     for id in ["knight_a","knight_b"]:
         for shown in world.visual_actors[id].entries:shown.texture_path="fixture:colour"
     world.source_images.erase("fixture:future")

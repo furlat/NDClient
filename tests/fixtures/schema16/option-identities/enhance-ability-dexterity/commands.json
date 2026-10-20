@@ -1,0 +1,391 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "51c26088-a4bc-4e84-a778-68cb3ac6061e",
+   "state_revision": "292e473f-6fd6-4d2c-9a78-8dc19e83c23d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "828c3bf0-c29c-4bd7-8861-597d6ede76cc",
+   "state_revision": "b180caf0-672e-42b7-9daa-014302d37168",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "9c695a9e-4a37-4652-8d65-f0d8fb262da8",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "9c695a9e-4a37-4652-8d65-f0d8fb262da8",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.enhance_ability",
+   "by": "caster",
+   "target": "ally",
+   "variant": {
+    "ability": "dexterity"
+   },
+   "level": 2,
+   "capture_choices": true,
+   "track": true,
+   "track_condition": "condition.spell.enhance_ability"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "469176e2-3647-4d56-8744-8d0a9db3c46b",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.enhance_ability",
+   "display_name": "Enhance Ability (Level 2) \u00b7 Dexterity",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "ability",
+     "value": "dexterity",
+     "label": "Dexterity"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "59283b17-aa04-4341-b943-b270ef2525ea",
+   "state_revision": "469176e2-3647-4d56-8744-8d0a9db3c46b",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 11,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 2
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "59283b17-aa04-4341-b943-b270ef2525ea",
+   "state_revision": "813c5423-e482-4d54-87ac-c857a63f9bda",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "hold",
+   "to": [
+    2,
+    8
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "51c26088-a4bc-4e84-a778-68cb3ac6061e",
+   "state_revision": "84f9330f-3ac7-410c-a91c-64f3ad55d0f4",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "51c26088-a4bc-4e84-a778-68cb3ac6061e",
+   "state_revision": "aacb125e-1ad3-4f97-afd4-23215ddbbe00",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 10
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "828c3bf0-c29c-4bd7-8861-597d6ede76cc",
+   "state_revision": "c9796837-7fa7-4a72-912e-d89b73290ce9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "9c695a9e-4a37-4652-8d65-f0d8fb262da8",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "9c695a9e-4a37-4652-8d65-f0d8fb262da8",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self",
+   "optional": false
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "7ae4a625-2e21-4819-8782-274dec99fb6a",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "59283b17-aa04-4341-b943-b270ef2525ea",
+   "state_revision": "7ae4a625-2e21-4819-8782-274dec99fb6a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 31,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 7,
+   "actor_uuid": "59283b17-aa04-4341-b943-b270ef2525ea",
+   "state_revision": "591412e6-1709-48dc-9070-9da2334801ef",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 7,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 15
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "ally",
+   "phase": "tail",
+   "to": [
+    2,
+    7
+   ]
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 8,
+   "actor_uuid": "51c26088-a4bc-4e84-a778-68cb3ac6061e",
+   "state_revision": "f68661f8-5810-4bde-a0d4-fa0a2eebd076",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 4,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      2
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": true
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+   "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+   "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+   "command_number": 8,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_enhance_ability_dexterity_lifecycle",
+    "game_epoch": "705e6230-5ab2-4499-99bf-95c5e917d253",
+    "audience_id": "ef1fe885-ed25-46a3-9302-36fc823a50e2",
+    "sequence": 17
+   }
+  }
+ }
+]

@@ -80,6 +80,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_36lpf"]
 script = ExtResource("6_fkoud")
 id = "goodberry_eat_native"
+dispatch_gap = "delegated_to_actual_action.spell.goodberry.eat_consumption"
 kind = "form"
 selection = "goodberry_eat_native"
 effects = Array[ExtResource("1_k2mhg")]([SubResource("Resource_51gsk")])
@@ -116,6 +117,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_e8614"]
 script = ExtResource("6_fkoud")
 id = "goodberry_healing_blocked_native"
+dispatch_gap = "delegated_to_actual_action.spell.goodberry.eat_heal_result"
 kind = "outcome"
 selection = "goodberry_healing_blocked_native"
 effects = Array[ExtResource("1_k2mhg")]([SubResource("Resource_i22wf")])

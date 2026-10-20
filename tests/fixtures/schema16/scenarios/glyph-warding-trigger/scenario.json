@@ -1,0 +1,125 @@
+{
+ "id": "spell.glyph_of_warding/arm_move_enter_trigger",
+ "title": "Glyph: placement, held movement, hostile entry and actual payload",
+ "kind": "spell",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.glyph_of_warding"
+  ],
+  "action": [
+   "action.move"
+  ],
+  "condition": [
+   "condition.spell.glyph_of_warding"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [
+   "spatial_effect.spell.glyph_of_warding"
+  ],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.glyph_of_warding"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    9,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    6
+   ]
+  },
+  {
+   "do": "spell.glyph_of_warding",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "level": 3,
+   "variant": {
+    "form": "fire"
+   },
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    3,
+    5
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    9,
+    6
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    8,
+    7
+   ]
+  },
+  {
+   "do": "action.move",
+   "by": "target",
+   "target": [
+    9,
+    7
+   ]
+  }
+ ],
+ "required_behaviors": [
+  "spell.glyph_of_warding",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.spell.glyph_of_warding"
+ ],
+ "required_ended_conditions": [
+  "condition.spell.glyph_of_warding"
+ ],
+ "required_facts": [
+  "movement",
+  "spatial_effect_state",
+  "saving_throw",
+  "damage"
+ ],
+ "required_applied_damage_types": [
+  "Fire"
+ ],
+ "purpose": "Actual ordinary hostile entry after a separately published held interval. The legal request selects Fire, but native armed/payload inputs are not manufactured from the request or from the name of the spell."
+}

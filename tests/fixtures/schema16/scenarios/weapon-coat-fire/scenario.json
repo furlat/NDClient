@@ -1,0 +1,149 @@
+{
+ "id": "consumable.weapon_coat.fire/equipped_runtime",
+ "title": "Fire: held coat, movement, contact and retirement",
+ "kind": "item",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.item.weapon_coat.apply",
+   "action.move",
+   "action.attack"
+  ],
+  "condition": [
+   "condition.consumable.weapon_coat.fire"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": [
+   "weapon.longsword",
+   "weapon.scimitar",
+   "consumable.weapon_coat.fire"
+  ]
+ },
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ],
+   "items": [
+    {
+     "id": "weapon.longsword",
+     "slot": "MELEE_MAIN"
+    },
+    {
+     "id": "weapon.scimitar",
+     "placement": "inventory"
+    },
+    {
+     "id": "consumable.weapon_coat.fire",
+     "placement": "inventory"
+    }
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.ogre_zombie",
+   "at": [
+    6,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.item.weapon_coat.apply",
+   "by": "caster",
+   "target": "self",
+   "item": "consumable.weapon_coat.fire",
+   "name": "Coat Main Hand",
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    5,
+    5
+   ]
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "unequip",
+   "by": "caster",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "equip",
+   "by": "caster",
+   "item": "weapon.scimitar",
+   "slot": "MELEE_MAIN"
+  },
+  {
+   "do": "end_turn",
+   "by": "caster"
+  },
+  {
+   "do": "action.attack",
+   "by": "caster",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "required_behaviors": [
+  "action.item.weapon_coat.apply",
+  "action.move",
+  "action.attack"
+ ],
+ "required_facts": [
+  "actor_change",
+  "movement",
+  "attack",
+  "damage"
+ ],
+ "purpose": "Exact public coating membership on the actual longsword; only natural expiry, legal concentration removal or optical item replacement retires its treatment. The Ogre Zombie target has actual Poison immunity; Poisoned or positive poison damage is not claimed. Concurrent Fire/Lightning is evidence of the source composition gap, never permission to overwrite the first direct owner."
+}

@@ -161,6 +161,8 @@ static func observed_index(events:Array,graph:Dictionary)->Dictionary:
                     "revived_entity_uuid":fact.entity_uuid,"life_change_event_uuid":str(node.id)}})
         var removed:Dictionary={}
         for cue in graph.get("condition_cues",{}).get(node.id,[]):
+            if cue.phase=="application":
+                rows.append({"kind":"condition_application","target_uuid":str(cue.actor_uuid),"node":node,"condition":cue.condition})
             if cue.phase!="removal":continue
             if not removed.has(cue.actor_uuid):removed[cue.actor_uuid]=[]
             removed[cue.actor_uuid].append(cue.condition.condition_uuid)
@@ -175,6 +177,42 @@ static func observed_index(events:Array,graph:Dictionary)->Dictionary:
             result[str(owner.id)].append_array(rows)
             parent=owner.get("parent_lineage")
     return result
+
+## A finite cast can name its actual committed descendant membership without
+## publishing that condition early. Current item/optical admission is separate.
+static func condition_application(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Dictionary:
+    var fact:Variant=node.get("fact")
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null or fact.kind!="spell":
+        return {"ready":false,"reason":"condition_application_cast_not_observed"}
+    var actor:Variant=fact.get("source_entity_uuid")
+    if actor==null:return {"ready":false,"reason":"condition_application_actor_not_disclosed"}
+    var rows:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):
+        return row.kind=="condition_application" and row.target_uuid==str(actor) \
+            and row.condition.get("behavior_id")==descriptor.condition_id and _cast_owns_result(node,row.node,graph))
+    if rows.size()!=1:return {"ready":false,"reason":"condition_application_exact_owner_not_observed"}
+    var applied:Dictionary=rows[0]
+    var member:Dictionary=applied.condition
+    var evidence:Dictionary={"cast_occurrence":str(node.id),"cast_lineage":str(node.lineage_id),
+        "application_occurrence":str(applied.node.id),"application_lineage":str(applied.node.lineage_id),
+        "actor_uuid":str(actor),"condition_uuid":str(member.condition_uuid),"condition_id":str(member.behavior_id)}
+    return {"ready":true,"condition":member,
+        "values":{"ownership":{"owner_kind":"caster","owner_uuid":str(actor),"effect_uuid":str(member.condition_uuid),"binding":{}},"hit":{}},
+        "evidence":evidence}
+
+static func _cast_owns_result(cast:Dictionary,result:Dictionary,graph:Dictionary)->bool:
+    var parent:Variant=result.get("parent_lineage")
+    while parent!=null:
+        var owner:Dictionary=graph.get("nodes",{}).get(str(parent),{})
+        if owner.is_empty() or owner.get("canceled",false):return false
+        if str(owner.lineage_id)==str(cast.lineage_id):return true
+        var fact:Variant=owner.get("fact")
+        if fact!=null and fact.kind in ["spell","action","attack"]:
+            # A native per-recipient application remains this same cast;
+            # another action or independently resolving spell is a new owner.
+            if fact.kind!="spell" or str(owner.get("resolution_record",{}).get("lineage",""))!=str(cast.lineage_id) \
+                or fact.get("behavior_id")!=cast.fact.behavior_id or fact.get("source_entity_uuid")!=cast.fact.source_entity_uuid:return false
+        parent=owner.get("parent_lineage")
+    return false
 
 static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
     var projection:String=str(descriptor.get("projection","event"))
