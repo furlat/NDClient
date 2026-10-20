@@ -127,7 +127,7 @@ func accept(message: Dictionary) -> void:
         state = message.state
         Conditions.observe(condition_owners,state.actors,display_ms,true)
         NativeItems.observe(item_effect_owners,state,display_ms,appearance_cache)
-        NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),display_ms,true)
+        NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},display_ms,true)
         sequence = int(message.sequence)
         revision += 1
         resource_revision += 1
@@ -324,7 +324,7 @@ func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_u
     if NativeItems.interested(item_effect_owners,delta,appearance_cache):
         changed=NativeItems.observe(item_effect_owners,state,at_ms,appearance_cache,event_uuid,item_rows) or changed
     if delta.get("set",{}).has("senses"):
-        var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),at_ms)
+        var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},at_ms)
         changed=changed or spatial_changed
     if changed:resource_revision+=1
 

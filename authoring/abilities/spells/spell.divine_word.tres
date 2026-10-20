@@ -40,6 +40,15 @@ ramp = PackedColorArray()
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/proclamation"
 role = "attached"
+scope = "cast"
+constructor_input = {
+"component_path": ["assembly", "proclamation"],
+"geometry_actor": "caster",
+"kind": "observed_event",
+"outcome": "cast",
+"projection": "cast_completion",
+"recipient_role": "target"
+}
 at = "release"
 attachment = "caster_ground"
 scale = 0.471404520791032
@@ -66,6 +75,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_rogwt"]
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/target_release"
+unbound_constructor_inputs = PackedStringArray("observation")
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
@@ -93,6 +103,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_rx1vd"]
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/target2_release"
+unbound_constructor_inputs = PackedStringArray("observation")
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
@@ -120,6 +131,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_ujetv"]
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/target_deafened"
+unbound_constructor_inputs = PackedStringArray("observation")
 role = "attached"
 at = "contact"
 attachment = "recipient_ground"
@@ -151,6 +163,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_2dy2l"]
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/target_blinded"
+unbound_constructor_inputs = PackedStringArray("observation")
 role = "attached"
 at = "contact"
 attachment = "recipient_ground"
@@ -266,7 +279,7 @@ applies_conditions = PackedStringArray("condition.blinded", "condition.deafened"
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "divine_word__back",
 "source": "assets/vfx/index.json:/selections/divine_word__back/staging"
@@ -338,4 +351,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "Proclamation uses only the actual completed cast and disclosed source/recipient identity, with no review owner packet. Recipient deafened/blinded/stunned/death tiers remain unavailable in the current public condition; their cues stay inspectable gaps, not invented outcomes. Imported body/timing/art still require review."

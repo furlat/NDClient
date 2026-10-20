@@ -114,6 +114,8 @@ static func observed_index(events:Array,graph:Dictionary)->Dictionary:
     return result
 
 static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Array:
+    var projection:String=str(descriptor.get("projection","event"))
+    if projection!="event" and (node.get("phase")!="completion" or node.fact.get("source_entity_uuid")==null):return []
     var source:String=str(node.fact.source_entity_uuid)
     var kind:String=str(descriptor.outcome)
     # A finite source may draw at the caster or speak toward the actual
@@ -127,6 +129,8 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
             if row.kind=="revival":revived.append(row.target_uuid)
     var result:Array=[]
     for row in rows:
+        if projection!="event" and row.node.get("phase")!="completion":continue
+        if projection=="applied_contact" and row.node.fact.get("target_entity_uuid")==null:continue
         if row.target_uuid in revived:continue
         # A damage/heal explicitly names its source. A LifeFact/removal is linked by
         # the native parent lineage instead; it has no invented source fact.
@@ -146,5 +150,21 @@ static func observed(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Ar
             evidence.merge({"damage_component_identity":"native_applied_result_occurrence","applied_damage":row.node.fact.applied_damage,
                 "damage_type":row.node.fact.damage_type,"source_condition_uuid":row.node.fact.get("source_condition_uuid"),
                 "effect_id":row.node.fact.get("effect_id")})
-        result.append({"node":row.node,"target_uuid":target,"values":values,"event":event,"evidence":evidence})
+        var inputs:Dictionary={"lease_input":{},"event_input":event}
+        if projection=="applied_contact":
+            # One applied-result occurrence owns this finite contact. Its cast
+            # identity is distinct from any subsequently held condition UUID.
+            var contact:Dictionary={"source_owner_uuid":str(node.id),"recipient_uuid":target,
+                "original_caster_uuid":source,"event_uuid":str(row.node.id),"damage_applied":true}
+            values.merge({"source_owner_uuid":str(node.id),"recipient_uuid":target,"original_caster_uuid":source,
+                "condition_uuid":"","condition_id":"","state":contact},true)
+            inputs={"native_state":contact}
+        elif projection=="cast_completion":
+            var identities:Dictionary={"event_uuid":str(node.id),"cast_uuid":str(node.id),
+                "source_entity_uuid":source,"target_entity_uuid":target}
+            var completion:Dictionary=identities.merged({"admitted":true,"canceled":false,"phase":"completion"})
+            values.owner=identities.merged({"owner_uuid":str(node.id),"condition_uuid":"","condition_id":""})
+            values.observation=completion
+            inputs={"observation":completion}
+        result.append({"node":row.node,"target_uuid":target,"values":values,"event":event,"inputs":inputs,"evidence":evidence})
     return result

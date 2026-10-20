@@ -17,11 +17,37 @@ func _process(_delta: float) -> bool:
     if peer!=null: peer.tick()
     if session!=null: session.poll()
     return false
-func until(predicate: Callable,label: String) -> void:
+func until(predicate: Callable,label: String) -> bool:
     var deadline = Time.get_ticks_msec()+20000
     while not predicate.call() and Time.get_ticks_msec()<deadline: await process_frame
-    check(predicate.call(),label)
+    var reached:bool=predicate.call()
+    check(reached,label)
+    return reached
+func null_senses_cut(source:Dictionary) -> void:
+    # Named compiler-output control over the real loopback's reduced state.
+    # Absence of sensory disclosure remains null; no game fact, optical member
+    # or replacement senses={} is invented to make the timeline accept it.
+    var actual=Timeline.new()
+    actual.accept({"kind":"initialization","state":source.duplicate(true),"sequence":0})
+    var before:PackedByteArray=var_to_bytes(actual.state)
+    var resources:int=actual.resource_revision
+    actual.accept({"kind":"operation","groups":[{"id":"unit:null-senses","operation_sequence":1,
+        "operation_end":true,"duration_ms":0.0,"events":[],"actor_tracks":[],"components":[],
+        "commits":[{"at_ms":0.0,"delta":{"set":{"senses":null}}}]}]})
+    actual.advance(0)
+    check(actual.sequence==1 and actual.state.senses==null and var_to_bytes(actual.state)==before,"Unit: a null sensory cut preserves the actual no-disclosure canonical value")
+    check(actual.spatial_effect_owners.is_empty() and actual.resource_revision==resources,"Unit: null membership invents no spatial owner or resource revision")
 func run() -> void:
+    var gallery=""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--recording="): gallery=argument.trim_prefix("--recording=")
+    if gallery.is_empty():
+        check(false,"Supply --recording= with an unchanged committed schema16 Gallery journal")
+        finish();return
+    var independent=Session.Journal.new()
+    var opened:Dictionary=independent.open(gallery,true,false)
+    check(opened.ok,"Actual Gallery opens under the current protocol: "+str(opened.get("error",{})))
+    if not opened.ok:finish();return
     peer = Peer.new(); check(peer.start("bounded"),"Native loopback peer starts")
     var directory = "user://checks/bounded-"+Session.uuid()
     session = Session.new()
@@ -36,6 +62,7 @@ func run() -> void:
     timeline.retire_group = session.retire_group
     for message in session.take_prepared(): timeline.accept(message)
     check(timeline.sequence==0,"Preparing later operations never changes displayed initialization")
+    check(timeline.state.senses==null and timeline.spatial_effect_owners.is_empty(),"Legal current loopback initialization preserves undisclosed senses=null with no spatial owners")
     var deadline = Time.get_ticks_msec()+20000
     timeline.paused = false
     while timeline.sequence<8 and session.issue.is_empty() and Time.get_ticks_msec()<deadline:
@@ -44,6 +71,7 @@ func run() -> void:
         timeline.advance(1000)
         await process_frame
     check(timeline.sequence==8 and timeline.state==session.journal.state,"Resumed display consumes every durable operation and matches canonical reduction")
+    null_senses_cut(timeline.state)
     check(timeline.completed_group_count==8,"No operation-end presentation group is omitted or duplicated")
     await until(func():return session.diagnostics().retired_groups==8,"Completed loopback groups return to the existing preparation worker")
     check(session.diagnostics().retirement_peak_groups<=2 and session.diagnostics().retirement_pending_groups==0,"One-group operations retain at most the bounded prepared window during retirement")
@@ -85,22 +113,21 @@ func run() -> void:
         FileAccess.open(directory.path_join("0000000000000001.json"),FileAccess.WRITE).store_buffer(original)
     for name in DirAccess.get_files_at(directory): DirAccess.remove_absolute(directory.path_join(name))
     DirAccess.remove_absolute(directory)
-    # Authentic long Gallery recording exercises non-empty lineages, actor
-    # motion, revealed terrain and observations through the bounded worker.
-    var gallery=""
-    for argument in OS.get_cmdline_user_args():
-        if argument.begins_with("--recording="): gallery=argument.trim_prefix("--recording=")
-    if gallery.is_empty():
-        check(false,"Supply --recording= with an authentic Gallery journal")
-        print("SESSION_EXECUTION_CHECKS ",JSON.stringify({"checks":checks,"failures":failures}))
-        quit(1)
-        return
+    # Unchanged committed Gallery originals exercise non-empty native lineages,
+    # actual actor motion/reveal and item/condition after-values through the same
+    # bounded worker. The malformed records above belong only to the private
+    # loopback journal; this original directory is never rewritten by the test.
     var last_recorded_sequence=-1
     var record_name=RegEx.new(); record_name.compile("^[0-9]{16}\\.json$")
     for filename in DirAccess.get_files_at(gallery):
         if record_name.search(filename)!=null: last_recorded_sequence=maxi(last_recorded_sequence,filename.trim_suffix(".json").to_int())
-    session=Session.new(); session.open_recording(gallery)
-    await until(func():return session.recording_ready,"Actual Gallery initialization prepares")
+    check(last_recorded_sequence>1,"Actual Gallery contains a complete multi-operation original prefix")
+    session=Session.new()
+    check(session.open_recording(gallery).ok,"Actual Gallery replay worker starts")
+    if not await until(func():return session.recording_ready or not session.issue.is_empty(),"Actual Gallery initialization prepares"):
+        finish();return
+    check(session.issue.is_empty(),"Actual Gallery initialization has no reader/compiler failure: "+str(session.issue))
+    if not session.issue.is_empty():finish();return
     var actual=Timeline.new()
     actual.retire_group=session.retire_group
     deadline=Time.get_ticks_msec()+120000
@@ -110,8 +137,7 @@ func run() -> void:
         session.set_displayed_sequence(actual.sequence)
         await process_frame
     check(session.issue.is_empty() and actual.sequence==last_recorded_sequence and session.terminal,"All authentic Gallery packets reach display, despite bounded lookahead")
-    var independent=Session.Journal.new()
-    var replayed=independent.open(gallery,true)
+    var replayed=independent.replay()
     check(replayed.ok and actual.state==independent.state,"Bounded real Gallery display matches independently replayed durable journal")
     check(session.diagnostics().recorded_handoff_hits==last_recorded_sequence,"Offline replay captures once per operation and hands records to the compiler")
     evidence.gallery={"sequence":actual.sequence,"completed_groups":actual.completed_group_count,"execution":session.diagnostics()}
@@ -125,6 +151,10 @@ func run() -> void:
     evidence.active_close_ms=Time.get_ticks_msec()-before
     check(session.diagnostics().prepared_sequence<last_recorded_sequence and evidence.active_close_ms<5000,"Cancellation waits at most the active packet, never the rest of the recording")
     session=null
+    finish()
+func finish() -> void:
+    if session!=null:session.close();session=null
+    if peer!=null:peer.close();peer=null
     var report={"checks":checks,"failures":failures,"evidence":evidence}
     FileAccess.open("res://generated/session_execution_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SESSION_EXECUTION_CHECKS ",JSON.stringify(report))

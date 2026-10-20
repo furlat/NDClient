@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "55427e5a-d31e-4e12-a9ab-85d5ccbe43ff",
+   "state_revision": "d676c7c3-f9fc-469c-8415-d8bc6525c8d5",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_divine_word_baseline",
+   "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+   "audience_id": "28d99c64-7326-4244-9743-8f1bbdd0b1a6",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_word_baseline",
+    "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+    "audience_id": "28d99c64-7326-4244-9743-8f1bbdd0b1a6",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "98b35142-e657-43d4-a35a-83ecfd0eff8b",
+   "state_revision": "33f7d34d-524a-4065-9edf-20c6bb2d7b1f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_divine_word_baseline",
+   "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+   "audience_id": "fd8a3546-88ce-4869-bada-f2ce9aaa2b7c",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_word_baseline",
+    "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+    "audience_id": "fd8a3546-88ce-4869-bada-f2ce9aaa2b7c",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "ff5cf81e-c9cc-4e7c-8639-808279a514a1",
+   "state_revision": "0b1a9785-dd6d-4562-b069-527de8919734",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_divine_word_baseline",
+   "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+   "audience_id": "fd8a3546-88ce-4869-bada-f2ce9aaa2b7c",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_word_baseline",
+    "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+    "audience_id": "fd8a3546-88ce-4869-bada-f2ce9aaa2b7c",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.divine_word",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.divine_word",
+   "display_name": "Divine Word (Level 7)",
+   "cast_at_level": 7,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "88cfce69-87aa-4a08-9a3b-99a0bf9fe17f",
+   "state_revision": "5b39edb4-dc73-44c5-9e2b-a8a6aba06d26",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_divine_word_baseline",
+   "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+   "audience_id": "28d99c64-7326-4244-9743-8f1bbdd0b1a6",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_word_baseline",
+    "game_epoch": "09bb69a6-2643-4efa-8a0c-22ef15bfec94",
+    "audience_id": "28d99c64-7326-4244-9743-8f1bbdd0b1a6",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

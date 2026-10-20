@@ -388,8 +388,14 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
         Common.error(report,where,"explicit input policy has no qualified source constructor");return
     if binding.is_empty():return
     if binding.get("kind")=="observed_event":
-        if binding.get("outcome") not in ["cast","heal","damage","removal","revival"] or use.scope not in ["source","recipient"] or binding.get("geometry_actor") not in ["caster","target"]:
-            Common.error(report,where,"observed event needs an outcome, source/recipient scope and actual geometry role");return
+        if binding.get("outcome") not in ["cast","heal","damage","removal","revival"] or use.scope not in ["source","recipient","cast"] or binding.get("geometry_actor") not in ["caster","target"]:
+            Common.error(report,where,"observed event needs an outcome, declared event scope and actual geometry role");return
+        var projection:String=str(binding.get("projection","event"))
+        if projection not in ["event","applied_contact","cast_completion"] \
+            or projection!="event" and use.scope!="cast" \
+            or projection=="applied_contact" and (binding.outcome!="damage" or str(binding.get("damage_type","")).is_empty() or use.at!="cast" or use.delay!=0.0) \
+            or projection=="cast_completion" and (binding.outcome!="cast" or binding.get("recipient_role")!="target"):
+            Common.error(report,where,"observed projection must match its actual result, source clock and recipient contract");return
     elif binding.get("kind")=="reaction_observation":
         if use.scope!="source" or binding.get("trigger_kind")!="spell" or not binding.get("succeeded") is bool or binding.get("input_field")!="observation":
             Common.error(report,where,"reaction observation needs source scope, spell trigger, observed outcome and observation member");return
@@ -427,6 +433,12 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
             if selected.size()!=1:Common.error(report,where,"constructor component path is unavailable: "+str(binding.component_path));return
             component=selected[0];input=component.input;components=input.get("components",[])
         if binding.get("kind") in ["application_result","reaction_observation"] and not input.get(binding.get("input_field","")) is Dictionary:Common.error(report,where,"constructor input member is not a supplied dictionary: "+str(binding.get("input_field")))
+        if binding.get("kind")=="observed_event":
+            var projection:String=str(binding.get("projection","event"))
+            if projection=="applied_contact" and (not input.get("state") is Dictionary or "native_state" not in clips[use.clip].get("inputs",[])):
+                Common.error(report,where,"applied contact needs its supplied state member and native_state setter")
+            elif projection=="cast_completion" and (not input.get("owner") is Dictionary or not input.get("observation") is Dictionary or "observation" not in clips[use.clip].get("inputs",[])):
+                Common.error(report,where,"cast completion needs supplied owner/observation members and observation setter")
         if binding.get("kind")=="spatial_owner" and binding.get("cell_input")=="cells":
             if not input.get("cells") is Array or not input.get("observed_removals") is Array \
                 or use.orientation!="world" or use.scale!=1.0:

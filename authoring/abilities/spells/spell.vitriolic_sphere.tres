@@ -20,6 +20,7 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_auh8c"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/native_delivery"
+unbound_constructor_inputs = PackedStringArray("targets", "accepted_release")
 role = "attached"
 at = "release"
 delay = -0.3
@@ -50,6 +51,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_27s2m"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/native_initial_blast"
+unbound_constructor_inputs = PackedStringArray("targets", "blast_event")
 role = "attached"
 at = "release"
 delay = 0.45
@@ -74,9 +76,17 @@ extra = {
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/native_target_initial"
 role = "attached"
-at = "release"
-delay = 0.52
-attachment = "caster_ground"
+scope = "cast"
+constructor_input = {
+"component_path": ["effect"],
+"damage_type": "Acid",
+"geometry_actor": "target",
+"kind": "observed_event",
+"outcome": "damage",
+"projection": "applied_contact"
+}
+at = "cast"
+attachment = "recipient_ground"
 orientation = "world"
 source_end = 0.5
 duration_policy = "authored"
@@ -129,6 +139,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_fki0e"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/target_native_next_end_packet"
+unbound_constructor_inputs = PackedStringArray("native_state")
 role = "attached"
 at = "release"
 delay = 2.05
@@ -213,6 +224,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_6clr5"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/target2_native_next_end_packet"
+unbound_constructor_inputs = PackedStringArray("native_state")
 role = "attached"
 at = "release"
 delay = 2.05
@@ -255,9 +267,10 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
-owner_ids = PackedStringArray()
-owner_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(5)
+owner_ids = PackedStringArray("condition.spell.vitriolic_sphere.residue")
+owner_cues = PackedInt32Array(3, 6)
+owner_kind = "condition"
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
@@ -270,5 +283,4 @@ staging_unported = {
 "selection": "vitriolic_sphere_native",
 "source": "assets/vfx/index.json:/selections/vitriolic_sphere_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "One recipient contact projects each actual same-cast positive Acid result at its own clock; fixed target2 contact is replaced by that factual fan-out. Existing condition UUID lifecycles own held residue, not the cast probes. Delivery/blast topology and later-END applied packets remain unbound; this is partial. Cast body remains the imported Attack5 stand-in, not accepted final timing/art."

@@ -1,0 +1,145 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "3c90eb94-e722-4e9f-86dd-844b9181a726",
+   "state_revision": "0b5a25c9-cd28-41d6-8932-f38b20ce3f86",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vitriolic_sphere_baseline",
+   "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+   "audience_id": "cf4d08a6-8e5e-4129-8c19-0beb4eaccbc5",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vitriolic_sphere_baseline",
+    "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+    "audience_id": "cf4d08a6-8e5e-4129-8c19-0beb4eaccbc5",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b9c211a5-117e-4e91-b2b7-a3a3c462efa8",
+   "state_revision": "b6c61395-afaa-4df4-aab8-3ceab227c37a",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vitriolic_sphere_baseline",
+   "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+   "audience_id": "37018948-0cb6-4b45-bdd0-b03c609cd836",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vitriolic_sphere_baseline",
+    "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+    "audience_id": "37018948-0cb6-4b45-bdd0-b03c609cd836",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "652913fa-0624-4fd8-8116-91b67a58213e",
+   "state_revision": "8dc465f5-bbb6-4223-a9cd-df816746f0fd",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vitriolic_sphere_baseline",
+   "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+   "audience_id": "37018948-0cb6-4b45-bdd0-b03c609cd836",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vitriolic_sphere_baseline",
+    "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+    "audience_id": "37018948-0cb6-4b45-bdd0-b03c609cd836",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.vitriolic_sphere",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.vitriolic_sphere",
+   "display_name": "Vitriolic Sphere (Level 4)",
+   "cast_at_level": 4,
+   "variant_facets": [],
+   "target_type": "position_aoe",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "c63ad474-87f3-4f30-b1bd-9cf61ccedd60",
+   "state_revision": "5cc25013-f4b9-4ef8-a644-3a683c8f254d",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_vitriolic_sphere_baseline",
+   "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+   "audience_id": "cf4d08a6-8e5e-4129-8c19-0beb4eaccbc5",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_vitriolic_sphere_baseline",
+    "game_epoch": "f5a7c523-7056-43bb-9c90-dbab3ef8cac3",
+    "audience_id": "cf4d08a6-8e5e-4129-8c19-0beb4eaccbc5",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

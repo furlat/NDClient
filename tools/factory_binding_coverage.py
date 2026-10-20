@@ -202,7 +202,14 @@ def report() -> dict:
                 cue["resolved_clip"] = clip
                 required = set(clips.get(clip, {}).get("inputs", []))
                 constructor = cue["constructor_input"].get("kind")
-                supplied = PROVIDERS | (EVENT_PROVIDERS if constructor in {"observed_event", "creation_admission"} else set())
+                event_channels = EVENT_PROVIDERS if constructor in {"observed_event", "creation_admission"} else set()
+                if constructor == "observed_event":
+                    projection = cue["constructor_input"].get("projection", "event")
+                    if projection == "applied_contact":
+                        event_channels = {"native_state"}
+                    elif projection == "cast_completion":
+                        event_channels = {"observation"}
+                supplied = PROVIDERS | event_channels
                 if constructor == "spatial_owner":
                     supplied = supplied | {"surface_presence"}
                     if cue["constructor_input"].get("cell_input") == "cells":

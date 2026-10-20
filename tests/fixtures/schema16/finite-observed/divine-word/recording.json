@@ -1,0 +1,75 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "88cfce69-87aa-4a08-9a3b-99a0bf9fe17f": "Amber caster",
+  "55427e5a-d31e-4e12-a9ab-85d5ccbe43ff": "Amber ally",
+  "98b35142-e657-43d4-a35a-83ecfd0eff8b": "Blue second target",
+  "ff5cf81e-c9cc-4e7c-8639-808279a514a1": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.divine_word \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 1,
+   "spell": 2
+  },
+  "behaviors": {
+   "spell.divine_word": 1
+  },
+  "conditions": [
+   "condition.spell.divine_word"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.divine_word",
+   "kind": "actor_change",
+   "actor_uuid": "ff5cf81e-c9cc-4e7c-8639-808279a514a1",
+   "condition_uuid": "95b49037-0a30-4226-955e-d00f6dd18196",
+   "condition_id": "condition.spell.divine_word"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 50,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.divine_word"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

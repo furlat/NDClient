@@ -215,3 +215,25 @@ admission fence change and all repaired socket fixtures. Bounded source reviews
 of preparation ownership and BodyScale/PWH found no remaining material blocker.
 The complete native/live inventory and explicit historical exclusions remain
 separate work; this checkpoint never labels the full repository green.
+
+
+## Finite factual source checkpoint after ca6cdd49
+
+[Vitriolic contacts and Divine Word proclamation](FINITE_OBSERVED_PROVIDER_COHORT_2026-10-20.md)
+now qualify394 headless/305 native assertions through original two-seat streams.
+They use the existing cast/result compiler and actual declared source setters.
+Unbound blast/delivery/tick/recipient tiers remain explicit gaps and never warm
+with review fixture packets. Existing damage18/healing150/PWH239 native defaults
+pass. The complete current fast lane is129/129 at
+`.runtime/tests/20261020T043522.877534Z/`.
+
+Three additional surviving gates are repaired: session40, trusted operations472,
+recording media2606. Session exposed a real null-senses assumption in spatial
+owner observation; initialization/cuts now use empty optical membership while
+leaving canonical senses=null. The original loopback and Gallery assertions
+remain.48actually deleted historical scripts are explicitly retired with named
+current owners, not counted green; existing excluded tests remain separate.
+[Exact inventory and receipts](REMAINING_EXECUTABLE_GATES_2026-10-20.md).
+
+No new sealed Factory package or source artwork is installed, no visual approval
+is granted, and the complete native/live/remaining-provider scope is still open.

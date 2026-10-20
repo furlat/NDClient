@@ -6,6 +6,8 @@ const Media=preload("res://presentation/media_warmup.gd")
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 const Catalog=preload("res://source_catalog.gd")
 const Compiler=preload("res://presentation/compiler.gd")
+const BodySources=preload("res://presentation/body_sources.gd")
+const NativeSources=preload("res://presentation/native_presentation_sources.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -22,9 +24,16 @@ func run()->void:
         var index=Recording.read(name)
         check(index.ok,name+" current recording admits")
         if not index.ok:continue
+        # Pin the actual typed source owners before a worker borrows the cache.
+        # The immutable admission shell is a source input, not a mutable planner
+        # index or an alias for the retired catalog/rigs.json document.
+        var admitted_sources:Dictionary=Catalog.source_snapshot(index.cache)
         var history=var_to_bytes([index.initialization,index.groups,index.rows,index.cache])
         var started=Time.get_ticks_usec()
-        var worker=Thread.new();worker.start(RecordingMedia.plan.bind(index))
+        var worker=Thread.new()
+        var dispatched:Error=worker.start(RecordingMedia.plan.bind(index))
+        check(dispatched==OK,name+" one metadata worker starts: "+error_string(dispatched))
+        if dispatched!=OK:continue
         var actual:Dictionary=worker.wait_to_finish()
         var elapsed=(Time.get_ticks_usec()-started)/1000.0
         check(var_to_bytes([index.initialization,index.groups,index.rows,index.cache])==history,name+" worker leaves admitted states, groups, rows and source cache unchanged")
@@ -51,8 +60,16 @@ func run()->void:
             check(estimated.has("bytes") and actual.estimate_bytes.get(path)==estimated.get("bytes"),name+" existing byte estimate retained: "+path)
             total+=int(estimated.get("bytes",0))
         check(total==actual.estimate_summary.bytes and total>0,name+" total retained CPU/GPU bytes match per-source estimates")
-        check(actual.source_files.keys().all(func(path):return not str(path).begins_with("__")),name+" worker returns source documents without mutable derived caches")
-        check(actual.source_files.has("catalog/rigs.json") and is_same(actual.source_files["catalog/rigs.json"],index.cache["catalog/rigs.json"]),name+" authored revision remains the immutable admitted source")
+        var typed_keys:Array=[BodySources.KEY,NativeSources.CACHE_KEY]
+        check(actual.source_files.keys().all(func(path):return (path is String and (path.ends_with(".json") or path.begins_with(Catalog.ENVIRONMENT)) and not path.begins_with("__")) \
+            or path in typed_keys or path in ["native_references_validated","native_authoring_errors"]),name+" worker returns only admitted documents/typed owners, never mutable derived planner caches")
+        for key in typed_keys:
+            var before:Dictionary=admitted_sources[key]
+            var after:Dictionary=actual.source_files[key]
+            check(before.index!=null and is_same(before.index,after.index) and after.is_read_only() and after.loaded.is_read_only(),name+" typed source revision remains the same immutable admitted Resource: "+key)
+            for path in before.loaded:
+                check(after.loaded.has(path) and is_same(before.loaded[path],after.loaded[path]),name+" worker retains an already admitted physical metadata Resource: "+path)
+        check(not actual.source_files[BodySources.KEY].index.rigs.is_empty(),name+" actual typed body index supplies the registered rig inventory")
         var prefix:Dictionary=index.initialization.state.duplicate(true)
         var group_cache=Catalog.source_snapshot(index.cache)
         check(actual.group_plans.size()==groups.size(),name+" each admitted group owns an exact prefix closure")
@@ -110,7 +127,8 @@ func run()->void:
         check(first_two.keys().all(func(path):return actual.paths.has(path)),name+" current two-group closure is retained in recording plan")
         evidence.append({"recording":name,"groups":groups.size(),"sources":actual.paths.size(),"first_two_groups_sources":first_two.size(),
             "future_only_sources":actual.paths.size()-first_two.size(),"environment_sources":actual.environment.size(),"fixture_sources":actual.fixtures.size(),
-            "cpu_required":actual.cpu_required.size(),"gpu_only":actual.gpu_only.size(),"estimated_bytes":total,"metadata_ms":elapsed})
+            "cpu_required":actual.cpu_required.size(),"gpu_only":actual.gpu_only.size(),"estimated_bytes":total,"metadata_ms":elapsed,
+            "body_source_index":actual.source_files[BodySources.KEY].index.resource_path,"native_source_index":actual.source_files[NativeSources.CACHE_KEY].index.resource_path})
     var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Explicit admitted journals. Worker-only exact source closure for all groups, immutable histories, PNG header accounting and bounded selection. No texture publication, native replay admission or performance claim.","unqualified":["Cumulative replay admission, cancellation and publication require real scene acceptance (studio_replay_native_checks)."]}
     FileAccess.open("res://generated/studio_recording_media_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_RECORDING_MEDIA ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

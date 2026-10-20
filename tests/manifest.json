@@ -377,8 +377,8 @@
   {
    "name": "body_source_parity_checks",
    "script": "res://tests/body_source_parity_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
@@ -386,8 +386,15 @@
     "--encounter-oracle",
     "--recording"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "characters_source_checks",
+    "schema16_character_sources_checks",
+    "native_demo_parity_checks",
+    "native_assembled_demo_checks",
+    "native_colour_transfer_checks"
+   ]
   },
   {
    "name": "body_source_reload_checks",
@@ -412,22 +419,34 @@
   {
    "name": "catalog_checks",
    "script": "res://tests/catalog_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "source_index_owner_checks",
+    "presentation_resource_revision_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "character_companion_cache_checks",
    "script": "res://tests/character_companion_cache_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "characters_source_checks",
+    "schema16_character_sources_checks",
+    "native_demo_parity_checks",
+    "native_assembled_demo_checks",
+    "native_colour_transfer_checks"
+   ]
   },
   {
    "name": "character_geometry_checks",
@@ -697,12 +716,18 @@
   {
    "name": "creature_geometry_checks",
    "script": "res://tests/creature_geometry_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "creature_scene_checks",
+    "creature_shadow_checks",
+    "native_optical_media_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "creature_scene_checks",
@@ -826,12 +851,18 @@
   {
    "name": "environment_input_state_checks",
    "script": "res://tests/environment_input_state_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "environment_streaming_checks",
+    "environment_media_delta_checks",
+    "world_preparation_receiver_ownership_checks",
+    "architectural_lighting_checks"
+   ]
   },
   {
    "name": "environment_media_delta_checks",
@@ -1058,12 +1089,18 @@
   {
    "name": "grid_alpha_checks",
    "script": "res://tests/grid_alpha_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "ground_visibility_checks",
+    "native_floor_batch_checks",
+    "native_floor_lighting_checks",
+    "player_view_checks"
+   ]
   },
   {
    "name": "grid_order_checks",
@@ -1256,12 +1293,20 @@
   {
    "name": "input_walking_checks",
    "script": "res://tests/input_walking_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "sdk_transport_checks",
+    "studio_replay_prefix_checks",
+    "studio_replay_native_checks",
+    "movement_reference_speed_checks",
+    "player_interaction_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "item_targeting_checks",
@@ -1439,12 +1484,20 @@
   {
    "name": "live_chain_separation_checks",
    "script": "res://tests/live_chain_separation_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "sdk_transport_checks",
+    "studio_replay_prefix_checks",
+    "studio_replay_native_checks",
+    "movement_reference_speed_checks",
+    "player_interaction_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "live_environment_admission_checks",
@@ -1753,12 +1806,19 @@
   {
    "name": "modular_tint_checks",
    "script": "res://tests/modular_tint_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "characters_source_checks",
+    "schema16_character_sources_checks",
+    "native_demo_parity_checks",
+    "native_assembled_demo_checks",
+    "native_colour_transfer_checks"
+   ]
   },
   {
    "name": "movement_reference_speed_checks",
@@ -1828,12 +1888,17 @@
   {
    "name": "native_area_mask_checks",
    "script": "res://tests/native_area_mask_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_area_mask_ownership_checks",
+    "native_spatial_owner_checks",
+    "studio_spatial_owner_checks"
+   ]
   },
   {
    "name": "native_area_mask_ownership_checks",
@@ -1953,12 +2018,20 @@
   {
    "name": "native_constant_resource_checks",
    "script": "res://tests/native_constant_resource_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_asset_admission_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_source_checks",
+    "native_recorded_preparation_checks",
+    "native_startup_lifecycle_failure_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "native_constructor_gap_checks",
@@ -2284,94 +2357,152 @@
   {
    "name": "native_shared_mesh_checks",
    "script": "res://tests/native_shared_mesh_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--spells"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_asset_admission_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_source_checks",
+    "native_recorded_preparation_checks",
+    "native_startup_lifecycle_failure_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "native_source_admission_checks",
    "script": "res://tests/native_source_admission_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_asset_admission_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_source_checks",
+    "native_recorded_preparation_checks",
+    "native_startup_lifecycle_failure_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "native_source_noise_checks",
    "script": "res://tests/native_source_noise_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--all-sources"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_effect_source_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_render_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "native_source_reload_checks",
    "script": "res://tests/native_source_reload_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_asset_admission_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_source_checks",
+    "native_recorded_preparation_checks",
+    "native_startup_lifecycle_failure_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "native_source_resources_checks",
    "script": "res://tests/native_source_resources_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_asset_admission_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_source_checks",
+    "native_recorded_preparation_checks",
+    "native_startup_lifecycle_failure_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "native_source_startup_checks",
    "script": "res://tests/native_source_startup_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--all-sources"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_asset_admission_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_source_checks",
+    "native_recorded_preparation_checks",
+    "native_startup_lifecycle_failure_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "native_source_variant_checks",
    "script": "res://tests/native_source_variant_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--all-sources"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_effect_source_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_render_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "native_source_variant_render_checks",
    "script": "res://tests/native_source_variant_render_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_effect_source_checks",
+    "native_immutable_preparation_checks",
+    "native_effect_render_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "native_spell_admission_checks",
@@ -2430,12 +2561,20 @@
   {
    "name": "native_spell_feedback_checks",
    "script": "res://tests/native_spell_feedback_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_spell_hits_checks",
+    "native_spell_retained_tail_checks",
+    "native_support_spell_event_checks",
+    "native_positive_healing_render_checks",
+    "wielded_weapon_impact_render_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "native_spell_hits_checks",
@@ -2574,12 +2713,18 @@
   {
    "name": "normal_profile_checks",
    "script": "res://tests/normal_profile_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "creature_scene_checks",
+    "creature_shadow_checks",
+    "native_optical_media_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "normal_profile_media_checks",
@@ -3092,8 +3237,8 @@
   {
    "name": "sandbox_batch_checks",
    "script": "res://tests/sandbox_batch_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
@@ -3101,218 +3246,362 @@
     "--batch-phases-only",
     "--batch-spells"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "studio_gallery_spell_checks",
+    "studio_replay_native_checks",
+    "live_all_spells_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "sandbox_body_surface_checks",
    "script": "res://tests/sandbox_body_surface_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_spell_hits_checks",
+    "native_spell_retained_tail_checks",
+    "native_support_spell_event_checks",
+    "native_positive_healing_render_checks",
+    "wielded_weapon_impact_render_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "sandbox_casting_checks",
    "script": "res://tests/sandbox_casting_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_cast_socket_checks",
+    "pose_socket_binding_checks",
+    "native_weapon_input_checks",
+    "native_spell_admission_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "sandbox_casting_native_checks",
    "script": "res://tests/sandbox_casting_native_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_cast_socket_checks",
+    "pose_socket_binding_checks",
+    "native_weapon_input_checks",
+    "native_spell_admission_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "sandbox_chill_source_checks",
    "script": "res://tests/sandbox_chill_source_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_colour_transfer_checks",
+    "native_requirement_templates_checks",
+    "native_spell_admission_checks",
+    "support_spell_event_checks",
+    "native_support_spell_event_checks"
+   ]
   },
   {
    "name": "sandbox_choreography_checks",
    "script": "res://tests/sandbox_choreography_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "studio_gallery_spell_checks",
+    "studio_replay_native_checks",
+    "live_all_spells_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "sandbox_colour_checks",
    "script": "res://tests/sandbox_colour_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_colour_transfer_checks",
+    "native_requirement_templates_checks",
+    "native_spell_admission_checks",
+    "support_spell_event_checks",
+    "native_support_spell_event_checks"
+   ]
   },
   {
    "name": "sandbox_feedback_checks",
    "script": "res://tests/sandbox_feedback_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_spell_hits_checks",
+    "native_spell_retained_tail_checks",
+    "native_support_spell_event_checks",
+    "native_positive_healing_render_checks",
+    "wielded_weapon_impact_render_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "sandbox_flash_playback_checks",
    "script": "res://tests/sandbox_flash_playback_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--all-capabilities"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_spell_hits_checks",
+    "native_spell_retained_tail_checks",
+    "native_support_spell_event_checks",
+    "native_positive_healing_render_checks",
+    "wielded_weapon_impact_render_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "sandbox_ice_web_checks",
    "script": "res://tests/sandbox_ice_web_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_colour_transfer_checks",
+    "native_requirement_templates_checks",
+    "native_spell_admission_checks",
+    "support_spell_event_checks",
+    "native_support_spell_event_checks"
+   ]
   },
   {
    "name": "sandbox_light_units_checks",
    "script": "res://tests/sandbox_light_units_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_effect_particle_checks",
+    "native_particle_units_checks",
+    "native_effect_receiving_checks",
+    "native_light_output_checks"
+   ]
   },
   {
    "name": "sandbox_particle_clock_checks",
    "script": "res://tests/sandbox_particle_clock_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_effect_particle_checks",
+    "native_particle_units_checks",
+    "native_effect_receiving_checks",
+    "native_light_output_checks"
+   ]
   },
   {
    "name": "sandbox_particle_scale_checks",
    "script": "res://tests/sandbox_particle_scale_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_effect_particle_checks",
+    "native_particle_units_checks",
+    "native_effect_receiving_checks",
+    "native_light_output_checks"
+   ]
   },
   {
    "name": "sandbox_position_checks",
    "script": "res://tests/sandbox_position_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_cast_socket_checks",
+    "pose_socket_binding_checks",
+    "native_weapon_input_checks",
+    "native_spell_admission_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "sandbox_regression_checks",
    "script": "res://tests/sandbox_regression_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "studio_gallery_spell_checks",
+    "studio_replay_native_checks",
+    "live_all_spells_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "sandbox_scene_integration_checks",
    "script": "res://tests/sandbox_scene_integration_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "studio_gallery_spell_checks",
+    "studio_replay_native_checks",
+    "live_all_spells_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "sandbox_source_light_checks",
    "script": "res://tests/sandbox_source_light_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_effect_particle_checks",
+    "native_particle_units_checks",
+    "native_effect_receiving_checks",
+    "native_light_output_checks"
+   ]
   },
   {
    "name": "sandbox_support_authoring_checks",
    "script": "res://tests/sandbox_support_authoring_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_colour_transfer_checks",
+    "native_requirement_templates_checks",
+    "native_spell_admission_checks",
+    "support_spell_event_checks",
+    "native_support_spell_event_checks"
+   ]
   },
   {
    "name": "sandbox_support_feedback_checks",
    "script": "res://tests/sandbox_support_feedback_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_spell_hits_checks",
+    "native_spell_retained_tail_checks",
+    "native_support_spell_event_checks",
+    "native_positive_healing_render_checks",
+    "wielded_weapon_impact_render_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "sandbox_surface_socket_checks",
    "script": "res://tests/sandbox_surface_socket_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--compact"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_cast_socket_checks",
+    "pose_socket_binding_checks",
+    "native_weapon_input_checks",
+    "native_spell_admission_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "sandbox_utility_feedback_checks",
    "script": "res://tests/sandbox_utility_feedback_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--utility-one-view",
     "--utility-spells"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_spell_hits_checks",
+    "native_spell_retained_tail_checks",
+    "native_support_spell_event_checks",
+    "native_positive_healing_render_checks",
+    "wielded_weapon_impact_render_checks",
+    "native_surface_receiving_checks"
+   ]
   },
   {
    "name": "scale_profile",
@@ -3780,13 +4069,15 @@
    "script": "res://tests/session_execution_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 300,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Original schema16 Gallery plus actual loopback no-disclosure initialization: exact canonical state, transport independence, ordered handoffs and retirement."
   },
   {
    "name": "session_record_retirement_checks",
@@ -3869,8 +4160,8 @@
   {
    "name": "sheet_prepack_checks",
    "script": "res://tests/sheet_prepack_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
@@ -3878,8 +4169,13 @@
     "--limit",
     "--timing"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "schema16_character_sources_checks",
+    "media_texture_native_checks",
+    "source_cut_reuse_checks"
+   ]
   },
   {
    "name": "shield_reaction_cast_checks",
@@ -3894,12 +4190,17 @@
   {
    "name": "source_catalog_static_owner_checks",
    "script": "res://tests/source_catalog_static_owner_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "source_index_owner_checks",
+    "presentation_resource_revision_checks",
+    "body_source_reload_checks"
+   ]
   },
   {
    "name": "source_cut_reuse_checks",
@@ -3948,12 +4249,18 @@
   {
    "name": "spell_sandbox_checks",
    "script": "res://tests/spell_sandbox_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "studio_gallery_spell_checks",
+    "studio_replay_native_checks",
+    "live_all_spells_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "studio_audio_transport_checks",
@@ -4360,13 +4667,16 @@
    "script": "res://tests/studio_recording_media_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/blue"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --recording=<journal-directory> (repeat for additional real recordings) (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Unchanged durable schema16 Gallery originals; current typed source/trust boundary semantics and original independent expectations."
   },
   {
    "name": "studio_render_preference_checks",
@@ -4638,15 +4948,22 @@
   {
    "name": "surface_socket_bake_checks",
    "script": "res://tests/surface_socket_bake_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
    "options": [
     "--source-list"
    ],
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "native_cast_socket_checks",
+    "pose_socket_binding_checks",
+    "native_weapon_input_checks",
+    "native_spell_admission_checks",
+    "native_spell_witness_checks"
+   ]
   },
   {
    "name": "targeting_hover_checks",
@@ -4765,13 +5082,15 @@
    "script": "res://tests/trusted_operations_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 300,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --recording=<current server journal directory> (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Unchanged durable schema16 Gallery originals; current typed source/trust boundary semantics and original independent expectations."
   },
   {
    "name": "ui_actor_portrait_checks",
@@ -4866,12 +5185,20 @@
   {
    "name": "unity_walk_checks",
    "script": "res://tests/unity_walk_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "sdk_transport_checks",
+    "studio_replay_prefix_checks",
+    "studio_replay_native_checks",
+    "movement_reference_speed_checks",
+    "player_interaction_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "vfx_effect_hold_checks",
@@ -4899,12 +5226,20 @@
   {
    "name": "walking_checks",
    "script": "res://tests/walking_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "Script was removed in source cleanup before this migration; retained historical manifest entry, not an executable current gate. Current native schema/resource/case gates replace its relevant contracts."
+   "status": "retired",
+   "reason": "Deleted historical script; current contract owners are explicit. No claim that unavailable legacy noise/variant or visual oracles have been reproduced. See agent_docs/REMAINING_EXECUTABLE_GATES_2026-10-20.md. Not counted as a pass.",
+   "replaced_by": [
+    "sdk_transport_checks",
+    "studio_replay_prefix_checks",
+    "studio_replay_native_checks",
+    "movement_reference_speed_checks",
+    "player_interaction_checks",
+    "live_spell_checks"
+   ]
   },
   {
    "name": "wall_compositing_checks",
@@ -5544,6 +5879,26 @@
    "timeout": 600,
    "status": "ok",
    "reason": "Actual two-seat schema16 Plant Growth spatial owner, stable cells and source clock; source/output/performance/visual acceptance are separate."
+  },
+  {
+   "name": "native_finite_observed_checks",
+   "script": "res://tests/native_finite_observed_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Original independent four applied Acid outcomes and completed proclamation, factual negative controls, exact source/result clocks and canonical preservation."
+  },
+  {
+   "name": "native_finite_observed_render_checks",
+   "script": "res://tests/native_finite_observed_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Both original seats: actual result/recipient geometry and source packets, isolated native pixels, real camera publication, finite clocks, seeking/looping and private teardown; not whole-spell or art acceptance."
   }
  ]
 }

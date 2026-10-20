@@ -169,7 +169,7 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
                 actual.ground_target=false
                 actual.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":"","values":observation.values}]
                 actual.native_constructor_evidence=observation.evidence
-                actual.native_inputs={"lease_input":{},"event_input":observation.event}
+                actual.native_inputs=observation.inputs
                 if constructor.outcome=="cast":
                     add(group,observation.node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,actual)
                 else:

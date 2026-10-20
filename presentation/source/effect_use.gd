@@ -12,7 +12,7 @@ const Look = preload("res://presentation/source/look.gd")
 ## Empty inherits the spell delivery scope. Explicit scopes separate a cast's
 ## single area source from its actually resolved recipient applications.
 @export var scope: String = ""
-## Finite native result projection: kind, component_path, input_field,
+## Finite native result projection: kind, projection, component_path, input_field,
 ## save_effect_id and damage_type. Static source/art settings stay in Factory.
 @export var constructor_input: Dictionary = {}
 ## Sources with actual role mapping consume entity UUIDs in endpoint.actor.
