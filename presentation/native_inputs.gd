@@ -8,6 +8,8 @@ const Sockets=preload("res://presentation/spell_placement.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
 const ConditionPose=preload("res://presentation/condition_pose.gd")
 const Appearances=preload("res://presentation/condition_appearance.gd")
+const SpatialInputs=preload("res://presentation/spatial_inputs.gd")
+const CreationInputs=preload("res://presentation/creation_inputs.gd")
 var appearances:RefCounted=Appearances.new()
 var surfaces:RefCounted=Surface.new()
 
@@ -144,7 +146,7 @@ func endpoint_packet(world:Node,handle:Dictionary,component:Dictionary,points:Di
         var pose_socket:String=str(authored.get("pose_socket",socket))
         if socket=="ground":resolved.point=Sockets.Placement.contact(visual.row)
         elif selector=="caster" and socket in ["cast_hand","hand"]:resolved.point=points.hand
-        else:resolved=Sockets.pose_point(world,visual.row,pose_socket)
+        else:resolved=Sockets.pose_point(world,visual.row,pose_socket,authored.get("pose_socket_by_clip",{}))
         if not resolved.ready:return {"rows":[],"reason":resolved.reason}
         var endpoint:Dictionary={"actor":actor if cue.get("endpoint_actor_uuids",false) else selector,"actor_uuid":actor,"socket":socket,"point":resolved.point}
         if authored.get("view_basis",false):endpoint.view_basis=world.camera.global_basis
@@ -255,6 +257,13 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
         else:unavailable.history_state="duplicate_count_not_disclosed"
     if "created_item_binding" in requested:
         unavailable.created_item_binding="wielded_native_bodies_not_supported"
+    if "surface_presence" in requested:
+        var packet:Dictionary=SpatialInputs.presence(component,world.timeline.state)
+        if packet.ready:
+            if not handle.has("surface_presence_input") or handle.surface_presence_input!=packet.value:
+                Effects.set_input(handle,"surface_presence",packet.value);handle.surface_presence_input=packet.value
+            supplied.append("surface_presence")
+        else:unavailable.surface_presence=packet.reason
     if component.get("intrinsic_item_effect",false) and "owner_state" in requested:
         var age:float=maxf(0.0,float(world.timeline.display_ms)-float(component.start_ms))/1000.0
         Effects.set_input(handle,"owner_state",{"phase":"sustain","phase_age_seconds":age,"owner_age_seconds":age})
@@ -379,13 +388,20 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,re
             if projection!=handle.get("owner_projection_input",{}):
                 Effects.set_input(handle,"owner_projection",projection);handle.owner_projection_input=projection
             supplied.append("owner_projection")
+    var values:Dictionary=component.get("native_inputs",{})
+    if "event_input" in requested and component.has("native_creation"):
+        var created:Dictionary=CreationInputs.event_packet(component,world.timeline.state,cell_endpoints)
+        if created.ready:
+            values=values.duplicate(false);values.event_input=created.event
+        else:unavailable.event_input=created.reason
     var packets:Dictionary=handle.get("native_input_packets",{})
-    for name in component.get("native_inputs",{}):
+    for name in values:
         if name=="weapon_binding":continue # Exact item provider owns the complete packet.
+        if unavailable.has(name):continue
         if name in requested:
-            if not packets.has(name) or packets[name]!=component.native_inputs[name]:
-                Effects.set_input(handle,name,component.native_inputs[name])
-                packets[name]={name:component.native_inputs[name]}.duplicate(true)[name]
+            if not packets.has(name) or packets[name]!=values[name]:
+                Effects.set_input(handle,name,values[name])
+                packets[name]={name:values[name]}.duplicate(true)[name]
             supplied.append(name)
     handle.native_input_packets=packets
     # Selector values are copied only from actual disclosed ConditionState.

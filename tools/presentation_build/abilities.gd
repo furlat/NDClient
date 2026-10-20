@@ -391,6 +391,12 @@ static func _check_constructor(use:Resource,where:String,clips:Dictionary,report
     elif binding.get("kind")=="reaction_observation":
         if use.scope!="source" or binding.get("trigger_kind")!="spell" or not binding.get("succeeded") is bool or binding.get("input_field")!="observation":
             Common.error(report,where,"reaction observation needs source scope, spell trigger, observed outcome and observation member");return
+    elif binding.get("kind")=="spatial_owner":
+        if use.scope!="spatial" or binding.get("input_field")!="":
+            Common.error(report,where,"spatial owner requires spatial scope and whole component input");return
+    elif binding.get("kind")=="creation_admission":
+        if use.scope!="recipient" or binding.get("admission") not in ["inventory","placed_object"] or binding.get("geometry_actor")!="caster" or str(binding.get("item_id","")).is_empty() or binding.get("input_field")!="":
+            Common.error(report,where,"creation admission needs an exact ordinary item kind, admission source and caster geometry");return
     elif binding.get("kind")=="application_result" and use.scope=="application":
         if str(binding.get("save_effect_id","")).is_empty() or str(binding.get("damage_type","")).is_empty():
             Common.error(report,where,"application result lacks save effect or damage type");return

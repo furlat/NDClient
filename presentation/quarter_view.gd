@@ -28,6 +28,9 @@ var wall_mode = "solid"
 var choices: Dictionary = {}
 var faded: Dictionary = {}
 var order: Array = []
+## Complete static ordering belongs to the cached view's entry owner. Empty
+## means a fresh quarter has not received that owner from Play's first sort.
+var static_order_owner: Dictionary = {}
 var picks: Array = []
 var support_candidates = 0
 var max_member_candidates = 0
@@ -72,6 +75,8 @@ func configure(owner: Node, target: int, cached: Dictionary = {}) -> void:
     camera.current = false
     set_target_camera()
     if not cached.is_empty():
+        static_order_owner = {"complete_order":cached.complete_order,"sort_nodes":cached.sort_nodes,
+            "order_proof":cached.order_proof} if cached.has("complete_order") else {}
         entries = cached.entries; static_entries = entries; fixture_entries = cached.fixtures
         groups = cached.groups; ground_groups = cached.ground
         scenery_consumers = cached.get("scenery_consumers",{})
@@ -85,6 +90,7 @@ func configure(owner: Node, target: int, cached: Dictionary = {}) -> void:
         # The root is retained with its geometry, material selection and mask.
         begin_style()
     else:
+        static_order_owner = {}
         rows = host.world_visual_rows
         phase = "rows"; cursor = 0
         geometry = {"targets":{},"buckets":{},"versions":{},"revision":1,"candidates":{},"generation":generation}
@@ -262,9 +268,11 @@ func before(a: Dictionary,b: Dictionary) -> bool:
     return Order.less(a.order_key,b.order_key) if a.order_key!=b.order_key else a.id<b.id
 
 func snapshot() -> Dictionary:
-    return {"root":self,"groups":groups,"ground":ground_groups,"entries":static_entries,"fixtures":fixture_entries,
+    var view:Dictionary={"root":self,"groups":groups,"ground":ground_groups,"entries":static_entries,"fixtures":fixture_entries,
         "order":order,"order_dirty":false,"order_count":static_entries.size(),"wall_pick_order":picks,
         "mask_viewport":mask_viewport,"mask_nodes":mask_nodes,"mask_sources":mask_sources,"mask_view":mask_view,
         "scenery_consumers":scenery_consumers,"wall_sources":sources,"wall_entries":wall_entries,
         "geometry":geometry,"faded":faded.keys(),"visible_cells":host.wall_visible_cells.duplicate(),
         "support_candidates":support_candidates,"max_member_candidates":max_member_candidates}
+    view.merge(static_order_owner)
+    return view

@@ -1,0 +1,405 @@
+{
+ "ok": false,
+ "failure": "Required actual spell/action occurrence absent: class_feature.cleric.blessed_healer",
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "66a384ff-7edf-4972-b2aa-d4beebb7e852": "Party caster",
+  "6a96f5c7-29d6-4c1d-88b7-0ec05733f481": "Party ally",
+  "1dd8fe59-bc0f-4457-8915-ed0f174bbddc": "Goblin 1",
+  "338e0830-ab32-4207-95fc-d951eaeace66": "Goblin 2"
+ },
+ "roles": {
+  "caster": "Party caster",
+  "ally": "Party ally"
+ },
+ "sequence": [
+  "end_turn \u00b7 Party ally",
+  "spell.fireball \u00b7 Party caster",
+  "spell.healing_word \u00b7 Party caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 9,
+   "spatial": 32,
+   "sensory": 13,
+   "step": 12,
+   "movement": 5,
+   "attack": 3,
+   "actor_change": 6,
+   "damage": 12,
+   "item_charge": 1,
+   "saving_throw": 4,
+   "spell": 6,
+   "life": 2,
+   "area_reach": 1,
+   "heal": 2
+  },
+  "behaviors": {
+   "action.jump": 2,
+   "action.attack": 2,
+   "reaction.opportunity_attack": 2,
+   "action.move": 3,
+   "spell.fireball": 5,
+   "spell.healing_word": 1
+  },
+  "conditions": [],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 1,
+   "occurrence": 78,
+   "lineage": 26,
+   "event_offset": 16,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 84,
+   "lineage": 79,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 120,
+   "lineage": 85,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 121,
+   "lineage": 85,
+   "event_offset": 7,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 123,
+   "lineage": 85,
+   "event_offset": 8,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 133,
+   "lineage": 85,
+   "event_offset": 12,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "66a384ff-7edf-4972-b2aa-d4beebb7e852",
+   "triggering_occurrence": 99,
+   "triggering_lineage": 99,
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 134,
+   "lineage": 85,
+   "event_offset": 13,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 149,
+   "lineage": 135,
+   "event_offset": 4,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 7,
+   "occurrence": 218,
+   "lineage": 166,
+   "event_offset": 16,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 239,
+   "lineage": 219,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 240,
+   "lineage": 219,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 242,
+   "lineage": 219,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 279,
+   "lineage": 243,
+   "event_offset": 12,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 294,
+   "lineage": 288,
+   "event_offset": 1,
+   "kind": "item_charge",
+   "label": "item_charge ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 303,
+   "lineage": 288,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 320,
+   "lineage": 288,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 321,
+   "lineage": 288,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 322,
+   "lineage": 288,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 327,
+   "lineage": 288,
+   "event_offset": 8,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 340,
+   "lineage": 288,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 343,
+   "lineage": 288,
+   "event_offset": 11,
+   "kind": "life",
+   "label": "life ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 346,
+   "lineage": 288,
+   "event_offset": 13,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 347,
+   "lineage": 288,
+   "event_offset": 14,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 352,
+   "lineage": 288,
+   "event_offset": 15,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 369,
+   "lineage": 288,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 370,
+   "lineage": 288,
+   "event_offset": 19,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 371,
+   "lineage": 288,
+   "event_offset": 20,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 376,
+   "lineage": 288,
+   "event_offset": 21,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 393,
+   "lineage": 288,
+   "event_offset": 24,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 396,
+   "lineage": 288,
+   "event_offset": 25,
+   "kind": "life",
+   "label": "life ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 399,
+   "lineage": 288,
+   "event_offset": 27,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 400,
+   "lineage": 288,
+   "event_offset": 28,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 405,
+   "lineage": 288,
+   "event_offset": 30,
+   "kind": "area_reach",
+   "label": "area_reach ",
+   "faction": "party"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 411,
+   "lineage": 288,
+   "event_offset": 33,
+   "kind": "spell",
+   "label": "spell spell.fireball",
+   "faction": "party"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 427,
+   "lineage": 417,
+   "event_offset": 0,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "party"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 428,
+   "lineage": 417,
+   "event_offset": 1,
+   "kind": "heal",
+   "label": "heal ",
+   "faction": "party"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 429,
+   "lineage": 417,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.healing_word",
+   "faction": "party"
+  }
+ ],
+ "perspectives": [
+  "party"
+ ],
+ "positive_applied_damage_types": [
+  "Bludgeoning",
+  "Fire",
+  "Slashing"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

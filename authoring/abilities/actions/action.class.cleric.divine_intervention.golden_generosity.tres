@@ -88,7 +88,14 @@ clip = "divine-class-study/divine_intervention_generosity_admission_study/1-gene
 selection = "divine_intervention_generosity_admission_study"
 role = "attached"
 scope = "recipient"
-constructor_input = {}
+constructor_input = {
+ "kind": "creation_admission",
+ "admission": "placed_object",
+ "item_id": "environment.storage_chest",
+ "geometry_actor": "caster",
+ "component_path": ["divine_art"],
+ "input_field": ""
+}
 endpoint_actor_uuids = true
 at = "event.start"
 attachment = "recipient_ground"
@@ -97,12 +104,11 @@ source_end = 1.0
 duration_policy = "authored"
 fade_out = 0.18
 light_multiplier = 0.0
-unbound_constructor_inputs = PackedStringArray("event_input.ordinary_item_admitted", "event_input.item_uuid", "event_input.creation_position_cells")
 staging_from = "factory@production-bindings-c494177f9ef03e3d selection:divine_intervention_generosity_admission_study"
 extra = {
  "dynamic_geometry": true,
  "entity_geometry": {
-  "actor": "target",
+  "actor": "caster",
   "slots": [
    "body",
    "chest",
@@ -147,4 +153,4 @@ body = SubResource("Resource_gfrmu")
 effect_sources = PackedStringArray()
 effects = Array[ExtResource("factory_effect_use")]([SubResource("FactoryInvocation"), SubResource("FactoryObservedResult")])
 status = "partial"
-notes = "Body role from the server's body kind (self_ability); the rig resolves it to a clip once roles are built (coverage fill). Exact Factory source invocation is bound to the disclosed action. Recipient output stays an explicit created_container_admission gap; no sample damage, item UUID, creation position or visual approval is inferred."
+notes = "Exact Factory invocation and admission accent are driven by native descendants and immutable event-time after-values. Actual item/container UUID stays separate from character geometry. No review item, placement, outcome or visual approval is inferred; held-item position is the authored actual holder socket, placed-container position is canonical base elevation."

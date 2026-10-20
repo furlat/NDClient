@@ -164,3 +164,88 @@ or approved shader retune was introduced to hide that gap.
 Receipts: `.runtime/tests/20261019T235454.505846Z/` (108/109),
 `.runtime/tests/20261019T235732.695429Z/` (production Sunder native18/18),
 `.runtime/consolidation/provider-checkpoint-checks.log` (focused follow-up).
+
+### Spatial/scenario delivery and live trace follow-up
+
+Spatial provider receipt `.runtime/tests/20261020T000340.178820Z/`:173headless
+and22native assertions pass, including both original Acid viewports, real setter
+admission,11,227 changed pixels each, backward seek and replay. Five exact
+material contracts are authored; other materials/height/removal variants remain
+unqualified. [Cohort details](SPATIAL_PROVIDER_COHORT_2026-10-20.md).
+
+The42 new successful studies pass5,778 production compile/restore/sample and
+canonical endpoint checks across81 original journals (39two-seat plus3party).
+Receipt `.runtime/consolidation/scenario-replay-20261020T000341.325008Z/`.
+Failed recipes are explicitly excluded from that success-only gate; the input
+also retains the superseded failed Greater-Invisibility attempt. The active
+Studio intake excludes that retired recipe and has252cases,238recorded/14failed.
+
+The live Gallery executes27actual commands, all seven tested spell families,
+Shield and room traversal; two diagnostic runs failed only their final stale
+raw-journal assertion reader (schema16 omits canceled/default-null fields and
+uses ActorChange condition members). The reader is repaired and a clean full
+live rerun is pending. Neither earlier run is advertised as a passed gate.
+
+First live run `.runtime/player-runs/20261020T000457.052269Z/` exposed one
+57.849ms gameplay frame while optional startup constructed
+`original-repairs/chill-touch/contact-layers`:52.572ms in recorded
+`baked_instantiate` (52.616ms startup scope). The128ms startup/reveal frame
+was before commands:108.893ms native resource preparation. These are explicit
+client-owned remaining costs; no lighting/graphics patch was made.
+
+Door first animation187.287ms from input: first complete stream record80.289ms,
+JSON/framing then35.754ms canonical consumption (33.177reduce,1.935transition
+stage,.599commit),13.976ms presentation opening (8.142compiler) and subsequent
+publication/native preparation/draw. Fireball first animation197.437ms:
+recordready99.740,32.696canonical,16.937opening (8.430compiler). The remainder
+needs publication/draw trace correlation, not a server-only label. Command
+completion seconds include animation and later choice boundaries and are not
+input latency. No action frame exceeded33.333ms except the named Chill Touch
+frame in that run; startup is reported separately, not hidden.
+
+Two real passive feature effects lack public typed provenance. They remain
+missing, with [exact producer causes and original evidence](SERVER_PASSIVE_ATTRIBUTION_GAPS_2026-10-20.md).
+No speculative unused passive bridge was retained in runtime.
+
+The clean live rerun is now qualified:
+`.runtime/tests/20261020T001238.792486Z/`,313assertions,27actual commands,
+zero script/engine errors and zero owned process leftovers. Earlier reader
+failures remain recorded above and were not counted as passes. The existing
+raw-journal reader now preserves condition before-members across removals and
+processes original packet filenames in order.
+
+### Integrated checkpoint qualification
+
+- Complete fast112/112: `.runtime/tests/20261020T001803.785167Z/`; zero
+  failures, script/engine errors or owned leftovers. This is the fast lane.
+- Native creation after measured Arm attachment correction:123headless and
+ 26native checks pass, `.runtime/tests/20261020T001742.031730Z/`.
+- Cached-view tests exposed an actual production ownership omission. Retained
+  visible order had been adopted without its complete order/node membership
+  table, so a later prepared replacement used stale slots in an empty array.
+  Play and QuarterView now retain/adopt all three original owner references
+  together, including their unchanged generation/epoch/background proof. No
+  bounds skip, extra runtime validation or per-rotation full-sort workaround.
+- Native cached-view receipt `.runtime/tests/20261020T001931.724624Z/`: rotation
+ 95, independent incremental111 and cache159 checks pass with clean exits and
+  pixel/order/physical displacement assertions. Generated shadows remain owned
+  helpers outside source/picking entries; tests now compare that exact boundary.
+- Shadow idle115/115 passes, `.runtime/tests/20261020T002831.093747Z/`.
+  The support-plane cookie migration retired the historical optical-height
+  branch; requiring an accidental source-winner crossover in one final room
+  was not a meaningful current regression. Its replacement checks actual
+  full-cycle mean ranking and support-plane centers across all16 authored
+  frames/four views. An independent energy-only control retains the exact
+  cookie geometry and proves receiving-weight/score variation at a real
+  disclosed competing contact. Stable production selection, body/flame
+  animation, blocked/fractional shadow samples, narrow clipping and immutable
+  canonical state remain required and pass. No synthetic light or actor move.
+- The189-ID live spell sweep at
+  `.runtime/tests/20261020T002124.937788Z/live-spells/` stopped after19 cases:
+  18safe, Blur failed with a native script error. The client forwarded the
+  canonical optional `duplicate_count:null` to the Factory integer setter.
+  This is a client consumer bug, distinct from the two deferred history shader
+  failures. Fix and fresh-process retry/remaining partition are required.
+  A native case coroutine that aborts without publishing now ends its owned
+  batch with truthful partial evidence; later partitions resume in a fresh
+  process rather than timing out every remaining case in an abandoned owner.

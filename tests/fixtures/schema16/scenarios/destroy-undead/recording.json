@@ -1,0 +1,165 @@
+{
+ "ok": false,
+ "failure": "Required actual spell/action occurrence absent: class_feature.cleric.destroy_undead",
+ "commands": 1,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "7910492a-7f1b-416c-b9a2-e08552a687d1": "Amber caster",
+  "e20ca898-52a8-45a6-b10b-a4c3b421faec": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.class.cleric.turn_undead \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 1,
+   "saving_throw": 1,
+   "actor_change": 2,
+   "damage": 2,
+   "action": 2
+  },
+  "behaviors": {
+   "action.class.cleric.turn_undead": 2
+  },
+  "conditions": [
+   "condition.class.divine.turned"
+  ],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 20,
+   "lineage": 12,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 24,
+   "lineage": 12,
+   "event_offset": 1,
+   "label": "condition applied condition.class.divine.turned",
+   "kind": "actor_change",
+   "actor_uuid": "e20ca898-52a8-45a6-b10b-a4c3b421faec",
+   "condition_uuid": "c5bfad86-24a6-430c-942e-e6f31854ee50",
+   "condition_id": "condition.class.divine.turned",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 35,
+   "lineage": 12,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 36,
+   "lineage": 12,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 37,
+   "lineage": 12,
+   "event_offset": 5,
+   "kind": "action",
+   "label": "action action.class.cleric.turn_undead",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 38,
+   "lineage": 12,
+   "event_offset": 6,
+   "kind": "action",
+   "label": "action action.class.cleric.turn_undead",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 24,
+   "lineage": 16,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 28,
+   "lineage": 16,
+   "event_offset": 1,
+   "label": "condition applied condition.class.divine.turned",
+   "kind": "actor_change",
+   "actor_uuid": "e20ca898-52a8-45a6-b10b-a4c3b421faec",
+   "condition_uuid": "c5bfad86-24a6-430c-942e-e6f31854ee50",
+   "condition_id": "condition.class.divine.turned",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 39,
+   "lineage": 16,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 40,
+   "lineage": 16,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 41,
+   "lineage": 16,
+   "event_offset": 5,
+   "kind": "action",
+   "label": "action action.class.cleric.turn_undead",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 42,
+   "lineage": 16,
+   "event_offset": 6,
+   "kind": "action",
+   "label": "action action.class.cleric.turn_undead",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Radiant"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

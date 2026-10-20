@@ -7,6 +7,7 @@ extends RefCounted
 const Spells=preload("res://presentation/native_spell_authoring.gd")
 const Authoring=preload("res://presentation/authoring.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const SpatialInputs=preload("res://presentation/spatial_inputs.gd")
 ## Client marker rotation: one overhead symbol group at a time per actor.
 const MARKER_TURN_MS:=1800.0
 
@@ -54,30 +55,8 @@ static func replaced_media(condition_id:String,recipe:Dictionary)->Array:
 ## An explicitly authored native hold uses the same UUID owner as package
 ## lifecycles. Cache only its immutable phase; the owner clock remains private.
 static func authored_samples(common:Dictionary,cache:Dictionary)->Array:
-    var config:Dictionary=common.recipe
-    var key:String="condition-native:"+str(common.condition.behavior_id)
-    if not cache.has(key):
-        var phases:Array=[]
-        for original in config.get("persistent",{}).get("nativeEffects",[]):
-            var cue:Dictionary=original.duplicate()
-            cue.authored_at=cue.get("at","owner_start");cue.at="release"
-            var selected={"id":str(cue.get("selection","")),"source":str(config.get("_resource_source",common.source))+"::effects",
-                "source_bounds":{},"palette":{},"staging":{"decorative_light_multiplier":float(cue.get("light_multiplier",0.0))}}
-            var phase:Dictionary=Spells._phase(selected,cue,{"prepare":0.0},0.0,0.0,0)
-            phase.erase("spell_id")
-            phase.condition_authored=true
-            phase.source=str(config.get("_resource_source",common.source))+"::effects/"+str(cue.source_index)
-            phase.lifecycle={}
-            phase.native_cue=phase.native_cue.duplicate()
-            phase.native_cue.begin=0.0;phase.native_cue.end=INF
-            # The source's observed owner projection owns its return. Generic
-            # finite-clip fading would evaluate smoothstep(INF, INF, age).
-            phase.native_cue.erase("fade_out_seconds")
-            phase.source_id=str(cue.clip)
-            phases.append(phase)
-        cache[key]=phases
     var result:Array=[]
-    for phase in cache[key]:
+    for phase in authored_phases(common.recipe,str(common.condition.behavior_id),cache,str(common.source)):
         var row:Dictionary=common.merged(phase,true)
         row.merge({"id":str(common.id)+":authored:"+str(phase.native_cue.source_index),"kind":"native_effect","native_spell":true,
             "persistent_owner":true,"target_uuid":common.actor_uuid,"cast_recipe":{"enabled":false},
@@ -87,6 +66,32 @@ static func authored_samples(common:Dictionary,cache:Dictionary)->Array:
         row.trace_keys=[row.id]
         result.append(row)
     return result
+
+## The existing typed held-effect description is independent of whether its
+## actual owner is an actor condition or a disclosed spatial instance.
+static func authored_phases(config:Dictionary,identity:String,cache:Dictionary,source:String="")->Array:
+    var key:String="condition-native:"+identity
+    if not cache.has(key):
+        var phases:Array=[]
+        for original in config.get("persistent",{}).get("nativeEffects",[]):
+            var cue:Dictionary=original.duplicate()
+            cue.authored_at=cue.get("at","owner_start");cue.at="release"
+            var selected={"id":str(cue.get("selection","")),"source":str(config.get("_resource_source",source))+"::effects",
+                "source_bounds":{},"palette":{},"staging":{"decorative_light_multiplier":float(cue.get("light_multiplier",0.0))}}
+            var phase:Dictionary=Spells._phase(selected,cue,{"prepare":0.0},0.0,0.0,0)
+            phase.erase("spell_id")
+            phase.condition_authored=true
+            phase.source=str(config.get("_resource_source",source))+"::effects/"+str(cue.source_index)
+            phase.lifecycle={}
+            phase.native_cue=phase.native_cue.duplicate()
+            phase.native_cue.begin=0.0;phase.native_cue.end=INF
+            # The source's observed owner projection owns its return. Generic
+            # finite-clip fading would evaluate smoothstep(INF, INF, age).
+            phase.native_cue.erase("fade_out_seconds")
+            phase.source_id=str(cue.clip)
+            phases.append(phase)
+        cache[key]=phases
+    return cache[key]
 
 static func authored_removal_ms(config:Dictionary)->float:
     var result:float=0.0
@@ -241,13 +246,13 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
         var selected=spatial_selection(owner.effect,cache)
         var effect:Dictionary=owner.effect
         var lifecycles:Array=spatial_lifecycles(effect)
-        if selected.is_empty() and lifecycles.is_empty():continue
+        var config:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).get(SpatialInputs.content_id(effect),{})
+        var authored:Array=authored_phases(config,SpatialInputs.content_id(effect),cache) if not config.get("persistent",{}).get("nativeEffects",[]).is_empty() else []
+        if selected.is_empty() and lifecycles.is_empty() and authored.is_empty():continue
         var close_ms:float=removal_ms(lifecycles) if not lifecycles.is_empty() else fade_ms(selected)
+        close_ms=maxf(close_ms,authored_removal_ms(config))
         if at_ms>=float(owner.end_ms)+close_ms:owners.erase(id);continue
-        var excluded:Dictionary={}
-        for suppression in effect.get("suppressions",[]):
-            for point in suppression.get("positions",[]):excluded["%d,%d"%point]=true
-        var positions:Array=effect.get("positions",[]).filter(func(point):return not excluded.has("%d,%d"%point))
+        var positions:Array=SpatialInputs.admitted_cells(effect)
         if positions.is_empty():continue
         var anchor:Variant=effect.get("anchor_position")
         if anchor==null:anchor=positions[0]
@@ -260,5 +265,20 @@ static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Arr
         if not lifecycles.is_empty():
             common.selected_spell=selected
             result.append_array(lifecycle_samples(common,lifecycles,cache))
-        else:result.append_array(phase_samples(common,Spells.condition_phases(selected)))
+        elif not selected.is_empty():result.append_array(phase_samples(common,Spells.condition_phases(selected)))
+        for phase in authored:
+            var row:Dictionary=common.merged(phase,true)
+            row.merge({"id":str(common.id)+":authored:"+str(phase.native_cue.source_index),"kind":"native_effect","native_spell":true,
+                "persistent_owner":true,"target_uuid":null,"cast_recipe":{"enabled":false},
+                "start_ms":common.start_ms,"absolute_start_ms":common.absolute_start_ms,"duration_ms":common.duration_ms,
+                "from_position":anchor,"to_position":anchor,"from_elevation_feet":common.elevation_feet,"to_elevation_feet":common.elevation_feet,
+                "ground_target":true,"spatial_content_id":SpatialInputs.content_id(effect),"sample_hz":60.0},true)
+            var construction:Dictionary=SpatialInputs.construction(str(id),effect,phase.native_cue)
+            if construction.ready:
+                row.native_constructor_inputs=construction.operands
+                row.native_constructor_evidence=construction.evidence
+            else:
+                row.status="missing";row.reason=construction.reason;row.native_input_gaps=[construction.reason]
+            row.trace_keys=[row.id]
+            result.append(row)
     return result

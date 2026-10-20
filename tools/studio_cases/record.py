@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Record current engine cases through legal SDK commands, preserving both seats.
+"""Record current engine cases through legal SDK commands, preserving actual seats.
 
     python3 tools/studio_cases/record.py --only cohort
     python3 tools/studio_cases/record.py --only spell.fire_bolt
@@ -83,7 +83,7 @@ def main():
         for kind,ids in inventory['ids'].items():
             observed=[content for content in actual_ids if content in ids]
             if observed:entry['subjects'][kind]=sorted(set(entry['subjects'].get(kind,[])+observed))
-        entry.update(journals={seat:resource(folder/seat/'journal') for seat in ('amber','blue')},
+        entry.update(journals={seat:resource(folder/seat/'journal') for seat in result.get('perspectives',('party',) if scenario.get('player_builds_source') else ('amber','blue'))},
             moments=result.get('moments',[]),status='recorded' if result['ok'] else 'failed',reason=result.get('failure') or '',
             scenario=resource(scenario_path),studio_checked=False,errors=[])
         index['cases']=[row for row in index['cases'] if row['id']!=entry['id']]+[entry]

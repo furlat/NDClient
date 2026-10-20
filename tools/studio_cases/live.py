@@ -57,6 +57,7 @@ async def run(args):
                 case_log_offset=(args.out/'godot.log').stat().st_size
                 folder=args.out/scenario['id'].replace('/','__');folder.mkdir(parents=True,exist_ok=True)
                 config=adapter.configuration(scenario,scenario.get('seed',2),folder)
+                native_turn={'submitted':False,'completed':False}
                 async def case(url):
                     blue=asyncio.create_task(drive_blue(url,config.credentials[1].token,folder))
                     try:
@@ -67,6 +68,7 @@ async def run(args):
                             'blue_result':windows_path(folder/'blue-result.json')}
                         write(config_path,values)
                         write(request/f'{number:08}.json',{'id':str(number),'scenario':scenario,'result':windows_path(report)})
+                        native_turn['submitted']=True
                         with (args.out/'godot.log').open(errors='replace') as observed:
                             observed.seek(case_log_offset)
                             async with asyncio.timeout(args.timeout):
@@ -74,10 +76,11 @@ async def run(args):
                                     if client.returncode is not None:raise RuntimeError('Native safety process exited; inspect godot.log')
                                     if blue.done():await blue;raise RuntimeError('Blue driver unexpectedly completed')
                                     errors=observed.read()
-                                    if any(token in errors for token in ('Parse Error:','Failed loading resource')):
-                                        raise RuntimeError('Native parse/load error; inspect godot.log')
+                                    if any(token in errors for token in ('SCRIPT ERROR:','Parse Error:','Failed loading resource')):
+                                        raise RuntimeError('Native script/load error; inspect godot.log')
                                     await asyncio.sleep(.05)
                         result=json.loads(report.read_text())
+                        native_turn['completed']=True
                         summary=adapter.journal_summary(folder/'amber/journal')
                         missing=set(scenario.get('required_behaviors',[]))-summary['behaviors'].keys()
                         if result['ok'] and missing:result.update(ok=False,failure='Missing required actual occurrences: '+', '.join(sorted(missing)))
@@ -92,6 +95,8 @@ async def run(args):
                     result=await adapter.hosted(args.engine,config,folder,case,timeout=args.timeout+30,port=available_port())
                 except Exception as error:
                     result={'id':scenario['id'],'ok':False,'failure':f'{type(error).__name__}: {error}'}
+                    if native_turn['submitted'] and not native_turn['completed']:
+                        result['native_turn_abandoned']=True
                 with (args.out/'godot.log').open(errors='replace') as observed:
                     observed.seek(case_log_offset)
                     result['native_errors']=[line for line in observed.read().splitlines()
@@ -103,7 +108,10 @@ async def run(args):
                 write(args.out/'results.json',{'cases':results,'expected_cases':len(rows),'completed_cases':len(results),
                     'complete':False,'ok':False})
                 print(('PASS ' if result['ok'] else 'FAIL ')+scenario['id'],flush=True)
-                if client.returncode is not None or 'Native parse/load error' in result.get('failure',''):break
+                # An interrupted case coroutine cannot be assumed to service
+                # another request in this native process. Retain the partial
+                # results and stop; --start-after resumes in a fresh owner.
+                if client.returncode is not None or result.get('native_turn_abandoned',False):break
             write(request/'99999999.json',{'id':'stop','stop':True})
             try:await asyncio.wait_for(client.wait(),10)
             except TimeoutError:pass

@@ -1,0 +1,81 @@
+{
+ "id": "spell.chromatic_orb/baseline",
+ "title": "Chromatic Orb: legal baseline",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.chromatic_orb"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [
+   "creature.generic_caster"
+  ],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.chromatic_orb"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.chromatic_orb",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  }
+ ],
+ "seed": 2,
+ "required_behaviors": [
+  "spell.chromatic_orb"
+ ],
+ "purpose": "Current-engine baseline cast/reaction safety; visual/lifecycle qualification is separate."
+}

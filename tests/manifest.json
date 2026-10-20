@@ -5212,6 +5212,66 @@
    "timeout": 300,
    "status": "ok",
    "reason": ""
+  },
+  {
+   "name": "spatial_input_checks",
+   "script": "res://tests/spatial_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_spatial_owner_checks",
+   "script": "res://tests/native_spatial_owner_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "schema16_scenario_recording_checks",
+   "script": "res://tests/schema16_scenario_recording_checks.gd",
+   "mode": "headless",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "needs-args",
+   "reason": "Explicit --index=<current recorder output> required; capability cohort journals are local captured data, not implicit encounter fixtures."
+  },
+  {
+   "name": "creation_input_checks",
+   "script": "res://tests/creation_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "native_creation_owner_checks",
+   "script": "res://tests/native_creation_owner_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
+  },
+  {
+   "name": "pose_socket_binding_checks",
+   "script": "res://tests/pose_socket_binding_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": ""
   }
  ]
 }

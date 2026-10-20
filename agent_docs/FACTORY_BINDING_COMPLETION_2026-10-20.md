@@ -136,3 +136,22 @@ supplied observation dictionary; runtime adds no validation pass.
 Factory inventory was regenerated after these bindings. It measures source and
 provider channel presence, not render/visual qualification. Reports/builds and
 captures remain ignored and are not committed.
+
+## Subsequent spatial and creation cohorts
+
+Current inventory:730typed sources (191spells,281conditions,258actions),
+745combined subjects,504Factory selections/1,159clips. All428default cues
+resolve. Source-channel classifications are204provider-present-unqualified,
+123owner handovers,79provider gaps,12disabled,2probes and8explicit semantic
+gaps. Spatial presence is counted only for its exact spatial-owner constructor;
+creation lease/event inputs only for their actual admission constructor.
+Stale Sunder/Arm/Golden missing-recording diagnostics were removed after the real
+recordings/provider qualification, not from source presence alone.
+
+See [spatial ownership](SPATIAL_PROVIDER_COHORT_2026-10-20.md),
+[real item/container admission](CREATION_PROVIDER_COHORT_2026-10-20.md),
+[passive attribution](SERVER_PASSIVE_ATTRIBUTION_GAPS_2026-10-20.md), and
+[exact selector/baseline gaps](CONDITION_SELECTOR_PRODUCER_GAPS_2026-10-20.md).
+The first two have actual native output; the latter remain blocked by missing
+public semantics. No general energy-type alias is valid: Fire Shield's visual
+Fire element and resisted Cold element are different.

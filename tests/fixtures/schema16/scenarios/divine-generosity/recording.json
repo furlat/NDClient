@@ -1,0 +1,188 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "983c7853-e716-4378-bc7f-c5cb5362c1ce": "Party caster",
+  "7c357394-517c-49c0-aa20-ab63bcaf2aa1": "Goblin 1",
+  "bb4b02da-f95d-408e-98ca-f7ce95ccbf22": "Goblin 2"
+ },
+ "roles": {
+  "caster": "Party caster"
+ },
+ "sequence": [
+  "action.class.cleric.divine_intervention.golden_generosity \u00b7 Party caster",
+  "action.environment.storage_chest.loot_all \u00b7 Party caster",
+  "action.environment.storage_chest.close \u00b7 Party caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "spatial": 29,
+   "sensory": 12,
+   "step": 10,
+   "movement": 4,
+   "attack": 3,
+   "actor_change": 5,
+   "damage": 2,
+   "life": 1,
+   "action": 3
+  },
+  "behaviors": {
+   "action.jump": 2,
+   "action.attack": 2,
+   "reaction.opportunity_attack": 2,
+   "action.move": 2,
+   "action.class.cleric.divine_intervention.golden_generosity": 1,
+   "action.environment.storage_chest.loot_all": 1,
+   "action.environment.storage_chest.close": 1
+  },
+  "conditions": [],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 1,
+   "occurrence": 67,
+   "lineage": 15,
+   "event_offset": 16,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 73,
+   "lineage": 68,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 109,
+   "lineage": 74,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 113,
+   "lineage": 74,
+   "event_offset": 8,
+   "kind": "life",
+   "label": "life ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 116,
+   "lineage": 74,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 118,
+   "lineage": 74,
+   "event_offset": 11,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 119,
+   "lineage": 74,
+   "event_offset": 12,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "983c7853-e716-4378-bc7f-c5cb5362c1ce",
+   "triggering_occurrence": 88,
+   "triggering_lineage": 88,
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 120,
+   "lineage": 74,
+   "event_offset": 13,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 181,
+   "lineage": 129,
+   "event_offset": 16,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 187,
+   "lineage": 182,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 224,
+   "lineage": 188,
+   "event_offset": 12,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 241,
+   "lineage": 233,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.class.cleric.divine_intervention.golden_generosity",
+   "faction": "party"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 249,
+   "lineage": 242,
+   "event_offset": 4,
+   "kind": "action",
+   "label": "action action.environment.storage_chest.loot_all",
+   "faction": "party"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 254,
+   "lineage": 250,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.environment.storage_chest.close",
+   "faction": "party"
+  }
+ ],
+ "perspectives": [
+  "party"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -14,7 +14,8 @@ async def record(args):
     async def drive(url):
         return await adapter.drive(config,url,args.out,scenario['steps'],scenario)
     result=await adapter.hosted(args.engine,config,args.out,drive,timeout=args.timeout)
-    summary=adapter.journal_summary(args.out/'amber/journal')
+    perspectives=[credential.seat_id for credential in config.credentials]
+    summary=adapter.journal_summary(args.out/perspectives[0]/'journal')
     missing=set(scenario.get('required_behaviors',()))-summary['behaviors'].keys()
     if missing and result['ok']:
         result['ok']=False
@@ -25,10 +26,17 @@ async def record(args):
             result.update(ok=False,failure=field+' absent from actual journal: '+', '.join(sorted(missing)))
     if not result['ok'] and not result.get('failure'):
         result['failure']='; '.join(str(row['reason']) for row in result.get('gaps',[]))
+    positive_damage_types=sorted({row[3]['fact']['damage_type']
+        for row in adapter.facts(args.out/perspectives[0]/'journal')
+        if row[3]['fact'].get('kind')=='damage' and row[3]['fact'].get('stage')=='applied'
+        and row[3]['fact'].get('applied_damage',0)>0})
+    missing=set(scenario.get('required_applied_damage_types',()))-set(positive_damage_types)
+    if missing and result['ok']:
+        result.update(ok=False,failure='Required positive applied damage types absent: '+', '.join(sorted(missing)))
     moments=[]
-    for faction in adapter.SIDES:
+    for faction in perspectives:
         moments.extend(dict(row,faction=faction) for row in adapter.moments(args.out/faction/'journal'))
-    result.update(summary=summary, moments=moments, engine=adapter.engine_identity(args.engine))
+    result.update(summary=summary, moments=moments, perspectives=perspectives, positive_applied_damage_types=positive_damage_types, engine=adapter.engine_identity(args.engine))
     (args.out/'recording.json').write_text(json.dumps(result,indent=1,default=str)+'\n')
     return result
 

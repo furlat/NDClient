@@ -22,7 +22,7 @@ func settle(world:Node)->bool:
             await frame()
             if world.playback_prepared():return true
         await frame()
-    check(false,"Real Sunder playback prepares: "+str({"errors":world.presentation_errors,"media":world.media_issue,"native":world.component_renderer.native_spells.diagnostics}))
+    check(false,"Native playback prepares: "+str({"errors":world.presentation_errors,"media":world.media_issue,"native":world.component_renderer.native_spells.diagnostics}))
     return false
 func changed(a:Image,b:Image)->int:
     var count:int=0

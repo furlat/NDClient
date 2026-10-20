@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2rxqh"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_iegin"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="spatial_effect_use"]
+
 [sub_resource type="Resource" id="Resource_8nt85"]
 script = ExtResource("1_2rxqh")
 path = "art/media/ui/icons/smooth48/condition.generic.png"
@@ -11,7 +13,34 @@ reuses = "condition.generic"
 status = "stand_in"
 source = "ui/resources.json icon:condition.generic"
 
+
+[sub_resource type="Resource" id="ObservedSurface"]
+script = ExtResource("spatial_effect_use")
+clip = "bg3-36/chromatic-orb/acid/observed-surface"
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+scale = 1.0
+light_multiplier = 0.0
+constructor_input = {
+"kind": "spatial_owner",
+"component_path": ["effect"],
+"input_field": "",
+"content_id": "spatial_effect.spell.acid_surface"
+}
+staging_from = "factory@c494177f9ef03e3d"
+extra = {
+"live_endpoints": [{"cue_point": "source"}],
+"cell_capacity": 32
+}
+
 [resource]
 script = ExtResource("1_iegin")
 id = "spatial_effect.spell.acid_surface"
 icon = SubResource("Resource_8nt85")
+disposition = "authored"
+effects = Array[ExtResource("spatial_effect_use")]([SubResource("ObservedSurface")])
+status = "partial"
+notes = "Exact sealed observed-surface source, owned by the actual disclosed spatial UUID/cells/suppression. Fixture topology/presence and three-second retirement are cleared before construction. No caster, condition fact, damage or duration is inferred. Original source supports at most 32 admitted cells; larger owners remain an explicit capacity gap. Removal follows actual disclosure immediately; native fading and visual approval remain unqualified."

@@ -1,0 +1,55 @@
+{
+ "id": "action.class.cleric.divine_intervention.golden_generosity/direct_character",
+ "title": "Divine Intervention: actual reward chest, loot transfer and close",
+ "kind": "action",
+ "seed": 2,
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.class.cleric.divine_intervention.golden_generosity",
+   "action.environment.storage_chest.loot_all",
+   "action.environment.storage_chest.close"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "party"
+  }
+ ],
+ "player_builds_source": "tools/studio_cases/scenarios/cleric_level10_builds.json",
+ "purpose": "Real level10 class grant and native AI skirmish; one actual party perspective only.",
+ "steps": [
+  {
+   "do": "action.class.cleric.divine_intervention.golden_generosity",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.environment.storage_chest.loot_all",
+   "by": "caster",
+   "target": {
+    "object": "Golden Generosity"
+   }
+  },
+  {
+   "do": "action.environment.storage_chest.close",
+   "by": "caster",
+   "target": {
+    "object": "Golden Generosity"
+   }
+  }
+ ],
+ "required_behaviors": [
+  "action.class.cleric.divine_intervention.golden_generosity",
+  "action.environment.storage_chest.loot_all",
+  "action.environment.storage_chest.close"
+ ],
+ "required_facts": []
+}

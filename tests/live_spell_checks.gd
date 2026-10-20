@@ -158,19 +158,32 @@ func _request_blue(step:Dictionary,ordinal:int)->bool:
 func _journal_spell_evidence()->void:
     var counts:Dictionary={}
     var shield:Array=[]
-    for name in DirAccess.get_files_at(scene.game_config.journal):
+    var members:Dictionary={}
+    var files:PackedStringArray=DirAccess.get_files_at(scene.game_config.journal);files.sort()
+    for name in files:
         if not name.ends_with(".json"):continue
         var packet:Variant=JSON.parse_string(FileAccess.get_file_as_string(scene.game_config.journal.path_join(name)))
         if not packet is Dictionary:continue
         for lineage in packet.get("lineages",[]):
             for node in lineage.events:
                 var fact:Variant=node.get("fact")
-                if fact==null or node.canceled:continue
+                if fact==null or node.get("canceled",false):continue
                 if fact.kind=="spell":
                     var behavior:String=fact.get("behavior_id","")
                     counts[behavior]=counts.get(behavior,0)+1
-                if fact.kind=="condition" and fact.condition.get("behavior_id")=="condition.spell.shield" and fact.target_entity_uuid==leader:
-                    shield.append({"event_uuid":node.uuid,"event_type":fact.event_type,"sequence":packet.cursor.sequence})
+                if fact.kind=="actor_change":
+                    for actor in fact.actors:
+                        if actor.actor_uuid!=leader:continue
+                        for row in actor.rows:
+                            if row.field!="condition":continue
+                            var before:Dictionary=members.get(row.condition_uuid,{})
+                            var after:Variant=row.get("member")
+                            if after==null:
+                                if before.get("behavior_id")=="condition.spell.shield":shield.append({"event_uuid":node.occurrence,"event_type":"condition_removal","sequence":packet.cursor.sequence,"condition_uuid":row.condition_uuid})
+                                members.erase(row.condition_uuid)
+                            else:
+                                if before.is_empty() and after.behavior_id=="condition.spell.shield":shield.append({"event_uuid":node.occurrence,"event_type":"condition_application","sequence":packet.cursor.sequence,"condition_uuid":row.condition_uuid})
+                                members[row.condition_uuid]=after
     evidence.actual_spell_facts=counts;evidence.actual_shield_facts=shield
     for behavior in ["ray_of_frost","scorching_ray","acid_splash","fireball","magic_missile","chill_touch","fire_bolt"]:
         check(counts.get("spell."+behavior,0)>0,"Original journal contains actual "+behavior+" facts")

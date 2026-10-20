@@ -99,9 +99,10 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
     if attachment=="recipient_head" and (target.is_empty() or not has_socket(world,target.row,"head")):
         return {"ready":false,"unavailable":true,"reason":"native_head_registration_not_bound"}
     var needs_hand:bool=role in ["cast","flight","spray"] or attachment in ["caster_hand","caster_release"]
+    var hand_endpoint:Dictionary={}
     for endpoint in cue.get("live_endpoints",[]):
         if endpoint.get("actor")=="caster" and endpoint.get("socket") in ["hand","cast_hand"]:
-            needs_hand=true
+            needs_hand=true;hand_endpoint=endpoint;break
     var needs_body:bool=not component.get("ground_target",false) and (role in ["flight","impact","strike"] or attachment in ["recipient_body","recipient_head"])
     if needs_hand and not displayed(source):return {"ready":false,"unavailable":true,"reason":"native_spell_actor_not_displayed"}
     if (needs_body or persistent and not component.get("spatial_owner",false)) and not displayed(target):return {"ready":false,"unavailable":true,"reason":"native_spell_recipient_not_displayed"}
@@ -137,7 +138,7 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
         else:
             # Weapon-backed spells use the real attack pose, not a fabricated
             # second casting action (e.g. True Strike).
-            released=pose_point(world,source.row,"hand");hand=released
+            released=pose_point(world,source.row,"hand",hand_endpoint.get("pose_socket_by_clip",{}));hand=released
             if not released.ready:return released
     var received:Dictionary={"ready":true,"point":Placement.contact(target_row)}
     if needs_body:
@@ -209,19 +210,22 @@ static func cast_point(world:Node,component:Dictionary,key:String,frame:int,view
         position+=forward*float(sockets.get("forwardPixels",0.0))*unit
     return {"ready":true,"point":position,"surfaces":qualifications,"clip":clip,"frame":frame,"facing":view}
 
-static func pose_point(world:Node,row:Dictionary,name:String)->Dictionary:
+static func pose_point(world:Node,row:Dictionary,name:String,by_clip:Dictionary={})->Dictionary:
     var rig:Dictionary=world.rigs[row.rig]
     var playback:Node=world.playbacks.get(row.id)
     var clip:String=playback.clip if playback!=null else "Idle"
     var frame=mini(int((playback.sample_seconds if playback!=null else 0.0)*float(rig.clips[clip].fps)),int(rig.clips[clip].frames)-1)
     var view=facing(world,row)
-    var choices:Array=rig.get("pose_sockets",{}).get(name,{}).get(clip,{}).get(view,[])
-    var point:Variant=choices[mini(frame,choices.size()-1)] if not choices.is_empty() else rig.get("body_anchor") if name=="body_center" else null
-    if point==null:return {"ready":false,"reason":"native_spell_"+name+"_socket_missing"}
-    var surface=Surfaces.resolve(world,row.id,clip,frame,view,Vector2(point.x,point.y),socket(world,row,name))
+    var selected:String=str(by_clip.get(clip,name))
+    var choices:Array=rig.get("pose_sockets",{}).get(selected,{}).get(clip,{}).get(view,[])
+    var point:Variant=choices[mini(frame,choices.size()-1)] if not choices.is_empty() else rig.get("body_anchor") if selected=="body_center" else null
+    if point==null:return {"ready":false,"reason":"native_spell_"+selected+"_socket_missing"}
+    var surface=Surfaces.resolve(world,row.id,clip,frame,view,Vector2(point.x,point.y),socket(world,row,selected))
     if str(surface.reason).ends_with("not_prepared"):
         return {"ready":false,"pending":true,"reason":"native_spell_"+surface.reason}
-    return {"ready":true,"point":surface.point,"surface":surface,"clip":clip,"frame":frame,"facing":view}
+    var result={"ready":true,"point":surface.point,"surface":surface,"clip":clip,"frame":frame,"facing":view}
+    if selected!=name:result.pose_socket=selected
+    return result
 
 static func displayed(visual:Dictionary)->bool:
     if visual.is_empty() or not visual.get("valid",false):return false

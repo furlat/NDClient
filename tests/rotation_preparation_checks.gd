@@ -15,6 +15,7 @@ func drain_view(scene: Node,target: int) -> void:
         scene._sample_actors(); scene._sample_fixtures()
         if scene.pending_view != null: phases[scene.pending_view.phase] = true
         scene._prepare_rotation()
+        scene._sync_native_lighting()
         scene._sort_draws()
         maximum = maxf(maximum,(Time.get_ticks_usec()-begun)/1000.0)
         if scene.rotation_pending():
@@ -29,41 +30,51 @@ func run() -> void:
     if DisplayServer.get_name()=="headless":quit(2);return
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(960,640)
     var scene=Player.instantiate();scene.timeline.paused=true;root.add_child(scene)
+    if not open_fixture(scene):scene.queue_free();await process_frame;quit(1);return
     var deadline=Time.get_ticks_msec()+120000
-    while (not scene.session.recording_ready or not scene._media_ready({})) and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
+    while (not scene.session.recording_ready or not scene._media_ready({}) or scene.world_revision<0 or scene.visual_actors.is_empty()) and scene.session.issue.is_empty() and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
     await scene.presentation_updated
     scene.session.close();scene.set_process(false);scene.hud.hide()
     scene.timeline.current={};scene.timeline.queue=[]
+    scene.fire_light_flicker=false;scene.source_lighting.fire_light_flicker=false
+    scene.grid_visible=false
     check(scene.session.issue.is_empty() and scene.media_issue.is_empty(),"Actual recorded Crypt and exact source preparation are ready")
     if not failures.is_empty():scene.queue_free();quit(1);return
     var canonical:Dictionary=scene.timeline.state.duplicate(true)
+    # A solid/hidden view correctly has no coverage viewport. Exercise mask
+    # ownership explicitly in translucent mode instead of relying on saved UI.
+    scene.wall_mode="translucent";scene.update_wall_visibility();scene._sort_draws()
+    await capture()
+    check(scene.wall_mask_viewport!=null,"Translucent source view owns actual native wall coverage")
     scene.request_view(1)
     check(scene.quarter==0 and scene.camera.current,"Requesting a cold quarter does not move the current camera")
     await drain_view(scene,1)
     check(timings.back().old_view_pose_samples>1,"Current native character clocks keep advancing during preparation")
     var source=weakref(scene.static_views[0].root)
-    var mask=weakref(scene.static_views[0].mask_viewport)
+    var mask:WeakRef=weakref(scene.static_views[0].mask_viewport) if scene.static_views[0].mask_viewport!=null else null
+    check(mask!=null,"Cached translucent quarter retains its coverage owner")
     scene.request_view(0)
     scene.request_view(2)
-    check(not source.get_ref().visible and mask.get_ref().render_target_update_mode==SubViewport.UPDATE_DISABLED,"Canceled view and its coverage stop rendering before disposal")
+    check((source.get_ref()==null or not source.get_ref().visible) and mask!=null and (mask.get_ref()==null or mask.get_ref().render_target_update_mode==SubViewport.UPDATE_DISABLED),"Canceled view and its coverage stop rendering before disposal")
     await drain_retired(scene)
-    check(source.get_ref()==null and mask.get_ref()==null,"Canceled cached target releases its root and separately parented original mask")
+    check(source.get_ref()==null and mask!=null and mask.get_ref()==null,"Canceled cached target releases its root and original coverage owner")
     check(scene.quarter==1,"Rapid replacement leaves the current quarter published")
     # Change only target selection/projection while its sources are being built.
     scene.wall_mode="hidden"
     var senses:Dictionary=scene.timeline.state.senses.duplicate(true)
     var visible:Array=Cells.mask_points(senses.visible)
     senses.visible=Cells.mask(visible.slice(0,maxi(1,visible.size()-2)))
-    scene.timeline.state.senses=senses;scene.timeline.revision+=1;scene.timeline.world_revision+=1
+    var delta:Dictionary=FixtureCompiler.empty_delta();delta.set.senses=senses
+    enqueue_fixture(scene,delta);await prepare_fixture(scene)
     scene._sync_scenery();scene.update_wall_visibility()
     root.size=Vector2i(1000,680)
     scene.camera.size=8.75;scene.camera_focus+=Vector3(.2,0,.1);scene.position_camera()
     await drain_view(scene,2)
-    check(scene.wall_mode=="hidden" and scene.wall_mask_view==[scene.camera.global_transform,scene.camera.size,root.get_visible_rect().size],"Changed visibility/mode/zoom publish with the matching prepared mask projection")
+    check(scene.wall_mode=="hidden" and scene.sprite_parent.projection_key==[scene.camera_focus,scene.camera.size,root.get_visible_rect().size],"Changed visibility/mode/zoom publish with the matching prepared view projection")
+    check(scene.wall_mask_viewport==null or scene.wall_mask_viewport.render_target_update_mode==SubViewport.UPDATE_DISABLED,"Hidden mode does not render deferred unused wall coverage")
     var native=await capture()
     native.save_png("res://.captures/rotation-prepared.png")
-    reference_rebuild(scene)
-    var independent=await capture()
+    var independent=await capture_reference(scene)
     independent.save_png("res://.captures/rotation-independent.png")
     var errors=0
     for y in range(native.get_height()):
@@ -71,14 +82,16 @@ func run() -> void:
             var a=native.get_pixel(x,y);var b=independent.get_pixel(x,y)
             if maxf(absf(a.r-b.r),maxf(absf(a.g-b.g),absf(a.b-b.b)))>1.0/255+.00001:errors+=1
     check(errors==0,"Changed pending visibility and projection exactly match independent fresh original-source rendering: %d pixels"%errors)
+    await drain_retired(scene)
     # An admitted source-generation change must retire incomplete prior rows.
     scene.request_view(3)
     var stale=weakref(scene.pending_view)
     var tile_key:String=scene.timeline.state.tiles.keys()[0]
     var tile:Dictionary=scene.timeline.state.tiles[tile_key].duplicate(true)
-    tile.elevation_steps+=1;scene.timeline.state.tiles[tile_key]=tile
-    scene.timeline.revision+=1;scene.timeline.world_revision+=1
-    scene._sync_world();scene._sync_scenery();scene.update_wall_visibility()
+    tile.elevation_steps+=1
+    delta=FixtureCompiler.empty_delta();delta.tiles[tile_key]=tile
+    enqueue_fixture(scene,delta);await prepare_fixture(scene)
+    scene._sync_scenery();scene.update_wall_visibility()
     await drain_retired(scene)
     check(stale.get_ref()==null,"Changed source geometry releases the incomplete prior generation")
     await drain_view(scene,3)
@@ -91,11 +104,12 @@ func run() -> void:
     for view in scene.static_views.values():
         retired.append(weakref(view.root));retired_nodes+=view.entries.size()+view.mask_nodes.size()
     tile=scene.timeline.state.tiles[tile_key].duplicate(true)
-    tile.elevation_steps+=1;scene.timeline.state.tiles[tile_key]=tile
-    scene.timeline.revision+=1;scene.timeline.world_revision+=1
+    tile.elevation_steps+=1
+    delta=FixtureCompiler.empty_delta();delta.tiles[tile_key]=tile
     var release_start=Time.get_ticks_usec()
-    scene._sync_world();scene._sync_scenery();scene.update_wall_visibility()
-    var release_cpu=(Time.get_ticks_usec()-release_start)/1000.0
+    enqueue_fixture(scene,delta);await prepare_fixture(scene)
+    scene._sync_scenery();scene.update_wall_visibility()
+    var publication_elapsed=(Time.get_ticks_usec()-release_start)/1000.0
     var request_started=Time.get_ticks_usec()
     scene.request_view(3)
     await drain_view(scene,3)
@@ -104,7 +118,7 @@ func run() -> void:
     check(scene.presentation_diagnostics().retiring_nodes==0,"A new camera request drains invalidated views and still publishes")
     var release_wall=(Time.get_ticks_usec()-release_start)/1000.0
     check(retired.all(func(ref):return ref.get_ref()==null),"All three inactive source-generation roots retire after publication invalidation")
-    timings.append({"case":"three_cached_view_invalidation","retired_native_nodes":retired_nodes,"sync_cpu_ms":release_cpu,"disposal_elapsed_ms":release_wall,"disposal":disposal})
+    timings.append({"case":"three_cached_view_invalidation","retired_native_nodes":retired_nodes,"fixture_prepare_and_publish_elapsed_ms":publication_elapsed,"disposal_elapsed_ms":release_wall,"disposal":disposal})
     scene.timeline.state=canonical
     check(scene.presentation_errors.is_empty(),"Prepared rotation has no missing source or rendering errors")
     var report={"checks":checks,"failures":failures,"timings":timings,"scope":"Actual Crypt sources with atomic cold publication, advancing native poses, rapid cached cancellation, and named visibility/projection/elevation renderer fixtures. Pixel comparison retains original tolerance."}

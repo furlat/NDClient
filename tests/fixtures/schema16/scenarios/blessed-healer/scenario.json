@@ -1,0 +1,58 @@
+{
+ "id": "class_feature.cleric.blessed_healer/actual_self_heal",
+ "title": "Blessed Healer: actual source and ally wounds, allied spell heal and emitted self-heal",
+ "kind": "interaction",
+ "seed": 2,
+ "subjects": {
+  "spell": [
+   "spell.fireball",
+   "spell.healing_word"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": [],
+  "class_feature": [
+   "class_feature.cleric.blessed_healer"
+  ]
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "party"
+  },
+  {
+   "role": "ally",
+   "side": "party"
+  }
+ ],
+ "player_builds_source": "tools/studio_cases/scenarios/blessed_healer_party_builds.json",
+ "steps": [
+  {
+   "do": "spell.fireball",
+   "by": "caster",
+   "target": [
+    9,
+    11
+   ],
+   "item": "spell_item.scroll_fireball"
+  },
+  {
+   "do": "spell.healing_word",
+   "by": "caster",
+   "target": "ally"
+  }
+ ],
+ "required_behaviors": [
+  "spell.fireball",
+  "spell.healing_word",
+  "class_feature.cleric.blessed_healer"
+ ],
+ "required_facts": [
+  "damage",
+  "heal"
+ ]
+}

@@ -6,7 +6,25 @@ var cached_comparisons: Array = []
 func cache_isolated(scene: Node) -> bool:
     var active := {}
     for entry in scene.entries: active[entry.node.get_instance_id()] = true
-    if scene.entries.size()!=scene.static_entries.size()+scene.actor_entries.size(): return false
+    var source_actors:Array=scene.actor_entries.filter(func(entry):return not entry.get("generated_shadow",false))
+    var expected:Dictionary={}
+    for entry in scene.static_entries+source_actors:expected[entry.node.get_instance_id()]=true
+    if active!=expected or scene.entries.size()!=active.size():return false
+    var statics:Dictionary={}
+    for entry in scene.static_entries:statics[entry.node.get_instance_id()]=true
+    # Native shadows join the painter sequence, not source sprites or picking.
+    for entry in scene.actor_entries:
+        if not entry.get("generated_shadow",false):continue
+        if active.has(entry.node.get_instance_id()):return false
+        var helper:Dictionary=scene.generated_shadows.actors.get(entry.placement.id,{})
+        if helper.is_empty() or helper.entry.node!=entry.node:return false
+        for view in scene.static_views.values():
+            if view.root.is_ancestor_of(entry.node):return false
+    for entry in scene.wall_pick_order:
+        if not statics.has(entry.node.get_instance_id()):return false
+    for visual in scene.visual_actors.values():
+        for entry in visual.entries:
+            if not active.has(entry.node.get_instance_id()) or entry.get("generated_shadow",false):return false
     if scene.static_views.size()>3: return false
     for view in scene.static_views.values():
         for entry in view.entries:
@@ -30,11 +48,15 @@ func run() -> void:
     if DisplayServer.get_name()=="headless": print("WORLD_VIEW_CACHE_CHECKS requires native graphics"); quit(2); return
     root.unfocusable = true; root.position = Vector2i(-16000,-16000); root.size = Vector2i(960,640)
     var scene = Player.instantiate(); scene.timeline.paused = true; root.add_child(scene)
+    if not open_fixture(scene):scene.queue_free();await process_frame;quit(1);return
     var deadline := Time.get_ticks_msec()+120000
-    while (not scene.session.recording_ready or not scene.MediaWarmup.ready(scene.media_warmup,scene.media_plan.required) or not scene._environment_media_ready()) and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
+    while (not scene.session.recording_ready or not scene._media_ready({}) or scene.world_revision<0 or scene.visual_actors.is_empty()) and scene.session.issue.is_empty() and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
     scene.session.close(); await scene.presentation_updated; scene.set_process(false); scene.hud.hide()
     check(scene.session.issue.is_empty() and not scene.timeline.state.is_empty() and scene._environment_media_ready(),"Actual Crypt and exact four-view source media initialize")
-    if scene.timeline.state.is_empty() or not scene._environment_media_ready(): quit(1); return
+    if not failures.is_empty() or scene.timeline.state.is_empty() or not scene._environment_media_ready():scene.queue_free();await process_frame;quit(1);return
+    scene.timeline.current={};scene.timeline.queue=[]
+    scene.fire_light_flicker=false;scene.source_lighting.fire_light_flicker=false
+    scene.grid_visible=false
     var canonical: Dictionary = scene.timeline.state.duplicate(true)
     var door := ""
     for row in scene.placements:
@@ -47,20 +69,24 @@ func run() -> void:
         var swing := "inward" if mode=="translucent" else "outward"
         set_door_fixture(scene,door,mode!="solid",swing)
         await prepare_fixture(scene)
-        # The independent reference at the previous iteration has no retained
-        # production owner groups. Explicitly start a fresh active view.
-        clear_world(scene); scene.world_quarter = -1
-        scene._sync_world(); scene.update_wall_visibility(); scene._sample_fixtures()
+        # The reference capture restores the accepted production owner. Camera
+        # caching stays on that owner rather than borrowing empty oracle groups.
+        scene.update_wall_visibility(); scene._sample_fixtures()
         var original_views := {}
+        var original_orders:Dictionary={}
+        var original_nodes:Dictionary={}
         for q in range(4):
             await rotate(scene,q)
             original_views[q] = identities(scene)
+            original_orders[q]=scene.static_complete_order
+            original_nodes[q]=scene.static_sort_nodes
         check(scene.static_views.size()==3,"Only three inactive quarters are retained")
         var snapshots := {}
         var state_before: Dictionary = scene.timeline.state.duplicate(true)
         for q in range(4):
             await rotate(scene,q)
             check(identities(scene)==original_views[q],"Repeated rotation reuses exact node/material/batch resources: %s q%d" % [mode,q])
+            check(is_same(scene.static_complete_order,original_orders[q]) and is_same(scene.static_sort_nodes,original_nodes[q]),"Cached rotation retains the same complete-order and native membership owner: %s q%d" % [mode,q])
             check(cache_isolated(scene),"Inactive views remain hidden and outside picking/fixtures: %s q%d" % [mode,q])
             assert_order(scene,"Cached %s q%d" % [mode,q])
             snapshots[q] = await capture()
@@ -77,14 +103,14 @@ func run() -> void:
         # A new displayed revision with unchanged authored rows retains every
         # inactive view. Actual door state change invalidates all inactive views.
         scene.timeline.revision += 1
-        scene._sync_world()
+        await sample_noop(scene)
         check(scene.static_views.size()==3 and identities(scene)==previous_ids,"Unchanged canonical rows preserve all quarters across a displayed revision")
         var stale: Array = []
         for view in scene.static_views.values():
             for entry in view.entries: stale.append(weakref(entry.node))
         set_door_fixture(scene,door,mode=="solid",swing)
         await prepare_fixture(scene)
-        scene._sync_world(); scene.update_wall_visibility()
+        scene.update_wall_visibility()
         check(scene.static_views.is_empty(),"Changed authored door rows invalidate inactive views")
         var retirement_deadline = Time.get_ticks_msec()+60000
         while scene.presentation_diagnostics().retiring_nodes>0 and Time.get_ticks_msec()<retirement_deadline:
@@ -94,10 +120,8 @@ func run() -> void:
         set_door_fixture(scene,door,mode!="solid",swing)
         await prepare_fixture(scene)
         for q in range(4):
-            scene.quarter = q; scene.position_camera()
-            scene._sample_actors()
-            reference_rebuild(scene)
-            compare_pixels(snapshots[q],await capture(),"%s q%d" % [mode,q])
+            await rotate(scene,q)
+            compare_pixels(snapshots[q],await capture_reference(scene),"%s q%d" % [mode,q])
     check(scene.presentation_errors.is_empty(),"No presentation errors")
     scene.timeline.state = canonical
     var report := {"checks":checks,"failures":failures,"comparisons":cached_comparisons,"renderer":RenderingServer.get_video_adapter_name()}

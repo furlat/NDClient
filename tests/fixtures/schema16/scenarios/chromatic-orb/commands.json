@@ -1,0 +1,153 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b50ab603-f363-4c57-bb23-95ea5f133085",
+   "state_revision": "c871f54e-ae39-44cb-94f5-837b10a9116e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_chromatic_orb_baseline",
+   "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+   "audience_id": "c2a3dea2-17fb-49b5-a639-b2ff996626d5",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chromatic_orb_baseline",
+    "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+    "audience_id": "c2a3dea2-17fb-49b5-a639-b2ff996626d5",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "84096d05-6e57-4dca-96c2-0ebfb5b32d7e",
+   "state_revision": "4beb69ca-007f-47a5-830b-6a324a963081",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_chromatic_orb_baseline",
+   "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+   "audience_id": "7feabc4a-3e9f-492e-922c-57ab44477b4c",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chromatic_orb_baseline",
+    "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+    "audience_id": "7feabc4a-3e9f-492e-922c-57ab44477b4c",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "37873eeb-8a57-4210-b6f1-b7b787d96995",
+   "state_revision": "590f8d96-0cc7-4792-91cd-b746cabab791",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_chromatic_orb_baseline",
+   "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+   "audience_id": "7feabc4a-3e9f-492e-922c-57ab44477b4c",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chromatic_orb_baseline",
+    "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+    "audience_id": "7feabc4a-3e9f-492e-922c-57ab44477b4c",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.chromatic_orb",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.chromatic_orb",
+   "display_name": "Chromatic Orb (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [
+    {
+     "key": "damage_type",
+     "value": "acid",
+     "label": "Acid"
+    },
+    {
+     "key": "side",
+     "value": "creature",
+     "label": "Creature"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "ed5091f3-00cf-4786-826d-d2671c591aee",
+   "state_revision": "8478f2ba-73c8-4c0d-bd41-37be4e9baed6",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_chromatic_orb_baseline",
+   "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+   "audience_id": "c2a3dea2-17fb-49b5-a639-b2ff996626d5",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chromatic_orb_baseline",
+    "game_epoch": "150f4973-8d60-4f9a-be41-39995b81e10e",
+    "audience_id": "c2a3dea2-17fb-49b5-a639-b2ff996626d5",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

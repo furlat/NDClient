@@ -57,9 +57,6 @@ DIVINE_GAPS = {
     "aura_devotion_fitted": ["aura_kind_not_disclosed"],
     "aura_courage": ["aura_kind_not_disclosed"],
     "holy_nimbus": ["contact_needs_exact_source_condition_uuid"],
-    "intervention_sunder_clefts": ["observed_damage_result_not_qualified", "legal_level10_recording_not_available"],
-    "intervention_arm_admission": ["created_item_admission", "legal_level10_recording_not_available"],
-    "intervention_generosity_admission": ["created_container_admission", "legal_level10_recording_not_available"],
     "devotee_mace_heal": ["source_item_owner_contribution_link"],
     "sacred_weapon": ["actual_condition_or_item_membership_not_disclosed"],
 }
@@ -156,7 +153,10 @@ def report() -> dict:
                     clip = renamed[0] if len(renamed) == 1 else matching[0] if len(matching) == 1 else clip
                 cue["resolved_clip"] = clip
                 required = set(clips.get(clip, {}).get("inputs", []))
-                supplied = PROVIDERS | (EVENT_PROVIDERS if cue["constructor_input"].get("kind") == "observed_event" else set())
+                constructor = cue["constructor_input"].get("kind")
+                supplied = PROVIDERS | (EVENT_PROVIDERS if constructor in {"observed_event", "creation_admission"} else set())
+                if constructor == "spatial_owner":
+                    supplied = supplied | {"surface_presence"}
                 cue["declared_inputs"] = sorted(required)
                 cue["missing_provider_channels"] = sorted(required - supplied)
                 cue["source_present"] = clip in clips

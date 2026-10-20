@@ -1433,6 +1433,7 @@ func _deactivate_static_view(retain: bool) -> void:
         if wall_mask_viewport != null: wall_mask_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
         static_views[world_quarter] = {"root":sprite_parent,"groups":world_groups,"ground":ground_groups,
             "entries":static_entries,"fixtures":fixture_entries,"order":static_order,
+            "complete_order":static_complete_order,"sort_nodes":static_sort_nodes,"order_proof":prepared_static_order,
             "order_dirty":static_order_dirty,"order_count":static_order_count,"wall_pick_order":wall_pick_order,
             "scenery_consumers":scenery_consumers,"wall_sources":wall_sources,"wall_entries":wall_entries,"geometry":wall_geometry_views.get(world_quarter,{}),"mask_viewport":wall_mask_viewport,"mask_nodes":wall_mask_nodes,
             "mask_sources":wall_mask_sources,"mask_view":wall_mask_view,"faded":faded_walls,"visible_cells":wall_visible_cells,
@@ -1442,7 +1443,7 @@ func _deactivate_static_view(retain: bool) -> void:
     entries = entries.filter(func(entry):return entry.placement.kind=="actor")
     sprite_parent = null
     world_groups = {}; ground_groups = {}; static_entries = []; fixture_entries = []; static_order = []
-    static_complete_order = []; static_sort_nodes = {}
+    static_complete_order = []; static_sort_nodes = {}; prepared_static_order = {}
     static_order_count = -1; static_order_dirty = true
     wall_mask_viewport = null; wall_mask_nodes = []; wall_mask_sources = []; wall_mask_view = []
 
@@ -1460,7 +1461,15 @@ func _activate_static_view(view_quarter: int, publish_lighting: bool = true) -> 
     scenery_index_dirty = scenery_consumers.is_empty(); scenery_index_count = view.entries.size()
     scenery_generation = world_generation
     static_entries = view.entries; fixture_entries = view.fixtures
-    static_order = view.order; static_order_count = view.order_count; static_order_dirty = view.order_dirty
+    static_order = view.order
+    # Prepared replacement slots refer to this view's complete order, including
+    # hidden members. Adopt its owner arrays and original proof together; a
+    # newly constructed Quarter has no complete-order owner until its first sort.
+    static_complete_order = view.get("complete_order",[])
+    static_sort_nodes = view.get("sort_nodes",{})
+    prepared_static_order = view.get("order_proof",{})
+    static_order_count = view.order_count if view.has("complete_order") else -1
+    static_order_dirty = view.order_dirty or not view.has("complete_order")
     wall_pick_order = view.wall_pick_order
     wall_mask_viewport = view.mask_viewport; wall_mask_nodes = view.mask_nodes; wall_mask_sources = view.mask_sources; wall_mask_view = view.mask_view
     wall_geometry_views[view_quarter] = view.geometry

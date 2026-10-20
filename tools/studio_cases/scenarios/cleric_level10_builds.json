@@ -1,0 +1,249 @@
+[
+ {
+  "name": "Party caster",
+  "base_ability_scores": [
+   [
+    "strength",
+    14
+   ],
+   [
+    "dexterity",
+    10
+   ],
+   [
+    "constitution",
+    14
+   ],
+   [
+    "intelligence",
+    8
+   ],
+   [
+    "wisdom",
+    15
+   ],
+   [
+    "charisma",
+    10
+   ]
+  ],
+  "flexible_ability_bonuses": [
+   [
+    "constitution",
+    1
+   ],
+   [
+    "wisdom",
+    2
+   ]
+  ],
+  "species": "species.human",
+  "background": "background.adventurer",
+  "class_levels": [
+   {
+    "step_id": "class.cleric.level_1",
+    "character_level": 1,
+    "class_id": "class.cleric",
+    "resulting_class_level": 1,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": [
+     {
+      "choice_id": "class.cleric.first_class.starting_equipment",
+      "values": [
+       "starting_equipment.cleric.mace_shield"
+      ]
+     },
+     {
+      "choice_id": "class.cleric.proficiencies.skills",
+      "values": [
+       "insight",
+       "religion"
+      ]
+     },
+     {
+      "choice_id": "class.cleric.level_1.subclass",
+      "values": [
+       "subclass.cleric.life_domain"
+      ]
+     },
+     {
+      "choice_id": "class.cleric.level_1.cantrips",
+      "values": [
+       "spell.sacred_flame",
+       "spell.guidance",
+       "spell.thaumaturgy"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.cleric.level_2",
+    "character_level": 2,
+    "class_id": "class.cleric",
+    "resulting_class_level": 2,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": []
+   },
+   {
+    "step_id": "class.cleric.level_3",
+    "character_level": 3,
+    "class_id": "class.cleric",
+    "resulting_class_level": 3,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": []
+   },
+   {
+    "step_id": "class.cleric.level_4",
+    "character_level": 4,
+    "class_id": "class.cleric",
+    "resulting_class_level": 4,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": [
+     {
+      "choice_id": "class.cleric.level_4.cantrips",
+      "values": [
+       "spell.resistance"
+      ]
+     },
+     {
+      "choice_id": "class.cleric.level_4.asi_or_feat",
+      "values": [
+       "ability_score.wisdom.2"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.cleric.level_5",
+    "character_level": 5,
+    "class_id": "class.cleric",
+    "resulting_class_level": 5,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": []
+   },
+   {
+    "step_id": "class.cleric.level_6",
+    "character_level": 6,
+    "class_id": "class.cleric",
+    "resulting_class_level": 6,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": []
+   },
+   {
+    "step_id": "class.cleric.level_7",
+    "character_level": 7,
+    "class_id": "class.cleric",
+    "resulting_class_level": 7,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": []
+   },
+   {
+    "step_id": "class.cleric.level_8",
+    "character_level": 8,
+    "class_id": "class.cleric",
+    "resulting_class_level": 8,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": [
+     {
+      "choice_id": "class.cleric.level_8.asi_or_feat",
+      "values": [
+       "ability_score.constitution.2"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.cleric.level_9",
+    "character_level": 9,
+    "class_id": "class.cleric",
+    "resulting_class_level": 9,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": []
+   },
+   {
+    "step_id": "class.cleric.level_10",
+    "character_level": 10,
+    "class_id": "class.cleric",
+    "resulting_class_level": 10,
+    "subclass_id": "subclass.cleric.life_domain",
+    "choices": [
+     {
+      "choice_id": "class.cleric.level_10.cantrips",
+      "values": [
+       "spell.light"
+      ]
+     }
+    ]
+   }
+  ],
+  "item_loadout": [
+   {
+    "item_id": "armor.chain_mail",
+    "quantity": 1,
+    "equipment_slot": "Body"
+   },
+   {
+    "item_id": "weapon.mace",
+    "quantity": 1,
+    "equipment_slot": "MELEE_MAIN"
+   },
+   {
+    "item_id": "shield.shield",
+    "quantity": 1,
+    "equipment_slot": "MELEE_OFF"
+   },
+   {
+    "item_id": "consumable.potion_haste",
+    "quantity": 1,
+    "equipment_slot": null
+   },
+   {
+    "item_id": "consumable.healing_potion",
+    "quantity": 2,
+    "equipment_slot": null
+   }
+  ],
+  "appearance": {
+   "visual_scale": 1.0,
+   "visual_scale_x": 1.0,
+   "body_category": "NakedBody",
+   "skin_tint": 14527112,
+   "head_category": null,
+   "hair_tint": 0,
+   "has_beard": false,
+   "beard_tint": 0,
+   "portrait_key": null
+  },
+  "species_variant": null,
+  "origin_choices": [
+   {
+    "choice_id": "species.human.additional_language",
+    "values": [
+     "language.draconic"
+    ]
+   }
+  ],
+  "prepared_spells": [
+   {
+    "source_id": "class.cleric.spellcasting",
+    "spell_ids": [
+     "spell.guiding_bolt",
+     "spell.healing_word",
+     "spell.spirit_guardians",
+     "spell.spiritual_weapon"
+    ]
+   }
+  ],
+  "scribed_spell_ids": [],
+  "permanent_feature_uses": [],
+  "feature_toggles": [],
+  "character_body_id": "creature.player.humanoid_body",
+  "description": "Direct player character",
+  "faction": null,
+  "position": [
+   0,
+   0
+  ],
+  "weight": 150
+ }
+]

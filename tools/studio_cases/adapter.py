@@ -6,10 +6,11 @@ encounter recipe, owns the bounded test host, performs each step as legal SDK
 choices/preview/commands and reads the recorded follower packets back. Current schema-16
 commands and native occurrence facts are the only supported wire path.
 
-Nothing is injected or rewritten: setup uses published encounter recipe edits
+Nothing is injected or rewritten: ordinary setup uses published encounter recipe edits
 (roster sources, spell/item/behavior grants, starting damage/conditions,
 damage affinities, battlefield and deployment); every later action is an
-offered choice. Both original faction journals are kept byte for byte.
+offered choice. Ordinary recipes retain both original faction journals byte for byte;
+existing direct-build skirmishes expose only their real party seat.
 
 Runs under the engine's Python with the engine and its sdk/python/src on
 PYTHONPATH; record.py arranges that.
@@ -25,7 +26,8 @@ import socket
 import subprocess
 import sys
 from uuid import uuid4
-from dnd_player.transport import headers
+from dnd_player.transport import ApiError, headers
+from httpx import HTTPStatusError
 
 from dnd.scenarios.encounter_assembler import _SPELL_ROW_BY_REF
 from dnd.core.content.encounters import AuthoredCreatureRosterSource, EncounterRosterMember, PremadeCharacterRosterSource, RosterBehaviorGrant, RosterDamageAffinity, RosterItemGrant, RosterItemPlacement, RosterSpellGrant, RosterStartingCondition, RosterStartingDamage, DamageAffinityStatus
@@ -40,6 +42,8 @@ from dnd_player import Follower, acknowledge, action_options, all_actions, bindi
 from dnd.player.reduction import reduce_initialization, reduce_operation
 from server.protocol import InitializationResponse, PlayerOperation
 from dnd.content_system.bootstrap import bootstrap_content_system
+from dnd.content.characters.build_types import CharacterBuild
+from pydantic import TypeAdapter
 
 PROJECT = Path(__file__).resolve().parents[2]
 SIDES = ('amber', 'blue')
@@ -141,7 +145,16 @@ def _member(actor, index):
 
 
 def configuration(scenario, seed, work):
-    """The ServerConfig for one scenario: two human seats (Amber, Blue), roles as named members."""
+    """Native recipe seats or the existing direct-character party, with exact named roles."""
+    if scenario.get('player_builds_source'):
+        # Existing native direct-character deployment has one real party seat
+        # and native AI opponents. It cannot claim a second faction journal.
+        build_path = PROJECT/scenario['player_builds_source']
+        builds = TypeAdapter(tuple[CharacterBuild, ...]).validate_json(build_path.read_bytes())
+        game = 'studio_'+''.join(c if c.isalnum() else '_' for c in scenario['id'])[:100]
+        return ServerConfig(game_id=game, encounter_id=None, player_builds=builds,
+            credentials=(SeatCredential(seat_id='party',token=secrets.token_urlsafe(32)),),
+            spool_directory=work/'spool',test_seed=seed)
     battlefield = scenario.get('battlefield', 'battlefield.open_floor_bright')
     slots, zones, assignments = [], [], []
     for side in SIDES:
@@ -365,28 +378,41 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             now = await status(seat['connection'])
             if now['published_cursor'] is not None: await wait_for_cursor(seat['follower'], now['published_cursor'])
 
-    async def active():
+    async def active(*, requested_name=None):
         async with asyncio.timeout(60):
             while True:
+                outside_encounter = False
                 for seat in seats:
                     now = await status(seat['connection'])
                     if now['published_cursor'] is not None: await wait_for_cursor(seat['follower'], now['published_cursor'])
                     if now['boundary']['lifecycle'] in ('terminal', 'failed', 'closed', 'closing'):
                         raise CaseError('Encounter ended ('+now['boundary']['lifecycle']+')')
+                    if now['boundary']['lifecycle'] == 'outside_encounter':
+                        # The existing SDK permits controlled actors' ordinary
+                        # choices outside combat. Keep the exact requested role.
+                        if requested_name is not None:
+                            for identity in seat['controlled']:
+                                if seat['names'].get(identity) == requested_name:return seat, now, identity
+                        outside_encounter = True
+                        continue
                     actor = now['boundary']['input_actor_uuid']
                     if actor is not None and actor in seat['controlled']: return seat, now, actor
+                if outside_encounter:raise CaseError('Encounter ended; no requested controlled actor can take an input turn')
                 await asyncio.sleep(.01)
 
     async def command(seat, now, actor, intent, evidence):
         if ctx['commands'] >= command_limit: raise CaseError('Command limit reached ('+str(command_limit)+')')
         ctx['commands'] += 1
+        evidence['command_issued'] = True
         await acknowledge(seat['connection'], seat['follower'].consumed)
         body = {'command_number': now['next_command_number'], 'actor_uuid': actor, 'state_revision': now['boundary']['state_revision'], 'intent': intent}
+        evidence.update(command=body, seat=seat['id'], actor=seat['names'].get(actor, actor))
+        trace.append(evidence)
         result = await submit_command(seat['connection'], body)
+        evidence['receipt'] = result['receipt']
         while result['receipt']['kind'] == 'pending':
             await asyncio.sleep(.01); result = await receipt(seat['connection'], body['command_number'])
-        evidence.update(command=body, receipt=result['receipt'], seat=seat['id'], actor=seat['names'].get(actor, actor))
-        trace.append(evidence)
+            evidence['receipt'] = result['receipt']
         if result['receipt']['kind'] != 'committed': raise CaseError('Command rejected: '+json.dumps(result['receipt'])[:600])
         await wait_for_cursor(seat['follower'], result['receipt']['cursor'])
         await settle()
@@ -396,7 +422,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
         """End turns until role's actor has input; None when it never gets one (dead, removed)."""
         name = roles.get(role, role)
         for _ in range(waits):
-            seat, now, actor = await active()
+            seat, now, actor = await active(requested_name=name)
             if seat['names'].get(actor) == name: return seat, now, actor
             await command(seat, now, actor, {'kind': 'end_turn'}, {'request': {'do': 'end_turn', 'waiting_for': role}})
         return None
@@ -452,11 +478,26 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
         return [base[0]+dx, base[1]+dy]
 
     async def perform(step):
+        # A status may be superseded while its follower catches up. Re-discover
+        # only an explicitly stale read; submitted commands are never repeated.
+        for attempt in range(3):
+            evidence = {'request': step, 'previews': 0}
+            try:
+                return await perform_attempt(step, evidence)
+            except (ApiError, HTTPStatusError) as error:
+                response = error.value if isinstance(error, ApiError) else error.response.json()
+                if response.get('code') != 'stale_state' or evidence.get('command_issued') or attempt == 2:
+                    raise
+                notes.append({'step':step, 'discovery_retry':attempt+1, 'rejected_response':response,
+                    'stage':evidence.get('stage'), 'query_revision':evidence.get('query_revision'),
+                    'discovery_generation':evidence.get('discovery_generation'),
+                    'reason':'Read-only discovery rejected as stale_state before command submission'})
+
+    async def perform_attempt(step, evidence):
         seat_now = await turn_of(step['by']) if step.get('by') else await active()
         if seat_now is None:
             raise CaseError((step.get('by') or 'actor')+' never had the required turn')
         seat, now, actor = seat_now
-        evidence = {'request': step, 'previews': 0}
         if step['do'] == 'end_turn':
             return await command(seat, now, actor, {'kind': 'end_turn'}, evidence)
         if step['do'] in ('equip', 'unequip'):
@@ -465,12 +506,16 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             if not items: raise CaseError('No observed item to equip: '+step['item'])
             return await command(seat, now, actor, {'kind': 'equip', 'item': {'item_uuid': items[0]['item_uuid'], 'slot': step['slot']}}, evidence)
         revision = now['boundary']['state_revision']
+        evidence.update(stage='choices', query_revision=revision)
         discovered = (await choices(seat['connection'], {'actor_uuid': actor, 'state_revision': revision, 'force_attack': False, 'correlation_id': str(uuid4())}))['choices']
+        evidence['discovery_generation'] = discovered['discovery_generation']
         if step['do'] == 'toggle_handler':
             handler = next((row for row in discovered.get('handler_details', []) if row['behavior_id'] == step['handler'] or step['handler'] in row['name'].lower()), None)
             if handler is None: raise CaseError('No toggleable handler '+step['handler'])
             return await command(seat, now, actor, {'kind': 'toggle_handler', 'discovery_generation': discovered['discovery_generation'],
                 'handler': {'handler_uuid': handler['uuid'], 'enabled': step.get('enabled', False)}}, evidence)
+        if step.get('capture_choices'):
+            (out/'choices.json').write_text(json.dumps(discovered,indent=1)+'\n')
         rows = offered_rows(discovered, step, actor)
         if step.get('expect_unavailable'):
             evidence['unavailable'] = not rows; trace.append(evidence)
@@ -489,7 +534,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
                 options=action_options(discovered,candidate)
                 if isinstance(wanted,(list,dict)) and 'object' not in wanted:
                     spot=resolve_position(wanted)
-                    if any(binding_position(discovered,option)==spot for option in options):matching.append(candidate)
+                    if any(binding_position(discovered,option)==spot for option in options) or (candidate.get('connector_traversal') or {}).get('command',{}).get('destination_position')==spot:matching.append(candidate)
                 elif any(subject_matches(discovered,option,wanted,actor,candidate) for option in options):matching.append(candidate)
             if matching:rows=matching
         row = min(rows, key=lambda value: (value.get('cast_at_level') or 0, value['discovery_index']))
@@ -498,7 +543,9 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             targets = [target for target in targets if subject_matches(discovered, target, wanted, actor,row)]
         elif wanted is not None:
             spot = resolve_position(wanted)
-            exact = [target for target in targets if binding_position(discovered, target) == spot]
+            connector = row.get('connector_traversal')
+            exact = [target for target in targets if binding_position(discovered, target) == spot
+                or (connector is not None and target['kind']=='self' and connector['command']['destination_position']==spot)]
             targets = exact
         if wanted=='first_legal':
             # The baseline explicitly requests the first legal recipient in
@@ -520,6 +567,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             candidates.sort(key=lambda t: min(_distance(binding_position(discovered, t) or goal[0], spot) for spot in goal if spot))
             target = None
             for candidate in candidates[:step.get('aim_tries', 48)]:
+                evidence['stage']='preview_affect'
                 aimed = (await preview(seat['connection'], {'actor_uuid': actor, 'state_revision': revision, 'discovery_generation': discovered['discovery_generation'],
                     'correlation_id': str(uuid4()), 'selection': selection_for(row, [candidate], prefer_safe=False)}))['preview']
                 evidence['previews'] += 1
@@ -533,6 +581,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
         if 'level' in step:selected['cast_at_level']=step['level']
         recipients = [roles.get(role, role) for role in step.get('recipients', [])]
         for _ in range(24):
+            evidence['stage']='preview_'+str(evidence['previews']+1)
             result = (await preview(seat['connection'], {'actor_uuid': actor, 'state_revision': revision, 'discovery_generation': discovered['discovery_generation'],
                 'correlation_id': str(uuid4()), 'selection': selected}))['preview']
             evidence['previews'] += 1
@@ -693,6 +742,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
     except Exception as error:
         ctx['failure'] = f'{type(error).__name__}: {error}'
     finally:
+        (out/'commands.json').write_text(json.dumps(trace, indent=1, default=str))
         for seat in seats:
             try:
                 async with asyncio.timeout(5):

@@ -1,0 +1,171 @@
+{
+ "ok": false,
+ "failure": "CaseError: Not offered to Party caster: action.item.devotees_mace.healing_incense (no such action)",
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "c819e8de-24d6-4662-ae6a-55b633e372e6": "Party caster",
+  "3a6e160b-1764-40bb-b1f2-499ceb328954": "Goblin 1",
+  "f80aa181-a9b4-40a4-a0b2-01845b21ac9b": "Goblin 2"
+ },
+ "roles": {
+  "caster": "Party caster"
+ },
+ "sequence": [
+  "action.class.cleric.divine_intervention.arm_thy_servant \u00b7 Party caster",
+  "unequip \u00b7 Party caster",
+  "equip \u00b7 Party caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "spatial": 28,
+   "sensory": 11,
+   "step": 10,
+   "movement": 4,
+   "attack": 3,
+   "actor_change": 5,
+   "damage": 2,
+   "life": 1,
+   "action": 1
+  },
+  "behaviors": {
+   "action.jump": 2,
+   "action.attack": 2,
+   "reaction.opportunity_attack": 2,
+   "action.move": 2,
+   "action.class.cleric.divine_intervention.arm_thy_servant": 1
+  },
+  "conditions": [],
+  "ended_conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 1,
+   "occurrence": 67,
+   "lineage": 15,
+   "event_offset": 16,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 73,
+   "lineage": 68,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 109,
+   "lineage": 74,
+   "event_offset": 6,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 113,
+   "lineage": 74,
+   "event_offset": 8,
+   "kind": "life",
+   "label": "life ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 116,
+   "lineage": 74,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 118,
+   "lineage": 74,
+   "event_offset": 11,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 119,
+   "lineage": 74,
+   "event_offset": 12,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "c819e8de-24d6-4662-ae6a-55b633e372e6",
+   "triggering_occurrence": 88,
+   "triggering_lineage": 88,
+   "faction": "party"
+  },
+  {
+   "sequence": 3,
+   "occurrence": 120,
+   "lineage": 74,
+   "event_offset": 13,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 4,
+   "occurrence": 181,
+   "lineage": 129,
+   "event_offset": 16,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 187,
+   "lineage": 182,
+   "event_offset": 0,
+   "kind": "attack",
+   "label": "attack action.attack",
+   "faction": "party"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 224,
+   "lineage": 188,
+   "event_offset": 12,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "party"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 238,
+   "lineage": 233,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.class.cleric.divine_intervention.arm_thy_servant",
+   "faction": "party"
+  }
+ ],
+ "perspectives": [
+  "party"
+ ],
+ "positive_applied_damage_types": [
+  "Bludgeoning"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

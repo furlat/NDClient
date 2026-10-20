@@ -1,0 +1,129 @@
+[
+ {
+  "request": {
+   "do": "action.class.cleric.divine_intervention.arm_thy_servant",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a9c0c064-7589-414f-b0b5-95f14f94031d",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.class.cleric.divine_intervention.arm_thy_servant",
+   "display_name": "Divine Intervention: Arm Thy Servant",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "c819e8de-24d6-4662-ae6a-55b633e372e6",
+   "state_revision": "a9c0c064-7589-414f-b0b5-95f14f94031d",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 40,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+   "game_epoch": "99ba7003-c868-4fe9-8983-3bfba5d5d9dd",
+   "audience_id": "040f67f1-03a8-41a8-9799-c9e340b7c23f",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+    "game_epoch": "99ba7003-c868-4fe9-8983-3bfba5d5d9dd",
+    "audience_id": "040f67f1-03a8-41a8-9799-c9e340b7c23f",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "target": "self",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "c819e8de-24d6-4662-ae6a-55b633e372e6",
+   "state_revision": "e64ecd89-91f7-4c92-8247-c04dca0c28a8",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+   "game_epoch": "99ba7003-c868-4fe9-8983-3bfba5d5d9dd",
+   "audience_id": "040f67f1-03a8-41a8-9799-c9e340b7c23f",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+    "game_epoch": "99ba7003-c868-4fe9-8983-3bfba5d5d9dd",
+    "audience_id": "040f67f1-03a8-41a8-9799-c9e340b7c23f",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "target": "self",
+   "slot": "MELEE_MAIN",
+   "item": "weapon.devotees_mace"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "c819e8de-24d6-4662-ae6a-55b633e372e6",
+   "state_revision": "9ca45d72-ffe5-422e-b048-7a5e9a815fe5",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "4df65b6b-e8c4-42e6-928d-26e74b579ea1",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+   "game_epoch": "99ba7003-c868-4fe9-8983-3bfba5d5d9dd",
+   "audience_id": "040f67f1-03a8-41a8-9799-c9e340b7c23f",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+    "game_epoch": "99ba7003-c868-4fe9-8983-3bfba5d5d9dd",
+    "audience_id": "040f67f1-03a8-41a8-9799-c9e340b7c23f",
+    "sequence": 10
+   }
+  }
+ }
+]

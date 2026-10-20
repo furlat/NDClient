@@ -567,5 +567,70 @@
    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
   },
   "scenario": "res://tests/fixtures/schema16/scenarios/counterspell/scenario.json"
+ },
+ "chromatic-orb": {
+  "id": "spell.chromatic_orb/baseline",
+  "label": "Chromatic Orb: actual acid delivery and persistent surface",
+  "perspectives": [
+   {
+    "id": "amber",
+    "label": "Amber",
+    "journal": "res://tests/fixtures/schema16/scenarios/chromatic-orb/amber"
+   },
+   {
+    "id": "blue",
+    "label": "Blue",
+    "journal": "res://tests/fixtures/schema16/scenarios/chromatic-orb/blue"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/chromatic-orb/scenario.json",
+  "scope": "Original two-seat acid baseline; other material variants not recorded here."
+ },
+ "divine-arm": {
+  "id": "action.class.cleric.divine_intervention.arm_thy_servant/direct_character",
+  "label": "Divine Intervention: real mace creation and equipment",
+  "perspectives": [
+   {
+    "id": "party",
+    "label": "Party",
+    "journal": "res://tests/fixtures/schema16/scenarios/divine-arm/party"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/divine-arm/scenario.json",
+  "scope": "Original lawful party stream. Creation-prefix qualification only; Arm Healing Incense follow-up remains a failed separate gap."
+ },
+ "divine-generosity": {
+  "id": "action.class.cleric.divine_intervention.golden_generosity/direct_character",
+  "label": "Divine Intervention: real chest creation, loot and close",
+  "perspectives": [
+   {
+    "id": "party",
+    "label": "Party",
+    "journal": "res://tests/fixtures/schema16/scenarios/divine-generosity/party"
+   }
+  ],
+  "engine": {
+   "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+   "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+   "protocol_version": 1,
+   "player_schema_version": 16,
+   "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "scenario": "res://tests/fixtures/schema16/scenarios/divine-generosity/scenario.json",
+  "scope": "Original lawful party stream. Creation-prefix qualification only; Arm Healing Incense follow-up remains a failed separate gap."
  }
 }

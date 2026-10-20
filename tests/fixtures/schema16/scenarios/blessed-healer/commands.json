@@ -1,0 +1,145 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "6a96f5c7-29d6-4c1d-88b7-0ec05733f481",
+   "state_revision": "2b3c3d9d-92e5-4217-84ae-2ab5bc27d6c0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "party",
+  "actor": "Party ally",
+  "receipt": {
+   "game_id": "studio_class_feature_cleric_blessed_healer_actual_self_heal",
+   "game_epoch": "05c55efb-6082-4d25-8f78-8ff130896670",
+   "audience_id": "c7704c89-50ae-4a18-9678-bc147eaad92d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_class_feature_cleric_blessed_healer_actual_self_heal",
+    "game_epoch": "05c55efb-6082-4d25-8f78-8ff130896670",
+    "audience_id": "c7704c89-50ae-4a18-9678-bc147eaad92d",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.fireball",
+   "by": "caster",
+   "target": [
+    9,
+    11
+   ],
+   "item": "spell_item.scroll_fireball"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "1ed79a9c-1c31-4079-8c00-bcf24da64acf",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.fireball",
+   "display_name": "Fireball (Scroll of Fireball)",
+   "cast_at_level": 3,
+   "variant_facets": [],
+   "target_type": "position_aoe",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "66a384ff-7edf-4972-b2aa-d4beebb7e852",
+   "state_revision": "1ed79a9c-1c31-4079-8c00-bcf24da64acf",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 31,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       9,
+       11
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_class_feature_cleric_blessed_healer_actual_self_heal",
+   "game_epoch": "05c55efb-6082-4d25-8f78-8ff130896670",
+   "audience_id": "c7704c89-50ae-4a18-9678-bc147eaad92d",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_class_feature_cleric_blessed_healer_actual_self_heal",
+    "game_epoch": "05c55efb-6082-4d25-8f78-8ff130896670",
+    "audience_id": "c7704c89-50ae-4a18-9678-bc147eaad92d",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.healing_word",
+   "by": "caster",
+   "target": "ally"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "8bc60f2d-f924-4be3-beed-120a9e07d283",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "spell.healing_word",
+   "display_name": "Healing Word (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "66a384ff-7edf-4972-b2aa-d4beebb7e852",
+   "state_revision": "8bc60f2d-f924-4be3-beed-120a9e07d283",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 19,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_class_feature_cleric_blessed_healer_actual_self_heal",
+   "game_epoch": "05c55efb-6082-4d25-8f78-8ff130896670",
+   "audience_id": "c7704c89-50ae-4a18-9678-bc147eaad92d",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_class_feature_cleric_blessed_healer_actual_self_heal",
+    "game_epoch": "05c55efb-6082-4d25-8f78-8ff130896670",
+    "audience_id": "c7704c89-50ae-4a18-9678-bc147eaad92d",
+    "sequence": 12
+   }
+  }
+ }
+]

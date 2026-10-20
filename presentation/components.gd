@@ -4,6 +4,7 @@ const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const ApplicationResults=preload("res://presentation/application_results.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
 const ReactionInputs=preload("res://presentation/reaction_inputs.gd")
+const CreationInputs=preload("res://presentation/creation_inputs.gd")
 const NativeItems=preload("res://presentation/native_items.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
 const Authoring=preload("res://presentation/authoring.gd")
@@ -166,6 +167,15 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
                     "input_field":descriptor.input_field,"values":projected.observation}]
                 actual.native_constructor_evidence=projected.evidence
             _native_action_component(group,node,node,actual,ReactionInputs.inputs(projected),graph)
+        elif descriptor.get("kind")=="creation_admission":
+            for projected in CreationInputs.observed(node,descriptor,graph,observations,group.commits):
+                var actual:Dictionary=phase.duplicate()
+                actual.start_ms=float(graph.starts[projected.node.id])+float(phase.start_ms)-float(markers["event.start"])
+                actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
+                actual.native_constructor_evidence=projected.evidence
+                actual.native_creation=projected.location
+                _native_action_component(group,node,projected.node,actual,{"values":{"lease_input":{},"event_input":projected.event},
+                    "gaps":[],"evidence":projected.evidence},graph,projected.target_uuid)
         elif descriptor.get("kind")=="observed_event":
             if Occurrences.application(node):continue
             for projected in ApplicationResults.observed(node,descriptor,graph):
