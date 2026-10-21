@@ -1,0 +1,48 @@
+{
+  "schema": "factory.additive_successor.actual_readiness.v1",
+  "version": "runtime-spirit-runtime-20261021-082bfa254988364b",
+  "index_sha256": "9729ee1a5efcb1a23041fdcb379fe6f50b3f4c491695d08201f85f3cb921e02c",
+  "native_receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spirit-runtime-20261021/native-smoke-complete-v1.json",
+  "native_receipt_sha256": "38404a290654e1bb754f051b25cd7c9da299480333bb49983f6e09ca80ae2a1e",
+  "cases": 2,
+  "constructor_flag_count": 1,
+  "unique_reported_immutable_resources": 2,
+  "resources": [
+    {
+      "path": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/4dfedede8b34909eac2c/radiant.res",
+      "complete": true,
+      "original_node_bank_ready": false,
+      "resources": 13
+    },
+    {
+      "path": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/190dc65ddaabfcd68f93/necrotic.res",
+      "complete": true,
+      "original_node_bank_ready": false,
+      "resources": 51
+    }
+  ],
+  "rows": [
+    {
+      "clip_id": "assembled/spirit_guardians_radiant_native",
+      "group": "spirit_rid_queued",
+      "native_complete_constructor_us": 1628,
+      "constructor_over2000us": false,
+      "measured_readiness_step_cpu_us": 3598,
+      "maximum_readiness_step_cpu_us": 1053,
+      "readiness_steps": 24
+    },
+    {
+      "clip_id": "assembled/spirit_guardians_necrotic_native",
+      "group": "spirit_rid_queued",
+      "native_complete_constructor_us": 2005,
+      "constructor_over2000us": true,
+      "measured_readiness_step_cpu_us": 3194,
+      "maximum_readiness_step_cpu_us": 365,
+      "readiness_steps": 59
+    }
+  ],
+  "maximum_actual_readiness_step_cpu_us": 1053,
+  "scope": "Actual native Resource-only prepublication CPU spans, separate from complete constructors. Cumulative Resource reports deduplicated by exact address. Async waiting, full-game input work and wall-clock loading are not characterized as negligible.",
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

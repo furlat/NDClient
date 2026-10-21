@@ -1,0 +1,1761 @@
+{
+  "version": "runtime-spirit-runtime-20261021-082bfa254988364b",
+  "source_cohort": {
+    "schema": "factory.spirit_runtime.cohort.v1",
+    "frozen": true,
+    "predecessor": "runtime-spike-seed-20261021-7ca62e2877bf5156",
+    "predecessor_archive_sha256": "29bbd0d978384a3c6d3a911609e2a3494d316c0456286f753e0a0e91f655c098",
+    "predecessor_index_sha256": "44f80785103f1bc939992497ff037b9447d2f58d352d82dbf90e52f464fabb51",
+    "rows": [
+      {
+        "key": "spirit_rid_queued_radiant",
+        "clip_id": "assembled/spirit_guardians_radiant_native",
+        "group": "spirit_rid_queued",
+        "candidate_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/radiant.tres",
+        "phase_sha256": "f9679500f8bc7b435ef58796a55677c3c54a24d5ec37ad7e6f4ba501d6aeb845",
+        "qualification_path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+        "qualification_sha256": "5e678682b2489291feb51cb0f4a1b4197fc2e9407cadcb6f79159b4af74aaf87",
+        "source_qualification": true,
+        "source_runtime_flags_retained": {
+          "cost_flags": [],
+          "readiness": {
+            "total_including_frame_yields_us": 332441,
+            "maximum_main_thread_step_us": 1074,
+            "atomic_cost_flags": [],
+            "cache_before": {
+              "bank": false,
+              "ground": false,
+              "piece": false
+            },
+            "node_counts": [
+              1,
+              1
+            ],
+            "actual_native_resources": 10,
+            "actual_explicit_dependency_paths": [
+              "res://factory/components/spirit_rid/piece_v3.gd",
+              "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/radiant.res",
+              "res://factory/components/owned_fields/flow_hold.gd",
+              "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_radiant-ground.res"
+            ]
+          },
+          "runtime_budget_pass": true,
+          "raw_flags_retained": true,
+          "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+          "raw_input_maxima_us": [
+            {
+              "repeat": 0,
+              "held_unchanged": 111,
+              "advancing_orbit": 280,
+              "changed_owner_anchor": 254
+            },
+            {
+              "repeat": 1,
+              "held_unchanged": 82,
+              "advancing_orbit": 256,
+              "changed_owner_anchor": 180
+            },
+            {
+              "repeat": 2,
+              "held_unchanged": 64,
+              "advancing_orbit": 289,
+              "changed_owner_anchor": 155
+            }
+          ],
+          "individual_over250us_input_maxima_remain_in_qualification": true
+        },
+        "construction_kind": "owner_operands",
+        "public_constructor": "res://factory/components/owner_release/common_occurrence.gd",
+        "public_setters": [
+          "set_targets",
+          "set_owner_state"
+        ],
+        "public_fixture": {
+          "constructor_values": {
+            "owner_uuid": "schema-spirit-rid-native"
+          },
+          "component_path": [
+            "effect"
+          ],
+          "input_field": "",
+          "targets": [
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "owner_uuid": "schema-spirit-rid-native",
+          "source_root_scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "source_age_seconds": 1.25,
+          "camera_focus": [
+            0,
+            0.4,
+            0
+          ],
+          "camera_size": 8.5,
+          "fixture_scope": "Schema-only actual API witness, no actor/gameplay assignment. Full source native fixture separately covers held32s moved anchor/layers/removal.",
+          "witness_age": 1.25,
+          "witness_sample_hz": 144,
+          "native_rid_draws": 64,
+          "private_materials": 9
+        },
+        "simulation_hz": 144,
+        "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+        "native_art_scope": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim.",
+        "evidence": [
+          {
+            "path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+            "sha256": "5e678682b2489291feb51cb0f4a1b4197fc2e9407cadcb6f79159b4af74aaf87",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": false,
+            "scope": "Current exact native bank/draw/material/Clock state plus retained4v3 exact positive pairs; no repeated images or actor/art approval."
+          }
+        ]
+      },
+      {
+        "key": "spirit_rid_queued_necrotic",
+        "clip_id": "assembled/spirit_guardians_necrotic_native",
+        "group": "spirit_rid_queued",
+        "candidate_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/necrotic.tres",
+        "phase_sha256": "cb4b3aec8292f12b6c22d51db2573d86a78358dc8af02698e5b9b0e1a5459c40",
+        "qualification_path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+        "qualification_sha256": "5e678682b2489291feb51cb0f4a1b4197fc2e9407cadcb6f79159b4af74aaf87",
+        "source_qualification": true,
+        "source_runtime_flags_retained": {
+          "cost_flags": [
+            {
+              "actual_us": 2194,
+              "measurement": "complete_constructor",
+              "repeat": 0,
+              "source": "necrotic-candidate",
+              "threshold_us": 2000
+            },
+            {
+              "actual_us": 2133,
+              "measurement": "complete_constructor",
+              "repeat": 1,
+              "source": "necrotic-candidate",
+              "threshold_us": 2000
+            },
+            {
+              "actual_us": 2061,
+              "measurement": "complete_constructor",
+              "repeat": 2,
+              "source": "necrotic-candidate",
+              "threshold_us": 2000
+            }
+          ],
+          "readiness": {
+            "total_including_frame_yields_us": 422506,
+            "maximum_main_thread_step_us": 328,
+            "atomic_cost_flags": [],
+            "cache_before": {
+              "bank": false,
+              "ground": true,
+              "piece": true
+            },
+            "node_counts": [
+              1,
+              1
+            ],
+            "actual_native_resources": 48,
+            "actual_explicit_dependency_paths": [
+              "res://factory/components/spirit_rid/piece_v3.gd",
+              "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/necrotic.res",
+              "res://factory/components/owned_fields/flow_hold.gd",
+              "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_necrotic-ground.res"
+            ]
+          },
+          "runtime_budget_pass": false,
+          "raw_flags_retained": true,
+          "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+          "raw_input_maxima_us": [
+            {
+              "repeat": 0,
+              "held_unchanged": 129,
+              "advancing_orbit": 236,
+              "changed_owner_anchor": 190
+            },
+            {
+              "repeat": 1,
+              "held_unchanged": 80,
+              "advancing_orbit": 243,
+              "changed_owner_anchor": 278
+            },
+            {
+              "repeat": 2,
+              "held_unchanged": 86,
+              "advancing_orbit": 246,
+              "changed_owner_anchor": 204
+            }
+          ],
+          "individual_over250us_input_maxima_remain_in_qualification": true
+        },
+        "construction_kind": "owner_operands",
+        "public_constructor": "res://factory/components/owner_release/common_occurrence.gd",
+        "public_setters": [
+          "set_targets",
+          "set_owner_state"
+        ],
+        "public_fixture": {
+          "constructor_values": {
+            "owner_uuid": "schema-spirit-rid-native"
+          },
+          "component_path": [
+            "effect"
+          ],
+          "input_field": "",
+          "targets": [
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "owner_uuid": "schema-spirit-rid-native",
+          "source_root_scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "source_age_seconds": 1.25,
+          "camera_focus": [
+            0,
+            0.4,
+            0
+          ],
+          "camera_size": 8.5,
+          "fixture_scope": "Schema-only actual API witness, no actor/gameplay assignment. Full source native fixture separately covers held32s moved anchor/layers/removal.",
+          "witness_age": 1.25,
+          "witness_sample_hz": 144,
+          "native_rid_draws": 368,
+          "private_materials": 9
+        },
+        "simulation_hz": 144,
+        "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+        "native_art_scope": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim.",
+        "evidence": [
+          {
+            "path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+            "sha256": "5e678682b2489291feb51cb0f4a1b4197fc2e9407cadcb6f79159b4af74aaf87",
+            "active_art_context_qualified": true,
+            "optical": {
+              "strict_threshold_pass": true
+            },
+            "complete_constructor_and_update_budget_pass": false,
+            "scope": "Current exact native bank/draw/material/Clock state plus retained4v3 exact positive pairs; no repeated images or actor/art approval."
+          }
+        ]
+      }
+    ],
+    "standalone_resources": [],
+    "groups": {
+      "spirit_rid_queued": 2
+    },
+    "frozen_inputs": {
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/source_delivery.json": "b6daa20e6815c36f21058c40faae081f62859c8ca3f98d33d9ee5468dcd5bf61",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json": "5e678682b2489291feb51cb0f4a1b4197fc2e9407cadcb6f79159b4af74aaf87",
+      "evidence/production-review-repair-20261021/runtime_tail/spirit_rid/queued-native-v1/checks.json": "fd0abac2e48abd173e40dfd7cdc1b696dfe44d01cb4f01582bc5a887ec17ec65",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/source-contract-v1.json": "d87027f22d8452fd98ca43268823c1063f3238babf6b15c52a45d232b442f2d2",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/preparation-v1.json": "2cf43f07890f0b2f2b03528b88c6ad01cc6e7ef362b7e4368ef37da04ea91e6c",
+      "evidence/production-review-repair-20261021/runtime_tail/spirit_rid/native-v3/checks.json": "c0a6c24f134dbbb0668013ff338fa267e433ae729e6573f5ad3d55f3df08e201",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/native-source-snapshot-v1.json": "f0458fdb770a439ffb2ecd72615a65c1f5cfe72fcfed5779b2414bf462e169c8",
+      "authoring/production-review-repair-20261021/owner_release/spirit_necrotic.tres": "a4aebcb3ca666d2200d9cd95160aeab761a9c0a66c7e67fa6e93901362cd648c",
+      "authoring/production-review-repair-20261021/owner_release/spirit_radiant.tres": "239047443bed568acaab7a7f65127408e46d4f0e9cd3782165ba78a578503663",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/publication/attribution-headless-v1.json": "9477fa2ac7a565c891763c44d5b92cd45a0812ae145879a0ac3bba6ad1581084",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/README.md": "74f0126e9910edf38a9a9a307b2ad1c9d93c4c1d50659508aa1bd98cf41e2084",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/necrotic.tres": "cb4b3aec8292f12b6c22d51db2573d86a78358dc8af02698e5b9b0e1a5459c40",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/radiant.tres": "f9679500f8bc7b435ef58796a55677c3c54a24d5ec37ad7e6f4ba501d6aeb845",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/sources.json": "44de41afe7a3de6e3e3487830c468e9c2503018e30deecba06194c61d5b9fb73",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/README.md": "f51129458e7885437325f1b5ca578643320d8cbaa2403a52c28540bec1c5a8ef",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/necrotic.res": "5fd8d4bde1a45e91e6064aec3f0a6b147a6b9209005645909fec0a4aac35043f",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/radiant.res": "7002f7475a98ab813c8ea149a878559dd8c1cba7e4ce33521eff5c62b1642704",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/necrotic.tres": "37b296a98e0952aeb97333c174cfeaee7b9b4e44c8423306e48fed3998268f6e",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/radiant.tres": "811eb6eed2c5c084347a4034500d6733cde89e5f3f6d62b62d6fe2d13d45a7a2",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/sources.json": "58699ef821fffe7c6013c94e76f4020c8e16b580ca162b6240922610ef73e3e9",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v1/assets-v2/necrotic-material.gd": "8ad5b42144ed29f7b6e5dbe29002c365310356273c977da56a43b01b8b2beba0",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v1/assets-v2/radiant-material.gd": "8ad5b42144ed29f7b6e5dbe29002c365310356273c977da56a43b01b8b2beba0",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v2/assets/necrotic.res": "59a2aea4fd8bbbc826e2a30905018658cbbe7c202139a12558b9849e57887ce2",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v2/assets/radiant.res": "7fe4a54b313c7aa422106b2e177a71eba73f6bb6e910e85865617c42db586958",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v2/necrotic.tres": "a2969beeee101e33bf461b5f8ae1c0316870a965c034ab8de2066f2a0a6c01a2",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v2/radiant.tres": "a4cc150425b2fde37226d0c747a52c95e5a81596d995607a0a1c11a6ed8268e5",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/README.md": "f6ff44def2f02f80dcbbd370ee6761264b066f9b731d8115158e3abdabdd5a87",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/assets/necrotic-publish.gd": "82c7a9fadb8cbe9c7c7b995ced2659fa378fa140ed100136891b35443b9fa889",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/assets/necrotic.res": "86142f334d0e905bc012abc764b4b55c22b60d37cadbf541716beaa9a55cdfd8",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/assets/radiant-publish.gd": "d68822d9b60935613c4265fde8e4816c2f8ee7fee4b1e8fc4af8d74a484bf1c9",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/assets/radiant.res": "d1ae3d09d69682ed1d81be92bdfc253faf3e00906a8401814c4112fa72f29ae1",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/necrotic.tres": "75c5e1657151bf9e11e6813678264e016ba670813467d4219f90dbf00d4a9912",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/radiant.tres": "7fd279e627be5aa8bbe184fdf46a9d5ce7d9a192a55637c410bea4dc62b3024b",
+      "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/v3/sources.json": "e5c45ef452a10cbff8de5f287bf32dd124eb5d0c1853206b2986e4eea4260d79",
+      "authoring/runtime-cost-repair-20261020/timed_direct_restore/v2/banks/62a8f5eb539f1bfc6e2d.res": "a78e091b1a79dbc3558c45c8602a4d60a9f1893fd36fe3e16ed9d67f94dfb349",
+      "authoring/runtime-cost-repair-20261020/timed_direct_restore/v2/banks/70172a234fd88b4e76b7.res": "f6edef2d79f00f25de5903c2621de30558d493f1bc797c1fe4ae1ec6c3f9244c",
+      "factory/baking/live_geometry_bindings.gd": "34c2ccdce695072ac450bdb79c6766ab7f843107dadc9044cd395be4f5b6409c",
+      "factory/baking/recording_source_sampler.gd": "18e128dbe6f9df00915f2d1727053e380fa92222424747ea6cca7439df7026fa",
+      "factory/baking/source_bridge.gd": "daa9ffcaa41beae562991ec3edb60ff5397ab5772aab2cfeb3d8115136b03c4d",
+      "factory/components/owned_fields/flow_hold.gd": "57591c6522310eb1293e5d71068c50e09fcdc9ce72cd0a09d4dfcc2c1b9de14a",
+      "factory/components/owner_release/common_occurrence.gd": "0356ecee848d74ed47e6d110191d8b179326f7db7bc35904053e34e888a56058",
+      "factory/components/owner_release/spirit.gd": "11048ea3276a9935bf011827dc311a1a2fb59b6ccf3d02c412194a6e6298afba",
+      "factory/components/prepared_timed/absolute_spirit_piece.gd": "e0eb40a55ae2b4c4451112445f62feb7b5ac558e1f487e7414c13c1477a93db3",
+      "factory/components/prepared_timed/assembly.gd": "4e014a2aac09bd780a6ac9239136dbd9ccb078aa85e531302494f84a6b68c715",
+      "factory/components/prepared_timed/direct_restore_bank.gd": "7a411555b6dee67d103984b58208bf714d984656728e5aed0a5cab3f18933e9d",
+      "factory/components/prepared_timed/path_assembly.gd": "ed621bfbe2f6aa5547c2bc6b27c67bcae21de4f31984c1b0e03c790336a4b154",
+      "factory/components/prepared_timed/spirit_piece.gd": "53b27a402f5681ce608e2b5b4f21834f2d14fdb4ea3d379f8406c744f3497bd3",
+      "factory/components/recipient/base.gd": "a866dea4a07145fce4b0a5719ed36a1e5c3eab3183d305d40ea6a221e4e3af39",
+      "factory/components/recipient/spirit_piece.gd": "59affdaa51743ab0141db236114eb37f11a2e04b4c0389b486b9e84cb50f04b9",
+      "factory/components/spirit_rid/bank.gd": "480f6017b128a359f0dab2645604ee694f357f2b14ae5d43c109c90e52b99dcb",
+      "factory/components/spirit_rid/bank_ready.gd": "e4575f678a79e218e321be1727dee7a3e3d93bb77b37149ab5d07a7e54cf3e9d",
+      "factory/components/spirit_rid/bank_v2.gd": "a3c324fdba990e4a964049d45266b6640383cf17d2ddf97b81e2737697f5bec0",
+      "factory/components/spirit_rid/bank_v3.gd": "c3de2eee197f30e7094c55b06014f90973fdf7996fd2b787ab30ee81c3bcbb75",
+      "factory/components/spirit_rid/field.gd": "c3784258624142af905494a520f66eb8ab8d4867cc70dd55fee7e48be80f7c2f",
+      "factory/components/spirit_rid/field_queued.gd": "2ac920f34db44f1dfc449854c75c8b6517c73d97d293fea304b9b10c223be096",
+      "factory/components/spirit_rid/field_v2.gd": "6b842de70ebec0226141322140bfdf6f75ddab7b6a5ad3107cec485ad646e4d3",
+      "factory/components/spirit_rid/field_v3.gd": "2780069e2cbd51b52fd205dc6f5d9f3dd9b9625c6043f64325cc40e4abadff56",
+      "factory/components/spirit_rid/piece.gd": "a33b7b96e5e3910e81c2878ae574abe5e258f0fe2bd113ae3f6c91f344b9b6d4",
+      "factory/components/spirit_rid/piece_v2.gd": "8ee0b63439c0e81851acd0e4bf42897fe2f52202c83013465cdb69f56424837a",
+      "factory/components/spirit_rid/piece_v3.gd": "ac3ff0508a2aab90e4f441d4c468bcb64bc6faad701d360f5c5d27066ab1a933",
+      "factory/components/timed_assembly.gd": "e2c4b5f4a2fc1cecabfca4ecdda4de197841eea09634f52e9801914b9c75bacb",
+      "factory/core/contract_composition.gd": "a27920cd68ea46ba734706fbe97614095d826ad137dc48e7506abc05b5770ec7",
+      "factory/core/native_source_space.gd": "f8cc53bd9caed6a2168bf7c478d08cbff25fa8ea83ecd3aa48817ac8a27b66a6",
+      "factory/core/source_materials.gd": "f40a55151ac28e2891eb3e606e1c257a4ac21ec10b63778e4baa3a08aa4b31b2",
+      "factory/packaging/occurrence.gd": "144c9c73ed1a0b1c955be270f68b41e998ba86584db9f36cda0366eea7aa7a73",
+      "factory/packaging/occurrence_bindings.gd": "30d613541975e19fd62bced07522ce4959da6657489ae4531143ac9a5c886df3",
+      "factory/packaging/occurrence_clock.gd": "59a42844d8168bc0bdb3fb893261197f7559d5fc94a7342d1861421c02691f6a",
+      "factory/packaging/prepare_spirit_rid_queued.gd": "f731ff0f5e91c0ee5598873c9b1a0dce1a1c31294ed2753cd4902dc738cb096f",
+      "factory/packaging/prepare_spirit_rid_ready.gd": "c9cee6fbf84a47b1dc45ce7fc2119e3d3ddc9714cf9f5913e48888044deb2240",
+      "factory/packaging/prepare_spirit_rid_v2.gd": "8418e6919f06fdb81c64aaeb421eb517688b1e9b143576513996b5c95e5313e5",
+      "factory/packaging/prepare_spirit_rid_v3.gd": "3b48468b3e575dda4556168908ff5942c608b7160a42acc0bcd6f5f4fc8eeee6",
+      "factory/packaging/source_readiness.gd": "9321995d3d4cc2e5ddc98cdf6b805685dc43a952589056654d9c6b0070c1a76a",
+      "factory/tests/spirit_rid_contract.gd": "bcf36b07c4afc9cd6ba670028733a8c246656ef19d455f4052bf1e28c160362e",
+      "factory/tests/spirit_rid_native.gd": "79de73195ba5fbc8dfd834ff7b36ce7fd4da93556d21755edca5b27746de5a93",
+      "factory/tests/spirit_rid_publication.gd": "1c4e523515960f575c8b67d2c8a405f3a26f4bca369979c83b230b3679c07154",
+      "factory/tests/spirit_rid_queued.gd": "b8943d9b4ec99cdb537cb45135a6b8ab4291b55810d6fea3cc03a327d52faa56",
+      "factory/tests/spirit_rid_queued_native.gd": "1897391ffa79aa87ddeb0d80165908951d3e727d2a424e03d87075c58a7d89ff",
+      "factory/tests/spirit_rid_ready.gd": "ceeeb27f80f6abc2a22d12794dc587509c123d2f349daeeb1c90448c8efd36e4",
+      "factory/tests/spirit_rid_ready_native.gd": "b109e52345d9c6b16d1d08c89f50298ecfa8a144a7fc60397c524bf37e4f9ff0",
+      "factory/tests/spirit_rid_v2_contract.gd": "e0351776390410def3007f432b346af2cbdd0ef1b777d1e6272da644f1a48fe7",
+      "factory/tests/spirit_rid_v2_native.gd": "7c155e17af57abefcc49f43781cd09cf0448cbf580f3b35a4f3bbe33999d40e8",
+      "factory/tests/spirit_rid_v3_contract.gd": "77855f8272ba90371771f119595fb64475b325f6b7eca6c526cea0e3ff3e5c27",
+      "factory/tests/spirit_rid_v3_native.gd": "6e159497ebe41c318bb3594785001d59c8152ece6123127bda8a1c9f18eef096",
+      "tools/runtime_cost/spirit_rid.py": "1d1506fe8fb089e75ab70b0af37a5ef00d3513f816a9efc9e5539c68003d5bfa",
+      "tools/runtime_cost/spirit_rid_queued.py": "7ba2ec6018945da69899f601328832b8b958b15dcf4f6c636cab83ea6d587e90",
+      "tools/runtime_cost/spirit_rid_v2.py": "64987389dca89bbe661ab547ff3d913e63f57c5e435eb8f32c4cf223330a8a43",
+      ".runtime/source-materials-correction-20261021/qualification-v2.json": "bb312d4fc885ac0a9970db133c4bc8cbe142a45d83ceec6aaa8f191659356b1c",
+      ".runtime/source-materials-correction-20261021/canonical-source-materials.gd.txt": "867d2df1b20a8bfc9448e6d01c3e3534407a10ec47cdb72034ada972b4a1db7e",
+      ".runtime/source-materials-correction-20261021/qualification-project/checks-v2.json": "cdae2dd1c8c5d9d3068cb64b88ad57c37258c41c94cfa644c7490e3de6df5f9f",
+      "tools/vfx_package/spirit_runtime_package.py": "5cce1d02db4c094027f36e8794d5b309a7ea8f5c58836f1948e411c99c40bc4b",
+      "tools/vfx_package/additive_successor.py": "586efb2c8ebdd40c028cf9005ada2753e733f51c4c89c6df87f183c581b86f2b",
+      "tools/vfx_package/source_materials_correction.py": "804df4b32128db33e6d111e8b45f4b88eedd9673a69e9ca779f3fdcfa0137a7e",
+      "authoring/production-review-repair-20261021/spike_seed_delivery/cohort.json": "46da0b60cc20490957ce5e127cf68051ce885dfd1fde6d00a178f5e413bcb5d9",
+      "factory/tests/owner_fields_package_contracts.gd": "8640c81949c4edc1856bdce9910ee6e65c45501110612fd81dcdb69bd1e88567",
+      "factory/tests/owner_fields_v2_package_actual.gd": "caa3b1528fbdabb1b224c2f5fc5502f82c2176a4976b22f6f866a3376b786cf7",
+      "factory/tests/owner_fields_package_actual.gd": "b865d3ed46a305ee253066b559b346719dc0eab01bde42eaebb08fd4c350be3c",
+      "factory/tests/followup_runtime_package_actual.gd": "8d9d24ab822c19c10939adc51dbe6c8c09c6ed5409c43142e4db4139561db211",
+      "factory/packaging/constructed_occurrence.gd": "ae59f52f60d99675d983839cb8696abd341de18b46bb618686f5481e3a5a009e"
+    },
+    "canonical_source_materials_correction": {
+      "canonical_runtime_path": "res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd",
+      "before_sha256": "211c7a270c476ad6f252e2e9453253acff3d71465321ad3a9595e4d104f6259b",
+      "after_sha256": "867d2df1b20a8bfc9448e6d01c3e3534407a10ec47cdb72034ada972b4a1db7e",
+      "proof_sha256": "bb312d4fc885ac0a9970db133c4bc8cbe142a45d83ceec6aaa8f191659356b1c"
+    },
+    "construction_helpers": [
+      "res://factory/components/owner_release/common_occurrence.gd",
+      "res://factory/packaging/constructed_occurrence.gd"
+    ],
+    "required_source_closure": [
+      "res://factory/components/owner_release/common_occurrence.gd",
+      "res://factory/packaging/constructed_occurrence.gd"
+    ],
+    "new_index_clip_ids_added": false,
+    "default_selection_changed": false,
+    "production_integration_performed": false,
+    "human_approval_inferred": false
+  },
+  "typed_sources": {
+    "schema": "factory.production_review.source_resources.v1",
+    "resources": [
+      {
+        "key": "deafness",
+        "clip_id": "production-review/deafness/finite_application",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/6dc5a39bea3357fd04ad/finite_deafness.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_sensory/phases-v2/finite_deafness.tres",
+        "source_sha256": "e6b499800e0dc24982bb263fc95f923ceb6b49335b68093c88c4d6dfc0d945f4"
+      },
+      {
+        "key": "delayed_fire",
+        "clip_id": "production-review/retained-payload/delayed_fire",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/90f9a5a22d9213d09bc2/retained_fire.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/retained_fire.tres",
+        "source_sha256": "3a87b0dae23d806be46f496857f89f42a1e7c3105ede613b4ebf322a398b4f65"
+      },
+      {
+        "key": "freezing",
+        "clip_id": "production-review/retained-payload/freezing",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/1602e5ab2c9262f9e0c5/retained.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/r6_freezing/phases/retained.tres",
+        "source_sha256": "41c7ba5e9091d425a0ca0f754fa6c1027f5efe1b3d3bd7db8d77ec0670f21ed2"
+      },
+      {
+        "key": "counterspell",
+        "clip_id": "production-review/counterspell/actual_presentation_contact",
+        "phase": "res://assets/vfx/extensions/source-preparation-20261020/sources/24692e80be5c661fdc84/counterspell_contact.tres",
+        "source_phase": "res://authoring/runtime-cost-repair-20261020/review_contacts/counterspell_contact.tres",
+        "source_sha256": "a9a3c3a0cba3ed9692973ad31ca4105d69eadb72114d46c3d2dabbe4fd9ddea5"
+      },
+      {
+        "key": "continual_flame_bounded_hold",
+        "clip_id": "production-review/continual-flame/source-hold-loop",
+        "phase": "res://assets/vfx/extensions/production-review-20261020/sources/99344fc19f3a0e8d0096/source-hold-loop.tres",
+        "source_phase": "res://authoring/production-review-repair-20261020/continual_flame/source-hold-loop.tres",
+        "source_sha256": "29d3ceb9c16f3b6b2b23b1f35499dd76d1668f98248b014f85fa4a834709f0f4"
+      },
+      {
+        "key": "aura_of_life_main_owner",
+        "clip_id": "production-review/aura-of-life/main_owner",
+        "phase": "res://assets/vfx/extensions/production-review-20261020/sources/2b93d2f154712e5f200b/owner.tres",
+        "source_phase": "res://authoring/production-review-repair-20261020/aura_of_life/owner.tres",
+        "source_sha256": "98ad8a7e16edf66201b408dad1ec18a9f35730e1fac5708260bcd5930a396bf9"
+      },
+      {
+        "key": "portable_freezing_explosion",
+        "clip_id": "high-level-22/freezing-sphere/launch_blast",
+        "phase": "res://assets/vfx/extensions/public-admission-20261020/sources/6033ff6a0d8ffe5824a1/phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261020/portable_freezing/phase.tres",
+        "source_sha256": "368e75c5de28c997d02568987a4aa77c33dad40bf8351c74fe3e7cc93e2b8c35",
+        "constructor": "res://assets/vfx/extensions/public-admission-20261020/sources/d34f187453abd42ddb8a/public_explosion_occurrence.gd",
+        "construction_input_contract": {
+          "kind": "portable_observed_freezing",
+          "operands": "Existing component_path/input_field/values; actual occurrence owner and original caster before Source.make",
+          "fixture_observation_defaults_used": false
+        },
+        "public_callbacks": {
+          "observed_explosion": "set_observed_explosion",
+          "targets": "set_targets"
+        }
+      },
+      {
+        "key": "frigid_air_child",
+        "clip_id": "native/frigid_air/lifecycle",
+        "phase": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/2503267e57482def9940/phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/frigid_air_child_v3/phase.tres",
+        "source_sha256": "32a7ba9eb18c2869eea464cc3fb8e4aa5c4111688c3f9913537533c5954e69e1",
+        "constructor": "res://assets/vfx/extensions/wall-child-v3-20261021/sources/77685eed96e701f52da0/frigid_air_child_v3_occurrence.gd",
+        "construction_input_contract": {
+          "operands": "One effect operand containing actual owner_uuid only"
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        }
+      },
+      {
+        "key": "cloud_cloudkill",
+        "clip_id": "review/cloudkill/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ed0cae71b5191d0c812e/cloudkill-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/cloudkill-phase.tres",
+        "source_sha256": "707242c1e17d5cf3e53ba785901d3910f79acbfc7b7aad8ff08cc5cad27f6ca9",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/91d871df4fd48ba30113/cloudkill.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "cloud_darkness",
+        "clip_id": "review/darkness/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/a48155fd4471e4d25ce2/darkness-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/darkness-phase.tres",
+        "source_sha256": "fdf7f3156f2827d255d9bacbabfeedddc27453bef859e07b284b1a18eda7cf7e",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/899d831709bf69cbd149/darkness.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "cloud_fog_cloud",
+        "clip_id": "review/fog_cloud/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/5d9fdb6ea9dfe4e9958e/fog_cloud-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/fog_cloud-phase.tres",
+        "source_sha256": "d2e5ecc1caacbdc22e08a333b612e99d47ad1932bc27ff45dbeba9367562ee2e",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/91648362bb673cc03880/fog_cloud.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "cloud_stinking_cloud",
+        "clip_id": "review/stinking_cloud/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f5fc7634962a11007e65/stinking_cloud-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/stinking_cloud-phase.tres",
+        "source_sha256": "dd6ac9aa0d99e8b89ca6a194a0c3bcca6458b965f69c6fe1566cb1efc8672e29",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/8613c1d49e5ec59d4742/stinking_cloud.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "cloud_incendiary_cloud",
+        "clip_id": "review/incendiary_cloud/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/84f1a38fb39b341e94a1/incendiary_cloud-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/incendiary_cloud-phase.tres",
+        "source_sha256": "4b0cbf2e579f9e694ea3fc9b6be2f3ac47f54384e3abd7aa3267689fc94a369d",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/98114d7858bc58906646/incendiary_cloud.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "spike",
+        "clip_id": "assembled/spike_growth_native",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/22a15c478bca6b5904bb/spike.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/spike.tres",
+        "source_sha256": "99a9e9b0af95bb582b994ba8441d6f427564e62c5dc6503faa67950e02a580f9",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/071cb5dfbf5ba3bf7019/owner_release_spike.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "zone_geometry": "set_zone_geometry"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "sleet",
+        "clip_id": "assembled/sleet_storm_native",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/1b7f19780b26c6798b82/sleet.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/sleet.tres",
+        "source_sha256": "021d4c4d1a253199b0a7699fadbef4a33c6a5c8a2edbe8f20435bc31ab9fd7af",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/466f2cf191ebaf6b135d/owner_release_sleet.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "zone_geometry": "set_zone_geometry"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "spirit_radiant",
+        "clip_id": "assembled/spirit_guardians_radiant_native",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/2e93044a5c373736be1b/spirit_radiant.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/spirit_radiant.tres",
+        "source_sha256": "239047443bed568acaab7a7f65127408e46d4f0e9cd3782165ba78a578503663",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/4358fe542e97279c061c/owner_release_spirit_radiant.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "spirit_necrotic",
+        "clip_id": "assembled/spirit_guardians_necrotic_native",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/e9c552183a421cae7c90/spirit_necrotic.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/spirit_necrotic.tres",
+        "source_sha256": "a4aebcb3ca666d2200d9cd95160aeab761a9c0a66c7e67fa6e93901362cd648c",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/89af03b3b463a89cdcf8/owner_release_spirit_necrotic.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "wind",
+        "clip_id": "review/gust_of_wind/whole/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f2699aff8bd985672766/wind.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/wind.tres",
+        "source_sha256": "7ab2b24e13b6f5f004c359b77aaf9dd370b337bf71b6a39e777d80786bcd4d07",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/8bc056cc059b0e916424/owner_release_wind.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "zone_geometry": "set_zone_geometry"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "force_panels",
+        "clip_id": "wall-native/wall_of_force_panels_back_native/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/9aa7b3266c8d9dd2a5cc/force_panels.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/force_panels.tres",
+        "source_sha256": "87d9a9788c9195a08fcaa4c4eb575cecf26ec2a529bdb6112ea78c26d0ee3fe8",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ff1fd545d18e174740a0/owner_release_force_panels.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "zone_geometry": "set_zone_geometry"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "force_dome",
+        "clip_id": "wall-native/wall_of_force_dome_back_native/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f0f6f2d4f36bce8317e4/force_dome.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/force_dome.tres",
+        "source_sha256": "61f4dd60c6fc5a69a766338cdede63266beeae979585f4778bf9ed2f0866e027",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/90f4808175f158a9753d/owner_release_force_dome.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "zone_geometry": "set_zone_geometry"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "stone_straight",
+        "clip_id": "wall-native/wall_of_stone_straight_back_native/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/64338dc77f9df28ee171/stone_straight.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/stone_straight.tres",
+        "source_sha256": "423bbe5d0b60a3b2dd12f7b482740afbdb4d1a6312abdfd71d0d0c6d711a54e2",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/6ba45e68758fa55ffd1a/stone_straight.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "stone_corner",
+        "clip_id": "wall-native/stone_wall_assembly_breakup_native/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/25d570c7aba326c3e0ab/stone_corner.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/stone_corner.tres",
+        "source_sha256": "293b5056b22967760d54de8c2aba60067e6b44f705dfc822593e0a1e55a01419",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/90d3c21331fc5ffe2c3d/stone_corner.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "ice_straight",
+        "clip_id": "wall-native/ice_wall_assembly_breakup_native/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/d3b02cdefe76a9e1ab14/ice_straight.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/ice_straight.tres",
+        "source_sha256": "8b18534c116eebd5584dcbcc9edd8eea82045ffbad3b46c5812ffff1a490d8e8",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/546881997d9f51554541/ice_straight.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "ice_corner",
+        "clip_id": "wall-native/wall_of_ice_corner_back_native/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/9f8de59fdae5b3eacbb0/ice_corner.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/ice_corner.tres",
+        "source_sha256": "dceffb7dc5be5ea14c64fccb405e8114c7993478c20730cbf7ece53c8f88e522",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/bfcb7c2d821081972edc/ice_corner.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "ice_dome",
+        "clip_id": "wall-native/ice_dome_surface_breakup_native/lifecycle",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fff2b41147e30064ec0a/ice_dome.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/solid_owner_release/ice_dome.tres",
+        "source_sha256": "589a60c93b2b94cdb8ff2d46fd5428938ae2fd9069a611b35f56b1edb0bf407c",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/88866e09bd2d02713cd8/ice_dome.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "forcecage_cage",
+        "clip_id": "high-level-22/forcecage/cage",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/c2436b5e61eb0d3f988a/cage.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/forcecage/cage.tres",
+        "source_sha256": "ded6e0b15eb66031c51016a4d24da164feb9950854cc7dfbd0d4b195d707e1e2",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/b6e13f250bd01b630220/forcecage_cage.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "partitioned_surface_ice",
+        "clip_id": "high-level-22/freezing-sphere/launch_observed_ice",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fe651910a22696b57f92/ice-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/ice-phase.tres",
+        "source_sha256": "cace8e5c556d0ae3eee276197e3f32f41e9a637c19eea37d716a9b34c46baee9",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/827440216c3d3edcc4f6/partitioned_surface_ice.gd",
+        "construction_input_contract": {
+          "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+          "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+          "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+        },
+        "public_callbacks": {
+          "surface_partition": "set_surface_partition",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "partitioned_surface_acid",
+        "clip_id": "bg3-36/chromatic-orb/acid/observed-surface",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/c4f61f828bfb0cf8a518/acid-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/acid-phase.tres",
+        "source_sha256": "ffcf24b3a8d8f1a7f7b898e86581fa5efe483ac90fefa508b35748ffe360df88",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/4cc60c54beea74752cf2/partitioned_surface_acid.gd",
+        "construction_input_contract": {
+          "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+          "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+          "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+        },
+        "public_callbacks": {
+          "surface_partition": "set_surface_partition",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "partitioned_surface_cold",
+        "clip_id": "bg3-36/chromatic-orb/cold/observed-surface",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/9bb4724fc5eb9042ea57/cold-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/cold-phase.tres",
+        "source_sha256": "647519a2b2f2d54e3386648c3a8bc705e6d80fbd168840e506789250a6fcd538",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/5a90258ef34d107d6948/partitioned_surface_cold.gd",
+        "construction_input_contract": {
+          "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+          "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+          "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+        },
+        "public_callbacks": {
+          "surface_partition": "set_surface_partition",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "partitioned_surface_fire",
+        "clip_id": "bg3-36/chromatic-orb/fire/observed-surface",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/545c3e0e639aebfb1c09/fire-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/fire-phase.tres",
+        "source_sha256": "231edced0c84c97f7842f9609f110fcf2b410fcb4d5d8d184678cedd1f352bc0",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ef94717312a8f0f83dfa/partitioned_surface_fire.gd",
+        "construction_input_contract": {
+          "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+          "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+          "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+        },
+        "public_callbacks": {
+          "surface_partition": "set_surface_partition",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "partitioned_surface_lightning",
+        "clip_id": "bg3-36/chromatic-orb/lightning/observed-surface",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/151498e87f3dc6a1779e/lightning-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/lightning-phase.tres",
+        "source_sha256": "17f8d9ced5f1a22cc77cc804678a1c4b9a7e055d1765a379280631fd6a7e9f05",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/3b73c9d48b53cbc55c63/partitioned_surface_lightning.gd",
+        "construction_input_contract": {
+          "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+          "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+          "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+        },
+        "public_callbacks": {
+          "surface_partition": "set_surface_partition",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "partitioned_surface_poison",
+        "clip_id": "bg3-36/chromatic-orb/poison/observed-surface",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/fa99b9d3dd611519f073/poison-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/partitioned_surfaces_v2/poison-phase.tres",
+        "source_sha256": "fb73b986cdde8eaebc9bdba5695d16d007a15537462eea92fbd2d748ccbc0569",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/73a1ccc511040b925f08/partitioned_surface_poison.gd",
+        "construction_input_contract": {
+          "operands": "One effect operand containing only the actual surface_uuid. Source bank/art is immutable.",
+          "surface_partition": "Explicit original-neighbor packet and disjoint draw subset; derive from actual admitted local cells once per footprint change.",
+          "placement": "Existing supplied finite world anchor point applied once; horizontal cell size one."
+        },
+        "public_callbacks": {
+          "surface_partition": "set_surface_partition",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "fire_wall_segment",
+        "clip_id": "assembled/wall_of_fire_straight_native",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/d8ecd83764d1b85daf91/segment-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/fire_wall/segment-phase.tres",
+        "source_sha256": "d058ea1b1dfb9d033788e130f1a25e97286f4b1523d0ec1f74200a4a40119444",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/ccdcfe2f055783af988c/segment.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [
+          "set_admitted_cells"
+        ],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "fire_wall_ring",
+        "clip_id": "assembled/wall_of_fire_ring_native",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/b2942c7f80e34ccec79b/ring-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/fire_wall/ring-phase.tres",
+        "source_sha256": "5f72a8291f2275ddfe56e05d389d6dc8338dde93b824f7b9306f13f43046867f",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/45429202d0da83f4f1ac/ring.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [
+          "set_admitted_cells"
+        ],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": true
+      },
+      {
+        "key": "forcecage_box",
+        "clip_id": "high-level-22/forcecage/box",
+        "phase": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/6a55e15534f0bfc573bf/box.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/forcecage/box.tres",
+        "source_sha256": "08f1f8722aa517bbe037f4e8a60d20a016f77469281071d423ddbc0d571906ed",
+        "constructor": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/e91096bd617ec9606200/forcecage_box.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "forwarded_source_inputs": [],
+        "forward_usage": "constructor result.forward(source_method, actual_value); not direct wrapper setters",
+        "indexed_alternative": false
+      },
+      {
+        "key": "material_runtime_fire_wall_segment",
+        "clip_id": "assembled/wall_of_fire_straight_native",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/f094d2311ca09245c364/segment-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/fire_colour/input-fast-v1/segment-phase.tres",
+        "source_sha256": "7b91a72dc44c5d13da459fc1e11ccc2d6869ea7fa1d3a8d3802fdd357afc8af2",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/bf22f7e2aab6184aad39/segment.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_admitted_cells"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_fire_wall_ring",
+        "clip_id": "assembled/wall_of_fire_ring_native",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/5e0a32e28e7fc4debd88/ring-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/fire_colour/input-fast-v1/ring-phase.tres",
+        "source_sha256": "ffefcacb0ad8df9f8d53923917639c3310037f914970dd493a87afcc8761bb91",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/3b8cdf2a215c95ef9bba/ring.gd",
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_admitted_cells"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_native_liquid_surface_acid",
+        "clip_id": "bg3-36/chromatic-orb/acid/observed-surface",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/66d0f866197b5da47066/acid-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/surface_readability/liquid_layers/acid-phase.tres",
+        "source_sha256": "4e1c631fc09e1cdd052587825ed83f52754d5541f8cbe7a551174f01a7e1f9cb",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/a10094fa967e3ba2ca8d/acid.gd",
+        "construction_input_contract": "One actual surface UUID, actual current owner age/presence/observation/suppression, actual world anchor and existing full-owner/disjoint draw packet.",
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "surface_partition": "set_surface_partition"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_surface_partition"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_native_liquid_surface_poison",
+        "clip_id": "bg3-36/chromatic-orb/poison/observed-surface",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/b3d7c9c8a0da8c7ffc0d/poison-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/surface_readability/liquid_layers/poison-phase.tres",
+        "source_sha256": "031f10d18adb5ed810fb3d06a585b1bdc80cc0f3a96c931f1f109e41211c2f26",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/b2137e984b3ce57bb44d/poison.gd",
+        "construction_input_contract": "One actual surface UUID, actual current owner age/presence/observation/suppression, actual world anchor and existing full-owner/disjoint draw packet.",
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "surface_partition": "set_surface_partition"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_surface_partition"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_cloud_cloudkill",
+        "clip_id": "review/cloudkill/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/ed0cae71b5191d0c812e/cloudkill-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/cloudkill-phase.tres",
+        "source_sha256": "707242c1e17d5cf3e53ba785901d3910f79acbfc7b7aad8ff08cc5cad27f6ca9",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/91d871df4fd48ba30113/cloudkill.gd",
+        "construction_input_contract": {
+          "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+          "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_cloud_darkness",
+        "clip_id": "review/darkness/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/a48155fd4471e4d25ce2/darkness-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/darkness-phase.tres",
+        "source_sha256": "fdf7f3156f2827d255d9bacbabfeedddc27453bef859e07b284b1a18eda7cf7e",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/899d831709bf69cbd149/darkness.gd",
+        "construction_input_contract": {
+          "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+          "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_cloud_fog_cloud",
+        "clip_id": "review/fog_cloud/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/5d9fdb6ea9dfe4e9958e/fog_cloud-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/fog_cloud-phase.tres",
+        "source_sha256": "d2e5ecc1caacbdc22e08a333b612e99d47ad1932bc27ff45dbeba9367562ee2e",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/91648362bb673cc03880/fog_cloud.gd",
+        "construction_input_contract": {
+          "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+          "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_cloud_stinking_cloud",
+        "clip_id": "review/stinking_cloud/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/f5fc7634962a11007e65/stinking_cloud-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/stinking_cloud-phase.tres",
+        "source_sha256": "dd6ac9aa0d99e8b89ca6a194a0c3bcca6458b965f69c6fe1566cb1efc8672e29",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/8613c1d49e5ec59d4742/stinking_cloud.gd",
+        "construction_input_contract": {
+          "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+          "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_cloud_incendiary_cloud",
+        "clip_id": "review/incendiary_cloud/volume/lifecycle",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/84f1a38fb39b341e94a1/incendiary_cloud-phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/clouds/incendiary_cloud-phase.tres",
+        "source_sha256": "4b0cbf2e579f9e694ea3fc9b6be2f3ac47f54384e3abd7aa3267689fc94a369d",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/98114d7858bc58906646/incendiary_cloud.gd",
+        "construction_input_contract": {
+          "operands": "One actual source-component operand, current owner UUID only; no saved review state or caller bank override.",
+          "lifetime": "Explicit current owner age/presence/observation/suppression and live endpoint."
+        },
+        "public_callbacks": {
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_curse_ability_burden",
+        "clip_id": "assembled/bestow_curse_ability_burden_native",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/dabbb5b33eff1fb6cd00/ability_burden.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/ability_burden.tres",
+        "source_sha256": "22297e052aa6698d8758aba09ab139963ef3fe30f40d90ff872979f130645e32",
+        "constructor": "res://assets/vfx/clips/01d77b5dfdf9846acf79b94c/construct.gd",
+        "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+        "public_callbacks": {
+          "targets": "set_targets",
+          "root_path": "set_root_path"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_curse_action_denial",
+        "clip_id": "assembled/bestow_curse_action_denial_native",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/4d30344c404e8a9c16c4/action_denial.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/action_denial.tres",
+        "source_sha256": "51b586baf18dfd7621260d58a8f451a08e2b6d8185d02f776e5a3ee822bfcb45",
+        "constructor": "res://assets/vfx/clips/2081319a0c53c892a4e60cd9/construct.gd",
+        "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+        "public_callbacks": {
+          "targets": "set_targets",
+          "root_path": "set_root_path"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_curse_bent_strike",
+        "clip_id": "assembled/bestow_curse_bent_strike_native",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/74c3c820027ac282cd40/bent_strike.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/bent_strike.tres",
+        "source_sha256": "e321f4e6b7af274ca642a4ac5f5bed4ba71b46e590afe16c5c9ac1dbd034a00c",
+        "constructor": "res://assets/vfx/clips/213eda1ff311d799e0e3eef7/construct.gd",
+        "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+        "public_callbacks": {
+          "targets": "set_targets",
+          "root_path": "set_root_path"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_curse_necrotic_wound",
+        "clip_id": "assembled/bestow_curse_necrotic_wound_native",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/907ebdb1975e9b2d65a9/necrotic_wound.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/curse_display_direct/phases/necrotic_wound.tres",
+        "source_sha256": "f69db8ffd10d6cc9207eb7e8e61ef5925fe7a7f6ee00f9729205b0abdd4bcb17",
+        "constructor": "res://assets/vfx/clips/3d5b0afcf75336469b495637/construct.gd",
+        "construction_input_contract": "Bind candidate_phase.to_clip() to existing constructed_occurrence.make_component({clip:...}). No owner/lease/event defaults or bank override. Fixed phase-binding wrapper not authored by this draft.",
+        "public_callbacks": {
+          "targets": "set_targets",
+          "root_path": "set_root_path"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_forcecage_cage",
+        "clip_id": "high-level-22/forcecage/cage",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/935a8199cd9007d69ba6/cage.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/forcecage_inputs/cage.tres",
+        "source_sha256": "f8cc704fc92d3855b4ce33e73de1f24a2d67f6e94cacaba077bfa3e4bbd27537",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/dd5fa40c87055ef1e240/cage.gd",
+        "construction_input_contract": "Existing observed_forcecage_occurrence: fixed phase plus one actual field operand (wall_uuid, anchor_position, wall_geometry); live set_zone_geometry, set_owner_state and set_targets. No synthesized sections, roof or floor.",
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_zone_geometry"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": true
+      },
+      {
+        "key": "material_runtime_forcecage_box",
+        "clip_id": "high-level-22/forcecage/box",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/3dcb6288ad2b0a017239/box.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/forcecage_inputs/box.tres",
+        "source_sha256": "0fcaa299ce490add193352e92fe6f060cad0ead4e511990234f1deb8e4d6b336",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/sources/64d33ed9bbb478dcdf9d/box.gd",
+        "construction_input_contract": "Existing observed_forcecage_occurrence: fixed phase plus one actual field operand (wall_uuid, anchor_position, wall_geometry); live set_zone_geometry, set_owner_state and set_targets. No synthesized sections, roof or floor.",
+        "public_callbacks": {
+          "zone_geometry": "set_zone_geometry",
+          "owner_state": "set_owner_state",
+          "targets": "set_targets"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_zone_geometry"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": false
+      },
+      {
+        "key": "material_runtime_summon_terminal_air_elemental",
+        "clip_id": "high-level-22/summon-manifestation/air_elemental/terminal",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/577712791e3d1a072ce8/air_elemental.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/summon_terminal/phases/air_elemental.tres",
+        "source_sha256": "d3081961d1d1def56433391b611762045d244c38e178f1346b9ba5a3c7a2e4ec",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/constructors/material_runtime_summon_terminal_air_elemental.gd",
+        "construction_input_contract": "Package full sampler path binds fixed candidate_phase.to_clip() through constructed_occurrence. Source fixed_constructor independently returns direct Terminal node. Feed actual terminal fact/commit occurrence/cause/clock and one witnessed world ground endpoint; no birth/body/arrival or invented owner defaults. Witnessed departure survives actor absence and retires by its original source duration.",
+        "public_callbacks": {
+          "terminal_departure": "set_terminal_departure",
+          "live_endpoints": "set_live_endpoints"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_terminal_departure"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": false
+      },
+      {
+        "key": "material_runtime_summon_terminal_draconic_spirit",
+        "clip_id": "high-level-22/summon-manifestation/draconic_spirit/terminal",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/02aad722b95dce013dde/draconic_spirit.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/summon_terminal/phases/draconic_spirit.tres",
+        "source_sha256": "5d6f1d7eb94f2ddc9c83cf93263154ac032c076a360d5f2163d316400cbb994c",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/constructors/material_runtime_summon_terminal_draconic_spirit.gd",
+        "construction_input_contract": "Package full sampler path binds fixed candidate_phase.to_clip() through constructed_occurrence. Source fixed_constructor independently returns direct Terminal node. Feed actual terminal fact/commit occurrence/cause/clock and one witnessed world ground endpoint; no birth/body/arrival or invented owner defaults. Witnessed departure survives actor absence and retires by its original source duration.",
+        "public_callbacks": {
+          "terminal_departure": "set_terminal_departure",
+          "live_endpoints": "set_live_endpoints"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_terminal_departure"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": false
+      },
+      {
+        "key": "material_runtime_summon_terminal_deva",
+        "clip_id": "high-level-22/summon-manifestation/deva/terminal",
+        "phase": "res://assets/vfx/extensions/material-runtime-20261021/sources/ee2f010c497771da80c7/deva.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/summon_terminal/phases/deva.tres",
+        "source_sha256": "8fb4d8032e73e6b140fd61cf626df0fd3421717365fac633dba7dc7dfdf978f1",
+        "constructor": "res://assets/vfx/extensions/material-runtime-20261021/constructors/material_runtime_summon_terminal_deva.gd",
+        "construction_input_contract": "Package full sampler path binds fixed candidate_phase.to_clip() through constructed_occurrence. Source fixed_constructor independently returns direct Terminal node. Feed actual terminal fact/commit occurrence/cause/clock and one witnessed world ground endpoint; no birth/body/arrival or invented owner defaults. Witnessed departure survives actor absence and retires by its original source duration.",
+        "public_callbacks": {
+          "terminal_departure": "set_terminal_departure",
+          "live_endpoints": "set_live_endpoints"
+        },
+        "public_usage": "Call public_callbacks methods directly on the returned occurrence; aliases such as set_targets perform their own binding.",
+        "forwarded_source_inputs": [
+          "set_terminal_departure"
+        ],
+        "forward_usage": "Only forwarded_source_inputs name source-level methods for occurrence.forward(source_method, actual_value); do not forward public aliases.",
+        "indexed_alternative": false
+      },
+      {
+        "key": "cell_validation_sleet",
+        "clip_id": "assembled/sleet_storm_native",
+        "phase": "res://assets/vfx/extensions/cell-validation-20261021/sources/1b7f19780b26c6798b82/sleet.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/owner_release/sleet.tres",
+        "source_sha256": "021d4c4d1a253199b0a7699fadbef4a33c6a5c8a2edbe8f20435bc31ab9fd7af",
+        "constructor": "res://assets/vfx/extensions/cell-validation-20261021/sources/466f2cf191ebaf6b135d/owner_release_sleet.gd",
+        "indexed_alternative": true,
+        "construction_input_contract": {
+          "operands": "One exact source-component operand with current owner/construction facts. No saved fixture defaults or bank override.",
+          "lifetime": "Explicit current owner state, disclosed geometry/cells and supplied world anchor; no review lease/recast."
+        },
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "zone_geometry": "set_zone_geometry"
+        },
+        "source_qualification": "authoring/production-review-repair-20261021/cell_validation/qualification.json",
+        "source_runtime_flags_retained": {
+          "flags": [
+            {
+              "actual_us": 258,
+              "measurement": "first_positive_age_inputs_plus_sample",
+              "repeat": 0,
+              "representation": "native_int197",
+              "threshold_us": 250
+            },
+            {
+              "actual_us": 2184,
+              "measurement": "complete_public_constructor",
+              "repeat": 1,
+              "representation": "",
+              "threshold_us": 2000
+            }
+          ],
+          "readiness": {
+            "elapsed_us": 276994,
+            "maximum_step_us": 13916,
+            "resources_only_before_first_owner": true,
+            "all_steps_below2000us": false
+          },
+          "raw_single_input_max_us": 347,
+          "full_budget_pass_claimed": false,
+          "previous_source_flags_preserved": true
+        }
+      },
+      {
+        "key": "finger_materials_normal",
+        "clip_id": "review/finger_of_death/normal_back/lifecycle",
+        "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/15e773dfaa9a8ce240e5/normal.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/phases/normal.tres",
+        "source_sha256": "db54a485083d859a1361855f2c1e4e0a05c5104ec2096be1697472fb29d01347",
+        "constructor": "res://assets/vfx/clips/3d4fb28e3e50d7ec47dae03a/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "root_path": "set_root_path",
+          "targets": "set_targets",
+          "delivery_timing": "set_delivery_timing"
+        },
+        "forwarded_source_inputs": [],
+        "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); original native component input, no overrides.",
+        "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+          "qualification_sha256": "9e5dd185ed526691cae8253a4e32901dbb8748a0b47e99367ee9b79337af966f",
+          "strict_rgba_equivalence_pass": false,
+          "runtime_budget_pass": false,
+          "raw_flags_retained": true,
+          "source_scope": "Original source/private-owner/native operand proof; bounded local early overlap difference retained. No strict fullRGBA, all-budget, arbitrary counterspell handover, art/default or gameplay-assignment claim."
+        },
+        "native_art_scope": "Same-owner material aliasing preserves logical slots/native operands; two source early-overlap frames retain one pixel above3bytes each, max5. Not strict RGBA art identity."
+      },
+      {
+        "key": "finger_materials_counterspell",
+        "clip_id": "private/finger-counterspell-v193/full_sequence",
+        "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/8e1bc02b83b153a2f55e/counterspell.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/phases/counterspell.tres",
+        "source_sha256": "e2a2f1ce2eb295926b9893d275c82b4c040bbfeb8288e5c619a7b453d234b085",
+        "constructor": "res://assets/vfx/clips/7c4c0f8015d3ccb567850789/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "root_path": "set_root_path",
+          "targets": "set_targets",
+          "delivery_timing": "set_delivery_timing"
+        },
+        "forwarded_source_inputs": [],
+        "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); original native component input, no overrides.",
+        "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "qualification": "authoring/production-review-repair-20261021/runtime_tail/finger_owner_materials/v1/qualification.json",
+          "qualification_sha256": "9e5dd185ed526691cae8253a4e32901dbb8748a0b47e99367ee9b79337af966f",
+          "strict_rgba_equivalence_pass": false,
+          "runtime_budget_pass": true,
+          "raw_flags_retained": true,
+          "source_scope": "Original source/private-owner/native operand proof; bounded local early overlap difference retained. No strict fullRGBA, all-budget, arbitrary counterspell handover, art/default or gameplay-assignment claim."
+        },
+        "native_art_scope": "Same-owner material aliasing preserves logical slots/native operands; two source early-overlap frames retain one pixel above3bytes each, max5. Not strict RGBA art identity."
+      },
+      {
+        "key": "patches_covariance_animal_friendship",
+        "clip_id": "bg3-36/animal-friendship/application",
+        "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/f2387bb46b015930811c/87f3b8e0852cfbcf.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/patches_covariance/v1/phases/87f3b8e0852cfbcf.tres",
+        "source_sha256": "c8520a9e4f8c7599a34cb0c083e25cc92fbf9b839925eb25757083533edbdd92",
+        "constructor": "res://assets/vfx/clips/2f837e3a846975da8b1a6b1c/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "entity_geometry": "set_entity_geometry",
+          "targets": "set_targets",
+          "root_path": "set_root_path"
+        },
+        "forwarded_source_inputs": [
+          "set_owner_visibility"
+        ],
+        "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); same existing component input and native bank, no input overrides.",
+        "source_qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+          "qualification_sha256": "ff07459a9d558b98186a5393ead1c650cacbb9550519cc2749f6a0e8246a49e1",
+          "strict_rgba_equivalence_pass": true,
+          "runtime_budget_pass": false,
+          "raw_flags_retained": true,
+          "source_scope": "Bounded explicit numerical source alternative: mandatory public material/mesh/point/owner/clock/admission/retirement checks passed, numerical and strict raster differences explicitly retained. This is not original bit-exact equivalence, arbitrary-body qualification, an all-cold budget pass, default selection or human approval."
+        },
+        "native_art_scope": "Covariance reassociation is an explicit bounded numerical alternative, not original floating-point reduction order. Four raw one-byte RGB flags across the source cohort remain; alpha is exact."
+      },
+      {
+        "key": "patches_covariance_laughter_application",
+        "clip_id": "bg3-36/hideous-laughter/application",
+        "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/cd402eb2f0dbcf7aed26/e022ccf45fa38223.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/patches_covariance/v1/phases/e022ccf45fa38223.tres",
+        "source_sha256": "ad19167ba81b5d0c239d724451a13598830ad1dee67b0ff0238bb0555c48ad64",
+        "constructor": "res://assets/vfx/clips/f7706b17e4a2fcadbf94a078/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "entity_geometry": "set_entity_geometry",
+          "targets": "set_targets",
+          "root_path": "set_root_path"
+        },
+        "forwarded_source_inputs": [
+          "set_owner_visibility"
+        ],
+        "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); same existing component input and native bank, no input overrides.",
+        "source_qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+          "qualification_sha256": "ff07459a9d558b98186a5393ead1c650cacbb9550519cc2749f6a0e8246a49e1",
+          "strict_rgba_equivalence_pass": false,
+          "runtime_budget_pass": false,
+          "raw_flags_retained": true,
+          "source_scope": "Bounded explicit numerical source alternative: mandatory public material/mesh/point/owner/clock/admission/retirement checks passed, numerical and strict raster differences explicitly retained. This is not original bit-exact equivalence, arbitrary-body qualification, an all-cold budget pass, default selection or human approval."
+        },
+        "native_art_scope": "Covariance reassociation is an explicit bounded numerical alternative, not original floating-point reduction order. Four raw one-byte RGB flags across the source cohort remain; alpha is exact."
+      },
+      {
+        "key": "patches_covariance_laughter_condition",
+        "clip_id": "bg3-36/hideous-laughter/condition",
+        "phase": "res://assets/vfx/extensions/input-reduction-20261021/sources/7af1dfa5616330f068ef/8fcd345672c6929a.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/patches_covariance/v1/phases/8fcd345672c6929a.tres",
+        "source_sha256": "b18215a81263b41c441efb07ed22b9f4fe55edc0022c003784edeac8ff076b7f",
+        "constructor": "res://assets/vfx/clips/1c9832fa32215839142162fc/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "entity_geometry": "set_entity_geometry",
+          "targets": "set_targets",
+          "root_path": "set_root_path"
+        },
+        "forwarded_source_inputs": [
+          "set_owner_visibility"
+        ],
+        "construction_input_contract": "clip = exact selected PhaseResource.to_clip(); same existing component input and native bank, no input overrides.",
+        "source_qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "qualification": "authoring/production-review-repair-20261021/patches_covariance/v1/qualification.json",
+          "qualification_sha256": "ff07459a9d558b98186a5393ead1c650cacbb9550519cc2749f6a0e8246a49e1",
+          "strict_rgba_equivalence_pass": false,
+          "runtime_budget_pass": false,
+          "raw_flags_retained": true,
+          "source_scope": "Bounded explicit numerical source alternative: mandatory public material/mesh/point/owner/clock/admission/retirement checks passed, numerical and strict raster differences explicitly retained. This is not original bit-exact equivalence, arbitrary-body qualification, an all-cold budget pass, default selection or human approval."
+        },
+        "native_art_scope": "Covariance reassociation is an explicit bounded numerical alternative, not original floating-point reduction order. Four raw one-byte RGB flags across the source cohort remain; alpha is exact."
+      },
+      {
+        "key": "spike_instance_seed",
+        "clip_id": "assembled/spike_growth_native",
+        "phase": "res://assets/vfx/extensions/spike-seed-20261021/sources/eea8273c8a8b5dbd6667/phase.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+        "source_sha256": "2a64c78415f32aa87b8f0e67df9d33586f0bae9aeb95179c9b7cb2425ca3313d",
+        "constructor": "res://assets/vfx/clips/ff9054553df3f010759f155a/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state",
+          "zone_geometry": "set_zone_geometry"
+        },
+        "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:2,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid,cells:actual_constructed_cells}}]}); add returned occurrence to its real parent before live setters/sample. A later package must privately bind this phase; existing fixed owner_release_spike wrapper still names the older phase.",
+        "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "qualification": "authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/qualification.json",
+          "qualification_sha256": "e35b88d2cf951f568a1b330e5d10df4fbec6dbe867a0932ff1e9ed06b184fc9d",
+          "cost_flags": [
+            {
+              "actual_us": 2118.0,
+              "measurement": "complete_constructor",
+              "source": "spike",
+              "threshold_us": 2000.0
+            },
+            {
+              "actual_us": 2437.0,
+              "measurement": "complete_constructor",
+              "source": "spike",
+              "threshold_us": 2000.0
+            },
+            {
+              "actual_us": 2071.0,
+              "measurement": "complete_constructor",
+              "source": "spike",
+              "threshold_us": 2000.0
+            }
+          ],
+          "readiness": [
+            {
+              "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_instance_seed/v1/phase.tres",
+              "total_including_frame_yields_us": 383345,
+              "sum_actual_step_us": 159235,
+              "maximum_actual_step_us": 24454,
+              "steps_over2000us": 9,
+              "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+            },
+            {
+              "phase": "res://authoring/production-review-repair-20261021/runtime_tail/spike_owner_direct/v1/phases/spike.tres",
+              "total_including_frame_yields_us": 246799,
+              "sum_actual_step_us": 148981,
+              "maximum_actual_step_us": 18093,
+              "steps_over2000us": 9,
+              "scope": "Readiness.begin and actual resource steps; caller phase load is separate. No owner construction or sample."
+            }
+          ],
+          "runtime_budget_pass": false,
+          "raw_flags_retained": true
+        },
+        "native_art_scope": "Only the native seed moves from material to draw-instance storage; three selected actual-owner native source/candidate pairs exact. Not whole chronology/arbitrary actor or human art approval."
+      },
+      {
+        "key": "spirit_rid_queued_radiant",
+        "clip_id": "assembled/spirit_guardians_radiant_native",
+        "phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/53af195b70b841a65a63/radiant.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/radiant.tres",
+        "source_sha256": "f9679500f8bc7b435ef58796a55677c3c54a24d5ec37ad7e6f4ba501d6aeb845",
+        "constructor": "res://assets/vfx/clips/98c1ade973e1e7f784cd1b07/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state"
+        },
+        "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+        "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "cost_flags": [],
+          "readiness": {
+            "total_including_frame_yields_us": 332441,
+            "maximum_main_thread_step_us": 1074,
+            "atomic_cost_flags": [],
+            "cache_before": {
+              "bank": false,
+              "ground": false,
+              "piece": false
+            },
+            "node_counts": [
+              1,
+              1
+            ],
+            "actual_native_resources": 10,
+            "actual_explicit_dependency_paths": [
+              "res://factory/components/spirit_rid/piece_v3.gd",
+              "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/radiant.res",
+              "res://factory/components/owned_fields/flow_hold.gd",
+              "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_radiant-ground.res"
+            ]
+          },
+          "runtime_budget_pass": true,
+          "raw_flags_retained": true,
+          "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+          "raw_input_maxima_us": [
+            {
+              "repeat": 0,
+              "held_unchanged": 111,
+              "advancing_orbit": 280,
+              "changed_owner_anchor": 254
+            },
+            {
+              "repeat": 1,
+              "held_unchanged": 82,
+              "advancing_orbit": 256,
+              "changed_owner_anchor": 180
+            },
+            {
+              "repeat": 2,
+              "held_unchanged": 64,
+              "advancing_orbit": 289,
+              "changed_owner_anchor": 155
+            }
+          ],
+          "individual_over250us_input_maxima_remain_in_qualification": true
+        },
+        "native_art_scope": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim."
+      },
+      {
+        "key": "spirit_rid_queued_necrotic",
+        "clip_id": "assembled/spirit_guardians_necrotic_native",
+        "phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/d08891dcb9d9d4e5e692/necrotic.tres",
+        "source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/necrotic.tres",
+        "source_sha256": "cb4b3aec8292f12b6c22d51db2573d86a78358dc8af02698e5b9b0e1a5459c40",
+        "constructor": "res://assets/vfx/clips/d5b707613ab209b59b3d65a5/construct.gd",
+        "indexed_alternative": true,
+        "public_callbacks": {
+          "targets": "set_targets",
+          "owner_state": "set_owner_state"
+        },
+        "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+        "source_qualification": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+        "source_runtime_flags_retained": {
+          "cost_flags": [
+            {
+              "actual_us": 2194,
+              "measurement": "complete_constructor",
+              "repeat": 0,
+              "source": "necrotic-candidate",
+              "threshold_us": 2000
+            },
+            {
+              "actual_us": 2133,
+              "measurement": "complete_constructor",
+              "repeat": 1,
+              "source": "necrotic-candidate",
+              "threshold_us": 2000
+            },
+            {
+              "actual_us": 2061,
+              "measurement": "complete_constructor",
+              "repeat": 2,
+              "source": "necrotic-candidate",
+              "threshold_us": 2000
+            }
+          ],
+          "readiness": {
+            "total_including_frame_yields_us": 422506,
+            "maximum_main_thread_step_us": 328,
+            "atomic_cost_flags": [],
+            "cache_before": {
+              "bank": false,
+              "ground": true,
+              "piece": true
+            },
+            "node_counts": [
+              1,
+              1
+            ],
+            "actual_native_resources": 48,
+            "actual_explicit_dependency_paths": [
+              "res://factory/components/spirit_rid/piece_v3.gd",
+              "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/necrotic.res",
+              "res://factory/components/owned_fields/flow_hold.gd",
+              "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_necrotic-ground.res"
+            ]
+          },
+          "runtime_budget_pass": false,
+          "raw_flags_retained": true,
+          "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+          "raw_input_maxima_us": [
+            {
+              "repeat": 0,
+              "held_unchanged": 129,
+              "advancing_orbit": 236,
+              "changed_owner_anchor": 190
+            },
+            {
+              "repeat": 1,
+              "held_unchanged": 80,
+              "advancing_orbit": 243,
+              "changed_owner_anchor": 278
+            },
+            {
+              "repeat": 2,
+              "held_unchanged": 86,
+              "advancing_orbit": 246,
+              "changed_owner_anchor": 204
+            }
+          ],
+          "individual_over250us_input_maxima_remain_in_qualification": true
+        },
+        "native_art_scope": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim."
+      }
+    ],
+    "default_selection_changed": false,
+    "new_index_clip_ids_added": false,
+    "usage": "Explicit typed SourceResource entries, not aliases for existing clip IDs or gameplay assignments",
+    "version": "runtime-spirit-runtime-20261021-082bfa254988364b",
+    "previous_table": "res://assets/vfx/format/spike-seed-20261021-source-resources.json",
+    "previous_table_sha256": "31ed2a4f12ec74a6a1cbc433508f028ed8f4c4ee424897724e3baf6342aaf42a",
+    "standalone_source_keys": [
+      "material_runtime_forcecage_box",
+      "material_runtime_summon_terminal_air_elemental",
+      "material_runtime_summon_terminal_draconic_spirit",
+      "material_runtime_summon_terminal_deva"
+    ]
+  },
+  "whole_library_runtime_complete": false,
+  "source_costs_not_relabelled_packaged_costs": true,
+  "human_approval_inferred": false,
+  "production_integration_performed": false
+}

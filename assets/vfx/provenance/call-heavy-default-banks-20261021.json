@@ -1,0 +1,1167 @@
+{
+  "source_manifest": {
+    "schema": "factory.call_heavy_bank_metadata.v1",
+    "clip_id": "live-electric/call_live_strike",
+    "approach_id": "gpu",
+    "package_bank_script": "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+    "bank_script_sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+    "phase": "res://assets/vfx/sources/511b48487f093345b692/phase-0.tres",
+    "phase_sha256": "312006665fdf5f95e05a81987a44f7f244a227a147bb20d30e37e7ad8166b0a8",
+    "constructor": "res://assets/vfx/clips/f5468ee415770f50cd6a7592/construct.gd",
+    "constructor_sha256": "042874783c469468ea87a0a3f9f72fd1fc6250269f35619ea8ab354adc2c1290",
+    "network": "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd",
+    "network_sha256": "41c2709524f0eda135ab7805fa97935fe49e8b83506c105c76f6722821e6acc1",
+    "constructed_occurrence": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd",
+    "constructed_occurrence_sha256": "3ef036963c578d4bc65990413ceba6bf9d51df365ef81e6cab085d24f96e0ac8",
+    "predecessor": "runtime-cone-interface-20261021-ce92c5a9b71799b2",
+    "predecessor_archive_sha256": "54241a9b9e235c0c8b5142cecaf851d8a379b8d96e7cbbc1cffa10a9043b32b8",
+    "intake_sha256": "43b532b883f40acd5d3ab6e760032862cc3738ff11c94eaeb44de8cee48d8da4",
+    "rows": [
+      {
+        "seed": 47291,
+        "package_path": "res://assets/vfx/sources/adb84e2b6418e3c23374/heavy-47291.res",
+        "followup_path": "res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res",
+        "before_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/inputs/banks/47291-default.res",
+        "before_bank_sha256": "575e105eb01d68c3eaed52c696c3734d500445a82e35dd0a4eff2ba439506d65",
+        "candidate_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/candidates/heavy-47291.res",
+        "candidate_bank_sha256": "706f50ae4455ca13bc58715566b026d372295602bddcfaadc5db63582421d49c",
+        "candidate_bank_bytes": 351907,
+        "changed_fields": [
+          {
+            "name": "fork_count",
+            "before": {
+              "type": "int",
+              "value": 36,
+              "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+            },
+            "after": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            }
+          },
+          {
+            "name": "primary_lanes",
+            "before": {
+              "type": "int",
+              "value": 1,
+              "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+            },
+            "after": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            }
+          },
+          {
+            "name": "primary_segments",
+            "before": {
+              "type": "int",
+              "value": 131,
+              "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+            },
+            "after": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            }
+          },
+          {
+            "name": "source_paths",
+            "before": {
+              "type": "PackedStringArray",
+              "value": [],
+              "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+            },
+            "after": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            }
+          },
+          {
+            "name": "source_seed",
+            "before": {
+              "type": "int",
+              "value": 0,
+              "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+            },
+            "after": {
+              "type": "int",
+              "value": 47291,
+              "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+            }
+          }
+        ],
+        "atlas": {
+          "bytes": 620544,
+          "format": 11,
+          "height": 32,
+          "mipmaps": false,
+          "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+          "type": "Image",
+          "width": 1212
+        },
+        "all_remaining_stored_properties_unchanged": true,
+        "original_and_followup_all_non_script_fields_equal": true,
+        "atlas_byte_exact": true,
+        "script_identity_exact": true
+      },
+      {
+        "seed": 48064,
+        "package_path": "res://assets/vfx/sources/f40f1cfae2a9bdc21016/heavy-48064.res",
+        "followup_path": "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res",
+        "before_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/inputs/banks/48064-default.res",
+        "before_bank_sha256": "6267d2e88a8b1c69f8429334e01b9537eb56e84c35b9663d0ed838c9b92a1f87",
+        "candidate_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/candidates/heavy-48064.res",
+        "candidate_bank_sha256": "0834597c844faee6bc1296225bd1e0c8282a50e6d5886895913df0526686c125",
+        "candidate_bank_bytes": 352105,
+        "changed_fields": [
+          {
+            "name": "fork_count",
+            "before": {
+              "type": "int",
+              "value": 36,
+              "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+            },
+            "after": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            }
+          },
+          {
+            "name": "primary_lanes",
+            "before": {
+              "type": "int",
+              "value": 1,
+              "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+            },
+            "after": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            }
+          },
+          {
+            "name": "primary_segments",
+            "before": {
+              "type": "int",
+              "value": 131,
+              "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+            },
+            "after": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            }
+          },
+          {
+            "name": "source_paths",
+            "before": {
+              "type": "PackedStringArray",
+              "value": [],
+              "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+            },
+            "after": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            }
+          },
+          {
+            "name": "source_seed",
+            "before": {
+              "type": "int",
+              "value": 0,
+              "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+            },
+            "after": {
+              "type": "int",
+              "value": 48064,
+              "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+            }
+          }
+        ],
+        "atlas": {
+          "bytes": 620544,
+          "format": 11,
+          "height": 32,
+          "mipmaps": false,
+          "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+          "type": "Image",
+          "width": 1212
+        },
+        "all_remaining_stored_properties_unchanged": true,
+        "original_and_followup_all_non_script_fields_equal": true,
+        "atlas_byte_exact": true,
+        "script_identity_exact": true
+      }
+    ],
+    "source_files": [
+      {
+        "path": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/prepare.py",
+        "sha256": "3fb9121a0387a4c7a53f53ec46718e53b29ff736d4c8f5e9e42ad1d039016f22",
+        "bytes": 14678
+      },
+      {
+        "path": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/probe.gd",
+        "sha256": "8035437a83585925adb92de731eec65e471986fd5b98481ff647d4e519042605",
+        "bytes": 3583
+      },
+      {
+        "path": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/generate.gd",
+        "sha256": "33affb4e722b885164192b316d7a6d22ce61381ddf76e3d807c9a668af559fb2",
+        "bytes": 7065
+      },
+      {
+        "path": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/inputs.json",
+        "sha256": "17dac73eb63d2b4a1fad5c31d09c7e1a72f4c4d2a6b39eb4bf46d118931c3761",
+        "bytes": 11169
+      },
+      {
+        "path": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/comparison.json",
+        "sha256": "0f44afd7eb51c5574f9002595f9bcaa08f46fd81a1ae1c2a770ba11ea9d33e37",
+        "bytes": 35091
+      }
+    ],
+    "cpu_checks": 267,
+    "failures": [],
+    "evidence": [
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/call-heavy-bank-metadata-20261021/factory-probe.json",
+        "sha256": "1b5967f75a4cd87496aad794d7641cd7028e752923e32ffcdf7fd27cdc1eac8a",
+        "bytes": 21763,
+        "snapshot": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/cpu/factory-probe.json"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/call-heavy-bank-metadata-20261021/packaged-probe.json",
+        "sha256": "27bd63d05a06c22e815b535cab3bb6b4774d5c5514399bad718f0627d48d5176",
+        "bytes": 14798,
+        "snapshot": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/cpu/packaged-probe.json"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/call-heavy-bank-metadata-20261021/generation.json",
+        "sha256": "7461345443751511f1f35e133ddb44c01b83b882b99ee40ca8cb4cc4649f328a",
+        "bytes": 9072,
+        "snapshot": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/cpu/generation.json"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/call-heavy-bank-metadata-factory-probe-v1.log",
+        "sha256": "d2508e3b04fb88865b10d274f5732600f3af8f65d9edd3430f6b7b2562623909",
+        "bytes": 128,
+        "snapshot": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/cpu/call-heavy-bank-metadata-factory-probe-v1.log"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/call-heavy-bank-metadata-packaged-probe-v1.log",
+        "sha256": "c19dd734d5875273a954842a7a4c30abe5d9045651c0746b51cf9de8caa732d4",
+        "bytes": 128,
+        "snapshot": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/cpu/call-heavy-bank-metadata-packaged-probe-v1.log"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/call-heavy-bank-metadata-generate-v2.log",
+        "sha256": "8143e5532effb9da43defe5aee8895927f7ca339740b493a4e8828852833c363",
+        "bytes": 132,
+        "snapshot": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/cpu/call-heavy-bank-metadata-generate-v2.log"
+      }
+    ],
+    "historical_failed_writer_gate": "authoring/production-review-repair-20261021/call_heavy_bank_metadata/history/generate-v1/history.json",
+    "native_constructor_qualified": false,
+    "public_overrides_qualified": false,
+    "public_default_selection_changed": false,
+    "source_runtime_or_shader_changed": false,
+    "source_atlas_or_ribbon_material_or_clock_changed": false,
+    "production_files_modified": false,
+    "human_approval_inferred": false,
+    "scope": "Only two selected default bank Resources: five original metadata values restored, canonical default Script and full embedded CPU Image retained. No followup substitution, new atlas, runtime change, rendering or performance claim."
+  },
+  "comparison": {
+    "schema": "factory.call_heavy_bank_metadata.comparison.v1",
+    "checks": 162,
+    "failures": [],
+    "rows": [
+      {
+        "seed": 47291,
+        "stored_properties": {
+          "original": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://factory/resources/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 47291,
+              "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          },
+          "factory_corrected": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://factory/resources/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 47291,
+              "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          },
+          "default": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 36,
+              "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 1,
+              "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 131,
+              "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [],
+              "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 0,
+              "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          },
+          "followup": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://assets/vfx/extensions/late-20261020/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 47291,
+              "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          }
+        },
+        "changed_fields": [
+          {
+            "name": "fork_count",
+            "before": {
+              "type": "int",
+              "value": 36,
+              "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+            },
+            "after": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            }
+          },
+          {
+            "name": "primary_lanes",
+            "before": {
+              "type": "int",
+              "value": 1,
+              "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+            },
+            "after": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            }
+          },
+          {
+            "name": "primary_segments",
+            "before": {
+              "type": "int",
+              "value": 131,
+              "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+            },
+            "after": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            }
+          },
+          {
+            "name": "source_paths",
+            "before": {
+              "type": "PackedStringArray",
+              "value": [],
+              "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+            },
+            "after": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            }
+          },
+          {
+            "name": "source_seed",
+            "before": {
+              "type": "int",
+              "value": 0,
+              "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+            },
+            "after": {
+              "type": "int",
+              "value": 47291,
+              "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+            }
+          }
+        ],
+        "atlas": {
+          "bytes": 620544,
+          "format": 11,
+          "height": 32,
+          "mipmaps": false,
+          "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+          "type": "Image",
+          "width": 1212
+        },
+        "all_non_script_witness_properties_equal": true
+      },
+      {
+        "seed": 48064,
+        "stored_properties": {
+          "original": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://factory/resources/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 48064,
+              "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          },
+          "factory_corrected": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://factory/resources/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 48064,
+              "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          },
+          "default": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 36,
+              "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 1,
+              "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 131,
+              "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [],
+              "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 0,
+              "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          },
+          "followup": {
+            "atlas": {
+              "bytes": 620544,
+              "format": 11,
+              "height": 32,
+              "mipmaps": false,
+              "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+              "type": "Image",
+              "width": 1212
+            },
+            "fork_count": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            },
+            "fork_samples": {
+              "type": "int",
+              "value": 13,
+              "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+            },
+            "morphology_hz": {
+              "type": "float",
+              "value": 11.0,
+              "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+            },
+            "primary_lanes": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            },
+            "primary_segments": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            },
+            "reference_length_cells": {
+              "type": "float",
+              "value": 32.0,
+              "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+            },
+            "resource_local_to_scene": {
+              "type": "bool",
+              "value": false,
+              "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+            },
+            "resource_name": {
+              "type": "String",
+              "value": "",
+              "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+            },
+            "script": {
+              "path": "res://assets/vfx/extensions/late-20261020/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+              "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+              "type": "GDScript"
+            },
+            "source_paths": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            },
+            "source_recipe": {
+              "type": "Dictionary",
+              "value": {
+                "actor_or_camera_data": false,
+                "detail_spacing_cells": 0.23,
+                "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                "forks_anchored_during_runtime_mapping": true,
+                "length_configurations_baked": false,
+                "reference_length_cells": 32.0,
+                "source_primary_spread_preserved": true
+              },
+              "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+            },
+            "source_seed": {
+              "type": "int",
+              "value": 48064,
+              "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+            },
+            "variations": {
+              "type": "int",
+              "value": 32,
+              "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+            }
+          }
+        },
+        "changed_fields": [
+          {
+            "name": "fork_count",
+            "before": {
+              "type": "int",
+              "value": 36,
+              "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+            },
+            "after": {
+              "type": "int",
+              "value": 39,
+              "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+            }
+          },
+          {
+            "name": "primary_lanes",
+            "before": {
+              "type": "int",
+              "value": 1,
+              "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+            },
+            "after": {
+              "type": "int",
+              "value": 5,
+              "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+            }
+          },
+          {
+            "name": "primary_segments",
+            "before": {
+              "type": "int",
+              "value": 131,
+              "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+            },
+            "after": {
+              "type": "int",
+              "value": 140,
+              "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+            }
+          },
+          {
+            "name": "source_paths",
+            "before": {
+              "type": "PackedStringArray",
+              "value": [],
+              "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+            },
+            "after": {
+              "type": "PackedStringArray",
+              "value": [
+                "res://factory/runtime/electric_paths.gd",
+                "res://factory/components/electric/live_network.gd",
+                "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+              ],
+              "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+            }
+          },
+          {
+            "name": "source_seed",
+            "before": {
+              "type": "int",
+              "value": 0,
+              "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+            },
+            "after": {
+              "type": "int",
+              "value": 48064,
+              "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+            }
+          }
+        ],
+        "atlas": {
+          "bytes": 620544,
+          "format": 11,
+          "height": 32,
+          "mipmaps": false,
+          "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+          "type": "Image",
+          "width": 1212
+        },
+        "all_non_script_witness_properties_equal": true
+      }
+    ],
+    "headless_factory_probe_sha256": "1b5967f75a4cd87496aad794d7641cd7028e752923e32ffcdf7fd27cdc1eac8a",
+    "headless_packaged_probe_sha256": "27bd63d05a06c22e815b535cab3bb6b4774d5c5514399bad718f0627d48d5176",
+    "candidate_written": false,
+    "scope": "All actual storage fields compared before any bank writer; Script identities are recorded separately."
+  },
+  "source_or_art_reauthored": false,
+  "default_selection_changed": false
+}

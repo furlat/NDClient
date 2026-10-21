@@ -1,6 +1,6 @@
 {
   "schema": "vfxfactory.production_package.v1",
-  "version": "runtime-spike-seed-20261021-7ca62e2877bf5156",
+  "version": "runtime-call-heavy-defaults-20261021-8dd103fb92174541",
   "status": "Complete isolated runtime successor candidate; source cost/visual evidence separate from packaged/client qualification",
   "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
   "namespace": "res://assets/vfx/",
@@ -35373,9 +35373,73 @@
           },
           "native_owner_key": "spirit_radiant",
           "forwarded_source_inputs": []
+        },
+        {
+          "id": "runtime-prepared-spirit-runtime-20261021",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/98c1ade973e1e7f784cd1b07/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/53af195b70b841a65a63/radiant.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/07c3d3a385610f2f36bc/piece_v3.gd",
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/4dfedede8b34909eac2c/radiant.res",
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/7e3b80c759ba5063bd33/flow_hold.gd",
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/c63b7344323c678ccd54/spirit_radiant-ground.res"
+          ],
+          "disk_bytes": 487,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 1.0,
+          "retained_lifecycle_seconds": 4.5,
+          "source_duration_matches_retained_lifecycle": false,
+          "factory_source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/radiant.tres",
+          "factory_source_revision": "082bfa254988364b",
+          "factory_source_evidence": [
+            {
+              "path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+              "sha256": "5e678682b2489291feb51cb0f4a1b4197fc2e9407cadcb6f79159b4af74aaf87",
+              "active_art_context_qualified": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "complete_constructor_and_update_budget_pass": false,
+              "scope": "Current exact native bank/draw/material/Clock state plus retained4v3 exact positive pairs; no repeated images or actor/art approval."
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [],
+            "phase_declares_input_contract": true,
+            "candidate_declared_inputs": [
+              "owner_state",
+              "targets"
+            ],
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": false,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim.",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections",
+          "source_key": "spirit_rid_queued_radiant",
+          "native_owner_key": "spirit_rid_queued_radiant",
+          "public_setters": [
+            "set_targets",
+            "set_owner_state"
+          ],
+          "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately."
         }
       ],
-      "content_hash": "46d002cfa781205275be2ed7f4b0781ddaee01b1109f4483da6197a2d96df1b5",
+      "content_hash": "f7e686f5850c73f4a2bc2e023e54a1bdd0f1ae67f780291e8834acc25b231866",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": true,
@@ -35691,9 +35755,73 @@
           },
           "native_owner_key": "spirit_necrotic",
           "forwarded_source_inputs": []
+        },
+        {
+          "id": "runtime-prepared-spirit-runtime-20261021",
+          "kind": "native",
+          "path": "res://assets/vfx/clips/d5b707613ab209b59b3d65a5/construct.gd",
+          "source_phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/d08891dcb9d9d4e5e692/necrotic.tres",
+          "seekable": false,
+          "warm": [
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/07c3d3a385610f2f36bc/piece_v3.gd",
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/190dc65ddaabfcd68f93/necrotic.res",
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/7e3b80c759ba5063bd33/flow_hold.gd",
+            "res://assets/vfx/extensions/spirit-runtime-20261021/sources/9f9582bf27310dc2e02a/spirit_necrotic-ground.res"
+          ],
+          "disk_bytes": 488,
+          "gpu_bytes": null,
+          "construction_ms": null,
+          "sample_us": null,
+          "measurement_status": "Factory source evidence only; new packaged actual-context timing not measured",
+          "source_simulation_hz": 144.0,
+          "source_seconds": 1.0,
+          "retained_lifecycle_seconds": 4.5,
+          "source_duration_matches_retained_lifecycle": false,
+          "factory_source_phase": "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/necrotic.tres",
+          "factory_source_revision": "082bfa254988364b",
+          "factory_source_evidence": [
+            {
+              "path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+              "sha256": "5e678682b2489291feb51cb0f4a1b4197fc2e9407cadcb6f79159b4af74aaf87",
+              "active_art_context_qualified": true,
+              "optical": {
+                "strict_threshold_pass": true
+              },
+              "complete_constructor_and_update_budget_pass": false,
+              "scope": "Current exact native bank/draw/material/Clock state plus retained4v3 exact positive pairs; no repeated images or actor/art approval."
+            }
+          ],
+          "input_interface": {
+            "retained_inputs": [],
+            "phase_declares_input_contract": true,
+            "candidate_declared_inputs": [
+              "owner_state",
+              "targets"
+            ],
+            "public_setter_contract": "Existing package index plus inherited Occurrence API; checked in namespace-only smoke",
+            "source_input_semantics": "Per-source actual-context receipts; no new projection/admission semantics inferred"
+          },
+          "source_qualification": {
+            "complete_constructor_and_update_budget_pass": false,
+            "active_art_context_qualified": true,
+            "strict_threshold_pass": true,
+            "art_revision": "Individual sorted native RIDs retain original v3 draws/private material/owner Clock; retained4exactpairs. No current full-game/actor/physics/art-approval claim.",
+            "human_approval_inferred": false,
+            "packaged_execution_qualified": false,
+            "consumer_assignment_performed": false
+          },
+          "history_contract": "Sequential source simulation at phase simulation_hz; arbitrary seek not qualified",
+          "runtime_selection": "Unselected alternative; retained exact default/recorded approaches and selections",
+          "source_key": "spirit_rid_queued_necrotic",
+          "native_owner_key": "spirit_rid_queued_necrotic",
+          "public_setters": [
+            "set_targets",
+            "set_owner_state"
+          ],
+          "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately."
         }
       ],
-      "content_hash": "a5d3f3d7f507aaa4c67ada09b454cb24badd055721cb92eb76d89edc94ce8090",
+      "content_hash": "05994e504e6a7d0918eb1acb1f4712b6c92c9410554e4fdf9f4b0720dee52106",
       "source_revision": "51f55198b28113fdcc90df9d0613b1f50960d354",
       "simulation_hz": 60.0,
       "recording_required": true,

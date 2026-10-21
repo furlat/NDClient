@@ -60,15 +60,23 @@ static func expand_shader(code: String, base: String) -> String:
 	var key := base + "\n" + code
 	if expanded_sources.has(key):
 		return expanded_sources[key]
-	var result = ""
+	# Most prepared native programs are already expanded. The old split/append
+	# loop returned precisely code plus one newline for these, at quadratic
+	# string-copy cost. Keep that exact result without scanning every line.
+	if not code.contains("#include"):
+		var complete := code + "\n"
+		expanded_sources[key] = complete
+		return complete
+	var parts := PackedStringArray()
 	for line in code.split("\n"):
 		if line.strip_edges().begins_with("#include"):
 			var path = line.get_slice('"', 1)
 			if not path.begins_with("res://"):
 				path = base.path_join(path)
-			result += expand_shader(VfxPackageIO_39ced3e79a.text(path), path.get_base_dir()) + "\n"
+			parts.append(expand_shader(VfxPackageIO_39ced3e79a.text(path), path.get_base_dir()) + "\n")
 		else:
-			result += line + "\n"
+			parts.append(line + "\n")
+	var result := "".join(parts)
 	expanded_sources[key] = result
 	return result
 

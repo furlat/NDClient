@@ -1,0 +1,935 @@
+{
+  "qualification": {
+    "resource": {
+      "report": {
+        "cases": [],
+        "checks": 99,
+        "failures": [],
+        "fixture_sha256": "d146b7d18cabd85540da8b017850d94efea5eb9b2dd9f216e6d8e93a35e57681",
+        "request": {
+          "clip_id": "live-electric/call_live_strike",
+          "clock": "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+          "construct": false,
+          "constructed": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd",
+          "constructor": "res://assets/vfx/clips/f5468ee415770f50cd6a7592/construct.gd",
+          "index_sha256": "1ed9813045240145e5abe3e77e9af7c6c6daa5ca4d7f0105fe82088eca59121e",
+          "layer_mask": 524288.0,
+          "network": "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd",
+          "output": "res://call-heavy-resource.json",
+          "override_cases": [
+            {
+              "id": "finite_contact_operand_contract",
+              "scope": "Exact current _finite_contact electric_network values. Target is test-only optical calibration, without gameplay event/actor/body evidence.",
+              "targets": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              ],
+              "values": {
+                "charge_coil": false,
+                "contact_from_edges": false,
+                "contact_schedule": [
+                  {
+                    "at": 0.0,
+                    "endpoint": 0.0
+                  }
+                ],
+                "edges": [],
+                "endpoint_count": 1.0
+              }
+            }
+          ],
+          "phase": "res://assets/vfx/sources/511b48487f093345b692/phase-0.tres",
+          "rows": [
+            {
+              "all_remaining_stored_properties_unchanged": true,
+              "atlas": {
+                "bytes": 620544.0,
+                "format": 11.0,
+                "height": 32.0,
+                "mipmaps": false,
+                "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+                "type": "Image",
+                "width": 1212.0
+              },
+              "atlas_byte_exact": true,
+              "before": "res://call-heavy-before-47291.res",
+              "before_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/inputs/banks/47291-default.res",
+              "before_bank_sha256": "575e105eb01d68c3eaed52c696c3734d500445a82e35dd0a4eff2ba439506d65",
+              "candidate_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/candidates/heavy-47291.res",
+              "candidate_bank_bytes": 351907.0,
+              "candidate_bank_sha256": "706f50ae4455ca13bc58715566b026d372295602bddcfaadc5db63582421d49c",
+              "changed_fields": [
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 39.0,
+                    "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 36.0,
+                    "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+                  },
+                  "name": "fork_count"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 5.0,
+                    "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 1.0,
+                    "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+                  },
+                  "name": "primary_lanes"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 140.0,
+                    "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 131.0,
+                    "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+                  },
+                  "name": "primary_segments"
+                },
+                {
+                  "after": {
+                    "type": "PackedStringArray",
+                    "value": [
+                      "res://factory/runtime/electric_paths.gd",
+                      "res://factory/components/electric/live_network.gd",
+                      "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                    ],
+                    "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                  },
+                  "before": {
+                    "type": "PackedStringArray",
+                    "value": [],
+                    "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+                  },
+                  "name": "source_paths"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 47291.0,
+                    "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 0.0,
+                    "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+                  },
+                  "name": "source_seed"
+                }
+              ],
+              "expected": {
+                "atlas": {
+                  "bytes": 620544.0,
+                  "format": 11.0,
+                  "height": 32.0,
+                  "mipmaps": false,
+                  "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+                  "type": "Image",
+                  "width": 1212.0
+                },
+                "fork_count": {
+                  "type": "int",
+                  "value": 39.0,
+                  "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                },
+                "fork_samples": {
+                  "type": "int",
+                  "value": 13.0,
+                  "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+                },
+                "morphology_hz": {
+                  "type": "float",
+                  "value": 11.0,
+                  "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+                },
+                "primary_lanes": {
+                  "type": "int",
+                  "value": 5.0,
+                  "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                },
+                "primary_segments": {
+                  "type": "int",
+                  "value": 140.0,
+                  "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                },
+                "reference_length_cells": {
+                  "type": "float",
+                  "value": 32.0,
+                  "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+                },
+                "resource_local_to_scene": {
+                  "type": "bool",
+                  "value": false,
+                  "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+                },
+                "resource_name": {
+                  "type": "String",
+                  "value": "",
+                  "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+                },
+                "script": {
+                  "path": "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+                  "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+                  "type": "GDScript"
+                },
+                "source_paths": {
+                  "type": "PackedStringArray",
+                  "value": [
+                    "res://factory/runtime/electric_paths.gd",
+                    "res://factory/components/electric/live_network.gd",
+                    "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                  ],
+                  "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                },
+                "source_recipe": {
+                  "type": "Dictionary",
+                  "value": {
+                    "actor_or_camera_data": false,
+                    "detail_spacing_cells": 0.23,
+                    "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                    "forks_anchored_during_runtime_mapping": true,
+                    "length_configurations_baked": false,
+                    "reference_length_cells": 32.0,
+                    "source_primary_spread_preserved": true
+                  },
+                  "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+                },
+                "source_seed": {
+                  "type": "int",
+                  "value": 47291.0,
+                  "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+                },
+                "variations": {
+                  "type": "int",
+                  "value": 32.0,
+                  "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+                }
+              },
+              "followup_path": "res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res",
+              "original_and_followup_all_non_script_fields_equal": true,
+              "package_path": "res://assets/vfx/sources/adb84e2b6418e3c23374/heavy-47291.res",
+              "script_identity_exact": true,
+              "seed": 47291.0
+            },
+            {
+              "all_remaining_stored_properties_unchanged": true,
+              "atlas": {
+                "bytes": 620544.0,
+                "format": 11.0,
+                "height": 32.0,
+                "mipmaps": false,
+                "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+                "type": "Image",
+                "width": 1212.0
+              },
+              "atlas_byte_exact": true,
+              "before": "res://call-heavy-before-48064.res",
+              "before_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/inputs/banks/48064-default.res",
+              "before_bank_sha256": "6267d2e88a8b1c69f8429334e01b9537eb56e84c35b9663d0ed838c9b92a1f87",
+              "candidate_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/candidates/heavy-48064.res",
+              "candidate_bank_bytes": 352105.0,
+              "candidate_bank_sha256": "0834597c844faee6bc1296225bd1e0c8282a50e6d5886895913df0526686c125",
+              "changed_fields": [
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 39.0,
+                    "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 36.0,
+                    "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+                  },
+                  "name": "fork_count"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 5.0,
+                    "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 1.0,
+                    "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+                  },
+                  "name": "primary_lanes"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 140.0,
+                    "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 131.0,
+                    "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+                  },
+                  "name": "primary_segments"
+                },
+                {
+                  "after": {
+                    "type": "PackedStringArray",
+                    "value": [
+                      "res://factory/runtime/electric_paths.gd",
+                      "res://factory/components/electric/live_network.gd",
+                      "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                    ],
+                    "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                  },
+                  "before": {
+                    "type": "PackedStringArray",
+                    "value": [],
+                    "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+                  },
+                  "name": "source_paths"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 48064.0,
+                    "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 0.0,
+                    "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+                  },
+                  "name": "source_seed"
+                }
+              ],
+              "expected": {
+                "atlas": {
+                  "bytes": 620544.0,
+                  "format": 11.0,
+                  "height": 32.0,
+                  "mipmaps": false,
+                  "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+                  "type": "Image",
+                  "width": 1212.0
+                },
+                "fork_count": {
+                  "type": "int",
+                  "value": 39.0,
+                  "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                },
+                "fork_samples": {
+                  "type": "int",
+                  "value": 13.0,
+                  "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+                },
+                "morphology_hz": {
+                  "type": "float",
+                  "value": 11.0,
+                  "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+                },
+                "primary_lanes": {
+                  "type": "int",
+                  "value": 5.0,
+                  "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                },
+                "primary_segments": {
+                  "type": "int",
+                  "value": 140.0,
+                  "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                },
+                "reference_length_cells": {
+                  "type": "float",
+                  "value": 32.0,
+                  "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+                },
+                "resource_local_to_scene": {
+                  "type": "bool",
+                  "value": false,
+                  "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+                },
+                "resource_name": {
+                  "type": "String",
+                  "value": "",
+                  "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+                },
+                "script": {
+                  "path": "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+                  "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+                  "type": "GDScript"
+                },
+                "source_paths": {
+                  "type": "PackedStringArray",
+                  "value": [
+                    "res://factory/runtime/electric_paths.gd",
+                    "res://factory/components/electric/live_network.gd",
+                    "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                  ],
+                  "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                },
+                "source_recipe": {
+                  "type": "Dictionary",
+                  "value": {
+                    "actor_or_camera_data": false,
+                    "detail_spacing_cells": 0.23,
+                    "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                    "forks_anchored_during_runtime_mapping": true,
+                    "length_configurations_baked": false,
+                    "reference_length_cells": 32.0,
+                    "source_primary_spread_preserved": true
+                  },
+                  "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+                },
+                "source_seed": {
+                  "type": "int",
+                  "value": 48064.0,
+                  "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+                },
+                "variations": {
+                  "type": "int",
+                  "value": 32.0,
+                  "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+                }
+              },
+              "followup_path": "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res",
+              "original_and_followup_all_non_script_fields_equal": true,
+              "package_path": "res://assets/vfx/sources/f40f1cfae2a9bdc21016/heavy-48064.res",
+              "script_identity_exact": true,
+              "seed": 48064.0
+            }
+          ],
+          "runtime_dependencies": {
+            "res://assets/vfx/clips/f5468ee415770f50cd6a7592/construct.gd": "042874783c469468ea87a0a3f9f72fd1fc6250269f35619ea8ab354adc2c1290",
+            "res://assets/vfx/sources/511b48487f093345b692/phase-0.tres": "312006665fdf5f95e05a81987a44f7f244a227a147bb20d30e37e7ad8166b0a8",
+            "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd": "3ef036963c578d4bc65990413ceba6bf9d51df365ef81e6cab085d24f96e0ac8",
+            "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd": "c8cda29d675b7b4d27a9ba908daf9f5878234574e9227bf5d94a3980e9ee4fc6",
+            "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd": "41c2709524f0eda135ab7805fa97935fe49e8b83506c105c76f6722821e6acc1",
+            "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80"
+          },
+          "schema": "factory.call_heavy_bank.package_request.v1",
+          "version": "runtime-call-heavy-defaults-20261021-8dd103fb92174541"
+        },
+        "request_sha256": "cf3e32b368872dc94689bd533f5f6d0679bcad2b93e8559ce407b284936ca7ea",
+        "schema": "factory.call_heavy_bank.package_contract.v1",
+        "scope": "Two actual default bank Resources, all original storage operands and exact CPU atlas bytes. Explicit native mode also constructs the unchanged unforced default and supplied optical override cases. No image, gameplay admission, art approval or performance qualification."
+      },
+      "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/call-heavy-default-banks-20261021/fresh-project/call-heavy-resource.json",
+      "sha256": "806f59fc358582cdd7c149a95cad7a1905821c8d6344221587f1fa7c2d33dd87",
+      "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/call-heavy-default-banks-20261021-resource-v1.log",
+      "log_sha256": "4b4f220ecf4265cade3e01781e4390992a0440121f9dd93295dcdfaa42c5bcb6"
+    },
+    "native": {
+      "report": {
+        "cases": [
+          {
+            "id": "unforced_default",
+            "observation": {
+              "body_geometry_uploads": 0,
+              "edges": 2,
+              "endpoints": 0,
+              "fixed_encounter_baked": false,
+              "maximum_range_cells": 32.0,
+              "primary_and_fork_geometry": "GPU deformation of shared immutable meshes",
+              "range_error": false,
+              "remaining_cpu_geometry": "No per-frame mesh generation; actor point/normal data texture updates on pose/view/scale/layer changes",
+              "source_materials_and_layers_retained": true
+            },
+            "outer_simulation_hz": 60.0,
+            "supplied_values": {},
+            "test_targets": [],
+            "ticks": 24
+          },
+          {
+            "id": "finite_contact_operand_contract",
+            "observation": {
+              "body_geometry_uploads": 0,
+              "edges": 0,
+              "endpoints": 1,
+              "fixed_encounter_baked": false,
+              "maximum_range_cells": 0.0,
+              "primary_and_fork_geometry": "GPU deformation of shared immutable meshes",
+              "range_error": false,
+              "remaining_cpu_geometry": "No per-frame mesh generation; actor point/normal data texture updates on pose/view/scale/layer changes",
+              "source_materials_and_layers_retained": true
+            },
+            "outer_simulation_hz": 60.0,
+            "supplied_values": {
+              "charge_coil": false,
+              "contact_from_edges": false,
+              "contact_schedule": [
+                {
+                  "at": 0.0,
+                  "endpoint": 0
+                }
+              ],
+              "edges": [],
+              "endpoint_count": 1
+            },
+            "test_targets": [
+              [
+                0.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "ticks": 24
+          }
+        ],
+        "checks": 149,
+        "failures": [],
+        "fixture_sha256": "d146b7d18cabd85540da8b017850d94efea5eb9b2dd9f216e6d8e93a35e57681",
+        "request": {
+          "clip_id": "live-electric/call_live_strike",
+          "clock": "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+          "construct": true,
+          "constructed": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd",
+          "constructor": "res://assets/vfx/clips/f5468ee415770f50cd6a7592/construct.gd",
+          "index_sha256": "1ed9813045240145e5abe3e77e9af7c6c6daa5ca4d7f0105fe82088eca59121e",
+          "layer_mask": 524288.0,
+          "network": "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd",
+          "output": "res://call-heavy-native.json",
+          "override_cases": [
+            {
+              "id": "finite_contact_operand_contract",
+              "scope": "Exact current _finite_contact electric_network values. Target is test-only optical calibration, without gameplay event/actor/body evidence.",
+              "targets": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              ],
+              "values": {
+                "charge_coil": false,
+                "contact_from_edges": false,
+                "contact_schedule": [
+                  {
+                    "at": 0.0,
+                    "endpoint": 0.0
+                  }
+                ],
+                "edges": [],
+                "endpoint_count": 1.0
+              }
+            }
+          ],
+          "phase": "res://assets/vfx/sources/511b48487f093345b692/phase-0.tres",
+          "rows": [
+            {
+              "all_remaining_stored_properties_unchanged": true,
+              "atlas": {
+                "bytes": 620544.0,
+                "format": 11.0,
+                "height": 32.0,
+                "mipmaps": false,
+                "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+                "type": "Image",
+                "width": 1212.0
+              },
+              "atlas_byte_exact": true,
+              "before": "res://call-heavy-before-47291.res",
+              "before_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/inputs/banks/47291-default.res",
+              "before_bank_sha256": "575e105eb01d68c3eaed52c696c3734d500445a82e35dd0a4eff2ba439506d65",
+              "candidate_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/candidates/heavy-47291.res",
+              "candidate_bank_bytes": 351907.0,
+              "candidate_bank_sha256": "706f50ae4455ca13bc58715566b026d372295602bddcfaadc5db63582421d49c",
+              "changed_fields": [
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 39.0,
+                    "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 36.0,
+                    "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+                  },
+                  "name": "fork_count"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 5.0,
+                    "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 1.0,
+                    "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+                  },
+                  "name": "primary_lanes"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 140.0,
+                    "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 131.0,
+                    "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+                  },
+                  "name": "primary_segments"
+                },
+                {
+                  "after": {
+                    "type": "PackedStringArray",
+                    "value": [
+                      "res://factory/runtime/electric_paths.gd",
+                      "res://factory/components/electric/live_network.gd",
+                      "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                    ],
+                    "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                  },
+                  "before": {
+                    "type": "PackedStringArray",
+                    "value": [],
+                    "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+                  },
+                  "name": "source_paths"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 47291.0,
+                    "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 0.0,
+                    "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+                  },
+                  "name": "source_seed"
+                }
+              ],
+              "expected": {
+                "atlas": {
+                  "bytes": 620544.0,
+                  "format": 11.0,
+                  "height": 32.0,
+                  "mipmaps": false,
+                  "sha256": "8dfc447145ef029586dc5424b92e4ffe05549f63d1755a61b42bc4afdf23cb12",
+                  "type": "Image",
+                  "width": 1212.0
+                },
+                "fork_count": {
+                  "type": "int",
+                  "value": 39.0,
+                  "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                },
+                "fork_samples": {
+                  "type": "int",
+                  "value": 13.0,
+                  "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+                },
+                "morphology_hz": {
+                  "type": "float",
+                  "value": 11.0,
+                  "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+                },
+                "primary_lanes": {
+                  "type": "int",
+                  "value": 5.0,
+                  "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                },
+                "primary_segments": {
+                  "type": "int",
+                  "value": 140.0,
+                  "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                },
+                "reference_length_cells": {
+                  "type": "float",
+                  "value": 32.0,
+                  "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+                },
+                "resource_local_to_scene": {
+                  "type": "bool",
+                  "value": false,
+                  "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+                },
+                "resource_name": {
+                  "type": "String",
+                  "value": "",
+                  "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+                },
+                "script": {
+                  "path": "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+                  "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+                  "type": "GDScript"
+                },
+                "source_paths": {
+                  "type": "PackedStringArray",
+                  "value": [
+                    "res://factory/runtime/electric_paths.gd",
+                    "res://factory/components/electric/live_network.gd",
+                    "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                  ],
+                  "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                },
+                "source_recipe": {
+                  "type": "Dictionary",
+                  "value": {
+                    "actor_or_camera_data": false,
+                    "detail_spacing_cells": 0.23,
+                    "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                    "forks_anchored_during_runtime_mapping": true,
+                    "length_configurations_baked": false,
+                    "reference_length_cells": 32.0,
+                    "source_primary_spread_preserved": true
+                  },
+                  "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+                },
+                "source_seed": {
+                  "type": "int",
+                  "value": 47291.0,
+                  "variant_sha256": "0de479f55b79ec512fbfb6c6181087d3eca6488480e57dacb3fc22b8abdb146b"
+                },
+                "variations": {
+                  "type": "int",
+                  "value": 32.0,
+                  "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+                }
+              },
+              "followup_path": "res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res",
+              "original_and_followup_all_non_script_fields_equal": true,
+              "package_path": "res://assets/vfx/sources/adb84e2b6418e3c23374/heavy-47291.res",
+              "script_identity_exact": true,
+              "seed": 47291.0
+            },
+            {
+              "all_remaining_stored_properties_unchanged": true,
+              "atlas": {
+                "bytes": 620544.0,
+                "format": 11.0,
+                "height": 32.0,
+                "mipmaps": false,
+                "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+                "type": "Image",
+                "width": 1212.0
+              },
+              "atlas_byte_exact": true,
+              "before": "res://call-heavy-before-48064.res",
+              "before_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/inputs/banks/48064-default.res",
+              "before_bank_sha256": "6267d2e88a8b1c69f8429334e01b9537eb56e84c35b9663d0ed838c9b92a1f87",
+              "candidate_bank": "res://authoring/production-review-repair-20261021/call_heavy_bank_metadata/candidates/heavy-48064.res",
+              "candidate_bank_bytes": 352105.0,
+              "candidate_bank_sha256": "0834597c844faee6bc1296225bd1e0c8282a50e6d5886895913df0526686c125",
+              "changed_fields": [
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 39.0,
+                    "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 36.0,
+                    "variant_sha256": "96c568a59e5312f158cbf8c6f38d01c1b705a16783a5e08890851575979e7404"
+                  },
+                  "name": "fork_count"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 5.0,
+                    "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 1.0,
+                    "variant_sha256": "7b2ed67587fcbc411fcb4b71b1cef1ef6cd9edf948148414cf5f0ab21362b9aa"
+                  },
+                  "name": "primary_lanes"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 140.0,
+                    "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 131.0,
+                    "variant_sha256": "6de15e5d02849d353035bc4c6b1c9abb50f8877eea964ce5fb26d35d925c4cac"
+                  },
+                  "name": "primary_segments"
+                },
+                {
+                  "after": {
+                    "type": "PackedStringArray",
+                    "value": [
+                      "res://factory/runtime/electric_paths.gd",
+                      "res://factory/components/electric/live_network.gd",
+                      "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                    ],
+                    "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                  },
+                  "before": {
+                    "type": "PackedStringArray",
+                    "value": [],
+                    "variant_sha256": "280263b8515b99c473d9685d1fca1b992ae0949c742ba11c9ba625d9cd984506"
+                  },
+                  "name": "source_paths"
+                },
+                {
+                  "after": {
+                    "type": "int",
+                    "value": 48064.0,
+                    "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+                  },
+                  "before": {
+                    "type": "int",
+                    "value": 0.0,
+                    "variant_sha256": "d86e8112f3c4c4442126f8e9f44f16867da487f29052bf91b810457db34209a4"
+                  },
+                  "name": "source_seed"
+                }
+              ],
+              "expected": {
+                "atlas": {
+                  "bytes": 620544.0,
+                  "format": 11.0,
+                  "height": 32.0,
+                  "mipmaps": false,
+                  "sha256": "98073573218287d5e3fb1fdd8523c03bc5c1336303ade4fc81a12da37c4eed83",
+                  "type": "Image",
+                  "width": 1212.0
+                },
+                "fork_count": {
+                  "type": "int",
+                  "value": 39.0,
+                  "variant_sha256": "c7300d0f3e470d3bf99a9c711cab196f7c5bdf96c8902f519ff77a5b95d1c61a"
+                },
+                "fork_samples": {
+                  "type": "int",
+                  "value": 13.0,
+                  "variant_sha256": "bde673a7d651cffca9a92f69afca13c230f50a98eac09452698d85ac1f474b5e"
+                },
+                "morphology_hz": {
+                  "type": "float",
+                  "value": 11.0,
+                  "variant_sha256": "e0fe2b2229ee0eb77580a601518a3ee3a2d26bf510a49c979661e0cebb9c0fef"
+                },
+                "primary_lanes": {
+                  "type": "int",
+                  "value": 5.0,
+                  "variant_sha256": "a01fd7895ceb904c3b612ebf136c2ec8a3fc5672e319ebc9bbb0f446209a7406"
+                },
+                "primary_segments": {
+                  "type": "int",
+                  "value": 140.0,
+                  "variant_sha256": "1976a2147bd697fdb76c7bebf0bde06250ce4097b0134eb5a0add4066d780928"
+                },
+                "reference_length_cells": {
+                  "type": "float",
+                  "value": 32.0,
+                  "variant_sha256": "a44c7184554fe415c8dbe9dccf4cf0a35f28b94ae94c4e5f2e20bd336d123db9"
+                },
+                "resource_local_to_scene": {
+                  "type": "bool",
+                  "value": false,
+                  "variant_sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8"
+                },
+                "resource_name": {
+                  "type": "String",
+                  "value": "",
+                  "variant_sha256": "f0a0278e4372459cca6159cd5e71cfee638302a7b9ca9b05c34181ac0a65ac5d"
+                },
+                "script": {
+                  "path": "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd",
+                  "sha256": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80",
+                  "type": "GDScript"
+                },
+                "source_paths": {
+                  "type": "PackedStringArray",
+                  "value": [
+                    "res://factory/runtime/electric_paths.gd",
+                    "res://factory/components/electric/live_network.gd",
+                    "res://library/selected/project_authored_godot_library_projects_boringdev_collection_eb22c84b/vfx_1/lightning/scripts/lightning_base.gd"
+                  ],
+                  "variant_sha256": "77cdc0775b037360e7cffc8ff90a46409698c5936f0460af17a1186e65656ad7"
+                },
+                "source_recipe": {
+                  "type": "Dictionary",
+                  "value": {
+                    "actor_or_camera_data": false,
+                    "detail_spacing_cells": 0.23,
+                    "fork_mapping": "Original local fork residuals; live parent/child spine anchors. A GPU length/morphology variant, not whole-frame pixel identity at every length.",
+                    "forks_anchored_during_runtime_mapping": true,
+                    "length_configurations_baked": false,
+                    "reference_length_cells": 32.0,
+                    "source_primary_spread_preserved": true
+                  },
+                  "variant_sha256": "14fd7c9064826ba4cf6f44f4a776eeef012040ebfc04e624aab8f4de615a314f"
+                },
+                "source_seed": {
+                  "type": "int",
+                  "value": 48064.0,
+                  "variant_sha256": "33ce0d8bb95a5f9570466331417811e85a9ad2c2c9d3f237a2212c33594efbee"
+                },
+                "variations": {
+                  "type": "int",
+                  "value": 32.0,
+                  "variant_sha256": "e1a6e15f442b3e0dec3a9fb7dfe213811217fe727a2488a140448b70142b8d08"
+                }
+              },
+              "followup_path": "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res",
+              "original_and_followup_all_non_script_fields_equal": true,
+              "package_path": "res://assets/vfx/sources/f40f1cfae2a9bdc21016/heavy-48064.res",
+              "script_identity_exact": true,
+              "seed": 48064.0
+            }
+          ],
+          "runtime_dependencies": {
+            "res://assets/vfx/clips/f5468ee415770f50cd6a7592/construct.gd": "042874783c469468ea87a0a3f9f72fd1fc6250269f35619ea8ab354adc2c1290",
+            "res://assets/vfx/sources/511b48487f093345b692/phase-0.tres": "312006665fdf5f95e05a81987a44f7f244a227a147bb20d30e37e7ad8166b0a8",
+            "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd": "3ef036963c578d4bc65990413ceba6bf9d51df365ef81e6cab085d24f96e0ac8",
+            "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd": "c8cda29d675b7b4d27a9ba908daf9f5878234574e9227bf5d94a3980e9ee4fc6",
+            "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd": "41c2709524f0eda135ab7805fa97935fe49e8b83506c105c76f6722821e6acc1",
+            "res://assets/vfx/sources/c6c4167c127a37b1a356/electric_shape_bank.gd": "59ad7d6c1744a48c9c0441d1a23218765fdb06291c4105c97a280f1f4c8f9b80"
+          },
+          "schema": "factory.call_heavy_bank.package_request.v1",
+          "version": "runtime-call-heavy-defaults-20261021-8dd103fb92174541"
+        },
+        "request_sha256": "0109e5c6027dfcfa542e3b68b8957308fd84a09ae663c6b02d6b2efb40da58fe",
+        "schema": "factory.call_heavy_bank.package_contract.v1",
+        "scope": "Two actual default bank Resources, all original storage operands and exact CPU atlas bytes. Explicit native mode also constructs the unchanged unforced default and supplied optical override cases. No image, gameplay admission, art approval or performance qualification."
+      },
+      "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/call-heavy-default-banks-20261021/fresh-project/call-heavy-native.json",
+      "sha256": "c76465c7b58795a38145f0f9d8d89e951ea51ebd35a201f32c71edc7e4aa335b",
+      "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/call-heavy-default-banks-20261021-native-v1.log",
+      "log_sha256": "9983e43ef3adc7738d90c6718652753cf1ddb8cd312c83ce9b991b1e9f016bd0"
+    }
+  },
+  "contracts": {
+    "version": "runtime-call-heavy-defaults-20261021-8dd103fb92174541",
+    "failures": [],
+    "index_except_version_exact": true,
+    "clips": 1246,
+    "selections": 504,
+    "engine_execution": false
+  },
+  "retention": {
+    "entries": 22842,
+    "exceptions": [
+      "assets/vfx/index.json",
+      "assets/vfx/sources/adb84e2b6418e3c23374/heavy-47291.res",
+      "assets/vfx/sources/f40f1cfae2a9bdc21016/heavy-48064.res"
+    ],
+    "all_other_predecessor_size_crc_exact": true
+  }
+}

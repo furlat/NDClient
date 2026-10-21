@@ -1,0 +1,752 @@
+{
+  "version": "runtime-spirit-runtime-20261021-082bfa254988364b",
+  "index_sha256": "9729ee1a5efcb1a23041fdcb379fe6f50b3f4c491695d08201f85f3cb921e02c",
+  "scope": "Exact complete namespace ResourceLoader exit trace. Static Script/preload ownership only; no occurrence was constructed. This does not label engine shutdown clean.",
+  "namespace_graph_qualified": true,
+  "engine_shutdown_clean": false,
+  "engine_errors_filtered": false,
+  "node_or_material_objectdb_count": 0,
+  "occurrence_leak_inferred": false,
+  "engine_exit_code": 0,
+  "dependency_files": 22667,
+  "graph_sha256": "3f410b3dde80c8e9e0e69214ddb54fe358a23cb62fe4b877e5389092a88a6483",
+  "probe_graph_sha256": "3f410b3dde80c8e9e0e69214ddb54fe358a23cb62fe4b877e5389092a88a6483",
+  "standard_log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/spirit-runtime-20261021-fresh-dependencies.log",
+  "standard_log_sha256": "34c199e42fd460de3b450f7aa7084cf37f40420e63600192b39db72e501b2b8a",
+  "verbose_log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/spirit-runtime-20261021-retention-verbose-v1.log",
+  "verbose_log_sha256": "85d057aa5d6ed8e68fa9a9dde1ed3cf03d02dcf510c236898076410cbef88832",
+  "audit_script_sha256": "263842f38729c3a995fdcd57607b9e5450c095dd9ddb6f52ae37e07fd7ae2aa7",
+  "exact_engine_exit_errors": [
+    "ERROR: 4 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.",
+    "ERROR: 115 resources still in use at exit (run with --verbose for details).",
+    "ERROR: Pages in use exist at exit in PagedAllocator: N12VariantPools11BucketLargeE",
+    "ERROR: Pages in use exist at exit in PagedAllocator: N12VariantPools12BucketMediumE",
+    "ERROR: Pages in use exist at exit in PagedAllocator: N12VariantPools11BucketSmallE"
+  ],
+  "resources": [
+    {
+      "path": "res://assets/vfx/sources/6c7e97d33d579dd6b3bc/resource_io.gd",
+      "type": "GDScript",
+      "sha256": "7a001b4b69c2480a2ee5b85c8f85e7fcc812c8ed67398483522ea9be8d9f39ed"
+    },
+    {
+      "path": "res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd",
+      "type": "GDScript",
+      "sha256": "867d2df1b20a8bfc9448e6d01c3e3534407a10ec47cdb72034ada972b4a1db7e"
+    },
+    {
+      "path": "res://assets/vfx/sources/1d02b6d800655ef86df2/resource_graph.gd",
+      "type": "GDScript",
+      "sha256": "eca090b0c9895146375d3e959eaf193fef1236f0a7aadf91d9f137e50f853627"
+    },
+    {
+      "path": "res://assets/vfx/sources/7861b47ba3b77bbd762a/support_query_index.gd",
+      "type": "GDScript",
+      "sha256": "b9379e1594652bf7eeac622c027c2e748e1cdee4539b551162fe72fed92574ae"
+    },
+    {
+      "path": "res://assets/vfx/sources/02d90ce9caaa3a5e1100/receiving_frame.gd",
+      "type": "GDScript",
+      "sha256": "8d04cb07c1af91f6e55bfb44e12febfcf4bd4df9d912ecf82ecf50e8e8021a4c"
+    },
+    {
+      "path": "res://assets/vfx/sources/9c05cee00f7d74560348/geometry_key.gd",
+      "type": "GDScript",
+      "sha256": "b682a79d9d2b5d0fba9d5a909e21f0a4cd34bbbb3fb095a6b3f23ccea21f8605"
+    },
+    {
+      "path": "res://assets/vfx/sources/7ffdb77f06cb06b0c42e/contract_stage.gd",
+      "type": "GDScript",
+      "sha256": "c221609b70fd97c7323cb05883f67c670d205392a50d02a1b1667886b1dd6804"
+    },
+    {
+      "path": "res://assets/vfx/sources/386bc581a35eb3b9ee50/spatial_energy_palette.gd",
+      "type": "GDScript",
+      "sha256": "bcb0f02805bde8f2992cfc5008b64e0390449cccba2e662cb18d829ba0e5adbc"
+    },
+    {
+      "path": "res://assets/vfx/sources/7fdb065636384c27c4a5/meshes.gd",
+      "type": "GDScript",
+      "sha256": "88716cb1593ba4804a91cbee939a025df8060b53e4879480046d58252769ec99"
+    },
+    {
+      "path": "res://assets/vfx/sources/39f30ee3f172ac269cd6/native_opacity.gd",
+      "type": "GDScript",
+      "sha256": "ac49da483ad4731d2e7d7d4c56482c822989c3dcb460d770f6f850ae5c64177d"
+    },
+    {
+      "path": "res://assets/vfx/sources/2aa74876db6a11f64ab1/condition_program.gd",
+      "type": "GDScript",
+      "sha256": "d1f519443cba08921dd64aba4daaf111de38d6c8cd358dc25a76345dc027520a"
+    },
+    {
+      "path": "res://assets/vfx/sources/801b495c0bd760a8e358/directed_program.gd",
+      "type": "GDScript",
+      "sha256": "1b5e2069054f4a0abaea998a4acbb91be3c9e17a9ec21003a132294787015e31"
+    },
+    {
+      "path": "res://assets/vfx/sources/2e511bee2be14a679d5d/measured_surface.gd",
+      "type": "GDScript",
+      "sha256": "5573ab12c0311323ee6bf4e7646727de3d1ad6c3b199b72d834f5df493c330f1"
+    },
+    {
+      "path": "res://assets/vfx/sources/e6f9d428eabf74ab814c/cambered_path.gd",
+      "type": "GDScript",
+      "sha256": "b2522e3d918614aa93c0ba64c7774ee0aa127f76bd99903a343a5c862f209df1"
+    },
+    {
+      "path": "res://assets/vfx/sources/d3bf76efa97b3499c285/receiving_table.gd",
+      "type": "GDScript",
+      "sha256": "de089b272bdd0a485d27f0113daa0626e82a17e50743ad70ebaffd5af54332f1"
+    },
+    {
+      "path": "res://assets/vfx/sources/a14e24228442da522a55/support_paths.gd",
+      "type": "GDScript",
+      "sha256": "886eebda5b8a5a3e82bc13d29fa29fd21b44fe649b454eaaa2238174d256fe7d"
+    },
+    {
+      "path": "res://assets/vfx/sources/024e3436e16596609d0f/prepared_receiving.gd",
+      "type": "GDScript",
+      "sha256": "4ed483221a50ebc83e5ecbad6970090082afa9b7ce78e16441771f95a95d199b"
+    },
+    {
+      "path": "res://assets/vfx/sources/628b95849d2163ba8eca/contract_composition.gd",
+      "type": "GDScript",
+      "sha256": "a71ecddf191f411a05a470602f3fd39b5da7a454794bacefd124646acef67145"
+    },
+    {
+      "path": "res://assets/vfx/sources/6487dfcacdbd7bcc9361/native_source_space.gd",
+      "type": "GDScript",
+      "sha256": "df574c5d73f030f495c7307841b465c4440b28b59a5b450019d66f3ff0ca1469"
+    },
+    {
+      "path": "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd",
+      "type": "GDScript",
+      "sha256": "c320f69dff522f7b9a4d1685f30bb01cf3caed62152b27dfc50c0c8712e99d3f"
+    },
+    {
+      "path": "res://assets/vfx/sources/a3ec7774922fb78f255c/native_materials.gd",
+      "type": "GDScript",
+      "sha256": "c50d58539e1701cce18511c916abda54e4ea4d08ccb00505291b30d3c9608dd7"
+    },
+    {
+      "path": "res://assets/vfx/sources/c1e0733a7ef81c657ab9/immutable_materials.gd",
+      "type": "GDScript",
+      "sha256": "7adebf9b65b70d734b12df5434791c7a6a708d260819306b10b256492d9d101a"
+    },
+    {
+      "path": "res://assets/vfx/sources/454cb6585d2ccf36c7c1/vegetation_clusters.gd",
+      "type": "GDScript",
+      "sha256": "ced3a14f68edcb7f7ffdcafcad0df583714025fb7e815b0628309a54816f8269"
+    },
+    {
+      "path": "res://assets/vfx/sources/a9de7d661c4a6a3f12a5/plant_growth.gd",
+      "type": "GDScript",
+      "sha256": "9177b3d2a5abf7433afac0d51650978957e21acd87eb1d1492d8873c602e78c5"
+    },
+    {
+      "path": "res://assets/vfx/sources/34e0f9ed9a909885cd97/path_ribbon.gd",
+      "type": "GDScript",
+      "sha256": "18bf3ab6c3df3af2c18dad2f94de6d0da340362bf7b6de900d096eea35ea7bca"
+    },
+    {
+      "path": "res://assets/vfx/sources/bf8982a2b5574ce024cf/contact_tube.gd",
+      "type": "GDScript",
+      "sha256": "70ac71ae72214c3b54a65ba56091d41004ea7c779fce1f1d6f2211daf1617c21"
+    },
+    {
+      "path": "res://assets/vfx/sources/2a27d065b490c7cfdfe2/pixel_boundary.gd",
+      "type": "GDScript",
+      "sha256": "501dc1b723493f31693c142f95d0ab8355cbaf383d5db1497943260896caa0f5"
+    },
+    {
+      "path": "res://assets/vfx/sources/f962a9879cefd5f352ba/class_action_assets.gd",
+      "type": "GDScript",
+      "sha256": "cc82f7950d9b627127a0055a1f32f2e665b587d2ef57bb569d8be6026db9f6ca"
+    },
+    {
+      "path": "res://assets/vfx/sources/5e6062cb1efe781a65b7/construction_profile.gd",
+      "type": "GDScript",
+      "sha256": "78b2194e6c972c80a191799044e7886450fa36bbb0c52b7a0d783a9a706bd4e8"
+    },
+    {
+      "path": "res://assets/vfx/sources/5944248dd6bb52ef8394/class_action.gd",
+      "type": "GDScript",
+      "sha256": "e0a6723b8a11b1dfdc7b619a15de7ef41d5069e0fc51a8985d9a1aaed0e19c4f"
+    },
+    {
+      "path": "res://assets/vfx/sources/584a1116b96d865072e3/strip_motion.gd",
+      "type": "GDScript",
+      "sha256": "d5269abde2f2db66b549fedcecd713c2d03be4b16d71a303a077cea9c3878977"
+    },
+    {
+      "path": "res://assets/vfx/sources/5ab0d0eb20f55fac8240/class_strips.gd",
+      "type": "GDScript",
+      "sha256": "b847eb45ac29460d88e1fb06d1134ff660921f20a33dcf93a5985fb4e818aec8"
+    },
+    {
+      "path": "res://assets/vfx/sources/abe6eb6721b80fc713e6/arcane_tube.gd",
+      "type": "GDScript",
+      "sha256": "df79b3a33c27cfb79d8ee455ed245257585364caf89cbde932a6eea3f36b3a89"
+    },
+    {
+      "path": "res://assets/vfx/sources/b80cef04b29a6a0ea421/accepted_recovery_finish_v190.gd",
+      "type": "GDScript",
+      "sha256": "e5f633d825e8a2f5a618a7c00d2c07c21aacf1505410a0b95ad1ff64a62ecb50"
+    },
+    {
+      "path": "res://assets/vfx/sources/3d101518574df82eb7f5/accepted_recovery_source_v190.gd",
+      "type": "GDScript",
+      "sha256": "5ab85c24040f4fae43406c637d918c49320396320ec9efd3eeaaa0329b683506"
+    },
+    {
+      "path": "res://assets/vfx/sources/861a64dfc7b97476a8d9/accepted_ground_source_v191.gd",
+      "type": "GDScript",
+      "sha256": "e24a875dbfcfd770e5f88fea4f053070de3a3e0deb493b0b565b436f26286b52"
+    },
+    {
+      "path": "res://assets/vfx/sources/7c77eade22900392e0b5/accepted_class_source_v176.gd",
+      "type": "GDScript",
+      "sha256": "37ced50c655700c650fbdcba2d291e9dfb2c5aec2df1a89d7625cdcd208d644a"
+    },
+    {
+      "path": "res://assets/vfx/sources/e6719ff212d75b074b38/electric_paths.gd",
+      "type": "GDScript",
+      "sha256": "759cd6c9fdfcce240581bf715a38f7b53bda6c341cd01c9790d9bcbaba15029e"
+    },
+    {
+      "path": "res://assets/vfx/sources/33a49af5fbfca3c6ad50/texture.res",
+      "type": "ImageTexture",
+      "sha256": "f9b282540352e34fc598c459e961e0c6c3e64bb273deb807a112e1c806458e55"
+    },
+    {
+      "path": "res://assets/vfx/sources/7ba83c1f7b0e9719534f/texture.res",
+      "type": "ImageTexture",
+      "sha256": "ef2544a32894606f37ba1d92ce48ca93930ff270f06b214bb91e58beed297bdf"
+    },
+    {
+      "path": "res://assets/vfx/sources/96d99f9415c238207665/texture.res",
+      "type": "ImageTexture",
+      "sha256": "f5efce238330e26cdf99084503f00586bf51c3be402e10e7a51219f0a25c9373"
+    },
+    {
+      "path": "res://assets/vfx/sources/ee2f42f6d681cb4e2be0/texture.res",
+      "type": "ImageTexture",
+      "sha256": "67953046088affae021bcaad5c3a6a3706f6ff911b6882b3e4cc224cf61133d3"
+    },
+    {
+      "path": "res://assets/vfx/sources/df180467412a5071502b/lightning_base.gd",
+      "type": "GDScript",
+      "sha256": "b3f685384a2146f048b6dc1a269fd4c6a01cc9988fee28046bf655edc5c964f4"
+    },
+    {
+      "path": "res://assets/vfx/sources/038f154b06649f707e70/live_network.gd",
+      "type": "GDScript",
+      "sha256": "b127faeccda4f3c78c653a5ef5cfeb55a15c8efe7f953125955724be61b013e1"
+    },
+    {
+      "path": "res://assets/vfx/sources/cf721dfb3774a72b8d38/liquid_conduction.gd",
+      "type": "GDScript",
+      "sha256": "d187f10477bde564d33f665d1ec74ffaecfe2b89e9071f34bd6d491726600758"
+    },
+    {
+      "path": "res://assets/vfx/sources/a30a2bcc236447517879/liquid_conduction.gd",
+      "type": "GDScript",
+      "sha256": "8d55579e0873717c34d4a83d70f523a78f72c111fa5fe4b102a65fa5a46bfc74"
+    },
+    {
+      "path": "res://assets/vfx/sources/a15ee27956ee27b7e1c4/electric_ribbon.gd",
+      "type": "GDScript",
+      "sha256": "b8cf5c1d43bcf3864dbbde3512f6b941607a132bef2fed5b04f9ddbd85cc76ee"
+    },
+    {
+      "path": "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd",
+      "type": "GDScript",
+      "sha256": "41c2709524f0eda135ab7805fa97935fe49e8b83506c105c76f6722821e6acc1"
+    },
+    {
+      "path": "res://assets/vfx/sources/e1712eaf075bc24a6231/liquid_field.gd",
+      "type": "GDScript",
+      "sha256": "c11d06f102cbab6148ec3eafc220ec7ca8d45de78533d4a2d6db90256214216a"
+    },
+    {
+      "path": "res://assets/vfx/sources/3966d6cc724927baedcb/occurrence_opacity.gd",
+      "type": "GDScript",
+      "sha256": "8a055de1dec739e670a9f686e16270b4f3885ead9c0c6a3f5b5c8b27a34b3d7d"
+    },
+    {
+      "path": "res://assets/vfx/sources/26c98431fd81e43423d8/recorded_swarm.gd",
+      "type": "GDScript",
+      "sha256": "fbb7b81923a07d86da49a55ab539d272041becee2f145efa53784a9cec684c6d"
+    },
+    {
+      "path": "res://assets/vfx/sources/ac0498530fe3f2aa918a/item_flame_source_finish.gd",
+      "type": "GDScript",
+      "sha256": "5a47aea44608f89c6d0094d6ee06993cf0b749060158b8a4e3f359f6e56cc46f"
+    },
+    {
+      "path": "res://assets/vfx/sources/63efbe77094fc90312ab/item_flame.gd",
+      "type": "GDScript",
+      "sha256": "ca3ae31b775137bfb8fa6d41f0f7a1508b6b18b4085c35fe75835cb4db4dacea"
+    },
+    {
+      "path": "res://assets/vfx/sources/6dfb3da3b0e3683f16b2/continuous_web_source.gd",
+      "type": "GDScript",
+      "sha256": "613935148b64cac8d2aa5bebb9274b68997c00dfe2716958c45739c39c0d52b9"
+    },
+    {
+      "path": "res://assets/vfx/sources/e5338118a904c73b413d/continuous_web_binding.gd",
+      "type": "GDScript",
+      "sha256": "e0a932ec9686b4d06172b8464e0c52e40f174470501611ef3b5a07c9fea351ea"
+    },
+    {
+      "path": "res://assets/vfx/sources/c0017ad639184b208deb/occurrence_clock.gd",
+      "type": "GDScript",
+      "sha256": "c8cda29d675b7b4d27a9ba908daf9f5878234574e9227bf5d94a3980e9ee4fc6"
+    },
+    {
+      "path": "res://assets/vfx/sources/dabf568b4506db4883ad/occurrence_bindings.gd",
+      "type": "GDScript",
+      "sha256": "30d613541975e19fd62bced07522ce4959da6657489ae4531143ac9a5c886df3"
+    },
+    {
+      "path": "res://assets/vfx/sources/a4f6231f0bb4547489bc/condition_measured.gd",
+      "type": "GDScript",
+      "sha256": "92619b78f6e385bbc7a72ca820bb3ac5402af84e9c321a12a1d59a6840b6518e"
+    },
+    {
+      "path": "res://assets/vfx/sources/a7bb17f8a6f8b7fadf85/treatment.gd",
+      "type": "GDScript",
+      "sha256": "98cb953c577e663190e4b0c370c6da567688711aa0f146687a5378d0a5e88ebc"
+    },
+    {
+      "path": "res://assets/vfx/sources/6e2b58c2da1471a344dd/bind.gd",
+      "type": "GDScript",
+      "sha256": "60767185d663dd6586b8325fadcc7b6a8da6b4ff0efe763112d7572b6085d5bc"
+    },
+    {
+      "path": "res://assets/vfx/sources/74ae53cdc42ec95e07a0/bind.gd",
+      "type": "GDScript",
+      "sha256": "6e9eed54f78aa00ebdf9082ea886181f4a3b084175c395b5739553c6fd524dee"
+    },
+    {
+      "path": "res://assets/vfx/sources/530cfc1d1d453d31a8c2/bind.gd",
+      "type": "GDScript",
+      "sha256": "157812df0fa79fde98095571f927baa681ae7020d4b6edfe3585c632dbd80d55"
+    },
+    {
+      "path": "res://assets/vfx/sources/62383d07549e9c732af2/direct_blade_material.gd",
+      "type": "GDScript",
+      "sha256": "a9042ada1ecb0d7bfa90eb8a68d457428f4324cde5723b13a3540fe7da1415c0"
+    },
+    {
+      "path": "res://assets/vfx/extensions/continuation42-20261020/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "55d0bffb43f0b82bfb0f2c835b2ebcd81c8bcce65f86361909b0bf6073560e97"
+    },
+    {
+      "path": "res://assets/vfx/extensions/continuation42-20261020/sources/1923f32af33912b47512/live_geometry_bindings.gd",
+      "type": "GDScript",
+      "sha256": "c973dba9067ca8d319291f044b2cc355bd7e2472324efd9918099cce1d8bc6b9"
+    },
+    {
+      "path": "res://assets/vfx/conditions/surface.gd",
+      "type": "GDScript",
+      "sha256": "2ce60b6de16330ae5cbbd1faab661dbb4c68798044beacf71e509c90ea3a31b9"
+    },
+    {
+      "path": "res://assets/vfx/conditions/cells.gd",
+      "type": "GDScript",
+      "sha256": "281dc2d6e8f6485695f24352d0de9312357a94b2425914dc9c978e8116ee81a6"
+    },
+    {
+      "path": "res://assets/vfx/conditions/measured.gd",
+      "type": "GDScript",
+      "sha256": "92619b78f6e385bbc7a72ca820bb3ac5402af84e9c321a12a1d59a6840b6518e"
+    },
+    {
+      "path": "res://assets/vfx/extensions/public-admission-20261020/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "fd5cb59d5e4d715bd6a4a80e01b4cece8cecc47ee3138a86de6b3108ae504666"
+    },
+    {
+      "path": "res://assets/vfx/extensions/public-admission-20261020/sources/5d620fd9a64eea66a8cb/source_materials.gd",
+      "type": "GDScript",
+      "sha256": "7bf2caf075a47ffd2bba8f6650bfda3ba864c300f2b6fa8f24f948f20ceb04b9"
+    },
+    {
+      "path": "res://assets/vfx/extensions/public-admission-20261020/sources/b77d94866d57f1c7edce/body_program.gd",
+      "type": "GDScript",
+      "sha256": "0fb8e1f0ecd58bc45604b8bd58a1c7c6c2f24988a46e2cb062e5db1ad900313a"
+    },
+    {
+      "path": "res://assets/vfx/extensions/public-admission-20261020/sources/5aa749322157f338b67c/body_stack.gd",
+      "type": "GDScript",
+      "sha256": "cbe6b1041f3e04519d44d003be11f791cd2e276d65d6a46ea6a8632aaf08f5db"
+    },
+    {
+      "path": "res://assets/vfx/extensions/public-admission-20261020/sources/39cf08ae841a336c8819/body_receiver.gd",
+      "type": "GDScript",
+      "sha256": "82445fc742d1d5f20ac1eca21b5b02ecaa2fcc6f1839441e62eb16f98ef2fb54"
+    },
+    {
+      "path": "res://assets/vfx/conditions/contour.gd",
+      "type": "GDScript",
+      "sha256": "53c1fcba6d3ac391b2403b7886ce72b9e906b3c450bfc2e574ee4a7cb27dea9c"
+    },
+    {
+      "path": "res://assets/vfx/conditions/web_body.gd",
+      "type": "GDScript",
+      "sha256": "04a0b4bee72032f128b5a59d1c7e1210c3cfb0078153ceba429710774059c5d1"
+    },
+    {
+      "path": "res://assets/vfx/conditions/live_pose.gd",
+      "type": "GDScript",
+      "sha256": "36af1d98764a780b6acaf34cf6fc99c36d1508ed74a0c8d0b80c120187fdd757"
+    },
+    {
+      "path": "res://assets/vfx/conditions/flame_blade.gd",
+      "type": "GDScript",
+      "sha256": "cc17282b42fc528de3f6bbb3e5ac0cdb43a6257fd4471e6027cbf09f832f980d"
+    },
+    {
+      "path": "res://assets/vfx/conditions/fly_appearance.gd",
+      "type": "GDScript",
+      "sha256": "51557ffe76b287a630c5d507f45c8e11f859071e69f8a3fbae4127bc18de6f83"
+    },
+    {
+      "path": "res://assets/vfx/extensions/public-admission-20261020/sources/ae17902829018b2a28d3/actor_history.gd",
+      "type": "GDScript",
+      "sha256": "2a6ecbd7cf8529793eceb0d91085ca7080bd8e5955c1c4e4b9bbd1f4459617dc"
+    },
+    {
+      "path": "res://assets/vfx/conditions/compound_surface.gd",
+      "type": "GDScript",
+      "sha256": "045d01876379126077bd0ffddbcf3c0578a21e37d76bc0355df15ebbeef6f587"
+    },
+    {
+      "path": "res://assets/vfx/extensions/public-admission-20261020/sources/672c1ceae061a45e68c9/runtime.gd",
+      "type": "GDScript",
+      "sha256": "a16b428403d819da58cd6812ec5d72cd3832d8124800d8e9173ded0b8276eaa2"
+    },
+    {
+      "path": "res://assets/vfx/conditions/body_program.gd",
+      "type": "GDScript",
+      "sha256": "7ba25eecdfb033a80dc814cb15f43a8f7a2f3f776d4a2ae9780bd27afa54d777"
+    },
+    {
+      "path": "res://assets/vfx/conditions/body_stack.gd",
+      "type": "GDScript",
+      "sha256": "33c2a74b15363458f9f120a5db007159adb68327495cf5e0762a5f86c54f4ef0"
+    },
+    {
+      "path": "res://assets/vfx/conditions/body_receiver.gd",
+      "type": "GDScript",
+      "sha256": "cc72355601622f7b5c8b20901e5c0fb7187c93970da1609b332378109483b255"
+    },
+    {
+      "path": "res://assets/vfx/conditions/actor_history.gd",
+      "type": "GDScript",
+      "sha256": "3ef6cf2ffbdfa84b6a3e095d047b3a69c498f08a89cc3cec0aa5ae422d8a3f76"
+    },
+    {
+      "path": "res://assets/vfx/conditions/runtime.gd",
+      "type": "GDScript",
+      "sha256": "67b5a757d94874b0ff0dd447fe25322d39f0b90e9c30feed526a5fd91be0e81f"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "36d24f753c9ac004f7bf2ea70b18faf3013e15dea0a363be0bccad99ff8f9f89"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/5d620fd9a64eea66a8cb/source_materials.gd",
+      "type": "GDScript",
+      "sha256": "2f7d2e6afff23f9d47a6901dd344d943623b34f197c6ee5ceb438df5ee9549f5"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/b77d94866d57f1c7edce/body_program.gd",
+      "type": "GDScript",
+      "sha256": "7308460f920d9235ef1445632de24c2f6c94db2ed73c1a08a9178e070bfa7102"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/5aa749322157f338b67c/body_stack.gd",
+      "type": "GDScript",
+      "sha256": "ddd6a6988ec08394277ac56c78c484e92e5642d7d2cfef19dc623f58ffd2c1a0"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/39cf08ae841a336c8819/body_receiver.gd",
+      "type": "GDScript",
+      "sha256": "df1a690d4a2c1f060a4b01f23a2c902089e15d4517c14904c37cee70a8e73365"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/ae17902829018b2a28d3/actor_history.gd",
+      "type": "GDScript",
+      "sha256": "0c7c6b4e2d4ba98260ba76fa99c2cf45e36f2a3a56bac809265741c88f393838"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/672c1ceae061a45e68c9/runtime.gd",
+      "type": "GDScript",
+      "sha256": "9701da021b73adddf9cb9f86fb2451e84e61090101bf63154ff827ceb7fcc5b2"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/762830662857c66f7d5b/condition_pose_table.gd",
+      "type": "GDScript",
+      "sha256": "500df97a21abd4824b6f7f3ac31507d9efd8da2e49b03b7e8165c2d9d137f4c3"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/801b495c0bd760a8e358/directed_program.gd",
+      "type": "GDScript",
+      "sha256": "239cef34197631a413d38990dd1ac073c8736f1a41916563448b999b9eb666c2"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/bf8982a2b5574ce024cf/contact_tube.gd",
+      "type": "GDScript",
+      "sha256": "473afc4ef35ea7116ec4359667f4ee8e90d71091ef3913bc4ab56e8d6a0cc438"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/e6f9d428eabf74ab814c/cambered_path.gd",
+      "type": "GDScript",
+      "sha256": "ddbccd286aca8556014909a76f40a58bc5870976bf24f44e4b578319eb6bc3e6"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/a15ee27956ee27b7e1c4/electric_ribbon.gd",
+      "type": "GDScript",
+      "sha256": "601e5094544acc71287578855b3d8ae18c37c4ad596a2f6510a59aded0832ba6"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/a14e24228442da522a55/support_paths.gd",
+      "type": "GDScript",
+      "sha256": "40a5792a2e8715b8f535147b0645f1f365021466329dbf5251d91dd294d9f047"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/024e3436e16596609d0f/prepared_receiving.gd",
+      "type": "GDScript",
+      "sha256": "cfd70b32ba1d35ec566888a464ecb250394ee19bbddd59e0b44b926104b8c9a4"
+    },
+    {
+      "path": "res://assets/vfx/extensions/material-runtime-20261021/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "5516998939ca59164ac2151926d24a783218e21306650227834f9c8112c5d947"
+    },
+    {
+      "path": "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd",
+      "type": "GDScript",
+      "sha256": "f078eb35f9a38924022ba4c0ebef7a856dea5ea49a7f47316759ec3b2fb8a88e"
+    },
+    {
+      "path": "res://assets/vfx/extensions/production-review-20261020/sources/1923f32af33912b47512/live_geometry_bindings.gd",
+      "type": "GDScript",
+      "sha256": "f6f54b62eb804a412508899b8c07caad1aedc43f669f2d0ad25a3b95e9637969"
+    },
+    {
+      "path": "res://assets/vfx/extensions/owner-fields-v2-20261021/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "a536c37cf5149c9122cd3edc10ee310449cfe1542a6afde9be9ebaf3f1e83458"
+    },
+    {
+      "path": "res://assets/vfx/extensions/late-20261020/sources/a3ec7774922fb78f255c/native_materials.gd",
+      "type": "GDScript",
+      "sha256": "1374d2928196ba7365b0dc7f38eb7a0f3cf76cf4024170005a211a1eaaf88e2e"
+    },
+    {
+      "path": "res://assets/vfx/extensions/heavy-effects-20261020/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "07d474b059cfb8825400f4a520b816757e905809aa24d73940a9f7a0e6d53664"
+    },
+    {
+      "path": "res://assets/vfx/extensions/heavy-effects-20261020/sources/1923f32af33912b47512/live_geometry_bindings.gd",
+      "type": "GDScript",
+      "sha256": "903c46688275871068a0e3a9f7f80516ac16ebef5d78016a6fca4b932ce4ef6a"
+    },
+    {
+      "path": "res://assets/vfx/extensions/heavy-effects-20261020/sources/801b495c0bd760a8e358/directed_program.gd",
+      "type": "GDScript",
+      "sha256": "49136e44a757fcee1997f45609f5ccdac82c96b853174f668b5c2b840274a49d"
+    },
+    {
+      "path": "res://assets/vfx/extensions/source-preparation-20261020/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "e05b4dfcc0e6f18214eaa3df585f4a4544d386a87ead7c3aa148b04db573a6f8"
+    },
+    {
+      "path": "res://assets/vfx/extensions/input-reduction-20261021/scoped_resource_io.gd",
+      "type": "GDScript",
+      "sha256": "d4c5fe3c1ca3b5ca1a2152b59b7243d3ac41560af8492ea3d3b127a5a4e75823"
+    },
+    {
+      "path": "res://assets/vfx/extensions/input-reduction-20261021/sources/801b495c0bd760a8e358/directed_program.gd",
+      "type": "GDScript",
+      "sha256": "4f3763e86c51d21c951ae27cd31a7694918d753eed0231f2d99f9188d903a1bd"
+    },
+    {
+      "path": "res://assets/vfx/extensions/followup-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd",
+      "type": "GDScript",
+      "sha256": "6b13d9d6eaf8b4ce7deebb50914563adadfd9a73b16ad91c011747a312170f9b"
+    },
+    {
+      "path": "res://assets/vfx/extensions/continuation42-20261020/sources/801b495c0bd760a8e358/directed_program.gd",
+      "type": "GDScript",
+      "sha256": "dcd33b14ef3a3c528a09e2d79962192ee32c93abaa14eb4e9fc8f3a57dc8fd88"
+    },
+    {
+      "path": "res://assets/vfx/extensions/continuation42-20261020/sources/34e0f9ed9a909885cd97/path_ribbon.gd",
+      "type": "GDScript",
+      "sha256": "db942768d45dfc05380673f9f53256608a69ae8af3596423632892a34a71af51"
+    },
+    {
+      "path": "res://assets/vfx/extensions/continuation42-20261020/sources/6a54923fc76acb58b29e/measured_surface.gd",
+      "type": "GDScript",
+      "sha256": "ad673f2cd869dcc35a87d0313938457cc9501d86f74fe3428792ca41d88b5d67"
+    }
+  ],
+  "counts": {
+    "GDScript": 111,
+    "ImageTexture": 4
+  },
+  "objectdb_classes": {
+    "GDScriptNativeClass": 41,
+    "GDScript": 114,
+    "ImageTexture": 4,
+    "Image": 4
+  },
+  "predecessor_retention_sha256": "b3dc9efa280195bf4640fc45573730c344d236bc369bd0fadc7a6465f4d98dc3",
+  "retention_reference_path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spike-seed-20261021/namespace-retention.json",
+  "retention_reference_version": "runtime-spike-seed-20261021-7ca62e2877bf5156",
+  "retention_reference_scope": "Actual current graph/verbose resource ownership compared with the explicitly supplied older static-owner witness; not a namespace execution proof for the intervening sealed predecessor",
+  "added_retained_scripts": [],
+  "removed_retained_resources": [],
+  "retained_subset_ownership": null,
+  "canonical_source_materials_correction": {
+    "canonical_runtime_path": "res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd",
+    "before_sha256": "211c7a270c476ad6f252e2e9453253acff3d71465321ad3a9595e4d104f6259b",
+    "after_sha256": "867d2df1b20a8bfc9448e6d01c3e3534407a10ec47cdb72034ada972b4a1db7e",
+    "proof_sha256": "bb312d4fc885ac0a9970db133c4bc8cbe142a45d83ceec6aaa8f191659356b1c",
+    "proof": {
+      "schema": "factory.canonical_source_materials_correction.v1",
+      "predecessor": {
+        "version": "runtime-spike-seed-20261021-7ca62e2877bf5156",
+        "archive": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/runtime-spike-seed-20261021/vfx-runtime-spike-seed-20261021-7ca62e2877bf5156-complete.zip",
+        "archive_sha256": "29bbd0d978384a3c6d3a911609e2a3494d316c0456286f753e0a0e91f655c098",
+        "index_sha256": "44f80785103f1bc939992497ff037b9447d2f58d352d82dbf90e52f464fabb51"
+      },
+      "canonical_runtime_path": "res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd",
+      "before_sha256": "211c7a270c476ad6f252e2e9453253acff3d71465321ad3a9595e4d104f6259b",
+      "after_sha256": "867d2df1b20a8bfc9448e6d01c3e3534407a10ec47cdb72034ada972b4a1db7e",
+      "source_sha256": "f40a55151ac28e2891eb3e606e1c257a4ac21ec10b63778e4baa3a08aa4b31b2",
+      "before_source_sha256": "0f4c218085af57252c96d744a0c174fba72539eb0b90f88ff418966c2ac2f9e0",
+      "original_qualification_sha256": "106d61ba19ba86ec5757f626fcc0328cece0735501ca4c9b00bade4a5207f88e",
+      "fixture_sha256": "bcb441c3c37f9929593d7bdaedf32150a9f248f1bab5e6d622db0ca9c0237d8a",
+      "programs": 1008,
+      "project": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/source-materials-correction-20261021/qualification-project",
+      "changed_function": "expand_shader",
+      "all_other_runtime_text_exact": true,
+      "runtime_script_identity_added": false,
+      "runtime_cache_owner_added": false,
+      "archive_modified": false,
+      "packaged": false,
+      "production_integration_performed": false,
+      "qualified": true,
+      "checks": 3039,
+      "failures": [],
+      "request_sha256": "c5ca8f034b13f96c754fe40e864aaa1dc5809352ce6b196880d35f493e9ea3d4",
+      "receipt": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/source-materials-correction-20261021/qualification-project/checks-v2.json",
+      "receipt_sha256": "cdae2dd1c8c5d9d3068cb64b88ad57c37258c41c94cfa644c7490e3de6df5f9f",
+      "fixture_includes": {
+        "source-text-branch.gdshaderinc": "f581bc7cfd1c1899dc58670a993ec8d792e53f7887c3edccd38056d667413325",
+        "source-text-leaf.gdshaderinc": "33f4af0cc0a4538af5d64075c30c7441d696f579c0818c7e3189cd83bd937639"
+      },
+      "expanded_text_and_cache_exact": true,
+      "scope": "Exact canonical Script payload over the complete installed shader corpus. Only immutable string construction differs; no native shader compilation, appearance, source clock or occurrence ownership change. Awaiting inclusion in one complete successor; not a loose production overlay."
+    },
+    "source_script_identity_added": false
+  },
+  "unnamed_inner_script_ownership": null,
+  "texture_owner": {
+    "path": "res://assets/vfx/sources/df180467412a5071502b/lightning_base.gd",
+    "actual_exported_preloads": [
+      "@export var glow_texture: Texture2D = preload(\"res://assets/vfx/sources/33a49af5fbfca3c6ad50/texture.res\"):",
+      "@export var streak_texture: Texture2D = preload(\"res://assets/vfx/sources/7ba83c1f7b0e9719534f/texture.res\"):",
+      "@export var star_texture: Texture2D = preload(\"res://assets/vfx/sources/96d99f9415c238207665/texture.res\"):",
+      "@export var spark_texture: Texture2D = preload(\"res://assets/vfx/sources/ee2f42f6d681cb4e2be0/texture.res\"):"
+    ]
+  },
+  "texture_owners": [
+    {
+      "path": "res://assets/vfx/sources/df180467412a5071502b/lightning_base.gd",
+      "actual_exported_preloads": [
+        "@export var glow_texture: Texture2D = preload(\"res://assets/vfx/sources/33a49af5fbfca3c6ad50/texture.res\"):",
+        "@export var streak_texture: Texture2D = preload(\"res://assets/vfx/sources/7ba83c1f7b0e9719534f/texture.res\"):",
+        "@export var star_texture: Texture2D = preload(\"res://assets/vfx/sources/96d99f9415c238207665/texture.res\"):",
+        "@export var spark_texture: Texture2D = preload(\"res://assets/vfx/sources/ee2f42f6d681cb4e2be0/texture.res\"):"
+      ]
+    }
+  ],
+  "unicode_and_deprecation_diagnostics": [
+    "Unicode parsing error: Byte 20 is not a correct continuation byte after d7",
+    "Unicode parsing error: Byte 20 is not a correct continuation byte after d7",
+    "Unicode parsing error: Invalid unicode codepoint (2212), cannot represent as ASCII/Latin-1",
+    "Unicode parsing error: Byte 30 is not a correct continuation byte after d7",
+    "Unicode parsing error: Byte 30 is not a correct continuation byte after d7",
+    "Unicode parsing error: Byte 30 is not a correct continuation byte after d7",
+    "WARNING: graph_offset property is deprecated. Setting it has no effect.",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error: Byte 2e is not a correct continuation byte after d7",
+    "Unicode parsing error: Byte 2e is not a correct continuation byte after d7",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error: Invalid unicode codepoint (2013), cannot represent as ASCII/Latin-1",
+    "Unicode parsing error: Invalid unicode codepoint (2192), cannot represent as ASCII/Latin-1",
+    "Unicode parsing error: Invalid unicode codepoint (2192), cannot represent as ASCII/Latin-1",
+    "Unicode parsing error: Invalid unicode codepoint (2013), cannot represent as ASCII/Latin-1",
+    "Unicode parsing error: Invalid unicode codepoint (2192), cannot represent as ASCII/Latin-1",
+    "Unicode parsing error: Invalid unicode codepoint (2192), cannot represent as ASCII/Latin-1",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)",
+    "Unicode parsing error, some characters were replaced with \ufffd (U+FFFD): Invalid UTF-8 leading byte (b7)"
+  ]
+}

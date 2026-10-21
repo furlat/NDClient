@@ -1,0 +1,2622 @@
+{
+  "native": {
+    "aperture_checks": [
+      {
+        "case": "ellipse_vs_diamond_actual_source_masks",
+        "metrics": {
+          "alpha_changed": 135,
+          "prepared_covered": 163,
+          "prepared_energy": 15421,
+          "rgb_changed": 135,
+          "rgba_changed": 135,
+          "source_covered": 298,
+          "source_energy": 36321
+        }
+      },
+      {
+        "case": "light-response-1",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 29153,
+          "rgb_changed": 298,
+          "rgba_changed": 298,
+          "source_covered": 298,
+          "source_energy": 6716
+        }
+      },
+      {
+        "case": "light-response-2",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 36321,
+          "rgb_changed": 298,
+          "rgba_changed": 298,
+          "source_covered": 298,
+          "source_energy": 29153
+        }
+      }
+    ],
+    "aperture_selection": {
+      "axis_x": "(4.705882, 0.0, -4.705882)",
+      "axis_y": "(-2.37037, 5.806196, -2.37037)",
+      "center": "(-2.318516, 0.416605, -0.021641)",
+      "cpu_boundary_margin": 0.0279497772297802,
+      "cpu_diamond_survivors": 6,
+      "cpu_ellipse_survivors": 12,
+      "cpu_mask_differences": 6,
+      "half_height_world": 0.149155390262604,
+      "half_width_world": 0.150260210037231,
+      "scope": "Deterministic optical fixture volume from current source texel positions and actual camera basis; not gameplay aperture facts, authored blade axes, expected pixel masks or a provider replay.",
+      "source_alpha_texels": 26,
+      "source_image_sha256": "bb3af6a2948901ecb0aa29c8f24a6cc75c14d82a77fa62c8e077082c4e1040d0",
+      "source_texel_ordinal": 0
+    },
+    "checks": 194,
+    "client_files_modified": false,
+    "contexts": [
+      {
+        "age_seconds": 0.6,
+        "aperture_scope": "source receiver optical operands, not a production event replay",
+        "clip": "Idle",
+        "equipment_slot": "MELEE_MAIN",
+        "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+        "source": "/media/smallscale/modular/Melee2/Idle.png",
+        "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+        "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+        "view": 0,
+        "weapon": "Longsword"
+      }
+    ],
+    "failures": [],
+    "fixture_sha256": "b9142e2776b77d626d50a3432b5fcd4a1fe4865796f651a9921128aa688ac00f",
+    "human_approval_inferred": false,
+    "request": {
+      "adapter_script": "res://assets/vfx/sources/b030caea4fa2359738f0/equipped_treatment.gd",
+      "element_phases": {
+        "electric": "res://assets/vfx/sources/413d61d473b38f8c5bb4/electric_axial_forks_medium_phase.tres",
+        "fire": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+        "ice": "res://assets/vfx/sources/6af0b39f1fb04b4c3def/ice_rime_facets_medium_phase.tres"
+      },
+      "fixture_source_sha256": "b9142e2776b77d626d50a3432b5fcd4a1fe4865796f651a9921128aa688ac00f",
+      "index_sha256": "557c178ad96c9afdf29aac30a5d7b0a823d784d050cc5ca7b0d216afb3425569",
+      "output": "res://receiver-aperture-output/",
+      "package_version": "runtime-weapon-aperture-20261021-def7d998b9e4e743",
+      "receiver_bank": "res://assets/vfx/sources/7ea03eda1143a2eb6407/receiver-programs.tres",
+      "source_is_root": true,
+      "source_shader": "res://modular.gdshader",
+      "sources_manifest": "res://assets/vfx/corrections/weapon-receiver-aperture-20261021/def7d998b9e4e743/sources.json"
+    },
+    "rows": [
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "aperture-disabled",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 665,
+          "prepared_energy": 93745,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 665,
+          "source_energy": 93745
+        },
+        "prepared": "res://receiver-aperture-output/longsword-aperture-disabled-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-aperture-disabled-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "ellipse-disabled-hook",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 36321,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 298,
+          "source_energy": 36321
+        },
+        "prepared": "res://receiver-aperture-output/longsword-ellipse-disabled-hook-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-ellipse-disabled-hook-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "ellipse-active-fire",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 27599,
+          "rgb_changed": 298,
+          "rgba_changed": 298,
+          "source_covered": 298,
+          "source_energy": 36321
+        },
+        "prepared": "res://receiver-aperture-output/longsword-ellipse-active-fire-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-ellipse-active-fire-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "ellipse-suppressed",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 36321,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 298,
+          "source_energy": 36321
+        },
+        "prepared": "res://receiver-aperture-output/longsword-ellipse-suppressed-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-ellipse-suppressed-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "ellipse-retired",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 36321,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 298,
+          "source_energy": 36321
+        },
+        "prepared": "res://receiver-aperture-output/longsword-ellipse-retired-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-ellipse-retired-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "ellipse-active-ice",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 74281,
+          "rgb_changed": 268,
+          "rgba_changed": 268,
+          "source_covered": 298,
+          "source_energy": 36321
+        },
+        "prepared": "res://receiver-aperture-output/longsword-ellipse-active-ice-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-ellipse-active-ice-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "ellipse-active-electric",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 54934,
+          "rgb_changed": 268,
+          "rgba_changed": 268,
+          "source_covered": 298,
+          "source_energy": 36321
+        },
+        "prepared": "res://receiver-aperture-output/longsword-ellipse-active-electric-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-ellipse-active-electric-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "diamond-disabled-hook",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 163,
+          "prepared_energy": 15421,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 163,
+          "source_energy": 15421
+        },
+        "prepared": "res://receiver-aperture-output/longsword-diamond-disabled-hook-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-diamond-disabled-hook-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "diamond-active-fire",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 163,
+          "prepared_energy": 9094,
+          "rgb_changed": 163,
+          "rgba_changed": 163,
+          "source_covered": 163,
+          "source_energy": 15421
+        },
+        "prepared": "res://receiver-aperture-output/longsword-diamond-active-fire-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-diamond-active-fire-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "diamond-suppressed",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 163,
+          "prepared_energy": 15421,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 163,
+          "source_energy": 15421
+        },
+        "prepared": "res://receiver-aperture-output/longsword-diamond-suppressed-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-diamond-suppressed-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "diamond-retired",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 163,
+          "prepared_energy": 15421,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 163,
+          "source_energy": 15421
+        },
+        "prepared": "res://receiver-aperture-output/longsword-diamond-retired-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-diamond-retired-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "diamond-active-ice",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 163,
+          "prepared_energy": 35780,
+          "rgb_changed": 133,
+          "rgba_changed": 133,
+          "source_covered": 163,
+          "source_energy": 15421
+        },
+        "prepared": "res://receiver-aperture-output/longsword-diamond-active-ice-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-diamond-active-ice-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "diamond-active-electric",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 163,
+          "prepared_energy": 23901,
+          "rgb_changed": 133,
+          "rgba_changed": 133,
+          "source_covered": 163,
+          "source_energy": 15421
+        },
+        "prepared": "res://receiver-aperture-output/longsword-diamond-active-electric-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-diamond-active-electric-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "condition-low",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 18915,
+          "rgb_changed": 298,
+          "rgba_changed": 298,
+          "source_covered": 298,
+          "source_energy": 25441
+        },
+        "prepared": "res://receiver-aperture-output/longsword-condition-low-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-condition-low-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "condition-zero-palette",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 0,
+          "prepared_energy": 0,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 0,
+          "source_energy": 0
+        },
+        "prepared": "res://receiver-aperture-output/longsword-condition-zero-palette-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-condition-zero-palette-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "wall-low",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 18916,
+          "rgb_changed": 298,
+          "rgba_changed": 298,
+          "source_covered": 298,
+          "source_energy": 25491
+        },
+        "prepared": "res://receiver-aperture-output/longsword-wall-low-prepared.png",
+        "rule": "active_colour_same_alpha",
+        "source": "res://receiver-aperture-output/longsword-wall-low-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "wall-zero-palette",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 0,
+          "prepared_energy": 0,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 0,
+          "source_energy": 0
+        },
+        "prepared": "res://receiver-aperture-output/longsword-wall-zero-palette-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-wall-zero-palette-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "aperture-lights-0",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 6716,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 298,
+          "source_energy": 6716
+        },
+        "prepared": "res://receiver-aperture-output/longsword-aperture-lights-0-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-aperture-lights-0-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "aperture-lights-1",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 29153,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 298,
+          "source_energy": 29153
+        },
+        "prepared": "res://receiver-aperture-output/longsword-aperture-lights-1-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-aperture-lights-1-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "aperture-lights-2",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 298,
+          "prepared_energy": 36321,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 298,
+          "source_energy": 36321
+        },
+        "prepared": "res://receiver-aperture-output/longsword-aperture-lights-2-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-aperture-lights-2-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "shadow-aperture-disabled",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 665,
+          "prepared_energy": 0,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 665,
+          "source_energy": 0
+        },
+        "prepared": "res://receiver-aperture-output/longsword-shadow-aperture-disabled-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-shadow-aperture-disabled-source.png"
+      },
+      {
+        "context": {
+          "age_seconds": 0.6,
+          "aperture_scope": "source receiver optical operands, not a production event replay",
+          "clip": "Idle",
+          "equipment_slot": "MELEE_MAIN",
+          "frame_uv": "(0.066667, 0.125, 0.066667, 0.125)",
+          "source": "/media/smallscale/modular/Melee2/Idle.png",
+          "source_phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+          "source_phase_clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+          "view": 0,
+          "weapon": "Longsword"
+        },
+        "label": "shadow-aperture-enabled",
+        "metrics": {
+          "alpha_changed": 0,
+          "prepared_covered": 0,
+          "prepared_energy": 0,
+          "rgb_changed": 0,
+          "rgba_changed": 0,
+          "source_covered": 0,
+          "source_energy": 0
+        },
+        "prepared": "res://receiver-aperture-output/longsword-shadow-aperture-enabled-prepared.png",
+        "rule": "exact_rgba",
+        "source": "res://receiver-aperture-output/longsword-shadow-aperture-enabled-source.png"
+      }
+    ],
+    "runtime_or_shared_files_modified": false,
+    "schema": "factory.weapon_receiver_aperture_contract.v1",
+    "scope": "One actual Longsword Idle equipped sheet; exact Ember sustain phase plus Ice/Electric shared receiver treatments; explicit test aperture operands, actual-source pixels as reference. Not a recorded production aperture event, body-provider, exterior, history, timing or artwork approval.",
+    "witness": {
+      "dependencies": {
+        "modular.gdshader": {
+          "bytes": 4977.0,
+          "sha256": "b61cce83cd020141731a4cd4385ef3b52e6d9da0a13ca80b0f8ef25e9e746a1f"
+        },
+        "presentation/body_surface.gdshaderinc": {
+          "bytes": 2587.0,
+          "sha256": "b5a3cb70f8d89dbaf956a7e82332fb2157221a9dda9ebc25d5f67483468a0883"
+        },
+        "presentation/character_material.gdshaderinc": {
+          "bytes": 4792.0,
+          "sha256": "069fb8d5fda758aa801caf0fa369094b610daec49efb79b92f08c6ac5373f574"
+        },
+        "presentation/light_table.gdshaderinc": {
+          "bytes": 2139.0,
+          "sha256": "362775d957265fa3c9110a66d4071ab82eeabe900897af9131c40d9784034145"
+        },
+        "presentation/lit_receiving.gdshaderinc": {
+          "bytes": 5775.0,
+          "sha256": "08c3e03137b1ef9ca73eb0c604bf5cc81f9bc420906acff2cf4aee288b49be5b"
+        },
+        "presentation/native_body_material.gdshaderinc": {
+          "bytes": 1446.0,
+          "sha256": "8cd7b442ac3ee2d169636554bd09cb1186ed68d3a64ea444bb92d00b3fa61e7b"
+        },
+        "presentation/native_scene_vertex.gdshaderinc": {
+          "bytes": 2901.0,
+          "sha256": "e5633ac3fa166ff76da2d5a508649f675e0b0f24d190e0be63836dfdfbc3db63"
+        },
+        "presentation/native_spell_finish.gdshaderinc": {
+          "bytes": 713.0,
+          "sha256": "362395910e8aacbe8f3138a40574c876c0417c0ae0affc87f9901c100315791f"
+        },
+        "presentation/source_colour_modular.gdshaderinc": {
+          "bytes": 515.0,
+          "sha256": "b51e354aee8cd23c61f888c25ba85e81fa7f1c087035e20018efe47c163407df"
+        }
+      },
+      "dependency_fingerprint": "92ae1fdd46e14d36ba87921e870155bd4b4c1e4e0b76204ef36594178e72f44b",
+      "expanded_sha256": "aa44590e5ca4ed65917b5b06e81b8ab596bda7d1b3affcd29f0d875eb071b9bf",
+      "expanded_shader": "res://assets/vfx/corrections/weapon-receiver-aperture-20261021/def7d998b9e4e743/92ae1fdd46e14d36ba87.gdshader",
+      "kind": "read_only_actual_current_receiving_source",
+      "root_code_sha256": "b61cce83cd020141731a4cd4385ef3b52e6d9da0a13ca80b0f8ef25e9e746a1f",
+      "source_project": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot",
+      "source_root": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/modular.gdshader"
+    }
+  },
+  "native_log_sha256": "8f8d6650bf859c3a31619f2e07816f7ab2a4aaab515de3186fd980f3b728ba7c",
+  "shutdown": {
+    "schema": "factory.weapon_receiver.static_exit_qualification.v2",
+    "native_log_sha256": "8f8d6650bf859c3a31619f2e07816f7ab2a4aaab515de3186fd980f3b728ba7c",
+    "native_receipt_sha256": "44063e99a9696e5ef1d1abd34a075373dc8376ecb464595010960da232e02c64",
+    "qualified_static_script_exit": true,
+    "engine_errors_filtered": false,
+    "engine_shutdown_clean": false,
+    "native_exact_errors": [
+      "ERROR: 3 resources still in use at exit (run with --verbose for details)."
+    ],
+    "native_script_owners": {
+      "Clock": {
+        "class": "GDScript",
+        "id": -9223372002276932146,
+        "object_metadata": {},
+        "path": "res://factory/packaging/occurrence_clock.gd",
+        "references_including_diagnostic": 16
+      },
+      "Program": {
+        "class": "GDScript",
+        "id": -9223372002562144820,
+        "object_metadata": {},
+        "path": "res://factory/components/weapon_appearance/program.gd",
+        "references_including_diagnostic": 12
+      },
+      "SourceMaterials": {
+        "class": "GDScript",
+        "id": -9223372002847357494,
+        "object_metadata": {},
+        "path": "res://factory/core/source_materials.gd",
+        "references_including_diagnostic": 44
+      }
+    },
+    "native_static_values": {
+      "clock_image": null,
+      "clock_programs": {
+        "first_entries": [],
+        "size": 0,
+        "type": "Dictionary"
+      },
+      "clock_texture": null,
+      "direct_claims": {
+        "first_entries": [],
+        "size": 0,
+        "type": "Dictionary"
+      },
+      "expanded_sources": {
+        "first_entries": [],
+        "size": 0,
+        "type": "Dictionary"
+      },
+      "free_slots": {
+        "first_entries": [],
+        "size": 0,
+        "type": "Array"
+      },
+      "shader_interfaces": {
+        "first_entries": [],
+        "size": 0,
+        "type": "Dictionary"
+      },
+      "uniform_names": {
+        "first_entries": [],
+        "size": 0,
+        "type": "Dictionary"
+      },
+      "weapon_programs": {
+        "first_entries": [],
+        "size": 0,
+        "type": "Dictionary"
+      }
+    },
+    "diagnosed_verbose_cleanup": {
+      "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/weapon-aperture-cleanup-verbose-v1.log",
+      "log_sha256": "74b67f48a3fc849b2d2f7de70539f66243326cfe94d6f10468430a3a4a91ca58",
+      "shutdown": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/weapon-receiver-aperture-20261021/actual-context-project/receiver-aperture-cleanup/static-shutdown.json",
+      "shutdown_sha256": "cd42036a1d15eb037a1689271a7a876e8e27d56c87b50eea4c736033377fd075",
+      "actual_shutdown_state": {
+        "frame_post_draw": [],
+        "frame_pre_draw": [],
+        "process_frame": [],
+        "scope": "Actual full-preparation state after explicit shutdown. Diagnostic arguments temporarily add references; this is not a retained graph or a leak-free exit verdict.",
+        "script_owners": {
+          "Clock": {
+            "class": "GDScript",
+            "id": -9223372002344041011,
+            "object_metadata": {},
+            "path": "res://factory/packaging/occurrence_clock.gd",
+            "references_including_diagnostic": 15
+          },
+          "Program": {
+            "class": "GDScript",
+            "id": -9223372002629253685,
+            "object_metadata": {},
+            "path": "res://factory/components/weapon_appearance/program.gd",
+            "references_including_diagnostic": 11
+          },
+          "SourceMaterials": {
+            "class": "GDScript",
+            "id": -9223372002914466359,
+            "object_metadata": {},
+            "path": "res://factory/core/source_materials.gd",
+            "references_including_diagnostic": 42
+          }
+        },
+        "static_values": {
+          "clock_image": null,
+          "clock_programs": {
+            "first_entries": [],
+            "size": 0,
+            "type": "Dictionary"
+          },
+          "clock_texture": null,
+          "direct_claims": {
+            "first_entries": [],
+            "size": 0,
+            "type": "Dictionary"
+          },
+          "expanded_sources": {
+            "first_entries": [],
+            "size": 0,
+            "type": "Dictionary"
+          },
+          "free_slots": {
+            "first_entries": [],
+            "size": 0,
+            "type": "Array"
+          },
+          "shader_interfaces": {
+            "first_entries": [],
+            "size": 0,
+            "type": "Dictionary"
+          },
+          "uniform_names": {
+            "first_entries": [],
+            "size": 0,
+            "type": "Dictionary"
+          },
+          "weapon_programs": {
+            "first_entries": [],
+            "size": 0,
+            "type": "Dictionary"
+          }
+        }
+      },
+      "exact_engine_exit_errors": [
+        "ERROR: 3 resources still in use at exit."
+      ],
+      "retained_resources": [
+        {
+          "path": "res://factory/core/source_materials.gd",
+          "type": "GDScript"
+        },
+        {
+          "path": "res://factory/components/weapon_appearance/program.gd",
+          "type": "GDScript"
+        },
+        {
+          "path": "res://factory/packaging/occurrence_clock.gd",
+          "type": "GDScript"
+        }
+      ],
+      "objectdb_classes": {
+        "GDScriptNativeClass": 5,
+        "GDScript": 3
+      },
+      "engine_shutdown_clean": false,
+      "engine_errors_filtered": false,
+      "scope": "Three exact static GDScript class resources plus five builtin class references at engine exit. Actual native rendering/ownership checks pass; no live Nodes, Shaders, Materials, images or textures are retained. This is not a clean-exit certificate."
+    },
+    "cleanup_checks": 71,
+    "cleanup_contexts": 2,
+    "no_new_images_in_diagnostic": true,
+    "scope": "Actual aperture fixture release-state equals separate verbose cleanup-only current-receiver proof. Exactly3staticScript+5builtin class references; no remaining mutable cache/Clock/frame callbacks or new liveNode/Material. Original error retained; no clean-engine claim."
+  },
+  "public_and_dependency_contracts": {
+    "version": "runtime-weapon-aperture-20261021-def7d998b9e4e743",
+    "checks": 4100,
+    "failures": [],
+    "reports": [
+      {
+        "report": {
+          "checks": 4031,
+          "failures": [],
+          "index_sha256": "557c178ad96c9afdf29aac30a5d7b0a823d784d050cc5ca7b0d216afb3425569",
+          "new_clips": [
+            {
+              "clip_id": "weapons/equipped/fire/blade_tongues/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/095309702c0aebdb55b551dd/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/c1f0d9b42f565d67388a/fire_blade_tongues_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/blade_tongues/medium/sustain",
+              "constructor": "res://assets/vfx/clips/5a0e0e17dedfdecfb69ff254/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/319459bfd36eb92deedd/fire_blade_tongues_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/blade_tongues/greater/sustain",
+              "constructor": "res://assets/vfx/clips/8546771c1153b2a15097978d/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/409eef7927c753216983/fire_blade_tongues_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/ember_sheath/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/4ae650d7d3d51ad6508eb680/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/8b2aa4448dfd159f568a/fire_ember_sheath_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/ember_sheath/medium/sustain",
+              "constructor": "res://assets/vfx/clips/40b9f80e70976dcf2a189e48/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/eac4963d69db77dd2024/fire_ember_sheath_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/ember_sheath/greater/sustain",
+              "constructor": "res://assets/vfx/clips/6ce581a06cba2ec3769d2c29/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/238b7448ec1e72c0f272/fire_ember_sheath_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/rime_facets/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/d631916bbff89dcc261577aa/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/985b1bf3d9c880650222/ice_rime_facets_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/rime_facets/medium/sustain",
+              "constructor": "res://assets/vfx/clips/f480e8d5642481b72ab86825/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/6af0b39f1fb04b4c3def/ice_rime_facets_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/rime_facets/greater/sustain",
+              "constructor": "res://assets/vfx/clips/7466b6422a9f17422016d6f4/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/63ceb52dfc843a653670/ice_rime_facets_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/clear_glaze/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/01ccca8a86fdec8cb57d9518/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/aa7491f394bb1eb95409/ice_clear_glaze_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/clear_glaze/medium/sustain",
+              "constructor": "res://assets/vfx/clips/8fc3a651e415e99acabb90f4/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/88f945c87554d02c2b1d/ice_clear_glaze_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/clear_glaze/greater/sustain",
+              "constructor": "res://assets/vfx/clips/11a6e2fc4e0d4249fca0dc59/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/5375bb67500ecbe8271a/ice_clear_glaze_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/axial_forks/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/c69b20fa9468897f544cabc4/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/793f3f12de683db03dc6/electric_axial_forks_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/axial_forks/medium/sustain",
+              "constructor": "res://assets/vfx/clips/a55a30066085132365d05649/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/413d61d473b38f8c5bb4/electric_axial_forks_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/axial_forks/greater/sustain",
+              "constructor": "res://assets/vfx/clips/5b685c8fa417284311cf485f/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/754b98e9bd9bdd3d8314/electric_axial_forks_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/cross_discharge/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/66bfb49d05bbe6cdd009f85f/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/d02da6fc20e06ae5fdfa/electric_cross_discharge_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/cross_discharge/medium/sustain",
+              "constructor": "res://assets/vfx/clips/50fa831d170548e1777d400d/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/5e7d2bc8c220d2458ee4/electric_cross_discharge_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/cross_discharge/greater/sustain",
+              "constructor": "res://assets/vfx/clips/4871adcd850c9c563f5576d8/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/85c5f550feb3250e39b8/electric_cross_discharge_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/psychic/vein_lattice/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/dcf56e68a75e164386d0e8eb/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/c5da1da353ca362d827d/psychic_vein_lattice_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/psychic/vein_lattice/medium/sustain",
+              "constructor": "res://assets/vfx/clips/0b958c69688b14afa6ad8fcc/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/9d0d2e6b16594eed717e/psychic_vein_lattice_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/psychic/vein_lattice/greater/sustain",
+              "constructor": "res://assets/vfx/clips/1f5550c21db5cec132cc1c6d/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/0d681e6a3a1023629f7a/psychic_vein_lattice_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/psychic/phase_slits/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/9458347220c6312c41284b3d/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/c06dd266343942f3b156/psychic_phase_slits_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/psychic/phase_slits/medium/sustain",
+              "constructor": "res://assets/vfx/clips/fb8b7f0662433b684f6faa4b/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/288129684725890d1b0b/psychic_phase_slits_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/psychic/phase_slits/greater/sustain",
+              "constructor": "res://assets/vfx/clips/ac76dc149b8280ec676e18b2/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/0f5cdd1e32bcb018eb3f/psychic_phase_slits_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/poison/viscous_film/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/dcc0fbbab3072377fb5df891/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/a3e0c84cecbe8bd871ac/poison_viscous_film_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/poison/viscous_film/medium/sustain",
+              "constructor": "res://assets/vfx/clips/5cb69c14d12bed4f391e5d54/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/f4800594751bfd0503f7/poison_viscous_film_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/poison/viscous_film/greater/sustain",
+              "constructor": "res://assets/vfx/clips/8c463c4b767f0645b28ddc0d/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/fd4c269dc18e77d2bcbe/poison_viscous_film_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/poison/venom_beads/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/fcd31a0f209b3de27775ce15/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/c2fa2d620d24f5f046cd/poison_venom_beads_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/poison/venom_beads/medium/sustain",
+              "constructor": "res://assets/vfx/clips/d06da74a5e9f33003e1bfe72/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/45950d7ca1af9b7f51ee/poison_venom_beads_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/poison/venom_beads/greater/sustain",
+              "constructor": "res://assets/vfx/clips/fcda8dd2a213dcaf6726e943/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/42687ad355b66c45a737/poison_venom_beads_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/radiant/gilded_etch/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/1c35aaade7a9af5a17fa375f/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/c6ba53041f2f2e9a9b69/radiant_gilded_etch_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/radiant/gilded_etch/medium/sustain",
+              "constructor": "res://assets/vfx/clips/f077e9e225487fa66600822e/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/34b21a46cef20894bf65/radiant_gilded_etch_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/radiant/gilded_etch/greater/sustain",
+              "constructor": "res://assets/vfx/clips/5d9cc301af9a5a09c0c97c72/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/5645a1e197abee4d3107/radiant_gilded_etch_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/radiant/solar_bevel/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/25f7809db7b31cefc1067f43/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/c913f2f632b9539832d7/radiant_solar_bevel_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/radiant/solar_bevel/medium/sustain",
+              "constructor": "res://assets/vfx/clips/bd108882115f3453d1fac953/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/f77a8e037571cd743878/radiant_solar_bevel_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/radiant/solar_bevel/greater/sustain",
+              "constructor": "res://assets/vfx/clips/3baf871e85b62204b0de2ad7/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/b796df43c369e900831a/radiant_solar_bevel_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/necrotic/soul_smoke/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/0ace28e0d404e8f0ff794053/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/b6c36a67f003df891f68/necrotic_soul_smoke_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/necrotic/soul_smoke/medium/sustain",
+              "constructor": "res://assets/vfx/clips/5fb5fdaddf39ca1256122b18/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/ac59007f3383e1701ad7/necrotic_soul_smoke_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/necrotic/soul_smoke/greater/sustain",
+              "constructor": "res://assets/vfx/clips/903455c938003fb414fce3e0/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/90e51c5f87d3a7894034/necrotic_soul_smoke_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/necrotic/hollow_veins/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/01be07d1a21892da8f60bbbb/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/2d4dc70ba04e118840d4/necrotic_hollow_veins_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/necrotic/hollow_veins/medium/sustain",
+              "constructor": "res://assets/vfx/clips/b80754857ab545e9a924654e/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/853fb936e968bf3a68cd/necrotic_hollow_veins_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/necrotic/hollow_veins/greater/sustain",
+              "constructor": "res://assets/vfx/clips/cbd90ada7f6d10391f27152a/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/b85ebba0ddba4c673b1a/necrotic_hollow_veins_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/arcane/etched_steel/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/ae20492c251e95635d49c887/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/2d2caa55d062452356f1/arcane_etched_steel_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/arcane/etched_steel/medium/sustain",
+              "constructor": "res://assets/vfx/clips/2880621ccb322c3d0dded095/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/2f556223de45c32038aa/arcane_etched_steel_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/arcane/etched_steel/greater/sustain",
+              "constructor": "res://assets/vfx/clips/e15ecf5f6f018417c5bd82a6/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/51e89a45e56f87ff12cc/arcane_etched_steel_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/arcane/swept_glint/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/fdf315f8ff9025c69c96f59e/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/ba76b451cd5d3b359087/arcane_swept_glint_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/arcane/swept_glint/medium/sustain",
+              "constructor": "res://assets/vfx/clips/f4100fa327f2d7edc8cb5e33/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/c23a6959362c917ecdb8/arcane_swept_glint_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/arcane/swept_glint/greater/sustain",
+              "constructor": "res://assets/vfx/clips/522dc780ec2f20e0a84f510a/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/80dd921474a0eed8b074/arcane_swept_glint_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/wood/living_grain/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/703920d2d366e6439c15f257/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/2840a5fd111b856c02aa/wood_living_grain_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/wood/living_grain/medium/sustain",
+              "constructor": "res://assets/vfx/clips/6624b317471ff36302babb76/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/28313f3b45296578ff03/wood_living_grain_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/wood/living_grain/greater/sustain",
+              "constructor": "res://assets/vfx/clips/aafe1fee14337fb012f14dd6/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/843a729c60419da0561f/wood_living_grain_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/pure_crystal/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/f46d3304e5e92ab4c5cf8f93/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/7a7f107f970c076f4b3e/ice_pure_crystal_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/pure_crystal/medium/sustain",
+              "constructor": "res://assets/vfx/clips/a3c080f450ecd5eb7f599fa9/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/9164596b5cca5145f1cf/ice_pure_crystal_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/pure_crystal/greater/sustain",
+              "constructor": "res://assets/vfx/clips/3a04c079b4c75f2396c8749e/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/3eb8e2b1f4a8bbd79a0b/ice_pure_crystal_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/pure_rime/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/594b6c550114c22b4dcbc6ab/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/495e41007fc5cbd67fa2/ice_pure_rime_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/pure_rime/medium/sustain",
+              "constructor": "res://assets/vfx/clips/4e244a54882e80b1ec991576/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/d1a1664d8e54ae042ac3/ice_pure_rime_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/ice/pure_rime/greater/sustain",
+              "constructor": "res://assets/vfx/clips/cd42a110b38b4d5a4e1e55e9/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/8013585ca2b41370d910/ice_pure_rime_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/pure_conduit/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/d4cb78c65b3b50cb9069eec4/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/ca82206bdcf0bff27728/electric_pure_conduit_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/pure_conduit/medium/sustain",
+              "constructor": "res://assets/vfx/clips/addb5a976c09ff4473acc689/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/b7924335196eb85fdb37/electric_pure_conduit_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/pure_conduit/greater/sustain",
+              "constructor": "res://assets/vfx/clips/6b6ec516377e62dc38eed73f/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/21cfb02aa2750a77a79b/electric_pure_conduit_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/pure_storm/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/00c4b65cb4080840af9d0c4e/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/f82acfc4b5515387b060/electric_pure_storm_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/pure_storm/medium/sustain",
+              "constructor": "res://assets/vfx/clips/cad3c4f1b3ee5af70641b394/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/8ce2b90356d61c386e68/electric_pure_storm_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/electric/pure_storm/greater/sustain",
+              "constructor": "res://assets/vfx/clips/2c06e57f3049ec4e947711c0/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/dda71f2095c36095bfe0/electric_pure_storm_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/blade_tongues_effect_only/lesser/sustain",
+              "constructor": "res://assets/vfx/clips/fe2630abbb8d0925fb0fdb0f/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/0080bb9b63e7e653af15/fire_blade_tongues_effect_only_lesser_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/blade_tongues_effect_only/medium/sustain",
+              "constructor": "res://assets/vfx/clips/ec005fb0d738e3b4341ae7bc/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/7074d263b5a7c61eaae1/fire_blade_tongues_effect_only_medium_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/equipped/fire/blade_tongues_effect_only/greater/sustain",
+              "constructor": "res://assets/vfx/clips/ab823b01fa9ceb1b4cdcfc4a/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": false,
+              "inputs": [
+                "weapon_binding",
+                "entity_geometry",
+                "actor_layers",
+                "owner_state",
+                "root_path"
+              ],
+              "phase": "res://assets/vfx/sources/2ab656211b74dc7461fb/fire_blade_tongues_effect_only_greater_phase.tres",
+              "seconds": 1.0,
+              "simulation_hz": 144.0
+            },
+            {
+              "clip_id": "weapons/contact/ice/lesser",
+              "constructor": "res://assets/vfx/clips/9751c01e752499329fbb398c/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/838f2f76969099e1b5b8/ice_lesser_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/ice/medium",
+              "constructor": "res://assets/vfx/clips/8b37c8bd238d863ec5bfbb73/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/a74d6a049616ba67f0ca/ice_medium_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/ice/greater",
+              "constructor": "res://assets/vfx/clips/f74be5a07a8f0908c635cc6b/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/c4bc21bbff6748113dbb/ice_greater_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/electric/lesser",
+              "constructor": "res://assets/vfx/clips/e49a07729386ea3986f35f18/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/db9a56c0b778ef5019f3/electric_lesser_phase.tres",
+              "seconds": 0.25,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/electric/medium",
+              "constructor": "res://assets/vfx/clips/e4dfcbd1e0f41d9daecbf4c0/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/9893540c8d391c80084d/electric_medium_phase.tres",
+              "seconds": 0.25,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/electric/greater",
+              "constructor": "res://assets/vfx/clips/b1fe71c4fb8b7e503278eed6/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/7dfb8d0674824c2443ba/electric_greater_phase.tres",
+              "seconds": 0.25,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/psychic/lesser",
+              "constructor": "res://assets/vfx/clips/50cc38e0f23bedb36183665f/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/a50738e7090a5abab987/psychic_lesser_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/psychic/medium",
+              "constructor": "res://assets/vfx/clips/6eda0d5c9c69e0552ec2625c/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/41892433e6045d66efad/psychic_medium_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/psychic/greater",
+              "constructor": "res://assets/vfx/clips/10517dd7585a3d4cde56489f/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/c7418ff270e095e84542/psychic_greater_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/poison/lesser",
+              "constructor": "res://assets/vfx/clips/4efbac4eff4c92ee02bf186b/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/f5166df21d37a3dac484/poison_lesser_phase.tres",
+              "seconds": 0.44,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/poison/medium",
+              "constructor": "res://assets/vfx/clips/5028c1ada47657f5011175f8/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/0607a7d395e1ab482f77/poison_medium_phase.tres",
+              "seconds": 0.44,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/poison/greater",
+              "constructor": "res://assets/vfx/clips/0c4cc8274cf8dad2f3e791ee/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/715b5552ff365b779891/poison_greater_phase.tres",
+              "seconds": 0.44,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/radiant/lesser",
+              "constructor": "res://assets/vfx/clips/7f3a058f5dc30b1de32248c7/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/87260d280d4b9d37c158/radiant_lesser_phase.tres",
+              "seconds": 0.27,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/radiant/medium",
+              "constructor": "res://assets/vfx/clips/397e2411a8bfaecbf492aab8/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/bc2cf7c64b62c1d2584c/radiant_medium_phase.tres",
+              "seconds": 0.27,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/radiant/greater",
+              "constructor": "res://assets/vfx/clips/4e87d7f0c92288c36c7246bd/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/7ed552934be733b66819/radiant_greater_phase.tres",
+              "seconds": 0.27,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/necrotic/lesser",
+              "constructor": "res://assets/vfx/clips/f57fe25db66a37e08cdac588/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/939238c06a99a30dd714/necrotic_lesser_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/necrotic/medium",
+              "constructor": "res://assets/vfx/clips/2c296f57f5cbfe0ac70bddfd/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/b67c6b580c1ade3d17a5/necrotic_medium_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/necrotic/greater",
+              "constructor": "res://assets/vfx/clips/9e7ae6bdcae65b2dd2315772/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/08271d5e12c92bfd62df/necrotic_greater_phase.tres",
+              "seconds": 0.4,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/fire/lesser",
+              "constructor": "res://assets/vfx/clips/b476b57f006c6cb6c0762e72/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/7429fff2169e05c5d74b/fire_lesser_phase.tres",
+              "seconds": 0.28,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/fire/medium",
+              "constructor": "res://assets/vfx/clips/5c6030b56a34d488585b3078/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/4b64a65eb03d4547cc0d/fire_medium_phase.tres",
+              "seconds": 0.28,
+              "simulation_hz": 60.0
+            },
+            {
+              "clip_id": "weapons/contact/fire/greater",
+              "constructor": "res://assets/vfx/clips/19571e1b50509c901947c337/construct.gd",
+              "context_or_pixels_qualified": false,
+              "history_seekable": true,
+              "inputs": [
+                "weapon_impact",
+                "root_path",
+                "entity_geometry"
+              ],
+              "phase": "res://assets/vfx/sources/1179efc9a8e18ff04e7b/fire_greater_phase.tres",
+              "seconds": 0.28,
+              "simulation_hz": 60.0
+            }
+          ],
+          "retained_clips": 1246,
+          "retained_condition_lifecycles": 155,
+          "retained_selections": 504,
+          "scope": "Fresh namespace-only ResourceLoader/public inherited API and exact predecessor selection retention; no actor/visual/GPU/performance/human approval inferred",
+          "version": "runtime-weapon-aperture-20261021-def7d998b9e4e743"
+        },
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/weapon-receiver-aperture-20261021/fresh-runtime-weapon-aperture-20261021-def7d998b9e4e743/weapon-checks.json",
+        "sha256": "cc6b0dfffd374780ff7af5e4487438b3d088b750ea907c2b423ecad6892e260a",
+        "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/weapon-receiver-aperture-20261021-public-v1.log",
+        "log_sha256": "59595af28c65c66152817abb4b5b6254ae0b187b54f24a95f760d286be86bcad"
+      },
+      {
+        "report": {
+          "checks": 34,
+          "detail": {
+            "current_keys": [
+              "1561e55b21a4614be1222da3e1bfccc4d918f13a725f3bb0c5ca918326b9a4a7",
+              "7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490",
+              "88dab08f51cf855eeb05b3160af1028320df91977651ac9a633cf7983ba0a8d2",
+              "aa44590e5ca4ed65917b5b06e81b8ab596bda7d1b3affcd29f0d875eb071b9bf",
+              "b61cce83cd020141731a4cd4385ef3b52e6d9da0a13ca80b0f8ef25e9e746a1f",
+              "cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956",
+              "fd0e8eea64114195bf6cd7f45e018462dce590b5c4288ef6df03fd6539f8dc07"
+            ],
+            "historical_keys": [
+              "1561e55b21a4614be1222da3e1bfccc4d918f13a725f3bb0c5ca918326b9a4a7",
+              "7f521694e8aa8624e868a1b27168ca156e9a1d08f14442e30168f5c4d6a0f490",
+              "88dab08f51cf855eeb05b3160af1028320df91977651ac9a633cf7983ba0a8d2",
+              "cb59c4ecf525d841fd1de267c1726a3ee7318d7a818fd3898adec3f5a9d44956",
+              "fd0e8eea64114195bf6cd7f45e018462dce590b5c4288ef6df03fd6539f8dc07"
+            ],
+            "native_conversion_required": false
+          },
+          "failures": [],
+          "index_sha256": "557c178ad96c9afdf29aac30a5d7b0a823d784d050cc5ca7b0d216afb3425569",
+          "version": "runtime-weapon-aperture-20261021-def7d998b9e4e743"
+        },
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/weapon-receiver-aperture-20261021/fresh-runtime-weapon-aperture-20261021-def7d998b9e4e743/receiver-contract.json",
+        "sha256": "029b0409256543bee15ae86a136bffa6fd7bdeb46830450957a0c80a7d3b4b27",
+        "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/weapon-receiver-aperture-20261021-bank-v1.log",
+        "log_sha256": "6b491e9c9147f40ad3a5b96e3009dedc2e39caeb4814110f8a20dbf40a87ae0f"
+      },
+      {
+        "report": {
+          "checks": 35,
+          "detail": {
+            "delta_files": [
+              "res://assets/vfx/corrections/weapon-receiver-aperture-20261021/def7d998b9e4e743/92ae1fdd46e14d36ba87.gdshader",
+              "res://assets/vfx/corrections/weapon-receiver-aperture-20261021/def7d998b9e4e743/effa41d358f198b201fab1f131f825d0d04193865c703d877c427675c4bd576a.gdshader",
+              "res://assets/vfx/sources/d761107faea637232d05/material.gdshaderinc",
+              "res://assets/vfx/sources/e4eb6fc0555192afd006/material.gdshaderinc",
+              "res://assets/vfx/sources/923689de2051b7ed9b64/element_material.gdshaderinc",
+              "res://assets/vfx/sources/7ea03eda1143a2eb6407/receiver-programs.tres",
+              "res://assets/vfx/sources/0fbf9b88434fe02d4db8/weapon_receiver_programs.gd",
+              "res://assets/vfx/sources/5010375539966f421b9d/058fbf1bdaa880202b33565e980f6a8b42d8ce248d9c00ff3cb2defa9af7c907.gdshader",
+              "res://assets/vfx/sources/bc2265c681f1ec6df125/649fc53a00f2a1a11890017e98b09deaf50ccbe99ae7ff03e8d9f13308d7aaa7.gdshader",
+              "res://assets/vfx/sources/7f6ca9b93d7ffa3af8b9/2a6a62199ca46456e3a10a861a7c164206e08351764ed314e2bd80eb55c4a421.gdshader",
+              "res://assets/vfx/corrections/weapon-receiver-correction-20261020/46b8f47014566e6d/1bdc5e72cfdd811c8a39335b1eaf4e2739ffc22ee5d310e0cbf7ea5f6438018e.gdshader"
+            ],
+            "inherited_exact_crc_boundaries": [
+              "res://assets/vfx/sources/d761107faea637232d05/material.gdshaderinc",
+              "res://assets/vfx/sources/e4eb6fc0555192afd006/material.gdshaderinc",
+              "res://assets/vfx/sources/923689de2051b7ed9b64/element_material.gdshaderinc",
+              "res://assets/vfx/sources/0fbf9b88434fe02d4db8/weapon_receiver_programs.gd",
+              "res://assets/vfx/sources/5010375539966f421b9d/058fbf1bdaa880202b33565e980f6a8b42d8ce248d9c00ff3cb2defa9af7c907.gdshader",
+              "res://assets/vfx/sources/bc2265c681f1ec6df125/649fc53a00f2a1a11890017e98b09deaf50ccbe99ae7ff03e8d9f13308d7aaa7.gdshader",
+              "res://assets/vfx/sources/7f6ca9b93d7ffa3af8b9/2a6a62199ca46456e3a10a861a7c164206e08351764ed314e2bd80eb55c4a421.gdshader",
+              "res://assets/vfx/corrections/weapon-receiver-correction-20261020/46b8f47014566e6d/1bdc5e72cfdd811c8a39335b1eaf4e2739ffc22ee5d310e0cbf7ea5f6438018e.gdshader"
+            ],
+            "whole_predecessor_reloaded": false
+          },
+          "failures": [],
+          "index_sha256": "557c178ad96c9afdf29aac30a5d7b0a823d784d050cc5ca7b0d216afb3425569",
+          "version": "runtime-weapon-aperture-20261021-def7d998b9e4e743"
+        },
+        "path": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/weapon-receiver-aperture-20261021/fresh-runtime-weapon-aperture-20261021-def7d998b9e4e743/receiver-dependencies.json",
+        "sha256": "f82ba2daee9bb2a2382c0aa9169940cafb2c81d22b724768639dca3e8acabe9e",
+        "log": "/mnt/c/Users/tommaso/Documents/assets/VFXFactory/.runtime/vfx-package-20261018/weapon-receiver-aperture-20261021-dependencies-v1.log",
+        "log_sha256": "5f41f315f890e2177e42a6a855b22399fcb62373f326b85ffaa5312bac53d1ad"
+      }
+    ]
+  },
+  "literal_labels": {
+    "checks": 606,
+    "failures": [],
+    "fixture_sha256": "61b21a147dd40a4b56eb6a4fce33b3cd4d3c94a4ea6cd918105a441eb18c24a9",
+    "loaded": 30,
+    "manifest_sha256": "c22e0ab479e0b521417924d380ab4e1a0ec3edee65988826ec083e191e22c6ad",
+    "observations": [
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_fire_event/application",
+        "label": "Draconic Breath \u00b7 observed Fire readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/c66e41a494b914bf097d/application.tres",
+        "sha256": "83170fab53bdf696f97aa70ffb906ac1a627837f378e375c6d62d757b76efade"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_fire_event/removal",
+        "label": "Draconic Breath \u00b7 observed Fire readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/df40eccfed79cdf3065e/removal.tres",
+        "sha256": "3b72fb401611f435e44f79a9fba4223ebef0f46e5c92e02fd18902a9fb6de0fd"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_fire_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Fire readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/79396fc1ff105bd14383/sustain.tres",
+        "sha256": "32bc3604e2b8ff15ef3de7e570526928b0316140c2a4358e8f746fde117539ce"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_cold_event/application",
+        "label": "Draconic Breath \u00b7 observed Cold readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/c79bea7f21e15beecac7/application.tres",
+        "sha256": "7f65f7fda91b077a2b85afa9764208dbed503ed65cce93a2b3d32932a91c2a56"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_cold_event/removal",
+        "label": "Draconic Breath \u00b7 observed Cold readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/b95f261a0964e1460370/removal.tres",
+        "sha256": "fd01d8e884896362b016d9ecb4085592f7f991a67a1753a13263ea7e999a6ffd"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_cold_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Cold readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/ba924e2339bd38a48024/sustain.tres",
+        "sha256": "6338bfd1314852fce175761d9c6959cae36bb4bf3417cfb744822a102ef47a30"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_lightning_event/application",
+        "label": "Draconic Breath \u00b7 observed Lightning readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/e6de05a931fdb895414e/application.tres",
+        "sha256": "f4941df3824eb237da46a77b6639655d732ee00176a08b55e444a99c3ec521fa"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_lightning_event/removal",
+        "label": "Draconic Breath \u00b7 observed Lightning readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/ffd5181e55ed81562072/removal.tres",
+        "sha256": "0e49d39567f8a55161bbebac45db2f02854741b3f529bf6b4dd2c86dd6b46693"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_lightning_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Lightning readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/46335ae26e93df222392/sustain.tres",
+        "sha256": "0c226cd46149dcc96def9155c749810c0d42353af69fa4ae56d63035a320fd7b"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_acid_event/application",
+        "label": "Draconic Breath \u00b7 observed Acid readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/9949cf392ffb66d68ea1/application.tres",
+        "sha256": "65d1f1b64fbbcd9d7082df8874b917a7b740ef4efe2602d5481b924a517d7872"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_acid_event/removal",
+        "label": "Draconic Breath \u00b7 observed Acid readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/b2db07a7d43af740b86e/removal.tres",
+        "sha256": "7041ac2f778c37f2c0be53d30e1f3b6a0299869f712a203f7b50e15216a12e3c"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_acid_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Acid readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/db19c0299a48641b60e9/sustain.tres",
+        "sha256": "525f82ba3cd75b3eb492300a754ed8fba1f35f8f1150cb181e319cec9784243b"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_poison_event/application",
+        "label": "Draconic Breath \u00b7 observed Poison readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/7a0bf6f8cbb9d251d654/application.tres",
+        "sha256": "0a2e16902a111105f2da70ee3bc3fa0b51da818db2ac0aaf3b1db1f33e3cad90"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_poison_event/removal",
+        "label": "Draconic Breath \u00b7 observed Poison readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/d04d267edabae7f0db89/removal.tres",
+        "sha256": "5c917750a4b8dac420664ca8c1af44c424f2ea26bdce24b51fc7a5fd65536cde"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_poison_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Poison readiness",
+        "pass": 0,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/4328b2485fce0f8eff80/sustain.tres",
+        "sha256": "656928ba5c06c6b3ad39dbecf17e6510a450bffcba94c55878f55a986b5a93a4"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_fire_event/application",
+        "label": "Draconic Breath \u00b7 observed Fire readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/c66e41a494b914bf097d/application.tres",
+        "sha256": "83170fab53bdf696f97aa70ffb906ac1a627837f378e375c6d62d757b76efade"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_fire_event/removal",
+        "label": "Draconic Breath \u00b7 observed Fire readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/df40eccfed79cdf3065e/removal.tres",
+        "sha256": "3b72fb401611f435e44f79a9fba4223ebef0f46e5c92e02fd18902a9fb6de0fd"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_fire_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Fire readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/79396fc1ff105bd14383/sustain.tres",
+        "sha256": "32bc3604e2b8ff15ef3de7e570526928b0316140c2a4358e8f746fde117539ce"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_cold_event/application",
+        "label": "Draconic Breath \u00b7 observed Cold readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/c79bea7f21e15beecac7/application.tres",
+        "sha256": "7f65f7fda91b077a2b85afa9764208dbed503ed65cce93a2b3d32932a91c2a56"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_cold_event/removal",
+        "label": "Draconic Breath \u00b7 observed Cold readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/b95f261a0964e1460370/removal.tres",
+        "sha256": "fd01d8e884896362b016d9ecb4085592f7f991a67a1753a13263ea7e999a6ffd"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_cold_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Cold readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/ba924e2339bd38a48024/sustain.tres",
+        "sha256": "6338bfd1314852fce175761d9c6959cae36bb4bf3417cfb744822a102ef47a30"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_lightning_event/application",
+        "label": "Draconic Breath \u00b7 observed Lightning readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/e6de05a931fdb895414e/application.tres",
+        "sha256": "f4941df3824eb237da46a77b6639655d732ee00176a08b55e444a99c3ec521fa"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_lightning_event/removal",
+        "label": "Draconic Breath \u00b7 observed Lightning readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/ffd5181e55ed81562072/removal.tres",
+        "sha256": "0e49d39567f8a55161bbebac45db2f02854741b3f529bf6b4dd2c86dd6b46693"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_lightning_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Lightning readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/46335ae26e93df222392/sustain.tres",
+        "sha256": "0c226cd46149dcc96def9155c749810c0d42353af69fa4ae56d63035a320fd7b"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_acid_event/application",
+        "label": "Draconic Breath \u00b7 observed Acid readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/9949cf392ffb66d68ea1/application.tres",
+        "sha256": "65d1f1b64fbbcd9d7082df8874b917a7b740ef4efe2602d5481b924a517d7872"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_acid_event/removal",
+        "label": "Draconic Breath \u00b7 observed Acid readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/b2db07a7d43af740b86e/removal.tres",
+        "sha256": "7041ac2f778c37f2c0be53d30e1f3b6a0299869f712a203f7b50e15216a12e3c"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_acid_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Acid readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/db19c0299a48641b60e9/sustain.tres",
+        "sha256": "525f82ba3cd75b3eb492300a754ed8fba1f35f8f1150cb181e319cec9784243b"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_poison_event/application",
+        "label": "Draconic Breath \u00b7 observed Poison readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/7a0bf6f8cbb9d251d654/application.tres",
+        "sha256": "0a2e16902a111105f2da70ee3bc3fa0b51da818db2ac0aaf3b1db1f33e3cad90"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_poison_event/removal",
+        "label": "Draconic Breath \u00b7 observed Poison readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/d04d267edabae7f0db89/removal.tres",
+        "sha256": "5c917750a4b8dac420664ca8c1af44c424f2ea26bdce24b51fc7a5fd65536cde"
+      },
+      {
+        "clip_id": "conditions/continuation/condition_draconic_breath_cadence_poison_event/sustain",
+        "label": "Draconic Breath \u00b7 observed Poison readiness",
+        "pass": 1,
+        "path": "res://assets/vfx/extensions/public-admission-20261020/sources/4328b2485fce0f8eff80/sustain.tres",
+        "sha256": "656928ba5c06c6b3ad39dbecf17e6510a450bffcba94c55878f55a986b5a93a4"
+      }
+    ],
+    "request": {
+      "manifest": "res://literal-labels-input.json",
+      "output": "res://literal-labels-checks.json"
+    },
+    "schema": "factory.weapon_receiver_utf8_labels.v1",
+    "scope": "Native label/property/reference loading only, including second top-level cache-ignore pass; no effect Nodes, particle construction, rendering, runtime/artwork or production integration claim."
+  },
+  "unsealed_tool_revisions": [
+    {
+      "old_tool_sha256": "d909d733250643e85344a70252ad8a90fb375cc67b66a3009f894abdb936c785",
+      "new_tool_sha256": "d30b732eebe3be3fe8e7bc30829b129b613fd9cfeb52d0b6dcdc7b7e02ee4307",
+      "original_source": "history/fixture-staging-v1/weapon_aperture_package.py",
+      "original_assembly": "history/fixture-staging-v1/assembly.json",
+      "scope": "Only optional absent fixture roots and exact-index partial setup resumption. Native bank/program/index unchanged; no qualified or sealed archive modified."
+    },
+    {
+      "old_tool_sha256": "d30b732eebe3be3fe8e7bc30829b129b613fd9cfeb52d0b6dcdc7b7e02ee4307",
+      "new_tool_sha256": "e6dd743a0a6d83ae15449efcac4db5bf28b5f1064aabbc00350f7a12cd0ad3a2",
+      "original_source": "history/pre-seal-source-v2/weapon_aperture_package.py",
+      "original_assembly": "history/pre-seal-source-v2/assembly.json",
+      "scope": "Before seal: independently requested15literalUTF8labels, explicit corrected-resource/index integrity at seal, exact diagnosed static-shutdown qualification. No sealed artifact modified."
+    }
+  ],
+  "retention": {
+    "entries": 22820,
+    "exceptions": [
+      "assets/vfx/extensions/public-admission-20261020/sources/4328b2485fce0f8eff80/sustain.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/46335ae26e93df222392/sustain.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/79396fc1ff105bd14383/sustain.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/7a0bf6f8cbb9d251d654/application.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/9949cf392ffb66d68ea1/application.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/b2db07a7d43af740b86e/removal.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/b95f261a0964e1460370/removal.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/ba924e2339bd38a48024/sustain.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/c66e41a494b914bf097d/application.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/c79bea7f21e15beecac7/application.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/d04d267edabae7f0db89/removal.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/db19c0299a48641b60e9/sustain.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/df40eccfed79cdf3065e/removal.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/e6de05a931fdb895414e/application.tres",
+      "assets/vfx/extensions/public-admission-20261020/sources/ffd5181e55ed81562072/removal.tres",
+      "assets/vfx/index.json",
+      "assets/vfx/sources/7ea03eda1143a2eb6407/receiver-programs.tres"
+    ],
+    "all_other_predecessor_size_crc_exact": true
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "version": "runtime-spirit-runtime-20261021-082bfa254988364b",
+  "approach": "runtime-prepared-spirit-runtime-20261021",
+  "choices": [
+    {
+      "clip_id": "assembled/spirit_guardians_radiant_native",
+      "approach_id": "runtime-prepared-spirit-runtime-20261021",
+      "constructor": "res://assets/vfx/clips/98c1ade973e1e7f784cd1b07/construct.gd",
+      "phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/53af195b70b841a65a63/radiant.tres",
+      "source_qualification_path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+      "source_qualification": true,
+      "source_runtime_flags_retained": {
+        "cost_flags": [],
+        "readiness": {
+          "total_including_frame_yields_us": 332441,
+          "maximum_main_thread_step_us": 1074,
+          "atomic_cost_flags": [],
+          "cache_before": {
+            "bank": false,
+            "ground": false,
+            "piece": false
+          },
+          "node_counts": [
+            1,
+            1
+          ],
+          "actual_native_resources": 10,
+          "actual_explicit_dependency_paths": [
+            "res://factory/components/spirit_rid/piece_v3.gd",
+            "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/radiant.res",
+            "res://factory/components/owned_fields/flow_hold.gd",
+            "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_radiant-ground.res"
+          ]
+        },
+        "runtime_budget_pass": true,
+        "raw_flags_retained": true,
+        "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+        "raw_input_maxima_us": [
+          {
+            "repeat": 0,
+            "held_unchanged": 111,
+            "advancing_orbit": 280,
+            "changed_owner_anchor": 254
+          },
+          {
+            "repeat": 1,
+            "held_unchanged": 82,
+            "advancing_orbit": 256,
+            "changed_owner_anchor": 180
+          },
+          {
+            "repeat": 2,
+            "held_unchanged": 64,
+            "advancing_orbit": 289,
+            "changed_owner_anchor": 155
+          }
+        ],
+        "individual_over250us_input_maxima_remain_in_qualification": true
+      },
+      "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "source_key": "spirit_rid_queued_radiant",
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Two exact actual-owner Spirit alternatives;60preceding typed rows unchanged; actual public owner inputs, chronological native samples, positive pixels and absence/retirement. No new index ID, gameplay replay, art approval, full budget pass or source-control rerender.",
+      "packaged_first_complete_constructor_us": 1628,
+      "packaged_first_constructor_over2000us": false
+    },
+    {
+      "clip_id": "assembled/spirit_guardians_necrotic_native",
+      "approach_id": "runtime-prepared-spirit-runtime-20261021",
+      "constructor": "res://assets/vfx/clips/d5b707613ab209b59b3d65a5/construct.gd",
+      "phase": "res://assets/vfx/extensions/spirit-runtime-20261021/sources/d08891dcb9d9d4e5e692/necrotic.tres",
+      "source_qualification_path": "authoring/production-review-repair-20261021/runtime_tail/spirit_rid/queued_v1/qualification.json",
+      "source_qualification": true,
+      "source_runtime_flags_retained": {
+        "cost_flags": [
+          {
+            "actual_us": 2194,
+            "measurement": "complete_constructor",
+            "repeat": 0,
+            "source": "necrotic-candidate",
+            "threshold_us": 2000
+          },
+          {
+            "actual_us": 2133,
+            "measurement": "complete_constructor",
+            "repeat": 1,
+            "source": "necrotic-candidate",
+            "threshold_us": 2000
+          },
+          {
+            "actual_us": 2061,
+            "measurement": "complete_constructor",
+            "repeat": 2,
+            "source": "necrotic-candidate",
+            "threshold_us": 2000
+          }
+        ],
+        "readiness": {
+          "total_including_frame_yields_us": 422506,
+          "maximum_main_thread_step_us": 328,
+          "atomic_cost_flags": [],
+          "cache_before": {
+            "bank": false,
+            "ground": true,
+            "piece": true
+          },
+          "node_counts": [
+            1,
+            1
+          ],
+          "actual_native_resources": 48,
+          "actual_explicit_dependency_paths": [
+            "res://factory/components/spirit_rid/piece_v3.gd",
+            "res://authoring/production-review-repair-20261021/runtime_tail/spirit_rid/ready_v1/assets/necrotic.res",
+            "res://factory/components/owned_fields/flow_hold.gd",
+            "res://authoring/production-review-repair-20261021/terrain_owner/assets-v1/spirit_necrotic-ground.res"
+          ]
+        },
+        "runtime_budget_pass": false,
+        "raw_flags_retained": true,
+        "runtime_budget_pass_definition": "Source gates: complete constructor<=2000us, first input<=250us, and held/advancing/moved input p95<=250us. This does not mean every individual input call fits250us.",
+        "raw_input_maxima_us": [
+          {
+            "repeat": 0,
+            "held_unchanged": 129,
+            "advancing_orbit": 236,
+            "changed_owner_anchor": 190
+          },
+          {
+            "repeat": 1,
+            "held_unchanged": 80,
+            "advancing_orbit": 243,
+            "changed_owner_anchor": 278
+          },
+          {
+            "repeat": 2,
+            "held_unchanged": 86,
+            "advancing_orbit": 246,
+            "changed_owner_anchor": 204
+          }
+        ],
+        "individual_over250us_input_maxima_remain_in_qualification": true
+      },
+      "construction_input_contract": "make_component({phase:load(candidate_phase),layer_mask:actual_layer_mask,operands:[{component_path:[\"effect\"],input_field:\"\",values:{owner_uuid:actual_owner_uuid}}]}); add returned occurrence to the real parent before setters/sample. A packaged fixed wrapper must bind this new phase privately.",
+      "packaged_execution_qualified": true,
+      "human_approval_inferred": false,
+      "source_key": "spirit_rid_queued_necrotic",
+      "packaged_smoke_label": "complete-v1",
+      "packaged_smoke_scope": "Two exact actual-owner Spirit alternatives;60preceding typed rows unchanged; actual public owner inputs, chronological native samples, positive pixels and absence/retirement. No new index ID, gameplay replay, art approval, full budget pass or source-control rerender.",
+      "packaged_first_complete_constructor_us": 2005,
+      "packaged_first_constructor_over2000us": true
+    }
+  ],
+  "by_clip_id": {
+    "assembled/spirit_guardians_radiant_native": "runtime-prepared-spirit-runtime-20261021",
+    "assembled/spirit_guardians_necrotic_native": "runtime-prepared-spirit-runtime-20261021"
+  },
+  "automatic_client_selection_performed": false,
+  "native_receipt_sha256": "38404a290654e1bb754f051b25cd7c9da299480333bb49983f6e09ca80ae2a1e"
+}
