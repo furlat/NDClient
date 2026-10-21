@@ -14,16 +14,42 @@ static func visible_positions(state:Dictionary)->Array:
     if senses==null:return []
     var mask:Dictionary=senses.get("visible",{})
     _mask_mutex.lock()
+    var view:Dictionary={}
     for entry in _mask_views:
-        if is_same(entry.mask,mask):
-            var points:Array=entry.points
-            _mask_mutex.unlock();return points
-    var points:Array=Cells.mask_points(mask)
-    points.make_read_only()
-    _mask_views.append({"mask":mask,"points":points})
-    if _mask_views.size()>4:_mask_views.pop_front()
+        if is_same(entry.mask,mask):view=entry;break
+    if view.is_empty():
+        view={"mask":mask}
+        _mask_views.append(view)
+        if _mask_views.size()>4:_mask_views.pop_front()
+    if not view.has("points"):
+        if not view.has("data"):view.data=Cells.bytes(mask.get("bits",""))
+        var data:PackedByteArray=view.data
+        var points:Array=[];var height:int=int(mask.get("height",0))
+        # Exact Cells.mask_points ordering, borrowing the same decoded bytes
+        # already retained for bounded neighbor queries when available.
+        for i in range(int(mask.get("width",0))*height):
+            if i/8<data.size() and (int(data[i/8])&(1<<(i%8)))!=0:
+                points.append([int(mask.get("x0",0))+i/height,int(mask.get("y0",0))+i%height])
+        points.make_read_only();view.points=points
+    var result:Array=view.points
     _mask_mutex.unlock()
-    return points
+    return result
+
+static func visible_mask_bytes(mask:Dictionary)->PackedByteArray:
+    # Extend the existing four-entry immutable-mask owner. Do not create a
+    # second population/cache or decode this whole mask for each residue row.
+    _mask_mutex.lock()
+    var view:Dictionary={}
+    for entry in _mask_views:
+        if is_same(entry.mask,mask):view=entry;break
+    if view.is_empty():
+        view={"mask":mask}
+        _mask_views.append(view)
+        if _mask_views.size()>4:_mask_views.pop_front()
+    if not view.has("data"):view.data=Cells.bytes(mask.get("bits",""))
+    var result:PackedByteArray=view.data
+    _mask_mutex.unlock()
+    return result
 
 static func cell_key(position: Array) -> String:
     return "%d,%d" % [position[0],position[1]]
@@ -139,10 +165,38 @@ static func residue_tile_rows(state:Dictionary,key:String,profiles:Dictionary,vi
     return rows
 
 static func residue_projection(state:Dictionary,cache:Dictionary)->Array:
+    var tiles:Dictionary=state.get("tiles",{})
+    if tiles.is_empty():return []
     var profiles:Dictionary=Catalog.environment_index(cache).get("floor_residue_sources",{})
     if profiles.is_empty():return []
-    var visible:Dictionary=Cells.point_set(visible_positions(state));var result:Array=[]
-    for key in state.get("tiles",{}):result.append_array(residue_tile_rows(state,key,profiles,visible))
+    var selected:Array=[]
+    for key in tiles:
+        for residue in tiles[key].get("residues",[]):
+            if profiles.has(residue.residue_id) and float(residue.amount)>0.0 and residue.get("condition_uuid")!=null:
+                selected.append(key)
+                break
+    if selected.is_empty():return []
+    var senses:Variant=state.get("senses")
+    var mask:Dictionary=senses.get("visible",Cells.EMPTY) if senses!=null else Cells.EMPTY
+    # Exact Cells.contains bit addressing. The existing mask-view owner
+    # decodes each immutable mask once while it remains in that bounded owner.
+    var data:PackedByteArray=visible_mask_bytes(mask)
+    var height:int=int(mask.get("height",0));var width:int=int(mask.get("width",0))
+    var visible:Dictionary={}
+    for key in selected:
+        var position:Array=tiles[key].position
+        for dx in [-1,0,1]:
+            for dy in [-1,0,1]:
+                if dx==0 and dy==0:continue
+                var point:Array=[position[0]+dx,position[1]+dy]
+                var x:int=int(point[0])-int(mask.get("x0",0))
+                var y:int=int(point[1])-int(mask.get("y0",0))
+                if x<0 or y<0 or x>=width or y>=height:continue
+                var index:int=x*height+y
+                if index/8<data.size() and (int(data[index/8])&(1<<(index%8)))!=0:
+                    visible[cell_key(point)]=point
+    var result:Array=[]
+    for key in selected:result.append_array(residue_tile_rows(state,key,profiles,visible))
     return result
 
 ## Same two disclosed incident supports as native boundary_sides. This is a

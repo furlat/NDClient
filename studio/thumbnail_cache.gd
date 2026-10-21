@@ -1,6 +1,7 @@
 extends RefCounted
 ## Bounded source previews use shared GPU materials and native simulations.
 const Catalog=preload("res://source_catalog.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const Recording=preload("res://studio/recording.gd")
 const ReplayPanes=preload("res://studio/replay_panes.gd")
 const BackgroundRelease=preload("res://presentation/background_release.gd")
@@ -52,6 +53,7 @@ var warm_requested: Dictionary={}
 var requested: Dictionary={}
 var worker: Thread
 var generation=0
+var effect_revision:int=Effects.revision
 # Preserve the previous 256-sample working set for all four authored views.
 # Published swatches also share a byte budget, including higher precision sources.
 var limit=1024
@@ -77,6 +79,20 @@ var source_reads=0
 var source_hits=0
 var source_evictions=0
 var pinned:Dictionary={}
+
+func refresh_effect_revision()->bool:
+    if effect_revision==Effects.revision:return false
+    # Keep the exact admitted source/index and actual hosts. Existing reset
+    # owns cancellation, generation barriers, parked-source release and cache
+    # clearing; it does not rebuild timeline rows or change their clocks.
+    var sources:Dictionary=cache.duplicate()
+    var actual_recording:Dictionary=recording
+    var reference:Node3D=reference_world
+    var displayed:Node3D=displayed_world
+    reset()
+    cache=sources;recording=actual_recording
+    reference_world=reference;displayed_world=displayed
+    return true
 
 func set_demand(keys:Dictionary)->void:
     if keys==pinned and keys.keys()==pinned.keys():return
@@ -118,6 +134,7 @@ func seed_source_images(sources:Dictionary)->bool:
     return true
 
 func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=true) -> String:
+    refresh_effect_revision()
     var component: Dictionary=row.get("component",{})
     if row.get("visible_here",true)==false or row.kind in ["other_view","perspective"] or row.get("status")=="missing":return ""
     if _composed_row(row):return _request_composed(row,sample_ms,quarter)
@@ -443,6 +460,7 @@ func _queue(job:Dictionary,prepare_views:bool)->void:
         warm_requested.erase(warm_pending.pop_front().key)
 
 func queue_prewarm(samples:Array)->Dictionary:
+    refresh_effect_revision()
     # A changed fit/zoom replaces only unresolved background descriptors. The
     # active worker and exact visible demand retain their existing ownership.
     warm_pending=[];warm_requested={}
@@ -538,6 +556,7 @@ func _ordinary(job:Dictionary)->bool:
     return not job.get("composed",false) and job.row.kind not in ["audio","feedback_text","damage_number","geometry_projectile","residue_deposit","native_effect"]
 
 func poll() -> bool:
+    if refresh_effect_revision():return true
     native_store.poll_retired()
     for key in baked_requests.keys():
         var job:Dictionary=baked_requests[key]
@@ -712,6 +731,7 @@ func _prepare_spares()->void:
 ## Spell swatch descriptors read their source files' stamps (tens of ms per
 ## spell). Resolve them when the recording is installed, not at first request.
 func prepare_descriptors(rows:Array)->void:
+    refresh_effect_revision()
     for row in rows:
         var component:Dictionary=row.get("component",{})
         if row.get("kind")!="native_effect" or not component.get("native_spell",false) or _composed_row(row) or row.get("status")=="missing":continue
@@ -821,6 +841,7 @@ func _close_hit(composite:Dictionary)->void:
     composite.hit_parent.queue_free()
 
 func reset() -> void:
+    effect_revision=Effects.revision
     Recording.cancel(composed_token)
     _release_composed_receiving()
     ReplayPanes.discard(composed_pane);composed_pane={};composed_active={};recording={};reference_world=null;displayed_world=null

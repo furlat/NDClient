@@ -14,7 +14,7 @@ const Catalog = preload("res://source_catalog.gd")
 const Choices = preload("res://sdk/choices.gd")
 
 static func create() -> Dictionary:
-    return {"task":-1,"pending":{},"result":{},"control":{},"cache":{},"key":[],
+    return {"worker":null,"pending":{},"result":{},"control":{},"cache":{},"key":[],
         "value":{},"revision":0,"closed":false,"jobs":0,"discarded":0,
         "object_rows":{},"object_contacts":{},"object_cells":{},"disclosed_objects":{},
         "owner_preview":{},"owner_result":{},"owner_rows":{},"owner_contacts":{},"owner_items":{},
@@ -131,7 +131,7 @@ static func request(data: Dictionary, key: Array, actor_uuid: String, behavior: 
     _start(data)
 
 static func _start(data: Dictionary) -> void:
-    if data.closed or data.task>=0 or data.pending.is_empty(): return
+    if data.closed or data.worker!=null or data.pending.is_empty(): return
     var pending: Dictionary=data.pending
     data.pending={}; data.result={};data.control={"mutex":Mutex.new(),"cancelled":false}
     data.jobs+=1
@@ -140,12 +140,18 @@ static func _start(data: Dictionary) -> void:
         data.profile_active_job={"job":data.jobs,"actor_uuid":pending.actor_uuid,"behavior":pending.behavior,
             "behavior_count":pending.behaviors.size(),"request_kind":"body_choices" if pending.behavior.is_empty() else "selected_action",
             "requested_usec":pending.requested_usec,"dispatched_usec":Time.get_ticks_usec(),"dispatched_frame":Engine.get_process_frames()}
-    data.task=WorkerThreadPool.add_task(_work.bind(pending,data.result,data.control,data.cache),false,"Selected action media metadata")
+    # One finite reader owns the whole selected metadata closure. Passive
+    # source reads on this dedicated Thread need no per-leaf child Thread.
+    data.worker=Thread.new()
+    var error:Error=data.worker.start(_work.bind(pending,data.result,data.control,data.cache))
+    if error!=OK:
+        data.worker=null;data.control={};data.profile_active_job={}
+        push_error("Cannot start selected action metadata: "+error_string(error))
 
 static func poll(data: Dictionary) -> bool:
     var revision: int=data.revision
-    if data.task>=0 and WorkerThreadPool.is_task_completed(data.task):
-        WorkerThreadPool.wait_for_task_completion(data.task)
+    if data.worker!=null and not data.worker.is_alive():
+        data.worker.wait_to_finish()
         var result: Dictionary=data.result
         var accepted:bool=result.get("complete",false) and result.key==data.key and not _cancelled(data.control)
         if not data.profile_active_job.is_empty():
@@ -161,14 +167,14 @@ static func poll(data: Dictionary) -> bool:
             data.object_sources.merge(result.value.get("object_sources",{}))
             data.source_revision+=1
         else: data.discarded+=1
-        data.task=-1;data.result={};data.control={};data.profile_active_job={}
+        data.worker=null;data.result={};data.control={};data.profile_active_job={}
         _start(data)
     return data.revision!=revision
 
 static func close(data: Dictionary) -> void:
     cancel(data);data.closed=true
-    if data.task>=0: WorkerThreadPool.wait_for_task_completion(data.task)
-    data.task=-1;data.result={};data.cache.clear();data.control={};data.profile_active_job={}
+    if data.worker!=null:data.worker.wait_to_finish()
+    data.worker=null;data.result={};data.cache.clear();data.control={};data.profile_active_job={}
     data.object_rows={};data.object_contacts={};data.object_cells={};data.owner_preview={};data.owner_result={}
     data.owner_rows={};data.owner_contacts={};data.owner_items={}
     data.disclosed_objects={};data.actor_sources={};data.object_sources={}

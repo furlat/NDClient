@@ -4,16 +4,17 @@ const BODY_DEFAULTS={"temporary_hp_grant":null,"conditions":[],"controlled_items
 static func failure(message:String)->Dictionary:return {"ok":false,"error":{"kind":"reducer","message":message}}
 static func success(value:Variant)->Dictionary:return {"ok":true,"value":value}
 
-static func enter_item(target:Dictionary,record:Dictionary,item_rows:Array=[],actor_uuid:String="")->Dictionary:
+static func enter_item(target:Dictionary,record:Dictionary,item_rows:Array=[],actor_uuid:String="",changed_items:Dictionary={})->Dictionary:
     var prior:Dictionary=target.items.get(record.item_uuid,{});var look:Variant=record.get("look",prior.get("look"))
     if look==null:return failure("An item's first record requires its look")
     target.items[record.item_uuid]={"look":look,"profile":record.get("profile") if record.get("profile")!=null else prior.get("profile"),"state":record.get("state") if record.get("state")!=null else prior.get("state"),"effects":record.get("effects",[])}
+    changed_items[record.item_uuid]=true
     var before:Array=prior.get("effects",[]);var after:Array=target.items[record.item_uuid].effects
     if not before.is_empty() or not after.is_empty():
         item_rows.append({"actor_uuid":actor_uuid,"item_uuid":record.item_uuid,"field":"item_record","record":record,"before":before,"after":after})
     return success(target)
 
-static func enter_body(target:Dictionary,record:Dictionary,item_rows:Array=[])->Dictionary:
+static func enter_body(target:Dictionary,record:Dictionary,item_rows:Array=[],changed_actors:Dictionary={},changed_items:Dictionary={})->Dictionary:
     var prior:Dictionary=target.actors.get(record.actor_uuid,{})
     if not prior.get("present",true):return success(target)
     var birth:Variant=record.get("birth",prior if not prior.is_empty() else null)
@@ -27,10 +28,10 @@ static func enter_body(target:Dictionary,record:Dictionary,item_rows:Array=[])->
     var actor={"uuid":record.actor_uuid,"name":birth.name,"character_body_id":birth.get("character_body_id"),"creature_content_ref":birth.get("creature_content_ref"),"appearance":birth.appearance,"structural_base_size":birth.get("structural_base_size"),"manifestation":birth.get("manifestation"),"visual_loadout":loadouts[body.visual_loadout_id],"last_visual_position":prior.get("last_visual_position"),"present":true}
     for field in ["normal_hp","maximum_hp","temporary_hp","life_state","armor_class"]:actor[field]=body[field]
     for field in BODY_DEFAULTS:actor[field]=body.get(field,BODY_DEFAULTS[field])
-    target.actors[record.actor_uuid]=actor
+    target.actors[record.actor_uuid]=actor;changed_actors[record.actor_uuid]=true
     var recorded={}
     for item in record.get("items",[]):
-        var entered=enter_item(target,item,item_rows,str(record.actor_uuid))
+        var entered=enter_item(target,item,item_rows,str(record.actor_uuid),changed_items)
         if not entered.ok:return entered
         recorded[item.item_uuid]=true
     var shown:Array=actor.controlled_items if actor.controlled_items!=null else []
@@ -39,7 +40,7 @@ static func enter_body(target:Dictionary,record:Dictionary,item_rows:Array=[])->
     for identity in shown:
         if not recorded.has(identity) and target.items.has(identity) and not target.items[identity].effects.is_empty():
             var item:Dictionary=target.items[identity].duplicate();var before:Array=item.effects
-            item.effects=[];target.items[identity]=item
+            item.effects=[];target.items[identity]=item;changed_items[identity]=true
             item_rows.append({"actor_uuid":str(record.actor_uuid),"item_uuid":identity,"field":"item_record","before":before,"after":item.effects})
     return success(target)
 
@@ -61,7 +62,7 @@ static func remove(rows:Array,field:String,identity:Variant)->Array:
         if (value[field] if field!="" else value)!=identity:result.append(value)
     return result
 
-static func changed_item(target:Dictionary,row:Dictionary,item_rows:Array=[],actor_uuid:String="")->void:
+static func changed_item(target:Dictionary,row:Dictionary,item_rows:Array=[],actor_uuid:String="",changed_items:Dictionary={})->void:
     var identity:Variant=row.get("item_uuid");var held:Variant=target.items.get(identity)
     if held==null:return
     var next:Dictionary=held.duplicate()
@@ -73,17 +74,18 @@ static func changed_item(target:Dictionary,row:Dictionary,item_rows:Array=[],act
                     var value:Dictionary=effect.duplicate();value.duration=row.duration;next.effects=upsert(held.effects,"effect_uuid",value);break
         "item_state":
             if held.state!=null:next.state=held.state.duplicate();next.state.merge(row.changes,true)
-    target.items[identity]=next
+    target.items[identity]=next;changed_items[identity]=true
     if row.field in ["item_effects","item_effect_duration"]:
         item_rows.append({"actor_uuid":actor_uuid,"item_uuid":identity,"field":row.field,"row":row,"before":held.effects,"after":next.effects})
 
-static func actor_change(target:Dictionary,fact:Dictionary,condition_rows:Array=[],item_rows:Array=[])->Dictionary:
+static func actor_change(target:Dictionary,fact:Dictionary,condition_rows:Array=[],item_rows:Array=[],changed_actors:Dictionary={},changed_items:Dictionary={})->Dictionary:
     for record in fact.get("items",[]):
-        var entered=enter_item(target,record,item_rows)
+        var entered=enter_item(target,record,item_rows,"",changed_items)
         if not entered.ok:return entered
     for change in fact.get("actors",[]):
         if not target.actors.has(change.actor_uuid):return failure("An actor change requires its held body")
         var actor:Dictionary=target.actors[change.actor_uuid]
+        var previous:Dictionary=actor
         if not actor.present:continue
         for row in change.rows:
             var next:Dictionary=actor.duplicate()
@@ -103,7 +105,8 @@ static func actor_change(target:Dictionary,fact:Dictionary,condition_rows:Array=
                 "inventory":
                     if actor.controlled_items==null:return failure("inventory rows require the controlled actor's inventory")
                     next.controlled_items=upsert(actor.controlled_items,"",row.item_uuid) if row.held else remove(actor.controlled_items,"",row.item_uuid)
-                "item_effects","item_effect_duration","item_state":changed_item(target,row,item_rows,str(change.actor_uuid))
+                "item_effects","item_effect_duration","item_state":changed_item(target,row,item_rows,str(change.actor_uuid),changed_items)
             actor=next
         target.actors[change.actor_uuid]=actor
+        if not is_same(previous,actor):changed_actors[change.actor_uuid]=true
     return success(target)

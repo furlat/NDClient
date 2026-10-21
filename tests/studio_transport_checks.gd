@@ -19,9 +19,13 @@ func history_pending(world:Node)->Array:
     var displayed:Dictionary={}
     for component in world.displayed_components:displayed[component.id]=true
     for id in native.handles:
+        if rows.size()>=6:break
         var handle:Dictionary=native.handles[id]
         if "actor_context" not in handle.clip.get("inputs",[]):continue
         var helper:RefCounted=handle.occurrence.actor_history
+        if helper==null:
+            rows.append({"id":id,"reason":"history_capture_owner_unavailable"});continue
+        var diagnostic:Dictionary=native.diagnostics.get(id,{})
         var records:Array=[];var suspended:int=0;var complete:int=0;var closed:int=0
         for poses in helper.history.values():
             for pose in poses:
@@ -39,7 +43,9 @@ func history_pending(world:Node)->Array:
             "actor_context_bound":handle.get("actor_context_bound",false),"admitted":helper.admitted,
             "history_requested_key":handle.get("history_requested_key",[]),"history_seeded_key":handle.get("history_seeded_key",[]),
             "departure_seeded_key":handle.get("departure_seeded_key",[]),"sample_time":handle.sample_time,
-            "requested_time":handle.requested_time,"drawn_time":handle.drawn_time,"native_diagnostic":native.diagnostics.get(id,{}),
+            "requested_time":handle.requested_time,"drawn_time":handle.drawn_time,
+            "native_diagnostic":{"status":diagnostic.get("status",""),"reason":diagnostic.get("reason",""),
+                "input_bindings":diagnostic.get("input_bindings",{})},
             "capture_complete":complete,"capture_suspended":suspended,"capture_closed":closed,"pending_examples":records})
         if rows.size()==6:break
     return rows
@@ -62,6 +68,7 @@ func pending_world_snapshot(world:Node)->Dictionary:
         "boot_complete":world.media_warmup.boot_complete,"boot_waiting_count":world.media_warmup.boot_waiting.size(),
         "components_ready":world.component_renderer.ready,"component_leaves":world.component_renderer.readiness.duplicate(true),
         "native_ready":native.ready,"native_preparation":native.preparation_state.duplicate(true),"native_issues":native.issues.duplicate(true),
+        "native_support_ready":native._support.ready if native._support!=null else true,
         "native_startup":world.native_startup.duplicate(true),"native_background":world.native_startup_background,
         "pending_world":pending,"history_owners":history_pending(world),"frame_budget":world.preparation_admission.duplicate(true),
         "last_completed_frame":last.duplicate(true),"errors":world.presentation_errors.duplicate()}

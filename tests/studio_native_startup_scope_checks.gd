@@ -68,7 +68,7 @@ func run()->void:
     check(not clip.has("opacity_uniform"),"Effective adaptation leaves authoring source unchanged")
     var done:Dictionary={}
     for item in variants:done[item.key]=true
-    Startup._state={"plan":variants.duplicate(),"known":done.duplicate(),"done":done.duplicate(),"failures":{},
+    Startup._state={"plan":variants.duplicate(),"known":done.duplicate(),"done":done.duplicate(),"failures":{},"resources":{},
         "ready":true,"started":Time.get_ticks_usec(),"elapsed_ms":12.5,"memory_after":{"completed":true},"construction_ms":[]}
     var completed_before:Dictionary=Startup._state.duplicate(true)
     var completed_status=Startup.step(null,{}, {"plan":variants,"required":[variants[0]],"optional":true})

@@ -101,11 +101,18 @@ static func _index(cache: Dictionary) -> Dictionary:
     return cache.__environment_demand_index
 
 static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, removed: Array,
-        senses: Variant, cache: Dictionary) -> Dictionary:
+        senses: Variant, cache: Dictionary, tiles_removed:Array=[]) -> Dictionary:
     var changed_paths = {}
     var contacts: Dictionary = senses.get("objects",{}) if senses != null else {}
     var cells = {}
     var floor_residues:Dictionary=Catalog.environment_index(cache).get("floor_residue_sources",{})
+    # Erasure precedes final after-values, matching Compiler.apply_delta.
+    # index.tiles is also the support map passed to spatial_projection below.
+    for key in tiles_removed:
+        index.tiles.erase(key)
+        index.tile_sources.erase(key)
+        index.tile_paths.erase(key)
+        index.paths_dirty=true
     for key in tiles:
         var tile: Dictionary = tiles[key]
         var material: String = tile.surface.base_material
@@ -282,13 +289,13 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
     index.erase("final_owner")
     var senses: Variant = state.senses
     if not skip_initial:
-        for key in index.tiles.keys():
-            if not state.tiles.has(key):
-                index.tiles.erase(key); index.tile_paths.erase(key); index.tile_sources.erase(key);index.paths_dirty=true
+        var removed_tiles:Array=[]
+        for key in index.tiles:
+            if not state.tiles.has(key):removed_tiles.append(key)
         var removed: Array = []
         for id in index.objects:
             if not state.objects.has(id): removed.append(id)
-        _update(index,state.tiles,state.objects,removed,senses,cache)
+        _update(index,state.tiles,state.objects,removed,senses,cache,removed_tiles)
     phases.initial_update = (Time.get_ticks_usec()-phase_started)/1000.0
     phase_started = Time.get_ticks_usec()
     required = _all_paths(index)
@@ -319,12 +326,12 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
                 _first_use(initial,first_use,staged_paths,float(group.get("staged_tile_at_ms",{}).get(key,0.0)))
         for commit in group.get("commits",[]):
             var delta: Dictionary = commit.delta
-            if delta.get("tiles",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("senses"): continue
+            if delta.get("tiles",{}).is_empty() and delta.get("tiles_removed",[]).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("senses"): continue
             applied_world_delta=true
             senses = delta.get("set",{}).get("senses",senses)
             # Existing paths were included at group entry. Add only changed
             # closures, preserving the exhaustive within-group union.
-            var changed_paths = _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache)
+            var changed_paths = _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,delta.get("tiles_removed",[]))
             paths=_extend_paths(paths,changed_paths)
             _first_use(initial,first_use,changed_paths,float(commit.get("at_ms",0.0)))
         if group.has("id"): environment_timeline[group.id] = _timeline(initial,first_use)
@@ -372,13 +379,14 @@ static func finish_handoff(groups:Array,final_state:Dictionary,cache:Dictionary)
     # only remaining authoritative world deltas in this private selector index
     # so the next operation can borrow its exact canonical starting owner.
     var index:Dictionary=_index(cache)
+    index.erase("final_owner")
     var senses:Variant=index.senses
     for group in groups:
         for commit in group.get("commits",[]):
             var delta:Dictionary=commit.delta
-            if delta.get("tiles",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("senses"):continue
+            if delta.get("tiles",{}).is_empty() and delta.get("tiles_removed",[]).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("senses"):continue
             senses=delta.get("set",{}).get("senses",senses)
-            _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache)
+            _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,delta.get("tiles_removed",[]))
     # Retain the selected final source union with its private canonical owner.
     # The next operation borrows it; it does not rebuild a room-sized union on
     # the opening path merely because this operation changed a few cells.

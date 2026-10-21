@@ -26,6 +26,15 @@ static func apply_delta(target: Dictionary, delta: Dictionary) -> void:
         target.combat_log_appends.append_array(delta.log_appends)
     for key in delta.get("objects_removed", []): target.objects.erase(key)
     for key in delta.get("tiles_removed", []): target.tiles.erase(key)
+    # Preserve real erase/reinsert order even when a key has a final after-value.
+    # Only fold-generated tile/object edges enter this internal metadata.
+    for entry in delta.get("world_order",[]):
+        var family:String=entry.kind
+        var identity:String=entry.id
+        if entry.remove:target[family].erase(identity)
+        elif delta.get(family,{}).has(identity):
+            target[family].erase(identity)
+            target[family][identity]=delta[family][identity]
     for field in ["actors", "items", "tiles", "objects", "spatial_commit_cursors"]:
         var values:Dictionary=delta.get(field,{})
         if not values.is_empty():target[field].merge(values,true)

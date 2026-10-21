@@ -27,10 +27,10 @@ func state_from(directory: String) -> Dictionary:
     return reduced.value if reduced.ok else {}
 func settle(owner: Dictionary) -> void:
     var deadline=Time.get_ticks_msec()+60000
-    while owner.task>=0 and Time.get_ticks_msec()<deadline:
+    while owner.worker!=null and Time.get_ticks_msec()<deadline:
         Selection.poll(owner)
         await process_frame
-    check(owner.task<0,"Finite selection metadata task completes")
+    check(owner.worker==null,"Finite selection metadata task completes")
 func run() -> void:
     var fixture="";var gallery="";var hover=""
     for arg in OS.get_cmdline_user_args():
@@ -65,9 +65,9 @@ func run() -> void:
     Selection.close(move_hint)
     var owner=Selection.create()
     Selection.request(owner,[1,"fireball"],actor_uuid,action.behavior_id,state,16*1024*1024*1024)
-    var first_task: int=owner.task
+    var first_worker:Thread=owner.worker
     Selection.request(owner,[2,"replacement"],actor_uuid,action.behavior_id,state,16*1024*1024*1024)
-    check(owner.task==first_task and owner.pending.key==[2,"replacement"],"Replacement owns one running metadata task and one latest request")
+    check(owner.worker==first_worker and owner.pending.key==[2,"replacement"],"Replacement owns one running metadata task and one latest request")
     await settle(owner)
     check(owner.discarded==1 and owner.value.paths.size()>0,"Canceled metadata cannot publish; current replacement has authored candidates")
     var value: Dictionary=owner.value
@@ -122,7 +122,7 @@ func run() -> void:
     check(caster.value.keys().all(func(path):return owner.value.paths.has(path)),"Recipient narrowing keeps every actual caster cast source")
     var jobs: int=owner.jobs
     Selection.request(owner,[2,"exact empty"],actor_uuid,action.behavior_id,state,16*1024*1024*1024,{},empty_aim,[],exact_owners)
-    check(owner.jobs==jobs and owner.task<0,"Identical resource-owner request cannot schedule another metadata job")
+    check(owner.jobs==jobs and owner.worker==null,"Identical resource-owner request cannot schedule another metadata job")
     Selection.request(owner,[2,"active Reference"],actor_uuid,action.behavior_id,state,16*1024*1024*1024,{},empty_aim,[],exact_owners,"reference")
     await settle(owner)
     var projected=Characters.CharacterGeometry.for_profile(owner.value.paths,owner.value.normal_sets,"reference")
@@ -135,7 +135,7 @@ func run() -> void:
     check(owner.value.paths.is_empty() and owner.value.skipped>0,"Insufficient budget skips optional candidates without any required readiness gate")
     Selection.request(owner,[4,"closing"],actor_uuid,action.behavior_id,state,16*1024*1024*1024)
     Selection.close(owner)
-    check(owner.task<0 and owner.pending.is_empty() and owner.value.is_empty() and owner.cache.is_empty(),"Close cancels and joins only its own finite worker and releases metadata")
+    check(owner.worker==null and owner.pending.is_empty() and owner.value.is_empty() and owner.cache.is_empty(),"Close cancels and joins only its own finite worker and releases metadata")
     if not gallery.is_empty():
         var gallery_state=state_from(gallery)
         var protocol=Protocol.new()
@@ -185,7 +185,7 @@ func run() -> void:
         var settled_jobs: int=live_owner.jobs
         var settled_revision: int=live_owner.revision
         Selection.request(live_owner,second_key,current.audience.controlled[0],witness.request.behavior,current,16*1024*1024*1024,{},second,[],second_owners)
-        check(live_owner.jobs==settled_jobs and live_owner.revision==settled_revision and live_owner.task<0,"Moving real area across unchanged authored sources neither cancels demand nor schedules metadata again")
+        check(live_owner.jobs==settled_jobs and live_owner.revision==settled_revision and live_owner.worker==null,"Moving real area across unchanged authored sources neither cancels demand nor schedules metadata again")
         var prior_environment: Dictionary=live_owner.value.environment
         var wider: Dictionary=witness.previews[3].preview
         var wider_owners=Selection.owners(live_owner,current,wider)

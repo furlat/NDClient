@@ -100,9 +100,13 @@ func history_pending(world:Node)->Array:
     var displayed:Dictionary={}
     for component in world.displayed_components:displayed[component.id]=true
     for id in native.handles:
+        if rows.size()>=6:break
         var handle:Dictionary=native.handles[id]
         if "actor_context" not in handle.clip.get("inputs",[]):continue
         var helper:RefCounted=handle.occurrence.actor_history
+        if helper==null:
+            rows.append({"id":id,"reason":"history_capture_owner_unavailable"});continue
+        var diagnostic:Dictionary=native.diagnostics.get(id,{})
         var records:Array=[];var suspended:int=0;var complete:int=0;var closed:int=0
         for poses in helper.history.values():
             for pose in poses:
@@ -120,7 +124,9 @@ func history_pending(world:Node)->Array:
             "actor_context_bound":handle.get("actor_context_bound",false),"admitted":helper.admitted,
             "history_requested_key":handle.get("history_requested_key",[]),"history_seeded_key":handle.get("history_seeded_key",[]),
             "departure_seeded_key":handle.get("departure_seeded_key",[]),"sample_time":handle.sample_time,
-            "requested_time":handle.requested_time,"drawn_time":handle.drawn_time,"native_diagnostic":native.diagnostics.get(id,{}),
+            "requested_time":handle.requested_time,"drawn_time":handle.drawn_time,
+            "native_diagnostic":{"status":diagnostic.get("status",""),"reason":diagnostic.get("reason",""),
+                "input_bindings":diagnostic.get("input_bindings",{})},
             "capture_complete":complete,"capture_suspended":suspended,"capture_closed":closed,"pending_examples":records})
         if rows.size()==6:break
     return rows
@@ -218,7 +224,8 @@ func settle_diagnostic(world:Node,component_id:String,before_draw:Dictionary)->D
         "before_draw":before_draw,"media_gate":world.media_gate.duplicate(true),"component_ready":world.component_renderer.ready,
         "component_leaves":world.component_renderer.readiness.duplicate(true),"native_ready":native.ready,
         "native_preparation":native.preparation_state.duplicate(true),"native_failures":native._prepare_failures.duplicate(),
-        "history_owners":history_pending(world),
+        "history_owners":history_pending(world),"native_issues":native.issues.duplicate(true),
+        "native_support_ready":native._support.ready if native._support!=null else true,
         "required_components":world.component_renderer._native_prepare_components.map(func(component):return {"id":component.id,"kind":component.kind,
             "status":component.get("status"),"clip":component.get("native_clip",{}).get("id"),"handle":native.handles.has(component.id)}),
         "required_sources":requirements.size(),"missing_sources":missing,"decode_jobs":owner.decode_jobs.size(),"pending_decode":owner.pending.size(),

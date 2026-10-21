@@ -37,6 +37,24 @@ func run()->void:
     check(not flights.is_empty(),"Actual selected original includes a native flight phase")
     if flights.is_empty():await finish();return
     var flight:Dictionary=flights[0]
+    # These are actual derived rows from this original, not another presenter
+    # or synthetic Light/Material proxy. The UI target must be their source ID.
+    for kind in ["native_light","native_material"]:
+        var channels:Array=studio.index.rows.filter(func(row):return row.kind==kind)
+        check(not channels.is_empty(),"Actual Fireball original exposes its "+kind+" inspection channels")
+        for channel in channels:
+            var parent:String=str(channel.component.parent_id)
+            var parents:Array=studio.index.rows.filter(func(row):return row.get("component",{}).get("id")==parent and row.kind in ["native_effect","material_flash"])
+            var expected_kind:String="native_effect" if kind=="native_light" else "material_flash"
+            check(parents.size()==1 and parents[0].kind==expected_kind \
+                and (parents[0].component.get("native_spell",false) if kind=="native_light" else parents[0].component.has("native_hit") \
+                    and parents[0].component.actor_uuid==channel.component.actor_uuid),"Derived inspection channel belongs to its actual native source/recipient presenter: "+kind)
+            studio.selected_row=channel
+            check(studio._diagnostic_id()==parent and parent!=channel.component.id,"Derived menu targets its source presenter: "+kind)
+            studio._menu_selected(7)
+            check(studio.world.presentation_mutes.has(parent) and not studio.world.presentation_mutes.has(channel.component.id),"Derived mute addresses the existing source draw: "+kind)
+            studio._menu_selected(7)
+    check(studio.world.presentation_mutes.is_empty(),"Channel target controls restore the unchanged diagnostic state")
     var at:float=flight.start_ms+(flight.component.native_cue.launch+flight.component.native_cue.contact)*500.0
     studio._seek(at)
     if not await settle():await finish();return

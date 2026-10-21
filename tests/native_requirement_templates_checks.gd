@@ -13,13 +13,28 @@ func check(ok:bool,label:String)->void:
 func _initialize()->void:run.call_deferred()
 
 ## The frozen extractor remains the independent oracle for every unchanged
-## field. Only the explicitly implemented damage-policy descriptions changed;
-## assert their new semantics independently, without regenerating the oracle.
-func frozen_contract(actual:Array,frozen:Array,selected:Dictionary)->bool:
+## field. Damage-policy descriptions and exact caller-root provenance changed;
+## assert both independently, without regenerating the frozen extractor.
+func frozen_contract(actual:Array,frozen:Array,selected:Dictionary,source:String)->bool:
     if actual.size()!=frozen.size():return false
     var definitions:Dictionary={"damage_flash":"hitFlash","damage_number":"floatingNumber","damage_death":"death"}
     for index in actual.size():
         var current:Dictionary=actual[index];var previous:Dictionary=frozen[index]
+        if current.get("source","")!=previous.get("source",""):
+            # Fresh typed body metadata supplies a Resource owner but no legacy
+            # catalog carrier. Only unmapped raw fields use the caller's known
+            # document root; typed field pointers still require frozen equality.
+            var legacy:String=str(previous.get("legacy_source",""))
+            if str(selected.get("_resource_source","")).is_empty() or not str(selected.get("_legacy_source","")).is_empty() \
+                or not source.ends_with(":") or not legacy.begins_with(source+"/"):return false
+            var relative:String=legacy.trim_prefix(source+"/")
+            if relative.is_empty() or selected.get("_source_fields",{}).has(relative) \
+                or previous.get("source")!="" or previous.get("source_pointer")!="" \
+                or previous.id!="operation::"+previous.kind:return false
+            if current.source!=source+"/"+relative or current.source_pointer!=current.source \
+                or current.id!="operation:"+legacy+":"+previous.kind or current.get("legacy_source")!=legacy:return false
+            previous=previous.duplicate()
+            previous.source=legacy;previous.source_pointer=legacy;previous.id="operation:"+legacy+":"+previous.kind
         if current==previous and not definitions.has(previous.kind):continue
         if not definitions.has(previous.kind) or current.kind!=previous.kind:return false
         var policy:Variant=selected.get("damage",{}).get(definitions[previous.kind])
@@ -84,12 +99,12 @@ func run()->void:
         if record==null:continue
         var expected:Array=oracle.recipe(record.recipe,record.requirement_source,["spell"],cache)
         check(record.requirements==Requirements.recipe(record.recipe,record.requirement_source,["spell"],cache),"Exact current uncached/offline recipe/source/event descriptions: "+behavior)
-        check(frozen_contract(record.requirements,expected,record.recipe),"Frozen unchanged descriptions and explicit current feedback policy: "+behavior)
+        check(frozen_contract(record.requirements,expected,record.recipe,record.requirement_source),"Frozen unchanged descriptions and explicit current feedback policy: "+behavior)
         var held:PackedByteArray=var_to_bytes(record.requirements)
         var event={"kind":"spell","behavior_id":behavior}
         var actual:Array=Requirements.occurrence(event,record.recipe,record.requirement_source,cache)
         check(actual==uncached_occurrence(event,record.recipe,record.requirement_source,cache),"Exact current cached/uncached occurrence requirements: "+behavior)
-        check(frozen_contract(actual,oracle.occurrence(event,record.recipe,record.requirement_source,cache),record.recipe),"Frozen unchanged occurrence fields and current feedback policy: "+behavior)
+        check(frozen_contract(actual,oracle.occurrence(event,record.recipe,record.requirement_source,cache),record.recipe,record.requirement_source),"Frozen unchanged occurrence fields and current feedback policy: "+behavior)
         for i in record.requirements.size():
             rows+=1
             if record.requirements[i].status=="missing" and (not record.requirements[i].get("outcome_selectors",{}).is_empty() or record.requirements[i].kind in ["cancellationMedia","childAttack"]):
@@ -98,6 +113,23 @@ func run()->void:
             else:check(is_same(actual[i],record.requirements[i]),"Unchanged requirement retains source operand")
         check(var_to_bytes(record.requirements)==held,"Occurrence cannot mutate admitted descriptions: "+behavior)
     var record:Resource=Sources.find("spell.fireball",cache)
+    var frozen_fireball:Array=oracle.recipe(record.recipe,record.requirement_source,["spell"],cache)
+    var clock:int=-1
+    for i in record.requirements.size():
+        if record.requirements[i].kind=="damage_clock":clock=i;break
+    check(clock>=0 and record.requirements[clock].source=="spells/spell.fireball.json:/damage" \
+        and record.requirements[clock].source_pointer==record.requirements[clock].source \
+        and record.requirements[clock].id=="operation:spells/spell.fireball.json:/damage:damage_clock" \
+        and record.requirements[clock].legacy_source=="spells/spell.fireball.json:/damage" \
+        and frozen_fireball[clock].source=="" and frozen_fireball[clock].source_pointer=="" \
+        and frozen_fireball[clock].id=="operation::damage_clock",
+        "Actual rebuilt Fireball preserves the exact caller-root raw policy pointer instead of the historical empty carrier")
+    if clock>=0:
+        for field in ["source","source_pointer","id","legacy_source","label"]:
+            var corrupted:Array=record.requirements.duplicate(true)
+            corrupted[clock][field]="wrong-source-control"
+            check(not frozen_contract(corrupted,frozen_fireball,record.recipe,record.requirement_source),
+                "Caller-root migration still refuses a changed "+field)
     var worker:Dictionary=Catalog.source_snapshot(cache)
     check(is_same(Requirements.fact("damage",worker),Requirements.fact("damage",cache)),"Workers retain exact source contract operands")
     check(is_same(Sources.find("spell.fireball",worker).requirements,record.requirements),"Workers retain exact recipe template owner")
@@ -106,10 +138,10 @@ func run()->void:
     var custom_event={"kind":"spell","behavior_id":"spell.fireball"}
     var custom_rows:Array=Requirements.occurrence(custom_event,custom,record.requirement_source,cache)
     check(custom_rows==uncached_occurrence(custom_event,custom,record.requirement_source,cache) \
-        and frozen_contract(custom_rows,oracle.occurrence(custom_event,custom,record.requirement_source,cache),custom),"Changed recipe with same behavior/source cannot reuse prior revision")
+        and frozen_contract(custom_rows,oracle.occurrence(custom_event,custom,record.requirement_source,cache),custom,record.requirement_source),"Changed recipe with same behavior/source cannot reuse prior revision")
     var custom_source_rows:Array=Requirements.occurrence(custom_event,record.recipe,"custom-source:",cache)
     check(custom_source_rows==uncached_occurrence(custom_event,record.recipe,"custom-source:",cache) \
-        and frozen_contract(custom_source_rows,oracle.occurrence(custom_event,record.recipe,"custom-source:",cache),record.recipe),"Changed source pointer cannot reuse imported pointers")
+        and frozen_contract(custom_source_rows,oracle.occurrence(custom_event,record.recipe,"custom-source:",cache),record.recipe,"custom-source:"),"Changed source pointer cannot reuse imported pointers")
     var replacement=Definition.new()
     replacement.recipe={"bodyMaterials":[{"id":"conditional","requiredSaveSuccess":true}]}
     replacement.requirement_source=record.requirement_source
@@ -124,7 +156,7 @@ func run()->void:
     check(second[0].reason!=first[0].reason and var_to_bytes(replacement.requirements)==before,"Occurrence edits cannot affect siblings or retained native source")
     var retained_rows:Array=Requirements.occurrence(custom_event,record.recipe,record.requirement_source,cache)
     check(retained_rows==uncached_occurrence(custom_event,record.recipe,record.requirement_source,cache) \
-        and frozen_contract(retained_rows,oracle.occurrence(custom_event,record.recipe,record.requirement_source,cache),record.recipe),"Old source owner remains valid beside replacement")
+        and frozen_contract(retained_rows,oracle.occurrence(custom_event,record.recipe,record.requirement_source,cache),record.recipe,record.requirement_source),"Old source owner remains valid beside replacement")
     var absent:Dictionary={}
     check(Requirements.occurrence({"kind":"saving_throw"},{},"custom:",absent)==oracle.occurrence({"kind":"saving_throw"},{},"custom:",{}),"Unadmitted custom source keeps exact extraction")
     check(absent.is_empty(),"Requirement lookup never admits a source or opens source data")

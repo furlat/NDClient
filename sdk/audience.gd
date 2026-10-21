@@ -69,14 +69,14 @@ static func _patch_effect(prior:Dictionary,patch:Dictionary)->Dictionary:
 static func _light(row:Dictionary,uuids:Array)->Dictionary:
     return {"source_uuid":uuids[row.source],"position":row.position,"base_height_steps":row.get("base_height_steps",0),"very_bright_radius_feet":row.get("very_bright_radius_feet",0),"bright_radius_feet":row.get("bright_radius_feet",0),"dim_radius_feet":row.get("dim_radius_feet",0),"appearance":row.get("appearance","neutral"),"actor_anchored":row.get("actor_anchored",false),"anchor_entity_uuid":uuids[row.anchor_entity] if row.get("anchor_entity")!=null else null,"anchor_item_uuid":uuids[row.anchor_item] if row.get("anchor_item")!=null else null}
 
-static func clear_unseen_positions(target:Dictionary)->void:
+static func clear_unseen_positions(target:Dictionary,changed_actors:Dictionary={})->void:
     if target.senses==null:return
     for identity in target.actors:
         var actor:Dictionary=target.actors[identity];var position:Variant=actor.last_visual_position
         if position!=null and actor.present and actor.life_state!="dead" and not identity in target.audience.controlled and not target.senses.entities.has(identity) and Cells.contains(target.senses.visible,position):
-            actor=actor.duplicate();actor.last_visual_position=null;target.actors[identity]=actor
+            actor=actor.duplicate();actor.last_visual_position=null;target.actors[identity]=actor;changed_actors[identity]=true
 
-static func fold(target:Dictionary,fact:Dictionary,values:Dictionary)->Dictionary:
+static func fold(target:Dictionary,fact:Dictionary,values:Dictionary,changed_actors:Dictionary={},cell_context:Dictionary={})->Dictionary:
     var rows:Dictionary=values.rows;var uuids:Array=rows.get("uuids",[]);var held:Variant=target.senses
     if fact.get("initial",false):
         if held!=null:return failure("A seat's perception enters once")
@@ -85,11 +85,19 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary)->Dictionar
     var added=_selected_cells(values.cells,fact.get("visible_cells_added",{}));var removed=_selected_cells(values.cells,fact.get("visible_cells_removed",{}))
     if not added.ok:return added
     if not removed.ok:return removed
-    var prior_points:Array=Cells.mask_points(held.visible)
-    var visible=Cells.point_set(prior_points)
+    # Only a context forked from this exact accepted state's immutable mask
+    # may borrow its ordered population and membership table.
+    var indexed:bool=is_same(cell_context.get("mask"),held.visible) and cell_context.has("points") and cell_context.has("members")
+    var prior_points:Array=cell_context.points if indexed else Cells.mask_points(held.visible)
+    var prior_members:Dictionary=cell_context.members if indexed else Cells.point_set(prior_points)
+    var topology_changed:bool=not removed.value.is_empty() or not added.value.is_empty()
+    var visible:Dictionary=prior_members.duplicate() if topology_changed else prior_members
     for point in removed.value:visible.erase(Cells.key(point))
     for point in added.value:visible[Cells.key(point)]=point
-    var points=Cells.sorted_points(visible);var result:Dictionary=held.duplicate();result.visible=Cells.mask(points);result.seen=Cells.union_points(held.seen,added.value)
+    var points:Array=Cells.sorted_points(visible) if topology_changed else prior_points
+    var result:Dictionary=held.duplicate()
+    result.visible=Cells.mask(points) if topology_changed else held.visible
+    result.seen=Cells.union_points(held.seen,added.value)
     var value_indices:PackedInt64Array=Cells.value_indices(prior_points,points)
     for pair in [["effective_light_levels","light_levels","effective_light_levels_changed"],["hazardous_cells","hazards","hazardous_cells_changed"]]:
         var changed=Cells.selected(values[pair[1]],fact.get(pair[2],{}))
@@ -178,9 +186,11 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary)->Dictionar
         if fact.get(field+"_changed",false) and fact.get(field)!=null:result[field]=fact[field]
     result.sense_modes_key=modes_key(result.sense_modes);target.senses=result
     if fact.get("observer_position")!=null and target.actors.has(target.observer_uuid):
-        var actor:Dictionary=target.actors[target.observer_uuid].duplicate();actor.last_visual_position=fact.observer_position;target.actors[target.observer_uuid]=actor
+        var actor:Dictionary=target.actors[target.observer_uuid].duplicate();actor.last_visual_position=fact.observer_position;target.actors[target.observer_uuid]=actor;changed_actors[target.observer_uuid]=true
     for index in fact.get("entity_contacts_changed",[]):
         var identity:String=uuids[rows.contact_uuid_index[index]];var contact:Dictionary=values.contacts[index]
         if contact.visual and target.actors.has(identity) and target.actors[identity].present:
-            var actor:Dictionary=target.actors[identity].duplicate();actor.last_visual_position=contact.position;target.actors[identity]=actor
-    clear_unseen_positions(target);return success(target)
+            var actor:Dictionary=target.actors[identity].duplicate();actor.last_visual_position=contact.position;target.actors[identity]=actor;changed_actors[identity]=true
+    clear_unseen_positions(target,changed_actors)
+    cell_context.mask=result.visible;cell_context.points=points;cell_context.members=visible
+    return success(target)

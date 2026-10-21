@@ -4,6 +4,7 @@ extends SceneTree
 const Conditions=preload("res://presentation/conditions.gd")
 const Outline=preload("res://presentation/condition_outline.gd")
 const Catalog=preload("res://source_catalog.gd")
+const SourceMaterial=preload("res://presentation/source_material.gd")
 class OutlineWorld extends Node3D:
     const Characters=preload("res://presentation/characters.gd")
     var visual_actors={}
@@ -66,7 +67,7 @@ func material_case(row:Dictionary,source:Image)->void:
     var node=Sprite2D.new();node.centered=false;node.texture=ImageTexture.create_from_image(source)
     node.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
     var shader=Shader.new()
-    shader.code="shader_type canvas_item;render_mode unshaded,blend_disabled;\n#include \"res://presentation/character_material.gdshaderinc\"\nvoid fragment(){COLOR=character_material(texture(TEXTURE,UV),UV);}"
+    shader.code="shader_type canvas_item;render_mode unshaded,blend_disabled;\n#include \"res://presentation/character_material.gdshaderinc\"\nvoid fragment(){vec4 source=texture(TEXTURE,UV);COLOR=character_material(source,UV,source.rgb);}"
     var material=ShaderMaterial.new();material.shader=shader;node.material=material;viewport.add_child(node)
     Conditions.bind(material,state,textures,resources)
     var image=await capture(viewport)
@@ -105,16 +106,24 @@ func outline_case(row:Dictionary)->void:
     for i in 2:
         var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2(2,2);node.layers=2;owner.add_child(node)
         var material=ShaderMaterial.new();material.shader=source_shader
-        material.set_shader_parameter("sheet",ImageTexture.create_from_image(load_image("part"+str(i)+".png")))
-        material.set_shader_parameter("frame_uv",Vector4(0,0,1,1));node.material_override=material
-        parts.append({"node":node,"material":material,"role":"actor","texture_path":"part"+str(i),"actor_layer":{"slot":"body" if i==0 else "chest","alpha":1.0}})
+        node.material_override=material
+        var part:Dictionary={"id":"fixture:part:"+str(i),"node":node,"material":material,"role":"actor","texture_path":"part"+str(i),"actor_layer":{"slot":"body" if i==0 else "chest","alpha":1.0}}
+        SourceMaterial.initialize(part)
+        SourceMaterial.apply(part,{"sheet":ImageTexture.create_from_image(load_image("part"+str(i)+".png")),"frame_uv":Vector4(0,0,1,1)})
+        parts.append(part)
     owner.visual_actors={"fixture":{"row":{"id":"fixture","rig":"fixture"},"entries":parts}}
     var recipe=Catalog.read_file("catalog/condition_recipes.json",cache)[row.recipe_id]
     var state=Conditions.material("fixture",[sample_for(row,recipe)])
     var helper=Outline.new()
-    helper.sample(owner,"fixture",state)
-    await capture(scene.view)
-    helper.sample(owner,"fixture",state)
+    # The ordinary renderer prepares its assembled-alpha owner before sampling.
+    # Wait on that exact existing draw boundary, not on an invented timer/pose.
+    var ready:bool=false;var deadline:int=Time.get_ticks_msec()+10000
+    while not ready and Time.get_ticks_msec()<deadline:
+        ready=helper.prepare(owner,"fixture").ready
+        if not ready:await capture(scene.view)
+    check(ready and helper.sample(owner,"fixture",state),row.name+" actual outline owner is prepared before its authored sample")
+    if not ready:
+        helper.close(owner);scene.view.free();return
     var image=await capture(scene.view)
     var reference=spatial_page()
     var quad=MeshInstance3D.new();quad.mesh=QuadMesh.new();quad.mesh.size=Vector2(2,2);reference.world.add_child(quad)

@@ -226,7 +226,7 @@ func run()->void:
     var indexing_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
     check(index.ok,"Original Fireball journal compiles with ordinary Studio Recording")
     if not index.ok:finish();return
-    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")=="spell.fireball")
+    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")=="fireball")
     check(rows.size()==3,"Real recording retains cast, flight and area source rows")
     if rows.size()!=3:finish();return
     var immutable:PackedByteArray=var_to_bytes(rows)

@@ -92,7 +92,7 @@ func set_index(value: Dictionary) -> void:
         by_id[row.id]=row
         if _environment_light(row):environment_lights[row.id]=true
         if row.kind in ["light","native_light"] and row.get("status")!="missing":lighting_rows[row.id]=true
-        if row.get("visible_here",true) and row.get("status")!="missing" and row.kind!="part" and (row.kind in PREVIEW_KINDS or row.kind in ["native_light","light"]):follow_rows.append(row)
+        if row.get("visible_here",true) and row.get("status")!="missing" and row.kind!="part" and (row.kind in PREVIEW_KINDS or row.kind in ["native_light","light","motion"]):follow_rows.append(row)
         if row.kind in ["event","parts","condition","condition_exit","temporary_hp_grant"] or row.get("source_kind") in ["parts","condition","condition_exit","temporary_hp_grant"]:collapsed[row.id]=true
         if first_body.is_empty() and row.kind=="body":first_body=row
     for row in index.get("rows",[]):
@@ -275,8 +275,8 @@ func _follow_priority(row:Dictionary)->int:
         if component.get("native_spell",false):
             return {"cast":3,"flight":4,"area":5,"impact":5,"spray":5,"attached":4}.get(component.get("native_cue",{}).get("role",""),3)
         return 2
-    if row.kind in ["body","condition_pose","condition_restore"]:return 2
-    if row.kind in ["sprite_layer","condition_appearance","geometry_projectile","residue_deposit"]:return 1
+    if row.kind in ["body","motion","condition_pose","condition_restore","world_activation"]:return 2
+    if row.kind in ["sprite_layer","condition_appearance","geometry_projectile","residue_deposit","world_animation"]:return 1
     if row.kind=="audio":return 0
     return -1
 
@@ -475,6 +475,7 @@ func _publish_visible_layout(signature:Array,visible:Array)->bool:
     return true
 
 func prepare_visible(all_quarters:bool=false)->Dictionary:
+    thumbnails.refresh_effect_revision()
     var signature=[thumbnails.generation,thumbnails.suspended,rows_revision,size,scroll_y,origin_ms,pixels_per_second,gutter,quarter,all_quarters]
     if not _preparation_available():
         # Row geometry and hit-testing follow the displayed clock even when

@@ -9,10 +9,15 @@ const EVIDENCE="res://generated/reports/studio-case-evidence.json"
 const PACKAGE="res://assets/vfx/index.json"
 const CATEGORY={"spell":"Spells","condition":"Conditions","action":"Actions","reaction":"Actions","trait":"Actions","class_feature":"Actions","feat":"Actions","creature":"Characters","environment_object":"Environment","boundary_structure":"Environment","connector":"Environment","battlefield":"Environment","spatial_effect":"Surfaces","residue":"Surfaces","decal":"Surfaces","item":"Items","interaction":"Interactions"}
 const Journal=preload("res://sdk/journal.gd")
+const Catalog=preload("res://source_catalog.gd")
 
 static func _read(path:String)->Dictionary:
     if not FileAccess.file_exists(path):return {}
-    var value=JSON.parse_string(FileAccess.get_file_as_string(path));return value if value is Dictionary else {}
+    # Reuse the Opus process cache already owned by SourceCatalog. Its raw-byte
+    # comparison preserves Refresh/reload detection without another cache owner.
+    var value:Variant=Catalog._document(path)
+    return value if value is Dictionary else {}
+
 static func category(kind:String)->String:return CATEGORY.get(kind,"Rules")
 static func _label(id:String)->String:return id.get_slice("@",0).get_file().get_slice("/",0).split(".")[-1].replace("_"," ").capitalize()
 static func _same_engine(expected:Dictionary,actual:Dictionary)->bool:
@@ -99,8 +104,16 @@ static func records(index:Dictionary,snapshot:Dictionary,check_files:bool=true,e
         record.evidence_status="evidence_available" if not record.output_witnesses.is_empty() else "not_assessed"
         result.append(record)
     return result
-static func read()->Array:
-    return records(_read(INDEX),_read(SERVER_IDS),true,_read(EVIDENCE),str(_read(PACKAGE).get("version","")))
+static func read(with_evidence:bool=true)->Array:
+    var index:Dictionary=_read(INDEX)
+    var snapshot:Dictionary=_read(SERVER_IDS)
+    if not with_evidence:
+        # The playback dropdown needs admission/provenance, not output claims.
+        # Full Library and report callers retain the default evidence join.
+        var admitted:Array=records(index,snapshot)
+        for record in admitted:record.evidence_status="not_loaded"
+        return admitted
+    return records(index,snapshot,true,_read(EVIDENCE),str(_read(PACKAGE).get("version","")))
 
 ## An explicitly selected failed scenario may retain a useful real prefix.
 ## Admit its initialization only here; the ordinary reader still owns every

@@ -893,7 +893,7 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
         "native_support_sync":component_renderer.native_spells._support.last_sync_phases if component_renderer.native_spells._support!=null else {},
         "actor_sample_counts":profile.get("actor_sample_counts",{}),
         "media_settle":_media_settle_diagnostics(),
-        "selection_metadata":{"task_pending":selection_media.task>=0,"request_pending":not selection_media.pending.is_empty(),
+        "selection_metadata":{"task_pending":selection_media.worker!=null,"request_pending":not selection_media.pending.is_empty(),
             "jobs":selection_media.jobs,"discarded":selection_media.discarded,
             "active":selection_media.profile_active_job.duplicate(true),"last":selection_media.profile_last_job.duplicate(true),
             "last_discarded":selection_media.profile_last_discarded.duplicate(true)},

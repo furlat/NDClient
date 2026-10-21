@@ -16,7 +16,10 @@ static func _read(path:String,cache_mode:ResourceLoader.CacheMode,profile:Dictio
     return value
 
 static func read(path:String,cache_mode:ResourceLoader.CacheMode,profile:Dictionary={})->Resource:
-    if Thread.is_main_thread():return _read(path,cache_mode,profile)
+    # A finite dedicated metadata job already owns a safe reader. Only pool
+    # callers need the separate reader that avoids nested ResourceLoader tasks.
+    if Thread.is_main_thread() or (WorkerThreadPool.get_caller_task_id()<0 and WorkerThreadPool.get_caller_group_id()<0):
+        return _read(path,cache_mode,profile)
     # ResourceLoader.load() from a pool task schedules another pool task.
     # Admission callers can exhaust that pool while awaiting a shared owner.
     # A Godot Thread reads synchronously without that dependency or Godot 4.7's

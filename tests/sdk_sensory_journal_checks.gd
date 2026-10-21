@@ -3,6 +3,7 @@ extends SceneTree
 ## semantic and durability refusal, retry, duplicate, cold replay and rollback.
 const Journal=preload("res://sdk/journal.gd")
 const Protocol=preload("res://sdk/protocol.gd")
+const Reducer=preload("res://sdk/reducer.gd")
 const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
 const ORACLE="res://tests/fixtures/schema16/spool-oracle"
 var checks:int=0
@@ -25,7 +26,7 @@ func run()->void:
     check(evidence.size()==4 and evidence.all(func(row):return row.semantic_refusal and row.durable_refusal and row.replay_rollback),"Both actual Door and lethal-OA faction prefixes exercise the full publication-refusal boundary")
     check(later_retries==2,"Both Door originals supply a genuine following operation for retry after replay refusal; final lethal-OA cuts do not invent one")
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,"producer_reference":index.reference,
-        "scope":"Actual native16 Door/lethal-OA prefixes and independent frozen Python cuts. Late malformed-HUD and durable-write controls preserve exact canonical mask/source ownership; actual retry, frozen event captures, duplicate, replay rollback and initialization seek. No old cell-context cache, synthetic positive operation, compatibility replay or rendering claim."}
+        "scope":"Actual native16 Door/lethal-OA prefixes and independent frozen Python cuts. Late malformed-HUD and durable-write controls preserve canonical masks and exact retained derived-index ownership; recording-on/off equality, actual retry, frozen event captures, duplicate, replay rollback and initialization seek. No synthetic positive operation, compatibility replay or rendering claim."}
     FileAccess.open("res://generated/sdk_sensory_journal_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SDK_SENSORY_JOURNAL_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
@@ -51,6 +52,13 @@ func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
             var senses:Dictionary=journal.state.senses;var visible:Dictionary=senses.visible;var seen:Dictionary=senses.seen
             var lights:Dictionary=journal.state.light_sources;var context:Dictionary=journal._sensory_context;var context_copy:Dictionary=context.duplicate(true)
             check(int(visible.width)>0 and int(seen.width)>0 and senses.effective_light_levels.cells==visible,str(seat.id)+": control holds actual native encoded visible/seen/light cells")
+            var plain:Dictionary=Reducer._reduce_operation_retained(owned,packet,false,null,context)
+            var recorded:Dictionary=Reducer._reduce_operation_retained(owned,packet,true,null,context)
+            check(plain.ok and recorded.ok,str(seat.id)+": the same actual sensory operation folds with recording off and on")
+            if plain.ok and recorded.ok:
+                check(not plain.has("transitions") and recorded.has("transitions") and Compare.difference(plain.value,recorded.value).is_empty(),str(seat.id)+": capture omission preserves the complete canonical result")
+                check(is_same(plain.sensory_context.state,plain.value) and is_same(recorded.sensory_context.state,recorded.value),str(seat.id)+": each reduction publishes only its own accepted-state index owner")
+            check(journal.state==before and context==context_copy,str(seat.id)+": both private candidates leave the committed state/index unchanged")
             var invalid:Dictionary=packet.duplicate(true)
             # Deliberately malformed final HUD resource key. Every original
             # native lineage, source table and sensory row remains unchanged.
@@ -64,6 +72,7 @@ func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
             var denied:Dictionary=journal._consume_admitted(invalid,invalid_raw,true)
             check(not denied.ok and denied.error.message=="Resource values name a row the sheet does not hold" and not denied.has("transitions"),str(seat.id)+": exact late HUD refusal publishes no event captures")
             check(journal.state==before and journal.cursor==cursor and invalid==invalid_copy and packet==original,str(seat.id)+": late refusal preserves state/cursor and both input packets")
+            check(context==context_copy,str(seat.id)+": late semantic refusal leaves the preceding derived index unchanged")
             owned_boundary(journal,owned,senses,visible,seen,lights,context,str(seat.id)+": late semantic refusal")
             var destination:String=path.path_join("%016d.json"%sequence)
             check(not FileAccess.file_exists(destination),str(seat.id)+": semantic refusal never commits malformed bytes")
@@ -88,8 +97,11 @@ func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
             check(accepted.has("transitions"),str(seat.id)+": actual following operation retries after replay refusal and publishes its real captures")
             later_retries+=1;pending_retry=-1
         if candidate:
-            check(accepted.has("transitions") and journal._sensory_context.is_empty(),str(seat.id)+": native retry publishes captures without resurrecting the retired context cache")
+            var admitted_context:Dictionary=journal._sensory_context
+            check(accepted.has("transitions") and is_same(admitted_context.get("state"),journal.state) and is_same(admitted_context.get("senses"),journal.state.senses),str(seat.id)+": native retry binds captures and derived indexes to the actual committed cut")
+            check(is_same(admitted_context.get("cells",{}).get("mask"),journal.state.senses.visible),str(seat.id)+": retained visible index belongs to that exact canonical mask")
             var after:Dictionary=journal.state;var after_copy:Dictionary=journal.snapshot();var after_context:Dictionary=journal._sensory_context
+            var after_context_copy:Dictionary=after_context.duplicate(true)
             var at:int=sequence+1 if sequence+1<seat.records.size() else sequence
             later=at>sequence
             var bad_raw:PackedByteArray=FileAccess.get_file_as_bytes(directory.path_join(seat.records[at].bytes))
@@ -101,13 +113,14 @@ func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
             var file:=FileAccess.open(bad_path,FileAccess.WRITE);file.store_string(JSON.stringify(broken,"",false,true));file.close()
             var denied:Dictionary=journal.replay()
             check(not denied.ok,str(seat.id)+": strict replay refuses the malformed native lineage gap")
-            check(journal.state==after_copy and is_same(journal.state,after) and journal.cursor.sequence==sequence and is_same(journal._sensory_context,after_context),str(seat.id)+": replay rollback restores the complete prior canonical/source/index owner")
+            check(journal.state==after_copy and is_same(journal.state,after) and journal.cursor.sequence==sequence and is_same(journal._sensory_context,after_context) and after_context==after_context_copy,str(seat.id)+": replay rollback restores the complete prior canonical/source/index owner and its contents")
             if later:DirAccess.remove_absolute(bad_path);pending_retry=at
             else:
                 file=FileAccess.open(bad_path,FileAccess.WRITE);file.store_buffer(bad_raw);file.close()
                 check(journal.replay().ok and journal.state==after_copy,str(seat.id)+": restoring original terminal bytes cold-replays the exact final cut")
+            var duplicate_state:Dictionary=journal.state;var duplicate_context:Dictionary=journal._sensory_context
             var duplicate:Dictionary=journal._consume_admitted(packet,raw,true)
-            check(duplicate.ok and not duplicate.has("transitions") and journal.state==after_copy,str(seat.id)+": actual repeated retry cannot republish captures or alter state")
+            check(duplicate.ok and not duplicate.has("transitions") and journal.state==after_copy and is_same(journal.state,duplicate_state) and is_same(journal._sensory_context,duplicate_context),str(seat.id)+": actual repeated retry cannot republish captures or replace the committed state/index owner")
             exercised=true
     var terminal:Dictionary=journal.snapshot()
     check(journal.replay().ok and journal.state==terminal,str(seat.id)+": strict cold replay equals complete original live result")

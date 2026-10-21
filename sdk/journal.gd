@@ -24,6 +24,7 @@ func open(path: String, _historical_recording: bool = false, replay_existing: bo
 	# An existing native16 recording selects its exact stored producer contract.
 	# Old wire9/unknown identities remain refused; no bytes or facts are rewritten.
 	if FileAccess.file_exists(_file(0)):
+		if not protocol.setup_error.is_empty(): return Protocol.failure(protocol.setup_error)
 		var raw := FileAccess.get_file_as_bytes(_file(0))
 		var parsed: Dictionary = Protocol.parse_json(raw)
 		if not parsed.ok: return parsed
@@ -34,15 +35,23 @@ func open(path: String, _historical_recording: bool = false, replay_existing: bo
 			var checked: Dictionary = archived.check_identity(parsed.value.protocol)
 			if not checked.ok: return checked
 			protocol = archived
-		var first := protocol.decode_recorded("InitializationResponse",raw)
-		if not first.ok: return first
-		_opened_initialization = [raw, first.value]
+		if not protocol._current_server_contract and not protocol._archived_server_contract:
+			return Protocol.failure("Unknown recorded producer contract")
+		# The already strict-parsed value belongs to the exact selected native16
+		# contract. Preserve decode_recorded's initialization cursor check without
+		# reparsing this entire packet (the Opus parse-once handoff).
+		if int(parsed.value.get("cursor",{}).get("sequence",-1))!=0:
+			return _failure("Initialization sequence must be zero")
+		_opened_initialization = [raw, parsed.value]
 	return replay() if replay_existing else {"ok":true,"value":null}
 
 ## Offline decode of one recorded packet. Packet 0 reuses open()'s parse when
-## its bytes are unchanged: decode() is that same parse plus schema admission.
+## its bytes are unchanged, preserving decode_recorded()'s producer admission.
 func decode_record(sequence: int, raw: PackedByteArray) -> Dictionary:
 	if sequence == 0 and not _opened_initialization.is_empty():
+		if not protocol.setup_error.is_empty(): return Protocol.failure(protocol.setup_error)
+		if not protocol._current_server_contract and not protocol._archived_server_contract:
+			return Protocol.failure("Unknown recorded producer contract")
 		var opened: Array = _opened_initialization
 		_opened_initialization = []
 		if opened[0] == raw: return {"ok":true,"value":opened[1]}

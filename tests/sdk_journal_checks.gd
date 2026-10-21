@@ -3,6 +3,7 @@ extends SceneTree
 const Journal=preload("res://sdk/journal.gd")
 const Protocol=preload("res://sdk/protocol.gd")
 const FIXTURE="res://tests/fixtures/schema16/current-production-0c/fire-bolt/amber"
+const ARCHIVED="res://tests/fixtures/schema16/scenarios/door/amber"
 var failures:Array=[]
 var checks=0
 func check(value:bool,label:String)->void:
@@ -11,6 +12,40 @@ func check(value:bool,label:String)->void:
 func raw(sequence:int)->PackedByteArray:return FileAccess.get_file_as_bytes(FIXTURE.path_join("%016d.json"%sequence))
 func decoded(journal:RefCounted,sequence:int)->Dictionary:
     return journal.protocol.decode_server("InitializationResponse" if sequence==0 else "PlayerOperation",raw(sequence)).value
+func recorded_admission(path:String,initial:Dictionary)->void:
+    for control in [{"label":"setup","schema":{"$defs":{},"unsupported_keyword":true},"error":"Unsupported schema keyword unsupported_keyword"},
+            {"label":"unsupported contract","schema":{"$defs":{}},"error":"Unknown recorded producer contract"}]:
+        var schema_path:String=path.path_join(control.label.replace(" ","-")+"-schema.json")
+        var file=FileAccess.open(schema_path,FileAccess.WRITE);file.store_string(JSON.stringify(control.schema));file.close()
+        # Real Protocol construction supplies the malformed/unsupported contract;
+        # do not replace the decoder or manufacture its result/setup flags.
+        var refused_protocol=Protocol.new(schema_path,"res://sdk/protocol-identity.json")
+        check(refused_protocol.setup_error==(control.error if control.label=="setup" else ""),"Construct actual "+control.label+" admission control")
+        var expected:Dictionary=Protocol.failure(control.error)
+        var unopened=Journal.new();unopened.protocol=refused_protocol
+        check(unopened.open(path,true,false)==expected,"Existing current packet zero refuses "+control.label+" before retained admission")
+        check(unopened.state.is_empty() and unopened.cursor.is_empty(),"Refused open publishes no state or cursor: "+control.label)
+        var cached=Journal.new()
+        check(cached.open(path,true,false).ok,"Open actual current packet zero before "+control.label+" changes")
+        var supported=cached.protocol;cached.protocol=refused_protocol
+        check(cached.decode_record(0,raw(0))==expected,"Retained packet-zero admission preserves protocol failure: "+control.label)
+        check(cached.state.is_empty() and cached.cursor.is_empty(),"Refused retained packet publishes no state or cursor: "+control.label)
+        cached.protocol=supported
+        var accepted:Dictionary=cached.decode_record(0,raw(0))
+        check(accepted.ok and accepted.value==initial,"Restored current contract admits unchanged initialization: "+control.label)
+    for original in [{"label":"current","path":path},{"label":"archived","path":ARCHIVED}]:
+        var reader=Journal.new()
+        check(reader.open(original.path,true,false).ok,"Open exact "+original.label+" original without replay")
+        var bytes:PackedByteArray=FileAccess.get_file_as_bytes(original.path.path_join("0000000000000000.json"))
+        var first:Dictionary=reader.decode_record(0,bytes)
+        check(first.ok and int(first.value.cursor.sequence)==0,"Retained "+original.label+" initialization admits cursor zero")
+        var repeated:Dictionary=reader.decode_record(0,bytes)
+        check(repeated==first,"Noncached "+original.label+" fallback preserves the exact admitted packet")
+    var fallback=Journal.new()
+    check(fallback.open(path,true,false).ok,"Open current packet-zero fallback control")
+    check(not fallback.decode_record(0,'{'.to_utf8_buffer()).ok,"Different malformed bytes cannot reuse valid packet zero")
+    var restored:Dictionary=fallback.decode_record(0,raw(0))
+    check(restored.ok and restored.value==initial,"Original bytes still admit after the malformed-byte refusal")
 func _init()->void:
     var path="user://sdk-journal-check-"+str(Time.get_ticks_usec())
     var journal=Journal.new()
@@ -50,6 +85,7 @@ func _init()->void:
     var stale=initial.duplicate(true);stale.protocol.player_schema_version=9
     var file=FileAccess.open(stale_path.path_join("0000000000000000.json"),FileAccess.WRITE);file.store_string(JSON.stringify(stale));file.close()
     check(not Journal.new().open(stale_path,true,false).ok,"Offline mode refuses retired wire schema; saved-container version is separate")
+    recorded_admission(path,initial)
     for directory in [path,stale_path]:
         for filename in DirAccess.get_files_at(directory):DirAccess.remove_absolute(directory.path_join(filename))
         DirAccess.remove_absolute(directory)

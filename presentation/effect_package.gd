@@ -619,6 +619,13 @@ static func _refresh_geometry(handle:Dictionary)->void:
 ## Also suspend source-owned capture viewports while a retained owner is idle.
 static func hide(handle:Dictionary)->void:
     handle.root.hide()
+    if "weapon_binding" in handle.get("clip",{}).get("inputs",[]):
+        # The public invalid binding releases only this source's material
+        # claims. Actor materials live outside the hidden occurrence subtree.
+        set_input(handle,"weapon_binding",{})
+        # A later identical valid packet must be delivered again on re-entry.
+        handle.erase("weapon_input_key")
+        handle.erase("weapon_hand_key")
     if handle.get("actor_context_bound",false):
         set_input(handle,"actor_context",{})
         handle.actor_context_bound=false

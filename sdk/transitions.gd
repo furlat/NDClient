@@ -41,6 +41,7 @@ static func capture_delta(target:Dictionary,node:Dictionary,bodies:Array,update:
     for identity in changed_items:delta.items[identity]=target.items[identity]
     if not bodies.is_empty():delta.set.static=target.static.duplicate()
     if update!=null:
+        delta.world_order=disclosed.get("order",[])
         delta.tiles=disclosed.get("tiles",{});delta.tiles_removed=disclosed.get("tiles_removed",[]);delta.objects=disclosed.get("objects",{});delta.objects_removed=disclosed.get("objects_removed",[])
         delta.set.connectors=target.connectors.duplicate();delta.set.object_members=target.object_members.duplicate()
         delta.set.static=target.static.duplicate()

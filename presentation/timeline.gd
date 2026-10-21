@@ -46,6 +46,7 @@ func take_world_changes(previous_revision: int) -> Dictionary:
 
 func _record_world_changes(delta: Dictionary) -> void:
     for key in delta.get("tiles",{}): world_changes.tiles[key] = true
+    for key in delta.get("tiles_removed",[]): world_changes.tiles[key] = true
     for key in delta.get("objects",{}): world_changes.objects[key] = true
     for key in delta.get("objects_removed",[]): world_changes.objects[key] = true
     world_changes.senses = world_changes.senses or delta.get("set",{}).has("senses")
@@ -54,13 +55,21 @@ func _record_world_changes(delta: Dictionary) -> void:
 static func _append_membership_order(order: Array, delta: Dictionary, before: Dictionary) -> void:
     # Match Compiler.apply_delta's dictionary insertion/removal order. Dirty
     # keys alone cannot distinguish a replacement from a remove-and-reappend.
+    if delta.has("world_order"):
+        order.append_array(delta.world_order)
+        return
+    # Archived deltas retain the earlier keyed representation.
+    var removed_tiles:Dictionary={}
+    for id in delta.get("tiles_removed",[]):
+        if before.tiles.has(id) and not removed_tiles.has(id):
+            order.append({"kind":"tiles","id":id,"remove":true});removed_tiles[id]=true
     var removed: Dictionary = {}
     for id in delta.get("objects_removed",[]):
         if before.objects.has(id) and not removed.has(id):
             order.append({"kind":"objects","id":id,"remove":true})
             removed[id] = true
     for id in delta.get("tiles",{}):
-        if not before.tiles.has(id): order.append({"kind":"tiles","id":id,"remove":false})
+        if removed_tiles.has(id) or not before.tiles.has(id): order.append({"kind":"tiles","id":id,"remove":false})
     for id in delta.get("objects",{}):
         if removed.has(id) or not before.objects.has(id): order.append({"kind":"objects","id":id,"remove":false})
 const DIAGNOSTIC_LIMIT = 2000
@@ -288,7 +297,7 @@ func _advance_immediate(delta_ms: float) -> void:
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
-            if not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors"):
+            if _world_delta(delta):
                 world_revision += 1
                 _record_world_changes(delta)
             commit_index += 1
@@ -819,6 +828,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
             Compiler.apply_delta(snapshot,delta)
             Conditions.observe(appearance_owners,delta.get("actors",{}),segment.start_ms+commit.at_ms,false,commit.get("condition_rows",[]),captures,commit.get("creation_bindings",{}))
             for key in delta.get("tiles",{}): changes.tiles[key] = true
+            for key in delta.get("tiles_removed",[]): changes.tiles[key] = true
             for id in delta.get("objects",{}): changes.objects[id] = true
             for id in delta.get("objects_removed",[]): changes.objects[id] = true
             changes.senses = changes.senses or delta.get("set",{}).has("senses")

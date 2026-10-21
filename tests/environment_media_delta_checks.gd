@@ -29,6 +29,7 @@ func exhaustive(state: Dictionary,groups: Array,cache: Dictionary) -> Dictionary
             if not future.tiles.has(key): collect({"tiles":{key:groups[index].staged_tiles[key]},"objects":{},"senses":future.senses},paths,cache)
         for commit in groups[index].commits:
             var delta: Dictionary=commit.delta; var changed=false
+            for key in delta.get("tiles_removed",[]): future.tiles.erase(key); changed=true
             for key in delta.tiles: future.tiles[key]=delta.tiles[key]; changed=true
             for key in delta.objects: future.objects[key]=delta.objects[key]; changed=true
             for key in delta.objects_removed: future.objects.erase(key); changed=true
@@ -39,6 +40,52 @@ func exhaustive(state: Dictionary,groups: Array,cache: Dictionary) -> Dictionary
         for path in paths:
             if cache.get("__live_fixture_frames",{}).has(path): fixtures[path]=true
     return {"required":required,"upcoming":upcoming,"fixtures":fixtures}
+func removal_controls(recorded:Dictionary)->void:
+    check(not recorded.tiles.is_empty(),"Actual Gallery supplies terrain for tile-removal controls")
+    if recorded.tiles.is_empty():return
+    var key:String=recorded.tiles.keys()[0]
+    var state:Dictionary={"tiles":{key:recorded.tiles[key]},"objects":{},"senses":null}
+    var after:Dictionary={"tiles":{},"objects":{},"senses":null}
+    var delta:Dictionary={"tiles":{},"tiles_removed":[key],"objects":{},"objects_removed":[],"set":{}}
+    var group:Dictionary={"id":"removed-actual-terrain","commits":[{"at_ms":25.0,"delta":delta}]}
+    var cache:Dictionary={}
+    var before:Dictionary=Media.plan(state,[],cache,state,state)
+    check(not before.required.is_empty(),"Actual terrain has a nonempty admitted source closure")
+    var planned:Dictionary=Media.plan(state,[group],cache,state,after)
+    var expected:Dictionary=exhaustive(state,[group],{})
+    check(planned.required==before.required and planned.required==expected.required,
+        "Removal preserves the sources needed earlier in the same operation")
+    var next:Dictionary=Media.plan(after,[],cache,after)
+    check(next.diagnostics.skipped_initial and next.required==exhaustive(after,[],{}).required and next.required.is_empty(),
+        "Exact final-owner reuse excludes deleted terrain sources")
+    cache={}
+    Media.plan(state,[{"id":"opening-a","commits":[]},{"id":"opening-b","commits":[]}],cache,state)
+    Media.finish_handoff([group],after,cache)
+    next=Media.plan(after,[],cache,after)
+    check(next.diagnostics.skipped_initial and next.required.is_empty(),
+        "Removal in an undisplayed handoff tail updates the next canonical source owner")
+    cache={}
+    Media.plan(state,[],cache,state,state)
+    Media.plan(state,[group],cache,state,{},true)
+    next=Media.plan(state,[],cache,state)
+    check(not next.diagnostics.skipped_initial and next.required==before.required,
+        "A changed partial plan cannot certify its unchanged canonical origin")
+    var reentered:Dictionary=delta.duplicate();reentered.tiles={key:recorded.tiles[key]}
+    var replacement:Dictionary={"id":"reentered-actual-terrain","commits":[{"at_ms":25.0,"delta":reentered}]}
+    cache={}
+    Media.plan(state,[replacement],cache,state,state)
+    next=Media.plan(state,[],cache,state)
+    check(next.diagnostics.skipped_initial and next.required==before.required,
+        "Remove plus same-key final after-value retains the actual terrain source")
+    for other in recorded.tiles:
+        if other==key or recorded.tiles[other].surface.base_material!=recorded.tiles[key].surface.base_material:continue
+        var shared:Dictionary={"tiles":{key:recorded.tiles[key],other:recorded.tiles[other]},"objects":{},"senses":null}
+        var retained:Dictionary={"tiles":{other:recorded.tiles[other]},"objects":{},"senses":null}
+        cache={};Media.plan(shared,[group],cache,shared,retained)
+        next=Media.plan(retained,[],cache,retained)
+        check(next.required==exhaustive(retained,[],{}).required and not next.required.is_empty(),
+            "Shared terrain paths remain while another actual tile requires them")
+        break
 func _initialize() -> void:
     var directory:String=Fixtures.journal("gallery")
     var journal=Journal.new()
@@ -80,6 +127,7 @@ func _initialize() -> void:
     var settled:int=settled_plan.diagnostics.changed_row_builds
     var repeated:Dictionary=Media.plan(journal.state,[],cache)
     check(repeated.diagnostics.changed_row_builds==settled,"Repeated unchanged map performs no row/source reconstruction")
+    removal_controls(journal.state)
     var report={"checks":checks,"failures":failures,"packets":count,"windows":worlds,"exhaustive_ms":exhaustive_us/1000.0,"incremental_ms":incremental_us/1000.0,
         "scope":"Metadata CPU only; authentic retained Gallery journal. Not renderer frame time or a whole-game speedup.","changed_row_builds":settled}
     FileAccess.open("res://generated/environment_media_delta_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

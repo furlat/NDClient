@@ -119,7 +119,7 @@ static func _merged_faces(prior:Array,current:Array,faces:Array)->Dictionary:
     for identity in keys:result.append(kept[identity])
     return success(result)
 
-static func _object(target:Dictionary,row:Dictionary,prior_objects:Dictionary)->Dictionary:
+static func _object(target:Dictionary,row:Dictionary,prior_objects:Dictionary,order:Array=[])->Dictionary:
     var identity:String=row.item_uuid;var previous:Variant=target.objects.get(identity);var members:Variant=row.members
     if members==null:
         if target.audience.observers.size()!=1:return failure("A seat with several observers names the members of each object row")
@@ -139,6 +139,7 @@ static func _object(target:Dictionary,row:Dictionary,prior_objects:Dictionary)->
         if not providers.has(value.provider_uuid):suppressions.append(value)
     item.value.construction_suppressions=suppressions
     if not prior_objects.has(identity):prior_objects[identity]=previous
+    if previous==null:order.append({"kind":"objects","id":identity,"remove":false})
     target.objects[identity]={"placement":at.value,"item":item.value,"contained_items":previous.contained_items if previous!=null else null};target.object_members[identity]=members
     return success(target)
 
@@ -212,13 +213,14 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->D
     # Keep only the first value of rows this update actually writes or erases.
     # Final comparison handles repeated writes and remove/re-add without
     # copying or diffing the unrelated retained tile/object stores.
-    var prior_tiles:Dictionary={};var prior_objects:Dictionary={}
+    var prior_tiles:Dictionary={};var prior_objects:Dictionary={};var order:Array=[]
     var result=static_rows(target,update)
     if not result.ok:return result
     for identity in update.get("objects_removed",[]):
         if not prior_objects.has(identity):prior_objects[identity]=target.objects.get(identity)
         if not target.objects.erase(identity):return failure("An object removal names an object the client holds")
         target.object_members.erase(identity)
+        order.append({"kind":"objects","id":identity,"remove":true})
     for identity in update.get("connectors_removed",[]):
         if not target.connectors.erase(identity):return failure("A connector removal names a connector the client holds")
     var entered=Cells.point_set(Cells.mask_points(update.get("entered",{})))
@@ -233,11 +235,13 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->D
             if not unchanged.has(key) and target.tiles.has(key):
                 if not prior_tiles.has(key):prior_tiles[key]=target.tiles[key]
                 target.tiles.erase(key)
+                order.append({"kind":"tiles","id":key,"remove":true})
         var tiles=tile_columns(update.get("tile_columns"),target.static.tiles,target.static.tile_looks)
         if not tiles.ok:return tiles
         for key in tiles.value:
             if not entered.has(key) or unchanged.has(key):return failure("Tile columns describe entered cells only, none of them unchanged")
             if not prior_tiles.has(key):prior_tiles[key]=target.tiles.get(key)
+            if not target.tiles.has(key):order.append({"kind":"tiles","id":key,"remove":false})
             target.tiles[key]=tiles.value[key]
         var resent:Array=update.objects.item_uuids if update.get("objects")!=null else []
         for identity in target.objects.keys():
@@ -246,7 +250,8 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->D
                 if entered.has(key):touched=true;break
             if not identity in resent and not kept.has(identity) and touched:
                 if not prior_objects.has(identity):prior_objects[identity]=held
-                target.objects.erase(identity);target.object_members.erase(identity);continue
+                target.objects.erase(identity);target.object_members.erase(identity)
+                order.append({"kind":"objects","id":identity,"remove":true});continue
             var suppressions:Array=[];var changed=false
             for row in held.item.construction_suppressions:
                 var points:Array=[]
@@ -263,7 +268,7 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->D
     var decoded=object_rows(update.get("objects"))
     if not decoded.ok:return decoded
     for row in decoded.value:
-        result=_object(target,row,prior_objects)
+        result=_object(target,row,prior_objects,order)
         if not result.ok:return result
     result=_contents(target,update,prior_objects)
     if not result.ok:return result
@@ -281,5 +286,5 @@ static func fold(target:Dictionary,update:Dictionary,disclosed:Dictionary={})->D
         if current==null:
             if prior_objects[identity]!=null:disclosed.objects_removed.append(identity)
         elif prior_objects[identity]==null or not is_same(prior_objects[identity],current):disclosed.objects[identity]=current
-    disclosed.changes=disclosed.tiles.keys()
+    disclosed.changes=disclosed.tiles.keys();disclosed.order=order
     return success(target)

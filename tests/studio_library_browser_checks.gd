@@ -10,6 +10,14 @@ func _initialize()->void:call_deferred("run")
 func check(value:bool,message:String)->void:
     if value:passed+=1
     else:failures.append(message);print("FAIL "+message)
+func prepared(window:Window)->bool:
+    # Match the existing authoring-inventory control's failure allowance;
+    # completion is actual publication, never an assumed number of frames.
+    var deadline:int=Time.get_ticks_msec()+60000
+    while not window.is_prepared() and window.error.is_empty() and Time.get_ticks_msec()<deadline:await process_frame
+    var ready:bool=window.is_prepared()
+    check(ready,"Library filtering and bounded rows finish publication: "+window.error)
+    return ready
 func run()->void:
     var identity={"commit":"current","protocol_version":1,"player_schema_version":16,"schema_digest":"current-schema"}
     var snapshot={"header":identity,"ids":{"spell":{"spell.fireball":{"level":3,"school":"evocation"},"spell.false_life":{"level":1,"school":"necromancy"}},"condition":{"condition.hidden":{"family":"core"}},"creature":{"creature.goblin":{}},"damage_type":{"Fire":{}}}}
@@ -103,11 +111,13 @@ func run()->void:
     check(moments[1].available,"A retained occurrence version resolves the same actual event")
     check(not moments[2].available and not moments[3].available,"Missing or wrong-lineage moments never retarget to another event")
     var window=WindowScript.new();root.add_child(window);window.report=report;window._refresh()
+    if not await prepared(window):window.free();quit(1);return
     check(window.tree.columns==5 and window.tree.get_column_title(3)=="Output evidence" and window.tree.get_column_title(4)=="Art review","Browser exposes source, scenario, actual output evidence and review as separate visible columns")
     window.report=witnessed;window.status_picker.select(4);window._refresh()
+    if not await prepared(window):window.free();quit(1);return
     check(window.summary.text.begins_with("2 / 5 capabilities") and window.summary.text.contains("2 with linked evidence"),"Output filter and compact counts include each multi-subject capability without duplicating IDs")
     window.report=report;window.status_picker.select(0);window._refresh()
-    var capability=window.tree.get_root().get_first_child().get_first_child().get_first_child()
+    if not await prepared(window):window.free();quit(1);return
     var emitted:Array=[];window.recording_selected.connect(func(entry,scenario,record):emitted.append({"entry":entry.id,"scenario":scenario.id,"record":record.id}))
     # Directly select the actual Fireball tree row by its data, independent of group layout.
     var pending:Array=[window.tree.get_root()]
@@ -124,10 +134,12 @@ func run()->void:
     var emitted_before:int=emitted.size();var unavailable_events:Array=[]
     window.recording_unavailable.connect(func():unavailable_events.append(true))
     window._refresh("spell.fireball","fireball/alternate")
+    if not await prepared(window):window.free();quit(1);return
     check(window.tree.get_selected().get_metadata(0).case.id==alternate.id and window.recording_options.size()==1 and window.recording_options[0].id==alternate.id,"Reopening the library restores the exact active scenario rather than the first case")
     check(not window.open_button.disabled and window.detail.text.contains(sources.spell["spell.fireball"].source_path),"Restored selection immediately exposes its real source and playback controls")
     check(emitted.size()==emitted_before and unavailable_events.is_empty(),"Restoring library focus inspects details without playback or cancellation side effects")
     window.search.text="Fireball";window._refresh()
+    if not await prepared(window):window.free();quit(1);return
     check(window.tree.get_selected().get_metadata(0).case.id==alternate.id and emitted.size()==emitted_before,"Filtering preserves the exact retained scenario without replaying it")
     var component:Dictionary={"native_clip":{"id":"test.inspector","inputs":[],"input_setters":{},"approaches":[{"id":"recorded-0","kind":"recorded","path":"res://test/default.res"},{"id":"actual-authored","kind":"native","path":"res://test/actual.gd","source_phase":"res://test/actual.tres"}]},"native_cue":{"approach":"actual-authored"}}
     var immutable:PackedByteArray=var_to_bytes(component)

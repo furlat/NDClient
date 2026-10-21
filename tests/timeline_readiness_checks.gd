@@ -119,7 +119,16 @@ func crossed_audio()->void:
         groups[i].components=[cue];cues.append(cue)
     var timeline=setup(initial(),groups)
     var presenter=Audio.new();var host=Node3D.new();root.add_child(host)
-    check(presenter.prepare(cues).is_empty(),"Actual authored audio sources prepare")
+    # An empty error list is not worker/voice completion. Establish the same
+    # real readiness boundary as the audio presenter gate before the clock run.
+    var deadline:int=Time.get_ticks_msec()+30000
+    var errors:Array=presenter.prepare(cues,host)
+    while not presenter.ready(cues) and errors.is_empty() and Time.get_ticks_msec()<deadline:
+        await process_frame
+        errors=presenter.prepare(cues,host)
+    var prepared:bool=errors.is_empty() and presenter.ready(cues)
+    check(prepared,"Actual authored audio sources prepare")
+    if not prepared:presenter.close();host.free();return
     presenter.sample(host,[],0,1,false,0)
     timeline.advance(510)
     var samples=timeline.component_samples()
@@ -225,7 +234,9 @@ func run()->void:
     if recordings.is_empty():
         printerr("Usage: --recording=<current-schema journal> [--recording=<another journal>]")
         quit(2);return
-    ready_groups();media_wait();world_wait();replay_wait();crossed_audio();membership_order()
+    ready_groups();media_wait();world_wait();replay_wait()
+    await crossed_audio()
+    membership_order()
     var records={}
     for directory in recordings:records[directory]=recording_cases(directory)
     var report={"checks":checks,"failures":failures,"records":records,

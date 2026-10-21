@@ -17,7 +17,11 @@ static func definitions(cache:Dictionary)->Dictionary:
     return result
 
 static func interested(owners:Dictionary,delta:Dictionary,cache:Dictionary)->bool:
-    if not owners.is_empty():return true
+    if not owners.is_empty():
+        # Location depends only on actors/loadouts/inventory and the current
+        # observed/controlled actor membership, never unrelated floor objects.
+        return not delta.get("actors",{}).is_empty() or not delta.get("items",{}).is_empty() \
+            or delta.get("set",{}).has("senses") or delta.get("set",{}).has("audience")
     var entries:Dictionary=definitions(cache)
     if not entries.is_empty() and delta.get("set",{}).has("senses"):return true
     if not entries.is_empty() and not delta.get("items",{}).is_empty():return true

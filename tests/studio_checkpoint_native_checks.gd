@@ -73,8 +73,10 @@ func transport_checks()->void:
     for wrapped in groups:
         for component in wrapped.group.components:
             if not component.get("native_spell",false):continue
+            # Components retain the exact package selection ID; case/behavior
+            # IDs use the separate spell. namespace. Untagged rows stay excluded.
             var spell:String=str(component.get("spell_id",""))
-            if spell not in ["spell.magic_missile","spell.scorching_ray","spell.fireball"]:continue
+            if spell not in ["magic_missile","scorching_ray","fireball"]:continue
             if not counts.has(spell):counts[spell]={}
             var role:String=component.native_cue.role
             counts[spell][role]=int(counts[spell].get(role,0))+1
@@ -94,9 +96,9 @@ func transport_checks()->void:
         var selected:Dictionary=NativeSpells.selected(source,application.fact)
         check(not NativeSpells.miss_impact_authored(selected.selection,application.fact),
             "Actual missed application selects no replacement miss-impact source: "+str(application.application_id))
-    var expected={"spell.magic_missile":{"cast":2,"flight":6,"impact":6},"spell.scorching_ray":{"cast":1,"flight":3},"spell.fireball":{"cast":1,"flight":1,"area":1}}
+    var expected={"magic_missile":{"cast":2,"flight":6,"impact":6},"scorching_ray":{"cast":1,"flight":3},"fireball":{"cast":1,"flight":1,"area":1}}
     check(counts==expected,"Compact tracks retain exact recorded cast/delivery roles, omit actual missed rays' impacts and keep one Fireball area")
-    check(int(counts.get("spell.scorching_ray",{}).get("impact",0))==0,
+    check(int(counts.get("scorching_ray",{}).get("impact",0))==0,
         "Three actual misses produce no invented ScorchingRay impact tracks")
     checkpoint.native_roles=counts
     checkpoint.scorching_ray={"applications":applications,"outcomes":outcomes,"authored_miss_impact":"omit",
@@ -107,7 +109,7 @@ func transport_checks()->void:
     var movement:Array=studio.index.rows.filter(func(row):return row.kind=="body" and row.get("track",{}).get("clip")=="Run" and row.end_ms-row.start_ms>100)
     if not movement.is_empty():selections.append({"name":"movement","row":movement[0]})
     for spell in ["spell.magic_missile","spell.scorching_ray","spell.fireball"]:
-        var sources:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("spell_id")==spell and row.component.native_cue.role==("area" if spell=="spell.fireball" else "flight") and row.get("visible_here",true))
+        var sources:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("spell_id")==spell.trim_prefix("spell.") and row.component.native_cue.role==("area" if spell=="spell.fireball" else "flight") and row.get("visible_here",true))
         check(not sources.is_empty(),"Actual recorded source available for "+spell)
         if not sources.is_empty():selections.append({"name":spell,"row":sources[0]})
     for selected in selections:

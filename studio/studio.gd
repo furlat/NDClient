@@ -428,10 +428,13 @@ static func _actor_for_row(row:Dictionary)->String:
 func _diagnostic_id()->String:
     if selected_row.get("kind") not in ["native_effect","native_material","native_light","sprite_layer","material_flash","damage_number","audio","condition_material"]:return ""
     var component:Dictionary=selected_row.get("component",{})
+    # Actual inspection channels can belong to either a spell occurrence or
+    # a native-hit material presenter; native_spell is not their eligibility.
+    if selected_row.get("kind") in ["native_light","native_material"] and component.get("kind")==selected_row.kind:
+        return str(component.get("parent_id",""))
     if component.get("kind") not in ["native_effect","sprite_layer","material_flash","damage_number","audio","condition"] and not component.get("native_spell",false):return ""
-    # Inspection channels belong to the same real submitted source. Muting a
-    # light/material channel must address that source, not a nonexistent draw.
-    return str(component.get("parent_id",component.get("id","")))
+    # Direct presenters retain their own draw ID even when parented by an event.
+    return str(component.get("id",""))
 
 func _diagnostic_menu_state()->void:
     var id=_diagnostic_id()
@@ -543,7 +546,7 @@ func _picker(parent:Node,hint:String,width:float)->OptionButton:
     picker.tooltip_text=hint;parent.add_child(picker);return picker
 
 func _discover_cases() -> void:
-    case_records=CaseLibrary.read();case_paths.clear()
+    case_records=CaseLibrary.read(false);case_paths.clear()
     for row in case_records:
         if not row.get("ready",false):continue
         for perspective in row.perspectives:case_paths.append(perspective.journal)
@@ -1404,9 +1407,15 @@ func _refresh_native_inspector()->void:
     inspector_update_usec=Time.get_ticks_usec()
     var owner:Node3D=_row_world(inspected_row)
     var component:Dictionary=inspected_row.get("component",{})
-    var sample:Dictionary=owner.component_renderer.native_spells.diagnostics.get(str(component.get("id","")),{})
-    inspector_text.text="At playhead %.3f s · current native submission/input diagnostics; framebuffer evidence remains separate.\n%s\n\n%s"%[
-        owner.timeline.display_ms/1000.0,JSON.stringify(sample if not sample.is_empty() else {"status":"not_sampled_at_playhead"},"  "),inspector_row_text]
+    var occurrence_id:String=str(component.get("id",""))
+    if component.get("kind") in ["native_light","native_material"]:
+        occurrence_id=str(component.get("parent_id",occurrence_id))
+    var sample:Dictionary=owner.component_renderer.native_spells.diagnostics.get(occurrence_id,{})
+    var channel_note:String=""
+    if component.get("kind")=="native_light":
+        channel_note="\nLight channel %s belongs to occurrence %s. This is the source occurrence's submission/input status; per-light sampling, illumination and framebuffer evidence remain separate."%[str(component.get("id","")),occurrence_id]
+    inspector_text.text="At playhead %.3f s · current native submission/input diagnostics; framebuffer evidence remains separate.%s\n%s\n\n%s"%[
+        owner.timeline.display_ms/1000.0,channel_note,JSON.stringify(sample if not sample.is_empty() else {"status":"not_sampled_at_playhead"},"  "),inspector_row_text]
 
 func _refresh_audio_inspector()->void:
     inspector_update_usec=Time.get_ticks_usec()

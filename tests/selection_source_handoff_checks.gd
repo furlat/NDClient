@@ -26,7 +26,7 @@ func _initialize()->void:run.call_deferred()
 func settle(owner:Dictionary)->void:
     for turn in 1200:
         Selection.poll(owner)
-        if owner.task<0:return
+        if owner.worker==null:return
         await process_frame
     check(false,"Finite selected metadata job completes")
 func source_count(cache:Dictionary)->int:

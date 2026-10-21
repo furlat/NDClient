@@ -128,7 +128,9 @@ func inspect_spell(item:Dictionary)->void:
     var index=Recording.read(item.perspectives[0].journal)
     check(index.ok,item.spell_id+": actual Studio index loads")
     if not index.ok:return
-    var rows:Array=index.rows.filter(func(row):return row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==item.spell_id and row.kind=="native_effect" \
+    # Preserve the package selection ID, distinct from the canonical behavior/case ID.
+    var source_id:String=item.spell_id.trim_prefix("spell.")
+    var rows:Array=index.rows.filter(func(row):return row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==source_id and row.kind=="native_effect" \
         and (not item.has("shield_condition_uuid") or row.component.get("condition_uuid")==item.shield_condition_uuid))
     check(not rows.is_empty(),item.spell_id+": Studio exposes native source tracks")
     if rows.is_empty():return
@@ -163,7 +165,7 @@ func inspect_spell(item:Dictionary)->void:
             if not await settle(world,item.shield_control+" current recipient view"):break
         await frame();await frame()
         var native=world.component_renderer.native_spells
-        var active=world.displayed_components.filter(func(sample):return sample.get("native_spell",false) and sample.get("spell_id")==item.spell_id \
+        var active=world.displayed_components.filter(func(sample):return sample.get("native_spell",false) and sample.get("spell_id")==source_id \
             and (not item.has("shield_condition_uuid") or sample.get("condition_uuid")==item.shield_condition_uuid))
         check(not active.is_empty(),item.spell_id+": selected native interval is active "+key)
         for sample in active:

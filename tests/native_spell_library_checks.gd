@@ -87,8 +87,12 @@ func open_case(spec:Dictionary)->bool:
     studio.loop_enabled=false;studio.loop_button.set_pressed_no_signal(false)
     studio._show_study_library()
     var panel:Window=studio.study_library
-    check(panel.visible and not panel.report.get("entries",[]).is_empty(),spell+": actual capability Library has its current catalog")
-    if not panel.visible or panel.report.get("entries",[]).is_empty():return false
+    # open() returns while its exact generation is still building. Native
+    # pointer/preview controls consume only fully published current Tree rows.
+    var catalog_deadline:int=Time.get_ticks_msec()+120000
+    while not panel.is_prepared() and panel.error.is_empty() and Time.get_ticks_msec()<catalog_deadline:await process_frame
+    check(panel.visible and panel.is_prepared() and not panel.report.get("entries",[]).is_empty(),spell+": actual capability Library has its current catalog; "+panel.error)
+    if not panel.visible or not panel.is_prepared() or panel.report.get("entries",[]).is_empty():return false
     var id:String=spec.case
     var item:TreeItem=find_item(panel.tree.get_root(),id)
     check(item!=null,spell+": Library contains the exact recorded scenario")
@@ -228,7 +232,7 @@ func active_phase(row:Dictionary,label:String)->void:
 func inspect_case(spec:Dictionary)->void:
     var spell:String=spec.spell
     if not await open_case(spec):return
-    var rows:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("visible_here",true) and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==spell and row.component.native_cue.role==spec.role and row.get("condition_phase","")==spec.condition_phase and row.end_ms>row.start_ms)
+    var rows:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("visible_here",true) and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==spell.trim_prefix("spell.") and row.component.native_cue.role==spec.role and row.get("condition_phase","")==spec.condition_phase and row.end_ms>row.start_ms)
     check(not rows.is_empty(),spell+": actual index exposes the requested native family")
     if rows.is_empty():return
     var row:Dictionary=rows[0]

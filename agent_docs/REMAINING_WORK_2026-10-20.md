@@ -1,5 +1,26 @@
 # Everything remaining: client, Factory migration and Studio
 
+## Recovery execution update — 22 October 2026
+
+The human resumed implementation with restoration of every regression as the
+priority. This update supersedes the historical STOPPED/planning-only and active
+queue statements below; their inventories and receipts remain preserved. The
+old broad queue is not running. The automated heartbeat remains paused.
+
+The initial 17-module Opus restoration plus A10 metadata ownership are applied.
+Three quiet current82a gameplay runs pass 83 checks each: Door actual submit to
+first body is 105–124 ms; Move active-group media hold is zero. Door holds and
+36–42 ms maximum frames remain above target. The affected native/Studio batch
+has five passing and three nonpassing rows; Library preview/pointer failures and
+the confirmed native transport access violation remain open. This is not clean
+whole-suite qualification or completion of R1–R8. No new assignments precede
+recovery. See the [current execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md)
+for exact scope, original receipts and next recovery boundaries. All art/audio
+remain unreviewed. No new Factory/backend/asset defect has been established by
+this batch, and delivered fixes are not requested again.
+
+## Historical execution boundaries and remaining inventory
+
 **Implementation stopped by the human,21October.** Root's native queue and
 current test process are stopped; the implementation heartbeat is paused.
 Sub-agents finished their assigned source-only work, leaving their pending

@@ -21,6 +21,20 @@ var selected_capability:Dictionary={}
 var selected_scenario:Dictionary={}
 var recording_options:Array=[]
 var rebuilding=false
+# Opus worker/generation ownership and bounded Tree publication, adapted only
+# to the current exact CaseLibrary report and five existing columns.
+var worker:Thread
+var request:Dictionary={}
+var generation=0
+var installed_generation=0
+var refresh_pending=false
+var pending_rows:Array=[]
+var row_cursor=0
+var preferred_id=""
+var preferred_scenario=""
+var published_rows:Dictionary={}
+var preferred_item:TreeItem
+var error=""
 func _ready()->void:
     title="Studio library";size=Vector2i(1120,640);min_size=Vector2i(820,420);close_requested.connect(hide)
     var margin=MarginContainer.new();margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);add_child(margin)
@@ -33,7 +47,7 @@ func _ready()->void:
     for label in FILTERS:status_picker.add_item(label);status_picker.set_item_metadata(status_picker.item_count-1,FILTERS[label])
     status_picker.item_selected.connect(func(_choice):_refresh())
     search=LineEdit.new();search.placeholder_text="Find a spell, condition, action or object";search.size_flags_horizontal=Control.SIZE_EXPAND_FILL;tools.add_child(search);search.text_changed.connect(func(_value):_refresh())
-    var reload=Button.new();reload.text="Refresh";tools.add_child(reload);reload.pressed.connect(func():report=Library.catalog();_refresh())
+    var reload=Button.new();reload.text="Refresh";tools.add_child(reload);reload.pressed.connect(_reload_catalog)
     summary=Label.new();summary.add_theme_font_size_override("font_size",12);box.add_child(summary)
     tree=Tree.new();tree.hide_root=true;tree.columns=5;tree.column_titles_visible=true;tree.select_mode=Tree.SELECT_ROW;tree.allow_reselect=true;tree.size_flags_vertical=Control.SIZE_EXPAND_FILL
     for column in 5:tree.set_column_title(column,["Capability / case","Source","Scenario","Output evidence","Art review"][column]);tree.set_column_expand_ratio(column,4 if column==0 else 2)
@@ -46,41 +60,126 @@ func _ready()->void:
     open_button=Button.new();open_button.text="Play";open_button.disabled=true;bottom.add_child(open_button);open_button.pressed.connect(_open)
     prefix_button=Button.new();prefix_button.text="Inspect failed prefix";prefix_button.disabled=true;bottom.add_child(prefix_button);prefix_button.pressed.connect(_inspect_prefix)
 func open(_cache:Dictionary,_records:Array,preferred:String="",scenario:String="")->void:
-    report=Library.catalog();search.text="";kind_picker.select(0);status_picker.select(0);_refresh(preferred,scenario)
+    search.set_block_signals(true);search.text="";search.set_block_signals(false)
+    kind_picker.select(0);status_picker.select(0)
+    _request_catalog(preferred,scenario)
     popup_centered(Vector2i(mini(1120,DisplayServer.window_get_size().x-40),mini(640,DisplayServer.window_get_size().y-40)))
+
+func _request_catalog(preferred:String,scenario:String)->void:
+    generation+=1;preferred_id=preferred;preferred_scenario=scenario
+    request={"generation":generation}
+    report={};error="";pending_rows=[];row_cursor=0;published_rows={};preferred_item=null
+    tree.clear();recording_options=[];recording_picker.clear();selected_capability={};selected_scenario={}
+    open_button.disabled=true;prefix_button.disabled=true;prefix_record={};prefix_perspectives=[];detail.text=""
+    summary.text="Reading capability definitions, cases and retained evidence…"
+    _start()
+
+func _reload_catalog()->void:
+    var preferred:String="";var scenario:String=""
+    if tree.get_selected()!=null:
+        var selected:Variant=tree.get_selected().get_metadata(0)
+        if selected is Dictionary:
+            preferred=str(selected.capability.get("key",selected.capability.id))
+            scenario=str(selected.case.get("id",""))
+    _request_catalog(preferred,scenario)
+
+func _start()->void:
+    if worker!=null or request.is_empty():return
+    var job:Dictionary=request;request={};worker=Thread.new()
+    var started:Error=worker.start(_build.bind(job))
+    if started!=OK:
+        worker=null;error=error_string(started);summary.text=error
+
+static func _build(job:Dictionary)->Dictionary:
+    return {"generation":job.generation,"report":Library.catalog()}
+
+func _process(_delta:float)->void:
+    if worker!=null and not worker.is_alive():
+        var result:Dictionary=worker.wait_to_finish();worker=null
+        if result.generation==generation:
+            report=result.report;installed_generation=generation;refresh_pending=true
+        _start()
+    if refresh_pending and installed_generation==generation:
+        refresh_pending=false;_filter()
+    var started:int=Time.get_ticks_usec();var count:int=0
+    rebuilding=true
+    while row_cursor<pending_rows.size() and count<24 and Time.get_ticks_usec()-started<2000:
+        var entry:Dictionary=pending_rows[row_cursor];row_cursor+=1;count+=1
+        _publish_row(entry)
+    rebuilding=false
+    if row_cursor==pending_rows.size() and not pending_rows.is_empty():
+        pending_rows=[];row_cursor=0
+        if preferred_item!=null:
+            var ancestor:TreeItem=preferred_item.get_parent()
+            while ancestor!=null:ancestor.collapsed=false;ancestor=ancestor.get_parent()
+            rebuilding=true;preferred_item.select(0);rebuilding=false
+            _selected(false);tree.scroll_to_item(preferred_item)
+
+func is_prepared()->bool:
+    return not report.is_empty() and installed_generation==generation and worker==null and request.is_empty() and pending_rows.is_empty() and not refresh_pending
+
 func _refresh(preferred:String="",scenario:String="")->void:
     if preferred.is_empty() and tree.get_selected()!=null:
         var previous:Variant=tree.get_selected().get_metadata(0)
         if previous is Dictionary:
             preferred=str(previous.capability.get("key",previous.capability.id));scenario=str(previous.case.get("id",""))
-    var preferred_item:TreeItem=null
-    rebuilding=true;tree.clear();var root=tree.create_item();var categories={};var groups={};var count=0;var recorded=0;var evidenced=0;var awaiting_review=0
-    var query=search.text.strip_edges().to_lower();var category=kind_picker.get_item_text(kind_picker.selected);selected_capability={};selected_scenario={};recording_options=[];recording_picker.clear();open_button.disabled=true;prefix_button.disabled=true;prefix_record={};prefix_perspectives=[];detail.text=""
+    preferred_id=preferred;preferred_scenario=scenario;refresh_pending=true
+
+func _filter()->void:
+    rebuilding=true;tree.clear();tree.create_item();pending_rows=[];row_cursor=0;published_rows={};preferred_item=null
+    var query:String=search.text.strip_edges().to_lower()
+    var category:String=kind_picker.get_item_text(kind_picker.selected)
+    selected_capability={};selected_scenario={};recording_options=[];recording_picker.clear()
+    open_button.disabled=true;prefix_button.disabled=true;prefix_record={};prefix_perspectives=[];detail.text=""
+    var categories:Dictionary={};var groups:Dictionary={}
+    var count:int=0;var recorded:int=0;var evidenced:int=0;var awaiting_review:int=0
     for entry in report.get("entries",[]):
         if not Library.matches(entry,query,category if kind_picker.selected>0 else "",str(status_picker.get_item_metadata(status_picker.selected))):continue
-        if not categories.has(entry.category):
-            var heading=tree.create_item(root);heading.set_text(0,entry.category);heading.set_selectable(0,false);categories[entry.category]=heading
-        var group_key=entry.category+":"+entry.group
+        var category_key:String="category:"+str(entry.category)
+        if not categories.has(category_key):
+            categories[category_key]=true
+            pending_rows.append({"kind":"category","key":category_key,"parent":"","label":entry.category})
+        var group_key:String="group:"+str(entry.category)+":"+str(entry.group)
         if not groups.has(group_key):
-            var heading=tree.create_item(categories[entry.category]);heading.set_text(0,entry.group);heading.set_selectable(0,false);heading.collapsed=query.is_empty() and entry.kind!="spell";groups[group_key]=heading
-        var item=tree.create_item(groups[group_key]);item.set_text(0,entry.label);item.set_text(1,entry.source_status.replace("_"," "));item.set_text(2,entry.scenario_status.replace("_"," "));item.set_text(3,_output_label(entry));item.set_text(4,entry.approval_status.replace("_"," "))
-        item.set_tooltip_text(3,_evidence_text(entry.get("witnesses",[])))
-        if entry.approval_status=="rejected":item.set_custom_color(4,Color("eeaa9c"))
-        if entry.approval_status=="needs_review":awaiting_review+=1
-        item.set_tooltip_text(0,entry.id+("\nTyped source; not listed in the server snapshot. Runtime availability unverified." if entry.get("inventory_origin")=="typed_source" else ""));item.set_metadata(0,{"capability":entry,"case":{}})
-        item.collapsed=query.is_empty();count+=1
+            groups[group_key]=true
+            pending_rows.append({"kind":"group","key":group_key,"parent":category_key,"label":entry.group,
+                "collapsed":query.is_empty() and entry.kind!="spell"})
+        var capability_key:String="capability:"+str(entry.key)
+        pending_rows.append({"kind":"capability","key":capability_key,"parent":group_key,
+            "capability":entry,"case":{},"collapsed":query.is_empty()})
+        count+=1
         if entry.scenario_status=="recorded":recorded+=1
         if not entry.get("output_witnesses",[]).is_empty():evidenced+=1
-        for record in entry.cases:
-            var child=tree.create_item(item);child.set_text(0,record.label);child.set_text(2,record.scenario_status.replace("_"," "));child.set_text(3,_output_label(record));child.set_tooltip_text(3,_evidence_text(record.witnesses));child.set_metadata(0,{"capability":entry,"case":record})
-            if preferred in [str(entry.key),str(entry.id)] and record.id==scenario:preferred_item=child;item.collapsed=false
-        if preferred in [str(entry.key),str(entry.id)] and preferred_item==null:preferred_item=item
-    summary.text="%d / %d capabilities · %d recorded · %d with linked evidence · %d awaiting art review"%[count,report.get("entries",[]).size(),recorded,evidenced,awaiting_review];rebuilding=false
-    if preferred_item!=null:
-        var ancestor:TreeItem=preferred_item.get_parent()
-        while ancestor!=null:ancestor.collapsed=false;ancestor=ancestor.get_parent()
-        rebuilding=true;preferred_item.select(0);rebuilding=false
-        _selected(false);tree.scroll_to_item(preferred_item)
+        if entry.approval_status=="needs_review":awaiting_review+=1
+    summary.text="%d / %d capabilities · %d recorded · %d with linked evidence · %d awaiting art review"%[count,report.get("entries",[]).size(),recorded,evidenced,awaiting_review]
+    rebuilding=false
+
+func _publish_row(row:Dictionary)->void:
+    var parent:TreeItem=published_rows.get(row.parent,tree.get_root())
+    var item:TreeItem=tree.create_item(parent);published_rows[row.key]=item
+    if row.kind in ["category","group"]:
+        item.set_text(0,row.label);item.set_selectable(0,false);item.collapsed=row.get("collapsed",false);return
+    var entry:Dictionary=row.capability
+    var record:Dictionary=row.case
+    item.set_metadata(0,{"capability":entry,"case":record})
+    if row.kind=="case":
+        item.set_text(0,record.label);item.set_text(2,record.scenario_status.replace("_"," "))
+        item.set_text(3,_output_label(record));item.set_tooltip_text(3,_evidence_text(record.witnesses))
+        if preferred_id in [str(entry.key),str(entry.id)] and record.id==preferred_scenario:
+            preferred_item=item;parent.collapsed=false
+        return
+    item.set_text(0,entry.label);item.set_text(1,entry.source_status.replace("_"," "))
+    item.set_text(2,entry.scenario_status.replace("_"," "));item.set_text(3,_output_label(entry));item.set_text(4,entry.approval_status.replace("_"," "))
+    item.set_tooltip_text(3,_evidence_text(entry.get("witnesses",[])))
+    if entry.approval_status=="rejected":item.set_custom_color(4,Color("eeaa9c"))
+    item.set_tooltip_text(0,entry.id+("\nTyped source; not listed in the server snapshot. Runtime availability unverified." if entry.get("inventory_origin")=="typed_source" else ""))
+    item.collapsed=row.collapsed
+    if preferred_id in [str(entry.key),str(entry.id)] and preferred_item==null:preferred_item=item
+    # Preserve Opus child enqueueing inside the bounded parent publication,
+    # rather than eagerly flattening every linked case during filtering.
+    for child_record in entry.cases:
+        pending_rows.append({"kind":"case","key":str(row.key)+":case:"+str(child_record.id),
+            "parent":row.key,"capability":entry,"case":child_record})
 
 static func _output_label(owner:Dictionary)->String:
     if not owner.get("current_output_witnesses",[]).is_empty():return "Engine/package receipts"
@@ -147,3 +246,7 @@ func _inspect_prefix()->void:
     failed_prefix_selected.emit(selected_capability,scenario,prefix_record,str(prefix_perspectives[0].id));hide()
 func copy_study()->void:
     if not selected_capability.is_empty():DisplayServer.clipboard_set(JSON.stringify({"capability":selected_capability.id,"kind":selected_capability.kind,"source_path":selected_capability.get("source_path",""),"inventory_origin":selected_capability.get("inventory_origin",""),"runtime_availability":selected_capability.get("runtime_availability","unknown"),"cases":selected_capability.cases,"source":selected_capability.source_status,"scenario":selected_capability.scenario_status,"presentation":selected_capability.presentation_status,"approval":selected_capability.approval_status,"witnesses":selected_capability.get("witnesses",[])},"  "))
+
+func _exit_tree()->void:
+    generation+=1;request={}
+    if worker!=null:worker.wait_to_finish();worker=null

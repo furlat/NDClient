@@ -3,6 +3,7 @@ extends SceneTree
 const Reducer=preload("res://sdk/reducer.gd")
 const Cells=preload("res://sdk/fold_cells.gd")
 const Audience=preload("res://sdk/audience.gd")
+const Compiler=preload("res://presentation/compiler.gd")
 const ROOT="res://tests/fixtures/schema16/fold/"
 var passed=0
 var failures:Array=[]
@@ -56,6 +57,11 @@ func fold(state:Dictionary,input:Dictionary)->Dictionary:
                 var expected_inserted:Array=expected[family].keys().filter(func(key):return not prior.has(key))
                 check(inserted==expected_inserted,"Sparse "+family+" insertion order preserves the actual canonical mutation order")
                 for key in expected[family]:check(is_same(disclosed[family][key],state[family][key]),"Disclosure owns the exact final "+family+" row reference")
+            var replayed:Dictionary={"tiles":prior_tiles.duplicate(),"objects":prior_objects.duplicate()}
+            Compiler.apply_delta(replayed,{"tiles":disclosed.tiles,"tiles_removed":disclosed.tiles_removed,
+                "objects":disclosed.objects,"objects_removed":disclosed.objects_removed,"world_order":disclosed.order})
+            for family in ["tiles","objects"]:
+                check(replayed[family]==state[family] and replayed[family].keys()==state[family].keys(),"Compiled sparse "+family+" delta preserves canonical values and erase/reinsert order")
         return result
     if input.has("sensory_rows"):
         var composed=Audience.composed_values(input.sensory_rows)
@@ -129,6 +135,34 @@ func sparse_disclosure_cases()->void:
     var refused:Dictionary=Reducer.apply_world_update(state,{"occurrence":2,"objects_removed":[identity,"not-held"]},disclosed)
     check(not refused.ok and disclosed=={"sentinel":"unchanged"},"A refused update does not publish a partial sparse disclosure")
 
+    # The original multi-object vector supplies every row. This private API
+    # control changes only explicit removal, never manufactures an object.
+    var ordered:Dictionary=_document("w13_")
+    var original_update:Dictionary=ordered.steps[0].input.update
+    var ordered_state:Dictionary=fold(ordered.initial.duplicate(true),ordered.steps[0].input).value
+    var original_order:Array=ordered_state.objects.keys()
+    check(original_order.size()==2,"Original mixed placement vector holds two ordered objects")
+    if original_order.size()==2:
+        var repeated:Dictionary=original_update.duplicate(true)
+        repeated.objects_removed=[original_order[0]]
+        var reordered:Dictionary=fold(ordered_state,{"update":repeated})
+        check(reordered.ok and reordered.value.objects.keys()==[original_order[1],original_order[0]],"A held object erased and reinserted moves behind its unchanged peer")
+
+    # Entering a known tile without a replacement is an explicit missing-row
+    # control; a later genuine original row restores that same source key.
+    var terrain:Dictionary=_document("w7_")
+    var terrain_state:Dictionary=fold(terrain.initial.duplicate(true),terrain.steps[0].input).value
+    var prior_order:Array=terrain_state.tiles.keys()
+    var removed_key:String=prior_order[1];var removed_tile:Dictionary=terrain_state.tiles[removed_key]
+    var removed_copy:Dictionary=removed_tile.duplicate(true)
+    var removed:Dictionary=fold(terrain_state,{"update":{"occurrence":1,"entered":Cells.mask([removed_tile.position])}})
+    check(removed.ok and not removed.value.tiles.has(removed_key),"Pure tile removal leaves no retained canonical support")
+    check(removed_tile==removed_copy,"Tile removal leaves the earlier disclosed row immutable")
+    if removed.ok:
+        var restored:Dictionary=fold(removed.value,terrain.steps[1].input)
+        var expected_order:Array=prior_order.duplicate();expected_order.erase(removed_key);expected_order.append(removed_key)
+        check(restored.ok and restored.value.tiles.keys()==expected_order,"Original tile after-value returns at its actual insertion position")
+
 func attack_source_cases()->void:
     var document:Dictionary=_document("v1_a_first_record")
     var state:Dictionary=fold(document.initial.duplicate(true),document.steps[0].input).value
@@ -148,6 +182,8 @@ func run()->void:
             if not result.ok:break
             state=result.value;var issue=difference(state,step.expected)
             check(issue.is_empty(),name+" step "+str(i)+" "+issue)
+            for family in ["tiles","objects"]:
+                check(state[family].keys()==step.expected[family].keys(),name+" step "+str(i)+" exact Python "+family+" insertion order")
             if step.input.has("group"):
                 var group:Dictionary=step.input.group;var branch=Reducer.lineage_branch(group,group.events[group.root]);check(branch.ok and branch.value.events.size()>0,name+" chronological branch preserved")
     error_cases();transition_cases();attack_source_cases();sparse_disclosure_cases()

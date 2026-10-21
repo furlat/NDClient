@@ -1,6 +1,22 @@
 # Recover the Opus fast paths, integrate the pending repairs, finish the client
 
-**Proposed recovery and completion plan — 21 October 2026.**
+## Current execution — 22 October 2026
+
+The human subsequently authorized implementation: “let's go priority is restoring
+all the regression gogo”. Recovery is active in this same chat. The plan-preparation
+and STOPPED statements below describe the historical proposal state; they do not
+supersede that instruction. The automated heartbeat remains paused.
+
+The initial 17-module restoration and A10 follow-through are applied. Three
+post-A10 quiet gameplay runs pass 83 checks each, with Door actual submit to first
+body at 105–124 ms and Move active-group media hold at zero. Door holds, frame
+costs and native/Studio failures remain open. Exact source scope, original receipts
+and limitations are in [the execution record](OPUS_RECOVERY_IMPLEMENTATION_2026-10-22.md).
+The frozen starting inventory and literal historical/proposed appendices below
+remain preserved. `d5d2ff1d` (`almost disaster`) remains the immutable starting
+checkpoint. This is not complete R1–R8 or full native qualification.
+
+**Proposed recovery and completion plan — 21 October 2026, corrected 22 October 2026.**
 
 This document follows the human's latest instruction: recovering lost behavior
 and speed comes first. It does not resume implementation or testing. No patch
@@ -12,6 +28,26 @@ code, complete proposed adaptations and the pending patch bytes. Historical
 code, proposed code, already-applied code and unresolved design are labelled
 separately. A historical whole module is **not** an instruction to replace its
 current schema16 counterpart wholesale.
+
+### 22 October amendment: four source-review corrections
+
+Astra's follow-up found four gaps in the proposed adaptations. This amendment
+corrects their complete literal code and callers in Appendix B; it does not
+authorize or apply restoration. The `d5d2ff1d` (`almost disaster`) source
+checkpoint is preserved. Implementation, runtime testing and the heartbeat
+remain stopped.
+
+| Finding | Required correction in the literal proposal |
+|---|---|
+| Tile removals omitted from retained environment demand | Carry `tiles_removed` through both `EnvironmentMedia.plan()` and `finish_handoff()`, including removal-only deltas. Remove deleted tile/source/support entries from the retained index and invalidate its path union before publishing `final_owner`. Keep sources needed earlier in the operation/group in that operation's required/upcoming paths; removing the final-state owner must not erase an earlier first use. |
+| Whole visibility mask decoded for each residue request | Reuse decoded bytes for the exact immutable mask through the existing bounded World mask owner/cache. Residue lookup performs only the actual tile/neighbour checks after that reuse; changed masks acquire their own bytes. Preserve current bit order, privacy and support-height rules, existing full-view reuse and bounded retention. |
+| Recording-disabled reductions still collect presentation inputs | Guard actor/item before-input snapshots, capture-only cast-owner indexing and admitted-body capture accumulation with `recorded != null`; allocate operation transition containers only when recording. Keep canonical declaration validation, body/world/fact ordering and writer-local mutation tracking active. |
+| Packet-zero parse reuse drops protocol setup refusal | Preserve the existing cheap protocol `setup_error` and recorded-contract admission refusals on the cached initialization path before returning its parsed value. Reuse the first parse; do not add another parse or a validation subsystem. |
+
+The earlier source reviews did not catch these four gaps. Their original notes
+remain historical in Appendix G, followed by the dated correction review. Exact
+historical modules and archived patch texts remain unchanged. A9–A12 remain
+unfinished follow-through and do not delay the initial restoration batch.
 
 ## 1. Required outcome and what the refactor did not justify
 
@@ -57,8 +93,8 @@ Authorities:
 |---|---|
 | Source to recover from | `9b73f29a849ac863fe528e5b16f9166e406768af`, plan-only commit immediately before the first implementation. Runtime parent is `1c4b9eb64390f148ee1eb2073cdd00b702d5b74d`. |
 | First migration | `119ddede435ec3a5d646bb518a4a716b03b0d588`, direct child of9b73. |
-| Current client | `fc84da2af36c33d5ccda832f3255c19987f18e01`, `codex-authoring-schemabump`, plus the pre-stop receiving changes. Preserve those exact working-tree changes. |
-| Installed Factory | Complete `runtime-speed-completion-20261021-82a271b677ff9604`; receiving integration is uncommitted. Previous8dd remains separately preserved. No quiet82a performance receipt exists. |
+| Current client | `d5d2ff1d` (`almost disaster`), `codex-authoring-schemabump`: checkpoint of `fc84da2af36c33d5ccda832f3255c19987f18e01` and the pre-stop receiving/source/document changes. This plan amendment is subsequent, unapplied document work; preserve the checkpoint. |
+| Installed Factory | Complete `runtime-speed-completion-20261021-82a271b677ff9604`; receiving integration is included in `d5d2ff1d`. Previous8dd remains separately preserved. No quiet82a performance receipt exists. |
 | New delivered Factory, not installed | Complete `runtime-cloud-body-speed-20261021-1dcd0207e3ef30d8`: retains1246clips/504defaults/155families/71prior typed rows, adds7explicit alternatives for78rows. Intake belongs after core recovery, not ahead of it. |
 | Current frozen backend | `9f81d52676d4cea78be0be951dfc51a756050032`, protocol1/schema16; matching SDK/schema identity already adopted. Read-only official checkout. |
 | Current manifest |575rows:430ok,37needs-args,15known-red,9owned-by-migration,59retired,25helpers. The430ok split235headless/183GPU/11live/1non-executable. |
@@ -74,9 +110,9 @@ arguments, modes and original timeouts are embedded later. The old stopped
 summary stays unchanged, including the interrupted EffectPackage exit255.
 That exit is human termination, not a natural crash or a passing completion.
 
-Use the existing branch and explicit file ownership. Before eventual editing,
-retain a recoverable source snapshot of the existing dirty tree and installed
-package using the project's existing checkpoint mechanisms. Do not reset,
+Use the existing branch and explicit file ownership. The requested recoverable
+source/package-receiving checkpoint is `d5d2ff1d`; do not amend or replace it.
+Preserve any later working-tree changes before eventual implementation. Do not reset,
 clean, overwrite or commit unrelated asset/engine work. Do not start another
 implementation branch/framework merely to avoid understanding these changes.
 
@@ -109,12 +145,12 @@ cross-owner interfaces are reviewed together before publication.
 
 | ID / priority | Target and introducing change | Literal reuse / minimum adaptation | Completion of this source work |
 |---|---|---|---|
-| A1 — first | `environment_media.gd`, `world.gd`; repeated whole-visible work introduced291e092c | Recover9b73's cheap partial-row closure. Preserve real residues, but do not construct the whole visible-cell Dictionary for each tiny tile/object state. Return immediately for empty relevant tiles; resolve only the actual residue tile/neighbors using current disclosed masks. Retain the separate once/update spatial projection until its full dependency tuple is derived. | Local row metadata work scales with changed source rows and actual bounded neighbor checks; actual residue joins/privacy/height still match current data. |
-| A2 — first | `sdk/reducer.gd`, `transitions.gd`;119ddede full actor/item snapshots/diffs per node | Reuse Opus incident-identity capture. Derive exact affected identities from current structured World/Actor/Item rows before mutation; retain ordered before/after cuts and immutable leaf borrowing. Do not copy both complete maps for every node, and do not capture/diff transitions when record_events=false. | Canonical schema16 results/order are unchanged; changes scale with affected identities. Every real static/body/item membership/removal branch remains covered. |
+| A1 — first | `environment_media.gd`, `world.gd`; repeated whole-visible work introduced291e092c | Recover9b73's cheap partial-row closure. Preserve real residues, but do not construct the whole visible-cell Dictionary or decode the same immutable mask for each tiny tile/object request. Return immediately for empty relevant tiles; reuse decoded bytes through the existing bounded mask owner and resolve only the actual residue tile/neighbors. Retain the separate once/update spatial projection until its full dependency tuple is derived. | Local row metadata work scales with changed source rows and actual bounded neighbor checks after one decode per retained exact mask; actual residue joins/privacy/height still match current data. Cache eviction may require a later decode; no unbounded retention is promised. |
+| A2 — first | `sdk/reducer.gd`, `transitions.gd`;119ddede full actor/item snapshots/diffs per node | Reuse Opus incident-identity capture. Derive exact affected identities from current structured World/Actor/Item rows before mutation; retain ordered before/after cuts and immutable leaf borrowing. Guard actor/item inputs, capture-only cast-owner indexes, admitted-body capture and transition-container allocation when recording is off. Do not copy both complete maps for every node. | Canonical schema16 validation/results/order and writer-local mutation tracking stay active with recording disabled; presentation snapshots/indexing are skipped. Every real static/body/item membership/removal branch remains covered. |
 | A3 — first | `sdk/audience.gd`/reducer sensory context;119ddede replacement | Restore retained visible-mask indexing. A contact-only change must not decode/sort/re-encode unchanged visibility. On actual mask change update the exact encoded mask/value columns in reference order. The literal candidate retains current value_indices/light/hazard reindexed_values passes; it does not claim all aligned-byte projection cost is removed. No observer API resurrection. | Same public visible/memory/contact/light/hazard values and exact ordering; no unchanged visibility population rebuild. Any further value-column optimization remains explicit R6 follow-through. |
 | A4 | `studio/study_library.gd`;119ddede synchronous rewrite | Reuse the old background construction, generation cancellation/result adoption and24row/2000µs Tree-publication algorithm. Adapt only the current CaseLibrary/evidence row shape and Tree columns. Search cancels/replaces pending rows; the passive filter scan remains synchronous as in Opus. | Catalog construction moves off scene thread; Tree publication is sliced and stale results never publish. The2ms bound is for Tree writes, not the whole filter/poll callback. |
 | A5 | `studio/case_library.gd`, source cache;291e092c uncached reads | Reuse the existing process parse cache. Keep current compatibility/evidence rules and real provenance. The dropdown-only caller explicitly uses read(false), skips unused EVIDENCE/PACKAGE reads and labels evidence not_loaded; full read/catalog keeps those joins. SourceCatalog._document still reads raw bytes on explicit full open/Refresh; unchanged bytes reuse the parse. Full Library's first9.64MB package parse and separate Effects cache remain. | Repeat parsing is recovered, unused cold-dropdown evidence reads are removed and full catalog/Tree work moves off scene thread. Do not claim all Library I/O or all initial package parsing is eliminated. |
-| A6 | `sdk/journal.gd`;291e092c packet-zero second parse | Restore parse once by handing the already parsed packet through actual recorded-contract admission. Keep identity/schema selection, strict number/cursor validation and archived provenance. | One initialization parse per open; every operation still admitted once; no validation bypass or current-code oracle. |
+| A6 | `sdk/journal.gd`;291e092c packet-zero second parse | Restore parse once by handing the already parsed packet through actual recorded-contract admission. Preserve the existing protocol setup and recorded-contract refusals on the cached path, identity/schema selection, strict number/cursor validation and archived provenance. | One initialization parse per open; malformed protocol setup still refuses admission; every operation still admitted once. No second parser or new validation machinery. |
 | A7 | `native_items.gd`, compiler/timeline relevance;78be810b and extensions | Keep actual created/intrinsic/dynamic item owners. Restore a mutation-relevance guard: unrelated object/tile/turn changes must not rebuild all inventories/loadouts merely because an owner exists. Use current actor/item/sensory/audience changes; update locations once per meaningful canonical mutation. | Correct holder/slot/drop/disclosure/removal while unrelated commits perform no broad membership pass. Do not turn this into a per-render-frame item scan. |
 | A8 — preserve applied code | `selection_media.gd`, `characters.gd`, metadata owner | Keep already applied24a cancellation boundary checks and offered-spell joins. No new restoration edit is required for those fixes. The older inner traversal was already nonpreemptible at9b73; deriving finer layer/clip cancellation is later R6 work, not literal old code to restore. | Existing boundary cancellation stays effective and real task drain stays correct; remaining inner-loop queue latency is not falsely claimed repaired. |
 | A9 — subsequent safety design | `native_source_admission.gd`;24a global-cache shortcut removal | Recover cheap completed physical sharing without stealing an IN_PROGRESS request token. Reuse completed owned results through existing caches. Keep exact request/get pairing, owner revisions, compiler exclusion and necessary native draw acknowledgment. Do not paste `has_cached => ready` back blindly. | Retain current safe code until a complete reviewed alternative exists. This unresolved design does not block the A1–A8 restoration checkpoint. |
@@ -179,7 +215,7 @@ cancellation boundaries,82a admission integration and Follow layout.
 | Defect | Exact required behavior and owner |
 |---|---|
 | External weapon material survives hidden/unavailable input | In existing Effects/NativeInputs withdrawal, release the exact weapon-binding/material claim when registration/endpoints become unavailable. Root visibility is insufficient for material applied to an external displayed weapon. Retain original material and independent overlapping owners; rebind only to the actual held item. |
-| Sparse tile removal/re-entry | Carry removed tiles into Timeline/world dirty cells and membership order. Preserve erase/reappend order for an already-held reentered tile; final-value dictionaries alone lose it. Do not undo the repaired sparse touched-row fold. |
+| Sparse tile removal/re-entry | Carry removed tiles into Timeline/world dirty cells and membership order, and into both EnvironmentMedia planning and tail handoff. Removal-only commits must update the retained tile/source/support index and invalidate its final path union before claiming `final_owner`. Preserve erase/reappend order for a reentered tile, earlier within-operation/group source requirements and paths still used by other owners. Do not undo the repaired sparse touched-row fold. |
 | Direct Mute/Solo | Apply the pending diagnostic-ID patch: direct components use their own ID; derived light/material rows use their parent occurrence. Seek/view/reapplication must retain the exact occurrence/channel behavior. |
 | Native-light inspector | Join parent occurrence diagnostics using the actual parent ID; keep per-light inspection separate. Fixing menu routing alone does not repair this lookup. Do not infer illumination from a diagnostics row. |
 | Thumbnail version invalidation | Include actual Effects revision/key in memory/composed descriptors and scheduling keys, or invalidate those existing caches on actual version change. Same-index seek must not bypass it. Disk cache is already version-aware; preserve reuse of unchanged versions. |
@@ -203,6 +239,16 @@ required-before-optional ownership, Library generation/publication, parse reuse,
 source IDs, materials and history. Reuse current originals and independent
 old/frozen controls. Correctness failures are fixed by their shared source
 owner, not by widening tolerances or relaxing expected fields.
+
+The same affected batch must cover the four 22 October corrections: removal-only
+tile deltas in both selected-window planning and tail handoff, remove/reinsert
+order, earlier-use paths retained for the operation and shared paths still
+needed by another owner; repeat residue lookups sharing one immutable mask and
+replacement-mask bit/support semantics; recording on/off yielding the same
+canonical result while the disabled path skips capture-only work; and a
+malformed protocol setup refusing cached packet zero without another parse.
+Use the existing affected owners/harnesses. These are future batch duties, not
+new tests or runtime receipts produced while correcting this document.
 
 Then run one serialized recovery performance cohort on the unchanged installed
 82a package before changing packages. Use actual Door/open/reveal, room Move,
@@ -508,11 +554,13 @@ identify any proposal not yet complete/safe instead of labelling all code ready.
 
 | Reviewer role | Actual source/document review | Disposition |
 |---|---|---|
-| Plan adherence / contract and literal completeness — `plan_review` | Initial restoration scope; current schema/ownership preservation;20full historical modules,6full Studio candidate modules, complete core closure,7pending patches, queue/backlog/evidence accounting. | Source/document clear after listed corrections; no parse/runtime/performance qualification. |
-| Independent anti-OOP — `event_consumers` | Actual core and Studio proposal ownership/data flow; no new managers/services/schedulers/registries, second reducer/catalog or unsafe wholesale schema rollback. | Clear within reviewed plan scope; safe loader/drain/history boundaries retained. |
-| Independent anti-slop — `studio` | Recovery-first order; code-versus-prose promises; exact pending/current/historical counts; no automatic oracle retirement or invented source/asset acceptance. | Clear with Tree-budget, Follow and final-manifest wording clarified here. |
+| Historical 21 October plan adherence / contract and literal completeness — `plan_review` | Initial restoration scope; current schema/ownership preservation;20full historical modules,6full Studio candidate modules, core closure,7pending patches, queue/backlog/evidence accounting. | Earlier source-clear disposition missed the four gaps listed in the 22 October amendment; retained as historical review, not current qualification. |
+| Historical 21 October independent anti-OOP — `event_consumers` | Actual core and Studio proposal ownership/data flow; no new managers/services/schedulers/registries, second reducer/catalog or unsafe wholesale schema rollback. | Safe loader/drain/history boundaries retained; four subsequent adaptation gaps require the literal corrections above. |
+| Historical 21 October independent anti-slop — `studio` | Recovery-first order; code-versus-prose promises; exact pending/current/historical counts; no automatic oracle retirement or invented source/asset acceptance. | Earlier Tree-budget/Follow/manifest clarifications retained; does not supersede Astra's four later findings. |
+| 22 October correction review — `plan_review` | Full EnvironmentMedia removal closure, existing mask-owner byte reuse, merged reducer capture guards, Journal admission guards, literal patch/module consistency and amended scope prose. | Source clear for these four bounded corrections; complete dated review in Appendix G. No implementation or runtime/performance qualification. |
+| 22 October independent capture / anti-OOP review — `event_consumers` | All three corrected reducer functions, canonical ordering and mandatory validation, recording-disabled omissions and existing ownership. | Source clear; no second reducer, cache service or framework added. No test or recovered-speed claim. |
 
-All three reviews are read-only planning reviews. They do not imply any
+All reviews are source/document-only planning reviews. They do not imply any
 proposal has been applied, compiled or executed. The unresolved A9–A12/new-cost
 designs remain explicitly incomplete and do not block the literal initial
 restoration batch.
@@ -7589,7 +7637,7 @@ The user requests literal old and minimally adapted code. Every concrete replace
 
 | Coherent batch | Old route restored / current contract retained | Exact source and disposition |
 | --- | --- | --- |
-| A. Local environment metadata | Restore Opus local-row complexity, preserving actual residue/ground gear/trap/portal/wall assignments | `9b73:World.rows` + current `residue_projection` adaptation below. Primary measured regression: new full visible membership population inside every tiny row request, introduced `291e092c`. |
+| A. Local environment metadata | Restore Opus local-row complexity, consume actual tile removals through planning/handoff, and reuse the existing mask-byte owner while preserving actual residue/ground gear/trap/portal/wall assignments | `9b73:World.rows` + current `residue_projection` adaptation below. Primary measured regression: new full visible membership population inside every tiny row request, introduced `291e092c`. |
 | B. Canonical fold/capture | Restore incident-identity capture and accepted-state sensory reuse, preserving schema-16 after-values, body/item rows, grants and real ordering | Current reducer writer-local closure below; old `9b73` snapshot/cell-owner functions included as literal reference. Keep already-applied `24a993f0` touched world fold; add exact removal/reinsertion propagation, not old full-store diffs. |
 | C. Item/source ownership | Narrow unrelated item observation and release direct weapon material leases on optical withdrawal | Current `interested` and `Effects.hide` complete candidates below. Actual item/member/source IDs, public setters, clocks and per-source claim ownership remain. |
 | D. Cold source metadata | Recover one immutable physical metadata read without per-leaf worker/thread churn, **only after loader safety is established** | Old `BodySources._current_index/_load` copied below. A blind CACHE_REUSE/has_cached rollback is not approved: current owner/thread workaround addresses nested loader lifetime/pool dependency hazards. No safe ready-to-apply rollback is claimed. |
@@ -7619,7 +7667,7 @@ Current compiler staged indexes, cue tolerance, preview candidate reuse, live `s
 
 At baseline `_update` supplied one tile or one changed object cell to `World.rows`. `291e092c` made every such call build `Cells.point_set(visible_positions(state))` through `residue_projection`, even for object-only or ordinary non-residue tiles. This is not required to choose a source path. Keep current `rows`, `_collect`, `row_paths`, wall joining, exact current object-to-native-owner joins, ground equipment, floor/world residues, portal/trap programs and their path closures. Restore locality in the one offending helper.
 
-The candidate first finds actually eligible residue-bearing supplied tiles, decodes the current canonical mask once, and tests only their eight neighbors using the exact existing schema-16 bit equation. It changes no neighbor visibility, height or residue ownership rule. Empty object-only and ordinary tile requests do no mask work. Full renderer requests still inspect their actual selected residue tiles. It introduces no cache, registry, alternate geometry or second canonical state.
+The corrected candidate first finds actually eligible residue-bearing supplied tiles, borrows decoded bytes from the existing bounded immutable-mask owner, and tests only their eight neighbors using the exact existing schema-16 bit equation. It changes no neighbor visibility, height or residue ownership rule. Empty object-only and ordinary tile requests do no mask work. Full renderer requests still inspect their actual selected residue tiles. It introduces no second cache, registry, alternate geometry or canonical state; it extends the existing mask-view entry with its decoded bytes.
 
 
 ### A1. Complete original local row adapter — `9b73f29a:presentation/world.gd::rows` (reference; do not wholesale replace current content branches)
@@ -7692,7 +7740,70 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
 ```
 
 
-### A2. Complete proposed current-schema replacement — `presentation/world.gd::residue_projection`
+### A2. Corrected complete mask-owner/residue closure — Astra correction 2, 22 October
+
+The earlier A2 candidate decoded the entire encoded mask once **per residue request**. Neighbor-only lookup therefore did not remove the full byte decode from repeated local row calls. This revision reuses decoded bytes through the **existing** `World._mask_views`/`_mask_mutex` owner, with its existing four-entry FIFO bound and exact immutable mask identity. No second cache/index/owner is added.
+
+Existing declarations remain exactly:
+
+```gdscript
+static var _mask_views:Array=[]
+static var _mask_mutex:=Mutex.new()
+```
+
+Replace `visible_positions` in full and add `visible_mask_bytes` in the same module. Both attach bytes/optional read-only points to those same existing entries under the existing mutex. A residue-only lookup decodes bytes without materializing every visible point. A later ordinary all-points request reuses those bytes and preserves `Cells.mask_points`' exact x-then-y order. If the points request comes first, the residue lookup reuses its bytes. PackedByteArray returns use value/COW semantics; callers only read them. Capacity eviction can require a later decode, so the claim is one decode **per resident immutable-mask entry**, not permanent global residency.
+
+### A2a. Complete proposed `presentation/world.gd::visible_positions`
+
+```gdscript
+static func visible_positions(state:Dictionary)->Array:
+    var senses:Variant=state.get("senses")
+    if senses==null:return []
+    var mask:Dictionary=senses.get("visible",{})
+    _mask_mutex.lock()
+    var view:Dictionary={}
+    for entry in _mask_views:
+        if is_same(entry.mask,mask):view=entry;break
+    if view.is_empty():
+        view={"mask":mask}
+        _mask_views.append(view)
+        if _mask_views.size()>4:_mask_views.pop_front()
+    if not view.has("points"):
+        if not view.has("data"):view.data=Cells.bytes(mask.get("bits",""))
+        var data:PackedByteArray=view.data
+        var points:Array=[];var height:int=int(mask.get("height",0))
+        # Exact Cells.mask_points ordering, borrowing the same decoded bytes
+        # already retained for bounded neighbor queries when available.
+        for i in range(int(mask.get("width",0))*height):
+            if i/8<data.size() and (int(data[i/8])&(1<<(i%8)))!=0:
+                points.append([int(mask.get("x0",0))+i/height,int(mask.get("y0",0))+i%height])
+        points.make_read_only();view.points=points
+    var result:Array=view.points
+    _mask_mutex.unlock()
+    return result
+```
+
+### A2b. Complete proposed `presentation/world.gd::visible_mask_bytes`
+
+```gdscript
+static func visible_mask_bytes(mask:Dictionary)->PackedByteArray:
+    # Extend the existing four-entry immutable-mask owner. Do not create a
+    # second population/cache or decode this whole mask for each residue row.
+    _mask_mutex.lock()
+    var view:Dictionary={}
+    for entry in _mask_views:
+        if is_same(entry.mask,mask):view=entry;break
+    if view.is_empty():
+        view={"mask":mask}
+        _mask_views.append(view)
+        if _mask_views.size()>4:_mask_views.pop_front()
+    if not view.has("data"):view.data=Cells.bytes(mask.get("bits",""))
+    var result:PackedByteArray=view.data
+    _mask_mutex.unlock()
+    return result
+```
+
+### A2c. Complete proposed `presentation/world.gd::residue_projection`
 
 ```gdscript
 static func residue_projection(state:Dictionary,cache:Dictionary)->Array:
@@ -7709,9 +7820,9 @@ static func residue_projection(state:Dictionary,cache:Dictionary)->Array:
     if selected.is_empty():return []
     var senses:Variant=state.get("senses")
     var mask:Dictionary=senses.get("visible",Cells.EMPTY) if senses!=null else Cells.EMPTY
-    # This is Cells.contains' exact schema-16 column-major bit addressing,
-    # with the same original mask decoded once for this local row request.
-    var data:PackedByteArray=Cells.bytes(mask.get("bits",""))
+    # Exact Cells.contains bit addressing. The existing mask-view owner
+    # decodes each immutable mask once while it remains in that bounded owner.
+    var data:PackedByteArray=visible_mask_bytes(mask)
     var height:int=int(mask.get("height",0));var width:int=int(mask.get("width",0))
     var visible:Dictionary={}
     for key in selected:
@@ -7731,6 +7842,240 @@ static func residue_projection(state:Dictionary,cache:Dictionary)->Array:
     return result
 ```
 
+### A3. Corrected complete environment tile-removal closure — Astra correction 1, 22 October
+
+Timeline/world dirty propagation alone is insufficient. Current `EnvironmentMedia.plan` and `finish_handoff` ignore `tiles_removed`; the retained source-selector/support index can therefore retain deleted terrain, residue source paths and tile-only spatial support while still naming the exact final canonical state as `final_owner`.
+
+The full candidate closure below adds an optional trailing `_update(..., tiles_removed:Array=[])` parameter, preserving the existing six-argument helper API for any independent callers. Every production internal call is shown in the full functions: initial synchronization, group commits and handoff-tail commits. All delete `index.tiles`, `index.tile_sources` and `index.tile_paths` **before** final tile after-values. The same `index.tiles` is the actual support input to the unchanged spatial projection; there is no separate environment support cache to leave stale. Canonical objects with independent public object-anchor support are not fabricated away merely because a floor tile leaves.
+
+Both pure-removal guards now admit the delta. This sets `applied_world_delta` for partial planning and prevents false `final_owner=origin_state` certification after an actual removal. `finish_handoff` clears the previous proof before applying its remaining canonical tail and publishes the supplied final canonical owner only after all admitted tail changes and the final path union are processed. The MediaWarmup caller already supplies `final_state` to `plan` only when `tail_groups` is empty, then calls `finish_handoff` on the actual remaining groups; that existing API and scheduling remain unchanged.
+
+**Two different lifetimes stay distinct:** remove paths from the retained *final selector index*, never subtract them from immutable `required`, `upcoming` or an earlier `_timeline` entry that already needs them for an earlier cut in this operation. Those operation unions remain monotonic via the existing `_extend_paths`/`_first_use`/`_timeline` functions. A later group's initial `_all_paths` and the next operation's `final_owner` fast path see the actual deletion. Read-only path snapshots are replaced, not mutated. All source-role/fixture/path-record bookkeeping stays unchanged.
+
+### A3a. Complete proposed `presentation/environment_media.gd::_update`
+
+```gdscript
+static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, removed: Array,
+        senses: Variant, cache: Dictionary, tiles_removed:Array=[]) -> Dictionary:
+    var changed_paths = {}
+    var contacts: Dictionary = senses.get("objects",{}) if senses != null else {}
+    var cells = {}
+    var floor_residues:Dictionary=Catalog.environment_index(cache).get("floor_residue_sources",{})
+    # Erasure precedes final after-values, matching Compiler.apply_delta.
+    # index.tiles is also the support map passed to spatial_projection below.
+    for key in tiles_removed:
+        index.tiles.erase(key)
+        index.tile_sources.erase(key)
+        index.tile_paths.erase(key)
+        index.paths_dirty=true
+    for key in tiles:
+        var tile: Dictionary = tiles[key]
+        var material: String = tile.surface.base_material
+        index.tiles[key] = tile
+        var residues:Array=[]
+        for residue in tile.get("residues",[]):
+            if floor_residues.has(residue.residue_id) and float(residue.amount)>0.0 and residue.get("condition_uuid")!=null:
+                residues.append(residue.residue_id)
+        # Terrain and authored residue atlases are selected by actual tile
+        # after-values. Amount, support and neighbor masks change no file path.
+        var selector:String=JSON.stringify([material,residues])
+        if index.tile_sources.get(key)==selector: continue
+        index.paths_dirty=true
+        index.tile_sources[key] = selector
+        var paths = {}
+        _collect({"tiles":{key:tiles[key]},"objects":{},"senses":senses},paths,cache)
+        index.tile_paths[key] = paths
+        changed_paths.merge(paths)
+        index.changed_row_builds += 1
+    for id in removed:
+        if not index.objects.has(id): continue
+        var old_cell = _cell(index.objects[id])
+        cells[old_cell] = true
+        index.cells[old_cell].erase(id)
+        index.objects.erase(id); index.visual.erase(id)
+    for id in objects:
+        var visual = contacts.get(id,{}).get("visual",false)
+        if index.objects.get(id)==objects[id] and index.visual.get(id)==visual: continue
+        if index.objects.has(id):
+            var old_cell = _cell(index.objects[id])
+            index.cells[old_cell].erase(id); cells[old_cell] = true
+        var cell = _cell(objects[id])
+        if not index.cells.has(cell): index.cells[cell] = {}
+        index.cells[cell][id] = objects[id]
+        index.objects[id] = objects[id]; index.visual[id] = visual
+        cells[cell] = true
+    # Sense-only commits can switch a registered fixture animation. No terrain
+    # or wall-source selection depends on the full visible-tile list.
+    if index.contacts != contacts:
+        for id in index.objects:
+            var visual = contacts.get(id,{}).get("visual",false)
+            if index.visual.get(id)==visual: continue
+            index.visual[id] = visual; cells[_cell(index.objects[id])] = true
+    index.contacts = contacts;index.senses=senses
+    var spatial_paths:Dictionary={}
+    var spatial:Dictionary=WorldRows.spatial_projection({"tiles":index.tiles,"objects":index.objects,"senses":senses},cache)
+    for row in spatial.rows:spatial_paths.merge(world_media_paths(row,cache))
+    if index.get("spatial_paths",{}).keys()!=spatial_paths.keys():
+        spatial_paths.make_read_only();index.spatial_paths=spatial_paths;index.paths_dirty=true
+    changed_paths.merge(spatial_paths)
+    for cell in cells:
+        var members: Dictionary = index.cells[cell]
+        if members.is_empty():
+            index.cells.erase(cell)
+            if index.cell_paths.erase(cell):index.paths_dirty=true
+            continue
+        var paths = {}
+        _collect({"tiles":{},"objects":members,"senses":senses},paths,cache)
+        var previous:Dictionary=index.cell_paths.get(cell,{})
+        if previous.keys()!=paths.keys():
+            paths.make_read_only();index.cell_paths[cell]=paths;index.paths_dirty=true
+        changed_paths.merge(paths)
+        index.changed_row_builds += members.size()
+    return changed_paths
+```
+
+### A3b. Complete proposed `presentation/environment_media.gd::plan`
+
+```gdscript
+static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_state: Dictionary = {}, final_state: Dictionary = {}, partial: bool = false) -> Dictionary:
+    var required = {}
+    var upcoming = {}
+    var environment_timeline = {}
+    if state.is_empty(): return {"required":required,"upcoming":upcoming,"fixtures":{},"disclosed":{},"environment_timeline":environment_timeline,
+        "required_records":[],"upcoming_records":[],"source_sizes":{},"source_headers":{}}
+    var phase_started = Time.get_ticks_usec()
+    var phases = {"initial_update":0.0,"all_paths":0.0,"commit_updates":0.0}
+    var index = _index(cache)
+    index.plans += 1
+    # Only the session's immutable canonical owner can prove continuity. A
+    # shallow worker snapshot alone cannot prove the previous full operation
+    # was planned. Optional/non-session/interleaved plans invalidate this proof.
+    var skip_initial: bool = groups.size()<=2 and not origin_state.is_empty() and is_same(index.get("final_owner",{}),origin_state)
+    index.erase("final_owner")
+    var senses: Variant = state.senses
+    if not skip_initial:
+        var removed_tiles:Array=[]
+        for key in index.tiles:
+            if not state.tiles.has(key):removed_tiles.append(key)
+        var removed: Array = []
+        for id in index.objects:
+            if not state.objects.has(id): removed.append(id)
+        _update(index,state.tiles,state.objects,removed,senses,cache,removed_tiles)
+    phases.initial_update = (Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started = Time.get_ticks_usec()
+    required = _all_paths(index)
+    phases.all_paths += (Time.get_ticks_usec()-phase_started)/1000.0
+    var disclosed: Dictionary = required
+    var applied_world_delta:bool=false
+    for group_index in range(groups.size()):
+        var paths: Dictionary = required if group_index==0 else upcoming
+        var initial: Dictionary = disclosed
+        if group_index>0:
+            phase_started = Time.get_ticks_usec()
+            initial = _all_paths(index)
+            paths=_extend_paths(paths,initial)
+            phases.all_paths += (Time.get_ticks_usec()-phase_started)/1000.0
+        phase_started = Time.get_ticks_usec()
+        var group: Dictionary = groups[group_index]
+        var first_use = {}
+        for component in group.get("components",[]):
+            if component.get("kind")!="world_activation" or component.get("status")=="missing":continue
+            var component_paths:Dictionary=world_media_paths(component,cache)
+            paths=_extend_paths(paths,component_paths)
+            _first_use(initial,first_use,component_paths,float(component.get("start_ms",0.0)))
+        for key in group.get("staged_tiles",{}):
+            if not index.tiles.has(key):
+                var staged_paths = {}
+                _collect({"tiles":{key:group.staged_tiles[key]},"objects":{},"senses":senses},staged_paths,cache)
+                paths=_extend_paths(paths,staged_paths)
+                _first_use(initial,first_use,staged_paths,float(group.get("staged_tile_at_ms",{}).get(key,0.0)))
+        for commit in group.get("commits",[]):
+            var delta: Dictionary = commit.delta
+            if delta.get("tiles",{}).is_empty() and delta.get("tiles_removed",[]).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("senses"): continue
+            applied_world_delta=true
+            senses = delta.get("set",{}).get("senses",senses)
+            # Existing paths were included at group entry. Add only changed
+            # closures, preserving the exhaustive within-group union.
+            var changed_paths = _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,delta.get("tiles_removed",[]))
+            paths=_extend_paths(paths,changed_paths)
+            _first_use(initial,first_use,changed_paths,float(commit.get("at_ms",0.0)))
+        if group.has("id"): environment_timeline[group.id] = _timeline(initial,first_use)
+        if group_index==0:required=paths
+        else:upcoming=paths
+        phases.commit_updates += (Time.get_ticks_usec()-phase_started)/1000.0
+    if groups.size()<=2 and not final_state.is_empty() and not origin_state.is_empty(): index.final_owner = final_state
+    elif partial and not origin_state.is_empty() and not applied_world_delta:
+        # Initial synchronization establishes this exact canonical origin.
+        # Staged source enumeration does not advance the index; the full
+        # continuation can reuse it without walking the room again.
+        index.final_owner=origin_state
+    var fixtures = {}
+    required.make_read_only();upcoming.make_read_only()
+    for paths in [required,upcoming]:
+        for path in paths:
+            if cache.get("__live_fixture_frames",{}).has(path): fixtures[path] = true
+    # The same producer owns finite physical source-role refs. An opening cut
+    # borrows the previous complete map; only full continuation retires extras.
+    var previous:Dictionary=cache.get("__environment_source_records",{})
+    var retained:Dictionary=previous.duplicate() if partial else {}
+    var reuse:Dictionary={"previous":cache.get("__environment_source_sets",[]),"current":[],"fixture_revision":int(cache.get("__live_fixture_revision",0)),"cache":cache}
+    var required_set:Dictionary=_role_records(required,fixtures,previous,retained,reuse)
+    var upcoming_set:Dictionary=_role_records(upcoming,fixtures,previous,retained,reuse)
+    cache.__environment_source_sets=reuse.current
+    var sizes:Dictionary=required_set.source_sizes
+    var headers:Dictionary=required_set.source_headers
+    if not upcoming_set.paths.is_empty():
+        var previous_sizes:Dictionary=required_set.get("size_union",{})
+        if is_same(previous_sizes.get("upcoming"),upcoming_set.source_sizes):
+            sizes=previous_sizes.value;headers=previous_sizes.headers
+        else:
+            sizes=sizes.duplicate();sizes.merge(upcoming_set.source_sizes);sizes.make_read_only()
+            headers=headers.duplicate();headers.merge(upcoming_set.source_headers);headers.make_read_only()
+            required_set.size_union={"upcoming":upcoming_set.source_sizes,"value":sizes,"headers":headers}
+    retained.make_read_only();cache.__environment_source_records=retained
+    return {"required":required,"upcoming":upcoming,"required_records":required_set.records,"upcoming_records":upcoming_set.records,"source_sizes":sizes,"source_headers":headers,
+        "required_family":required_set.family,"upcoming_family":upcoming_set.family,
+        "fixtures":fixtures,"disclosed":disclosed,"environment_timeline":environment_timeline,
+        "diagnostics":{"plans":index.plans,"changed_row_builds":index.changed_row_builds,"skipped_initial":skip_initial,"phases":phases}}
+```
+
+### A3c. Complete proposed `presentation/environment_media.gd::finish_handoff`
+
+```gdscript
+static func finish_handoff(groups:Array,final_state:Dictionary,cache:Dictionary)->void:
+    if final_state.is_empty():return
+    # The selected display prefix has its own immutable source cuts. Advance
+    # only remaining authoritative world deltas in this private selector index
+    # so the next operation can borrow its exact canonical starting owner.
+    var index:Dictionary=_index(cache)
+    index.erase("final_owner")
+    var senses:Variant=index.senses
+    for group in groups:
+        for commit in group.get("commits",[]):
+            var delta:Dictionary=commit.delta
+            if delta.get("tiles",{}).is_empty() and delta.get("tiles_removed",[]).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("senses"):continue
+            senses=delta.get("set",{}).get("senses",senses)
+            _update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache,delta.get("tiles_removed",[]))
+    # Retain the selected final source union with its private canonical owner.
+    # The next operation borrows it; it does not rebuild a room-sized union on
+    # the opening path merely because this operation changed a few cells.
+    _all_paths(index)
+    index.final_owner=final_state
+```
+
+**Current caller closure (unchanged existing MediaWarmup functions):** `_plan_sources` at `presentation/media_warmup.gd:802–816` passes `request.final_state` to `EnvironmentMedia.plan` only when `tail_groups` is empty; its later `finish_handoff(tail, request.final_state, cache)` handles the remaining authoritative groups. No new callback, queue or readiness gate is introduced. `_update` has exactly three internal production call sites in the inspected source, all included above. `_all_paths` still rebuilds only when `paths_dirty` is set.
+
+**Future assertions in the existing grouped metadata/fold/world cohort — not tests added or run here:**
+
+- A pure removal (no tile/object after-value and no new senses) deletes all three retained tile fields, drops tile-only spatial support, marks paths dirty, and cannot be certified as unchanged partial origin.
+- Earlier same-operation source use remains in `required`/the appropriate `upcoming` union and first-use schedule; final selector state and the next operation exclude the deleted unique path. Shared paths still required by other tiles/objects remain.
+- Removal in the unselected handoff tail is consumed before `final_owner` publication; the next exact-origin fast path matches a fresh canonical final-state planner. Empty tail keeps the already-planned same final state; unknown/empty final state never creates a proof.
+- Removal plus same-key after-value reselects only the final terrain/residue closure; ordered semantic re-entry still comes from the B1 fold/order proposal, not a guessed source path.
+- Tile-independent actual object-anchor support remains valid; absent tile-only support is not borrowed from old `index.tiles` or future staged tiles.
+- Repeated residue requests for the same resident immutable mask borrow the existing bytes without a new decode or full point population. Point-first and byte-first sequences produce exact unchanged bit membership/point order. A new mask identity with changed bits cannot borrow stale bytes; the existing four-entry bound and mutex protect concurrent ownership.
+- Existing real Gallery exhaustive/path/source-role fixture controls remain. Its current `exhaustive` helper omits tile removals too, so future removal assertions must apply actual removals in that independent oracle before claiming parity; they must not regenerate expectations from this candidate.
+
+These 22-October additions received independent SOURCE CLEAR for this exact A2/A3 closure after review against current World/Cells/EnvironmentMedia/MediaWarmup call sites. This is not parser, runtime or performance qualification. Prior 21-October evidence is not promoted. No product code, tests, jobs or saved runtime receipts changed.
 
 The separate new `EnvironmentMedia._update` full spatial projection runs once per admitted update, rather than once per tiny `_collect`; its exclusive cost/nonempty Gallery workload was not measured. Do **not** delete it or gate it on an arbitrary object/visible-mask identity: source admission can depend on real current effect cells, support and exact object observations. First restore A2. A later exact metadata-input equality route must name the full current dependency tuple before replacing that once-per-update projection. Original contacts-changed iteration already existed at baseline and is not a newly introduced scan.
 
@@ -8432,16 +8777,35 @@ static func apply_committed_player_fact(target:Dictionary,fact:Dictionary,source
 ```
 
 
+### B2/B3 correction 3 — capture work is conditional, 22 October
+
+The earlier candidate collected actor inputs and indexed cast ownership even when
+`recorded == null`, then discarded those presentation inputs. The corrected full
+functions below guard the actor/item before-input helpers, the capture-only
+`owners`/`casts` map and cast-input join, admitted-body capture accumulation and
+operation transition-container allocation. The mandatory `node_lineages` inside
+`check_spell_declarations` still runs: it validates canonical spell declarations,
+whereas the guarded copy exists only to choose recorded actor inputs.
+
+Canonical body/world/fact ordering, world-update indexing, composed sensory
+values, declaration validation, writer-local changed-identity sets, sparse-world
+preimages/order and accepted-state sensory ownership remain active without
+recording. No fact writer, validation or current schema field is skipped. Full
+node, lineage and operation functions follow; the retained-operation wrapper and
+Bodies/Audience writer signatures keep their existing proposed contracts.
+
 ### B2/B3 proposed `sdk/reducer.gd::_reduce_nodes_owned`
 
 ```gdscript
 static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionary,bodies:Array,updates:Array,rows:Dictionary={},recorded:Variant=null,profile:Variant=null,resolutions:Array=[],sensory_cells:Dictionary={})->Dictionary:
     var composed=Audience.composed_values(rows)
     if not composed.ok:return composed
-    var owners=node_lineages(nodes,versions);var casts={}
-    for i in range(nodes.size()):
-        var declared:Variant=nodes[i].get("fact")
-        if declared!=null and declared.kind=="spell" and declared.get("source_entity_uuid")!=null:casts[owners[i]]=declared.source_entity_uuid
+    var casts:Dictionary={}
+    if recorded!=null:
+        var owners:Array=node_lineages(nodes,versions)
+        for i in range(nodes.size()):
+            var declared:Variant=nodes[i].get("fact")
+            if declared!=null and declared.kind=="spell" and declared.get("source_entity_uuid")!=null:casts[owners[i]]=declared.source_entity_uuid
     var order:Array=range(bodies.size());order.sort_custom(func(a,b):return a<b if bodies[a].occurrence==bodies[b].occurrence else bodies[a].occurrence<bodies[b].occurrence)
     var pending:Array=[]
     for index in order:pending.append(bodies[index])
@@ -8452,12 +8816,15 @@ static func _reduce_nodes_owned(result:Dictionary,nodes:Array,versions:Dictionar
         while next<pending.size() and pending[next].occurrence<=node.occurrence:
             var entered=Bodies.enter_body(result,pending[next],item_rows,changed_actors,changed_items)
             if not entered.ok:return entered
-            admitted.append(pending[next]);next+=1
-        var started:int=Time.get_ticks_usec() if profile!=null else 0;var inputs=Transitions.actor_inputs(result,node);var update:Variant=world_updates.get(int(node.occurrence));var disclosed={}
-        if node.get("resolution")!=null and not resolutions.is_empty():
+            if recorded!=null:admitted.append(pending[next])
+            next+=1
+        var started:int=Time.get_ticks_usec() if profile!=null else 0
+        var inputs:Dictionary=Transitions.actor_inputs(result,node) if recorded!=null else {}
+        if recorded!=null and node.get("resolution")!=null and not resolutions.is_empty():
             var source:Variant=casts.get(int(resolutions[node.resolution].lineage))
             if source!=null and result.actors.has(source):inputs[source]=result.actors[source]
         var item_inputs:Dictionary=Transitions.item_inputs(result,inputs) if recorded!=null else {}
+        var update:Variant=world_updates.get(int(node.occurrence));var disclosed={}
         if update!=null:
             var folded=apply_world_update(result,update,disclosed)
             if not folded.ok:return folded
@@ -8512,7 +8879,9 @@ static func _reduce_operation(target:Dictionary,update:Dictionary,record_events:
     if update.generation!=target.generation or update.observer_uuid!=target.observer_uuid:return failure("An operation belongs to another observer or generation")
     var cells:Dictionary={}
     if retained and is_same(sensory_context.get("state"),target):cells=sensory_context.get("cells",{}).duplicate()
-    var result=_retained_target(target) if retained else copy_target(target);var records={"lineages":[]};var content={}
+    var result=_retained_target(target) if retained else copy_target(target)
+    var records:Variant={"lineages":[]} if record_events else null
+    var content={}
     if not update.get("content_additions",[]).is_empty():
         for descriptor in result.content:content[content_key(descriptor)]=descriptor
         for descriptor in update.content_additions:
@@ -9181,8 +9550,14 @@ of filtering and an indivisible row operation.
    elapsed speedup is claimed without a later matched measurement.
 3. Journal.open reuses its first strict-parsed initialization after exact
    current/archive wire contract selection and the existing sequence==0 check.
-   It does not change ordinary Journal reduction, known producer contracts,
-   operation bytes, int64 admission, schema files or live HTTP/SSE policy.
+   The existing-file open branch refuses protocol.setup_error before parsing;
+   both open and cached decode_record retain decode_recorded's exact known
+   current-or-archived producer guard. Cached decode also rechecks setup_error
+   before consuming the retained parse. These checks use existing Protocol.failure;
+   ordinary operations still call decode_recorded unchanged. No extra parse or
+   new admission path is introduced. It does not change ordinary Journal reduction,
+   known producer contracts, operation bytes, int64 admission, schema files or
+   live HTTP/SSE policy.
 4. Thumbnail effect-version changes run the existingreset cancellation/generation
    and cache clearing while rebinding the SAME admitted source cache, immutable
    recording and actual reference/displayed hosts. This happens before TimelineView
@@ -10226,6 +10601,7 @@ func open(path: String, _historical_recording: bool = false, replay_existing: bo
 	# An existing native16 recording selects its exact stored producer contract.
 	# Old wire9/unknown identities remain refused; no bytes or facts are rewritten.
 	if FileAccess.file_exists(_file(0)):
+		if not protocol.setup_error.is_empty(): return Protocol.failure(protocol.setup_error)
 		var raw := FileAccess.get_file_as_bytes(_file(0))
 		var parsed: Dictionary = Protocol.parse_json(raw)
 		if not parsed.ok: return parsed
@@ -10236,6 +10612,8 @@ func open(path: String, _historical_recording: bool = false, replay_existing: bo
 			var checked: Dictionary = archived.check_identity(parsed.value.protocol)
 			if not checked.ok: return checked
 			protocol = archived
+		if not protocol._current_server_contract and not protocol._archived_server_contract:
+			return Protocol.failure("Unknown recorded producer contract")
 		# The already strict-parsed value belongs to the exact selected native16
 		# contract. Preserve decode_recorded's initialization cursor check without
 		# reparsing this entire packet (the Opus parse-once handoff).
@@ -10245,9 +10623,12 @@ func open(path: String, _historical_recording: bool = false, replay_existing: bo
 	return replay() if replay_existing else {"ok":true,"value":null}
 
 ## Offline decode of one recorded packet. Packet 0 reuses open()'s parse when
-## its bytes are unchanged: decode() is that same parse plus schema admission.
+## its bytes are unchanged, preserving decode_recorded()'s producer admission.
 func decode_record(sequence: int, raw: PackedByteArray) -> Dictionary:
 	if sequence == 0 and not _opened_initialization.is_empty():
+		if not protocol.setup_error.is_empty(): return Protocol.failure(protocol.setup_error)
+		if not protocol._current_server_contract and not protocol._archived_server_contract:
+			return Protocol.failure("Unknown recorded producer contract")
 		var opened: Array = _opened_initialization
 		_opened_initialization = []
 		if opened[0] == raw: return {"ok":true,"value":opened[1]}
@@ -13879,13 +14260,23 @@ Reference only; NOT applied. Rebase this delta when implementation is authorized
  ## Admit its initialization only here; the ordinary reader still owns every
 --- a/sdk/journal.gd
 +++ b/sdk/journal.gd
-@@ -34,9 +34,12 @@
+@@ -24,6 +24,7 @@
+ 	# An existing native16 recording selects its exact stored producer contract.
+ 	# Old wire9/unknown identities remain refused; no bytes or facts are rewritten.
+ 	if FileAccess.file_exists(_file(0)):
++		if not protocol.setup_error.is_empty(): return Protocol.failure(protocol.setup_error)
+ 		var raw := FileAccess.get_file_as_bytes(_file(0))
+ 		var parsed: Dictionary = Protocol.parse_json(raw)
+ 		if not parsed.ok: return parsed
+@@ -34,15 +35,23 @@
  			var checked: Dictionary = archived.check_identity(parsed.value.protocol)
  			if not checked.ok: return checked
  			protocol = archived
 -		var first := protocol.decode_recorded("InitializationResponse",raw)
 -		if not first.ok: return first
 -		_opened_initialization = [raw, first.value]
++		if not protocol._current_server_contract and not protocol._archived_server_contract:
++			return Protocol.failure("Unknown recorded producer contract")
 +		# The already strict-parsed value belongs to the exact selected native16
 +		# contract. Preserve decode_recorded's initialization cursor check without
 +		# reparsing this entire packet (the Opus parse-once handoff).
@@ -13895,6 +14286,16 @@ Reference only; NOT applied. Rebase this delta when implementation is authorized
  	return replay() if replay_existing else {"ok":true,"value":null}
  
  ## Offline decode of one recorded packet. Packet 0 reuses open()'s parse when
+-## its bytes are unchanged: decode() is that same parse plus schema admission.
++## its bytes are unchanged, preserving decode_recorded()'s producer admission.
+ func decode_record(sequence: int, raw: PackedByteArray) -> Dictionary:
+ 	if sequence == 0 and not _opened_initialization.is_empty():
++		if not protocol.setup_error.is_empty(): return Protocol.failure(protocol.setup_error)
++		if not protocol._current_server_contract and not protocol._archived_server_contract:
++			return Protocol.failure("Unknown recorded producer contract")
+ 		var opened: Array = _opened_initialization
+ 		_opened_initialization = []
+ 		if opened[0] == raw: return {"ok":true,"value":opened[1]}
 --- a/studio/thumbnail_cache.gd
 +++ b/studio/thumbnail_cache.gd
 @@ -1,6 +1,7 @@
@@ -19408,6 +19809,11 @@ Delivered1dcd metadata, not installed-client evidence. The existing complete-pac
 ## Appendix G — plan adherence, anti-slop and anti-OOP source review
 
 
+### G.1 — historical 21 October reviews, retained unchanged
+
+These earlier approvals missed the four adaptation gaps listed in the 22 October amendment. They record the prior review scope and are not approval of an uncorrected proposal or runtime evidence.
+
+
 # Recovery plan: scope, plan adherence, anti-slop and anti-OOP review
 
 **Plan only,21October2026.** The human stopped implementation/testing and now requests a complete recovery plan. This note performs offline source/document/receipt review only. No production edits, client, build, benchmark, capture, test, Factory/engine writes or other-chat reads. The restoration plan does not itself resume implementation.
@@ -19610,6 +20016,139 @@ These are precision corrections, not requests for new features, extra gates,
 another framework or immediate execution. The plan's unresolved preview-target,
 restore-teardown, atomic polling and cold full-Library parsing costs remain
 required follow-through rather than falsely completed optimizations.
+
+
+### G.2 — 22 October correction source review
+
+The four findings change only the proposed current-contract adaptations. Historical modules and archived pending patches remain verbatim. The following reviews concern these corrected literal proposals only; they do not establish parser, runtime, visual or performance results.
+
+
+# Independent source peer — Astra capture correction 3
+
+**Verdict: SOURCE CLEAR, plan-only.** Reviewed the three full proposed reducer functions in `capture-guards.md` against the earlier core B2/B3 proposal and current canonical call boundary. This review neither applies the code nor qualifies syntax, runtime output or performance. No product files, tests, builds, runtime jobs or Git state were changed.
+
+## Canonical behavior is retained
+
+- Body ordering and admission remain before the same node's fact; all actual body/item writes still execute.
+- The world-update index, composed sensory rows and canonical world/fact folding remain active without recording.
+- Actual condition/item writer rows and operation-local changed-identity dictionaries remain; the proposal does not substitute guessed affected IDs.
+- Mandatory spell-declaration checks, lineage/cursor admission, content/static state, HUD/log validation and accepted-state sensory ownership remain unchanged.
+- The full `_reduce_lineage_owned` boundary preserves its parameters, fold call and final cursor publication.
+
+## Capture work is conditional
+
+When recording is enabled, actor/item inputs still precede canonical mutation, the actual cast actor joins the same recorded input set, and after-values are captured after world/fact application. Trailing body capture remains at the original cut.
+
+When recording is disabled, the proposal skips actor/item snapshot helpers, the capture-only node-owner/cast-source index, admitted-body capture accumulation and operation/lineage transition construction. `node_lineages` used by mandatory declaration checking is not removed. Small empty local placeholders do not perform the omitted scans or snapshots.
+
+## Anti-OOP and scope
+
+The correction is control flow within existing reducer functions. It adds no manager, registry, scheduler, persistent cache, public/wire schema, source clock, renderer or second reducer. Current private state ownership and writer closure are retained. Parent owns merging these functions; this peer does not overwrite the separately reviewed environment/residue proposal.
+
+All conclusions are source-level. No new test, benchmark, native output, timing improvement or artwork acceptance is claimed. Implementation and testing remain stopped.
+
+
+# Independent review of the four Astra plan corrections — 22 October 2026
+
+**Disposition: SOURCE CLEAR for the corrected literal proposals and amended
+plan prose.** This is document/source review only. No product source, package,
+test, runtime queue, benchmark, heartbeat or Git state was changed or resumed.
+The `d5d2ff1d` (`almost disaster`) checkpoint is preserved. No compilation,
+runtime correctness, rendering result or recovered speed is claimed.
+
+## Environment removal closure: correction 1
+
+Reviewed complete core-note A3a–A3c against current EnvironmentMedia,
+WorldRows/Cells and the actual MediaWarmup `_plan_sources` caller.
+
+- The optional final `_update` argument carries real `tiles_removed` at all
+  three internal callers: initial synchronization, ordinary commits and handoff
+  tail. Both removal-only commit guards include it.
+- Erasure removes `index.tiles`, `tile_sources` and `tile_paths` before final
+  after-values and marks the path union dirty. Spatial projection uses those
+  same retained tiles as support, so there is no second support map left stale.
+  Independent disclosed object-anchor support is retained.
+- A real removal counts as an applied world delta during partial planning.
+  Handoff clears its prior `final_owner` proof until the actual remaining tail
+  and final path union are processed. The unchanged caller supplies final state
+  to `plan` only without a tail and otherwise finishes the actual tail.
+- Deleting final selector entries does not mutate earlier read-only path
+  snapshots or subtract sources needed earlier in the same operation.
+  Required/upcoming/first-use unions retain their existing monotonic behavior;
+  shared paths survive through their other actual owners.
+
+No additional source or scheduling correction is required within this bounded
+removal closure. The note correctly retains a later independent removal oracle
+duty rather than claiming that the current omission-bearing exhaustive helper
+already proves it.
+
+## Existing mask ownership: correction 2
+
+Reviewed complete A2a–A2c against current `World.visible_positions`,
+`residue_tile_rows` and `Cells.mask_points`/`contains`/`bytes`.
+
+Decoded bytes and optional read-only points share the existing `_mask_views`
+entry, exact immutable mask identity, four-entry FIFO bound and `_mask_mutex`.
+Byte-first lookup avoids full point population; point-first lookup retains the
+same bytes for later neighbor queries. Bit addressing is the existing
+`x * height + y` little-endian equation, and full points retain x-then-y order.
+Empty/non-residue requests return before mask admission. Current residue owner,
+amount, neighbor visibility and equal-height rules remain in the existing row
+constructor. No second cache, visibility population, canonical state or manager
+is introduced. Eviction can require another decode; the prose accurately limits
+reuse to the resident immutable-mask entry.
+
+## Capture-disabled reduction: correction 3
+
+The three complete node/lineage/operation functions merged into the core note
+are byte-identical to `capture-guards.md`. Event's independent source review
+also returned clear. Capture-only actor/item snapshots, owner/cast indexing,
+admitted-body capture accumulation and transition containers are conditional.
+Canonical declaration validation, body/world/fact order, writer-local changed
+sets/rows, sparse-world tracking, cursors, HUD/log admission and accepted-state
+sensory ownership remain active without recording. Recorded before-input and
+after-value cuts keep their original order.
+
+## Packet-zero decoder refusal: correction 4
+
+Reviewed the complete proposed Journal against current
+`Protocol.decode_recorded`, `_decode_producer`, constructor setup and failure
+helpers.
+
+Existing-file `open` refuses `setup_error` before parse/identity access, then
+checks exact current-or-archived contract support after ordinary identity
+selection. The cached packet-zero arm repeats both cheap guards before
+consuming the retained parse. New refusals use `Protocol.failure`; raw-byte
+equality, cursor-zero refusal, existing archive construction and noncached
+`decode_recorded` fallback remain. No second packet parse or new validation
+subsystem is added.
+
+Read-only document comparisons confirmed:
+
+- The inline full Journal equals `studio/proposed/sdk/journal.gd`.
+- The Journal section of `studio-restoration-proposed.patch` is exactly the
+  current-product-to-complete-candidate diff.
+- The full patch embedded in `studio-restoration-and-patches.md` equals its
+  standalone proposal carrier.
+
+These comparisons establish literal consistency, not executable qualification.
+
+## Plan scope, anti-slop and anti-OOP disposition
+
+Reviewed amended `plan-prose.md`, including its 22 October table, checkpoint,
+qualification and historical-review wording. It explicitly acknowledges that
+the prior source reviews missed these four gaps, preserves those reviews as
+historical, and labels the new code as unapplied proposals. It keeps recovery
+first, A9–A12 deferred, existing schema/ownership/clock constraints, the installed
+82a versus delivered-only 1dcd boundary and all art/audio UNREVIEWED.
+
+The corrections use existing functions and owners. They add no registry,
+renderer, reducer, scheduler, cache service or per-feature policy. They neither
+authorize implementation nor add a new prerequisite before the initial recovery
+batch. No further correction was found in this bounded review. Root must retain
+these complete corrected blocks and this dated disposition when regenerating
+the master plan with its existing assembler; historical modules and pending
+patch bytes stay unchanged.
 
 
 ## End state of this planning deliverable
