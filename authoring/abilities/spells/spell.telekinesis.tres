@@ -130,6 +130,7 @@ source = "ui/resources.json icon:spell.telekinesis"
 [sub_resource type="Resource" id="Resource_02agj"]
 script = ExtResource("10_y8obl")
 id = "action.spell.telekinesis.move"
+dispatch_gap = "delegated_actual_action_owner_with_existing_suppression_policy"
 kind = "sub_action"
 value = "move"
 recipe = {
@@ -753,7 +754,7 @@ recipe = {
 }
 staging_from = "client"
 status = "partial"
-notes = "Old child draft (action.spell.telekinesis.move), a complete recipe of the old model; nothing maps a server fact to it."
+notes = "The typed action.spell.telekinesis.move and actual ordered movement own the event. This legacy full spell recipe cannot bypass the current Telekinesis suppression disposition or create another cast; the action remains inspectable through its own source."
 
 [resource]
 script = ExtResource("8_ixp5c")

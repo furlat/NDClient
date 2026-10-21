@@ -49,6 +49,21 @@ def qualify(report, log, native_exit):
             spell['assertion_status'] = spell['status']
             spell['status'] = 'failed'
             spell['failures'].append(f'Godot emitted {len(own)} script/resource error lines')
+    selected = report.get('selected_spell_ids')
+    examined = [row['id'] for row in report.get('spells', [])]
+    excluded = report.get('excluded_definitions', [])
+    excluded_ids = [row['id'] for row in excluded]
+    inventory_valid = (isinstance(selected, list) and len(selected) == len(set(selected))
+        and len(examined) == len(set(examined)) and set(examined) == set(selected)
+        and report.get('inventory') == len(selected)
+        and len(excluded_ids) == len(set(excluded_ids)) and not set(excluded_ids).intersection(selected)
+        and all(row.get('visibility') in ('developer', 'internal') for row in excluded)
+        and report.get('registry_inventory') == len(selected) + len(excluded_ids))
+    report['inventory_validation'] = {'exact_selected_inventory': inventory_valid,
+        'selected': len(selected) if isinstance(selected, list) else None, 'examined': len(examined),
+        'excluded': len(excluded_ids)}
+    if not inventory_valid:
+        report.setdefault('failures', []).append('Recording sweep did not examine exactly its declared production inventory')
     report['assertion_failures'] = report.get('failures', []).copy()
     report['passed'] = [row['id'] for row in report.get('spells', []) if row['status'] == 'passed']
     report['tested_failures'] = [row['id'] for row in report.get('spells', []) if row['status'] == 'failed']
@@ -87,7 +102,8 @@ def main():
     output = json.dumps(report, indent=1) + '\n'
     REPORT.write_text(output)
     (args.out / 'report.json').write_text(output)
-    print(json.dumps({'inventory': report.get('inventory'), 'passed': len(report['passed']),
+    print(json.dumps({'inventory': report.get('inventory'), 'registry_inventory': report.get('registry_inventory'),
+        'excluded_definitions': len(report.get('excluded_definitions', [])), 'passed': len(report['passed']),
         'baseline_unavailable': len(report.get('unavailable_baseline', [])), 'tested_failures': len(report['tested_failures']),
         'script_errors': report['log_validation']['script_errors'], 'error_lines': report['log_validation']['error_lines'],
         'warning_lines': len(report['log_validation']['warnings']), 'qualified': report['qualified'], 'report': str(args.out / 'report.json')}))

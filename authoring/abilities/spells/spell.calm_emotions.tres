@@ -245,11 +245,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_gpw4r"]
 script = ExtResource("6_xifts")
 id = "calm_emotions_members_native"
+dispatch_gap = "unselected_membership_review_actual_condition_owner_required"
 kind = "form"
 selection = "calm_emotions_members_native"
 effects = Array[ExtResource("1_u522c")]([SubResource("Resource_tf8dg"), SubResource("Resource_oi71r"), SubResource("Resource_jmaa1"), SubResource("Resource_mkkbo"), SubResource("Resource_tksat")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "This multi-member review combines application and hold with Frightened and Rage probes. Actual condition.spell.calm_emotions membership owns its lifecycle; the review probes must not manufacture either other condition or a cast-wide member outcome. Distinct member output remains subject to qualification."
 
 [resource]
 script = ExtResource("4_58agw")

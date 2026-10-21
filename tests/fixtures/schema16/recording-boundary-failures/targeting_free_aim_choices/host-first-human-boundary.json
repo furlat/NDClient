@@ -1,0 +1,36 @@
+{
+  "observed_unix_ns": 1792525380947247663,
+  "publications": {
+    "amber": {
+      "cursor": {
+        "game_id": "combat_fireball_six_goblins",
+        "game_epoch": "ba4d5aca-c75e-4fe1-bed8-2ac73b39f6cd",
+        "audience_id": "d7229f28-6b01-42e2-845f-9b2875540af5",
+        "sequence": 1
+      },
+      "boundary": {
+        "lifecycle": "waiting_for_human",
+        "input_actor_uuid": "dc55034c-2844-4433-9269-dd19876479b1",
+        "state_revision": "2dc3f745-eeff-4253-abb9-85f98ac7adb7",
+        "reason": null,
+        "incident_id": null
+      }
+    },
+    "blue": {
+      "cursor": {
+        "game_id": "combat_fireball_six_goblins",
+        "game_epoch": "ba4d5aca-c75e-4fe1-bed8-2ac73b39f6cd",
+        "audience_id": "0eed2f10-addf-418f-81ce-89d50e7ced56",
+        "sequence": 1
+      },
+      "boundary": {
+        "lifecycle": "advancing",
+        "input_actor_uuid": null,
+        "state_revision": null,
+        "reason": null,
+        "incident_id": null
+      }
+    }
+  },
+  "scope": "Host observed all seat initial publications committed and at least one published waiting-for-human boundary; includes native process launch, imports, pre-Start policy, initialization, advancement, encoding, pipe transfer and recording commit. Excludes SDK startup, attachment and consumption."
+}

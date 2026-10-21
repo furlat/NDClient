@@ -25,7 +25,7 @@ const FACT_OWNERS={
 # These have canonical/world consumers but no independently indexed operation.
 # Their finite animation coverage must not be inferred from a final-state sprite.
 const FACT_INSPECTION=["equipment","object_destroyed","spatial_effect_state"]
-const FACT_UNASSESSED=["area_reach","saving_throw","item_effect","portal_transfer","mechanism_activation","object_damage"]
+const FACT_UNASSESSED=["area_reach","saving_throw","item_effect","object_damage"]
 const REFERENCES={
     "equipment_override":"animation.py::sample_cast", "body_recovery":"animation.py::compile_cast + sample_cast",
     "cast_slash":"animation_draw.py::animation_draw_commands", "bodyMaterials":"cast_media.py::sample_cast_body_materials",
@@ -78,6 +78,8 @@ static func fact(kind:String,cache:Dictionary={})->Dictionary:
     var inspection="missing" if implementation=="unassessed" or kind in FACT_INSPECTION else "projected"
     var result=row("fact:"+kind,FACT_OWNERS.get(kind,"Unassessed fact presentation · "+kind),source,implementation,inspection,[kind])
     result.reference_source=REFERENCE+"choreography.py::FACT_PRESENTATION"
+    if kind in ["portal_transfer","mechanism_activation"]:
+        result.reason="Actual committed facts have shared source-backed consumers. Each selected source still reports unsupported or missing placement/geometry independently; runtime output and artwork remain unqualified."
     if not FACT_OWNERS.has(kind):result.reason="Current schema fact has no classified presentation owner; it is not implicitly state-only."
     return result
 
@@ -222,8 +224,15 @@ static func recipe(value:Dictionary,source:String,events:Array=[],cache:Dictiona
         clock.disposition="parent_owned";result.append(clock)
         for definition in [["hitFlash","damage_flash","Hit-flash override"],["floatingNumber","damage_number","Floating-number override"],["death","damage_death","Lethal presentation policy"]]:
             if not damage.has(definition[0]) or damage[definition[0]]==null:continue
-            var option=row(definition[1],definition[2],source+"/damage/"+definition[0],"unassessed","missing",["damage","life"],"recipient","Some shared callback/material fields are consumed; enabled, colour, label and death-policy parity require field-level assessment at actual child outcomes.")
-            option.disposition="parent_owned";option.authored_enabled=damage[definition[0]].get("enabled",true)
+            var policy:Dictionary=damage[definition[0]]
+            var supported:bool=definition[0]!="death" or policy.get("enabled",true)
+            var reason:String="Actual applied-result feedback consumes the authored enable, colour/palette, label, duration and existing callback frame; native hit programs retain their own palette/envelope."
+            if definition[0]=="death":reason="The actual Life fact owns terminal publication/body timing. The exported legacy death.frame is retained as unused metadata, matching the original lethal path; it never schedules a fabricated death delay."
+            var option=row(definition[1],definition[2],source+"/damage/"+definition[0],"implemented" if supported else "unassessed","projected" if supported else "missing",["damage","life"],"recipient",reason)
+            option.disposition="parent_owned";option.authored_enabled=policy.get("enabled",true);option.authored_policy=policy.duplicate(true)
+            if definition[0]=="death":
+                option.execution_owner="fact:life"
+                option.unused_legacy_fields=["frame"] if policy.has("frame") else []
             result.append(option)
     for definition in [["condition","condition_policy","Condition effect/feedback policy","condition"],["contact","contact_policy","Authored delivery/contact policy","spell"]]:
         if value.get(definition[0])!=null:
@@ -289,7 +298,15 @@ static func owner(kind:String,id:String,source:String,value:Variant)->Dictionary
     result.reference_source=REFERENCE+REFERENCES.get(kind,"presentation_coverage.py::presentation_inventory")
     if kind in ["environment_door","environment_trap","environment_prop","environment_wreck"]:
         result.reason="Observed-state selection exists; finite transition and source-phase inspection are not established by the final sprite."
-    if kind=="world_animation":result.reason="The selected finite world-animation sequence has no production consumer. Final-state scenery selectors do not execute its activation frames, contact, projectile or avoidance controls."
+    if kind in ["world_animation","portal"] and value is Dictionary and value.get("native_world_media",false):
+        result.implementation="implemented";result.inspection="projected";result.gap_kind="unexercised";result.status="unexercised"
+        result.reason="Typed source program is consumed by actual spatial-owner state and committed finite events through the shared environment sprites. Runtime output and artwork remain unqualified."
+        result.methods={"observed_state":"implemented","finite_activation":"implemented" if not value.get("activation_frames",[]).is_empty() else "not_applicable",
+            "projectile":"implemented" if value.has("projectile") else "not_applicable",
+            "actor_depth":"implemented_with_order_refusal" if value.has("actor_depth") else "not_applicable",
+            "authored_avoidance":"implemented" if value.has("successful_save_hop") else "not_applicable"}
+        if kind=="portal":result.methods.portal_transfer="implemented";result.methods.actor_aperture="implemented"
+    elif kind=="world_animation":result.reason="The selected finite world-animation sequence has no production consumer. Final-state scenery selectors do not execute its activation frames, contact, projectile or avoidance controls."
     if kind=="rig":result.inspection="projected";result.gap_kind="unexercised";result.status="unexercised"
     if value is Dictionary and value.get("enabled",true)==false:
         result.implementation="not_applicable";result.gap_kind="explicit_none";result.status="explicit_none"
@@ -333,13 +350,20 @@ static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,c
             var id:String=behavior
             if values.has(id):result.append(owner(binding[1],id,path+":/"+pointer(id),values[id]))
     if fact_value.get("committed",true) and kind in ["portal_transfer","mechanism_activation"]:
-        # Portals and finite world animations with old presentation, as the environment build lists them.
-        var inspection:Dictionary=Authoring.Catalog.environment_index(cache).get("inspection",{})
+        # Resolve the actual active source program before its retained legacy
+        # inspection alternative. Presence is a method declaration, never a
+        # witness that this occurrence supplied its placement or drew pixels.
+        var environment:Dictionary=Authoring.Catalog.environment_index(cache)
+        var inspection:Dictionary=environment.get("inspection",{})
         var bindings:Array=[]
         if kind=="portal_transfer":bindings=[["portal",fact_value.get("portal_content_id","")]]
         elif kind=="mechanism_activation":bindings=[["world_animation",fact_value.get("mechanism_content_id","")]]
         for binding in bindings:
-            if inspection.get(binding[0],{}).has(binding[1]):result.append(owner(binding[0],binding[1],environment_source(binding[1]),inspection[binding[0]][binding[1]]))
+            var program:Dictionary=environment.get("spatial_media",{}).get(binding[1],{})
+            if program.get("native_world_media",false):
+                result.append(owner(binding[0],binding[1],str(program.get("source",environment_source(binding[1]))),program))
+            elif inspection.get(binding[0],{}).has(binding[1]):
+                result.append(owner(binding[0],binding[1],environment_source(binding[1]),inspection[binding[0]][binding[1]]))
     if kind=="object_destroyed":
         var environment=Authoring.Catalog.environment_index(cache)
         for family in ["doors","props","traps"]:
@@ -348,9 +372,11 @@ static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,c
     if kind=="damage" and fact_value.get("stage")=="applied":
         var release:Dictionary=fact_value.get("body_release",{}) if fact_value.get("body_release")!=null else {}
         var id:String=release.get("release_id","")
-        if not id.is_empty() and id!="body.blood":
+        if not id.is_empty():
             var selected_releases=Authoring.load_data("catalog/body_release_media.json",cache)
-            result.append(row("body_release","Authoritative release · "+id,"catalog/body_release_media.json:/"+pointer(id),"missing" if selected_releases.has(id) else "unassessed","missing",[kind],"recipient","This received release is distinct from the implemented blood branch; its selected source and receiving path require a dedicated consumer."))
+            var release_selection:Dictionary=selected_releases.get(id,{})
+            var admitted:bool=not release_selection.is_empty() and (not release.get("regions",[]).is_empty() or not str(release_selection.get("air_source_catalog","")).is_empty())
+            result.append(row("body_release","Authoritative release · "+id,"catalog/body_release_media.json:/"+pointer(id),("implemented" if admitted else "missing") if not release_selection.is_empty() else "unassessed","projected" if not release_selection.is_empty() else "missing",[kind],"recipient","Actual source-selected receiving regions and residue after-values use the shared region path." if admitted else "No authored source or actual receiving regions are disclosed; no body proxy or receiving plane is invented."))
     # These property-selected owners have no recipe on the actor fact. Keep
     # source fields attached to their actual occurrence, without scheduling it.
     var context_key={"forced_movement":"forced_movement_context","equipment":"equipment_context"}.get(kind,"")

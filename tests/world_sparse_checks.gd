@@ -25,7 +25,7 @@ func compare(state:Dictionary,label:String)->void:
     previous=state
     check(actual==World.rows(state,cache),label+" original row/corner equality")
     var expected=World.visibility(state)
-    var sparse=World.current_ids(state,retained.boundaries)
+    var sparse=World.current_ids(state,retained.boundaries,{}, {},retained.spatial_rows,retained.residue_rows)
     check(sparse.keys().all(func(id):return expected.get(id,false)) and expected.keys().all(func(id):return bool(expected[id])==sparse.has(id)),label+" exact subjective grants")
     check(retained.boundaries==World.boundary_index(state),label+" exact live boundary index")
     check(state==before,label+" canonical after-values unchanged")

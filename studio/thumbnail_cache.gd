@@ -1,6 +1,8 @@
 extends RefCounted
 ## Bounded source previews use shared GPU materials and native simulations.
 const Catalog=preload("res://source_catalog.gd")
+const Recording=preload("res://studio/recording.gd")
+const ReplayPanes=preload("res://studio/replay_panes.gd")
 const BackgroundRelease=preload("res://presentation/background_release.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Tracks=preload("res://presentation/tracks.gd")
@@ -14,6 +16,7 @@ const NativePreview=preload("res://presentation/native_effect_preview.gd")
 const NativeSpellPreview=preload("res://studio/native_spell_preview.gd")
 const NativePreviewStore=preload("res://studio/native_preview_store.gd")
 const NativeSources=preload("res://presentation/native_effects.gd")
+const NativeHits=preload("res://presentation/native_spell_hits.gd")
 const Lighting=preload("res://presentation/lighting_2d.gd")
 const ConditionOutline=preload("res://presentation/condition_outline.gd")
 const OutlineShader=preload("res://studio/condition_outline_preview.gdshader")
@@ -24,6 +27,18 @@ var baked_requests:Dictionary={}
 var native_descriptors:Dictionary={}
 var outline_source=ConditionOutline.new()
 var host: Node
+## One ordinary production pane serves demand-only composed samples. The
+## immutable recording supplies all owners/poses/items; no study operands.
+var recording:Dictionary={}
+var reference_world:Node3D
+## The published pane may differ from the staged source-preparation reference.
+var displayed_world:Node3D
+var composed_receiving:Dictionary={}
+var composed_pane:Dictionary={}
+var composed_worker:Thread
+var composed_job:Dictionary={}
+var composed_token:Dictionary={}
+var composed_active:Dictionary={}
 var cache: Dictionary={}
 var textures: Dictionary={}
 var errors: Dictionary={}
@@ -47,6 +62,7 @@ var active: Dictionary={}
 const COMPOSITE_BATCH_LIMIT=8
 var batch_size=COMPOSITE_BATCH_LIMIT
 var composites:Array=[]
+var hit_templates:Dictionary={}
 const NATIVE_BATCH_LIMIT=8
 var native_batch_size=NATIVE_BATCH_LIMIT
 var native_composites:Array=[]
@@ -103,11 +119,8 @@ func seed_source_images(sources:Dictionary)->bool:
 
 func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=true) -> String:
     var component: Dictionary=row.get("component",{})
-    # These appearances require the actual restored hand/item membership.
-    # Their main viewport is authoritative; an unbound source-only swatch
-    # would silently hide the source or manufacture a study attachment.
-    if component.get("native_item",false):return ""
     if row.get("visible_here",true)==false or row.kind in ["other_view","perspective"] or row.get("status")=="missing":return ""
+    if _composed_row(row):return _request_composed(row,sample_ms,quarter)
     var state: Dictionary={}
     for candidate in row.get("preview_states",[]):
         if candidate.at_ms>sample_ms:break
@@ -130,6 +143,7 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
     if row.kind=="native_effect":age=NativeSources.source_age_ms(component,age)
     elif component.get("loop",false) and component.has("source_duration_ms"):age=fposmod(age,component.source_duration_ms)
     var hz=float(row.get("source_fps",component.get("sample_hz",32)))
+    if component.has("native_hit"):hz=maxf(32.0,hz)
     var tick:int=floori(age*maxf(1,hz)/1000.0)
     if component.get("native_spell",false):age=tick*1000.0/maxf(1,hz)
     if row.kind in ["audio","feedback_text","damage_number","geometry_projectile"]:quarter=0
@@ -198,7 +212,12 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         if not delta.is_zero_approx():direction=cycle[posmod(roundi((atan2(delta.y,delta.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
     var facing: String=cycle[posmod(cycle.find(direction)+quarter*2,8)]
     var conditions=Conditions.samples(state.get("condition_owners",row.get("condition_owners",{})).duplicate(),sample_ms,cache)
-    if row.kind=="material_flash":
+    if row.kind in ["material_flash","native_material"] and component.has("native_hit"):
+        # Each sampled thumbnail has a private clock/surface. Reuse the exact
+        # production material extractor, envelope and recipient composition.
+        var flash=component.duplicate();flash.id=key;flash.kind="material_flash";flash.age_ms=age
+        conditions.append(flash);job.hit_sample=flash
+    elif row.kind=="material_flash":
         var flash=component.duplicate();flash.age_ms=age;conditions.append(flash)
     var material=Conditions.material(actor.id,conditions)
     var layers=Characters.layers(actor,rig,cache)
@@ -213,6 +232,203 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         "hidden":track.get("hidden_slots",[]),"scale_x":actor.get("scale_x",1.0),"material":material})
     _queue(job,prepare_views)
     return key
+
+static func _composed_row(row:Dictionary)->bool:
+    var component:Dictionary=row.get("component",{})
+    if component.get("native_item",false):return true
+    if row.get("kind")=="native_material" and not component.has("native_hit"):return true
+    if row.get("kind")=="world_animation" or component.get("kind")=="world_activation":return true
+    # All input-bearing sources require their real receiving scene, including
+    # spatial UUIDs with no actor. Immutable constructor operands belong to that
+    # same production occurrence, never an isolated review or empty fixture.
+    return row.get("kind")=="native_effect" and component.get("native_spell",false) \
+        and (not component.get("native_clip",{}).get("inputs",[]).is_empty() \
+            or not component.get("native_constructor_inputs",[]).is_empty() or component.get("spatial_effect_uuid")!=null)
+
+func _request_composed(row:Dictionary,sample_ms:float,quarter:int)->String:
+    var hz:float=maxf(32.0,float(row.get("source_fps",32.0)))
+    var key:String="%s:%s:composed:%s:%s"%[generation,row.id,floori(sample_ms*hz/1000.0),quarter]
+    if textures.has(key):
+        var texture:Texture2D=textures[key];textures.erase(key);textures[key]=texture;return key
+    if suspended or requested.has(key) or errors.has(key) or inactive.has(key):return key
+    if recording.is_empty() or not recording.has("initialization"):
+        errors[key]="Composed source preview requires this actual recording";return key
+    if not is_instance_valid(reference_world):inactive[key]="Awaiting the actual production preview host"
+    requested[key]=true
+    pending.append({"key":key,"row":row,"component":row.get("component",{}),"sample_ms":sample_ms,"quarter":quarter,
+        "generation":generation,"composed":true,"recording":recording})
+    return key
+
+static func _restore_composed(job:Dictionary,token:Dictionary)->Dictionary:
+    return {"job":job,"timeline":Recording.restore(job.recording,float(job.sample_ms),token)}
+
+func _start_composed(job:Dictionary)->void:
+    inactive.erase(job.key)
+    composed_job=job
+    composed_token=Recording.cancellation();composed_worker=Thread.new()
+    var error:Error=composed_worker.start(_restore_composed.bind(job,composed_token))
+    if error!=OK:
+        composed_worker=null;composed_job={};errors[job.key]="Cannot restore composed recording sample: "+error_string(error);requested.erase(job.key)
+
+func set_displayed_world(value:Node3D)->void:
+    var changed:bool=not is_same(displayed_world,value)
+    displayed_world=value
+    if changed:_release_composed_receiving()
+
+func _release_composed_receiving()->void:
+    if composed_receiving.is_empty():return
+    var saved:Dictionary=composed_receiving;composed_receiving={}
+    if not composed_active.is_empty():
+        composed_active.drawn=false;composed_active.erase("draw_signature")
+    if not composed_pane.is_empty() and is_instance_valid(composed_pane.get("world")):
+        composed_pane.world.publishes_receiving=false
+    # A seek may have published another pane while the draw fence was pending.
+    # Restore the currently displayed publisher, never a retired candidate.
+    var current:Node3D=displayed_world
+    if is_instance_valid(current) and current.is_inside_tree():
+        current.claim_receiving();current._publish_receiving()
+    if is_instance_valid(saved.world) and is_same(saved.world,current) and saved.world.is_inside_tree() and is_instance_valid(saved.pane.viewport):
+        ReplayPanes.freeze(saved.pane,false)
+        saved.world.process_mode=saved.process_mode
+
+func _claim_composed_receiving(owner:Node3D)->bool:
+    if not composed_receiving.is_empty():return true
+    if not is_instance_valid(displayed_world) or not displayed_world.is_inside_tree() or not displayed_world.timeline.paused:return false
+    if not displayed_world.publishes_receiving:return false
+    # Reuse the ordinary pane freeze. Only the paused displayed texture is
+    # frozen; the private restored source keeps its normal preparation process
+    # and its exact external display clock. No authoritative clock is held.
+    var pane:Dictionary={"world":displayed_world,"viewport":displayed_world.get_viewport(),"frozen":[]}
+    composed_receiving={"world":displayed_world,"pane":pane,"process_mode":displayed_world.process_mode}
+    ReplayPanes.freeze(pane,true)
+    displayed_world.publishes_receiving=false
+    owner.claim_receiving();owner._publish_receiving()
+    return true
+
+func _finish_composed()->void:
+    _release_composed_receiving()
+    if not composed_pane.is_empty() and is_instance_valid(composed_pane.get("world")):ReplayPanes.freeze(composed_pane,true)
+    composed_active={}
+
+func _poll_composed()->bool:
+    if composed_worker!=null and not composed_worker.is_alive():
+        # A paused request can finish after playback resumes. Retain the one
+        # completed result until optional preparation is admitted again; never
+        # construct a production pane during the displayed playback's budget.
+        if suspended or prewarm_suspended:return false
+        var restored:Variant=composed_worker.wait_to_finish();composed_worker=null
+        var job:Dictionary=composed_job;composed_job={}
+        if job.generation!=generation:return false
+        if not restored is Dictionary:
+            errors[job.key]="Actual recording sample restoration failed";requested.erase(job.key);_finish_composed();return true
+        if restored.get("timeline")!=null and is_instance_valid(reference_world):
+            var budget:int=int(reference_world.media_warmup.budget_bytes)
+            composed_pane=ReplayPanes.prepare(host,restored.timeline,job.recording,reference_world,composed_pane,budget,true,true)
+            var owner:Node3D=composed_pane.world
+            owner.external_clock=true;owner.timeline.paused=true;owner.publishes_receiving=false
+            owner.native_startup_background=false
+            owner.component_renderer.audio.set_enabled(false);composed_pane.viewport.audio_listener_enable_3d=false
+            owner.presentation_mutes={};owner.presentation_solo={}
+            owner.request_view(int(job.quarter))
+            composed_active={"job":job,"started_ms":Time.get_ticks_msec(),"drawn":false,"framing":false}
+        elif job.generation==generation:
+            errors[job.key]="Actual recording sample restoration unavailable";requested.erase(job.key)
+    if composed_active.is_empty():return false
+    if composed_pane.is_empty() or not is_instance_valid(composed_pane.get("world")) or not is_instance_valid(composed_pane.get("viewport")):
+        var lost_job:Dictionary=composed_active.job
+        errors[lost_job.key]="Actual production preview host was retired";requested.erase(lost_job.key);_finish_composed();return true
+    if suspended or prewarm_suspended or not is_instance_valid(displayed_world) or not displayed_world.timeline.paused:
+        _release_composed_receiving()
+        composed_active.drawn=false;composed_active.erase("draw_signature")
+        ReplayPanes.freeze(composed_pane,true);composed_active.started_ms=Time.get_ticks_msec();return false
+    ReplayPanes.freeze(composed_pane,false)
+    var job:Dictionary=composed_active.job;var owner:Node3D=composed_pane.world
+    if not owner.media_issue.is_empty() or not owner.presentation_errors.is_empty():
+        errors[job.key]="Composed source preparation: "+str(owner.presentation_errors)+owner.media_issue
+        requested.erase(job.key);_finish_composed();return true
+    if Time.get_ticks_msec()-int(composed_active.started_ms)>NATIVE_READY_TIMEOUT_MS:
+        errors[job.key]="Actual composed source did not become ready within the thumbnail budget";requested.erase(job.key);_finish_composed();return true
+    if not owner.playback_prepared() or owner.rotation_pending() or int(owner.quarter)!=int(job.quarter):return false
+    var component:Dictionary=job.component
+    var source_stamp:Array=[];var focus:Variant=null
+    if job.row.kind=="world_animation":
+        var identity:String=str(job.row.get("owner",{}).get("id",""))
+        var spatial:Dictionary=owner.timeline.spatial_effect_owners.get(identity,{})
+        if spatial.is_empty() or owner.timeline.display_ms>=float(spatial.get("end_ms",INF)):
+            inactive[job.key]="Recorded world owner is inactive at this exact sample"
+            while inactive.size()>limit:inactive.erase(inactive.keys()[0])
+            requested.erase(job.key);_finish_composed();return true
+        var entries:Array=owner.world_media_entries.filter(func(entry):return entry.placement.get("spatial_effect_uuid")==identity)
+        if entries.is_empty():
+            errors[job.key]="Actual world source has no admitted placement at this recorded cut: "+identity
+            requested.erase(job.key);_finish_composed();return true
+        focus=_composed_world_focus(entries,source_stamp)
+    else:
+        var current:Array=owner.displayed_components.filter(func(value):return value.id==component.id)
+        if current.is_empty():
+            inactive[job.key]="Recorded source is inactive or suppressed at this exact sample"
+            while inactive.size()>limit:inactive.erase(inactive.keys()[0])
+            requested.erase(job.key);_finish_composed();return true
+        if current.size()!=1:
+            errors[job.key]="Recorded source identity is ambiguous: "+str(component.id);requested.erase(job.key);_finish_composed();return true
+        component=current[0]
+        if component.kind=="world_activation":
+            var entries:Array=owner.component_renderer.media_handles.values().filter(func(entry):return entry.component_id==component.id and entry.published)
+            if entries.is_empty():return false
+            focus=_composed_world_focus(entries,source_stamp)
+        else:
+            var diagnostics:Dictionary=owner.component_renderer.native_spells.diagnostics.get(str(component.id),{})
+            var bindings:Dictionary=diagnostics.get("input_bindings",{})
+            if diagnostics.get("status") in ["missing","partial"]:
+                errors[job.key]="Actual composed source unavailable: "+str(diagnostics.get("reason",""))+" "+str(bindings.get("unavailable",{}))
+                requested.erase(job.key);_finish_composed();return true
+            if diagnostics.get("status")!="rendered" or not bindings.get("pending",{}).is_empty():return false
+            if not bindings.get("unavailable",{}).is_empty():return false
+            var handle:Dictionary=owner.component_renderer.native_spells.handles.get(str(component.id),{})
+            if handle.is_empty():return false
+            source_stamp.append([handle.root.get_instance_id(),handle.get("drawn_time",-1.0)])
+            var actor_id:String="" if component.get("actor_uuid")==null else str(component.actor_uuid)
+            if component.get("target_uuid")!=null and not str(component.get("native_cue",{}).get("attachment","")).begins_with("caster"):actor_id=str(component.target_uuid)
+            if not actor_id.is_empty():
+                var visual:Dictionary=owner.visual_actors.get(actor_id,{})
+                if visual.is_empty() or not visual.get("valid",false):
+                    errors[job.key]="Actual composed recipient is not disclosed at this sample: "+actor_id;requested.erase(job.key);_finish_composed();return true
+                focus=Components.Placement.contact(visual.row)
+            elif handle.get("endpoints",{}).get("ready",false):
+                # The shared renderer resolved this optical ground point from
+                # the actual owner/geometry/support. No actor or cell is made up.
+                focus=handle.endpoints.ground
+    if focus==null:
+        errors[job.key]="Actual composed source has no disclosed framing anchor";requested.erase(job.key);_finish_composed();return true
+    if not composed_active.framing:
+        # Keep the full recorded scene: an actor or cell crop cannot bound all
+        # held field/weapon artwork. Only its actual restored focus is changed.
+        owner.camera_focus=focus;owner.position_camera()
+        composed_active.framing=true;composed_active.drawn=false;return false
+    if not _claim_composed_receiving(owner):return false
+    var signature:Array=[owner.timeline.initialization_revision,owner.world_revision,owner.quarter,owner.timeline.display_ms,owner.camera.transform,owner.camera.size,source_stamp]
+    if composed_active.get("draw_signature",[])!=signature:
+        composed_active.draw_signature=signature;composed_active.drawn=false
+        var sample_owner:Dictionary=composed_active
+        RenderingServer.frame_post_draw.connect(func():
+            if is_same(composed_active,sample_owner):sample_owner.drawn=true,CONNECT_ONE_SHOT)
+        return false
+    if not composed_active.drawn:return false
+    # Re-fetch above after the draw fence; publication may replace source
+    # handles/operands while that frame was in flight. This is a preview only.
+    _publish(job,composed_pane.viewport.get_texture().get_image())
+    _finish_composed();return true
+
+## One framing bound over actual already-published source placements. Each
+## draw keeps the real spatial/occurrence identity and its normal source clock.
+static func _composed_world_focus(entries:Array,stamp:Array)->Variant:
+    var bounds:AABB;var found:bool=false
+    for entry in entries:
+        if not is_instance_valid(entry.get("node")) or not entry.get("placement",{}).has("position"):continue
+        var point:Vector3=Components.Placement.contact(entry.placement)
+        bounds=bounds.expand(point) if found else AABB(point,Vector3.ZERO);found=true
+        stamp.append([entry.node.get_instance_id(),entry.get("world_media_frame_key",[]),entry.node.global_transform])
+    return bounds.get_center() if found else null
 
 func _queue(job:Dictionary,prepare_views:bool)->void:
     requested[job.key]=true;pending.append(job)
@@ -233,7 +449,7 @@ func queue_prewarm(samples:Array)->Dictionary:
     var ordered:Array=[]
     for sample in samples:
         var row:Dictionary=sample.row
-        if row.get("status")=="missing" or not row.get("visible_here",true):continue
+        if row.get("status")=="missing" or not row.get("visible_here",true) or _composed_row(row):continue
         ordered.append({"sample":sample,"group":_prewarm_group(row)})
     ordered.sort_custom(func(a,b):
         if a.group!=b.group:return a.group<b.group
@@ -319,7 +535,7 @@ func _decode_batch(jobs:Array)->Array:
     return decoded
 
 func _ordinary(job:Dictionary)->bool:
-    return job.row.kind not in ["audio","feedback_text","damage_number","geometry_projectile","residue_deposit","native_effect"]
+    return not job.get("composed",false) and job.row.kind not in ["audio","feedback_text","damage_number","geometry_projectile","residue_deposit","native_effect"]
 
 func poll() -> bool:
     native_store.poll_retired()
@@ -331,13 +547,17 @@ func poll() -> bool:
         if not native_store.pending(job.descriptor,job.tick,job.quarter):
             baked_requests.erase(key);request(job.row,job.sample_ms,job.quarter,false)
         break
-    if not is_instance_valid(host): return false
+    if not is_instance_valid(host):
+        _release_composed_receiving();return false
+    var composed_changed:bool=_poll_composed()
     if suspended:
         if active.get("kind")=="native_effect":active.started_ms=Time.get_ticks_msec()
         for composite in native_composites:composite.started_ms=Time.get_ticks_msec()
+        for composite in composites:
+            if composite.get("preparing_hit",false):composite.started_ms=Time.get_ticks_msec()
         return false
     _prepare_spares()
-    var changed=false
+    var changed:bool=composed_changed
     # Each spell swatch retains its own simulation and private viewport. They
     # advance one existing 60 Hz history step together per drawn frame, rather
     # than replaying every visible sample's entire history serially.
@@ -347,8 +567,29 @@ func poll() -> bool:
             _close_native(composite);native_composites.remove_at(i);changed=true
     for i in range(composites.size()-1,-1,-1):
         var composite:Dictionary=composites[i]
+        if composite.get("preparing_hit",false):
+            if Time.get_ticks_msec()-composite.started_ms>NATIVE_READY_TIMEOUT_MS:
+                errors[composite.job.key]="Native body material source did not become ready within the thumbnail budget";requested.erase(composite.job.key)
+                _close_hit(composite);composites.remove_at(i);changed=true;continue
+            var loading:Dictionary=composite.hit_renderer.prepare(composite.hit_parent,[composite.job.hit_sample],cache,[],{},false)
+            if not loading.issues.is_empty():
+                errors[composite.job.key]=str(loading.issues);requested.erase(composite.job.key)
+                _close_hit(composite);composites.remove_at(i);changed=true;continue
+            if not loading.ready:continue
+            var decorated:Dictionary=composite.hit_renderer.decorate(composite.hit_parent,[composite.job.hit_sample])
+            if not decorated.ready:continue
+            if not composite.get("hit_sampled",false):
+                composite.hit_sampled=true
+                RenderingServer.frame_post_draw.connect(func():composite.hit_drawn=true,CONNECT_ONE_SHOT)
+            if not composite.get("hit_drawn",false):continue
+            composite.job.material.flash=composite.job.hit_sample
+            var body:Dictionary=_compose(composite.decoded,false)
+            body.hit_renderer=composite.hit_renderer;body.hit_parent=composite.hit_parent;composites[i]=body
+            if not RenderingServer.frame_post_draw.is_connected(_composites_drawn):RenderingServer.frame_post_draw.connect(_composites_drawn,CONNECT_ONE_SHOT)
+            continue
         if not composite.drawn:continue
         _publish(composite.job,composite.viewport.get_texture().get_image())
+        if composite.has("hit_renderer"):_close_hit(composite)
         composite.viewport.queue_free();composites.remove_at(i);changed=true
     if worker!=null and not worker.is_alive() and composites.is_empty():
         var batch:Array=worker.wait_to_finish();worker=null
@@ -375,13 +616,16 @@ func poll() -> bool:
         if not active.is_empty() and active.kind!="native_effect":active.draws+=1
     if worker==null and active.is_empty() and pending.is_empty():_prepare_view()
     if worker==null and active.is_empty() and not pending.is_empty():
-        while native_composites.size()<clampi(native_batch_size,1,NATIVE_BATCH_LIMIT) and not pending.is_empty() and pending[0].row.kind=="native_effect" and pending[0].component.get("native_spell",false):
+        if pending[0].get("composed",false):
+            if composed_worker==null and composed_active.is_empty() and not prewarm_suspended and is_instance_valid(reference_world):_start_composed(pending.pop_front())
+            return changed
+        while native_composites.size()<clampi(native_batch_size,1,NATIVE_BATCH_LIMIT) and not pending.is_empty() and not pending[0].get("composed",false) and pending[0].row.kind=="native_effect" and pending[0].component.get("native_spell",false):
             var next:Dictionary=pending.pop_front()
             if next.generation!=generation:continue
             var composite:Dictionary=_start_native(next)
             if not composite.is_empty():native_composites.append(composite)
             else:changed=true
-        if pending.is_empty():return changed
+        if pending.is_empty() or pending[0].get("composed",false):return changed
         # A full native batch must leave the next spell job queued. Ordinary
         # image decoding can still use its existing independent worker.
         if pending[0].row.kind=="native_effect" and pending[0].component.get("native_spell",false):return changed
@@ -462,7 +706,7 @@ func _prepare_spares()->void:
 func prepare_descriptors(rows:Array)->void:
     for row in rows:
         var component:Dictionary=row.get("component",{})
-        if row.get("kind")!="native_effect" or not component.get("native_spell",false) or component.get("native_item",false) or row.get("status")=="missing":continue
+        if row.get("kind")!="native_effect" or not component.get("native_spell",false) or _composed_row(row) or row.get("status")=="missing":continue
         var hz=float(row.get("source_fps",component.get("sample_hz",32)))
         var descriptor_key:String=str(row.id)+":"+str(hz)
         if not native_descriptors.has(descriptor_key):native_descriptors[descriptor_key]=native_store.descriptor(component,maxf(1,hz))
@@ -487,8 +731,12 @@ func _primitive(job: Dictionary) -> void:
     active={"kind":"primitive","job":job,"viewport":view,"draws":0,"drawn":false}
     RenderingServer.frame_post_draw.connect(_drawn.bind(job.key,job.generation),CONNECT_ONE_SHOT)
 
-func _compose(decoded: Dictionary) -> Dictionary:
+func _compose(decoded: Dictionary,prepare_hit:bool=true) -> Dictionary:
     var job: Dictionary=decoded.job
+    if prepare_hit and job.has("hit_sample"):
+        var renderer=NativeHits.new();renderer.material_templates=hit_templates
+        var source_parent=Node3D.new();host.add_child(source_parent)
+        return {"kind":"body","job":job,"decoded":decoded,"preparing_hit":true,"hit_renderer":renderer,"hit_parent":source_parent,"drawn":false,"started_ms":Time.get_ticks_msec()}
     var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true
     view.size=Vector2i(job.rig.cell_width,job.rig.cell_height);view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
     var resources: Dictionary=decoded.resources;var aux={}
@@ -515,7 +763,8 @@ func _compose(decoded: Dictionary) -> Dictionary:
     return {"kind":"body","job":job,"viewport":view,"drawn":false}
 
 func _composites_drawn()->void:
-    for composite in composites:composite.drawn=true
+    for composite in composites:
+        if not composite.get("preparing_hit",false):composite.drawn=true
 
 func _drawn(key: String,epoch: int) -> void:
     if epoch==generation and not active.is_empty() and active.job.key==key: active.drawn=true
@@ -533,7 +782,7 @@ func _waveform(job: Dictionary) -> void:
 func _publish(job: Dictionary,output: Image) -> void:
     requested.erase(job.key)
     if job.generation!=generation or output==null or output.is_empty(): return
-    if job.row.kind!="audio":
+    if job.row.kind!="audio" and not job.get("composed",false):
         var used=output.get_used_rect()
         if used.has_area():output=output.get_region(used.grow(3).intersection(Rect2i(Vector2i.ZERO,output.get_size())))
     var factor=minf(1.0,128.0/maxi(output.get_width(),output.get_height()))
@@ -559,17 +808,29 @@ func _clear_active() -> void:
     if active.has("viewport"):active.viewport.queue_free()
     active={}
 
+func _close_hit(composite:Dictionary)->void:
+    composite.hit_renderer.close()
+    composite.hit_parent.queue_free()
+
 func reset() -> void:
+    Recording.cancel(composed_token)
+    _release_composed_receiving()
+    ReplayPanes.discard(composed_pane);composed_pane={};composed_active={};recording={};reference_world=null;displayed_world=null
     generation+=1;pending.clear();warm_pending.clear();warm_requested.clear();requested.clear();pinned.clear();textures.clear();texture_sizes.clear();texture_bytes=0;errors.clear();inactive.clear();cache.clear();_clear_active()
     for composite in native_composites:_close_native(composite)
     native_composites.clear()
     native_descriptors.clear();baked_requests.clear();native_store.reset()
     if RenderingServer.frame_post_draw.is_connected(_composites_drawn):RenderingServer.frame_post_draw.disconnect(_composites_drawn)
-    for composite in composites:composite.viewport.queue_free()
+    for composite in composites:
+        if composite.has("hit_renderer"):_close_hit(composite)
+        if composite.has("viewport"):composite.viewport.queue_free()
     composites.clear()
+    hit_templates.clear()
 
 func close() -> void:
     reset()
+    if composed_worker!=null:composed_worker.wait_to_finish();composed_worker=null
+    composed_job={}
     for node in native_spares:
         if is_instance_valid(node):node.close();node.queue_free()
     native_spares.clear()

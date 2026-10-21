@@ -50,11 +50,11 @@ steps = Array[ExtResource("5_vwmvr")]([SubResource("Resource_31xra")])
 
 [sub_resource type="Resource" id="Resource_0ehrk"]
 script = ExtResource("7_gbwdf")
-path = "art/media/ui/icons/smooth48/ui.filter-spells.png"
+path = "art/media/ui/icons/smooth48/spell.ice_knife.png"
 native_size = Vector2i(48, 48)
-reuses = "ui.filter-spells"
-status = "stand_in"
-source = "ui/resources.json icon:ui.filter-spells"
+reuses = "spell.ice_knife"
+status = "ready"
+source = "Existing Ice Knife spell glyph deliberately shared by its actual finite burst child; ui/resources.json icon:spell.ice_knife"
 
 [resource]
 script = ExtResource("7_6g7kt")
@@ -209,3 +209,5 @@ unported = {
 }
 }
 }
+
+notes = "Internal unpaid Ice Knife effect identity. The parent spell.ice_knife resource explicitly routes this actual effect_id to its existing area impact cue; this disabled body and empty effect list do not cast or render it twice. All artwork remains unreviewed."

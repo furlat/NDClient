@@ -135,6 +135,22 @@ func decorate(_world:Node,samples:Array,full_material:bool=true,spell_colours:bo
     ready=pending==0 and not issues.any(func(issue):return issue.status=="missing")
     return {"ready":ready,"pending":pending,"issues":issues,"pending_occurrences":pending_occurrences}
 
+## A capture duplicates this exact source surface and sets its private clock.
+## It never samples/rewinds this owner's current viewport or reads it to CPU.
+func history_material(sample:Dictionary)->Dictionary:
+    var record:Dictionary=records.get(_key(sample),{})
+    if record.is_empty():return {"ready":false,"reason":"history_native_hit_source_not_prepared"}
+    if record.has("issue"):return {"ready":false,"reason":record.issue.reason}
+    var surface:Dictionary=record.surface
+    if surface.closed:return {"ready":false,"reason":"history_native_hit_source_retired"}
+    var texture:Texture2D=surface.viewport.get_texture()
+    var identity:Dictionary={"component_id":sample.id,"actor_uuid":sample.actor_uuid,
+        "source_event_uuid":sample.get("source_event_uuid",""),"spell_id":sample.native_hit.get("spell_id",""),
+        "clip_id":sample.native_hit.clip.id}
+    return {"ready":true,"surface":texture,"ramp":record.ramp,"finishing":record.finishing,
+        "dependency":{"texture":texture,"surface":surface,"clock_parameter":record.clock,
+            "seconds":float(sample.age_ms)/1000.0,"identity":identity}}
+
 func _retire()->void:
     for key in records.keys():
         if admitted.has(key) or active.has(key):continue

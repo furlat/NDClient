@@ -2,7 +2,10 @@ extends "res://tests/native_surface_receiving_checks.gd"
 # Capture first-disclosure and final-grid frames of one immutable recording.
 # Sprites light themselves from the light table. This captures evidence;
 # cross-run byte comparison (e.g. two revisions) belongs to the caller.
+const OriginalFixtures=preload("res://tests/recording_fixtures.gd")
 var publication_captures:Array=[]
+var original_disclosures:Array=[]
+var recording_directory:String=""
 var output_directory:String
 var run_label:String
 var reveal_indices:Array=[1,2,3]
@@ -37,6 +40,27 @@ func open_requested_recording(scene:Node,directory:String)->Dictionary:
     scene.notice_text="Playing recorded subjective events." if opened.ok else str(opened.error)
     opened.opened_by="harness"
     return opened
+
+## Source proof is an original public tile admission, not an operation count.
+## Native publication/capture below must still independently expose each reveal.
+func source_disclosures(directory:String)->Array:
+    var known:Dictionary={};var result:Array=[]
+    var files:PackedStringArray=DirAccess.get_files_at(directory);files.sort()
+    for file in files:
+        if file.length()!=21 or not file.get_basename().is_valid_int():continue
+        var packet:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(directory.path_join(file)))
+        var updates:Array=[]
+        if packet.kind=="initialization":updates=packet.initialization.get("world_updates",[])
+        else:
+            for lineage in packet.get("lineages",[]):updates.append_array(lineage.get("world_updates",[]))
+        for update in updates:
+            var admitted:Array=[]
+            for tile in update.get("tile_statics",[]):
+                var key:String="%d,%d"%tile.position
+                if not known.has(key):known[key]=true;admitted.append(key)
+            if packet.cursor.sequence>0 and not admitted.is_empty():
+                result.append({"sequence":packet.cursor.sequence,"occurrence":update.occurrence,"new_tile_statics":admitted.size()})
+    return result
 
 func enter(label:String,limit_ms:int=STEP_MS)->void:
     stage=label;stage_limit=Time.get_ticks_msec()+limit_ms
@@ -178,6 +202,7 @@ func run()->void:
         for value in requested.split(","):
             if value.is_valid_int() and int(value)>0 and int(value) not in reveal_indices:reveal_indices.append(int(value))
         reveal_indices.sort()
+        check(not reveal_indices.is_empty(),"Requested reveal selection contains actual positive publication indices")
     cap_during_reveals=argument("--reveal-cap")=="on"
     output_directory="res://.captures/atlas-publication"+("-cap" if cap_during_reveals else "")+"/"+run_label
     DirAccess.make_dir_recursive_absolute(output_directory)
@@ -185,12 +210,17 @@ func run()->void:
     # beside this run's evidence.
     for stale in DirAccess.get_files_at(output_directory):
         if stale.get_extension()=="png":DirAccess.remove_absolute(output_directory+"/"+stale)
-    var recording=argument("--recording")
+    var recording:String=argument("--recording",OriginalFixtures.journal("gallery"))
+    recording_directory=recording
     if recording.is_empty() or not FileAccess.file_exists(recording.path_join("0000000000000000.json")):
         check(false,"Recording journal exists: "+recording)
         print("INITIALIZATION ",JSON.stringify({"cause":"missing journal; pass --recording=<journal directory>","recording":recording}))
         finish_report();return
     ProjectSettings.set_setting("source_data/encounter_cache_mib",0)
+    original_disclosures=source_disclosures(recording)
+    var requested_max:int=0
+    for selected in reveal_indices:requested_max=maxi(requested_max,int(selected))
+    check(original_disclosures.size()>=requested_max,"Original public tile admissions support the requested positive reveal corpus")
     var scene=Player.instantiate();scene.timeline.paused=true
     root.add_child(scene)
     scene.set_process_input(false);scene.set_process_unhandled_input(false)
@@ -306,7 +336,7 @@ func run()->void:
 func finish_report()->void:
     if report_written:return
     report_written=true
-    var report={"run":run_label,"checks":checks,"failures":failures,"recording":argument("--recording"),
+    var report={"run":run_label,"checks":checks,"failures":failures,"recording":recording_directory,"original_disclosures":original_disclosures,
 "selected_reveals":reveal_indices,"initialization":initialization,"reveals":reveal_log,"captures":publication_captures,
         "rotation_failures":rotation_failures,"stall":stall,"settled":settled,
         "renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),

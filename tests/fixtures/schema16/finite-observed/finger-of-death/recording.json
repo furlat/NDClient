@@ -1,0 +1,80 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "0c2b7a7f-94fd-4d8d-9051-428397f278cf": "Amber caster",
+  "02fbd014-c069-448a-a58e-c38bdffd62e8": "Amber ally",
+  "2e165715-859b-461b-a176-c068ee200c8d": "Blue target",
+  "8e80f5ba-189c-4166-b4a1-3d43eb1c8cee": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.finger_of_death \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 1,
+   "actor_change": 1,
+   "damage": 2,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.finger_of_death": 1
+  },
+  "conditions": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 46,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 63,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 64,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage "
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.finger_of_death"
+  }
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

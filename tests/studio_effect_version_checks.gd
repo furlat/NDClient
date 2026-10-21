@@ -24,7 +24,7 @@ func settle(studio:Control)->bool:
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1600,900)
     var directory:String="res://.runtime/studio-spells-20261015/fireball-seed3/amber/journal"
-    var at:float=1300.0;var captures:String=""
+    var at:float=-1.0;var captures:String=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--recording="):directory=argument.trim_prefix("--recording=")
         if argument.begins_with("--at="):at=float(argument.trim_prefix("--at="))
@@ -34,6 +34,11 @@ func run()->void:
     await settle(studio)
     studio._load(directory)
     check(await settle(studio),"Recording installs")
+    if at<0:
+        var active:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and not row.component.get("native_clip",{}).is_empty() and row.component.get("status","available")=="available" and row.end_ms>row.start_ms)
+        check(not active.is_empty(),"Actual recording contains an available native occurrence for effect-version inspection")
+        if active.is_empty():studio.queue_free();await process_frame;quit(1);return
+        at=(float(active[0].start_ms)+float(active[0].end_ms))*.5
     studio._seek(at)
     check(await settle(studio),"Seek installs")
     check(is_equal_approx(studio.world.timeline.display_ms,at),"Playhead at %.0f ms"%at)
@@ -53,7 +58,7 @@ func run()->void:
             check(handle.effect_kind==kind or not handle.effect_reason.is_empty(),kind+": occurrence plays it or names its fallback "+str(handle.clip.id))
         check(not renderer.handles.is_empty(),kind+": effects displayed at the playhead")
         var drawn:Array=renderer.diagnostics.values().filter(func(entry):return entry.get("status")=="rendered")
-        check(not drawn.is_empty(),kind+": a spell effect drew")
+        check(not drawn.is_empty(),kind+": selected occurrence reports a rendered sample; this diagnostic is not framebuffer pixel proof")
         print("EFFECT_VERSION ",kind," ",JSON.stringify(kinds))
         if not captures.is_empty():studio.viewport.get_texture().get_image().save_png(ProjectSettings.globalize_path(captures.path_join(kind+".png")))
     Effects.set_requested("")

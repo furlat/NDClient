@@ -28,7 +28,7 @@ func inspect_journal(id:String,seat:String,directory:String)->void:
         if name.ends_with(".json") and name.get_basename().is_valid_int():names.append(name)
     names.sort()
     var cache:Dictionary={};var components:Array=[];var positive:Dictionary={};var missing_parent:bool=false
-    var declarations:int=0;var applications:int=0
+    var declarations:int=0;var applications:int=0;var members:Dictionary={}
     for sequence in names.size():
         var raw:PackedByteArray=FileAccess.get_file_as_bytes(directory.path_join(names[sequence]))
         var decoded:Dictionary=journal.decode_record(sequence,raw)
@@ -44,6 +44,10 @@ func inspect_journal(id:String,seat:String,directory:String)->void:
                 if node.canceled or node.fact==null:continue
                 if node.fact.kind=="heal" and node.fact.actual_healing>0 and not node.fact.was_blocked:
                     positive[str(node.id)]={"target":node.fact.target_entity_uuid,"amount":node.fact.actual_healing}
+                if node.fact.kind=="actor_change":
+                    for actor in node.fact.actors:
+                        for row in actor.rows:
+                            if row.field=="condition" and row.get("member")!=null:members[str(row.member.condition_uuid)]={"actor":actor.actor_uuid,"member":row.member}
                 if node.fact.get("behavior_id")=="action.class.cleric.preserve_life":
                     if Occurrences.application(node):applications+=1
                     else:declarations+=1
@@ -84,5 +88,18 @@ func inspect_journal(id:String,seat:String,directory:String)->void:
             check(healing.parent_event_uuid==projection.action_uuid,id+" "+seat+": original native action parent is preserved")
         evidence.append({"case":id,"seat":seat,"positive_heals":positive,"native_cues":components.size()})
     else:
-        check(missing_parent,id+" "+seat+": real Frenzy keeps its exact missing-parent gap")
-        evidence.append({"case":id,"seat":seat,"frenzy_parent_gap":missing_parent})
+        var children:Array=members.values().filter(func(row):return row.member.get("behavior_id")=="class_feature.barbarian.frenzied")
+        check(children.size()==1,id+" "+seat+": original publishes one actual Frenzied child")
+        if children.size()==1:
+            var child:Dictionary=children[0];var parent:Variant=child.member.get("state",{}).get("parent_condition_uuid")
+            if parent!=null:
+                check(members.has(str(parent)) and members[str(parent)].actor==child.actor \
+                    and members[str(parent)].member.behavior_id=="class_feature.barbarian.raging",id+" "+seat+": actual child names the same actor's exact Raging parent")
+                check(components.size()==1 and components[0].status=="available",id+" "+seat+": one finite onset binds the real linked pair")
+                for row in components:
+                    var projection:Dictionary=row.get("native_inputs",{}).get("owner_projection",{})
+                    check(projection.get("owner_uuid")==str(parent) and projection.get("frenzied_child",{}).get("owner_uuid")==child.member.condition_uuid and projection.get("frenzied_child",{}).get("parent_owner_uuid")==str(parent) \
+                        and projection.get("actor_uuid")==child.actor,id+" "+seat+": source projection retains actual parent, child and holder identities")
+            else:
+                check(missing_parent or components.any(func(row):return row.get("status")=="missing" and "native_condition_parent_link_unavailable" in row.get("native_input_gaps",[])),id+" "+seat+": an original without a public parent remains refused")
+        evidence.append({"case":id,"seat":seat,"frenzy_members":members.keys(),"frenzy_parent_gap":missing_parent})

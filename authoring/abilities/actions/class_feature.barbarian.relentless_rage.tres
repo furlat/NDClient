@@ -34,43 +34,53 @@ disposition = "authored"
 body = SubResource("Resource_rntaj")
 effect_sources = PackedStringArray()
 status = "partial"
+observed_fact = {"kind": "damage", "stage": "taken", "witness": "relentless_rage", "when": {"succeeded": true}, "actor_field": "target_entity_uuid"}
+media = Array[Dictionary]([
+ {
+  "alpha": 0.8,
+  "assetId": "class.relentless.burst-q0-back",
+  "attachment": "source_ground",
+  "depth": "behind_body",
+  "id": "class.relentless.burst-q0-back",
+  "requiredSaveSuccess": true,
+  "scale": 0.425,
+  "startOffsetMs": 600.0,
+  "source_id": "class.relentless",
+  "durationMs": 875.0
+ },
+ {
+  "alpha": 0.8,
+  "assetId": "class.relentless.burst-q0-front",
+  "attachment": "source_ground",
+  "depth": "front_body",
+  "id": "class.relentless.burst-q0-front",
+  "requiredSaveSuccess": true,
+  "scale": 0.425,
+  "startOffsetMs": 600.0,
+  "source_id": "class.relentless",
+  "durationMs": 875.0
+ }
+])
+notes = "Finite original burst is selected only by the actual successful relentless_rage public witness on the completed damage TAKEN request fact. It uses the actual target actor, existing 600 ms delay and both source halves once; no ActionFact, body gesture, HP inference or mandatory nonnull condition UUID is invented. Artwork and production qualification remain unreviewed."
 unported = {
-"actionFeedback": null,
-"actor": {
-"media": []
-},
-"attackFeedback": null,
-"compatibleCueKinds": ["action"],
-"counterspellFeedback": null,
-"definitionRef": {
-"content_id": "class_feature.barbarian.relentless_rage",
-"content_version": 1.0,
-"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
-"definition_kind": "class_feature",
-"pack_id": "content.srd_5_1_cc"
-},
-"handlerResponse": true,
-"media": [{
-"alpha": 0.8,
-"assetId": "class.relentless.burst-q0-back",
-"attachment": "source_ground",
-"depth": "behind_body",
-"id": "class.relentless.burst-q0-back",
-"requiredSaveSuccess": true,
-"scale": 0.425,
-"startOffsetMs": 600.0
-}, {
-"alpha": 0.8,
-"assetId": "class.relentless.burst-q0-front",
-"attachment": "source_ground",
-"depth": "front_body",
-"id": "class.relentless.burst-q0-front",
-"requiredSaveSuccess": true,
-"scale": 0.425,
-"startOffsetMs": 600.0
-}],
-"mediaFailurePolicy": "fail_transaction",
-"previewChildCueKinds": [],
-"projectile": null,
-"variants": []
+ "actionFeedback": null,
+ "actor": {
+  "media": []
+ },
+ "attackFeedback": null,
+ "compatibleCueKinds": [
+  "damage"
+ ],
+ "counterspellFeedback": null,
+ "definitionRef": {
+  "content_id": "class_feature.barbarian.relentless_rage",
+  "content_version": 1.0,
+  "definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+  "definition_kind": "class_feature",
+  "pack_id": "content.srd_5_1_cc"
+ },
+ "mediaFailurePolicy": "fail_transaction",
+ "previewChildCueKinds": [],
+ "projectile": null,
+ "variants": []
 }

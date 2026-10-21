@@ -45,6 +45,8 @@ var flights:Dictionary={}
 var ambient:float=Color(.18,.18,.18).linear_to_srgb().srgb_to_linear().r
 var room_lights:bool=true
 var source:Dictionary={}
+# Source references admitted by actual release/tile preparation, not new world owners.
+var sources:Dictionary={}
 var tiles_owner:Dictionary={}
 var tiles_revision=-1
 var tiles:Dictionary={}
@@ -199,10 +201,15 @@ func _paint(slot:int,kernels:Array)->void:
     var data:=PackedFloat32Array();data.resize(kernels.size()*12)
     for i in kernels.size():
         var transform:Transform2D=kernels[i].transform
-        transform.x*=sqrt(1.5)*64.;transform.y*=sqrt(1.5)*64.;transform.origin=(transform.origin+Vector2(.5,.5))*64.
+        var fragment:bool=kernels[i].get("fragment",false)
+        if fragment:
+            transform.origin=(transform.origin+Vector2(.5,.5)+(transform.x+transform.y)*.5)*64.
+            transform.x*=32.;transform.y*=32.
+        else:
+            transform.x*=sqrt(1.5)*64.;transform.y*=sqrt(1.5)*64.;transform.origin=(transform.origin+Vector2(.5,.5))*64.
         var at:int=i*12
         data[at]=transform.x.x;data[at+1]=transform.y.x;data[at+3]=transform.origin.x
-        data[at+4]=transform.x.y;data[at+5]=transform.y.y;data[at+7]=transform.origin.y;data[at+8]=kernels[i].mass
+        data[at+4]=transform.x.y;data[at+5]=transform.y.y;data[at+7]=transform.origin.y;data[at+8]=kernels[i].mass;data[at+9]=1. if fragment else 0.
     var multimesh:MultiMesh=_painter_kernels[painter]
     if multimesh.instance_count!=kernels.size():multimesh.instance_count=kernels.size()
     multimesh.buffer=data
@@ -281,6 +288,7 @@ func prepare_world(world:Node,owner:Node,rows:Dictionary,preparation:Dictionary,
             if borrowed:handle.world_users=handle.get("world_users",0)+1
             handle.value=row.value;handle.phase=[];handle.coverage=row.coverage
             handle.kernel_cache=row.cache
+            _style(handle,row.source)
             _upload(handle,row.kernels)
             handle.ready=false
             _await_draw(handle)
@@ -302,7 +310,9 @@ func publish_world(world:Node,preparation:Dictionary)->void:
             preparation.retired.append(old)
         if record.get("removed",false):deposits.erase(key);world.draw_order_dirty=true;continue
         if not handle.registered:world.actor_entries.append(handle.entry);handle.registered=true
-        source=handle.kernel_cache.source
+        var residue_id:String=Blood.field_residue(key)
+        sources[residue_id]=handle.kernel_cache.source
+        if residue_id=="residue.blood":source=handle.kernel_cache.source
         deposits[key]=handle;world.draw_order_dirty=true
     preparation.handles={}
 
@@ -316,6 +326,18 @@ func release_world(preparation:Dictionary)->Array:
     for handle in preparation.retired:_release(null,handle)
     preparation.handles={};preparation.retired=[]
     return []
+
+func _style(handle:Dictionary,asset:Dictionary)->void:
+    if is_same(handle.get("style_source"),asset):return
+    var region:Dictionary=asset.region
+    var palette:Variant=region.get("palette")
+    var node:MeshInstance3D=handle.entry.node
+    node.set_instance_shader_parameter("fragment_primitive",region.get("primitive")=="fragments")
+    node.set_instance_shader_parameter("authored_palette",palette!=null)
+    for i in 3:
+        var color:Color=Color.hex(int(palette[i])*256+255) if palette!=null else Color.BLACK
+        node.set_instance_shader_parameter("palette"+str(i),Vector3(color.r,color.g,color.b))
+    handle.style_source=asset
 
 func _upload(handle:Dictionary,kernels:Array)->void:
     # The same cached kernel shapes in the same order are the same field: only
@@ -371,20 +393,20 @@ func _start_kernel_jobs(budget:Dictionary)->void:
         for prepared in rows:prepared.task=task
         kernel_jobs.append({"task":task,"rows":rows,"control":control})
 
-func _prepare_kernels(key:String,reveal:Dictionary,pattern:String,group_id:String,budget:Dictionary)->bool:
+func _prepare_kernels(key:String,reveal:Dictionary,pattern:String,group_id:String,budget:Dictionary,asset:Dictionary)->bool:
     for prepared in kernel_preparations:
-        if prepared.key==key and is_same(prepared.source,source) and prepared.value==reveal.after:
+        if prepared.key==key and is_same(prepared.source,asset) and prepared.value==reveal.after:
             prepared.groups[group_id]=true
             return prepared.task==-1 and prepared.output.has("cache")
-    var input={"value":reveal.after,"position":reveal.position.duplicate(),"source":source,"reveal":reveal,"pattern":pattern}
+    var input={"value":reveal.after,"position":reveal.position.duplicate(),"source":asset,"reveal":reveal,"pattern":pattern}
     var output:Dictionary={}
-    kernel_preparations.append({"key":key,"value":reveal.after,"source":source,"groups":{group_id:true},"input":input,"output":output,"task":-2})
+    kernel_preparations.append({"key":key,"value":reveal.after,"source":asset,"groups":{group_id:true},"input":input,"output":output,"task":-2})
     return false
 
-func _adopt_kernel_cache(handle:Dictionary,key:String,value:Dictionary,prefer_landing:bool=false)->void:
-    if is_same(handle.kernel_cache.get("value"),value) and (not prefer_landing or handle.kernel_cache.has("landing")):return
+func _adopt_kernel_cache(handle:Dictionary,key:String,value:Dictionary,prefer_landing:bool=false,asset:Dictionary={})->void:
+    if is_same(handle.kernel_cache.get("value"),value) and is_same(handle.kernel_cache.get("source"),asset) and (not prefer_landing or handle.kernel_cache.has("landing")):return
     for prepared in kernel_preparations:
-        if prepared.key==key and prepared.task==-1 and not prepared.groups.is_empty() and is_same(prepared.source,source) and prepared.value==value and prepared.output.get("cache",{}).get("value")==value:
+        if prepared.key==key and prepared.task==-1 and not prepared.groups.is_empty() and is_same(prepared.source,asset) and prepared.value==value and prepared.output.get("cache",{}).get("value")==value:
             handle.kernel_cache=prepared.output.cache
             # After-values may be copied during admission. Verify equality once
             # at field adoption, then keep the existing identity-only hot path.
@@ -405,29 +427,27 @@ func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
         if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-began-(budget.used_usec-charged_before))
         return false
     if source.is_empty():source=Blood.Catalog.prepared_residue_asset(world.catalog_cache)
-    if source.is_empty():
-        # A real release carries its worker-admitted source. No source loading
-        # may be hidden in the scene preparation or sampling path.
-        for group in groups:
-            for component in group.get("components",[]):
-                if component.kind=="residue_deposit":source=component.get("asset_metadata",{});break
-            if not source.is_empty():break
-    if source.is_empty():
-        for group in groups:
-            if group.get("components",[]).any(func(component):return component.kind=="residue_deposit"):return false
-        return true
+    if not source.is_empty():sources["residue.blood"]=source
     for group in groups:
         for component in group.get("components",[]):
-            if component.kind!="residue_deposit":continue
-            for reveal in component.reveals:_prepare_kernels(Blood.key(reveal.position),reveal,component.body_release.pattern,group.id,budget)
+            if component.kind!="residue_deposit" or component.get("status")=="missing":continue
+            var asset:Dictionary=component.get("asset_metadata",{})
+            if asset.is_empty():return false
+            sources[str(component.get("residue_id","residue.blood"))]=asset
+    for group in groups:
+        for component in group.get("components",[]):
+            if component.kind!="residue_deposit" or component.get("status")=="missing":continue
+            var asset:Dictionary=sources[str(component.get("residue_id","residue.blood"))]
+            for reveal in component.reveals:_prepare_kernels(Blood.field_key(reveal.position,str(component.get("residue_id","residue.blood"))),reveal,component.body_release.pattern,group.id,budget,asset)
     _start_kernel_jobs(budget)
     var complete=true
     for group in groups:
         for component in group.get("components",[]):
-            if component.kind!="residue_deposit":continue
+            if component.kind!="residue_deposit" or component.get("status")=="missing":continue
+            var asset:Dictionary=sources[str(component.get("residue_id","residue.blood"))]
             for reveal in component.reveals:
-                var key=Blood.key(reveal.position)
-                var shapes_ready:bool=_prepare_kernels(key,reveal,component.body_release.pattern,group.id,budget)
+                var key=Blood.field_key(reveal.position,str(component.get("residue_id","residue.blood")))
+                var shapes_ready:bool=_prepare_kernels(key,reveal,component.body_release.pattern,group.id,budget,asset)
                 complete=complete and shapes_ready
                 if deposits.has(key):continue
                 if not pending_deposits.has(key):
@@ -467,12 +487,12 @@ func _prune_pending(world:Node)->void:
 func _active(world:Node,samples:Array)->Array:
     var result:Array=[];var ids={}
     for component in samples:
-        if component.kind=="residue_deposit":result.append(component);ids[component.id]=true
+        if component.kind=="residue_deposit" and component.get("status")!="missing":result.append(component);ids[component.id]=true
     # A tile update may precede its parent DamageApplied completion. Retain the
     # previous contribution until the event-owned flight reaches that tile.
     if world.timeline.current!=null:
         for component in world.timeline.current.get("components",[]):
-            if component.kind!="residue_deposit" or ids.has(component.id):continue
+            if component.kind!="residue_deposit" or component.get("status")=="missing" or ids.has(component.id):continue
             var copy=component.duplicate();copy.age_ms=world.timeline.display_ms-world.timeline.group_start_ms-component.start_ms
             if copy.age_ms<0:result.append(copy)
     return result
@@ -497,10 +517,13 @@ func sync_tiles(owner:Dictionary,revision:int,changes:Dictionary={})->void:
     var keys:Array=changes.get("tiles",{}).keys() if sparse else owner.keys()
     if not sparse:tiles={}
     tiles_owner=owner;tiles_revision=revision
-    for key in keys:
-        var tile:Dictionary=owner.get(key,{})
-        if not Blood.residue(tile).is_empty():tiles[key]=tile
-        else:tiles.erase(key)
+    if not source.is_empty():sources["residue.blood"]=source
+    for cell in keys:
+        var tile:Dictionary=owner.get(cell,{})
+        for residue_id in sources:
+            var key:String=Blood.field_id(str(cell),residue_id)
+            if not Blood.residue(tile,residue_id).is_empty():tiles[key]=tile
+            else:tiles.erase(key)
 
 func sample(world:Node,samples:Array,changes:Dictionary={})->void:
     var began=Time.get_ticks_usec()
@@ -514,24 +537,28 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
     sync_tiles(state.get("tiles",{}),world.timeline.world_revision,changes)
     _phase("tile_index",stage_started);stage_started=Time.get_ticks_usec()
     var active=_active(world,samples);var by_tile={};var live_flights={};var flown={}
-    if source.is_empty():
+    if sources.is_empty() and source.is_empty():
         ready=tiles.is_empty() and active.is_empty()
         return
     _room(world)
     for component in active:
+        if component.get("status")=="missing":continue
+        var residue_id:String=str(component.get("residue_id","residue.blood"))
+        var asset:Dictionary=sources.get(residue_id,{})
+        if asset.is_empty():ready=false;continue
         var age:float=component.age_ms/1000.
         var step:int=-1
         for reveal in component.reveals:
-            var cell=Blood.key(reveal.position)
-            if not tiles.has(cell) or not Blood.affects_residue(Blood.residue(tiles[cell]),reveal,component.body_release.pattern,source):continue
-            if step<0:step=Blood.landing_step(source,component.body_release.pattern,age)
+            var cell=Blood.field_key(reveal.position,residue_id)
+            if not tiles.has(cell) or not Blood.affects_residue(Blood.residue(tiles[cell],residue_id),reveal,component.body_release.pattern,asset):continue
+            if step<0:step=Blood.landing_step(asset,component.body_release.pattern,age)
             if not by_tile.has(cell):by_tile[cell]=[]
             var row=reveal.duplicate();row.pattern=component.body_release.pattern;row.age_seconds=age;row.id=component.id
             row.step=step;by_tile[cell].append(row)
         if age>=0:
             var flight_started:int=Time.get_ticks_usec()
             flown[component.id]=true
-            _flight(world,component,age,live_flights)
+            _flight(world,component,age,live_flights,asset)
             _phase("flight",flight_started)
     _phase("active",stage_started);stage_started=Time.get_ticks_usec()
     var visible:Dictionary=world.scenery_visible_cells
@@ -541,7 +568,9 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
     var view:Array=[world.camera.global_transform,world.camera.size,world.get_viewport().get_visible_rect()]
     if view!=_tile_view:_tile_view=view;_tile_on_screen={}
     for key in tiles:
-        var tile:Dictionary=tiles[key];var value=Blood.residue(tile)
+        var tile:Dictionary=tiles[key];var value=Blood.residue(tile,Blood.field_residue(key))
+        var asset:Dictionary=sources.get(Blood.field_residue(key),{})
+        if asset.is_empty():ready=false;continue
         var known:Array=_tile_on_screen.get(key,[])
         var on_screen:bool=known[1] if not known.is_empty() and is_same(known[0],tile) else _tile_visible(world,tile)
         if known.is_empty() or not is_same(known[0],tile):_tile_on_screen[key]=[tile,on_screen]
@@ -560,17 +589,18 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
         var reveals:Array=by_tile.get(key,NO_REVEALS);var phase:Array=NO_REVEALS if reveals.is_empty() else reveals.map(func(row):return [row.id,row.step])
         if not is_same(handle.value,value) or handle.phase!=phase:
             var kernel_started:int=Time.get_ticks_usec()
-            _adopt_kernel_cache(handle,key,value,not reveals.is_empty())
-            var kernels=Blood.kernels(value,tile.position,reveals,source,handle.kernel_cache)
+            _adopt_kernel_cache(handle,key,value,not reveals.is_empty(),asset)
+            var kernels=Blood.kernels(value,tile.position,reveals,asset,handle.kernel_cache)
             _phase("kernels",kernel_started)
             var upload_started:int=Time.get_ticks_usec()
+            _style(handle,asset)
             _upload(handle,kernels);handle.value=value;handle.phase=phase
             handle.coverage=Blood.has_coverage(kernels)
             _phase("upload",upload_started)
         if handle.get("coverage",false) and handle.entry.node.visible:visible_fields[key]=true
         var entry:Dictionary=handle.entry
         # This renderer alone writes its stain draws; room values are shared.
-        var height=tile.get("elevation_steps",0);var shown:float=1. if visible.has(key) else 0.
+        var height=tile.get("elevation_steps",0);var shown:float=1. if visible.has(Blood.field_cell(str(key))) else 0.
         if handle.get("written_height")!=height:
             entry.placement.base_height_steps=height;entry.node.position=Placement.contact(entry.placement);handle.written_height=height
         if handle.get("written_visibility")!=shown:entry.node.set_instance_shader_parameter("visibility",shown);handle.written_visibility=shown
@@ -601,7 +631,7 @@ func _room(world:Node)->void:
 
 func visible_deposit(component:Dictionary)->bool:
     for reveal in component.reveals:
-        if visible_fields.has(Blood.key(reveal.position)):return true
+        if visible_fields.has(Blood.field_key(reveal.position,str(component.get("residue_id","residue.blood")))):return true
     return false
 
 static func _tile_visible(world:Node,tile:Dictionary)->bool:
@@ -612,22 +642,23 @@ static func _tile_visible(world:Node,tile:Dictionary)->bool:
         for dz in [-.5,.5]:bounds=bounds.expand(world.camera.unproject_position(center+Vector3(dx,0,dz)))
     return bounds.intersects(world.get_viewport().get_visible_rect())
 
-func _flight(world:Node,component:Dictionary,age:float,live:Dictionary)->void:
+func _flight(world:Node,component:Dictionary,age:float,live:Dictionary,asset:Dictionary)->void:
     var buckets={};var cells={};var zoom:float=world.camera.unproject_position(world.camera.global_basis.x).distance_to(world.camera.unproject_position(Vector3.ZERO))/Placement.PIXELS_PER_UNIT
     var pixel_unit=1.0/Placement.PIXELS_PER_UNIT
     var basis:Basis=world.camera.basis
     var scale:float=maxf(.001,zoom)
-    var snap:float=float(source.snapPx)*zoom
-    var tail_min:float=source.tailMinPx;var tail_max:float=source.tailMaxPx
-    var colors:Array=[Color.hex(int(source.colors[0])*256+255),Color.hex(int(source.colors[1])*256+255)]
+    var snap:float=float(asset.snapPx)*zoom
+    var tail_min:float=asset.tailMinPx;var tail_max:float=asset.tailMaxPx
+    var colors:Array=[Color.hex(int(asset.colors[0])*256+255),Color.hex(int(asset.colors[1])*256+255)]
+    var fragment_primitive:bool=asset.region.get("primitive")=="fragments"
     var actor:Dictionary=world.visual_actors.get(component.actor_uuid,{})
     var actor_prefix:Array=GridOrder.key(actor.row,"body",0,0).slice(0,5) if not actor.is_empty() else []
     var plan:Array=_flight_plans.get(component.id,[])
     if plan.is_empty() or not is_same(plan[0],component.body_release) or not is_same(plan[1],component.position) or plan[2]!=component.elevation_steps \
-            or plan[3]!=component.get("flight_enabled",true) or not is_same(plan[4],source):
-        plan=[component.body_release,component.position,component.elevation_steps,component.get("flight_enabled",true),source,Blood.flight_plan(component,source)]
+            or plan[3]!=component.get("flight_enabled",true) or not is_same(plan[4],asset):
+        plan=[component.body_release,component.position,component.elevation_steps,component.get("flight_enabled",true),asset,Blood.flight_plan(component,asset)]
         _flight_plans[component.id]=plan
-    for particle in Blood.particles(component,source,age,plan[5]):
+    for particle in Blood.particles(component,asset,age,plan[5]):
         # GridOrder.key's quarter-0 prefix is [1,x+y,x-y,support,2] of the
         # particle's owner cell: the cell and support height (with its type,
         # as str() tells them apart) select the bucket. The key itself is
@@ -653,23 +684,32 @@ func _flight(world:Node,component:Dictionary,age:float,live:Dictionary)->void:
         var across=basis.z.cross(tangent)
         var length_px=clampf(screen.distance_to(old)/scale,tail_min,tail_max)
         var snapped=Vector2(Blood.even_round(screen.x/snap),Blood.even_round(screen.y/snap))*snap
+        var fragment_origin:Vector3=point
         point+=basis.x*(snapped.x-screen.x)/scale*pixel_unit-basis.y*(snapped.y-screen.y)/scale*pixel_unit
         # Original physical-blood vocabulary: body rectangle plus bright edge.
         var size:float=particle.size
         var width:float=2.+length_px;var height:float=size-(-size)
         var center:Vector3=point+tangent*(-length_px+2.)*.5*pixel_unit
         var pieces:PackedFloat32Array=bucket.pieces
-        _piece(pieces,tangent*width*pixel_unit,across*height*pixel_unit,basis.z,center,colors[0])
+        if fragment_primitive:
+            var polygon:PackedVector2Array=particle.fragment
+            var indices:PackedInt32Array=Geometry2D.triangulate_polygon(polygon)
+            for at in range(0,indices.size(),3):
+                var a:Vector2=polygon[indices[at]];var b:Vector2=polygon[indices[at+1]];var c:Vector2=polygon[indices[at+2]]
+                var x:=Vector3(b.x-a.x,0.,b.y-a.y);var y:=Vector3(c.x-a.x,0.,c.y-a.y)
+                _piece(pieces,x,y,Vector3.UP,fragment_origin+Vector3(a.x,0.,a.y)+(x+y)*.5,colors[0],true,true)
+        else:
+            _piece(pieces,tangent*width*pixel_unit,across*height*pixel_unit,basis.z,center,colors[0])
         var edge:float=-size+maxf(1.,size*.6)
         width=2.;height=edge-(-size)
         center=point-across*(-size+edge)*.5*pixel_unit
-        _piece(pieces,tangent*width*pixel_unit,across*height*pixel_unit,basis.z,center,colors[1])
+        _piece(pieces,tangent*width*pixel_unit,across*height*pixel_unit,basis.z,center,colors[1],fragment_primitive)
     var partition:bool=not actor.is_empty()
     var plane=Vector3(basis.z.x,0,basis.z.z).normalized()
     var foot=Placement.contact(actor.row) if partition else Vector3.ZERO
     for bucket_key in buckets:
         var bucket:Dictionary=buckets[bucket_key]
-        var count:int=bucket.pieces.size()/16
+        var count:int=bucket.pieces.size()/(20 if fragment_primitive else 16)
         for half in ["back","front"]:
             var key=bucket_key+":"+half
             live[key]=true
@@ -677,19 +717,23 @@ func _flight(world:Node,component:Dictionary,age:float,live:Dictionary)->void:
             var entry:Dictionary=flights[key];var multi:MultiMesh=entry.node.multimesh
             entry.placement=bucket.row.duplicate();entry.placement.id=key
             entry.node.visible=true
+            if multi.use_custom_data!=fragment_primitive:
+                multi.instance_count=0;multi.use_custom_data=fragment_primitive
+                entry.node.set_instance_shader_parameter("polygon_flight",fragment_primitive)
             if multi.instance_count!=count:multi.instance_count=count
             multi.buffer=bucket.pieces
             if entry.get("written_partition")!=partition:entry.node.set_instance_shader_parameter("partition",partition);entry.written_partition=partition
             if entry.get("written_foot")!=foot:entry.node.set_instance_shader_parameter("plane_origin",foot);entry.written_foot=foot
             if entry.get("written_plane")!=plane:entry.node.set_instance_shader_parameter("plane_normal",plane);entry.written_plane=plane
 
-static func _piece(pieces:PackedFloat32Array,x:Vector3,y:Vector3,z:Vector3,origin:Vector3,color:Color)->void:
+static func _piece(pieces:PackedFloat32Array,x:Vector3,y:Vector3,z:Vector3,origin:Vector3,color:Color,custom:bool=false,fragment:bool=false)->void:
     # MultiMesh TRANSFORM_3D + colour layout: basis rows with origin, then RGBA.
-    var i:int=pieces.size();pieces.resize(i+16)
+    var i:int=pieces.size();pieces.resize(i+(20 if custom else 16))
     pieces[i]=x.x;pieces[i+1]=y.x;pieces[i+2]=z.x;pieces[i+3]=origin.x
     pieces[i+4]=x.y;pieces[i+5]=y.y;pieces[i+6]=z.y;pieces[i+7]=origin.y
     pieces[i+8]=x.z;pieces[i+9]=y.z;pieces[i+10]=z.z;pieces[i+11]=origin.z
     pieces[i+12]=color.r;pieces[i+13]=color.g;pieces[i+14]=color.b;pieces[i+15]=color.a
+    if custom:pieces[i+16]=1. if fragment else 0.
 
 func _flight_entry(world:Node,key:String,back:bool)->Dictionary:
     _own(world)
@@ -728,7 +772,7 @@ func close(world:Node)->void:
     for handle in deposits.values():_release(world,handle)
     for handle in pending_deposits.values():_release(world,handle)
     deposits.clear();pending_deposits.clear();_flight_plans={}
-    tiles_owner={};tiles={};source={};tiles_revision=-1;_tile_view=[];_tile_on_screen={}
+    tiles_owner={};tiles={};source={};sources={};tiles_revision=-1;_tile_view=[];_tile_on_screen={}
     resources_ready=false;resource_frame=-1
 
 func _own(world:Node)->void:

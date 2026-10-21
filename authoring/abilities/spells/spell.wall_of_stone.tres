@@ -144,11 +144,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_nx6l6"]
 script = ExtResource("10_ci3wv")
 id = "wall_of_stone_corner_back_native"
+dispatch_gap = "unselected_fixed_stone_corner_review_actual_sections_not_bound"
 kind = "form"
 selection = "wall_of_stone_corner_back_native"
 effects = Array[ExtResource("3_cni7e")]([SubResource("Resource_jyivc")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The source fixes a corner assembly and breakup sequence. Actual Stone wall sections, observed destruction and owner retirement must own these phases; the review is not a substitute for arbitrary multi-position construction."
 
 [resource]
 script = ExtResource("8_soxm0")
@@ -163,7 +165,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -175,7 +177,7 @@ applies_conditions = PackedStringArray("condition.prone", "condition.spell.wall_
 applies_surfaces = PackedStringArray("spatial_effect.spell.frigid_air", "spatial_effect.spell.wall_of_force", "spatial_effect.spell.wall_of_ice", "spatial_effect.spell.wall_of_stone")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "wall_of_stone_straight_back_native",
 "source": "assets/vfx/index.json:/selections/wall_of_stone_straight_back_native/staging"
@@ -198,4 +200,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "Factory source boundary (§13 of agent_docs/FACTORY_REVIEW_2026-10-20.md): The delivered fixed sections/corner shatter and retire on review clocks; actual wall sections and observed destruction are not its inputs. The fixed review cue0 is explicitly unselected in production. Cast body/palette and actual receiving damage, movement or condition feedback remain independent. This family stays partial pending the named source repair; all artwork remains unreviewed."

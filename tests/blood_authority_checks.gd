@@ -39,7 +39,7 @@ func verify(before:Dictionary,packet:Dictionary,identity:String,cache:Dictionary
             if event.event_uuid==identity:
                 for requirement in event.components:
                     if requirement.kind=="residue_deposit":requirements.append(requirement)
-    check(blood.size()==(1 if air else 0),label+": blood requires explicit ordinary blood release")
+    check(blood.size()==(1 if air else 0),label+": finite material requires an explicitly authored release")
     check(ground.size()==(1 if residue else 0),label+": ground renderer requires disclosed receiving regions")
     check(requirements.size()==(1 if residue else 0),label+": ground presentation exists only for disclosed residue regions")
     var node=damage_node(packet,identity)
@@ -88,7 +88,7 @@ func run()->void:
     check(positions.size()==20,"Original melee injury retains all twenty disclosed receiving positions")
     var cache={}
     verify(journal.state,packet,identity,cache,"original recorded release",true,true)
-    for mode in ["null release","omitted release","empty receiving regions","bone release","corrosive release","dread release","zero applied damage","canceled damage"]:
+    for mode in ["null release","omitted release","empty receiving regions","bone release","corrosive release","dread release","unassigned release","zero applied damage","canceled damage"]:
         var variant=packet.duplicate(true);var changed=damage_node(variant,identity)
         match mode:
             "null release":changed.fact.body_release=null
@@ -97,9 +97,11 @@ func run()->void:
             "bone release":changed.fact.body_release.release_id="body.bone"
             "corrosive release":changed.fact.body_release.release_id="body.corrosive_blood"
             "dread release":changed.fact.body_release.release_id="body.dread_blood"
+            "unassigned release":changed.fact.body_release.release_id="body.unassigned_control"
             "zero applied damage":changed.fact.applied_damage=0
             "canceled damage":changed.canceled=true
-        verify(journal.state,variant,identity,cache,mode,mode=="empty receiving regions",false)
+        var assigned:bool=mode in ["bone release","corrosive release","dread release"]
+        verify(journal.state,variant,identity,cache,mode,mode=="empty receiving regions" or assigned,assigned)
     var index=Recording.read(directory)
     check(index.ok,"Studio reads the same real journal")
     if index.ok:

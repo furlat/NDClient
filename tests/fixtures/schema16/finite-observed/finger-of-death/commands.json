@@ -1,0 +1,142 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "02fbd014-c069-448a-a58e-c38bdffd62e8",
+   "state_revision": "65b64683-f17b-454a-9dd2-837e3ed5d10e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_finger_of_death_baseline",
+   "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+   "audience_id": "06d82a37-c3c5-4e4f-b005-8796cc0f9ac0",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_finger_of_death_baseline",
+    "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+    "audience_id": "06d82a37-c3c5-4e4f-b005-8796cc0f9ac0",
+    "sequence": 2
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "8e80f5ba-189c-4166-b4a1-3d43eb1c8cee",
+   "state_revision": "8939ff6a-2e3e-4bc2-982a-12c629ce8062",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_finger_of_death_baseline",
+   "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+   "audience_id": "e72071e1-3d68-4f07-aa46-ae1fc7971fde",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_finger_of_death_baseline",
+    "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+    "audience_id": "e72071e1-3d68-4f07-aa46-ae1fc7971fde",
+    "sequence": 4
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target"
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "2e165715-859b-461b-a176-c068ee200c8d",
+   "state_revision": "ff8246d2-7be5-4bd9-88cd-f43cda2cf41f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_finger_of_death_baseline",
+   "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+   "audience_id": "e72071e1-3d68-4f07-aa46-ae1fc7971fde",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_finger_of_death_baseline",
+    "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+    "audience_id": "e72071e1-3d68-4f07-aa46-ae1fc7971fde",
+    "sequence": 6
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target"
+ },
+ {
+  "request": {
+   "do": "spell.finger_of_death",
+   "by": "caster",
+   "target": "first_legal",
+   "aim": [
+    6,
+    7
+   ]
+  },
+  "previews": 1,
+  "selected_action": {
+   "behavior_id": "spell.finger_of_death",
+   "display_name": "Finger of Death (Level 7)",
+   "cast_at_level": 7,
+   "variant_facets": [],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "0c2b7a7f-94fd-4d8d-9051-428397f278cf",
+   "state_revision": "396aa103-e36e-461f-bf98-a65de5a460ef",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "receipt": {
+   "game_id": "studio_spell_finger_of_death_baseline",
+   "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+   "audience_id": "06d82a37-c3c5-4e4f-b005-8796cc0f9ac0",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_finger_of_death_baseline",
+    "game_epoch": "9210ae99-0a35-4ef9-8427-a4d1ed1eed0f",
+    "audience_id": "06d82a37-c3c5-4e4f-b005-8796cc0f9ac0",
+    "sequence": 8
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster"
+ }
+]

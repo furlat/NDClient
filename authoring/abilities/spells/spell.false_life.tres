@@ -41,7 +41,7 @@ script = ExtResource("3_1ag3d")
 clip = "spells/false_life/back/lifecycle"
 role = "attached"
 at = "release"
-attachment = "recipient_ground"
+attachment = "caster_ground"
 scale = 0.5
 orientation = "world"
 source_end = 2.0
@@ -188,14 +188,16 @@ status = "partial"
 script = ExtResource("8_g1aqk")
 id = "spell.false_life"
 icon = SubResource("Resource_p0xuf")
+native_staging = true
 delivery = "self"
+effect_scope = "single"
 body = SubResource("Resource_0upp6")
 hand_layers = Array[ExtResource("4_q72kt")]([SubResource("Resource_sn8bf"), SubResource("Resource_r5ylv")])
 sockets = "measured/abilities/spells/spell.false_life.sockets.json"
 effects = Array[ExtResource("3_1ag3d")]([SubResource("Resource_umdvo"), SubResource("Resource_8p783")])
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(1)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -225,3 +227,5 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+
+notes = "The existing finite application artwork is enabled for review on the actual accepted self cast. Its separately timed legacy sustain cue is excluded rather than claiming a temporary-HP lifetime from a review timer. Actual HP/grant outcomes remain authoritative. All artwork remains unreviewed."

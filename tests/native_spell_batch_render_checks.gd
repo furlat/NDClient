@@ -1,6 +1,14 @@
 extends "res://tests/native_spell_playback_checks.gd"
 ## Whole imported batch through the real Studio restore and production renderer.
+const Effects=preload("res://presentation/effect_package.gd")
+const Library=preload("res://studio/case_library.gd")
 const Recording=preload("res://studio/recording.gd")
+const BASELINES=["acid_splash","chill_touch","eldritch_blast","fire_bolt","fireball","guiding_bolt","ice_knife","magic_missile","poison_spray","produce_flame","ray_of_frost","scorching_ray","sleep","web","bane","command","mage_armor","sanctuary","shield","shocking_grasp","burning_hands","thunderwave","cure_wounds","healing_word","guidance","resistance","light","thaumaturgy","shield_of_faith","true_strike","aid","bless","false_life","sacred_flame"]
+## These old independent controls have no current native16 original. Keeping
+## them explicit prevents supported baselines from claiming the old whole gate.
+const HISTORICAL_CONTROLS=["native-spell-shield-ranged","native-spell-shield-walk"]
+var missing_originals:Array=[]
+var selected_cases:Array=[]
 var results:Array=[]
 var sample_fraction:float=.5
 func _initialize()->void:
@@ -9,15 +17,27 @@ func _initialize()->void:
 func run()->void:
     DirAccess.make_dir_recursive_absolute("res://.captures/native-spell-batch")
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-    var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_spell_case_inventory.json"))
+    var records:Array=Library.read()
     var only:String=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--only="):only=argument.trim_prefix("--only=")
         if argument.begins_with("--sample-fraction="):sample_fraction=float(argument.trim_prefix("--sample-fraction="))
-    for item in inventory.cases:
-        if not only.is_empty() and item.spell_id not in only.split(","):continue
-        if not item.get("failures",[]).is_empty() or not item.get("native_effects_authored",true):continue
-        await inspect_spell(item)
+    for short_id in BASELINES:
+        var id:String="spell."+short_id
+        if not only.is_empty() and short_id not in only.split(",") and id not in only.split(","):continue
+        var matches:Array=records.filter(func(record):return record.id==id+"/baseline")
+        check(matches.size()==1,id+": exact current baseline is present in the one Library")
+        if matches.size()!=1:missing_originals.append(id+"/baseline");continue
+        var original:Dictionary=matches[0]
+        check(original.ready and original.perspectives.size()==2,id+": both independent original seats remain available")
+        if not original.ready:missing_originals.append(original.id);continue
+        var item:Dictionary=original.duplicate();item.spell_id=id
+        selected_cases.append(item.id);await inspect_spell(item)
+    if only.is_empty() or "shield" in only.split(",") or "spell.shield" in only.split(","):
+        for control in HISTORICAL_CONTROLS:
+            missing_originals.append(control)
+            check(false,control+": exact current native16 ranged/OA reaction-and-walk original is missing; baseline interception cannot replace it")
+    check(not selected_cases.is_empty(),"Every requested supported subset includes an actual current original")
     finish()
 func inspect_spell(item:Dictionary)->void:
     var index=Recording.read(item.perspectives[0].journal)
@@ -97,6 +117,9 @@ func representative_time(row:Dictionary)->float:
                 at=minf(at,row.start_ms+seconds*500.0)
     return at
 func finish()->void:
-    var report={"checks":checks,"failures":failures,"renderer":RenderingServer.get_current_rendering_method(),"cases":results}
+    var report={"checks":checks,"failures":failures,"renderer":RenderingServer.get_current_rendering_method(),"cases":results,
+        "factory_version":JSON.parse_string(FileAccess.get_file_as_string(Effects.INDEX)).version,
+        "selected_current_cases":selected_cases,"missing_original_controls":missing_originals,
+        "scope":"Current original baseline cohort through ordinary Studio restore/Play, representative phase samples, native scene pixels, reverse seek and source retirement. Historical ranged/OA Shield originals remain explicit missing controls; supported subset output is not the complete historical gate, all-spell safety or art acceptance."}
     FileAccess.open("res://generated/native_spell_batch_render_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
-    print("BATCH_RENDER ",checks," / ",failures.size());quit(0 if failures.is_empty() else 1)
+    print("BATCH_RENDER ",JSON.stringify({"checks":checks,"failures":failures,"missing_original_controls":missing_originals}));quit(0 if failures.is_empty() else 1)

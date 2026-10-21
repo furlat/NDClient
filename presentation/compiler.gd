@@ -147,6 +147,65 @@ static func _spell_sources(behavior: String, graph: Dictionary, cache: Dictionar
             graph.spell_sources[behavior].recipe=Components.NativeSpells.recipe({"behavior_id":behavior},cache)
     return graph.spell_sources[behavior]
 
+## Cancellation retains only the authored incoming preparation. Its original
+## body owner ends at the actual reaction contact; no canceled delivery or
+## destination phase is scheduled. The finite contact keeps that exact pose.
+static func _interrupted_preparations(lineage:Dictionary,state:Dictionary,group:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    graph.interrupted_presentations={}
+    var config:Dictionary=Authoring.load_data("catalog/rig.json",cache)
+    var bindings:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)
+    for node in lineage.events:
+        if node.get("fact")==null or node.fact.get("kind")!="action" or node.fact.get("reaction")==null:continue
+        var cues:Array=bindings.get(str(node.fact.get("behavior_id","")),{}).get("effect_cues",[]).filter(func(cue):return not cue.get("incoming_track",{}).is_empty() \
+            and cue.get("constructor_input",{}).get("kind")=="reaction_observation" \
+            and cue.constructor_input.get("succeeded")==node.fact.reaction.succeeded)
+        if cues.size()!=1:continue
+        var program:Dictionary=cues[0].incoming_track
+        var observed:Dictionary=Components.ReactionInputs.observe(node,graph)
+        if not observed.ready or observed.triggered.fact.get("kind")!="spell":continue
+        var incoming:Dictionary=observed.triggered
+        var fact:Dictionary=Occurrences.spell(incoming,graph)
+        var actor:Dictionary=_actor(state,group,fact.source_entity_uuid,incoming,graph)
+        if actor.is_empty():continue
+        var at:float=float(graph.times.get(str(node.id),0.0))
+        var tracks:Array=group.actor_tracks.filter(func(track):return str(track.source_event_uuid)==str(incoming.id) and track.actor_uuid==fact.source_entity_uuid)
+        var track:Dictionary={}
+        if incoming.canceled:
+            var recipe:Dictionary=_spell_sources(str(fact.behavior_id),graph,cache).recipe
+            track=_cast_track(group,incoming,actor,recipe,str(fact.behavior_id),0.0,SpellDelivery.aim_position(fact,graph),graph,cache,at)
+            if track.is_empty():continue
+            var rate:float=float(recipe.cast.get("bodyPlaybackSpeed",1.0))*Authoring.playback_rate(actor,cache)
+            track.duration_ms=maxf(0.0,at-float(track.start_ms))
+            track.source_end_seconds=float(track.source_start_seconds)+track.duration_ms*rate/1000.0
+            if track.duration_ms<=0.0:
+                group.actor_tracks.erase(track);continue
+            track.interrupted_preparation=true
+            for skipped in group.skipped:
+                if str(skipped.get("occurrence",""))==str(incoming.lineage_id) and skipped.get("reason")=="canceled_body":
+                    skipped.reason="canceled_delivery_preparation_retained"
+        elif tracks.size()==1:track=tracks[0]
+        if track.is_empty() or at<float(track.start_ms) or at>float(track.start_ms)+float(track.duration_ms):continue
+        var held:Dictionary=track.duplicate(false);held.holding_pose=true
+        var sample:Dictionary=Tracks.samples([held],at).get(str(actor.uuid),{})
+        if sample.is_empty():continue
+        if incoming.canceled:
+            var clip:Dictionary=Authoring.clip(actor,str(track.clip),cache)
+            if clip.is_empty():continue
+            var last_frame:int=clampi(ceili(float(track.source_end_seconds)*float(clip.fps))-1,0,int(clip.frames)-1)
+            var source_seconds:float=maxf(float(track.source_start_seconds),float(last_frame)/float(clip.fps))
+            if source_seconds>=float(track.source_end_seconds):continue
+            sample.source_seconds=source_seconds
+        var resolved:Dictionary=Authoring.Characters.resolve(actor,{"items":graph.item_inputs.get(str(incoming.id),{}),"senses":state.senses,"audience":state.audience},cache)
+        if not resolved.ok or resolved.value==null:continue
+        var row:Dictionary=resolved.value.duplicate(false)
+        row.position=track.from_position;row.base_height_steps=float(track.get("from_elevation_feet",0.0))/5.0
+        var target:Variant=track.get("target_position")
+        if target!=null and target!=track.from_position:row.facing=Conditions.ConditionPose.Placement.facing(Vector2(target[0]-track.from_position[0],target[1]-track.from_position[1]),config.FACING_CYCLE)
+        graph.interrupted_presentations[str(node.id)]={"presentation_uuid":str(track.trace_track_id),"source_owner_uuid":str(incoming.id),
+            "triggered_event_uuid":str(observed.observation.triggered_event_uuid),"triggered_lineage_uuid":str(incoming.lineage_id),
+            "source_seconds":float(sample.source_seconds),"row":row,"source_track":track,"sample":sample,
+            "actor":actor,"captured_local_ms":at,"socket":str(program.socket)}
+
 ## One immutable choice per actual application. Rendering and Studio borrow it
 ## together, including the exact disclosed save evidence or its named gap.
 static func _spell_choice(node:Dictionary,fact:Dictionary,graph:Dictionary,cache:Dictionary,has_applications:bool)->Dictionary:
@@ -164,6 +223,72 @@ static func _children(node: Dictionary, graph: Dictionary) -> Array:
     for identity in node.children_lineages:
         if graph.nodes.has(identity): rows.append(graph.nodes[identity])
     return rows
+
+## An authored optical avoidance follows this exact mechanism's successful
+## save. It does not create movement, displacement or another native action.
+static func _mechanism_avoidance(node:Dictionary,start:float,state:Dictionary,group:Dictionary,graph:Dictionary,cache:Dictionary)->float:
+    var fact:Dictionary=node.fact
+    if node.canceled or node.phase!="completion" or not fact.get("succeeded",false):return start
+    var parent:Variant=node.get("parent_lineage")
+    var source:Dictionary={}
+    while parent!=null:
+        var candidate:Dictionary=graph.nodes.get(str(parent),{})
+        if candidate.is_empty() or candidate.get("canceled",false):return start
+        var owner:Variant=candidate.get("fact")
+        if owner!=null:
+            if owner.get("kind")=="mechanism_activation":source=candidate;break
+            if owner.get("kind") in ["spell","attack","action","movement"]:return start
+        parent=candidate.get("parent_lineage")
+    if source.is_empty() or source.phase!="completion" or not source.fact.get("committed",false):return start
+    var program:Dictionary=Components.world_program(str(source.fact.mechanism_content_id),cache)
+    var avoidance:Dictionary=program.get("successful_save_hop",{})
+    if avoidance.is_empty() or fact.get("effect_id")!=avoidance.get("effect_id"):return start
+    var duration:float=float(avoidance.get("duration_ms",0.0))
+    var point:Dictionary=graph.get("world_inputs",{}).get(str(node.id),{})
+    if duration<=0.0 or not point.has("position") or not point.has("elevation_feet"):return start
+    var actor:Dictionary=_actor(state,group,fact.target_entity_uuid,node,graph)
+    var clip_name:String=str(avoidance.get("body_clip",""))
+    var clip:Dictionary=Authoring.clip(actor,clip_name,cache)
+    if clip.is_empty():
+        group.skipped.append({"occurrence":node.lineage_id,"kind":fact.kind,
+            "reason":"mechanism_avoidance_clip_not_on_actual_body","clip":clip_name,"actor_uuid":fact.target_entity_uuid})
+        return start
+    var natural:float=float(clip.frames)*1000.0/float(clip.fps)
+    var track:Dictionary=_track(group,node,actor,clip_name,start,natural/duration,25,cache,graph)
+    if track.is_empty():return start
+    track.merge({"from_position":point.position,"to_position":point.position,
+        "from_elevation_feet":point.elevation_feet,"to_elevation_feet":point.elevation_feet,
+        "trajectory":"direct_arc","arc_height_px":float(avoidance.get("height_px",0.0)),
+        "motion_fraction_from":0.0,"motion_fraction_to":1.0,"activity":"act",
+        "mechanism_avoidance":true,"source":str(program.get("source",""))+"/successful_save_hop"},true)
+    return start+duration
+
+## Portal movement holds the actual disclosed body pose. Only its visual
+## height changes; there is no extra StepFact or inferred world destination.
+static func _portal_body(node:Dictionary,actor:Dictionary,point:Dictionary,start:float,duration:float,
+        keys:Array,group:Dictionary,graph:Dictionary,cache:Dictionary)->Dictionary:
+    if actor.is_empty() or not point.has("position") or not point.has("elevation_feet") or duration<=0.0:return {}
+    var rig_id:String=Authoring.rig_id(actor,cache)
+    var rig:Dictionary=Authoring.rigs(cache).get(rig_id,{})
+    if rig.is_empty():return {}
+    var rest:Dictionary=Authoring.Characters.rest_sample(actor,rig,cache)
+    if not rest.ok:return {}
+    var pose:Dictionary=rest.value
+    var eligible:Array=[]
+    for candidate in group.actor_tracks:
+        if candidate.actor_uuid!=actor.uuid or candidate.get("rig")!=rig_id or float(candidate.start_ms)>start:continue
+        if candidate.get("portal_transfer_phase")=="entry":continue
+        if candidate.get("presentation_actor",{}).get("life_state")!=actor.get("life_state"):continue
+        eligible.append(candidate)
+    var sampled:Dictionary=Tracks.samples(eligible,start).get(actor.uuid,{})
+    if not sampled.is_empty():pose={"clip":sampled.clip,"source_seconds":sampled.source_seconds}
+    var track:Dictionary=_track(group,node,actor,str(pose.clip),start,1.0,26,cache,graph)
+    if track.is_empty():return {}
+    track.merge({"duration_ms":duration,"source_start_seconds":float(pose.source_seconds),"source_end_seconds":float(pose.source_seconds),
+        "holding_pose":false,"from_position":point.position,"to_position":point.position,
+        "from_elevation_feet":point.elevation_feet,"to_elevation_feet":point.elevation_feet,
+        "lift_pixels_keys":keys,"activity":"act","source":"canonical_portal_transfer"},true)
+    return track
 
 static func _schedule(node: Dictionary, start: float, state: Dictionary, group: Dictionary,
         graph: Dictionary, cache: Dictionary, jump: Dictionary = {}) -> float:
@@ -388,6 +513,16 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             if child.get("fact")!=null and child.fact.kind=="spell" and Occurrences.application(child):has_applications=true
         var sources:Dictionary=_spell_choice(node,fact,graph,cache,has_applications)
         var recipe: Dictionary = sources.recipe
+        # The selected resource decides whether an actually admitted result
+        # owns this occurrence without an additional casting body gesture.
+        var body_cues:Array=[] if sources.selection.is_empty() else Components.NativeSpells.event_cues(sources.selection)
+        for cue in body_cues:
+            if not cue.get("replaces_cast_body",false):continue
+            var descriptor:Dictionary=cue.get("constructor_input",{})
+            if descriptor.get("kind")!="observed_event":continue
+            if Components.ApplicationResults.observed(node,descriptor,graph).is_empty():continue
+            recipe=recipe.duplicate();recipe.cast={"enabled":false}
+            break
         graph.recipes[node.id]=recipe
         var cast: Dictionary=recipe.get("cast",{})
         var selected:Dictionary=sources.selection
@@ -408,7 +543,23 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         var shared_area:bool=not selected_delivery.is_empty() and selected_delivery.get("delivery",{}).get("scope")=="area"
         if not selected_delivery.is_empty():
             if SpellDelivery.owns_delivery(node,graph,selected_delivery,has_applications):
-                var points=SpellDelivery.endpoints(fact,graph,state,selected_delivery)
+                var release:Dictionary={}
+                var release_descriptor:Dictionary=Components.CreationInputs.release_descriptor(selected_delivery)
+                var placement_fact:Dictionary=fact
+                if not release_descriptor.is_empty():
+                    release=Components.CreationInputs.payload_release(node,release_descriptor,graph,group.commits)
+                    if release.get("ready",false):
+                        placement_fact=fact.duplicate();placement_fact.target_position=release.position
+                    elif not release.get("applies",false):
+                        selected_delivery=selected_delivery.duplicate();selected_delivery.staging=selected_delivery.staging.duplicate()
+                        selected_delivery.staging.cues=selected_delivery.staging.cues.filter(func(cue):return cue.get("constructor_input",{}).get("kind")!="payload_release")
+                    else:
+                        selected_delivery=selected_delivery.duplicate();selected_delivery.staging=selected_delivery.staging.duplicate()
+                        selected_delivery.staging.cues=selected_delivery.staging.cues.map(func(original):
+                            if original.get("constructor_input",{}).get("kind")!="payload_release":return original
+                            var unavailable:Dictionary=original.duplicate();unavailable.unbound_constructor_inputs=["accepted_release"];return unavailable)
+                var points=SpellDelivery.endpoints(placement_fact,graph,state,selected_delivery)
+                if not points.is_empty() and release.has("elevation_feet"):points.to_elevation_feet=release.elevation_feet
                 if not points.is_empty():
                     var propagation:Dictionary=Components.PropagationInputs.descriptor(selected_delivery)
                     if application and not propagation.is_empty():
@@ -419,7 +570,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                             contact=maxf(contact,float(graph.propagation_contacts[predecessor.id]))
                     elif application:contact+=float(Occurrences.application_index(node,graph))*recipe.get("projectile",{}).get("missileStaggerMs",0)
                     var travel=SpellDelivery.travel_ms(selected_delivery,recipe,points,cache)
-                    Components.native_spell(group,node,recipe,selected_delivery,contact,travel,points,cache,owner,fact,Occurrences.application_index(node,graph),graph)
+                    Components.native_spell(group,node,recipe,selected_delivery,contact,travel,points,cache,owner,fact,Occurrences.application_index(node,graph),graph,release)
                     contact+=travel
                     if application and not propagation.is_empty():
                         if not graph.has("propagation_contacts"):graph.propagation_contacts={}
@@ -442,6 +593,63 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         for child in children: finish=maxf(finish,_schedule(child,owner.start if has_applications and not shared_area else contact,state,group,graph,cache))
         finish=maxf(finish,contact)
         effect_commit=contact
+    elif kind == "portal_transfer" and not node.canceled and node.phase=="completion" and fact.get("committed",false):
+        var program:Dictionary=Components.world_portal_program(node,graph,cache)
+        var timing:Dictionary=Components.world_portal_timing(node,graph,cache)
+        var before:Dictionary=graph.get("portal_inputs",{}).get(str(node.id),{})
+        var after:Dictionary=graph.get("result_contacts",{}).get(str(node.id),{})
+        var tracks:Array=[]
+        var entry_ms:float=float(timing.get("entry_ms",0.0))
+        var depth:float=float(program.get("fall_depth_px",0.0))
+        if entry_ms>0.0 and before.get("position")==fact.get("start_position"):
+            var wait:float=float(program.get("fall_delay_ms",0.0))/entry_ms
+            var fall:float=(float(program.get("fall_delay_ms",0.0))+float(program.get("fall_ms",0.0)))/entry_ms
+            var keys:Array=[[0.0,0.0]]
+            if wait>0.0:keys.append([wait,0.0])
+            keys.append([fall,-depth])
+            if fall<1.0:keys.append([1.0,-depth])
+            var entering:Dictionary=_portal_body(node,before.get("actor",{}),before,start,entry_ms,
+                keys,group,graph,cache)
+            if not entering.is_empty():
+                entering.portal_transfer_phase="entry"
+                entering.aperture=program.get("entrance_aperture",{}).merged({"source_scale":float(program.get("scale",1.0))})
+                entering.visible_until_ms=float(program.get("fall_delay_ms",0.0))+float(program.get("fall_ms",0.0))
+                tracks.append(entering)
+        var contact:float=start+entry_ms if not tracks.is_empty() else start
+        var emerge:float=float(program.get("emerge_ms",0.0))
+        if fact.get("end_position")!=null and after.get("position")==fact.end_position:
+            var point:Dictionary={"position":after.position,"elevation_feet":float(after.elevation_steps)*5.0}
+            var exiting:Dictionary=_portal_body(node,before.get("after_actor",{}),point,contact,emerge,
+                [[0.0,-depth],[1.0,0.0]],group,graph,cache)
+            if not exiting.is_empty():
+                exiting.portal_transfer_phase="exit"
+                exiting.aperture=program.get("exit_aperture",{}).merged({"source_scale":float(program.get("scale",1.0))})
+                tracks.append(exiting)
+        if not after.is_empty():
+            graph.positions[fact.target_entity_uuid]=after.position
+            graph.contacts[fact.target_entity_uuid]={"from_elevation_feet":float(after.elevation_steps)*5.0,"to_elevation_feet":float(after.elevation_steps)*5.0}
+        if not tracks.is_empty():
+            if not graph.has("portal_tracks"):graph.portal_tracks={}
+            graph.portal_tracks[str(node.id)]={"tracks":tracks,"commit_ms":contact}
+        finish=contact+(emerge if tracks.any(func(track):return track.portal_transfer_phase=="exit") else 0.0)
+        for child in children:finish=maxf(finish,_schedule(child,contact,state,group,graph,cache))
+        effect_commit=contact
+    elif kind == "mechanism_activation" and not node.canceled and node.phase=="completion" and fact.get("committed",false):
+        var observed:Dictionary=graph.get("world_inputs",{}).get(str(node.id),{})
+        var timing:Dictionary=Components.world_activation_timing(fact,cache,observed)
+        var program:Dictionary=Components.world_program(str(fact.mechanism_content_id),cache)
+        if program.get("requires_object_anchor",true):
+            if fact.get("origin_position")==null or not observed.has("elevation_feet"):timing={}
+        elif observed.get("affected_elevations_feet",{}).is_empty():timing={}
+        if not program.get("projectile",{}).is_empty() and not observed.has("end_elevation_feet"):timing={}
+        var contact:float=start+float(timing.get("contact_ms",0.0))
+        finish=start+float(timing.get("duration_ms",0.0))
+        for child in children:finish=maxf(finish,_schedule(child,contact,state,group,graph,cache))
+        effect_commit=contact
+    elif kind == "saving_throw" and not node.canceled:
+        finish=_mechanism_avoidance(node,start,state,group,graph,cache)
+        for child in children:finish=maxf(finish,_schedule(child,start,state,group,graph,cache))
+        effect_commit=start
     elif kind == "damage" and fact.stage == "applied" and not node.canceled:
         var actor = _actor(state,group,fact.target_entity_uuid,node,graph)
         var timing=DamageTiming.resolve(node,graph,actor,start,cache)
@@ -487,7 +695,8 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
     # not their recovery animations. The source-order commit pass below must
     # not make one missile's TakeDamage recovery delay the next missile's HP.
     if is_finite(effect_commit):
-        for child in children:effect_commit=maxf(effect_commit,graph.times.get(child.id,start))
+        if kind!="portal_transfer":
+            for child in children:effect_commit=maxf(effect_commit,graph.times.get(child.id,start))
     else:effect_commit=finish
     # HP/life after-values are exposed at their effect contact, not recovery end.
     graph.times[node.id] = equipment_commit if kind in ["equipment","actor_change"] else (graph.damage_timings[node.id].hp if graph.damage_timings.has(node.id) else (start if kind in ["damage","life","actor_change"] else effect_commit))
@@ -512,7 +721,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
     var owners: Dictionary = {}; var areas: Dictionary = {}
     var item_owners:Dictionary={}
     var item_state:Dictionary={"actors":before.actors.duplicate(),"items":before.items.duplicate(),"objects":before.objects.duplicate(),
-        "object_members":before.get("object_members",{}),"senses":before.senses,"audience":before.audience}
+        "object_members":before.get("object_members",{}),"senses":before.senses,"audience":before.audience,"tiles":before.tiles.duplicate()}
     NativeItems.observe(item_owners,item_state,0.0,cache)
     Conditions.observe(owners,before.actors,0.0,true)
     var condition_inputs:Dictionary={}
@@ -520,7 +729,7 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
         condition_inputs[id]=[before.actors[id].get("conditions",[]),before.actors[id].get("life_state","alive")]
     var spatial_inputs:Dictionary={} if before.senses==null else before.senses.get("spatial_effects",{})
     if before.senses!=null:
-        Conditions.NativePersistent.observe_spatial(areas,before.senses.get("spatial_effects",{}),0.0,true)
+        Conditions.NativePersistent.observe_spatial(areas,before.senses.get("spatial_effects",{}),0.0,true,[],item_state.tiles)
     var start = 0.0
     for group in groups:
         group.native_requirements = []
@@ -528,7 +737,10 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
         _native_requirement_cut(group,previous,owners,areas,start,0.0,cache,item_owners,item_state)
         var sampled_at:float=start
         for commit in group.get("commits",[]):
+            _interrupted_draw_cut(group,commit,owners,item_state,start,cache)
             var delta: Dictionary = commit.delta
+            item_state.tiles.merge(delta.get("tiles",{}),true)
+            for cell in delta.get("tiles_removed",[]):item_state.tiles.erase(cell)
             if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses") and delta.get("items",{}).is_empty() and delta.get("objects",{}).is_empty() and delta.get("objects_removed",[]).is_empty() and not delta.get("set",{}).has("object_members") and commit.get("spatial_rows",[]).is_empty(): continue
             var at: float = start+commit.at_ms
             for field in ["actors","items","objects"]:item_state[field].merge(delta.get(field,{}),true)
@@ -543,10 +755,10 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
                 var selected:Array=[actor.get("conditions",[]),actor.get("life_state","alive")]
                 changed=changed or condition_inputs.get(id,[])!=selected
                 condition_inputs[id]=selected
-            changed=Conditions.observe(owners,delta.get("actors",{}),at,false,commit.get("condition_rows",[])) or changed
+            changed=Conditions.observe(owners,delta.get("actors",{}),at,false,commit.get("condition_rows",[]),{},commit.get("creation_bindings",{})) or changed
             if delta.get("set",{}).has("senses") or not commit.get("spatial_rows",[]).is_empty():
                 var spatial:Dictionary=item_state.senses.get("spatial_effects",{}) if item_state.senses!=null else {}
-                changed=Conditions.NativePersistent.observe_spatial(areas,spatial,at,false,commit.get("spatial_rows",[])) or changed
+                changed=Conditions.NativePersistent.observe_spatial(areas,spatial,at,false,commit.get("spatial_rows",[]),item_state.tiles) or changed
                 spatial_inputs=spatial
             # Several HP/position after-values can share one effect contact.
             # They change no persistent constructor operand. Keep all distinct
@@ -555,6 +767,39 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
             _native_requirement_cut(group,previous,owners,areas,at,commit.at_ms,cache,item_owners,item_state)
             sampled_at=at
         start += float(group.duration_ms)
+
+## Reuse this canonical owner walk for the actual pre-cancellation outfit,
+## body treatment and pose. No current idle actor supplies a prior hand.
+static func _interrupted_draw_cut(group:Dictionary,commit:Dictionary,owners:Dictionary,state:Dictionary,start:float,cache:Dictionary)->void:
+    for component in group.get("components",[]):
+        if not component.has("native_counterspell") or str(component.source_event_uuid)!=str(commit.get("event_uuid","")):continue
+        var capture:Dictionary=component.native_counterspell
+        var id:String=str(capture.actor.uuid)
+        var actor:Dictionary=state.actors.get(id,{})
+        if actor.is_empty():continue
+        var at:float=start+float(commit.at_ms)
+        var samples:Array=Conditions.samples(owners.duplicate(true),at,cache)
+        for row in group.components:
+            if row.kind not in ["sprite_layer","material_flash","body_surface"] or float(row.start_ms)>float(commit.at_ms) or float(row.start_ms)+float(row.duration_ms)<=float(commit.at_ms):continue
+            samples.append(row.merged({"age_ms":float(commit.at_ms)-float(row.start_ms)}))
+        samples.append_array(Appearance.components(owners,at,cache))
+        actor=ActorConstruction.actor_with_loadout(actor,ActorConstruction.loadouts({id:capture.sample},samples))
+        var resolved:Dictionary=Authoring.Characters.resolve(actor,state,cache)
+        if not resolved.ok or resolved.value==null:continue
+        var row:Dictionary=resolved.value.duplicate(false)
+        row.position=capture.source_track.from_position;row.base_height_steps=float(capture.source_track.get("from_elevation_feet",0.0))/5.0
+        row.facing=capture.row.facing
+        var rig:Dictionary=Authoring.Characters.rigs(cache).get(row.rig,{})
+        var rest:Dictionary=Authoring.Characters.rest_sample(actor,rig,cache)
+        if not rest.ok:continue
+        var pose:Dictionary=Conditions.pose(actor,row.rig,cache,owners)
+        var pose_age:float=at-float(owners.get(pose.get("condition_uuid",""),{}).get("start_ms",at))
+        var actual:Dictionary=Conditions.ConditionPose.capture_sample(rest.value,actor.life_state,rig,pose,capture.sample,at,pose_age,row.facing)
+        var material:Dictionary=Conditions.material(id,samples)
+        capture.row=row;capture.clip=actual.clip;capture.frame=actual.frame;capture.world_facing=actual.world_facing
+        capture.source_seconds=actual.source_seconds;capture.body_scale=material.body_scale.factor
+        capture.present=WorldRows.visible_actor(actor,state) and float(material.alpha)>0.0
+        capture.capture_cut="canonical_pre_reaction_commit";capture.source_material=material
 
 static func _native_requirement_cut(group: Dictionary, previous: Dictionary, owners: Dictionary,
         areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary,item_owners:Dictionary={},item_state:Dictionary={}) -> void:
@@ -775,12 +1020,14 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 if not target.tiles.has(key) and not group.staged_tiles.has(key):group.staged_tiles[key]=captured.delta.tiles[key]
         var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"item_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{},"spell_sources":{},"spell_choices":{},"spell_facts":{},"application_indices":{},"condition_cues":{}}
         graph.body_records=lineage.get("bodies",[])
+        graph.contact_inputs={}
+        graph.condition_response_inputs={}
         # Retain only authoritative blood receiving cells needed to reveal a
         # later residue increment. No future tile or full-map snapshot is made.
         graph.initial_tiles={}
         for event in lineage.events:
             var release: Variant=event.get("fact",{}).get("body_release") if event.get("fact")!=null else null
-            if release==null or release.get("release_id")!="body.blood":continue
+            if release==null or Components.Blood.binding(release,cache).is_empty():continue
             for region in release.get("regions",[]):
                 for point in region.positions:
                     var key=Reducer.Audience.point_key(point)
@@ -794,7 +1041,14 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         graph.version_index=EventTrace._version_index(lineage.version_rows)
         graph.first=graph.version_index.first
         var cursors:Dictionary=graph.version_index.events
-        for node in lineage.events:graph.nodes[node.lineage_id]=node
+        for node in lineage.events:
+            graph.nodes[node.lineage_id]=node
+            # A sensory child can remove the public object before the native
+            # object_removed parent row. Preserve only this exact disclosed
+            # pre-lineage object; the later lifetime/explosion ancestry owns
+            # retirement admission, rather than object disappearance alone.
+            if node.get("fact")!=null and node.fact.kind=="spatial" and node.fact.get("change_type")=="object_removed":
+                graph.object_inputs[str(node.id)]=target.objects.get(node.fact.get("object_uuid"),{})
         var applications:Dictionary={}
         graph.item_rows={}
         graph.operation_sheets=operation_sheets
@@ -807,12 +1061,138 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             if not applications.has(owner):applications[owner]=[]
             if identity not in applications[owner]:applications[owner].append(identity)
             graph.application_indices[identity]=applications[owner].find(identity)
+        # A one-shot field can publicly retire before emitting its damage.
+        # Retain only exact already-disclosed sources named by actual results,
+        # and admit that cut only after its real same-lineage removal is seen.
+        var contact_sources:Dictionary={}
+        var contact_source_ids:Dictionary={}
+        var contact_retirements:Dictionary={}
+        if target.senses!=null:
+            var spatial:Dictionary=target.senses.get("spatial_effects",{})
+            for candidate in lineage.events:
+                var result:Variant=candidate.get("fact")
+                if result==null or result.get("kind")!="damage" or result.get("stage")!="applied" or result.get("source_condition_uuid")==null:continue
+                var identity:String=str(result.source_condition_uuid)
+                contact_source_ids[identity]=true
+                if spatial.has(identity):contact_sources[identity]=spatial[identity]
         for event_index in lineage.events.size():
             var node: Dictionary = lineage.events[event_index]
             var captured: Dictionary = recorded.events[event_index]
             graph.actor_inputs[node.id]=_spell_actor_inputs(node,captured.actor_inputs,target,graph)
             graph.item_inputs[node.id]=captured.item_inputs
+            var observed_fact:Variant=node.get("fact")
+            if observed_fact!=null and observed_fact.get("kind")=="spatial" \
+                and observed_fact.get("terminal_departure",false) and observed_fact.get("terminal_cause")!=null \
+                and observed_fact.get("position")!=null:
+                var key:String=Reducer.Audience.point_key(observed_fact.position)
+                var support:Dictionary=target.tiles.get(key,captured.delta.get("tiles",{}).get(key,{}))
+                if support.has("elevation_steps"):
+                    if not graph.has("terminal_inputs"):graph.terminal_inputs={}
+                    graph.terminal_inputs[str(node.id)]={"source_index":captured.source_index,
+                        "elevation_feet":float(support.elevation_steps)*5.0}
+            if observed_fact!=null and observed_fact.get("kind") in ["mechanism_activation","saving_throw"]:
+                var point:Dictionary={"source_index":captured.source_index}
+                var position:Variant=observed_fact.get("origin_position")
+                if observed_fact.kind=="saving_throw":
+                    position=captured.actor_inputs.get(str(observed_fact.target_entity_uuid),{}).get("last_visual_position")
+                if position!=null:
+                    var key:String=Reducer.Audience.point_key(position)
+                    var support:Dictionary=captured.delta.get("tiles",{}).get(key,target.tiles.get(key,{}))
+                    if support.has("elevation_steps"):
+                        point.position=position;point.elevation_feet=float(support.elevation_steps)*5.0
+                if observed_fact.kind=="mechanism_activation":
+                    var end:Variant=observed_fact.get("end_position")
+                    if end!=null:
+                        var key:String=Reducer.Audience.point_key(end)
+                        var support:Dictionary=captured.delta.get("tiles",{}).get(key,target.tiles.get(key,{}))
+                        if support.has("elevation_steps"):point.end_elevation_feet=float(support.elevation_steps)*5.0
+                    point.affected_elevations_feet={}
+                    point.missing_support_positions=[]
+                    for cell in observed_fact.get("affected_positions",[]):
+                        var key:String=Reducer.Audience.point_key(cell)
+                        var support:Dictionary=captured.delta.get("tiles",{}).get(key,target.tiles.get(key,{}))
+                        if support.has("elevation_steps"):point.affected_elevations_feet[key]=float(support.elevation_steps)*5.0
+                        else:point.missing_support_positions.append(cell)
+                if not graph.has("world_inputs"):graph.world_inputs={}
+                graph.world_inputs[str(node.id)]=point
+            if observed_fact!=null and observed_fact.get("kind")=="portal_transfer":
+                var point:Dictionary={"source_index":captured.source_index}
+                var content_id:Variant=observed_fact.get("portal_content_id")
+                if content_id==null and observed_fact.get("portal_uuid")!=null and target.senses!=null:
+                    content_id=target.senses.get("spatial_effects",{}).get(str(observed_fact.portal_uuid),{}).get("content_ref",{}).get("content_id")
+                if content_id!=null:point.content_id=str(content_id)
+                var actor:Dictionary=captured.actor_inputs.get(str(observed_fact.target_entity_uuid),target.actors.get(str(observed_fact.target_entity_uuid),{}))
+                var position:Variant=observed_fact.get("start_position")
+                if position!=null and actor.get("last_visual_position")==position:
+                    var key:String=Reducer.Audience.point_key(position)
+                    var support:Dictionary=captured.delta.get("tiles",{}).get(key,target.tiles.get(key,{}))
+                    if support.has("elevation_steps"):
+                        point.merge({"position":position,"elevation_feet":float(support.elevation_steps)*5.0,"actor":actor})
+                var end:Variant=observed_fact.get("end_position")
+                if end!=null:
+                    var key:String=Reducer.Audience.point_key(end)
+                    var support:Dictionary=captured.delta.get("tiles",{}).get(key,target.tiles.get(key,{}))
+                    if support.has("elevation_steps"):point.end_elevation_feet=float(support.elevation_steps)*5.0
+                if not graph.has("portal_inputs"):graph.portal_inputs={}
+                graph.portal_inputs[str(node.id)]=point
+            if observed_fact!=null and observed_fact.get("kind")=="spatial_effect_state":
+                var identity:String=str(observed_fact.spatial_effect_uuid)
+                if observed_fact.get("operation")=="removed":
+                    contact_retirements[identity]=str(node.id)
+                    if contact_source_ids.has(identity) and target.senses!=null:
+                        var spatial:Dictionary=target.senses.get("spatial_effects",{})
+                        if spatial.has(identity):contact_sources[identity]=spatial[identity]
+                elif observed_fact.get("operation")=="created" and contact_source_ids.has(identity) and target.senses!=null:
+                    var spatial:Dictionary=target.senses.get("spatial_effects",{})
+                    if spatial.has(identity):contact_sources[identity]=spatial[identity]
+            if observed_fact!=null and (observed_fact.get("kind")=="heal" \
+                or observed_fact.get("kind")=="damage" and observed_fact.get("stage")=="applied") \
+                and observed_fact.get("source_condition_uuid")!=null and target.senses!=null:
+                var spatial:Dictionary=target.senses.get("spatial_effects",{})
+                var owner:String=str(observed_fact.source_condition_uuid)
+                if spatial.has(owner):
+                    if not graph.has("spatial_contact_inputs"):graph.spatial_contact_inputs={}
+                    graph.spatial_contact_inputs[str(node.id)]={"identity":owner,"effect":spatial[owner],"origin_cut":"canonical_before_result"}
+                elif observed_fact.get("kind")=="damage" and contact_sources.has(owner) and contact_retirements.has(owner):
+                    if not graph.has("spatial_contact_inputs"):graph.spatial_contact_inputs={}
+                    graph.spatial_contact_inputs[str(node.id)]={"identity":owner,"effect":contact_sources[owner],
+                        "origin_cut":"actual_disclosed_spatial_before_retirement","removal_occurrence":contact_retirements[owner]}
+            if observed_fact!=null and observed_fact.get("kind") in ["damage","heal","temporary_hit_points","actor_change"]:
+                var receivers:Dictionary={}
+                for identity in captured.actor_inputs:
+                    var actor:Dictionary=captured.actor_inputs[identity]
+                    var position:Variant=actor.get("last_visual_position")
+                    if position==null:continue
+                    var support:Dictionary=target.tiles.get(Reducer.Audience.point_key(position),{})
+                    if support.has("elevation_steps"):receivers[identity]={"position":position,"elevation_steps":support.elevation_steps}
+                graph.condition_response_inputs[node.id]=receivers
+            if observed_fact!=null and observed_fact.get("kind")=="damage" and observed_fact.get("stage")=="applied":
+                var recipient:Dictionary=captured.actor_inputs.get(str(observed_fact.get("target_entity_uuid","")),{})
+                var contact_position:Variant=recipient.get("last_visual_position")
+                if contact_position!=null:
+                    var support:Dictionary=target.tiles.get(Reducer.Audience.point_key(contact_position),{})
+                    if support.has("elevation_steps"):graph.contact_inputs[node.id]={"position":contact_position,"elevation_steps":support.elevation_steps}
             graph.item_rows[node.id]=captured.get("item_rows",[])
+            if observed_fact!=null and observed_fact.get("kind")=="actor_change":
+                for change in observed_fact.get("actors",[]):
+                    var actor:Dictionary=captured.actor_inputs.get(str(change.actor_uuid),{})
+                    for row in change.rows:
+                        if row.get("field")!="inventory" or row.held or actor.get("controlled_items")==null or str(row.item_uuid) not in actor.controlled_items:continue
+                        var item:Dictionary=target.items.get(str(row.item_uuid),{})
+                        if item.is_empty():continue
+                        if not graph.has("inventory_retirements"):graph.inventory_retirements={}
+                        if not graph.inventory_retirements.has(str(node.id)):graph.inventory_retirements[str(node.id)]=[]
+                        graph.inventory_retirements[str(node.id)].append({"item_uuid":str(row.item_uuid),"holder_uuid":str(change.actor_uuid),"item":item})
+            if observed_fact!=null and observed_fact.get("kind")=="spell" and observed_fact.get("aoe_position")!=null:
+                var support:Dictionary=target.tiles.get(Reducer.Audience.point_key(observed_fact.aoe_position),{})
+                if support.has("elevation_steps"):
+                    if not graph.has("area_contacts"):graph.area_contacts={}
+                    graph.area_contacts[str(node.id)]={"position":observed_fact.aoe_position,"elevation_steps":support.elevation_steps}
+            if observed_fact!=null and observed_fact.get("kind")=="action" and observed_fact.get("target_position")!=null:
+                var support:Dictionary=target.tiles.get(Reducer.Audience.point_key(observed_fact.target_position),{})
+                if support.has("elevation_steps"):
+                    if not graph.has("target_contacts"):graph.target_contacts={}
+                    graph.target_contacts[str(node.id)]={"position":observed_fact.target_position,"elevation_steps":support.elevation_steps}
             var cues:Array=[]
             for change in captured.get("condition_rows",[]):
                 if change.row.get("field")!="condition":continue
@@ -825,13 +1205,36 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             if node.fact!=null and node.fact.kind=="object_damage":
                 graph.object_inputs[node.id]=target.objects.get(node.fact.object_uuid,{})
             apply_delta(target,captured.delta)
+            if observed_fact!=null and observed_fact.get("kind")=="portal_transfer":
+                graph.portal_inputs[str(node.id)].after_actor=target.actors.get(str(observed_fact.target_entity_uuid),{})
+            if observed_fact!=null and (observed_fact.get("kind") in ["life","heal","portal_transfer"] \
+                or observed_fact.get("kind")=="damage" and observed_fact.get("stage")=="applied"):
+                var recipient:String=str(observed_fact.get("entity_uuid",observed_fact.get("target_entity_uuid","")))
+                var actor:Dictionary=target.actors.get(recipient,{})
+                var position:Variant=actor.get("last_visual_position")
+                if position!=null:
+                    var support:Dictionary=target.tiles.get(Reducer.Audience.point_key(position),{})
+                    if support.has("elevation_steps"):
+                        if not graph.has("result_contacts"):graph.result_contacts={}
+                        graph.result_contacts[str(node.id)]={"target_uuid":recipient,"position":position,"elevation_steps":support.elevation_steps,
+                            "source_index":captured.source_index}
+            if observed_fact!=null and observed_fact.get("kind")=="spatial_effect_state" and observed_fact.get("operation")=="created" and target.senses!=null:
+                var identity:String=str(observed_fact.spatial_effect_uuid)
+                var spatial:Dictionary=target.senses.get("spatial_effects",{})
+                if spatial.has(identity):
+                    if not graph.has("spatial_creation_inputs"):graph.spatial_creation_inputs={}
+                    graph.spatial_creation_inputs[str(node.id)]=spatial[identity]
+                if contact_source_ids.has(identity) and spatial.has(identity):contact_sources[identity]=spatial[identity]
             group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.id,
                 "delta":captured.delta,"condition_rows":captured.get("condition_rows",[]),"item_rows":captured.get("item_rows",[]),
                 "spatial_rows":Conditions.NativePersistent.SpatialInputs.observed_rows(node)})
         var trailing: Dictionary = recorded.trailing
         apply_delta(target,trailing)
         graph.observed_results=Components.ApplicationResults.observed_index(lineage.events,graph)
-        var creation_bindings:Dictionary=Components.CreationInputs.lifetime_bindings(lineage.events,graph,group.commits)
+        var creation_bindings:Dictionary=Components.CreationInputs.lifetime_bindings(lineage.events,graph,group.commits,cache)
+        var wall_contacts:Dictionary=Conditions.NativePersistent.SpatialInputs.wall_contact_rows(lineage.events,graph,Authoring.load_data("catalog/condition_recipes.json",cache))
+        for commit in group.commits:
+            if wall_contacts.has(str(commit.get("event_uuid",""))):commit.spatial_rows.append_array(wall_contacts[str(commit.event_uuid)])
         for commit in group.commits:
             if creation_bindings.has(str(commit.get("event_uuid",""))):commit.creation_bindings=creation_bindings[str(commit.event_uuid)]
         if profile_enabled:stage_started=_profile_phase(compile_phases,"lineage_inputs",stage_started)
@@ -840,11 +1243,27 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             if not graph.visited.has(node.lineage_id):
                 group.duration_ms = maxf(group.duration_ms,_schedule(node,0.0,target,group,graph,cache))
         var at = 0.0
+        var commit_clocks:Dictionary={}
+        graph.committed_at={}
         for commit in group.commits:
             at = maxf(at,graph.times.get(commit.event_uuid,at))
             commit.at_ms = at
+            graph.committed_at[str(commit.event_uuid)]=at
+            var portal:Dictionary=graph.get("portal_tracks",{}).get(str(commit.event_uuid),{})
+            if not portal.is_empty():
+                var delay:float=at-float(portal.commit_ms)
+                for track in portal.tracks:
+                    track.start_ms+=delay
+                    group.duration_ms=maxf(float(group.duration_ms),float(track.start_ms)+float(track.duration_ms))
+            if not wall_contacts.is_empty():commit_clocks[str(commit.event_uuid)]=at
+        if not wall_contacts.is_empty():
+            for commit in group.commits:
+                for row in commit.get("spatial_rows",[]):
+                    if row.get("operation")=="contact":
+                        row.contact_offset_ms=float(commit_clocks[str(row.event_uuid)])-float(commit.at_ms)
         group.duration_ms = maxf(group.duration_ms,at)
         _reaction_casts(lineage,target,group,graph,cache)
+        _interrupted_preparations(lineage,target,group,graph,cache)
         if profile_enabled:stage_started=_profile_phase(compile_phases,"schedule_delivery",stage_started)
         # A staged row is disclosed at its first commit, actor admission or
         # track endpoint. Fold those few clocks once per source, visiting each
@@ -888,7 +1307,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
     if groups.is_empty():
         groups.append({"id":"operation:%s" % packet.get("cursor",{}).get("sequence",-1),"start_cursor":before.reducer_cursor,
             "end_cursor":before.reducer_cursor,"operation_sequence":packet.get("cursor",{}).get("sequence",-1),
-            "operation_end":true,"duration_ms":0.0,"actor_tracks":[],"commits":[],"staged_actors":{},"staged_at_ms":{},"staged_tiles":{},"staged_tile_at_ms":{},"skipped":[]})
+            "operation_end":true,"duration_ms":0.0,"actor_tracks":[],"components":[],"events":[],"commits":[],"staged_actors":{},"staged_at_ms":{},"staged_tiles":{},"staged_tile_at_ms":{},"skipped":[]})
     # Native operation identity survives every lineage, including the empty
     # operation marker. Command numbers are scoped to the full cursor identity.
     for group in groups:

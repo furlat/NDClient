@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_yxnob"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_e18we"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_njfov"]
 script = ExtResource("1_uu1om")
 role = "act"
@@ -23,6 +25,61 @@ path = "art/media/ui/icons/smooth48/action.call-lightning-strike.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:action.call-lightning-strike"
 
+[sub_resource type="Resource" id="ActualArea"]
+script = ExtResource("effect")
+clip = "live-electric/call_live_strike"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"source_resources": {"gpu_shape_banks": ["res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res", "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res"]},
+"kind": "area_links",
+"component_path": ["network"],
+"input_field": "",
+"area_shape": "sphere",
+"edges": [{"from": 0, "to": 1, "delay": 0.28}, {"from": 0, "to": 1, "delay": 1.33}],
+"endpoint_count": 2,
+"charge_coil": false
+}
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.58
+duration_policy = "authored"
+staging_from = "client-public-area-20261020"
+extra = {
+"live_endpoints": [{"area_point": "center", "offset_cells": [0.0, 7.5, 0.0]}, {"area_point": "center"}],
+"input_policies": {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}},
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="ActualContact"]
+script = ExtResource("effect")
+clip = "live-electric/call_live_strike"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"source_resources": {"gpu_shape_banks": ["res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res", "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res"]},
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"component_path": ["network"],
+"input_field": "",
+"packet": "electric_network",
+"damage_type": "Lightning",
+"save_effect_id": "action.spell.call_lightning.strike.saving_throw"
+}
+at = "event.start"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.72
+duration_policy = "authored"
+staging_from = "client-public-area-20261020"
+extra = {
+"live_endpoints": [{"actor": "target", "socket": "body_center", "surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]}],
+"input_policies": {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}}
+}
+
 [resource]
 script = ExtResource("2_yxnob")
 id = "action.spell.call_lightning.strike"
@@ -32,6 +89,7 @@ icon = SubResource("Resource_u7ugk")
 disposition = "authored"
 body = SubResource("Resource_njfov")
 delivers_spell = "spell.call_lightning"
+effects = Array[ExtResource("effect")]([SubResource("ActualArea"), SubResource("ActualContact")])
 effect_sources = PackedStringArray()
 status = "partial"
 unported = {
@@ -54,3 +112,5 @@ unported = {
 "projectile": null,
 "variants": []
 }
+
+notes = "Accepted granted strikes explicitly select the existing main electric source and native saved positive Lightning contacts. Actual public sphere geometry and support own placement; source edges are authored optical strokes. No new casting gesture or inferred persistent grant is added. The legacy delivers_spell table is not used as a runtime alias. Actual-context qualification and artwork review remain open."

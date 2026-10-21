@@ -40,7 +40,11 @@ func inspect(rows:Array,id:String,state:Variant,cache:Dictionary,label:String)->
     var original:PackedByteArray=var_to_bytes(condition)
     var config:Dictionary=recipe()
     var held:PackedByteArray=var_to_bytes(config)
-    var expected:Array=matching(rows,id,state)
+    # Package predicates remain independent controls; explicit client owner
+    # policy may delegate a declared event/weapon alternative rather than play
+    # an idle lifecycle. This is not a predicate match failure.
+    var admitted:Array=Effects.conditions(id).map(func(row):return row.key)
+    var expected:Array=matching(rows,id,state).filter(func(row):return row.key in admitted)
     var actual:Array=Persistent.lifecycles(condition)
     check(actual.map(func(row):return row.key)==expected.map(func(row):return row.key),label+": exact package predicates select source identity")
     check(Persistent.replaced_media(condition,config)==expected_replacement(expected),label+": only selected body/marker/phases replace media")

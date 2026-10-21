@@ -2,10 +2,29 @@
 
 [ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_ddl7k"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_038td"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="neutral_ward"]
+
+[sub_resource type="Resource" id="NeutralObservedWard"]
+script = ExtResource("neutral_ward")
+clip = "wall-native/antimagic_field_back_native/lifecycle"
+approach = "native"
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+requires_spatial_anchor = true
+scale = 1.0
+orientation = "world"
+light_multiplier = 0.0
+fade_out = 0.0
+staging_from = "client:explicit-existing-neutral-ward-shell-reuse"
 
 [resource]
 script = ExtResource("2_038td")
 id = "spatial_effect.spell.glyph_of_warding"
 layer = "field"
 art = PackedStringArray()
-notes = "No art and no Factory scenario."
+lasting = SubResource("NeutralObservedWard")
+native_staging = true
+status = "partial"
+notes = "The actual disclosed Glyph spatial UUID, required public anchor and current admitted cells own one neutral ward-shell draft, explicitly reusing the existing Antimagic shell artwork at its original scale1.0 with zero decorative light. This is an art choice, not Antimagic gameplay or an inferred armed/payload state. The source clock continues while this actual owner is present; its absence or full suppression withdraws the source, and the existing AreaMask retains only real admitted cells. No exact visible-radius calibration or selected payload is claimed. Five separately authored contacts use actual attributed elemental results. The old armed/trigger/payload studies remain optional unselected alternatives; they create no mandatory backend/API request. All artwork remains unreviewed and output qualification is separate."

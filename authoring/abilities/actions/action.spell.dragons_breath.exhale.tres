@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_7ju8d"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_qb3bv"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="event_family"]
+
 [sub_resource type="Resource" id="Resource_qb3bv"]
 script = ExtResource("1_7ju8d")
 role = "cast"
@@ -17,6 +19,211 @@ path = "art/ui-delivery-20261018/runtime/smooth48/action.spell.dragons_breath.ex
 native_size = Vector2i(48, 48)
 source = "ui-delivery-20261018"
 
+[sub_resource type="Resource" id="Resource_event_family_0"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/acid_native_receiver"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"damage_type": "Acid",
+"save_effect_id": null,
+"accepted_behavior_id": "action.spell.dragons_breath.exhale",
+"save_ability": "dexterity",
+"retained_caster": true,
+"component_path": ["effect"]
+}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="Resource_event_family_1"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/cold_native_receiver"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"damage_type": "Cold",
+"save_effect_id": null,
+"accepted_behavior_id": "action.spell.dragons_breath.exhale",
+"save_ability": "dexterity",
+"retained_caster": true,
+"component_path": ["effect"]
+}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="Resource_event_family_2"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/fire_native_receiver"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"damage_type": "Fire",
+"save_effect_id": null,
+"accepted_behavior_id": "action.spell.dragons_breath.exhale",
+"save_ability": "dexterity",
+"retained_caster": true,
+"component_path": ["effect"]
+}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="Resource_event_family_3"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/lightning_native_receiver"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"damage_type": "Lightning",
+"save_effect_id": null,
+"accepted_behavior_id": "action.spell.dragons_breath.exhale",
+"save_ability": "dexterity",
+"retained_caster": true,
+"component_path": ["effect"]
+}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="Resource_event_family_4"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/poison_native_receiver"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"damage_type": "Poison",
+"save_effect_id": null,
+"accepted_behavior_id": "action.spell.dragons_breath.exhale",
+"save_ability": "dexterity",
+"retained_caster": true,
+"component_path": ["effect"]
+}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="Resource_actual_breath_acid_exhale"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/acid_native_exhale"
+role = "attached"
+scope = "cast"
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+constructor_input = {"kind":"observed_event", "constructor_script":"res://assets/vfx/sources/2f6628255a3170c06996/dragons_breath.gd", "projection":"breath_exhale", "behavior_id":"action.spell.dragons_breath.exhale", "condition_id":"condition.spell.dragons_breath", "outcome":"cast", "geometry_actor":"caster", "element":"acid", "component_path":["effect"], "input_field":""}
+extra = {"live_endpoints":[{"actor":"caster","socket":"ground"},{"actor":"caster","socket":"face"},{"cue_point":"target"}]}
+
+[sub_resource type="Resource" id="Resource_actual_breath_cold_exhale"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/cold_native_exhale"
+role = "attached"
+scope = "cast"
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+constructor_input = {"kind":"observed_event", "constructor_script":"res://assets/vfx/sources/ce3fb52e9d3edba4bb39/cold_breath_particles.gd", "projection":"breath_exhale", "behavior_id":"action.spell.dragons_breath.exhale", "condition_id":"condition.spell.dragons_breath", "outcome":"cast", "geometry_actor":"caster", "element":"cold", "component_path":["effect"], "input_field":""}
+extra = {"live_endpoints":[{"actor":"caster","socket":"ground"},{"actor":"caster","socket":"face"},{"cue_point":"target"},{"aim_from_endpoint":1,"direction_endpoints":[0,2]}]}
+
+[sub_resource type="Resource" id="Resource_actual_breath_fire_exhale"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/fire_native_exhale"
+role = "attached"
+scope = "cast"
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+constructor_input = {"kind":"observed_event", "constructor_script":"res://assets/vfx/sources/2f6628255a3170c06996/dragons_breath.gd", "projection":"breath_exhale", "behavior_id":"action.spell.dragons_breath.exhale", "condition_id":"condition.spell.dragons_breath", "outcome":"cast", "geometry_actor":"caster", "element":"fire", "component_path":["effect"], "input_field":""}
+extra = {"live_endpoints":[{"actor":"caster","socket":"ground"},{"actor":"caster","socket":"face"},{"cue_point":"target"}]}
+
+[sub_resource type="Resource" id="Resource_actual_breath_lightning_exhale"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/lightning_native_exhale"
+role = "attached"
+scope = "cast"
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+constructor_input = {"kind":"observed_event", "constructor_script":"res://assets/vfx/sources/2f6628255a3170c06996/dragons_breath.gd", "projection":"breath_exhale", "behavior_id":"action.spell.dragons_breath.exhale", "condition_id":"condition.spell.dragons_breath", "outcome":"cast", "geometry_actor":"caster", "element":"lightning", "component_path":["effect"], "input_field":""}
+extra = {"live_endpoints":[{"actor":"caster","socket":"ground"},{"actor":"caster","socket":"face"},{"cue_point":"target"}]}
+
+[sub_resource type="Resource" id="Resource_actual_breath_poison_exhale"]
+script = ExtResource("event_family")
+clip = "bg3-36/dragons-breath/poison_native_exhale"
+role = "attached"
+scope = "cast"
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+constructor_input = {"kind":"observed_event", "constructor_script":"res://assets/vfx/sources/2f6628255a3170c06996/dragons_breath.gd", "projection":"breath_exhale", "behavior_id":"action.spell.dragons_breath.exhale", "condition_id":"condition.spell.dragons_breath", "outcome":"cast", "geometry_actor":"caster", "element":"poison", "component_path":["effect"], "input_field":""}
+extra = {"live_endpoints":[{"actor":"caster","socket":"ground"},{"actor":"caster","socket":"face"},{"cue_point":"target"}]}
+
 [resource]
 script = ExtResource("2_7ju8d")
 id = "action.spell.dragons_breath.exhale"
@@ -25,4 +232,5 @@ family = "spell"
 icon = SubResource("Resource_ulfen")
 body = SubResource("Resource_qb3bv")
 effect_sources = PackedStringArray()
+effects = Array[ExtResource("event_family")]([SubResource("Resource_event_family_0"), SubResource("Resource_event_family_1"), SubResource("Resource_event_family_2"), SubResource("Resource_event_family_3"), SubResource("Resource_event_family_4"), SubResource("Resource_actual_breath_acid_exhale"), SubResource("Resource_actual_breath_cold_exhale"), SubResource("Resource_actual_breath_fire_exhale"), SubResource("Resource_actual_breath_lightning_exhale"), SubResource("Resource_actual_breath_poison_exhale")])
 notes = "Body role from the server's body kind (area_ability); the rig resolves it to a clip once roles are built (coverage fill)."

@@ -2,6 +2,7 @@ extends RefCounted
 ## Resolve only an already selected cue and source marker. The shared compiler
 ## supplies occurrence identity/timing; this module knows no actions or rules.
 const Authoring=preload("res://presentation/authoring.gd")
+const Tracks=preload("res://presentation/tracks.gd")
 
 static func source_seconds(row:Dictionary,age_ms:float)->float:
     var seconds=maxf(0,age_ms/1000.0)
@@ -37,6 +38,29 @@ static func contact_marker_error(marker:Dictionary,clip:Dictionary,loop:bool)->S
     if marker.get("direction","") not in ["forward","reverse"]:return "contact_direction_not_authored"
     if (frame==clip.frames and (loop or marker.get("boundary","")!="clip_end")) or (marker.get("boundary","")=="clip_end" and frame!=clip.frames):return "invalid_contact_end_boundary"
     if marker.get("binding","") not in ["path","takeoff","landing"]:return "contact_binding_not_authored"
+    if marker.get("motion_endpoint","") not in ["","start","end"]:return "invalid_contact_motion_endpoint"
+    return ""
+
+## An authored source-frame crossing can name an actual motion endpoint.
+## Reuse the existing body sampler and disclosed track; never substitute a
+## step-end time for a missing arc or treat a repeated loop as touchdown.
+static func motion_endpoint_error(marker:Dictionary,track:Dictionary,at_ms:float)->String:
+    var endpoint:String=str(marker.get("motion_endpoint",""))
+    if endpoint.is_empty():return ""
+    if endpoint not in ["start","end"]:return "invalid_contact_motion_endpoint"
+    if track.get("loop",false):return "contact_motion_endpoint_requires_nonlooping_source"
+    if not track.get("motion",false) or float(track.get("duration_ms",0.0))<=0.0 \
+        or track.get("from_position")==null or track.get("to_position")==null \
+        or track.get("from_elevation_feet")==null or track.get("to_elevation_feet")==null:
+        return "actual_contact_motion_endpoint_not_disclosed"
+    var fraction:float=(at_ms-float(track.start_ms))/float(track.duration_ms)
+    if (fraction<0.0 and not is_zero_approx(fraction)) or (fraction>1.0 and not is_equal_approx(fraction,1.0)):return "source_contact_outside_motion"
+    fraction=clampf(fraction,0.0,1.0)
+    var phase:float=lerpf(float(track.get("motion_fraction_from",0.0)),float(track.get("motion_fraction_to",1.0)),fraction)
+    if not is_equal_approx(phase,0.0 if endpoint=="start" else 1.0):return "actual_contact_motion_endpoint_not_reached"
+    var held:Dictionary=track.duplicate(false);held.holding_pose=true
+    var sampled:Dictionary=Tracks.samples([held],at_ms).get(str(track.get("actor_uuid","")),{})
+    if sampled.is_empty() or not is_zero_approx(float(sampled.get("lift_pixels",0.0))):return "actual_contact_motion_endpoint_airborne"
     return ""
 
 static func source_frame_times(track:Dictionary,frame:float,fps:float,frames:int,direction:String="forward")->Array:

@@ -9,6 +9,7 @@ const Recording=preload("res://studio/recording.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
 const Delivery=preload("res://presentation/spell_delivery.gd")
+const Birth=preload("res://presentation/actor_birth_inputs.gd")
 const Records=preload("res://tools/presentation_build/ability_records.gd")
 const APPROACH="runtime-prepared-heavy-effects-20261020"
 const ACID_PREPARATION="res://assets/vfx/extensions/followup-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
@@ -38,7 +39,7 @@ func run()->void:
     check(supplied.get("approach")==APPROACH and supplied.get("version")=="runtime-heavy-effects-20261020-fa024e4e027bf708","Exact complete heavy successor and choice map are installed")
     var choices:Dictionary={}
     for row in supplied.get("choices",[]):choices[row.clip_id]=row
-    var entries:Dictionary={};var paths:Dictionary={};var defaults:Dictionary={}
+    var entries:Dictionary={};var paths:Dictionary={}
     for name in CLIPS:
         var id:String="spell."+name;var path:String="res://authoring/abilities/spells/"+id+".tres"
         var entry:Resource=load(path);entries[id]=entry;paths[id]=path
@@ -46,13 +47,8 @@ func run()->void:
         check(entry.effects[0].immutable_preparation==(ACID_PREPARATION if name=="acid_arrow" else ""),id+": only Acid delivery opts into its isolated source coordinator")
         check(entry.effects.slice(1).all(func(cue):return cue.approach!=APPROACH) \
             and entry.variants.all(func(variant):return variant.effects.all(func(cue):return cue.approach!=APPROACH)),id+": unrelated phases and inactive alternatives are not activated")
-        var baseline:Resource=entry.duplicate(false)
-        baseline.effects=entry.effects.duplicate();baseline.effects[0]=entry.effects[0].duplicate(true)
-        baseline.effects[0].approach="";baseline.effects[0].immutable_preparation=""
-        defaults[id]=baseline
     var context:Dictionary={"hit_flash":load("res://authoring/abilities/contexts/hit_flash.tres")}
     var built:Dictionary=Build.documents({"spells":entries,"contexts":context},{"spells":paths})
-    var prior:Dictionary=Build.documents({"spells":defaults,"contexts":context},{"spells":paths})
     var cache:Dictionary=source_cache(built,paths)
     for name in CLIPS:
         var id:String="spell."+name;var clip:Dictionary=Effects.clip(CLIPS[name])
@@ -60,7 +56,13 @@ func run()->void:
         if not choices.has(CLIPS[name]):continue
         var selected:Dictionary=built.native.records[id].selection
         var rows:Array=Spells.phases(selected,{"prepare":0.0},500.0,300.0,0,true)
-        var baseline_rows:Array=Spells.phases(prior.native.records[id].selection,{"prepare":0.0},500.0,300.0,0,true)
+        # Keep the exact authored provenance and all renderer operands. A
+        # Resource duplicate loses resource_path, which is unrelated to the
+        # alternate source choice this isolated control compares.
+        var baseline:Dictionary=selected.duplicate(true)
+        baseline.staging.cues[0].erase("approach")
+        baseline.staging.cues[0].erase("immutable_preparation")
+        var baseline_rows:Array=Spells.phases(baseline,{"prepare":0.0},500.0,300.0,0,true)
         var original:PackedByteArray=var_to_bytes(clip)
         var first:Array=rows.filter(func(row):return int(row.native_cue.source_index)==0)
         check(first.size()==1,id+": ordinary phase compiler retains one default occurrence")
@@ -86,17 +88,23 @@ func run()->void:
         var clip:Dictionary=Effects.clip(UNSELECTED[name])
         var cue:Dictionary=Records.cue_from_effect(entry.effects[0],0)
         check(not clip.is_empty() and clip.approaches.any(func(approach):return approach.id==APPROACH),name+": exact heavy source remains installed and available for later compatible ownership")
-        check(entry.effects[0].approach.is_empty() and entry.effects[0].attachment=="recipient_ground" \
-            and entry.effects[0].constructor_input.is_empty() \
-            and Effects.choice(Effects.occurrence_clip({"native_clip":clip,"native_cue":cue})).approaches.all(func(approach):return approach.id!=APPROACH),name+": whole review assembly is unselected, with no fabricated birth join or caster relocation")
+        check(entry.effects[0].constructor_input.get("kind")=="actor_birth" \
+            and entry.effects[0].constructor_input.get("creature_ids")==Array(entry.summons) \
+            and entry.effects[0].attachment=="recipient_ground" and entry.effects[0].clip!=clip.id,
+            name+": neutral manifestation uses exactly its declared actual birth family")
+        check(entry.variants.any(func(variant):return variant.when.is_empty() and not variant.dispatch_gap.is_empty() \
+            and variant.effects.any(func(use):return use.clip==clip.id)),name+": the fixed review departure remains an inspectable unselected alternative")
         var control:Dictionary={"id":"spell."+name,"staging":{"cues":[cue]},"lifecycle":{}}
         var fact:Dictionary={"source_entity_uuid":"unit-caster","source_position":[3,7],"target_entity_uuid":null}
-        check(Delivery.endpoints(fact,{"positions":{"unit-caster":[3,7]}},{"tiles":{}},control).is_empty(),name+": labelled null-recipient endpoint control cannot silently turn the caster into a summoned recipient")
+        var endpoint:Dictionary=Delivery.endpoints(fact,{"positions":{"unit-caster":[3,7]},"contacts":{}},{"tiles":{}},control)
+        check(not endpoint.is_empty() and endpoint.ground_target and endpoint.to_position==[3,7] \
+            and not Birth.packet({"actor_uuid":"unit-caster","target_uuid":null},{"actors":{}},true).ready,
+            name+": labelled null-recipient control permits the caster ground anchor but cannot admit a summoned recipient without an actual birth binding")
     for name in ORIGINALS:
         for seat in ["amber","blue"]:actual_original(name,seat,cache)
     Effects.set_requested("")
     print("HEAVY_EFFECT_SELECTION ",JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Five supported typed and ordinary compiled source selections; four durable original families in both independent seats. Three Conjure assemblies remain installed/unselected pending compatible actual birth/lifecycle ownership; labelled endpoint controls forbid a fake recipient. IceStorm native output belongs to the separate selected-family gate. No native pixels/performance or human visual approval claimed."}))
+        "scope":"Five supported typed and ordinary compiled source selections; four durable original families in both independent seats. Three Conjure families use explicit neutral actual-birth art while their old fixed-departure assemblies remain unselected; labelled endpoint controls forbid a fake recipient. IceStorm native output belongs to the separate selected-family gate. No native pixels/performance or human visual approval claimed."}))
     quit(0 if failures.is_empty() else 1)
 func source_cache(built:Dictionary,paths:Dictionary)->Dictionary:
     var cache:Dictionary={};var admitted:Dictionary=Sources.admission(cache)

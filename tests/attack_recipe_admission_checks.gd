@@ -61,6 +61,8 @@ func without_pose_storage(recipe:Dictionary)->Dictionary:
 func reference_trail(recipe:Dictionary,fact:Dictionary,actor:Dictionary,cache:Dictionary)->Dictionary:
     var trail:Dictionary=recipe.get("weaponTrail",{}) if recipe.get("weaponTrail")!=null else {}
     if trail.is_empty() or recipe.get("projectile")!=null or fact.attack_source_kind!="equipped":return {}
+    if str(trail.get("source_id","")).is_empty() or float(trail.get("contact_seconds",0.0))<=0.0 \
+        or float(trail.get("end_seconds",0.0))<float(trail.get("contact_seconds",0.0)):return {}
     var outcome:String={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}[fact.attack_outcome]
     if fact.behavior_id not in trail.get("behaviorIds",[]) and outcome not in trail.get("outcomes",[]):return {}
     var rig_id:String=Authoring.rig_id(actor,cache)
@@ -71,7 +73,9 @@ func reference_trail(recipe:Dictionary,fact:Dictionary,actor:Dictionary,cache:Di
         if layer.slot!=slot:continue
         for pose in trail.poses:
             if pose.rigId==rig_id and pose.category==layer.category and pose.clip==recipe.actor.clip:
-                return {"pose":pose,"palette":trail.palette,"impact_asset_id":trail.impactAssetId}
+                return {"pose":pose,"palette":trail.palette,"source_id":str(trail.source_id),
+                    "impact_source_id":str(trail.get("impact_source_id","")),"contact_seconds":float(trail.contact_seconds),
+                    "end_seconds":float(trail.end_seconds),"source":str(trail.get("source",""))}
     return {}
 func run()->void:
     var cache:Dictionary={}

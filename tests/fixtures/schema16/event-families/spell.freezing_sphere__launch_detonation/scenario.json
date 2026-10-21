@@ -1,0 +1,88 @@
+{
+ "id": "spell.freezing_sphere/launch_detonation",
+ "title": "spell.freezing_sphere: actual launch detonation",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.freezing_sphere"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.freezing_sphere",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "capture_choices": true,
+   "variant": {
+    "form": "launch"
+   }
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.freezing_sphere"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "required_behaviors": [
+  "spell.freezing_sphere"
+ ],
+ "required_facts": [
+  "damage"
+ ],
+ "required_applied_damage_types": [
+  "Cold"
+ ],
+ "purpose": "Legal release/retirement and original applied results; no fabricated payload state or blast admission."
+}

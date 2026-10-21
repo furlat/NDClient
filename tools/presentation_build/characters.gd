@@ -513,6 +513,7 @@ static func _equipment(state: Dictionary, gear: Dictionary) -> void:
                 effects.append(cue)
             if field=="effects":index.item_effects[id]=effects
             else:index.item_impact_effects[id]=effects
+        if not entry.ground.is_empty() or not entry.family.is_empty():_ground_equipment(state,entry)
         if not entry.family.is_empty():index.gear[id] = [entry.family, entry.visual_variant_id]
         if entry.slots.is_empty() and entry.hands.is_empty():continue
         index.gear[id] = [id, ""]
@@ -529,6 +530,47 @@ static func _equipment(state: Dictionary, gear: Dictionary) -> void:
                 if look.is_empty():index.equipment_errors[key] = "No unique authored equipment binding " + id + "/" + slot;continue
                 if variant == null:index.equipment[key] = _legacy_layers(look.layers)
                 elif look.variants.has(variant):index.equipment[key] = _legacy_layers(look.variants[variant])
+
+## Dropped looks retain the original source cell and companion encoding. No
+## environment height packet, atlas or inferred contact is baked from these.
+static func _ground_equipment(state:Dictionary,entry:Resource)->void:
+    var rig:Resource=state.rigs[state.index.root_rig]
+    var variants:Dictionary={}
+    state.index.ground_equipment[entry.id]={"family":entry.family,"variants":variants}
+    for ordinal in entry.ground.size():
+        var authored:Dictionary=entry.ground[ordinal]
+        var where:String="gear/"+entry.id+"/ground/"+str(ordinal)
+        var part:Resource=state.parts.get(authored.get("part",""))
+        var clip:String=str(authored.get("clip",""))
+        if part==null or not part.actions.has(clip):Common.error(state.report,where,"ground part/action is not authored");continue
+        var art:Resource=part.actions[clip]
+        var slot:String=""
+        for candidate in rig.slot_order:
+            if part.id in rig.slot_categories.get(candidate,[]):slot=candidate;break
+        if slot.is_empty():Common.error(state.report,where,"ground part is not in the actual source rig");continue
+        if float(authored.get("rotation",0.))!=0.:
+            Common.error(state.report,where,"ground optical registration does not author rotated source cells");continue
+        # Ground rows retain JSON numeric floats; ArtSource.cell is Vector2i.
+        # Compare the actual dimensions, not strict Array element variants.
+        var cell:Array=authored.get("cell",[])
+        if cell.size()!=2 or float(cell[0])!=float(art.cell.x) or float(cell[1])!=float(art.cell.y) or authored.get("rows_by_camera",[]).size()!=4 or authored.get("pivots_by_camera",[]).size()!=4 or float(authored.get("scale",0.))<=0.:
+            Common.error(state.report,where,"ground cell/camera registration is incomplete");continue
+        var path:String=_res(art.path);var size:Dictionary=_header(state,path)
+        var valid:bool=not size.has("error") and int(authored.get("frame",-1))>=0 and int(authored.get("frame",-1))<art.frames
+        for row in authored.rows_by_camera:
+            valid=valid and int(row)>=0 and (int(row)+1)*art.cell.y<=int(size.get("height",0))
+        if not valid:Common.error(state.report,where,"ground frame/row is outside its unchanged source sheet");continue
+        var variant:String=str(authored.get("variant",""))
+        if variants.has(variant):Common.error(state.report,where,"duplicate ground variant");continue
+        var value:Dictionary=_plain(authored)
+        value.merge({"path":path,"slot":slot,"source_pivot":[art.pivot.x,art.pivot.y],
+            "source":entry.resource_path+"::ground/"+str(ordinal),"status":entry.status})
+        var shadow:Resource=state.parts.get(authored.get("shadow_part",""))
+        if shadow!=null and shadow.actions.has(clip) and float(authored.get("shadow_scale",0.))>0.:
+            var shadow_art:Resource=shadow.actions[clip]
+            value.shadow={"path":_res(shadow_art.path),"cell":[shadow_art.cell.x,shadow_art.cell.y],
+                "pivot":[shadow_art.pivot.x,shadow_art.pivot.y],"scale":float(authored.shadow_scale)}
+        variants[variant]=value
 
 static func _appearance(state: Dictionary, entry: Resource) -> void:
     if entry == null:Common.error(state.report, "characters", "appearance/modular missing");return

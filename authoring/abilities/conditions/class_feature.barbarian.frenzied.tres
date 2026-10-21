@@ -68,7 +68,7 @@ duration_policy = "authored"
 follow = true
 extra = {"replaces_media": ["class.frenzy.mantle-q0-back", "class.frenzy.mantle-q0-front"], "entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}
 
-unbound_constructor_inputs = PackedStringArray("condition_parent_uuid")
+owner_projection = {"parent_field": "parent_condition_uuid", "parent_behavior_id": "class_feature.barbarian.raging", "child_input": "frenzied_child"}
 
 
 [resource]

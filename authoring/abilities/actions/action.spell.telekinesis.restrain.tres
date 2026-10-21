@@ -30,10 +30,10 @@ script = ExtResource("2_ucabg")
 id = "action.spell.telekinesis.restrain"
 kind = "action"
 icon = SubResource("Resource_4stcf")
-disposition = "authored"
+disposition = "state_only"
 body = SubResource("Resource_72hdi")
 effect_sources = PackedStringArray()
-status = "partial"
+status = "internal"
 unported = {
 "actionFeedback": null,
 "actor": {
@@ -54,3 +54,5 @@ unported = {
 "projectile": null,
 "variants": []
 }
+
+notes = "Legacy presentation alias, not a current executable native action. The current producer declares only action.spell.telekinesis.move and the initial spell.telekinesis; their explicit finite source assignments own accepted attempts. Actual forced movement, hostile save, landing damage and Prone UUID retain their own ordered presentation owners. This empty disabled-body alias neither creates a second cast nor invents a held restraint/grab condition. Current source boundary: dnd/spells/transmutation.py TelekinesisMove and _resolve_telekinetic_transfer; no grab/restrain native action template is registered. All assigned artwork remains unreviewed."

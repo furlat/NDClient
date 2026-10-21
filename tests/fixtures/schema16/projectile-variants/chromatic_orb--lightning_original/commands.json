@@ -1,0 +1,130 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "942eff80-22f9-426a-92d7-d4b49cf5f7a0",
+   "state_revision": "a82a62ad-74cf-483b-aa54-642c058428b0",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_chromatic_orb_lightning_original",
+   "game_epoch": "66d2b0f7-5e6e-4969-a34a-a79b88e3c9ab",
+   "audience_id": "843fe63d-0355-4632-9170-b0f852fa4a34",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chromatic_orb_lightning_original",
+    "game_epoch": "66d2b0f7-5e6e-4969-a34a-a79b88e3c9ab",
+    "audience_id": "843fe63d-0355-4632-9170-b0f852fa4a34",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "f13b7eb3-440d-430f-a458-49550bbfb944",
+   "state_revision": "63e47fe3-3120-472b-a5f5-b27878716699",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_chromatic_orb_lightning_original",
+   "game_epoch": "66d2b0f7-5e6e-4969-a34a-a79b88e3c9ab",
+   "audience_id": "0d9747ed-44de-4c19-bfbd-a0fd223e5cba",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chromatic_orb_lightning_original",
+    "game_epoch": "66d2b0f7-5e6e-4969-a34a-a79b88e3c9ab",
+    "audience_id": "0d9747ed-44de-4c19-bfbd-a0fd223e5cba",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.chromatic_orb",
+   "by": "caster",
+   "target": "target",
+   "variant": {
+    "damage_type": "lightning"
+   },
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "12aecd1a-3bb2-4aec-b53f-598ebe044d39",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.chromatic_orb",
+   "display_name": "Chromatic Orb (Level 1)",
+   "cast_at_level": 1,
+   "variant_facets": [
+    {
+     "key": "damage_type",
+     "value": "lightning",
+     "label": "Lightning"
+    },
+    {
+     "key": "side",
+     "value": "creature",
+     "label": "Creature"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "30b4314b-118c-402d-9307-c4379fc06835",
+   "state_revision": "12aecd1a-3bb2-4aec-b53f-598ebe044d39",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 13,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_chromatic_orb_lightning_original",
+   "game_epoch": "66d2b0f7-5e6e-4969-a34a-a79b88e3c9ab",
+   "audience_id": "843fe63d-0355-4632-9170-b0f852fa4a34",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_chromatic_orb_lightning_original",
+    "game_epoch": "66d2b0f7-5e6e-4969-a34a-a79b88e3c9ab",
+    "audience_id": "843fe63d-0355-4632-9170-b0f852fa4a34",
+    "sequence": 6
+   }
+  }
+ }
+]

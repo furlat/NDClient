@@ -21,10 +21,12 @@ static func channels(component:Dictionary)->Array:
         channel.merge({"id":component.id+":native_material","kind":"native_material","parent_id":component.id,
             "label":"Spell material · body","source":"sandbox/body_materials.json:/spells/"+str(component.native_hit.spell_id),
             "render_method":{"node":"ShaderMaterial","surface":"assembled recipient body","renderer":"res://presentation/native_spell_hits.gd","shader":"res://presentation/native_body_material.gdshaderinc"},
-            "preview_scope":"live_composed_actor","preview_status":"missing","preview_reason":"Dedicated composed-body source thumbnail is not implemented; inspect the actual recipient in the replay.",
+            "preview_scope":"composed_actor","preview_status":"available","preview_reason":"Source thumbnail samples the actual disclosed recipient pose/outfit with the selected native hit material and its private occurrence clock. Scene lighting and final rendered acceptance require replay evidence.",
             "mode":"Full spell material; Colour treatment is selectable in Settings / Studio Inspect"},true)
         var definition:Dictionary=component.native_hit.get("definition",{})
-        if definition.get("status")!="available":channel.status="missing";channel.reason=definition.get("reason","native_body_material_unassigned")
+        if definition.get("status")!="available":
+            channel.status="missing";channel.reason=definition.get("reason","native_body_material_unassigned")
+            channel.preview_status="unavailable";channel.preview_reason=channel.reason
         result.append(channel)
     return result
 

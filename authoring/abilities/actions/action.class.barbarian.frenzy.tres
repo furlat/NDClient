@@ -34,6 +34,7 @@ at = "body.contact"
 [sub_resource type="Resource" id="NativeActionEffect_1"]
 script = ExtResource("native_effect_use")
 selection = "barbarian_frenzy_native"
+owner_projection = {"parent_field": "parent_condition_uuid", "parent_behavior_id": "class_feature.barbarian.raging", "child_behavior_id": "class_feature.barbarian.frenzied", "child_input": "frenzied_child"}
 at = "body.effect"
 delay = 0.1
 light_multiplier = 0.0

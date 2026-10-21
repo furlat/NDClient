@@ -4,6 +4,31 @@
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="2_eo5qf"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="3_vk1c2"]
 
+[sub_resource type="Resource" id="ActualOil"]
+script = ExtResource("2_eo5qf")
+clip = "oil-local-fire"
+selection = "oil_ignite_douse"
+approach = "runtime-prepared-late-20261020"
+role = "attached"
+scope = "spatial"
+requires_spatial_anchor = true
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+scale = 1.0
+source_end = 1.0
+duration_policy = "authored"
+light_multiplier = 0.0
+lifecycle = {"enter_end_seconds": 1.0, "hold_start_seconds": 1.0, "exit_start_seconds": 1.0, "exit_end_seconds": 1.0}
+extra = {"input_policies": {
+"transition_events": {"mode": "not_applicable", "reason": "selected_static_liquid_pose_precedes_review_transitions"},
+"live_particles": {"mode": "not_applicable", "reason": "selected_static_liquid_pose_uses_original_packaged_field"},
+"link_edges": {"mode": "not_applicable", "reason": "selected_static_liquid_pose_has_no_active_electric_network"},
+"targets": {"mode": "not_applicable", "reason": "selected_static_liquid_pose_has_no_active_electric_network"},
+"density_field": {"mode": "not_applicable", "reason": "selected_static_liquid_pose_has_no_active_electric_network"}
+}}
+staging_from = "factory@runtime-public-admission-20261020-976f8289ebcefa5c"
+
 [sub_resource type="Resource" id="operations_0_transition"]
 script = ExtResource("2_eo5qf")
 clip = "oil-local-fire"
@@ -26,8 +51,10 @@ becomes = "spatial_effect.material.fire"
 [resource]
 script = ExtResource("3_vk1c2")
 id = "spatial_effect.material.oil"
+native_staging = true
+lasting = SubResource("ActualOil")
 operations = Array[ExtResource("1_kenod")]([SubResource("operations_0")])
 art = PackedStringArray()
 legacy = "measured/environment/surfaces/spatial_effect.material.oil.json"
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "The actual observed OilSurface UUID owns the prepared source only at its disclosed public anchor. The resource advances source0–1 then holds the original pre-ignition pose1 indefinitely; actual owner absence tears down immediately, with no source review ignite, douse, clear or retirement replay. This explicitly static deployed ground treatment retains the sealed prepared bank and its original particle field, not continuing flow or live gameplay particles. Its fixed4×4 artwork interior is clipped by the existing AreaMask to actual current cells; arbitrary footprint coverage or complete cell fill is not claimed. Optional electric inputs are unused because no charge event can occur in the selected source window. The oil_ignite_douse operation below is an unused inspection study: an actual ignition replaces affected Oil cells with a separately observed FireSurface owner, which owns its own artwork. All artwork remains unreviewed; native output qualification is separate."

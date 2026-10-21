@@ -5,9 +5,9 @@ const Studio=preload("res://studio/studio.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
 const CAPTURES="res://.captures/native-spell-library"
 const CASES=[
-    {"spell":"fireball","role":"area","condition_phase":""},
-    {"spell":"mage_armor","role":"attached","condition_phase":"condition"},
-    {"spell":"shield","role":"attached","condition_phase":"condition"}]
+    {"spell":"spell.fireball","case":"spell.fireball/baseline","role":"area","condition_phase":""},
+    {"spell":"spell.mage_armor","case":"spell.mage_armor/studio_uuid_lifecycle","role":"attached","condition_phase":"condition"},
+    {"spell":"spell.shield","case":"spell.shield/studio_uuid_lifecycle","role":"attached","condition_phase":"condition"}]
 var studio:Control
 var checks:int=0
 var failures:Array=[]
@@ -58,6 +58,8 @@ func settle(label:String,case_id:String="")->bool:
                 timing.within_200ms=timing.get("publication_ms",timing.publication_observed_ms)<=200.0
                 selection_measurements[case_id]=timing;pending_selection={}
             await frame()
+            if not studio.world.playback_prepared() or studio.installing or studio.requested_seek>=0 or not studio.pending_directory.is_empty():continue
+            if not case_id.is_empty() and studio.active_case.get("id")!=case_id:continue
             if selection_measurements.has(case_id):
                 selection_measurements[case_id].first_draw_observed_ms=(Time.get_ticks_usec()-selection_measurements[case_id].requested_usec)/1000.0
             check(studio.world.presentation_errors.is_empty(),label+": active world has no presentation errors")
@@ -73,13 +75,14 @@ func settle(label:String,case_id:String="")->bool:
 func find_item(item:TreeItem,id:String)->TreeItem:
     if item==null:return null
     var data=item.get_metadata(0)
-    if data is Dictionary and data.scenario.get("id","")==id:return item
+    if data is Dictionary and data.get("case",{}).get("id","")==id:return item
     for child in item.get_children():
         var found=find_item(child,id)
         if found!=null:return found
     return null
 
-func open_case(spell:String)->bool:
+func open_case(spec:Dictionary)->bool:
+    var spell:String=spec.spell
     studio.loop_enabled=false;studio.loop_button.set_pressed_no_signal(false)
     studio._show_study_library()
     var panel:Window=studio.study_library
@@ -87,7 +90,7 @@ func open_case(spell:String)->bool:
     while not panel.is_prepared() and Time.get_ticks_msec()<deadline:await process_frame
     check(panel.is_prepared() and panel.error.is_empty(),spell+": actual capability Library is ready")
     if not panel.is_prepared():return false
-    var id:String="native-spell-"+spell
+    var id:String=spec.case
     var item:TreeItem=find_item(panel.tree.get_root(),id)
     check(item!=null,spell+": Library contains the exact recorded scenario")
     if item==null:return false
@@ -95,15 +98,26 @@ func open_case(spell:String)->bool:
     while parent!=null:parent.collapsed=false;parent=parent.get_parent()
     panel.tree.scroll_to_item(item,true);await process_frame
     var rect:Rect2=panel.tree.get_item_area_rect(item,0)
-    var at:Vector2=panel.tree.global_position+rect.position+Vector2(minf(100,rect.size.x*.5),rect.size.y*.5)
+    var local:Vector2=rect.position+Vector2(minf(65,rect.size.x*.5),rect.size.y*.5)
+    var geometry_deadline:int=Time.get_ticks_msec()+2000
+    while panel.tree.get_item_at_position(local)!=item and Time.get_ticks_msec()<geometry_deadline:
+        await process_frame;rect=panel.tree.get_item_area_rect(item,0)
+        local=rect.position+Vector2(minf(65,rect.size.x*.5),rect.size.y*.5)
+    check(panel.tree.get_item_at_position(local)==item,spell+": pointer geometry identifies this exact current Library original")
+    var at:Vector2=panel.tree.global_position+local
     pending_selection={"case":id,"requested_usec":Time.get_ticks_usec(),"measurement":"Actual Library row pointer press to shared Studio publication in this fresh test process"}
+    var delivered:Dictionary={"case":""}
+    var observe:Callable=func(_capability:Dictionary,_scenario:Dictionary,record:Dictionary):delivered.case=str(record.get("id",""))
+    panel.recording_selected.connect(observe)
     for pressed in [true,false]:
         var event=InputEventMouseButton.new();event.button_index=MOUSE_BUTTON_LEFT;event.pressed=pressed;event.position=at;event.global_position=at
         panel.push_input(event,true)
     await process_frame
+    panel.recording_selected.disconnect(observe)
+    check(delivered.case==id,spell+": actual native Tree pointer emits the exact selected original recording")
     check(not panel.visible,spell+": selecting the actual recorded row closes Library")
     if not await settle(spell+" Library navigation",id):return false
-    check(studio.study_capability.get("id")=="spell."+spell and studio.study_scenario.get("id")==id,spell+": displayed study keeps its exact spell association")
+    check(studio.study_capability.get("id")==spell and studio.study_scenario.get("id")==id,spell+": displayed study keeps its exact spell association")
     check(studio.active_directory==studio.active_case.perspectives[0].journal and studio.index.directory==studio.active_directory and studio.tracks.index.directory==studio.active_directory,spell+": world, timeline and original Amber journal publish together")
     return true
 
@@ -198,7 +212,7 @@ func active_phase(row:Dictionary,label:String)->void:
 
 func inspect_case(spec:Dictionary)->void:
     var spell:String=spec.spell
-    if not await open_case(spell):return
+    if not await open_case(spec):return
     var rows:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("visible_here",true) and row.get("component",{}).get("native_spell",false) and row.component.spell_id==spell and row.component.native_cue.role==spec.role and row.get("condition_phase","")==spec.condition_phase and row.end_ms>row.start_ms)
     check(not rows.is_empty(),spell+": actual index exposes the requested native family")
     if rows.is_empty():return
@@ -267,11 +281,11 @@ func run()->void:
     studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
     if await settle("initial Studio"):
         for spec in CASES:
-            if only.is_empty() or spec.spell==only:await inspect_case(spec)
+            if only.is_empty() or spec.spell==only or spec.spell.trim_prefix("spell.")==only:await inspect_case(spec)
     await finish()
 
 func finish()->void:
-    var requested:Array=CASES.filter(func(spec):return only.is_empty() or spec.spell==only)
+    var requested:Array=CASES.filter(func(spec):return only.is_empty() or spec.spell==only or spec.spell.trim_prefix("spell.")==only)
     check(not requested.is_empty() and observations.size()==requested.size(),"Every requested case reaches its final native UI and loop assertions")
     studio.queue_free();await frame();await frame()
     var report={"checks":checks,"failures":failures,"cases":observations,"renderer":RenderingServer.get_current_rendering_method(),

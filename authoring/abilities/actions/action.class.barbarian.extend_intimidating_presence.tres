@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_k70li"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_3cdtu"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="native_effect_use"]
+
 [sub_resource type="Resource" id="Resource_b8ebs"]
 script = ExtResource("1_d0v1g")
 role = "act"
@@ -24,41 +26,53 @@ reuses = "condition.dnd-classes-barbarian-intimidatingpresencefeature"
 status = "ready"
 source = "ui/presentation.json direct_features/class_feature.barbarian.intimidating_presence"
 
+[sub_resource type="Resource" id="NativeActionEffect_0"]
+script = ExtResource("native_effect_use")
+selection = "barbarian_intimidating_presence_native"
+at = "body.effect"
+delay = 0.22
+light_multiplier = 0.0
+staging_from = "factory@conditions-candidate-7fab471588209a41 selection:barbarian_intimidating_presence_native"
+clip = "barbarian_intimidating_presence_native"
+role = "attached"
+attachment = "caster_ground"
+orientation = "world"
+scale = 1.0
+source_end = 1.3
+duration_policy = "authored"
+follow = true
+extra = {"live_endpoints": [{"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}]}
+
 [resource]
 script = ExtResource("2_k70li")
 id = "action.class.barbarian.extend_intimidating_presence"
 kind = "action"
+effects = Array[ExtResource("native_effect_use")]([SubResource("NativeActionEffect_0")])
 icon = SubResource("Resource_6idcg")
 disposition = "authored"
 body = SubResource("Resource_b8ebs")
 effect_sources = PackedStringArray()
-status = "ready"
+status = "partial"
+notes = "Existing Intimidating Presence native face-to-recipient source is also selected for the actual accepted Extend action. Its current Idle4 body/effect marker is retained; no new condition application or gameplay rule is required. Replaces the old imported threat media. Artwork and production qualification remain unreviewed."
 unported = {
-"actionFeedback": null,
-"actor": {
-"media": []
-},
-"attackFeedback": null,
-"compatibleCueKinds": ["action"],
-"counterspellFeedback": null,
-"definitionRef": {
-"content_id": "action.class.barbarian.extend_intimidating_presence",
-"content_version": 1.0,
-"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
-"definition_kind": "action",
-"pack_id": "content.srd_5_1_cc"
-},
-"media": [{
-"assetId": "class.intimidate.threat",
-"attachment": "source_ground",
-"depth": "front_body",
-"id": "class.intimidate.threat",
-"poseSocket": "face",
-"scale": 0.5,
-"startOffsetMs": 220.0
-}],
-"mediaFailurePolicy": "fail_transaction",
-"previewChildCueKinds": [],
-"projectile": null,
-"variants": []
+ "actionFeedback": null,
+ "actor": {
+  "media": []
+ },
+ "attackFeedback": null,
+ "compatibleCueKinds": [
+  "action"
+ ],
+ "counterspellFeedback": null,
+ "definitionRef": {
+  "content_id": "action.class.barbarian.extend_intimidating_presence",
+  "content_version": 1.0,
+  "definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+  "definition_kind": "action",
+  "pack_id": "content.srd_5_1_cc"
+ },
+ "mediaFailurePolicy": "fail_transaction",
+ "previewChildCueKinds": [],
+ "projectile": null,
+ "variants": []
 }

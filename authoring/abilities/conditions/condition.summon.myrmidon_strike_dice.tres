@@ -1,17 +1,68 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_chyb2"]
-[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_fkd8k"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="image"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="response_effect"]
 
-[sub_resource type="Resource" id="Resource_vhgmb"]
-script = ExtResource("1_chyb2")
+[sub_resource type="Resource" id="Icon"]
+script = ExtResource("image")
 path = "art/media/ui/icons/smooth48/condition.generic.png"
 native_size = Vector2i(48, 48)
 reuses = "condition.generic"
 status = "stand_in"
 source = "ui/resources.json icon:condition.generic"
 
+[sub_resource type="Resource" id="ResultResponse0"]
+script = ExtResource("response_effect")
+clip = "weapons/contact/electric/medium"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.25
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_component", "participant": "recipient", "attack_behavior_id": "action.air_myrmidon.electrified_flail", "damage_type": "Lightning", "when_state": {"action_id": "action.air_myrmidon.electrified_flail", "damage_type": "Lightning"}}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
+
+[sub_resource type="Resource" id="ResultResponse1"]
+script = ExtResource("response_effect")
+clip = "weapons/contact/fire/medium"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.28
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_component", "participant": "recipient", "attack_behavior_id": "action.fire_myrmidon.scorching_strike", "damage_type": "Fire", "when_state": {"action_id": "action.fire_myrmidon.scorching_strike", "damage_type": "Fire"}}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
+
+[sub_resource type="Resource" id="ResultResponse2"]
+script = ExtResource("response_effect")
+clip = "weapons/contact/ice/medium"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_component", "participant": "recipient", "attack_behavior_id": "action.water_myrmidon.hiemal_strike", "damage_type": "Cold", "when_state": {"action_id": "action.water_myrmidon.hiemal_strike", "damage_type": "Cold"}}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
+
 [resource]
-script = ExtResource("1_fkd8k")
+script = ExtResource("condition")
 id = "condition.summon.myrmidon_strike_dice"
-icon = SubResource("Resource_vhgmb")
+icon = SubResource("Icon")
+disposition = "authored"
+play_package_lifecycle = false
+responses = Array[ExtResource("response_effect")]([SubResource("ResultResponse0"), SubResource("ResultResponse1"), SubResource("ResultResponse2")])
+status = "partial"
+notes = "Three actual configured strike members select finite recipient contact candidates from the attributed positive component and positive enclosing applied packet. Exact native attack action, actor, item and recipient are required; the component source_damage_uuid remains distinct from packet applied HP. Existing weapon contact receivers consume factual Hit/Crit packets and measured recipient pixels; no HELD contribution flag or generic idle coating is invented. Prepared weapon-decorator alternatives stay unselected. All artwork is unreviewed."

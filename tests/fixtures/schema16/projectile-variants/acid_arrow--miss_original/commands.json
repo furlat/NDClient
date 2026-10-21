@@ -1,0 +1,206 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "bc17b0b0-d739-467a-bcc7-f3b493c98336",
+   "state_revision": "4ebe2113-8c0c-4d79-aafe-e398888163cd",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_miss_original",
+   "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+   "audience_id": "202aba68-dedb-4d61-8b3d-308c63ca5e5f",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_miss_original",
+    "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+    "audience_id": "202aba68-dedb-4d61-8b3d-308c63ca5e5f",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "60cc68d6-0c6f-41b6-91a9-1c5b9fd2558e",
+   "state_revision": "dbdaaa20-ed4c-419b-99e8-461b08ae4b56",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_miss_original",
+   "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+   "audience_id": "38792e5f-d4e7-4914-9343-bb2ff7589c07",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_miss_original",
+    "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+    "audience_id": "38792e5f-d4e7-4914-9343-bb2ff7589c07",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.dodge",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "3574b559-f040-4f23-89e6-3be4ecb17069",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.dodge",
+   "display_name": "Dodge",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "state_revision": "3574b559-f040-4f23-89e6-3be4ecb17069",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 22,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_miss_original",
+   "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+   "audience_id": "38792e5f-d4e7-4914-9343-bb2ff7589c07",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_miss_original",
+    "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+    "audience_id": "38792e5f-d4e7-4914-9343-bb2ff7589c07",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "state_revision": "1f5368e3-33e9-4a02-80b0-8754646ce1a3",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_miss_original",
+   "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+   "audience_id": "38792e5f-d4e7-4914-9343-bb2ff7589c07",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_miss_original",
+    "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+    "audience_id": "38792e5f-d4e7-4914-9343-bb2ff7589c07",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.acid_arrow",
+   "by": "caster",
+   "target": "target",
+   "level": 2
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "2e3acd3c-f3fb-483b-95c6-1f105a160095",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.acid_arrow",
+   "display_name": "Acid Arrow (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "side",
+     "value": "creature",
+     "label": "Creature"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "d31aaad3-b465-4f8b-a5e2-e5d6f04a2a11",
+   "state_revision": "2e3acd3c-f3fb-483b-95c6-1f105a160095",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 2
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_miss_original",
+   "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+   "audience_id": "202aba68-dedb-4d61-8b3d-308c63ca5e5f",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_miss_original",
+    "game_epoch": "85111326-7779-4691-b4e8-c0936ecb9ec5",
+    "audience_id": "202aba68-dedb-4d61-8b3d-308c63ca5e5f",
+    "sequence": 9
+   }
+  }
+ }
+]

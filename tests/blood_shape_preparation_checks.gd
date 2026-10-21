@@ -60,14 +60,15 @@ func run()->void:
         check(renderer.prepare_allocations==0 and renderer.pending_deposits.is_empty(),"Existing fields warm without allocating or publishing native fields")
         retained_versions=maxi(retained_versions,renderer.kernel_preparations.size())
         for component in components:
+            var asset:Dictionary=component.asset_metadata
             for reveal in component.reveals:
                 versions+=1
                 var key=Blood.key(reveal.position)
                 var value:Dictionary=reveal.after.duplicate(true)
                 var handle:Dictionary=renderer.deposits[key]
-                renderer._adopt_kernel_cache(handle,key,value)
-                check(is_same(handle.kernel_cache.get("value"),value) and not handle.kernel_cache.get("particles",{}).is_empty(),"Prepared equivalent after-value copy adopts exact particle cache")
-                var prepared=renderer.kernel_preparations.filter(func(entry):return entry.key==key and entry.value==value)[0]
+                renderer._adopt_kernel_cache(handle,key,value,false,asset)
+                check(is_same(handle.kernel_cache.get("value"),value) and is_same(handle.kernel_cache.get("source"),asset) and not handle.kernel_cache.get("particles",{}).is_empty(),"Prepared equivalent after-value copy adopts exact particle cache")
+                var prepared=renderer.kernel_preparations.filter(func(entry):return entry.key==key and is_same(entry.source,asset) and entry.value==value)[0]
                 check(is_same(handle.kernel_cache,prepared.output.cache),"Impact adopts completed worker cache without copying particle shapes")
                 var active:Dictionary=reveal.duplicate();active.pattern=component.body_release.pattern
                 check(not handle.kernel_cache.get("landing",{}).is_empty(),"Worker prepares exact single-reveal landing rows")
@@ -86,7 +87,7 @@ func run()->void:
                 var copied:Dictionary=active.duplicate(true)
                 check(Blood.kernels(value,reveal.position,[copied],renderer.source,handle.kernel_cache)==original.kernels(value,reveal.position,[copied],renderer.source),"Copied equal reveal retains exact landing output")
                 check(Blood.kernels(reveal.before,reveal.position,[],renderer.source,handle.kernel_cache)==original.kernels(reveal.before,reveal.position,[],renderer.source),"Reverse version cannot retain future residue shapes")
-                renderer._adopt_kernel_cache(handle,key,value)
+                renderer._adopt_kernel_cache(handle,key,value,false,asset)
                 check(Blood.kernels(value,reveal.position,[],renderer.source,handle.kernel_cache)==original.kernels(value,reveal.position,[],renderer.source),"Reverse then forward cannot reuse a cache for another residue version")
                 check(reveal.after==value,"Worker/adoption never mutates received residue")
         if first_groups.is_empty():first_groups=[group]
@@ -124,8 +125,9 @@ func run()->void:
         await process_frame
     renderer._prune_pending(owner)
     var retired_handle={"kernel_cache":{}}
-    var retired_reveal:Dictionary=first_groups[0].components.filter(func(component):return component.kind=="residue_deposit")[0].reveals[0]
-    renderer._adopt_kernel_cache(retired_handle,Blood.key(retired_reveal.position),retired_reveal.after)
+    var retired_component:Dictionary=first_groups[0].components.filter(func(component):return component.kind=="residue_deposit")[0]
+    var retired_reveal:Dictionary=retired_component.reveals[0]
+    renderer._adopt_kernel_cache(retired_handle,Blood.key(retired_reveal.position),retired_reveal.after,false,retired_component.asset_metadata)
     check(renderer.kernel_jobs.is_empty() and renderer.kernel_preparations.is_empty() and retired_handle.kernel_cache.is_empty(),"Canceled received groups cannot publish completed or partial worker caches")
     owner.timeline.current=first_groups[0]
     renderer.prepare(owner,first_groups)

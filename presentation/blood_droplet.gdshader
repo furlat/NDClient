@@ -5,14 +5,17 @@ uniform float light_cap=0.;
 uniform bool normals_visible=false;
 // One shared material; each bucket half carries its own split plane.
 instance uniform bool partition=false;
+instance uniform bool polygon_flight=false;
 instance uniform bool back=false;
 instance uniform vec3 plane_origin;
 instance uniform vec3 plane_normal;
 varying vec3 world_point;
 varying vec4 tint;
-void vertex(){world_point=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;tint=COLOR;}
+varying float fragment_triangle;
+void vertex(){world_point=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;tint=COLOR;fragment_triangle=INSTANCE_CUSTOM.x;}
 vec3 decode(vec3 value){return mix(pow((value+vec3(.055))/1.055,vec3(2.4)),value/12.92,lessThanEqual(value,vec3(.04045)));}
 void fragment(){
+    if(polygon_flight&&fragment_triangle>.5&&UV.x+UV.y>1.)discard;
     if(!partition&&back)discard;
     if(partition&&(dot(world_point-plane_origin,plane_normal)<0.)!=back)discard;
     vec3 light=blood_irradiance(SCREEN_UV,VIEWPORT_SIZE,vec3(0.,0.,1.));float peak=max(light.r,max(light.g,light.b));if(light_cap>0.&&peak>light_cap)light*=light_cap/peak;

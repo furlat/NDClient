@@ -26,6 +26,11 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 ## the coverage report says whether the installed package has one. False
 ## keeps the package's lifecycle from playing for this condition.
 @export var play_package_lifecycle: bool = true
+## Optional delivered public-admission table, paired with its exact indexed
+## direct constructors at build time. Defaults remain in the package index.
+@export var lifecycle_opt_in: String = ""
+## Authored receiving subset for this lifecycle's declared source method.
+@export var lifecycle_geometry: Dictionary = {}
 ## Retain the actual pre-admission body for a delivered departure compositor.
 ## This does not freeze the displayed body or supply delayed live history.
 @export var capture_departure: bool = false
@@ -40,9 +45,14 @@ const EffectUse = preload("res://presentation/source/effect_use.gd")
 @export var aim_policy: String = ""
 ## The spell whose staging names this condition as its lifecycle owner.
 @export var owner_spell: String = ""
+## Build-time optional spell palette/staging treatment. False keeps this
+## condition's own delivered finish; its actual package lifecycle still plays.
+@export var inherit_spell_finish: bool = true
 ## Native held effects not supplied by a package condition selection. These
 ## run on this condition instance's observed lifetime, never an action clip.
 @export var effects: Array[EffectUse] = []
+## Finite effects admitted by actual attributed result facts, never owner age.
+@export var responses: Array[EffectUse] = []
 ## Surface id of a zone condition (its visuals belong to the surface).
 @export var surface: String = ""
 

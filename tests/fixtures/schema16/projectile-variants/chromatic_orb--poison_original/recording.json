@@ -1,0 +1,195 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "1c724a73-ae5c-4057-bcc9-3573c45e5686": "Amber caster",
+  "25fcaae2-a761-4646-b041-3fc21cab1c76": "Amber ally",
+  "1834be58-f70f-4540-a858-3b71722e5ec8": "Blue second target",
+  "2666e1b2-09f7-4da6-a067-fee1204fd973": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.chromatic_orb \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "saving_throw": 3,
+   "actor_change": 2,
+   "sensory": 1,
+   "spatial_effect_state": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.chromatic_orb": 1
+  },
+  "conditions": [
+   "condition.spell.simple_toxin"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 45,
+   "lineage": 33,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 49,
+   "lineage": 33,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.simple_toxin",
+   "kind": "actor_change",
+   "actor_uuid": "1834be58-f70f-4540-a858-3b71722e5ec8",
+   "condition_uuid": "78d6bd93-f08f-45f6-9f83-9967cab99868",
+   "condition_id": "condition.spell.simple_toxin",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 53,
+   "lineage": 33,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 57,
+   "lineage": 33,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 33,
+   "event_offset": 4,
+   "label": "condition applied condition.spell.simple_toxin",
+   "kind": "actor_change",
+   "actor_uuid": "2666e1b2-09f7-4da6-a067-fee1204fd973",
+   "condition_uuid": "a298acf7-c8c4-4c0b-934e-b1f97fbf0fbb",
+   "condition_id": "condition.spell.simple_toxin",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 63,
+   "lineage": 33,
+   "event_offset": 6,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 65,
+   "lineage": 33,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 53,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 57,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.simple_toxin",
+   "kind": "actor_change",
+   "actor_uuid": "1834be58-f70f-4540-a858-3b71722e5ec8",
+   "condition_uuid": "78d6bd93-f08f-45f6-9f83-9967cab99868",
+   "condition_id": "condition.spell.simple_toxin",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 4,
+   "label": "condition applied condition.spell.simple_toxin",
+   "kind": "actor_change",
+   "actor_uuid": "2666e1b2-09f7-4da6-a067-fee1204fd973",
+   "condition_uuid": "a298acf7-c8c4-4c0b-934e-b1f97fbf0fbb",
+   "condition_id": "condition.spell.simple_toxin",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 71,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 73,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

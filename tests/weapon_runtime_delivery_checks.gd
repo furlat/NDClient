@@ -50,8 +50,10 @@ func run()->void:
             var restored=Recording.restore(index,at)
             var active:Array=restored.component_samples(index.cache).filter(func(value):return value.get("native_weapon_impact",false))
             check(active.size()==(1 if at>=contact.start_ms and at<contact.end_ms else 0),"Finite contact seek boundary "+str(at)+", "+seat)
-    for seat in ["amber","blue"]:poison_original(seat)
-    print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Current production Ember and conditional Basic Poison assignments on independent original factions. Exact attack-time effect snapshots, two coated contacts, real natural expiry, clean later Crit/Hit, canonical seek/loop and immutable facts. No native pixels, applied Poison damage, Poisoned condition or user visual approval claimed."}))
+    for seat in ["amber","blue"]:
+        poison_original(seat)
+        flame_original(seat)
+    print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Current production Ember, conditional Basic Poison and created Flame Blade assignments on independent original factions. Exact attack-time effect snapshots, two coated contacts, real natural expiry, clean later Crit/Hit, canonical seek/loop and immutable facts. No native pixels, applied Poison damage, Poisoned condition or user visual approval claimed."}))
     quit(0 if failures.is_empty() else 1)
 
 func poison_original(seat:String)->void:
@@ -72,7 +74,7 @@ func poison_original(seat:String)->void:
         check(coat.native_clip.id=="weapons/equipped/poison/viscous_film/medium/sustain" \
             and coat.item_owner_uuid==POISON_ITEM and coat.item_effect_uuid==POISON_OWNER \
             and coat.item_effect_member.contribution_uuid==POISON_CONTRIBUTION \
-            and held[0].source=="res://authoring/characters/gear/weapon.longsword.tres::effects/0",label+": sustain uses the exact actual item/effect/contribution and production Gear source")
+            and held[0].source=="res://authoring/abilities/contexts/item_attachments.tres::effects/3",label+": sustain uses the exact actual item/effect/contribution and shared production membership source")
         for at in [held[0].start_ms-.01,held[0].start_ms+.01,held[0].end_ms-.01,held[0].end_ms+.01,held[0].start_ms+.01]:
             var restored:RefCounted=Recording.restore(index,maxf(0.0,at))
             var active:Array=restored.component_samples(index.cache).filter(func(value):return value.get("dynamic_item_effect",false))
@@ -111,7 +113,7 @@ func poison_original(seat:String)->void:
         var source:Array=coated.filter(func(row):return str(int(row.node.occurrence))==component.source_event_uuid)
         check(source.size()==1,label+": contact is owned by an original attack occurrence")
         if source.size()!=1:continue
-        check(contact.source=="res://authoring/characters/gear/weapon.longsword.tres::impact_effects/0" \
+        check(contact.source=="res://authoring/abilities/contexts/item_attachments.tres::impact_effects/0" \
             and component.weapon_impact.source_item_uuid==POISON_ITEM \
             and component.native_cue.item_effect_source_item_uuid==POISON_ITEM \
             and Compare.difference(component.native_cue.item_effect_members,source[0].fact.item_effects).is_empty(),label+": finite cue keeps this audience's attack-time values, including nullable duration/provenance and normal SDK integer decoding")
@@ -140,3 +142,35 @@ func poison_original(seat:String)->void:
         else:check(journal.state.items[POISON_ITEM].effects.is_empty(),label+": actual expired membership stays empty at the later boundary")
     check(Recording.restore(index,index.presentation_end_ms+1000.0).state==final,label+": end seek drains to the original independent canonical state")
     check(var_to_bytes([index.initialization,index.groups,index.rows])==immutable,label+": contact inspection/seek never mutates original source cuts or effect snapshots")
+
+func flame_original(seat:String)->void:
+    var key:String="intrinsic-weapon-flame-blade";var label:String="Created Flame Blade/"+seat
+    var index:Dictionary=Fixtures.read(key,seat)
+    check(index.ok,label+": both original creation/holding/expiry journals compile")
+    if not index.ok:return
+    var held:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("intrinsic_item_effect",false) \
+        and row.component.get("native_cue",{}).get("item_effect_behavior_id","").is_empty())
+    held.sort_custom(func(a,b):return a.start_ms<b.start_ms)
+    check(held.size()==2,label+": unequip and genuine same-item re-equip produce exactly two held intervals")
+    if held.size()!=2:return
+    var item:String=held[0].component.item_owner_uuid
+    check(held[1].component.item_owner_uuid==item and held[1].start_ms>held[0].end_ms,label+": real item UUID survives the unequipped gap")
+    for row in held:
+        var restored=Recording.restore(index,lerpf(row.start_ms,row.end_ms,.5))
+        var samples:Array=Items.samples(restored.item_effect_owners,restored.state,restored.display_ms)
+        check(samples.size()==1 and samples[0].item_owner_uuid==item and samples[0].native_clip.id=="weapons/equipped/fire/blade_tongues/medium/sustain",label+": actual held item selects existing modular fire decoration")
+        check(restored.state.items[item].look.item_id=="weapon.flame_blade" and row.component.optical.energy_multiplier==0.0,label+": original created Scimitar and backend light remain authoritative")
+        check(not row.component.has("condition_uuid") and not row.component.has("item_effect_uuid"),label+": intrinsic item ownership adds no synthetic membership")
+    for at in [lerpf(held[0].end_ms,held[1].start_ms,.5),held[1].end_ms+.01,index.presentation_end_ms]:
+        var restored=Recording.restore(index,at)
+        check(Items.samples(restored.item_effect_owners,restored.state,restored.display_ms).is_empty(),label+": real unequip/expiry cuts leave no held fire source "+str(at))
+    var final=Recording.restore(index,index.presentation_end_ms)
+    check(Items.membership(item,final.state).is_empty(),label+": actual native expiry removes current created-item membership while retained metadata remains immutable")
+    check(final.state.items.get(item,{}).get("look",{}).get("item_id")=="weapon.flame_blade",label+": the independent original retains the same created-item look metadata after expiry")
+    check(final.item_effect_owners==Recording.restore(index,index.presentation_end_ms).item_effect_owners,label+": seek/loop recovers identical retired ownership")
+    var contacts:Array=index.rows.filter(func(row):return row.get("component",{}).get("native_weapon_impact",false))
+    check(contacts.size()==2,label+": two accepted blade contacts, none for plain replacement")
+    for row in contacts:
+        check(row.component.weapon_impact.source_item_uuid==item and row.component.native_clip.id=="weapons/contact/fire/medium",label+": finite contact belongs to exact created blade and accepted occurrence")
+    var attacks:Array=Fixtures.fact_rows(key,"attack",seat)
+    check(attacks.size()==3 and attacks[2].fact.source_item_id=="weapon.longsword" and attacks[2].fact.source_item_uuid!=item,label+": final accepted attack uses actual plain replacement")

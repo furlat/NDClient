@@ -1,0 +1,152 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 13,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "adcae845-ad6e-4ff2-a509-3a546e78de76": "Amber caster",
+  "9527e419-9abf-4999-ba86-67a64be88fae": "Amber ally",
+  "089579de-171e-4b84-a467-a92b7c886d1d": "Blue second target",
+  "8fa5b1c9-bd05-4d43-a80a-a77bb78a93d0": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "action.move \u00b7 Amber caster",
+  "action.environment.directional_door.open \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "action.move \u00b7 Amber caster",
+  "action.environment.directional_door.open \u00b7 Amber caster",
+  "action.move \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 9,
+   "spatial": 16,
+   "sensory": 9,
+   "step": 7,
+   "movement": 4,
+   "action": 2
+  },
+  "behaviors": {
+   "action.move": 4,
+   "action.environment.directional_door.open": 2
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [],
+  "item_effects": [],
+  "ended_item_effects": [],
+  "item_effect_memberships": [],
+  "item_attacks": []
+ },
+ "moments": [
+  {
+   "sequence": 4,
+   "occurrence": 47,
+   "lineage": 29,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 5,
+   "occurrence": 56,
+   "lineage": 48,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.environment.directional_door.open",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 105,
+   "lineage": 57,
+   "event_offset": 15,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 145,
+   "lineage": 127,
+   "event_offset": 5,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 12,
+   "occurrence": 154,
+   "lineage": 146,
+   "event_offset": 2,
+   "kind": "action",
+   "label": "action action.environment.directional_door.open",
+   "faction": "amber"
+  },
+  {
+   "sequence": 13,
+   "occurrence": 188,
+   "lineage": 155,
+   "event_offset": 10,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 10,
+   "occurrence": 62,
+   "lineage": 50,
+   "event_offset": 3,
+   "kind": "action",
+   "label": "action action.environment.directional_door.open",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 96,
+   "lineage": 63,
+   "event_offset": 10,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7",
+  "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "2c11d7a9919c8aa9b1490628fff224627f19d6388c3884171d14a4a5cbecea22"
+ },
+ "sdk": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7/sdk/python/src",
+  "query_adapter": "strict_selected_SDK_choices",
+  "source": {
+   "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+   "branch": "feature/rules-checking",
+   "source": "/mnt/c/Users/tommaso/Documents/Dev/dnd_engine",
+   "export": "git archive committed tree; no working-tree changes"
+  }
+ }
+}

@@ -245,7 +245,7 @@ func _prepare_operation(next:int,handoff:Dictionary)->void:
     var input_at:int=Time.get_ticks_usec() if journal.profile_enabled else 0
     if handoff.is_empty():
         var raw = FileAccess.get_file_as_bytes(journal._file(next))
-        result = protocol.decode_server(root_name,raw)
+        result = protocol.decode_recorded(root_name,raw) if replay_thread!=null else protocol.decode_server(root_name,raw)
         if result.ok and int(result.value.cursor.sequence)!=next:
             result = {"ok":false,"error":{"kind":"recording","message":"Journal filename/cursor mismatch"}}
         if result.ok:

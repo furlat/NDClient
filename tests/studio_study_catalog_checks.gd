@@ -27,7 +27,7 @@ func run()->void:
         check(capability.kind in ["Action","Spell","Condition","VFX","Mechanic"],"Capability has a defined study family")
         for requirement in capability.requirements:
             check(not requirement.rendered,"Assignments never become rendering evidence")
-            check(not requirement.source.is_empty(),"Expected requirement has an inspectable source")
+            check(not requirement.source.is_empty(),"Expected requirement has an inspectable source: "+capability.id+" / "+str(requirement))
         for scenario in capability.scenarios:
             check(not scenario.sequence.is_empty() and not scenario.expectations.is_empty(),"Authored study has a sequence and expected consequences")
             for binding in scenario.recordings:
@@ -53,22 +53,27 @@ func run()->void:
         if not current.by_key.has(key):continue
         var capability:Dictionary=current.by_key[key]
         var sequences:Array=capability.cases.filter(func(row):return "spell."+id in row.subjects.get("spell",[]) and row.ready)
-        check(not sequences.is_empty(),"Each previously selected spell retains an openable real current study: "+id)
+        check(not sequences.is_empty(),"Each previously selected spell retains an openable real same-contract study: "+id)
         var identities:Dictionary={}
         for record in sequences:
             check(not identities.has(record.id),"Real study identity appears once for its exact capability: "+id)
             identities[record.id]=true
-            check(record.perspectives.size()==2,"Both independently recorded factions remain selectable: "+id)
+            var original:Dictionary=Cases._read(record.descriptor)
+            var expected_seats:Array=["party"] if original.has("player_builds_source") else ["amber","blue"]
+            check(record.perspectives.map(func(view):return view.id)==expected_seats,"Every actual independent recorded seat remains selectable: "+id+" / "+record.id)
             for view in record.perspectives:
                 var packet:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(view.journal.path_join("0000000000000000.json")))
                 check(packet.protocol.player_schema_version==16,"Study uses an original schema16 initialization: "+id+" / "+view.id)
-        check(capability.scenario_status=="recorded","Real current spell study reports its scenario coverage: "+id)
+        check(sequences.any(func(record):return record.perspectives.map(func(view):return view.id)==["amber","blue"]),"An original independent Amber/Blue spell study remains selectable: "+id)
+        check(capability.scenario_status=="recorded","Real admitted spell study reports its scenario coverage: "+id)
         if capability.cases.all(func(row):return row.get("presentation",{}).is_empty()):
-            check(capability.presentation_status=="not_assessed","A recording without render evidence cannot fabricate presentation coverage: "+id)
+            var witnessed:bool=not capability.get("output_witnesses",[]).is_empty()
+            check(capability.presentation_status==("evidence_available" if witnessed else "not_assessed"),"Recording and saved output witnesses remain distinct coverage facts: "+id)
+            check(capability.presentation_status not in ["passed","accepted"],"Saved witness presence cannot qualify current output or approve art: "+id)
     for id in ["aid","bless","false_life","sacred_flame"]:
         var capability:Dictionary=current.by_key.get("spell:spell."+id,{})
         check(not capability.is_empty() and capability.scenario_status=="recorded","Formerly deferred spell remains recorded and discoverable: "+id)
-        check(capability.approval_status=="rejected","An available real recording cannot approve rejected spell art: "+id)
+        check(capability.approval_status=="needs_review","An available real recording cannot approve current artwork: "+id)
     var expected_fields={}
     for id in ["action.move","action.jump"]:
         for requirement in index[id].requirements:
@@ -77,7 +82,8 @@ func run()->void:
     var dash:Dictionary=index["condition.dashing"]
     check(dash.indicator_assignments.size()==6,"Dash condition follows its actual conditional movement owners")
     check(not dash.requirements.any(func(row):return row.get("reason")=="persistent_visual_assignment_missing"),"Existing Dash trail is not mislabeled missing authoring")
-    check(dash.requirements.any(func(row):return row.get("reason")=="authored_movement_media_not_implemented"),"Unimplemented original trail stays an explicit renderer gap")
+    var dash_movement:Array=dash.requirements.filter(func(row):return row.get("phase")=="movement")
+    check(dash_movement.size()==6 and dash_movement.all(func(row):return row.implementation=="implemented" and row.status=="unexercised" and not row.rendered and not row.get("native_sources",[]).is_empty()),"All six declared Dash trails have selected shared native movement sources without claiming rendered output")
     var jumper={"conditions":[{"behavior_id":"condition.spell.jump"}]}
     check(Movement.selected(jumper,"connector_transfer",cache).is_empty() and Movement.selected(jumper,"forced",cache).is_empty(),"Non-jump transfers do not inherit jump expectations")
     for phase in [{"from":0.0,"to":.25},{"from":.25,"to":.5},{"from":.75,"to":1.0}]:
@@ -87,18 +93,22 @@ func run()->void:
         check(selected.filter(func(row):return row.media.role=="source_vfx").size()==2,"Flight expectation remains during each admitted airborne edge")
     var journal=Fixtures.read("dash")
     check(journal.ok,"Actual server Dash journal still admits after tooling changes")
-    var missing=[]
+    var missing:Array=[];var native_movement:Array=[]
     if journal.ok:
         for item in journal.groups:
-            for event in item.group.events:
-                for component in event.components:
-                    if component.get("reason")=="authored_movement_media_not_implemented":missing.append(component)
-        check(not missing.is_empty(),"Actual Dash occurrence exposes missing original trails instead of false green")
+            for component in item.group.components:
+                if component.get("reason")=="authored_movement_media_not_implemented":missing.append(component)
+                if not component.get("native_cue",{}).get("movement",{}).is_empty():native_movement.append(component)
+        check(missing.is_empty(),"Actual Dash no longer reports the retired unimplemented trail adapter")
+        check(not native_movement.is_empty(),"Actual Dash emits selected native movement occurrences")
+        for component in native_movement:
+            check("condition.dashing" in component.native_cue.movement.when_conditions and not component.authored_media.is_empty(),"Actual native movement retains the authored Dash predicate and legacy media delegation")
+            check(not component.body_track_id.is_empty() and component.source_track.actor_uuid==component.actor_uuid and component.source_track.get("motion",false),"Native movement follows the same actual scheduled body track and owner")
     var without_records=Study.build(cache,[])
     check(without_records.capabilities.size()==built.capabilities.size(),"Removing all recordings cannot remove any capability")
     check(without_records.counts.scenarios==built.counts.scenarios,"Removing recording files cannot remove the authored study sequences")
     check(without_records.counts.recorded_scenarios==0 and without_records.counts.partial_scenarios==0,"Unrecorded authored studies stay visible without claiming coverage")
     check(without_records.capabilities.all(func(capability):return capability.scenarios.all(func(scenario):return scenario.recordings.all(func(binding):return not binding.available))),"No implicit CaseLibrary lookup bypasses the supplied recording boundary")
-    var result={"checks":checks,"failures":failures,"counts":built.counts,"build_ms":elapsed,"actual_dash_missing_components":missing.size(),"scope":built.scope}
+    var result={"checks":checks,"failures":failures,"counts":built.counts,"build_ms":elapsed,"actual_dash_missing_components":missing.size(),"actual_dash_native_components":native_movement.size(),"scope":built.scope}
     FileAccess.open("res://generated/studio_study_catalog_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("STUDIO_STUDY_CATALOG ",JSON.stringify(result));quit(0 if failures.is_empty() else 1)

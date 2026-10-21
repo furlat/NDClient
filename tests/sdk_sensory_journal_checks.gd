@@ -1,82 +1,120 @@
 extends SceneTree
-# Real accepted sensory operations retain their derived indexes across journal
-# failure/retry and replay rollback; no private candidate becomes public.
-const Journal = preload("res://sdk/journal.gd")
-const Protocol = preload("res://sdk/protocol.gd")
-var checks := 0
-var failures: Array = []
-func check(value: bool, label: String) -> void:
-    checks += 1
-    if not value: failures.append(label)
-func _initialize() -> void:
-    var recording = "res://.runtime/player-runs/20261013T152452.610938Z/journal"
+## Actual native sensory masks/source dictionaries retain ownership through
+## semantic and durability refusal, retry, duplicate, cold replay and rollback.
+const Journal=preload("res://sdk/journal.gd")
+const Protocol=preload("res://sdk/protocol.gd")
+const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
+const ORACLE="res://tests/fixtures/schema16/spool-oracle"
+var checks:int=0
+var failures:Array=[]
+var evidence:Array=[]
+var later_retries:int=0
+func check(ok:bool,label:String)->void:
+    checks+=1
+    if not ok:failures.append(label);print("SDK_SENSORY_JOURNAL_FAIL ",label)
+func _initialize()->void:run.call_deferred()
+func run()->void:
+    var directory:String=ORACLE
     for arg in OS.get_cmdline_user_args():
-        if arg.begins_with("--recording="): recording = arg.trim_prefix("--recording=")
-    var path = "user://sensory-journal-"+str(Time.get_ticks_usec())
-    var journal = Journal.new()
-    check(journal.open(path).ok,"Open isolated current journal")
-    for sequence in range(5):
-        var raw = FileAccess.get_file_as_bytes(recording.path_join("%016d.json" % sequence))
-        var decoded = journal.protocol.decode("InitializationResponse" if sequence==0 else "PlayerOperation",raw)
-        check(decoded.ok,"Recorded prefix strictly admitted "+str(sequence))
-        if not decoded.ok: finish(path); return
-        check(journal._consume_admitted(decoded.value,raw,true,sequence>0).ok,"Recorded prefix committed "+str(sequence))
-    var before = journal.snapshot()
-    var cursor = journal.cursor.duplicate(true)
-    var context: Dictionary = journal._sensory_context
-    var frozen_context = context.duplicate(true)
-    check(context.get("cells",{}).get("composed",false),"Control includes accepted sensory indexes")
-    var raw = FileAccess.get_file_as_bytes(recording.path_join("0000000000000005.json"))
-    var decoded = journal.protocol.decode("PlayerOperation",raw)
-    check(decoded.ok,"Following real sensory operation admitted")
-    if not decoded.ok: finish(path); return
-    var packet: Dictionary = decoded.value
-    var invalid: Dictionary = packet.duplicate(true)
-    check(invalid.hud!=null,"Control has final HUD after sensory changes")
-    if invalid.hud==null: finish(path); return
-    invalid.hud.revision = invalid.lineages[-1].end_cursor+1
-    var invalid_raw = JSON.stringify(invalid,"",false,true).to_utf8_buffer()
-    var denied = journal._consume_admitted(invalid,invalid_raw,true,true)
-    check(not denied.ok and not denied.has("transitions"),"Late semantic refusal publishes no captures")
-    check(journal.state==before and journal.cursor==cursor,"Late refusal preserves state and cursor")
-    check(is_same(journal._sensory_context,context) and context==frozen_context,"Late refusal preserves committed indexes and ownership")
-    var destination = path.path_join("0000000000000005.json")
-    check(DirAccess.make_dir_absolute(destination)==OK,"Obstruct durable rename after reduction")
-    denied = journal._consume_admitted(packet,raw,true,true)
-    check(not denied.ok and not denied.has("transitions"),"Durability refusal publishes no captures")
-    check(journal.state==before and journal.cursor==cursor,"Durability refusal preserves canonical boundary")
-    check(is_same(journal._sensory_context,context) and context==frozen_context,"Durability refusal preserves committed indexes")
-    DirAccess.remove_absolute(destination)
-    var accepted = journal._consume_admitted(packet,raw,true,true)
-    check(accepted.ok and accepted.has("transitions"),"Retry commits complete authoritative operation")
-    check(context==frozen_context,"Successful later commit also preserves earlier retained indexes")
-    var after = journal.snapshot()
-    var after_context = journal._sensory_context
-    var frozen_after_context = after_context.duplicate(true)
-    var held_captures = accepted.transitions.duplicate(true)
-    var bad_path = path.path_join("0000000000000006.json")
-    var next_raw = FileAccess.get_file_as_bytes(recording.path_join("0000000000000006.json"))
-    var next = journal.protocol.decode("PlayerOperation",next_raw)
-    check(next.ok,"Next real operation strictly admitted")
-    if not next.ok: finish(path); return
-    var broken: Dictionary = next.value.duplicate(true)
-    broken.lineages[-1].start_cursor += 1
-    FileAccess.open(bad_path,FileAccess.WRITE).store_string(JSON.stringify(broken,"",false,true))
-    denied = journal.replay()
-    check(not denied.ok,"Replay rejects a later invalid lineage")
-    check(journal.state==after and journal.cursor.sequence==5,"Replay rollback restores exact preceding public boundary")
-    check(is_same(journal._sensory_context,after_context) and after_context==frozen_after_context,"Replay rollback restores committed index owner")
-    DirAccess.remove_absolute(bad_path)
-    check(journal._consume_admitted(next.value,next_raw,true,true).ok,"Retry after replay failure consumes next sensory operation")
-    check(accepted.transitions==held_captures,"Later retry leaves earlier event-time captures frozen")
-    var final_state = journal.snapshot()
-    check(journal.replay().ok and journal.state==final_state,"Strict cold replay equals trusted live result")
-    check(journal.replay(0).ok and journal._sensory_context.is_empty(),"Initialization-only replay drops prior derived context")
-    finish(path)
-func finish(path: String) -> void:
-    for name in DirAccess.get_files_at(path): DirAccess.remove_absolute(path.path_join(name))
-    DirAccess.remove_absolute(path)
-    var report = {"checks":checks,"failures":failures,"scope":"Real sensory operations, late semantic failure, durable rename failure, retry, frozen captures and strict replay rollback"}
+        if arg.begins_with("--oracle="):directory=arg.trim_prefix("--oracle=")
+    var index:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(directory.path_join("index.json")))
+    var states:=ZIPReader.new()
+    check(states.open(directory.path_join(index.states_archive))==OK,"Independent frozen Python canonical archive opens")
+    for seat in index.seats:original(directory,seat,states)
+    states.close()
+    check(evidence.size()==4 and evidence.all(func(row):return row.semantic_refusal and row.durable_refusal and row.replay_rollback),"Both actual Door and lethal-OA faction prefixes exercise the full publication-refusal boundary")
+    check(later_retries==2,"Both Door originals supply a genuine following operation for retry after replay refusal; final lethal-OA cuts do not invent one")
+    var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,"producer_reference":index.reference,
+        "scope":"Actual native16 Door/lethal-OA prefixes and independent frozen Python cuts. Late malformed-HUD and durable-write controls preserve exact canonical mask/source ownership; actual retry, frozen event captures, duplicate, replay rollback and initialization seek. No old cell-context cache, synthetic positive operation, compatibility replay or rendering claim."}
     FileAccess.open("res://generated/sdk_sensory_journal_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
-    print("SDK_SENSORY_JOURNAL_CHECKS ",JSON.stringify(report))
-    quit(0 if failures.is_empty() else 1)
+    print("SDK_SENSORY_JOURNAL_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
+func original(directory:String,seat:Dictionary,states:ZIPReader)->void:
+    var path:String="user://sensory-native-"+str(Time.get_ticks_usec())
+    var journal:RefCounted=Journal.new()
+    check(journal.open(path).ok,str(seat.id)+": isolated native journal opens")
+    journal.protocol=Protocol.new(Protocol.PRE_REVIEW_SCHEMA,Protocol.PRE_REVIEW_IDENTITY)
+    var exercised:bool=false;var pending_retry:int=-1;var captures:Array=[];var capture_copies:Array=[]
+    var held:Array=[];var frozen:Array=[];var selected:int=-1;var later:bool=false
+    for sequence in seat.records.size():
+        var record:Dictionary=seat.records[sequence];var raw:PackedByteArray=FileAccess.get_file_as_bytes(directory.path_join(record.bytes))
+        var decoded:Dictionary=journal.protocol.decode("InitializationResponse" if sequence==0 else "PlayerOperation",raw)
+        check(decoded.ok,str(seat.id)+": original native packet strictly admits "+str(sequence))
+        if not decoded.ok:break
+        var packet:Dictionary=decoded.value;var sensory_count:int=0
+        for lineage in packet.get("lineages",[]):
+            for event in lineage.events:
+                if not event.get("canceled",false) and event.get("fact")!=null and event.fact.kind=="sensory":sensory_count+=1
+        var candidate:bool=sequence>0 and sensory_count>0 and not exercised
+        if candidate:
+            selected=sequence
+            var owned:Dictionary=journal.state;var before:Dictionary=journal.snapshot();var cursor:Dictionary=journal.cursor.duplicate(true)
+            var senses:Dictionary=journal.state.senses;var visible:Dictionary=senses.visible;var seen:Dictionary=senses.seen
+            var lights:Dictionary=journal.state.light_sources;var context:Dictionary=journal._sensory_context;var context_copy:Dictionary=context.duplicate(true)
+            check(int(visible.width)>0 and int(seen.width)>0 and senses.effective_light_levels.cells==visible,str(seat.id)+": control holds actual native encoded visible/seen/light cells")
+            var invalid:Dictionary=packet.duplicate(true)
+            # Deliberately malformed final HUD resource key. Every original
+            # native lineage, source table and sensory row remains unchanged.
+            var sheet:Dictionary=before.hud_snapshot.sheets[0];var resource:Dictionary=sheet.resources[0]
+            var bad:Dictionary={"actor_uuid":sheet.actor_uuid,"changes":{},"resource_values":[{"key":str(resource.key)+":not-held-control","current":resource.current,"maximum":resource.maximum}]}
+            invalid.hud=packet.hud.duplicate(true) if packet.get("hud")!=null else {}
+            var patches:Array=invalid.hud.get("sheets",[]).duplicate(true);patches=patches.filter(func(row):return row.actor_uuid!=sheet.actor_uuid);patches.append(bad);invalid.hud.sheets=patches
+            var invalid_copy:Dictionary=invalid.duplicate(true);var original:Dictionary=packet.duplicate(true)
+            var invalid_raw:PackedByteArray=JSON.stringify(invalid,"",false,true).to_utf8_buffer()
+            check(journal.protocol.decode("PlayerOperation",invalid_raw).ok,str(seat.id)+": malformed final HUD stays schema-admitted")
+            var denied:Dictionary=journal._consume_admitted(invalid,invalid_raw,true)
+            check(not denied.ok and denied.error.message=="Resource values name a row the sheet does not hold" and not denied.has("transitions"),str(seat.id)+": exact late HUD refusal publishes no event captures")
+            check(journal.state==before and journal.cursor==cursor and invalid==invalid_copy and packet==original,str(seat.id)+": late refusal preserves state/cursor and both input packets")
+            owned_boundary(journal,owned,senses,visible,seen,lights,context,str(seat.id)+": late semantic refusal")
+            var destination:String=path.path_join("%016d.json"%sequence)
+            check(not FileAccess.file_exists(destination),str(seat.id)+": semantic refusal never commits malformed bytes")
+            check(DirAccess.make_dir_absolute(destination)==OK,str(seat.id)+": obstruct exact durable rename after candidate reduction")
+            denied=journal._consume_admitted(packet,raw,true)
+            check(not denied.ok and not denied.has("transitions"),str(seat.id)+": durability refusal publishes no captures")
+            check(journal.state==before and journal.cursor==cursor and context==context_copy,str(seat.id)+": durability refusal preserves exact preceding cut")
+            owned_boundary(journal,owned,senses,visible,seen,lights,context,str(seat.id)+": durable refusal")
+            DirAccess.remove_absolute(destination)
+        var accepted:Dictionary=journal._consume_admitted(packet,raw,true)
+        check(accepted.ok,str(seat.id)+": exact original retry/commit succeeds "+str(sequence))
+        if not accepted.ok:break
+        check(FileAccess.get_file_as_bytes(journal._file(sequence))==raw,str(seat.id)+": committed original bytes remain exact")
+        var expected:Variant=JSON.parse_string(states.read_file(record.expected).get_string_from_utf8())
+        var issue:String=Compare.difference(journal.state,expected)
+        check(issue.is_empty(),str(seat.id)+": full independent Python prefix "+str(sequence)+" "+issue)
+        for i in held.size():check(held[i]==frozen[i],str(seat.id)+": later publication leaves earlier native cut unchanged "+str(i))
+        for i in captures.size():check(captures[i]==capture_copies[i],str(seat.id)+": later retry preserves earlier event-time captures "+str(i))
+        held.append(journal.state);frozen.append(journal.snapshot())
+        if accepted.has("transitions"):captures.append(accepted.transitions);capture_copies.append(accepted.transitions.duplicate(true))
+        if pending_retry==sequence:
+            check(accepted.has("transitions"),str(seat.id)+": actual following operation retries after replay refusal and publishes its real captures")
+            later_retries+=1;pending_retry=-1
+        if candidate:
+            check(accepted.has("transitions") and journal._sensory_context.is_empty(),str(seat.id)+": native retry publishes captures without resurrecting the retired context cache")
+            var after:Dictionary=journal.state;var after_copy:Dictionary=journal.snapshot();var after_context:Dictionary=journal._sensory_context
+            var at:int=sequence+1 if sequence+1<seat.records.size() else sequence
+            later=at>sequence
+            var bad_raw:PackedByteArray=FileAccess.get_file_as_bytes(directory.path_join(seat.records[at].bytes))
+            var next:Dictionary=journal.protocol.decode("PlayerOperation",bad_raw)
+            check(next.ok,str(seat.id)+": actual replay-control original strictly admits")
+            if not next.ok:break
+            var broken:Dictionary=next.value.duplicate(true);broken.lineages[-1].start_cursor+=1
+            var bad_path:String=path.path_join("%016d.json"%at)
+            var file:=FileAccess.open(bad_path,FileAccess.WRITE);file.store_string(JSON.stringify(broken,"",false,true));file.close()
+            var denied:Dictionary=journal.replay()
+            check(not denied.ok,str(seat.id)+": strict replay refuses the malformed native lineage gap")
+            check(journal.state==after_copy and is_same(journal.state,after) and journal.cursor.sequence==sequence and is_same(journal._sensory_context,after_context),str(seat.id)+": replay rollback restores the complete prior canonical/source/index owner")
+            if later:DirAccess.remove_absolute(bad_path);pending_retry=at
+            else:
+                file=FileAccess.open(bad_path,FileAccess.WRITE);file.store_buffer(bad_raw);file.close()
+                check(journal.replay().ok and journal.state==after_copy,str(seat.id)+": restoring original terminal bytes cold-replays the exact final cut")
+            var duplicate:Dictionary=journal._consume_admitted(packet,raw,true)
+            check(duplicate.ok and not duplicate.has("transitions") and journal.state==after_copy,str(seat.id)+": actual repeated retry cannot republish captures or alter state")
+            exercised=true
+    var terminal:Dictionary=journal.snapshot()
+    check(journal.replay().ok and journal.state==terminal,str(seat.id)+": strict cold replay equals complete original live result")
+    check(journal.replay(0).ok and journal._sensory_context.is_empty() and Compare.difference(journal.state,JSON.parse_string(states.read_file(seat.records[0].expected).get_string_from_utf8())).is_empty(),str(seat.id)+": initialization seek restores original native masks and drops all future index/source state")
+    evidence.append({"case":seat.id,"records":seat.records.size(),"control_sequence":selected,"semantic_refusal":exercised,"durable_refusal":exercised,"replay_rollback":exercised,"later_original_available":later})
+    for name in DirAccess.get_files_at(path):DirAccess.remove_absolute(path.path_join(name))
+    DirAccess.remove_absolute(path)
+func owned_boundary(journal:RefCounted,state:Dictionary,senses:Dictionary,visible:Dictionary,seen:Dictionary,lights:Dictionary,context:Dictionary,label:String)->void:
+    check(is_same(journal.state,state) and is_same(journal.state.senses,senses) and is_same(journal.state.senses.visible,visible) and is_same(journal.state.senses.seen,seen),label+": exact committed native mask owners survive")
+    check(is_same(journal.state.light_sources,lights) and is_same(journal._sensory_context,context),label+": exact light-source and derived-index owners survive")

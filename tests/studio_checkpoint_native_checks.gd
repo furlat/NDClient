@@ -34,19 +34,19 @@ func transport_checks()->void:
         for component in wrapped.group.components:
             if not component.get("native_spell",false):continue
             var spell:String=component.spell_id
-            if spell not in ["magic_missile","scorching_ray","fireball"]:continue
+            if spell not in ["spell.magic_missile","spell.scorching_ray","spell.fireball"]:continue
             if not counts.has(spell):counts[spell]={}
             var role:String=component.native_cue.role
             counts[spell][role]=int(counts[spell].get(role,0))+1
-    var expected={"magic_missile":{"cast":2,"flight":6,"impact":6},"scorching_ray":{"cast":1,"flight":3,"impact":1},"fireball":{"cast":1,"flight":1,"area":1}}
+    var expected={"spell.magic_missile":{"cast":2,"flight":6,"impact":6},"spell.scorching_ray":{"cast":1,"flight":3,"impact":1},"spell.fireball":{"cast":1,"flight":1,"area":1}}
     check(counts==expected,"Compact tracks retain the recorded casts, missiles, rays, impacts and single Fireball area")
     checkpoint.native_roles=counts
     DirAccess.make_dir_recursive_absolute(CAPTURE_DIR)
     var selections:Array=[]
     var movement:Array=studio.index.rows.filter(func(row):return row.kind=="body" and row.get("track",{}).get("clip")=="Run" and row.end_ms-row.start_ms>100)
     if not movement.is_empty():selections.append({"name":"movement","row":movement[0]})
-    for spell in ["magic_missile","scorching_ray","fireball"]:
-        var sources:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("spell_id")==spell and row.component.native_cue.role==("area" if spell=="fireball" else "flight") and row.get("visible_here",true))
+    for spell in ["spell.magic_missile","spell.scorching_ray","spell.fireball"]:
+        var sources:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("spell_id")==spell and row.component.native_cue.role==("area" if spell=="spell.fireball" else "flight") and row.get("visible_here",true))
         check(not sources.is_empty(),"Actual recorded source available for "+spell)
         if not sources.is_empty():selections.append({"name":spell,"row":sources[0]})
     for selected in selections:
@@ -59,7 +59,7 @@ func transport_checks()->void:
         check(followed_visible(),"Seek follows visible animation: "+selected.name)
         var context:Array=studio.tracks.context_labels(studio.tracks.published_layout)
         check(context.size()==2 and not str(context[0]).is_empty(),"Scrolled tracks retain their action and lane context: "+selected.name)
-        if selected.name=="fireball":
+        if selected.name=="spell.fireball":
             var followed:Dictionary=studio.tracks.rows_by_id.get(studio.tracks.followed_row,{})
             check(followed.get("kind")=="native_effect" and followed.get("component",{}).get("native_cue",{}).get("role")=="area","Fireball follows its active area instead of incidental residue")
         var path:String=CAPTURE_DIR.path_join(selected.name+".png")

@@ -20,6 +20,24 @@
               "direction": "forward"
             }
           ]
+        },
+        "connector_transfer": {
+          "review_status": "source_authored_unreviewed",
+          "evidence": "Same actual modular Run source frames3 and10 as the existing path assignment. The current Run connector fallback has no connector arc/warped body keys; its actual source clock owns stride crossings. This is source reuse only; sound/artwork and native contact remain unreviewed.",
+          "markers": [
+            {
+              "id": "foot_a",
+              "binding": "path",
+              "frame": 3,
+              "direction": "forward"
+            },
+            {
+              "id": "foot_b",
+              "binding": "path",
+              "frame": 10,
+              "direction": "forward"
+            }
+          ]
         }
       },
       "CrouchRun": {
@@ -51,14 +69,60 @@
               "id": "takeoff",
               "binding": "takeoff",
               "frame": 0,
-              "direction": "forward"
+              "direction": "forward",
+              "motion_endpoint": "start"
             },
             {
               "id": "touchdown",
               "binding": "landing",
               "frame": 15,
               "boundary": "clip_end",
-              "direction": "forward"
+              "direction": "forward",
+              "motion_endpoint": "end"
+            }
+          ]
+        },
+        "connector_transfer": {
+          "review_status": "source_authored_unreviewed",
+          "evidence": "authoring/abilities/contexts/movement.tres connectorProfiles.window bodyFrameKeys are 0->3 hold->0; Tracks.movement supplies the actual window arc and Tracks.samples returns zero lift at its endpoints. Forward frame0 owns takeoff; reverse frame0 owns completed landing. The endpoint qualifier refuses loops, incomplete motion or airborne crossings. No source pose inside the arc is treated as ground.",
+          "markers": [
+            {
+              "id": "window_takeoff",
+              "binding": "takeoff",
+              "frame": 0,
+              "direction": "forward",
+              "motion_endpoint": "start"
+            },
+            {
+              "id": "window_touchdown",
+              "binding": "landing",
+              "frame": 0,
+              "direction": "reverse",
+              "motion_endpoint": "end"
+            }
+          ]
+        }
+      }
+    },
+    "smallscale.goblin01": {
+      "Rolling": {
+        "direct_arc": {
+          "review_status": "source_authored_unreviewed",
+          "evidence": "Actual source is Goblin 01/Roll 1.png, authored as Rolling in authoring/characters/rigs/smallscale.goblin01.tres. Its direct_arc frame_keys map full actual motion 0->3->10->14; source frame14 therefore reaches the real full arc endpoint, not clip_end15. The shared endpoint qualifier requires the actual nonlooping motion boundary with disclosed endpoints/elevations and zero sampled lift. Looped/disclosed-edge-only clocks remain unavailable; source/artwork and native contact remain unreviewed.",
+          "markers": [
+            {
+              "id": "takeoff",
+              "binding": "takeoff",
+              "frame": 0,
+              "direction": "forward",
+              "motion_endpoint": "start"
+            },
+            {
+              "id": "touchdown",
+              "binding": "landing",
+              "frame": 14,
+              "direction": "forward",
+              "motion_endpoint": "end"
             }
           ]
         }

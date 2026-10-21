@@ -63,7 +63,7 @@ var follow_scans=0
 var preview_visible_rows:Array=[]
 var frame_cpu_ms:Dictionary={}
 const RULER = 27.0
-const PREVIEW_KINDS = ["body","part","condition_material","condition_pose","condition_appearance","condition_restore","native_effect","sprite_layer","material_flash","feedback_text","damage_number","audio","residue_deposit","geometry_projectile"]
+const PREVIEW_KINDS = ["body","part","condition_material","condition_pose","condition_appearance","condition_restore","native_effect","native_material","sprite_layer","material_flash","feedback_text","damage_number","audio","residue_deposit","geometry_projectile","world_activation","world_animation"]
 
 func _ready() -> void:
     thumbnails.host=self
@@ -82,6 +82,7 @@ func set_index(value: Dictionary) -> void:
     light_plots.clear()
     collapsed.clear(); thumbnails.reset(); scroll_y = 0; origin_ms = 0
     thumbnails.cache=Thumbnails.Catalog.source_snapshot(value.get("cache",{}))
+    thumbnails.recording=value
     thumbnails.prepare_descriptors(index.get("rows",[]))
     rows_by_id.clear();event_descendants.clear();environment_lights.clear();lighting_rows.clear();follow_rows.clear()
     follow_from=INF;follow_until=-INF;follow_scans=0

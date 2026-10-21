@@ -1,5 +1,6 @@
 extends SceneTree
 const Studio=preload("res://studio/studio.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -36,8 +37,15 @@ func run()->void:
     DirAccess.make_dir_recursive_absolute("res://.captures/studio")
     DisplayServer.window_set_size(Vector2i(1280,720))
     var studio=Studio.new();root.add_child(studio)
+    var record:Dictionary=Fixtures.public_case("action-surge")
+    var requested:String=""
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--recording="):requested=arg.trim_prefix("--recording=")
+    check(record.journals.values().has(requested),"Native UI input is one exact independent original in the declared Action Surge case")
+    if not record.journals.values().has(requested):await finish(studio);return
+    studio.case_records.append(record);studio._load(requested)
     if not await wait_ready(studio):await finish(studio);return
-    check(studio.case_paths.any(func(path):return "/blue/journal" in path),"Case picker includes actual blue observer recordings")
+    check(studio.case_bundle.perspectives.any(func(view):return view.id=="blue"),"Actual selected case retains its independent Blue observer recording")
     check(studio.index.rows.any(func(row):return row.kind=="audio"),"Timeline exposes actual compiled audio rows")
     check(studio.index.rows.any(func(row):return row.kind=="native_effect"),"Timeline exposes actual compiled native source rows")
     check(studio.preview.size.y>=200 and studio.tracks.size.y>100,"1280 layout retains usable preview and tracks")

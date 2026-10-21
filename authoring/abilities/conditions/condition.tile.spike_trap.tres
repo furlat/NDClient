@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_11kok")
 id = "condition.tile.spike_trap"
+disposition = "state_only"
 icon = SubResource("Resource_fxovc")
+play_package_lifecycle = false
+status = "internal"
+notes = "SpikeTrapCondition is the retained legacy TileEffectCondition record in dnd/tile_conditions.py. Its inherited apply only records the condition and creates no trap interaction, damage or field. Current actual spatial SpikeTrap ownership is a separate producer identity; this legacy tile record cannot fabricate that geometry or replay a spike effect."

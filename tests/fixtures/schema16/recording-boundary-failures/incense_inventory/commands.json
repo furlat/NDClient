@@ -1,0 +1,105 @@
+[
+ {
+  "request": {
+   "do": "action.class.cleric.divine_intervention.arm_thy_servant",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "3a977f66-a0bc-453a-b99c-056257c97c23",
+  "discovery_generation": 1,
+  "preview_request": {
+   "actor_uuid": "a56fcf1b-17c7-4482-a5b7-1065f8b606e4",
+   "state_revision": "3a977f66-a0bc-453a-b99c-056257c97c23",
+   "discovery_generation": 1,
+   "correlation_id": "8edec4a1-b765-4e7c-8e20-4f1f6be09777",
+   "selection": {
+    "action_index": 40,
+    "target_indices": [
+     0
+    ],
+    "extra_target_positions": [],
+    "prefer_safe": false
+   }
+  },
+  "selected_action": {
+   "behavior_id": "action.class.cleric.divine_intervention.arm_thy_servant",
+   "display_name": "Divine Intervention: Arm Thy Servant",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a56fcf1b-17c7-4482-a5b7-1065f8b606e4",
+   "state_revision": "3a977f66-a0bc-453a-b99c-056257c97c23",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 40,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character__inventory_control",
+   "game_epoch": "82f97c30-55d3-47ab-947c-b16027e5756b",
+   "audience_id": "c5a45d63-9e62-4cf7-9614-f10919be915d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character__inventory_control",
+    "game_epoch": "82f97c30-55d3-47ab-947c-b16027e5756b",
+    "audience_id": "c5a45d63-9e62-4cf7-9614-f10919be915d",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "target": "self",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "a56fcf1b-17c7-4482-a5b7-1065f8b606e4",
+   "state_revision": "fb5d2e0a-325a-4522-982a-0b682f1e3b55",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character__inventory_control",
+   "game_epoch": "82f97c30-55d3-47ab-947c-b16027e5756b",
+   "audience_id": "c5a45d63-9e62-4cf7-9614-f10919be915d",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character__inventory_control",
+    "game_epoch": "82f97c30-55d3-47ab-947c-b16027e5756b",
+    "audience_id": "c5a45d63-9e62-4cf7-9614-f10919be915d",
+    "sequence": 9
+   }
+  }
+ }
+]

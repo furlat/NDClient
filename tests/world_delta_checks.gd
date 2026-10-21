@@ -17,7 +17,11 @@ func compare(state:Dictionary,label:String)->void:
     var actual=World.cached_rows(state,cache,retained)
     check(actual==World.rows(state,cache),label+" original row/corner equality")
     var expected=World.visibility(state)
-    var sparse=World.current_ids(state,retained.boundaries)
+    var spatial:Dictionary={};var residues:Dictionary={}
+    for row in actual.rows:
+        if row.has("spatial_effect_uuid"):spatial[row.id]=row
+        if row.has("floor_motifs"):residues[row.id]=row
+    var sparse=World.current_ids(state,retained.boundaries,{}, {},spatial,residues)
     check(sparse.keys().all(func(id):return expected.get(id,false)) and expected.keys().all(func(id):return bool(expected[id])==sparse.has(id)),label+" exact subjective grants")
     check(retained.boundaries==World.boundary_index(state),label+" exact live boundary index")
     check(state==before,label+" canonical after-values unchanged")

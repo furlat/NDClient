@@ -5,12 +5,15 @@ const Compiler=preload("res://presentation/compiler.gd")
 const Timeline=preload("res://presentation/timeline.gd")
 const Play=preload("res://play.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Occurrences=preload("res://presentation/occurrences.gd")
 const CAPTURES="res://.captures/native-spell-playback"
 const REPORT="res://.runtime/native-spell-playback-checks.json"
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
 var captures:Array=[]
+var plan_only:bool=false
 
 func _initialize()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
@@ -33,20 +36,26 @@ func read_case(spec:Dictionary)->Dictionary:
     var before=journal.replay(spec.sequence-1)
     check(before.ok,spec.id+": preceding canonical state reduces")
     if not before.ok:return {}
-    var decoded=journal.protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(spec.path.path_join("%016d.json"%spec.sequence)))
-    check(decoded.ok,spec.id+": actual operation admits")
+    var initial:Dictionary=journal.state
+    var raw:PackedByteArray=FileAccess.get_file_as_bytes(spec.path.path_join("%016d.json"%spec.sequence))
+    var decoded:Dictionary=journal.decode_record(spec.sequence,raw)
+    check(decoded.ok,spec.id+": actual native16 operation admits")
     if not decoded.ok:return {}
-    var packet=journal.protocol.normalize("PlayerOperation",decoded.value)
+    var folded:Dictionary=journal._consume_admitted(decoded.value,raw,true)
+    check(folded.ok,spec.id+": actual event-time canonical cuts reduce")
+    if not folded.ok:return {}
+    var packet:Dictionary=folded.normalized
     var cache:Dictionary={}
-    var compiled=Compiler.compile(journal.state,packet,cache)
+    var compiled=Compiler.compile_recorded(initial,packet,cache,journal.state,folded.transitions)
     check(compiled.ok,spec.id+": production compiler accepts")
     if not compiled.ok:print(compiled);return {}
-    var result={"spec":spec,"initial":journal.state,"final":compiled.value.final_state,"groups":compiled.value.groups,"cache":cache,"rows":[],"end_ms":0.0,"semantic_end_ms":0.0,"events":{}}
+    var result={"spec":spec,"initial":initial,"final":journal.state,"groups":compiled.value.groups,"cache":cache,"rows":[],"end_ms":0.0,"semantic_end_ms":0.0,"events":{}}
     var completion_by_lineage:Dictionary={}
-    for lineage in packet.lineages:
+    for native in packet.lineages:
+        var lineage:Dictionary=Occurrences.group(native)
         for event in lineage.events:
-            result.events[event.uuid]=event
-            if event.phase=="completion":completion_by_lineage[event.lineage_uuid]=event
+            result.events[event.id]=event
+            if event.phase=="completion":completion_by_lineage[event.lineage_id]=event
     var at=0.0
     for group in result.groups:
         for component in group.components:
@@ -68,7 +77,7 @@ func read_case(spec:Dictionary)->Dictionary:
         while ancestor_lineage!=null and completion_by_lineage.has(ancestor_lineage):
             var owner:Dictionary=completion_by_lineage[ancestor_lineage]
             var fact:Variant=owner.fact
-            ancestor=owner.uuid
+            ancestor=owner.id
             if fact!=null and fact.kind=="spell":break
             ancestor_lineage=owner.parent_lineage
         var own=flights.filter(func(row):return row.component.source_event_uuid==ancestor)
@@ -91,6 +100,7 @@ func settle(world:Node,label:String)->bool:
     var diagnosed=false
     var ready=false
     while world.presentation_errors.is_empty() and world.media_issue.is_empty() and Time.get_ticks_msec()<deadline:
+        await process_frame
         if world.playback_prepared():
             check(world.component_renderer.native_spells.required_images.keys().all(func(path):return world.media_plan.required.has(path)),label+": ready includes every current native optical image in mandatory media")
             check(world.playback_prepared(),label+": readiness does not retract on an unchanged immediate query")
@@ -113,7 +123,7 @@ func preparation_diagnostic(world:Node)->Dictionary:
         "world_epoch":world.world_prepare_epoch,"timeline_epoch":world.timeline.initialization_revision,"waiting_world":world.timeline.waiting_for_world,
         "media_metadata_ready":world.media_metadata_ready,"media_initial_ready":world.media_initial_ready,"media_group":group.get("id"),
         "renderer_ready":world.component_renderer.ready,"native_ready":world.component_renderer.native_spells.ready,"hit_ready":world.component_renderer.native_hits.ready,
-        "blood_ready":world.component_renderer.blood.ready,"native_prepare":world.component_renderer.prepare([group],world.catalog_cache,world)}
+        "blood_ready":world.component_renderer.blood.ready,"native_prepare":world.component_renderer.readiness}
 
 func advance(world:Node,target:float)->bool:
     var plan=world.timeline.replay_plan(target)
@@ -386,6 +396,8 @@ func paused_controls(world:Node,view:SubViewport,data:Dictionary)->void:
 func run_case(spec:Dictionary)->void:
     var data=read_case(spec)
     if data.is_empty():return
+    if plan_only:
+        evidence.append({"case":spec.id,"recording":spec.path,"sequence":spec.sequence,"deliveries":spec.deliveries,"hits":spec.hits,"phase_plan":data.rows.map(func(row):return {"id":row.component.id,"source_event_uuid":row.component.source_event_uuid,"role":row.component.get("native_cue",{}).get("role","material_flash"),"start_ms":row.start_ms,"end_ms":row.end_ms})});return
     var immutable=data.groups.duplicate(true)
     var view=SubViewport.new();view.size=Vector2i(960,640);view.own_world_3d=true
     view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;view.audio_listener_enable_3d=false;root.add_child(view)
@@ -411,16 +423,20 @@ func run()->void:
     var selected=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--case="):selected=argument.trim_prefix("--case=")
-    for spec in [{"id":"fire-bolt","path":"res://.runtime/compact-magic-missile-20261013/amber/journal","sequence":29,"deliveries":1,"hits":1},
-        {"id":"magic-missile","path":"res://.runtime/gallery-route/journal","sequence":22,"deliveries":3,"hits":3},
-        {"id":"shield-blocked","path":"res://.runtime/studio-cases/magic_missile-seed3/amber/journal","sequence":2,"deliveries":3,"hits":0}]:
+        if argument=="--plan-only":plan_only=true
+    for spec in [{"id":"fire-bolt","path":Fixtures.journal("fire-bolt"),"sequence":8,"deliveries":1,"hits":1},
+        {"id":"magic-missile","path":Fixtures.journal("magic-missile"),"sequence":2,"deliveries":3,"hits":3},
+        {"id":"shield-blocked","path":Fixtures.journal("shield"),"sequence":6,"deliveries":3,"hits":0}]:
         if selected.is_empty() or selected==spec.id:await run_case(spec)
+    check(selected.is_empty() or selected in ["fire-bolt","magic-missile","shield-blocked"],"Requested playback subset names an actual original case")
     finish()
 
 func finish()->void:
     for capture in captures:capture.image.save_png(CAPTURES+"/"+capture.label+".png")
     var report={"checks":checks,"failed":failures.size(),"failures":failures,"renderer":RenderingServer.get_current_rendering_method(),"evidence":evidence,
         "scope":"Real SDK operations through production Compiler/Timeline/Play with external shared-clock publication, native30fps1x and60fps2x draws, source/receiver pixels, actual application contact ownership, tails, seeks, loops and retirement. Frame intervals include test observations and are not performance measurements."}
-    FileAccess.open(REPORT,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
-    print("NATIVE_SPELL_PLAYBACK ",JSON.stringify({"checks":checks,"failed":failures.size(),"failures":failures,"report":REPORT}))
+    if plan_only:report.scope="Actual current original three-case native16 operation admission, independent canonical cuts, exact damage/application ancestry and phase-clock plans only; no native rendering, playback controls or pixel qualification."
+    var destination:String=REPORT.replace(".json","-plan.json") if plan_only else REPORT
+    FileAccess.open(destination,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
+    print("NATIVE_SPELL_PLAYBACK ",JSON.stringify({"checks":checks,"failed":failures.size(),"failures":failures,"report":destination}))
     quit(0 if failures.is_empty() else 1)

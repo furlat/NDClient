@@ -10,6 +10,7 @@ extends RefCounted
 const Baked=preload("res://presentation/baked_effect.gd")
 const Admission=preload("res://presentation/native_source_admission.gd")
 const Native=preload("res://presentation/native_effects.gd")
+const SOURCE_TABLE:="res://assets/vfx/format/spike-seed-20261021-source-resources.json"
 const INDEX:="res://assets/vfx/index.json"
 ## Conditions whose package lifecycle the client keeps from playing.
 const LIFECYCLES:="condition_lifecycles.json"
@@ -93,6 +94,41 @@ static func resolve(staged_id:String,spell:String,role:String="")->Dictionary:
         else:return {}
     return clip(id)
 
+## A typed standalone assignment is admitted only from the delivered public
+## table. Reuse the existing phase/clip metadata caches without altering the
+## indexed inventory or its condition selections.
+static func for_cue(cue:Dictionary,spell:String="",role:String="")->Dictionary:
+    var path:String=str(cue.get("source_phase",""))
+    if path.is_empty():return resolve(str(cue.get("clip","")),spell,role)
+    _load()
+    var setters:Dictionary=cue.get("source_inputs",{})
+    var identity:String="source_phase:"+path+"|"+JSON.stringify(setters)+"|"+str(cue.get("source_seekable",false))
+    _mutex.lock()
+    if _client.has(identity):
+        var cached:Dictionary=_client[identity];_mutex.unlock();return cached
+    var table:Variant=JSON.parse_string(FileAccess.get_file_as_string(SOURCE_TABLE)) if FileAccess.file_exists(SOURCE_TABLE) else null
+    var rows:Array=table.get("resources",[]) if table is Dictionary else []
+    var matches:Array=rows.filter(func(row):return row.get("phase")==path)
+    if matches.size()!=1 or setters.is_empty():_mutex.unlock();return {}
+    if not _phases.has(path):_phases[path]=Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
+    var phase:Resource=_phases[path]
+    if phase==null or str(phase.get("clip_id"))!=str(matches[0].clip_id):_mutex.unlock();return {}
+    var options:Dictionary=phase.get("options")
+    var value:Dictionary={"id":str(phase.clip_id),"spell":spell,"stage":str(phase.get("phase")),"seconds":float(phase.seconds),
+        "loop":false,"inputs":setters.keys(),"input_setters":setters.duplicate(),"source_kind":"standalone_phase",
+        "source_phase":path,"bounded_formation":bool(options.get("bounded_formation",false)),
+        "content_hash":FileAccess.get_sha256(path),"approaches":[{"id":"standalone_phase","kind":"native",
+            "path":"res://presentation/native_constructed_occurrence.gd","source_phase":path,"warm":[],
+            "seekable":bool(cue.get("source_seekable",false)),"runtime_selection":"Explicit typed standalone source"}]}
+    # A delivered public constructor may own admission before Source.make.
+    # Keep its declared operand API with the exact mapped PhaseResource.
+    if matches[0].has("constructor"):
+        value.approaches[0].path=str(matches[0].constructor)
+        value.approaches[0].construction_input_contract=matches[0].get("construction_input_contract",{})
+        value.approaches[0].public_callbacks=matches[0].get("public_callbacks",{})
+        value.approaches[0].forwarded_source_inputs=matches[0].get("forwarded_source_inputs",[])
+    _client[identity]=value;_mutex.unlock();return value
+
 ## The package's condition lifecycles for a server condition id (selections
 ## with a `condition` block: application, sustain and removal clips, their
 ## registration and visibility), in package order; [] when it has none.
@@ -164,6 +200,8 @@ static func key(value:Dictionary)->String:
     var sources:Array=selected.approaches.map(func(approach):return [str(approach.id),str(approach.path),str(approach.get("source_phase",""))])
     var identity:Array=[str(value.get("id","")),selected.kind,sources,str(value.get("opacity_uniform",""))]
     if not str(value.get("immutable_preparation","")).is_empty():identity.append(value.immutable_preparation)
+    if value.get("preparation_inputs","construction")!="construction":identity.append(value.preparation_inputs)
+    if not value.get("source_resources",{}).is_empty():identity.append(value.source_resources)
     return JSON.stringify(identity)
 
 static func occurrence_clip(component:Dictionary)->Dictionary:
@@ -172,9 +210,20 @@ static func occurrence_clip(component:Dictionary)->Dictionary:
     if not approach.is_empty():result.approach_id=approach
     var preparation:String=str(component.get("native_cue",{}).get("immutable_preparation",""))
     if not preparation.is_empty():result.immutable_preparation=preparation
+    result.preparation_inputs=str(component.get("native_cue",{}).get("preparation_inputs","construction"))
     if component.has("native_constructor_inputs"):
         result.construction_inputs=component.native_constructor_inputs
         result.preparation_owner=component.id
+        # An authored resource choice replaces only existing source-resource
+        # operands. Factual admission remains mandatory and its operands merge
+        # last, so authoring cannot replace an actual occurrence's values.
+        var descriptor:Dictionary=component.get("native_cue",{}).get("constructor_input",{})
+        var resources:Dictionary=descriptor.get("source_resources",{})
+        if not resources.is_empty():
+            result.source_resources=resources.duplicate(true)
+            result.construction_inputs=[{"component_path":descriptor.component_path,"input_field":descriptor.get("input_field",""),
+                "values":resources.duplicate(true)}]
+            result.construction_inputs.append_array(component.native_constructor_inputs)
     if component.get("native_cue",{}).get("sampling")=="absolute":result.absolute_sampling=true
     if component.get("native_cue",{}).has("opacity_uniform"):result.opacity_uniform=component.native_cue.opacity_uniform
     return result
@@ -182,6 +231,11 @@ static func occurrence_clip(component:Dictionary)->Dictionary:
 ## Files this clip's playing approach reads (Studio preview dependencies).
 static func resource_paths(value:Dictionary)->Array:
     var result:Array=[]
+    var selected_resources:Dictionary={}
+    _resource_values(value.get("source_resources",{}),selected_resources)
+    result.append_array(selected_resources.keys())
+    if "actor_context" in value.get("inputs",[]):
+        result.append("res://assets/vfx/extensions/production-review-20261020/sources/6e2fd9339711629213f5/condition_actor_history.gd")
     if not str(value.get("immutable_preparation","")).is_empty():result.append(value.immutable_preparation)
     for approach in choice(value).approaches:
         result.append(approach.path)
@@ -211,6 +265,7 @@ static func prepare(clips:Array,cache:Dictionary,urgent:bool=true)->Dictionary:
         var approach:Dictionary=chosen.approaches[0]
         live.append(approach)
         for path in [approach.path,approach.source_phase]+approach.warm:paths[path]=true
+        for path in resource_paths(value):paths[path]=true
         var preparation:String=str(value.get("immutable_preparation",_immutable_preparation))
         if not preparation.is_empty():paths[preparation]=true
         var phase:Resource=cache.get(approach.source_phase)
@@ -254,7 +309,7 @@ static func _prepare_immutable(clips:Array,cache:Dictionary)->Dictionary:
         var identity:String=key(value)+"|"+str(selected.approaches[0].path)+"|"+str(value.get("preparation_owner","source"))
         if not jobs.has(identity):
             var phase:Resource=cache[selected.approaches[0].source_phase]
-            var actual:Dictionary=Constructed.clip_with_inputs(phase,value.construction_inputs) if value.has("construction_inputs") else phase.to_clip()
+            var actual:Dictionary=Constructed.clip_with_inputs(phase,value.construction_inputs) if value.has("construction_inputs") and value.get("preparation_inputs","construction")=="construction" else phase.to_clip()
             jobs[identity]=preparation.begin(actual)
             jobs[identity].preparation_owner=str(value.get("preparation_owner",""))
         var job:Dictionary=jobs[identity]
@@ -307,6 +362,7 @@ static func make(parent:Node3D,value:Dictionary,layer_mask:int,seed:int=0)->Dict
 static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:int)->Dictionary:
     var handle={"root":null,"occurrence":null,"inner":{},"error":"","clip":value.duplicate(false),"layer_mask":layer_mask,"geometry":[],"emitters":[],
         "light_units":{},"opacity_bindings":[],"players":[],"seekable":bool(value.get("absolute_sampling",approach.get("seekable",false))),"initialized":false,"age":0.0,"construction_phases":{}}
+    handle.forwarded_source_inputs=approach.get("forwarded_source_inputs",[]).duplicate()
     var phase_started:int=Time.get_ticks_usec()
     if not Admission.begin_mutation():
         handle.error="Live effect construction admission is pending";return handle
@@ -315,16 +371,27 @@ static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:
     var script:Script=ResourceLoader.load(approach.path)
     var constructed:Script
     var source_phase:Resource
-    if value.has("construction_inputs"):
-        constructed=load("res://presentation/native_constructed_occurrence.gd")
+    var contract:Variant=approach.get("construction_input_contract",{})
+    # Delivered bound constructors accept actual phase/operand transport. New
+    # tables retain the exact public contract as text rather than a map.
+    var bound_constructor:bool=contract is String and not contract.is_empty()
+    var direct_operands:bool=bound_constructor or contract is Dictionary and contract.has("operands")
+    var bind_phase:bool=(value.has("construction_inputs") or value.get("source_kind")=="standalone_phase") and not direct_operands
+    if bind_phase or bound_constructor:
         source_phase=ResourceLoader.load(approach.source_phase)
+    if bind_phase:
+        constructed=load("res://presentation/native_constructed_occurrence.gd")
     handle.construction_phases.script_load=(Time.get_ticks_usec()-phase_started)/1000.0
     if script==null or not script.has_method("make_component"):
         handle.error="Missing package constructor: "+str(approach.path);return handle
     phase_started=Time.get_ticks_usec()
     var occurrence:Node3D
-    if value.has("construction_inputs"):
-        occurrence=constructed.make_component({"layer_mask":layer_mask,"phase":source_phase,"operands":value.construction_inputs})
+    if direct_operands:
+        var actual:Dictionary={"layer_mask":layer_mask,"operands":value.get("construction_inputs",[])}
+        if bound_constructor:actual.phase=source_phase
+        occurrence=script.make_component(actual)
+    elif bind_phase:
+        occurrence=constructed.make_component({"layer_mask":layer_mask,"phase":source_phase,"operands":value.get("construction_inputs",[])})
     else:occurrence=script.make_component({"layer_mask":layer_mask})
     handle.construction_phases.make_component=(Time.get_ticks_usec()-phase_started)/1000.0
     handle.occurrence=occurrence
@@ -368,6 +435,24 @@ static func _staged_paths(cue:Dictionary)->Dictionary:
     if cue.has("origin_path"):result.origin_path=[str(cue.origin_path)]
     return result
 
+## Recorded-geometry sources explicitly verify that their original scene
+## paths survive beneath their private wrappers. Only that supplied capability
+## admits a deeper alias, and it still requires one unchanged full relative
+## path and one actual target inside the occurrence.
+static func _verified_wrapped_path(root:Node,path:String)->Node:
+    var relative:NodePath=NodePath(path)
+    if relative.is_absolute() or relative.get_name_count()<2 or relative.get_subname_count()>0:return null
+    for at in relative.get_name_count():
+        if str(relative.get_name(at)) in [".",".."]:return null
+    var matches:Array=[]
+    for wrapper in root.find_children("*","Node3D",true,false):
+        if not wrapper.has_method("has_verified_stable_paths") or not wrapper.has_verified_stable_paths():continue
+        var prefixes:Array=[wrapper];prefixes.append_array(wrapper.find_children("*","Node",true,false))
+        for prefix in prefixes:
+            var target:Node=prefix.get_node_or_null(relative)
+            if target!=null and target not in matches:matches.append(target)
+    return matches[0] if matches.size()==1 else null
+
 ## Staged node paths the built effect lacks. Where the package's own staging
 ## of this cue (same spell, clip and role) names that field's node under
 ## another path of this effect's tree, it is used (`handle.path_aliases`,
@@ -388,6 +473,10 @@ static func resolve_paths(handle:Dictionary,cue:Dictionary,spell:String)->Array:
             var within:Array=handle.root.get_children().filter(func(child):return child.get_node_or_null(NodePath(path))!=null)
             if at<other.size() and handle.root.get_node_or_null(NodePath(str(other[at])))!=null:aliases[path]=str(other[at])
             elif within.size()==1:aliases[path]=str(within[0].name)+"/"+path
+            elif within.is_empty():
+                var wrapped:Node=_verified_wrapped_path(handle.root,path)
+                if wrapped!=null:aliases[path]=str(handle.root.get_path_to(wrapped))
+                else:missing.append(path)
             else:missing.append(path)
     handle.path_aliases=aliases
     return missing
@@ -407,8 +496,12 @@ static func place(handle:Dictionary,transform:Transform3D)->void:
 ## Source seconds -> the drawn state. A recording reads it directly; a live
 ## occurrence samples its source (the package's sampler steps its own
 ## particles by the time since its last sample).
-static func sample(handle:Dictionary,seconds:float)->void:
+static func sample(handle:Dictionary,seconds:float,refresh_geometry:bool=false)->void:
     if handle.get("baked",false):Baked.sample(handle,seconds);return
+    # Existing authored dynamic geometry can change endpoints during a held
+    # view/pose. Reuse the same equation-only path as constructed phases; the
+    # ordinary occurrence still owns its clock, native players and GPU delta.
+    if refresh_geometry:Constructed.refresh_held_source(handle.inner,seconds)
     handle.occurrence.sample(seconds)
     if handle.get("geometry_membership",{}).get("dirty",false):_refresh_geometry(handle)
     handle.age=seconds;handle.initialized=true
@@ -418,13 +511,15 @@ static func sample(handle:Dictionary,seconds:float)->void:
 static func set_input(handle:Dictionary,input:String,value:Variant,extra_arguments:Array=[])->void:
     if input not in handle.clip.get("inputs",[]) or not is_instance_valid(handle.get("occurrence")):return
     var method:String=handle.clip.input_setters[input]
-    # Public generic construction keeps the shared geometry/clock adapters;
-    # source-only setters belong to the child source, not a generated wrapper.
-    if handle.clip.has("construction_inputs") and method not in ["set_targets","set_live_endpoints","set_recipient_geometry", "set_entity_geometry","set_owner_state","set_lifecycle_context","set_root_path"]:
+    # Public aliases can bind more than forwarding does (notably targets).
+    # Call the returned occurrence's declared method before its source seam.
+    if handle.occurrence.has_method(method):
+        if extra_arguments.is_empty():handle.occurrence.call(method,value)
+        else:handle.occurrence.callv(method,[value]+extra_arguments)
+    elif handle.clip.has("construction_inputs") or handle.clip.get("source_kind")=="standalone_phase" or method in handle.get("forwarded_source_inputs",[]):
         if extra_arguments.is_empty():handle.occurrence.forward(method,value)
         else:handle.occurrence.forward_arguments(method,[value]+extra_arguments)
-    elif extra_arguments.is_empty():handle.occurrence.call(method,value)
-    else:handle.occurrence.callv(method,[value]+extra_arguments)
+    else:push_error("Declared native input has no public setter: "+method)
 
 static func stop_emission(handle:Dictionary,source_seconds:float)->void:
     if handle.get("baked",false):Baked.stop_emission(handle,source_seconds)

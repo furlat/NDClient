@@ -3,7 +3,9 @@ extends SceneTree
 const Authoring=preload("res://presentation/authoring.gd")
 const AudioCues=preload("res://presentation/audio_cues.gd")
 const Recording=preload("res://studio/recording.gd")
-const Library=preload("res://studio/case_library.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Protocol=preload("res://sdk/protocol.gd")
+const CASES=["move","melee","ranged","jump","window-break","death-save","prone","hide","action-surge","door","stairs","interaction-media","dash","hide-light","intrinsic-weapon-arcane-staff"]
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -20,11 +22,12 @@ func inspect(directory:String)->void:
     if not index.ok:return
     var facts={}
     for name in DirAccess.get_files_at(directory):
-        if not name.ends_with(".json"):continue
-        var packet=JSON.parse_string(FileAccess.get_file_as_string(directory.path_join(name)))
-        if not packet is Dictionary:continue
-        for lineage in packet.get("lineages",[]):
-            for node in lineage.events:facts[node.uuid]=node.get("fact")
+        if not name.ends_with(".json") or not name.get_basename().is_valid_int():continue
+        var parsed:Dictionary=Protocol.parse_json(FileAccess.get_file_as_bytes(directory.path_join(name)))
+        check(parsed.ok,"Original current-schema fact identities parse exactly: "+name)
+        if not parsed.ok:continue
+        for lineage in parsed.value.get("lineages",[]):
+            for node in lineage.events:facts[str(node.occurrence)]=node.get("fact")
     var count=0
     for item in index.groups:
         var group:Dictionary=item.group
@@ -63,7 +66,7 @@ func inspect(directory:String)->void:
                 check(release.size()==1,"Actual bow attack owns one bow release")
                 if release.size()==1:
                     check(is_equal_approx(release[0].start_ms,track.contact_ms),"Bow sound follows authored release, not windup or target impact")
-            if fact.get("kind")=="step" and track.get("motion",false) and (fact.movement_mode=="walking" or track.trajectory=="connector_transfer"):
+            if fact.get("kind")=="step" and track.get("motion",false) and (fact.get("movement_mode")=="walking" or track.trajectory=="connector_transfer"):
                 var marker_set=Authoring.load_data("audio/contacts.json",{}).rigs.get(track.rig,{}).get(track.clip,{}).get(track.trajectory,{})
                 var steps=own.filter(func(c):return c.get("body_track_id")==track.trace_track_id)
                 if marker_set.is_empty():
@@ -100,9 +103,8 @@ func inspect(directory:String)->void:
 
 func run()->void:
     var paths={}
-    for item in Library.read():
-        for audience in item.perspectives:paths[audience.journal]=true
-    paths["res://.runtime/studio-cases/dying-seed5/amber/journal"]=true
+    for case_id in CASES:
+        for seat in ["amber","blue"]:paths[Fixtures.journal(case_id,seat)]=true
     var explicit=false
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="):

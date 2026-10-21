@@ -1,17 +1,54 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_jyj3f"]
-[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_u3bgp"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="image"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="response_effect"]
 
-[sub_resource type="Resource" id="Resource_3h5ab"]
-script = ExtResource("1_jyj3f")
+[sub_resource type="Resource" id="Icon"]
+script = ExtResource("image")
 path = "art/media/ui/icons/smooth48/condition.generic.png"
 native_size = Vector2i(48, 48)
 reuses = "condition.generic"
 status = "stand_in"
 source = "ui/resources.json icon:condition.generic"
 
+[sub_resource type="Resource" id="ResultResponse0"]
+script = ExtResource("response_effect")
+clip = "bg3-36/flaming-sphere/native_enemy_turn_end"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_damage", "participant": "recipient", "damage_type": "Fire", "turn_event_type": "turn_end", "save_effect_id": "spell.flaming_sphere.aura", "trigger": "enemy_turn_end", "save_policy": "exact_unique"}
+extra = {"dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
+scope = "recipient"
+constructor_input = {"kind": "observed_event", "projection": "spatial_fire_contact", "outcome": "damage", "geometry_actor": "target", "trigger": "enemy_turn_end", "component_path": ["effect"], "input_field": ""}
+
+[sub_resource type="Resource" id="AmbiguousSaveContact"]
+script = ExtResource("response_effect")
+clip = "original-repairs/fire-shield-contact/warm/contact"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_damage", "participant": "recipient", "damage_type": "Fire", "turn_event_type": "turn_end", "save_effect_id": "spell.flaming_sphere.aura", "save_policy": "unavailable_or_ambiguous"}
+staging_from = "Existing finite native warm Fire contact donor, selected at the actual zone-attributed END result when no save can be uniquely joined. No shield lifecycle or inferred save. All artwork is unreviewed."
+
 [resource]
-script = ExtResource("1_u3bgp")
+script = ExtResource("condition")
 id = "spatial_effect.spell.flaming_sphere.aura"
-icon = SubResource("Resource_3h5ab")
+icon = SubResource("Icon")
+disposition = "authored"
+play_package_lifecycle = false
+responses = Array[ExtResource("response_effect")]([SubResource("ResultResponse0"), SubResource("AmbiguousSaveContact")])
+status = "partial"
+notes = "The construct-anchored region now owns exact finite enemy END contacts: the actual applied Fire result names this zone UUID, under the same actual recipient END. A uniquely joined spell.flaming_sphere.aura save selects the dedicated source for saved-half or failed-save. Multiple spheres emit sibling saves without public zone attribution, so that case selects the existing finite warm Fire contact donor instead; no save outcome is guessed, and the two resource predicates are exclusive. The disclosed sphere anchor_entity_uuid is used when present; explicit empty source metadata remains empty when redacted, never replaced by the original caster or a nearby sphere. Original caster attribution remains distinct evidence. Visible sphere body, authoritative moving light and actual deposited FireSurface trail remain delegated to their existing owners. No demo lifetime or extra zone-wide idle art is played. All artwork is unreviewed."

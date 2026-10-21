@@ -21,9 +21,8 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_v3uan")
 clip = "bg3-36/hunters-mark/hunters_mark_native/windup"
 role = "attached"
-unbound_constructor_inputs = PackedStringArray("retained_caster_sustain_uuid_not_disclosed")
-at = "release"
-delay = -0.64
+scope = "cast"
+at = "cast"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.64
@@ -34,7 +33,9 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "quarry_application", "outcome": "condition_application", "geometry_actor": "caster", "quarry_kind": "hunters_mark", "component_path": ["owned_quarry"], "input_field": "", "behavior_id": "spell.hunters_mark", "owner_condition_id": "condition.spell.hunters_mark", "recipient_condition_id": "condition.spell.hunters_mark.quarry"}
 extra = {
+"input_policies":{"healing_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "strike_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "condition_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "tick_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "hit_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}},
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
@@ -54,7 +55,8 @@ extra = {
 script = ExtResource("1_v3uan")
 clip = "bg3-36/hunters-mark/hunters_mark_native/application"
 role = "attached"
-at = "release"
+scope = "cast"
+at = "cast"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.55
@@ -65,7 +67,9 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "quarry_application", "outcome": "condition_application", "geometry_actor": "caster", "quarry_kind": "hunters_mark", "component_path": ["owned_quarry"], "input_field": "", "behavior_id": "spell.hunters_mark", "owner_condition_id": "condition.spell.hunters_mark", "recipient_condition_id": "condition.spell.hunters_mark.quarry"}
 extra = {
+"input_policies":{"healing_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "strike_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "condition_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "tick_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "hit_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}},
 "delay_seconds": 0.0,
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -118,8 +122,8 @@ extra = {
 script = ExtResource("1_v3uan")
 clip = "bg3-36/hunters-mark/hunters_mark_native/hit"
 role = "attached"
-at = "release"
-delay = 2.116666667
+scope = "cast"
+at = "event.start"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.4
@@ -130,7 +134,9 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "weapon_component", "outcome": "damage", "damage_type_policy": "actual_component", "geometry_actor": "caster", "quarry_kind": "hunters_mark", "component_path": ["owned_quarry"], "input_field": "", "damage_source_ids": ["spell.hunters_mark"], "behavior_id": "spell.hunters_mark", "owner_condition_id": "condition.spell.hunters_mark", "recipient_condition_id": "condition.spell.hunters_mark.quarry"}
 extra = {
+"input_policies":{"healing_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "strike_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "condition_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}, "tick_input": {"mode": "not_applicable", "reason": "selected_quarry_finite_phase_consumes_actual_owner_quarry_and_optional_hit"}},
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
@@ -195,10 +201,10 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array(3)
+excluded_cues = PackedInt32Array(2, 4)
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.hunters_mark.quarry")
-owner_cues = PackedInt32Array(1, 2, 4)
+owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()

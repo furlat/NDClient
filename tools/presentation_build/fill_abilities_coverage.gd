@@ -3,8 +3,9 @@ extends SceneTree
 ## data that already exists, one step at a time (each its own commit):
 ##   --step=spells      spells whose staging is imported from the Factory
 ##                      become playable (native_staging, a delivery scope from
-##                      the server's delivery), except the four the user
-##                      deferred; every spell without a body gets a stand-in
+##                      the server's delivery) only for an assigned source
+##                      without an explicit unresolved constructor input;
+##                      artwork remains unreviewed. Every spell without a body gets a stand-in
 ##                      cast body (role cast, Attack5, release frame 7: the
 ##                      most common old gesture), so no spell is silent;
 ##   --step=conditions  HUD icons from the icon banks;
@@ -18,6 +19,7 @@ extends SceneTree
 const Common = preload("res://tools/presentation_build/common.gd")
 const BodyUse = preload("res://presentation/source/abilities/body_use.gd")
 const ImageRef = preload("res://presentation/source/image_ref.gd")
+const Effects = preload("res://presentation/effect_package.gd")
 const ROOT := "res://authoring/abilities.tres"
 const UI_DELIVERY := "art/ui-delivery-20261018"
 ## Server body kind -> clip role in the shared vocabulary.
@@ -64,8 +66,18 @@ func entry_path(source: Dictionary, section: String, id: String) -> String:
 
 # --- Spells -------------------------------------------------------------------
 
-## Spells the user deferred (staged in the old sandbox, kept off in the game).
-const DEFERRED := ["spell.aid", "spell.bless", "spell.false_life", "spell.sacred_flame"]
+## Source availability and explicit input refusals determine staging admission.
+## This helper neither accepts artwork nor clears another cue's refusal.
+func has_assigned_source(entry: Resource) -> bool:
+    for index in entry.effects.size():
+        if index in entry.excluded_cues:continue
+        var use: Resource = entry.effects[index]
+        if not use.unbound_constructor_inputs.is_empty():continue
+        var cue := {"clip":use.clip,"selection":use.selection,"role":use.role,
+            "source_phase":use.source_phase.resource_path if use.source_phase != null else "",
+            "source_inputs":use.source_inputs,"source_seekable":use.source_seekable}
+        if not Effects.for_cue(cue, use.selection if not use.selection.is_empty() else str(entry.id).trim_prefix("spell."), use.role).is_empty():return true
+    return false
 
 func spells(source: Dictionary) -> void:
     for id in source.entries.spells:
@@ -77,13 +89,13 @@ func spells(source: Dictionary) -> void:
             e.body.hidden_slots = PackedStringArray(["weapon", "offhand"])
             e.notes = (e.notes + "\nCast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).").strip_edges()
             touched = true
-        if not e.native_staging and not e.effects.is_empty() and e.staging_from.begins_with("factory@") and id not in DEFERRED:
+        if not e.native_staging and e.staging_from.begins_with("factory@") and has_assigned_source(e):
             e.native_staging = true
             var area: Variant = server.spell.get(id, {}).get("delivery", {}).get("area")
             e.effect_scope = "area" if area is Dictionary else "single"
             var key: String = str(e.staging_unported.get("selection", ""))
             e.staging_unported["source"] = "assets/vfx/index.json:/selections/" + key + "/staging"
-            e.notes = (e.notes + "\nPlays its imported Factory staging (coverage fill).").strip_edges()
+            e.notes = (e.notes + "\nAssigned Factory source is enabled for inspection (coverage fill). Explicit cue input refusals remain; artwork needs review.").strip_edges()
             touched = true
         if e.status != "internal":
             e.status = "ready" if e.native_staging and not stand_in else ("stand_in" if stand_in and e.effects.is_empty() else "partial")

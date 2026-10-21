@@ -9,5 +9,296 @@ id = "spatial_effect.environment.dart_launcher"
 layer = "field"
 art = PackedStringArray("trap-workshop.darts")
 legacy = "measured/environment/surfaces/spatial_effect.environment.dart_launcher.json"
+world_media = {
+  "kind": "sprite",
+  "requires_object_anchor": true,
+  "state_field": "trap_state",
+  "art_ids": [
+    "trap-workshop.darts",
+    "trap-workshop.dart-projectile"
+  ],
+  "frames_by_pose": {
+    "e": [
+      "trap-workshop.darts.e.0",
+      "trap-workshop.darts.e.1",
+      "trap-workshop.darts.e.2",
+      "trap-workshop.darts.e.3",
+      "trap-workshop.darts.e.4",
+      "trap-workshop.darts.e.5",
+      "trap-workshop.darts.e.6",
+      "trap-workshop.darts.e.7",
+      "trap-workshop.darts.e.8",
+      "trap-workshop.darts.e.9",
+      "trap-workshop.darts.e.10",
+      "trap-workshop.darts.e.11"
+    ],
+    "n": [
+      "trap-workshop.darts.n.0",
+      "trap-workshop.darts.n.1",
+      "trap-workshop.darts.n.2",
+      "trap-workshop.darts.n.3",
+      "trap-workshop.darts.n.4",
+      "trap-workshop.darts.n.5",
+      "trap-workshop.darts.n.6",
+      "trap-workshop.darts.n.7",
+      "trap-workshop.darts.n.8",
+      "trap-workshop.darts.n.9",
+      "trap-workshop.darts.n.10",
+      "trap-workshop.darts.n.11"
+    ],
+    "s": [
+      "trap-workshop.darts.s.0",
+      "trap-workshop.darts.s.1",
+      "trap-workshop.darts.s.2",
+      "trap-workshop.darts.s.3",
+      "trap-workshop.darts.s.4",
+      "trap-workshop.darts.s.5",
+      "trap-workshop.darts.s.6",
+      "trap-workshop.darts.s.7",
+      "trap-workshop.darts.s.8",
+      "trap-workshop.darts.s.9",
+      "trap-workshop.darts.s.10",
+      "trap-workshop.darts.s.11"
+    ],
+    "w": [
+      "trap-workshop.darts.w.0",
+      "trap-workshop.darts.w.1",
+      "trap-workshop.darts.w.2",
+      "trap-workshop.darts.w.3",
+      "trap-workshop.darts.w.4",
+      "trap-workshop.darts.w.5",
+      "trap-workshop.darts.w.6",
+      "trap-workshop.darts.w.7",
+      "trap-workshop.darts.w.8",
+      "trap-workshop.darts.w.9",
+      "trap-workshop.darts.w.10",
+      "trap-workshop.darts.w.11"
+    ]
+  },
+  "fps": 12,
+  "state_frames": {
+    "activated": 0,
+    "deactivated": 0,
+    "ready": 0
+  },
+  "activation_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "contact_frame": 3,
+  "projectile": {
+    "frames_by_pose": {
+      "e": [
+        "trap-workshop.dart-projectile.e.0",
+        "trap-workshop.dart-projectile.e.1",
+        "trap-workshop.dart-projectile.e.2",
+        "trap-workshop.dart-projectile.e.3",
+        "trap-workshop.dart-projectile.e.4",
+        "trap-workshop.dart-projectile.e.5",
+        "trap-workshop.dart-projectile.e.6",
+        "trap-workshop.dart-projectile.e.7"
+      ],
+      "n": [
+        "trap-workshop.dart-projectile.n.0",
+        "trap-workshop.dart-projectile.n.1",
+        "trap-workshop.dart-projectile.n.2",
+        "trap-workshop.dart-projectile.n.3",
+        "trap-workshop.dart-projectile.n.4",
+        "trap-workshop.dart-projectile.n.5",
+        "trap-workshop.dart-projectile.n.6",
+        "trap-workshop.dart-projectile.n.7"
+      ],
+      "s": [
+        "trap-workshop.dart-projectile.s.0",
+        "trap-workshop.dart-projectile.s.1",
+        "trap-workshop.dart-projectile.s.2",
+        "trap-workshop.dart-projectile.s.3",
+        "trap-workshop.dart-projectile.s.4",
+        "trap-workshop.dart-projectile.s.5",
+        "trap-workshop.dart-projectile.s.6",
+        "trap-workshop.dart-projectile.s.7"
+      ],
+      "w": [
+        "trap-workshop.dart-projectile.w.0",
+        "trap-workshop.dart-projectile.w.1",
+        "trap-workshop.dart-projectile.w.2",
+        "trap-workshop.dart-projectile.w.3",
+        "trap-workshop.dart-projectile.w.4",
+        "trap-workshop.dart-projectile.w.5",
+        "trap-workshop.dart-projectile.w.6",
+        "trap-workshop.dart-projectile.w.7"
+      ]
+    },
+    "tip_offsets_by_pose": {
+      "e": [
+        [
+          12.12190000000001,
+          6.060900000000004
+        ],
+        [
+          0.0,
+          8.571400000000011
+        ],
+        [
+          -12.121799999999993,
+          6.060900000000004
+        ],
+        [
+          -17.142799999999994,
+          0.0
+        ],
+        [
+          -12.121799999999993,
+          -6.060900000000004
+        ],
+        [
+          0.0,
+          -8.571400000000011
+        ],
+        [
+          12.12190000000001,
+          -6.060900000000004
+        ],
+        [
+          17.142899999999997,
+          0.0
+        ]
+      ],
+      "n": [
+        [
+          12.121800000000007,
+          -6.060900000000004
+        ],
+        [
+          17.142799999999994,
+          0.0
+        ],
+        [
+          12.121800000000007,
+          6.060900000000004
+        ],
+        [
+          0.0,
+          8.571400000000011
+        ],
+        [
+          -12.121899999999997,
+          6.060900000000004
+        ],
+        [
+          -17.142899999999997,
+          0.0
+        ],
+        [
+          -12.121899999999997,
+          -6.060900000000004
+        ],
+        [
+          0.0,
+          -8.571400000000011
+        ]
+      ],
+      "s": [
+        [
+          -12.121799999999993,
+          6.061000000000007
+        ],
+        [
+          -17.142899999999997,
+          0.00010000000000331966
+        ],
+        [
+          -12.121799999999993,
+          -6.060900000000004
+        ],
+        [
+          0.0,
+          -8.571400000000011
+        ],
+        [
+          12.121800000000007,
+          -6.060900000000004
+        ],
+        [
+          17.142799999999994,
+          0.00010000000000331966
+        ],
+        [
+          12.121800000000007,
+          6.061000000000007
+        ],
+        [
+          0.0,
+          8.571499999999986
+        ]
+      ],
+      "w": [
+        [
+          -12.121799999999993,
+          -6.060900000000004
+        ],
+        [
+          0.0,
+          -8.571400000000011
+        ],
+        [
+          12.121800000000007,
+          -6.060900000000004
+        ],
+        [
+          17.142899999999997,
+          0.00010000000000331966
+        ],
+        [
+          12.121800000000007,
+          6.061000000000007
+        ],
+        [
+          0.0,
+          8.571499999999986
+        ],
+        [
+          -12.121799999999993,
+          6.061000000000007
+        ],
+        [
+          -17.142799999999994,
+          0.00010000000000331966
+        ]
+      ]
+    },
+    "muzzle_offsets_by_pose": {
+      "e": [
+        6.7882999999999925,
+        -50.05199999999999
+      ],
+      "n": [
+        6.788199999999989,
+        -56.84020000000001
+      ],
+      "s": [
+        -6.788200000000003,
+        -50.05199999999999
+      ],
+      "w": [
+        -6.788200000000003,
+        -56.84020000000001
+      ]
+    },
+    "muzzle_height_steps": 0.8350953125,
+    "speed_tiles_per_second": 12.0
+  },
+  "depth": "world"
+}
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Source-authored world program promoted from measured/environment/surfaces/spatial_effect.environment.dart_launcher.json. The shared environment path retains the exact observed spatial owner, disclosed state and original numeric pose-frame ordering. Finite activation is driven only by actual committed mechanism facts; state transitions use actual successive owner values. Projectile, avoidance, depth and residue declarations remain separate factual inputs. All artwork remains unreviewed; source assignment does not qualify runtime output."

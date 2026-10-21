@@ -2,12 +2,31 @@
 
 [ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_uhyei"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_dvplv"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="ActualPresenceOwner"]
+script = ExtResource("effect")
+clip = "sorcerer_draconic_presence_native"
+selection = "sorcerer_draconic_presence_native"
+approach = "native"
+role = "attached"
+scope = "spatial"
+requires_spatial_anchor = true
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.0
+light_multiplier = 0.0
+extra = {"entity_geometry": {"actor": "spatial_anchor"}, "live_endpoints": [{"cue_point": "source"}]}
+staging_from = "Actual current Draconic Presence spatial UUID and its public anchor_entity_uuid; installed original presence_wisps source."
 
 [resource]
 script = ExtResource("2_dvplv")
 id = "spatial_effect.class_feature.draconic_presence"
 layer = "field"
+lasting = SubResource("ActualPresenceOwner")
+native_staging = true
 art = PackedStringArray()
 legacy = "measured/environment/surfaces/spatial_effect.class_feature.draconic_presence.json"
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "The actual visible Draconic Presence spatial UUID owns the existing wisps at its real disclosed anchor. The exact current public anchor_entity_uuid supplies the measured actor geometry; absent identity or optical geometry refuses without borrowing a caster or nearby body. The original presence shader continues its own clock without finite retirement, until actual owner disappearance. This is an authored local owner halo, not a reconstruction of its sixty-foot gameplay radius or a choice of awe/fear from recipient outcomes. Actual Charmed/Frightened members retain their independent treatments. The initial action delegates this same visual to the real spatial owner, avoiding duplicate four-second art. All artwork remains unreviewed; rendered-output qualification remains separate."

@@ -13,6 +13,38 @@ source = "ui-icons-bg3-glyphs-2026-10-07"
 script = ExtResource("2_3ylkn")
 id = "weapon.light_hammer"
 kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee10",
+"slot": "weapon",
+"tint": "#778899"
+}],
+"variants": {}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"variants": {}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee10",
+"pivots_by_camera": [[55.0, 65.5], [66.5, 57.5], [75.0, 65.0], [64.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": ""
+}])
 icon = SubResource("Resource_8lsaa")
 status = "partial"
-notes = "No worn look authored."
+notes = "The existing Melee10 light-hammer artwork now owns the actual main-hand and ground look, using its already registered Club-family pivots/scale and existing metal tint. The offhand uses that family's existing Offhand2 approximation with the same tint; it is not a claim of a dedicated offhand hammer sheet. The real item UUID, slot, thrown/melee rules and any actual source variant remain unchanged. All artwork remains unreviewed; source assignment does not qualify output."

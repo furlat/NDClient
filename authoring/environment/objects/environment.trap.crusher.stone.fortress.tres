@@ -23,6 +23,7 @@ bank = "trap.crusher-fortress.intact"
 script = ExtResource("3_efb8i")
 id = "environment.trap.crusher.stone.fortress"
 kind = "trap"
+native_owner_content = "spatial_effect.environment.crusher"
 views = PackedStringArray("e", "s", "w", "n")
 select_field = "is_engaged"
 states = Dictionary[String, ExtResource("4_ly7i3")]({
@@ -39,5 +40,5 @@ wrecks = Dictionary[String, String]({
 "environment.trap.crusher.stone.fortress.wreck": ""
 })
 art = PackedStringArray()
-status = "ready"
-notes = "The game asks for state \"active\" when the trap is engaged, but the states are ready/activated/deactivated (world.gd)."
+status = "partial"
+notes = "Body delegated only when the current observed spatial_effect.environment.crusher explicitly names this same physical item UUID in anchor_item_uuid. The shared world program owns the single mechanism body and actual committed activation clock; no nearby owner or matching position suffices. The existing object banks/stand-in and material/style identities remain the fallback when that exact observed link is absent. This explicitly shares the canonical workshop mechanism motion across this hardware variant; its alternate static art remains available as fallback. All artwork remains unreviewed; runtime output is unqualified."

@@ -2,7 +2,7 @@ extends SceneTree
 ## Exact current-server bytes, durable publication and independently replayed prefixes.
 const Journal=preload("res://sdk/journal.gd")
 const Protocol=preload("res://sdk/protocol.gd")
-const FIXTURE="res://tests/fixtures/schema16/fire-bolt"
+const FIXTURE="res://tests/fixtures/schema16/current-production-0c/fire-bolt/amber"
 var failures:Array=[]
 var checks=0
 func check(value:bool,label:String)->void:

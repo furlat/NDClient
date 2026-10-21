@@ -91,7 +91,9 @@ func run() -> void:
         var path:String="withdrawn-required-"+str(i)
         original_required[path]=slot_file;full_family.paths[path]=slot_file;full_family.estimates[path]={"bytes":512}
     full_family.paths[slot_required]=slot_file;full_family.estimates[slot_required]={"bytes":512}
-    Media.adopt_encounter(full,full_family,1);Media.demand(full,original_required);Media.prepare_optional(full)
+    Media.adopt_encounter(full,full_family,1);Media.demand(full,{})
+    check(Media.boot_ready(full),"An empty startup publishes before testing withdrawal of later required work")
+    Media.demand(full,original_required);Media.prepare_optional(full)
     Media.poll(full,true,false)
     while not full.decode_jobs.all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
     check(full.decode_jobs.size()==Media.DECODE_WORKERS and full.decode_jobs.all(func(job):return job.paths.size()==Media.DECODE_BATCH_IMAGES),

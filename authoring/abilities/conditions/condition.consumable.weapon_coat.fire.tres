@@ -38,20 +38,18 @@ script = ExtResource("4_h2m2j")
 id = "condition.consumable.weapon_coat.fire"
 label = "Flaming Coat"
 icon = SubResource("Resource_h2m2j")
-disposition = "authored"
-look = SubResource("Resource_iiq3c")
 group = "equipment_weapon"
 priority = 30.0
 max_layers = 3.0
-application_text = SubResource("Resource_gjmpd")
-removal_text = SubResource("Resource_oqhk8")
 unported = {
 "application": {
 "durationMs": 220.0,
 "effects": []
 },
 "classification": {
-"presentationDomains": ["equipment_weapon"],
+"presentationDomains": [
+"equipment_weapon"
+],
 "runtimeRole": "equipment_or_weapon_state",
 "visualFamily": "catalog.condition.consumable.weapon_coat.fire",
 "visualIntensity": "secondary_dynamic"
@@ -70,20 +68,12 @@ unported = {
 "mediaFailurePolicy": "omit_optional_track",
 "persistent": {
 "appearanceLayers": [],
-"bodyColor": null,
-"equipmentModifiers": [{
-"alphaMultiplier": 1.0,
-"brightness": 1.12,
-"id": "coated-weapon",
-"priority": 80.0,
-"saturation": 1.35,
-"slots": ["weapon", "offhand"],
-"tintRgb": 16739125.0
-}]
+"bodyColor": null
 },
 "relationships": {
 "grantsActions": [],
-"incomingTriggers": [{
+"incomingTriggers": [
+{
 "direct": true,
 "effect": "apply",
 "evidence": "branch=fire; effect=condition.weapon_coat.fire; disposition=beneficial; target=equipped_item; gates=origin_root:content.neurodragon:item:consumable.weapon_coat.fire@1",
@@ -96,7 +86,8 @@ unported = {
 "pack_id": "content.neurodragon"
 },
 "triggerType": "action"
-}],
+}
+],
 "relatedStates": []
 },
 "removal": {
@@ -104,3 +95,7 @@ unported = {
 "effects": []
 }
 }
+disposition = "state_only"
+play_package_lifecycle = false
+status = "internal"
+notes = "Presentation delegates to the exact published ItemRecord.effects membership and the global item_attachments resource: actual item/effect UUID, current holder, modular equipped sheet and original membership clock. Actual equipped Hit/Crit snapshots select the separate authored finite contacts. This legacy condition ID adds no duplicate actor-body coating, tint/glint or feedback. All artwork/audio remains unreviewed."

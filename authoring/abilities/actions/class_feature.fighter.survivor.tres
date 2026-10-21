@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_bfihl"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_6ie7y"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_r60d8"]
 script = ExtResource("1_qpxp0")
 role = "act"
@@ -25,6 +27,20 @@ reuses = "condition.dnd-classes-fighter-survivor"
 status = "ready"
 source = "ui/presentation.json direct_features/class_feature.fighter.survivor"
 
+[sub_resource type="Resource" id="ObservedSurvivorHealing"]
+script = ExtResource("effect")
+clip = "spells/cure_wounds/back/production_impact"
+role = "attached"
+scope = "recipient"
+constructor_input = {"kind": "observed_event", "projection": "effective_handler", "required_effective_handler": "class_feature.fighter.survivor", "self_only": true, "outcome": "heal", "geometry_actor": "target", "component_path": ["effect"], "input_field": ""}
+at = "event.start"
+attachment = "recipient_body"
+scale = 0.3
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+light_multiplier = 0.0
+
 [resource]
 script = ExtResource("2_bfihl")
 id = "class_feature.fighter.survivor"
@@ -32,7 +48,8 @@ kind = "class_feature"
 icon = SubResource("Resource_awod7")
 disposition = "authored"
 body = SubResource("Resource_r60d8")
-effect_sources = PackedStringArray("class.second_wind")
+effects = Array[ExtResource("effect")]([SubResource("ObservedSurvivorHealing")])
+effect_sources = PackedStringArray()
 status = "partial"
 unported = {
 "actionFeedback": null,
@@ -50,27 +67,11 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 },
 "handlerResponse": true,
-"media": [{
-"alpha": 0.55,
-"assetId": "class.second_wind.heal-q0-back",
-"attachment": "source_ground",
-"depth": "behind_body",
-"id": "class.second_wind.heal-q0-back",
-"requireHealingApplied": true,
-"scale": 0.5,
-"startOffsetMs": 450.0
-}, {
-"alpha": 0.55,
-"assetId": "class.second_wind.heal-q0-front",
-"attachment": "source_ground",
-"depth": "front_body",
-"id": "class.second_wind.heal-q0-front",
-"requireHealingApplied": true,
-"scale": 0.5,
-"startOffsetMs": 450.0
-}],
+"media": [],
 "mediaFailurePolicy": "fail_transaction",
 "previewChildCueKinds": [],
 "projectile": null,
 "variants": []
 }
+
+notes = "Survivor selects the existing finite healing source only through the actual class_feature.fighter.survivor effective-handler attribution and its emitted positive unblocked self-heal. The native turn-start result owns the occurrence; no action, HP threshold decision, body gesture or condition application is manufactured. The obsolete Second Wind side-sheet pair is cleared. All artwork remains unreviewed; this source assignment is unvalidated."

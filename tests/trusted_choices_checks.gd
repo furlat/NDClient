@@ -93,7 +93,7 @@ func run() -> void:
     check(not protocol.decode("ChoicesResponse",real_token.to_utf8_buffer()).ok and protocol.decode_server_choices(real_token.to_utf8_buffer()).ok,"Only opted native-number path accepts integral real-token references")
     for field in ["game_id","game_epoch","audience_id","state_revision","correlation_id","force_attack","choices"]:
         var omitted=small.duplicate(true); omitted.erase(field)
-        check(not protocol.decode_server_choices(JSON.stringify(omitted).to_utf8_buffer()).ok,"Missing required envelope "+field+" rejected")
+        check(not protocol.decode("ChoicesResponse",JSON.stringify(omitted).to_utf8_buffer()).ok,"Strict schema rejects missing required envelope "+field)
     for mutation in ["wrong_kind","invalid_actor","null_actor","family_shape","choice_extra","top_extra","fractional_generation","unsafe_generation","force_number","missing_generation","missing_index","float_index","invalid_reference"]:
         var bad=small.duplicate(true)
         match mutation:
@@ -110,11 +110,11 @@ func run() -> void:
             "missing_index": bad.choices.target_sets[0][0].erase("index")
             "float_index": bad.choices.target_sets[0][0].index=0.5
             "invalid_reference": bad.choices.target_sets[0][0].subject=999
-        check(not protocol.decode_server_choices(JSON.stringify(bad).to_utf8_buffer()).ok,"Envelope/shared-domain/reference admission rejects "+mutation)
+        check(not protocol.decode("ChoicesResponse",JSON.stringify(bad).to_utf8_buffer()).ok,"Strict envelope/shared-domain/reference admission rejects "+mutation)
     for malformed in ["{",'{"choices":',"not json","[]","null"]:
         check(not protocol.decode_server_choices(malformed.to_utf8_buffer()).ok,"Malformed JSON or non-object envelope rejected: "+malformed)
     for invalid_utf8 in [[255],[0xc0,0x80],[0xed,0xa0,0x80],[0xf4,0x90,0x80,0x80]]:
-        check(not protocol.decode_server_choices(PackedByteArray(invalid_utf8)).ok,"Invalid UTF8 rejected before native JSON")
+        check(not protocol.decode("ChoicesResponse",PackedByteArray(invalid_utf8)).ok,"Public strict boundary rejects invalid UTF8 before decoding")
     var nested=small.duplicate(true)
     nested.choices.entity_actions[0].trusted_fixture_marker="nested server data"
     var nested_bytes=JSON.stringify(nested).to_utf8_buffer()
@@ -129,6 +129,10 @@ func run() -> void:
         peer.reply_case="trusted_body"
         var strict_reply=await request("choices",arguments())
         check(not strict_reply.ok and strict_reply.error.kind=="protocol","Real HTTP default transport still deeply validates choices")
+        for mode in ["invalid_family","invalid_reference"]:
+            peer.reply_case=mode
+            var strict_nested:Dictionary=await request("choices",arguments())
+            check(not strict_nested.ok and strict_nested.error.kind=="protocol","Default strict HTTP rejects "+mode)
     stop_peer()
     await start_peer(small,true)
     if connected!=null and connected.ok:
@@ -143,10 +147,19 @@ func run() -> void:
         peer.reply_case="trusted_body"
         var trusted_reply=await request("choices",arguments())
         check(trusted_reply.ok and trusted_reply.value.choices.entity_actions[0].has("trusted_fixture_marker"),"Explicit transport opt-in reaches native trusted-metadata path")
-        for mode in ["foreign_game","foreign_epoch","foreign_audience","wrong_actor","wrong_revision","wrong_correlation","wrong_force","invalid_actor","invalid_family","invalid_reference"]:
+        for mode in ["foreign_game","foreign_epoch","foreign_audience","wrong_actor","wrong_revision","wrong_correlation","wrong_force","invalid_actor"]:
             peer.reply_case=mode
             var rejected=await request("choices",arguments())
             check(not rejected.ok and rejected.error.kind=="protocol","Opted HTTP still rejects "+mode)
+        # Explicit current-producer trust delegates nested schema/reference
+        # correctness to that producer. The strict default above keeps those
+        # negatives; the opted path must not claim a second recursive validator.
+        for mode in ["invalid_family","invalid_reference"]:
+            peer.reply_case=mode
+            var borrowed:Dictionary=await request("choices",arguments())
+            check(borrowed.ok,"Explicit current-producer HTTP borrows nested metadata without recursive validation: "+mode)
+            if borrowed.ok:
+                check((borrowed.value.choices.entity_actions is Dictionary) if mode=="invalid_family" else borrowed.value.choices.target_sets[0][0].subject==999,"Opted metadata retains exactly the producer's nested value: "+mode)
         for received in peer.requests:
             check(received.headers.get("authorization")=="Bearer test","Loopback requests retain authentication header")
     stop_peer()
@@ -187,6 +200,6 @@ func stop_peer() -> void:
 func finish() -> void:
     var report={"checks":checks,"failures":failures,"choices":path,"payload_bytes":payload_bytes,"timings":timings,
         "command":"Godot --headless --path \"%s\" --script res://tests/trusted_choices_checks.gd -- --choices=\"%s\"" % [ProjectSettings.globalize_path("res://"),path],
-        "scope":"Schema8 actual compact payload strict/native JSON equality without normalization; once-per-domain structure/reference admission; sparse defaults, safe integer coordinates and native indices. Real loopback HTTP default strict and explicit trusted metadata preserve identity/scope/correlation and reject unsafe references. Native JSON intentionally cannot distinguish integer versus integral-real tokens. Single-call diagnostic timings are not live-frame performance claims."}
+        "scope":"Schema16 actual scoped native payload strict/current-producer JSON value equality without defaults or normalization. Strict public decoder/defaultHTTP reject malformed envelope/schema/references/UTF8; explicit current-producer trust borrows nested typed metadata and HTTP still enforces game/epoch/audience/actor/revision/correlation/force scope. No recursive schema/reference/UTF8 revalidation claim on the opted producer path. Diagnostic call timings are not live-frame acceptance."}
     FileAccess.open("res://generated/trusted_choices_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("TRUSTED_CHOICES_CHECKS ",JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

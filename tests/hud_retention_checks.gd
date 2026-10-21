@@ -56,14 +56,15 @@ func settle_bar() -> void:
     await process_frame
 
 func run() -> void:
-    var path=""
+    var path:String="";var recording:String=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--state="):path=argument.trim_prefix("--state=")
-    if path.is_empty() or not FileAccess.file_exists(path):
-        print("Usage: --script res://tests/hud_retention_checks.gd -- --state=<recorded canonical state.json>")
-        quit(2);return
+        if argument.begins_with("--recording="):recording=argument.trim_prefix("--recording=")
+    var loaded:Dictionary=Fixtures.canonical(recording) if not recording.is_empty() else {"ok":not path.is_empty() and FileAccess.file_exists(path)}
+    check(loaded.ok,"Supply actual --recording=<journal> or --state=<canonical state.json>")
+    if not loaded.ok:quit(1);return
     root.size=Vector2i(1280,720)
-    var state: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(path))
+    var state:Dictionary=loaded.value if not recording.is_empty() else JSON.parse_string(FileAccess.get_file_as_string(path))
     var actor: String=state.observer_uuid
     state.current_actor_uuid=actor
     var canonical_before=state.duplicate(true)

@@ -160,6 +160,7 @@ source = "ui/resources.json icon:spell.sunbeam"
 [sub_resource type="Resource" id="Resource_qfpgj"]
 script = ExtResource("10_e4gle")
 id = "action.spell.sunbeam.strike"
+dispatch_gap = "delegated_to_actual_granted_action_owner"
 kind = "sub_action"
 value = "strike"
 recipe = {
@@ -705,7 +706,7 @@ recipe = {
 }
 staging_from = "client"
 status = "partial"
-notes = "Old child draft (action.spell.sunbeam.strike), a complete recipe of the old model; nothing maps a server fact to it."
+notes = "The typed action.spell.sunbeam.strike source owns the granted action. This legacy full spell recipe is not a dispatch route and must not create another cast or replay the initial application. Actual granted-action output remains separately qualified."
 
 [resource]
 script = ExtResource("8_4ma4o")

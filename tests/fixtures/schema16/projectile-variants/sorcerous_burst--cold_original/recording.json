@@ -1,0 +1,69 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "5f7e7816-b7b8-4423-bf84-2b4966c184b0": "Amber caster",
+  "f8f167ee-0e83-4cc1-af81-243d0a84ad77": "Amber ally",
+  "040d795e-421f-4f66-bd98-cc899bab0bb0": "Blue second target",
+  "16af7408-dece-4737-902d-280c0cedc298": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.sorcerous_burst \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.sorcerous_burst": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 36,
+   "lineage": 33,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.sorcerous_burst",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 44,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.sorcerous_burst",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -40,7 +40,9 @@ ramp = PackedColorArray()
 script = ExtResource("3_tidk0")
 clip = "spells/sacred_flame/back/lifecycle"
 role = "attached"
-at = "release"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "owned_outcome", "outcome": "damage", "damage_type": "Radiant", "geometry_actor": "target", "component_path": ["effect"]}
+at = "cast"
 attachment = "recipient_ground"
 scale = 0.12
 orientation = "world"
@@ -105,7 +107,9 @@ source = "ui/resources.json icon:spell.sacred-flame"
 script = ExtResource("8_essgq")
 id = "spell.sacred_flame"
 icon = SubResource("Resource_p7wke")
+native_staging = true
 delivery = "projectile"
+effect_scope = "single"
 body = SubResource("Resource_b0e2t")
 hand_layers = Array[ExtResource("6_lau1h")]([SubResource("Resource_hkxup")])
 sockets = "measured/abilities/spells/spell.sacred_flame.sockets.json"
@@ -190,3 +194,5 @@ unported = {
 "startOffsetMs": -303.57142857142856
 }]
 }
+
+notes = "The existing finite artwork is enabled only for this native cast own positive applied Radiant result, at its actual recipient result clock. A passed save or zero/blocked result does not invent a contact. All artwork remains unreviewed."

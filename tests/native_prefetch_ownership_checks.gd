@@ -6,16 +6,18 @@ const Native=preload("res://presentation/native_spell_renderer.gd")
 const Hits=preload("res://presentation/native_spell_hits.gd")
 const Admission=preload("res://presentation/native_source_admission.gd")
 const Profile=preload("res://frame_profile.gd")
-class Lighting extends RefCounted:
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+class PreparedLighting extends RefCounted:
+    var native_preparation_ready:bool=true
+    func prepare_native_handles(_handles:Dictionary,_budget:Dictionary={})->bool:return true
     func sample_handles(_handles:Dictionary)->void:pass
-class World extends Node3D:
-    var timeline:RefCounted
-    var camera:Camera3D
-    var profile:Dictionary=Profile.create()
-    var source_lighting=Lighting.new()
-    var visual_actors:Dictionary={}
-    var playbacks:Dictionary={}
-    var catalog_cache:Dictionary={}
+    func clear_pages()->void:pass
+class World extends "res://play.gd":
+    func _ready()->void:
+        set_process(false);set_process_unhandled_input(false)
+        camera=Camera3D.new();add_child(camera);add_child(context_menu)
+        source_lighting=PreparedLighting.new()
+        rig_config=Characters._read("catalog/rig.json",catalog_cache)
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -23,7 +25,7 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);printerr(label)
 func run()->void:
-    var index=Recording.read("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal")
+    var index=Recording.read(Fixtures.journal("gallery"))
     check(index.ok,"Actual Gallery source recording admits")
     if not index.ok:quit(1);return
     var world=World.new();root.add_child(world)
@@ -50,8 +52,10 @@ func run()->void:
         "Missing required hit remains pending without resource admission or a private material constructor")
     result=native.prepare([],index.cache,world,rows,budget)
     check(result.ready and native.handles.is_empty() and native.required_images.is_empty(),"Unprepared optional source cannot block current readiness or acquire image pins when frame budget is spent")
+    var appearance:Dictionary=native._prepare_layers(world,{native_component.id:native_component},{})
+    check(appearance.ready,"Preconstructed-resource fixture owns its actual hidden appearance pass before promotion")
     var source=Node3D.new();source.hide();native._owner.add_child(source)
-    var prepared={"root":source,"component":native_component}
+    var prepared={"root":source,"component":native_component,"clip":Native.Effects.occurrence_clip(native_component)}
     native.handles[native_component.id]=prepared
     result=native.prepare([],index.cache,world,rows,budget,false)
     check(result.ready and is_same(native.handles[native_component.id],prepared) and not source.visible,"Required-only pass retains a hidden prepared future source")
@@ -71,7 +75,8 @@ func run()->void:
     result=hits.prepare(world,[],{},[hit_component],budget)
     check(result.ready and hits.records.is_empty(),"Optional hit preparation cannot block current group or bypass spent shared allowance")
     var viewport=SubViewport.new();world.add_child(viewport)
-    var surface={"viewport":viewport,"ready":true,"closed":false}
+    var quad=MeshInstance3D.new();viewport.add_child(quad)
+    var surface={"viewport":viewport,"quad":quad,"ready":true,"closed":false}
     var record={"surface":surface};var key=Hits._key(hit_component)
     hits.records[key]=record
     result=hits.prepare(world,[],{},[hit_component],budget,false)
@@ -82,13 +87,15 @@ func run()->void:
     hits.prepare(world,[],{},[],budget)
     check(hits.records.has(key) and not surface.closed,"Still-active hit survives leaving the preparation window")
     hits.active.clear();hits.prepare(world,[],{},[],budget)
-    check(not hits.records.has(key) and surface.closed and viewport.is_queued_for_deletion(),"Cancelled inactive hit releases exactly its own surface")
+    check(not hits.records.has(key) and surface.closed and hits.spare_surfaces.any(func(parked):return parked.viewport==viewport),"Cancelled inactive hit releases exactly its surface into its bounded owner reuse pool")
     check(world.timeline.state==canonical,"Preparation and promotion preserve canonical reducer state")
     # Explicit cancellation removes received ownership; no event is simulated.
     world.timeline.queue=[];world.timeline.current={};world.timeline.condition_owners={};world.timeline.spatial_effect_owners={};world.timeline.revision+=1
     native.sample(world,[],0.0)
     check(native.handles.is_empty() and not is_instance_valid(source),"Cancelled received owner retires its prepared source on normal sampling")
-    native.close(world);hits.close();world.queue_free()
+    native.close(world);hits.close()
+    check(viewport.is_queued_for_deletion(),"Closing the owner retires its exact parked hit viewport")
+    world.queue_free()
     while not Admission.loading_path.is_empty():
         Admission.prepare([],future_cache)
         await process_frame

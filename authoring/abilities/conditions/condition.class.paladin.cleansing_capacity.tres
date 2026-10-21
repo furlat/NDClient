@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_p3e5g")
 id = "condition.class.paladin.cleansing_capacity"
+disposition = "state_only"
 icon = SubResource("Resource_81i8b")
+play_package_lifecycle = false
+status = "internal"
+notes = "CleansingTouchCapacity owns CHA-based resource capacity and spent uses across rest. It is resource bookkeeping, not an active cleanse. Actual Cleansing Touch execution and actual removals own the existing finite action effects; passive capacity changes never replay them."

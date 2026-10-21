@@ -59,7 +59,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -74,5 +74,4 @@ staging_unported = {
 "selection": "forcecage_cage_native",
 "source": "assets/vfx/index.json:/selections/forcecage_cage_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "Factory source boundary (§13 of agent_docs/FACTORY_REVIEW_2026-10-20.md): The prepared source bank contains fixed review sections and requires exact section-geometry keys; actual disclosed wall-section geometry and UUID ownership cannot be replaced by the example cage. The fixed review cue0 is explicitly unselected in production. Cast body/palette and actual receiving damage, movement or condition feedback remain independent. This family stays partial pending the named source repair; all artwork remains unreviewed."

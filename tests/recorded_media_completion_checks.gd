@@ -1,5 +1,5 @@
 extends "res://tests/media_latency_checks.gd"
-## Replay the saved live boundary, then exercise its real required-worker fallback.
+## Replay an explicit original server operation, then exercise its real required-worker fallback.
 const Journal = preload("res://sdk/journal.gd")
 
 func run() -> void:
@@ -8,25 +8,25 @@ func run() -> void:
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--journal="): directory = arg.trim_prefix("--journal=")
         if arg.begins_with("--sequence="): sequence = int(arg.trim_prefix("--sequence="))
-    check(not directory.is_empty() and sequence>0,"Explicit saved live journal and blocked sequence supplied")
+    check(not directory.is_empty() and sequence>0,"Explicit saved live journal and operation sequence supplied")
     if not failures.is_empty(): finish_recorded(); return
     var journal = Journal.new()
     var opened = journal.open(directory,true,false)
     check(opened.ok,"Saved live journal opens read-only for replay")
     if not opened.ok: finish_recorded(); return
     var replayed = journal.replay(sequence-1)
-    check(replayed.ok,"Original reducer reaches the boundary before the blocked operation")
+    check(replayed.ok,"Original reducer reaches the boundary before the recorded operation")
     if not replayed.ok: finish_recorded(); return
     var before: Dictionary = journal.state
     var raw = FileAccess.get_file_as_bytes(directory.path_join("%016d.json" % sequence))
     var decoded = journal.protocol.decode("PlayerOperation",raw)
-    check(decoded.ok,"Original blocked server packet validates")
+    check(decoded.ok,"Original recorded server packet validates")
     if not decoded.ok: finish_recorded(); return
     var admitted = journal._consume_admitted(decoded.value,raw,true)
-    check(admitted.ok,"Original reducer admits the blocked operation")
+    check(admitted.ok,"Original reducer admits the recorded operation")
     if not admitted.ok: finish_recorded(); return
     var compiled = Compiler.compile_recorded(before,admitted.normalized,{},journal.state,admitted.transitions)
-    check(compiled.ok,"Actual blocked operation compiles")
+    check(compiled.ok,"Actual recorded operation compiles")
     if not compiled.ok: finish_recorded(); return
     var groups: Array = compiled.value.groups
     check(not groups.is_empty(),"Actual operation contains presentation groups")
@@ -39,13 +39,13 @@ func run() -> void:
         player._prepare_media()
         while not player.media_metadata_ready and player.media_warmup.plan_thread!=null:
             var result = await poll_plan(player.media_warmup)
-            check(not result.has("error") and result.get("complete",false),"Live group %d worker publishes a successful result" % index)
+            check(not result.has("error") and result.get("complete",false),"Recorded group %d worker publishes a successful result" % index)
             player._adopt_media_plan(result)
             player._prepare_media()
         check(player.media_metadata_ready and player.media_issue.is_empty() and player.media_plan.errors.is_empty(),
-            "Live group %d is no longer blocked by a false metadata error" % index)
+            "Recorded group %d is no longer blocked by a false metadata error" % index)
         check(player.timeline.current==groups[index] and player.timeline.sequence==sequence-1,
-            "Preparing live group %d does not advance the displayed cursor" % index)
+            "Preparing recorded group %d does not advance the displayed cursor" % index)
         for commit in groups[index].commits: Compiler.apply_delta(player.timeline.state,commit.delta)
     var exact_message = "Authored media metadata preparation did not complete; inspect the source error log."
     var report = player.error_report(exact_message)

@@ -166,11 +166,13 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 [sub_resource type="Resource" id="Resource_t1pf8"]
 script = ExtResource("10_75p35")
 id = "enlarge_reduce_reduce_native"
+dispatch_gap = "delegated_actual_size_change_condition_application"
 kind = "form"
 selection = "enlarge_reduce_reduce_native"
 effects = Array[ExtResource("3_vsjab")]([SubResource("Resource_0tic7"), SubResource("Resource_4m7lj")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual condition.spell.enlarge_reduce size_change selects the Reduce application and body scale in the existing condition source. Its review interval and duplicate application must not run as a second spell-owned lifecycle."
 
 [resource]
 script = ExtResource("8_3h075")

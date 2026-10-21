@@ -40,30 +40,27 @@ ramp = PackedColorArray()
 script = ExtResource("3_rardb")
 clip = "live-electric/call_live_strike"
 role = "attached"
+scope = "cast"
+constructor_input = {
+"source_resources": {"gpu_shape_banks": ["res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res", "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res"]},
+"kind": "area_links",
+"component_path": ["network"],
+"input_field": "",
+"area_shape": "sphere",
+"edges": [{"from": 0, "to": 1, "delay": 0.28}, {"from": 0, "to": 1, "delay": 1.33}],
+"endpoint_count": 2,
+"charge_coil": false
+}
 at = "release"
 delay = -0.28
 attachment = "caster_ground"
 orientation = "world"
 source_end = 2.58
 duration_policy = "authored"
-hide_at_contact = PackedStringArray()
-hide_at_release = PackedStringArray()
-hide_nodes = PackedStringArray()
-show_nodes = PackedStringArray()
-opacity_keys = PackedVector2Array()
-staging_from = "factory@20261018-c3c616e88a6b725f"
+staging_from = "client-public-area-20261020"
 extra = {
-"live_endpoints": [{
-"point": [2.0, 7.5, 0.0]
-}, {
-"actor": "target",
-"socket": "body_center",
-"surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
-}, {
-"actor": "target2",
-"socket": "body_center",
-"surface_slots": ["body", "legs", "chest", "head", "helmet"]
-}],
+"live_endpoints": [{"area_point": "center", "offset_cells": [0.0, 7.5, 0.0]}, {"area_point": "center"}],
+"input_policies": {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}},
 "source_rate": 1.0
 }
 
@@ -189,6 +186,7 @@ source = "ui/resources.json icon:spell.call-lightning"
 [sub_resource type="Resource" id="Resource_p2tgs"]
 script = ExtResource("10_rs3fe")
 id = "action.spell.call_lightning.strike"
+dispatch_gap = "delegated_to_actual_action_effects"
 kind = "sub_action"
 value = "strike"
 recipe = {
@@ -692,7 +690,35 @@ recipe = {
 }
 staging_from = "client"
 status = "partial"
-notes = "Old child draft (action.spell.call_lightning.strike), a complete recipe of the old model; nothing maps a server fact to it."
+notes = "Imported alternative is delegated to the authored action.spell.call_lightning.strike delivery of this same public area source."
+
+[sub_resource type="Resource" id="Resource_actual_electric_contact"]
+script = ExtResource("3_rardb")
+clip = "live-electric/call_live_strike"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"source_resources": {"gpu_shape_banks": ["res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res", "res://assets/vfx/extensions/followup-20261020/sources/2d9c560e3c695aae2f0c/heavy-48064.res"]},
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"component_path": ["network"],
+"input_field": "",
+"packet": "electric_network",
+"damage_type": "Lightning",
+"save_effect_id": "spell.call_lightning.saving_throw"
+}
+at = "cast"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.72
+duration_policy = "authored"
+staging_from = "client-public-area-20261020"
+extra = {
+"live_endpoints": [{"actor": "target", "socket": "body_center", "surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]}],
+"input_policies": {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}}
+}
 
 [resource]
 script = ExtResource("8_5cqno")
@@ -702,7 +728,8 @@ delivery = "sphere"
 body = SubResource("Resource_lwv4r")
 hand_layers = Array[ExtResource("4_xog18")]([SubResource("Resource_jy8mq"), SubResource("Resource_bhvdl")])
 sockets = "measured/abilities/spells/spell.call_lightning.sockets.json"
-effects = Array[ExtResource("3_rardb")]([SubResource("Resource_g4f2j"), SubResource("Resource_jlmj6"), SubResource("Resource_hwbyl"), SubResource("Resource_p2otn")])
+effects = Array[ExtResource("3_rardb")]([SubResource("Resource_g4f2j"), SubResource("Resource_jlmj6"), SubResource("Resource_hwbyl"), SubResource("Resource_p2otn"), SubResource("Resource_actual_electric_contact")])
+native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
@@ -763,5 +790,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
-notes = "Not played in the game: its Factory live-electric clips need live target endpoints the client does not supply (their live approaches assert in electric_network.gd); the imported staging stays as review data.
-Plays its imported Factory staging (coverage fill)."
+notes = "Native area source consumes the real disclosed sphere center, with its vertical offset authored here. The source retains its optical edge program; fixture recipient schedules are cleared. Separate finite contacts require an actual matching save and positive Lightning result. Density masking is disabled in the selected source. Artwork and actual-context output remain unreviewed/unqualified."

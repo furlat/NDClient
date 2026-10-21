@@ -1,0 +1,69 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "bf03697c-43ea-4f80-be54-3d178214b946": "Amber caster",
+  "395258b5-69e5-449e-ad36-d1f307bee871": "Amber ally",
+  "3cb0a96f-44d9-488e-b571-8bb4b8a431cf": "Blue target",
+  "eb0bbf20-82d8-4910-9b56-dd9bdc6035dc": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.chromatic_orb \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.chromatic_orb": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 36,
+   "lineage": 33,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 44,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

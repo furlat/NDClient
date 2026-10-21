@@ -9,5 +9,110 @@ id = "spatial_effect.environment.jaw_trap"
 layer = "field"
 art = PackedStringArray("trap-workshop.jaw")
 legacy = "measured/environment/surfaces/spatial_effect.environment.jaw_trap.json"
+world_media = {
+  "kind": "sprite",
+  "requires_object_anchor": true,
+  "state_field": "trap_state",
+  "art_ids": [
+    "trap-workshop.jaw"
+  ],
+  "frames_by_pose": {
+    "e": [
+      "trap-workshop.jaw.e.0",
+      "trap-workshop.jaw.e.1",
+      "trap-workshop.jaw.e.2",
+      "trap-workshop.jaw.e.3",
+      "trap-workshop.jaw.e.4",
+      "trap-workshop.jaw.e.5",
+      "trap-workshop.jaw.e.6",
+      "trap-workshop.jaw.e.7",
+      "trap-workshop.jaw.e.8",
+      "trap-workshop.jaw.e.9",
+      "trap-workshop.jaw.e.10",
+      "trap-workshop.jaw.e.11"
+    ],
+    "n": [
+      "trap-workshop.jaw.n.0",
+      "trap-workshop.jaw.n.1",
+      "trap-workshop.jaw.n.2",
+      "trap-workshop.jaw.n.3",
+      "trap-workshop.jaw.n.4",
+      "trap-workshop.jaw.n.5",
+      "trap-workshop.jaw.n.6",
+      "trap-workshop.jaw.n.7",
+      "trap-workshop.jaw.n.8",
+      "trap-workshop.jaw.n.9",
+      "trap-workshop.jaw.n.10",
+      "trap-workshop.jaw.n.11"
+    ],
+    "s": [
+      "trap-workshop.jaw.s.0",
+      "trap-workshop.jaw.s.1",
+      "trap-workshop.jaw.s.2",
+      "trap-workshop.jaw.s.3",
+      "trap-workshop.jaw.s.4",
+      "trap-workshop.jaw.s.5",
+      "trap-workshop.jaw.s.6",
+      "trap-workshop.jaw.s.7",
+      "trap-workshop.jaw.s.8",
+      "trap-workshop.jaw.s.9",
+      "trap-workshop.jaw.s.10",
+      "trap-workshop.jaw.s.11"
+    ],
+    "w": [
+      "trap-workshop.jaw.w.0",
+      "trap-workshop.jaw.w.1",
+      "trap-workshop.jaw.w.2",
+      "trap-workshop.jaw.w.3",
+      "trap-workshop.jaw.w.4",
+      "trap-workshop.jaw.w.5",
+      "trap-workshop.jaw.w.6",
+      "trap-workshop.jaw.w.7",
+      "trap-workshop.jaw.w.8",
+      "trap-workshop.jaw.w.9",
+      "trap-workshop.jaw.w.10",
+      "trap-workshop.jaw.w.11"
+    ]
+  },
+  "fps": 12,
+  "state_frames": {
+    "activated": 5,
+    "deactivated": 0,
+    "ready": 0
+  },
+  "activation_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "contact_frame": 5,
+  "transition_frames": {
+    "activated:deactivated": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "activated:ready": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ]
+  },
+  "successful_save_hop": {
+    "effect_id": "spatial_effect.environment.jaw_trap.capture",
+    "body_clip": "Rolling",
+    "duration_ms": 360.0,
+    "height_px": 10.0
+  }
+}
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Source-authored world program promoted from measured/environment/surfaces/spatial_effect.environment.jaw_trap.json. The shared environment path retains the exact observed spatial owner, disclosed state and original numeric pose-frame ordering. Finite activation is driven only by actual committed mechanism facts; state transitions use actual successive owner values. Projectile, avoidance, depth and residue declarations remain separate factual inputs. All artwork remains unreviewed; source assignment does not qualify runtime output."

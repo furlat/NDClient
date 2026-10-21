@@ -1,6 +1,8 @@
 extends SceneTree
 ## Typed action cues use the same package clock without pretending to be spells.
 const Action=preload("res://presentation/source/abilities/action.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
+const NativeSourceMedia=preload("res://presentation/native_effects.gd")
 const Use=preload("res://presentation/source/effect_use.gd")
 const Body=preload("res://presentation/source/abilities/body_use.gd")
 const Build=preload("res://tools/presentation_build/abilities.gd")
@@ -20,7 +22,7 @@ const ID="action.class.fighter.action_surge"
 const CLIP="fighter_action_surge_native"
 var checks:int=0
 var failures:Array=[]
-const SELECTED=["action.class.barbarian.rage","action.class.barbarian.frenzy","action.class.barbarian.intimidating_presence",
+const SELECTED=["action.class.barbarian.rage","action.class.barbarian.frenzy","action.class.barbarian.intimidating_presence","action.class.barbarian.extend_intimidating_presence",
     "action.class.barbarian.frenzied_strike","action.class.fighter.action_surge","action.class.fighter.second_wind",
     "action.class.sorcerer.quickened_spell","action.class.sorcerer.twinned_spell","action.class.sorcerer.distant_spell",
     "action.class.sorcerer.elemental_affinity.resistance","action.class.sorcerer.draconic_presence"]
@@ -35,7 +37,10 @@ func authored()->void:
     for id in SELECTED:
         var path="res://authoring/abilities/actions/"+id+".tres"
         var entry:Resource=load(path)
-        check(entry!=null and not entry.effects.is_empty(),id+" has its exact selected typed Factory cues")
+        if id=="action.class.sorcerer.draconic_presence":
+            var owner:Resource=load("res://authoring/environment/surfaces/spatial_effect.class_feature.draconic_presence.tres")
+            check(entry!=null and entry.effects.is_empty() and owner.native_staging and owner.lasting!=null,id+" delegates its retained field to the actual public spatial owner")
+        else:check(entry!=null and not entry.effects.is_empty(),id+" has its exact selected typed Factory cues")
         if entry==null:continue
         entries[id]=entry;paths[id]=path
         check(entry.unported.get("media",[]).is_empty(),id+" does not replay its replaced old sprite media")
@@ -59,7 +64,7 @@ func authored()->void:
 func observations()->void:
     var action={"id":"21","lineage_id":"4","parent_lineage":null,"fact":{"kind":"action","behavior_id":"action.class.fighter.second_wind","source_entity_uuid":"actor"}}
     var heal={"id":"22","lineage_id":"5","parent_event":"20","parent_lineage":"4","fact":{"kind":"heal","source_entity_uuid":"actor","target_entity_uuid":"actor","actual_healing":7,"was_blocked":false,"source_condition_uuid":null}}
-    var phase={"start_ms":100.0,"native_clip":{"inputs":["owner_projection"]}}
+    var phase={"start_ms":100.0,"native_clip":{"inputs":["owner_projection"]},"native_cue":{}}
     var graph={"nodes":{"4":action,"5":heal},"condition_cues":{},"starts":{"21":0.0,"22":100.0}}
     var original:Dictionary=graph.duplicate(true)
     var result:Dictionary=Actions.inputs(action,{},phase,graph)
@@ -197,6 +202,155 @@ func retained_occurrences()->void:
         "persistent":{"nativeEffects":[{"replaces_media":["only-this-layer"]}]}}
     check(Conditions.NativePersistent.replaced_media({"behavior_id":"condition.test.no_package"},untouched)==["only-this-layer"],"An authored hold only replaces its declared media; unrelated missing apply/remove effects remain requirements")
 
+## Synthetic projection controls over the real six authored Resources. These
+## are compiler/source-time assertions, not recordings or rendered evidence.
+func legacy_six_build()->Dictionary:
+    var entries:Dictionary={};var paths:Dictionary={};var sources:Dictionary={}
+    for id in ["action.class.barbarian.extend_intimidating_presence","action.class.sorcerer.convert_sorcery_points_to_slot",
+            "action.class.sorcerer.convert_slot_to_sorcery_points","action.class.sorcerer.dragon_wings.toggle",
+            "class_feature.fighter.indomitable","class_feature.barbarian.relentless_rage"]:
+        var path:String="res://authoring/abilities/actions/"+id+".tres"
+        var entry:Resource=load(path)
+        check(entry!=null,"Legacy-six actual authored action exists: "+id)
+        if entry==null:continue
+        entries[id]=entry;paths[id]=path
+        var raw:Dictionary=Records.action_recipe(entry)
+        var copy:Resource=Action.new();Records.action_from_recipe(copy,raw)
+        check(Build.F.same(Records.action_recipe(copy),raw),"Actual action import/export preserves its complete media, predicate and original leftovers: "+id)
+    for id in ["class.font_gather","class.wings.mantle","class.indomitable","class.relentless"]:
+        var source:Resource=load("res://authoring/abilities/sources/"+id+".tres")
+        check(source!=null,"Legacy-six actual native source exists: "+id)
+        if source!=null:sources[id]=source
+    return Build.documents({"actions":entries,"sources":sources},{"actions":paths})
+
+func legacy_media_roundtrip()->void:
+    for presence in ["absent","empty","assigned"]:
+        var raw:Dictionary={"disposition":"authored","original_extra":{"keep":[1.0,false]}}
+        if presence=="empty":raw.media=[]
+        elif presence=="assigned":
+            raw.media=[{"id":"distinct-use","source_id":"class.font_gather","assetId":"class.font_gather.charge-q0-all",
+                "poseSocket":"other_hand","alpha":.95,"scale":.3,"durationMs":1250.0,
+                "timeMap":[{"elapsedMs":0.0,"sourceFrame":39.0},{"elapsedMs":1250.0,"sourceFrame":0.0}]}]
+            raw.observedFact={"kind":"damage","stage":"taken","witness":"relentless_rage","when":{"succeeded":true},"actor_field":"target_entity_uuid"}
+        var before:Dictionary=raw.duplicate(true)
+        var imported:Resource=Action.new();Records.action_from_recipe(imported,raw)
+        check(Build.F.same(Records.action_recipe(imported),raw) and raw==before,
+            "Media import/export preserves exact "+presence+" presence, frame values and unknown fields without mutating input")
+
+func legacy_compile(node:Dictionary,built:Dictionary,children:Array=[],cues:Dictionary={})->Array:
+    var events:Array=[node];events.append_array(children)
+    var graph:Dictionary={"nodes":{},"starts":{},"times":{},"committed_at":{},"recipes":{},"actor_inputs":{},
+        "condition_cues":cues,"positions":{"actor":[3,7],"recipient":[4,7],"other":[4,8]},"contacts":{}}
+    for current in events:
+        graph.nodes[str(current.lineage_id)]=current
+        graph.starts[str(current.id)]=100.0;graph.times[str(current.id)]=125.0;graph.committed_at[str(current.id)]=425.0
+        graph.recipes[str(current.id)]=built.docs["catalog/body_action_recipes.json"].get(str(current.fact.get("behavior_id","")),{})
+        graph.actor_inputs[str(current.id)]={"actor":{"uuid":"actor"},"recipient":{"uuid":"recipient"},"other":{"uuid":"other"}}
+    graph.observed_results=Results.observed_index(events,graph)
+    var before:Dictionary=graph.duplicate(true)
+    var cache:Dictionary=built.docs.duplicate()
+    cache["audio/bindings.json"]={"actions":{},"conditions":{},"equipment":{},"damage_types":{}}
+    var group:Dictionary={"operation_sequence":19,"actor_tracks":[],"components":[],"commits":[]}
+    check(Components.compile(group,{"events":events},graph,cache).ok,"Synthetic legacy-six selector input compiles through the production component boundary")
+    check(graph==before and group.actor_tracks.is_empty(),"Projection preserves input facts/owners and never invents a body gesture")
+    return group.components
+
+func legacy_fact_media(built:Dictionary)->void:
+    for definition in [{"owner":"class_feature.fighter.indomitable","kind":"saving_throw","witness":"indomitable_reroll","source":"class.indomitable"},
+            {"owner":"class_feature.barbarian.relentless_rage","kind":"damage","witness":"relentless_rage","source":"class.relentless"}]:
+        var fact:Dictionary={"kind":definition.kind,"target_entity_uuid":"recipient"}
+        if definition.kind=="damage":fact.stage="taken"
+        fact[definition.witness]={"condition_uuid":null,"succeeded":true}
+        var node:Dictionary={"id":"101","lineage_id":"100","parent_lineage":null,"phase":"completion","canceled":false,"fact":fact}
+        var rows:Array=legacy_compile(node,built)
+        check(rows.size()==1,"One successful actual-kind witness emits one composition, with no duplicate rear/front capture: "+definition.owner)
+        if rows.size()==1:
+            var row:Dictionary=rows[0]
+            check(row.kind=="native_effect" and row.source_id==definition.source and row.actor_uuid=="recipient" \
+                and row.source_event_uuid=="101" and row.source_lineage=="100" and not row.has("spell_id"),"Finite passive preserves exact fact/recipient/domain identity: "+definition.owner)
+            check(row.start_ms==1025.0 and row.duration_ms==875.0 and row.alpha==.8 and row.scale==.425,
+                "Passive starts at actual425ms commit plus authored600ms and retains28/32s, alpha and scale: "+definition.owner)
+            check(row.observed_fact.authored_owner==definition.owner and row.observed_fact.witness.condition_uuid==null \
+                and row.source=="res://authoring/abilities/actions/"+definition.owner+".tres::media/0","Nullable disclosed condition UUID is evidence, not a fabricated mandatory source operand: "+definition.owner)
+        for control in ["false","null","missing","wrong_kind","wrong_witness","missing_target","pending","canceled"]:
+            var rejected:Dictionary=node.duplicate(true)
+            if control=="false":rejected.fact[definition.witness].succeeded=false
+            elif control=="null":rejected.fact[definition.witness]=null
+            elif control=="missing":rejected.fact.erase(definition.witness)
+            elif control=="wrong_kind":rejected.fact.kind="turn"
+            elif control=="wrong_witness":rejected.fact.erase(definition.witness);rejected.fact.unrelated_success={"succeeded":true}
+            elif control=="missing_target":rejected.fact.target_entity_uuid=null
+            elif control=="pending":rejected.phase="execution"
+            else:rejected.canceled=true
+            check(legacy_compile(rejected,built).is_empty(),"Passive refuses "+control+" without inferring a successful response: "+definition.owner)
+        if definition.kind=="damage":
+            var applied:Dictionary=node.duplicate(true);applied.fact.stage="applied";applied.fact.applied_damage=0
+            check(legacy_compile(applied,built).is_empty(),"Relentless witness cannot move from TAKEN to applied-damage/HP inference")
+        var another:Dictionary=node.duplicate(true);another.fact.target_entity_uuid="other"
+        var other_rows:Array=legacy_compile(another,built)
+        check(other_rows.size()==1 and other_rows[0].actor_uuid=="other","The actual witness target owns the response; no remembered recipient substitution: "+definition.owner)
+
+func legacy_font_media(built:Dictionary)->void:
+    for direction in ["sorcery_points_to_slot","slot_to_sorcery_points"]:
+        var id:String="action.class.sorcerer.convert_"+direction
+        var node:Dictionary={"id":"151","lineage_id":"150","parent_lineage":null,"phase":"completion","canceled":false,
+            "fact":{"kind":"action","behavior_id":id,"source_entity_uuid":"actor","target_entity_uuid":"actor"}}
+        var rows:Array=legacy_compile(node,built)
+        var reverse:bool=direction=="slot_to_sorcery_points"
+        check(rows.size()==(2 if reverse else 1),"Font preserves each separately authored hand use: "+direction)
+        var ids:Array=[];var sockets:Array=[];var private_ids:Array=[]
+        for row in rows:
+            ids.append(row.authored_use_id);sockets.append(row.attachment);private_ids.append(row.id)
+            check(row.actor_uuid=="actor" and row.source_id=="class.font_gather" and row.start_ms==100.0 \
+                and row.duration_ms==1250.0 and row.alpha==.95 and row.scale==.3 and row.requires_pose_socket,
+                "Font retains exact actor, finite interval, opacity/scale and actual socket admission: "+direction)
+            if reverse:
+                check(is_equal_approx(NativeSourceMedia.source_age_ms(row,0.0),1218.75) \
+                    and is_equal_approx(NativeSourceMedia.source_age_ms(row,625.0),609.375) \
+                    and is_zero_approx(NativeSourceMedia.source_age_ms(row,1250.0)),"Reverse Font uses actual frame39/32 to0 over1250ms on the shared source clock")
+                check(is_equal_approx(NativeSourceMedia.source_age_ms(row,-20.0),1218.75) \
+                    and is_zero_approx(NativeSourceMedia.source_age_ms(row,2000.0)),"Affine finite window clamps without extrapolating nonexistent source frames")
+            else:check(NativeSourceMedia.source_age_ms(row,625.0)==625.0,"Forward Font keeps the original source chronology")
+        check(ids==(["charge-hand","charge-other_hand"] if reverse else ["charge-hand"]) \
+            and sockets==(["hand","other_hand"] if reverse else ["hand"]),"Distinct authored Font IDs and actual hand sockets survive one shared source record")
+        check(private_ids.size()<2 or private_ids[0]!=private_ids[1],"Two actual Font hands own distinct finite component instances")
+
+func legacy_wings_media(built:Dictionary)->void:
+    var id:String="action.class.sorcerer.dragon_wings.toggle"
+    var action:Dictionary={"id":"201","lineage_id":"200","parent_lineage":null,"phase":"completion","canceled":false,
+        "fact":{"kind":"action","behavior_id":id,"source_entity_uuid":"actor","target_entity_uuid":"actor"}}
+    var applied:Dictionary={"id":"202","lineage_id":"203","parent_lineage":"200","phase":"completion","canceled":false,
+        "fact":{"kind":"actor_change"}}
+    var cue:Dictionary={"phase":"application","actor_uuid":"actor","condition":{"condition_uuid":"actual-wing-member",
+        "behavior_id":"class_feature.sorcerer.dragon_wings.active"},"recipe":{}}
+    var rows:Array=legacy_compile(action,built,[applied],{"202":[cue]})
+    check(rows.size()==1,"The same actor's one linked Dragon Wings application emits its two source halves once")
+    if rows.size()==1:
+        var row:Dictionary=rows[0]
+        check(row.source_id=="class.wings.mantle" and row.actor_uuid=="actor" and row.duration_ms==1250.0 \
+            and row.alpha==.4 and row.scale==.4 and row.fade_in_ms==180.0 and row.fade_out_ms==350.0,
+            "Wings application retains its finite authored source/fade without replacing persistent body appearance")
+        check(row.observed_condition=={"condition_uuid":"actual-wing-member","application_occurrence":"202"},"Wings retains exact actual application/member evidence")
+    for control in ["absent","other_actor","other_condition","unlinked","removal","duplicate","canceled"]:
+        var child:Dictionary=applied.duplicate(true);var selected:Dictionary=cue.duplicate(true)
+        var cues:Dictionary={"202":[selected]}
+        if control=="absent":cues={}
+        elif control=="other_actor":selected.actor_uuid="other"
+        elif control=="other_condition":selected.condition.behavior_id="unrelated-condition"
+        elif control=="unlinked":child.parent_lineage=null
+        elif control=="removal":selected.phase="removal"
+        elif control=="duplicate":cues["202"].append(selected.duplicate(true))
+        else:child.canceled=true
+        check(legacy_compile(action,built,[child],cues).is_empty(),"Wings application accent refuses "+control+" rather than replaying a toggle by name")
+
+func legacy_six()->void:
+    legacy_media_roundtrip()
+    var built:Dictionary=legacy_six_build()
+    var before:Dictionary=built.docs.duplicate(true)
+    legacy_fact_media(built);legacy_font_media(built);legacy_wings_media(built)
+    check(built.docs==before,"Legacy-six compile controls never mutate shared authored source records")
+
+
 func run()->void:
     var use=Use.new();use.clip=CLIP;use.selection="fighter_action_surge_native"
     use.role="attached";use.at="body.effect";use.attachment="caster_ground";use.follow=true
@@ -266,6 +420,6 @@ func run()->void:
     Components.compile(group,{"events":[node]},graph,cache)
     check(group.components.size()==1 and group.components[0].status=="missing" and group.components[0].reason=="native_action_position_unavailable","Missing public placement never creates an effect at a fixture origin")
     check(fact==original,"Cue preparation and component dispatch do not mutate authoritative facts")
-    authored();observations();held_conditions();factual_events();retained_occurrences()
-    print(JSON.stringify({"checks":checks,"failures":failures}))
+    authored();observations();held_conditions();factual_events();retained_occurrences();legacy_six()
+    print(JSON.stringify({"checks":checks,"failures":failures,"legacy_six_scope":"Actual authored six-resource import/export and production compiler outputs from explicit synthetic witness/membership controls; shared source-time values only, no recorded/native/art evidence."}))
     quit(0 if failures.is_empty() else 1)

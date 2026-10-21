@@ -1,5 +1,37 @@
 # Factory handoff: immutable actor-history material captures
 
+## Successor intake — client implementation awaiting qualification
+
+The original request below describes the predecessor's defect. The complete
+`runtime-production-review-20261020-937fdd136d621742` now supplies its repaired
+owner at `extensions/production-review-20261020/sources/6e2fd9339711629213f5/condition_actor_history.gd`
+and capture helper at `sources/55cd7ae83a2e60843ea1/condition_history_capture.gd`
+under the same extension. The client rebinds the existing occurrence's history
+helper before its first context packet, using that occurrence's original
+settings and clock slot. Both helpers share the retained source clock table.
+
+`NativeInputs` supplies actual current or privately realized original layer
+materials, selected native-hit surface/clock/result descriptors, and original
+body-treatment/appearance owner samples. Prefix preparation uses the existing
+native source and appearance lease contracts; it does not rewind live owners.
+Timeline cuts retain the original appearance membership even during movement.
+Missing source inputs/material support remain explicit refusals. Pending
+requests retain their context while drawing; they do not withdraw and suspend
+their own captures. Capture completion and the final output draw independently
+gate rendered witnesses. Existing occurrence/epoch teardown owns all private
+layers, original source occurrences and frozen targets.
+
+The existing logical and native material-transition gates now include the four
+unchanged Fire Bolt/Magic Missile originals listed below. Native checks compare
+the frozen dependency with its selected source at the original absolute age,
+then require unchanged frozen bytes after later sampling and source retirement.
+The original view, pixel, seek/loop, withdrawal and teardown controls remain.
+Magic Missile's missing authoritative Blur retirement stays unclaimed. New
+body-treatment/appearance overlap recordings and current-package execution are
+pending; this source intake is not a fresh native, performance or art pass.
+Past lighting-table restoration and unsupported receiver/shader paths are not
+qualified by the delivered capture repair.
+
 This is a source-contract request for the complete installed
 `runtime-e102c29dec58524b`. No source/art change or new native qualification is
 claimed here. The client draft remains private; a seek-only implementation is

@@ -1,5 +1,11 @@
 # Shared-provider qualification checkpoint — 20 October 2026
 
+**Current artwork-review status — human clarification, 20 October 2026:** all
+artwork still awaits human review. The earlier named four-effect rejection list
+is superseded and must not be treated as current scope or as acceptance of any
+other artwork.
+
+
 **Historical checkpoint below.** Current complete package is e102, committed
 as `ad26e594`; the actor-history shader failures described here are closed.
 Current shared code is `5b12fdf6` after `a33d1e59`:163/163 fast gates, five

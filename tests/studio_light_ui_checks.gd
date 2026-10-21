@@ -1,5 +1,5 @@
 extends SceneTree
-## Native Studio inspection of the actual schema9 Hide/torch operation journal.
+## Native Studio inspection of the actual current-schema Hide/torch journal.
 const Studio=preload("res://studio/studio.gd")
 const LightTracks=preload("res://studio/light_tracks.gd")
 var checks=0
@@ -32,13 +32,14 @@ func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_size(Vector2i(1280,720))
     DirAccess.make_dir_recursive_absolute("res://.captures/studio/lights")
-    var explicit=false
-    for arg in OS.get_cmdline_user_args():explicit=explicit or arg.begins_with("--recording=")
-    if not explicit:printerr("Requires --recording=<actual hide-light-schema9 journal>");quit(2);return
+    var requested:String=""
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--recording="):requested=arg.trim_prefix("--recording=")
+    if requested.is_empty():printerr("Requires --recording=<actual Hide/light journal>");quit(2);return
     var studio=Studio.new();root.add_child(studio);studio.inspector.unfocusable=true
     studio.loop_enabled=false
     if not await settle(studio):await finish(studio);return
-    check(studio.active_directory.contains("hide-light-schema9"),"UI is bound to the actual optical-source recording")
+    check(studio.active_directory==requested,"UI is bound to the exact requested optical-source original")
     studio.tracks.filter="light";studio.tracks.rebuild_rows();studio.tracks.fit()
     await process_frame;await RenderingServer.frame_post_draw
     var lights=studio.index.rows.filter(func(row):return row.kind=="light")

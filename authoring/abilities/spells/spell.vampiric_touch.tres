@@ -20,10 +20,10 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_wyktx"]
 script = ExtResource("1_q5d5o")
 clip = "bg3-36/vampiric-touch/vampiric_touch_native/windup"
-unbound_constructor_inputs = PackedStringArray("retained_owner_lifecycle_not_bound")
 role = "attached"
-at = "release"
-delay = -0.72
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "owner_activity", "geometry_actor": "caster", "outcome": "condition_application", "behavior_id": "spell.vampiric_touch", "condition_id": "condition.spell.vampiric_touch", "new_membership": true, "component_path": ["owned_contact"]}
+at = "cast"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.72
@@ -35,6 +35,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"input_policies": {"recipient_geometry": {"mode": "not_applicable", "reason": "hand_startup_draws_only_the_actual_hand_endpoint"}, "healing_input": {"mode": "not_applicable", "reason": "hand_startup_consumes_only_actual_owner_activity"}, "strike_input": {"mode": "not_applicable", "reason": "hand_startup_does_not_assert_a_hit"}, "condition_input": {"mode": "not_applicable", "reason": "hand_startup_has_no_recipient_condition"}, "tick_input": {"mode": "not_applicable", "reason": "hand_startup_has_no_tick"}},
 "dynamic_geometry": true,
 "entity_geometry": {
 "actor": "caster",
@@ -239,4 +240,4 @@ staging_unported = {
 "selection": "vampiric_touch_native",
 "source": "assets/vfx/index.json:/selections/vampiric_touch_native/staging"
 }
-notes = "First-cast impact consumes actual native Hit/Crit and its own positive Necrotic result. Finite healing consumes each real positive self HealFact at its own result clock; the drained enemy remains the optical endpoint and activation identity is that HealFact's actual parent occurrence. Held/retire probes 3 and 4 delegate to the existing condition.spell.vampiric_touch UUID hand lifecycle, preserving owner age instead of constructing a duplicate. Pre-application windup and repeat-impact owner activity remain explicit missing inputs; no idle contribution-active state is inferred. Source availability, native qualification and visual acceptance remain separate."
+notes = "First-cast impact consumes actual native Hit/Crit and its own positive Necrotic result. Finite healing consumes each real positive self HealFact at its own result clock; the drained enemy remains the optical endpoint and activation identity is that HealFact's actual parent occurrence. Held/retire probes 3 and 4 delegate to the existing condition.spell.vampiric_touch UUID hand lifecycle, preserving owner age instead of constructing a duplicate. The accepted initial cast admits its authored windup, and actual completed granted strikes admit repeat impact through the exact current owner and positive Necrotic result. No idle contribution-active state is inferred. Source availability, native qualification and visual acceptance remain separate."

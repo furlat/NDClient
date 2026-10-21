@@ -1,13 +1,27 @@
 [gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_74hfx"]
-[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_dwers"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="surface"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="ActualField"]
+script = ExtResource("effect")
+clip = "wall-native/antimagic_field_back_native/lifecycle"
+approach = "native"
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+scale = 1.0
+orientation = "world"
+light_multiplier = 0.0
+fade_out = 0.0
+staging_from = "factory@runtime-public-admission-20261020-976f8289ebcefa5c"
 
 [resource]
-script = ExtResource("2_dwers")
+script = ExtResource("surface")
 id = "spatial_effect.spell.antimagic_field"
 layer = "field"
-art = PackedStringArray()
-legacy = "measured/environment/surfaces/spatial_effect.spell.antimagic_field.json"
+lasting = SubResource("ActualField")
+native_staging = true
 status = "partial"
-notes = "Removed on the modern branch; the pinned engine still sends it. Art or a Factory scenario exists; the game does not draw it."
+notes = "Canonical native field assignment: the actual public spatial UUID/anchor/current admitted cells retain the chosen original source. Its existing source clock advances without finite review retirement until actual owner removal or disclosure loss. Backend lighting keeps its independent authoritative owner; no repeated cast, frozen pose or inferred geometry is created. Immediate actual teardown is explicit. All artwork remains unreviewed; rendered-output qualification remains separate."

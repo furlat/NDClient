@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_ohgeb")
 id = "condition.class.paladin.sacred_weapon"
+disposition = "state_only"
 icon = SubResource("Resource_4sgak")
+play_package_lifecycle = false
+status = "internal"
+notes = "SacredWeaponEffect is owned by the exact weapon and publishes its real ItemRecord.effects membership. Presentation delegates to item_attachments through item_effect_behavior_id, exact effect/item UUID, holder, modular weapon sheet and membership age. This catalog condition entry must not create a duplicate actor coating or replace the real item owner. Artwork remains unreviewed."

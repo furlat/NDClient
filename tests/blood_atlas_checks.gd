@@ -116,7 +116,14 @@ func run()->void:
         for step in 61:
             var age:float=(step-1)*component.duration_ms/59000.
             var expected:Array=old_blood.particles(component,source,age)
-            check(new_blood.particles(component,source,age)==expected and new_blood.particles(component,source,age,plan)==expected,"Planned flight particles equal per-frame evaluation "+str([number,age]))
+            var actual:Array=new_blood.particles(component,source,age)
+            var planned:Array=new_blood.particles(component,source,age,plan)
+            # New fragment sources add an empty polygon field to old liquids.
+            # Strip only that empty metadata; every old numeric field remains exact.
+            for sample in [actual,planned]:
+                for particle in sample:
+                    if particle.get("fragment")==PackedVector2Array():particle.erase("fragment")
+            check(actual==expected and planned==expected,"Planned flight particles equal per-frame evaluation "+str([number,age]))
         for quarter in 4:
             for age in ages:
                 var swap:bool=frames%2==1

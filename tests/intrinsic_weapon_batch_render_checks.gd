@@ -13,11 +13,11 @@ func run()->void:
     require_continuous_source=false
     source_refusals=["current_source_pose_has_no_authored_axis","material_only_source_has_no_qualified_finish"]
     var cases:Array=Fixtures.catalog().keys().filter(func(key):return str(key).begins_with("intrinsic-weapon-"));cases.sort()
-    check(cases.size()==11,"Eleven exact-item candidate originals, not every artistic alternative")
+    check(cases.size()==12,"Twelve cohort originals plus the separately qualified Ember Longsword cover thirteen selected intrinsic candidates")
     for key in cases:
         case_id=key
         var scenario:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Fixtures.case_record(key).scenario))
-        item_id=str(scenario.actors[0].items[0].id)
+        item_id=str(scenario.subjects.item[0])
         for seat in ["amber","blue"]:
             var index:Dictionary=Fixtures.read(key,seat)
             var journal:RefCounted=Journal.new();var opened:Dictionary=journal.open(Fixtures.journal(key,seat),true)
@@ -29,18 +29,20 @@ func run()->void:
             var actual:Array=sources.equipment[[look[0],null if str(look[1]).is_empty() else look[1],"weapon_melee_main"]]
             weapon_part=str(actual[0].sprite_key)
             var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("intrinsic_item_effect",false))
-            check(rows.size()==1,key+"/"+seat+": one intrinsic source follows the actual equipped item")
-            if rows.size()!=1:continue
-            var owner:Dictionary=rows[0];var component:Dictionary=owner.component
-            var poses:Array=cuts(index,owner,seat)
-            check(poses.size()==3,key+"/"+seat+": real Idle, movement and attack are available")
-            if poses.size()!=3:continue
+            var expected_owners:int=2 if item_id=="weapon.flame_blade" else 1
+            check(rows.size()==expected_owners,key+"/"+seat+": exact observed equipped intervals own their intrinsic sources")
+            if rows.size()!=expected_owners:continue
+            check(rows.all(func(row):return row.get("preview_scope")=="recorded_composed_context" and row.get("preview_lighting_scope")=="recorded_receiving_cut"),key+"/"+seat+": actual equipped owners use their recorded composed preview and receiving cut")
             var immutable:PackedByteArray=var_to_bytes([index.initialization,index.groups,index.rows])
-            for quarter in 4:await original_view(index,owner,poses,key+"/"+seat,quarter,journal.snapshot())
+            for owner in rows:
+                var poses:Array=cuts(index,owner,seat)
+                check(poses.size()==3,key+"/"+seat+": real Idle, movement and attack are available in each actual equipped interval")
+                if poses.size()!=3:continue
+                for quarter in 4:await original_view(index,owner,poses,key+"/"+seat,quarter,journal.snapshot())
             await accepted_contact(index,key+"/"+seat)
             check(var_to_bytes([index.initialization,index.groups,index.rows])==immutable,key+"/"+seat+": rendering leaves all original facts and source timing unchanged")
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Eleven selected intrinsic candidates, exact existing item/sheet/tint/holder and actual production native sources, independent faction originals/four views, real movement/attack/removal/replacement/seek/loop, actual contact pixels where proposed. Common receiver light/opacity oracle remains separately qualified; no new gameplay, inferred rider damage or human art acceptance."}
+        "scope":"Twelve cohort originals (including created Flame Blade with same-item re-equip/native expiry), exact existing item/sheet/tint/holder and actual production native sources, independent faction originals/four views, real movement/attack/removal/replacement/seek/loop, actual contact pixels where proposed. Common receiver light/opacity oracle remains separately qualified; no new gameplay, inferred rider damage or human art acceptance."}
     FileAccess.open(OUT+"/result.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("INTRINSIC_WEAPON_BATCH ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 func accepted_contact(index:Dictionary,label:String)->void:

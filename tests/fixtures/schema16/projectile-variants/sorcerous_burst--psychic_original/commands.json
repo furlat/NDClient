@@ -1,0 +1,125 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "f1258065-49c7-4efc-ace2-eea81f41e23d",
+   "state_revision": "571633c2-8324-4301-b053-10ec87ec53ef",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_psychic_original",
+   "game_epoch": "b6f6b3c0-4274-473b-9767-c91101424aa5",
+   "audience_id": "5ec1e671-069c-4b30-a905-47377361bd0b",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_psychic_original",
+    "game_epoch": "b6f6b3c0-4274-473b-9767-c91101424aa5",
+    "audience_id": "5ec1e671-069c-4b30-a905-47377361bd0b",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "fa7858b3-2766-449f-8c34-0eb21a4a0d4a",
+   "state_revision": "e64a1914-9b06-44c7-8bf7-b557a3b0c28d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_psychic_original",
+   "game_epoch": "b6f6b3c0-4274-473b-9767-c91101424aa5",
+   "audience_id": "0adbaa9d-55a5-4ebc-8f76-85e98105b87d",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_psychic_original",
+    "game_epoch": "b6f6b3c0-4274-473b-9767-c91101424aa5",
+    "audience_id": "0adbaa9d-55a5-4ebc-8f76-85e98105b87d",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.sorcerous_burst",
+   "by": "caster",
+   "target": "target",
+   "variant": {
+    "damage_type": "psychic"
+   },
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "aead4aca-90b1-4575-bf21-827fc90ef521",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.sorcerous_burst",
+   "display_name": "Sorcerous Burst",
+   "cast_at_level": 0,
+   "variant_facets": [
+    {
+     "key": "damage_type",
+     "value": "psychic",
+     "label": "Psychic"
+    }
+   ],
+   "target_type": "creature_or_object",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "5ff114ca-51aa-4d74-9cc9-8c2cf5395d9f",
+   "state_revision": "aead4aca-90b1-4575-bf21-827fc90ef521",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 15,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_psychic_original",
+   "game_epoch": "b6f6b3c0-4274-473b-9767-c91101424aa5",
+   "audience_id": "5ec1e671-069c-4b30-a905-47377361bd0b",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_psychic_original",
+    "game_epoch": "b6f6b3c0-4274-473b-9767-c91101424aa5",
+    "audience_id": "5ec1e671-069c-4b30-a905-47377361bd0b",
+    "sequence": 6
+   }
+  }
+ }
+]

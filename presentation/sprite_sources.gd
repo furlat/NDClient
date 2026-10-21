@@ -27,6 +27,8 @@ var source_images: Dictionary = {}
 const Order = preload("res://grid_order.gd")
 const FIXTURE_FLAME_SHADER = preload("res://presentation/fixture_flame.gdshader")
 var static_entries: Array = []
+# Active source-owned animated scenery, maintained at ordinary row publication.
+var world_media_entries: Array = []
 var fixture_entries: Array = []
 var fixture_clips: Dictionary = {}
 var fixture_clock_owner: Node
@@ -186,10 +188,201 @@ func _apply_environment_descriptor(entry:Dictionary,value:Dictionary)->void:
         SourceMaterial.set_parameter(entry,name,texture(value.texture_parameters[name]))
     if value.record.has("hit_mask"):texture(value.record.hit_mask.path)
 
+## Sample the exact registered frame through the existing environment material.
+## Preparation owns the complete source closure; this path creates no textures.
+func sample_world_media_frame(entry:Dictionary,content:String,role:String,orientation:String,frame:int,visible:bool=true)->bool:
+    var key:Array=[content,role,orientation,frame,quarter,source_depth,source_normals]
+    if entry.get("world_media_frame_key",[])!=key:
+        var record:Dictionary=Catalog.world_media_record(content,role,quarter,orientation,frame,catalog_cache)
+        record=Catalog.texture_layout(Catalog.receiving_normal(record,catalog_cache),catalog_cache)
+        if record.is_empty():entry.node.visible=false;return false
+        entry.placement.orientation=orientation
+        SourceMaterial.structural_change(entry)
+        entry.node.position=Placement.contact(entry.placement);entry.node.basis=camera.basis
+        _apply_environment_descriptor(entry,EnvironmentSource.describe(entry.placement,record,int(entry.get("source_role",1)),quarter,camera.basis,source_depth,source_normals))
+        _light_entry(entry)
+        entry.world_media_frame_key=key
+        entry.world_media_content=content;entry.world_media_role=role;entry.world_media_frame=frame;entry.world_media_orientation=orientation
+        entry.world_media_source_visible=entry.node.visible
+    entry.node.visible=visible and entry.get("world_media_source_visible",false)
+    return true
+
+static func _world_media_token(value:Variant)->String:
+    return JSON.stringify(value) if value is bool else str(value)
+
+## State changes and source ages come from the existing observed owner cut.
+## A first sight of an already open portal begins at hold, not a fake opening.
+static func world_media_sample(program:Dictionary,role:String,token:String,owner:Dictionary,at_ms:float)->Dictionary:
+    var observation:Dictionary={}
+    var field:String=str(program.get("state_field","trap_state"))
+    for row in owner.get("spatial_observations",[]):
+        if float(row.at_ms)>at_ms:continue
+        if row.get(field if field=="pressed" else "state")!=null:observation=row
+    var elapsed:float=maxf(0.0,at_ms-float(observation.get("at_ms",owner.get("start_ms",at_ms))))
+    if program.get("kind")=="portal":
+        var source:Dictionary=program.get("roles",{}).get(role,{})
+        var fps:float=float(source.get("fps",0.0))
+        if fps<=0.0:return {"frame":0,"visible":false}
+        var opening:bool=token=="activated"
+        var changed:bool=not observation.is_empty() and (observation.get("previous_state")!=observation.get("state") or observation.get("operation")=="created")
+        if role in ["hatch","hatch_front"]:
+            var frames:Array=source.get("opening" if opening else "closing",[])
+            if frames.is_empty():return {"frame":0,"visible":false}
+            return {"frame":int(frames[mini(frames.size()-1,floori(elapsed*fps/1000.0))]) if changed else int(frames.back()),"visible":true}
+        var count:int=int(source.get("opening_frames",0));var hold:int=int(source.get("hold_frames",0));var close:int=int(source.get("closing_frames",0))
+        if opening:
+            var cursor:int=floori(elapsed*fps/1000.0)+(0 if changed else count)
+            return {"frame":cursor if cursor<count else count+posmod(cursor-count,maxi(1,hold)),"visible":true}
+        var closing_frame:int=floori(elapsed*fps/1000.0)
+        return {"frame":count+hold+mini(maxi(0,close-1),closing_frame),"visible":changed and closing_frame<close}
+    var frame:int=int(program.get("state_frames",{}).get(token,0))
+    if not observation.is_empty():
+        var previous:Variant=observation.get("previous_pressed" if field=="pressed" else "previous_state")
+        var current:Variant=observation.get("pressed" if field=="pressed" else "state")
+        var frames:Array=program.get("transition_frames",{}).get(_world_media_token(previous)+":"+_world_media_token(current),[])
+        var index:int=floori(elapsed*float(program.get("fps",0.0))/1000.0)
+        if index>=0 and index<frames.size():frame=int(frames[index])
+    return {"frame":frame,"visible":true}
+
+func sample_world_media(owners:Dictionary,at_ms:float,samples:Array)->bool:
+    var visibility_changed:bool=false
+    var finite:Dictionary={}
+    for component in samples:
+        if component.get("kind")=="world_activation" and component.get("role","")!="portal_exit" and component.get("status")!="missing" and component.get("mechanism_uuid")!=null:
+            finite[str(component.mechanism_uuid)]=true
+    var programs:Dictionary=Catalog.environment_index(catalog_cache).get("spatial_media",{})
+    for entry in world_media_entries:
+        var row:Dictionary=entry.placement
+        var owner:Dictionary=owners.get(row.spatial_effect_uuid,{})
+        var program:Dictionary=programs.get(row.world_media_content,{})
+        var sampled:Dictionary=world_media_sample(program,row.world_media_role,row.world_media_state,owner,at_ms)
+        var admitted:bool=not owner.is_empty() and at_ms<float(owner.get("end_ms",INF)) and not finite.has(row.spatial_effect_uuid)
+        var was_visible:bool=entry.node.visible
+        sample_world_media_frame(entry,row.world_media_content,row.world_media_role,row.orientation,int(sampled.frame),admitted and bool(sampled.visible))
+        visibility_changed=visibility_changed or (not entry.has("actor_depth_bands") and was_visible!=entry.node.visible)
+    return visibility_changed
+
+## Private sibling draws retain their original source owner's lifetime. Their
+## only difference is the exact (lower, upper] painter-depth utility band.
+func _release_actor_depth_bands(entry:Dictionary)->void:
+    for band in entry.get("actor_depth_bands",[]):
+        actor_entries.erase(band)
+        if is_instance_valid(band.node):band.node.queue_free()
+    entry.actor_depth_bands=[]
+
+func prepare_actor_depth_bands(sources:Array,budget:Dictionary,tracks:Array=[])->bool:
+    var complete:bool=true
+    var programs:Dictionary=Catalog.environment_index(catalog_cache).get("spatial_media",{})
+    for entry in sources:
+        if entry.get("actor_depth_band",false) or int(entry.get("source_role",-1))!=1:continue
+        var content:String=str(entry.get("world_media_content",entry.placement.get("world_media_content","")))
+        var descriptor:Dictionary=programs.get(content,{}).get("actor_depth",{})
+        if descriptor.is_empty():continue
+        var peers:Dictionary={}
+        var plane:int=int(Order.key(entry.placement,entry.role,entry.layer,quarter)[0])
+        for peer in static_entries+actor_entries:
+            if peer.get("actor_depth_band",false) or peer.placement.id==entry.placement.id or not peer.node.visible:continue
+            if int(Order.key(peer.placement,peer.role,peer.layer,quarter)[0])!=plane:continue
+            if entry.get("screen_rect",Rect2()).intersects(peer.get("screen_rect",Rect2())):peers[str(peer.placement.id)]=true
+        for track in tracks:
+            var actor_id:String=str(track.get("actor_uuid",""))
+            var rig:Dictionary=rigs.get(track.get("rig",""),{})
+            var actor:Dictionary=track.get("presentation_actor",{})
+            var appearance:Dictionary=actor.get("appearance",{})
+            if actor_id.is_empty() or rig.is_empty() or appearance.is_empty() or track.get("from_position")==null \
+                or track.get("to_position")==null or not track.has("from_elevation_feet") or not track.has("to_elevation_feet"):continue
+            var scale:float=128.0/float(rig_config.TILE_W)*float(appearance.visual_scale)
+            var size:Vector2=Vector2(float(rig.cell_width)*absf(float(appearance.visual_scale_x)),float(rig.cell_height))*scale
+            var pivot:Vector2=Vector2(size.x*0.5,(float(rig.cell_height)-float(rig.origin_y_from_ground))*scale)
+            var a:Vector2=Placement.project(v2(track.from_position),float(track.from_elevation_feet)/5.0,quarter)
+            var b:Vector2=Placement.project(v2(track.to_position),float(track.to_elevation_feet)/5.0,quarter)
+            var swept:Rect2=Rect2(a-pivot,size).merge(Rect2(b-pivot,size))
+            var lift:float=maxf(0.0,float(track.get("arc_height_px",0.0)))
+            for key in track.get("lift_pixels_keys",[]):lift=maxf(lift,float(key[1]))
+            if lift>0.0:swept.position.y-=lift;swept.size.y+=lift
+            if entry.get("screen_rect",Rect2()).intersects(swept):peers[actor_id]=true
+        var count:int=peers.size()+1
+        if not entry.has("actor_depth_bands"):
+            entry.actor_depth_bands=[]
+            entry.node.tree_exiting.connect(_release_actor_depth_bands.bind(entry),CONNECT_ONE_SHOT)
+        while entry.actor_depth_bands.size()<count:
+            if budget.used_usec>=budget.limit_usec:complete=false;break
+            var started:int=Time.get_ticks_usec()
+            var node=MeshInstance3D.new();node.visible=false;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+            node.sorting_use_aabb_center=false
+            var material=ShaderMaterial.new();material.shader=entry.material.shader;node.material_override=material
+            (sprite_parent if sprite_parent!=null else self).add_child(node)
+            var band:Dictionary={"id":entry.id+":depth:"+str(entry.actor_depth_bands.size()),"node":node,"material":material,
+                "placement":entry.placement,"role":entry.role,"layer":entry.layer,"source_role":1,"screen_rect":Rect2(),
+                "actor_depth_band":true,"actor_depth_owner":entry,"mobile":false}
+            SourceMaterial.initialize(band);entry.actor_depth_bands.append(band);actor_entries.append(band)
+            budget.used_usec+=Time.get_ticks_usec()-started
+    return complete
+
+func sample_actor_depth_bands(sources:Array)->bool:
+    var visibility_changed:bool=false
+    var depth_sources:Array=sources.filter(func(entry):return entry.has("actor_depth_bands"))
+    if depth_sources.is_empty():return false
+    var programs:Dictionary=Catalog.environment_index(catalog_cache).get("spatial_media",{})
+    var peers:Array=[]
+    for peer in static_entries+actor_entries:
+        if peer.node.visible and not peer.get("actor_depth_band",false):peers.append(peer)
+    for entry in depth_sources:
+        var bands:Array=entry.actor_depth_bands
+        var content:String=str(entry.get("world_media_content",entry.placement.get("world_media_content","")))
+        var descriptor:Dictionary=programs.get(content,{}).get("actor_depth",{})
+        var record:Dictionary=Catalog.environment_resources(catalog_cache).resources.get(descriptor.get("asset_id",""),{})
+        var cuts:Dictionary={}
+        if entry.node.visible and not record.is_empty():
+            var plane:int=int(Order.key(entry.placement,entry.role,entry.layer,quarter)[0])
+            for peer in peers:
+                if peer.placement.id==entry.placement.id or int(Order.key(peer.placement,peer.role,peer.layer,quarter)[0])!=plane                     or not entry.screen_rect.intersects(peer.get("screen_rect",Rect2())):continue
+                var depth:float=Placement.sort_contact(peer.placement,quarter).y
+                if not cuts.has(depth):cuts[depth]=[]
+                cuts[depth].append(peer)
+        var depths:Array=cuts.keys();depths.sort()
+        var wanted:bool=entry.node.visible and not record.is_empty()
+        var inputs:Array=[]
+        for depth in depths:
+            var contacts:Array=[]
+            for peer in cuts[depth]:contacts.append([peer.node.get_instance_id(),Order.key(peer.placement,peer.role,peer.layer,quarter)])
+            inputs.append([depth,contacts])
+        if entry.get("actor_depth_order_inputs",[])!=inputs:entry.actor_depth_order_status="available"
+        entry.actor_depth_order_inputs=inputs
+        var active:bool=wanted and bands.size()>=depths.size()+1 and entry.get("actor_depth_order_status")!="incompatible_peer_order"
+        entry.actor_depth_needs_preparation=wanted and bands.size()<depths.size()+1
+        var lower:float=-1.0e30
+        for index in bands.size():
+            var band:Dictionary=bands[index]
+            if not active or index>depths.size():band.node.visible=false;continue
+            var upper:float=float(depths[index]) if index<depths.size() else 1.0e30
+            band.placement=entry.placement
+            if band.get("actor_depth_source_key",[])!=entry.get("world_media_frame_key",[]):band.erase("world_media_frame_key")
+            if not sample_world_media_frame(band,content,str(entry.get("world_media_role","body")),str(entry.get("world_media_orientation",entry.placement.get("orientation","east"))),int(entry.get("world_media_frame",entry.placement.get("world_media_frame",0)))):
+                band.node.visible=false;continue
+            band.actor_depth_source_key=entry.get("world_media_frame_key",[])
+            var pose:String=Placement.pose(str(entry.placement.get("orientation","east")),quarter)
+            var cell:Array=descriptor.cell
+            SourceMaterial.apply(band,{"use_actor_depth":true,"actor_depth_texture":texture(record.path),
+                "actor_depth_rect":Vector4(float(entry.get("world_media_frame",0))*float(cell[0]),float(descriptor.rows_by_pose[pose])*float(cell[1]),float(cell[0]),float(cell[1])),
+                "actor_depth_range":v2(descriptor.depth_range),"actor_depth_scale":float(descriptor.pixels_per_unit_by_pose[pose])*float(entry.get("scale",1.0)),
+                "actor_depth_origin":Placement.sort_contact(entry.placement,quarter).y,"actor_depth_limits":Vector2(lower,upper)})
+            band.actor_depth_path=record.path
+            band.actor_depth_before=[];band.actor_depth_after=[]
+            for depth in depths:
+                if float(depth)>=upper:band.actor_depth_before.append_array(cuts[depth])
+                if float(depth)<=lower:band.actor_depth_after.append_array(cuts[depth])
+            lower=upper
+        var original_visible:bool=entry.node.visible
+        if active:entry.node.visible=false
+        if entry.get("actor_depth_draw_visible",original_visible)!=entry.node.visible:visibility_changed=true
+        entry.actor_depth_draw_visible=entry.node.visible
+    return visibility_changed
+
 func set_environment(entry: Dictionary, _rotation: Basis) -> void:
     SourceMaterial.structural_change(entry)
     var row: Dictionary = entry.placement
-    var record = Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role == 2 else record_for(row)
+    var record = Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role == 2 else Catalog.environment_role(record_for(row),entry.source_role)
     if record.is_empty(): entry.node.visible = false; return
     if row.get("water_surface",false):
         record=record.duplicate();record.water=Catalog.environment_resources(catalog_cache).water
@@ -448,6 +641,7 @@ func _environment_row(row: Dictionary) -> void:
             initialize_entry(entry)
             _light_entry(entry)
             static_entries.append(entry)
+            if variant.has("world_media_content"):world_media_entries.append(entry)
             if variant.kind in ["wall","cliff"]:
                 entry.wall_source = row
                 entry.wall_variant = "joined" if variant.has("wall_members") else variant.id

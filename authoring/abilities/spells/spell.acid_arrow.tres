@@ -50,7 +50,8 @@ extra = {
 "actor": "target",
 "socket": "ground"
 }],
-"source_launch_local": 0.45
+"source_launch_local": 0.45,
+"source_contact_local": 0.95
 }
 
 [sub_resource type="Resource" id="Resource_8swrr"]
@@ -70,6 +71,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"recipient_geometry": {"actor": "target"},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -209,14 +211,17 @@ extra = {
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [2.0, 0.15, 0.6]
+"actor": "target",
+"socket": "ground",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
 }, {
 "cue_point": "source"
 }, {
 "actor": "target",
 "socket": "ground"
 }],
-"source_launch_local": 0.45
+"source_launch_local": 0.45,
+"source_contact_local": 0.95
 }
 
 [sub_resource type="Resource" id="Resource_oaupn"]
@@ -236,12 +241,15 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"recipient_geometry": {"actor": "target"},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [2.0, 0.15, 0.6]
+"actor": "target",
+"socket": "ground",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
 }, {
 "cue_point": "source"
 }, {
@@ -277,10 +285,14 @@ extra = {
 script = ExtResource("6_xcbwv")
 id = "acid_arrow_miss_native"
 kind = "outcome"
+override_owner_cues = true
+owner_cues = PackedInt32Array()
+when = {"attack_outcome": ["Miss", "Crit Miss"]}
 selection = "acid_arrow_miss_native"
-effects = Array[ExtResource("1_owtpk")]([SubResource("Resource_jqwfb"), SubResource("Resource_oaupn"), SubResource("Resource_4myjo")])
+effects = Array[ExtResource("1_owtpk")]([SubResource("Resource_jqwfb"), SubResource("Resource_oaupn")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Finite missed delivery/splash only. No residue cells or persistent acid patch are inferred from a Miss."
 
 [sub_resource type="Resource" id="Resource_ajncm"]
 script = ExtResource("1_owtpk")
@@ -312,7 +324,8 @@ extra = {
 "actor": "target",
 "socket": "ground"
 }],
-"source_launch_local": 0.45
+"source_launch_local": 0.45,
+"source_contact_local": 0.95
 }
 
 [sub_resource type="Resource" id="Resource_58uoh"]
@@ -376,6 +389,8 @@ kind = "form"
 selection = "acid_arrow_ground_native"
 effects = Array[ExtResource("1_owtpk")]([SubResource("Resource_ajncm"), SubResource("Resource_58uoh"), SubResource("Resource_jcc0t")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = "ground_review_endpoint_and_actual_patch_cells_not_bound"
+notes = "The imported ground alternative includes fixed endpoints and a patch. It remains an unselected review alternative until an actual ground declaration and residue cells can own it."
 status = "partial"
 
 [resource]
@@ -383,6 +398,7 @@ script = ExtResource("4_hcpcd")
 id = "spell.acid_arrow"
 icon = SubResource("Resource_k84gt")
 delivery = "projectile"
+impact_delay = 0.5
 body = SubResource("Resource_o0b3v")
 effects = Array[ExtResource("1_owtpk")]([SubResource("Resource_smev0"), SubResource("Resource_8swrr"), SubResource("Resource_7bh41"), SubResource("Resource_4tpo2"), SubResource("Resource_b1t0r")])
 native_staging = true

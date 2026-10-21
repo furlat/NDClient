@@ -66,6 +66,30 @@ The compiler never silently clamps a sound to an owner start and makes its impac
 late. Loop cues currently require source sync0; arbitrary loop transient shifting
 has no supported interval semantics. Native Ogg loops must end at the file end.
 
+### Source-authored endpoint assignments, 21 October
+
+`contacts.json` now also selects Goblin Rolling/direct_arc frame0 takeoff and
+frame14 landing from that rig's actual `0 → 3 → 10 → 14` full-arc source keys;
+modular Run/connector_transfer reuses its frame3/frame10 stride source; modular
+Rolling/window connector uses forward frame0 takeoff and reverse frame0 landing
+from the existing `0 → 3 hold → 0` body program. These source choices are
+unvalidated; all artwork/audio, contact placement and mix remain unreviewed.
+
+An optional `motion_endpoint` value of `start` or `end` qualifies a source-frame
+crossing using the actual motion fraction, disclosed endpoints/elevations and
+the same `Tracks.samples` lift used for rendering. A repeated source loop,
+incomplete arc or positive lift cannot authorize a qualified landing. The
+qualifier does not move a marker, change a source/body clock or turn a step-end
+into a contact. The modular direct-arc markers use it too. A marker outside a
+split segment still emits nothing.
+
+Goblin Run/path still needs actual planted-foot source-frame authoring; do not
+copy modular frames onto it. The two Blue late-lethal clip-end refusals remain:
+that original discloses only ground→air/air→air Steps and no complete Movement
+path. The other independently recorded audience cannot supply its touchdown.
+Exact existing art and original paths are in
+`agent_docs/ASSET_AUDIO_REVIEW_2026-10-20.md`.
+
 ## Semantic selectors and current review work
 
 These names select real shared-compiler clocks; `source_marker` in a cue is a
@@ -165,6 +189,47 @@ animation clock or inventing touchdown. Unreviewed creature contacts are also
 unchanged, and no creature movement is exercised in the current Library set.
 Other unassigned spell/condition lifecycles are inventoried without inventing a
 universal entry/removal sound.
+
+### Physical weapon variants, 20 October
+
+The current Library audit exposed equipped attacks whose exact item IDs did not
+select their already-authored physical base-weapon swish. `bindings.json` now
+names the following ten variants explicitly, preserving each base binding's
+existing cue, `body.contact` selector and provisional review status:
+
+| Exact item | Existing base assignment |
+| --- | --- |
+| `weapon.arcane_staff` | `weapon.quarterstaff` |
+| `weapon.circus.flaming_scimitar` | `weapon.scimitar` |
+| `weapon.circus.longsword_plus_one` | `weapon.longsword` |
+| `weapon.devotees_mace` | `weapon.mace` |
+| `weapon.roster.ember_greatsword` | `weapon.greatsword` |
+| `weapon.roster.ember_longsword` | `weapon.longsword` |
+| `weapon.roster.psychic_greataxe` | `weapon.greataxe` |
+| `weapon.roster.psychic_longsword` | `weapon.longsword` |
+| `weapon.roster.psychic_longsword_greater` | `weapon.longsword` |
+| `weapon.roster.psychic_scimitar` | `weapon.scimitar` |
+
+These are exact mechanical base/WeaponKind associations in the frozen engine's
+`dnd/content/items/{authored_item_definitions,roster_item_definitions}.py` and
+`dnd/items/divine_rewards.py`, not inference from art or item names. They add
+only the physical swing/release; fire, psychic, radiant and other riders do not
+inherit a sound. They neither select new assets nor change source-sync offsets,
+gain, attachment, authored body clocks or magical-audio exclusions.
+
+The final content batch explicitly assigns the existing broad physical swish
+`weapon_swing_heavy` to `weapon.circus.soul_draining_morningstar` (Morningstar)
+and `weapon.roster.psychic_trident` (Trident). The real created Scimitar
+`weapon.flame_blade` selects the existing physical blade swish `weapon_swing`.
+These are authored source reuse decisions at the same `body.contact` clock;
+necrotic, psychic and fire sounds are not inferred. All three sound choices,
+placement and mix remain unreviewed, and no new native playback is claimed.
+
+The torch inventory still contains ignition only, with no selected extinguishing
+source. Magic Missile and concentration bindings remain disabled by the human.
+The 18:08:59 audit predates these thirteen assignments; its counts are historical,
+not a fresh playback or post-change coverage receipt. See the exact remaining
+catalog/owner handoff in `agent_docs/ASSET_AUDIO_REVIEW_2026-10-20.md`.
 
 `tools/studio_audio_coverage_audit.gd` reads all current Library audiences and
 reports actual event owners, resolved sources/timing and condition assignments

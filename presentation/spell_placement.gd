@@ -5,6 +5,8 @@ const Surfaces=preload("res://presentation/surface_sockets.gd")
 const Weapons=preload("res://presentation/native_weapon_inputs.gd")
 const Characters=preload("res://presentation/characters.gd")
 const WorldRows=preload("res://presentation/world.gd")
+const CreationInputs=preload("res://presentation/creation_inputs.gd")
+const Tracks=preload("res://presentation/tracks.gd")
 
 ## A source-owned body has no modular sprite to register. Its selected
 ## ground-body lifecycle follows this actual visible actor and shared motion.
@@ -51,6 +53,26 @@ static func display_facing_aim(row:Dictionary,cycle:Array,source_point:Vector3,l
     return {"rows":[{"actor_uuid":str(row.id),"point":source_point},
         {"actor_uuid":str(row.id),"point":origin+direction,"optical_aim":"display_facing"}],
         "reason":"","direction":direction,"source_origin":origin}
+
+## Authored miss staging clears the actual composed sprite quads in the
+## camera's horizontal direction. It changes an optical endpoint only; the
+## canonical target/cell and disclosed attack outcome remain unchanged.
+static func miss_point(world:Node,row:Dictionary,origin:Vector3,policy:Dictionary)->Dictionary:
+    var side:float={"right":1.0,"left":-1.0}.get(str(policy.get("side","")),0.0)
+    var clearance:float=float(policy.get("clearance_cells",0.0))
+    if side==0.0 or clearance<=0.0:return {"ready":false,"reason":"optical_miss_staging_not_authored"}
+    var direction:Vector3=world.camera.global_basis.x.normalized()*side
+    var edge:float=-INF
+    for entry in world.visual_actors.get(row.id,{}).get("entries",[]):
+        if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
+        if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree():continue
+        for corner in [Vector2.ZERO,Vector2(entry.cell.x,0.0),Vector2(0.0,entry.cell.y),Vector2(entry.cell)]:
+            var local:Vector3=Vector3(corner.x-entry.pivot.x,entry.pivot.y-corner.y,0.0)*float(entry.scale)/Placement.PIXELS_PER_UNIT
+            edge=maxf(edge,(entry.node.global_transform*local).dot(direction))
+    if edge==-INF:return {"ready":false,"reason":"optical_miss_body_not_displayed"}
+    var distance:float=maxf(clearance,edge-origin.dot(direction)+clearance)
+    return {"ready":true,"point":origin+direction*distance,"optical_miss":policy,
+        "clearance_cells":clearance,"body_edge":edge,"direction":direction}
 
 static func projectile_point(world: Node,component: Dictionary,fraction: float) -> Vector3:
     var recipe: Dictionary=component.recipe
@@ -101,6 +123,15 @@ static func socket(world: Node,row: Dictionary,socket: String) -> Vector3:
     if point==null: return base
     return Surfaces.painted_point(world,row,Vector2(point.x,point.y))
 
+## A measured channel may explicitly contain null frames. Those intervals
+## have no attachment point to draw, while an absent pose/view channel is
+## still genuinely unauthored. Neither permits a substitute point.
+static func has_socket_channel(world:Node,row:Dictionary,socket:String)->bool:
+    var rig:Dictionary=world.rigs[row.rig]
+    var playback:Node=world.playbacks.get(row.id)
+    var clip:String=playback.clip if playback!=null else "Idle"
+    return not rig.get("pose_sockets",{}).get(socket,{}).get(clip,{}).get(facing(world,row),[]).is_empty()
+
 static func has_socket(world: Node,row: Dictionary,socket: String) -> bool:
     var rig: Dictionary=world.rigs[row.rig]
     var playback: Node=world.playbacks.get(row.id)
@@ -110,13 +141,49 @@ static func has_socket(world: Node,row: Dictionary,socket: String) -> bool:
     var frame=mini(int((playback.sample_seconds if playback!=null else 0.0)*rig.clips[clip].fps),int(rig.clips[clip].frames)-1)
     return points[mini(frame,points.size()-1)]!=null
 
+
+## A finite movement source follows the already scheduled native track. Static
+## stamps retain their actual emission point; airborne sources use its same arc.
+static func movement_point(component:Dictionary)->Dictionary:
+    var binding:Dictionary=component.native_movement
+    var track:Dictionary=binding.track
+    var at:float=float(binding.sample_ms)+(float(component.get("age_ms",0.0)) if binding.get("follow",false) else 0.0)
+    var finish:float=float(track.start_ms)+float(track.duration_ms)
+    var position:Variant
+    var height:float
+    var lift:float=0.0
+    if at>=finish:
+        position=track.to_position;height=float(track.to_elevation_feet)/5.0
+    else:
+        var motion:Dictionary=Tracks.samples([track],maxf(float(track.start_ms),at)).get(str(track.actor_uuid),{})
+        if motion.is_empty():return {"ready":false,"unavailable":true,"reason":"movement_source_track_not_admitted"}
+        position=motion.position;height=float(motion.base_height_steps);lift=float(motion.get("lift_pixels",0.0))
+    var ground:Vector3=Vector3(position[0],height*Placement.HEIGHT_UNIT,position[1])
+    var point:Vector3=ground
+    if component.native_cue.attachment=="recipient_body":point+=Vector3.UP*lift/Placement.PIXELS_PER_UNIT
+    return {"ready":true,"from":point,"hand":point,"to":point,"ground":ground,"caster_ground":ground,
+        "surfaces":[],"fixed":{},"motion_track_id":str(track.get("trace_track_id","")),"motion_sample_ms":at}
+
 static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},preparing:bool=true,weapon_registration:Dictionary={})->Dictionary:
     var cue:Dictionary=component.native_cue
+    if component.has("native_movement"):return movement_point(component)
+    if component.has("native_actor_terminal"):
+        var receipt:Dictionary=component.native_actor_terminal
+        if not receipt.has("elevation_feet"):return {"ready":false,"unavailable":true,"reason":"witnessed_terminal_ground_support_not_disclosed"}
+        var point:Vector3=Vector3(receipt.position[0],float(receipt.elevation_feet)/5.0*Placement.HEIGHT_UNIT,receipt.position[1])
+        return {"ready":true,"from":point,"hand":point,"to":point,"ground":point,"caster_ground":point,"surfaces":[],"fixed":{}}
+    if component.get("native_payload",false):
+        var payload:Dictionary=CreationInputs.payload_location(component,world.timeline.state)
+        if not payload.ready:return payload.merged({"unavailable":true})
+        var point:Vector3=payload.point
+        return {"ready":true,"from":point,"hand":point,"to":point,"ground":point,"caster_ground":point,"surfaces":[],"fixed":{},"payload":payload}
     var persistent:bool=component.get("persistent_owner",false)
     var source:Dictionary=world.visual_actors.get(component.get("actor_uuid"),{})
     var target:Dictionary=world.visual_actors.get(component.get("target_uuid"),{})
     var role:String=cue.role
     var attachment:String=cue.get("attachment","")
+    var follow_recipient:bool=bool(cue.get("follow",cue.get("follow_attachment",false))) \
+        and attachment in ["recipient_body","recipient_ground","recipient_head"]
     if component.get("native_weapon_impact",false) and component.has("impact"):
         var receipt:Dictionary=component.impact
         if receipt.status!="available":return {"ready":false,"unavailable":true,"reason":receipt.get("reason","weapon_impact_contact_not_resolved")}
@@ -183,13 +250,13 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
             if not actual.ready:return actual
             return {"ready":true,"from":actual.point,"hand":actual.point,"to":actual.point,
                 "ground":actual.point,"caster_ground":actual.point,"surfaces":[actual],"fixed":{},"effect_owned_ground":actual}
-    if (needs_body or persistent and not component.get("spatial_owner",false)) and not displayed(target):return {"ready":false,"unavailable":true,"reason":"native_spell_recipient_not_displayed"}
+    if (needs_body or follow_recipient or persistent and not component.get("spatial_owner",false)) and not displayed(target):return {"ready":false,"unavailable":true,"reason":"native_spell_recipient_not_displayed"}
     var from_position:Array=component.get("from_position",[0,0])
     var to_position:Array=component.get("to_position",from_position)
     var row:Dictionary=source.get("row",{}).duplicate()
     row.position=from_position;row.base_height_steps=float(component.get("from_elevation_feet",0))/5.0
     var target_row:Dictionary=target.get("row",{}).duplicate()
-    if not persistent:
+    if not persistent and not follow_recipient:
         target_row.position=to_position;target_row.base_height_steps=float(component.get("to_elevation_feet",0))/5.0
     elif target_row.is_empty():
         target_row.position=to_position;target_row.base_height_steps=float(component.get("to_elevation_feet",0))/5.0
@@ -225,13 +292,13 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
             if not released.ready:return released
     var received:Dictionary={"ready":true,"point":Placement.contact(target_row)}
     if needs_body:
-        if not persistent:
+        if not persistent and not follow_recipient:
             target_row.facing=world._facing(-direction) if not direction.is_zero_approx() else "SW"
             received=fixed.get("target",{})
             if received.is_empty():received=body_anchor(world,target_row)
         else:
-            # A condition registers at its declared socket (a marker at the
-            # head); rigs without that socket use their body centre.
+            # Actual owner/following attachments use this displayed pose at
+            # its current position. Detached contacts keep their admitted cut.
             var anchor:String="head" if attachment=="recipient_head" else str(cue.get("anchor","body_center"))
             if not world.rigs[target_row.rig].get("pose_sockets",{}).has(anchor):anchor="body_center"
             received=pose_point(world,target_row,anchor)
@@ -302,7 +369,12 @@ static func pose_point(world:Node,row:Dictionary,name:String,by_clip:Dictionary=
     var selected:String=str(by_clip.get(clip,name))
     var choices:Array=rig.get("pose_sockets",{}).get(selected,{}).get(clip,{}).get(view,[])
     var point:Variant=choices[mini(frame,choices.size()-1)] if not choices.is_empty() else rig.get("body_anchor") if selected=="body_center" else null
-    if point==null:return {"ready":false,"reason":"native_spell_"+selected+"_socket_missing"}
+    if point==null:
+        var absent:Dictionary={"ready":false,"reason":"native_spell_"+selected+"_socket_missing"}
+        # A real channel's null current frame is a hidden attachment interval,
+        # not asynchronous preparation or a permanent missing-source error.
+        if not choices.is_empty():absent.unavailable=true
+        return absent
     var surface=Surfaces.resolve(world,row.id,clip,frame,view,Vector2(point.x,point.y),socket(world,row,selected))
     if str(surface.reason).ends_with("not_prepared"):
         return {"ready":false,"pending":true,"reason":"native_spell_"+surface.reason}

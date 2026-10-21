@@ -141,6 +141,10 @@ func run()->void:
     var host=Player.new();host.attach_media_sources()
     var data:Dictionary=host.media_warmup;var owner:Dictionary=Media.physical(data)
     Media.adopt_required(data,7)
+    # This scenario changes future priority after the initial empty picture
+    # has published. Unfinished startup retains its own exact source pins.
+    Media.demand(data,{})
+    check(Media.boot_ready(data),"Initial picture completes before future candidate scheduling and cancellation")
     # Deliberately queue scenery first. After the displayed cut is ready,
     # independent future resource producers share urgency and retain FIFO.
     var all:Dictionary={FLOOR:FLOOR,FIXTURE:FIXTURE,ACTOR:ACTOR,NORMAL:NORMAL,LATER:LATER,CURRENT:CURRENT}

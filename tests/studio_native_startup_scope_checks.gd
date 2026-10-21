@@ -39,7 +39,7 @@ func run()->void:
                 clip=component.native_hit.clip;hit+=1
             if clip.is_empty() or component.get("native_item",false) or (Effects.requires_construction(clip) and not clip.has("construction_inputs")) or row.end_ms<=row.start_ms:continue
             var at=lerpf(row.start_ms,row.end_ms,.5)
-            check(Startup.requested(plan,at).any(func(item):return item.clip==clip),"Exact active phase/hit source is required at its own actual row time")
+            check(Startup.requested(plan,at).any(func(item):return item.key==Startup._key(clip)),"Exact active phase/hit source is required at its own actual row time")
         check(var_to_bytes(index.rows)==before,"Source plan does not mutate original rows, clips or clocks")
         var required:Array=Startup.requested(plan,0.0)
         var cold=Startup.status({"plan":plan,"required":required})

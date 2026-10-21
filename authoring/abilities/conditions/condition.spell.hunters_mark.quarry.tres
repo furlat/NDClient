@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_0in7n"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_4td3y"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="quarry_use"]
+
 [sub_resource type="Resource" id="Resource_ktj3g"]
 script = ExtResource("1_4td3y")
 path = "art/ui-delivery-20261018/runtime/smooth48/spell.hunters_mark.png"
@@ -11,7 +13,23 @@ reuses = "spell.hunters_mark"
 status = "stand_in"
 source = "ui-delivery-20261018"
 
+[sub_resource type="Resource" id="ActualQuarryOwner"]
+script = ExtResource("quarry_use")
+clip = "bg3-36/hunters-mark/hunters_mark_native/condition"
+role = "attached"
+scope = "source"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+constructor_input = {"kind": "quarry_owner", "quarry_kind": "hunters_mark", "component_path": ["owned_quarry"], "input_field": "", "owner_condition_id": "condition.spell.hunters_mark", "recipient_condition_id": "condition.spell.hunters_mark.quarry"}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}, {"actor": "target", "socket": "body_center", "surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]}], "input_policies": {"healing_input": {"mode": "not_applicable", "reason": "selected_quarry_condition_consumes_actual_owner_and_quarry_state"}, "strike_input": {"mode": "not_applicable", "reason": "selected_quarry_condition_consumes_actual_owner_and_quarry_state"}, "condition_input": {"mode": "not_applicable", "reason": "selected_quarry_condition_consumes_actual_owner_and_quarry_state"}, "tick_input": {"mode": "not_applicable", "reason": "selected_quarry_condition_consumes_actual_owner_and_quarry_state"}, "hit_input": {"mode": "not_applicable", "reason": "selected_quarry_condition_consumes_actual_owner_and_quarry_state"}}}
+
 [resource]
 script = ExtResource("1_0in7n")
 id = "condition.spell.hunters_mark.quarry"
 icon = SubResource("Resource_ktj3g")
+
+disposition = "authored"
+effects = Array[ExtResource("quarry_use")]([SubResource("ActualQuarryOwner")])
+status = "partial"
+notes = "Actual original cast joins exact public caster sustain and recipient child. Current state controls membership and suppression; no retained fixture lifetime, inferred damage or private owner. Finite attributed contacts and reapply are separately authored."

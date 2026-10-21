@@ -269,7 +269,7 @@ async def run(args: argparse.Namespace) -> Path:
 def main() -> None:
     project = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--engine", type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-211b71134"))
+    parser.add_argument("--engine", type=Path, default=Path("/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267"))
     parser.add_argument("--godot", type=Path, default=project.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe")
     parser.add_argument("--port", type=int, default=0, help="Backend port; default checks native Windows and WSL availability")
     parser.add_argument("--scenario", choices=("crypt", "crypt_gallery", "gallery_sorcerer"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")

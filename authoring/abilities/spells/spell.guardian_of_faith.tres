@@ -169,7 +169,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0, 1)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -180,7 +180,7 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray("spatial_effect.spell.guardian_of_faith")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "guardian_of_faith_native",
 "source": "assets/vfx/index.json:/selections/guardian_of_faith_native/staging"
@@ -202,4 +202,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "The actual spatial_effect.spell.guardian_of_faith UUID owns the prepared spectral sentinel at its disclosed world-object anchor. Its authored idle source window stays strictly before the fixed demo strike; actual positive Radiant packets naming that same zone UUID own the finite recipient source. Both fixed cast probes are excluded, including the old delayed2.4167-second contact. Actual owner removal controls teardown, with no replayed budget, timed hit or synthetic target. All artwork is unreviewed; source assignment is separate from native output qualification."

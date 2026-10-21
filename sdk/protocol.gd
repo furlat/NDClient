@@ -6,11 +6,14 @@ const SAFE_INTEGER := 9007199254740991
 const Choices = preload("res://sdk/choices.gd")
 const StrictJSON = preload("res://sdk/strict_json.gd")
 const ProducerJSON = preload("res://sdk/producer_json.gd")
+const PRE_REVIEW_SCHEMA := "res://sdk/recordings/pre-production-review/player-api-v1.schema.json"
+const PRE_REVIEW_IDENTITY := "res://sdk/recordings/pre-production-review/protocol-identity.json"
 var schema: Dictionary
 var identity: Dictionary
 var setup_error := ""
 var _patterns: Dictionary = {}
 var _current_server_contract := false
+var _archived_server_contract := false
 var _producer_json: RefCounted
 # The shipped schema and identity are parsed once per path pair per process
 # (each strict parse is ~95 ms). Protocol objects share only these parsed,
@@ -33,6 +36,7 @@ func _init(schema_path: String = "res://sdk/player-api-v1.schema.json", identity
 	schema = parsed.schema
 	identity = parsed.identity
 	_current_server_contract = schema_path == "res://sdk/player-api-v1.schema.json" and identity_path == "res://sdk/protocol-identity.json"
+	_archived_server_contract = schema_path == PRE_REVIEW_SCHEMA and identity_path == PRE_REVIEW_IDENTITY
 
 func _parse(schema_path: String, identity_path: String) -> Dictionary:
 	var schema_result := StrictJSON.new().parse(FileAccess.get_file_as_string(schema_path))
@@ -137,6 +141,16 @@ func decode_server(root_name: String, raw: PackedByteArray) -> Dictionary:
 	# or materializing defaults across shared choices, bodies and world columns.
 	if not setup_error.is_empty(): return failure(setup_error)
 	if not _current_server_contract: return failure("Trusted responses require the current shipped server contract")
+	return _decode_producer(root_name, raw)
+
+## Exact archived native16 producer bytes are an offline recording boundary.
+## HTTP/SSE admission above continues to require the current shipped identity.
+func decode_recorded(root_name: String, raw: PackedByteArray) -> Dictionary:
+	if not setup_error.is_empty(): return failure(setup_error)
+	if not _current_server_contract and not _archived_server_contract: return failure("Unknown recorded producer contract")
+	return _decode_producer(root_name, raw)
+
+func _decode_producer(root_name: String, raw: PackedByteArray) -> Dictionary:
 	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
 	if raw.has(0): return failure("Godot strings cannot represent NUL characters")
 	if _producer_json == null: _producer_json = ProducerJSON.new()

@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_rl2lr"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_rl2lr"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_8bdqu"]
 script = ExtResource("1_vxjq0")
 role = "act"
@@ -23,6 +25,26 @@ path = "art/media/ui/icons/smooth48/action.telekinesis-move.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:action.telekinesis-move"
 
+[sub_resource type="Resource" id="TelekineticContact"]
+script = ExtResource("effect")
+clip = "assembled/telekinesis_contact_v178"
+role = "attached"
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.0
+duration_policy = "authored"
+fade_out = 0.3
+light_multiplier = 0.0
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"authored_suppressed": false,
+"suppression_policy": "schema16_retired_antimagic",
+"follow_attachment": true,
+"live_endpoints": [{"actor": "target", "socket": "face", "surface_slots": ["body", "head", "helmet"]}]
+}
+
 [resource]
 script = ExtResource("2_k27c6")
 id = "action.spell.telekinesis.move"
@@ -32,6 +54,7 @@ icon = SubResource("Resource_u1ifv")
 disposition = "authored"
 body = SubResource("Resource_8bdqu")
 delivers_spell = "spell.telekinesis"
+effects = Array[ExtResource("effect")]([SubResource("TelekineticContact")])
 effect_sources = PackedStringArray()
 status = "partial"
 unported = {
@@ -54,3 +77,5 @@ unported = {
 "projectile": null,
 "variants": []
 }
+
+notes = "Each accepted repeat already publishes its own native SpellFact with action.spell.telekinesis.move behavior. This finite measured-head source belongs to that actual occurrence and recipient; the real forced-movement path, hostile save, landing damage and Prone membership keep their own ordered tracks. It does not recast the initial spell or create a retained owner. The existing retired-antimagic suppression disposition is preserved. Artwork is unreviewed; this source assignment has not been requalified."

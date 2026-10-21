@@ -36,6 +36,7 @@ static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initia
             else:
                 changed=changed or not is_same(owners[id].condition,condition) or not is_inf(owners[id].end_ms)
                 if not is_inf(owners[id].end_ms):owners[id].start_ms=at_ms;owners[id].initial=initial
+                if not is_same(owners[id].condition,condition):owners[id].observation_revision=int(owners[id].get("observation_revision",0))+1
                 owners[id].condition=condition
                 owners[id].end_ms=INF
             changed=changed or owners[id].get("life_state")!=actor.get("life_state","alive")
@@ -96,7 +97,8 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         var common={"id":"condition:"+owner.id,"kind":"condition","condition_uuid":owner.id,"actor_uuid":owner.actor_uuid,
             "source":"catalog/condition_recipes.json:/"+Authoring.Catalog.condition_key(owner.condition),"source_event_uuid":"",
             "status":"available","start_ms":owner.start_ms,"absolute_start_ms":owner.start_ms,"duration_ms":owner.end_ms-owner.start_ms,
-            "age_ms":age,"initial":owner.initial,"alpha":alpha,"recipe":config,"condition":owner.condition,"sample_hz":32.0}
+            "age_ms":age,"initial":owner.initial,"alpha":alpha,"recipe":config,"condition":owner.condition,"sample_hz":32.0,
+            "observation_revision":int(owner.get("observation_revision",0))}
         if owner.has("logical_pose"):common.logical_pose=owner.logical_pose
         if owner.has("creation_binding"):common.creation_binding=owner.creation_binding
         common.removal_age_ms=null if is_inf(owner.end_ms) else maxf(0,at_ms-owner.end_ms)

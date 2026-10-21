@@ -23,11 +23,29 @@ path = "art/media/ui/icons/smooth48/spell.acid_flask.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:spell.acid_flask"
 
+[sub_resource type="Resource" id="ActualAcidContact"]
+script = ExtResource("1_owon8")
+clip = "spells/acid_splash/default/impact"
+scale = 0.18
+role = "attached"
+scope = "cast"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.798611111111111
+duration_policy = "authored"
+light_multiplier = 0.0
+constructor_input = {"kind": "observed_event", "projection": "owned_outcome", "outcome": "damage", "damage_type": "Acid", "geometry_actor": "target", "component_path": ["impact"]}
+
+
 [resource]
 script = ExtResource("4_007j5")
 id = "spell.acid_flask"
 icon = SubResource("Resource_bosvs")
 delivery = "other"
+native_staging = true
+effect_scope = "application"
+effects = Array[ExtResource("1_owon8")]([SubResource("ActualAcidContact")])
 body = SubResource("Resource_m0quy")
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
@@ -40,4 +58,4 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 status = "stand_in"
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill)."
+notes = "This real item-owned spell uses existing Acid Splash impact artwork only for its own positive applied Acid result. No extra Flask projectile/body or fabricated surface is created. The cast gesture remains a stand-in and all artwork remains unreviewed."

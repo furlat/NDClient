@@ -20,12 +20,25 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_b7og7"]
 script = ExtResource("1_2w1xr")
 clip = "high-level-22/delayed-blast-fireball/native_place_from_hand"
-role = "attached"
+role = "flight"
+scope = "cast"
+constructor_input = {
+"kind": "payload_release",
+"behavior_id": "spell.delayed_blast_fireball",
+"payload_kind": "delayed_fire",
+"admission": "placed_object",
+"item_id": "spell_payload.delayed_fireball",
+"component_path": ["effect"],
+"input_field": ""
+}
 at = "release"
-delay = -0.3
+delay = 0.0
 attachment = "caster_ground"
 orientation = "world"
+source_launch = 0.3
+source_contact = 0.75
 source_end = 0.9
+charge_seconds = 0.3
 duration_policy = "authored"
 hide_at_contact = PackedStringArray()
 hide_at_release = PackedStringArray()
@@ -40,16 +53,18 @@ extra = {
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_c2nio"]
 script = ExtResource("1_2w1xr")
 clip = "high-level-22/delayed-blast-fireball/native_floor_bead"
+unbound_constructor_inputs = PackedStringArray("payload_state", "payload_anchor")
 role = "attached"
 at = "release"
 delay = 0.45
@@ -73,6 +88,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_2xt4j"]
 script = ExtResource("1_2w1xr")
 clip = "high-level-22/delayed-blast-fireball/native_retirement_blast"
+unbound_constructor_inputs = PackedStringArray("blast_event")
 role = "attached"
 at = "release"
 delay = 2.95
@@ -97,9 +113,21 @@ extra = {
 script = ExtResource("1_2w1xr")
 clip = "high-level-22/delayed-blast-fireball/native_target_packet"
 role = "attached"
-at = "release"
-delay = 3.02
-attachment = "caster_ground"
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"damage_type": "Fire",
+"save_effect_id": "spell.delayed_blast_fireball.explosion",
+"retained_caster": true,
+"payload_kind": "delayed_fire",
+"component_path": ["effect"]
+}
+at = "cast"
+delay = 0.0
+attachment = "recipient_ground"
 orientation = "world"
 source_end = 0.45
 duration_policy = "authored"
@@ -166,7 +194,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(1, 2, 4)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -182,4 +210,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/delayed_blast_fireball_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual direct release uses its exact canonical created bead placement. The cast-time retirement review cue is excluded; the action.drop_concentration binding consumes only the explosion owned by actual item/lifetime removal. The actual payload-lifetime resource owns the delivered retained bead at its disclosed item/anchor; the old fixed floor-bead probe is excluded. Optional retained-power disclosure remains an explicit backend policy decision."

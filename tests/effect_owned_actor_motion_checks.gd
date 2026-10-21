@@ -37,7 +37,7 @@ func original(seat:String)->void:
     var immutable:PackedByteArray=var_to_bytes([index.initialization,index.groups,index.rows])
     var originals:Dictionary={}
     for sequence in [5,6,8,9,10,11]:
-        var decoded:Dictionary=journal.protocol.decode_server("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join("%016d.json"%sequence)))
+        var decoded:Dictionary=journal.decode_record(sequence,FileAccess.get_file_as_bytes(directory.path_join("%016d.json"%sequence)))
         check(decoded.ok,seat+": original Step packet decodes exact typed public operands "+str(sequence))
         if not decoded.ok:return
         var packet:Dictionary=decoded.value
@@ -92,7 +92,7 @@ func original(seat:String)->void:
     var movement_rows:Array=index.rows.filter(func(row):return row.kind=="motion" and row.get("track",{}).get("actor_uuid")==SPHERE)
     check(movement_rows.size()==6 and movement_rows.all(func(row):return row.status=="available" and row.source_fps==0),seat+": Studio exposes six actual movements without missing sprite-source rows")
     check(index.groups.all(func(item):return not item.group.components.any(func(component):return component.get("actor_uuid")==SPHERE and component.get("kind")=="audio" and component.get("assignment_source","").begins_with("audio/bindings.json:/movement/"))),seat+": spatial tracks do not fabricate sprite footstep contacts")
-    var decoded_departure:Dictionary=journal.protocol.decode_server("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join("0000000000000016.json")))
+    var decoded_departure:Dictionary=journal.decode_record(16,FileAccess.get_file_as_bytes(directory.path_join("0000000000000016.json")))
     check(decoded_departure.ok,seat+": original dismissal packet decodes")
     if not decoded_departure.ok:world.free();return
     var dismissed:Dictionary=decoded_departure.value

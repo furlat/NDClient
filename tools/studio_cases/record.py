@@ -16,11 +16,21 @@ import signal
 from pathlib import Path
 import subprocess
 
-from cases import first_cohort, spell_baselines
+from cases import first_cohort, spell_baselines, spell_baseline_exclusions
 
 PROJECT=Path(__file__).resolve().parents[2]
-ENGINE=Path('/home/tommaso/.cache/ndclient/dnd_engine-211b71134')
+ENGINE=Path('/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267')
 PYTHON=Path('/home/tommaso/.cache/dnd-engine/venv/bin/python')
+
+
+def compatible_cases(previous, expected):
+    """Retain playable originals with their actual engine across same-wire fixes."""
+    actual=previous.get('engine',{})
+    fields=('protocol_version','player_schema_version','schema_digest')
+    if any(actual.get(key) is None or actual.get(key)!=expected.get(key) for key in fields):
+        raise ValueError('Existing library uses another wire contract; select a separate --out')
+    return [dict(row,engine=(row.get('engine') or {}) if 'engine' in row else actual.copy())
+            for row in previous.get('cases',[])]
 
 
 def resource(path):
@@ -30,7 +40,7 @@ def resource(path):
 def entry_for(scenario,result,folder,inventory):
     entry={key:scenario[key] for key in ('id','title','kind','subjects','seed')}
     entry['subjects']={kind:list(ids) for kind,ids in entry['subjects'].items()}
-    actual_ids=list(result.get('summary',{}).get('behaviors',{}))+result.get('summary',{}).get('conditions',[])
+    actual_ids=list(result.get('summary',{}).get('behaviors',{}))+result.get('summary',{}).get('conditions',[])+result.get('summary',{}).get('item_effects',[])
     actual_ids.extend(actor['creature'] for actor in scenario['actors'] if 'creature' in actor)
     actual_ids.extend(item if isinstance(item,str) else item['id'] for actor in scenario['actors'] for item in actor.get('items',[]))
     for kind,ids in inventory['ids'].items():
@@ -42,7 +52,8 @@ def entry_for(scenario,result,folder,inventory):
         if not path.joinpath('0000000000000000.json').exists():path=folder/seat
         journals[seat]=resource(path)
     entry.update(journals=journals,moments=result.get('moments',[]),status='recorded' if result['ok'] else 'failed',
-        reason=result.get('failure') or '',scenario=resource(folder/'scenario.json'),studio_checked=False,errors=[])
+        reason=result.get('failure') or '',scenario=resource(folder/'scenario.json'),studio_checked=False,errors=[],
+        engine=result.get('engine') or {})
     return entry
 
 
@@ -52,14 +63,20 @@ def import_recordings(roots,out):
     identity={key:inventory['header'][key] for key in ('commit','protocol_version','player_schema_version','schema_digest')}
     path=out/'index.json'
     index=json.loads(path.read_text()) if path.exists() else {'version':1,'engine':{'path':str(ENGINE),**identity},'cases':[]}
+    index['spell_baseline_exclusions']=spell_baseline_exclusions(inventory)
     if any(index['engine'].get(key)!=value for key,value in identity.items()):
-        raise ValueError('Existing library belongs to another engine; select a separate --out')
+        index['cases']=compatible_cases(index,identity)
+        index['engine']={'path':str(ENGINE),**identity}
     files=sorted({record.resolve() for root in roots for record in root.rglob('recording.json')})
     if not files:raise ValueError('No preserved recording.json was found')
     published=[]
     for record in files:
         result=json.loads(record.read_text());folder=record.parent
-        if any(result.get('engine',{}).get(key)!=value for key,value in identity.items()):
+        actual=result.get('engine') or {}
+        # A setup failure may precede any initialized producer journal. Keep
+        # that failed original inspectable without assigning it the expected
+        # engine; successful or identified captures must match exactly.
+        if (actual or result.get('ok')) and any(actual.get(key)!=value for key,value in identity.items()):
             raise ValueError('Original recording engine does not match current authoring: '+str(record))
         entry=entry_for(json.loads((folder/'scenario.json').read_text()),result,folder,inventory)
         if entry['id'] in published:
@@ -77,12 +94,14 @@ def import_recordings(roots,out):
         published.append(entry['id'])
     out.mkdir(parents=True,exist_ok=True)
     path.write_text(json.dumps(index,indent=1)+'\n')
-    return {'imported':published,'index':str(path),'backend_started':False}
+    return {'imported':published,'index':str(path),'backend_started':False,
+            'spell_baseline_exclusions':index['spell_baseline_exclusions']}
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--engine',type=Path,default=ENGINE)
+    parser.add_argument('--sdk',type=Path,help='Explicit immutable Python SDK source root (default: selected engine export SDK)')
     parser.add_argument('--python',type=Path,default=PYTHON)
     parser.add_argument('--only',default='cohort')
     parser.add_argument('--out',type=Path,default=PROJECT/'.runtime/studio-library')
@@ -93,7 +112,12 @@ def main():
         print(json.dumps(import_recordings(args.import_recordings,args.out)));return
     if args.timeout<90:parser.error('--timeout must leave at least90s for bounded host/driver cleanup')
     args.out.mkdir(parents=True,exist_ok=True)
-    environment=dict(os.environ,PYTHONPATH=f'{args.engine}:{args.engine}/sdk/python/src',PYTHONDONTWRITEBYTECODE='1',PYTHONHASHSEED='0')
+    selected_sdk=(args.sdk or args.engine/'sdk/python/src').resolve()
+    sdk_provenance={'path':str(selected_sdk),'query_adapter':'strict_selected_SDK_choices'}
+    sdk_source=selected_sdk.parents[2]/'.source.json'
+    if sdk_source.exists():sdk_provenance['source']=json.loads(sdk_source.read_text())
+    environment=dict(os.environ,PYTHONPATH=f'{args.engine}:{selected_sdk}',PYTHONDONTWRITEBYTECODE='1',PYTHONHASHSEED='0',
+                     NDCLIENT_STUDIO_SDK_PROVENANCE=json.dumps(sdk_provenance))
     extracted=subprocess.run([str(args.python),'-B',str(PROJECT/'tools/snapshot_server_ids.py'),'--extract','--engine',str(args.engine)],
         env=environment,cwd=args.engine,capture_output=True,text=True,timeout=180,check=True)
     inventory=json.loads(extracted.stdout)
@@ -106,11 +130,12 @@ def main():
         candidates=[row for row in candidates if row['id'] in wanted or wanted.intersection(row['subjects']['spell'])]
     if not candidates:parser.error('No current scenario matches '+args.only)
     identity={key:inventory['header'][key] for key in ('commit','protocol_version','player_schema_version','schema_digest')}
-    index={'version':1,'engine':{'path':str(args.engine),**identity},'engine_ids':resource(args.out/'engine_ids.json'),'cases':[]}
+    index={'version':1,'engine':{'path':str(args.engine),**identity},'engine_ids':resource(args.out/'engine_ids.json'),
+           'spell_baseline_exclusions':spell_baseline_exclusions(inventory),'cases':[]}
     index_path=args.out/'index.json'
     if index_path.exists():
         previous=json.loads(index_path.read_text())
-        if previous.get('engine')==index['engine']:index['cases']=previous['cases']
+        index['cases']=compatible_cases(previous,index['engine'])
     if args.only=='failed':
         failed_ids={row['id'] for row in index['cases'] if row.get('status')!='recorded'}
         candidates=[row for row in candidates if row['id'] in failed_ids]
@@ -135,7 +160,8 @@ def main():
         index['cases']=[row for row in index['cases'] if row['id']!=entry['id']]+[entry]
         index_path.write_text(json.dumps(index,indent=1)+'\n')
         failed+=not result['ok'];print(f"{entry['status']:8} {entry['id']} {entry['reason']}",flush=True)
-    print(json.dumps({'cases':len(candidates),'failed':failed,'index':str(index_path)}))
+    print(json.dumps({'cases':len(candidates),'failed':failed,'index':str(index_path),
+                      'spell_baseline_exclusions':index['spell_baseline_exclusions']}))
     raise SystemExit(1 if failed else 0)
 
 

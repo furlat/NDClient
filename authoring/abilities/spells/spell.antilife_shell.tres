@@ -60,7 +60,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -75,5 +75,4 @@ staging_unported = {
 "selection": "antilife_shell_native",
 "source": "assets/vfx/index.json:/selections/antilife_shell_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "Actual retained shell presentation is authored on spatial_effect.spell.antilife_shell with the exact UUID/state/current anchor; this finite fixture lifecycle is excluded from the cast. The existing cast body remains separate. All artwork is unreviewed."

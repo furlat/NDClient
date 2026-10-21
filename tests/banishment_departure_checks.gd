@@ -21,6 +21,8 @@ class CaptureProbe extends RefCounted:
     var ages:Array=[]
     func sample(seconds:float)->void:
         ages.append(seconds);history.recipient=[seconds]
+    func capture_status()->Dictionary:
+        return {"error":"","captures":[{"ready":not ages.is_empty(),"requested_identity":"original","drawn_identity":"original"}]}
 class HistoryProbe extends Node3D:
     var parameters:Dictionary={"actor_history":{"capture_departure":true,"mirror":false}}
     var context:Dictionary={}
@@ -55,6 +57,7 @@ func cache_for(entry:Resource)->Dictionary:
     recipes.merge(built.docs["catalog/condition_recipes.json"],true);cache["catalog/condition_recipes.json"]=recipes
     return cache
 func run()->void:
+    Effects._ensure_clock()
     var entry:Resource=load(PATH);var cache:Dictionary=cache_for(entry)
     check(entry.capture_departure and entry.status=="partial","Typed departure intent remains separate from final visual acceptance")
     check(cache["catalog/condition_recipes.json"][ID].persistent.actorHistory.captureDeparture,"Typed intent round-trips into the one existing recipe path")
@@ -173,7 +176,9 @@ func material_and_motion_controls(before:RefCounted,capture:Dictionary,component
     check(is_equal_approx(float(Conditions.parameters(captured.departure.material,{},{}).flash_strength),.75) and packet.colors==flash.colors,seat+" exact prior treatment envelope/colour survives logical capture")
     flash.native_hit={"clip":{"id":"unit-only"}}
     captured=Timeline.pose_admissions(commit,before.state,before.condition_owners,group,0.0,{},cache,retained)[OWNER]
-    check(captured.departure.reason=="departure_native_hit_frame_not_bound",seat+" missing native-hit framebuffer stays explicit instead of copying a later/current texture")
+    check(captured.departure.get("reason","").is_empty() \
+        and captured.departure.material.flash.native_hit==flash.native_hit \
+        and not captured.departure.material.flash.has("native_surface"),seat+" logical native-hit capture retains its immutable source dependency without borrowing a framebuffer")
     check(var_to_bytes(before.state)==original,seat+" pure material capture controls never alter canonical actor data")
     var unseen:Dictionary=before.state.duplicate(false);unseen.senses=unseen.senses.duplicate(false)
     unseen.senses.entities=unseen.senses.entities.duplicate(false)

@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="PresentationNativeSource" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/native_source.gd" id="source"]
+
+[resource]
+script = ExtResource("source")
+id = "class.wings.mantle"
+kind = "class_component"
+record = {
+ "camera_target": [
+  0.0,
+  0.734846922834953,
+  0.0
+ ],
+ "canvas": [
+  384.0,
+  384.0
+ ],
+ "capture_halves": [
+  "back",
+  "front"
+ ],
+ "duration": 2.0,
+ "id": "class.wings.mantle",
+ "kind": "class_component",
+ "loop": true,
+ "media_ids": [
+  "class.wings.mantle-q0-back",
+  "class.wings.mantle-q0-front"
+ ],
+ "palette": {
+  "colors": [
+   "#254e69",
+   "#64aec7",
+   "#c5d8d8"
+  ],
+  "operator": "class_neutral"
+ },
+ "pivot": [
+  192.0,
+  249.6
+ ],
+ "pixels_per_unit": 90.5096679918781,
+ "preload_paths": [
+  "res://assets/native_effects/class_actions/ClassComponents.gd",
+  "res://assets/native_effects/class_actions/Flow.gdshader",
+  "res://presentation/native_effect_mote.gdshader",
+  "res://assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres"
+ ],
+ "properties": {
+  "kind": "mantle",
+  "quadrant": 0.0,
+  "side_name": "all"
+ },
+ "requirements": [
+  "production_painter_integration"
+ ],
+ "sample_hz": 32.0,
+ "script": "res://assets/native_effects/class_actions/ClassComponents.gd"
+}
+status = "partial"
+notes = "Installed ClassComponents mantle source; exact palette, frame rate/count, canvas and pivot from authoring/media/definitions/class.wings.mantle-q0-back.json. Existing native class-action calibration and material/painter preparation are reused. One native composition owns back/front capture halves. No new artwork or renderer; artwork and production qualification remain unreviewed."

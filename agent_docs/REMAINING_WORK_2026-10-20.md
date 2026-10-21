@@ -1,6 +1,6 @@
 # Everything remaining: client, Factory migration and Studio
 
-**Current task authority — 20 October 2026, branch `codex-authoring-schemabump`. Original migration snapshot: `fb3a3760`; the R2 consumer cohorts below supersede its affected counts and evidence.**
+**Current task authority — updated 21 October 2026, branch `codex-authoring-schemabump`. Original migration snapshot: `fb3a3760`; the R2 consumer cohorts below supersede its affected counts and evidence.**
 
 This is the single current remaining-work list. It supersedes remaining-task
 claims and percentages in the older progress/checklist/handoff documents. Those
@@ -11,6 +11,228 @@ execution order; later sections and appendices hold the exact inventory/evidence
 
 ## 1. The actual situation
 
+**Current artwork-review status — human clarification, 20 October 2026:** all
+artwork and audio remain **UNREVIEWED**. The earlier named four-effect rejection list
+is superseded and must not be treated as current scope or as acceptance of any
+other artwork.
+
+**Current runtime closing pass, 21 October:** the complete7ca source cohort,
+including the six legacy action/passive assignments and the source-owned
+readiness repair, publishes all three domains with zero authoring errors. The
+latest complete publication took65.432s; two retained authoring warnings and45
+known text-resource Unicode warnings remain explicit. The latter are scoped in
+[Factory§18](FACTORY_REVIEW_2026-10-20.md#18-serialize-source-resource-labels-as-literal-utf-8),
+including the independent client-note escapes; they are not45 missing source APIs.
+
+The active Studio Library has **357 recorded cases out of360** after the six
+new action/passive originals were imported. The current
+producer is immutable9f81d5267. Captures retain their actual0c/2948/9f and other
+historical identities; strict matching wire fields plus ordinary Journal
+admission allow historical playback, while current-output qualification still
+requires the exact current engine/package. The three remaining failed cases are
+voluntary Drop Prone, the developer-only TestBless setup and the actual Extend
+Intimidating Presence original's `no_valid_targets`. That failed admission is
+retained; it is not retried for a desired outcome or treated as missing artwork. A setup that never
+initialized an engine retains an empty actual identity, not an expected identity.
+The earlier345-case publication with336 recorded/nine failed is historical.
+
+**Current coherent source and qualification batch, 21 October14:59UTC:**
+All230 enabled headless scripts completed.229 passed; the remaining frozen
+requirements-reference test failed45 old policy expectations after the new
+22-spell feedback consumer. Its test-only migration keeps exact cached/uncached
+equality, all unchanged independent oracle fields and explicit policy semantics;
+the affected rerun passed **2,015 assertions, zero failures, exit0**. The original
+failed receipt remains retained. The broad pass includes **357 actual recorded
+studies /704 journals /44,742 assertions**, zero failures; the three failed
+capture recipes remain excluded explicitly. Exact current receipts:
+`.runtime/tests/20261021T144622.590398Z-current-checkpoint/summary.json` and
+`.runtime/material-runtime-integration-20261021/template-policy-current/result.json`.
+These receipts are source/compiler/canonical-state evidence, not rendered art.
+
+All **six selected heavy-electric uses** now author the delivered corrected
+static source banks through the existing constructor-input schema. Actual
+factual inputs retain precedence, interface/preparation keys remain exact, and
+Studio exposes the static paths through its existing generic inspection DTO.
+Bare original Factory default-bank metadata remains Factory§20; native proof of
+these six assignments is pending. No per-spell renderer or new scheduling clock
+was introduced.
+
+The shadow investigation found an actual missing native invalidation: both
+frame-only UV paths changed reconstructed caster geometry without notifying
+Godot's cached shadow atlas. They now use the same unchanged-bounds native
+instance notification already used by full source binding. Independent test
+references start at each actual source frame, retaining strict pixels and
+actual-owner checks. The patch was applied **before the first native process**
+in the current batch; the headless processes had already loaded prior sources.
+The source cutoff is recorded in
+`.runtime/material-runtime-integration-20261021/source-cutoff-shadow-templates.json`.
+Exact restored-pixel qualification remains pending.
+
+The current queue serializes **183 enabled native scripts**, two additional
+actual public/class replay rows and11 live scripts plus four independent
+input/material repeats required by the approved plan. Its actual public replay
+resumes57 uncompleted IDs plus Divine Smite; prior131 unique completed originals
+retain their source/error cutoffs and are not misreported as fresh passes. The
+first Acid check still fails both pixel controls. Its new diagnostic proves the
+selected two planes disappear from native draw counts while the unchanged green
+pixels belong to separate real condition droplets. This rules out stale pass
+output and failed parent visibility; selected partition material/occlusion is
+still under investigation. Full native/live/quiet-performance/art acceptance
+remains open.
+
+**Earlier completed broad qualification:**
+`.runtime/tests/20261021T123511.143023Z/summary.json` records **230/230 headless
+scripts passing** and **28/44 native scripts passing, 16 failed**. Its native
+failures remain part of that receipt; later fixes and focused passes do not
+rewrite it. The earlier214/230 and162/230 headless receipts remain historical.
+The empty-operation Studio fields, finite-passive event-start anchors and
+current source/inspection contract repairs are included in the230 passing rows.
+This is not a complete passing native/live checkpoint.
+
+The subsequent13-script follow-up,
+`.runtime/tests/20261021T131204.311779Z/summary.json`, passed **9/9 headless
+scripts** and **144/144 shadow-preparation assertions**. Actor preparation
+still failed one exact shadow-edge restoration assertion out of7039, despite
+retaining the same helper viewport/World3D/light owners; the cause remains
+open and exact numeric diagnostics are retained. Studio transport completed
+**61 assertions with zero assertion failures**, three loops and two hosts,
+then crashed with **process exit5**. The matching Windows event reports native
+access violation `0xc0000005`; this invocation remains failed, with teardown
+cause unattributed. [Exact exit evidence and open investigation](STUDIO_NATIVE_EXIT_2026-10-21.md).
+
+That follow-up also exposed24 suspended immutable history captures. The client
+now resumes the same owned requests through the delivered `Capture.resume`
+API, without new captures, source samples or clock changes. Its first current
+native qualification has **16,432 assertions, zero failures, exit0**:
+`.runtime/tests/20261021T132936.940719Z-content-addons/native_actor_history_material_transition_checks.log`.
+This qualifies the selected six-original history/material cohort, four camera
+views, isolated native output, seek/loop and teardown. It does not qualify all
+equipment/history combinations, live cost or artwork; Magic Missile retirement
+remains unrecorded in those originals.
+
+The combined add-on batch is now complete: **12/18 scripts passed, six failed**,
+including all three headless scripts passing.
+`.runtime/tests/20261021T132936.940719Z-content-addons/summary.json` preserves
+the exact outcomes. In addition to R3, the selected Call/Command package gates
+passed683 assertions; Quarry60, Water62, actor birth528, Vampiric repeat183,
+creation trace423 and thumbnails522 passed. Studio transport now passes all61
+assertions with **exit0**; the earlier native crash and its unattributed cause
+remain preserved, rather than rewritten as a successful invocation.
+
+The six failed rows are actor preparation's one exact shadow-edge comparison,
+Acid's two zero-pixel seat controls, event-family output, owner/head/item,
+the authored-class replay and the interrupted all-public-spell replay. The last
+row's309 printed checks describe its last case, not aggregate public-spell
+coverage. The actual failure exposed a client preparation-owner mismatch on
+nine explicitly selected input-reduction uses in five resources. Those uses now
+name the exact source-owned preparation coordinator; the subsequent abilities
+publication took5.34s with zero authoring errors. This is a client authoring fix,
+not a new Factory request. Its native qualification remains pending.
+
+The fresh188-public-spell replay has stopped at the actual default Call
+Lightning heavy-bank assertion; it is not an active or complete passing sweep.
+Its log contains **130 completed case records, 127 with passing internal
+assertions**, but also **nine native `ERROR` messages** across Hideous Laughter
+and Animal Friendship. Internal assertions alone therefore do not certify clean
+execution. The three internally failed cases were Divine Smite, Spare the Dying
+and Shocking Grasp. The remaining inventory was not completed in this invocation.
+The saved summary's359 printed checks belong to its last completed case.
+[Exact public replay](../.runtime/tests/20261021T134952.762281Z-all-public-current/schema16_all_public_spells_current.log).
+
+The subsequent closure batch is complete: **three of eight scripts passed,
+five failed**. Its selected-source results are:
+
+| Existing gate | Actual assertions / failures | Current disposition |
+|---|---:|---|
+| Shadow preparation |154 /0| Pass. |
+| History/material transition |16,432 /0| Pass for the selected original/view/seek cohort. |
+| Owner/head/item |468 /0| Pass; preserves signed selected-source contribution controls. |
+| Actor preparation |7,702 /1| Exact shadow-edge restoration remains open. |
+| Acid owner |34 /2| Both isolated seat pixel controls remain zero; packet/owner assertions pass. |
+| Event families |1,741 /14| Output controls and one contextual initial-world preparation stall remain open. |
+| Authored class replay |53,973 /9| Reverse Font conversion failed; the other four actual class/passive cases passed. |
+| Affected public-spell replay |6 completed cases,5 internally passing| Spare the Dying, Shocking Grasp, Hideous Laughter, Animal Friendship and Fireball passed with zero native errors; Divine Smite still failed. The next Lightning Bolt case hit the same heavy-bank assertion. |
+
+[Exact eight-script closure receipt](../.runtime/tests/20261021T141619.511042Z-closure-affected/summary.json).
+The last replay row's701 summary checks again describe its last completed case,
+not the aggregate inventory. The generic public-setter forwarding correction is
+applied and its two affected Laughter/Animal originals now pass without the nine
+prior native errors. Fresh Spare/Shock successes do not erase the separate
+Event-family initial-world stall: that candidate reached all28 actor bindings,
+then retained16 actual residue rows with no prepared field handles. Its shared
+Blood/source-admission owner is under diagnosis; there is no invented generation
+reset, budget bypass or new backend requirement.
+
+Two further shared source cohorts are applied and await affected qualification:
+nullable authored pose markers now omit only their unsupported current-frame
+placement without a permanent error latch (actual reverse Font and Divine Smite
+null-marker witnesses, no substituted socket), and the existing damage feedback
+path now honors parent flash/number settings across **22 spells**, with all
+**63 policy records** exposed in inspection and exact typed/raw/variant
+provenance. Actual ancestry and callback clocks remain intact. Native hit
+palettes/envelopes and canonical Life timing remain unchanged; the19 legacy
+death records retain `death.frame` as inspectable-unused metadata. These are client content/schema
+changes, not new Factory APIs or artwork approval.
+
+The Electric bank repair described above is applied using already delivered corrected
+banks; affected native proof remains pending. Both original fatal cases are tracked in [Factory§20](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata).
+The sealed `_ready`/`_construct` backtrace also occurs through the actual
+constructed wrapper; it does not prove missing factual operands or a neutral
+startup-admission bypass. No runtime fix was made for that false inference.
+
+The immutable Factory package has checkpoint commit **`7079505b`**; the client
+code checkpoint is still pending qualification. A checkpoint does not end the
+authorized migration: continue unblocked authoring/content and shared-renderer
+work under the approved plan, with affected checks grouped into coherent batches.
+
+The combined resource/diagnostic repairs publish with zero authoring errors
+and two retained warnings. The 413-row qualification baseline was deliberately interrupted after 115
+completed native checks to apply the user-reported camera/scenery reuse fix.
+All original logs and completion lines remain preserved; it is not a completed
+413-row pass. The affected and remaining checks will resume together. The actual
+walled Gallery comparison now reproduces the user-reported narrow strips with
+the old spare-quarter code (**269 checks, 22 failed**) and passes with the
+correction (**269 checks, zero failed**), with intact walls in the preserved
+after image. This closes the demonstrated camera/source publication defect;
+it does not qualify the remaining suite or approve artwork.
+[Exact interrupted baseline](../.runtime/material-runtime-integration-20261021/closing-413-interrupted.json).
+[Camera defect and correction](STUDIO_CAMERA_REUSE_DEFECT_2026-10-21.md).
+[Before/after camera receipt](../.runtime/material-runtime-integration-20261021/camera-before-after.json).
+[Repaired source publication](../.runtime/material-runtime-integration-20261021/build-closing.json).
+
+The separate 16-case original capture batch against 2948 is complete and
+published: at that publication the actual Studio Library had **351 recorded
+cases out of 354**.
+It covers the three crowded wall placements, three corrected Blur action-budget
+scenarios, all five elemental Glyph contacts and five native trap hardware
+families. The original Spike fixture assertion failure is preserved; its new
+original uses the actual source contract (spatial state, without an invented
+mechanism-activation fact). Native mechanisms are installed before audience
+initialization; all subsequent commands and per-seat packets are ordinary
+producer output. At that publication the remaining failures were voluntary Drop
+Prone, stable-zero-HP Cure Wounds discovery and the explicitly developer-only TestBless fixture.
+The developer fixture is not a missing production spell or backend request.
+[Fresh 2948 Library publication](../.runtime/material-runtime-integration-20261021/library-2948-publication.json).
+[Closing-pass state and receipts](../.runtime/material-runtime-integration-20261021/progress.json),
+[completed230-headless/44-native results](../.runtime/tests/20261021T123511.143023Z/summary.json),
+[earlier214/230 results](../.runtime/tests/20261021T102439.728833Z/summary.json),
+[original230 results](../.runtime/tests/20261021T094435.215627Z/summary.json),
+[current Library publication](../.runtime/material-runtime-integration-20261021/library-complete-publication.json).
+The preserved stable-zero-HP healing failure was repaired by backend9f81;
+the unchanged stabilize/heal/move journey now records successfully on that
+actual export, bringing that publication to352 recorded out of354cases.
+The later six-original cohort brings the active Library to357/360, with five
+successful actual originals and the failed Extend target admission retained.
+[Current six-original publication](../.runtime/material-runtime-integration-20261021/library-after-six.json).
+[Adoption and original capture](../.runtime/material-runtime-integration-20261021/backend-9f81-adoption.json).
+[Historical diagnosis](BACKEND_REVIEW_2026-10-20.md#current-0c-capture-cure-wounds-discovery-omits-the-stable-zero-hp-recipient).
+Native/live qualification and the client source checkpoint remain in progress;
+they have not passed as a complete current checkpoint. The six named
+legacy action/passive assignments are now implemented through the existing
+source/compiler/renderer paths and exposed in structured Studio inspection;
+they are no longer postponed content work after that checkpoint. Their actual
+output and human review remain independent requirements.
+
 The complete migration is **not finished**. The repeated checkpoints were real,
 but reporting a shared adapter, a successful example and a passing fast suite as
 near-completion concealed the remaining production consumers and qualification.
@@ -19,12 +241,46 @@ not an endless mathematical requirement of the project.
 
 What is already established and should **not be restarted**:
 
-- One main Windows checkout and branch; frozen executable engine `211b71134`,
-  protocol 1/schema 16. The official engine and Factory sources remain read-only.
-- The complete sealed Factory `runtime-heavy-effects-20261020-fa024e4e027bf708` is installed (R2 intake below retains the corrected weapon receiver):
-  1,246 clips, 504 selections, 155 condition lifecycle families. The earlier two
+- One main Windows checkout and branch. Production producer repairs are adopted
+  from immutable engine `9f81d5267`, with its matching SDK selected for recording
+  and live tools. This includes the prior `a97bb55b0` producer and `09e93c439`
+  SDK repairs, solid-wall cancellation/admission, Holy Nimbus and the later
+  Sphere/summon/Incense attribution repairs plus five observed trap anchors and
+  witnessed retired Glyph-zone attribution, living zero-HP healing discovery
+  and corrected HTTP invalid-preview error categories. These latest repairs
+  preserve the wire contract and require no SDK generation. Existing same-wire recordings remain
+  playable with their exact actual engine labels; current-output evidence still
+  requires the current actual revision. The 328 earlier captures retain their actual `a97bb55b0`
+  metadata; the newer fixes do not relabel them. Protocol 1/schema 16 uses the delivered
+  digest `2c11d7a9919c8aa9b1490628fff224627f19d6388c3884171d14a4a5cbecea22`.
+  The official engine and Factory sources remain read-only.
+- The complete sealed Factory `runtime-spike-seed-20261021-7ca62e2877bf5156`
+  is installed; the complete8b/public-admission976/production-review937
+  predecessors are preserved separately in `NDClientGodot-backups`:
+  1,246 clips,504 unchanged default selections,155 condition lifecycle families
+  and60 public typed source rows. The supplied material/runtime handoff delivers
+  the previous§§12–14/16 API requests; client source integration is written and
+  source-published, with native/live qualification still open. It is not another
+  open Factory delegation. [Reconciled requests and retained limits](FACTORY_REVIEW_2026-10-20.md).
+  The earlier two
   actor-history shader errors are fixed in this successor; they are not a
   current blocker.
+- The source follow-through moves remaining payload/quarry/outcome identities
+  and martial source clocks into resources, assigns Survivor, and repairs
+  authored recipient following and initial wall-contact admission. The latest
+  Factory public portable explosion source is assigned; paired public readiness
+  constructors are wired with actual missing mouth authoring explicit. Eight
+  prepared source replacements are selected without replacing the shared
+  scheduling/preparation/publication/lighting owners. Exact source status and
+  external boundaries are in
+  [the content inventory](AUTHORING_CONTENT_REMAINING_2026-10-20.md).
+  The complete three-domain source publication before the7ca material intake has
+  zero authoring errors and two warnings; the final Play/Studio/browser/capability
+  entry points and affected browser follow-through load without script/parse
+  errors. The authentic mouth warning, zero-missing-
+  condition coverage notice and inherited UTF-8 diagnostics remain explicit.
+  [Current publication/parse receipts](AUTHORING_CONTENT_REMAINING_2026-10-20.md).
+  This is source publication, not a native/live or artwork acceptance receipt.
 - Canonical reduction/order, original faction journals, pre-row removal data,
   shared compiler/preparation/publication and working Studio replay exist.
   Equipment publication has a five-run live acceptance receipt. We need
@@ -38,14 +294,28 @@ What is already established and should **not be restarted**:
   basic authentic history/departure, spatial owners/transitions, creation,
   observed results, propagation, and generic native/audio channels exist.
   Their existence does **not** mean every consumer/interaction is integrated.
-- 20 production spell predicates are active: 17 exact option IDs and 3 saved-result
-  branches. The 130 imported alternatives are not 130 missing spells.
+- The takeover audit classifies all 130 imported native alternatives: 22 exact
+  predicates and 108 explicit dispositions. This is assignment coverage, not
+  qualification of every alternative. The selected-element facts are now
+  delivered and all thirteen Orb/Burst choices are authored through the shared
+  selector, including misses; the old missing-element claim is superseded.
 - Water/Wet has real native output through both independent faction streams,
   four views, seek/loop and cleanup. Its actual creation/removal choreography is
   qualified separately by the R2 Water DRY cohort below.
-- Latest full fast run: **185/185 clean**, `.runtime/tests/20261020T171550.110627Z/summary.json`, including heavy selection/preparation identity, motion and both accepted-contact cohorts. The R2 native receiving evidence is below; the earlier shared-provider run passed 444 checks.
-  Latest actual Gallery route: 313/313 clean. These are bounded receipts, **not
-  a green complete suite or complete visual coverage**.
+- Historical qualification snapshot: **195 fast, 27 headless gates, 182 native
+  gates and 11 live checks**. The recorded consolidated fast/headless receipt has
+  221 rows, 219 passing and two failed,
+  `.runtime/tests/20261020T190713.065786Z/summary.json`; both causes have
+  focused repairs, and a consolidated final-source rerun is pending. The whole
+  182-native run completed 175 passing and seven failed,
+  `.runtime/tests/20261020T190820.789395Z/summary.json`; its exact repair,
+  source and rerun boundaries are recorded below. Later focused SDK/media
+  batches do not overwrite those failed whole receipts. Latest quiet actual
+  Gallery route: 313/313 clean, with a 53.175 ms
+  maximum interaction frame and no demonstrated final performance acceptance.
+  These are bounded receipts, **not a green complete suite or complete visual
+  coverage**. Detailed takeover evidence below supersedes the older appendix
+  snapshots and historical checkpoint counts.
 
 Current detailed receipts: [production checkpoint](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
 The latest performance evidence is in §7 below.
@@ -67,7 +337,7 @@ close it. Existing explicit user exclusions remain excluded.
 | R5 | Close the named backend and Factory blockers. | External producer/source changes; client records, consumes and qualifies the delivered result. | The missing public value or source API is actually delivered and its affected original case passes. A replacement handoff or inferred rule is insufficient. |
 | R6 | Complete final live preparation/publication/startup/frame-time work. | Client performance; report server execution separately. | Actual player commands and Studio meet the existing responsiveness/frame goals in comparable final cold/warm trials, with no holds, hidden event reorder or approved-pixel regressions. |
 | R7 | Finish the applicable whole test inventory on the final checkpoint. | Client tests/fixtures and R5 for genuinely unavailable cases. | Fast, applicable native/headless gates and live inventory pass together; current excluded tests are repaired or explicitly retired only with valid scope/successor evidence. No silently skipped current responsibility. |
-| R8 | Resolve outstanding visual/audio authoring and user acceptance. | Factory/art/audio authoring and human review; client exposes the result honestly. | Rejected effects are reworked/reviewed; required timing/placement/sounds/assignments are authored; remaining explicit stand-ins/deferred art have a truthful user-approved disposition. |
+| R8 | Resolve outstanding visual/audio authoring and user acceptance. | Factory/art/audio authoring and human review; client exposes the result honestly. | All artwork remains unreviewed by the human; the full inventory is inspectable, timing/placement/sounds/assignments are authored, and review feedback is applied without inventing acceptance. |
 
 **Execution order:** finish client-bindable R1/R2 in shared family batches while
 R5 deliveries happen independently; complete R3 when its source contract is
@@ -97,7 +367,104 @@ partial suite to be described as complete.
 
 ## 3. Exact remaining production input/binding work
 
-### R1: declaration-level snapshot and remaining consumer families
+**Current content inventory:** [named authoring assignments and shared consumer
+work](AUTHORING_CONTENT_REMAINING_2026-10-20.md). It supersedes the old
+missing-field/consumer classifications in the declaration snapshot below.
+The backend has delivered the sixteen producer groups, SDK correction and the
+subsequent solid-wall/Nimbus and Sphere/summon/Incense attribution repairs;
+the old tables must not be forwarded as current missing-field requests.
+
+The current content batch has authored the thirteen Orb/Burst element choices,
+Prismatic application colours, emitted Blessed Healer/Destroy Undead results,
+Magic/Sacred item-effect lifecycles, the delivered wall/payload owners and Dragon
+grant/exhale families. The source batch also supplies six movement assignments,
+condition responses, repeated/granted attack outcomes, held Spirit Guardians,
+actual Searing/Ensnaring ticks and resource-owned Counterspell preparation.
+The `0c2e5a0d7` follow-through assigns Sphere END, the eight summon result
+decisions and exact Incense heals, plus real Antilife/Moonbeam/Raging fields
+and explicit bookkeeping delegation. All ability resources compile together
+with zero authoring errors; this does not close current rendering/performance
+qualification or human review.
+Existing selector matching already handles the new condition operands; it does
+not need another selector framework. These are implementation statements,
+not current-source render/acceptance receipts. Content comes before the final
+batch rebuild and qualification.
+
+The 21 October follow-through also stages fifteen canonical Ground fields,
+ten resource-defined mechanism programs, retained Portal/Hatch state and actual
+PortalTransfer entry/exit, thirteen exact hardware delegations, and recovered
+mechanism painter-depth bands through the existing world/media path. Steam,
+Burning Web, Elemental Fire and Draconic Presence are actual owner assignments;
+old internal ledgers/prototypes do not demand invented field art. The precise
+source inventory linked above records these implementations and source limits.
+The further21 October batch connects all387 authored Ground appearances,
+six existing-art worn gear choices, retained Blood/Dread/Poison pools, Ashen
+floor motifs and exact static wood/stone wall faces, Water topology growth,
+complete source inspection and actual recorded item/condition previews. The
+six summon spells now author54 spell-to-creature assignments over36 unique
+creature IDs through actual birth admission; three assembled fixed
+arrival/departure studies are explicitly inactive. No creature body pixels or
+terminal facts are inferred. Camera/projection/viewport changes now invalidate
+optical history while retaining logical owner identity. The current content
+inventory records all remaining source/registration boundaries.
+The complete character/environment/ability cohort now publishes together with
+zero authoring errors and two retained authoring warnings; the linked current
+inventory holds the corrected build and earlier entry-point source-load receipts.
+Earlier failed logs remain intact. The latest coherent follow-through adds:
+
+- Six real legacy assignments: Extend Intimidating Presence; both Font of Magic
+  conversions with their distinct actual hand sockets and authored affine source
+  windows; Dragon Wings' actual application accent; and Indomitable/Relentless
+  bursts selected by exact public successful witnesses. Relentless uses the
+  actual TAKEN damage fact, not an inferred applied-damage/HP outcome. No passive
+  ActionFact or body gesture is invented.
+- The typed `EffectUse.immutable_preparation` assignment for28 uses in22
+  resources. These Ground/field/aura/item sources now prepare through the exact
+  source-owning coordinator instead of a same-named default namespace. Existing
+  resource closure, occurrence identity and bounded begin/step ownership remain.
+  [Exact source/operand inventory](../.runtime/source-readiness-owner-repair/source-evidence.json).
+- Explicit admission of the delivered second Recording resource schema for
+  Sleep through the existing Baked consumer; source placement/loop/nearest
+  hooks remain shared. False Life uses the actual self-cast source ground,
+  without fabricating a target or a persistent temporary-HP lifetime.
+- Native spell and non-Factory native source methods now reach the existing
+  authoring audit, trace and capability report. Actual program/capture aliases,
+  typed media pointers, sockets, source windows and authored public-fact
+  selectors stay separate from actual occurrence witnesses and rendered evidence.
+
+No rendered, live, listening, full-suite or performance result is inferred from
+these source receipts. The affected current qualification remains in progress.
+
+One concrete client compositing boundary remains: a continuous mechanism
+utility-depth band cannot always fit the existing rounded lexicographic actor
+order. Admission checks both neighboring actor constraints and reports
+`actor_depth_order_status = incompatible_peer_order` while retaining ordinary
+fixture art when no exact placement exists. This does not request new Factory
+art or producer data, and it is not rendered depth-compositing acceptance.
+
+The 7ca material/runtime delivery supplies the earlier thirteen fixed-layout/expiry
+field APIs; their current client assignments cover 23 actual owners and 30 forms.
+These are no longer missing Factory interfaces. The wall-child successor supplies Frigid
+Air child-only geometry/owner and prepared Wind; those source assignments are
+now implemented alongside the existing shared renderer. Blood/Bone/Corrosive/
+Dread region releases also share the existing prepared field/flight path. Blight/Harm/Cone of Cold keep their actual finite
+scene assignments; the separate original body-UV parity in Factory §15 is
+explicitly unselected optional work, not a missing Factory API request. The earlier five hardware-anchor and Glyph attribution requests are delivered
+in2948. Neutral Glyph presence is now assigned; richer armed/payload studies
+are optional unselected art choices. The stable-zero-HP healing defect is
+repaired in9f81, with a successful unchanged client journey and the original
+failed recording preserved. Authentic mouth authoring,
+twelve summon body substitutions and the eight named sound categories are
+separate asset work. All artwork remains unreviewed.
+
+Current external issues: [backend content capture blockers](BACKEND_CONTENT_BLOCKERS_2026-10-20.md),
+[Factory source review](FACTORY_REVIEW_2026-10-20.md), and the
+[exact creature-body artwork list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md).
+The twelve summon body substitutions are distinct from 63 raw `stand_in`
+resource flags; ordinary modular human bodies and duplicate aliases do not
+require sixty-three new creatures.
+
+### R1: historical declaration snapshot and consumer-family boundaries
 
 The original snapshot contained 57 flags across 28 IDs, all resolving to installed clips. That static audit found 39 cues with at least
 one declared channel lacking a provider and 18 explicit authoring refusals. It
@@ -116,7 +483,13 @@ active variant predicates are not a completion percentage. Exact raw cue
 addresses are in Appendix A. The later R2 consumer receipts below supersede
 completed work in this snapshot; 57 is not today's remaining count.
 
-| Shared family | Actual owners | Raw flagged cues | Remaining work; factual boundary |
+The table below preserves that original diagnosis, including then-missing
+operands and failed recordings. Its open wording is historical: the current
+assignments, delivered fields and optional source decisions are in
+[the current content inventory](AUTHORING_CONTENT_REMAINING_2026-10-20.md),
+not a fresh request to rebuild these already-integrated consumer families.
+
+| Shared family | Actual owners | Raw flagged cues | Original diagnosis and factual boundary — historical |
 |---|---|---:|---|
 | Weapon smites/Ensnaring | Branding Smite, Divine Smite, Ensnaring Strike, Searing Smite |6| Establish each phase's actual operands. Branding impact calls payload admission; its condition phase calls condition admission. A later tick is not required for that impact. Bind required exact strike/armed/recipient/tick/heal data only where consumed. Aggregated damage cannot invent an attributed rider. Three baseline capture failures remain independent backend defects. |
 | Divine Favor | `spell.divine_favor` |3| Finite cast and actor-owned application/hold/removal are qualified below. Exact equipped attack plus attributed result remains required for the hit phase; the held original misses and cannot prove positive Radiant output. |
@@ -158,7 +531,14 @@ Source evidence: [Divine Favor](../assets/vfx/sources/9e80f76781257e6a4d5d/divin
 [runtime refusal](../presentation/native_spell_renderer.gd),
 [existing occurrence adapter](../presentation/application_results.gd).
 
-### Additional gaps not included in 57
+### Historical gaps not included in 57
+
+**Historical source diagnoses:** the selector, event, item membership, finite
+Deafness and material-history omissions below were repaired/adopted by the
+current producer/package source batch. They retain the original reasons and
+links; they are not current requests. Today's exact open source/producer
+boundaries are listed in §3 above and §4 below. Final native/live history and
+case qualification remain open independently.
 
 - **28 condition selections:** Paladin aura benefit needs `aura_kind` (3);
   Dragon shared resistance needs `damage_type` (5); draconic cadence needs
@@ -200,22 +580,26 @@ Source/public-field evidence and exact family definitions:
 ### R2: variant and weapon assignments
 
 - 130 imported spell alternatives across 43 native-enabled spell owners;
-  20 have real predicates. The remaining 110 need a final production disposition:
+  22 now have explicit predicates (the original 20 plus Ray of Sickness/Acid Arrow
+  Miss). The other 108 now have explicit typed dispatch dispositions. This closes
+  accidental empty-predicate classification, not their named unfinished consumer,
+  source, public-input or art branches. The dispositions distinguish:
   exact supported replacement, already-owned lifecycle, unselected review
-  alternative, incompatible source, missing public input or explicitly rejected
-  policy/art. **110 is not 110 mandatory new effects**, and empty predicates do
+  alternative, incompatible source, missing public input or explicit user
+  exclusion. All artwork remains unreviewed; an old rejection label does not
+  establish a current acceptance category. **110 is not 110 mandatory new effects**, and empty predicates do
   not silently count as done. Assign compatible required forms using the existing
   shared selector; keep one caster/current recipe and actual recipient outcomes.
   The raw typed inventory has 133 variants across 46 owners; three extra variants
   belong to native-disabled Bless/Call Lightning/False Life and do not change
   this 130 native-enabled denominator or automatically add required art.
-- Nine of 17 literal option IDs now have original per-form witnesses. The five
-  additional Enhance Ability forms have actual application, held movement and
-  concentration removal in both original streams. The remaining eight are
-  Bestow Curse options 2/3/4, Deafened and Protection from Energy acid/cold/
-  lightning/thunder: the frozen action's public choice domain does not offer
-  these forms. They are proven R5 selection gaps, not permission to relabel
-  defaults. Dissonant Whispers now has genuine saved/failed original outcomes
+- The earlier per-form receipt had nine of17 literal option IDs, including the
+  five additional Enhance Ability application/movement/removal originals. Its
+  eight missing-option diagnosis (Bestow Curse2/3/4, Deafened and Protection
+  acid/cold/lightning/thunder) is historical: the current producer supplies
+  those domains and the client authors their exact predicates. Current original
+  and native coverage must be reconciled from actual per-form receipts; neither
+  an old missing-option claim nor a relabelled default establishes it. Dissonant Whispers now has genuine saved/failed original outcomes
   and native saved-branch output on a supported modular recipient (R2 evidence
   below). These use the existing selectors, not another variant system.
 - Production `Gear.effects` / `impact_effects` now select twelve intrinsic
@@ -233,18 +617,19 @@ Source/public-field evidence and exact family definitions:
   Six delivered native weapon-body consumers are **excluded by user policy**.
   Spiritual Weapon/summoned actors remain a separate actual actor case.
 
-The bounded Miss review identifies presentation authoring, not a new engine
-contract: the actual Ray of Sickness Miss original already discloses source,
-recipient and outcome, but its delivered Miss source aims directly at the
-provided endpoint and the imported endpoint is fixed review data. Author and
-qualify an explicit optical miss endpoint before selecting it; aiming at the
-body is not automatically a miss. Acid Arrow's finite Miss delivery/splash
-has the same optical endpoint issue, and no durable actual Acid Miss original
-is qualified. Its finite splash does not consume the patch's geometry/cell
-channels; its separate patch still requires 1–32 actual disclosed cells. The
-Hit baseline, installed heavy Miss alternative and target floor cannot prove
-that branch or manufacture a residue. Keep these dispositions explicit under
-R2/R4/R8; no new factual provider or producer request follows from this review.
+The bounded Miss review identified client optical staging and phase timing,
+not a new engine endpoint contract. Ray of Sickness now has an exact original
+Miss predicate and shared clearance beyond the current displayed composition.
+Acid Arrow has a durable actual Crit Miss original (seed 5; seeds 2/3/7 remain
+Hits), and its replacement finite recipe explicitly removes the imported patch
+and old owner-cue indices. Both use actual target endpoints without changing
+canonical target cells. Fixed source-local launch/contact pairs preserve their
+existing authored delivery time; positive damage feedback uses the same .38s
+Ray / .5s Acid contact offsets. Final native timing/view qualification is active.
+Acid's separately owned patch still requires actual disclosed cells; no residue
+is inferred from the Miss. Sorcerous Burst/Chromatic Orb optical alternatives
+retain their explicit missing selected-element disposition. See the current
+batch section below for exact validation limits.
 
 ### R2 weapon delivery integration
 
@@ -260,7 +645,7 @@ Use current typed gear/condition/event resources; no second assignment registry.
 | Intrinsic appearance | Gear.effects → NativeItems → exact disclosed equipped item/current holder; preserve its sprite sheet. The first qualified candidate is main-hand Ember Longsword; visual acceptance remains separate. |
 | Six coatings | Gear.effects selected by actual item-effect behavior/damage type and effect UUID. Ordered public membership/removal owns lifetime; no permanent intrinsic coat or invented Poisoned condition. |
 | Shillelagh / Divine Favor | Shillelagh retains its actor condition and affected_item_uuid. Divine Favor retains actor-owned rider semantics/current eligible item; a generic Hit cannot prove its Radiant rider. |
-| Magic Weapon / Sacred Weapon | Existing exact-item consumer; missing public memberships remain R5 dependencies. Never infer ownership from cast/Concentrating. |
+| Magic Weapon / Sacred Weapon | Delivered public item-effect memberships now own the authored exact-item sustain/removal path. Never infer ownership from cast/Concentrating; current receiver/output qualification remains separate. |
 | Finite contacts | Gear.impact_effects or the existing spell/action result path; one accepted actual event/contact. Searing/Branding/Divine Smite proposals remain unselected until their actual accepted result and replacement of the intended existing accent are qualified; never append a duplicate or create an indefinite coating. |
 
 Two concrete delivery defects govern the first family:
@@ -569,8 +954,11 @@ arcane-elemental stand-in, Draconic Spirit an armoured T-rex, and Deva a paladin
 all `status="stand_in"`). A disclosed actor and visible stand-in prove factual
 placement of an arrival accent; they do not provide the intended creature body
 or qualify a usable complete summon. Keep those source receipts bounded to
-arrival VFX. Per the user's priority correction, park further summon extensions
-while integrating existing usable bodies and actual gameplay contacts. Intended
+arrival VFX. Per the user's priority correction, keep placeholder-body
+extensions parked while integrating usable source families and actual gameplay
+contacts. The21 October resource batch reuses existing neutral arrival art
+only at actual births and disables fabricated timed review departures; it does
+not create or qualify another creature body. Intended
 creature art/rigs remain R8 gaps; do not invent bodies or count arrival coverage
 as creature completion. An unrelated imported
 Acid residue phase remains outside the heavy delivery gate; its absent runtime
@@ -608,13 +996,15 @@ selections and their receiving/replay qualification, not the eleven other
 bindings, final live R6 measurements or R8 acceptance. The full fast run at that intake passed **183/183**, receipt
 `.runtime/tests/20261020T163620.423896Z/summary.json`.
 
-The other eleven alternatives are installed and unselected. Conjure Animals/
-Fey/Fiend have real descendant body/entry admissions, but their old recipient
-cues are not joined to those actual births. No target is invented from the
-empty SpellFact target. Their assembled source also includes timed review
-sections rather than a terminal-owner setter; qualify an actual admission/
-finite phase with the existing ActorBirthInputs seam before selecting it.
-This is remaining client/source phase work, not a request for an engine field.
+The historical other-eleven alternative list is superseded by the current
+content inventory. Conjure Animals/Fey/Fiend now use the existing prepared
+neutral manifestation through actual descendant actor births, with their
+exact18/18/6 declared form sets. Their assembled fixed arrival/departure studies
+remain inspectable inactive alternatives. Elemental and Planar Ally now cover
+their8/3 declared forms through the same resource-selected consumer. No target
+is invented from an empty SpellFact target. The real witnessed terminal facts
+already exist; the source constructor's irrelevant original-birth requirement
+is the exact Factory§16 boundary. This is no new backend field request.
 Guardian still
 needs observed response/swing inputs; delayed-blast retirement its actual
 blast/item/footprint; Frigid Air its child spatial owner; Feast's scene is not
@@ -629,8 +1019,7 @@ maximum **1.065 ms**, including readiness (median .273/max .974), factory make
 (.020/.061), script (.014/.045), adaptation (.005/.020) and admission (.003/.010).
 These nested phases must not be added to their inclusive total; receipt
 `.runtime/intrinsic-weapon-batch/result.json`. They exclude startup/GPU warmup
-and whole-command feedback. All newly proposed intrinsic/coating art remains R8 review-pending; none changes
-the explicit Aid/Bless/False Life/Sacred Flame rejections. Sequential weapon
+and whole-command feedback. All newly proposed intrinsic/coating art remains R8 review-pending; the complete artwork inventory remains unreviewed by the human. Sequential weapon
 history still does not close R3 historical-body overlap. Final applicable suite
 qualification remains R7, after executable integration rather than ahead of it.
 This batch has plan-adherence, antislop and ownership review with no remaining
@@ -648,64 +1037,69 @@ An unresolved setup or recording failure stays an R4 investigation until its
 cause is isolated; the observed failed case alone does not assign that cause
 to the engine.
 
-| Dependency | Exact required correction/delivery | Affected obligations |
+| Dependency | Current disposition | Boundary / handoff |
 |---|---|---|
-| Backend terminal-lineage capture | Fix actual `lineage requires terminal root and child facts` in Branding/Searing Smite and Ensnaring Strike. Re-record the unchanged legal equipped cases on the promoted export. | Three baseline failures; related strike/tick proof. |
-| Discovery/setup: proven and unisolated cases | Spare the Dying's zero-HP target filtering and developer Test Bless's unregistered grant are proven engine/setup defects. Drop Prone not offered, Help Attack's stale second selection and absent Healing Incense after mace creation/equip are observed case failures: isolate current legal prerequisites, choices freshness and public results before assigning another engine change. | Required scenario/action safety; unresolved recording/setup work must not block unrelated client integration. |
-| Backend item-effect membership | Magic Weapon and Sacred Weapon mechanics exist, but their effects do not override snapshot_item_effect; the base returns null and item publication omits them. Populate that existing membership/retirement route. | Persistent exact-item VFX; client ordered membership/holder support already exists. |
-| Backend typed event/condition semantics | Correct proven selector/parent omissions. Populate the existing effective-handler/trigger/emitted-lineage transport for affected passives, plus any genuinely absent rider result. For grant/recipient/rider branches, inspect actual existing events/ancestry before requesting public data. | The named groups in §3; no new attribution framework or private actor-state dump. |
-| Backend Prismatic Spray result | Publish actual selected colour indices and their recipient/result ownership. Current execution keeps rolls locally and writes prose, not typed colour results. | Non-damaging and double-colour outcomes cannot be reconstructed from damage or parsed status text. |
-| Sleep playback/adoption | Installed recorded Sleep clips away when translated. A complete successor now includes an opt-in prepared approach: qualify it against the original translated/rotated/scaled case first; request further source repair only if that candidate cannot meet the contract. | Client adoption check available; installed defect is not silently fixed. |
-| Factory Insect Plague recording | Export actual swarm material-clock tracks and private-material ownership for all 3 recorded variants. | Three blank recorded outputs; do not silently switch the approved approach. |
-| Factory Counterspell | Supply a real arbitrary incoming-presentation/path/contact contract instead of the fixed study donor. | Three explicit interrupted-presentation cues. |
-| Factory held item | Current-holder rebinding for the same item/effect, plus source-qualified bounded permanent forward/back seek. | Continual Flame; actual transfer/holder changes without resetting owner age. |
-| Factory historical capture | Immutable evaluated native-hit capture/fence/lifetime; separately stable historical body-program clocks and appearance opacity. | R3 through actual live retention and replay; no mutable-current texture substitution. |
-| Factory finite Deafness | A compatible Deafened application source rather than hardcoded Blinded art. | One active option-only explicit gap. |
-| Factory/art authoring | Rework user-rejected Aid/Bless/False Life/Sacred Flame and tune remaining required spell release/position/scale/hold/removal and compatible weapon decorations. | R2/R8; source delivery alone is not acceptance. |
+| Glyph presence and contacts — assigned | The real disclosed owner explicitly selects existing neutral shell artwork; five elemental contacts consume actual attributed results. Richer armed/payload/hostile-trigger studies remain optional unselected art. | No outstanding backend/Factory request for these optional studies. Delivered2948 attribution and fresh five-form originals are retained separately from native/art acceptance. [Backend content blockers](BACKEND_CONTENT_BLOCKERS_2026-10-20.md). |
+| Backend observed hardware join — delivered |2948 publishes actual observed `anchor_item_uuid` for GasVent, JawTrap, PressurePlate, Tripwire and SpikeTrap. Client exact-link assignments and five native-fixture originals are present. | Source/current-original evidence is separate from rendering acceptance. Old missing-link packets retain their actual null values. Same backend handoff. |
+| Backend living zero-HP healing / HTTP preview categories — delivered |9f81 repairs healing discovery/preview and invalid-query error classification without changing the wire contract. The unchanged stabilize/heal/move journey now records successfully. | The original0c failure remains preserved. No recorder workaround, invented target or SDK generation. [Adoption and original capture](../.runtime/material-runtime-integration-20261021/backend-9f81-adoption.json). |
+| Backend legal original availability | Voluntary Drop Prone and slot-six Myrmidon discovery remain named limitations. Test Bless has actual native `developer` visibility and is outside production spell-baseline qualification; its failed original remains inspectable. | Developer fixture setup is not a required backend repair and real Bless does not substitute for its test semantics. Keep actual missing cases separate from repaired spell/item/selector/result fields. Same backend handoff. |
+| Factory prepared cloud lifetime — delivered | Five actual-owner source continuations are present in complete7ca; client resource assignments and owner consumption are written and source-published. | No additional API request; startup/history/readiness limits remain in [Factory status](FACTORY_REVIEW_2026-10-20.md). |
+| Factory terrain/wall geometry and lifetime — delivered | Actual terrain, wall/section, Gust, Spirit and Cage/Box source APIs are present in complete7ca; shared client assignments and geometry/owner consumption are source-published. | Actual source/native/live qualification remains separate; no fixed review state is promoted. Same reconciled Factory status. |
+| Factory connected footprint capacity — delivered | Complete7ca supplies genuine full-owner neighbors with disjoint bounded draw subsets, now consumed by the client partition path. | Source publication is separate from output qualification; original same-UUID/clock and seam rules remain. Same reconciled Factory status. |
+| Optional body-UV parity — unselected | Blight/Harm/Cone old actor-UV operations remain explicitly unselected under the supplied compatibility disposition; finite effects stay assigned. | No current missing Factory API request; Circle of Death already has its receiving source. Same reconciled Factory status. |
+| Factory witnessed summon departure — delivered | Complete7ca supplies independent terminal-only sources; client actual-terminal resource/consumer integration is written. | Actual cause/commit/position/support, no birth/body dependency. Source publication/output qualification remain separate. Same reconciled Factory status. |
+| Factory equipped receiver — current§17 | The actual current modular shader has no matching prepared equipped-weapon receiver program. Actual Ember contact draws; its independent equipped sustain refuses the exact current source key. | Prepare that unchanged source through the existing receiver bank; no old-program substitution. [Exact source/key/request](FACTORY_REVIEW_2026-10-20.md#17-prepare-equipped-weapon-receiver-for-the-current-modular-shader). |
+| Factory text-resource labels — current§18 | Fifteen selected readiness-phase labels use escaped Unicode misdecoded by the pinned text-resource loader. Runtime source publication succeeds; this is nonfatal metadata damage. | Literal UTF-8 regeneration preserving text/IDs/operands, through the complete sealed successor. Independent client-note escapes are not attributed to Factory. [Exact request](FACTORY_REVIEW_2026-10-20.md#18-serialize-source-resource-labels-as-literal-utf-8). |
+| Optional Cone native bank — current§19 | The unselected native approach retains pre-relocation preparation identity while its mapped base computes the installed identity. Ordinary recorded Cone remains separate. | Exact packaged-bank identity repair; do not activate the optional approach, normalize its identity or weaken the exhaustive gate. [Source proof](FACTORY_REVIEW_2026-10-20.md#19-rebase-packaged-cone-interface-identities-after-source-relocation). |
+| Default heavy-electric bank — current§20 | Call Lightning and Lightning Bolt default GPU phases name malformed original heavy banks; both actual replay failures are retained. Corrected banks are already delivered, and explicit client resource-operand selection is being completed without modifying the sealed package. | Preserve actual area/contact operands and original source art/material/clock; no automatic fixture-bank override or missing-backend request. [Exact source and same-family scope](FACTORY_REVIEW_2026-10-20.md#20-re-export-the-default-heavy-electric-bank-metadata). |
+| Art/audio | Twelve real summon bodies, authentic Draconic mouth/pose geometry, missing sound selections and actual human review. | [Body list](CREATURE_BODY_ASSET_GAPS_2026-10-20.md), [audio/art handoff](ASSET_AUDIO_REVIEW_2026-10-20.md). All artwork/audio remains unreviewed. |
 
-Sources: [backend setup](BACKEND_SPELL_SETUP_GAPS_2026-10-20.md),
-[Sleep proof](FACTORY_SLEEP_RECORDING_HANDOFF_2026-10-20.md),
-[swarm proof](FACTORY_SWARM_RECORDING_HANDOFF_2026-10-20.md),
-[modular weapon contract](MODULAR_WEAPON_EFFECTS_FACTORY_HANDOFF_2026-10-20.md).
-Old paragraphs describing 6 baseline failures are historical: Hellish Rebuke's
-new single-target original closes that earlier baseline setup, but does not
-retroactively turn an older broad live safety run green.
+Sleep, the GPU Insect Plague owner, general Counterspell inputs, held-item
+rebinding, historical capture, finite Deafness, Magic/Sacred memberships,
+Prismatic colours and the delivered selector/result families are adopted in
+source. Their older diagnoses remain in the linked historical handoffs; they
+must not be re-forwarded as missing current deliveries. Their complete current
+native/live/seek/performance qualification remains R3/R4/R6/R7 work.
 
-A producer request is not proof the producer changed. After a real promoted
-engine/whole sealed Factory delivery: inspect the relevant change, use the
-matching frozen export/package, re-record affected originals, integrate the
-consumer and rerun its affected output/safety checks. Do not overlay loose
-Factory files, rerun from the mutable engine or add runtime checksum gates.
+Optional continuing Spirit Guardians orbit/flap is an art/source continuation
+choice. Its deployed-pose hold and actual removal are already authored; no new
+client loop is inferred from the review animation.
 
-### Available complete successor; installation is not completion
+### Current complete successor; installation is separate from acceptance
 
-The corrected complete `runtime-weapon-receiver-46b8f47014566e6d` is installed
-through R2 above. It includes the sealed continuation42 predecessor:
-`runtime-continuation42-20261020-ecdf1a60ae59ee03`:
-[Factory handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/RUNTIME_CONTINUATION_PRODUCTION_HANDOFF_2026-10-20.md).
-Its archive retains 1,246 IDs/504 selections and adds the Sleep approach
-`runtime-prepared-followup-20261020`, explicitly opt-in and not seek-qualified.
-Package replacement preserves the 504 existing selection dictionaries. The
-Sleep study remains unselected: qualify placement, actual timeline seeking/looping,
-pixels and costs before choosing it. No new art approval follows installation.
+The complete `runtime-spike-seed-20261021-7ca62e2877bf5156` is installed,
+including the wall-child8b, public-admission976 and production-review repairs.
+[Current material/runtime handoff](/mnt/c/Users/tommaso/Documents/assets/VFXFactory/docs/MATERIAL_RUNTIME_HANDOFF_2026-10-21.md),
+[installation receipt](../.runtime/vfx-material-install-7ca62e/installation.json).
+Its1,246 clips,504 unchanged default selections,155 condition lifecycle families
+and60 public typed source rows are the active package. The complete predecessors
+remain preserved separately in `NDClientGodot-backups`. Frigid Air, Wind,
+actual-owner fields/connected surfaces and independent terminal sources are
+selected in client resources. Known source readiness/optical limits remain
+explicit under R6/Factory status. Package/source adoption does not establish
+output, responsiveness or human art acceptance; old8b receipts retain8b identity.
 
-Direct archive comparisons found actor_history.gd, item_flame.gd and
-interrupted_source.gd unchanged from the installed versions. The new
-Counterspell-labelled choice is `private/finger-counterspell-v193/full_sequence`,
-not the general incoming-presentation API. Do not close history, holder-transfer
-or Counterspell blockers from installing this successor. Its handoff also
-retains readiness work up to 46.864 ms per step and 14 of 42 new constructors
-above 2 ms; these are source/package measurements to account for during R6,
-not new client benchmarks or proof the package is already cheap in gameplay.
+Use the matching frozen producer and complete sealed package for later batched
+recording/qualification. Keep past originals' actual identities, retain failed
+receipts, and never overlay loose Factory files or execute the mutable engine.
+No extra recurring runtime checksum gate is required.
 
 ## 5. R4: Studio, scenarios and full rendering-method visibility
 
-The local library after the R2 cohorts has 299 cases: 285 recorded and 14 failed.
-These are cases, not capability completeness. All 299 index `studio_checked`
-flags are false; focused tests prove subsets separately. Therefore the index
-alone cannot establish either “none tested” or “all tested.” Finish the existing
-source/scenario/presentation/approval evidence join, rather than making another
-parallel catalogue or inferring pixels from a recording's existence.
+The current ordinary Studio Library is usable:357 recorded cases out of360,
+with voluntary Drop Prone, developer TestBless setup and Extend Intimidating
+Presence's actual `no_valid_targets` retained as failures.
+Historical originals retain their actual engine labels; same-wire playback and
+strict current engine/package output qualification are separate. The old
+299/285/14,331/312/19 and354/352/2 populations are preserved receipts, not today's Library
+status. Case counts and historical `studio_checked` flags do not establish
+capability completeness or artwork acceptance.
+
+The existing browser/evidence join is implemented. It keeps source/provider,
+scenario/reader safety, native/live/audio output and human review separate,
+retains missing engine/package identity and leaves predecessor output historical.
+Current work is completing/reconciling actual coverage and interaction/output
+qualification through that browser, not building another catalogue.
 
 ### Required remaining scenario/output matrix
 
@@ -718,41 +1112,55 @@ cases; add only missing branches. Do not create every combinatorial pair.
 | Combat/reactions | Actual hit/miss/crit, attack→applied damage→hurt→death ordering on every recipient; resistance/immunity/vulnerability; lethal and surviving OA interruptions; Shield melee/ranged/Magic Missile, Counterspell, Hellish Rebuke, Protection/Parry/smite; actual reaction removal/normal continuation. |
 | Survival | Temp HP, heal, dying/death saves/stabilize/revive/shake-awake; no repeated death animation after terminal state; real life transitions rather than initial preconfigured outcomes. |
 | Conditions | Cast/application/hold, held movement, actual removal/restored body; concentration drop/break, suppression/disclosure, overlap/remove→reapply, original departure. Hidden crouch/opacity and actual reveal; Fly appearance and appropriate locomotion; geometry/head/material/pose/history with current outfit/equipment. |
-| Spells | Required outcomes/forms/upcasts and actual multi-recipient/multi-projectile events, chosen source phases and own clocks. Finish 13 option originals, saved Dissonant, true damage/rider/retained-repeat branches rather than adding random replays. |
+| Spells | Reconcile actual required outcomes/forms/upcasts and multi-recipient/multi-projectile events with current originals and native receipts, chosen source phases and own clocks. Exact options, saved outcomes, attributed riders and retained-repeat branches stay distinct; no random replay or source-only count substitutes for output coverage. |
 | Items/constructs/summons | Real gear/coating/impact/drop/transfer/removal, Flame Blade actual item overlay, Spiritual/Arcane Weapon/Sword, Flaming Sphere action/contact/despawn, delayed/freezing payload release/detonation, granted/summoned actions. |
-| Walls/surfaces/environment | Multi-position walls/sections/boundaries; traversal/elevation/destruction, doors/chests/loot/torch/levers/traps; actual oil/fire/water/ice/electric/Web/cloud/vegetation transitions; genuine source creation and actual cell/owner retirement. Water/Wet currently proves hold, not rainfall/destroy/Wet removal. |
+| Walls/surfaces/environment | Multi-position walls/sections/boundaries; traversal/elevation/destruction, doors/chests/loot/torch/levers/traps; actual oil/fire/water/ice/electric/Web/cloud/vegetation transitions; genuine creation, changing coverage and cell/owner retirement. Earlier Water/Wet receipts retain their actual package/branch scope; current source integration does not qualify every current branch. |
 | Creatures/classes | Current capability inventory, including creature-specific actions/passives: appear/move/attack/damage/death and real class trigger/result owners. A creature portrait or idle minion is not action presentation. |
 
-Known 14 failed case IDs are all in Appendix B. Duplicate failures for one
+The historical failed case IDs are retained in Appendix B. Duplicate failures for one
 backend defect are not separate engineering systems. Every required ID remains
 reachable with truthful failure/missing status; a blocked recording does not
 prevent playback of other ready capabilities.
 
-### Remaining Studio delivery and interaction acceptance
+### Implemented Studio source work and remaining interaction/output acceptance
 
-- Finish one capability-organized browser, multi-subject links and compact
-  filters/counts. Display source, factual/provider, scenario/output and human
-  review separately. Persist/link native test witnesses where they actually
-  qualify a case; never colour a case green because a source was loaded.
-- Reconcile the existing offline coverage report's evidence inputs. Its safety
-  lookup hardcodes historical paths and omits the explicit current
-  `shared-provider-recording-safety-second-checkpoint/report.json` path; its UI
-  input is the older generated report already qualified in §6. Select the actual
-  intended receipt with its engine/package/completeness, keeping reader safety,
-  native pixels, live gestures and visual approval separate. This is an offline
-  reporting correction, not a new runtime validator or a prerequisite for
-  integrating effects. The saved aggregate incorrectly reports safety as
-  `not_available`; the script's current fallback now contains the newer result.
-  Refresh the stale aggregate from explicit receipts rather than rerunning
-  completed gameplay merely to recreate evidence. See Appendix C.
-- Complete tracks for each actual caster **and recipient**: body/pose/motion,
+- The capability browser already has multi-subject links, compact filters/counts
+  and separate source, factual/provider, scenario/output and human-review facts.
+  Native witnesses join only to their actual case and engine/package scope;
+  loaded sources and historical receipts do not qualify current pixels.
+- The offline evidence reporter accepts explicit safety/native/live/UI receipts,
+  includes the previously omitted second reader checkpoint, preserves historical
+  identities and reports zero-start audio receipts accurately. Refreshing output
+  after the final cohort remains useful; the old hardcoded lookup/false
+  `not_available` diagnosis is repaired source work, not a missing method.
+- The native spell audit now traverses actual default/variant EffectUses with
+  exact cue source, selected context and dispatch/owner policy. It no longer
+  drops native cues or creates duplicate inherited variant field identities.
+  Non-Factory source methods also expose the actual native program, capture
+  aliases, sockets, affine windows, finite clocks and public-fact selectors.
+  Actual occurrence witnesses stay separate; neither mapping approves pixels.
+- Existing tracks expose each actual caster **and recipient**: body/pose/motion,
   material/flash/opacity/outline, geometry/history/appearance, weapon/item,
   native VFX/source clocks, authored contacts/audio and meaningful light on/off.
-  Missing work needs an inspectable reason. Hide routine exploration/accounting
-  and group movement samples/missiles rather than pages of tiny empty rows.
-- Finish dedicated composed-body source previews where currently absent
-  (`native_spell_channels.gd` explicitly reports this gap). Keep substantial
-  preview area, useful horizontal time scale and cached on-disk thumbnails.
+  Missing work retains an inspectable reason. Routine exploration/accounting is
+  compacted and movement/missile rows remain grouped without rewriting causality.
+  Remaining family/output coverage is the matrix above; source visibility alone
+  does not establish it.
+- Composed native-hit body thumbnails retain the existing production extractor.
+  Actual recorded item/weapon and input-bearing condition previews now restore
+  their exact index/sample in one reused production pane, on demand with bounded
+  cancellable restoration and readiness/draw fencing. Completed restores wait
+  while playback is running. The same generic path now includes recorded spatial
+  owners/fields and compatible world-source components, with exact current
+  owner/private component, real anchor/cells/support and published placement.
+  A paused displayed pane freezes while the restored pane temporarily publishes
+  its actual receiving light/ground cut; completion/cancel/reset/resume restores
+  the displayed owner before thaw. No donor/current-idle actor, synthetic field,
+  second renderer or independent clock is introduced. Full-context framing
+  avoids silently clipping held/field artwork. Dropped gear, item-effect/contact,
+  world/residue and native source methods expose their authored operands. These
+  previews remain source inspection, not accepted output or artwork evidence;
+  the affected current qualification is still in progress.
 - Requalify navigation/selection, draggable playhead, reverse seek, automatic
   bounded looping, short meaningful lead/tail, follow/autoscroll for recording,
   camera reuse without rebuilding tracks, divider/modal input isolation and
@@ -783,37 +1191,44 @@ from the game UI; retain diagnostics through the requested tools.
 
 Audio is already a real timeline/render consumer, with authored contact markers,
 stream/voice ownership and native replay tests. It is **not complete game audio**.
-The old coverage audit covers 57 audiences, not the current 299 cases. Finish the
-current-corpus assignment/contact/mix audit and missing selected audio rather
+The old coverage audit covers 57 audiences; the later 331-case/655-prefix receipt
+is separate historical evidence. Finish current assignment/contact/mix work and missing selected audio rather
 than drawing waveforms without a played source.
 
 Known categories without complete authored coverage include damage voices,
 window traversal/contact, general condition application/removal, spell impact,
 additional floor/gear steps, other ability/spell cues and torch extinguishing.
-The older receipt also named an unqualified weapon socket swing, late-lethal
-jump-end contacts and unreviewed creature foot contacts; remeasure their current
-scope rather than copying old occurrence counts. Keep sound on actual first
+The latest source batch authors Goblin direct-arc takeoff/landing and modular
+Run/Rolling connector contacts through actual source crossings, motion
+fractions and sampled lift. Goblin Run still needs authenticated planted-foot
+frames. Two historical terminal Blue-view rows have no disclosed whole arc or
+terminal ground endpoint and retain source-admission refusals; they are not
+missing landing audio files. These changes remain unvalidated for listening.
+Keep sound on actual first
 foot/ground/strike/release frames, original source offsets, pause/seek/loop rules,
 selected-faction hearing, licensed source credits and explicit missing choices.
 Mix/listening acceptance is separate from native `play()` dispatch. A sound
 artist can replace authored cues/offsets without changing the reducer/renderer.
 
-Latest UI-art gate has zero missing files or shipping-map mismatch, but 103
+The earlier UI-art receipt had zero missing files or shipping-map mismatch, with 103
 generic placeholder assignments across action/class/condition/trait/spell/feat
 owners. Some are intentionally internal, not requests to paint 103 new icons.
-Current spell roots have assigned art; the developer fixture and old partial
-Ice Knife burst remain explicit placeholders. All 232 creature portraits and 432
-selectable player portraits resolve; 53 portrait bindings and 63 creature bodies
-remain stand-ins. Review/replace the required art or retain only an explicit
+Eight later delivered icon assignments (including Ice Knife Burst) and the
+existing Skeleton Warrior body are now source-corrected; their earlier placeholder
+labels/counts are historical. The developer fixture remains internal. That
+receipt resolved 232 creature portraits and 432 selectable player portraits;
+its 53 portrait and 63 body stand-in flags are historical populations, not a
+fresh missing-art count. Review/replace the required art or retain only an explicit
 permitted stand-in disposition. The older generated UI report predates Wet and
 four class-feature entries; use the latest actual gate summary, not its stale
 98-placeholder count. No native runtime architecture is missing because an
 icon is a placeholder.
 
-Aid, Bless, False Life and Sacred Flame are still **not accepted by the user**.
-Other outstanding required timing/placement/casting-hand/animation-release and
-cast-vs-persistent strength reviews stay authoring work. Installation, a valid
-resource or a test's nonzero pixel count cannot mark them visually accepted.
+**All artwork and audio remain unreviewed by the human.** No named four-effect
+subset or old acceptance/rejection label narrows that full review. Placement,
+casting-hand/animation-release, cast-versus-persistent strength, timing and mix
+still require actual review. Installation, a valid resource or a test's nonzero
+pixel count does not accept any artwork.
 Preserve approved lighting/normal decoding/colours/shadows/tint/wall behavior
 while doing this; do not use a rendering rewrite as a substitute for finishing
 these consumers.
@@ -957,6 +1372,143 @@ work, then the applicable complete inventory at the final checkpoint.
   clean committed source checkpoint. No claim that all visuals are accepted or
   all performance targets met while the corresponding rows remain open.
 
+## Current takeover batch — implemented consumers, qualification still open
+
+The user requested parallel family batches, continued implementation during
+validation, and forwardable external defects. Same-task agents share this main
+checkout; engine/Factory sources remain read-only. The following supersedes the
+affected older snapshots; it does not close the eight whole deliverables above.
+
+- **R1:** 13 genuine two-seat originals now feed the ordinary result/release/
+  spatial paths for Freezing Sphere, Delayed Blast Fireball, five Exhale elements,
+  four Divine Word outcomes and attributed Vitriolic END damage. The native
+  cohort expects **66 components**: 44 new finite contacts/outcomes, eight existing
+  initial Acid contacts, two immediate Freezing blasts, two exact retired-bead
+  blasts, six accepted releases and four independent observed ice owners.
+  Missing grant identity, payload power, Blue portable destination and three
+  unattributed delayed packets remain unavailable. This is supported consumer
+  integration, not complete payload/grant family lifecycle qualification.
+  Latest native receipt `.runtime/tests/20261020T190119.388544Z/` has
+  **1,321 checks / four failures**, zero script/engine errors: three camera-3
+  pixel controls and one cold preparation timeout. Earlier startup ownership
+  failures are repaired; current failures remain open. External Factory GPU
+  activity prevents treating that run as quiet timing evidence.
+  [Actual originals, consumers and limitations](EVENT_FAMILY_CONSUMERS_2026-10-20.md).
+- **R2:** all 130 imported native alternatives have 22 exact predicates or 108
+  explicit dispositions. Seventeen real projectile originals include actual Ray
+  Miss, Acid Crit Miss/Hits and all 13 chosen-element declarations. Ray/Acid
+  miss placement uses actual composed sprite edges and the current camera; the
+  canonical target is unchanged. Native optical evidence passed **648/0**,
+  `.runtime/tests/20261020T182847.775483Z/native_spell_variant_render_checks.log`.
+  Exact source-local timing is authored for 62 delivery cues. Six-family timing,
+  HP/body contact and refused-selector controls pass **1,522/0** in the current
+  consolidated headless run. Chromatic/Sorcerous fixed default colours now refuse
+  the absent public chosen-element operand, preserving their factual cast/body/
+  result tracks. No damage/outcome/case-name inference selects their colour.
+- **R2 created weapons:** Flame Blade completes the thirteenth selected intrinsic
+  assignment using existing modular flame sustain/finite Fire contact on the
+  actual created Scimitar. Its unchanged two-seat original covers creation,
+  movement/Hit, unequip, same-item re-equip/Hit, actual expiry and plain Longsword
+  replacement/Crit. The expanded intrinsic cohort passed **70,671/0**, zero
+  script/engine errors, `.runtime/tests/20261020T181838.195085Z/`. Together with
+  the separately qualified Ember Longsword this covers all 13 selected candidates;
+  the final native regression pass remains separate from this bounded receipt.
+- **R4 — historical20 October receipt:** that Library contained331 cases,
+  312 recorded/19 failed. The current357/360 population and implemented source
+  follow-through are described in§§1/5 above. Preserved failed Dragon prefixes
+  remain inspectable with their actual original status; newer successful cases
+  do not rewrite those bytes.
+  Browser source/scenario/output/art facts, filters and saved package scope stay
+  separate. Human inspection follows the actual authored occurrence approach,
+  and reopening preserves the exact scenario without automatic playback.
+  Composed body-hit thumbnails passed 473 native checks; latest actual Library
+  navigation passed **84/0**, `.runtime/tests/20261020T190119.388544Z/`.
+  [Studio evidence and remaining scope](STUDIO_R4_BROWSER_PREVIEW_BATCH_2026-10-20.md).
+- **R5:** exact forwardable [backend defects](BACKEND_REVIEW_2026-10-20.md),
+  [Factory source/ownership/history requests](FACTORY_REVIEW_2026-10-20.md), and
+  [asset/audio omissions and acceptance](ASSET_AUDIO_REVIEW_2026-10-20.md) remain
+  available while independent client work continues. Current native profiling
+  locates 429–512 ms cold work inside source readiness; per-clip attribution and
+  external GPU contention are disclosed rather than guessed.
+- **R6:** sensory folding now reuses its existing visible mask/point scan,
+  performs packed seen-mask union, and shares one linear light/hazard alignment.
+  Full integer coordinates, canonical bytes, retained cuts and four-seat Python
+  reference oracles remain covered. The value-column microbenchmark improved
+  from 129 ms to 31 ms across 60 real cuts; this is isolated codec evidence.
+  Startup roles retain their exact CPU/GPU/fixture ownership until first
+  publication, then release through existing interest accounting. Focused media
+  qualification passed 6,524/0. No new cache/manager/reducer or presentation hold
+  was added. Final live improvement is still unmeasured after these changes.
+- **R7:** current consolidated **194 fast + 27 headless gates** completed
+  **219 passing / two failed**, `.runtime/tests/20261020T190713.065786Z/`.
+  Two intentional authoring-negative errors remain narrowly allowlisted;
+  other diagnostics are not concealed. The two failures now pass in the
+  nine-row resource/preparation rerun,
+  `.runtime/tests/20261020T191845.764204Z/`, zero script/engine errors. That repair
+  uses the same builders/retirement on the scene thread only for the installed
+  headless dummy renderer's non-thread-safe material storage; Forward+/Vulkan
+  workers remain unchanged. The current normal-profile lifecycle test is also
+  repaired and passes 54/0 headless, raising the fast inventory to195.
+  The **182 native gate** completed **175 passing / seven failed** at
+  `.runtime/tests/20261020T190820.789395Z/`. Exact bank admission, startup test
+  setup, Wet inventory expectation and variant-test method parsing have source
+  repairs pending the consolidated rerun. Sleep has two actual empty-output
+  failures. UI clipboard access failed at the Windows boundary. Native event
+  coverage retains **1,321 checks / five failures**: four camera3 captures
+  recorded explicitly unready recipient geometry after a late camera move,
+  plus one actual preparation timeout. The camera-readiness harness correction
+  preserves all pixel assertions; no passing rerun is claimed yet. Seven native
+  rows also require serialized reruns after an aborted competing candidate
+  invocation; `.runtime/checks/native-gpu-overlap-rerun.json` names every row
+  and retains the overlap interval. Full current live/all-spell safety,
+  repeated equipment and three quiet final trials remain unfinished.
+  Four removed wire9 observer/reducer tests are explicitly retired with named
+  current independent vector/spool/retained/journal successors; their original
+  125-case oracle is not claimed rerun. Eight missing producer precomposition
+  controls remain unqualified in `sdk_optical_sources_checks`. No retirement
+  counts as a passing test. Other current legacy responsibility remains open.
+
+The next consumer batch binds the existing finite Glyph ground trace and
+Flaming optical seed to actual public spatial-creation/actor-birth admissions
+through the ordinary compiler and Play paths. Both seats retain separate rule,
+birth/creation, optical admission and publication identities, with the later
+actual commit owning source age zero. Structured/human Studio inspection shows
+that evidence without claiming rendered output. Source and two shared gates
+are frozen; a single ordinary source rebuild and actual headless/native output
+qualification are pending. Armed Glyph/payload and Flaming body/trail/contact
+remain separate obligations.
+
+Whole-reader evidence before the latest codec/media changes inventories all
+**189 baselines: 184 available pass, five original backend/setup failures**, zero
+script/engine errors and warnings. Its saved report
+`.runtime/takeover-reader-final-20261020/report.json` is complete but unqualified
+for all 189. The fresh post-codec whole-reader run at
+`.runtime/takeover-reader-post-codec-20261020/report.json` independently confirms
+189 inventoried / 184 passed / five unavailable, zero tested-reader failures,
+script/engine errors or warnings. It is complete and explicitly unqualified for
+all 189.
+
+The complete audio attribution audit covers 331 cases / 655 available audience
+prefixes, retains all 19 failed originals and finds zero missing selected files.
+Ten exact physical weapon aliases add 40 genuine attack audio rows; final totals
+are 1,531 audio inspection rows and 2,098 disclosed unassigned event rows.
+The 388 explicit unassigned cues include 384 human-disabled concentration/Magic
+Missile rows and four unassigned extinguish rows. Its 78 contact/timing rows
+predate the three new movement-contact assignments and have not been rerun.
+The remaining genuine marker/source boundaries and sound/mix choices are in the
+[asset/audio delegation](ASSET_AUDIO_REVIEW_2026-10-20.md).
+
+Last quiet Gallery route, before the packed codecs/startup-role fix:
+**313/0, 27 actual commands**, zero trace evictions,
+`.runtime/player-runs/20261020T183420.057914Z`. Across 7,537 interaction frames,
+p50/p95/p99/max were **6.127/12.581/16.175/53.175 ms**; 61 frames exceeded
+16.667 ms and one exceeded 33.333 ms. Door first animation was 223.854 ms,
+Fireball 189.993 ms, initial room movements 209.446–217.017 ms. These miss the
+existing performance targets and establish no final speedup or acceptance.
+
+None of these receipts establishes human approval of any artwork/audio, closes R3
+immutable overlapping history, or qualifies the complete native/live inventory.
+
 ## Appendix A — exact declaration-level default cue flags (snapshot, 57)
 
 This is the complete 57-flag default population grouped by typed owner. Cue
@@ -1012,16 +1564,21 @@ gaps + 18 explicit gaps + 11 disabled + 8 excluded probes. The 732 typed sources
 746 joined ability subjects are not all game capability IDs, and no one should
 turn this distribution into a completion percentage.
 
-## Appendix B — all 14 failed current library case IDs
+## Appendix B — historical 19 failed Library case IDs
 
-Multiple cases can expose one backend defect. These are still failed requirements,
-not extra independent systems, and original successful prefixes remain usable.
+This is the preserved20 October331-case snapshot, not today's failure list or
+an open backend/authoring request. Current producer repairs and successful
+originals supersede its missing-field conclusions without changing these saved
+failed receipts. The active Library has357 recorded/360 cases; voluntary
+Drop Prone, developer TestBless and the new actual Extend target-admission
+failure remain failed. Multiple historical failures
+can expose one repaired defect; they are not separate current systems.
 
-| Exact case | Unresolved boundary |
+| Exact historical case | Boundary in that original receipt |
 |---|---|
 | `spell.branding_smite/baseline` | Native terminal-lineage capture fails. |
 | `spell.ensnaring_strike/baseline` | Native terminal-lineage capture fails. |
-| `spell.fixture.test_bless/baseline` | Developer spell cannot be granted at encounter setup. |
+| `spell.fixture.test_bless/baseline` | Historical failed developer-fixture setup; explicitly outside production baseline qualification by native descriptor visibility, not a required backend repair. Original unchanged. |
 | `spell.searing_smite/baseline` | Native terminal-lineage capture fails. |
 | `spell.spare_the_dying/baseline` | Actual dying target excluded from discovery. |
 | `action.class.paladin.sacred_weapon/expiry` | Required condition/item membership absent. |
@@ -1033,14 +1590,23 @@ not extra independent systems, and original successful prefixes remain usable.
 | `class_feature.cleric.destroy_undead/committed_turning_result` | Actual result lacks required typed passive attribution. |
 | `class_feature.cleric.blessed_healer/actual_self_heal` | Actual result lacks required typed passive attribution. |
 | `spell.magic_weapon/equipped_use_retire_replace` | New fully committed equipped/use/retire/replace original still lacks enchantment membership. |
+| `spell.dragons_breath/acid_grant_exhale_end` | Accepted Exhale/results are retained; original requirement fails because public retained grant-owner membership is absent. |
+| `spell.dragons_breath/cold_grant_exhale_end` | Accepted Exhale/results are retained; original requirement fails because public retained grant-owner membership is absent. |
+| `spell.dragons_breath/fire_grant_exhale_end` | Accepted Exhale/results are retained; original requirement fails because public retained grant-owner membership is absent. |
+| `spell.dragons_breath/lightning_grant_exhale_end` | Accepted Exhale/results are retained; original requirement fails because public retained grant-owner membership is absent. |
+| `spell.dragons_breath/poison_grant_exhale_end` | Accepted Exhale/results are retained; original requirement fails because public retained grant-owner membership is absent. |
 
-## Appendix C — evidence boundaries and documentation corrections
+## Appendix C — historical evidence boundaries and documentation corrections
 
-- Current code/source snapshot: `fb3a3760`; no application/asset change, backend,
-  Godot test or profiling run belongs to preparing this document.
-- Latest fast receipt: `.runtime/tests/20261020T112707.141470Z/summary.json`.
-  Latest scoped native: `.runtime/tests/20261020T112708.503903Z/summary.json`.
-  Latest issued-command Gallery: `.runtime/tests/20261020T113039.907232Z/summary.json`.
+These are the original20 October document's evidence boundaries. The current
+source/Library/qualification status is in§§1/3/5/7/8; the dated receipts below
+are not relabelled as the current checkpoint.
+
+- Original code/source snapshot: `fb3a3760`; no application/asset change, backend,
+  Godot test or profiling run belonged to preparing that original document.
+- That snapshot's fast receipt: `.runtime/tests/20261020T112707.141470Z/summary.json`.
+  Scoped native: `.runtime/tests/20261020T112708.503903Z/summary.json`.
+  Issued-command Gallery: `.runtime/tests/20261020T113039.907232Z/summary.json`.
 - Latest actual UI count comes from `ui_art_coverage_checks.log` in the fast
   receipt, not the older generated art report. Source/placeholder, scenario,
   native output, audible output and human acceptance are different facts.

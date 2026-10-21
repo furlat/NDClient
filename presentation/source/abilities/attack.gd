@@ -6,6 +6,7 @@ extends Resource
 const BodyUse = preload("res://presentation/source/abilities/body_use.gd")
 const AttackVariant = preload("res://presentation/source/abilities/attack_variant.gd")
 const Feedback = preload("res://presentation/source/abilities/feedback.gd")
+const NativeSource = preload("res://presentation/source/abilities/native_source.gd")
 @export var id: String = ""
 @export var body: BodyUse
 ## Outcome texts: hit, miss, critical, critical_miss (absent: none).
@@ -17,6 +18,12 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 @export var trail_outcomes: PackedStringArray = []
 @export var trail_behaviours: PackedStringArray = []
 @export var trail_points: String = ""
+## Source choice and native source-clock window for the measured weapon
+## path. Actual body contact fits this authored source time to the same track.
+@export var trail_source: NativeSource
+@export var trail_impact_source: NativeSource
+@export var trail_contact_seconds: float = 0.0
+@export var trail_end_seconds: float = 0.0
 @export var trail_unported: Dictionary = {}
 ## Measured arrow release sockets per variant id (res path relative to res://assets/).
 @export var variant_sockets: String = ""

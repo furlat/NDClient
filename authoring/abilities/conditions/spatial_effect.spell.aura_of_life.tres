@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_ybvy4")
 id = "spatial_effect.spell.aura_of_life"
+disposition = "state_only"
 icon = SubResource("Resource_gaq5w")
+
+status = "internal"
+notes = "This spatial UUID controls actual membership and admission. The main visible field is already owned by condition.spell.aura_of_life.owner through the delivered standalone main-owner source; each actual benefit condition owns its recipient lifecycle separately. Do not draw a duplicate field from this region or a cast timer. All artwork is unreviewed."

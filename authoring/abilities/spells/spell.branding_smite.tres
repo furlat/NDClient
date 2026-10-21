@@ -21,7 +21,8 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_3cbtq")
 clip = "bg3-36/branding-smite/branding_smite_native/impact"
 role = "attached"
-at = "release"
+scope = "cast"
+at = "event.start"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.52
@@ -32,7 +33,9 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "weapon_component", "outcome": "damage", "geometry_actor": "caster", "damage_type": "Radiant", "damage_source_ids": ["spell.branding_smite"], "component_path": ["smite"], "input_field": ""}
 extra = {
+"input_policies": {"condition_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_condition"}, "tick_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_tick"}},
 "delay_seconds": 0.0,
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -218,11 +221,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_s2di8"]
 script = ExtResource("6_1givs")
 id = "branding_smite_miss_native"
+dispatch_gap = "negative_admission_review_miss_has_no_applied_payload"
 kind = "outcome"
 selection = "branding_smite_miss_native"
 effects = Array[ExtResource("1_3cbtq")]([SubResource("Resource_qq0rf"), SubResource("Resource_hmvtr"), SubResource("Resource_lp3fs")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Factory Miss study is a negative payload-admission control, not an additional impact or condition on a missed attack. Keep it inspectable without replaying its review strike, condition or tick packets. Positive attributed smite contacts remain unfinished separately."
 
 [sub_resource type="Resource" id="Resource_7ppfj"]
 script = ExtResource("1_3cbtq")
@@ -323,11 +328,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_sow1j"]
 script = ExtResource("6_1givs")
 id = "branding_smite_blocked_magic_native"
+dispatch_gap = "negative_admission_review_blocked_payload_not_bound"
 kind = "outcome"
 selection = "branding_smite_blocked_magic_native"
 effects = Array[ExtResource("1_3cbtq")]([SubResource("Resource_7ppfj"), SubResource("Resource_n4h7j"), SubResource("Resource_njc45")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Blocked-magic study remains a negative admission alternative. A cast or aggregate damage does not establish an accepted Branding payload, suppression outcome or recipient condition; exact actual strike and recipient admission must own any selected phase."
 
 [resource]
 script = ExtResource("4_xqpmu")

@@ -3,6 +3,7 @@ extends RefCounted
 const Sources=preload("res://presentation/body_sources.gd")
 const Builder=preload("res://tools/presentation_build/characters.gd")
 const BodyIndex=preload("res://presentation/resources/body_source_index.gd")
+const Equipment=preload("res://tests/weapon_effect_support.gd")
 const ITEM="4df65b6b-e8c4-42e6-928d-26e74b579ea1"
 const EFFECT="f13a6583-c3c4-42d8-9fb9-eeff69686626"
 static func cache()->Dictionary:
@@ -10,7 +11,7 @@ static func cache()->Dictionary:
     var selected:Resource=current.index.duplicate(false)
     var staged:Resource=BodyIndex.new()
     var fixture:Resource=load("res://tests/fixtures/dynamic_weapon_overlay.tres")
-    Builder._equipment({"index":staged},{fixture.id:fixture})
+    Equipment.equipment(staged,{fixture.id:fixture})
     selected.item_effects=staged.item_effects
     return {Sources.KEY:{"index":selected,"loaded":current.loaded}}
 
@@ -25,6 +26,13 @@ static func settle(tree:SceneTree,world:Node,ids:Array=[],source_refusals:Array=
         # Drive ordinary preparation, but observe this published cut rather
         # than waiting for an unrelated future queue entry while paused.
         world.playback_prepared()
+        # The source's exact receiver program table is immutable in this run.
+        # A missing offline artifact cannot become ready by waiting more frames.
+        if world.displayed_components.any(func(component):
+            var diagnostic:Dictionary=world.component_renderer.native_spells.diagnostics.get(component.id,{})
+            return diagnostic.get("status")=="partial" and is_equal_approx(float(diagnostic.get("requested_age_ms",-1.0)),float(component.get("age_ms",-2.0))) \
+                and str(diagnostic.get("reason","")).begins_with("actual_receiver_program_needs_offline_preparation:")):
+            return false
         if displayed_ready(world,ids,source_refusals):
             await frame(tree)
             if displayed_ready(world,ids,source_refusals):return true

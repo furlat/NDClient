@@ -2,6 +2,7 @@ extends RefCounted
 ## Decorations share the actual item's membership, never its body. Intrinsic
 ## uses follow gear; selected dynamic uses follow exact public effect UUIDs.
 ## Actor Conditions and finite spell/action cues retain their existing owners.
+const Authoring=preload("res://presentation/authoring.gd")
 const Bodies=preload("res://presentation/body_sources.gd")
 const World=preload("res://presentation/world.gd")
 const Effects=preload("res://presentation/effect_package.gd")
@@ -9,7 +10,11 @@ const WEAPON_SETS={"MELEE_MAIN":"melee","MELEE_OFF":"melee","RANGED_MAIN":"range
 
 static func definitions(cache:Dictionary)->Dictionary:
     var index:Resource=Bodies.index(cache)
-    return {} if index==null else index.item_effects
+    var result:Dictionary={} if index==null else index.item_effects.duplicate(false)
+    var attachments:Dictionary=Authoring.load_data("catalog/item_attachments.json",cache)
+    var global_uses:Array=attachments.get("nativeEffects",[])
+    if not global_uses.is_empty():result["*"]=global_uses
+    return result
 
 static func interested(owners:Dictionary,delta:Dictionary,cache:Dictionary)->bool:
     if not owners.is_empty():return true
@@ -45,7 +50,19 @@ static func membership(item:String,state:Dictionary)->Dictionary:
     return locations(state).get(item,{})
 
 static func active(owner:Dictionary,_state:Dictionary)->bool:
-    return owner.get("member_present",true) and owner.get("location",{}).get("kind")=="held"
+    # The exact held item may finish its source-owned removal after its actual
+    # membership ended. samples() bounds this by the declared removal phase.
+    return (owner.get("member_present",true) or not owner.get("definition",{}).get("item_lifecycle",{}).is_empty()) \
+        and owner.get("location",{}).get("kind")=="held"
+
+static func lifecycle_phases(cue:Dictionary)->Dictionary:
+    var declared:Dictionary=cue.get("item_lifecycle",{})
+    if declared.is_empty():return {}
+    var result:Dictionary={}
+    for phase in ["application","sustain","removal"]:
+        result[phase]=Effects.clip(str(declared.get(phase,"")))
+        if result[phase].is_empty():return {}
+    return result
 
 static func _matches(cue:Dictionary,member:Dictionary)->bool:
     return not str(cue.get("item_effect_behavior_id","")).is_empty() \
@@ -65,7 +82,7 @@ static func _admit(owners:Dictionary,item:String,item_id:String,cue:Dictionary,m
     var after:Dictionary=prior.duplicate(false)
     if prior.is_empty() or not prior.get("member_present",false):
         after={"id":id,"item_uuid":item,"item_id":item_id,"definition":cue,"start_ms":at_ms,"end_ms":INF,
-            "source_event_uuid":event_uuid,"location":{},"dynamic":true}
+            "source_event_uuid":event_uuid,"location":{},"dynamic":true,"initial":event_uuid.is_empty() and is_zero_approx(at_ms)}
     after.member=member;after.member_present=true;owners[id]=after
     return true
 
@@ -93,7 +110,7 @@ static func observe(owners:Dictionary,state:Dictionary,at_ms:float,cache:Diction
         var item_id:String=_kind(state,item,current.get(item,{}))
         var after_members:Dictionary={}
         for member in row.after:after_members[str(member.effect_uuid)]=member
-        for cue in available.get(item_id,[]):
+        for cue in Array(available.get(item_id,[]))+Array(available.get("*",[])):
             if str(cue.get("item_effect_behavior_id","")).is_empty():continue
             for member in row.before:
                 if _matches(cue,member) and not _matches(cue,after_members.get(str(member.effect_uuid),{})):
@@ -107,7 +124,7 @@ static func observe(owners:Dictionary,state:Dictionary,at_ms:float,cache:Diction
     for item in current:
         var location:Dictionary=current[item]
         var item_id:String=_kind(state,item,location)
-        for cue in available.get(item_id,[]):
+        for cue in Array(available.get(item_id,[]))+Array(available.get("*",[])):
             if not str(cue.get("item_effect_behavior_id","")).is_empty():
                 for member in state.get("items",{}).get(item,{}).get("effects",[]):
                     if not _matches(cue,member):continue
@@ -130,7 +147,9 @@ static func observe(owners:Dictionary,state:Dictionary,at_ms:float,cache:Diction
         if owner.get("dynamic",false) and current.has(owner.item_uuid) and not admitted.has(id):
             changed=_remove(owners,id,at_ms,event_uuid) or changed
         # A changed look with the same item UUID cannot retain a previous use.
-        if not admitted.has(id) and location.get("kind")=="held":location={}
+        var retiring:bool=owner.get("dynamic",false) and not owners[id].get("member_present",false) \
+            and not owner.definition.get("item_lifecycle",{}).is_empty() and location.get("item_id")==owner.item_id
+        if not admitted.has(id) and location.get("kind")=="held" and not retiring:location={}
         if owners[id].location!=location:
             var after:Dictionary=owners[id].duplicate(false);after.location=location;owners[id]=after;changed=true
     return changed
@@ -140,14 +159,18 @@ static func samples(owners:Dictionary,_state:Dictionary,at_ms:float)->Array:
     for owner in owners.values():
         # Studio inspects exact same-clock transitions before sampling. Later
         # samples release ended dynamic metadata just like other owner tables.
-        if owner.get("dynamic",false) and not owner.get("member_present",false) and at_ms>float(owner.end_ms):
-            owners.erase(owner.id);continue
+        var phases:Dictionary=lifecycle_phases(owner.definition)
+        var removal_ms:float=float(phases.removal.seconds)*1000.0 if not phases.is_empty() else 0.0
+        if owner.get("dynamic",false) and not owner.get("member_present",false) and at_ms>=float(owner.end_ms)+removal_ms:
+            if at_ms>float(owner.end_ms):owners.erase(owner.id)
+            continue
+        if owner.get("dynamic",false) and not owner.get("member_present",false) and float(owner.start_ms)==float(owner.end_ms):continue
         if not active(owner,{}):continue
         var cue:Dictionary=owner.definition.duplicate(false)
         var equipment:String="weapon_"+("ranged_" if str(owner.location.equipment_slot).begins_with("RANGED") else "melee_")+("off" if owner.location.render_slot=="offhand" else "main")
         if not cue.get("equipment_slots",[]).is_empty() and equipment not in cue.equipment_slots:continue
         cue.merge({"begin":0.0,"end":INF,"launch":0.0,"contact":0.0},true)
-        var clip:Dictionary=Effects.resolve(str(cue.clip),str(cue.get("selection","")),"attached").duplicate(false)
+        var clip:Dictionary=Effects.for_cue(cue,str(cue.get("selection","")),"attached").duplicate(false)
         var actor:String=owner.location.holder_uuid
         var dynamic:bool=owner.get("dynamic",false)
         var row={"id":owner.id,"kind":"native_effect","native_spell":true,"native_item":true,"intrinsic_item_effect":not dynamic,
@@ -160,6 +183,11 @@ static func samples(owners:Dictionary,_state:Dictionary,at_ms:float)->Array:
             "trace_keys":[owner.id],"source_event_uuid":owner.source_event_uuid}
         if dynamic:
             row.dynamic_item_effect=true;row.item_effect_uuid=str(owner.member.effect_uuid);row.item_effect_member=owner.member
+        if not phases.is_empty():
+            row.lifecycle_phases=phases;row.lifecycle_key="item_effect:"+str(owner.definition.item_effect_behavior_id)
+            row.initial=owner.get("initial",false)
+            row.duration_ms=float(owner.get("end_ms",INF))-float(owner.start_ms)
+            row.removal_age_ms=null if owner.get("member_present",true) else maxf(0.0,at_ms-float(owner.end_ms))
         var unbound:Array=cue.get("unbound_constructor_inputs",[])
         if not unbound.is_empty():
             row.status="missing";row.unbound_constructor_inputs=unbound
@@ -175,7 +203,8 @@ static func impact_binding(fact:Dictionary,cache:Dictionary)->Dictionary:
     if fact.get("attack_source_kind")!="equipped" or fact.get("attack_outcome") not in ["Hit","Crit"]:return {}
     if fact.get("source_item_uuid")==null or fact.get("source_item_id")==null:return {}
     var index:Resource=Bodies.index(cache)
-    var cues:Array=[] if index==null else index.item_impact_effects.get(fact.source_item_id,[])
+    var cues:Array=[] if index==null else Array(index.item_impact_effects.get(fact.source_item_id,[])).duplicate()
+    cues.append_array(Authoring.load_data("catalog/item_attachments.json",cache).get("nativeImpactEffects",[]))
     var selected:Array=[]
     for cue in cues:
         if str(cue.get("item_effect_behavior_id","")).is_empty():

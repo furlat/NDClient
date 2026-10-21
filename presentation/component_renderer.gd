@@ -17,6 +17,9 @@ const NativeChannels=preload("res://presentation/native_spell_channels.gd")
 const NativeAuthoring=preload("res://presentation/native_spell_authoring.gd")
 const Choices=preload("res://sdk/choices.gd")
 const Catalog=preload("res://source_catalog.gd")
+const SourceMaterial=preload("res://presentation/source_material.gd")
+const EnvironmentSource=preload("res://presentation/environment_source.gd")
+const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 var native_spells=NativeSpells.new()
 var native_hits=NativeHits.new()
 var blood=BloodRenderer.new()
@@ -96,18 +99,61 @@ var _optional_components:Array=[]
 var _optional_blood_groups:Array=[]
 var _optional_owner:Array=[]
 
-static func preparation_groups(groups:Array,persistent:Array)->Array:
+## A compiler packet begins with its own before-snapshot coverage. Normalize
+## those immutable source operands against the displayed owner's actual prior
+## disclosures; no world delta or future owner clock is replayed here.
+static func surface_requirements(requirements:Array,coverage:Dictionary,world:Node)->Array:
+    var result:Array=[]
+    for requirement in requirements:
+        var cue:Dictionary=requirement.get("native_cue",{})
+        var descriptor:Dictionary=cue.get("constructor_input",{})
+        if descriptor.get("cell_input")!="surface_groups" or requirement.get("spatial_removal",false) or requirement.get("status")=="missing":
+            result.append(requirement);continue
+        var identity:String=str(requirement.spatial_effect_uuid)
+        var base:String=str(requirement.get("spatial_coverage_base_id",requirement.id))
+        var key:Array=[identity,base]
+        if not coverage.has(key):
+            var owner:Dictionary=world.timeline.spatial_effect_owners.get(identity,{})
+            var original:Dictionary=owner.get("source_effect",{})
+            var origin:Dictionary=Conditions.NativePersistent.SpatialInputs.surface_origin(original,owner.get("source_disclosures",[]))
+            if origin.anchor==null:origin={"anchor":requirement.from_position,"elevation_steps":float(requirement.from_elevation_feet)/5.0}
+            coverage[key]={"known":owner.get("source_disclosed_cells",{}).duplicate(),
+                "disclosures":owner.get("source_disclosures",[]).duplicate(),
+                "constructions":owner.get("surface_constructions",{}).get(int(cue.source_index),{}).duplicate(),
+                "anchor":origin.anchor,"elevation":origin.elevation_steps}
+        var projected:Dictionary=coverage[key]
+        var cells:Array=requirement.spatial_source_cells
+        var added:Array=[]
+        for position in cells:
+            if projected.known.has(position):continue
+            projected.known[position]=true;added.append(position)
+        if not added.is_empty():projected.disclosures.append({"cells":added,"original":projected.disclosures.is_empty()})
+        for disclosure in projected.disclosures:
+            var first:Array=disclosure.cells[0]
+            var batch:String=str(first[0])+","+str(first[1])
+            if not projected.constructions.has(batch):
+                if disclosure.cells==cells and projected.anchor==requirement.from_position:
+                    projected.constructions[batch]={"operands":requirement.native_constructor_inputs,
+                        "surface_records":requirement.spatial_surface_records,"evidence":requirement.native_constructor_evidence,
+                        "source_anchor":projected.anchor,"source_elevation_steps":projected.elevation,"source_cells":cells}
+                else:
+                    projected.constructions[batch]=Conditions.NativePersistent.SpatialInputs.surface_construction(identity,
+                        str(requirement.spatial_content_id),disclosure.cells,projected.anchor,projected.elevation,descriptor)
+            result.append(Conditions.NativePersistent.surface_component(requirement,disclosure,projected.constructions[batch]))
+    return result
+
+static func preparation_groups(groups:Array,persistent:Array,world:Node=null)->Array:
     # Compiler-owned requirements contain no live occurrence clocks. Join them
     # with the current displayed owners without copying owner history or replaying
     # future commits on the scene thread.
-    var result:Array=[]
+    var result:Array=[];var coverage:Dictionary={}
     for group in groups:
         var requirements:Array=group.get("native_requirements",[])
         if requirements.is_empty():
             result.append(group);continue
         var prepared:Dictionary=group.duplicate()
         prepared.components=group.get("components",[]).duplicate()
-        prepared.components.append_array(requirements)
+        prepared.components.append_array(surface_requirements(requirements,coverage,world) if world!=null else requirements)
         result.append(prepared)
     if not persistent.is_empty():result.append({"components":persistent,"preparation_always_due":true})
     return result
@@ -231,15 +277,15 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
         persistent.append_array(NativeItems.samples(world.timeline.item_effect_owners,world.timeline.state,world.timeline.display_ms))
         _native_base_groups=groups.duplicate();_native_persistent=persistent
-        var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent),world)
-        var required:Array=live_requirements(preparation_groups(required_groups,persistent),world)
+        var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent,world),world)
+        var required:Array=live_requirements(preparation_groups(required_groups,persistent,world),world)
         var due:Array=due_groups(required,world,through_ms)
         var due_components:Array=[]
         for group in due:due_components.append_array(group.components)
         _native_prepare_groups=due;_native_prepare_components=due_components;_native_optical_groups=required
         var audio_errors:Array=audio.prepare(due_components,world,budget)
         var audio_ready:bool=audio.ready(due_components)
-        var presentation_ready:bool=_prepare_presenters(world,due_components,budget)
+        var presentation_ready:bool=_prepare_presenters(world,due_components,budget,required)
         var outline_ready:bool=true
         var outline_actors:Dictionary={}
         for component in due_components:
@@ -292,7 +338,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
     if world!=null:FrameProfile.end_phase(world.profile,"component_prepare",prepare_started)
     return result
 
-func _prepare_presenters(world:Node,components:Array,budget:Dictionary)->bool:
+func _prepare_presenters(world:Node,components:Array,budget:Dictionary,groups:Array=[])->bool:
     var complete:bool=true
     for component in components:
         if component.get("status")=="missing":continue
@@ -310,6 +356,21 @@ func _prepare_presenters(world:Node,components:Array,budget:Dictionary)->bool:
             budget.used_usec+=Time.get_ticks_usec()-started
         elif component.get("kind")=="geometry_projectile":
             if not _prepare_media_entry(world,component.id,component,BoltShader,budget):complete=false
+        elif component.get("kind")=="world_activation":
+            for path in EnvironmentMedia.world_media_paths(component,world.catalog_cache):
+                if not world.textures.has(path) or not world.source_images.has(path):complete=false
+            var program:Dictionary=Components.world_program(str(component.get("content_id","")),world.catalog_cache)
+            for part in _world_activation_parts(component,program):
+                if not _prepare_media_entry(world,part.id,component,world.ENVIRONMENT_SHADER,budget):complete=false;continue
+                var entry:Dictionary=media_handles[part.id]
+                entry.placement.position=part.position;entry.placement.base_height_steps=float(part.elevation_feet)/5.0
+                var record:Dictionary=Catalog.world_media_record(str(component.content_id),"exit" if program.get("kind")=="portal" else "body",world.quarter,"east",0,world.catalog_cache)
+                if not record.is_empty():entry.screen_rect=EnvironmentSource.quad(entry.placement,record,world.quarter,world.camera.basis).screen_rect
+            if not program.get("projectile",{}).is_empty() and not _prepare_media_entry(world,component.id+":projectile",component,world.ENVIRONMENT_SHADER,budget):complete=false
+    var depth_sources:Array=world.world_media_entries+media_handles.values().filter(func(entry):return not entry.get("actor_depth_band",false))
+    var tracks:Array=[]
+    for group in groups:tracks.append_array(group.get("actor_tracks",[]))
+    if not world.prepare_actor_depth_bands(depth_sources,budget,tracks):complete=false
     return complete
 
 func _prepare_media_entry(world:Node,id:String,component:Dictionary,shader:Shader,budget:Dictionary)->bool:
@@ -320,6 +381,12 @@ func _prepare_media_entry(world:Node,id:String,component:Dictionary,shader:Shade
     var material=ShaderMaterial.new();material.shader=shader;node.material_override=material;world.add_child(node)
     var row:Dictionary={"id":component.id,"position":[0,0],"base_height_steps":0.0,"kind":"effect","facing":"SW"}
     media_handles[id]={"id":id,"node":node,"material":material,"placement":row,"role":"native_effect","layer":100,"published":false,"component_id":component.id}
+    if component.get("kind")=="world_activation":
+        node.sorting_use_aabb_center=false
+        row.kind="resource";row.orientation="east";row.boundaries=[];row.layer=1;row.presentation_only=true
+        media_handles[id].role="body";media_handles[id].layer=12;media_handles[id].source_role=1
+        media_handles[id].world_media_content=str(component.get("content_id",""))
+        SourceMaterial.initialize(media_handles[id])
     budget.used_usec+=Time.get_ticks_usec()-started
     return true
 
@@ -390,8 +457,8 @@ func prepare_optional(world:Node,cache:Dictionary,admission:Dictionary={})->void
         var required:Array=_native_base_groups.filter(func(group):return not group.is_empty())
         if not world.timeline.current.is_empty() and not required.any(func(group):return group.get("id")==world.timeline.current.id):required.push_front(world.timeline.current)
         _optional_blood_groups=_native_prefetch(_native_base_groups,world)
-        var future:Array=live_requirements(preparation_groups(_native_prefetch(required,world),_native_persistent),world)
-        _native_optical_groups=live_requirements(preparation_groups(required,_native_persistent),world)
+        var future:Array=live_requirements(preparation_groups(_native_prefetch(required,world),_native_persistent,world),world)
+        _native_optical_groups=live_requirements(preparation_groups(required,_native_persistent,world),world)
         _select_optional(world,future)
     var started:int=Time.get_ticks_usec();var charged_before:int=budget.used_usec
     if not _optional_blood_groups.is_empty():blood.prepare(world,_optional_blood_groups,budget)
@@ -472,6 +539,8 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
         if component.get("status")=="missing": continue
         if component.kind=="audio":
             sounds.append(_audio_attachment(world,component));continue
+        if component.kind=="world_activation":
+            _sample_world_activation(world,component,live_media);continue
         var actor: Dictionary=world.visual_actors.get(component.get("actor_uuid"),{})
         var fixed_ground=component.get("attachment")=="ground" and component.get("position")!=null
         var fixed_impact=component.get("attachment")=="impact" and component.get("impact",{}).get("status")=="available"
@@ -495,6 +564,16 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
             handle.component=component
             handle.placement.merge(row,true);handle.placement.id=component.id
             var attach: String=component.get("attachment","body")
+            if component.get("requires_pose_socket",false) and not _has_socket(world,row,attach):
+                handle.node.visible=false
+                if not SpellPlacement.has_socket_channel(world,row,attach):
+                    ready=false
+                    var missing_socket:String="native_pose_socket_unavailable:"+str(component.actor_uuid)+":"+attach
+                    if missing_socket not in world.presentation_errors:world.presentation_errors.append(missing_socket)
+                # Explicit null current markers hide only this interval. The
+                # supplied source age resumes at the next actual marker.
+                continue
+            if component.get("requires_pose_socket",false):handle.node.visible=true
             if attach=="projectile":
                 var fraction=clampf(component.age_ms/maxf(.001,component.duration_ms),0,1)
                 var a=component.from_position;var b=component.to_position
@@ -512,7 +591,7 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
                 origin=Placement.contact(handle.placement)
             elif attach=="impact":origin=component.impact.world_anchor
             elif attach=="body":origin+=Vector3.UP*row.get("visual_height",0.0)*Placement.HEIGHT_UNIT
-            elif attach in ["body_center","head","face","hand"]:origin=_socket(world,row,attach)
+            elif attach in ["body_center","head","face","hand","other_hand"]:origin=_socket(world,row,attach)
             var opacity: float=component.get("alpha",1)
             var fade=minf(1,component.age_ms/component.fade_in_ms) if component.get("fade_in_ms",0)>0 else 1.0
             if component.get("fade_out_ms",0)>0:fade=minf(fade,(component.duration_ms-component.age_ms)/component.fade_out_ms)
@@ -601,6 +680,92 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
         if voice.started and not voice.paused:_witness(world,voice.row,true)
     for id in world.visual_actors:
         if _actor_visible(world,id):_condition_witnesses(world,id,samples)
+
+static func _world_activation_parts(component:Dictionary,program:Dictionary)->Array:
+    if program.get("kind")=="portal" or program.get("requires_object_anchor",true):
+        if component.get("origin_position")==null or component.get("elevation_feet")==null:return []
+        return [{"id":component.id,"position":component.origin_position,"elevation_feet":component.elevation_feet}]
+    var result:Array=[]
+    var heights:Dictionary=component.get("affected_elevations_feet",{})
+    for position in component.get("affected_positions",[]):
+        var key:String="%d,%d"%[position[0],position[1]]
+        if not heights.has(key):continue
+        result.append({"id":component.id+":cell:"+key,"position":position,"elevation_feet":heights[key]})
+    return result
+
+func _sample_world_activation(world:Node,component:Dictionary,live_media:Dictionary)->void:
+    var program:Dictionary=Components.world_program(str(component.get("content_id","")),world.catalog_cache)
+    if not program.get("native_world_media",false):return
+    var direction:Variant=component.get("direction")
+    if direction==null or direction==[0,0]:
+        var declared:Vector2=Placement.DIRECTIONS.get(str(program.get("default_orientation","")),Vector2.ZERO)
+        if declared==Vector2.ZERO:return
+        direction=[declared.x,declared.y]
+    var column:int=posmod(floori(atan2(float(direction[1]),float(direction[0]))/(PI/4.0)+0.5),8)
+    var orientation:String=["east","north","west","south"][floori(float(column)/2.0)]
+    var role:String="body";var frame:int=0
+    var age:float=float(component.age_ms)
+    if program.get("kind")=="portal" and component.get("role")=="portal_exit":
+        role="exit"
+        var source:Dictionary=program.get("roles",{}).get(role,{})
+        var opening:int=int(source.get("opening_frames",0));var hold:int=int(source.get("hold_frames",0))
+        var emerge:float=float(program.get("emerge_ms",0.0));var hold_ms:float=float(program.get("exit_hold_ms",0.0))
+        if age<emerge and emerge>0.0:frame=mini(maxi(0,opening-1),floori(age*float(opening)/emerge))
+        elif age<emerge+hold_ms:frame=opening+posmod(floori((age-emerge)*float(source.get("fps",0.0))/1000.0),maxi(1,hold))
+        else:frame=opening+hold+mini(maxi(0,int(source.get("closing_frames",0))-1),floori((age-emerge-hold_ms)*float(source.get("fps",0.0))/1000.0))
+    elif program.get("kind")=="sprite":
+        var frames:Array=program.get("activation_frames",[])
+        if frames.is_empty():return
+        frame=int(frames[mini(frames.size()-1,floori(age*float(program.get("fps",0.0))/1000.0))])
+    else:return
+    var offset:Array=program.get("origin_offset",[0.0,0.0])
+    for part in _world_activation_parts(component,program):
+        if not media_handles.has(part.id):ready=false;continue
+        var entry:Dictionary=media_handles[part.id]
+        var origin:Array=part.position
+        var point:Array=[origin[0]+offset[0]*direction[0]-offset[1]*direction[1],origin[1]+offset[0]*direction[1]+offset[1]*direction[0]]
+        var changed:bool=entry.placement.position!=point or entry.placement.base_height_steps!=float(part.elevation_feet)/5.0
+        entry.placement.position=point;entry.placement.base_height_steps=float(part.elevation_feet)/5.0;entry.placement.unlit=program.get("kind")=="portal"
+        if changed:entry.erase("world_media_frame_key");world.draw_order_dirty=true
+        if not world.sample_world_media_frame(entry,str(component.content_id),role,orientation,frame):ready=false;continue
+        live_media[part.id]=true;_publish_media(world,entry)
+        entry.node.visible=entry.get("world_media_source_visible",true)
+        _witness(world,component,_entry_visible(world,entry))
+    if program.get("projectile",{}).is_empty():return
+    var projectile_id:String=component.id+":projectile"
+    var launch:float=float(component.get("launch_delay_ms",0.0));var travel:float=float(component.get("projectile_ms",0.0))
+    if age<launch or age>=launch+travel or travel<=0.0 or component.get("end_position")==null:return
+    if not media_handles.has(projectile_id):ready=false;return
+    if component.get("end_elevation_feet")==null:return
+    var projectile:Dictionary=program.projectile
+    var origin:Array=component.origin_position
+    var camera_pose:String=Placement.POSES[posmod(world.quarter,4)]
+    var fixture_pose:String=Placement.POSES[posmod(world.quarter+floori(float(column)/2.0),4)]
+    var tips:Array=projectile.get("tip_offsets_by_pose",{}).get(camera_pose,[])
+    var muzzle:Array=projectile.get("muzzle_offsets_by_pose",{}).get(fixture_pose,[])
+    if tips.size()!=8 or muzzle.size()!=2:return
+    var destination:Array=component.end_position
+    var ground_start:float=float(component.elevation_feet)/5.0
+    var ground_end:float=float(component.end_elevation_feet)/5.0
+    var lift:float=float(projectile.get("muzzle_height_steps",0.0))
+    var first:Vector2=Placement.project(Vector2(origin[0],origin[1]),ground_start,world.quarter)+Vector2(muzzle[0],muzzle[1])
+    var last:Vector2=Placement.project(Vector2(destination[0],destination[1]),ground_end+lift,world.quarter)
+    var fraction:float=clampf((age-launch)/travel,0.0,1.0)
+    var anchor:Vector2=first.lerp(last,fraction)
+    var height:float=lerpf(ground_start+lift,ground_end+lift,fraction)
+    var camera_grid:=Vector2(anchor.x/128.0+(anchor.y+64.0*height)/64.0,(anchor.y+64.0*height)/64.0-anchor.x/128.0)
+    var grid:Vector2=Placement.rotate_grid(camera_grid,posmod(-world.quarter,4))
+    var vector:Vector2=last-first
+    var tip:Vector2=Vector2(tips[column][0],tips[column][1])
+    var rotation:float=vector.angle()-tip.angle() if vector.length_squared()>0.0 else 0.0
+    var shot:Dictionary=media_handles[projectile_id]
+    shot.placement.position=[grid.x,grid.y];shot.placement.base_height_steps=height
+    shot.placement.affine=[cos(rotation),sin(rotation),-sin(rotation),cos(rotation)]
+    shot.erase("world_media_frame_key")
+    if not world.sample_world_media_frame(shot,str(component.content_id),"projectile",orientation,column):ready=false;return
+    # The original directional source rotates the whole quad around its authored
+    # pivot; the tip vector determines angle, not an extra tip translation.
+    live_media[projectile_id]=true;_publish_media(world,shot);world.draw_order_dirty=true
 
 static func _audio_attachment(world: Node, component: Dictionary) -> Dictionary:
     var sound=component.duplicate()

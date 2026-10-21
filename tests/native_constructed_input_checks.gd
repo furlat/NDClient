@@ -1,6 +1,8 @@
 extends SceneTree
 ## Pure input/sampling boundary. Native output is a separate original-recording gate.
 const Constructed=preload("res://presentation/native_constructed_occurrence.gd")
+const Effects=preload("res://presentation/effect_package.gd")
+const Indexed=preload("res://assets/vfx/sources/6269f7f4cb5f43f5a59c/occurrence.gd")
 class ClockProbe extends RefCounted:
     var calls:Array=[]
     func sample(seconds:float)->void:calls.append(seconds)
@@ -84,7 +86,38 @@ func run()->void:
     check(emitter.speed_scale==1.75 and is_equal_approx(player.current_animation_position,.3),"Public hook and root placement refresh preserve the pending native particle/player delta")
     wrapper.forward_arguments("set_pair",["delivery",2]);wrapper.sample(.25)
     check(refreshed.pair==["delivery",2] and refreshed.refresh_calls.size()==3 and refreshed.calls.is_empty(),"A two-argument receiver invalidates the exact public refresh once")
-    wrapper.free();source.free()
+    # The same declared indexed occurrence used by ordinary source clips has
+    # no client wrapper override. Its authored dynamic path must reflow too.
+    var indexed:Node3D=Indexed.new();indexed.clock=ClockProbe.new()
+    indexed.handle=wrapper.handle;indexed.handle.components.body=component
+    indexed.inputs_dirty=false;indexed.input_receivers={"set_entity_geometry":[component]}
+    var ordinary:Dictionary={"occurrence":indexed,"inner":indexed.handle}
+    var before:int=component.calls.size()
+    indexed.set_recipient_geometry({"envelope":.3});Effects.sample(ordinary,.25)
+    check(component.calls.size()==before and not component.visible,"An indexed cue without the authored dynamic opt-in retains its sealed source sampling policy")
+    indexed.set_recipient_geometry({"envelope":.5});Effects.sample(ordinary,.25,true)
+    check(component.calls.size()==before+1 and component.visible and is_equal_approx(component.calls.back(),.6),"An authored dynamic indexed cue reflows its actual changed packet at the same mapped source age")
+    check(is_equal_approx(float(indexed.handle.opacity_bindings[0].native),.5) and not indexed.handle.source_inputs_dirty,"Indexed reflow owns its source envelope and consumes the exact dirty packet")
+    Effects.sample(ordinary,.25,true)
+    check(component.calls.size()==before+1,"The ordinary indexed sampler cannot reflow the same consumed packet twice")
+    indexed.handle.components.body=refreshed;indexed.input_receivers={"set_entity_geometry":[refreshed]}
+    var before_refresh:int=refreshed.refresh_calls.size()
+    indexed.set_recipient_geometry({"envelope":.9});Effects.sample(ordinary,.25,true)
+    check(refreshed.refresh_calls.size()==before_refresh+1 and refreshed.calls.is_empty(),"Indexed sources with a public refresh hook invoke it exactly once through the shared path")
+    wrapper.inputs_dirty=false;wrapper.input_receivers={"set_entity_geometry":[refreshed]}
+    wrapper.set_recipient_geometry({"envelope":.65})
+    var before_wrapper:int=refreshed.refresh_calls.size()
+    Effects.sample({"occurrence":wrapper,"inner":wrapper.handle},.25,true)
+    check(refreshed.refresh_calls.size()==before_wrapper+1 and wrapper.sampled_input_revision==wrapper.source_input_revision,"Shared indexed preparation and the constructed wrapper consume one source refresh, never two")
+    check(emitter.speed_scale==1.75 and is_equal_approx(player.current_animation_position,.3) and indexed.handle.age==age and indexed.handle.motion_age==motion_age,"Both shared source routes preserve pending native player/emitter work and existing ages")
+    var before_trail:int=refreshed.refresh_calls.size()
+    indexed.handle.source_inputs_dirty=true
+    indexed.handle.motion_trails={"pending":{"released":false}}
+    check(not Constructed.refresh_held_source(indexed.handle,.25) and refreshed.refresh_calls.size()==before_trail and indexed.handle.source_inputs_dirty,"An unreleased trail retains its one ordinary native sample instead of an extra equation reflow")
+    indexed.handle.motion_trails.pending.released=true;indexed.handle.motion_age=.2
+    check(not Constructed.refresh_held_source(indexed.handle,.25) and refreshed.refresh_calls.size()==before_trail,"A changed trail motion age also retains the sealed sampler's full-sample path")
+    indexed.handle.motion_trails={};indexed.handle.motion_age=motion_age
+    indexed.free();wrapper.free();source.free()
     print("CONSTRUCTED_INPUTS ",JSON.stringify({"checks":checks,"failures":failures,
         "scope":"Actual client wrapper and sealed paused-source boundary with explicit setter/material/emitter/player probes; framebuffer and performance qualification remain separate."}))
     quit(0 if failures.is_empty() else 1)

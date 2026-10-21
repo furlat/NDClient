@@ -84,11 +84,13 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 [sub_resource type="Resource" id="Resource_esmpd"]
 script = ExtResource("6_hh7bg")
 id = "destroy_water_native"
+dispatch_gap = "delegated_actual_water_owner_removal"
 kind = "form"
 selection = "destroy_water_native"
 effects = Array[ExtResource("1_1han3")]([SubResource("Resource_gd7ma")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual spatial water removal and its observed before-member cells own the destroy transition through the existing spatial consumer. This cast draft is not a new form selector or authority to erase undisclosed water; it must not duplicate the qualified Water DRY removal."
 
 [resource]
 script = ExtResource("4_wykjf")
@@ -118,4 +120,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/create_water_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Actual disclosed water-surface UUID owns the create source. Default finite surface cue0 belongs to that spatial owner; Wet cue1 belongs to the actual condition UUID via its exact disclosed semantic authoring key. Neither finite cast duplicates the held owners. Destroy/removal choreography remains separately unqualified."
+Actual disclosed water-surface UUID owns the create source. Default finite surface cue0 belongs to that spatial owner; Wet cue1 belongs to the actual condition UUID via its exact disclosed semantic authoring key. Neither finite cast duplicates the held owners. Actual disclosed removed water cells own the Water DRY transition; this cast does not replay the fixed destroy-water review or erase undisclosed water. Source assignment does not imply artwork acceptance or current native output qualification."

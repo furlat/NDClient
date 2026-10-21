@@ -37,6 +37,7 @@ id = "condition.charmed"
 label = "Charmed"
 icon = SubResource("Resource_uiyan")
 disposition = "authored"
+inherit_spell_finish = false
 look = SubResource("Resource_capuq")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -244,3 +245,4 @@ unported = {
 "effects": []
 }
 }
+notes = "Charmed keeps its own delivered condition finish. Optional Charm Person or Hypnotic Pattern palettes are not selected from the shared condition identity. Its real condition UUID and package application/sustain/removal lifecycle remain authoritative; all artwork remains unreviewed."

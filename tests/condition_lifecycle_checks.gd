@@ -275,7 +275,8 @@ func run()->void:
             check(Effects.conditions(str(id)).has(selection),"Condition id resolves its lifecycle: "+str(id))
         results.append(await lifecycle_checks(selection,save_dir))
     check(only.is_empty()==(results.size()==keys.size()),"Every package condition lifecycle checked")
-    var report:Dictionary={"checks":checks,"failures":failures,"lifecycles":results,
+    check(only.all(func(key):return keys.has(key)),"Every requested lifecycle name resolves a real current package source")
+    var report:Dictionary={"checks":checks,"failures":failures,"lifecycles":results,"factory_version":index.get("version",""),"requested_lifecycles":only,"complete_lifecycle_inventory":only.is_empty(),
         "scope":"Package condition lifecycles through the client's rows, owner_state and occurrences in an isolated world: construction, first sample/draw, sustain at 0/seam/7.3/180 s and a reverse seek, removal from 0.5/7.3/180 s. Coverage and pixel difference only, not a look comparison."}
     FileAccess.open("res://.runtime/condition-lifecycle-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("CONDITION_LIFECYCLE_CHECKS ",JSON.stringify({"checks":checks,"failures":failures}))

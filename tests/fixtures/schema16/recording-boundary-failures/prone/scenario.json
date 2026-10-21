@@ -1,0 +1,75 @@
+{
+ "id": "condition.prone/drop_stand_walk",
+ "title": "Prone: voluntarily lie down, stand at real cost, resume walking",
+ "kind": "action",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.core.drop_prone",
+   "action.core.stand_up",
+   "action.move"
+  ],
+  "condition": [
+   "condition.prone"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    14,
+    7
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.core.drop_prone",
+   "by": "caster",
+   "target": "self",
+   "capture_choices": true
+  },
+  {
+   "do": "action.core.stand_up",
+   "by": "caster",
+   "target": "self"
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    4,
+    7
+   ]
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "action.core.drop_prone",
+  "action.core.stand_up",
+  "action.move"
+ ],
+ "required_conditions": [
+  "condition.prone"
+ ],
+ "required_condition_ends": [
+  "condition.prone"
+ ],
+ "required_facts": []
+}

@@ -51,8 +51,14 @@ func run() -> void:
     var deadline = Time.get_ticks_msec()+60000
     while not scene.session.recording_ready and scene.session.issue.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
     scene.session.close()
-    while (not scene._environment_media_ready() or not scene.MediaWarmup.ready(scene.media_warmup,scene.media_plan.required)) and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline: await scene.presentation_updated
-    await scene.presentation_updated
+    # Environment textures alone do not admit the initial actor/world source
+    # generation. The ordinary Play process must finish that full boundary
+    # before this intentionally frozen fixture drives quarter publication.
+    while not scene.playback_prepared() and scene.session.issue.is_empty() and scene.media_issue.is_empty() and scene.presentation_errors.is_empty() and Time.get_ticks_msec()<deadline: await process_frame
+    await RenderingServer.frame_post_draw
+    var prepared:bool=scene.playback_prepared() and scene.presentation_errors.is_empty() and scene.media_issue.is_empty()
+    check(prepared,"Actual initial world, actors and selected sources are admitted before freezing wall captures")
+    if not prepared:scene.queue_free();await process_frame;quit(1);return
     scene.set_process(false); scene.hud.hide()
     scene.wall_mode = "translucent"
     check(scene.session.issue.is_empty() and not scene.timeline.state.is_empty(),"Recorded Crypt initializes")

@@ -13,11 +13,11 @@ hidden_slots = PackedStringArray()
 
 [sub_resource type="Resource" id="Resource_d15dg"]
 script = ExtResource("2_vnaw3")
-path = "art/media/ui/icons/smooth48/ui.filter-actions.png"
+path = "art/media/ui/icons/smooth48/item.incense.png"
 native_size = Vector2i(48, 48)
-reuses = "ui.filter-actions"
-status = "stand_in"
-source = "ui/resources.json icon:ui.filter-actions"
+reuses = "item.incense"
+status = "ready"
+source = "Existing incense item glyph deliberately shared by the mace healing-incense action; ui/resources.json icon:item.incense"
 
 [resource]
 script = ExtResource("1_ocb50")
@@ -27,4 +27,4 @@ family = "item"
 icon = SubResource("Resource_d15dg")
 body = SubResource("Resource_vnaw3")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (use_item); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "Actual action admission creates the native Incense spatial owner; its observed UUID and real attributed HealFacts own the finite healing source in spatial_effect.item.devotees_mace.healing_incense.responses. The action does not replay a heal before any recipient actually receives one. The producer controls exact item/holder contribution and removal. All artwork is unreviewed."

@@ -57,8 +57,9 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 script = ExtResource("3_i2uxx")
 clip = "native/spirit_guardians_radiant_native/contact"
 role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "damage", "geometry_actor": "target", "input_field": "", "projection": "spatial_contact", "content_id": "spatial_effect.spell.spirit_guardians", "damage_type": "Radiant", "component_path": ["contact"]}
 at = "release"
-delay = 2.0
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 1.5
@@ -70,6 +71,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
 "slots": ["body", "legs", "chest", "head", "helmet", "boots", "gauntlets"]
@@ -161,8 +163,9 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 script = ExtResource("3_i2uxx")
 clip = "native/spirit_guardians_necrotic_native/contact"
 role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "damage", "geometry_actor": "target", "input_field": "", "projection": "spatial_contact", "content_id": "spatial_effect.spell.spirit_guardians", "damage_type": "Necrotic", "component_path": ["contact"]}
 at = "release"
-delay = 2.0
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 1.5
@@ -174,6 +177,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"dynamic_geometry": true,
 "entity_geometry": {
 "actor": "target",
 "slots": ["body", "legs", "chest", "head", "helmet", "boots", "gauntlets"]
@@ -184,12 +188,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_m3rpr"]
 script = ExtResource("10_bvtop")
 id = "spirit_guardians_necrotic_native"
+dispatch_gap = "delegated_actual_spatial_owner_energy_type"
 kind = "element"
 value = "necrotic"
 selection = "spirit_guardians_necrotic_native"
-effects = Array[ExtResource("3_i2uxx")]([SubResource("Resource_3gfkk"), SubResource("Resource_oqjos")])
+effects = Array[ExtResource("3_i2uxx")]([SubResource("Resource_3gfkk"), SubResource("Resource_1hyru"), SubResource("Resource_oqjos")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The actual spatial owner public energy_type selects the one held Radiant/Necrotic composition through its typed condition resource. Exact applied damage source_condition_uuid independently selects recipient contacts. This bundled finite cast variant is an unselected alternative and cannot duplicate that spatial owner. No alignment or class inference is used; all artwork remains unreviewed."
 
 [resource]
 script = ExtResource("8_d5vum")
@@ -199,13 +205,14 @@ delivery = "zone"
 body = SubResource("Resource_5w3qc")
 hand_layers = Array[ExtResource("4_la1xw")]([SubResource("Resource_1hm8c"), SubResource("Resource_haekv")])
 sockets = "measured/abilities/spells/spell.spirit_guardians.sockets.json"
-effects = Array[ExtResource("3_i2uxx")]([SubResource("Resource_4yvfi"), SubResource("Resource_1hyru")])
+effects = Array[ExtResource("3_i2uxx")]([SubResource("Resource_4yvfi"), SubResource("Resource_1hyru"), SubResource("Resource_oqjos")])
 native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
-owner_ids = PackedStringArray()
+excluded_cues = PackedInt32Array(0)
+owner_kind = "spatial_effect"
+owner_ids = PackedStringArray("spatial_effect.spell.spirit_guardians")
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
@@ -255,4 +262,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "The actual spatial UUID and public energy_type own one held source composition through the existing deployed-pose lifecycle. Each positive Radiant/Necrotic contact independently resolves its exact spatial source and actual recipient surface. The finite cast assembly is excluded to avoid duplication. No cast timer creates a contact or retirement; all artwork remains unreviewed."

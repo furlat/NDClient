@@ -11,6 +11,8 @@
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_tpxvh"]
 [ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_ary2v"]
 
+[ext_resource type="Resource" path="res://assets/vfx/extensions/source-preparation-20261020/sources/6dc5a39bea3357fd04ad/finite_deafness.tres" id="deafness_phase"]
+
 [sub_resource type="Resource" id="Resource_120mu"]
 script = ExtResource("1_s6360")
 role = "cast"
@@ -139,17 +141,19 @@ staging_from = "client"
 status = "partial"
 notes = "Exact disclosed SpellFact.effect_id selects this option. Current Godot recipe, caster and lifecycle ownership are inherited."
 
-[sub_resource type="Resource" id="DeafenedFiniteGap"]
+[sub_resource type="Resource" id="DeafenedFiniteApplication"]
 script = ExtResource("3_yn5ps")
-clip = "review/blindness_deafness/back/lifecycle"
+clip = "production-review/deafness/finite_application"
+source_phase = ExtResource("deafness_phase")
+source_inputs = Dictionary[String, String]({"root_path": "set_root_path", "live_endpoints": "set_live_endpoints"})
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
 orientation = "world"
-source_end = 4.0
+source_end = 1.2
 duration_policy = "authored"
-unbound_constructor_inputs = PackedStringArray("deafened_finite_source_not_delivered")
-staging_from = "client"
+extra = {"dynamic_geometry": true, "follow_attachment": true, "live_endpoints": [{"actor": "target", "socket": "head", "surface_slots": ["head", "helmet", "beard", "hair"], "view_basis": true}]}
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
 
 [sub_resource type="Resource" id="Resource_juoap"]
 script = ExtResource("10_ary2v")
@@ -157,7 +161,7 @@ id = "control.deafened"
 when = {"effect_id": ["control.deafened"]}
 kind = "option"
 value = "deafened"
-effects = Array[ExtResource("3_yn5ps")]([SubResource("DeafenedFiniteGap")])
+effects = Array[ExtResource("3_yn5ps")]([SubResource("DeafenedFiniteApplication")])
 
 staging_from = "client"
 status = "partial"

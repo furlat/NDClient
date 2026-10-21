@@ -1,0 +1,125 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "2e6f7e68-2d57-48c5-93b2-ca3ecedadb75",
+   "state_revision": "a6b07718-ea6b-4da2-bba0-352f24fe4f8e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_lightning_original",
+   "game_epoch": "8cf47c65-daeb-41ce-bc98-cf7e28ae0337",
+   "audience_id": "a6a87012-fa54-4d48-bb7c-e4daa9f388f2",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_lightning_original",
+    "game_epoch": "8cf47c65-daeb-41ce-bc98-cf7e28ae0337",
+    "audience_id": "a6a87012-fa54-4d48-bb7c-e4daa9f388f2",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "20c73183-a2d9-4acc-952b-ddc2da77955a",
+   "state_revision": "3459085f-8ef2-4a99-8473-d120cd5ca498",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_lightning_original",
+   "game_epoch": "8cf47c65-daeb-41ce-bc98-cf7e28ae0337",
+   "audience_id": "df5b9c1b-2fd5-4acb-bbfc-2f6dfa8964ea",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_lightning_original",
+    "game_epoch": "8cf47c65-daeb-41ce-bc98-cf7e28ae0337",
+    "audience_id": "df5b9c1b-2fd5-4acb-bbfc-2f6dfa8964ea",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.sorcerous_burst",
+   "by": "caster",
+   "target": "target",
+   "variant": {
+    "damage_type": "lightning"
+   },
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "b9022b06-7e15-41a2-b3c8-2fe8b7857356",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.sorcerous_burst",
+   "display_name": "Sorcerous Burst",
+   "cast_at_level": 0,
+   "variant_facets": [
+    {
+     "key": "damage_type",
+     "value": "lightning",
+     "label": "Lightning"
+    }
+   ],
+   "target_type": "creature_or_object",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "b0bb7921-8cd6-46f2-989c-fdd9d8cc44b4",
+   "state_revision": "b9022b06-7e15-41a2-b3c8-2fe8b7857356",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 13,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_lightning_original",
+   "game_epoch": "8cf47c65-daeb-41ce-bc98-cf7e28ae0337",
+   "audience_id": "a6a87012-fa54-4d48-bb7c-e4daa9f388f2",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_lightning_original",
+    "game_epoch": "8cf47c65-daeb-41ce-bc98-cf7e28ae0337",
+    "audience_id": "a6a87012-fa54-4d48-bb7c-e4daa9f388f2",
+    "sequence": 6
+   }
+  }
+ }
+]

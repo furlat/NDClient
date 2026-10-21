@@ -1,5 +1,18 @@
 # Item appearance and materials
 
+**Production editing:** use the typed gear resources listed by
+[`characters.tres`](../characters.tres), particularly
+`characters/gear/*.tres`. `PresentationGear.slots` owns worn choices;
+`ground` owns exact dropped variants, four camera rows/pivots, scale, tint and
+the original shadow. `family` declares explicit compatible reuse. The shared
+body and environment paths consume these fields. Intrinsic decorations and
+actual item-effect memberships use the existing gear EffectUses and the shared
+ability item-attachment context; item/effect UUIDs and the real holder keep
+their original clocks. See [current authoring ownership](../README.md).
+
+The JSON intake below is retained as historical source material, not the
+production edit/assembly command or a current missing-renderer claim.
+
 `index.json` assembles four existing `PresentationCatalogExport` fields. These
 are editable client copies, with the original category, variant, slot and
 behavior identities preserved:
@@ -29,5 +42,5 @@ edits use the JSON here; `tools/build_authoring.py` assembles it without engine
 imports or copy receipts. Schemas under `schemas/item-*.schema.json` and
 `schemas/source-palettes.schema.json` come from those same owners.
 
-This completes data adoption and media references. The shared client renderer
-still needs to consume equipment, dropped-item and material presentation.
+These historical intake counts do not establish current assignment coverage,
+native output qualification or human artistic acceptance.

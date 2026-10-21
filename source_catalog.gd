@@ -4,6 +4,7 @@ const Placement = preload("res://placement.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
 const NativePresentationSources = preload("res://presentation/native_presentation_sources.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
+const CharacterGeometry = preload("res://presentation/character_geometry.gd")
 const Metadata = preload("res://presentation/source_metadata.gd")
 const AbilityDocuments = preload("res://presentation/ability_documents.gd")
 ## Environment runtime documents written by tools/build_presentation.gd from
@@ -71,18 +72,18 @@ static func fixture_optics() -> Dictionary:
     if facts == null: push_error("Missing environment build output (run tools/build_presentation.gd): fixture_optics.res")
     return facts.frames if facts != null else {}
 
-## The blood residue's region particles (residue.blood). Preparation loads it;
-## sampling only reads what preparation admitted.
-static func residue_asset(cache: Dictionary) -> Dictionary:
-    var path := ENVIRONMENT + "residues/blood.res"
+## Prepared region artwork is selected by the actual authored residue id.
+## Default blood preserves existing callers; unknown sources never alias it.
+static func residue_asset(cache: Dictionary,residue_id:String="residue.blood") -> Dictionary:
+    var path:String=ENVIRONMENT+"residues/"+residue_id.trim_prefix("residue.")+".res"
     if not cache.has(path):
         var asset: Resource = Metadata.read(path,ResourceLoader.CACHE_MODE_REUSE)
         if asset == null: push_error("Missing environment build output (run tools/build_presentation.gd): " + path); return {}
         cache[path] = asset.value
     return cache[path]
 
-static func prepared_residue_asset(cache: Dictionary) -> Dictionary:
-    return cache.get(ENVIRONMENT + "residues/blood.res", {})
+static func prepared_residue_asset(cache: Dictionary,residue_id:String="residue.blood") -> Dictionary:
+    return cache.get(ENVIRONMENT+"residues/"+residue_id.trim_prefix("residue.")+".res", {})
 
 static func read_file(relative_path: String, cache: Dictionary) -> Variant:
     if not cache.has(relative_path):
@@ -167,6 +168,9 @@ static func validate_native(cache: Dictionary) -> Array:
         var rigs:Dictionary={} if built==null else built.rigs
         for recipe in cache["catalog/body_action_recipes.json"].values():
             if not recipe.has("_resource_source"):continue
+            # Generic actor actions resolve their real rig at admission. Only
+            # a resource's explicit fixed rig is a build-time clip reference.
+            if str(recipe.get("rigId","")).is_empty():continue
             var clip:Dictionary=rigs.get(recipe.rigId,{}).get("clips",{}).get(recipe.actor.clip,{})
             if clip.is_empty():NativeAuthoring._error(cache,"Selected action has no source clip: "+recipe._resource_source)
             else:
@@ -277,11 +281,58 @@ static func receiving_normal(record: Dictionary, cache: Dictionary) -> Dictionar
     return result
 
 static func environment(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
+    if row.has("floor_motifs"):return floor_residue_record(row,cache)
     # Live destroyed after-values and reconnected snapshots settle on the same
     # authored endpoint as native destruction playback. An explicit active
     # playback phase still selects its own intermediate samples.
     if phase==0 and row.get("destroyed",false): phase=2
-    return texture_layout(receiving_normal(_environment_source(row,quarter,cache,phase,time),cache),cache)
+    return wall_residue_record(row,quarter,texture_layout(receiving_normal(_environment_source(row,quarter,cache,phase,time),cache),cache),cache)
+
+## Original atlas remains unchanged. The existing environment material samples
+## its continuous motif field on one actual supported tile-sized ground quad.
+static func floor_residue_record(row:Dictionary,cache:Dictionary)->Dictionary:
+    var profile:Dictionary=row.floor_motifs
+    var source:Dictionary=environment_resources(cache).get("resources",{}).get(profile.get("art_id",""),{})
+    if source.is_empty():return {}
+    return {"path":source.path,"native_size":[32.,32.],"pivot":[16.,16.],"scale":1.,
+        "flat_ground":true,"floor_motifs":profile}
+
+## Only unchanged original image records carry source_image_id. New banks,
+## destruction frames and unrelated objects never borrow those face planes.
+static func wall_residue_record(row:Dictionary,quarter:int,record:Dictionary,cache:Dictionary)->Dictionary:
+    var image:String=str(record.get("source_image_id",""))
+    if image.is_empty() or row.get("kind")!="wall":return record
+    var profiles:Dictionary=environment_index(cache).get("wall_residue_sources",{})
+    var faces:Array=[]
+    for member in row.get("wall_members",[row]):
+        if member.get("boundaries",[]).size()!=1:continue
+        var direction:String=str(member.boundaries[0])
+        var vertical:bool=direction in ["east","west"]
+        var sign:int=1 if direction in ["east","north"] else -1
+        var line_twice:int=int(member.position[0] if vertical else member.position[1])*2+sign
+        var along:int=int(member.position[1] if vertical else member.position[0])
+        var tangent:Vector2=Placement.project(Vector2(0,1) if vertical else Vector2(1,0),0,quarter)
+        for residue in member.get("surface_residues",[]):
+            var profile:Dictionary=profiles.get(residue.residue_id,{})
+            var planes:Array=profile.get("images",{}).get(image,{}).get(Placement.pose(direction,quarter),[])
+            if planes.is_empty() or not residue.faces.any(func(face):return face in member.get("residue_observed_faces",[]) and Placement.pose(face,quarter) in ["e","s"]):continue
+            for plane in planes:
+                faces.append({"profile":profile,"plane":plane,"reverse":Vector2(plane.across[0],plane.across[1]).dot(tangent)<0.,
+                    "line_twice":line_twice,"along":along,"item_uuid":member.id,"condition_uuid":residue.condition_uuid})
+    if faces.is_empty():return record
+    var result:Dictionary=record.duplicate(false);result.wall_motif_faces=faces
+    return result
+
+static func world_media_frames(program:Dictionary,role:String,quarter:int,orientation:String="east")->Array:
+    var source:Dictionary=program.get("roles",{}).get(role,{}) if program.get("kind")=="portal" else program.get("projectile",{}) if role=="projectile" else program
+    if source.has("frames_by_quarter"):return source.frames_by_quarter.get(str(quarter),[])
+    return source.get("frames_by_pose",{}).get(Placement.POSES[posmod(quarter,4)] if role=="projectile" else Placement.pose(orientation,quarter),[])
+
+static func world_media_record(content:String,role:String,quarter:int,orientation:String,frame:int,cache:Dictionary)->Dictionary:
+    var program:Dictionary=environment_index(cache).get("spatial_media",{}).get(content,{})
+    var frames:Array=world_media_frames(program,role,quarter,orientation)
+    if frames.is_empty() or frame<0 or frame>=frames.size():return {}
+    return environment_resources(cache).resources.get(frames[frame],{})
 
 static func _layout_region(region: Dictionary, layouts: Dictionary) -> Dictionary:
     if not layouts.has(region.path): return region
@@ -357,10 +408,13 @@ static func texture_layout(record: Dictionary, cache: Dictionary) -> Dictionary:
     return result
 
 static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
+    if row.has("ground_equipment"):return ground_equipment_record(row.ground_equipment,quarter,cache)
     var world = environment_world(cache)
     var direction: String = row.get("orientation", "east")
     var source_kind:String=row.get("source_kind",row.kind)
     var view = Placement.pose(direction, quarter)
+    if row.has("world_media_content"):
+        return world_media_record(row.world_media_content,str(row.get("world_media_role","body")),quarter,direction,int(row.get("world_media_frame",0)),cache)
     if row.kind == "resource": return environment_resources(cache).resources[row.asset]
     var bank_id = bank_for(row, phase > 0, cache)
     if not bank_id.is_empty():
@@ -440,3 +494,38 @@ static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary
                         view = Placement.POSES[posmod(Placement.POSES.find(candidate) + quarter, 4)]
                 views = world.terrain_cliff.corner
     return environment_resources(cache).resources[views[view]]
+
+## The authored look is independent of the public object's identity/placement.
+static func ground_equipment(item:Dictionary,cache:Dictionary)->Dictionary:
+    return BodySources.ground(item,cache)
+
+static func ground_equipment_record(look:Dictionary,quarter:int,cache:Dictionary)->Dictionary:
+    if look.is_empty():return {}
+    var cell:Array=look.cell;var frame:int=int(look.frame);var row:int=int(look.rows_by_camera[posmod(quarter,4)])
+    var value:Dictionary={"path":look.path,"rect":[frame*cell[0],row*cell[1],cell[0],cell[1]],
+        "native_size":cell,"pivot":look.pivots_by_camera[posmod(quarter,4)],"scale":look.scale,
+        "ground_equipment_source":look.source,"ground_equipment_tint":look.get("tint","#ffffff"),
+        "source_pivot":look.source_pivot,"component_profile":"original","optical_status":"colour_shadow_only"}
+    # This original source uses affine byte depth + RGB normals. Keep that
+    # descriptor distinct from the environment's RG16BE/oct packet.
+    var key:Array=[&"__ground_component_binding",look.path,look.slot,look.scale]
+    if not cache.has(key):
+        BodySources.prepare_descriptor(look.path,look.slot,cache)
+        cache[key]=CharacterGeometry.prepare_binding(look.path,look.slot,cache,true,true,"original",float(look.scale),1.)
+    var binding:Dictionary=cache[key]
+    if binding.parameters.get("has_component_geometry",false):
+        value.component_binding=binding
+        value.optical_status=binding.status
+        var header:Dictionary=BodySources.header(look.path,cache)
+        value.component_sheet_size=[header.width,header.height]
+    var shadow:Dictionary=look.get("shadow",{})
+    if not shadow.is_empty():
+        value.ground_shadow={"path":shadow.path,"rect":[frame*shadow.cell[0],row*shadow.cell[1],shadow.cell[0],shadow.cell[1]],
+            "native_size":shadow.cell,"pivot":shadow.pivot,"scale":shadow.scale,"ground_equipment_shadow":true}
+    return value
+
+static func environment_role(record:Dictionary,source_role:int)->Dictionary:
+    # A delivered Shadow sheet is a separate authored source, not a colour
+    # selection mask guessed from the equipment's painted pixels.
+    if source_role==0 and record.has("ground_equipment_source"):return record.get("ground_shadow",{})
+    return record

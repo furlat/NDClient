@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="2_rth14"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="3_f4tvg"]
 
+[ext_resource type="Resource" path="res://assets/vfx/extensions/owner-fields-v2-20261021/sources/545c3e0e639aebfb1c09/fire-phase.tres" id="OwnerFieldPhase0"]
+
 [sub_resource type="Resource" id="operations_0_transition"]
 script = ExtResource("2_rth14")
 clip = "oil-local-fire"
@@ -23,11 +25,31 @@ script = ExtResource("1_4dxbj")
 operation = "douse"
 transition = SubResource("operations_0_transition")
 
+[sub_resource type="Resource" id="OwnerField0"]
+script = ExtResource("2_rth14")
+clip = "bg3-36/chromatic-orb/fire/observed-surface"
+source_phase = ExtResource("OwnerFieldPhase0")
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_inputs = {"surface_partition": "set_surface_partition", "owner_state": "set_owner_state", "targets": "set_targets"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+area_mask = false
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["effect"], "input_field": "", "cell_input": "partitioned_surface", "content_id": "spatial_effect.material.fire", "topology_script": "res://assets/vfx/extensions/owner-fields-v2-20261021/sources/98ceb7e4b344b743d5c6/topology.gd", "capacity": 128, "anchor_policy": "disclosed_cell"}
+source_seekable = true
+extra = {"live_endpoints": [{"cue_point": "source"}]}
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+
 [resource]
 script = ExtResource("3_f4tvg")
 id = "spatial_effect.material.fire"
 operations = Array[ExtResource("1_4dxbj")]([SubResource("operations_0")])
 art = PackedStringArray()
 legacy = "measured/environment/surfaces/spatial_effect.material.fire.json"
+lasting = SubResource("OwnerField0")
+native_staging = true
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Actual full admitted owner topology and capacity128 disjoint draws use the delivered public Topology helper once per footprint change. All draws keep the same real spatial UUID, anchor and owner clock; neighbor support never becomes duplicate output or a synthetic owner. Actual suppression/removal updates membership immediately; no radius, hidden cells, false internal edges or review retirement is supplied. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."

@@ -9,6 +9,10 @@
   {
    "pattern": "ObjectDB instances were leaked at exit",
    "reason": "same exit-time leak report (a WARNING line, listed for clarity)"
+  },
+  {
+   "pattern": "The abilities build has no record table res://.runtime/native-authoring-reload/abilities/docs/catalog/condition_recipes.res (run tools/build_presentation.gd)",
+   "reason": "native_authoring_checks deliberately saves a wrong Resource and removes this exact isolated candidate table. Both negative controls assert rejection and preserve earlier admitted sources; no other missing-table path or fatal diagnostic is allowed."
   }
  ],
  "tests": [
@@ -202,8 +206,8 @@
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Fifteen durable current-schema paired cases (28 unique faction journals), all17 required physical cues, exact disclosed occurrence/marker/source checks and explicit authoring gaps; no audible mix/timing acceptance."
   },
   {
    "name": "base_audio_native_checks",
@@ -807,7 +811,10 @@
    "script": "res://tests/door_state_render_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -931,12 +938,12 @@
   {
    "name": "environment_source_preparation_checks",
    "script": "res://tests/environment_source_preparation_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "environment"
+   "status": "ok",
+   "reason": "Current actual-input adapter: passed 33833 checks, zero script/engine errors in .runtime/tests/20261020T195256.688977Z/summary.json. Native pixels remain separately qualified where applicable."
   },
   {
    "name": "environment_streaming_checks",
@@ -971,15 +978,20 @@
   {
    "name": "equipment_presentation_checks",
    "script": "res://tests/equipment_presentation_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/poison-weapon-runtime/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/poison-weapon-runtime/blue",
+    "--recording=res://tests/fixtures/schema16/scenarios/shillelagh-equipped-move/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/shillelagh-equipped-move/blue"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current actual-input adapter: passed 1281 checks, zero script/engine errors in .runtime/tests/20261020T195256.688977Z/summary.json. Native pixels remain separately qualified where applicable."
   },
   {
    "name": "equipment_selection_checks",
@@ -996,7 +1008,11 @@
    "script": "res://tests/event_trace_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--journal=res://tests/fixtures/schema16/scenarios/gallery/amber",
+    "--journal=res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber",
+    "--journal=res://tests/fixtures/schema16/scenarios/revive/amber"
+   ],
    "timeout": 300,
    "options": [
     "--journal"
@@ -1072,13 +1088,15 @@
    "script": "res://tests/frenzy_presentation_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/rage/amber"
+   ],
    "timeout": 300,
    "options": [
     "--recording"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current actual-input adapter: passed 9 checks, zero script/engine errors in .runtime/tests/20261020T195256.688977Z/summary.json. Only existing missing-parent refusal is qualified; positive Frenzied onset remains unavailable."
   },
   {
    "name": "frenzy_render_checks",
@@ -1288,7 +1306,9 @@
    "script": "res://tests/hud_retention_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/interaction-media/amber"
+   ],
    "timeout": 600,
    "options": [
     "--state"
@@ -1299,9 +1319,14 @@
   {
    "name": "impact_placement_checks",
    "script": "res://tests/impact_placement_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/intrinsic-weapon-flaming-scimitar/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/intrinsic-weapon-flaming-scimitar/blue",
+    "--recording=res://tests/fixtures/schema16/scenarios/intrinsic-weapon-soul-draining-morningstar/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/intrinsic-weapon-soul-draining-morningstar/blue"
+   ],
    "timeout": 600,
    "options": [
     "--output",
@@ -1391,9 +1416,12 @@
   {
    "name": "light_range_profile_checks",
    "script": "res://tests/light_range_profile_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/hide-light/blue",
+    "--sequence=8"
+   ],
    "timeout": 600,
    "options": [
     "--recording",
@@ -1625,9 +1653,11 @@
   {
    "name": "media_completion_checks",
    "script": "res://tests/media_completion_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "options": [
     "--state"
@@ -1668,7 +1698,9 @@
    "script": "res://tests/media_handoff_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "options": [
     "--state"
@@ -1681,7 +1713,9 @@
    "script": "res://tests/media_latency_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 300,
    "options": [
     "--state"
@@ -1968,12 +2002,12 @@
   {
    "name": "native_authoring_checks",
    "script": "res://tests/native_authoring_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "spells and actions (authoring overlay)"
+   "status": "ok",
+   "reason": "Current abilities and typed body source selection, exact provenance, invalid candidate/pose rejection and immutable worker/reload isolation. Two intentional candidate-table diagnostics use only the exact isolated-path allowance; no native pixel claim."
   },
   {
    "name": "native_blood_partition_checks",
@@ -2537,12 +2571,12 @@
   {
    "name": "native_spell_batch_authoring_checks",
    "script": "res://tests/native_spell_batch_authoring_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
    "args": [],
    "timeout": 600,
-   "status": "owned-by-migration",
-   "reason": "spells and actions (authoring overlay)"
+   "status": "ok",
+   "reason": "Current authored sources include the actual Aura of Life main owner. The complete authoring cohort passed 3542 checks on 2026-10-21; this headless gate asserts assignments and contracts, independently of native output and art review."
   },
   {
    "name": "native_spell_batch_render_checks",
@@ -2749,15 +2783,15 @@
   {
    "name": "normal_profile_media_checks",
    "script": "res://tests/normal_profile_media_checks.gd",
-   "mode": "gpu",
-   "tier": "gate",
+   "mode": "headless",
+   "tier": "fast",
    "args": [],
    "timeout": 600,
    "options": [
     "--recording"
    ],
-   "status": "owned-by-migration",
-   "reason": "characters"
+   "status": "ok",
+   "reason": "Current native16 Gallery profile projection, cold/partial residency, failure, cancellation, replacement, persistence and immutable earlier-state controls; no framebuffer qualification."
   },
   {
    "name": "optical_light_source_checks",
@@ -2930,9 +2964,11 @@
   {
    "name": "preload_priority_checks",
    "script": "res://tests/preload_priority_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -2996,7 +3032,10 @@
    "script": "res://tests/presentation_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--journal=res://tests/fixtures/schema16/scenarios/oa-jump-late-lethal/amber",
+    "--limit=20"
+   ],
    "timeout": 600,
    "options": [
     "--journal",
@@ -3067,7 +3106,7 @@
    "mode": "headless",
    "tier": "fast",
    "args": [
-    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+    "--recording=res://tests/fixtures/schema16/current-production-0c/door/amber"
    ],
    "timeout": 300,
    "options": [
@@ -3075,7 +3114,7 @@
     "--recording"
    ],
    "status": "ok",
-   "reason": "Current original Gallery qualified: strict/trusted producer parity and immutable retained/public snapshot contracts; receipt 20261020T053925.731356Z or 20261020T054026.881012Z."
+   "reason": "Current producer/live-protocol duty uses unchanged actual0c door originals; archived Gallery duties retain their independent historical fixtures."
   },
   {
    "name": "profile_run",
@@ -3121,22 +3160,30 @@
   {
    "name": "recorded_lifecycle_checks",
    "script": "res://tests/recorded_lifecycle_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--journal=res://tests/fixtures/schema16/scenarios/death-save-recovery/amber",
+    "--journal=res://tests/fixtures/schema16/scenarios/death-save-recovery/blue",
+    "--journal=res://tests/fixtures/schema16/scenarios/revive/amber",
+    "--journal=res://tests/fixtures/schema16/scenarios/revive/blue"
+   ],
    "timeout": 600,
    "options": [
     "--journal"
    ],
-   "status": "needs-args",
-   "reason": "takes --journal (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current actual-input adapter: passed 662 checks, zero script/engine errors in .runtime/tests/20261020T195256.688977Z/summary.json. Native pixels remain separately qualified where applicable."
   },
   {
    "name": "recorded_media_completion_checks",
    "script": "res://tests/recorded_media_completion_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--journal=res://tests/fixtures/schema16/scenarios/gallery/amber",
+    "--sequence=59"
+   ],
    "timeout": 600,
    "options": [
     "--journal",
@@ -3779,6 +3826,16 @@
    "reason": "Current real Web recording through shared spatial lifecycle ownership and admitted footprint; requires recorded library, not native output."
   },
   {
+   "name": "schema16_seen_union_checks",
+   "script": "res://tests/schema16_seen_union_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Exact packed seen union against frozen Python masks and prior validated codec across negative/shifted/disjoint bounds, every column byte alignment, empty sets and immutable retained values."
+  },
+  {
    "name": "schema16_spool_oracle_checks",
    "script": "res://tests/schema16_spool_oracle_checks.gd",
    "mode": "headless",
@@ -3816,15 +3873,22 @@
   {
    "name": "sdk_cell_checks",
    "script": "res://tests/sdk_cell_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
    "options": [
     "--cases"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --cases=<Python reducer oracle JSON> (argument not yet chosen)"
+   "status": "retired",
+   "reason": "Old expanded perception.members/point-array reducer fixture contract removed. Current packed-mask and point obligations have exact successors; no claim old synthetic wire reran. Current exact successor responsibilities remain separately gated; original files preserved, no historical oracle pass inferred.",
+   "replaced_by": [
+    "sdk_points_union_checks",
+    "schema16_seen_union_checks",
+    "schema16_values_merge_checks",
+    "schema16_fold_vectors_checks",
+    "schema16_spool_oracle_checks"
+   ]
   },
   {
    "name": "sdk_choices_checks",
@@ -3875,12 +3939,10 @@
    "args": [],
    "timeout": 300,
    "options": [
-    "--legacy",
-    "--oracle",
-    "--recording"
+    "--oracle"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "owned-by-migration",
+   "reason": "Current subset passes514 checks on four frozen native16 Door/lethal-OA prefixes plus all8 independent sensory vectors. Eight old observer/source revision/tombstone/compact-footprint producer precomposition controls lack current independent producer inputs; explicit report inventory retained. Current consumer success does not qualify those controls."
   },
   {
    "name": "sdk_points_union_checks",
@@ -3892,8 +3954,8 @@
    "options": [
     "--journal"
    ],
-   "status": "needs-args",
-   "reason": "takes --journal (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current numeric/reference union controls plus all four frozen native16 Door/lethal-OA originals; late schema-admitted malformed-HUD refusal preserves complete prior state and inputs after actual sensory work. Defaults require no ignored recording."
   },
   {
    "name": "sdk_pool_checks",
@@ -3938,41 +4000,60 @@
   {
    "name": "sdk_reducer_checks",
    "script": "res://tests/sdk_reducer_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
    "options": [
     "--cases"
    ],
-   "status": "owned-by-migration",
-   "reason": "Retired wire-schema-9 event/observation fixtures; current native16 fold_vectors, owner_order and full two-seat spool_oracle checks own this contract. No compatibility path is retained."
+   "status": "retired",
+   "reason": "Retired wire9 event/observer oracle and removed Audience.observe/view/reduce_senses APIs. Native16 receives indexed rows and composed masks; current independent complete-state/fold/order owners are listed. The125 old cases were not rerun. Eight independent producer precomposition controls remain explicitly unqualified in sdk_optical_sources_checks.",
+   "replaced_by": [
+    "schema16_fold_vectors_checks",
+    "schema16_spool_oracle_checks",
+    "schema16_owner_order_checks"
+   ]
   },
   {
    "name": "sdk_retained_transaction_checks",
    "script": "res://tests/sdk_retained_transaction_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
    "options": [
     "--cases"
    ],
-   "status": "owned-by-migration",
-   "reason": "Retired wire-schema-9 event/observation fixtures; current native16 fold_vectors, owner_order and full two-seat spool_oracle checks own this contract. No compatibility path is retained."
+   "status": "retired",
+   "reason": "Retired wire9 perception.members/observer synthesis/post-transfer mutation contract. Current retained native cuts, rollback, prior captures, durable retry and snapshot isolation have independent journal/reference owners below. Eight producer precomposition controls remain unqualified in sdk_optical_sources_checks; this retirement is not a pass.",
+   "replaced_by": [
+    "sdk_canonical_reuse_checks",
+    "schema16_owner_order_checks",
+    "schema16_spool_oracle_checks",
+    "sdk_sensory_journal_checks",
+    "tile_journal_checks"
+   ]
   },
   {
    "name": "sdk_sensory_context_checks",
    "script": "res://tests/sdk_sensory_context_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
    "options": [
     "--cases"
    ],
-   "status": "owned-by-migration",
-   "reason": "Retired wire-schema-9 event/observation fixtures; current native16 fold_vectors, owner_order and full two-seat spool_oracle checks own this contract. No compatibility path is retained."
+   "status": "retired",
+   "reason": "Retired context.cells.view.source and client multi-observer incremental composition API. Native16 supplies composed masks; current exact mask/value, canonical context and independent multi-seat replay owners are listed. Eight producer precomposition controls remain unqualified in sdk_optical_sources_checks; no legacy context oracle is claimed reproduced.",
+   "replaced_by": [
+    "schema16_fold_vectors_checks",
+    "schema16_spool_oracle_checks",
+    "sdk_canonical_reuse_checks",
+    "sdk_sensory_journal_checks",
+    "tile_journal_checks"
+   ]
   },
   {
    "name": "sdk_sensory_journal_checks",
@@ -3982,26 +4063,32 @@
    "args": [],
    "timeout": 300,
    "options": [
-    "--recording"
+    "--oracle"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "All four frozen native16 Door/lethal-OA prefixes, exact independent Python states, current encoded mask/source ownership through late semantic and durable refusal/retry, frozen captures, duplicate, cold replay and rollback. No retired sensory-context cache or compatibility replay."
   },
   {
    "name": "sdk_single_audience_projection_checks",
    "script": "res://tests/sdk_single_audience_projection_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
-   "status": "owned-by-migration",
-   "reason": "Retired wire-schema-9 event/observation fixtures; current native16 fold_vectors, owner_order and full two-seat spool_oracle checks own this contract. No compatibility path is retained."
+   "status": "retired",
+   "reason": "Retired _observe_retained/_view_after/_view_retained/_senses_for_write API and synthesized second-observer wire9 fixture. Native16 delivers composed fields; current original seat/state isolation owners are listed. Eight independent producer precomposition controls remain unqualified in sdk_optical_sources_checks; no compatibility path or passing legacy receipt is claimed.",
+   "replaced_by": [
+    "schema16_spool_oracle_checks",
+    "schema16_owner_order_checks",
+    "sdk_canonical_reuse_checks",
+    "sdk_sensory_journal_checks"
+   ]
   },
   {
    "name": "sdk_snapshot_checks",
    "script": "res://tests/sdk_snapshot_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
    "options": [
@@ -4009,21 +4096,33 @@
     "--recording",
     "--sequence"
    ],
-   "status": "needs-args",
-   "reason": "Usage: Godot --headless --path <project> --script res://tests/sdk_snapshot_checks.gd -- --recording=<current SDK journal> --sequence=<sensory operation> [--cases=<reducer-oracle.json>] (argument not yet chosen)"
+   "status": "retired",
+   "reason": "Old expanded-wire/perception.members and poisoning private post-transfer values are removed contracts. Current public Journal.snapshot remains detached; retained canonical/event snapshots have explicit present checks. Current exact successor responsibilities remain separately gated; original files preserved, no historical oracle pass inferred.",
+   "replaced_by": [
+    "sdk_canonical_reuse_checks",
+    "schema16_spool_oracle_checks",
+    "schema16_owner_order_checks",
+    "schema16_fold_vectors_checks"
+   ]
   },
   {
    "name": "sdk_tile_field_checks",
    "script": "res://tests/sdk_tile_field_checks.gd",
-   "mode": "headless",
-   "tier": "fast",
+   "mode": "none",
+   "tier": "none",
    "args": [],
    "timeout": 300,
    "options": [
     "--cases"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --cases=<generated tile-field oracle JSON> is required (argument not yet chosen)"
+   "status": "retired",
+   "reason": "Old expanded tile/group/version/oracle shape removed. Native tile scalar/column/delete/reentry and original journal fold/replay are covered by current exact producer vectors+four-seat spool. Current exact successor responsibilities remain separately gated; original files preserved, no historical oracle pass inferred.",
+   "replaced_by": [
+    "schema16_fold_vectors_checks",
+    "tile_journal_checks",
+    "schema16_spool_oracle_checks",
+    "schema16_presentation_checks"
+   ]
   },
   {
    "name": "sdk_transport_checks",
@@ -4129,7 +4228,9 @@
    "script": "res://tests/settings_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/interaction-media/amber"
+   ],
    "timeout": 600,
    "options": [
     "--state"
@@ -4273,7 +4374,11 @@
    "script": "res://tests/source_requirement_publication_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber",
+    "--sequences=8,17,31,45,59,73",
+    "--fireball-sequence=59"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -4324,7 +4429,9 @@
    "script": "res://tests/studio_blood_partition_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/oa-walk/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -4337,7 +4444,9 @@
    "script": "res://tests/studio_blood_residue_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/dash/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -4421,7 +4530,9 @@
    "script": "res://tests/studio_condition_preview_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/poisoned/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -4459,7 +4570,9 @@
    "script": "res://tests/studio_effect_version_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/fireball/amber"
+   ],
    "timeout": 600,
    "options": [
     "--at",
@@ -4581,7 +4694,9 @@
    "script": "res://tests/studio_light_levels_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/hide-light/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -4604,7 +4719,9 @@
    "script": "res://tests/studio_light_ui_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/hide-light/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -4786,9 +4903,13 @@
   {
    "name": "studio_seek_checks",
    "script": "res://tests/studio_seek_checks.gd",
-   "mode": "gpu",
+   "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/melee/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/oa-jump/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/revive/amber"
+   ],
    "timeout": 600,
    "options": [
     "--output",
@@ -4966,7 +5087,9 @@
    "script": "res://tests/studio_ui_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/action-surge/amber"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -5056,18 +5179,20 @@
    "args": [],
    "timeout": 300,
    "options": [
-    "--previous",
-    "--recording"
+    "--oracle"
    ],
-   "status": "needs-args",
-   "reason": "takes --recording (argument not yet chosen)"
+   "status": "ok",
+   "reason": "All four frozen native16 Door/lethal-OA prefixes against independent Python canonical states; actual Door world rows exercise missing-base refusal, exact durable bytes, retry, retained state, duplicate and cold replay. Retired schema6/7/8/9 identities remain refused."
   },
   {
    "name": "timeline_readiness_checks",
    "script": "res://tests/timeline_readiness_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/blue"
+   ],
    "timeout": 600,
    "options": [
     "--recording"
@@ -5100,13 +5225,15 @@
    "script": "res://tests/trusted_choices_checks.gd",
    "mode": "headless",
    "tier": "fast",
-   "args": [],
+   "args": [
+    "--choices=res://tests/fixtures/schema16/recording-boundary-failures/help_envelope/choices-response.json"
+   ],
    "timeout": 300,
    "options": [
     "--choices"
    ],
-   "status": "needs-args",
-   "reason": "Usage: --choices=<actual compact ChoicesResponse JSON> is required (argument not yet chosen)"
+   "status": "ok",
+   "reason": "Current actual-input adapter: passed 122 checks, zero script/engine errors in .runtime/tests/20261020T195256.688977Z/summary.json. Native pixels remain separately qualified where applicable."
   },
   {
    "name": "trusted_choices_peer",
@@ -5122,14 +5249,14 @@
    "mode": "headless",
    "tier": "fast",
    "args": [
-    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+    "--recording=res://tests/fixtures/schema16/current-production-0c/door/amber"
    ],
    "timeout": 300,
    "options": [
     "--recording"
    ],
    "status": "ok",
-   "reason": "Unchanged durable schema16 Gallery originals; current typed source/trust boundary semantics and original independent expectations."
+   "reason": "Current producer/live-protocol duty uses unchanged actual0c door originals; archived Gallery duties retain their independent historical fixtures."
   },
   {
    "name": "ui_actor_portrait_checks",
@@ -5244,7 +5371,11 @@
    "script": "res://tests/vfx_effect_hold_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording=res://tests/fixtures/schema16/scenarios/fireball/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/shield/amber",
+    "--recording=res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "options": [
     "--captures",
@@ -5303,7 +5434,10 @@
    "script": "res://tests/wall_corner_checks.gd",
    "mode": "gpu",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--recording",
+    "res://tests/fixtures/schema16/scenarios/gallery/amber"
+   ],
    "timeout": 600,
    "options": [
     "--background-check",
@@ -5738,10 +5872,12 @@
    "script": "res://tests/schema16_scenario_recording_checks.gd",
    "mode": "headless",
    "tier": "gate",
-   "args": [],
+   "args": [
+    "--index=res://.runtime/studio-library/index.json"
+   ],
    "timeout": 600,
-   "status": "needs-args",
-   "reason": "Explicit --index=<current recorder output> required; capability cohort journals are local captured data, not implicit encounter fixtures."
+   "status": "ok",
+   "reason": "Current actual-input adapter: passed 36099 checks, zero script/engine errors in .runtime/tests/20261020T195256.688977Z/summary.json. Ready-case journal coverage retains19 failed recipes separately."
   },
   {
    "name": "creation_input_checks",
@@ -6417,7 +6553,7 @@
    "timeout": 600,
    "options": [],
    "status": "ok",
-   "reason": "Eleven actual intrinsic Gear candidates with independent original equipped/attack/removal/replacement/seek/loop, four views and finite native contacts; common receiver regressions separately gated."
+   "reason": "Twelve exact intrinsic cohort originals plus separately qualified Ember Longsword cover thirteen candidates; created Flame Blade includes real same-item re-equip and native expiry. Both seats/four views/finite contacts/seek/loop; common receiver regressions separately gated."
   },
   {
    "name": "native_condition_application_render_checks",
@@ -6637,6 +6773,66 @@
    "timeout": 240,
    "status": "ok",
    "reason": "Actual two-seat accepted Vampiric Touch repeat, exact grant/result clock and recipient geometry/setters/native output; finite reverse seek/loop and four published views. Does not qualify idle grant activity or missing windup."
+  },
+  {
+   "name": "event_family_consumers_checks",
+   "script": "res://tests/event_family_consumers_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "13 original two-seat payload/granted-result/outcome cases, exact source packets, canonical drain and Studio seek/loop; absent grant memberships and unlinked residue packets stay explicit."
+  },
+  {
+   "name": "native_event_family_render_checks",
+   "script": "res://tests/native_event_family_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": "Every finite payload/exhale/Divine/attributed-residue branch from13 originals in both seats and4 actual views, isolated framebuffer output, exact setters and seek/loop teardown."
+  },
+  {
+   "name": "payload_release_checks",
+   "script": "res://tests/payload_release_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Two actual direct payload cast releases in both original seats: exact created/declared aim, sealed accepted-release constructor, real release socket, positive flight timing and creation/result contact chronology."
+  },
+  {
+   "name": "schema16_values_merge_checks",
+   "script": "res://tests/schema16_values_merge_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Exact canonical light/hazard value merge against prior codec over60 actual sensory cuts and768 differential columns; full wire integer coordinates, empty/new/removed cells, all byte values, duplicate/outside patches, retained ownership, nonmatching-mask fallback and unchanged malformed-row refusal. Isolated codec timings do not claim live performance."
+  },
+  {
+   "name": "creation_trace_input_checks",
+   "script": "res://tests/creation_trace_input_checks.gd",
+   "mode": "headless",
+   "tier": "fast",
+   "args": [],
+   "timeout": 300,
+   "status": "ok",
+   "reason": "Actual two-seat Glyph spatial-creation and Flaming actor-birth finite traces passed 259 checks on 2026-10-21 with their durable originals and no arguments. Factual ancestry, admission clock, null/withdrawn/ambiguous negatives, immutable inspection and timeline replay; native output is a separate gate."
+  },
+  {
+   "name": "native_creation_trace_render_checks",
+   "script": "res://tests/native_creation_trace_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 600,
+   "status": "ok",
+   "reason": "Actual two-seat Glyph ground trace and Flaming optical preparation passed 423 native checks on 2026-10-21 without arguments: four views, source inputs/timing/pixels, reverse seek/loop and cleanup. Armed/payload/body/trail and art acceptance remain separate."
   }
  ]
 }

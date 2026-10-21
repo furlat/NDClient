@@ -8,4 +8,5 @@ script = ExtResource("2_o8yh5")
 id = "spatial_effect.trait.leadership"
 layer = "field"
 art = PackedStringArray()
-notes = "No art and no Factory scenario."
+status = "internal"
+notes = "Actual LeadershipAura is mechanically reachable but inherits AreaCondition.has_visible_presence=false; current get_spatial_observation supplies no visible spatial owner/cells. The real trait action and recipient benefit condition owners retain their existing presentation. No new field, inferred radius or spatial appearance is selected by this internal ledger. This does not request another body asset or backend visibility field."

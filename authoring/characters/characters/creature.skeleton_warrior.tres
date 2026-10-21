@@ -6,13 +6,17 @@
 script = ExtResource("1_2sfgd")
 id = "creature.skeleton_warrior"
 identity = "content.neurodragon:creature:creature.skeleton_warrior@1"
-rig = "neuroclient.modular"
+rig = "smallscale.undead.6warrior"
 portrait = "undead--6warrior"
 portrait_status = "stand_in"
 size = "Medium"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
 death = Dictionary[String, String]({
 "default": "Die"
 })
-status = "stand_in"
-notes = "Drawn by the layered humanoid rig from the server's appearance; no creature art of its own.
-Portrait stand-in: undead--6warrior (no portrait of its own)."
+status = "partial"
+kit_mismatch = "The baked skeletal body carries a spear and wooden shield rather than the actual Longsword, Wooden Shield and Armor Scraps loadout. Its weapon/armor pixels do not change when actual equipment changes."
+notes = "Assigned the installed skeletal melee/shield body (smallscale.undead.6warrior) instead of a living modular humanoid. Uses the rig's existing attack, cast, movement, hit, Block and Die poses and clocks. The source rig retains its partial optical coverage and explicit clip fallbacks; baked kit differences remain above.
+Portrait remains borrowed undead--6warrior; no dedicated Skeleton Warrior portrait was delivered. All artwork remains unreviewed."

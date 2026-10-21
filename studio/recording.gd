@@ -123,7 +123,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             _observe_item_history(item_history,item_spans,item_owners,preview_state,0.0,"",result.cache)
             _preview_states(preview_states,preview_state,preview_state.actors,condition_history,0.0,result.cache)
             LightTracks.observe(light_history,preview_state,0.0,"",0,result.cache)
-            _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),0.0,"",true)
+            _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}) if preview_state.senses!=null else {},0.0,"",true,[],World.spatial_projection(preview_state,result.cache),{"operation_sequence":0,"source_index":preview_state.get("reducer_cursor")})
             continue
         var compiled:Dictionary
         phase_started=Time.get_ticks_usec()
@@ -166,7 +166,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     NativeItems.observe(item_owners,preview_state,offset+commit.at_ms,result.cache,str(commit.get("event_uuid","")),commit.get("item_rows",[]))
                     _observe_item_history(item_history,item_spans,item_owners,preview_state,offset+commit.at_ms,"%s:%s"%[sequence,commit.get("event_uuid","")],result.cache)
                 LightTracks.observe(light_history,preview_state,offset+commit.at_ms,commit.get("event_uuid",""),sequence,result.cache)
-                _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}) if preview_state.senses!=null else {},offset+commit.at_ms,commit.get("event_uuid",""),false,commit.get("spatial_rows",[]))
+                _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}) if preview_state.senses!=null else {},offset+commit.at_ms,commit.get("event_uuid",""),false,commit.get("spatial_rows",[]),World.spatial_projection(preview_state,result.cache),{"operation_sequence":sequence,"source_index":commit.get("source_index")})
                 if nodes.has(commit.get("event_uuid","")):
                     var event:Dictionary=nodes[commit.event_uuid]
                     var contacts={}
@@ -237,7 +237,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                 if component.has("body_track_id"):
                     for body_row in result.rows:
                         if body_row.id==component.body_track_id:actor=body_row.actor;source_track=body_row.track;break
-                result.rows.append({"id":component.id,"parent":component.parent_id,"kind":component.kind,
+                var component_row:Dictionary={"id":component.id,"parent":component.parent_id,"kind":component.kind,
                     "label":"Weapon impact" if component.get("native_weapon_impact",false) else str(component.native_cue.role).capitalize() if component.get("native_spell",false) else str(component.get("text")) if component.kind=="feedback_text" else str(component.get("cue_id",component.get("source_id",component.kind))),"depth":1,
                     "start_ms":offset+component.start_ms,"end_ms":offset+component.start_ms+component.duration_ms,
                     "component":component,"group_start_ms":offset,"group_id":group.id,
@@ -245,13 +245,24 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     "status":component.get("status","missing"),"reason":component.get("reason",""),
                     "missing_category":"source" if component.get("status")=="missing" else "",
                     "coverage":{"implementation":"resolved","source":component.get("status","missing"),"prepared":"not_examined","rendered":"not_witnessed"},"source_fps":component.get("sample_hz",0),"actor":actor,"source_track":source_track,
-                    "markers":[{"kind":component.source_marker,"at_ms":offset+component.get("contact_ms",component.start_ms),"source":component.get("timing_source","compiled.component.source_marker")}] if component.has("source_marker") else []})
+                    "markers":[{"kind":component.source_marker,"at_ms":offset+component.get("contact_ms",component.start_ms),"source":component.get("timing_source","compiled.component.source_marker")}] if component.has("source_marker") else []}
+                var component_method:Dictionary=Compiler.EventTrace.render_method(component,result.cache)
+                if not component_method.is_empty():component_row.render_method=component_method
+                if component.kind=="world_activation":
+                    component_row.merge(_recorded_world_preview(),true)
+                    component_row.source_fps=component_method.get("program",{}).get("fps",0)
+                    if component.get("role","")!="portal_exit" and component.get("status")!="missing":
+                        component_row.markers.append({"kind":"launch","at_ms":offset+float(component.start_ms)+float(component.get("launch_delay_ms",0.0)),"source":"authored world_media.contact_frame"})
+                        component_row.markers.append({"kind":"contact","at_ms":offset+float(component.start_ms)+float(component.get("launch_delay_ms",0.0))+float(component.get("projectile_ms",0.0)),"source":"authored contact frame + actual endpoint travel"})
+                result.rows.append(component_row)
                 for channel in NativeChannels.channels(component):
                     result.rows.append({"id":channel.id,"parent":component.id,"kind":channel.kind,"label":channel.label,
                         "start_ms":offset+channel.start_ms,"end_ms":offset+channel.start_ms+channel.duration_ms,
                         "component":channel,"group_start_ms":offset,"group_id":group.id,"source_event_uuid":channel.source_event_uuid,
                         "source":channel.source,"status":channel.status,"reason":channel.get("reason",""),
                         "render_method":channel.render_method,"preview_scope":channel.get("preview_scope","source_property_keys"),
+                        "preview_status":channel.get("preview_status","not_applicable"),"preview_reason":channel.get("preview_reason",""),
+                        "recipient_uuid":channel.actor_uuid if channel.kind=="native_material" else "",
                         "markers":NativeChannels.markers(channel,offset),
                         "coverage":{"implementation":"resolved","source":channel.status,"prepared":"not_examined","rendered":"not_witnessed"}})
             Timeline._directions(group.actor_tracks,INF,previous_directions)
@@ -321,7 +332,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         receiver.merge({"id":component.id+":weapon_surface:span:"+str(span.start_ms),"parent":span.id,"kind":"native_material",
             "label":"Weapon surface","trace_track_id":component.id+":weapon_surface",
             "render_method":{"surface":"separate modular weapon layer","renderer":"res://presentation/native_weapon_inputs.gd","item_uuid":component.item_owner_uuid},
-            "preview_scope":"live_composed_actor","preview_status":"missing","preview_reason":"Inspect the attached effect on the actual weapon in the replay; no isolated composed-weapon thumbnail is supplied."},true)
+            "preview_scope":"recorded_composed_context","preview_status":"available","preview_lighting_scope":"recorded_receiving_cut","preview_reason":"Demand-only thumbnails restore this exact recorded item/holder/pose and owner age through the existing production replay pane. The full scene is retained so held artwork is not clipped; unsupported actual source inputs remain explicit. The paused production pane temporarily publishes the exact restored receiving light/ground cut before capture. This source preview is not rendering evidence or artwork approval."},true)
         result.rows.append(receiver)
         _persistent_native_channels(result.rows,span,component)
     result.rows.append_array(LightTracks.rows(light_history,result,preview_tracks))
@@ -1156,14 +1167,25 @@ static func _persistent_native_channels(rows:Array,parent:Dictionary,sample:Dict
         # source property changes, not invented gameplay illumination curves.
         rows.append(row)
 
-static func _observe_spatial_history(history:Dictionary,owners:Dictionary,effects:Dictionary,at_ms:float,event_uuid:String,initial:bool=false,rows:Array=[])->void:
+static func _observe_spatial_history(history:Dictionary,owners:Dictionary,effects:Dictionary,at_ms:float,event_uuid:String,initial:bool=false,rows:Array=[],projection:Dictionary={},source_cut:Dictionary={})->void:
     NativePersistent.observe_spatial(owners,effects,at_ms,initial,rows)
+    var projected:Dictionary={};var missing:Dictionary={}
+    for row in projection.get("rows",[]):
+        var id:String=str(row.spatial_effect_uuid)
+        if not projected.has(id):projected[id]=[]
+        projected[id].append(row)
+    for reason in projection.get("unresolved",[]):
+        var id:String=str(reason).get_slice(":",1)
+        if not missing.has(id):missing[id]=[]
+        missing[id].append(reason)
     for id in owners:
         var owner:Dictionary=owners[id]
         if not history.has(id):history[id]={"source_event_uuid":event_uuid,"keys":[]}
         var keys:Array=history[id].keys
-        if not keys.is_empty() and keys.back().owner==owner:continue
-        keys.append({"at_ms":at_ms,"source_event_uuid":event_uuid,"owner":owner.duplicate(true)})
+        var world_rows:Array=projected.get(str(id),[]);var world_gaps:Array=missing.get(str(id),[])
+        if not keys.is_empty() and keys.back().owner==owner and keys.back().get("world_media_rows",[])==world_rows and keys.back().get("world_media_gaps",[])==world_gaps:continue
+        keys.append({"at_ms":at_ms,"source_event_uuid":event_uuid,"owner":owner.duplicate(true),"source_cut":source_cut.duplicate(true),
+            "world_media_rows":world_rows.duplicate(true),"world_media_gaps":world_gaps.duplicate()})
 
 static func _spatial_presentation(effect:Dictionary,cache:Dictionary)->Dictionary:
     # Match the existing production sampler's three source arms. A typed held
@@ -1171,11 +1193,13 @@ static func _spatial_presentation(effect:Dictionary,cache:Dictionary)->Dictionar
     var selected:Dictionary=NativePersistent.spatial_selection(effect,cache)
     var lifecycles:Array=NativePersistent.spatial_lifecycles(effect)
     var identity:String=NativePersistent.SpatialInputs.content_id(effect)
-    var config:Dictionary=Compiler.Authoring.load_data("catalog/condition_recipes.json",cache).get(identity,{})
+    var config:Dictionary=NativePersistent.spatial_config(identity,cache)
     var authored:Array=NativePersistent.authored_phases(config,identity,cache) if not config.get("persistent",{}).get("nativeEffects",[]).is_empty() else []
     var close_ms:float=NativePersistent.removal_ms(lifecycles) if not lifecycles.is_empty() else NativePersistent.fade_ms(selected)
-    return {"selected":selected,"eligible":not selected.is_empty() or not lifecycles.is_empty() or not authored.is_empty(),
-        "close_ms":maxf(close_ms,NativePersistent.authored_removal_ms(config))}
+    var world_program:Dictionary=Compiler.Authoring.Catalog.environment_index(cache).get("spatial_media",{}).get(identity,{})
+    var has_world:bool=world_program.get("native_world_media",false)
+    return {"selected":selected,"eligible":has_world or not selected.is_empty() or not lifecycles.is_empty() or not authored.is_empty(),
+        "world_media":world_program if has_world else {},"close_ms":maxf(close_ms,NativePersistent.authored_removal_ms(config))}
 
 static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,events:Dictionary)->void:
     # Record the disclosed after-values once. The same NativePersistent sampler
@@ -1191,6 +1215,7 @@ static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,
             "start_ms":owner.start_ms,"end_ms":end,"owner":owner,
             "source":"PlayerState.senses.spatial_effects/"+str(id),"status":"available",
             "timing_source":"Actual disclosed spatial-effect membership and after-values"}
+        if not presentation.world_media.is_empty():life.render_method=Compiler.EventTrace.world_method(presentation.world_media)
         index.rows.append(life)
         var keys:Array=history[id].keys
         for n in keys.size():
@@ -1200,6 +1225,23 @@ static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,
             if interval_end<=start:continue
             var sampled_owner:Dictionary=key.owner.duplicate()
             sampled_owner.end_ms=owner.end_ms
+            if not presentation.world_media.is_empty():
+                var world_method:Dictionary=Compiler.EventTrace.world_method(presentation.world_media)
+                var state_field:String=str(presentation.world_media.get("state_field","trap_state"))
+                var observed_rows:Array=key.get("world_media_rows",[])
+                var gaps:Array=key.get("world_media_gaps",[])
+                world_method.occurrence={"spatial_effect_uuid":str(id),"source_event_uuid":str(key.source_event_uuid),
+                    "source_cut":key.get("source_cut",{}).duplicate(true),"observed_state":sampled_owner.effect.get(state_field),
+                    "source_rows":observed_rows.duplicate(true),"unavailable":gaps.duplicate(),
+                    "observations":sampled_owner.get("spatial_observations",[]).duplicate(true)}
+                index.rows.append({"id":life.id+":world_media:"+str(n),"parent":life.id,"kind":"world_animation",
+                    "label":"Observed world state · "+str(sampled_owner.effect.get(state_field)),"start_ms":start,"end_ms":interval_end,
+                    "owner":sampled_owner,"source_event_uuid":str(key.source_event_uuid),"source":world_method.source,
+                    "source_fps":float(presentation.world_media.get("fps",0.0)),"render_method":world_method,
+                    "status":"missing" if not gaps.is_empty() else "available" if not observed_rows.is_empty() else "state_only",
+                    "reason":"; ".join(gaps),"missing_category":"source" if not gaps.is_empty() else "",
+                    "markers":[],"coverage":{"implementation":"implemented","source":"missing" if not gaps.is_empty() else "available",
+                        "prepared":"not_examined","rendered":"not_witnessed"}}.merged(_recorded_world_preview(),true))
             for sample in NativePersistent.spatial_samples({id:sampled_owner},start,index.cache):
                 # Successful native phases omit a status override; the live
                 # renderer admits them unless explicitly missing. Retain that
@@ -1215,8 +1257,13 @@ static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,
                     "source":sample.source,"source_fps":sample.sample_hz,"status":sample.status,
                     "interval_causes":["event:"+str(key.source_event_uuid)] if not key.source_event_uuid.is_empty() else ["initial:"+str(id)],
                     "coverage":{"implementation":"resolved","source":sample.status,"prepared":"not_examined","rendered":"not_witnessed"}}
+                row.merge(_recorded_world_preview(),true)
                 index.rows.append(row)
                 _persistent_native_channels(index.rows,row,sample)
+
+static func _recorded_world_preview()->Dictionary:
+    return {"preview_scope":"recorded_composed_context","preview_status":"available","preview_lighting_scope":"recorded_receiving_cut",
+        "preview_reason":"Demand-only thumbnails restore the exact original owner, footprint, source phase and observation cut through Play. Framing uses its admitted source placements/ground anchor in the full scene; no actor, review fixture or target is invented. Missing or inactive actual inputs remain explicit. This preview is neither rendered qualification nor artwork approval."}
 
 static func _preview_states(output: Dictionary,state: Dictionary,actors: Dictionary,owners: Dictionary,at_ms: float,cache: Dictionary,source_event_uuid:String="")->void:
     for id in actors:
@@ -1384,5 +1431,5 @@ static func _observe_item_history(current:Dictionary,spans:Array,owners:Dictiona
             "start_ms":at_ms,"end_ms":INF,"source_start_ms":component.start_ms,"group_start_ms":component.start_ms,"group_id":"",
             "source_event_uuid":component.source_event_uuid,"actor_uuid":component.actor_uuid,"component":component,
             "source":component.source,"status":component.status,"reason":component.get("reason",""),"signature":signature,
-            "markers":[],"source_fps":0,"render_method":{"renderer":"res://presentation/native_spell_renderer.gd","attachment":component.native_cue.attachment,"item_uuid":component.item_owner_uuid,"inputs":component.native_clip.get("inputs",[])},"preview_scope":"actual_item_in_scene","coverage":{"implementation":"resolved","source":component.status,"prepared":"not_examined","rendered":"not_witnessed"}}
+            "markers":[],"source_fps":0,"render_method":{"renderer":"res://presentation/native_spell_renderer.gd","attachment":component.native_cue.attachment,"item_uuid":component.item_owner_uuid,"inputs":component.native_clip.get("inputs",[])},"preview_scope":"recorded_composed_context","preview_status":"available","preview_lighting_scope":"recorded_receiving_cut","preview_reason":"Uses the exact restored recording and production item receiver; no donor or synthetic source operands. Its paused production pane publishes the exact restored receiving light/ground cut for capture. Preparation, rendered output and artwork acceptance remain separate evidence.","coverage":{"implementation":"resolved","source":component.status,"prepared":"not_examined","rendered":"not_witnessed"}}
         current[id]=row;spans.append(row)

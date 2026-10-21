@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_2al3i")
 id = "spatial_effect.spell.pass_without_trace"
+disposition = "state_only"
 icon = SubResource("Resource_pwlab")
+
+status = "internal"
+notes = "This region owns membership in the actual moving friendly aura. Visible receiving effects are delegated to each actual condition.spell.pass_without_trace.bonus UUID and its delivered application/sustain/removal lifecycle. No second region visual, fabricated member or fixed cast-duration hold is authored. All artwork is unreviewed."

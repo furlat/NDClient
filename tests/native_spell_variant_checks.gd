@@ -6,6 +6,7 @@ const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Common=preload("res://tools/presentation_build/common.gd")
 const SpellVariant=preload("res://presentation/source/abilities/spell_variant.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
+const Playback=preload("res://presentation/native_spell_playback.gd")
 const Sources=preload("res://presentation/native_presentation_sources.gd")
 const Requirements=preload("res://presentation/requirements.gd")
 const Components=preload("res://presentation/components.gd")
@@ -42,6 +43,9 @@ func source_cache(record:Resource,id:String=ID,path:String=PATH)->Dictionary:
     return cache
 func run()->void:
     var entry:Resource=load(PATH).duplicate(true)
+    var authored_delay:Resource=entry.duplicate(true);authored_delay.unported=authored_delay.unported.duplicate(true);authored_delay.unported.erase("damage")
+    authored_delay.impact_delay=.5
+    check(Build.raw_recipe(authored_delay).get("damage",{}).get("impactDelayMs")==500.0,"A typed spell impact delay reaches the published recipe without a legacy damage dictionary")
     var miss:Resource=variant("test.actual_miss",{"attack_outcome":["Miss","Crit Miss"]},entry)
     var crit:Resource=variant("test.actual_critical",{"attack_outcome":["Crit"]},entry)
     var draft:Resource=variant("miss_name_is_not_a_predicate",{},entry);draft.value="Miss"
@@ -95,8 +99,109 @@ func run()->void:
     inventory()
     await originals()
     mixed_siblings()
+    attached_impact_timing()
     print("NATIVE_SPELL_VARIANT ",JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,"scope":"Explicit typed selector/compiler/preparation ownership and actual original outcomes; no automatic Factory variant activation, native pixels or visual acceptance."}))
     quit(0 if failures.is_empty() else 1)
+func attached_impact_timing()->void:
+    # Build this entire authored cohort in memory. This tests the source/build/
+    # compiler boundary before the shared on-disk build or expensive native run.
+    var specs:Array=[
+        {"id":"ray_of_sickness","folder":"root-target-save/ray-of-sickness","impact":"bg3-36/ray-of-sickness/impact"},
+        {"id":"acid_arrow","folder":"projectile-variants/acid_arrow--dodge_seed_3","impact":"bg3-36/acid-arrow/impact"},
+        {"id":"chromatic_orb","folder":"scenarios/chromatic-orb","impact":"bg3-36/chromatic-orb/thunder/impact","element_gap":true},
+        {"id":"sorcerous_burst","folder":"finite-observed/sorcerous-burst","impact":"bg3-36/sorcerous-burst/fire/impact","element_gap":true},
+        {"id":"finger_of_death","folder":"finite-observed/finger-of-death","impact":"native/finger_of_death/impact"},
+        {"id":"vitriolic_sphere","folder":"finite-observed/vitriolic-sphere","impact":"high-level-22/vitriolic-sphere/native_target_initial"}]
+    var entries:Dictionary={};var paths:Dictionary={}
+    for spec in specs:
+        var id:String="spell."+spec.id;var path:String="res://authoring/abilities/spells/"+id+".tres"
+        entries[id]=load(path);paths[id]=path
+    var records:Dictionary=Build.documents({"spells":entries,"contexts":{"hit_flash":load("res://authoring/abilities/contexts/hit_flash.tres")}}, {"spells":paths}).native.records
+    var cache:Dictionary={};var admitted:Dictionary=Sources.admission(cache)
+    var catalog:Resource=admitted.index.duplicate();catalog.spells=admitted.index.spells.duplicate();catalog.spells.merge(paths,true)
+    cache[Sources.CACHE_KEY]=Sources.make_admission(catalog,records)
+    for spec in specs:
+        if spec.get("element_gap",false):
+            var selected:Dictionary=records["spell."+spec.id].selection
+            check(selected.staging.cues.size()==2 and selected.staging.cues.all(func(cue):return cue.get("unbound_constructor_inputs",[])==["chosen_spell_element_not_disclosed"]),spec.id+" both unsupported fixed-element default cues retain their exact authored gap")
+            check(NativeSpells.effect_clips(selected).is_empty(),spec.id+" missing chosen element admits no default-colour preparation")
+        for seat in ["amber","blue"]:
+            var directory:String="res://tests/fixtures/schema16/"+spec.folder+"/"+seat
+            if DirAccess.dir_exists_absolute(directory.path_join("journal")):directory=directory.path_join("journal")
+            var index:Dictionary=Recording.read(directory,{},{},cache)
+            check(index.ok,seat+" "+spec.id+" actual positive original compiles with the authored source cohort")
+            if not index.ok:continue
+            var rows:Dictionary={}
+            for row in index.rows:rows[row.id]=row
+            var impacts:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("native_clip",{}).get("id")==spec.impact)
+            check(not impacts.is_empty(),seat+" "+spec.id+" retains its exact recipient impact chronology for inspection")
+            if spec.get("element_gap",false):
+                check(impacts.all(func(row):return row.status=="missing" and row.component.get("unbound_constructor_inputs",[])==["chosen_spell_element_not_disclosed"]),seat+" "+spec.id+" unknown selected element cannot render the fixed default impact")
+                check(index.rows.any(func(row):return row.kind=="body" and row.track.get("activity")=="cast"),seat+" "+spec.id+" original cast body remains factual despite the fixed-colour gap")
+            else:check(impacts.all(func(row):return row.status=="available"),seat+" "+spec.id+" supported recipient impact remains available")
+            for impact in impacts:
+                var deliveries:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("native_cast_id")==impact.component.native_cast_id and row.component.get("native_cue",{}).has("source_contact_local"))
+                check(deliveries.size()==1,seat+" "+spec.id+" impact retains its exact authored finite delivery owner")
+                if deliveries.size()!=1:continue
+                var delivery:Dictionary=deliveries[0];var cue:Dictionary=delivery.component.native_cue
+                if spec.get("element_gap",false):check(delivery.status=="missing" and delivery.component.get("unbound_constructor_inputs",[])==["chosen_spell_element_not_disclosed"],seat+" "+spec.id+" unknown selected element cannot render the fixed default delivery")
+                else:check(delivery.status=="available",seat+" "+spec.id+" supported authored delivery remains available")
+                # A flight phase maps its authored source launch/contact onto
+                # the real distance-scaled delivery interval. Attached sources
+                # keep their own unwarped source clock instead.
+                var source_contact:float=float(cue.source_contact_local)
+                var elapsed:float=float(cue.contact) if cue.role=="flight" else source_contact/float(cue.get("source_rate",1.0))
+                check(is_equal_approx(Playback.source_time(cue,elapsed),source_contact),seat+" "+spec.id+" actual phase contact samples the exact authored source contact")
+                var contact:float=delivery.start_ms+elapsed*1000.0
+                check(is_equal_approx(impact.start_ms,contact),seat+" "+spec.id+" finite impact aligns with the actual source contact")
+                var matched:int=0
+                for flash in index.rows:
+                    if flash.kind!="material_flash" or flash.component.actor_uuid!=impact.component.target_uuid or flash.group_id!=impact.group_id:continue
+                    var ancestor:String=flash.parent
+                    while rows.has(ancestor) and ancestor!=impact.parent:ancestor=rows[ancestor].parent
+                    if ancestor!=impact.parent:continue
+                    matched+=1
+                    check(is_equal_approx(flash.start_ms,contact),seat+" "+spec.id+" actual recipient material reacts at source contact")
+                    var damage:Dictionary=rows[flash.parent]
+                    check(damage.markers.any(func(marker):return marker.kind=="commit" and is_equal_approx(float(marker.at_ms),contact)),seat+" "+spec.id+" actual HP after-value commits at source contact")
+                    var bodies:Array=index.rows.filter(func(row):return row.kind=="body" and row.parent==damage.id)
+                    check(not bodies.is_empty(),seat+" "+spec.id+" original has a real receiving actor reaction")
+                    for body in bodies:check(body.track.actor_uuid==impact.component.target_uuid and is_equal_approx(body.start_ms,contact),seat+" "+spec.id+" exact receiving actor reacts at source contact")
+                    evidence.append({"kind":"unavailable_fixed_element_chronology" if spec.get("element_gap",false) else "attached_source_impact_timing","behavior_id":"spell."+spec.id,"seat":seat,"directory":directory,"delivery_clip":delivery.component.native_clip.id,
+                        "delivery_status":delivery.status,"impact_clip":spec.impact,"impact_status":impact.status,"source_contact_ms":contact,"impact_ms":impact.start_ms,"material_ms":flash.start_ms,"actor_ms":bodies.map(func(row):return row.start_ms),"damage_event":damage.id,"commit_markers":damage.markers})
+                check(matched>0,seat+" "+spec.id+" impact has its actual causal applied damage")
+    original_miss_contacts(cache)
+func original_miss_contacts(cache:Dictionary)->void:
+    var families:Dictionary={"chromatic_orb":["acid","cold","fire","lightning","poison","thunder"],"sorcerous_burst":["acid","cold","fire","lightning","poison","psychic","thunder"]}
+    for owner in families:
+        for element in families[owner]:
+            for seat in ["amber","blue"]:
+                var directory:String="res://tests/fixtures/schema16/projectile-variants/"+owner+"--"+element+"_original/"+seat+"/journal"
+                var label:String=seat+" "+owner+" "+element+" original Miss"
+                var declarations:Array=[];var applied:Array=[]
+                for file in DirAccess.get_files_at(directory):
+                    if not file.ends_with(".json") or not file.get_basename().is_valid_int():continue
+                    var packet:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(directory.path_join(file)))
+                    for lineage in packet.get("lineages",[]):
+                        for node in lineage.events:
+                            var fact:Dictionary=node.get("fact",{}) if node.get("fact")!=null else {}
+                            if fact.get("kind")=="spell" and fact.get("behavior_id")=="spell."+owner and fact.get("attack_outcome") in ["Miss","Crit Miss"]:
+                                declarations.append(str(int(node.occurrence)))
+                                check(fact.get("effect_id")==null and not fact.has("element"),label+" actual declaration supplies no chosen element")
+                            if fact.get("kind")=="damage" and fact.get("stage")=="applied" and fact.applied_damage>0:applied.append({"id":str(int(node.occurrence)),"target":fact.target_entity_uuid})
+                check(declarations.size()==1,label+" independently retains its single actually disclosed Miss")
+                var index:Dictionary=Recording.read(directory,{},{},cache)
+                check(index.ok,label+" reduces/compiles without rewriting its facts")
+                if not index.ok:continue
+                var own:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("native_cast_id","") in declarations)
+                check(not own.is_empty(),label+" has actual native rows joined to that exact original declaration")
+                check(own.all(func(row):return row.status=="missing" and row.component.get("unbound_constructor_inputs",[])==["chosen_spell_element_not_disclosed"]),label+" every fixed-element fallback row stays explicitly unavailable")
+                var impacts:Array=own.filter(func(row):return str(row.component.native_clip.id).ends_with("/impact"))
+                check(impacts.is_empty(),label+" never emits a normal recipient impact for that same declaration")
+                for damage in applied:
+                    var flashes:Array=index.rows.filter(func(row):return row.kind=="material_flash" and row.component.source_event_uuid==damage.id and row.component.actor_uuid==damage.target)
+                    check(flashes.size()==1,label+" preserves each separately disclosed positive secondary damage/material fact")
+                evidence.append({"kind":"original_miss_contact_omission","behavior_id":"spell."+owner,"element_case":element,"seat":seat,"directory":directory,"actual_miss_occurrences":declarations,"normal_impacts":impacts.size(),"separate_positive_damage_occurrences":applied})
 func serialized(original:Resource,label:String,behavior:String=ID)->Resource:
     var unchanged:PackedByteArray=var_to_bytes([original.selection,original.recipe,original.requirements,original.variants])
     var compact:Resource=Build.persisted_native_record(original)

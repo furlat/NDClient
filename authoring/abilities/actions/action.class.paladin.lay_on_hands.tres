@@ -5,6 +5,38 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_607u5"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_j0gdb"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="CommittedHealing"]
+script = ExtResource("effect")
+clip = "divine-class-study/divine_lay_on_hands_lesser_study/1-lesser"
+role = "attached"
+scope = "recipient"
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+endpoint_actor_uuids = true
+light_multiplier = 0.0
+constructor_input = {"kind": "observed_event", "projection": "owned_outcome", "outcome": "heal", "geometry_actor": "target", "component_path": ["divine_art"]}
+extra = {"dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]}, "live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face", "pose_socket": "head"}, {"actor": "target", "socket": "body_center"}]}
+
+[sub_resource type="Resource" id="CommittedCure"]
+script = ExtResource("effect")
+clip = "divine-class-study/divine_lay_on_hands_cure_study/1-cure"
+role = "attached"
+scope = "recipient"
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+endpoint_actor_uuids = true
+light_multiplier = 0.0
+constructor_input = {"kind": "observed_event", "projection": "owned_outcome", "outcome": "removal", "geometry_actor": "target", "component_path": ["divine_art"]}
+extra = {"dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]}, "live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face", "pose_socket": "head"}, {"actor": "target", "socket": "body_center"}]}
+
 [sub_resource type="Resource" id="Resource_607u5"]
 script = ExtResource("1_j0gdb")
 role = "cast"
@@ -26,5 +58,6 @@ kind = "action"
 family = "class"
 icon = SubResource("Resource_b6q1d")
 body = SubResource("Resource_607u5")
+effects = Array[ExtResource("effect")]([SubResource("CommittedHealing"), SubResource("CommittedCure")])
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (targeted_ability); the rig resolves it to a clip once roles are built (coverage fill)."
+notes = "One chosen existing healing artwork serves all actual positive unblocked Lay on Hands healing, without inferring Lesser/Greater from amount. Actual same-action condition removals select the separate Cure artwork. Greater is an unselected artwork alternative, not a required missing gameplay form. Fixture leases/events are cleared and exact native outcomes bind each finite source; no extra casting body or windup is invented. Native visual acceptance remains open."

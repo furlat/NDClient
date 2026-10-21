@@ -1,0 +1,236 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "b56ff617-7d2e-4e22-98c0-cd817714a989",
+   "state_revision": "2c5004ae-02d2-47bf-b8d1-e8094e77e86f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+   "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+   "audience_id": "ea29bf6b-9752-4cda-8299-ae1ae6d24f42",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+    "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+    "audience_id": "ea29bf6b-9752-4cda-8299-ae1ae6d24f42",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.dodge",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "e5670b4a-fae8-4511-b664-138f2e1be15a",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.dodge",
+   "display_name": "Dodge",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "0a5545fe-008d-4aa1-bf12-a2bbed336b80",
+   "state_revision": "e5670b4a-fae8-4511-b664-138f2e1be15a",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 22,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+   "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+   "audience_id": "1a7eca66-4fc6-41a1-be18-e039b86f78a5",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+    "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+    "audience_id": "1a7eca66-4fc6-41a1-be18-e039b86f78a5",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "0a5545fe-008d-4aa1-bf12-a2bbed336b80",
+   "state_revision": "8d350637-e5fa-4fb0-9ec4-a010e08f161f",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+   "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+   "audience_id": "1a7eca66-4fc6-41a1-be18-e039b86f78a5",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+    "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+    "audience_id": "1a7eca66-4fc6-41a1-be18-e039b86f78a5",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "8a8fcaa2-0349-4336-939d-8c42886329b6",
+   "state_revision": "5a99ac6c-e4ac-4899-a5ea-c051bb351b0e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+   "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+   "audience_id": "ea29bf6b-9752-4cda-8299-ae1ae6d24f42",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+    "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+    "audience_id": "ea29bf6b-9752-4cda-8299-ae1ae6d24f42",
+    "sequence": 7
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "4f7364ce-4053-4d8a-81a8-6b343014902f",
+   "state_revision": "b39794e8-470d-436e-bec7-85c872d2ad82",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+   "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+   "audience_id": "1a7eca66-4fc6-41a1-be18-e039b86f78a5",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+    "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+    "audience_id": "1a7eca66-4fc6-41a1-be18-e039b86f78a5",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.acid_arrow",
+   "by": "caster",
+   "target": "target",
+   "level": 2
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "828b8c04-6427-4ce2-aa34-3d498b19e21c",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.acid_arrow",
+   "display_name": "Acid Arrow (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "side",
+     "value": "creature",
+     "label": "Creature"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "b56ff617-7d2e-4e22-98c0-cd817714a989",
+   "state_revision": "828b8c04-6427-4ce2-aa34-3d498b19e21c",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 2
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+   "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+   "audience_id": "ea29bf6b-9752-4cda-8299-ae1ae6d24f42",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_7",
+    "game_epoch": "074e9174-23f9-409b-b671-2293df015c31",
+    "audience_id": "ea29bf6b-9752-4cda-8299-ae1ae6d24f42",
+    "sequence": 11
+   }
+  }
+ }
+]

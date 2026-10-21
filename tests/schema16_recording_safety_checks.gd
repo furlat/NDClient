@@ -87,7 +87,18 @@ func run()->void:
     var baseline:Dictionary={}
     for record in Library.records(index,snapshot):
         if record.get("kind")=="spell" and str(record.id).ends_with("/baseline"):baseline[str(record.id).trim_suffix("/baseline")]=record
-    var identities:Array=snapshot.get("ids",{}).get("spell",{}).keys();identities.sort()
+    var descriptors:Dictionary=snapshot.get("ids",{}).get("spell",{})
+    var registry_ids:Array=descriptors.keys();registry_ids.sort()
+    var identities:Array=[];var excluded:Array=[]
+    for identity in registry_ids:
+        var visibility:String=str(descriptors[identity].get("visibility",""))
+        if visibility in ["developer","internal"]:
+            var prior:Dictionary=baseline.get(identity,{})
+            excluded.append({"id":identity,"visibility":visibility,"disposition":"nonproduction_definition",
+                "reason":"Native descriptor visibility="+visibility+"; outside production spell baselines. Existing original captures remain unchanged and inspectable.",
+                "case_id":str(identity)+"/baseline","scenario_status":prior.get("scenario_status","missing"),
+                "recording_reason":prior.get("reason","")})
+        else:identities.append(identity)
     var missing:Array=[];var unavailable:Array=[];var passed:Array=[];var tested_failures:Array=[];var rows:Array=[]
     var inventory_failures:Array=[]
     check(not identities.is_empty(),"Frozen official spell inventory is present",inventory_failures)
@@ -120,12 +131,14 @@ func run()->void:
         # Persist completed rows so a later reader crash does not erase the
         # exact last examined ID or previously completed inventory results.
         var report={"scope":"headless_current_recordings_only","engine":index.get("engine",{}),"expected_engine":snapshot.get("header",{}),
-            "inventory":identities.size(),"index_cases_at_start":index.get("cases",[]).size(),"checks":checks,"failures":failures,
+            "inventory":identities.size(),"registry_inventory":registry_ids.size(),"selected_spell_ids":identities.duplicate(),
+            "excluded_definitions":excluded,"eligibility":"Only exact native developer/internal descriptor visibility excludes a definition; absent visibility remains selected.",
+            "index_cases_at_start":index.get("cases",[]).size(),"checks":checks,"failures":failures,
             "passed":passed,"missing_baseline":missing,"unavailable_baseline":unavailable,"tested_failures":tested_failures,"spells":rows,
             "complete":rows.size()==identities.size(),"elapsed_ms":float(Time.get_ticks_usec()-started)/1000.0,
             "qualifies":"Original faction journals, production compiler, boundary restore/sample, canonical endpoint and immutable earlier state",
             "does_not_qualify":"Native pixels, shader/resource preparation, audible playback, Studio UI or actual live player gestures; script-error log must also be clean"}
         FileAccess.open(REPORT,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
         print("SCHEMA16_RECORDING_SPELL ",JSON.stringify({"id":identity,"status":result.status,"factions":result.factions.size()}))
-    print("SCHEMA16_RECORDING_SAFETY ",JSON.stringify({"checks":checks,"failures":failures.size(),"inventory":identities.size(),"passed":passed.size(),"missing_baseline":missing.size(),"unavailable_baseline":unavailable.size(),"tested_failures":tested_failures.size(),"report":REPORT}))
+    print("SCHEMA16_RECORDING_SAFETY ",JSON.stringify({"checks":checks,"failures":failures.size(),"inventory":identities.size(),"registry_inventory":registry_ids.size(),"excluded_definitions":excluded.size(),"passed":passed.size(),"missing_baseline":missing.size(),"unavailable_baseline":unavailable.size(),"tested_failures":tested_failures.size(),"report":REPORT}))
     quit(0 if failures.is_empty() else 1)

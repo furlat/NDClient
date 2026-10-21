@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_18a00")
 id = "condition.tile.zone_marker"
+disposition = "state_only"
 icon = SubResource("Resource_aox4u")
+play_package_lifecycle = false
+status = "internal"
+notes = "ZoneMarkerCondition is the retained legacy authored tile marker in dnd/tile_conditions.py. Its inherited apply stores an ordinary tile condition without extra mechanics or source geometry. Actual spatial fields keep their distinct observed owner identities; this bookkeeping record creates no additional zone or actor visual."

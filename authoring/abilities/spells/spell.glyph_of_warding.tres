@@ -35,21 +35,27 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_vf6u4"]
 script = ExtResource("1_to5aj")
 clip = "bg3-36/glyph-of-warding/neutral_armed"
+unbound_constructor_inputs = PackedStringArray("glyph_armed_state_not_disclosed")
 role = "attached"
 at = "release"
 delay = 0.45
@@ -94,16 +100,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_dv4q3"]
@@ -211,12 +222,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_8jtc0"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_acid_native"
+dispatch_gap = "actual_glyph_armed_payload_and_element_not_bound"
 kind = "element"
 value = "acid"
 selection = "glyph_of_warding_acid_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_k0nsk"), SubResource("Resource_dv4q3"), SubResource("Resource_gj0ip"), SubResource("Resource_djqe6"), SubResource("Resource_7ts1k")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The Acid review requires actual armed state, contribution/caster ownership and explicit payload identity. The legal held-to-trigger result has null public spatial state and cannot supply these operands. Damage type alone must not select or manufacture the payload; this branch remains blocked on its exact contract."
 
 [sub_resource type="Resource" id="Resource_n56xa"]
 script = ExtResource("1_to5aj")
@@ -236,16 +249,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_yeio1"]
@@ -353,12 +371,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_2qh0f"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_cold_native"
+dispatch_gap = "actual_glyph_armed_payload_and_element_not_bound"
 kind = "element"
 value = "cold"
 selection = "glyph_of_warding_cold_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_n56xa"), SubResource("Resource_yeio1"), SubResource("Resource_ba845"), SubResource("Resource_njbc8"), SubResource("Resource_inmtq")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The Cold review requires actual armed state, contribution/caster ownership and explicit payload identity. The legal held-to-trigger result has null public spatial state and cannot supply these operands. Damage type alone must not select or manufacture the payload; this branch remains blocked on its exact contract."
 
 [sub_resource type="Resource" id="Resource_4wj6f"]
 script = ExtResource("1_to5aj")
@@ -378,16 +398,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_a7s8e"]
@@ -495,12 +520,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_fbxt0"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_fire_native"
+dispatch_gap = "actual_glyph_armed_payload_and_element_not_bound"
 kind = "element"
 value = "fire"
 selection = "glyph_of_warding_fire_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_4wj6f"), SubResource("Resource_a7s8e"), SubResource("Resource_fwlb0"), SubResource("Resource_jvsqh"), SubResource("Resource_cqvax")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The Fire review requires actual armed state, contribution/caster ownership and explicit payload identity. The legal held-to-trigger result has null public spatial state and cannot supply these operands. Damage type alone must not select or manufacture the payload; this branch remains blocked on its exact contract."
 
 [sub_resource type="Resource" id="Resource_kpvew"]
 script = ExtResource("1_to5aj")
@@ -520,16 +547,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_645rm"]
@@ -637,12 +669,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_cf461"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_lightning_native"
+dispatch_gap = "actual_glyph_armed_payload_and_element_not_bound"
 kind = "element"
 value = "lightning"
 selection = "glyph_of_warding_lightning_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_kpvew"), SubResource("Resource_645rm"), SubResource("Resource_3ye4b"), SubResource("Resource_2oxra"), SubResource("Resource_687m3")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The Lightning review requires actual armed state, contribution/caster ownership and explicit payload identity. The legal held-to-trigger result has null public spatial state and cannot supply these operands. Damage type alone must not select or manufacture the payload; this branch remains blocked on its exact contract."
 
 [sub_resource type="Resource" id="Resource_5pkbp"]
 script = ExtResource("1_to5aj")
@@ -662,16 +696,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_sgirr"]
@@ -779,12 +818,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_aevu0"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_thunder_native"
+dispatch_gap = "actual_glyph_armed_payload_and_element_not_bound"
 kind = "element"
 value = "thunder"
 selection = "glyph_of_warding_thunder_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_5pkbp"), SubResource("Resource_sgirr"), SubResource("Resource_2yr6s"), SubResource("Resource_dohi1"), SubResource("Resource_pbwi6")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The Thunder review requires actual armed state, contribution/caster ownership and explicit payload identity. The legal held-to-trigger result has null public spatial state and cannot supply these operands. Damage type alone must not select or manufacture the payload; this branch remains blocked on its exact contract."
 
 [sub_resource type="Resource" id="Resource_o4qa8"]
 script = ExtResource("1_to5aj")
@@ -804,16 +845,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_5styl"]
@@ -913,11 +959,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_qy72e"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_sleep_native"
+dispatch_gap = "actual_glyph_sleep_payload_and_recipient_results_not_bound"
 kind = "form"
 selection = "glyph_of_warding_sleep_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_o4qa8"), SubResource("Resource_5styl"), SubResource("Resource_tijd1"), SubResource("Resource_0wrat"), SubResource("Resource_ikl5w")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Sleep review requires an actual armed glyph and explicit Sleep payload plus each recipient result. Current glyph creation/removal and Fire damage do not establish that payload, failed/saved Sleep outcomes or their conditions. Keep these branches unselected and unfinished."
 
 [sub_resource type="Resource" id="Resource_ds5mj"]
 script = ExtResource("1_to5aj")
@@ -937,16 +985,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_015jx"]
@@ -998,11 +1051,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_dq2se"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_sleep_saved_native"
+dispatch_gap = "actual_glyph_sleep_payload_and_recipient_results_not_bound"
 kind = "outcome"
 selection = "glyph_of_warding_sleep_saved_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_ds5mj"), SubResource("Resource_015jx"), SubResource("Resource_ouhgt")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Sleep review requires an actual armed glyph and explicit Sleep payload plus each recipient result. Current glyph creation/removal and Fire damage do not establish that payload, failed/saved Sleep outcomes or their conditions. Keep these branches unselected and unfinished."
 
 [sub_resource type="Resource" id="Resource_ci370"]
 script = ExtResource("1_to5aj")
@@ -1022,16 +1077,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_ayyok"]
@@ -1083,11 +1143,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_rcnge"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_detonation_native"
+dispatch_gap = "actual_glyph_detonation_payload_and_results_not_bound"
 kind = "form"
 selection = "glyph_of_warding_detonation_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_ci370"), SubResource("Resource_ayyok"), SubResource("Resource_yyoln")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Detonation review requires actual glyph owner, explicit admitted payload/trigger and per-recipient results. Held membership or aggregate damage cannot manufacture those inputs, and its saved-labelled study is not a whole-cast outcome selector."
 
 [sub_resource type="Resource" id="Resource_4sbn2"]
 script = ExtResource("1_to5aj")
@@ -1107,16 +1169,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_7srv0"]
@@ -1168,11 +1235,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_a68ow"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_detonation_saved_native"
+dispatch_gap = "actual_glyph_detonation_payload_and_results_not_bound"
 kind = "outcome"
 selection = "glyph_of_warding_detonation_saved_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_4sbn2"), SubResource("Resource_7srv0"), SubResource("Resource_x8oci")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Detonation review requires actual glyph owner, explicit admitted payload/trigger and per-recipient results. Held membership or aggregate damage cannot manufacture those inputs, and its saved-labelled study is not a whole-cast outcome selector."
 
 [sub_resource type="Resource" id="Resource_gl6ri"]
 script = ExtResource("1_to5aj")
@@ -1192,16 +1261,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_loofy"]
@@ -1230,11 +1304,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_iosxa"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_rest_native"
+dispatch_gap = "actual_glyph_armed_and_contribution_state_not_bound"
 kind = "form"
 selection = "glyph_of_warding_rest_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_gl6ri"), SubResource("Resource_loofy")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Rest/suppressed review requires actual armed, caster-owner and contribution state. The current null public glyph spatial state cannot establish these operands; elapsed review time or Concentrating is not permission to assert them."
 
 [sub_resource type="Resource" id="Resource_ey7fr"]
 script = ExtResource("1_to5aj")
@@ -1254,16 +1330,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "spatial_creation",
+"content_id": "spatial_effect.spell.glyph_of_warding"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_221ya"]
@@ -1292,11 +1373,83 @@ extra = {
 [sub_resource type="Resource" id="Resource_ka46h"]
 script = ExtResource("6_ehf5c")
 id = "glyph_of_warding_suppressed_native"
+dispatch_gap = "actual_glyph_armed_and_contribution_state_not_bound"
 kind = "form"
 selection = "glyph_of_warding_suppressed_native"
 effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_ey7fr"), SubResource("Resource_221ya")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Rest/suppressed review requires actual armed, caster-owner and contribution state. The current null public glyph spatial state cannot establish these operands; elapsed review time or Concentrating is not permission to assert them."
+
+[sub_resource type="Resource" id="Actual_acid_contact"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/acid_target_receiver"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "projection": "spatial_contact", "packet": "element_contact", "outcome": "damage", "geometry_actor": "target", "component_path": ["effect"], "input_field": "", "content_id": "spatial_effect.spell.glyph_of_warding", "damage_type": "Acid", "save_effect_id": "spell.glyph_of_warding.payload"}
+at = "cast"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+staging_from = "client-actual-spatial-result-20261020"
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}
+
+[sub_resource type="Resource" id="Actual_cold_contact"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/cold_target_receiver"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "projection": "spatial_contact", "packet": "element_contact", "outcome": "damage", "geometry_actor": "target", "component_path": ["effect"], "input_field": "", "content_id": "spatial_effect.spell.glyph_of_warding", "damage_type": "Cold", "save_effect_id": "spell.glyph_of_warding.payload"}
+at = "cast"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+staging_from = "client-actual-spatial-result-20261020"
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}
+
+[sub_resource type="Resource" id="Actual_fire_contact"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/fire_target_receiver"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "projection": "spatial_contact", "packet": "element_contact", "outcome": "damage", "geometry_actor": "target", "component_path": ["effect"], "input_field": "", "content_id": "spatial_effect.spell.glyph_of_warding", "damage_type": "Fire", "save_effect_id": "spell.glyph_of_warding.payload"}
+at = "cast"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+staging_from = "client-actual-spatial-result-20261020"
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}
+
+[sub_resource type="Resource" id="Actual_lightning_contact"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/lightning_target_receiver"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "projection": "spatial_contact", "packet": "element_contact", "outcome": "damage", "geometry_actor": "target", "component_path": ["effect"], "input_field": "", "content_id": "spatial_effect.spell.glyph_of_warding", "damage_type": "Lightning", "save_effect_id": "spell.glyph_of_warding.payload"}
+at = "cast"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+staging_from = "client-actual-spatial-result-20261020"
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}
+
+[sub_resource type="Resource" id="Actual_thunder_contact"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/thunder_target_receiver"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "projection": "spatial_contact", "packet": "element_contact", "outcome": "damage", "geometry_actor": "target", "component_path": ["effect"], "input_field": "", "content_id": "spatial_effect.spell.glyph_of_warding", "damage_type": "Thunder", "save_effect_id": "spell.glyph_of_warding.payload"}
+at = "cast"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+staging_from = "client-actual-spatial-result-20261020"
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]}, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}
 
 [resource]
 script = ExtResource("4_rc11v")
@@ -1304,13 +1457,14 @@ id = "spell.glyph_of_warding"
 icon = SubResource("Resource_7oqxu")
 delivery = "zone"
 body = SubResource("Resource_tdudn")
-effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_wf27f"), SubResource("Resource_vf6u4")])
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_wf27f"), SubResource("Resource_vf6u4"), SubResource("Actual_acid_contact"), SubResource("Actual_cold_contact"), SubResource("Actual_fire_contact"), SubResource("Actual_lightning_contact"), SubResource("Actual_thunder_contact")])
 native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
-owner_ids = PackedStringArray()
+excluded_cues = PackedInt32Array(1)
+owner_kind = "spatial_effect"
+owner_ids = PackedStringArray("spatial_effect.spell.glyph_of_warding")
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
@@ -1326,4 +1480,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/glyph_of_warding_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Finite hand trace requires the actual created spatial owner and separately disclosed public anchor; its source clock begins only after both admissions. Five elemental recipient contacts now consume only exact attributed positive spatial damage and its actual same-native-owner save; these select typed contact artwork, never the hidden Glyph payload. The actual disclosed GroundSurface owns a neutral retained shell. The richer armed/payload/trigger, Sleep and Detonation studies remain explicitly unselected optional alternatives; they are not required backend fields. Native output and art acceptance require their own receipts."

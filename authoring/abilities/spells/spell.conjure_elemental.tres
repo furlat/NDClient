@@ -27,7 +27,7 @@ constructor_input = {
 "kind": "actor_birth",
 "component_path": ["summon_manifestation"],
 "input_field": "",
-"creature_id": "creature.spell.air_elemental"
+"creature_ids": ["creature.spell.air_elemental", "creature.spell.air_myrmidon", "creature.spell.earth_elemental", "creature.spell.earth_myrmidon", "creature.spell.fire_elemental", "creature.spell.fire_myrmidon", "creature.spell.water_elemental", "creature.spell.water_myrmidon"]
 }
 at = "cast"
 attachment = "recipient_ground"
@@ -81,4 +81,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/conjure_elemental_air_elemental_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Actual disclosed air_elemental birth owns the finite manifestation at its admitted ground position. Actor body and terminal manifestation are separate; terminal input is not observed/qualified."
+All 8 declared native summon choices explicitly reuse this existing neutral finite manifestation at their own witnessed birth and admitted ground position. The delivered Air/Deva/Draconic manifestation entries share the same source geometry/palette/scale after entry labels; this is an explicit source reuse decision, not distinct creature-body artwork. Actual creature identity is retained in constructor diagnostics. Actor body remains separate. The7ca successor supplies independent terminal-only sources, now assigned by the shared entity_lifecycle_media context at actual witnessed terminal cause/commit/position/support. No birth ID, live body or terminal event is fabricated; source publication and encounter qualification remain separate. All artwork remains unreviewed."

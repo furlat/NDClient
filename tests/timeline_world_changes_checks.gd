@@ -34,7 +34,7 @@ func compare(timeline:RefCounted,label:String)->Dictionary:
     var state=timeline.presentation_state()
     var actual=World.update_rows(state,cache,retained,changes)
     check(actual==World.rows(state,cache),label+" ordered rows and original corner assembly")
-    var current=World.current_ids(state,retained.boundaries)
+    var current=World.current_ids(state,retained.boundaries,{}, {},retained.spatial_rows,retained.residue_rows)
     var expected=World.visibility(state)
     check(current.keys().all(func(id):return expected.get(id,false)) and expected.keys().all(func(id):return current.has(id)==bool(expected[id])),label+" current subjective identities")
     check(retained.negative.is_empty()==World.ground_background(state,timeline.staged_actors()),label+" original below-floor eligibility")
@@ -99,7 +99,8 @@ func run()->void:
     timeline.advance(5);timeline.advance(5);timeline.advance(10)
     var changes=compare(timeline,"several advances remove and readd")
     check(not changes.full and changes.objects.has(id),"Union dirty ID retained until the single consumer")
-    check(timeline.state.objects.keys().back()==id and retained.result.rows.back().id==id,"Remove/re-add preserves canonical last position and equal-Y input order")
+    var ordered_objects:Array=retained.result.rows.filter(func(row):return timeline.state.objects.has(row.id))
+    check(timeline.state.objects.keys().back()==id and not ordered_objects.is_empty() and ordered_objects.back().id==id,"Remove/re-add preserves canonical last object position and equal-Y input order within the object rows")
     # Two changes in one advance are both retained, while subsequent consume is empty.
     var tile_keys=timeline.state.tiles.keys()
     var a=Compiler.empty_delta();var b=Compiler.empty_delta()

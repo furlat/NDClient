@@ -14,27 +14,23 @@ func run()->void:
     var index=Recording.read(directory)
     check(index.ok,"Actual Frenzy journal compiles")
     if not index.ok:finish({});return
-    var sources=Recording.Compiler.Authoring.load_data("native_effects/index.json",index.cache).sources
-    var record:Dictionary=sources["class.frenzy.ground"]
-    check(record.script==sources["class.rage.ground"].script and record.properties.kind=="ground" and record.duration==2 and record.loop,"Exact previously installed native ground source and original64/32s clock")
-    check(record.palette.colors==["#78262b","#da393f","#f07b68"],"Original Frenzy conversion palette, distinct from Rage")
-    check(FileAccess.file_exists(record.script),"Selected native source file actually installed")
-    var found=0
+    var found:int=0
     for item in index.groups:
         for event in item.group.events:
             if event.get("behavior_id")!="action.class.barbarian.frenzy":continue
-            var components=item.group.components.filter(func(row):return row.source_event_uuid==event.event_uuid and row.get("source_id")=="class.frenzy.ground")
-            check(components.size()==1,"One original Frenzy occurrence owns one ground source")
+            var components:Array=item.group.components.filter(func(row):return row.source_event_uuid==event.event_uuid and row.get("ability_id")=="action.class.barbarian.frenzy")
+            check(components.size()==1,"One actual Frenzy action owns one finite selected onset")
             for component in components:
                 found+=1
-                check(is_equal_approx(component.start_ms,event._start_ms+100) and component.duration_ms==950,"Original action media100ms start and950ms lifetime")
-                check(component.attachment=="source_ground" and component.scale==.5 and component.alpha==.6,"Original ground registration, scale and alpha")
-                check(component.fade_in_ms==180 and component.fade_out_ms==350 and component.fade_curve=="smoothstep","Original finite fades")
-                check(component.loop and component.source_duration_ms==2000,"Occurrence clock samples exact original looping source")
-            check(not event.components.any(func(row):return row.status=="missing"),"Actual compiled source satisfies all selected Frenzy occurrence requirements")
-    check(found>0,"Actual recording exercises selected Frenzy source")
-    finish({"recording":directory,"source":record})
+                check(component.native_clip.id=="barbarian_frenzy_onset_v191_pressure","Actual action selects the delivered pressure onset, with no retired ground-source substitute")
+                check(is_equal_approx(component.start_ms,event._start_ms+100.0) and is_equal_approx(component.duration_ms,1100.0),"Actual onset retains its authored100ms delay and1100ms finite clock")
+                check(component.native_cue.attachment=="caster_ground" and component.actor_uuid==event.actor_uuid,"Actual caster owns the onset ground registration")
+                check(component.native_cue.get("entity_geometry",{}).get("actor")=="caster" and not component.native_cue.get("entity_geometry",{}).get("slots",[]).is_empty(),"Onset requests the real receiving caster geometry")
+                check(component.status=="missing" and component.reason=="native_condition_parent_link_unavailable","Actual onset truthfully refuses the undisclosed Rage/Frenzy parent relation")
+                check(component.get("native_inputs",{}).is_empty() and "native_condition_parent_link_unavailable" in component.get("native_input_gaps",[]),"No fabricated parent or arbitrary one-of-two member enters the constructor")
+    check(found>0,"Original recording exercises the selected current Frenzy onset")
+    finish({"recording":directory,"finite_onsets":found,"output_status":"unavailable","parent_gap":"Both finite foot pressure and retained Frenzy require the actual undisclosed Rage/Frenzy parent link"})
 func finish(evidence:Dictionary)->void:
-    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Recorded Frenzy occurrence and exact installed native source/palette/clock registration. Native rendering remains separate."}
+    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Actual Frenzy action ownership, selected native onset metadata and exact missing-parent refusal. This does not prove finite or retained Frenzy pixels; both require the undisclosed native parent relationship."}
     FileAccess.open("res://generated/frenzy_presentation_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("FRENZY_PRESENTATION ",JSON.stringify({"checks":checks,"failures":failures}));quit(0 if failures.is_empty() else 1)

@@ -75,9 +75,30 @@ extra = {
 [sub_resource type="Resource" id="Resource_rogwt"]
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/target_release"
-unbound_constructor_inputs = PackedStringArray("observation")
 role = "attached"
-at = "release"
+scope = "cast"
+constructor_input = {
+"kind": "observed_event",
+"projection": "condition_set_outcome",
+"behavior_id": "spell.divine_word",
+"outcome_branches": [{
+"result_kind": "death",
+"outcome": "death"
+}, {
+"condition_ids": ["condition.blinded", "condition.deafened", "condition.stunned"],
+"outcome": "blinded_deafened_stunned"
+}, {
+"condition_ids": ["condition.blinded", "condition.deafened"],
+"outcome": "blinded_deafened"
+}, {
+"condition_ids": ["condition.deafened"],
+"outcome": "deafened"
+}],
+"outcome": "condition_application",
+"geometry_actor": "target",
+"component_path": ["assembly", "target_release"]
+}
+at = "cast"
 attachment = "recipient_ground"
 scale = 0.471404520791032
 orientation = "world"
@@ -131,6 +152,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_ujetv"]
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/target_deafened"
+approach = "runtime-prepared-source-preparation-20261020"
 unbound_constructor_inputs = PackedStringArray("observation")
 role = "attached"
 at = "contact"
@@ -163,6 +185,7 @@ extra = {
 [sub_resource type="Resource" id="Resource_2dy2l"]
 script = ExtResource("3_un2rm")
 clip = "review/divine_word/back/target_blinded"
+approach = "runtime-prepared-source-preparation-20261020"
 unbound_constructor_inputs = PackedStringArray("observation")
 role = "attached"
 at = "contact"
@@ -268,7 +291,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(2, 3, 4)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -351,4 +374,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
-notes = "Proclamation uses only the actual completed cast and disclosed source/recipient identity, with no review owner packet. Recipient deafened/blinded/stunned/death tiers remain unavailable in the current public condition; their cues stay inspectable gaps, not invented outcomes. Imported body/timing/art still require review."
+notes = "Proclamation follows the actual completed cast. The authored ordered outcome branches select one finite recipient response from this cast's actual owned Deafened/Blinded/Stunned applications or death. Those held memberships retain their own UUID lifecycles; fixed target2 and duplicate held-marker studies stay excluded. No HP threshold or review outcome is inferred. All artwork awaits human review."

@@ -43,12 +43,16 @@ func negative_controls(events:Array,source:Dictionary,damage:Dictionary,before:D
     later.actor_inputs["later_private_cut"]={source.fact.source_entity_uuid:before.actors[source.fact.source_entity_uuid]}
     check(not Results.spell_strike(source,descriptor,later).ready,label+" a later owner cannot replace the original pre-row membership")
 func run()->void:
-    var spell:Resource=load(PATH);var action:Resource=load(ACTION_PATH);var use:Resource=action.effects[1]
+    var spell:Resource=load(PATH);var action:Resource=load(ACTION_PATH)
+    var uses:Array=action.effects.filter(func(cue):return cue.constructor_input.get("kind")=="spell_strike")
+    check(uses.size()==1,"Exactly one authored repeated contact has the strike contract")
+    if uses.size()!=1:quit(1);return
+    var use:Resource=uses[0]
     var descriptor:Dictionary=use.constructor_input
     check(use.unbound_constructor_inputs.is_empty() and descriptor.kind=="spell_strike" \
         and descriptor.behavior_id==ACTION and descriptor.owner_condition_id==OWNER,"Production repeat names the actual action and condition grant")
     check(action.body.enabled==false and use.at=="event.start" and use.delay==0.0,"Finite contact uses the real result clock without fabricating a body marker")
-    check(not spell.effects[0].unbound_constructor_inputs.is_empty() and spell.owner_cues==PackedInt32Array([3,4]),"Windup remains missing and the existing UUID lifecycle still owns held/removal")
+    check(spell.effects[0].unbound_constructor_inputs.is_empty() and spell.effects[0].constructor_input.projection=="owner_activity" and spell.owner_cues==PackedInt32Array([3,4]),"Event-local windup is authored while the existing UUID lifecycle owns held/removal")
     var clip:Dictionary=Effects.clip(IMPACT);var report:Dictionary=Common.report()
     Build._check_constructor(use,"abilities/actions/"+ACTION,{IMPACT:clip},report)
     check(report.errors.is_empty(),"Exact repeat source policy is accepted offline: "+str(report.errors))
@@ -115,7 +119,7 @@ func inspect_original(directory:String,seat:String,built:Dictionary,phase:Resour
         for group in compiled.value.groups:
             duration+=group.duration_ms
             for component in group.components:
-                if component.get("native_cue",{}).get("constructor_input",{}).get("behavior_id")!=ACTION:continue
+                if component.get("native_cue",{}).get("constructor_input",{}).get("behavior_id")!=ACTION or component.native_cue.constructor_input.get("kind")!="spell_strike":continue
                 compiled_count+=1
                 check(component.status=="available" and component.native_inputs.has("owner_input") and component.native_inputs.has("strike_input"),seat+" production action supplies both required factual packets")
                 var damage_id:String=component.native_constructor_evidence.result_occurrence

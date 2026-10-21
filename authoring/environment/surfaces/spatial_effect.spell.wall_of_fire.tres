@@ -3,11 +3,55 @@
 [ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_qa5du"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_7qaxm"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="owner_field_use"]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/material-runtime-20261021/sources/f094d2311ca09245c364/segment-phase.tres" id="OwnerFieldPhase0"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/material-runtime-20261021/sources/5e0a32e28e7fc4debd88/ring-phase.tres" id="OwnerFieldPhase1"]
+
+[sub_resource type="Resource" id="OwnerField0"]
+script = ExtResource("owner_field_use")
+clip = "assembled/wall_of_fire_straight_native"
+source_phase = ExtResource("OwnerFieldPhase0")
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_inputs = {"owner_state": "set_owner_state", "targets": "set_targets", "admitted_cells": "set_admitted_cells"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+area_mask = false
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["assembly"], "input_field": "", "cell_input": "wall_geometry", "content_id": "spatial_effect.spell.wall_of_fire", "geometry_shapes": ["wall"]}
+requires_spatial_anchor = true
+extra = {"live_endpoints": [{"cue_point": "source"}], "wall_forms": ["segment"]}
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+
+[sub_resource type="Resource" id="OwnerField1"]
+script = ExtResource("owner_field_use")
+clip = "assembled/wall_of_fire_ring_native"
+source_phase = ExtResource("OwnerFieldPhase1")
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_inputs = {"owner_state": "set_owner_state", "targets": "set_targets", "admitted_cells": "set_admitted_cells"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+area_mask = false
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["assembly"], "input_field": "", "cell_input": "wall_geometry", "content_id": "spatial_effect.spell.wall_of_fire", "geometry_shapes": ["wall"]}
+requires_spatial_anchor = true
+extra = {"live_endpoints": [{"cue_point": "source"}], "wall_forms": ["ring"]}
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+
 [resource]
 script = ExtResource("2_7qaxm")
 id = "spatial_effect.spell.wall_of_fire"
 layer = "field"
 art = PackedStringArray()
 legacy = "measured/environment/surfaces/spatial_effect.spell.wall_of_fire.json"
+lasting = SubResource("OwnerField0")
+lasting_variants = Array[ExtResource("owner_field_use")]([SubResource("OwnerField1")])
+native_staging = true
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Actual Fire wall path segment/ring geometry, anchor, dimensions and hot_side choose the delivered palette-correct native source. Actual cells and owner age/presence/suppression continue its original module emission beyond review timers. Admission is whole-module source coverage with natural artwork spill, not a new per-fragment gameplay mask or inferred heat-damage band. Six-colour per-draw finish is not exact historical post-composite colour. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."

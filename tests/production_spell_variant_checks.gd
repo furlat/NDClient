@@ -29,6 +29,8 @@ func check(value:bool,label:String)->void:
 func run()->void:
     for sample in CASES:
         for seat in ["amber","blue"]:inspect(sample,seat)
+    miss_originals()
+    elemental_originals()
     print("PRODUCTION_SPELL_VARIANTS ",JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,
         "scope":"Actual built production predicates and original single-target streams; no private authoring or native-output claim"}))
     quit(0 if failures.is_empty() else 1)
@@ -87,3 +89,56 @@ func inspect(sample:Dictionary,seat:String)->void:
     var restored:RefCounted=Recording.restore(index,end)
     check(not restored.busy() and Compare.difference(restored.state,canonical.state).is_empty(),label+" ordered publication ends at the exact independent canonical value")
     check(var_to_bytes([record.recipe,record.selection,record.variants])==immutable,label+" production source remains shared and immutable")
+
+func miss_originals()->void:
+    for sample in [{"spell":"ray_of_sickness","folder":"typed-variants-miss","variant":"ray_of_sickness_miss_native","clips":["bg3-36/ray-of-sickness/miss"]},
+        {"spell":"acid_arrow","folder":"projectile-variants/acid_arrow--dodge_seed_5","variant":"acid_arrow_miss_native","clips":["bg3-36/acid-arrow/miss-delivery","bg3-36/acid-arrow/miss-splash"]}]:
+        for seat in ["amber","blue"]:
+            var cache:Dictionary={}
+            var record:Resource=Sources.find("spell."+sample.spell,cache)
+            var index:Dictionary=Recording.read("res://tests/fixtures/schema16/"+sample.folder+"/"+seat+"/journal",{},{},cache)
+            var label:String=sample.spell+" / "+seat+" original Miss"
+            check(index.get("ok",false),label+" compiles through production")
+            if not index.get("ok",false):continue
+            var actual:Array=index.rows.filter(func(row):return row.get("component",{}).get("native_variant",{}).get("id")==sample.variant)
+            var clips:Array=actual.map(func(row):return row.component.native_clip.id);clips.sort()
+            check(clips==sample.clips,label+" exact finite authored phase list")
+            check(actual.all(func(row):return row.component.native_cue.live_endpoints[1].get("actor")=="target" and row.component.native_cue.live_endpoints[1].has("optical_miss")),label+" actual recipient registration replaces fixed review endpoints")
+            check(actual.all(func(row):return row.component.actor_uuid!=row.component.target_uuid and row.component.to_position==[6,7]),label+" canonical target and original endpoint cell remain unchanged")
+            for outcome in ["Hit","Crit"]:
+                var selected:Dictionary=NativeSpells.selected(NativeSpells.source("spell."+sample.spell,cache),{"attack_outcome":outcome})
+                check(selected.selection.get("variant",{}).get("id","")!=sample.variant,label+" "+outcome+" cannot select missed art")
+            evidence.append({"spell":"spell."+sample.spell,"seat":seat,"variant":sample.variant,"clips":clips,"scope":"original missed delivery; actual renderer qualified separately"})
+
+func elemental_originals()->void:
+    # All legal selected facets are preserved in command evidence, while the
+    # original replicated SpellFacts disclose no selected element. Never
+    # substitute the fixed Fire/Thunder source from damage text or a title.
+    for family in ["sorcerous_burst","chromatic_orb"]:
+        var cache:Dictionary={};var source:Dictionary=NativeSpells.source("spell."+family,cache)
+        var elements:Array=["acid","cold","fire","lightning","poison","thunder"]
+        if family=="sorcerous_burst":elements.append("psychic")
+        for element in elements:
+            for seat in ["amber","blue"]:
+                var folder:String="res://tests/fixtures/schema16/projectile-variants/"+family+"--"+element+"_original/"+seat+"/journal"
+                var index:Dictionary=Recording.read(folder,{},{},cache)
+                var label:String=family+" / "+element+" / "+seat
+                check(index.get("ok",false),label+" original selected-facet journal compiles")
+                if not index.get("ok",false):continue
+                var found:int=0
+                for wrapped in index.groups:
+                    for event in wrapped.group.events:
+                        if event.get("kind")!="spell" or event.get("behavior_id")!="spell."+family:continue
+                        found+=1
+                        check(event.get("effect_id")==null,label+" actual declaration has no element option identity")
+                        check(event.get("native_variant",{}).is_empty(),label+" no fixed-element alternative is invented from its outcome")
+                check(found==1,label+" exact accepted original declaration")
+        var active:Array=source.variants.filter(func(variant):return not variant.when.get("damage_types",[]).is_empty())
+        check(elements.all(func(element):return active.any(func(variant):return element.capitalize() in variant.when.damage_types)),family+" every declared element has an active typed predicate")
+        for variant in active:
+            var element:String=str(variant.when.damage_types[0])
+            check(variant.dispatch_gap.is_empty() and variant.when.damage_types.size()==1,family+" active element has one exact public operand and no obsolete dispatch gap")
+            for outcome in variant.when.get("attack_outcome",["Hit"]):
+                var selected:Dictionary=NativeSpells.selected(source,{"behavior_id":"spell."+family,"damage_types":[element],"attack_outcome":outcome,"target_kind":"creature"})
+                check(selected.selection.get("variant",{}).get("id")==variant.id,family+" exact declared "+element+"/"+outcome+" selects its authored source")
+        check(NativeSpells.selected(source,{"behavior_id":"spell."+family,"attack_outcome":"Hit"}).selection.get("variant",{}).is_empty(),family+" missing chosen element cannot borrow a default palette")

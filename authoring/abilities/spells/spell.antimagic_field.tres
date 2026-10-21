@@ -131,7 +131,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -164,4 +164,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "The retained source is assigned to the actual spatial_effect.spell.antimagic_field spatial UUID and current observed anchor. The finite cast-review copy delegates to that owner; the ordinary casting body remains separate. Backend world lighting retains its existing owner. All artwork remains unreviewed."

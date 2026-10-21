@@ -1,0 +1,167 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 1,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "c9939736-cc12-4424-bfdb-bc84b9b8c22b": "Amber caster",
+  "2cfee634-702d-4842-8b9e-fc7857988578": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "action.jump \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 1,
+   "actor_change": 1,
+   "damage": 2,
+   "attack": 1,
+   "spatial": 8,
+   "sensory": 2,
+   "step": 2,
+   "movement": 1
+  },
+  "behaviors": {
+   "reaction.opportunity_attack": 1,
+   "action.jump": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Slashing"
+  ],
+  "item_effects": [],
+  "ended_item_effects": [],
+  "item_effect_memberships": [],
+  "item_attacks": [
+   {
+    "sequence": 2,
+    "lineage": 16,
+    "occurrence": 43,
+    "source_entity_uuid": "2cfee634-702d-4842-8b9e-fc7857988578",
+    "source_item_uuid": "4a9be9f3-c2d4-4ef3-8abd-9feee04784e2",
+    "source_item_id": "weapon.longsword",
+    "weapon_slot": "MELEE_MAIN",
+    "attack_outcome": "Hit",
+    "item_effects": null
+   }
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 2,
+   "occurrence": 40,
+   "lineage": 16,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 41,
+   "lineage": 16,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 43,
+   "lineage": 16,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 89,
+   "lineage": 16,
+   "event_offset": 19,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 40,
+   "lineage": 16,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 41,
+   "lineage": 16,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 43,
+   "lineage": 16,
+   "event_offset": 4,
+   "kind": "attack",
+   "label": "attack reaction.opportunity_attack",
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 65,
+   "lineage": 16,
+   "event_offset": 11,
+   "kind": "reaction_handler",
+   "label": "Opportunity Attack Handler",
+   "behavior_id": "reaction.opportunity_attack",
+   "actor_uuid": "2cfee634-702d-4842-8b9e-fc7857988578",
+   "triggering_occurrence": 19,
+   "triggering_lineage": 19,
+   "faction": "blue"
+  },
+  {
+   "sequence": 2,
+   "occurrence": 89,
+   "lineage": 16,
+   "event_offset": 19,
+   "kind": "movement",
+   "label": "movement ",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Slashing"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7",
+  "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "2c11d7a9919c8aa9b1490628fff224627f19d6388c3884171d14a4a5cbecea22"
+ },
+ "sdk": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7/sdk/python/src",
+  "query_adapter": "strict_selected_SDK_choices",
+  "source": {
+   "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+   "branch": "feature/rules-checking",
+   "source": "/mnt/c/Users/tommaso/Documents/Dev/dnd_engine",
+   "export": "git archive committed tree; no working-tree changes"
+  }
+ }
+}

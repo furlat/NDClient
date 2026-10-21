@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_oq74v")
 id = "condition.summon.raging_vortex_owner"
+disposition = "state_only"
 icon = SubResource("Resource_pd4ws")
+
+status = "internal"
+notes = "Bookkeeping lifetime/replacement owner for exactly one native RagingVortexZone child. The spatial_effect.summon.raging_vortex UUID owns the authored retained field at its real anchor; actual Silence membership and applied damage retain their own recipients. The actor ledger draws no second field. All artwork is unreviewed."

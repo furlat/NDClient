@@ -216,11 +216,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_k0yrx"]
 script = ExtResource("6_2hve6")
 id = "flame_blade_miss_native"
+dispatch_gap = "unselected_created_weapon_body_review_miss_not_item_lifetime"
 kind = "outcome"
 selection = "flame_blade_miss_native"
 effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_lh15a"), SubResource("Resource_s4fsq"), SubResource("Resource_llgj2")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The review combines hand preparation with a native created-weapon body and lifetime light. Native weapon-body consumers remain excluded by user policy; a later missed attack is not creation or removal of the actual Flame Blade item. Preserve the separate actual item/condition owner."
 
 [sub_resource type="Resource" id="Resource_5tl1n"]
 script = ExtResource("1_yi2l2")
@@ -306,11 +308,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_almtj"]
 script = ExtResource("6_2hve6")
 id = "flame_blade_inventory_native"
+dispatch_gap = "unselected_created_weapon_body_review_inventory_not_wielded"
 kind = "form"
 selection = "flame_blade_inventory_native"
 effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_5tl1n"), SubResource("Resource_qr6i3"), SubResource("Resource_i4st1")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "An inventory admission does not establish a displayed held weapon. This review includes a native created-weapon body excluded by user policy; actual created item identity, current holder and condition lifetime belong to the existing item path, without a proxy sheet."
 
 [sub_resource type="Resource" id="Resource_an4rd"]
 script = ExtResource("1_yi2l2")
@@ -396,11 +400,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_fo625"]
 script = ExtResource("6_2hve6")
 id = "flame_blade_transfer_native"
+dispatch_gap = "unselected_created_weapon_body_review_actual_transfer_not_qualified"
 kind = "form"
 selection = "flame_blade_transfer_native"
 effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_an4rd"), SubResource("Resource_heeyk"), SubResource("Resource_sif1y")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The native created-weapon body in this review remains excluded by user policy. A real transferred item must retain exact item/effect lifetime and use its current holder; the transfer-labelled cast draft cannot prove that lifecycle or fabricate holder rebinding."
 
 [resource]
 script = ExtResource("4_wv5su")

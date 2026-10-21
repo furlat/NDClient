@@ -105,17 +105,31 @@ static func feedback_to(record: Dictionary, path: String, feedback: Feedback, ke
 # --- Effects (staging cues) ------------------------------------------------
 
 const CUE_FIELDS := [
+    ["area_mask", "area_mask", "bool", true],
     ["clip", "clip", "string", true], ["role", "role", "string", true], ["scale", "scale", "float", true],
+    ["selection", "selection", "string", false],
     ["at", "at", "string", false], ["delay_seconds", "delay", "float", false],
     ["approach", "approach", "string", false],
     ["immutable_preparation", "immutable_preparation", "string", false],
-    ["sampling", "sampling", "string", false], ["scope", "scope", "string", false], ["constructor_input", "constructor_input", "same", false],
+    ["preparation_inputs", "preparation_inputs", "string", false],
+    ["sampling", "sampling", "string", false], ["scope", "scope", "string", false], ["constructor_input", "constructor_input", "same", false], ["observed_result", "observed_result", "same", false], ["incoming_track", "incoming_track", "same", false], ["movement", "movement", "same", false], ["condition_response", "condition_response", "same", false],
     ["endpoint_actor_uuids", "endpoint_actor_uuids", "bool", false],
+    ["when", "when", "same", false],
+    ["owner_projection", "owner_projection", "same", false],
+    ["requires_spatial_anchor", "requires_spatial_anchor", "bool", false],
+    ["item_effect_behavior_id", "item_effect_behavior_id", "string", false],
+    ["item_effect_damage_type", "item_effect_damage_type", "string", false],
+    ["replaces_cast_body", "replaces_cast_body", "bool", false],
+    ["input_arguments", "input_arguments", "same", false],
+    ["lifecycle", "lifecycle", "same", false],
     ["attachment", "attachment", "string", false], ["orientation", "orientation", "string", false],
+    ["offset", "offset", "vec3", false],
     ["recipient_slots", "recipient_slots", "strings", false], ["follow", "follow", "bool", false],
     ["rotation_degrees", "rotation_degrees", "vec3", false],
+    ["axis_scale", "axis_scale", "vec3", false],
     ["source_start", "source_start", "float", false],
     ["source_launch", "source_launch", "float", false], ["source_contact", "source_contact", "float", false],
+    ["result_contact_seconds", "result_contact_seconds", "float", false],
     ["source_end", "source_end", "float", false], ["source_rate", "source_rate", "float", false],
     ["charge_seconds", "charge_seconds", "float", false], ["charge_scale_from", "charge_scale_from", "float", false],
     ["duration_policy", "duration_policy", "string", false],
@@ -126,6 +140,7 @@ const CUE_FIELDS := [
     ["hide_nodes", "hide_nodes", "strings", false], ["show_nodes", "show_nodes", "strings", false],
     ["origin_path", "origin_path", "string", false],
     ["opacity_keys", "opacity_keys", "vec2s", false], ["opacity_uniform", "opacity_uniform", "string", false],
+    ["light_color", "light_colour", "colour_html", false], ["light_multiplier", "light_multiplier", "float", false],
     ["fade_in_seconds", "fade_in", "float", false], ["fade_out_seconds", "fade_out", "float", false],
     ["unbound_constructor_inputs", "unbound_constructor_inputs", "strings", false],
 ]
@@ -137,6 +152,10 @@ static func effect_from_cue(cue: Dictionary, staging_from: String, drop_dead: bo
     if drop_dead:
         for field in DEAD_CUE_FIELDS:raw.erase(field)
     var use := EffectUse.new()
+    if raw.has("source_phase"):
+        use.source_phase=load(str(raw.source_phase));raw.erase("source_phase")
+        use.source_inputs.assign(raw.get("source_inputs",{}));raw.erase("source_inputs")
+        use.source_seekable=bool(raw.get("source_seekable",false));raw.erase("source_seekable")
     for field in CUE_FIELDS:F.move(raw, field[0], use, field[1], field[2], field[3])
     use.extra = F.plain(raw)
     use.staging_from = staging_from
@@ -145,6 +164,10 @@ static func effect_from_cue(cue: Dictionary, staging_from: String, drop_dead: bo
 static func cue_from_effect(use: EffectUse, index: int) -> Dictionary:
     var cue := {}
     for field in CUE_FIELDS:F.emit(cue, field[0], use, field[1], field[2], field[3])
+    if use.source_phase!=null:
+        cue.source_phase=use.source_phase.resource_path
+        cue.source_inputs=use.source_inputs.duplicate()
+        cue.source_seekable=use.source_seekable
     cue.merge(use.extra.duplicate(true), true)
     if index >= 0:cue.source_index = index
     return cue
@@ -239,8 +262,10 @@ static func spell_recipe(e: Resource, sockets: Dictionary) -> Dictionary:
         F.emit(record, "projectile/speedPxPerSecond", e, "flight_tiles_per_second", "tiles")
         F.emit(record, "projectile/minimumTravelDurationMs", e, "minimum_travel_seconds", "ms")
         F.emit(record, "projectile/missileStaggerMs", e, "stagger_seconds", "ms")
+    # An authored typed delay creates its own section; imported legacy damage
+    # fields are not a prerequisite for a new spell's impact chronology.
+    F.emit(record, "damage/impactDelayMs", e, "impact_delay", "ms")
     if record.get("damage") is Dictionary:
-        F.emit(record, "damage/impactDelayMs", e, "impact_delay", "ms")
         F.emit(record, "damage/hitFlash/frame", e, "flash_frame", "float")
         F.emit(record, "damage/hitFlash/durationMs", e, "flash_duration", "ms")
         ramp_to(record, "damage/hitFlash/palette", e.flash_look)
@@ -323,7 +348,10 @@ static func spell_finish(e: Resource) -> Dictionary:
 static func spell_selection(e: Resource, short_id: String, bounds: Dictionary) -> Dictionary:
     var staging: Dictionary = e.staging_unported.get("staging", {}).duplicate(true)
     var cues: Array = []
-    for i in e.effects.size():cues.append(cue_from_effect(e.effects[i], i))
+    for i in e.effects.size():
+        var cue:Dictionary=cue_from_effect(e.effects[i], i)
+        if not e.resource_path.is_empty():cue.source=e.resource_path+"::effects/"+str(i)
+        cues.append(cue)
     staging.cues = cues
     F.emit(staging, "bends", e, "bends")
     F.emit(staging, "light_color", e, "light_colour", "string")
@@ -349,6 +377,8 @@ static func spell_selection(e: Resource, short_id: String, bounds: Dictionary) -
         "excluded_cue_indices": Array(e.excluded_cues).map(func(i): return int(i)), "staging": staging}
     for key in e.staging_unported:
         if key not in ["staging", "lifecycle", "delivery", "palette"]:result[key] = F.deep(e.staging_unported[key])
+    if not result.has("source") or str(result.source).is_empty():result.source=e.resource_path
+    result._resource_source=e.resource_path
     return result
 
 ## Variant cues replace the finite event selection; the base cast body stays
@@ -359,7 +389,10 @@ static func variant_selection(base:Dictionary,variant:Resource)->Dictionary:
     selected.staging=base.staging.duplicate()
     if not variant.effects.is_empty():
         selected.staging.cues=[]
-        for i in variant.effects.size():selected.staging.cues.append(cue_from_effect(variant.effects[i],i))
+        for i in variant.effects.size():
+            var cue:Dictionary=cue_from_effect(variant.effects[i],i)
+            cue.source=str(base.get("_resource_source",base.source))+"::variants/"+variant.id+"/effects/"+str(i)
+            selected.staging.cues.append(cue)
     if variant.override_owner_cues:
         selected.lifecycle=base.lifecycle.duplicate()
         selected.lifecycle.cue_ids=Array(variant.owner_cues)
@@ -395,6 +428,7 @@ static func condition_from_recipe(e: Resource, recipe: Dictionary) -> void:
     F.move(raw, "label", e, "label", "string", true)
     F.move(raw, "disposition", e, "disposition", "string", true)
     F.move(raw, "reactionCastBinding", e, "reaction_cast", "string", true)
+    F.move(raw, "surfaceOwner", e, "surface", "string")
     F.move(raw, "persistent/actorHistory/captureDeparture", e, "capture_departure", "bool")
     F.move(raw, "persistent/creationIdentity/source_behavior_id", e, "creation_source_id", "string")
     F.move(raw, "persistent/creationIdentity/item_id", e, "creation_item_id", "string")
@@ -402,7 +436,7 @@ static func condition_from_recipe(e: Resource, recipe: Dictionary) -> void:
     F.move(raw, "composition/group", e, "group", "string", true)
     F.move(raw, "composition/exclusiveGroup", e, "exclusive_group", "string", true)
     F.move(raw, "composition/priority", e, "priority", "float", true)
-    F.move(raw, "composition/maxLayers", e, "max_layers", "float", true)
+    F.move(raw, "composition/maxLayers", e, "max_layers", "float")
     var look := Look.new()
     var adjust := LookStep.new();adjust.kind = "body_adjust"
     var moved := F.move(raw, "persistent/alphaMultiplier", adjust, "alpha", "float", true)
@@ -468,6 +502,7 @@ static func condition_recipe(e: Resource) -> Dictionary:
     F.emit(record, "label", e, "label", "string", true)
     F.emit(record, "disposition", e, "disposition", "string", true)
     F.emit(record, "reactionCastBinding", e, "reaction_cast", "string")
+    F.emit(record, "surfaceOwner", e, "surface", "string")
     F.emit(record, "persistent/actorHistory/captureDeparture", e, "capture_departure", "bool")
     F.emit(record, "persistent/actorHistory/windowSeconds", e, "history_window_seconds", "float")
     F.emit(record, "persistent/creationIdentity/source_behavior_id", e, "creation_source_id", "string")
@@ -479,7 +514,10 @@ static func condition_recipe(e: Resource) -> Dictionary:
     if not F.has_path(record, "composition/group"):F.emit(record, "composition/group", e, "group", "string", legacy_composition)
     if not F.has_path(record, "composition/exclusiveGroup"):F.emit(record, "composition/exclusiveGroup", e, "exclusive_group", "string", legacy_composition)
     F.emit(record, "composition/priority", e, "priority", "float", legacy_composition)
-    F.emit(record, "composition/maxLayers", e, "max_layers", "float", legacy_composition)
+    # A newly authored condition may declare its visual disposition without
+    # declaring a layer limit. Default zero would suppress its actual native
+    # owners. Preserve an explicit old zero, and emit authored nondefault caps.
+    F.emit(record, "composition/maxLayers", e, "max_layers", "float", F.has_path(record,"composition/maxLayers"))
     var adjust := step_of(e.look, "body_adjust")
     if adjust != null:
         F.emit(record, "persistent/alphaMultiplier", adjust, "alpha", "float", true)
@@ -526,6 +564,14 @@ static func condition_recipe(e: Resource) -> Dictionary:
         var effects:Array=[]
         for index in e.effects.size():effects.append(cue_from_effect(e.effects[index],index))
         F.put(record,"persistent/nativeEffects",effects)
+    if not e.responses.is_empty():
+        var responses:Array=[]
+        for index in e.responses.size():
+            var cue:Dictionary=cue_from_effect(e.responses[index],index)
+            cue.light_multiplier=e.responses[index].light_multiplier
+            if not e.resource_path.is_empty():cue.source=e.resource_path+"::responses/"+str(index)
+            responses.append(cue)
+        record.nativeResponses=responses
     for phase in ["application", "removal"]:
         feedback_to(record, phase, e.get(phase + "_text"), CONDITION_TEXT)
         var body: BodyUse = e.get(phase + "_body")
@@ -549,15 +595,34 @@ static func action_from_recipe(e: Resource, recipe: Dictionary) -> void:
     if raw.get("effectAudioCue") is String:
         var sound := SoundRef.new();sound.cue = raw.effectAudioCue;sound.at = "effect"
         e.sounds.append(sound);raw.erase("effectAudioCue")
+    if raw.get("media") is Array and not raw.media.is_empty() and raw.media.all(func(row):return row is Dictionary):
+        e.media.assign(raw.media);raw.erase("media")
+    F.move(raw,"observedFact",e,"observed_fact","same")
     e.unported = F.plain(raw)
 
 static func action_recipe(e: Resource) -> Dictionary:
     var record: Dictionary = e.unported.duplicate(true)
     F.emit(record, "disposition", e, "disposition", "string", true)
+    if not e.media.is_empty():record.media=e.media.duplicate(true)
+    if not e.observed_fact.is_empty():record.observedFact=e.observed_fact.duplicate(true)
+    if (not e.media.is_empty() or not e.observed_fact.is_empty()) and not e.resource_path.is_empty():
+        record._resource_source=e.resource_path
+        record._source_fields=record.get("_source_fields",{}).duplicate()
+        if not e.media.is_empty():record._source_fields.media=e.resource_path+"::media"
+        if not e.observed_fact.is_empty():record._source_fields.observedFact=e.resource_path+"::observed_fact"
     body_to_actor(record, "actor", e.body)
     markers_to(record, "anchors", e.body)
     if e.body != null:F.emit(record, "rigId", e.body, "rig", "string")
     feedback_to(record, "actionFeedback", e.feedback, ACTION_TEXT)
+    if e.feedback != null:record.actionFeedback.enabled=e.feedback.enabled
+    for outcome in e.reaction_feedback:
+        if e.reaction_feedback[outcome]==null:continue
+        feedback_to(record,"reactionFeedback/"+outcome,e.reaction_feedback[outcome],ACTION_TEXT)
+        record.reactionFeedback[outcome].enabled=e.reaction_feedback[outcome].enabled
+        if not e.resource_path.is_empty():
+            record._resource_source=e.resource_path
+            if not record.has("_source_fields"):record._source_fields={}
+            record._source_fields["reactionFeedback/"+outcome]=e.resource_path+"::reaction_feedback/"+outcome
     for sound in e.sounds:
         if sound.at == "effect":record.effectAudioCue = sound.cue
     return record
@@ -628,6 +693,11 @@ static func attack_recipe(e: Resource, trail: Variant, sockets: Dictionary) -> D
         F.emit(weapon_trail, "palette", e, "trail_palette", "strings", true)
         F.emit(weapon_trail, "outcomes", e, "trail_outcomes", "strings", true)
         F.emit(weapon_trail, "behaviorIds", e, "trail_behaviours", "strings", true)
+        if e.trail_source!=null:weapon_trail.source_id=e.trail_source.id
+        if e.trail_impact_source!=null:weapon_trail.impact_source_id=e.trail_impact_source.id
+        weapon_trail.contact_seconds=e.trail_contact_seconds
+        weapon_trail.end_seconds=e.trail_end_seconds
+        weapon_trail.source=e.resource_path
         record.weaponTrail = weapon_trail
     return record
 
@@ -684,6 +754,7 @@ static func context_from(e: Resource, id: String, document: Variant) -> void:
 static func context_document(e: Resource, id: String) -> Variant:
     if e.unported.has("document") and e.unported.size() == 1 and not e.unported.document is Dictionary:return F.deep(e.unported.document)
     var record: Dictionary = e.unported.duplicate(true)
+    record.merge(e.release_sources.duplicate(true),true)
     if e.body != null:
         for field in CONTEXT_BODY.get(id, []):F.emit(record, field[0], e.body, field[1], field[2], true)
     for name in e.texts:
@@ -693,6 +764,17 @@ static func context_document(e: Resource, id: String) -> Variant:
         else:feedback_to(record, spec[0], e.texts[name], spec[1])
     for field in CONTEXT_SECONDS.get(id, []):
         if e.values.has(field[1]):record[field[0]] = F.to_legacy("ms", e.values[field[1]])
+    for field in ["effects","impact_effects"]:
+        var uses:Array=e.effects if field=="effects" else e.impact_effects
+        if uses.is_empty():continue
+        var key:String="nativeEffects" if field=="effects" else "nativeImpactEffects"
+        record[key]=[]
+        for ordinal in uses.size():
+            var cue:Dictionary=cue_from_effect(uses[ordinal],ordinal)
+            cue.source=e.resource_path+"::"+field+"/"+str(ordinal)
+            if not uses[ordinal].recipient_slots.is_empty():
+                cue.entity_geometry={"actor":"recipient","slots":Array(uses[ordinal].recipient_slots)}
+            record[key].append(cue)
     return record
 
 # --- Damage types (damage_context palette, hit responses) -------------------

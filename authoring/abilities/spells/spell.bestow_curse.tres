@@ -39,6 +39,35 @@ ramp = PackedColorArray()
 [sub_resource type="Resource" id="Resource_xcunn"]
 script = ExtResource("3_v18p1")
 clip = "assembled/bestow_curse_ability_burden_native"
+approach = "runtime-prepared-material-runtime-20261021"
+unbound_constructor_inputs = PackedStringArray("chosen_bestow_curse_option_not_disclosed")
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "ground",
+"surface_slots": ["body", "legs", "chest", "head", "helmet", "boots", "gauntlets"]
+}]
+}
+
+
+[sub_resource type="Resource" id="Resource_ability_chosen"]
+script = ExtResource("3_v18p1")
+clip = "assembled/bestow_curse_ability_burden_native"
+approach = "runtime-prepared-material-runtime-20261021"
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
@@ -127,6 +156,7 @@ source = "ui/resources.json icon:spell.bestow-curse"
 [sub_resource type="Resource" id="Resource_561o7"]
 script = ExtResource("3_v18p1")
 clip = "assembled/bestow_curse_bent_strike_native"
+approach = "runtime-prepared-material-runtime-20261021"
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
@@ -152,15 +182,18 @@ extra = {
 [sub_resource type="Resource" id="Resource_o5va2"]
 script = ExtResource("10_d16fr")
 id = "bestow_curse_bent_strike_native"
+dispatch_gap = "unselected_review_assembly_exact_options_own_dispatch"
 kind = "form"
 selection = "bestow_curse_bent_strike_native"
 effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_561o7")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Timed review assembly remains unselected. The explicit control.bestow_curse.option_1 through option_4 predicates own form dispatch and inherit the current caster and lifecycle; this assembly is not another required cast. Actual unavailable option originals remain separate gaps."
 
 [sub_resource type="Resource" id="Resource_yolww"]
 script = ExtResource("3_v18p1")
 clip = "assembled/bestow_curse_action_denial_native"
+approach = "runtime-prepared-material-runtime-20261021"
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
@@ -186,15 +219,18 @@ extra = {
 [sub_resource type="Resource" id="Resource_q64qi"]
 script = ExtResource("10_d16fr")
 id = "bestow_curse_action_denial_native"
+dispatch_gap = "unselected_review_assembly_exact_options_own_dispatch"
 kind = "form"
 selection = "bestow_curse_action_denial_native"
 effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_yolww")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Timed review assembly remains unselected. The explicit control.bestow_curse.option_1 through option_4 predicates own form dispatch and inherit the current caster and lifecycle; this assembly is not another required cast. Actual unavailable option originals remain separate gaps."
 
 [sub_resource type="Resource" id="Resource_wkjgi"]
 script = ExtResource("3_v18p1")
 clip = "assembled/bestow_curse_necrotic_wound_native"
+approach = "runtime-prepared-material-runtime-20261021"
 role = "attached"
 at = "release"
 attachment = "recipient_ground"
@@ -220,56 +256,70 @@ extra = {
 [sub_resource type="Resource" id="Resource_jpxwh"]
 script = ExtResource("10_d16fr")
 id = "bestow_curse_necrotic_wound_native"
+dispatch_gap = "unselected_review_assembly_exact_options_own_dispatch"
 kind = "element"
 value = "necrotic"
 selection = "bestow_curse_necrotic_wound_native"
 effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_wkjgi")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Timed review assembly remains unselected. The explicit control.bestow_curse.option_1 through option_4 predicates own form dispatch and inherit the current caster and lifecycle; this assembly is not another required cast. Actual unavailable option originals remain separate gaps."
 
 [sub_resource type="Resource" id="Resource_12t71"]
 script = ExtResource("10_d16fr")
 id = "control.bestow_curse.option_1"
+effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_ability_chosen")])
+override_owner_cues = true
+owner_cues = PackedInt32Array()
 when = {"effect_id": ["control.bestow_curse.option_1"]}
 kind = "option"
 value = "option_1"
 
 staging_from = "client"
 status = "partial"
-notes = "Exact disclosed SpellFact.effect_id selects this option. Current Godot recipe, caster and lifecycle ownership are inherited."
+notes = "Exact disclosed option selects its complete finite prepared cast: 1 Ability Burden, 2 Bent Strike, 3 Action Denial, 4 Necrotic Wound. Its timed release is artwork, not real curse expiry. Actual condition UUID lifecycles remain separate. Original target surfaces and source/raster/cost limits remain; all artwork is unreviewed."
 
 [sub_resource type="Resource" id="Resource_bomu4"]
 script = ExtResource("10_d16fr")
 id = "control.bestow_curse.option_2"
+effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_561o7")])
+override_owner_cues = true
+owner_cues = PackedInt32Array()
 when = {"effect_id": ["control.bestow_curse.option_2"]}
 kind = "option"
 value = "option_2"
 
 staging_from = "client"
 status = "partial"
-notes = "Exact disclosed SpellFact.effect_id selects this option. Current Godot recipe, caster and lifecycle ownership are inherited."
+notes = "Exact disclosed option selects its complete finite prepared cast: 1 Ability Burden, 2 Bent Strike, 3 Action Denial, 4 Necrotic Wound. Its timed release is artwork, not real curse expiry. Actual condition UUID lifecycles remain separate. Original target surfaces and source/raster/cost limits remain; all artwork is unreviewed."
 
 [sub_resource type="Resource" id="Resource_wncdj"]
 script = ExtResource("10_d16fr")
 id = "control.bestow_curse.option_3"
+effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_yolww")])
+override_owner_cues = true
+owner_cues = PackedInt32Array()
 when = {"effect_id": ["control.bestow_curse.option_3"]}
 kind = "option"
 value = "option_3"
 
 staging_from = "client"
 status = "partial"
-notes = "Exact disclosed SpellFact.effect_id selects this option. Current Godot recipe, caster and lifecycle ownership are inherited."
+notes = "Exact disclosed option selects its complete finite prepared cast: 1 Ability Burden, 2 Bent Strike, 3 Action Denial, 4 Necrotic Wound. Its timed release is artwork, not real curse expiry. Actual condition UUID lifecycles remain separate. Original target surfaces and source/raster/cost limits remain; all artwork is unreviewed."
 
 [sub_resource type="Resource" id="Resource_yy6rb"]
 script = ExtResource("10_d16fr")
 id = "control.bestow_curse.option_4"
+effects = Array[ExtResource("3_v18p1")]([SubResource("Resource_wkjgi")])
+override_owner_cues = true
+owner_cues = PackedInt32Array()
 when = {"effect_id": ["control.bestow_curse.option_4"]}
 kind = "option"
 value = "option_4"
 
 staging_from = "client"
 status = "partial"
-notes = "Exact disclosed SpellFact.effect_id selects this option. Current Godot recipe, caster and lifecycle ownership are inherited."
+notes = "Exact disclosed option selects its complete finite prepared cast: 1 Ability Burden, 2 Bent Strike, 3 Action Denial, 4 Necrotic Wound. Its timed release is artwork, not real curse expiry. Actual condition UUID lifecycles remain separate. Original target surfaces and source/raster/cost limits remain; all artwork is unreviewed."
 
 [resource]
 script = ExtResource("8_qbecu")
@@ -287,7 +337,7 @@ event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.bestow_curse.ability", "condition.spell.bestow_curse.attack", "condition.spell.bestow_curse.damage", "condition.spell.bestow_curse.inaction")
-owner_cues = PackedInt32Array(0)
+owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 colours = SubResource("Resource_o101m")
@@ -342,4 +392,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "All four exact public option IDs now select their complete finite prepared compositions. An undisclosed option withholds the fixed Ability Burden default instead of guessing from later conditions or damage. Actual curse UUID lifecycles and cast body/hand timing remain separate. Source onset/cost/raster flags remain; this assignment is unvalidated and all artwork remains unreviewed."

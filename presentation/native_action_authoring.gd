@@ -13,10 +13,15 @@ static func effect_clips(behavior:String,cache:Dictionary)->Array:
     var binding:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache).get(behavior,{})
     for cue in binding.get("effect_cues",[]):
         if not cue.get("unbound_constructor_inputs",[]).is_empty():continue
-        var clip:Dictionary=Effects.resolve(str(cue.clip),str(cue.get("selection","")),str(cue.role))
-        if not clip.is_empty() and not seen.has(clip.id):
-            if not cue.get("constructor_input",{}).is_empty():clip=clip.duplicate();clip.requires_constructor_input=true
-            seen[clip.id]=true;result.append(clip)
+        var clip:Dictionary=Effects.for_cue(cue,behavior,str(cue.role))
+        if clip.is_empty():continue
+        # Candidate preparation must select the same resource-authored
+        # approach, source bank and opacity inputs as the played occurrence.
+        clip=Effects.occurrence_clip({"native_clip":clip,"native_cue":cue})
+        var identity:String=Effects.key(clip)
+        if seen.has(identity):continue
+        if not cue.get("constructor_input",{}).is_empty():clip.requires_constructor_input=true
+        seen[identity]=true;result.append(clip)
     return result
 
 static func descendant(candidate:Dictionary,owner:Dictionary,graph:Dictionary)->bool:
@@ -54,7 +59,24 @@ static func inputs(node:Dictionary,binding:Dictionary,phase:Dictionary,graph:Dic
         if fact.get("kind")=="heal" and fact.get("source_entity_uuid")==actor and fact.get("target_entity_uuid")==actor \
                 and fact.get("actual_healing",0)>0 and not fact.get("was_blocked",true) and fact.get("source_condition_uuid")==null:
             heals.append(candidate)
-    if heals.size()==1 and "owner_projection" in required:
+    var descriptor:Dictionary=phase.native_cue.get("owner_projection",{})
+    var linked_child:Dictionary={}
+    if not descriptor.is_empty():
+        var pairs:Array=[]
+        for child in applications:
+            if child.cue.condition.behavior_id!=descriptor.child_behavior_id:continue
+            var raw:Variant=child.cue.condition.get("state")
+            var state:Dictionary=raw if raw is Dictionary else {}
+            var parent_id:Variant=state.get(str(descriptor.parent_field))
+            if parent_id==null:continue
+            for parent in applications:
+                if parent.cue.condition.condition_uuid==parent_id and parent.cue.condition.behavior_id==descriptor.parent_behavior_id \
+                    and parent.order<child.order:pairs.append({"parent":parent,"child":child})
+        if pairs.size()==1:
+            applications=[pairs[0].parent];linked_child=pairs[0].child
+        else:
+            applications=[];result.gaps.append("native_condition_parent_link_unavailable")
+    if descriptor.is_empty() and heals.size()==1 and "owner_projection" in required:
         var heal:Dictionary=heals[0]
         # The native parent occurrence may be an earlier version of the same
         # action lineage. Preserve it; do not manufacture a UUID or replace an
@@ -83,6 +105,20 @@ static func inputs(node:Dictionary,binding:Dictionary,phase:Dictionary,graph:Dic
         if not removed.is_empty() and graph.get("starts",{}).has(removed.id):
             result.values.owner_projection.removed_seconds=maxf(0.0,(float(graph.starts[removed.id])-float(phase.start_ms))/1000.0)
             result.evidence.removal_occurrence=str(removed.id)
+        if not linked_child.is_empty():
+            var child:Dictionary=linked_child.cue.condition
+            var child_state:Dictionary=child.state
+            result.values.owner_projection[str(descriptor.child_input)]={"owner_uuid":str(child.condition_uuid),
+                "behavior_id":str(child.behavior_id),"parent_owner_uuid":str(child_state[str(descriptor.parent_field)]),
+                "admitted":true,"suppressed":not child_state.get("suppression_provider_uuids",[]).is_empty()}
+            result.evidence.child_condition_uuid=str(child.condition_uuid)
+            result.evidence.child_application_occurrence=str(linked_child.node.id)
+            for candidate in removals.get(child.condition_uuid,[]):
+                if candidate.order<=linked_child.order or not graph.get("starts",{}).has(candidate.node.id):continue
+                var removed_seconds:float=maxf(0.0,(float(graph.starts[candidate.node.id])-float(phase.start_ms))/1000.0)
+                var parent_end:float=float(result.values.owner_projection.removed_seconds)
+                result.values.owner_projection.removed_seconds=removed_seconds if parent_end<0.0 else minf(parent_end,removed_seconds)
+                break
         # -1 is the delivered class source's explicit unknown-removal sentinel,
         # including the finite activation adapter. No clip/round expiry is inferred.
         if "activation_projection" in required:

@@ -37,7 +37,7 @@ func run()->void:
     var entry:Resource=load(PATH)
     check(entry.native_staging and entry.effect_scope=="application" and entry.status=="partial","Actual single-link staging is enabled without claiming all Chain Lightning variants complete")
     check(entry.effects[0].clip=="live-electric/chain_live_single" and entry.effects[0].scope=="application","Single-link constructor replaces the unrelated two-target review fixture")
-    check(entry.variants.all(func(variant):return variant.status=="partial" and variant.effects.all(func(effect):return not effect.unbound_constructor_inputs.is_empty())),"Alternate branches/hops remain explicit unqualified sources")
+    check(entry.variants.all(func(variant):return variant.when.is_empty() and not variant.dispatch_gap.is_empty()),"Unselected alternate studies retain explicit dispatch dispositions without invented constructor gaps")
     var report:Dictionary=Common.report()
     var clip:Dictionary=Effects.clip(entry.effects[0].clip)
     Build._check_constructor(entry.effects[0],ID,{clip.id:clip},report)

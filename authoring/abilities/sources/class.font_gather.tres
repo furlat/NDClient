@@ -1,0 +1,66 @@
+[gd_resource type="Resource" script_class="PresentationNativeSource" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/native_source.gd" id="source"]
+
+[resource]
+script = ExtResource("source")
+id = "class.font_gather"
+kind = "class_component"
+record = {
+ "camera_target": [
+  0.0,
+  0.734846922834953,
+  0.0
+ ],
+ "canvas": [
+  384.0,
+  384.0
+ ],
+ "capture_halves": [
+  "all"
+ ],
+ "duration": 1.25,
+ "id": "class.font_gather",
+ "kind": "class_component",
+ "loop": false,
+ "media_ids": [
+  "class.font_gather.charge-q0-all",
+  "class.font_gather.charge-q1-all",
+  "class.font_gather.charge-q2-all",
+  "class.font_gather.charge-q3-all"
+ ],
+ "palette": {
+  "colors": [
+   "#277fa4",
+   "#77cce6",
+   "#d9bb73"
+  ],
+  "operator": "class_neutral"
+ },
+ "pivot": [
+  192.0,
+  249.6
+ ],
+ "pixels_per_unit": 90.5096679918781,
+ "preload_paths": [
+  "res://assets/native_effects/class_actions/ClassComponents.gd",
+  "res://assets/native_effects/class_actions/Charge.gdshader",
+  "res://assets/native_effects/class_actions/Glow.gdshader",
+  "res://presentation/native_effect_mote.gdshader",
+  "res://assets/native_effects/class_actions/vfx_1/arc_charge/variants/arc_charge_swirl_charge.tscn",
+  "res://assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres",
+  "res://assets/native_effects/class_actions/vfx_1/arc_charge/textures/aura_glow.png"
+ ],
+ "properties": {
+  "kind": "charge",
+  "quadrant": 0.0,
+  "side_name": "all"
+ },
+ "requirements": [
+  "production_painter_integration"
+ ],
+ "sample_hz": 32.0,
+ "script": "res://assets/native_effects/class_actions/ClassComponents.gd"
+}
+status = "partial"
+notes = "Installed ClassComponents charge source; exact palette, frame rate/count, canvas and pivot from authoring/media/definitions/class.font_gather.charge-q0-all.json. Existing native class-action calibration and material/painter preparation are reused. One native composition owns all capture halves. No new artwork or renderer; artwork and production qualification remain unreviewed."

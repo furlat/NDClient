@@ -1,0 +1,321 @@
+{
+ "ok": false,
+ "failure": "ApiError: stale_state",
+ "commands": 2,
+ "tracked": null,
+ "gaps": [],
+ "notes": [
+  {
+   "step": {
+    "do": "action.help_attack",
+    "by": "caster",
+    "target": "target",
+    "recipients": [
+     "target",
+     "ally"
+    ],
+    "capture_choices": true
+   },
+   "query_error": {
+    "kind": "error",
+    "incident_id": null,
+    "code": "stale_state",
+    "http_status": 409,
+    "retryable": false
+   },
+   "stage": "preview_2",
+   "query_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+   "discovery_generation": 1,
+   "preview_request": {
+    "actor_uuid": "97f873e9-3b83-4331-a907-05a4d2db10de",
+    "state_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+    "discovery_generation": 1,
+    "correlation_id": "96fc86f3-ad0f-43c6-82ac-078a72b8cf87",
+    "selection": {
+     "action_index": 2,
+     "target_indices": [
+      0,
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   },
+   "last_preview": {
+    "subjects": [
+     {
+      "uuid": "5ca22718-7c0b-4cbc-a61b-d9f8e9e14951",
+      "kind": "creature",
+      "name": "Amber ally"
+     }
+    ],
+    "positions": [
+     [
+      4,
+      7
+     ]
+    ],
+    "target_sets": [
+     [
+      {
+       "index": 1,
+       "distance": 5,
+       "kind": "subject",
+       "subject": 0,
+       "position": 0
+      }
+     ]
+    ],
+    "can_confirm": false,
+    "reason": "Select an allied attacker",
+    "effective_target_uuids": [
+     "1a689b52-fbb7-4bc4-8c76-6f7fe04ffd5e"
+    ],
+    "next_target_set": 0,
+    "next_positions": [],
+    "geometry": null,
+    "area_preview": "not_applicable",
+    "affected_positions": [],
+    "affected_entity_uuids": [],
+    "affected_entity_names": [],
+    "selected_route": null
+   }
+  },
+  {
+   "step": {
+    "do": "action.help_attack",
+    "by": "caster",
+    "target": "target",
+    "recipients": [
+     "target",
+     "ally"
+    ],
+    "capture_choices": true
+   },
+   "discovery_retry": 1,
+   "rejected_response": {
+    "kind": "error",
+    "incident_id": null,
+    "code": "stale_state",
+    "http_status": 409,
+    "retryable": false
+   },
+   "stage": "preview_2",
+   "query_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+   "discovery_generation": 1,
+   "reason": "Read-only discovery rejected as stale_state before command submission"
+  },
+  {
+   "step": {
+    "do": "action.help_attack",
+    "by": "caster",
+    "target": "target",
+    "recipients": [
+     "target",
+     "ally"
+    ],
+    "capture_choices": true
+   },
+   "query_error": {
+    "kind": "error",
+    "incident_id": null,
+    "code": "stale_state",
+    "http_status": 409,
+    "retryable": false
+   },
+   "stage": "preview_2",
+   "query_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+   "discovery_generation": 1,
+   "preview_request": {
+    "actor_uuid": "97f873e9-3b83-4331-a907-05a4d2db10de",
+    "state_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+    "discovery_generation": 1,
+    "correlation_id": "47c3eaac-aa85-42a8-87f9-6a0163842121",
+    "selection": {
+     "action_index": 2,
+     "target_indices": [
+      0,
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   },
+   "last_preview": {
+    "subjects": [
+     {
+      "uuid": "5ca22718-7c0b-4cbc-a61b-d9f8e9e14951",
+      "kind": "creature",
+      "name": "Amber ally"
+     }
+    ],
+    "positions": [
+     [
+      4,
+      7
+     ]
+    ],
+    "target_sets": [
+     [
+      {
+       "index": 1,
+       "distance": 5,
+       "kind": "subject",
+       "subject": 0,
+       "position": 0
+      }
+     ]
+    ],
+    "can_confirm": false,
+    "reason": "Select an allied attacker",
+    "effective_target_uuids": [
+     "1a689b52-fbb7-4bc4-8c76-6f7fe04ffd5e"
+    ],
+    "next_target_set": 0,
+    "next_positions": [],
+    "geometry": null,
+    "area_preview": "not_applicable",
+    "affected_positions": [],
+    "affected_entity_uuids": [],
+    "affected_entity_names": [],
+    "selected_route": null
+   }
+  },
+  {
+   "step": {
+    "do": "action.help_attack",
+    "by": "caster",
+    "target": "target",
+    "recipients": [
+     "target",
+     "ally"
+    ],
+    "capture_choices": true
+   },
+   "discovery_retry": 2,
+   "rejected_response": {
+    "kind": "error",
+    "incident_id": null,
+    "code": "stale_state",
+    "http_status": 409,
+    "retryable": false
+   },
+   "stage": "preview_2",
+   "query_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+   "discovery_generation": 1,
+   "reason": "Read-only discovery rejected as stale_state before command submission"
+  },
+  {
+   "step": {
+    "do": "action.help_attack",
+    "by": "caster",
+    "target": "target",
+    "recipients": [
+     "target",
+     "ally"
+    ],
+    "capture_choices": true
+   },
+   "query_error": {
+    "kind": "error",
+    "incident_id": null,
+    "code": "stale_state",
+    "http_status": 409,
+    "retryable": false
+   },
+   "stage": "preview_2",
+   "query_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+   "discovery_generation": 1,
+   "preview_request": {
+    "actor_uuid": "97f873e9-3b83-4331-a907-05a4d2db10de",
+    "state_revision": "88c868a2-b8c9-4efc-8cba-b352f99e1428",
+    "discovery_generation": 1,
+    "correlation_id": "efa0c5fa-3e9e-4d6d-ae60-7fe27af73721",
+    "selection": {
+     "action_index": 2,
+     "target_indices": [
+      0,
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   },
+   "last_preview": {
+    "subjects": [
+     {
+      "uuid": "5ca22718-7c0b-4cbc-a61b-d9f8e9e14951",
+      "kind": "creature",
+      "name": "Amber ally"
+     }
+    ],
+    "positions": [
+     [
+      4,
+      7
+     ]
+    ],
+    "target_sets": [
+     [
+      {
+       "index": 1,
+       "distance": 5,
+       "kind": "subject",
+       "subject": 0,
+       "position": 0
+      }
+     ]
+    ],
+    "can_confirm": false,
+    "reason": "Select an allied attacker",
+    "effective_target_uuids": [
+     "1a689b52-fbb7-4bc4-8c76-6f7fe04ffd5e"
+    ],
+    "next_target_set": 0,
+    "next_positions": [],
+    "geometry": null,
+    "area_preview": "not_applicable",
+    "affected_positions": [],
+    "affected_entity_uuids": [],
+    "affected_entity_names": [],
+    "selected_route": null
+   }
+  }
+ ],
+ "names": {
+  "97f873e9-3b83-4331-a907-05a4d2db10de": "Amber caster",
+  "5ca22718-7c0b-4cbc-a61b-d9f8e9e14951": "Amber ally",
+  "1a689b52-fbb7-4bc4-8c76-6f7fe04ffd5e": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue target"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5
+  },
+  "behaviors": {},
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

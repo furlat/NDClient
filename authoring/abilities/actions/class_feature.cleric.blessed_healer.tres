@@ -21,6 +21,9 @@ role = "attached"
 scope = "recipient"
 constructor_input = {
  "kind": "observed_event",
+ "projection": "effective_handler",
+ "required_effective_handler": "class_feature.cleric.blessed_healer",
+ "self_only": true,
  "outcome": "heal",
  "component_path": [
   "divine_art"
@@ -35,7 +38,6 @@ source_end = 0.85
 duration_policy = "authored"
 fade_out = 0.18
 light_multiplier = 0.0
-unbound_constructor_inputs = PackedStringArray("effective_handler_attribution")
 staging_from = "factory@production-bindings-c494177f9ef03e3d selection:divine_blessed_healer_study"
 extra = {
  "dynamic_geometry": true,
@@ -82,4 +84,4 @@ icon = SubResource("PendingFeatureArtwork")
 disposition = "authored"
 effects = Array[ExtResource("effect")]([SubResource("ObservedPassiveResult")])
 status = "partial"
-notes = "Exact frozen native passive handler; not a standalone action. Factory contact source remains missing until observed handler attribution and its own accepted result can be joined. No name-based damage/heal inference, fake ActionFact, generic icon, or user visual approval. Destroy Undead markers, where present in the study, remain with the real Turned lifecycle."
+notes = "Finite result selected only by the actual effective-handler attribution, its triggering version and emitted native result ancestry. No standalone action is invented. The source receives actual identities and committed positive healing/damage; its review lease/event fixtures are cleared. Turned markers remain with the actual condition lifecycle. Artistic acceptance remains separate."

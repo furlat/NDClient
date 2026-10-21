@@ -86,8 +86,12 @@ static func endpoints(fact:Dictionary,graph:Dictionary,state:Dictionary,selectio
     if target==null and fact.get("aoe_position")!=null:target=fact.aoe_position
     # A self spell has no separate recipient. Do not invent a target for a
     # projectile whose real recipient is outside the disclosed view.
-    var needs_target:bool=NativeSpells.event_cues(selection).any(func(cue):return cue.get("constructor_input",{}).get("kind")!="actor_birth" \
-        and (cue.role in ["flight","impact","strike"] or cue.get("attachment","").begins_with("recipient")))
+    var needs_target:bool=NativeSpells.event_cues(selection).any(func(cue):
+        var constructor:Dictionary=cue.get("constructor_input",{})
+        # Observed result phases receive their exact recipient later, at that
+        # result's own clock. The parent area/explosion needs no guessed actor.
+        if constructor.get("kind")=="actor_birth" or constructor.get("kind")=="observed_event" and constructor.get("outcome")!="cast":return false
+        return cue.role in ["flight","impact","strike"] or cue.get("attachment","").begins_with("recipient"))
     if target==null and not needs_target:target=source
     if target==null and fact.get("target_entity_uuid")==fact.source_entity_uuid:target=source
     if source==null or target==null:return {}
@@ -111,7 +115,10 @@ static func endpoints(fact:Dictionary,graph:Dictionary,state:Dictionary,selectio
 static func travel_ms(selected:Dictionary,recipe:Dictionary,points:Dictionary,cache:Dictionary)->float:
     var propagation:Dictionary=PropagationInputs.descriptor(selected)
     if not propagation.is_empty():return PropagationInputs.travel_ms(points.get("propagation",{}),propagation)
-    if not selected.staging.cues.any(func(cue):return cue.role=="flight"):return 0.0
+    if not selected.staging.cues.any(func(cue):return cue.role=="flight" and cue.get("unbound_constructor_inputs",[]).is_empty()):
+        var contact:float=0.0
+        for cue in selected.staging.cues:contact=maxf(contact,float(cue.get("result_contact_seconds",0.0)))
+        return contact*1000.0
     var config:Dictionary=recipe.get("projectile",{}) if recipe.get("projectile")!=null else {}
     var distance=Vector2(points.from_position[0]-points.to_position[0],points.from_position[1]-points.to_position[1]).length()*float(Authoring.load_data("catalog/rig.json",cache).TILE_W)
     return maxf(config.get("minimumTravelDurationMs",150),distance/maxf(1,config.get("speedPxPerSecond",800))*1000)

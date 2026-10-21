@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_bvlhl"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_pwhni"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="2_native_effect"]
+
 [sub_resource type="Resource" id="Resource_rllvk"]
 script = ExtResource("1_bvlhl")
 path = "art/ui-delivery-20261018/runtime/smooth48/spell.hideous_laughter.png"
@@ -11,7 +13,41 @@ reuses = "spell.hideous_laughter"
 status = "stand_in"
 source = "ui-delivery-20261018"
 
+[sub_resource type="Resource" id="Resource_native_application"]
+script = ExtResource("2_native_effect")
+clip = "bg3-36/hideous-laughter/application"
+approach = "runtime-prepared-input-reduction-20261021"
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+role = "attached"
+at = "application"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+fade_out = 0.0
+extra = {"dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "chest", "belt", "cloak"]}, "follow_attachment": true, "live_endpoints": [{"actor": "target", "socket": "face"}, {"actor": "target", "socket": "body_center"}]}
+
+[sub_resource type="Resource" id="Resource_native_condition"]
+script = ExtResource("2_native_effect")
+clip = "bg3-36/hideous-laughter/condition"
+approach = "runtime-prepared-input-reduction-20261021"
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+role = "attached"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+fade_out = 0.28
+extra = {"dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "chest", "belt", "cloak"]}, "follow_attachment": true, "live_endpoints": [{"actor": "target", "socket": "face"}, {"actor": "target", "socket": "body_center"}]}
+
 [resource]
 script = ExtResource("1_pwhni")
 id = "condition.spell.hideous_laughter"
 icon = SubResource("Resource_rllvk")
+
+disposition = "authored"
+play_package_lifecycle = false
+effects = Array[ExtResource("2_native_effect")]([SubResource("Resource_native_application"), SubResource("Resource_native_condition")])
+status = "partial"
+notes = "The actual disclosed condition UUID owns the receiving surface and clock. Finite application requires a witnessed new member; initial owners do not replay onset. Native condition mode continues until actual removal and uses existing removal visibility/fade. The old package body lifecycle is explicitly replaced to avoid duplicate body art; actual Prone/body-state tracks remain independent. The covariance implementation is an explicit numerical source alternative with retained raster/cost flags. Assignment is unvalidated; all artwork remains unreviewed."

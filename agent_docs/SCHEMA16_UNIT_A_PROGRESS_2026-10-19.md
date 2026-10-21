@@ -1,5 +1,11 @@
 # Schema 16 — complete Factory migration progress
 
+**Current artwork-review status — human clarification, 20 October 2026:** all
+artwork still awaits human review. The earlier named four-effect rejection list
+is superseded and must not be treated as current scope or as acceptance of any
+other artwork.
+
+
 **Current remaining work, 20 October:** [Everything remaining](REMAINING_WORK_2026-10-20.md).
 [Current bounded receipts](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md) remain evidence, not a second task list.
 All percentage estimates below are withdrawn as current progress measures. They

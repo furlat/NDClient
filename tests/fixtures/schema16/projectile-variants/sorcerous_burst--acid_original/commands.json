@@ -1,0 +1,125 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "306e919a-0610-47b6-aa92-077b86caedc9",
+   "state_revision": "847252dc-7466-423f-89fb-e5984e32e2c9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_acid_original",
+   "game_epoch": "ced3d89d-3564-4ae5-9427-81ce63b18fc0",
+   "audience_id": "1ec312be-9d6a-49da-8963-4dfd13e54602",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_acid_original",
+    "game_epoch": "ced3d89d-3564-4ae5-9427-81ce63b18fc0",
+    "audience_id": "1ec312be-9d6a-49da-8963-4dfd13e54602",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a92ee25d-ddc4-4cd2-9925-24662040b3e6",
+   "state_revision": "b270b33c-015c-45fe-908e-b2f197aedb3c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_acid_original",
+   "game_epoch": "ced3d89d-3564-4ae5-9427-81ce63b18fc0",
+   "audience_id": "d7f41598-7c10-4014-bd13-9d33f4e1fb59",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_acid_original",
+    "game_epoch": "ced3d89d-3564-4ae5-9427-81ce63b18fc0",
+    "audience_id": "d7f41598-7c10-4014-bd13-9d33f4e1fb59",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.sorcerous_burst",
+   "by": "caster",
+   "target": "target",
+   "variant": {
+    "damage_type": "acid"
+   },
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "644f6aeb-f483-4439-87bf-bac501bf61c9",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.sorcerous_burst",
+   "display_name": "Sorcerous Burst",
+   "cast_at_level": 0,
+   "variant_facets": [
+    {
+     "key": "damage_type",
+     "value": "acid",
+     "label": "Acid"
+    }
+   ],
+   "target_type": "creature_or_object",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "0f6e783f-00bf-4c07-b361-e8e241df4a65",
+   "state_revision": "644f6aeb-f483-4439-87bf-bac501bf61c9",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_sorcerous_burst_acid_original",
+   "game_epoch": "ced3d89d-3564-4ae5-9427-81ce63b18fc0",
+   "audience_id": "1ec312be-9d6a-49da-8963-4dfd13e54602",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_sorcerous_burst_acid_original",
+    "game_epoch": "ced3d89d-3564-4ae5-9427-81ce63b18fc0",
+    "audience_id": "1ec312be-9d6a-49da-8963-4dfd13e54602",
+    "sequence": 6
+   }
+  }
+ }
+]

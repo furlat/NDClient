@@ -41,6 +41,11 @@ func sample_case(owners:Dictionary,at:float,label:String)->Array:
 func phase_isolation(behavior:String)->void:
     var selections:Array=Conditions.NativePersistent.Effects.conditions(behavior)
     var original=selections.duplicate(true)
+    if selections.is_empty():
+        var root_source:Resource=load("res://authoring/abilities.tres")
+        var authored:Resource=load(root_source.sections.conditions[behavior])
+        check(not authored.play_package_lifecycle and (authored.disposition=="state_only" or not authored.effects.is_empty() or not authored.responses.is_empty()),behavior+" explicitly delegates package lifecycles to its exact item/finite/native owner")
+        return
     var common={"id":"condition:one","actor_uuid":"actor","condition":{"behavior_id":behavior,"state":{}},"start_ms":100.0,"absolute_start_ms":100.0,
         "duration_ms":900.0,"age_ms":200.0,"removal_age_ms":null,"initial":false}
     var first=Conditions.NativePersistent.lifecycle_samples(common,selections,cache)

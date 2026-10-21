@@ -129,7 +129,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -140,7 +140,7 @@ applies_conditions = PackedStringArray("condition.prone", "condition.spell.sleet
 applies_surfaces = PackedStringArray("spatial_effect.spell.sleet_storm")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "sleet_storm_native",
 "source": "assets/vfx/index.json:/selections/sleet_storm_native/staging"
@@ -162,4 +162,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "Factory source boundary (§13–14 of agent_docs/FACTORY_REVIEW_2026-10-20.md): Delivered weather entries and shaders retire at four seconds; actual connected ground ice exceeds the selected source capacity and cannot be partitioned without false internal edges. The fixed review cue0 is explicitly unselected in production. Cast body/palette and actual receiving damage, movement or condition feedback remain independent. This family stays partial pending the named source repair; all artwork remains unreviewed."

@@ -11,6 +11,11 @@ static func release(values: Array) -> void:
         if WorkerThreadPool.is_task_completed(_tasks[i]):
             WorkerThreadPool.wait_for_task_completion(_tasks[i]); _tasks.remove_at(i)
     if values.is_empty(): return
+    # Retired tables can own the last Material reference. Godot's headless
+    # dummy RID owner cannot free it concurrently with scene construction.
+    if DisplayServer.get_name()=="headless" and RenderingServer.get_rendering_device()==null:
+        values.clear()
+        return
     if not _joins_at_exit:
         # Whatever owner released them, every release finishes before the
         # scene tree, and with it the scripts of what they free, shuts down.

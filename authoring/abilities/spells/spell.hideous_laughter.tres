@@ -20,6 +20,8 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_7bgk6"]
 script = ExtResource("1_eakmr")
 clip = "bg3-36/hideous-laughter/application"
+approach = "runtime-prepared-input-reduction-20261021"
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
 role = "attached"
 at = "cast"
 attachment = "recipient_ground"
@@ -53,6 +55,8 @@ extra = {
 [sub_resource type="Resource" id="Resource_lqxv0"]
 script = ExtResource("1_eakmr")
 clip = "bg3-36/hideous-laughter/condition"
+approach = "runtime-prepared-input-reduction-20261021"
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
 role = "attached"
 at = "contact"
 attachment = "recipient_ground"
@@ -101,10 +105,10 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0, 1)
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.hideous_laughter")
-owner_cues = PackedInt32Array(0, 1)
+owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
@@ -118,4 +122,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/hideous_laughter_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+The actual recipient condition owns the assigned receiving application and continuing native source. Spell-level receiving reviews stay excluded, avoiding a caster substitute or fixed condition expiry. Existing cast/hand timing and actual Prone/body outcomes remain independent. The covariance alternative retains numeric/raster/cost flags; assignment is unvalidated and all artwork unreviewed."

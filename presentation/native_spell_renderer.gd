@@ -270,6 +270,7 @@ func _construct(component:Dictionary)->String:
         frame_phases[name]=frame_phases.get(name,0.0)+handle.construction_phases[phase]
     if not handle.error.is_empty():
         var error:String=handle.error;_prepare_failures[component.id]=error;Effects.close(handle);return error
+    Inputs.rebind_history(handle)
     # Staged node paths the effect lacks are reported with its diagnostics.
     handle.missing_paths=Effects.resolve_paths(handle,component.native_cue,str(component.get("spell_id","")))
     for index in handle.emitters.size():
@@ -364,7 +365,14 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     for id in active:retained[id]=true
     for id in handles.keys():
         if not retained.has(id):Inputs.release_departure(handles[id]);Effects.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
-        elif not active.has(id):Inputs.invalidate_history(handles[id]);Effects.hide(handles[id])
+        elif not active.has(id):
+            var handle:Dictionary=handles[id]
+            if not handle.started and "actor_context" in handle.clip.get("inputs",[]):
+                # A queued owner may already have requested its private prefix
+                # draw without publishing a source sample. Keep that admitted
+                # preparation alive; the output is still not displayed.
+                handle.root.hide()
+            else:Inputs.invalidate_history(handle);Effects.hide(handle)
     FrameProfile.end_phase(world.profile,"native_sample_retention",sample_phase)
     sample_phase=Time.get_ticks_usec()
     for id in active:
@@ -376,6 +384,13 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             ready=false;_pending(component,"native_spell_source_not_prepared");continue
         var handle:Dictionary=handles[id]
         handle.component=component
+        # Private actor passes are prepared across the shared frame allowance.
+        # Sampling their prefix earlier would request captures that the next
+        # allocation step withdraws, leaving the exact requested draw suspended.
+        if "actor_context" in handle.clip.get("inputs",[]) and not handle.get("history_allocated",false):
+            handle.root.hide();ready=false
+            _pending(component,"native_actor_context_not_prepared")
+            continue
         var cue:Dictionary=component.native_cue.duplicate(false)
         var age:float=maxf(0,float(component.age_ms)/1000.0)
         var equipped:bool=Inputs.Weapons.equipped_source(handle)
@@ -406,7 +421,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         Effects.set_layer(handle,int(groups[key].layer_mask))
         handle.group_key=key
         handle.optical=_optical(component.get("optical",{}))
-        if component.get("spatial_owner",false) and "admitted_cells" not in handle.clip.get("inputs",[]):
+        if component.get("spatial_owner",false) and cue.get("area_mask",true) and "admitted_cells" not in handle.clip.get("inputs",[]):
             var mask=AreaMask.publish(handle,component.get("resolved_area_positions",[]))
             if not mask.ready:
                 Effects.hide(handle);ready=false
@@ -433,7 +448,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var input_bindings:Dictionary={"supplied":[],"unavailable":{}}
         if not handle.get("baked",false):
             var input_started:int=Time.get_ticks_usec()
-            input_bindings=inputs.sync(world,handle,component,points,_support.viewport.get_texture())
+            input_bindings=inputs.sync(world,handle,component,points,_support.viewport.get_texture(),false,Playback.source_time(cue,sample_time))
             FrameProfile.end_phase(world.profile,"native_input_bindings",input_started)
             # A source may carry offline observations for authoring. They are
             # never permission to display a successful gameplay outcome.
@@ -443,17 +458,25 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
                 for channel in input_bindings.unavailable:reasons.append(str(channel)+"="+str(input_bindings.unavailable[channel]))
                 _unavailable(component,"native_input_unavailable:"+",".join(reasons),input_bindings)
                 continue
+            if not input_bindings.get("pending",{}).is_empty():
+                # Withdrawing actor_context suspends its pending GPU captures.
+                # Hide only the output while this exact admitted draw completes.
+                handle.root.hide();handle.rendered_once=false;ready=false
+                _pending(component,"history_capture_draw_pending")
+                diagnostics[id].input_bindings=input_bindings
+                diagnostics[id].history_capture=Inputs.capture_status(handle)
+                continue
         if handle.get("baked",false) and not handle.has("emission_stop_set"):
             Baked.stop_emission(handle,_emission_stop(cue));handle.emission_stop_set=true
         if lifecycle:
             var state:Dictionary=Persistent.lifecycle_state(component,sample_time)
             if equipped:state.source_age_seconds=handle.weapon_source_age
             if state!=handle.get("owner_state",{}):Effects.set_input(handle,"owner_state",state);handle.owner_state=state
-            Effects.sample(handle,float(handle.weapon_source_age) if equipped else state.owner_age_seconds)
+            Effects.sample(handle,float(handle.weapon_source_age) if equipped else state.owner_age_seconds,bool(cue.get("dynamic_geometry",false)))
             handle.lifecycle_phase=state.phase
         else:
             if input_bindings.has("source_contact_seconds"):cue.source_contact=input_bindings.source_contact_seconds
-            Effects.sample(handle,float(handle.weapon_source_age) if equipped else Playback.source_time(cue,sample_time))
+            Effects.sample(handle,float(handle.weapon_source_age) if equipped else Playback.source_time(cue,sample_time),bool(cue.get("dynamic_geometry",false)))
         if cue.has("origin_path"):
             var anchor=Effects.node(handle,cue.origin_path)
             if anchor==null:
@@ -473,14 +496,23 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         handle.cue=cue
         handle.support_y=lerpf(points.caster_ground.y,points.ground.y,clampf((sample_time-float(cue.launch))/maxf(.001,float(cue.contact)-float(cue.launch)),0,1)) if cue.role=="flight" else points.caster_ground.y if cue.role=="cast" else points.ground.y
         var caught_up:bool=is_equal_approx(sample_time,age)
+        var history_capture:Dictionary=Inputs.capture_status(handle)
+        caught_up=caught_up and history_capture.ready
+        if not history_capture.ready:handle.rendered_once=false
         if caught_up:handle.warming=false
         var drawn:bool=handle.rendered_once
+        if history_capture.has("captures") and not drawn:ready=false
         var submitted_bounds:bool=submitted_geometry(handle,frustum,int(groups[key].layer_mask))
         if equipped:
             submitted_bounds=submitted_bounds or submitted_geometry({"geometry":Inputs.Weapons.receivers(world,handle)},frustum,world.camera.cull_mask)
         diagnostics[id]={"id":id,"status":"rendered" if drawn else "prepared", "reason":"" if caught_up else "native_spell_history_preparing", "age_ms":sample_time*1000.0,"requested_age_ms":age*1000.0,"source_age":handle.age,"group":key,"layer":groups[key].layer_mask,"attachment_support":points.surfaces,"submitted_bounds":submitted_bounds,
             "effect_clip":str(component.lifecycle_phases[handle.lifecycle_phase].id) if lifecycle else str(handle.clip.get("id","")),"effect_kind":handle.effect_kind,"effect_fallback":handle.effect_reason,"missing_staged_paths":handle.missing_paths}
         diagnostics[id].input_bindings=input_bindings
+        if history_capture.has("captures"):
+            diagnostics[id].history_capture=history_capture
+            if not history_capture.ready:
+                diagnostics[id].reason=history_capture.reason
+                if not str(history_capture.get("error","")).is_empty():diagnostics[id].status="partial"
         if equipped:
             diagnostics[id].history_policy="observed_weapon_poses_only"
             diagnostics[id].observed_from_age_seconds=handle.weapon_source_origin
@@ -502,7 +534,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
                 witnesses.append(moved)
             if component.get("native_item",false) and "weapon_binding" in input_bindings.supplied and input_bindings.supplied.any(func(name):return name in ["entity_geometry","recipient_geometry"]):
                 var receiver:Dictionary=witness.duplicate(false);receiver.id=id+":weapon_surface";witnesses.append(receiver)
-        if float(handle.drawn_time)!=sample_time:
+        if float(handle.drawn_time)!=sample_time or (caught_up and not handle.rendered_once):
             var sampled_root:WeakRef=weakref(handle.root)
             RenderingServer.frame_post_draw.connect(func():
                 var submitted:Node3D=sampled_root.get_ref()
@@ -600,6 +632,10 @@ func sync(world:Node)->void:
     _support.sync(world.static_entries,world.visual_actors,world.camera)
     if not _support.ready:
         ready=false
+        # Visibility/opacity can admit a receiver after preparation sampled
+        # the earlier actor cut. Revisit the existing membership preparation
+        # instead of retaining a ready resource result for that older cut.
+        preparation_revision+=1
         for issue in _support.issues:
             if issue not in issues:issues.append(issue)
     FrameProfile.end_phase(world.profile,"native_support_sync",started)

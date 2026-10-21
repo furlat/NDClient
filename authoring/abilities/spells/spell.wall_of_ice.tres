@@ -144,11 +144,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_ulti4"]
 script = ExtResource("10_dvb4h")
 id = "wall_of_ice_corner_back_native"
+dispatch_gap = "unselected_fixed_corner_review_actual_sections_not_bound"
 kind = "form"
 selection = "wall_of_ice_corner_back_native"
 effects = Array[ExtResource("3_bekld")]([SubResource("Resource_3vc16")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The source fixes shape=corner and a review lifecycle. Actual Ice wall sections, destruction and owner lifetime must determine geometry and retirement; this review is not a supported arbitrary-corner consumer."
 
 [sub_resource type="Resource" id="Resource_74nw3"]
 script = ExtResource("3_bekld")
@@ -174,11 +176,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_383bh"]
 script = ExtResource("10_dvb4h")
 id = "ice_dome_native"
+dispatch_gap = "unselected_fixed_ice_dome_review_actual_breakup_not_bound"
 kind = "form"
 selection = "ice_dome_native"
 effects = Array[ExtResource("3_bekld")]([SubResource("Resource_74nw3")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The source fixes an ice-dome surface partition and review breakup. Actual dome geometry, damaged sections and resulting spatial owners must own the phase; no cast-wide predicate may invent the breakup or its lifetime."
 
 [sub_resource type="Resource" id="Resource_fnm4h"]
 script = ExtResource("3_bekld")
@@ -203,11 +207,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_b8njf"]
 script = ExtResource("10_dvb4h")
 id = "wall_of_ice_frigid_air_native"
+dispatch_gap = "delegated_actual_frigid_air_spatial_owner"
 kind = "form"
 selection = "wall_of_ice_frigid_air_native"
 effects = Array[ExtResource("3_bekld")]([SubResource("Resource_fnm4h")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The canonical authoring/environment/surfaces/spatial_effect.spell.frigid_air.tres assignment selects the delivered child-only source from the actual disclosed spatial UUID, cells, suppression, anchor and owner age. This older fixed wall/breach study remains unselected as an Ice cast variant; no child is inferred from wall age. Source assignment does not qualify actual-context output, and all artwork remains unreviewed."
 
 [resource]
 script = ExtResource("8_0jday")
@@ -222,7 +228,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -234,7 +240,7 @@ applies_conditions = PackedStringArray("condition.prone", "condition.spell.wall_
 applies_surfaces = PackedStringArray("spatial_effect.spell.frigid_air", "spatial_effect.spell.wall_of_force", "spatial_effect.spell.wall_of_ice", "spatial_effect.spell.wall_of_stone")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "wall_of_ice_straight_back_native",
 "source": "assets/vfx/index.json:/selections/wall_of_ice_straight_back_native/staging"
@@ -257,4 +263,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "Factory source boundary (§13 of agent_docs/FACTORY_REVIEW_2026-10-20.md): The delivered fixed wall sections shatter and retire on review clocks; actual wall sections and observed destruction still need the named compatible source contract. Fixed review cue0 and the corner/dome studies remain unselected in production. The independently observed Frigid Air child is assigned through its canonical Ground resource and the delivered child-only source (§11), with actual spatial UUID, geometry, anchor and owner age. Cast body/palette and actual receiving damage, movement or condition feedback remain independent. This family stays partial for the solid-wall source boundary; source assignment does not qualify output, and all artwork remains unreviewed."

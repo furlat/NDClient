@@ -1,6 +1,8 @@
 extends SceneTree
 ## Native Library controls must switch the actual recorded world and timeline.
 const Studio=preload("res://studio/studio.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Library=preload("res://studio/case_library.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -38,7 +40,9 @@ func selection(s:Control,capability:String,interaction:String)->void:
     check(s.index.directory==s.active_directory and s.tracks.index.directory==s.active_directory,"World and timeline use the selected recording together")
     check(not s.world.timeline.paused,"Library selection automatically plays its recording")
     check(s.case_picker.get_item_text(s.case_picker.selected)==s.active_case.label,"Header identifies the actual displayed case")
-    evidence.append({"case":s.active_case.id,"directory":s.active_directory})
+    var original:Array=s.case_records.filter(func(record):return record.id==s.active_case.id)
+    check(original.size()==1 and s.active_case.capture_engine==original[0].get("engine",{}) and s.active_case.engine_status==original[0].engine_status,"Native navigation retains this original's actual engine identity and qualification scope")
+    evidence.append({"case":s.active_case.id,"directory":s.active_directory,"capture_engine":s.active_case.capture_engine,"engine_status":s.active_case.engine_status})
 func find_item(item:TreeItem,id:String)->TreeItem:
     if item==null:return null
     var data=item.get_metadata(0)
@@ -69,6 +73,56 @@ func click_tree(panel:Window,id:String,column:int=0)->void:
         var event=InputEventMouseButton.new();event.button_index=MOUSE_BUTTON_LEFT;event.pressed=pressed;event.position=at;event.global_position=at
         panel.push_input(event,true)
     await process_frame
+func inspect_failed_prefix(s:Control)->void:
+    var original:Dictionary=Fixtures.failed_original("res://tests/fixtures/schema16/event-families/spell.dragons_breath__fire_grant_exhale_end")
+    check(not original.is_empty() and not original.ready and original.scenario_status=="failed" and original.engine_status=="historical_or_unverified","Exact preserved failed Dragon original remains failed before inspection, independently of current capture success")
+    if original.is_empty():return
+    var immutable:PackedByteArray=var_to_bytes(original)
+    # The native UI consumes the genuine historical capture as an explicit
+    # control. No current index/status or journal bytes are rewritten.
+    s.case_records=s.case_records.filter(func(record):return record.id!=original.id)+[original]
+    s._show_study_library();var panel:Window=s.study_library
+    panel.report=Library.build(Library._read(Library.SERVER_IDS),{}, {"engine":original.engine,"cases":[original]})
+    panel._refresh("spell:spell.dragons_breath",original.id)
+    await click_tree(panel,original.id)
+    check(panel.visible and panel.open_button.disabled and not panel.prefix_button.disabled \
+        and not requested(s),"Failed case exposes an explicit prefix action without automatic playback or ready promotion")
+    await process_frame
+    # Embedded Window input enters through the parent viewport. A mouse move
+    # establishes native Button hover; a panel-local button event alone leaves
+    # that state unchanged even though Tree's press handling accepts it.
+    var at:Vector2=Vector2(panel.position)+panel.prefix_button.get_global_rect().get_center()
+    var motion=InputEventMouseMotion.new();motion.position=at;motion.global_position=at
+    root.push_input(motion,true);await process_frame
+    check(panel.gui_get_hovered_control()==panel.prefix_button,"Native pointer targets the actual failed-prefix action")
+    for pressed in [true,false]:
+        var event=InputEventMouseButton.new();event.button_index=MOUSE_BUTTON_LEFT;event.pressed=pressed;event.position=at;event.global_position=at
+        root.push_input(event,true)
+    await process_frame
+    check(requested(s),"Native pointer activation opens the selected failed case's exact journal")
+    if not requested(s) or not await settle(s):return
+    check(s.active_case.id==original.id and not s.active_case.ready and s.active_case.scenario_status=="failed" \
+        and s.study_scenario.inspection_mode=="failed_prefix" and s.status.text.contains("Failed recording prefix"),"Published scene/header/inspection retain original failed-prefix status")
+    check(s.index.directory==original.perspectives[0].journal and s.tracks.index.directory==s.index.directory,"Failed prefix uses the actual selected journal for world and timeline")
+    var receivers:Array=s.index.rows.filter(func(row):return row.get("component",{}).get("native_clip",{}).get("id")=="bg3-36/dragons-breath/fire_native_receiver")
+    check(receivers.size()==1,"Failed lifecycle prefix exposes its actual accepted Exhale receiver")
+    if receivers.size()==1:
+        var row:Dictionary=receivers[0]
+        s._seek((float(row.start_ms)+float(row.end_ms))*.5)
+        if await settle(s):
+            s._show_inspector(row)
+            check(s.inspector_text.text.contains("damage_event") and s.inspector_text.text.contains("current native submission/input diagnostics"),"Actual receiver inspection shows current exact channel diagnostics")
+            check(row.coverage.rendered=="not_witnessed","Inspecting a supported failed-prefix phase does not promote recorded pixel qualification")
+            s.inspector.hide()
+    s.select_perspective("blue")
+    if await settle(s):
+        check(s.active_perspective=="blue" and s.active_case.id==original.id and not s.active_case.ready \
+            and s.status.text.contains("Failed recording prefix"),"Independent faction switch preserves the actual failed original and explicit inspection scope")
+        s._seek(0.0)
+        if await settle(s):check(s.status.text.contains("Failed recording prefix"),"Backward seek keeps failed-prefix scope visible")
+    check(var_to_bytes(original)==immutable,"Prefix navigation leaves the actual case failure/qualification unchanged")
+    evidence.append({"case":original.id,"scope":"failed_prefix_inspection","scenario_status":original.scenario_status,
+        "ready":original.ready,"recording_failure":original.reason,"directory":s.active_directory})
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1280,720);root.gui_embed_subwindows=true
     var s=Studio.new();root.add_child(s)
@@ -76,14 +130,14 @@ func run()->void:
     var hide:Dictionary={}
     for record in s.case_records:
         if record.id=="action.hide/lifecycle":hide=record;break
-    check(not hide.is_empty() and hide.ready,"Current Library supplies original Hide lifecycle")
+    check(not hide.is_empty() and hide.ready,"Library supplies an admitted original Hide lifecycle")
     if hide.is_empty():await finish(s);return
     await choose(s.capability_picker,"Actions")
     var started=requested(s);check(started,"Choosing Actions starts its first real case without a third click")
     if started and await settle(s):
         check(s.active_case.capability=="Actions","Category selection publishes an actual action recording")
     await choose(s.case_picker,hide.label)
-    started=requested(s);check(started,"Choosing Hide starts its exact current recording")
+    started=requested(s);check(started,"Choosing Hide starts its exact admitted original recording")
     if started and await settle(s):selection(s,hide.capability,hide.interaction)
     s._show_study_library()
     var panel=s.study_library
@@ -130,6 +184,7 @@ func run()->void:
             check(s.case_picker.disabled and s.status.text.contains("No recording"),"Unrecorded selection remains explicit after worker cancellation")
             check(not s.perspective_picker.disabled,"Retained recording's faction selector remains usable")
     check(s.world.presentation_errors.is_empty(),"Library switching has no presentation errors")
+    await inspect_failed_prefix(s)
     await finish(s)
 func finish(s:Control)->void:
     s.queue_free();await process_frame;await process_frame

@@ -12,6 +12,8 @@ var checks:int=0
 var failures:Array=[]
 var evidence:Array=[]
 var recorded_sequences:int=0
+var selected_sequences:Array=[1,2,3,4,5,6]
+var fireball_sequence:int=5
 func _initialize()->void:run.call_deferred()
 func check(ok:bool,label:String)->void:
     checks+=1
@@ -258,7 +260,7 @@ func recorded(directory:String)->void:
     var state:Dictionary=Reducer.reduce_initialization(initial.initialization,initial.content_additions).value
     var source_actor:Dictionary=state.actors.values()[0]
     actor_source_inputs(state.actors.values()[0])
-    for sequence in range(1,7):
+    for sequence in range(1,int(selected_sequences.max())+1):
         var path:String=directory.path_join("%016d.json"%sequence)
         if not FileAccess.file_exists(path):break
         var decoded:Dictionary=protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(path))
@@ -268,6 +270,9 @@ func recorded(directory:String)->void:
         var reduced:Dictionary=Reducer._reduce_operation_retained(state,packet,true)
         check(reduced.ok,"Actual operation %d reduces"%sequence)
         if not reduced.ok:return
+        if sequence not in selected_sequences:state=reduced.value;continue
+        if sequence==fireball_sequence:
+            check(packet.lineages.any(func(lineage):return lineage.events.any(func(event):return event.get("fact")!=null and event.fact.get("kind")=="spell" and event.fact.get("behavior_id")=="spell.fireball")),"Selected late-source control is an actual native Fireball operation")
         var compiled:Dictionary=Compiler.compile_recorded(state,packet,cache,reduced.value,reduced.transitions)
         check(compiled.ok,"Actual operation %d compiles"%sequence)
         if not compiled.ok:return
@@ -322,7 +327,7 @@ func recorded(directory:String)->void:
             var exclusive:int=0
             for source in later_sources:
                 if complete.value.required.has(source) and not opening.value.required.has(source):exclusive+=1
-            if sequence==5:
+            if sequence==fireball_sequence:
                 var failure_player=Player.new()
                 failure_player.timeline.accept({"kind":"initialization","sequence":0,"state":state})
                 failure_player.timeline.current=groups[0];failure_player.timeline.group_start_ms=0.0
@@ -383,9 +388,15 @@ func run()->void:
     later_publication()
     partition_ownership()
     hint_roles()
-    var directory:String="res://.runtime/player-runs/20261015T235855.075072Z/journal"
+    var directory:String=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--recording="):directory=argument.trim_prefix("--recording=")
+        if argument.begins_with("--sequences="):
+            selected_sequences=[]
+            for part in argument.trim_prefix("--sequences=").split(",",false):selected_sequences.append(int(part))
+        if argument.begins_with("--fireball-sequence="):fireball_sequence=int(argument.trim_prefix("--fireball-sequence="))
+    check(not directory.is_empty() and selected_sequences.size()==6 and fireball_sequence in selected_sequences,"Supply actual journal, six source operations and its actual Fireball sequence")
+    if not failures.is_empty():quit(1);return
     await recorded(directory)
     check(recorded_sequences==6,"All six actual recorded operations reached source qualification without an interrupted reducer/compiler path")
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Independent source-consumer pins and actual Gallery recorded source closures/opening deadlines. CPU only; timings are isolated metadata work, not live onset or frame acceptance."}

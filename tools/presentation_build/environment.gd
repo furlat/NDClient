@@ -14,6 +14,9 @@ extends RefCounted
 ##   lighting.res, light_ranges.res   torch colour, cookie, optical heights, range profile
 ## and reports every server id of its kinds through Common.cover().
 const Common = preload("res://tools/presentation_build/common.gd")
+const AbilityRecords = preload("res://tools/presentation_build/ability_records.gd")
+const AbilityBuild = preload("res://tools/presentation_build/abilities.gd")
+const Effects = preload("res://presentation/effect_package.gd")
 const Record = preload("res://presentation/source/environment/runtime_record.gd")
 const AssetMetadata = preload("res://presentation/resources/asset_metadata.gd")
 const Facts = preload("res://presentation/fixture_optical_facts.gd")
@@ -53,7 +56,7 @@ static func build(source: Dictionary, out_dir: String, report: Dictionary) -> vo
     DirAccess.make_dir_recursive_absolute(out_dir)
     var context := {"report": report, "entries": entries, "out": out_dir, "art": entries.art, "resources": {}, "animations": {},
         "paths": {}, "banks": {}, "library": {}, "normals": {}, "layouts": {}, "selections": {}, "rests": {},
-        "packet_headers": {}, "page_cache": {}, "previous_layouts": {}, "previous_page_cache": {}}
+        "packet_headers": {}, "page_cache": {}, "previous_layouts": {}, "previous_page_cache": {}, "portal_art": {}}
     for previous in [["texture_layouts.res", "previous_layouts", "layouts"], ["texture_page_cache.res", "previous_page_cache", "sources"]]:
         var path: String = out_dir.path_join(previous[0])
         if FileAccess.file_exists(path):
@@ -69,7 +72,7 @@ static func build(source: Dictionary, out_dir: String, report: Dictionary) -> vo
     var resources := {"resources": context.resources, "animations": context.animations}
     _terrain(context, world, resources)
     var index := {"doors": {}, "props": {}, "traps": {}, "banks": context.banks, "library": context.library, "wall_destructions": {}, "rests": {},
-        "wrecks": {}, "spatial_media": {}, "inspection": {"portal": {}, "world_animation": {}, "device": {}}}
+        "wrecks": {}, "spatial_media": {}, "native_spatial_effects": {}, "native_object_owners": {}, "residue_sources": {}, "floor_residue_sources": {}, "wall_residue_sources": {}, "inspection": {"portal": {}, "world_animation": {}, "device": {}}}
     _structures(context, world, index)
     _objects(context, world, index)
     _surfaces(context, index)
@@ -143,6 +146,8 @@ static func _art(context: Dictionary) -> void:
         match art.kind:
             "bank": _bank(context, art, where)
             "images": _images(context, art, where)
+            "sprite": _images(context, art, where)
+            "portal": _portal_art(context, art, where)
             "samples":
                 var family: Variant = _measured(context, where, art.art.measurements)
                 # Every family's art must resolve; the game reads only the ones a rest pose shows.
@@ -199,9 +204,65 @@ static func _images(context: Dictionary, art: Art, where: String) -> void:
         if not delivered.has("pivot"): record.pivot = [float(source.pivot.x), float(source.pivot.y)]
         if not delivered.has("scale"): record.scale = source.scale
         record.merge(delivered, true)
+        record.source_image_id=image
         _collect_paths(context, record)
         context.resources[image] = record
     if source.fps > 0.0: context.animations[art.id] = {"frames": Array(art.images), "fps": source.fps}
+
+## Normalize supplied page registrations into ordinary environment records.
+## No pixels, geometry or source clocks are baked or generated here.
+static func _portal_art(context:Dictionary,art:Art,where:String)->void:
+    var delivered:Variant=_measured(context,where,art.art.measurements)
+    if not delivered is Dictionary:return
+    # Only the explicitly authored retained-world program uses this page ABI.
+    # Other portal art keeps its original finite/back-front registration.
+    var selected:bool=false
+    for surface in context.entries.surfaces.values():
+        if surface.world_media.get("kind")=="portal" and surface.world_media.get("art_id")==art.id:
+            selected=true;break
+    if not selected:return
+    var program:Dictionary=delivered.duplicate(false)
+    var roles:Dictionary={}
+    for role in ["entrance","exit"]:
+        var source:Dictionary=delivered.get(role,{})
+        var frames:Dictionary={}
+        var count:int=int(source.get("opening_frames",0))+int(source.get("hold_frames",0))+int(source.get("closing_frames",0))
+        if source.get("pages",[]).size()!=4 or count<=0 or float(source.get("fps",0.0))<=0.0:
+            Common.error(context.report,where,"portal needs four registered page sets and declared phase frames");continue
+        for quarter in range(4):
+            var ids:Array=[]
+            for frame in range(count):
+                var page:int=floori(float(frame)/float(source.frames_per_page))
+                if page>=source.pages[quarter].size():Common.error(context.report,where,"portal frame outside supplied page set");break
+                var local:int=frame%int(source.frames_per_page)
+                var id:String=art.id+":"+role+":"+str(quarter)+":"+str(frame)
+                var cell:Array=source.cell
+                var record:Dictionary={"path":source.pages[quarter][page],"rect":[(local%int(source.columns))*cell[0],floori(float(local)/float(source.columns))*cell[1],cell[0],cell[1]],
+                    "native_size":cell,"pivot":source.pivot,"scale":float(delivered.get("scale",1.0))}
+                context.resources[id]=record;_collect_paths(context,record);ids.append(id)
+            frames[str(quarter)]=ids
+        roles[role]={"frames_by_quarter":frames,"fps":source.fps,"opening_frames":int(source.opening_frames),
+            "hold_frames":int(source.hold_frames),"closing_frames":int(source.closing_frames),"unlit":true}
+    var hatch:Variant=delivered.get("hatch")
+    if hatch is Dictionary:
+        for role in ["hatch","hatch_front"]:
+            var frames:Dictionary={}
+            var surfaces:Array=hatch.get("front_surface_frames_by_camera" if role=="hatch_front" else "surface_frames_by_camera",[])
+            if surfaces.size()!=4:Common.error(context.report,where,"hatch needs its four actual registered surface views");continue
+            for quarter in range(4):
+                var ids:Array=[]
+                for frame in range(surfaces[quarter].size()):
+                    var id:String=art.id+":"+role+":"+str(quarter)+":"+str(frame)
+                    var record:Dictionary=surfaces[quarter][frame].duplicate(false)
+                    var cell:Array=hatch.cell
+                    record.merge({"path":hatch.front if role=="hatch_front" else hatch.sheet,"rect":[frame*cell[0],0,cell[0],cell[1]],
+                        "native_size":cell,"pivot":hatch.pivot,"scale":float(delivered.get("scale",1.0))},true)
+                    context.resources[id]=record;_collect_paths(context,record);ids.append(id)
+                frames[str(quarter)]=ids
+            roles[role]={"frames_by_quarter":frames,"fps":hatch.fps,"opening":hatch.opening,"closing":hatch.closing}
+    program.erase("entrance");program.erase("exit");program.erase("hatch")
+    program.roles=roles
+    context.portal_art[art.id]=program
 
 ## View -> image id of an images art entry (the first frame of each view).
 static func _view_images(context: Dictionary, art_id: String, where: String) -> Dictionary:
@@ -425,6 +486,10 @@ static func _objects(context: Dictionary, world: Dictionary, index: Dictionary) 
         var where: String = "environment/objects/" + id
         if object.id != id: Common.error(report, where, "id field says " + object.id)
         Common.cover(report, "environment_object", id, object.status)
+        if not object.native_owner_content.is_empty():
+            if not context.entries.surfaces.has(object.native_owner_content):
+                Common.error(report,where,"native object body names no authored spatial owner: "+object.native_owner_content)
+            else:index.native_object_owners[id]=object.native_owner_content
         Common.asset(report, where, object.measurements)
         for art in object.art:
             if not context.art.has(art): Common.error(report, where, "art missing: " + art)
@@ -529,7 +594,23 @@ static func _surfaces(context: Dictionary, index: Dictionary) -> void:
             if legacy.has("spatial_media"): index.spatial_media[id] = legacy.spatial_media
             if legacy.has("spatial_effects"): index.inspection.world_animation[id] = {}
         if Array(surface.art).any(func(art): return context.art.has(art) and context.art[art].kind == "portal"): index.inspection.portal[id] = {}
+        if not surface.world_media.is_empty():
+            var program:Dictionary=surface.world_media.duplicate(true)
+            program.source=surface.resource_path+"::world_media"
+            program.native_world_media=true
+            if program.get("kind")=="portal":
+                var art_id:String=str(program.get("art_id",""))
+                if not context.portal_art.has(art_id):Common.error(report,where,"world portal names no supplied portal art")
+                else:program.merge(context.portal_art[art_id],false)
+                index.inspection.portal[id]=program
+            elif program.get("kind")=="sprite":
+                if float(program.get("fps",0.0))<=0.0 or program.get("frames_by_pose",{}).is_empty():Common.error(report,where,"world images need registered frames and positive source fps")
+                _world_program(context,program,where)
+                index.inspection.world_animation[id]=program
+            else:Common.error(report,where,"world media needs an explicit sprite or portal program")
+            index.spatial_media[id]=program
         var uses: Array = [surface.lasting, surface.appear, surface.disappear, surface.spread]
+        uses.append_array(surface.lasting_variants)
         for operation in surface.operations:
             uses.append(operation.transition)
             for other in [operation.becomes, operation.also_creates]:
@@ -538,15 +619,141 @@ static func _surfaces(context: Dictionary, index: Dictionary) -> void:
             if use == null or use.selection.is_empty(): continue
             if not context.selections.has(use.selection): Common.error(report, where, "Factory selection missing: " + use.selection); continue
             if not use.clip.is_empty() and not context.selections[use.selection].get("clips", []).has(use.clip): Common.error(report, where, "clip " + use.clip + " is not in selection " + use.selection)
-        if id != "residue.blood": continue
-        var value: Variant = _measured(context, where, surface.region_particles)
-        if not value is Dictionary: Common.error(report, where, "residue.blood has no region particles"); continue
-        var asset := AssetMetadata.new()
-        asset.asset_id = "particles.region.blood"
-        asset.value = value
+        if surface.native_staging:
+            var held:Array=([surface.lasting] if surface.lasting!=null else [])+Array(surface.lasting_variants)
+            var native_effects:Array=[]
+            if held.is_empty():Common.error(report,where,"native spatial owner needs an authored lasting source")
+            for ordinal in held.size():
+                var use:Resource=held[ordinal]
+                if surface.source_kind!="spatial_effect" or use.role!="attached" \
+                    or use.scope!="spatial" or use.at!="owner_start" or use.attachment!="recipient_ground":
+                    Common.error(report,where,"native lasting source requires an actual spatial owner and its owner_start ground attachment");continue
+                var cue:Dictionary=AbilityRecords.cue_from_effect(use,ordinal)
+                var clip:Dictionary=Effects.for_cue(cue,id,use.role)
+                if clip.is_empty():Common.error(report,where,"native lasting source is not assigned in the installed package");continue
+                AbilityBuild._check_constructor(use,where,{use.clip:clip},report)
+                cue.source=surface.resource_path+"::"+("lasting" if surface.lasting!=null and ordinal==0 else "lasting_variants/"+str(ordinal-(1 if surface.lasting!=null else 0)))
+                native_effects.append(cue)
+            index.native_spatial_effects[id]={"disposition":"authored","_resource_source":surface.resource_path,
+                "persistent":{"nativeEffects":native_effects}}
+        if not surface.floor_motifs.is_empty():
+            var profile:Dictionary=surface.floor_motifs.duplicate(true)
+            var art_id:String=str(profile.get("art_id",""))
+            var record:Dictionary=context.resources.get(art_id,{})
+            var original:Dictionary=legacy.get("residue_surfaces",{}) if legacy is Dictionary else {}
+            var size:Array=record.get("native_size",[])
+            if surface.source_kind!="residue" or profile.get("sampling")!="world_motifs_32" \
+                or size.size()!=2 or size.any(func(axis):return float(axis)<=0.) or original.get("floor_atlas")!=art_id \
+                or float(profile.get("opacity",-1.))!=float(original.get("floor_opacity",-2.)):
+                Common.error(report,where,"ground motifs require the original registered 4x4 source and measured floor opacity")
+            else:
+                profile.source=surface.resource_path+"::floor_motifs"
+                profile.art_size=record.native_size
+                index.floor_residue_sources[id]=profile
+        if not surface.wall_motifs.is_empty():
+            var profile:Dictionary=_wall_motif_source(context,surface,legacy,where)
+            if not profile.is_empty():index.wall_residue_sources[id]=profile
+        if surface.source_kind!="residue" or (surface.region_particles.is_empty() and surface.region_asset.is_empty()):continue
+        var value:Variant=_measured(context,where,surface.region_particles) if not surface.region_particles.is_empty() else null
+        if value==null and not surface.region_asset.is_empty():
+            if not context.has("region_assets"):
+                context.region_assets=JSON.parse_string(FileAccess.get_file_as_string("res://authoring/catalog/action_media_assets.json"))
+            value=context.region_assets.get(surface.region_asset)
+        if not value is Dictionary or not value.get("region",{}) is Dictionary or value.get("region",{}).is_empty():
+            Common.error(report,where,"selected residue has no region particle source");continue
+        var asset:=AssetMetadata.new()
+        asset.asset_id=str(value.get("assetId",surface.region_asset))
+        asset.value=value.duplicate(false)
+        if not surface.deposit_profile.is_empty():
+            var deposit:Dictionary=_residue_deposit(context,surface,value,where)
+            if deposit.is_empty():continue
+            asset.value.retained_deposit=deposit
+        index.residue_sources[id]={"asset_id":asset.asset_id,"source":surface.resource_path+"::region_asset" if not surface.region_asset.is_empty() else surface.resource_path+"::region_particles"}
         DirAccess.make_dir_recursive_absolute(context.out.path_join("residues"))
-        if ResourceSaver.save(asset, context.out.path_join("residues/blood.res")) != OK: Common.error(report, where, "cannot save the blood particles")
+        if ResourceSaver.save(asset,context.out.path_join("residues/"+id.trim_prefix("residue.")+".res"))!=OK:
+            Common.error(report,where,"cannot save selected region particles")
     for layer in ["ground_surface", "cloud", "field"]: Common.cover(report, "spatial_effect_layer", layer, "internal")
+
+## UV planes are delivered image registrations, never reconstructed object
+## faces. Only records from those exact original images may consume them.
+static func _wall_motif_source(context:Dictionary,surface:Ground,legacy:Variant,where:String)->Dictionary:
+    var profile:Dictionary=surface.wall_motifs.duplicate(true)
+    var atlas:Dictionary=context.resources.get(profile.get("art_id",""),{})
+    var original:Dictionary=legacy.get("residue_surfaces",{}) if legacy is Dictionary else {}
+    var faces:Variant=_measured(context,where,str(profile.get("faces","")))
+    var size:Array=atlas.get("native_size",[])
+    if surface.source_kind!="residue" or profile.get("sampling")!="wall_motifs_80x192" \
+        or size.size()!=2 or size.any(func(axis):return float(axis)<=0.) \
+        or original.get("wall_atlas")!=profile.get("art_id") \
+        or float(original.get("wall_opacity",-1.))!=float(profile.get("opacity",-2.)) or not faces is Dictionary:
+        Common.error(context.report,where,"wall motifs need their original atlas, measured opacity and supplied face-UV profiles");return {}
+    var images:Dictionary={}
+    for image in faces.get("assets",{}):
+        if not context.resources.has(image):continue
+        var planes:Dictionary=faces.get("profiles",{}).get(faces.assets[image],{})
+        if planes.is_empty():Common.error(context.report,where,"wall motif image has no supplied UV profile: "+str(image));continue
+        for pose in planes:
+            if planes[pose].size()>2:Common.error(context.report,where,"wall motif profile exceeds its two supplied source planes")
+            for face in planes[pose]:
+                if face.get("origin",[]).size()!=2 or face.get("across",[]).size()!=2 or face.get("down",[]).size()!=2 \
+                    or float(face.across[0])*float(face.down[1])-float(face.across[1])*float(face.down[0])==0.:
+                    Common.error(context.report,where,"wall motif UV plane is incomplete or singular")
+        images[image]=planes
+    profile.merge({"source":surface.resource_path+"::wall_motifs","path":atlas.path,"art_size":size,"images":images},true)
+    return profile
+
+## The original local-pool profile supplies optical ellipse/palette settings;
+## actual MaterialDepositSource and tile membership remain runtime operands.
+static func _residue_deposit(context:Dictionary,surface:Ground,asset:Dictionary,where:String)->Dictionary:
+    var measured:Variant=_measured(context,where,surface.deposit_profile)
+    if not measured is Dictionary:
+        Common.error(context.report,where,"retained deposit profile is not supplied");return {}
+    var pool:Dictionary=measured.get("liquid_surfaces",{})
+    var ellipse:Dictionary=pool.get("ellipse",{})
+    var radius:Variant=measured.get("deposit_media",{}).get("radiusCells")
+    if pool.get("asset_id")!=asset.get("assetId") or asset.region.get("primitive")!="liquid" \
+        or not ellipse.get("center") is Array or ellipse.center.size()!=2 \
+        or float(ellipse.get("radius_x",0.0))<=0.0 or float(ellipse.get("radius_y",0.0))<=0.0 \
+        or radius==null or float(radius)<0.0 or float(radius)!=floorf(float(radius)) \
+        or float(pool.get("opacity",1.0))!=1.0:
+        Common.error(context.report,where,"retained local pool requires its matching original liquid source, ellipse, opaque profile and declared deposit radius");return {}
+    var optical:Dictionary=ellipse.duplicate(true)
+    optical.angle=float(ellipse.get("angle",0.0))
+    return {"kind":"tile_local_pool","radius_cells":int(radius),"ellipse":optical,
+        "source":surface.resource_path+"::deposit_profile","profile":surface.deposit_profile}
+
+## Authoring admission checks the existing finite images, not runtime state.
+static func _world_program(context:Dictionary,program:Dictionary,where:String)->void:
+    if program.get("state_field","") not in ["trap_state","pressed"]:Common.error(context.report,where,"world state needs the actual public trap_state or pressed field")
+    if program.has("default_orientation") and program.default_orientation not in ["east","north","west","south"]:Common.error(context.report,where,"unknown authored world orientation")
+    var sources:Array=[program]
+    if program.has("projectile"):sources.append(program.projectile)
+    for source in sources:
+        var sizes:Dictionary={}
+        for pose in source.get("frames_by_pose",{}):
+            var frames:Array=source.frames_by_pose[pose]
+            sizes[pose]=frames.size()
+            for frame in frames:
+                if not context.resources.has(frame):Common.error(context.report,where,"world image is not supplied: "+str(frame))
+        var indexes:Array=source.get("activation_frames",[]).duplicate()
+        indexes.append_array(source.get("state_frames",{}).values())
+        for frames in source.get("transition_frames",{}).values():indexes.append_array(frames)
+        if source.has("contact_frame"):indexes.append(source.contact_frame)
+        for index in indexes:
+            for count in sizes.values():
+                if float(index)!=floor(float(index)) or int(index)<0 or int(index)>=int(count):Common.error(context.report,where,"world frame index is outside its supplied pose bank")
+    if program.has("actor_depth"):
+        var descriptor:Dictionary=program.actor_depth
+        var record:Dictionary=context.resources.get(descriptor.get("asset_id",""),{})
+        if record.is_empty():Common.error(context.report,where,"actor-depth utility image is not supplied")
+        for pose in program.get("frames_by_pose",{}):
+            if not descriptor.get("rows_by_pose",{}).has(pose) or float(descriptor.get("pixels_per_unit_by_pose",{}).get(pose,0.0))<=0.0:Common.error(context.report,where,"actor-depth utility needs exact pose registration")
+    if program.has("projectile"):
+        var projectile:Dictionary=program.projectile
+        for pose in ["e","s","w","n"]:
+            if projectile.get("frames_by_pose",{}).get(pose,[]).size()!=8 or projectile.get("tip_offsets_by_pose",{}).get(pose,[]).size()!=8 \
+                or projectile.get("muzzle_offsets_by_pose",{}).get(pose,[]).size()!=2:Common.error(context.report,where,"projectile needs eight direction images/tips and the actual pose muzzle")
+        if float(projectile.get("speed_tiles_per_second",0.0))<=0.0:Common.error(context.report,where,"projectile needs positive authored source speed")
 
 static func _lighting(context: Dictionary, world: Dictionary) -> void:
     var report: Dictionary = context.report

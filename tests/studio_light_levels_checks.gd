@@ -1,6 +1,8 @@
 extends SceneTree
 const Overlay=preload("res://studio/light_levels.gd")
 const Studio=preload("res://studio/studio.gd")
+const Cells=preload("res://sdk/fold_cells.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures=[]
 var evidence=[]
@@ -15,14 +17,18 @@ func run()->void:
     var source=Studio.new()
     overlay.level_source=source._light_marker_level
     overlay.legend_label="Perceived light";root.add_child(overlay)
-    var state={"tiles":{},"senses":{"visible":[],"effective_light_levels":{}}}
+    var state={"tiles":{},"senses":{}}
+    var visible:Array=[];var levels:Dictionary={}
     for level in 5:
         var p=[level-2,0];var key="%d,0"%p[0]
         state.tiles[key]={"tile_uuid":"tile"+str(level),"position":p,"elevation_steps":level%2,"resolved_light":4-level}
-        state.senses.visible.append(p);state.senses.effective_light_levels[key]=level
+        visible.append(p);levels[key]=level
     state.tiles["0,1"]={"tile_uuid":"remembered","position":[0,1],"elevation_steps":0,"resolved_light":4}
     state.tiles["1,1"]={"tile_uuid":"unknown","position":[1,1],"elevation_steps":0}
-    state.senses.visible.append([1,1]);state.senses.visible.append([2,1]);state.senses.effective_light_levels["2,1"]=3
+    visible.append([1,1]);visible.append([2,1]);levels["2,1"]=3
+    # This existing negative projection fixture deliberately omits one
+    # visible tile's light observation; a missing value cannot use tile light.
+    state.senses.visible=Cells.mask(visible);state.senses.effective_light_levels=Cells.values(Cells.sorted_points(Cells.point_set(levels.keys().map(Cells.point))),levels)
     var original=state.duplicate(true)
     for quarter in 4:
         for zoom in [9.0,12.0]:
@@ -31,7 +37,7 @@ func run()->void:
             check(overlay.markers.size()==5,"Only disclosed currently visible tiles with current perceived level q%d zoom%s"%[quarter,zoom])
             for marker in overlay.markers:
                 var tile:Dictionary=state.tiles["%d,%d"%marker.position]
-                check(marker.level==state.senses.effective_light_levels["%d,%d"%marker.position],"Current perceived level wins over different tile observation q%d level%d"%[quarter,marker.level])
+                check(marker.level==levels["%d,%d"%marker.position],"Current perceived level wins over different tile observation q%d level%d"%[quarter,marker.level])
                 var p=Vector3(tile.position[0],tile.elevation_steps*Overlay.Placement.HEIGHT_UNIT,tile.position[1])
                 check(marker.center.distance_to(camera.unproject_position(p))<.001,"Marker follows original support elevation/view q%d level%d"%[quarter,marker.level])
             var revisions=overlay.rebuilds
@@ -49,7 +55,8 @@ func run()->void:
     overlay.visible=true
     check(overlay.inspection().markers.size()==5 and overlay.mouse_filter==Control.MOUSE_FILTER_IGNORE,"Toggle restores passive markers without intercepting clicks")
     check(state==original,"Projection and toggles cannot mutate canonical light/visibility")
-    var changed=state.duplicate(true);changed.senses.effective_light_levels["0,0"]=1
+    var changed=state.duplicate(true);var changed_levels:Dictionary=levels.duplicate()
+    changed_levels["0,0"]=1;changed.senses.effective_light_levels=Cells.values(Cells.sorted_points(Cells.point_set(changed_levels.keys().map(Cells.point))),changed_levels)
     overlay.refresh(changed,[2],camera,Vector2(640,480))
     check(overlay.markers.any(func(m):return m.tile_uuid=="tile2" and m.level==1),"New admitted perception replaces previous marker without a tile change")
     overlay.free();view.free();source.free()
@@ -72,6 +79,13 @@ func capture(studio:Control)->Image:
 func actual_studio()->void:
     DisplayServer.window_set_size(Vector2i(1280,720))
     var studio=Studio.new();root.add_child(studio)
+    var record:Dictionary=Fixtures.public_case("hide-light")
+    var requested:String=""
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--recording="):requested=arg.trim_prefix("--recording=")
+    check(record.journals.values().has(requested),"Native overlay input is one exact independent original in the declared Hide/light case")
+    if not record.journals.values().has(requested):studio.queue_free();await process_frame;return
+    studio.case_records.append(record);studio._load(requested)
     if not await settle(studio):studio.queue_free();await process_frame;return
     var state=studio.world.timeline.state.duplicate(true);var clock=studio.world.timeline.display_ms
     check(not studio.light_levels_button.button_pressed and not studio.light_levels.visible,"Studio opens with diagnostic off")
@@ -92,11 +106,11 @@ func actual_studio()->void:
         studio.world.request_view(q)
         if not await settle(studio):break
         var image=await capture(studio);image.save_png("res://.captures/studio/light-levels/q%d.png"%q)
-        var visible={}
-        for p in studio.world.timeline.state.senses.visible:visible["%d,%d"%p]=true
+        var visible:Dictionary=Cells.point_set(Cells.mask_points(studio.world.timeline.state.senses.visible))
+        var levels:Dictionary=Cells.values_map(studio.world.timeline.state.senses.effective_light_levels)
         for marker in studio.light_levels.markers:
             var key="%d,%d"%marker.position
-            check(visible.has(key) and studio.world.timeline.state.senses.effective_light_levels.get(key)==marker.level,"Actual q%d marker uses displayed perceived visible tile"%q)
+            check(visible.has(key) and levels.get(key)==marker.level,"Actual q%d marker uses displayed perceived visible tile"%q)
         evidence.append({"quarter":q,"markers":studio.light_levels.markers.size(),"level_counts":_level_counts(studio.light_levels.markers),"source_rings":studio.light_levels.ranges.size()})
     check(studio.world.timeline.state==state and studio.world.timeline.display_ms==clock,"Toggle and camera never change displayed canonical state/clock")
     studio.world.request_view(0);await settle(studio)
@@ -113,7 +127,7 @@ func actual_studio()->void:
             check(studio.active_perspective=="blue" and studio.light_levels.visible,"Diagnostic stays enabled on faction switch")
             for marker in studio.light_levels.markers:
                 var cell="%d,%d"%marker.position
-                check(studio.world.timeline.state.senses.effective_light_levels.get(cell)==marker.level,"Faction markers use only the newly displayed observer aggregate")
+                check(Cells.values_map(studio.world.timeline.state.senses.effective_light_levels).get(cell)==marker.level,"Faction markers use only the newly displayed observer aggregate")
     var before_reload=studio.world
     studio._load(studio.active_directory)
     if await settle(studio):

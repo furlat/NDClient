@@ -20,8 +20,9 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_mdv3v"]
 script = ExtResource("1_s3u5u")
 clip = "bg3-36/revivify/application/source-8d90ebdda130325c"
+observed_result = {"outcomes": ["revival", "heal"], "relocation": "absent"}
 role = "attached"
-at = "release"
+at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 2.25
@@ -49,8 +50,9 @@ source = "ui-delivery-20261018"
 [sub_resource type="Resource" id="Resource_630kg"]
 script = ExtResource("1_s3u5u")
 clip = "bg3-36/revivify/application/source-2b7d3749fbb41b6f"
+observed_result = {"outcomes": ["revival", "heal"], "relocation": "committed"}
 role = "attached"
-at = "release"
+at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 2.25
@@ -72,11 +74,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_wjg71"]
 script = ExtResource("6_d10mm")
 id = "revivify_relocate_native"
+dispatch_gap = "delegated_to_actual_committed_relocation_result"
 kind = "form"
 selection = "revivify_relocate_native"
 effects = Array[ExtResource("1_s3u5u")]([SubResource("Resource_630kg")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The default cue set selects this exact geometry-only source only after an actual owned revival/heal and committed PortalTransferFact. The finite source starts on that actual transfer commit at the actual supported post-transfer recipient position and follows the current recipient; no review motion, life-state change or pose is synthesized. Native output and artwork review remain open."
 
 [resource]
 script = ExtResource("4_yoqfm")
@@ -84,7 +88,7 @@ id = "spell.revivify"
 icon = SubResource("Resource_jnd7h")
 delivery = "targeted"
 body = SubResource("Resource_vef25")
-effects = Array[ExtResource("1_s3u5u")]([SubResource("Resource_mdv3v")])
+effects = Array[ExtResource("1_s3u5u")]([SubResource("Resource_mdv3v"), SubResource("Resource_630kg")])
 native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
@@ -106,4 +110,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/revivify_in_place_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+Actual owned dead-to-alive or positive healing results admit the finite release; an actual committed relocation selects the relocation source and its destination clock. The source consumes recipient geometry only, with no fabricated event or life-state constructor. Both branches and all artwork remain unreviewed."

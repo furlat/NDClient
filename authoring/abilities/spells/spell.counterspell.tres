@@ -88,11 +88,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_5r5ea"]
 script = ExtResource("5_myum6")
 id = "counterspell_failure_native_study"
+dispatch_gap = "delegated_actual_reaction_owner"
 kind = "form"
 selection = "counterspell_failure_native_study"
 effects = Array[ExtResource("1_4ka04")]([SubResource("Resource_x01nc")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The actual reaction.spell.counterspell resource owns success and failure through its typed incoming_track and delivered generic finite source. This separate spell-declaration study is retained as an unselected artwork alternative; its fixed donor is not played. All artwork awaits human review."
 
 [resource]
 script = ExtResource("3_gsufy")
@@ -105,7 +107,7 @@ native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()

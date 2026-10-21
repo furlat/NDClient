@@ -9,5 +9,123 @@ id = "spatial_effect.environment.swinging_blade"
 layer = "none"
 art = PackedStringArray("trap-workshop.blade")
 legacy = "measured/environment/surfaces/spatial_effect.environment.swinging_blade.json"
+world_media = {
+  "kind": "sprite",
+  "requires_object_anchor": true,
+  "state_field": "trap_state",
+  "art_ids": [
+    "trap-workshop.blade",
+    "trap-workshop.blade.actor-depth"
+  ],
+  "frames_by_pose": {
+    "e": [
+      "trap-workshop.blade.e.0",
+      "trap-workshop.blade.e.1",
+      "trap-workshop.blade.e.2",
+      "trap-workshop.blade.e.3",
+      "trap-workshop.blade.e.4",
+      "trap-workshop.blade.e.5",
+      "trap-workshop.blade.e.6",
+      "trap-workshop.blade.e.7",
+      "trap-workshop.blade.e.8",
+      "trap-workshop.blade.e.9",
+      "trap-workshop.blade.e.10",
+      "trap-workshop.blade.e.11"
+    ],
+    "n": [
+      "trap-workshop.blade.n.0",
+      "trap-workshop.blade.n.1",
+      "trap-workshop.blade.n.2",
+      "trap-workshop.blade.n.3",
+      "trap-workshop.blade.n.4",
+      "trap-workshop.blade.n.5",
+      "trap-workshop.blade.n.6",
+      "trap-workshop.blade.n.7",
+      "trap-workshop.blade.n.8",
+      "trap-workshop.blade.n.9",
+      "trap-workshop.blade.n.10",
+      "trap-workshop.blade.n.11"
+    ],
+    "s": [
+      "trap-workshop.blade.s.0",
+      "trap-workshop.blade.s.1",
+      "trap-workshop.blade.s.2",
+      "trap-workshop.blade.s.3",
+      "trap-workshop.blade.s.4",
+      "trap-workshop.blade.s.5",
+      "trap-workshop.blade.s.6",
+      "trap-workshop.blade.s.7",
+      "trap-workshop.blade.s.8",
+      "trap-workshop.blade.s.9",
+      "trap-workshop.blade.s.10",
+      "trap-workshop.blade.s.11"
+    ],
+    "w": [
+      "trap-workshop.blade.w.0",
+      "trap-workshop.blade.w.1",
+      "trap-workshop.blade.w.2",
+      "trap-workshop.blade.w.3",
+      "trap-workshop.blade.w.4",
+      "trap-workshop.blade.w.5",
+      "trap-workshop.blade.w.6",
+      "trap-workshop.blade.w.7",
+      "trap-workshop.blade.w.8",
+      "trap-workshop.blade.w.9",
+      "trap-workshop.blade.w.10",
+      "trap-workshop.blade.w.11"
+    ]
+  },
+  "fps": 12,
+  "state_frames": {
+    "activated": 0,
+    "deactivated": 0,
+    "ready": 0
+  },
+  "activation_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "contact_frame": 5,
+  "depth": "world",
+  "successful_save_hop": {
+    "effect_id": "spatial_effect.environment.swinging_blade.avoidance",
+    "body_clip": "Rolling",
+    "duration_ms": 360.0,
+    "height_px": 10.0
+  },
+  "actor_depth": {
+    "asset_id": "trap-workshop.blade.actor-depth",
+    "cell": [
+      256,
+      256
+    ],
+    "rows_by_pose": {
+      "e": 0,
+      "n": 3,
+      "s": 1,
+      "w": 2
+    },
+    "depth_range": [
+      -4.0,
+      4.0
+    ],
+    "pixels_per_unit_by_pose": {
+      "e": 22.857127046414462,
+      "n": 22.857137836007496,
+      "s": 22.857137836007496,
+      "w": 22.85714862560053
+    }
+  }
+}
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Source-authored world program promoted from measured/environment/surfaces/spatial_effect.environment.swinging_blade.json. The shared environment path retains the exact observed spatial owner, disclosed state and original numeric pose-frame ordering. Finite activation is driven only by actual committed mechanism facts; state transitions use actual successive owner values. Projectile, avoidance, depth and residue declarations remain separate factual inputs. All artwork remains unreviewed; source assignment does not qualify runtime output."

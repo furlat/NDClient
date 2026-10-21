@@ -154,7 +154,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0, 1, 2, 3, 4)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -169,5 +169,4 @@ staging_unported = {
 "selection": "moonbeam_native",
 "source": "assets/vfx/index.json:/selections/moonbeam_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "The real spatial_effect.spell.moonbeam UUID owns its native beam continuously at the current observed anchor and relocation. All five fixed review apply/hold/remove/recipient cues are excluded, including the fixture trajectory and future target2 contact; actual damage remains its real receiving feedback. The existing cast body remains separate. All artwork is unreviewed."

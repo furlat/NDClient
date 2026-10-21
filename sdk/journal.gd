@@ -16,18 +16,27 @@ var last_profile: Dictionary = {}
 # and checked its current protocol. decode_record() admits that parse instead of a second.
 var _opened_initialization: Array = []
 
-func open(path: String, historical_recording: bool = false, replay_existing: bool = true) -> Dictionary:
+func open(path: String, _historical_recording: bool = false, replay_existing: bool = true) -> Dictionary:
 	if not directory.is_empty(): return _failure("Journal already opened")
 	var code := DirAccess.make_dir_recursive_absolute(path)
 	if code != OK: return _failure("Cannot create journal: " + error_string(code))
 	directory = path
-	# A replay uses the same current wire contract as live play. Historical
-	# wire-schema-9 journals must be re-recorded; container version is separate.
-	if historical_recording and FileAccess.file_exists(_file(0)):
+	# An existing native16 recording selects its exact stored producer contract.
+	# Old wire9/unknown identities remain refused; no bytes or facts are rewritten.
+	if FileAccess.file_exists(_file(0)):
 		var raw := FileAccess.get_file_as_bytes(_file(0))
-		var first := protocol.decode_server("InitializationResponse",raw)
+		var parsed: Dictionary = Protocol.parse_json(raw)
+		if not parsed.ok: return parsed
+		if not parsed.value is Dictionary or not parsed.value.get("protocol") is Dictionary: return _failure("Recorded initialization has no protocol identity")
+		if not protocol.check_identity(parsed.value.protocol).ok:
+			var archived := Protocol.new(Protocol.PRE_REVIEW_SCHEMA, Protocol.PRE_REVIEW_IDENTITY)
+			if not archived.setup_error.is_empty(): return _failure(archived.setup_error)
+			var checked: Dictionary = archived.check_identity(parsed.value.protocol)
+			if not checked.ok: return checked
+			protocol = archived
+		var first := protocol.decode_recorded("InitializationResponse",raw)
 		if not first.ok: return first
-		if not replay_existing: _opened_initialization = [raw, first.value]
+		_opened_initialization = [raw, first.value]
 	return replay() if replay_existing else {"ok":true,"value":null}
 
 ## Offline decode of one recorded packet. Packet 0 reuses open()'s parse when
@@ -37,7 +46,7 @@ func decode_record(sequence: int, raw: PackedByteArray) -> Dictionary:
 		var opened: Array = _opened_initialization
 		_opened_initialization = []
 		if opened[0] == raw: return {"ok":true,"value":opened[1]}
-	return protocol.decode_server("InitializationResponse" if sequence == 0 else "PlayerOperation", raw)
+	return protocol.decode_recorded("InitializationResponse" if sequence == 0 else "PlayerOperation", raw)
 
 func consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	if directory.is_empty(): return _failure("Journal is not open")

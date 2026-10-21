@@ -65,3 +65,47 @@ static func optical_contact(component:Dictionary,rows:Array,transform:Transform3
     var inverse:Transform3D=transform.affine_inverse()
     var a:Vector3=inverse*rows[0].point;var b:Vector3=inverse*rows[1].point
     return float(binding.source_launch)+maxf(float(binding.minimum_travel_seconds),a.distance_to(b)/float(binding.speed_tiles_per_second))
+
+## An optical area source draws its disclosed declaration, independently of
+## gameplay recipient membership. Edges/timing remain authored source data.
+static func area_project(node:Dictionary,binding:Dictionary)->Dictionary:
+    var fact:Variant=node.get("fact")
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact==null or fact.get("kind")!="spell" \
+        or fact.get("source_entity_uuid")==null or Occurrences.application(node):
+        return {"ready":false,"reason":"electric_area_cast_not_observed"}
+    var geometry:Dictionary=fact.get("area_geometry",{}) if fact.get("area_geometry")!=null else {}
+    if geometry.get("shape")!=binding.get("area_shape") or fact.get("resolved_area_positions")==null:
+        return {"ready":false,"reason":"electric_area_geometry_not_disclosed"}
+    if geometry.shape=="line" and (geometry.get("origin")==null or geometry.get("direction")==null \
+        or Vector2(geometry.direction[0],geometry.direction[1]).is_zero_approx() or float(geometry.get("length_feet",0.0))<=0.0):
+        return {"ready":false,"reason":"electric_declared_line_not_disclosed"}
+    if geometry.shape=="sphere" and (geometry.get("center")==null or fact.get("aoe_position")!=geometry.center):
+        return {"ready":false,"reason":"electric_declared_center_not_disclosed"}
+    var edges:Array=binding.edges.duplicate(true)
+    return {"ready":true,"reason":"","values":{"edges":edges,"endpoint_count":2,"contact_schedule":[],
+        "charge_coil":bool(binding.charge_coil)},"inputs":{"link_edges":edges},
+        "evidence":{"cast_occurrence":str(node.id),"cast_lineage":str(node.lineage_id),
+            "source_uuid":str(fact.source_entity_uuid),"area_geometry":geometry.duplicate(true),
+            "resolved_area_positions":fact.resolved_area_positions,"endpoint_source":"native_declared_area_geometry"}}
+
+## Coordinate conversion for explicitly authored optical area endpoints. The
+## public line already supplies its extent; this never solves occupied cells.
+static func area_endpoint(component:Dictionary,authored:Dictionary,points:Dictionary)->Dictionary:
+    var geometry:Dictionary=component.get("area_geometry",{})
+    var point:Vector3
+    if authored.get("area_point")=="line_end" and geometry.get("shape")=="line" \
+        and geometry.get("origin")!=null and geometry.get("direction")!=null:
+        var direction:=Vector2(geometry.direction[0],geometry.direction[1])
+        if direction.is_zero_approx() or float(geometry.get("length_feet",0.0))<=0.0:
+            return {"ready":false,"reason":"electric_declared_line_not_disclosed"}
+        var end:=Vector2(geometry.origin[0],geometry.origin[1])+direction.normalized()*float(geometry.length_feet)/5.0
+        point=Vector3(end.x,points.hand.y,end.y)
+    elif authored.get("area_point") in ["segment_start","segment_end"] and geometry.get("shape")=="wall_assembly" \
+        and geometry.get("path",{}).get("form")=="segment" and geometry.path.get("start")!=null and geometry.path.get("end")!=null:
+        var position:Array=geometry.path.start if authored.area_point=="segment_start" else geometry.path.end
+        point=Vector3(position[0],points.ground.y,position[1])
+    elif authored.get("area_point")=="center" and geometry.get("shape")=="sphere" and geometry.get("center")!=null:
+        point=Vector3(geometry.center[0],points.ground.y,geometry.center[1])
+    else:return {"ready":false,"reason":"authored_area_endpoint_not_disclosed"}
+    var offset:Array=authored.get("offset_cells",[0.0,0.0,0.0])
+    return {"ready":true,"point":point+Vector3(offset[0],offset[1],offset[2])}

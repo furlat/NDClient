@@ -20,13 +20,17 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_auh8c"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/native_delivery"
-unbound_constructor_inputs = PackedStringArray("targets", "accepted_release")
-role = "attached"
+role = "flight"
+scope = "cast"
+constructor_input = {"kind": "payload_release", "behavior_id": "spell.vitriolic_sphere", "payload_kind": "acid", "admission": "declared_aim", "component_path": ["effect"], "input_field": ""}
 at = "release"
-delay = -0.3
+delay = 0.0
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.9
+source_launch = 0.3
+source_contact = 0.75
+charge_seconds = 0.3
 duration_policy = "authored"
 hide_at_contact = PackedStringArray()
 hide_at_release = PackedStringArray()
@@ -41,20 +45,20 @@ extra = {
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [1.0, 0.0, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_27s2m"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/native_initial_blast"
-unbound_constructor_inputs = PackedStringArray("targets", "blast_event")
 role = "attached"
-at = "release"
-delay = 0.45
+scope = "cast"
+at = "contact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 1.5
@@ -65,26 +69,15 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-extra = {
-"dynamic_geometry": true,
-"live_endpoints": [{
-"point": [1.0, 0.0, 0.0]
-}]
-}
+constructor_input = {"kind": "observed_event", "projection": "accepted_area_blast", "outcome": "cast", "geometry_actor": "caster", "component_path": ["effect"], "input_field": "", "behavior_id": "spell.vitriolic_sphere", "payload_kind": "acid", "area_shape": "sphere"}
+extra = {"dynamic_geometry":true,"live_endpoints":[{"cue_point":"source"}]}
 
 [sub_resource type="Resource" id="Resource_pp0rf"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/native_target_initial"
 role = "attached"
 scope = "cast"
-constructor_input = {
-"component_path": ["effect"],
-"damage_type": "Acid",
-"geometry_actor": "target",
-"kind": "observed_event",
-"outcome": "damage",
-"projection": "applied_contact"
-}
+constructor_input = {"component_path": ["effect"], "damage_type": "Acid", "geometry_actor": "target", "kind": "observed_event", "outcome": "damage", "projection": "applied_contact"}
 at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
@@ -139,11 +132,12 @@ extra = {
 [sub_resource type="Resource" id="Resource_fki0e"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/target_native_next_end_packet"
-unbound_constructor_inputs = PackedStringArray("native_state")
 role = "attached"
-at = "release"
-delay = 2.05
-attachment = "caster_ground"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "condition_contact", "outcome": "damage", "geometry_actor": "target", "condition_id": "condition.spell.vitriolic_sphere.residue", "damage_type": "Acid", "component_path": ["effect"]}
+at = "cast"
+delay = 0.0
+attachment = "recipient_ground"
 orientation = "world"
 source_end = 0.5
 duration_policy = "authored"
@@ -224,7 +218,6 @@ extra = {
 [sub_resource type="Resource" id="Resource_6clr5"]
 script = ExtResource("1_2ul3h")
 clip = "high-level-22/vitriolic-sphere/target2_native_next_end_packet"
-unbound_constructor_inputs = PackedStringArray("native_state")
 role = "attached"
 at = "release"
 delay = 2.05
@@ -267,7 +260,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array(5)
+excluded_cues = PackedInt32Array(5, 7)
 owner_ids = PackedStringArray("condition.spell.vitriolic_sphere.residue")
 owner_cues = PackedInt32Array(3, 6)
 owner_kind = "condition"
@@ -283,4 +276,4 @@ staging_unported = {
 "selection": "vitriolic_sphere_native",
 "source": "assets/vfx/index.json:/selections/vitriolic_sphere_native/staging"
 }
-notes = "One recipient contact projects each actual same-cast positive Acid result at its own clock; fixed target2 contact is replaced by that factual fan-out. Existing condition UUID lifecycles own held residue, not the cast probes. Delivery/blast topology and later-END applied packets remain unbound; this is partial. Cast body remains the imported Attack5 stand-in, not accepted final timing/art."
+notes = "One recipient contact projects each actual same-cast positive Acid result at its own clock; fixed target2 contact is replaced by that factual fan-out. Existing condition UUID lifecycles own held residue, not the cast probes. Accepted direct ground aim owns the authored delivery and its actual disclosed resolved footprint owns the initial blast; exact condition-attributed recipient END packets own delayed positive Acid contacts. These phases share the ordinary source clock and preserve actual applied outcomes. The imported casting body and all artwork remain unreviewed; production output qualification remains separate."

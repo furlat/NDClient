@@ -6,69 +6,28 @@
 [resource]
 script = ExtResource("1_upggn")
 id = "body_release_media"
-unported = {
-"body.blood": [{
-"assetId": "particles.region.blood",
-"attachment": "body",
-"fps": 24.0,
-"id": "body.blood",
-"loop": false,
-"offsetX": 0.0,
-"offsetY": 0.0,
-"reversed": false,
-"role": "impact",
-"scale": 1.0,
-"spellTintStrength": 0.06,
-"startFrame": 0.0,
-"tint": 16777215.0,
-"tint2": null
-}],
-"body.bone": [{
-"assetId": "particles.region.bone",
-"attachment": "body",
-"fps": 24.0,
-"id": "body.bone",
-"loop": false,
-"offsetX": 0.0,
-"offsetY": 0.0,
-"reversed": false,
-"role": "impact",
-"scale": 1.0,
-"spellTintStrength": 0.06,
-"startFrame": 0.0,
-"tint": 16777215.0,
-"tint2": null
-}],
-"body.corrosive_blood": [{
-"assetId": "particles.region.corrosive",
-"attachment": "body",
-"fps": 24.0,
-"id": "body.corrosive_blood",
-"loop": false,
-"offsetX": 0.0,
-"offsetY": 0.0,
-"reversed": false,
-"role": "impact",
-"scale": 1.0,
-"spellTintStrength": 0.06,
-"startFrame": 0.0,
-"tint": 16777215.0,
-"tint2": null
-}],
-"body.dread_blood": [{
-"assetId": "particles.region.dread",
-"attachment": "body",
-"fps": 24.0,
-"id": "body.dread_blood",
-"loop": false,
-"offsetX": 0.0,
-"offsetY": 0.0,
-"reversed": false,
-"role": "impact",
-"scale": 1.0,
-"spellTintStrength": 0.06,
-"startFrame": 0.0,
-"tint": 16777215.0,
-"tint2": null
-}]
+release_sources = {
+  "body.blood": {
+    "air_source_catalog": "native_effects/responses.json",
+    "asset_id": "particles.region.blood",
+    "residue_id": "residue.blood",
+    "source": "res://authoring/environment/surfaces/residue.blood.tres::region_particles"
+  },
+  "body.bone": {
+    "asset_id": "particles.region.bone",
+    "residue_id": "residue.bone_fragments",
+    "source": "res://authoring/environment/surfaces/residue.bone_fragments.tres::region_asset"
+  },
+  "body.corrosive_blood": {
+    "asset_id": "particles.region.corrosive",
+    "residue_id": "residue.corrosive_demonic_blood",
+    "source": "res://authoring/environment/surfaces/residue.corrosive_demonic_blood.tres::region_asset"
+  },
+  "body.dread_blood": {
+    "asset_id": "particles.region.dread",
+    "residue_id": "residue.dread_blood",
+    "source": "res://authoring/environment/surfaces/residue.dread_blood.tres::region_asset"
+  }
 }
+unported = {}
+notes = "Actual disclosed release_id selects the exact existing region artwork and residue owner. All receiving ellipses, admitted cells, elevations, amount and immutable contribution identities remain public server values. Source primitive/palette/template data are retained; no blood alias, body proxy or species inference is used. All artwork and audio remain unreviewed."

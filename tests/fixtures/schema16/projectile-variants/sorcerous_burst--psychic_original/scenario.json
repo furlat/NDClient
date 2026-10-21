@@ -1,0 +1,78 @@
+{
+ "id": "spell.sorcerous_burst/psychic_original",
+ "title": "spell.sorcerous_burst: actual psychic choice",
+ "kind": "spell",
+ "subjects": {
+  "spell": [
+   "spell.sorcerous_burst"
+  ],
+  "action": [],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.sorcerous_burst"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.knight",
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "seed": 2,
+ "steps": [
+  {
+   "do": "spell.sorcerous_burst",
+   "by": "caster",
+   "target": "target",
+   "variant": {
+    "damage_type": "psychic"
+   },
+   "capture_choices": true
+  }
+ ],
+ "required_behaviors": [
+  "spell.sorcerous_burst"
+ ],
+ "purpose": "Preserve literal public declaration and recipient outcome for supported production dispatch; no inferred element from damage."
+}

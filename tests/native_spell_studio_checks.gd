@@ -1,5 +1,6 @@
 extends SceneTree
 ## Actual Studio controls and independent replay hosts, using a real journal.
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Studio=preload("res://studio/studio.gd")
 var checks:=0
 var failures:Array=[]
@@ -13,9 +14,9 @@ func check(value:bool,label:String)->void:
 func settle()->bool:
     var deadline=Time.get_ticks_msec()+120000
     while Time.get_ticks_msec()<deadline:
-        if not studio.index.is_empty() and studio.loader==null and studio.seeker==null and not studio.installing and studio.requested_seek<0 and studio.world.playback_prepared():
+        if not studio.index.is_empty() and studio.loader==null and studio.seeker==null and not studio.installing and studio.requested_seek<0 and studio.pending_directory.is_empty() and studio.world.playback_prepared():
             await RenderingServer.frame_post_draw
-            return true
+            if studio.seeker==null and not studio.installing and studio.requested_seek<0 and studio.pending_directory.is_empty() and studio.world.playback_prepared():return true
         await process_frame
     check(false,"Actual Studio seek/prepare completes within finite budget")
     return false
@@ -23,11 +24,19 @@ func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_size(Vector2i(1280,720))
     studio=Studio.new();root.add_child(studio)
+    var directory:String=Fixtures.journal("fireball")
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--recording="):directory=argument.trim_prefix("--recording=")
+    studio._select_browser_path(directory);studio._load(directory)
     if not await settle():await finish();return
+    check(studio.index.directory==directory,"Actual Studio test displays the exact requested original journal")
     var phases:Array=studio.index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false))
     check(not phases.is_empty(),"Real recording exposes native phase rows")
     if phases.is_empty():await finish();return
-    var flight:Dictionary=phases.filter(func(row):return row.component.native_cue.role=="flight")[0]
+    var flights:Array=phases.filter(func(row):return row.component.native_cue.role=="flight")
+    check(not flights.is_empty(),"Actual selected original includes a native flight phase")
+    if flights.is_empty():await finish();return
+    var flight:Dictionary=flights[0]
     var at:float=flight.start_ms+(flight.component.native_cue.launch+flight.component.native_cue.contact)*500.0
     studio._seek(at)
     if not await settle():await finish();return

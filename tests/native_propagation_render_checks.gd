@@ -19,14 +19,20 @@ func frame()->void:
 func settle(world:Node,component_id:String="")->bool:
     var deadline:int=Time.get_ticks_msec()+45000
     while Time.get_ticks_msec()<deadline and not world.publication_failed and world.presentation_errors.is_empty() and world.media_issue.is_empty():
+        # The actual replay controller asks for required work before Play spends
+        # this frame's shared allowance; a post-draw poll cannot own that turn.
+        await process_frame
+        var prepared:bool=world.playback_prepared()
+        await RenderingServer.frame_post_draw
+        var drawn:bool=world.playback_prepared()
         var bindings:Dictionary=world.component_renderer.native_spells.diagnostics.get(component_id,{}).get("input_bindings",{})
         var inputs_ready:bool=component_id.is_empty() or (not bindings.is_empty() and bindings.unavailable.is_empty())
-        if world.playback_prepared() and inputs_ready:
-            await frame()
-            if world.playback_prepared():return true
-        await frame()
-    check(false,"Native preparation: "+str({"errors":world.presentation_errors,"media":world.media_issue,"native":world.component_renderer.native_spells.diagnostics}))
+        if prepared and drawn and inputs_ready and not world.rotation_pending():return true
+    check(false,"Native preparation: "+str({"errors":world.presentation_errors,"media":world.media_issue,
+        "media_gate":world.media_gate,"components":world.component_renderer.readiness,"budget":world.preparation_admission,
+        "native":world.component_renderer.native_spells.diagnostics}))
     return false
+
 func changed(a:Image,b:Image)->int:
     a=a.duplicate();b=b.duplicate();a.convert(Image.FORMAT_RGBA8);b.convert(Image.FORMAT_RGBA8)
     var left:PackedByteArray=a.get_data();var right:PackedByteArray=b.get_data();var count:int=0

@@ -1,5 +1,5 @@
 extends SceneTree
-## Compare unchanged bytes with the current Python SDK's independent decisions.
+## Compare unchanged archived native16 bytes with their pinned Python decisions.
 const Protocol = preload("res://sdk/protocol.gd")
 const StrictJSON = preload("res://sdk/strict_json.gd")
 
@@ -34,12 +34,14 @@ func _init() -> void:
 		push_error("Cannot read protocol oracle cases: " + path)
 		quit(1)
 		return
-	var protocol := Protocol.new()
+	var protocol := Protocol.new(Protocol.PRE_REVIEW_SCHEMA,Protocol.PRE_REVIEW_IDENTITY)
 	var manifest: Dictionary = StrictJSON.new().parse(file.get_line()).value
 	var failures: Array = []
 	var native_rejections: Array = []
 	var count := 0
 	var normalized_count := 0
+	if Protocol.new().check_identity(protocol.identity).ok:
+		failures.append({"label":"current live identity must refuse the archived producer"})
 	if manifest.schema_digest != protocol.identity.schema_digest:
 		failures.append({"label": "oracle schema identity", "expected": manifest.schema_digest, "actual": protocol.identity.schema_digest})
 	while not file.eof_reached():

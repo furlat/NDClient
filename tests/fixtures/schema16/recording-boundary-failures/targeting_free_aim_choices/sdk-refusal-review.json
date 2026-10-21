@@ -1,0 +1,40 @@
+{
+  "scope": "Offline diagnosis of unchanged actual public response only; original targeting gate remains failed, zero witness checks.",
+  "python_sdk_module": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134/sdk/python/src/dnd_player/choices.py",
+  "transport_module": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134/sdk/python/src/dnd_player/transport.py",
+  "strict_sdk_refusal": "Contradictory action availability and target set",
+  "contradictory_unconditional_rows": [
+    {
+      "discovery_index": 15,
+      "display_name": "Drop (Potion of Greater Invisibility)",
+      "behavior_id": "action.core.drop",
+      "availability_status": "available",
+      "can_afford": true,
+      "target_set": 0,
+      "position_region": {
+        "range_feet": 5,
+        "candidate_source": "visible",
+        "requires_unoccupied": false,
+        "requires_walkable": false,
+        "requires_axis_or_diagonal_alignment": false,
+        "exclude_source_position": true
+      }
+    },
+    {
+      "discovery_index": 16,
+      "display_name": "Drop (Potion of Haste)",
+      "behavior_id": "action.core.drop",
+      "availability_status": "available",
+      "can_afford": true,
+      "target_set": 0,
+      "position_region": {
+        "range_feet": 5,
+        "candidate_source": "visible",
+        "requires_unoccupied": false,
+        "requires_walkable": false,
+        "requires_axis_or_diagonal_alignment": false,
+        "exclude_source_position": true
+      }
+    }
+  ]
+}

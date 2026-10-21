@@ -9,6 +9,8 @@ const Journal=preload("res://sdk/journal.gd")
 const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
 const Build=preload("res://tools/presentation_build/abilities.gd")
 const Common=preload("res://tools/presentation_build/common.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
+const ConditionSource=preload("res://presentation/source/abilities/condition.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const KEY="unbound:dnd.spatial.environmental_conditions.Wet"
 const OWNER="dede53e7-00f4-44ab-a4b1-e9a7bbf785e3"
@@ -32,6 +34,21 @@ func run()->void:
 func constructor_controls()->void:
     var source:Resource=load("res://authoring/abilities/conditions/semantic.wet.tres")
     var use:Resource=source.effects[0]
+    var emitted:Dictionary=Records.condition_recipe(source)
+    check(not emitted.get("composition",{}).has("maxLayers"),"An authored Wet visual with no stacking limit cannot acquire a zero-layer suppression policy")
+    var explicit_zero:Resource=source.duplicate(true)
+    explicit_zero.unported={"composition":{"maxLayers":0.0}}
+    check(Records.condition_recipe(explicit_zero).composition.maxLayers==0.0,"An explicitly preserved legacy zero limit is not silently enabled")
+    var bounded:Resource=source.duplicate(true);bounded.max_layers=2.0
+    check(Records.condition_recipe(bounded).composition.maxLayers==2.0,"An actual authored positive stacking cap is preserved")
+    for maximum in [0.0,2.0,null]:
+        var raw:Dictionary={"label":"Independent import limit control","disposition":"authored"}
+        if maximum!=null:raw.composition={"maxLayers":maximum}
+        var imported:Resource=ConditionSource.new()
+        Records.condition_from_recipe(imported,raw)
+        var roundtrip:Dictionary=Records.condition_recipe(imported)
+        check(roundtrip.get("composition",{}).has("maxLayers")==raw.get("composition",{}).has("maxLayers"),"Import and emit preserve actual layer-limit presence: "+str(maximum))
+        if maximum!=null:check(roundtrip.composition.maxLayers==maximum,"Import and emit preserve the exact authored limit: "+str(maximum))
     var original:PackedByteArray=var_to_bytes([use.extra,use.at,use.delay,use.role])
     var clips:Dictionary={CLIP:Effects.clip(CLIP)}
     var where:String="abilities/conditions/"+KEY
@@ -86,7 +103,12 @@ func original(seat:String)->void:
         and row.get("component",{}).get("condition_uuid")==OWNER \
         and row.component.get("native_clip",{}).get("id")==CLIP)
     check(not rows.is_empty(),seat+" real Wet membership has a native Studio hold track")
-    if rows.is_empty():return
+    if rows.is_empty():
+        evidence.append({"seat":seat,"kind":"missing_native_hold_diagnostic","presentation_end_ms":index.presentation_end_ms,
+            "actual_owner_rows":index.rows.filter(func(row):return row.get("owner",{}).get("id")==OWNER).map(func(row):return {
+                "kind":row.kind,"start_ms":row.start_ms,"end_ms":row.end_ms,"status":row.get("status"),
+                "clip":row.get("component",{}).get("native_clip",{}).get("id"),"reason":row.get("reason","")})})
+        return
     var identities:Dictionary={}
     for row in rows:
         var component:Dictionary=row.component;identities[component.id]=true

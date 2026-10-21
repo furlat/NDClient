@@ -9,6 +9,8 @@ extends Resource
 @export var source_owners: Dictionary = {}
 @export var equipment: Dictionary = {}
 @export var equipment_errors: Dictionary = {}
+## Actual item id -> explicit family and exact dropped visual variants.
+@export var ground_equipment: Dictionary = {}
 ## Item id -> ordered native decoration cues. Equipment sheets remain separate.
 @export var item_effects: Dictionary = {}
 ## Item id -> finite cues triggered by its actual attack contact.

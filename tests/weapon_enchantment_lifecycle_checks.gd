@@ -22,7 +22,7 @@ const CASES={
         "owner":"","admission":-1,"removal":{},
         "staff":"c9b7213a-ab09-4be2-a4a0-9cc6d2a17964","sword":"2bce8acb-6986-4941-aa85-65e062df960f",
         "held_attack":51,"held_outcome":"Miss","last_attack":{"amber":195,"blue":195},
-        "unequip":18,"equip":23,"last":28,"commands":17,"owner_cues":[2,3]}}
+        "unequip":18,"equip":23,"last":28,"commands":17,"owner_cues":[2,3],"presentation_owner":"item_effect"}}
 var checks:int=0
 var failures:Array=[]
 var observations:Array=[]
@@ -80,10 +80,17 @@ func inspect_original(name:String,seat:String,spec:Dictionary)->Dictionary:
     var condition_id:String="condition.spell."+str(spec.spell)
     var spell:Resource=load("res://authoring/abilities/spells/spell."+str(spec.spell)+".tres")
     var condition:Resource=load("res://authoring/abilities/conditions/"+condition_id+".tres")
-    check(spell.owner_kind=="condition" and Array(spell.owner_ids)==[condition_id] and Array(spell.owner_cues)==spec.owner_cues \
-        and condition.play_package_lifecycle,label+": actual typed source delegates its held cues to this exact condition lifecycle")
+    if spec.get("presentation_owner")=="item_effect":
+        var attachments:Resource=load("res://authoring/abilities/contexts/item_attachments.tres")
+        check(not condition.play_package_lifecycle and condition.disposition=="state_only" \
+            and attachments.effects.any(func(use):return use.item_effect_behavior_id==condition_id),label+": actual typed item-effect owner replaces the obsolete duplicate actor condition lifecycle")
+    else:
+        check(spell.owner_kind=="condition" and Array(spell.owner_ids)==[condition_id] and Array(spell.owner_cues)==spec.owner_cues \
+            and condition.play_package_lifecycle,label+": actual typed source delegates its held cues to this exact condition lifecycle")
     var selected:Dictionary=Spells.selection("spell."+str(spec.spell),index.cache)
-    check(not selected.is_empty() and Spells.owned_cues(selected)==spec.owner_cues,label+": built production selection retains the same handover")
+    var expected_cues:Array=[] if spec.get("presentation_owner")=="item_effect" else spec.owner_cues
+    check(not selected.is_empty() and Spells.owned_cues(selected)==expected_cues,label+": built production selection retains the declared presentation owner")
+    if spec.get("presentation_owner")=="item_effect":check(Spells.event_cues(selected).is_empty(),label+": excluded obsolete spell cues cannot duplicate the actual item-effect lifecycle")
     var casts:Array=independent.events.filter(func(event):return event.fact.kind=="spell" and event.fact.get("behavior_id")=="spell."+str(spec.spell))
     check(casts.size()==1 and casts[0].sequence==2 and casts[0].fact.source_entity_uuid==spec.actor,label+": one actual completed cast does not imply a held condition")
     var held:Array=independent.events.filter(func(event):return event.fact.kind=="attack" and event.sequence==7)

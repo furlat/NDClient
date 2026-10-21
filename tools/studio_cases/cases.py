@@ -3,6 +3,12 @@
 Baseline casts exercise safety only. They do not claim the richer lifecycle,
 outcome or visual coverage described by an explicitly choreographed study.
 """
+from event_family_cases import event_family_studies
+from projectile_variant_cases import projectile_variant_studies
+from flame_blade_case import flame_blade_weapon_study
+from production_review_cases import production_review_studies, repair_item_owner_requirements
+from trap_cases import hardware_studies
+from legacy_six_cases import legacy_six_studies
 
 
 def subjects(spells=(), actions=(), conditions=()):
@@ -19,9 +25,20 @@ def actors(spells=()):
         {'role':'second_target', 'side':'blue', 'creature':'creature.generic_caster', 'level':20, 'at':[4,8]}]
 
 
+def spell_baseline_exclusions(inventory):
+    """Native nonproduction definitions stay cataloged and explicitly named."""
+    return [{'id': spell, 'visibility': row['visibility'], 'disposition': 'nonproduction_definition',
+             'reason': 'Native descriptor visibility='+row['visibility']+'; outside production spell baselines. '
+                       'Existing original captures remain unchanged and inspectable.'}
+            for spell, row in sorted(inventory['ids']['spell'].items())
+            if row.get('visibility') in ('developer', 'internal')]
+
+
 def spell_baselines(inventory):
     result=[]
     for spell in sorted(inventory['ids']['spell']):
+        if inventory['ids']['spell'][spell].get('visibility') in ('developer', 'internal'):
+            continue
         roster=actors([spell])
         step={'do':spell, 'by':'caster', 'target':'first_legal', 'aim':[6,7]}
         steps=None
@@ -114,7 +131,7 @@ def first_cohort():
     healers[3]={'role':'second_target','side':'amber','creature':'creature.knight','at':[4,8],'damage':39}
     recovering=actors();recovering[0]={'role':'caster','side':'amber','premade':'fighter','at':[3,7],'damage':20}
     recovering[2]['at']=[9,7];recovering[3]['at']=[9,8]
-    return [
+    cohort = [
         {'id':'spell.flesh_to_stone/petrification_restoration',
          'title':'Petrification: ordinary movement, failed saves, stone and restoration', 'kind':'spell',
          'subjects':subjects(['spell.flesh_to_stone','spell.greater_restoration'], ['action.move'],
@@ -208,7 +225,9 @@ def first_cohort():
                   {'do':'action.move','by':'caster','target':[11,6]},
                   {'do':'action.environment.directional_door.open','by':'caster','target':{'object':'Burial hall'}},
                   {'do':'action.move','by':'caster','target':[13,6]}],
-         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), glyph_warding_trigger_study(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + coating_weapon_studies()
+         'required_behaviors':['action.environment.directional_door.open'],'required_facts':['movement']}, gallery_sorcerer(), equipped_weapon_study(), poison_weapon_contact_study(), poison_weapon_runtime_study(), water_create_dry_study(), *glyph_warding_trigger_studies(), power_word_heal_poison_study(), goodberry_consumption_study(), shillelagh_equipped_move_study(), flaming_sphere_lifecycle_study()] + interaction_cohort() + traversal_and_utility_cohort() + survival_cohort() + perspective_and_reaction_cohort() + direct_character_cohort() + passive_handler_cohort() + [interaction_media_study(), vampiric_positive_study(), banishment_departure_study()] + native_persistent_studio_studies() + option_identity_studies() + intrinsic_weapon_studies() + [flame_blade_weapon_study(subjects)] + coating_weapon_studies() + event_family_studies(actors, subjects) + projectile_variant_studies(actors, subjects) + production_review_studies(actors, subjects) + legacy_six_studies(subjects)
+    cohort += hardware_studies(subjects)
+    return [repair_item_owner_requirements(case) for case in cohort]
 
 
 def equipped_weapon_study(item_id='weapon.roster.ember_longsword', title='Ember Longsword',
@@ -440,6 +459,24 @@ def glyph_warding_trigger_study():
         'purpose': 'Actual ordinary hostile entry after a separately published held interval. '
                    'The legal request selects Fire, but native armed/payload inputs are not '
                    'manufactured from the request or from the name of the spell.'}
+
+
+def glyph_warding_trigger_studies():
+    """The same legal hostile entry with each actual offered elemental form."""
+    result = []
+    for form in ('acid', 'cold', 'fire', 'lightning', 'thunder'):
+        case = glyph_warding_trigger_study()
+        if form != 'fire':
+            case['id'] = 'spell.glyph_of_warding/'+form+'_observed_contact'
+        case['title'] = 'Glyph '+form.title()+': placement, held movement and actual contact'
+        case['steps'][1]['variant']['form'] = form
+        case['required_applied_damage_types'] = [form.title()]
+        case['purpose'] = ('Actual ordinary hostile entry after a separately published held interval. '
+            'The legal request selects '+form.title()+', but no armed or payload state is '
+            'manufactured from that request. Qualification requires the original positive '
+            +form.title()+' result and retains any genuine failed outcome.')
+        result.append(case)
+    return result
 
 
 def water_create_dry_study():

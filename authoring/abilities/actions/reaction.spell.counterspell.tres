@@ -5,6 +5,9 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_orltq"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_5g7ty"]
 [ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="4_reaction"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="5_feedback"]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/source-preparation-20261020/sources/24692e80be5c661fdc84/counterspell_contact.tres" id="actual_contact"]
 
 [sub_resource type="Resource" id="Resource_lse1i"]
 script = ExtResource("1_yj8kk")
@@ -25,53 +28,61 @@ source = "ui/resources.json icon:reaction.counterspell"
 
 [sub_resource type="Resource" id="Resource_reaction_success"]
 script = ExtResource("4_reaction")
-clip = "reaction-prismatic-study/counterspell_success_native_study"
-selection = "counterspell_success_native_study"
+clip = "production-review/counterspell/actual_presentation_contact"
+source_phase = ExtResource("actual_contact")
+source_inputs = {"reaction_observation":"set_reaction_observation","interrupted_presentation":"set_interrupted_presentation","interrupted_path":"set_interrupted_path"}
+source_seekable = true
+incoming_track = {"source_role":"cast_preparation","end_at":"body.release","capture_at":"reaction.contact","socket":"hand"}
 role = "attached"
 scope = "source"
 at = "body.release"
 attachment = "caster_ground"
 orientation = "world"
 scale = 1.0
-source_end = 1.8
+source_end = 0.43
 light_multiplier = 0.0
 constructor_input = {
 "kind": "reaction_observation",
-"component_path": ["counterspell"],
-"input_field": "observation",
+"component_path": ["effect"],
+"input_field": "",
 "trigger_kind": "spell",
 "succeeded": true
 }
-unbound_constructor_inputs = PackedStringArray("reaction_incoming_presentation_path_unavailable")
 staging_from = "factory@c494177f9ef03e3d"
-extra = {
-"live_endpoints": [{"actor": "caster", "socket": "hand"}, {"actor": "target", "socket": "hand"}, {"actor": "caster", "socket": "body_center"}]
-}
 
 [sub_resource type="Resource" id="Resource_reaction_failure"]
 script = ExtResource("4_reaction")
-clip = "reaction-prismatic-study/counterspell_failure_native_study"
-selection = "counterspell_failure_native_study"
+clip = "production-review/counterspell/actual_presentation_contact"
+source_phase = ExtResource("actual_contact")
+source_inputs = {"reaction_observation":"set_reaction_observation","interrupted_presentation":"set_interrupted_presentation","interrupted_path":"set_interrupted_path"}
+source_seekable = true
+incoming_track = {"source_role":"cast_preparation","end_at":"body.release","capture_at":"reaction.contact","socket":"hand"}
 role = "attached"
 scope = "source"
 at = "body.release"
 attachment = "caster_ground"
 orientation = "world"
 scale = 1.0
-source_end = 1.8
+source_end = 0.43
 light_multiplier = 0.0
 constructor_input = {
 "kind": "reaction_observation",
-"component_path": ["counterspell"],
-"input_field": "observation",
+"component_path": ["effect"],
+"input_field": "",
 "trigger_kind": "spell",
 "succeeded": false
 }
-unbound_constructor_inputs = PackedStringArray("reaction_incoming_presentation_path_unavailable")
 staging_from = "factory@c494177f9ef03e3d"
-extra = {
-"live_endpoints": [{"actor": "caster", "socket": "hand"}, {"actor": "target", "socket": "hand"}, {"actor": "caster", "socket": "body_center"}]
-}
+
+[sub_resource type="Resource" id="Resource_feedback_success"]
+script = ExtResource("5_feedback")
+text = "Counterspelled"
+colour = Color(0.5450980392156862, 0.8274509803921568, 1, 1)
+
+[sub_resource type="Resource" id="Resource_feedback_failure"]
+script = ExtResource("5_feedback")
+text = "Counterspell failed"
+colour = Color(1, 0.6078431372549019, 0.44313725490196076, 1)
 
 [resource]
 script = ExtResource("2_orltq")
@@ -83,6 +94,7 @@ disposition = "authored"
 body = SubResource("Resource_lse1i")
 effect_sources = PackedStringArray()
 effects = Array[ExtResource("4_reaction")]([SubResource("Resource_reaction_success"), SubResource("Resource_reaction_failure")])
+reaction_feedback = Dictionary[String, ExtResource("5_feedback")]({"succeeded": SubResource("Resource_feedback_success"), "failed": SubResource("Resource_feedback_failure")})
 status = "partial"
 unported = {
 "actionFeedback": null,
@@ -91,20 +103,6 @@ unported = {
 },
 "attackFeedback": null,
 "compatibleCueKinds": ["counterspell"],
-"counterspellFeedback": {
-"automatic_success": {
-"color": 9163775.0,
-"text": "Counterspelled"
-},
-"check_failure": {
-"color": 16751473.0,
-"text": "Counterspell failed"
-},
-"check_success": {
-"color": 9163775.0,
-"text": "Counterspelled"
-}
-},
 "definitionRef": {
 "content_id": "reaction.spell.counterspell",
 "content_version": 1.0,
@@ -118,4 +116,4 @@ unported = {
 "variants": []
 }
 
-notes = "Actual ActionFact.reaction selects the success/failure study and retains native parent occurrence/lineage evidence. Incoming interrupted-source path, selected native phase and exact source-clock remap remain unqualified; the Factory Fireball review path is not a production substitute. No outcome or path is inferred from cancellation alone."
+notes = "Actual reaction parent/lineage/outcome retains only the resource-declared incoming authored body preparation through its real cancellation contact. The existing canonical owner pass captures original outfit, pose, scale and opacity; the finite source receives an immutable source-clock hand Transform3D. No canceled flight, destination effect, donor spell or current idle hand is constructed. Artwork is unreviewed; native qualification remains separate."

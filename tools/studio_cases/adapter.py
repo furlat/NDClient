@@ -26,7 +26,7 @@ import socket
 import subprocess
 import sys
 from uuid import uuid4
-from dnd_player.transport import ApiError, headers
+from dnd_player.transport import ApiError
 from httpx import HTTPStatusError
 
 from dnd.scenarios.encounter_assembler import _SPELL_ROW_BY_REF
@@ -182,17 +182,23 @@ def _kill_group(process):
     except (ProcessLookupError, PermissionError): pass
 
 
-async def hosted(engine, config, work, run, *, timeout=600, port=None):
+async def hosted(engine, config, work, run, *, timeout=600, port=None, initial_mechanisms=()):
     """Start the engine's test host for config, await run(url), stop it.
 
     The host and its worker run in their own process group, so a stuck or
     failed case never leaves an engine process behind."""
     config_path = work/'server.json'; config_path.write_text(config.model_dump_json(indent=2)); config_path.chmod(0o600)
+    host_command = [sys.executable, '-m', 'devtools.player_server_acceptance.test_host']
+    if initial_mechanisms:
+        setup = work/'initial-mechanisms.json'
+        setup.write_text(json.dumps(initial_mechanisms, indent=1)+'\n'); setup.chmod(0o600)
+        host_command = [sys.executable, '-B', str(Path(__file__).with_name('fixture_host.py')),
+            '--initial-mechanisms', str(setup)]
     if port is None:
         with socket.socket() as sock:
             sock.bind(('127.0.0.1', 0)); port = sock.getsockname()[1]
     with (work/'server.log').open('wb') as log:
-        host = await asyncio.create_subprocess_exec(sys.executable, '-m', 'devtools.player_server_acceptance.test_host',
+        host = await asyncio.create_subprocess_exec(*host_command,
             '--config', str(config_path), '--stop', str(work/'server.stop'), '--result', str(work/'host-result.json'), '--port', str(port),
             cwd=engine, stdout=log, stderr=log, start_new_session=True)
         (work/'host.pid').write_text(str(host.pid))
@@ -254,6 +260,15 @@ def condition_rows(node):
             if row['field'] == 'condition': yield actor['actor_uuid'], row
 
 
+def item_effect_rows(node):
+    """Original whole ItemEffectsRow after-values in native actor-row order."""
+    fact = node.get('fact') or {}
+    if fact.get('kind') != 'actor_change': return
+    for actor in fact['actors']:
+        for row in actor['rows']:
+            if row['field'] == 'item_effects': yield actor['actor_uuid'], row
+
+
 def moments(journal, names=None):
     """Jump points name actual native occurrences, never fabricated event UUIDs."""
     rows = []
@@ -285,6 +300,7 @@ def moments(journal, names=None):
 def journal_summary(journal):
     counted, behaviors, conditions = Counter(), Counter(), set()
     known={};ended=set();positive_damage_types=set()
+    known_items={};item_behaviors=set();item_ends=set();item_memberships=[];item_attacks=[]
     # Initial memberships establish owner identity, not an application event.
     initialization=json.loads((Path(journal)/('0'*16+'.json')).read_bytes())['initialization']
     for record in initialization.get('bodies', []):
@@ -296,7 +312,11 @@ def journal_summary(journal):
             member=row.get('member')
             if member and member.get('behavior_id'):known[row['condition_uuid']]=member['behavior_id']
             elif member is None:known.pop(row['condition_uuid'], None)
-    for _, _, _, node in nodes(journal):
+    for node in initialization.get('nodes', []):
+        if node.get('canceled',False) or node.get('fact') is None:continue
+        for _, row in item_effect_rows(node):
+            known_items[row['item_uuid']]={member['effect_uuid']:member for member in row['effects']}
+    for sequence, lineage, offset, node in nodes(journal):
         fact=node.get('fact') or {}
         identities={row['behavior_id'] for row in node.get('content_attributions',[])
             if row.get('role') in ('behavior','effective_handler') and row.get('outcome')!='no_effect' and row.get('behavior_id')}
@@ -306,6 +326,20 @@ def journal_summary(journal):
         counted[fact['kind']] += 1
         if fact['kind']=='damage' and fact.get('stage')=='applied' and fact.get('applied_damage',0)>0:
             positive_damage_types.add(fact['damage_type'])
+        if fact['kind']=='attack':
+            item_attacks.append({'sequence':sequence,'lineage':lineage,'occurrence':node['occurrence'],
+                **{field:fact.get(field) for field in ('source_entity_uuid','source_item_uuid','source_item_id','weapon_slot','attack_outcome','item_effects')}})
+        for holder, row in item_effect_rows(node):
+            item=row['item_uuid'];before=known_items.get(item,{})
+            after={member['effect_uuid']:member for member in row['effects']}
+            for effect,member in before.items():
+                if effect not in after:item_ends.add(member['behavior_id'])
+            item_behaviors.update(member['behavior_id'] for member in row['effects'])
+            item_memberships.append({'sequence':sequence,'lineage':lineage,'occurrence':node['occurrence'],
+                'event_offset':offset,'holder_uuid':holder,'item_uuid':item,
+                'before':list(before.values()),'after':row['effects'],
+                'ended_effect_uuids':[effect for effect in before if effect not in after]})
+            known_items[item]=after
         for _, row in condition_rows(node):
             member = row.get('member')
             if member and member.get('behavior_id'):
@@ -313,7 +347,8 @@ def journal_summary(journal):
             elif member is None:
                 previous=known.pop(row['condition_uuid'],None)
                 if previous is not None:ended.add(previous)
-    return {'facts':dict(counted), 'behaviors':dict(behaviors), 'conditions':sorted(conditions),'ended_conditions':sorted(ended),'positive_applied_damage_types':sorted(positive_damage_types)}
+    return {'facts':dict(counted), 'behaviors':dict(behaviors), 'conditions':sorted(conditions),'ended_conditions':sorted(ended),'positive_applied_damage_types':sorted(positive_damage_types), 'item_effects':sorted(item_behaviors),
+        'ended_item_effects':sorted(item_ends),'item_effect_memberships':item_memberships,'item_attacks':item_attacks}
 
 
 # --- SDK driver -----------------------------------------------------------------
@@ -331,22 +366,6 @@ async def open_seat(url, token, *, timeout=90):
             await connection.http.aclose(); await asyncio.sleep(.05)
     await attach(connection, {'acquisition_id': str(uuid4()), 'expected_attachment_epoch': connection.bootstrap['status']['attachment_epoch']})
     return connection
-
-
-async def choices(connection, body):
-    """Current trusted server query, retaining free-aim rows with empty sets.
-
-    The frozen Python SDK's relation checker predates PositionRegion and rejects
-    valid current rows. Keep its connection/auth/session and the actual wire
-    request, without mutating that exported SDK or rebuilding targets.
-    """
-    response=await connection.http.post('/api/v1/games/'+connection.bootstrap['status']['game_id']+'/choices',
-        headers=headers(connection),json=body)
-    response.raise_for_status()
-    result=response.json()
-    if result['correlation_id']!=body['correlation_id'] or result['state_revision']!=body['state_revision'] or result['choices']['entity_uuid']!=body['actor_uuid']:
-        raise CaseError('Choices correlation mismatch')
-    return result
 
 
 class CaseError(RuntimeError):
@@ -431,13 +450,28 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
         await settle()
         return result['receipt']
 
+    async def end_current_turn(seat, now, actor, evidence):
+        """End only the published human turn; outside combat has no such command."""
+        boundary = now['boundary']
+        if boundary['lifecycle'] == 'outside_encounter':
+            notes.append({'step': evidence['request'], 'turn_not_applicable': 'outside_encounter_has_no_turn_to_end',
+                'seat': seat['id'], 'actor_uuid': actor, 'boundary': dict(boundary),
+                'published_cursor': now['published_cursor']})
+            return False
+        if boundary['lifecycle'] != 'waiting_for_human' or boundary['input_actor_uuid'] != actor:
+            raise CaseError('The published boundary does not give this actor a human turn to end')
+        evidence['turn_boundary'] = dict(boundary)
+        await command(seat, now, actor, {'kind': 'end_turn'}, evidence)
+        return True
+
     async def turn_of(role, *, waits=24):
         """End turns until role's actor has input; None when it never gets one (dead, removed)."""
         name = roles.get(role, role)
         for _ in range(waits):
             seat, now, actor = await active(requested_name=name)
             if seat['names'].get(actor) == name: return seat, now, actor
-            await command(seat, now, actor, {'kind': 'end_turn'}, {'request': {'do': 'end_turn', 'waiting_for': role}})
+            if not await end_current_turn(seat, now, actor, {'request': {'do': 'end_turn', 'waiting_for': role}}):
+                return None
         return None
 
     def offered_rows(discovered, step, actor):
@@ -499,6 +533,12 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
                 return await perform_attempt(step, evidence)
             except (ApiError, HTTPStatusError) as error:
                 response = error.value if isinstance(error, ApiError) else error.response.json()
+                notes.append({'step':step, 'query_error':response, 'stage':evidence.get('stage'),
+                    'query_revision':evidence.get('query_revision'),
+                    'discovery_generation':evidence.get('discovery_generation'),
+                    'preview_request':evidence.get('preview_request'),
+                    'last_preview':evidence.get('last_preview'),
+                    'first_legal_previews':evidence.get('first_legal_previews')})
                 if response.get('code') != 'stale_state' or evidence.get('command_issued') or attempt == 2:
                     raise
                 notes.append({'step':step, 'discovery_retry':attempt+1, 'rejected_response':response,
@@ -512,7 +552,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             raise CaseError((step.get('by') or 'actor')+' never had the required turn')
         seat, now, actor = seat_now
         if step['do'] == 'end_turn':
-            return await command(seat, now, actor, {'kind': 'end_turn'}, evidence)
+            return await end_current_turn(seat, now, actor, evidence)
         if step['do'] in ('equip', 'unequip'):
             if step['do'] == 'unequip': return await command(seat, now, actor, {'kind': 'unequip', 'item': {'slot': step['slot']}}, evidence)
             items = [item for item in seats_items(actor) if item['item_id'] == step['item']]
@@ -520,7 +560,8 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             return await command(seat, now, actor, {'kind': 'equip', 'item': {'item_uuid': items[0]['item_uuid'], 'slot': step['slot']}}, evidence)
         revision = now['boundary']['state_revision']
         evidence.update(stage='choices', query_revision=revision)
-        discovered = (await choices(seat['connection'], {'actor_uuid': actor, 'state_revision': revision, 'force_attack': False, 'correlation_id': str(uuid4())}))['choices']
+        choice_response = await choices(seat['connection'], {'actor_uuid': actor, 'state_revision': revision, 'force_attack': False, 'correlation_id': str(uuid4())})
+        discovered = choice_response['choices']
         evidence['discovery_generation'] = discovered['discovery_generation']
         if step['do'] == 'toggle_handler':
             handler = next((row for row in discovered.get('handler_details', []) if row['behavior_id'] == step['handler'] or step['handler'] in row['name'].lower()), None)
@@ -529,6 +570,7 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
                 'handler': {'handler_uuid': handler['uuid'], 'enabled': step.get('enabled', False)}}, evidence)
         if step.get('capture_choices'):
             (out/'choices.json').write_text(json.dumps(discovered,indent=1)+'\n')
+            (out/'choices-response.json').write_text(json.dumps(choice_response,indent=1)+'\n')
         rows = offered_rows(discovered, step, actor)
         if step.get('expect_unavailable'):
             evidence['unavailable'] = not rows; trace.append(evidence)
@@ -550,7 +592,8 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
                     if any(binding_position(discovered,option)==spot for option in options) or (candidate.get('connector_traversal') or {}).get('command',{}).get('destination_position')==spot:matching.append(candidate)
                 elif any(subject_matches(discovered,option,wanted,actor,candidate) for option in options):matching.append(candidate)
             if matching:rows=matching
-        row = min(rows, key=lambda value: (value.get('cast_at_level') or 0, value['discovery_index']))
+        ordered_rows = sorted(rows, key=lambda value: (value.get('cast_at_level') or 0, value['discovery_index']))
+        row = ordered_rows[0]
         targets = list(action_options(discovered, row))
         if wanted is not None and not (isinstance(wanted, (list, dict)) and 'object' not in wanted):
             targets = [target for target in targets if subject_matches(discovered, target, wanted, actor,row)]
@@ -592,12 +635,36 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
         selected = selection_for(row, [] if free_aim else [target],
             extra_target_positions=([list(step['aim']) if wanted=='first_legal' else resolve_position(wanted)] if free_aim else [])+step.get('positions', []), prefer_safe=step.get('prefer_safe', False))
         if 'level' in step:selected['cast_at_level']=step['level']
+        facet_rows = []
+        if wanted=='first_legal' and free_aim and 'variant' not in step:
+            # FIRST_LEGAL may choose another offered facet of this same paid
+            # source at the exact authored aim. Explicit choices never change.
+            source_fields = ('behavior_id','provided_by_id','origin_root_id','source_item_uuid',
+                             'spellcasting_source_id','spellcasting_provider_id','cast_at_level','weapon_slot')
+            facet_rows = [candidate for candidate in ordered_rows[1:]
+                if candidate.get('position_region') is not None
+                and all(candidate.get(key)==row.get(key) for key in source_fields)]
+            evidence['first_legal_previews'] = []
+        initial_positions = [list(position) for position in selected['extra_target_positions']]
         recipients = [roles.get(role, role) for role in step.get('recipients', [])]
         for _ in range(24):
             evidence['stage']='preview_'+str(evidence['previews']+1)
-            result = (await preview(seat['connection'], {'actor_uuid': actor, 'state_revision': revision, 'discovery_generation': discovered['discovery_generation'],
-                'correlation_id': str(uuid4()), 'selection': selected}))['preview']
+            request={'actor_uuid': actor, 'state_revision': revision, 'discovery_generation': discovered['discovery_generation'],
+                'correlation_id': str(uuid4()), 'selection': selected}
+            evidence['preview_request']=request
+            result = (await preview(seat['connection'], request))['preview']
+            if step.get('capture_choices') or 'first_legal_previews' in evidence:evidence['last_preview']=result
             evidence['previews'] += 1
+            if 'first_legal_previews' in evidence:
+                evidence['first_legal_previews'].append({
+                    'action_index':row['discovery_index'],
+                    'variant_facets':row.get('variant_facets',[]),
+                    'provided_by_id':row.get('provided_by_id'),
+                    'source_item_uuid':row.get('source_item_uuid'),
+                    'spellcasting_source_id':row.get('spellcasting_source_id'),
+                    'selection':{**selected,'target_indices':list(selected['target_indices']),
+                                 'extra_target_positions':[list(position) for position in selected['extra_target_positions']]},
+                    'can_confirm':result['can_confirm'],'reason':result.get('reason')})
             if result['can_confirm'] and len(selected['target_indices']) >= max(0 if free_aim else 1, len(recipients)): break
             destinations=list(preview_positions(result))
             if step.get('then') is not None and not selected.get('extra_target_positions'):
@@ -607,6 +674,14 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
                     continue
             options = list(next_options(result))
             if not options:
+                if facet_rows:
+                    row = facet_rows.pop(0)
+                    selected = selection_for(row, [], extra_target_positions=initial_positions,
+                        prefer_safe=step.get('prefer_safe',False))
+                    if 'level' in step:selected['cast_at_level']=step['level']
+                    continue
+                if 'first_legal_previews' in evidence:
+                    notes.append({'step':step,'first_legal_previews':evidence['first_legal_previews']})
                 raise CaseError('Selection of '+step['do']+' cannot complete: '+str(result.get('reason')))
             offset = len(selected['target_indices'])
             choice = None
@@ -619,7 +694,10 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             if choice is None and result['can_confirm']: break
             if choice is None: raise CaseError('Scenario must name the next recipient or position for '+step['do'])
             selected['target_indices'].append(choice['index'])
-        else: raise CaseError('Selection of '+step['do']+' did not complete in 24 previews')
+        else:
+            if 'first_legal_previews' in evidence:
+                notes.append({'step':step,'first_legal_previews':evidence['first_legal_previews']})
+            raise CaseError('Selection of '+step['do']+' did not complete in 24 previews')
         evidence['selected_action'] = {key: row.get(key) for key in ('behavior_id', 'display_name', 'cast_at_level', 'variant_facets', 'target_type', 'weapon_slot')}
         evidence['outcome_resolution'] = (row.get('outcome_profile') or {}).get('resolution')
         before = len(journal_facts())
@@ -634,11 +712,23 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
         """The lasting condition the main step applied, preferring its named recipient."""
         rows = journal_facts()[before:]
         wanted = step.get('track_condition')
+        wanted_item = step.get('track_item_effect')
         target_uuid = ctx['main']['target_uuid']
         affected = [actor_of(role)[0] for role in ([step['affect']] if isinstance(step.get('affect'), str) else step.get('affect', []))]
         best = None
         for sequence, lineage, offset, node in rows:
             fact = node['fact']
+            if wanted_item:
+                for holder, changed in item_effect_rows(node):
+                    for member in changed['effects']:
+                        if member['behavior_id']!=wanted_item:continue
+                        rank=(holder==target_uuid,holder==actor)
+                        if best is None or rank>best[0]:
+                            best=(rank,{'kind':'item_effect','condition_id':member['behavior_id'],
+                                'effect_uuid':member['effect_uuid'],'item_uuid':changed['item_uuid'],
+                                'member':member,'holder_uuid':holder,'holder':next((seat['names'].get(holder) for seat in seats if holder in seat['names']),holder),
+                                'occurrence':node['occurrence'],'lineage':lineage,'sequence':sequence,'seat':seats[0]['id']})
+                continue
             for holder, changed in condition_rows(node):
                 member = changed.get('member')
                 if member is None: continue
@@ -653,7 +743,15 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
 
     def tracked_on():
         tracked = ctx['tracked']
-        return tracked is not None and tracked['condition_uuid'] in [uuid for _, uuid in conditions_of(tracked['holder_uuid'])]
+        if tracked is None:return False
+        if tracked.get('kind')=='item_effect':
+            for seat in seats:
+                if seat['id']!=tracked['seat']:continue
+                for identity,item in seat['state'].items.items():
+                    if str(identity)==tracked['item_uuid']:
+                        return any(str(member.effect_uuid)==tracked['effect_uuid'] and member.behavior_id==tracked['condition_id'] for member in item.effects)
+            return False
+        return tracked['condition_uuid'] in [uuid for _, uuid in conditions_of(tracked['holder_uuid'])]
 
     def holder_role():
         tracked = ctx['tracked']
@@ -700,7 +798,8 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
         for _ in range(step.get('max_turns', 40)):
             if not tracked_on(): return
             seat, now, actor = await active()
-            await command(seat, now, actor, {'kind': 'end_turn'}, {'request': {'do': 'end_turn', 'until_removed': tracked['condition_id']}})
+            if not await end_current_turn(seat, now, actor, {'request': {'do': 'end_turn', 'until_removed': tracked['condition_id']}}):
+                raise CaseError('The tracked condition '+str(tracked['condition_id'])+' remains outside an encounter with no turn to advance')
         if tracked_on(): raise CaseError('The tracked condition '+str(tracked['condition_id'])+' did not end within '+str(step.get('max_turns', 40))+' ended turns')
 
     async def wait_condition(step):
@@ -719,8 +818,9 @@ async def drive(config, url, out, steps, scenario, *, command_limit=220):
             if step.get('while_condition') and not any(behavior == step['while_condition'] for behavior, _ in conditions_of(holder)):
                 raise CaseError('The prerequisite '+step['while_condition']+' ended before '+step['condition'])
             seat, now, actor = await active()
-            await command(seat, now, actor, {'kind':'end_turn'},
-                {'request':{'do':'end_turn', 'until_condition':step['condition'], 'target':step['target']}})
+            if not await end_current_turn(seat, now, actor,
+                    {'request':{'do':'end_turn', 'until_condition':step['condition'], 'target':step['target']}}):
+                raise CaseError('No observed '+step['condition']+' outside an encounter with no turn to advance')
         raise CaseError('No observed '+step['condition']+' after '+str(step.get('max_turns', 24))+' ended turns')
 
     try:

@@ -6,6 +6,7 @@ const Media=preload("res://presentation/media_warmup.gd")
 const Settings=preload("res://presentation/render_settings.gd")
 const Protocol=preload("res://sdk/protocol.gd")
 const Reducer=preload("res://sdk/reducer.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 class ProfilePlayer extends "res://play.gd":
     var settings_path=""
     var saves=0
@@ -21,16 +22,15 @@ func check(ok: bool,label: String) -> void:
     if not ok:failures.append(label);printerr("NORMAL_PROFILE_FAIL ",label)
 func _initialize() -> void:run.call_deferred()
 func run() -> void:
-    var recording=""
+    var recording=Fixtures.journal("gallery")
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
-    if recording.is_empty():printerr("Pass actual --recording=<journal>");quit(2);return
     var protocol=Protocol.new()
     var decoded=protocol.decode("InitializationResponse",FileAccess.get_file_as_bytes(recording.path_join("0000000000000000.json")))
     check(decoded.ok,"Actual initialization passes strict SDK admission")
     if not decoded.ok:quit(1);return
-    var packet=protocol.normalize("InitializationResponse",decoded.value)
-    var reduced=Reducer.reduce_initialization(packet.initialization,packet.content_additions)
+    var packet:Dictionary=decoded.value
+    var reduced=Reducer.reduce_initialization(packet.initialization,packet.get("content_additions",[]))
     check(reduced.ok,"Actual initialization reduces without a profile-dependent event")
     var state: Dictionary=reduced.value
     var frozen=var_to_bytes(state)
@@ -51,7 +51,7 @@ func run() -> void:
         check(plan.required.keys().all(func(path):return active.has(path)==(not variants.has(path) or chosen.has(path))),"Only registered inactive normal variants leave "+profile+" exact paths")
         check(is_same(active,Geometry.for_profile(plan.required,plan.normal_sets,profile,cache,"test")),"Unchanged "+profile+" owner reuses its immutable projection")
         for actor in state.actors.values():
-            var sheets=Characters.sheet_paths(actor,["Idle"],cache)
+            var sheets=Characters.sheet_paths(actor,["Idle"],cache,Characters.item_looks(actor,state))
             check(sheets.ok and not sheets.normal_sets.is_empty(),"Actual outfit sources carry all authored profile alternatives")
             for path in sheets.geometry_slots:
                 var companions=Geometry.paths(path,sheets.geometry_slots[path],cache,profile)
@@ -61,14 +61,14 @@ func run() -> void:
     var scene=ProfilePlayer.new();root.add_child(scene)
     scene.settings_path="user://normal-profile-checks-%s.cfg" % Time.get_ticks_usec()
     Settings.write(Settings.DEFAULT_PROFILE,scene.settings_path)
-    scene.media_metadata_ready=true;scene.timeline.state=state
-    scene.media_plan_epoch=scene.timeline.initialization_revision
-    scene.media_empty_key=[scene.timeline.initialization_revision,[],scene.timeline.revision]
-    scene.media_empty_plan={"character":plan.required,"environment":{},"fixtures":{},"errors":[]}
-    scene.media_empty_plan.merge(roles)
-    scene.catalog_cache=cache.duplicate()
-    scene.media_normal_sets=plan.normal_sets
+    scene.timeline.accept({"kind":"initialization","sequence":0,"state":state})
+    scene._reset_media_epoch()
+    var completed:Dictionary={}
+    Media._plan_sources({"key":[scene.timeline.initialization_revision,[],scene.timeline.revision],"state":Media._snapshot(state),"groups":[]},completed,cache)
+    check(completed.complete and completed.value.errors.is_empty(),"Actual native source owner completes the profile-neutral handoff")
+    scene._adopt_media_plan(completed,false)
     scene._prepare_media()
+    check(not scene.media_empty_plan.get("source_records",{}).is_empty(),"The actual profile lifecycle publishes source records through the production media owner")
     var reference=Geometry.for_profile(plan.required,plan.normal_sets,"reference",cache,"expected")
     check(scene.media_plan.required==reference,"Actual Play demand requires only active Reference companions")
     var required_identity: Dictionary=scene.media_plan.required
@@ -86,6 +86,9 @@ func run() -> void:
     scene.set_character_light_profile("reference")
     check(scene.notice_text=="Unrelated command notice","Canceling profile preparation preserves unrelated notices")
     scene.notice_text="";scene.set_character_light_profile("gentle")
+    check(not scene.character_profile_pending_paths.is_empty(),"A cold profile has actual selected normal maps to prepare")
+    if scene.character_profile_pending_paths.is_empty():
+        Media.close(scene.media_warmup);scene.free();quit(1);return
     var failed_path: String=scene.character_profile_pending_paths.keys()[0]
     scene.media_warmup.failed[failed_path]="Exact optional normal failed"
     scene._poll_character_light_profile()
@@ -109,9 +112,9 @@ func run() -> void:
     check(not scene.set_character_light_profile("invented") and scene.character_light_profile=="gentle","Invalid profile cannot change rendering or preparation")
     check(var_to_bytes(state)==frozen,"Display setting lifecycle preserves canonical actor/event data")
     DirAccess.remove_absolute(scene.settings_path)
-    scene.free();cache.clear()
+    Media.close(scene.media_warmup);scene.free();cache.clear()
     await process_frame
     await process_frame
-    var report={"ok":failures.is_empty(),"checks":checks,"failures":failures,"scope":"Actual SDK/authored normal closure projection, Play demand and atomic local setting lifecycle; tiny typed residency acknowledgements, no normal bitmap changes, no native pixel/performance claim"}
+    var report={"ok":failures.is_empty(),"checks":checks,"failures":failures,"recording":recording,"scope":"Actual native16 SDK/authored normal closure projection, completed source-record handoff, Play demand and atomic local setting lifecycle; tiny typed residency acknowledgements, no normal bitmap changes, no native pixel/performance claim"}
     FileAccess.open("res://generated/normal_profile_media_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print(JSON.stringify(report));quit(0 if failures.is_empty() else 1)

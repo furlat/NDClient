@@ -32,7 +32,68 @@ func readiness_leaves(world:Node)->Dictionary:
         spells.append({"id":row.get("id"),"status":row.get("status"),"reason":row.get("reason"),
             "age_ms":row.get("age_ms"),"requested_age_ms":row.get("requested_age_ms")})
     var support=renderer.native_spells._support
-    return {"display_ms":world.timeline.display_ms,"state":not world.timeline.state.is_empty(),
+    var pending:Dictionary={}
+    if world.pending_world!=null:
+        var prepared_world=world.pending_world
+        pending={"phase":prepared_world.phase,"prepared":prepared_world.prepared,"admitted":prepared_world.admitted,
+            "epoch":prepared_world.epoch,"quarter":prepared_world.quarter,"key":prepared_world.boundary.get("preparation_key",[]),
+            "actor_binding_cursor":prepared_world.binding_cursor,"actor_binding_total":prepared_world.actor_bindings.size(),
+            "actor_binding_path":prepared_world.actor_bindings[prepared_world.binding_cursor].value.get("path","") if prepared_world.binding_cursor<prepared_world.actor_bindings.size() else "",
+            "blood_rows":prepared_world.result.get("blood_rows",{}).size(),"blood_handles":prepared_world.blood_preparation.handles.size(),
+            "blocked_actor":prepared_world.blocked_actor.duplicate(true),"blocked_source":prepared_world.blocked_source.duplicate(true),
+            "native_phase_usec":prepared_world.phase_usec.duplicate()}
+        if prepared_world.binding_cursor<prepared_world.actor_bindings.size():
+            var binding:Dictionary=prepared_world.actor_bindings[prepared_world.binding_cursor];var value:Dictionary=binding.value
+            var missing:Array=[]
+            if not world.textures.has(value.path):missing.append(value.path)
+            for path in value.get("geometry",{}).get("textures",{}).values():
+                if not world.textures.has(path) and path not in missing:missing.append(path)
+            var optical:Dictionary=binding.get("optical",{})
+            pending.binding={"actor":binding.get("actor",""),"prepared":not binding.get("prepared",{}).is_empty(),"missing_textures":missing,
+                "optical":{"ready":optical.get("ready"),"mask_path":optical.get("mask_path",""),"has_mask":optical.has("mask")}}
+        var waiting:Array=[];var ready_count:int=0;var removed_count:int=0;var waiting_count:int=0
+        for key in prepared_world.blood_preparation.handles:
+            var record:Dictionary=prepared_world.blood_preparation.handles[key]
+            if record.get("removed",false):removed_count+=1;continue
+            var held:Dictionary=record.get("handle",{})
+            if held.get("ready",false):ready_count+=1;continue
+            waiting_count+=1
+            if waiting.size()==4:continue
+            var callback:Callable=held.get("draw_callback",Callable())
+            waiting.append({"key":key,"ready":held.get("ready",false),"slot":held.get("slot",-1),"generation":held.get("generation",-1),
+                "borrowed":record.get("borrowed",false),"draw_wait":held.get("draw_wait",-1),
+                "draw_wait_owned":renderer.blood._draw_waits.has(held.get("draw_wait",-1)),
+                "callback_connected":callback.is_valid() and RenderingServer.frame_post_draw.is_connected(callback)})
+        pending.blood={"ready":renderer.blood.ready,"resources_ready":renderer.blood.resources_ready,
+            "ready_handles":ready_count,"removed_handles":removed_count,"pending_handles":waiting_count,
+            "draw_waits":renderer.blood._draw_waits.size(),"pending_examples":waiting}
+        # Inspect the existing exclusion owner without polling/joining a job,
+        # requesting resources or acquiring source mutation from a diagnostic.
+        var admission=renderer.BloodRenderer.Admission
+        var material_job:Dictionary=admission._material_job
+        var receiver_cache:Dictionary=renderer.native_spells._resource_cache
+        var blood_pool:Variant=renderer.blood._pool_world
+        pending.blood.admission={"loading_path":admission.loading_path,"settling":admission.settling,
+            "loading_revision":admission.loading_revision,"loading_owner_revision":admission.loading_owner.get("native_source_revision",0),
+            "loading_owner_is_receiver_cache":is_same(admission.loading_owner,receiver_cache),
+            "mutation_frame":admission.mutation_frame,"current_frame":Engine.get_process_frames(),
+            "material_job":not material_job.is_empty(),"material_task":material_job.get("task",-1),
+            "material_task_complete":not material_job.is_empty() and WorkerThreadPool.is_task_completed(material_job.task),
+            "material_revision":material_job.get("revision",0),"material_owner_revision":material_job.get("owner",{}).get("native_source_revision",0),
+            "material_owner_is_receiver_cache":is_same(material_job.get("owner",{}),receiver_cache),
+            "receiver_cache_revision":receiver_cache.get("native_source_revision",0),
+            "receiver_preparation_revision":renderer.native_spells.preparation_revision,
+            "pool_world_valid":is_instance_valid(blood_pool),"pool_is_current_world":is_same(blood_pool,world),
+            "initial_world":prepared_world.initial,"frame_budget_used_usec":world.preparation_admission.used_usec,
+            "frame_budget_limit_usec":world.preparation_admission.limit_usec}
+    var required_missing:Array=[];var missing_count:int=0
+    for path in world.media_plan.get("required",{}):
+        var requested:Dictionary={};requested[path]=world.media_plan.required[path]
+        if world.MediaWarmup.ready(world.media_warmup,requested):continue
+        missing_count+=1
+        if required_missing.size()<8:required_missing.append({"path":path,"texture_present":world.textures.has(path),"image_present":world.source_images.has(path)})
+    return {"pending_world":pending,"required_missing":{"count":missing_count,"examples":required_missing},
+        "display_ms":world.timeline.display_ms,"state":not world.timeline.state.is_empty(),
         "world_epoch":world.world_prepare_epoch,"timeline_epoch":world.timeline.initialization_revision,
         "world_revision":world.world_revision,"timeline_world_revision":world.timeline.world_revision,
         "waiting_world":world.timeline.waiting_for_world,"component_ready":renderer.ready,
@@ -135,13 +196,46 @@ func save_capture(studio:Control,label:String)->void:
     var path="res://.captures/studio/replay-comparison/"+label
     studio.viewport.get_texture().get_image().save_png(path+"-primary.png")
     root.get_texture().get_image().save_png(path+"-studio.png")
-func play_once(studio:Control,label:String)->void:
+## Failure-only actual pose operands. Null current markers are reported as
+## null; no neighbouring frame, primary hand or idle actor is substituted.
+func socket_operands(world:Node)->Array:
+    var rows:Array=[]
+    for component in world.displayed_components:
+        if not component.get("native_spell",false) and not component.get("requires_pose_socket",false):continue
+        var visual:Dictionary=world.visual_actors.get(component.get("actor_uuid"),{})
+        if visual.is_empty():continue
+        var row:Dictionary=visual.row;var playback:Node=world.playbacks.get(row.id)
+        if playback==null:continue
+        var rig:Dictionary=world.rigs[row.rig];var clip:Dictionary=rig.clips[playback.clip]
+        var frame:int=mini(int(playback.sample_seconds*float(clip.fps)),int(clip.frames)-1)
+        var facing:String=world.component_renderer.SpellPlacement.facing(world,row)
+        var names:Array=[]
+        if component.get("requires_pose_socket",false):names.append(str(component.get("attachment","")))
+        var cue:Dictionary=component.get("native_cue",{})
+        for endpoint in cue.get("live_endpoints",[]):
+            if endpoint.get("actor")=="caster" and endpoint.get("socket") in ["hand","cast_hand"] and "hand" not in names:names.append("hand")
+        if names.is_empty():continue
+        var sockets:Dictionary={}
+        for name in names:
+            var points:Array=rig.get("pose_sockets",{}).get(name,{}).get(playback.clip,{}).get(facing,[])
+            sockets[name]={"channel_present":rig.get("pose_sockets",{}).has(name),"pose_present":rig.get("pose_sockets",{}).get(name,{}).has(playback.clip),
+                "row_count":points.size(),"point":points[mini(frame,points.size()-1)] if not points.is_empty() else null}
+        rows.append({"component":component.id,"source_id":component.get("source_id",""),"assignment_source":component.get("assignment_source",component.get("source","")),
+            "actor":row.id,"rig":row.rig,"world_facing":row.facing,"quarter":world.quarter,"display_facing":facing,
+            "clip":playback.clip,"source_seconds":playback.sample_seconds,"source_frame":frame,"sockets":sockets,
+            "component_age_ms":component.age_ms,"cast_recipe":component.get("cast_recipe",{}),"active_body":world.displayed_samples.get(row.id,{})})
+    return rows
+
+func play_once(studio:Control,label:String,source_uses:Array=[])->void:
     var failures_before:int=failures.size()
     studio.loop_enabled=false;studio._play_study()
     if not await settle(studio):return
-    var deadline=Time.get_ticks_msec()+45000
+    # The fixed allowance bounds preparation overhead, not the recording's
+    # natural duration. Long legal originals must reach their actual witness.
+    var expected_play_ms:int=ceili(maxf(0.0,studio.index.presentation_end_ms-studio.world.timeline.display_ms)/studio.world.playback_speed)
+    var deadline=Time.get_ticks_msec()+expected_play_ms+45000
     var next_sample=0.0;var frames=0;var longest=0.0;var last=Time.get_ticks_usec()
-    var observed_native:Dictionary={}
+    var observed_native:Dictionary={};var observed_sources:Dictionary={}
     var atomic_targets:Dictionary={};var atomic_seen:Dictionary={}
     if label=="hide-light":
         for i in range(studio.index.groups.size()-1):
@@ -161,6 +255,44 @@ func play_once(studio:Control,label:String)->void:
             var actual:Dictionary=component.get("native_constructor_evidence",component.get("native_input_evidence",{}))
             if actual.is_empty():continue
             observed_native[witness.id]={"clip":component.native_clip.id,"evidence":actual}
+        # Use the existing post-draw acknowledgement and exact native output.
+        # Only the requested capability's explicit authored uses are required;
+        # an incidental out-of-view native component is not a failed witness.
+        var renderer=studio.world.component_renderer
+        for id in renderer.handles:
+            if observed_sources.has(id):continue
+            var handle:Dictionary=renderer.handles[id];var component:Dictionary=handle.component
+            if not source_uses.any(func(use):return use.source_id==component.get("source_id") and use.attachment==component.get("attachment") \
+                and use.assignment_source==component.get("assignment_source")):continue
+            var presenter=handle.node
+            if not handle.published or not presenter.error.is_empty() or not presenter.sample_ready \
+                or presenter.sampled_age<0.0 or not is_equal_approx(presenter.sampled_age,presenter.requested_age) \
+                or presenter._rendered_key!=presenter._requested_render_key:continue
+            var submitted:Array=timeline.trace.tracks.get(id,[]).filter(func(binding):return binding.component.sample_count>0 and binding.component.status=="presented")
+            if submitted.is_empty():continue
+            var pixels:int=0;var captures:Array=[]
+            for source_view in presenter.views:
+                var shown:bool=handle.draws.any(func(draw):return draw.half==source_view.half \
+                    and float(draw.material.get_shader_parameter("opacity"))>0.0 and renderer._entry_visible(studio.world,draw))
+                if not shown:continue
+                var image:Image=source_view.output.get_texture().get_image()
+                image.convert(Image.FORMAT_RGBA8)
+                var bytes:PackedByteArray=image.get_data();var count:int=0
+                for at in range(3,bytes.size(),4):
+                    if bytes[at]>0:count+=1
+                pixels+=count
+                if count==0:continue
+                var path:String="res://.captures/studio/replay-comparison/"+label.replace("/","-")+"-native-"+str(observed_sources.size())+"-"+str(source_view.half)+".png"
+                image.save_png(path);captures.append({"half":source_view.half,"pixels":count,"path":path})
+            if pixels==0:continue
+            observed_sources[id]={"source_id":component.source_id,"attachment":component.get("attachment",""),
+                "assignment_source":component.get("assignment_source",""),"authored_use_id":component.get("authored_use_id",""),
+                "source_time_window":component.get("source_time_window",{}).duplicate(true),
+                "observed_fact":component.get("observed_fact",{}).duplicate(true),"observed_condition":component.get("observed_condition",{}).duplicate(true),
+                "generation":presenter._generation,"source_sample_seconds":presenter.sampled_age,"requested_source_seconds":presenter.requested_age,
+                "render_key_current":true,"presented_samples":submitted.map(func(binding):return binding.component.sample_count).max(),
+                "native_source_pixels":pixels,"captures":captures,
+                "scope":"Actual submitted source textures and visible production draw entries, not a final-scene difference or human artwork approval."}
         # A cut is observed on a frame displaying its exact clock with nothing
         # playing. Zero-time groups at that same instant may already have been
         # applied in that frame (nothing to prepare means no frame between).
@@ -179,13 +311,18 @@ func play_once(studio:Control,label:String)->void:
         print("PLAYBACK_STALL ",JSON.stringify({"display_ms":w.timeline.display_ms,"waiting_media":w.timeline.waiting_for_media,"busy":w.timeline.busy(),
             "world_revision":w.world_revision,"pending":pw!=null,"phase":pw.phase if pw!=null else "",
             "prepared":pw.prepared if pw!=null else false,"media_issue":w.media_issue,"errors":w.presentation_errors.slice(0,3),
-            "media_gate":w.media_gate,"rotation":w.rotation_pending()}))
+            "media_gate":w.media_gate,"rotation":w.rotation_pending(),"socket_operands":socket_operands(w),"readiness":readiness_leaves(w)}))
     check(studio.world.timeline.paused,label+": reaches stop")
     check(atomic_seen.size()==atomic_targets.size(),label+": every requested native atomic cut was observed before ordered zero-time tails drained")
     check(is_equal_approx(studio.world.timeline.display_ms,studio.index.presentation_end_ms),label+": reaches actual recorded endpoint")
     verify_prefix(studio,label+" terminal")
     check(not studio.world.timeline.busy(),label+": selected terminal prefix drained")
-    evidence.append({"case":label,"frames":frames,"functional_max_frame_ms_including_oracle":longest,"diagnostics":studio.replay_diagnostics(),"audio_primary":studio.world.component_renderer.audio.diagnostics(),"observed_native":observed_native})
+    for use in source_uses:
+        check(observed_sources.values().any(func(row):return row.source_id==use.source_id and row.attachment==use.attachment \
+            and row.assignment_source==use.assignment_source and row.native_source_pixels>0),
+            label+": actual submitted positive native source at authored "+str(use.attachment)+": "+str(use.source_id)+" from "+str(use.assignment_source))
+    evidence.append({"case":label,"frames":frames,"functional_max_frame_ms_including_oracle":longest,"diagnostics":studio.replay_diagnostics(),"audio_primary":studio.world.component_renderer.audio.diagnostics(),"observed_native":observed_native,
+        "required_native_sources":source_uses,"observed_native_sources":observed_sources,"expected_playback_ms":expected_play_ms,"preparation_allowance_ms":45000})
 func measure_single(studio:Control)->void:
     studio.loop_enabled=false;studio._play_study()
     if not await settle(studio):return

@@ -9,7 +9,12 @@ const ClassPalette = preload("res://presentation/native_effect_palette.gdshader"
 const Receiving = preload("res://presentation/native_effect_receiving.gd")
 
 static func source_age_ms(component:Dictionary,age_ms:float)->float:
-    var age:float=component.get("source_age_ms",age_ms)*component.get("native_age_rate",1.0)
+    var age:float=float(component.get("source_age_ms",age_ms))
+    var window:Dictionary=component.get("source_time_window",{})
+    if not window.is_empty():
+        var fraction:float=clampf(age/maxf(.001,float(window.duration_ms)),0.0,1.0)
+        return lerpf(float(window.begin_seconds),float(window.end_seconds),fraction)*1000.0
+    age*=float(component.get("native_age_rate",1.0))
     return fposmod(age,component.source_duration_ms) if component.get("loop",false) else age
 
 static func weapon_context(component:Dictionary,actor:Dictionary,rig:Dictionary,cycle:Array,quarter:int)->Dictionary:

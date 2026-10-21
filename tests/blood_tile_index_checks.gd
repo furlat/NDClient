@@ -37,6 +37,7 @@ func recorded(directory:String,sequence:int)->void:
     check(compiled.ok,"Original operation compiles")
     if not compiled.ok:return
     var renderer=Renderer.new()
+    renderer.source=Blood.asset({})
     var display=before.duplicate(true)
     var revision=0
     renderer.sync_tiles(display.tiles,revision)

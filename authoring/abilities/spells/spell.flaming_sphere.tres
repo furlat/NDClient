@@ -35,16 +35,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "actor_birth",
+"creature_id": "creature.spell.flaming_sphere"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [0.0, 0.1, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_ov36h"]
@@ -194,16 +199,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "actor_birth",
+"creature_id": "creature.spell.flaming_sphere"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [0.0, 0.1, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_bi3wa"]
@@ -332,11 +342,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_lgv4j"]
 script = ExtResource("6_xlpsi")
 id = "flaming_sphere_saved_ram_native"
+dispatch_gap = "delegated_actual_ram_save_and_damage_result"
 kind = "outcome"
 selection = "flaming_sphere_saved_ram_native"
 effects = Array[ExtResource("1_eb83g")]([SubResource("Resource_qmvl7"), SubResource("Resource_bi3wa"), SubResource("Resource_bd1bt"), SubResource("Resource_csy18"), SubResource("Resource_xjod1"), SubResource("Resource_pc8hy")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual Ram ancestry, owner condition and saving throw own saved-half contact through the existing accepted-contact consumer. This whole review repeats creation/body/trail and cannot be selected as a cast variant. The consumer accepts both the actual saved-half and failed-save outcomes; neither source integration nor an earlier failed-save receipt supplies visual acceptance or end-turn ownership."
 
 [sub_resource type="Resource" id="Resource_ou7op"]
 script = ExtResource("1_eb83g")
@@ -356,16 +368,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "actor_birth",
+"creature_id": "creature.spell.flaming_sphere"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [0.0, 0.1, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_ilc6o"]
@@ -440,11 +457,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_04hvk"]
 script = ExtResource("6_xlpsi")
 id = "flaming_sphere_doused_trail_native"
+dispatch_gap = "delegated_actual_fire_surface_deposition_and_removal"
 kind = "form"
 selection = "flaming_sphere_doused_trail_native"
 effects = Array[ExtResource("1_eb83g")]([SubResource("Resource_ou7op"), SubResource("Resource_ilc6o"), SubResource("Resource_agh1e"), SubResource("Resource_0jv6a")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The producer deposits real FireSurface owners on actual old sphere positions. The existing fire spatial consumer draws those exact UUIDs, cells and observed removal/dousing; body movement alone does not create a patch. This bundled trail review remains unselected to avoid duplicating those actual spatial owners or the sphere body."
 
 [sub_resource type="Resource" id="Resource_mdql2"]
 script = ExtResource("1_eb83g")
@@ -464,16 +483,21 @@ opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "delivery_timing": true,
+"observed_destination": {
+"kind": "actor_birth",
+"creature_id": "creature.spell.flaming_sphere"
+},
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [0.0, 0.1, 0.0]
+"cue_point": "target"
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.75
 }
 
 [sub_resource type="Resource" id="Resource_asds6"]
@@ -548,11 +572,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_cnw8u"]
 script = ExtResource("6_xlpsi")
 id = "flaming_sphere_concentration_end_native"
+dispatch_gap = "delegated_actual_construct_owner_removal"
 kind = "form"
 selection = "flaming_sphere_concentration_end_native"
 effects = Array[ExtResource("1_eb83g")]([SubResource("Resource_mdql2"), SubResource("Resource_asds6"), SubResource("Resource_6cqpf"), SubResource("Resource_m7ddl")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual construct condition/body removal owns dismissal in the existing lifecycle. Concentration-end review is not a separate cast or an extra persistent body; its bundled trail still needs actual deposition and removal evidence."
 
 [resource]
 script = ExtResource("4_d4wej")
@@ -589,4 +615,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/flaming_sphere_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Actual condition.spell.flaming_sphere.aura owns the existing prepared native body on the disclosed effect-owned sphere actor. It follows that actor's current published ground/motion instead of requiring a nonexistent modular sprite. The actual Ram action owns its finite accepted-result contact; this timed review copy remains excluded. Turn-end/trail and decorative-light copies remain excluded with their real event/spatial consumers explicit. Preparation still needs its actual born-actor endpoint; no review ground point is accepted."
+Actual condition.spell.flaming_sphere.aura owns the existing prepared native body on the disclosed effect-owned sphere actor. It follows that actor's current published ground/motion instead of requiring a nonexistent modular sprite. The actual Ram action owns its finite accepted-result contact; this timed review copy remains excluded. Turn-end/trail and decorative-light copies remain excluded with their real event/spatial consumers explicit. Finite preparation now receives its exact actor-birth admission position, with separate birth/body/admission identities and its source clock starting at that public commit. No review ground point is accepted; native output and art acceptance require their own receipts."

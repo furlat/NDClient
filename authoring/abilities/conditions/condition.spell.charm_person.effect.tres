@@ -14,4 +14,8 @@ source = "ui/resources.json icon:spell.charm-person"
 [resource]
 script = ExtResource("1_yb4gm")
 id = "condition.spell.charm_person.effect"
+disposition = "state_only"
 icon = SubResource("Resource_4oum6")
+play_package_lifecycle = false
+status = "internal"
+notes = "CharmPersonEffect is the same-caster lifetime/damage-break owner which creates or shares a real condition.charmed child (dnd/spells/enchantment.py). The actual Charmed UUID owns its delivered body/condition finish. This owner adds no duplicate heart/halo/body treatment and never chooses a Charm Person palette from a shared condition name. Artwork remains unreviewed."

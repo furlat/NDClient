@@ -145,7 +145,10 @@ func qualify(row:Dictionary,effect:Dictionary,owners:Dictionary,cache:Dictionary
     var extension:Dictionary=effect.duplicate(true);extension.positions=effect.positions+[[99,99]]
     Persistent.observe_spatial(owners,{WATER:extension},float(row.absolute_start_ms)+1400.0)
     var extended:Array=Persistent.spatial_samples(owners,float(row.absolute_start_ms)+1500.0,cache)
-    check(extended.size()==1 and extended[0].get("reason")=="spatial_source_topology_extension_not_bound",seat+" synthetic topology extension is explicit, not silently dropped")
+    var extended_cells:Array=[]
+    for sample in extended:extended_cells.append_array(sample.resolved_area_positions)
+    check(extended.size()==2 and extended_cells==extension.positions and is_same(extended[0].native_constructor_inputs,first) \
+        and not extended[1].spatial_creation_observed,seat+" labelled later-disclosure control adds exact immutable coverage without rebuilding earlier source or inventing rainfall")
     Persistent.observe_spatial(owners,{WATER:effect},float(row.absolute_start_ms)+1600.0)
     var initial:Dictionary={};Persistent.observe_spatial(initial,{WATER:effect},0.0,true)
     var initial_rows:Array=Persistent.spatial_samples(initial,0.0,cache)
@@ -154,7 +157,8 @@ func qualify(row:Dictionary,effect:Dictionary,owners:Dictionary,cache:Dictionary
     var disclosed:Array=Persistent.spatial_samples(late,65000.0,cache)
     check(disclosed.size()==1 and not disclosed[0].spatial_creation_observed and disclosed[0].age_ms==3500.0,seat+" late first disclosure is held water, not a new rain action")
     Persistent.observe_spatial(late,{},65500.0)
-    check(Persistent.spatial_samples(late,65500.0,cache).is_empty(),seat+" actual sensory loss releases the private source")
+    var lost:Array=Persistent.spatial_samples(late,65500.0,cache)
+    check(lost.all(func(sample):return sample.resolved_area_positions.is_empty() and not Spatial.presence(sample,{"senses":{"spatial_effects":{}}}).value),seat+" actual sensory loss withdraws every visible cell while the bounded private owner may remain for readmission")
     Persistent.observe_spatial(late,{WATER:effect},66000.0)
     var readmitted:Array=Persistent.spatial_samples(late,66000.0,cache)
     check(readmitted.size()==1 and not readmitted[0].spatial_creation_observed and readmitted[0].start_ms==65000.0 and readmitted[0].age_ms==4500.0,seat+" remembered owner within the retained window keeps its first-disclosure clock and cannot replay rainfall")

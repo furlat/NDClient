@@ -156,8 +156,8 @@ extra = {
 script = ExtResource("1_evxyo")
 clip = "bg3-36/divine-favor/divine_favor_native/hit"
 role = "attached"
-at = "release"
-delay = 2.11666666666667
+scope = "cast"
+at = "event.start"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.42
@@ -168,6 +168,7 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "weapon_component", "outcome": "damage", "geometry_actor": "caster", "damage_type": "Radiant", "damage_source_ids": ["spell.divine_favor"], "component_path": ["weapon_blessing"], "input_field": "", "owner_condition_id": "condition.spell.divine_favor"}
 extra = {
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -347,11 +348,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_tut8h"]
 script = ExtResource("6_segj1")
 id = "divine_favor_miss_native"
+dispatch_gap = "delegated_actual_condition_lifecycle_miss_has_no_rider_contact"
 kind = "outcome"
 selection = "divine_favor_miss_native"
 effects = Array[ExtResource("1_evxyo")]([SubResource("Resource_1pr5e"), SubResource("Resource_8ad2p"), SubResource("Resource_syph2"), SubResource("Resource_d6rbo"), SubResource("Resource_p4wfp")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual Divine Favor condition membership owns application, hold and removal on the eligible current item. A missed weapon attack neither restarts that lifecycle nor proves an applied Radiant rider. The positive attributed hit phase remains unqualified by the Miss original."
 
 [resource]
 script = ExtResource("4_iqbqd")

@@ -297,11 +297,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_sw76w"]
 script = ExtResource("6_73mky")
 id = "vicious_mockery_consumed_native"
+dispatch_gap = "delegated_actual_recipient_condition_removal"
 kind = "outcome"
 selection = "vicious_mockery_consumed_native"
 effects = Array[ExtResource("1_pl2fp")]([SubResource("Resource_2e5oo"), SubResource("Resource_knc8s"), SubResource("Resource_ylx3t")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual condition.spell.vicious_mockery UUID and its observed removal own consumption or expiry. These reviews repeat voice, application and hold; a later attack or turn ending must not start a new cast or impose a fabricated removal reason. Required branch evidence remains separate."
 
 [sub_resource type="Resource" id="Resource_pf2ko"]
 script = ExtResource("1_pl2fp")
@@ -403,11 +405,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_pi3ct"]
 script = ExtResource("6_73mky")
 id = "vicious_mockery_turn_ended_native"
+dispatch_gap = "delegated_actual_recipient_condition_removal"
 kind = "form"
 selection = "vicious_mockery_turn_ended_native"
 effects = Array[ExtResource("1_pl2fp")]([SubResource("Resource_pf2ko"), SubResource("Resource_yxkca"), SubResource("Resource_xqd02")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual condition.spell.vicious_mockery UUID and its observed removal own consumption or expiry. These reviews repeat voice, application and hold; a later attack or turn ending must not start a new cast or impose a fabricated removal reason. Required branch evidence remains separate."
 
 [resource]
 script = ExtResource("4_v1wqq")

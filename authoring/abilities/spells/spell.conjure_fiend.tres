@@ -123,6 +123,42 @@ path = "art/media/ui/icons/smooth48/spell.conjure_fiend.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:spell.conjure_fiend"
 
+[sub_resource type="Resource" id="Resource_observed_birth"]
+script = ExtResource("3_yycvf")
+clip = "high-level-22/summon-manifestation/air_elemental/admitted"
+approach = "runtime-prepared-heavy-effects-20261020"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"kind": "actor_birth",
+"component_path": ["summon_manifestation"],
+"input_field": "",
+"creature_ids": ["creature.claw_mote_devil", "creature.corrosive_demon", "creature.dread_demon", "creature.dretch", "creature.fellwing_devil", "creature.huntsman_wing_devil"]
+}
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.1291666666666667
+duration_policy = "authored"
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"live_endpoints": [{
+"actor": "target",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fixed_assembly_review"]
+script = ExtResource("10_o0ff2")
+id = "conjure_fiend_fixed_assembly_review"
+kind = "option"
+value = "fixed_assembly_review"
+dispatch_gap = "unselected_review_assembly_has_fixed_arrival_and_three_second_departure"
+effects = Array[ExtResource("3_yycvf")]([SubResource("Resource_uobdl")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+notes = "The original assembled review remains inspectable only. Its source contains an arrival at a fixed local point and a departure at source 3 seconds, without actual born-actor or terminal admission. Production arrival is the separate actual actor_birth use; witnessed departure now has an independent7ca terminal source assignment in the shared entity_lifecycle_media context. This alternative cannot dispatch from a cast or visibility loss."
+
 [resource]
 script = ExtResource("8_mjayf")
 id = "spell.conjure_fiend"
@@ -131,7 +167,8 @@ delivery = "summon"
 body = SubResource("Resource_nswav")
 hand_layers = Array[ExtResource("4_nmbjb")]([SubResource("Resource_vhp0q"), SubResource("Resource_5wrkh")])
 sockets = "measured/abilities/spells/spell.conjure_fiend.sockets.json"
-effects = Array[ExtResource("3_yycvf")]([SubResource("Resource_uobdl")])
+effects = Array[ExtResource("3_yycvf")]([SubResource("Resource_observed_birth")])
+variants = Array[ExtResource("10_o0ff2")]([SubResource("Resource_fixed_assembly_review")])
 native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
@@ -147,7 +184,7 @@ applies_conditions = PackedStringArray("condition.attack_assistance", "condition
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray("creature.claw_mote_devil", "creature.corrosive_demon", "creature.dread_demon", "creature.dretch", "creature.fellwing_devil", "creature.huntsman_wing_devil")
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "conjure_fiend_native",
 "source": "assets/vfx/index.json:/selections/conjure_fiend_native/staging"
@@ -195,4 +232,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "All 6 declared summon choices use this explicit existing neutral manifestation donor at each actual witnessed birth and admitted ground position. The donor palette is an unreviewed artwork choice, not creature-specific body art or a distinction between natural, fey and fiend forms. Existing cast body, hand layers and their timing remain authored separately; actual creature identity is retained by the shared actor_birth constructor. The old assembled fixed arrival/departure program is an unselected review alternative. Actor bodies remain separate. Actual witnessed terminal departure now selects the independent7ca terminal source through the shared entity_lifecycle_media context using its real cause/commit/position/support; no original birth ID or live body is needed. Source publication and encounter qualification remain separate. No timed review departure, terminal event or birth identity is fabricated. All artwork remains unreviewed."

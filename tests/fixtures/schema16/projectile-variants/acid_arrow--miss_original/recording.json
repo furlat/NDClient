@@ -1,0 +1,229 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 5,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "d31aaad3-b465-4f8b-a5e2-e5d6f04a2a11": "Amber caster",
+  "bc17b0b0-d739-467a-bcc7-f3b493c98336": "Amber ally",
+  "1a5e113d-7e3d-423b-a738-f814636afa5d": "Blue target",
+  "60cc68d6-0c6f-41b6-91a9-1c5b9fd2558e": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "action.dodge \u00b7 Blue target",
+  "end_turn \u00b7 Blue target",
+  "spell.acid_arrow \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 4,
+   "action": 1,
+   "damage": 2,
+   "sensory": 1,
+   "spatial_effect_state": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "action.dodge": 1,
+   "spell.acid_arrow": 1
+  },
+  "conditions": [
+   "condition.dodging",
+   "condition.spell.acid_arrow",
+   "condition.spell.acid_surface"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Acid"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 40,
+   "lineage": 33,
+   "event_offset": 0,
+   "label": "condition applied condition.dodging",
+   "kind": "actor_change",
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "condition_uuid": "7c762f7e-a6c3-43ed-b2ba-3716c0504bc3",
+   "condition_id": "condition.dodging",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 41,
+   "lineage": 33,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.dodge",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 68,
+   "lineage": 50,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 69,
+   "lineage": 50,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 73,
+   "lineage": 50,
+   "event_offset": 4,
+   "label": "condition applied condition.spell.acid_arrow",
+   "kind": "actor_change",
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "condition_uuid": "bce5630d-1bf3-47e4-8e14-e70c903c78eb",
+   "condition_id": "condition.spell.acid_arrow",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 83,
+   "lineage": 50,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.acid_surface",
+   "kind": "actor_change",
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "condition_uuid": "11731285-e632-4ed9-ba28-ae83daad5a37",
+   "condition_id": "condition.spell.acid_surface",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 85,
+   "lineage": 50,
+   "event_offset": 7,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 87,
+   "lineage": 50,
+   "event_offset": 9,
+   "kind": "spell",
+   "label": "spell spell.acid_arrow",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 40,
+   "lineage": 33,
+   "event_offset": 0,
+   "label": "condition applied condition.dodging",
+   "kind": "actor_change",
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "condition_uuid": "7c762f7e-a6c3-43ed-b2ba-3716c0504bc3",
+   "condition_id": "condition.dodging",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 41,
+   "lineage": 33,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.dodge",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 68,
+   "lineage": 50,
+   "event_offset": 2,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 69,
+   "lineage": 50,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 73,
+   "lineage": 50,
+   "event_offset": 4,
+   "label": "condition applied condition.spell.acid_arrow",
+   "kind": "actor_change",
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "condition_uuid": "bce5630d-1bf3-47e4-8e14-e70c903c78eb",
+   "condition_id": "condition.spell.acid_arrow",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 83,
+   "lineage": 50,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.acid_surface",
+   "kind": "actor_change",
+   "actor_uuid": "1a5e113d-7e3d-423b-a738-f814636afa5d",
+   "condition_uuid": "11731285-e632-4ed9-ba28-ae83daad5a37",
+   "condition_id": "condition.spell.acid_surface",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 86,
+   "lineage": 50,
+   "event_offset": 8,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 9,
+   "occurrence": 88,
+   "lineage": 50,
+   "event_offset": 10,
+   "kind": "spell",
+   "label": "spell spell.acid_arrow",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Acid"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

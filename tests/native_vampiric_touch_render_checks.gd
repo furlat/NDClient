@@ -18,6 +18,13 @@ func frame()->void:
 func settle(world:Node,component_id:String="")->bool:
     var deadline:int=Time.get_ticks_msec()+45000
     while Time.get_ticks_msec()<deadline and not world.publication_failed and world.presentation_errors.is_empty() and world.media_issue.is_empty():
+        # Preserve the actual failure below; this specific missing immutable
+        # receiver artifact cannot complete through transient frame preparation.
+        if world.displayed_components.any(func(component):
+            var diagnostic:Dictionary=world.component_renderer.native_spells.diagnostics.get(component.id,{})
+            return diagnostic.get("status")=="partial" and is_equal_approx(float(diagnostic.get("requested_age_ms",-1.0)),float(component.get("age_ms",-2.0))) \
+                and str(diagnostic.get("reason","")).begins_with("actual_receiver_program_needs_offline_preparation:")):
+            break
         var bindings:Dictionary=world.component_renderer.native_spells.diagnostics.get(component_id,{}).get("input_bindings",{})
         var inputs_ready:bool=component_id.is_empty() or (not bindings.is_empty() and bindings.unavailable.is_empty())
         if world.playback_prepared() and inputs_ready:

@@ -33,19 +33,37 @@ static func playback_rate(actor: Dictionary, cache: Dictionary) -> float:
 static func action(fact: Dictionary, cache: Dictionary, actor:Dictionary={}) -> Dictionary:
     var path = "catalog/shove_recipes.json" if fact.kind=="shove" else "catalog/body_action_recipes.json"
     var key: String = fact.get("behavior_id","")
-    if fact.kind=="action": key=load_data("catalog/body_action_bindings.json",cache).get(key,{}).get("source_recipe",key)
+    var binding:Dictionary=load_data("catalog/body_action_bindings.json",cache).get(key,{}) if fact.kind=="action" else {}
+    key=str(binding.get("source_recipe",key))
     var selected:Dictionary=load_data(path,cache).get(key,{})
     if selected.has("rigId") and not actor.is_empty() and selected.rigId!=rig_id(actor,cache):return {}
+    if not selected.is_empty() and binding.get("action_feedback")!=null:
+        selected=selected.duplicate()
+        selected.actionFeedback=binding.action_feedback
+        selected._source_fields=selected.get("_source_fields",{}).duplicate()
+        selected._source_fields.actionFeedback=str(binding.get("action_feedback_source","catalog/body_action_bindings.json:/"+str(fact.behavior_id)+"/action_feedback"))
     if not selected.is_empty() and not selected.has("_legacy_source"):
         selected=selected.duplicate()
         selected._legacy_source=path+":/"+key.replace("~","~0").replace("/","~1")
     return selected
 
 static func recipe_source(recipe:Dictionary,field:String,cache:Dictionary)->String:
+    if recipe.get("_source_fields",{}).has(field):return str(recipe._source_fields[field])
     var source:String=recipe.get("_legacy_source","")
     if source.is_empty():return ""
     var parts=source.split(":/",true,1)
     return Catalog.source_pointer(parts[0],parts[1]+("/"+field if not field.is_empty() else ""),cache)
+
+## Feedback is selected from the actual disclosed reaction result, never a
+## canceled child, spell name, later damage or an inferred automatic mode.
+static func action_feedback(recipe:Dictionary,fact:Dictionary)->Dictionary:
+    var reaction:Variant=fact.get("reaction") if fact.get("kind")=="action" else null
+    if reaction!=null:
+        var outcome:String="succeeded" if reaction.succeeded else "failed"
+        var selected:Dictionary=recipe.get("reactionFeedback",{}).get(outcome,{})
+        if not selected.is_empty():return {"value":selected,"field":"reactionFeedback/"+outcome}
+    var ordinary:Dictionary=recipe.get("actionFeedback",{}) if recipe.get("actionFeedback")!=null else {}
+    return {"value":ordinary,"field":"actionFeedback"} if not ordinary.is_empty() else {}
 
 static func spell(fact: Dictionary, cache: Dictionary) -> Dictionary:
     var path = "spells/"+str(fact.get("behavior_id",""))+".json"

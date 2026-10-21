@@ -4,6 +4,7 @@ extends RefCounted
 const Authoring = preload("res://presentation/authoring.gd")
 const NativeSpells = preload("res://presentation/native_spell_authoring.gd")
 const NativeActions = preload("res://presentation/native_action_authoring.gd")
+const Effects = preload("res://presentation/effect_package.gd")
 const Characters = preload("res://presentation/characters.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
@@ -219,7 +220,7 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         var native_conditions:Dictionary={}
         var action_bindings:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)
         for behavior in behaviors:
-            for clip in NativeActions.effect_clips(behavior,cache):native_clips[clip.id]=clip
+            for clip in NativeActions.effect_clips(behavior,cache):native_clips[Effects.key(clip)]=clip
             for id in action_bindings.get(behavior,{}).get("applies_conditions",[]):native_conditions[id]=true
             var body: Dictionary=Authoring.action({"kind":"action","behavior_id":behavior},cache,caster).get("actor",{})
             if body.get("enabled",true) and body.has("clip"):clips[body.clip]=true

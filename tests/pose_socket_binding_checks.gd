@@ -54,7 +54,7 @@ func run()->void:
     # no source images or substitute depth maps and makes no draw assertion.
     var shape:Dictionary=Construction.layer_shape(rig,128.0/float(world.rig_config.TILE_W)*row.scale)
     drawn.position=Placement.contact(row)
-    world.visual_actors.actual_actor={"valid":true,"row":row,"entries":[{"role":"body","node":drawn,"pivot":shape.pivot,"scale":shape.scale,"actor_layer":{"slot":"body","paths":{}}}]}
+    world.visual_actors.actual_actor={"valid":true,"row":row,"entries":[{"role":"body","node":drawn,"pivot":shape.pivot,"cell":shape.cell,"scale":shape.scale,"actor_layer":{"slot":"body","paths":{}}}]}
     var component={"actor_uuid":"actual_actor","target_uuid":"actual_actor","from_position":[10,10],"to_position":[10,10],
         "from_elevation_feet":10.0,"to_elevation_feet":10.0,"cast_recipe":{"enabled":false},
         "native_cue":{"role":"attached","attachment":"recipient_ground","live_endpoints":arm.effects[0].extra.live_endpoints}}
@@ -98,6 +98,53 @@ func run()->void:
     var mapped:Dictionary=Sockets.pose_point(world,row,"hand",{"Taunt":"clasped_hands"})
     var packet:Dictionary=inputs.endpoint_packet(world,{"root":drawn},mapped_component,{},{})
     check(packet.reason.is_empty() and packet.rows[0].point.is_equal_approx(mapped.point),"Other endpoint roles use the same per-clip socket contract")
+    # Actual shipping Special1/SW contains one null other-hand frame between
+    # two real markers. Null intervals remain hidden on the same body clock;
+    # absent channels and fixed release-frame authoring still refuse.
+    world.quarter=0;row.facing="SW"
+    world.camera.transform=Placement.camera_transform(Vector3.ZERO,0);drawn.basis=world.camera.basis
+    playback.clip="Special1"
+    var null_component:Dictionary=component.duplicate(true)
+    null_component.native_cue.live_endpoints=[]
+    null_component.native_cue.source_socket="other_hand"
+    for source_frame in [0,1,2]:
+        playback.sample_seconds=(float(source_frame)+.25)/float(rig.clips.Special1.fps)
+        var measured_point:Variant=measured.pose_sockets.other_hand.Special1.SW[source_frame]
+        check(Sockets.has_socket_channel(world,row,"other_hand"),"A real pose/view channel remains authored across its null interval")
+        var socket:Dictionary=Sockets.pose_point(world,row,"other_hand")
+        var ends:Dictionary=Sockets.endpoints(world,null_component)
+        if source_frame==1:
+            check(measured_point==null and not Sockets.has_socket(world,row,"other_hand"),"The actual Special1/SW frame1 explicitly has no other-hand marker")
+            check(not socket.ready and socket.get("unavailable",false) and not socket.get("pending",false) \
+                and not socket.has("point"),"A null current marker is unavailable without inventing a point or waiting on preparation")
+            check(not ends.ready and ends.get("unavailable",false),"Native live endpoints preserve the same hidden interval classification")
+        else:
+            check(measured_point!=null and Sockets.has_socket(world,row,"other_hand") and socket.ready and ends.ready \
+                and socket.frame==source_frame,"Actual neighbouring markers resume at their own unchanged source frames")
+    playback.clip="Taunt";playback.sample_seconds=0.0
+    var missing_channel:Dictionary=Sockets.pose_point(world,row,"other_hand")
+    check(not Sockets.has_socket_channel(world,row,"other_hand") and not missing_channel.ready \
+        and not missing_channel.get("unavailable",false),"A genuinely absent pose channel retains its real missing-authoring refusal")
+    var fixed_component:Dictionary=component.duplicate(true)
+    fixed_component.cast_recipe={"actionClip":"Special1","releaseFrame":1}
+    fixed_component.recipe={"sourceSockets":{"sources":["other_hand"]}}
+    var fixed_release:Dictionary=Sockets.cast_point(world,fixed_component,"release",1,"SW")
+    check(not fixed_release.ready and not fixed_release.get("unavailable",false) \
+        and fixed_release.reason=="native_spell_release_socket_missing","A fixed authored release on an empty marker remains a real authoring refusal")
+    # Optical miss staging clears displayed quads in the current view, while
+    # keeping the factual target and elevation untouched.
+    for quarter in 4:
+        world.quarter=quarter;world.camera.transform=Placement.camera_transform(Vector3.ZERO,quarter)
+        for side in ["left","right"]:
+            var origin:Vector3=Placement.contact(row)
+            var policy:Dictionary={"side":side,"clearance_cells":0.2}
+            var missed:Dictionary=Sockets.miss_point(world,row,origin,policy)
+            check(missed.ready,"Authored Miss resolves in view "+str(quarter)+" / "+side)
+            var direction:Vector3=world.camera.global_basis.x*(1.0 if side=="right" else -1.0)
+            check(missed.point.dot(direction)>drawn.global_position.dot(direction),"Miss clears the target's center on the authored side")
+            check(is_equal_approx((missed.point-origin).dot(world.camera.global_basis.y),0.0),"Miss preserves the authored body/ground vertical anchor")
+            check(row.position==[10,10] and row.base_height_steps==2.0,"Optical staging never changes canonical target/cell/elevation")
+    check(not Sockets.miss_point(world,row,Vector3.ZERO,{}).ready,"Missing authored Miss policy stays unavailable")
     inputs.clear();world.queue_free()
     await process_frame
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Actual modular socket metadata for Taunt all8views×15frames×4quarters, strict defaults and shared preflight/endpoint conversion; no optical-framebuffer claim"}))

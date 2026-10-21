@@ -36,6 +36,8 @@ class Host extends Node:
     var native_spell_hit_material:bool=true
     var source_lighting:RefCounted=Lighting.new()
     var displayed_components:Array=[]
+    var world_media_entries:Array=[]
+    func prepare_actor_depth_bands(entries:Array,_budget:Dictionary,_tracks:Array=[])->bool:return entries.is_empty()
 
 var checks:int=0
 var failures:Array=[]

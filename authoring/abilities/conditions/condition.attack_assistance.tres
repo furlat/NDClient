@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_31phx")
 id = "condition.attack_assistance"
+disposition = "state_only"
 icon = SubResource("Resource_c78a4")
+play_package_lifecycle = false
+status = "internal"
+notes = "The exact ally/enemy assistance member is a one-attack advantage lease consumed by the native rolled attack or the helper deadline (AttackAssistance in dnd/conditions.py). It owns no independent magic/body field. Actual Help action/attack results retain their own presentation; this state-only choice does not claim a Help action effect or a successful recording."

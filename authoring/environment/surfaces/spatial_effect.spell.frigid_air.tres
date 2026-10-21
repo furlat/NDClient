@@ -1,13 +1,38 @@
 [gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_sii30"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_rvafp"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/wall-child-v3-20261021/sources/2503267e57482def9940/phase.tres" id="child"]
+
+[sub_resource type="Resource" id="ObservedChild"]
+script = ExtResource("effect")
+clip = "native/frigid_air/lifecycle"
+source_phase = ExtResource("child")
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_inputs = Dictionary[String, String]({"zone_geometry": "set_zone_geometry", "owner_state": "set_owner_state", "targets": "set_targets"})
+source_seekable = true
+sampling = "absolute"
+role = "attached"
+scope = "spatial"
+requires_spatial_anchor = true
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+scale = 0.471404520693175
+axis_scale = Vector3(1, 0.816496580927726, 1)
+source_end = 4.0
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "cell_input": "zone_geometry", "component_path": ["effect"], "input_field": "", "content_id": "spatial_effect.spell.frigid_air"}
+extra = {"cell_capacity": 64, "cell_span_capacity": [8, 8], "live_endpoints": [{"cue_point": "source"}]}
+staging_from = "factory@runtime-wall-child-v3-20261021-8b695014a812da72"
 
 [resource]
 script = ExtResource("2_rvafp")
 id = "spatial_effect.spell.frigid_air"
 layer = "field"
+lasting = SubResource("ObservedChild")
+native_staging = true
 art = PackedStringArray()
 legacy = "measured/environment/surfaces/spatial_effect.spell.frigid_air.json"
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Independent child-only mist/frost uses the delivered resource-safe source, actual spatial UUID/current disclosed cells, height/base, exact anchor and owner age. Source calibration maps its2.121320344-unit cells into the client's one-unit horizontal and sqrt(2/3) vertical grid. Source setters retain suppression and actual absence without a parent wall, review breach or invented expiry. Original144Hz four-second motion remains source-owned; capacity64cells within8x8 is explicit. Arbitrary basis/recipient contact and actual-context output remain unqualified; all artwork remains unreviewed."

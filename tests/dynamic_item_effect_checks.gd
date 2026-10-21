@@ -11,6 +11,7 @@ const Recording=preload("res://studio/recording.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Construction=preload("res://presentation/actor_construction.gd")
 const NativeActions=preload("res://presentation/native_action_authoring.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
 const ITEM="4df65b6b-e8c4-42e6-928d-26e74b579ea1"
 const EFFECT="f13a6583-c3c4-42d8-9fb9-eeff69686626"
 class State extends RefCounted:
@@ -246,16 +247,16 @@ func conditional_impact_checks(compiled:Dictionary)->void:
     # Explicit value controls, not a fabricated original replay or poison
     # damage proof. The ordinary coating/hit/removal recording is separate.
     var gear:Resource=load("res://authoring/characters/gear/weapon.longsword.tres")
-    check(gear.impact_effects.size()==6 and gear.impact_effects.all(func(cue):return not cue.item_effect_behavior_id.is_empty()),"Plain Longsword has six actual-membership contacts, without inheriting intrinsic Ember Fire")
-    var use:Resource=gear.impact_effects[0]
+    var attachments:Resource=load("res://authoring/abilities/contexts/item_attachments.tres")
+    check(gear.impact_effects.is_empty() and attachments.impact_effects.size()==6 \
+        and attachments.impact_effects.all(func(cue):return not cue.item_effect_behavior_id.is_empty()),"Six shared actual-membership contacts apply to a plain weapon without duplicating its Gear resources or inheriting intrinsic Ember Fire")
+    var use:Resource=attachments.impact_effects[0]
     check(use.clip=="weapons/contact/poison/medium" and use.item_effect_behavior_id=="condition.consumable.weapon_coat.basic_poison" \
         and use.item_effect_damage_type=="Poison" and not use.follow,"Candidate uses exact Basic Poison membership and finite recipient contact")
-    var staged:Resource=Support.BodyIndex.new()
-    Builder._equipment({"index":staged},{gear.id:gear})
-    var index:Resource=compiled[Support.Sources.KEY].index.duplicate(false)
-    index.item_impact_effects=staged.item_impact_effects
-    var cache:Dictionary={Support.Sources.KEY:{"index":index,"loaded":compiled[Support.Sources.KEY].loaded}}
-    var cues:Array=index.item_impact_effects[gear.id]
+    var document:Dictionary=Records.context_document(attachments,"item_attachments")
+    var cache:Dictionary=compiled.duplicate(false)
+    cache["catalog/item_attachments.json"]=document
+    var cues:Array=document.nativeImpactEffects
     check(cues.size()==6 and cues[0].item_effect_behavior_id==use.item_effect_behavior_id \
         and cues[0].item_effect_damage_type=="Poison","Current builder preserves exact membership selectors on finite contact cues")
     var attack:Dictionary={"kind":"attack","behavior_id":"action.attack","source_entity_uuid":"contract-wielder", \
@@ -294,7 +295,10 @@ func conditional_impact_checks(compiled:Dictionary)->void:
         var wrong:Dictionary=attack.duplicate(false);wrong.attack_source_kind=kind
         check(Items.impact_binding(wrong,cache).is_empty(),"Coating cannot lend a weapon contact to "+kind+" attacks")
     var different_item:Dictionary=attack.duplicate(false);different_item.source_item_id="weapon.roster.ember_longsword"
-    check(Items.impact_binding(different_item,cache).is_empty(),"Gear-family look reuse cannot inherit the plain sword's conditional poison cue")
+    var other_contacts:Dictionary=Items.impact_binding(different_item,cache)
+    check(other_contacts.get("effect_cues",[]).filter(func(cue):return cue.get("item_effect_behavior_id")==member.behavior_id).size()==1,"Another exact equipped item with the actual Basic Poison snapshot receives its shared membership contact")
+    different_item.item_effects=[]
+    check(not Items.impact_binding(different_item,cache).get("effect_cues",[]).any(func(cue):return cue.get("item_effect_behavior_id")==member.behavior_id),"Intrinsic Ember artwork alone cannot supply a missing Basic Poison membership")
     var other:Dictionary=member.duplicate(false);other.effect_uuid="contract-second-owner";other.contribution_uuid="contract-second-contribution"
     var stacked:Dictionary=attack.duplicate(false);stacked.item_effects=[member,other]
     var stack_binding:Dictionary=Items.impact_binding(stacked,cache)
@@ -302,7 +306,10 @@ func conditional_impact_checks(compiled:Dictionary)->void:
     var unconditional:Dictionary=cues[0].duplicate(false)
     unconditional.erase("item_effect_behavior_id");unconditional.erase("item_effect_damage_type")
     unconditional.source_index=1;unconditional.source="test-only-unconditional-contact"
-    index.item_impact_effects={gear.id:[cues[0],unconditional]}
+    var index:Resource=compiled[Support.Sources.KEY].index.duplicate(false)
+    index.item_impact_effects=index.item_impact_effects.duplicate(false)
+    index.item_impact_effects[gear.id]=[unconditional]
+    cache[Support.Sources.KEY]={"index":index,"loaded":compiled[Support.Sources.KEY].loaded}
     check(Items.impact_binding(after_retirement,cache).effect_cues==[unconditional] \
         and Items.impact_binding(attack,cache).effect_cues.size()==2,"Conditional membership never suppresses a separately authored unconditional contact")
     check(var_to_bytes([attack,cues])==original,"Selecting/compiling contact evidence leaves original facts and shared authored cues immutable")
@@ -357,7 +364,7 @@ func run()->void:
             for value in rows:
                 if not spans.has(value.component.id):spans[value.component.id]=[]
                 spans[value.component.id].append(value)
-            check(rows.size()==4 and spans.size()==2 and rows.all(func(value):return value.component.item_effect_uuid==EFFECT and value.preview_scope=="actual_item_in_scene"),"Two dynamic uses each expose both real equipped intervals through existing Studio tracks: "+str(rows.map(func(value):return [value.id,value.start_ms,value.end_ms])))
+            check(rows.size()==4 and spans.size()==2 and rows.all(func(value):return value.component.item_effect_uuid==EFFECT and value.preview_scope=="recorded_composed_context" and value.preview_lighting_scope=="recorded_receiving_cut"),"Two dynamic uses each expose both real equipped intervals through existing Studio tracks: "+str(rows.map(func(value):return [value.id,value.start_ms,value.end_ms])))
             for owner_spans in spans.values():
                 owner_spans.sort_custom(func(a,b):return a.start_ms<b.start_ms)
                 check(owner_spans.size()==2 and owner_spans[0].start_ms==commits["237"] and owner_spans[0].end_ms==commits["239"] and owner_spans[1].start_ms==commits["240"],"Studio intervals follow the original equip237→unequip239→equip240 commit boundaries")

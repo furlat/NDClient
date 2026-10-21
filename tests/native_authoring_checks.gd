@@ -7,6 +7,8 @@ const Document = preload("res://presentation/resources/ability_document.gd")
 const AbilityDocuments = preload("res://presentation/ability_documents.gd")
 const Builder = preload("res://tools/presentation_build/abilities.gd")
 const Common = preload("res://tools/presentation_build/common.gd")
+const Characters = preload("res://presentation/characters.gd")
+const BodySources = preload("res://presentation/body_sources.gd")
 var checks = 0
 var failures: Array = []
 
@@ -35,8 +37,8 @@ func _initialize() -> void:
     check(hidden.persistent.bodyColor == null, "An explicitly neutral native filter clears inherited legacy colour operations")
     check(Catalog.source_pointer("catalog/condition_recipes.json", "/condition.hidden/persistent/alphaMultiplier", cache) == "res://authoring/abilities/conditions/condition.hidden.tres::look/steps/0/alpha", "Inspector resolves selected opacity to its authored property")
     check(Catalog.source_pointer("catalog/condition_recipes.json", "/condition.hidden/relationships", cache) == "catalog/condition_recipes.json:/condition.hidden/relationships", "Inherited relationship retains its actual source pointer")
-    var rigs = Catalog.read_file("catalog/rigs.json", cache)
-    var sources = Catalog.read_file("catalog/resources.json", cache)
+    var rigs = Characters.rigs(cache)
+    var sources:Dictionary = BodySources.index(cache).sheets
     var action:Dictionary=Catalog.read_file("catalog/body_action_recipes.json",cache)["action.hide"]
     check(action.actor.enabled and action.actor.clip=="CrouchIdle" and action.anchors[1].frame==15,
         "Hide selects a finite authored action and its condition effect boundary")
@@ -52,7 +54,7 @@ func _initialize() -> void:
         if clip.is_empty(): continue
         check(clip.frames == 15 and clip.fps == 12, "Crouch has real frame count and explicitly adopted rate: " + name)
         for path in clip.sheets.values():
-            check(sources.has(path) and FileAccess.file_exists(Catalog.media_path(sources[path])), "Registered source exists: " + path)
+            check(sources.has(path) and FileAccess.file_exists(str(sources.get(path,{}).get("default",""))), "Registered source exists: " + path)
     check(cache.get("native_authoring_errors", []).is_empty(), "All native source definitions are valid")
     # Reload isolation: a candidate abilities build in a temporary folder.
     var directory = "res://.runtime/native-authoring-reload"
@@ -85,7 +87,7 @@ func _initialize() -> void:
     var worker=Thread.new()
     worker.start(func():return {"errors":Catalog.validate_native(worker_snapshot),
         "opacity":Catalog.read_file("catalog/condition_recipes.json",worker_snapshot)["condition.hidden"].persistent.alphaMultiplier,
-        "clip":Catalog.read_file("catalog/rigs.json",worker_snapshot)["neuroclient.modular"].clips.CrouchRun})
+        "clip":Characters.rigs(worker_snapshot)["neuroclient.modular"].clips.CrouchRun})
     var worker_result:Dictionary=worker.wait_to_finish()
     check(worker_result.errors.is_empty() and is_equal_approx(worker_result.opacity,0.3) and worker_result.clip.frames==15,
         "Worker uses admitted source snapshot despite subsequent rebuilds and a missing new build")

@@ -1,13 +1,30 @@
 [gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_ij0hh"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_hhxlb"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="ActualSwarm"]
+script = ExtResource("effect")
+clip = "review/insect_plague/default/lifecycle"
+selection = "insect_plague__default"
+approach = "gpu"
+sampling = "absolute"
+role = "attached"
+scope = "spatial"
+requires_spatial_anchor = true
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 6.0
+light_multiplier = 0.0
 
 [resource]
 script = ExtResource("2_hhxlb")
 id = "spatial_effect.spell.insect_plague"
 layer = "field"
+lasting = SubResource("ActualSwarm")
+native_staging = true
 art = PackedStringArray()
 legacy = "measured/environment/surfaces/spatial_effect.spell.insect_plague.json"
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Actual public spatial UUID/anchor/current admitted cells retain the original GPU locust source at scale1. The delivered source owns its actual two-second formation and six-second continuing trajectory loop; the client adds no loop or expiry clock. Its original radius3.85-cell swarm interior is retained within the native four-cell field, while AreaMask limits current disclosed/suppressed cells. Actual owner absence tears it down immediately. No live CPU boids, fixed recorded fallback, bite contact or private outcome is created. The finite cast review is excluded. All artwork remains unreviewed; current rendered-output qualification remains separate."

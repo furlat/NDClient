@@ -5,7 +5,7 @@
 
 [sub_resource type="Resource" id="ObservedSurface"]
 script = ExtResource("spatial_effect_use")
-clip = "bg3-36/chromatic-orb/cold/observed-surface"
+clip = "high-level-22/freezing-sphere/launch_observed_ice"
 role = "attached"
 scope = "spatial"
 at = "owner_start"
@@ -17,18 +17,21 @@ constructor_input = {
 "kind": "spatial_owner",
 "component_path": ["effect"],
 "input_field": "",
+"cell_input": "surface_state",
+"surface_kind": "spatial_effect.material.ice",
 "content_id": "spatial_effect.material.ice"
 }
 staging_from = "factory@c494177f9ef03e3d"
 extra = {
 "live_endpoints": [{"cue_point": "source"}],
-"cell_capacity": 32
+"cell_capacity": 128
 }
 
 [resource]
 script = ExtResource("spatial_owner")
 id = "spatial_effect.material.ice"
-disposition = "authored"
-effects = Array[ExtResource("spatial_effect_use")]([SubResource("ObservedSurface")])
+disposition = "state_only"
+play_package_lifecycle = false
+surface = "spatial_effect.material.ice"
 status = "partial"
-notes = "Exact sealed observed-surface source, owned by the actual disclosed spatial UUID/cells/suppression. Fixture topology/presence and three-second retirement are cleared before construction. No caster, condition fact, damage or duration is inferred. Original source supports at most 32 admitted cells; larger owners remain an explicit capacity gap. Removal follows actual disclosure immediately; native fading and visual approval remain unqualified."
+notes = "This spatial recipe delegates its body visual to canonical GroundSurface spatial_effect.material.ice, which consumes the actual same spatial UUID, observed geometry/cells, suppression and lifetime. The former ability-side source is retained here only as inactive source provenance; no second condition or fixed-review field is drawn. Existing independent responses and metadata remain unchanged. Current source optical/shape/cost limits remain in the delivery handoff; this assignment is unvalidated and all artwork remains unreviewed."

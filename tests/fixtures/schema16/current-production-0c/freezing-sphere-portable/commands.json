@@ -1,0 +1,293 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a3d75bdc-90fb-4373-aba8-38897e404477",
+   "state_revision": "054bfa9a-ac3d-45ef-a6c4-1f10709dad76",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_portable_detonation",
+   "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+   "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_portable_detonation",
+    "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+    "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "3baed701-d29b-499d-a745-3fc85f0c441a",
+   "state_revision": "4c7650d5-4a76-4ac6-bd20-37d9a93a8c1d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_portable_detonation",
+   "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+   "audience_id": "dba98da1-0c46-40f0-8ae8-2fae68cba100",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_portable_detonation",
+    "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+    "audience_id": "dba98da1-0c46-40f0-8ae8-2fae68cba100",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "9cddbba7-3f32-4226-9c72-982cbbc0e33c",
+   "state_revision": "09379cdf-6bd8-4e16-9125-715c962b4563",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_portable_detonation",
+   "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+   "audience_id": "dba98da1-0c46-40f0-8ae8-2fae68cba100",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_portable_detonation",
+    "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+    "audience_id": "dba98da1-0c46-40f0-8ae8-2fae68cba100",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.freezing_sphere",
+   "by": "caster",
+   "target": "ally",
+   "variant": {
+    "form": "portable"
+   }
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "368a91ff-a729-4d64-8eb7-0eda580d2993",
+  "discovery_generation": 1,
+  "preview_request": {
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "state_revision": "368a91ff-a729-4d64-8eb7-0eda580d2993",
+   "discovery_generation": 1,
+   "correlation_id": "4eae1c10-2613-4c9e-9189-7fc072e245fd",
+   "selection": {
+    "action_index": 10,
+    "target_indices": [
+     0
+    ],
+    "extra_target_positions": [],
+    "prefer_safe": false
+   }
+  },
+  "selected_action": {
+   "behavior_id": "spell.freezing_sphere",
+   "display_name": "Freezing Sphere (Level 6)",
+   "cast_at_level": 6,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "portable",
+     "label": "Portable"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "state_revision": "368a91ff-a729-4d64-8eb7-0eda580d2993",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_portable_detonation",
+   "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+   "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_portable_detonation",
+    "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+    "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "state_revision": "bd8b9f2c-cbd3-482f-8a5a-e5139d452f66",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_portable_detonation",
+   "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+   "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_portable_detonation",
+    "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+    "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.spell.payload.throw",
+   "by": "ally",
+   "target": [
+    6,
+    7
+   ],
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "65ba5f8a-83d8-420d-be5b-4b2e503001f4",
+  "discovery_generation": 2,
+  "preview_request": {
+   "actor_uuid": "a3d75bdc-90fb-4373-aba8-38897e404477",
+   "state_revision": "65ba5f8a-83d8-420d-be5b-4b2e503001f4",
+   "discovery_generation": 2,
+   "correlation_id": "9f1f0620-6d58-4373-a376-695945fea1de",
+   "selection": {
+    "action_index": 22,
+    "target_indices": [],
+    "extra_target_positions": [
+     [
+      6,
+      7
+     ]
+    ],
+    "prefer_safe": false
+   }
+  },
+  "last_preview": {
+   "subjects": [],
+   "positions": [],
+   "target_sets": [
+    []
+   ],
+   "can_confirm": true,
+   "reason": null,
+   "effective_target_uuids": [],
+   "next_target_set": 0,
+   "next_positions": [],
+   "geometry": null,
+   "area_preview": "not_applicable",
+   "affected_positions": [],
+   "affected_entity_uuids": [],
+   "affected_entity_names": [],
+   "selected_route": null
+  },
+  "selected_action": {
+   "behavior_id": "action.spell.payload.throw",
+   "display_name": "Throw Spell Sphere (Portable Freezing Sphere)",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "position_los",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "a3d75bdc-90fb-4373-aba8-38897e404477",
+   "state_revision": "65ba5f8a-83d8-420d-be5b-4b2e503001f4",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 22,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_portable_detonation",
+   "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+   "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_portable_detonation",
+    "game_epoch": "8f42a534-34fa-4b12-8528-cc53536988fb",
+    "audience_id": "bbdb8764-2614-44d5-b46b-5c03d9539b75",
+    "sequence": 11
+   }
+  }
+ }
+]

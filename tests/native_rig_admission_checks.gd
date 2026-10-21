@@ -75,6 +75,13 @@ func add_native_clips(expected:Dictionary,root_id:String)->void:
     # their own rig and compatible source-part sheets.
     var source:Resource=load("res://authoring/characters.tres")
     var rig:Resource=load(source.sections.rigs[root_id])
+    # The retired helmet offer named one never-installed part. Preserve every
+    # other oracle field and require exactly that declared source correction.
+    var helmets:Array=expected[root_id].slot_categories.helmet.duplicate()
+    check("Head11" in helmets and not source.sections.parts.has("Head11"),"Retired Head11 offer has no authored installed part")
+    helmets.erase("Head11")
+    check(helmets==Array(rig.slot_categories.helmet),"Current helmet offers differ from the complete legacy oracle only by unavailable Head11")
+    expected[root_id].slot_categories.helmet=helmets
     var parts:Dictionary={}
     for slot in rig.slot_order:
         for category in rig.slot_categories.get(slot,[]):

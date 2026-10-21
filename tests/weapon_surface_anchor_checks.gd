@@ -13,6 +13,7 @@ const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Builder=preload("res://tools/presentation_build/characters.gd")
 const BodyIndex=preload("res://presentation/resources/body_source_index.gd")
 const EffectUse=preload("res://presentation/source/effect_use.gd")
+const Equipment=preload("res://tests/weapon_effect_support.gd")
 const CLIP="conditions/continuation/condition_shillelagh_persistent/sustain"
 const FAMILIES=["magic_weapon","divine_favor","sacred_weapon","shillelagh","coating_fire","coating_lightning","coating_poison","flame_blade",
     "elemental_multiattack_shocked_event","elemental_multiattack_prone_event","elemental_multiattack_burning_event","elemental_multiattack_chilled_event",
@@ -68,7 +69,7 @@ static func source_cache()->Dictionary:
         cue.recipient_slots=PackedStringArray([spec[2]]);cue.follow=true;cue.light_multiplier=0.0
         cue.extra={"equipment_slots":[spec[1]]};cue.staging_from="test-only intrinsic exact-surface decoration; no condition, damage or art acceptance"
         gear.effects=gear.effects.duplicate();gear.effects.clear();gear.effects.append(cue);entries[gear.id]=gear
-    Builder._equipment({"index":staged},entries)
+    Equipment.equipment(staged,entries)
     selected.item_effects=staged.item_effects
     return {Sources.KEY:{"index":selected,"loaded":current.loaded}}
 

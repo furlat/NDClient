@@ -144,11 +144,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_o1ai2"]
 script = ExtResource("10_x4qko")
 id = "wall_of_thorns_circle_native"
+dispatch_gap = "delegated_actual_spatial_owner_geometry_and_contacts"
 kind = "form"
 selection = "wall_of_thorns_circle_native"
 effects = Array[ExtResource("3_qpele")]([SubResource("Resource_ybold")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The actual spatial owner explicitly selects segment or ring source from disclosed wall_assembly geometry and supplies observed state, contacts and removal. This duplicate finite circle review stays unselected; it does not create another cast wall or timed review pulse. All artwork remains unreviewed."
 
 [resource]
 script = ExtResource("8_4gvag")
@@ -163,7 +165,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -198,4 +200,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "Actual disclosed spatial UUID owns the new wall geometry/age/contact/removal source. The old finite review wall cue is delegated to that spatial owner; cast body and hand layers remain. Native original-case output and human approval remain separate."

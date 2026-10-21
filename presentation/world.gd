@@ -2,6 +2,8 @@ extends RefCounted
 # Adapter from disclosed SDK geometry into existing authored placement rows.
 const Catalog = preload("res://source_catalog.gd")
 const Cells = preload("res://sdk/fold_cells.gd")
+const SpatialInputs = preload("res://presentation/spatial_inputs.gd")
+const Placement=preload("res://placement.gd")
 
 # The few current immutable sensory masks are shared by world/camera readers.
 # This bounded cache is optical derived data, never a second canonical state.
@@ -26,7 +28,135 @@ static func visible_positions(state:Dictionary)->Array:
 static func cell_key(position: Array) -> String:
     return "%d,%d" % [position[0],position[1]]
 
-static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
+## A body delegation is an exact current public identity join. Content alone,
+## proximity and remembered placement cannot suppress an unrelated object.
+static func native_object_owner(identity:String,item_id:String,senses:Dictionary,index:Dictionary,placement:Dictionary={})->String:
+    var content:String=str(index.get("native_object_owners",{}).get(item_id,""))
+    if content.is_empty():return ""
+    var matched:String=""
+    for key in senses.get("spatial_effects",{}):
+        var effect:Dictionary=senses.spatial_effects[key]
+        # Current sensory membership admits concealed traps too; their
+        # apparent_presence controls absence/memory, not this disclosed cut.
+        if effect.get("anchor_item_uuid")!=identity or SpatialInputs.content_id(effect)!=content \
+            or SpatialInputs.admitted_cells(effect).is_empty():continue
+        var program:Dictionary=index.get("spatial_media",{}).get(content,{})
+        if effect.get("anchor_position")==null and not program.get("native_world_media",false):continue
+        if program.get("native_world_media",false) and program.get("requires_object_anchor",false):
+            if placement.is_empty() or not senses.get("objects",{}).get(identity,{}).get("visual",false):continue
+            var direction:Variant=effect.get("direction")
+            var orientation:Variant=placement.get("orientation")
+            if orientation==null:orientation=placement.get("boundary_direction")
+            if direction==null and not Placement.DIRECTIONS.has(str(orientation)):continue
+            if direction==[0,0]:continue
+        if not matched.is_empty():return ""
+        matched=str(key)
+    return matched
+
+## These are visual rows owned by disclosed spatial UUIDs, not SDK objects.
+## Source images, state keys and placement policy are declared in GroundSurface.
+static func spatial_projection(state:Dictionary,cache:Dictionary)->Dictionary:
+    var result:Array=[];var missing:Array=[]
+    var senses:Dictionary=state.get("senses",{}) if state.get("senses")!=null else {}
+    var sources:Dictionary=Catalog.environment_index(cache).get("spatial_media",{})
+    for identity in senses.get("spatial_effects",{}):
+        var effect:Dictionary=senses.spatial_effects[identity]
+        var content:String=SpatialInputs.content_id(effect)
+        var program:Dictionary=sources.get(content,{})
+        if not program.get("native_world_media",false):continue
+        var cells:Array=SpatialInputs.admitted_cells(effect)
+        if cells.is_empty():continue
+        var positions:Array=cells
+        var support_height:Variant=null
+        var subject_uuid:Variant=null
+        var object_orientation:Variant=null
+        if program.get("requires_object_anchor",false):
+            var object_id:Variant=effect.get("anchor_item_uuid")
+            var object:Dictionary=state.get("objects",{}).get(object_id,{})
+            if object.is_empty() or not senses.get("objects",{}).get(object_id,{}).get("visual",false):
+                missing.append("world_media_object_anchor:"+str(identity));continue
+            positions=[object.placement.position];support_height=object.placement.base_height_steps;subject_uuid=object_id
+            object_orientation=object.placement.get("orientation")
+            if object_orientation==null:object_orientation=object.placement.get("boundary_direction")
+        elif program.get("placement")=="anchor":
+            var anchor:Variant=effect.get("anchor_position")
+            if anchor==null:missing.append("world_media_anchor:"+str(identity));continue
+            positions=[anchor]
+        var direction:Variant=effect.get("direction")
+        if direction==null:
+            var declared:String=str(object_orientation) if object_orientation!=null else str(program.get("default_orientation",""))
+            var vector:Vector2=Placement.DIRECTIONS.get(declared,Vector2.ZERO)
+            if vector==Vector2.ZERO:missing.append("world_media_direction:"+str(identity));continue
+            direction=[vector.x,vector.y]
+        if direction==[0,0]:missing.append("world_media_direction:"+str(identity));continue
+        var column:int=posmod(floori(atan2(float(direction[1]),float(direction[0]))/(PI/4.0)+0.5),8)
+        var orientation:String=["east","north","west","south"][floori(float(column)/2.0)]
+        var raw:Variant=effect.get(str(program.get("state_field","trap_state")))
+        var token:String=JSON.stringify(raw) if raw is bool else str(raw)
+        var frame:int=int(program.get("state_frames",{}).get(token,0))
+        var roles:Array=["entrance","hatch","hatch_front"].filter(func(role):return program.get("roles",{}).has(role)) if program.get("kind")=="portal" else ["body"]
+        for position in positions:
+            var tile:Dictionary=state.get("tiles",{}).get(cell_key(position),{})
+            if tile.is_empty() and support_height==null:missing.append("world_media_support:"+str(identity));continue
+            var offset:Array=program.get("origin_offset",[0.0,0.0])
+            var point:Array=[position[0]+offset[0]*direction[0]-offset[1]*direction[1],position[1]+offset[0]*direction[1]+offset[1]*direction[0]]
+            for role in roles:
+                var source:Dictionary=program.get("roles",{}).get(role,{})
+                var initial_frame:int=frame
+                if program.get("kind")=="portal":
+                    initial_frame=int(source.get("opening_frames",0)) if role=="entrance" and token=="activated" else int(source.get("opening_frames",0))+int(source.get("hold_frames",0))+maxi(0,int(source.get("closing_frames",0))-1) if role=="entrance" else int(source.get("opening",[0]).back()) if token=="activated" else 0
+                result.append({"id":"spatial:"+str(identity)+":"+cell_key(position)+":"+role,"kind":"resource","position":point,
+                    "base_height_steps":float(tile.elevation_steps) if support_height==null else float(support_height),"orientation":orientation,"boundaries":[],"layer":2 if role=="hatch_front" else 1,
+                    "spatial_effect_uuid":str(identity),"world_media_content":content,"world_media_role":role,"world_media_frame":initial_frame,
+                    "world_media_state":token,"unlit":bool(source.get("unlit",false)),"subject_uuid":subject_uuid,"presentation_only":subject_uuid==null})
+    return {"rows":result,"unresolved":missing}
+
+## Continuous floor artwork belongs to actual tile residue identities. Only
+## disclosed, currently observed same-height neighbors may join its edge mask.
+static func residue_tile_rows(state:Dictionary,key:String,profiles:Dictionary,visible:Dictionary)->Array:
+    var tile:Dictionary=state.get("tiles",{}).get(key,{})
+    if tile.is_empty():return []
+    var rows:Array=[]
+    for residue in tile.get("residues",[]):
+        var profile:Dictionary=profiles.get(residue.residue_id,{})
+        if profile.is_empty() or float(residue.amount)<=0. or residue.get("condition_uuid")==null:continue
+        var connected:int=0;var bit:int=0
+        for dx in [-1,0,1]:
+            for dy in [-1,0,1]:
+                if dx==0 and dy==0:continue
+                var neighbor_key:String=cell_key([tile.position[0]+dx,tile.position[1]+dy])
+                var neighbor:Dictionary=state.tiles.get(neighbor_key,{})
+                if visible.has(neighbor_key) and not neighbor.is_empty() and neighbor.elevation_steps==tile.elevation_steps:
+                    for other in neighbor.get("residues",[]):
+                        if other.residue_id==residue.residue_id and float(other.amount)>0.:connected|=1<<bit;break
+                bit+=1
+        rows.append({"id":"residue:"+str(tile.tile_uuid)+":"+str(residue.condition_uuid),"kind":"resource",
+            "position":tile.position,"base_height_steps":tile.elevation_steps,"orientation":"east","boundaries":[],
+            "layer":1,"sort_role":"covering","presentation_only":true,"tile_uuid":tile.tile_uuid,
+            "residue_uuid":residue.condition_uuid,"residue_id":residue.residue_id,"floor_motifs":profile,
+            "connected_neighbors":connected,"affine":[2.,1.,-2.,1.],"ground_projection":true})
+    return rows
+
+static func residue_projection(state:Dictionary,cache:Dictionary)->Array:
+    var profiles:Dictionary=Catalog.environment_index(cache).get("floor_residue_sources",{})
+    if profiles.is_empty():return []
+    var visible:Dictionary=Cells.point_set(visible_positions(state));var result:Array=[]
+    for key in state.get("tiles",{}):result.append_array(residue_tile_rows(state,key,profiles,visible))
+    return result
+
+## Same two disclosed incident supports as native boundary_sides. This is a
+## visibility cut only; remembered marked faces remain in the SDK after-value.
+static func residue_observed_faces(place:Dictionary,visible:Dictionary)->Array:
+    var direction:Variant=place.get("boundary_direction")
+    if direction==null:return []
+    var delta:Array={"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}[direction]
+    var opposite:String={"north":"south","south":"north","east":"west","west":"east"}[direction]
+    var result:Array=[]
+    if Cells.contains(visible,place.position):result.append(opposite)
+    if Cells.contains(visible,[place.position[0]+delta[0],place.position[1]+delta[1]]):result.append(direction)
+    return result
+
+static func rows(state: Dictionary, cache: Dictionary,include_spatial:bool=true) -> Dictionary:
     var world = Catalog.environment_world(cache)
     var index = Catalog.environment_index(cache)
     var senses: Dictionary = state.get("senses",{}) if state.get("senses") != null else {}
@@ -41,6 +171,7 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
         var object: Dictionary = state.objects[id]
         var place: Dictionary = object.placement
         var item: Dictionary = object.item
+        if not native_object_owner(str(id),str(item.item_id),senses,index,place).is_empty():continue
         var direction: String = place.get("boundary_direction") if place.get("boundary_direction") != null else (place.get("orientation") if place.get("orientation") != null else "east")
         var row = {"id":id,"position":place.position,"base_height_steps":place.base_height_steps,
             "orientation":direction,"boundaries":[direction] if place.kind=="boundary" else [],"layer":1,"item_id":item.item_id}
@@ -83,8 +214,11 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
             if prop.has("lit_animation") and item.get("is_lit") == true and senses.get("objects",{}).get(id,{}).get("visual",false):
                 row.lit_animation = prop.lit_animation
         else:
-            missing.append("object:"+item.item_id)
-            continue
+            var ground:Dictionary=Catalog.ground_equipment(item,cache)
+            if ground.is_empty():
+                missing.append("object:"+item.item_id)
+                continue
+            row.merge({"kind":"ground_equipment","ground_equipment":ground})
         if item.get("boundary_structure")!=null:
             var structure:Dictionary=item.boundary_structure
             # Source ownership chooses the registered artwork; disclosed
@@ -101,7 +235,14 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
         if item.get("integrity")=="destroyed" and row.kind in ["prop","wall"]:
             row.destroyed = true
             if item.get("destruction_outcome") != null: row.outcome = item.destruction_outcome
+        if not item.get("surface_residues",[]).is_empty() and place.get("boundary_direction")!=null:
+            row.surface_residues=item.surface_residues
+            row.residue_observed_faces=residue_observed_faces(place,senses.get("visible",Cells.EMPTY))
         result.append(row)
+    result.append_array(residue_projection(state,cache))
+    if include_spatial:
+        var spatial:Dictionary=spatial_projection(state,cache)
+        result.append_array(spatial.rows);missing.append_array(spatial.unresolved)
     return {"rows":result,"visual_rows":join_walls(result,world),"unresolved":missing}
 
 static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictionary) -> Dictionary:
@@ -109,6 +250,7 @@ static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
     # changes are still resolved through the original source adapter above.
     var senses: Dictionary = state.get("senses",{}) if state.get("senses") != null else {}
     var old: Dictionary = retained.get("records",{})
+    var index:Dictionary=Catalog.environment_index(cache)
     var records = {}; var result: Array = []; var walls: Array = []; var missing: Array = []
     var changed = old.size()!=state.tiles.size()+state.objects.size()
     var resolved = 0
@@ -120,16 +262,18 @@ static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
             var key = kind+":"+id
             var sight: bool = kind=="objects" and senses.get("objects",{}).get(id,{}).get("visual",false)
             var record: Dictionary = old.get(key,{})
-            if record.is_empty() or not is_same(record.source,source) or record.sight!=sight:
+            var native_owner:String=native_object_owner(str(id),str(source.item.item_id),senses,index,source.placement) if kind=="objects" else ""
+            var faces:Array=residue_observed_faces(source.placement,senses.get("visible",Cells.EMPTY)) if kind=="objects" and not source.item.get("surface_residues",[]).is_empty() else []
+            if record.is_empty() or not is_same(record.source,source) or record.sight!=sight or record.get("native_owner","")!=native_owner or record.get("residue_faces",[])!=faces:
                 if kind=="objects" and (record.is_empty() or not is_same(record.source,source)): boundary_dirty = true
                 var input = {"tiles":{},"objects":{},"senses":senses}
                 input[kind][id] = source
-                var derived = rows(input,cache)
+                var derived = rows(input,cache,false)
                 var row: Dictionary = derived.rows[0] if not derived.rows.is_empty() else {}
                 if record.is_empty() or row!=record.row or derived.unresolved!=record.missing: changed = true
                 # Reuse equal projections when HP/resources change without art.
                 elif not row.is_empty(): row = record.row
-                record = {"source":source,"sight":sight,"row":row,"missing":derived.unresolved}
+                record = {"source":source,"sight":sight,"native_owner":native_owner,"residue_faces":faces,"row":row,"missing":derived.unresolved}
                 resolved += 1
             records[key] = record
             missing.append_array(record.missing)
@@ -137,6 +281,13 @@ static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
             result.append(record.row)
             if record.row.kind=="wall": walls.append(record.row)
     retained.records = records
+    var spatial:Dictionary=spatial_projection(state,cache)
+    if retained.get("spatial_projection",{})!=spatial:changed=true
+    retained.spatial_projection=spatial
+    var residues:Array=residue_projection(state,cache)
+    if retained.get("residue_projection",[])!=residues:changed=true
+    retained.residue_projection=residues;result.append_array(residues)
+    result.append_array(spatial.rows);missing.append_array(spatial.unresolved)
     retained.resolved = resolved
     # Preserve insertion order too: it is the old equal-projection floor tie.
     var ids = records.keys()
@@ -163,8 +314,8 @@ static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
 # task may borrow them read-only until it finishes, including after cancellation.
 # Patches own only changed records/cells. apply_changes is the ownership handoff;
 # no presenter may mutate source rows or keep a result array as a private snapshot.
-const ROW_INDEXES = ["tile_rows","object_rows","missing","wall_cells","assembly",
-    "boundaries","boundary_cells","lit_candidates","negative","terrain_materials","object_ranks"]
+const ROW_INDEXES = ["tile_rows","object_rows","spatial_rows","residue_rows","residue_cells","missing","wall_cells","assembly",
+    "boundaries","boundary_cells","lit_candidates","native_candidates","residue_candidates","negative","terrain_materials","object_ranks"]
 
 static func projected_index(base: Dictionary, patch: Dictionary, index: String, key: String, fallback: Variant = null) -> Variant:
     if patch.writes[index].has(key): return patch.writes[index][key]
@@ -172,7 +323,7 @@ static func projected_index(base: Dictionary, patch: Dictionary, index: String, 
     return base.get(index,{}).get(key,fallback)
 
 static func projected_row(base: Dictionary, patch: Dictionary, kind: String, id: String) -> Dictionary:
-    return projected_index(base,patch,"tile_rows" if kind=="tiles" else "object_rows",id,{})
+    return projected_index(base,patch,"tile_rows" if kind=="tiles" else "spatial_rows" if kind=="spatial" else "residue_rows" if kind=="residues" else "object_rows",id,{})
 
 static func _write_index(base: Dictionary, patch: Dictionary, index: String, key: String, value: Variant) -> void:
     patch.removes[index].erase(key)
@@ -206,6 +357,25 @@ static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictiona
         "resolved":0,"changed":full,"rebuild_rows":full,"rebuild_visual":full,"missing_changed":full,
         "next_object_rank":0 if full else base.get("next_object_rank",0)}
     for index in ROW_INDEXES: patch.writes[index] = {}; patch.removes[index] = {}
+    if full or changes.get("senses",false) or not changes.get("tiles",{}).is_empty() or not changes.get("objects",{}).is_empty() or not changes.get("objects_removed",[]).is_empty():
+        var spatial:Dictionary=spatial_projection(state,cache)
+        var current:Dictionary={}
+        for row in spatial.rows:current[row.id]=row
+        var keys:Dictionary=current.duplicate()
+        if not full:
+            for id in base.get("spatial_rows",{}):keys[id]=true
+        for id in keys:
+            var old:Dictionary={} if full else base.get("spatial_rows",{}).get(id,{})
+            var row:Dictionary=current.get(id,{})
+            if row.is_empty():_erase_index(base,patch,"spatial_rows",id)
+            else:_write_index(base,patch,"spatial_rows",id,row)
+            if old!=row:
+                patch.canonical_changes["spatial:"+id]=row;patch.visual_changes[id]=row;patch.changed=true
+                if old.is_empty() or row.is_empty():patch.rebuild_rows=true;patch.rebuild_visual=true
+        var old_missing:Array=[] if full else base.get("missing",{}).get("spatial",[])
+        if spatial.unresolved.is_empty():_erase_index(base,patch,"missing","spatial")
+        else:_write_index(base,patch,"missing","spatial",spatial.unresolved)
+        if old_missing!=spatial.unresolved:patch.missing_changed=true;patch.changed=true
     var tile_keys: Dictionary = changes.get("tiles",{}).duplicate()
     var object_keys: Dictionary = changes.get("objects",{}).duplicate()
     if full:
@@ -221,7 +391,40 @@ static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictiona
         for id in base.lit_candidates:
             if bool(base.lit_candidates[id])!=bool(senses.get("objects",{}).get(id,{}).get("visual",false)):
                 object_keys[id] = true
+        # Only the few explicitly delegated objects depend on spatial-owner
+        # membership. Unrelated scenery keeps its existing sparse fast path.
+        for id in base.get("native_candidates",{}):object_keys[id]=true
+        for id in base.get("residue_candidates",{}):object_keys[id]=true
+    var residue_keys:Dictionary=tile_keys.duplicate()
+    for key in tile_keys:
+        var point:Array=Cells.point(key)
+        for dx in [-1,0,1]:
+            for dy in [-1,0,1]:residue_keys[cell_key([point[0]+dx,point[1]+dy])]=true
+    if changes.get("senses",false) and not full:
+        for key in base.get("residue_cells",{}):residue_keys[key]=true
+    var profiles:Dictionary=Catalog.environment_index(cache).get("floor_residue_sources",{})
+    var observed:Dictionary=Cells.point_set(visible_positions(state)) if not profiles.is_empty() else {}
+    for key in residue_keys:
+        var old_ids:Array=[] if full else base.get("residue_cells",{}).get(key,[])
+        var current:Dictionary={}
+        for row in residue_tile_rows(state,key,profiles,observed):current[row.id]=row
+        var ids:Dictionary=current.duplicate()
+        for id in old_ids:ids[id]=true
+        for id in ids:
+            var old:Dictionary={} if full else base.get("residue_rows",{}).get(id,{})
+            var row:Dictionary=current.get(id,{})
+            if row.is_empty():_erase_index(base,patch,"residue_rows",id)
+            else:_write_index(base,patch,"residue_rows",id,row)
+            if old!=row:
+                patch.canonical_changes["residues:"+id]=row;patch.visual_changes[id]=row;patch.changed=true
+                if old.is_empty() or row.is_empty():patch.rebuild_rows=true;patch.rebuild_visual=true
+        var current_ids:Array=current.keys()
+        if old_ids!=current_ids:
+            patch.rebuild_rows=true;patch.rebuild_visual=true;patch.changed=true
+        if current.is_empty():_erase_index(base,patch,"residue_cells",key)
+        else:_write_index(base,patch,"residue_cells",key,current_ids)
     var world: Dictionary = Catalog.environment_world(cache)
+    var native_index:Dictionary=Catalog.environment_index(cache)
     var affected_walls = {}; var affected_boundaries = {}; var visual_objects = {}
     for key in tile_keys:
         var old: Dictionary = {} if full else base.tile_rows.get(key,{})
@@ -260,12 +463,18 @@ static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictiona
         var missing: Array = []
         _erase_index(base,patch,"missing",token); _erase_index(base,patch,"negative",token)
         _erase_index(base,patch,"lit_candidates",id)
+        _erase_index(base,patch,"native_candidates",id)
+        _erase_index(base,patch,"residue_candidates",id)
         if state.objects.has(id):
             var object: Dictionary = state.objects[id]
-            var derived = rows({"tiles":{},"objects":{id:object},"senses":senses},cache)
+            var derived = rows({"tiles":{},"objects":{id:object},"senses":senses},cache,false)
             if not derived.rows.is_empty(): row = derived.rows[0]
             missing = derived.unresolved
             if object.placement.base_height_steps<0: _write_index(base,patch,"negative",token,true)
+            if not object.item.get("surface_residues",[]).is_empty() and object.placement.get("boundary_direction")!=null:
+                _write_index(base,patch,"residue_candidates",id,true)
+            if native_index.get("native_object_owners",{}).has(object.item.item_id):
+                _write_index(base,patch,"native_candidates",id,object.item.item_id)
             if world.props.has(object.item.item_id) and world.props[object.item.item_id].has("lit_animation"):
                 _write_index(base,patch,"lit_candidates",id,senses.get("objects",{}).get(id,{}).get("visual",false))
             if old==row: row = old
@@ -342,8 +551,8 @@ static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictiona
     return patch
 
 static func _projected_order(base: Dictionary, patch: Dictionary, kind: String) -> Array:
-    if patch.has("order_reset"): return patch.order_reset[kind]
-    var index: String = "tile_rows" if kind=="tiles" else "object_rows"
+    if patch.has("order_reset") and patch.order_reset.has(kind): return patch.order_reset[kind]
+    var index: String = "tile_rows" if kind=="tiles" else "spatial_rows" if kind=="spatial" else "residue_rows" if kind=="residues" else "object_rows"
     var ordered = {}
     if not patch.full:
         for id in base[index]:
@@ -360,6 +569,10 @@ static func _prepare_result(base: Dictionary, patch: Dictionary) -> void:
     # Publication only installs these completed arrays and their slot indexes.
     var tile_order: Array = _projected_order(base,patch,"tiles")
     var object_order: Array = _projected_order(base,patch,"objects")
+    var spatial_order:Array=_projected_order(base,patch,"spatial")
+    var residue_order:Array=[]
+    for cell in tile_order:
+        residue_order.append_array(projected_index(base,patch,"residue_cells",cell,[]))
     # Keep displaced outer values until the existing candidate retirement.
     # The result shell is separate because publication edits its fields.
     patch.retired=base.duplicate()
@@ -368,8 +581,8 @@ static func _prepare_result(base: Dictionary, patch: Dictionary) -> void:
     var result: Array = []
     if patch.rebuild_rows:
         var slots = {}
-        for kind in ["tiles","objects"]:
-            for id in (tile_order if kind=="tiles" else object_order):
+        for kind in ["tiles","objects","residues","spatial"]:
+            for id in (tile_order if kind=="tiles" else spatial_order if kind=="spatial" else residue_order if kind=="residues" else object_order):
                 var row: Dictionary = projected_row(base,patch,kind,id)
                 if row.is_empty(): continue
                 slots[kind+":"+id] = result.size(); result.append(row)
@@ -378,9 +591,9 @@ static func _prepare_result(base: Dictionary, patch: Dictionary) -> void:
     if patch.rebuild_visual:
         var visual: Array = []; var slots = {}
         # Assembly-only membership changes can leave canonical row slots intact.
-        for kind in ["tiles","objects"]:
-            for id in (tile_order if kind=="tiles" else object_order):
-                var row: Dictionary = projected_row(base,patch,kind,id) if kind=="tiles" else _projected_visual(base,patch,id)
+        for kind in ["tiles","objects","residues","spatial"]:
+            for id in (tile_order if kind=="tiles" else spatial_order if kind=="spatial" else residue_order if kind=="residues" else object_order):
+                var row: Dictionary = _projected_visual(base,patch,id) if kind=="objects" else projected_row(base,patch,kind,id)
                 if row.is_empty(): continue
                 slots[row.id] = visual.size(); visual.append(row)
         patch.prepared_visual = visual; patch.prepared_visual_slots = slots
@@ -391,6 +604,7 @@ static func _prepare_result(base: Dictionary, patch: Dictionary) -> void:
             for key in tile_order: missing.append_array(projected_index(base,patch,"missing","tiles:"+key,[]))
             for id in object_order: missing.append_array(projected_index(base,patch,"missing","objects:"+id,[]))
         patch.prepared_missing = missing
+        patch.prepared_missing.append_array(projected_index(base,patch,"missing","spatial",[]))
 
 static func _prepare_indexes(base:Dictionary,patch:Dictionary,tile_order:Array,object_order:Array)->void:
     # Membership/order already requires a new canonical row owner. Complete
@@ -476,7 +690,7 @@ static func boundary_index(state: Dictionary) -> Dictionary:
             result[cell].append(id)
     return result
 
-static func current_ids(state: Dictionary, boundaries: Dictionary, visible_cells: Dictionary = {}, patch: Dictionary = {}) -> Dictionary:
+static func current_ids(state: Dictionary, boundaries: Dictionary, visible_cells: Dictionary = {}, patch: Dictionary = {}, spatial_rows:Dictionary = {}, residue_rows:Dictionary = {}) -> Dictionary:
     # Sparse form of visibility(): only already-disclosed, currently observed
     # identities. Missing IDs mean remembered, never newly invented scenery.
     var senses: Dictionary = state.get("senses",{}) if state.get("senses")!=null else {}
@@ -491,6 +705,13 @@ static func current_ids(state: Dictionary, boundaries: Dictionary, visible_cells
             if state.objects.has(id): result[id] = true
     for id in senses.get("objects",{}):
         if state.objects.has(id) and senses.objects[id].get("visual",false): result[id] = true
+    for id in residue_rows:
+        var row:Dictionary=residue_rows[id]
+        if result.has(row.tile_uuid):result[id]=true
+    for id in spatial_rows:
+        var row:Dictionary=spatial_rows[id]
+        var effect:Dictionary=senses.get("spatial_effects",{}).get(row.spatial_effect_uuid,{})
+        if not effect.is_empty() and not SpatialInputs.admitted_cells(effect).is_empty():result[id]=true
     return result
 
 static func join_walls(rows: Array, world: Dictionary) -> Array:
@@ -536,7 +757,7 @@ static func visible_actor(actor: Dictionary, state: Dictionary, staged: bool = f
     # the disclosed last position; never retain an unseen living actor.
     return staged or actor.uuid in state.audience.controlled or contact.get("visual",false) or actor.get("life_state")=="dead"
 
-static func visibility(state: Dictionary) -> Dictionary:
+static func visibility(state: Dictionary,cache:Dictionary={}) -> Dictionary:
     # Current sight is separate from the last-observed map. Never grow the map
     # from `seen`, a light radius, or an object's remembered activation state.
     var senses: Dictionary = state.get("senses",{}) if state.get("senses") != null else {}
@@ -557,6 +778,8 @@ static func visibility(state: Dictionary) -> Dictionary:
             var delta: Array = directions[direction]
             current = visible.has(cell_key(position)) or visible.has(cell_key([position[0]+delta[0],position[1]+delta[1]]))
         result[id] = current
+    for row in residue_projection(state,cache):result[row.id]=bool(result.get(row.tile_uuid,false))
+    for row in spatial_projection(state,cache).rows:result[row.id]=true
     return result
 
 static func ground_background(state: Dictionary, staged: Dictionary = {}) -> bool:

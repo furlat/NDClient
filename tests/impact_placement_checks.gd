@@ -5,6 +5,7 @@ const Recording=preload("res://studio/recording.gd")
 const Impact=preload("res://presentation/impact_placement.gd")
 const Graphs=preload("res://animation/graphs.gd")
 const Renderer=preload("res://presentation/component_renderer.gd")
+const BodySources=preload("res://presentation/body_sources.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -43,7 +44,7 @@ func run()->void:
         for item in index.groups:
             var group:Dictionary=item.group
             for component in group.get("components",[]):
-                if component.get("attachment")!="impact":continue
+                if not component.has("impact"):continue
                 impacts+=1
                 var held_component=component.duplicate(true)
                 var timeline=Recording.restore(index,item.start_ms+component.start_ms)
@@ -51,14 +52,16 @@ func run()->void:
                 check(resolved.size()==1,"Restore publishes the exact due impact "+component.id)
                 if resolved.is_empty():continue
                 var receipt:Dictionary=resolved[0].impact
-                var actor:Dictionary=component.presentation_actor
+                var recipient:String=component.get("impact_actor_uuid",component.actor_uuid)
+                var actor:Dictionary=timeline.state.actors[recipient]
+                var at_ms:float=component.get("impact_at_ms",component.start_ms)
                 var label=path+":"+component.id
                 check(receipt.status=="available",label+" real recorded impact resolves")
                 if receipt.status!="available":continue
-                var sampled=Impact.Tracks.samples(group.actor_tracks,component.start_ms).get(component.actor_uuid,{})
-                var current=direction_at(group.actor_tracks,component.start_ms,directions)
-                var facing=facing_of(current[component.actor_uuid],config) if current.has(component.actor_uuid) else "SW"
-                var rig:Dictionary=Impact.Authoring.load_data("catalog/rigs.json",index.cache)[receipt.source_rig]
+                var sampled=Impact.Tracks.samples(group.actor_tracks,at_ms).get(recipient,{})
+                var current=direction_at(group.actor_tracks,at_ms,directions)
+                var facing=facing_of(current[recipient],config) if current.has(recipient) else "SW"
+                var rig:Dictionary=Impact.Authoring.rigs(index.cache)[receipt.source_rig]
                 var frame=-1
                 if not sampled.is_empty():
                     if not hosts.has(receipt.source_rig):hosts[receipt.source_rig]=Graphs.build_character(parent,rig,true)
@@ -72,7 +75,7 @@ func run()->void:
                 if not bank.is_empty():pixel=bank[mini(frame,bank.size()-1)]
                 check(pixel!=null,label+" recorded pose has authored impact socket")
                 if pixel==null:continue
-                var point:Array=sampled.get("position",actor.last_visual_position)
+                var point:Array=sampled.get("position",receipt.position)
                 var elevation=float(sampled.get("base_height_steps",receipt.elevation_feet/5.0))
                 var foot=Vector3(point[0],elevation*Impact.Placement.HEIGHT_UNIT,point[1])
                 var lift=float(sampled.get("lift_pixels",0))*128.0/float(config.TILE_W)/64.0*Impact.Placement.HEIGHT_UNIT
@@ -99,7 +102,9 @@ func run()->void:
                 timeline.advance(component.duration_ms+1)
                 check(not timeline.component_samples(index.cache).any(func(row):return row.id==component.id),label+" finite impact expires rather than retaining a finished occurrence")
                 check(component==held_component,label+" delayed receipt never mutates compiler source")
-                if impacts==1:_typed_boundaries(actor,rig,hosts[receipt.source_rig],index.cache)
+                if impacts==1:
+                    if not hosts.has(receipt.source_rig):hosts[receipt.source_rig]=Graphs.build_character(parent,rig,true)
+                    _typed_boundaries(actor,rig,hosts[receipt.source_rig],index.cache)
                 evidence.append({"recording":path,"component":component.id,"event":component.source_event_uuid,"clip":receipt.source_clip,"frame":frame,"receipt_facing":receipt.source_facing,"displayed_facing":facing,"source_pixel":receipt.source_pixel,"position":receipt.position,"world_anchor":receipt.world_anchor})
             directions=direction_at(group.actor_tracks,INF,directions)
         for host in hosts.values():host.free()
@@ -123,8 +128,12 @@ func _typed_boundaries(actor:Dictionary,rig:Dictionary,host:Node,cache:Dictionar
     check(source.source_frame==frame,"Accumulated looping body time matches native AnimationTree frame")
     check(source.position==[3.0,3.0] and source.elevation_feet==7.5 and is_equal_approx(source.lift_pixels,24.0),"Impact source keeps fractional support and actual airborne pose")
     check(actor==held_actor and track==held_track,"Impact preparation preserves caller actor and track")
-    var isolated=cache.duplicate();isolated["catalog/rigs.json"]=cache["catalog/rigs.json"].duplicate(true)
-    var selected:Dictionary=isolated["catalog/rigs.json"][source.source_rig]
+    var admitted:Dictionary=BodySources.admission(cache)
+    var private_index:Resource=admitted.index.duplicate(false)
+    private_index.rigs=admitted.index.rigs.duplicate(true)
+    var isolated:Dictionary=cache.duplicate()
+    isolated[BodySources.KEY]={"index":private_index,"loaded":admitted.loaded}
+    var selected:Dictionary=Impact.Authoring.rigs(isolated)[source.source_rig]
     if not selected.pose_sockets.body_center.has("Run"):selected.pose_sockets.body_center.Run={}
     selected.pose_sockets.body_center.Run.erase("SW")
     var fallback=Impact.with_direction(source,[],isolated)

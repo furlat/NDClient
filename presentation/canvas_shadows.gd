@@ -570,7 +570,10 @@ func prepare_actor_step(owner:Node3D,prepared:Dictionary)->bool:
     # The accepted actor boundary owns these disabled native objects until
     # publication. Light selection and animation remain displayed sampling.
     var index:int=prepared.get("shadow_cursor",0)
-    if index==0 and prepared.get("reuse_actor",false) and actors.has(prepared.row.id) and not prepared.has("shadow_base"):
+    # This helper belongs to the actual actor UUID, independently of whether
+    # its painted layers are retained. Prepare replacement casters privately;
+    # the existing adoption path swaps them without replacing the live light.
+    if index==0 and actors.has(prepared.row.id) and not prepared.has("shadow_base"):
         prepared.shadow_base=actors[prepared.row.id]
         prepared.shadow_rekeys=[];prepared.shadow_new={}
     if index>=prepared.entries.size():return true
@@ -581,8 +584,19 @@ func prepare_actor_step(owner:Node3D,prepared:Dictionary)->bool:
     if prepared.has("shadow_base"):
         var target_id:String=prepared.row.id+":"+str(index)+":"+entry.role
         var before:Dictionary=prepared.shadow_base
-        if is_same(prepared.get("retained_entries",{}).get(entry.actor_layer.slot),entry) and before.casters.has(entry.id):
-            prepared.shadow_rekeys.append({"before":entry.id,"after":target_id})
+        var retained:bool=is_same(prepared.get("retained_entries",{}).get(entry.actor_layer.slot),entry) and before.casters.has(entry.id)
+        var previous_id:String=entry.id if retained else target_id
+        var same_proxy:bool=false
+        if not retained and before.casters.has(target_id):
+            var cell:Vector2=Vector2(entry.get("geometry_cell_size",Vector2(128,128)))
+            # The native caster belongs to this actor/layer, independently of
+            # the painted material. Borrow only the same logical slot and
+            # already prepared immutable vertex grid; never change it here.
+            same_proxy=before.casters[target_id].mesh==_meshes.get(Vector2i(cell)) and before.snapshots.any(func(snapshot):
+                return snapshot.id==target_id and snapshot.entry.actor_layer.slot==entry.actor_layer.slot)
+        if retained or same_proxy:
+            var caster:MeshInstance3D=before.casters[previous_id]
+            prepared.shadow_rekeys.append({"before":previous_id,"after":target_id,"node":caster,"mesh":caster.mesh,"reset":same_proxy})
         else:
             # Only added/replaced caster resources belong to the hidden owner.
             # The displayed viewport and its existing casters stay untouched.
@@ -605,8 +619,11 @@ func adopt_actor(prepared:Dictionary)->Array:
         var casters:Dictionary={};var samples:Dictionary={};var shapes:Dictionary={}
         for change in prepared.shadow_rekeys:
             casters[change.after]=state.casters[change.before]
-            if state.caster_samples.has(change.before):samples[change.after]=state.caster_samples[change.before]
-            if _caster_shapes.has(change.before):shapes[change.after]=_caster_shapes[change.before]
+            # A different painted source must publish all current operands at
+            # adoption. Keep the native caster instance, not its old bindings.
+            if not change.reset:
+                if state.caster_samples.has(change.before):samples[change.after]=state.caster_samples[change.before]
+                if _caster_shapes.has(change.before):shapes[change.after]=_caster_shapes[change.before]
         for id in state.casters:
             _caster_shapes.erase(id)
             if state.casters[id] not in casters.values():
@@ -759,6 +776,9 @@ func _update_casters(state: Dictionary,snapshots: Array,camera: Camera3D,origin:
             if snapshot.has("frame_changed"):
                 snapshot.erase("frame_changed")
                 caster.material_override.set_shader_parameter("frame_uv",snapshot.frame_uv);_writes+=1;written=true
+                # UVs select reconstructed vertices as well as colour. A UBO
+                # update alone does not invalidate Godot's cached shadow atlas.
+                RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
                 state.caster_samples[snapshot.id][0][1]=snapshot.frame_uv
                 _last_counts.caster_frame_copies=int(_last_counts.get("caster_frame_copies",0))+1
             continue
@@ -783,6 +803,9 @@ func _update_casters(state: Dictionary,snapshots: Array,camera: Camera3D,origin:
                 if index!=1 and previous[0][index]!=parameters[index]:frame_only=false;break
         if frame_only:
             caster.material_override.set_shader_parameter("frame_uv",snapshot.frame_uv);_writes+=1
+            # Same exact bounds and caster; notify native shadow geometry just
+            # as the full source-binding branch below already does.
+            RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
             _last_counts.caster_frame_copies=int(_last_counts.get("caster_frame_copies",0))+1
             continue
         _last_counts.caster_full_copies=int(_last_counts.get("caster_full_copies",0))+1

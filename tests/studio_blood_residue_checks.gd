@@ -6,6 +6,7 @@ var checks=0
 var failures:Array=[]
 var evidence:Array=[]
 const CAPTURE="res://.captures/studio/blood-residue"
+const REFERENCE="res://tests/oracles/blood_liquid_original"
 func _initialize()->void:run.call_deferred()
 func check(ok:bool,label:String)->void:
     checks+=1
@@ -40,6 +41,18 @@ func run()->void:
     DisplayServer.window_set_size(Vector2i(1280,720));DirAccess.make_dir_recursive_absolute(CAPTURE)
     var studio=Studio.new();root.add_child(studio)
     if not await settle(studio):await finish(studio);return
+    # The frozen reference is numerical operator output, not a replay input.
+    # Its entire actual release operand must match this current original.
+    var original:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(REFERENCE.path_join("original_operation.json")))
+    var actual:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(studio.active_directory.path_join("0000000000000003.json")))
+    var original_releases:Array=[];var actual_releases:Array=[]
+    for pair in [[original,original_releases],[actual,actual_releases]]:
+        for lineage in pair[0].lineages:
+            for node in lineage.events:
+                var fact:Variant=node.get("fact")
+                if not node.get("canceled",false) and fact!=null and fact.get("kind")=="damage" and fact.get("body_release")!=null:pair[1].append(fact.body_release)
+    check(original_releases.size()==1 and actual_releases==original_releases,"Exact current Dash release matches all independent original reference model operands")
+    if original_releases.size()!=1 or actual_releases!=original_releases:await finish(studio);return
     var rows=studio.index.rows.filter(func(row):return row.kind=="residue_deposit")
     check(rows.size()==1,"Actual opportunity hit has one authored residue track")
     if rows.is_empty():await finish(studio);return
@@ -122,7 +135,7 @@ func run()->void:
     var complete=fields(studio);var settled_pixels=0
     var field_error=0.0;var oracle_pixels=0
     for cell in complete:
-        var path="res://.runtime/blood-liquid-reference/"+cell+".bin"
+        var path=REFERENCE.path_join(cell+".bin")
         check(FileAccess.file_exists(path),"Independent original Pygame field exists for "+cell)
         if not FileAccess.file_exists(path):continue
         var expected=FileAccess.get_file_as_bytes(path).to_float32_array()

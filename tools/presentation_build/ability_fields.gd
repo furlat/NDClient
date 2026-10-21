@@ -142,6 +142,7 @@ static func to_typed(kind: String, value: Variant) -> Variant:
             return points
         "int":return int(value) if value is float and value == floorf(value) and absf(value) < 1e15 else null
         "string":return value if value is String else null
+        "colour_html":return Color(value) if value is String else null
         "float":return value if value is float else null
         "bool":return value if value is bool else null
     return value
@@ -154,6 +155,7 @@ static func to_legacy(kind: String, value: Variant) -> Variant:
         "tiles":return value * TILE_PX
         "hex":return float(value.substr(1).hex_to_int())
         "colour":return float(value.to_rgba32() >> 8)
+        "colour_html":return "#"+value.to_html(true)
         "colours":return Array(value).map(func(colour): return float(colour.to_rgba32() >> 8))
         "hex_colours":return Array(value).map(func(colour): return colour.to_html(false))
         "strings":return Array(value)

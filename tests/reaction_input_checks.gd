@@ -1,7 +1,7 @@
 extends SceneTree
 ## Original independent schema16 seats qualify observed reaction semantics.
-## No source is constructed or drawn: the absent incoming presentation path
-## is an explicit gap, not a substitute Fireball or a GPU qualification.
+## No source is constructed or drawn here: this headless contract check
+## does not qualify the incoming framebuffer or native drawing.
 const Reactions=preload("res://presentation/reaction_inputs.gd")
 const Occurrences=preload("res://presentation/occurrences.gd")
 const Trace=preload("res://presentation/event_trace.gd")
@@ -40,7 +40,9 @@ func run()->void:
     var built:Dictionary=Build.documents({"actions":{ID:entry}},{"actions":{ID:PATH}})
     var binding:Dictionary=built.docs["catalog/body_action_bindings.json"][ID]
     check(binding.effect_cues.map(func(cue):return cue.constructor_input.succeeded)==[true,false],"Outcome selection is authored as explicit observed booleans")
-    check(Actions.effect_clips(ID,{"catalog/body_action_bindings.json":{ID:binding}}).is_empty(),"Unqualified incoming paths cannot warm successful Factory review fixtures")
+    var neutral:Array=Actions.effect_clips(ID,{"catalog/body_action_bindings.json":{ID:binding}})
+    check(neutral.size()==1 and neutral.all(func(clip):return Effects.requires_construction(clip) \
+        and not clip.has("construction_inputs") and clip.get("source_kind")=="standalone_phase"),"Reaction prewarming admits only the neutral delivered source, without a successful observation or review fixture")
     var seats:int=0;var reactions:int=0
     for seat in ["amber","blue"]:
         var path:String=directory.path_join(seat)
@@ -150,12 +152,14 @@ func constructor(row:Dictionary,seat:String)->void:
     var phase:Resource=load(Effects.choice(row.native_clip).approaches[0].source_phase)
     var original:Dictionary=phase.to_clip()
     var private_clip:Dictionary=Constructed.clip_with_inputs(phase,row.native_constructor_inputs)
-    var observation:Dictionary=private_clip.components[0].input.observation
+    var observation:Dictionary=row.native_reaction_observation
     check(observation.reaction_uuid==row.source_event_uuid and observation.triggered_event_uuid==row.native_input_evidence.triggering_occurrence \
         and observation.triggered_lineage_uuid==row.native_input_evidence.triggered_lineage,seat+" exact public constructor member accepts seat-local native aliases before make")
     check(phase.to_clip()==original,seat+" shared delivered Factory resource is immutable")
-    check(private_clip.components[0].input.incoming==original.components[0].input.incoming,seat+" unresolved Factory Fireball donor is neither silently rewritten nor instantiated")
+    check(row.native_constructor_inputs.size()==1 and row.native_constructor_inputs[0].values.is_empty() and private_clip==original \
+        and not private_clip.components[0].input.has("observation") \
+        and not private_clip.components[0].input.has("incoming"),seat+" neutral standalone construction embeds no success or Fireball donor; actual reaction and interrupted presentation remain separate public setter packets")
 
 func finish()->void:
-    print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Independent original schema16 reactions, compiler ownership/order and private constructor aliases; incoming renderer path/source clock and native drawing remain gaps"}))
+    print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Independent original schema16 reactions, compiler ownership/order and neutral constructor operands plus actual setter packets; no incoming framebuffer or native drawing qualification is claimed"}))
     quit(0 if failures.is_empty() else 1)

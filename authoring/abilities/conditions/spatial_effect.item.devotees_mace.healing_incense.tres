@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_3vr8d"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_xj8g6"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="healing_response"]
+
 [sub_resource type="Resource" id="Resource_246ub"]
 script = ExtResource("1_xj8g6")
 path = "art/media/ui/icons/smooth48/condition.generic.png"
@@ -11,7 +13,25 @@ reuses = "condition.generic"
 status = "stand_in"
 source = "ui/resources.json icon:condition.generic"
 
+[sub_resource type="Resource" id="ActualIncenseHealing"]
+script = ExtResource("healing_response")
+clip = "spells/cure_wounds/back/production_impact"
+scale = 0.3
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_healing", "participant": "recipient"}
+
 [resource]
 script = ExtResource("1_3vr8d")
 id = "spatial_effect.item.devotees_mace.healing_incense"
+responses = Array[ExtResource("healing_response")]([SubResource("ActualIncenseHealing")])
+disposition = "authored"
+status = "partial"
 icon = SubResource("Resource_246ub")
+
+notes = "The actual observed Incense spatial UUID owns finite response selection. Producer0c2e5a0d7 now discloses that same source_condition_uuid on each actual positive unblocked HealFact; its canonical pre-result public spatial snapshot selects this reusable Cure Wounds receiving source. The exact healed actor supplies the actual receiving geometry. No proximity, display description, current held-mace inference, synthetic actor condition or dedicated Incense artwork is required. Visual scope is these actual healed recipients; the field ledger draws no extra bulk cloud. All artwork is unreviewed and this source assignment is unvalidated."

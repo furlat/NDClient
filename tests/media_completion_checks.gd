@@ -8,6 +8,12 @@ const Characters = preload("res://presentation/characters.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const Compiler = preload("res://presentation/compiler.gd")
 const Peer = preload("res://tests/sdk_transport_peer.gd")
+const Journal = preload("res://sdk/journal.gd")
+class CompletionPlayer extends "res://play.gd":
+    func _ready()->void:
+        set_process(false);set_process_unhandled_input(false)
+        camera=Camera3D.new();add_child(camera);add_child(context_menu)
+        rig_config=Characters._read("catalog/rig.json",catalog_cache)
 var checks := 0
 var failures: Array = []
 var evidence: Dictionary = {}
@@ -29,19 +35,23 @@ func group(id: String, commits: Array = [], duration := 20.0) -> Dictionary:
         "operation_sequence":1,"operation_end":true}
 
 func fixture(row: Dictionary) -> Node3D:
-    var player = Player.new()
-    player.session = Player.Session.new() # Explicit input boundary; this fixture does not enter _ready.
+    var player = CompletionPlayer.new()
+    player.session = Player.Session.new()
     player.catalog_cache = Characters.Catalog.source_snapshot(admitted_sources)
     player.media_warmup.plan_cache = Characters.Catalog.source_snapshot(admitted_sources)
+    root.add_child(player) # Real native preparation needs its viewport and camera, even with no effect rows.
     player.timeline.accept({"kind":"initialization","sequence":0,"state":{
         "actors":{},"tiles":{},"objects":{},"spatial_commit_cursors":{},"combat_log_appends":[],
-        "senses":null,"audience":{"controlled":[]},"current_actor_uuid":Peer.UUID}})
+        "senses":null,"audience":{"controlled":[]},"round_number":1,"current_actor_uuid":Peer.UUID}})
     player.timeline.media_ready = player._media_ready
     player.world_revision = 0
+    player.world_prepare_epoch=player.timeline.initialization_revision
     player.media_warmup.boot_complete = true
     player.media_plan_epoch = player.timeline.initialization_revision
     player.media_group_plans[row.id] = {"character":{character_path:true},"environment":{environment_path:true},
         "fixtures":{environment_path:true},"errors":[],"gpu_only":{},"cpu_required":{character_path:true}}
+    var lease:Dictionary=Media.source_record({character_path:true,environment_path:true},{environment_path:true},{environment_path:true},{},{character_path:true})
+    player.media_group_plans[row.id].source_records={player.character_light_profile:[lease]}
     Media.published(player.media_warmup,{"path":character_path,"cpu_bytes":16,"gpu_bytes":16})
     Media.published(player.media_warmup,{"path":environment_path,"cpu_bytes":16,"gpu_bytes":16,
         "energy":0.5,"emission_centroid":Vector2.ZERO})
@@ -58,12 +68,10 @@ func fixture(row: Dictionary) -> Node3D:
     return player
 
 func dispose(player: Node3D) -> void:
-    Media.close(player.media_warmup)
-    player.context_menu.free()
     player.free()
 
-func authored_union(path: String) -> void:
-    var original: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
+func authored_union(original: Dictionary, path: String) -> void:
+    var frozen:PackedByteArray=var_to_bytes(original)
     var state: Dictionary = original.duplicate(true)
     var actor: Dictionary = state.actors[state.observer_uuid]
     var ranged: Dictionary = actor.duplicate(true)
@@ -85,7 +93,7 @@ func authored_union(path: String) -> void:
     check(ranged_rest.required.keys().all(func(source):return plan.required.has(source)),"Group union contains committed ranged outfit rest sources")
     check(terminal.required.keys().any(func(source):return source.contains("Die") or source.contains("Death")),"Terminal union really requests authored death media")
     check(terminal_world.required.keys().all(func(source):return world_plan.required.has(source)),"Group environment union contains terminal world sources")
-    check(original==JSON.parse_string(FileAccess.get_file_as_string(path)),"Planning/terminal folding preserves the supplied canonical snapshot")
+    check(var_to_bytes(original)==frozen,"Planning/terminal folding preserves the supplied canonical snapshot")
     character_path = plan.required.keys()[0]
     environment_path = world_plan.required.keys()[0]
     disclosed_cell = original.tiles.keys()[0]
@@ -101,18 +109,29 @@ func _with_actor(state: Dictionary, actor: Dictionary) -> Dictionary:
     return value
 
 func run() -> void:
-    var path := ""
+    var path := "";var recording:String=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--state="): path = argument.trim_prefix("--state=")
-    if path.is_empty() or not FileAccess.file_exists(path):
-        print("Usage: --script res://tests/media_completion_checks.gd -- --state=<recorded canonical state.json>")
-        quit(2); return
-    authored_union(path)
+        if argument.begins_with("--recording="):recording=argument.trim_prefix("--recording=")
+    var original:Dictionary={}
+    if not recording.is_empty():
+        var journal:RefCounted=Journal.new();var opened:Dictionary=journal.open(recording,true,false)
+        check(opened.ok,"Actual source recording opens without schema substitution")
+        if not opened.ok:quit(1);return
+        var initialized:Dictionary=journal.replay(0)
+        check(initialized.ok,"Original initialization folds through the current SDK")
+        if not initialized.ok:quit(1);return
+        original=journal.state;path=recording
+    elif not path.is_empty() and FileAccess.file_exists(path):original=JSON.parse_string(FileAccess.get_file_as_string(path))
+    else:
+        print("Usage: --recording=<actual current-schema journal> or --state=<recorded canonical state.json>")
+        quit(2);return
+    authored_union(original,path)
     var commits: Array = [{"at_ms":10,"delta":{"set":{"round_number":2}}},
         {"at_ms":20,"delta":{"set":{"round_number":3}}}]
     var player = fixture(group("multiple-final-commits",commits))
     player.timeline.advance(10)
-    check(player.timeline.commit_index==1 and player.timeline.state.round_number==2 and not player.command_ready(),"Prepared group applies its first commit while input stays closed")
+    check(player.timeline.commit_index==1 and player.timeline.state.round_number==2 and not player.command_ready(),"Prepared group applies its first commit while input stays closed: "+JSON.stringify(player.media_gate))
     player.timeline.advance(10)
     check(player.timeline.state.round_number==3 and player.command_ready(),"Final commit reaches acknowledged input boundary")
     var jobs: int = player.media_warmup.metadata_jobs
@@ -160,7 +179,10 @@ func run() -> void:
             "state-owner": player.timeline.state = player.timeline.state.duplicate(true)
             "revision": player.timeline.revision += 1
             "completion-count": player.timeline.completed_group_count += 1
-            "completion-id": player.timeline.completed_groups[-1].id = "another-group"
+            "completion-id":
+                check(not player.timeline.completed_groups.is_empty(),"Completion identity control starts from an actually completed group")
+                if player.timeline.completed_groups.is_empty():dispose(player);continue
+                player.timeline.completed_groups[-1].id = "another-group"
         player.timeline.advance(0)
         check(not player.command_ready() and player.timeline.waiting_for_media,"Unproved "+mismatch+" boundary cannot reuse terminal readiness")
         check(player.media_warmup.plan_thread!=null,"Unproved "+mismatch+" boundary uses normal metadata preparation")
@@ -175,6 +197,11 @@ func run() -> void:
             Media.published(player.media_warmup,{"path":source,"cpu_bytes":16,"gpu_bytes":16})
         else:
             player.media_warmup.resident.erase(source); player.media_warmup.ready_paths.erase(source)
+        if missing in ["environment","fixture-metrics"]:
+            check(not player._environment_sources_ready(),"The exact source owner refuses missing "+missing)
+            # Live environment residency belongs to its prepared world cut.
+            # An unprepared replacement cannot borrow that previous admission.
+            player.world_prepare_epoch=-1
         player.timeline.advance(0)
         check(not player.command_ready() and player.timeline.waiting_for_media,"Valid terminal proof still blocks missing "+missing)
         check(player.media_metadata_ready and player.media_warmup.plan_thread==null,"Missing "+missing+" does not discard valid metadata")

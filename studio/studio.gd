@@ -13,6 +13,7 @@ const ReplayPanes=preload("res://studio/replay_panes.gd")
 const BackgroundRelease=preload("res://presentation/background_release.gd")
 const ConditionCoverage=preload("res://presentation/condition_coverage.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const CapabilityReport=preload("res://studio/capability_report.gd")
 ## Inspect menu ids of the "Effect version" choices (Effects.KINDS order).
 const EFFECT_VERSION_IDS:={16:"recorded",17:"gpu",18:"native"}
 var world: Node3D
@@ -179,7 +180,7 @@ func _ready() -> void:
             menu.get_popup().set_item_checked(15,tracks.show_lighting_tracks)
             return
         if id==14:
-            follow_actor_id="" if not follow_actor_id.is_empty() else str(selected_row.get("actor_uuid",""))
+            follow_actor_id="" if not follow_actor_id.is_empty() else _actor_for_row(selected_row)
             return
         if EFFECT_VERSION_IDS.has(id):
             set_effect_version(EFFECT_VERSION_IDS[id])
@@ -364,11 +365,23 @@ func _show_study_library()->void:
         study_library=StudyLibrary.new();add_child(study_library)
         study_library.recording_selected.connect(_open_study_recording)
         study_library.recording_unavailable.connect(_cancel_case_selection)
+        study_library.failed_prefix_selected.connect(_inspect_failed_prefix)
     world.timeline.paused=true
-    study_library.open(index.get("cache",{}),case_records,study_capability.get("id",""),study_scenario.get("id",""))
+    study_library.open(index.get("cache",{}),case_records,study_capability.get("key",study_capability.get("id","")),study_scenario.get("id",""))
 
 func _open_study_recording(capability:Dictionary,scenario:Dictionary,record:Dictionary)->void:
     select_case(record,"",{"capability":capability,"scenario":scenario})
+
+func _inspect_failed_prefix(capability:Dictionary,scenario:Dictionary,record:Dictionary,perspective_id:String)->void:
+    if record.get("ready",false) or record.get("scenario_status") not in ["failed","stale"]:return
+    for perspective in record.get("perspectives",[]):
+        if str(perspective.id)==perspective_id:
+            _load(perspective.journal,{"capability":capability,"scenario":scenario},false);return
+    # The selected initialization may have appeared after the catalog was
+    # read. failed_prefix validated that original journal-derived candidate;
+    # the ordinary reader still admits the complete current prefix.
+    var journal:String=str(record.get("journals",{}).get(perspective_id,""))
+    if not journal.is_empty():_load(journal,{"capability":capability,"scenario":scenario},false)
 
 func _show_study_expectations()->void:
     study_tree.clear();var root_item=study_tree.create_item()
@@ -404,11 +417,21 @@ func _inspect_study_expectation()->void:
     for pointer in expected.get("authoring_sources",[])+expected.get("rule_sources",[]):lines.append(str(pointer))
     inspector_text.text="\n".join(lines);inspector.popup_centered()
 
+static func _actor_for_row(row:Dictionary)->String:
+    for value in [row.get("recipient_uuid"),row.get("actor_uuid"),row.get("track",{}).get("actor_uuid")]:
+        if value!=null and not str(value).is_empty():return str(value)
+    var component:Dictionary=row.get("component",{})
+    if not str(component.get("native_cue",{}).get("attachment","")).begins_with("caster") and component.get("target_uuid")!=null:
+        return str(component.target_uuid)
+    return str(component.actor_uuid) if component.get("actor_uuid")!=null else ""
+
 func _diagnostic_id()->String:
-    if selected_row.get("kind") not in ["native_effect","sprite_layer","material_flash","damage_number","audio","condition_material"]:return ""
+    if selected_row.get("kind") not in ["native_effect","native_material","native_light","sprite_layer","material_flash","damage_number","audio","condition_material"]:return ""
     var component:Dictionary=selected_row.get("component",{})
-    if component.get("kind") not in ["native_effect","sprite_layer","material_flash","damage_number","audio","condition"]:return ""
-    return component.get("id","")
+    if component.get("kind") not in ["native_effect","sprite_layer","material_flash","damage_number","audio","condition"] and not component.get("native_spell",false):return ""
+    # Inspection channels belong to the same real submitted source. Muting a
+    # light/material channel must address that source, not a nonexistent draw.
+    return str(component.get("parent_id",component.get("id","")))
 
 func _diagnostic_menu_state()->void:
     var id=_diagnostic_id()
@@ -422,7 +445,7 @@ func _diagnostic_menu_state()->void:
     diagnostic_menu.set_item_checked(15,tracks.show_lighting_tracks)
     diagnostic_menu.set_item_checked(13,follow_tracks)
     diagnostic_menu.set_item_checked(14,not follow_actor_id.is_empty())
-    diagnostic_menu.set_item_disabled(14,follow_actor_id.is_empty() and str(selected_row.get("actor_uuid","")).is_empty())
+    diagnostic_menu.set_item_disabled(14,follow_actor_id.is_empty() and _actor_for_row(selected_row).is_empty())
     for version in EFFECT_VERSION_IDS:diagnostic_menu.set_item_checked(diagnostic_menu.get_item_index(version),EFFECT_VERSION_IDS[version]==(Effects.requested if not Effects.requested.is_empty() else "recorded"))
 
 ## Plays every spell effect from this approach kind where its clip has one
@@ -669,7 +692,11 @@ func _play_clip(row:Dictionary)->void:
     if end<=row.start_ms:
         _seek(row.start_ms)
         return
-    loop_start=row.start_ms;loop_end=end;loop_enabled=true;loop_button.set_pressed_no_signal(true)
+    # Existing context margins show admission/restoration around a real clip;
+    # they never retime its source, commit or independent recipient outcomes.
+    loop_start=maxf(0.,float(row.start_ms)-Recording.PREVIEW_LEAD_IN_MS)
+    loop_end=minf(float(index.get("presentation_end_ms",index.duration_ms)),end+Recording.PREVIEW_OPERATION_GAP_MS)
+    loop_enabled=true;loop_button.set_pressed_no_signal(true)
     _seek(loop_start,true)
 
 static func _read_selection(directory:String,record:Dictionary,perspective_id:String,token:Dictionary)->Dictionary:
@@ -791,8 +818,13 @@ func _load(directory: String,study:Dictionary={},autoplay:bool=false,reload_auth
 func _start_load()->void:
     startup_setup.loader_started_ms=(Time.get_ticks_usec()-opened_usec)/1000.0
     loader_token=Recording.cancellation();loader=Thread.new()
-    loader.start(_read_selection.bind(pending_directory,pending_case_request.get("case",{}),pending_case_request.get("perspective_id",""),loader_token))
-    pending_directory="";pending_case_request={};perspective_picker.disabled=true
+    var error:Error=loader.start(_read_selection.bind(pending_directory,pending_case_request.get("case",{}),pending_case_request.get("perspective_id",""),loader_token))
+    pending_directory="";pending_case_request={}
+    if error!=OK:
+        loader=null;pending_study_selection={};pending_autoplay=false
+        status.text="Cannot start recording reader; previous preview retained: "+error_string(error)
+        _set_perspectives(active_perspective);return
+    perspective_picker.disabled=true
 
 func _seek(time_ms: float, resume: bool=false, keep_view_anchor:bool=false, rebuild:bool=false) -> void:
     var source:Dictionary=pending_index if not pending_index.is_empty() else index
@@ -845,6 +877,10 @@ func _prepare_candidate(restored: Dictionary, source: Dictionary)->void:
     preparation_measurement.created_usec=Time.get_ticks_usec()
 
 func _publish_candidate()->void:
+    # Restore the paused displayed texture before its ordinary retirement/spare
+    # capture; a thumbnail must not leave disabled update modes in that spare.
+    tracks.thumbnails._release_composed_receiving()
+    if candidate_tracks!=null:candidate_tracks.thumbnails._release_composed_receiving()
     var first_publication=index.is_empty()
     _freeze_loop_candidate(false)
     preparation_measurement.publish_ms=(Time.get_ticks_usec()-int(preparation_measurement.get("requested_usec",Time.get_ticks_usec())))/1000.0
@@ -856,6 +892,8 @@ func _publish_candidate()->void:
     _cancel_replay_advance()
     var changed=not is_same(index,candidate_index)
     viewport=candidate_viewport;world=candidate_world
+    tracks.thumbnails.set_displayed_world(world)
+    if candidate_tracks!=null:candidate_tracks.thumbnails.set_displayed_world(world)
     if is_instance_valid(previous_world) and previous_world!=world:previous_world.publishes_receiving=false
     world.claim_receiving()
     world.native_startup_background=true
@@ -910,6 +948,9 @@ func _publish_candidate()->void:
         if inspector_mode=="log":inspector_text.text=JSON.stringify(world.timeline.event_log(),"  ")
         elif inspector_mode=="row":_refresh_row_inspector(selected_row)
     status.text="Ready · Q/E view · wheel zoom · middle-drag pan · Space play · G grid · Z walls" if candidate_preview_errors.is_empty() else "Source preview unavailable · Inspect for details"
+    if study_scenario.get("inspection_mode")=="failed_prefix":
+        var scope:String="Historical recording original" if study_scenario.get("recording_status")=="stale" else "Failed recording prefix"
+        status.text=scope+" · "+str(study_scenario.get("recording_failure",""))+" · "+status.text
     candidate_preview_errors=[]
     _set_perspectives(active_perspective)
     DisplayServer.window_set_title(WINDOW_TITLE)
@@ -991,7 +1032,11 @@ func _process(_delta: float) -> void:
         worker_generation=seek_generation;seeker_token=Recording.cancellation()
         var target=requested_seek;requested_seek=-1
         var source=pending_index if not pending_index.is_empty() else index
-        seeker=Thread.new();seeker.start(_restore_selection.bind(source,target,seeker_token))
+        seeker=Thread.new()
+        var error:Error=seeker.start(_restore_selection.bind(source,target,seeker_token))
+        if error!=OK:
+            seeker=null;scrub_target=-1.;pending_study_selection={}
+            status.text="Cannot start recording seek; previous preview retained: "+error_string(error)
     if installing and installation_generation==seek_generation:
         var candidate_size=preview_row.size
         var size_changed=ViewportLayout.resize(candidate_viewport,candidate_world.camera,candidate_size)
@@ -1001,6 +1046,7 @@ func _process(_delta: float) -> void:
             candidate_tracks.size=tracks.size
             candidate_tracks.quarter=candidate_world.quarter
             candidate_tracks.set_light_context({"light_strength":candidate_world.light_strength,"fire_light_flicker":candidate_world.fire_light_flicker},candidate_world.fixture_clips)
+            candidate_tracks.thumbnails.reference_world=candidate_world
             var prepared:Dictionary=candidate_tracks.prepare_visible()
             candidate_tracks.thumbnails.seed_source_images(candidate_world.source_images)
             candidate_preview_pending=prepared.pending
@@ -1009,6 +1055,7 @@ func _process(_delta: float) -> void:
             # A same-recording seek can follow a filter/expand selection. Keep
             # its visible previews preparing without holding the exact scene.
             # Pending cells and source errors remain inspectable in the tracks.
+            tracks.thumbnails.reference_world=candidate_world
             var prepared:Dictionary=tracks.prepare_visible()
             tracks.thumbnails.seed_source_images(candidate_world.source_images)
             candidate_preview_pending=prepared.pending
@@ -1025,6 +1072,7 @@ func _process(_delta: float) -> void:
             if not preparing_loop or world.timeline.display_ms>=loop_end:_publish_candidate()
             else:_freeze_loop_candidate(true)
     if not index.is_empty():
+        if not installing:tracks.thumbnails.reference_world=world
         if not world.timeline.paused and not installing:
             if loop_enabled and loop_end>loop_start and world.timeline.display_ms>=loop_end and not preparing_loop:
                 _seek(loop_start,true)
@@ -1043,8 +1091,11 @@ func _process(_delta: float) -> void:
     # Optional swatches must not compete with actual recorded playback. The
     # visible rows still request and publish through the ordinary cache path.
     var suspend_optional=preparing_sources or not world.timeline.paused
+    tracks.thumbnails.set_displayed_world(world)
     tracks.thumbnails.prewarm_suspended=suspend_optional
-    if candidate_tracks!=null:candidate_tracks.thumbnails.prewarm_suspended=suspend_optional
+    if candidate_tracks!=null:
+        candidate_tracks.thumbnails.set_displayed_world(world)
+        candidate_tracks.thumbnails.prewarm_suspended=suspend_optional
     markers.queue_redraw()
     if inspector.visible and inspector_mode=="log" and inspector_log_revision!=world.timeline.revision:
         inspector_log_revision=world.timeline.revision
@@ -1052,6 +1103,7 @@ func _process(_delta: float) -> void:
     if inspector.visible and inspector_mode=="row" and inspected_row.get("kind")=="light" and Time.get_ticks_usec()-inspector_update_usec>=200000:
         _refresh_light_inspector()
     if inspector.visible and inspector_mode=="row" and inspected_row.get("kind")=="audio" and Time.get_ticks_usec()-inspector_update_usec>=200000:_refresh_audio_inspector()
+    if inspector.visible and inspector_mode=="row" and inspected_row.get("component",{}).get("native_spell",false) and Time.get_ticks_usec()-inspector_update_usec>=200000:_refresh_native_inspector()
     if not world.presentation_errors.is_empty() and str(world.presentation_errors)!=last_status:
         last_status=str(world.presentation_errors);print("STUDIO_RENDER_ISSUES: "+last_status)
 
@@ -1102,7 +1154,11 @@ func _prepare_loop()->void:
     preparing_loop=true;prepared_loop_range=Vector2(loop_start,loop_end)
     preparation_measurement={"target_ms":loop_start,"loop":true,"requested_usec":Time.get_ticks_usec()}
     seeker_token=Recording.cancellation();worker_generation=seek_generation;resume_after_install=true
-    seeker=Thread.new();seeker.start(_restore_selection.bind(index,loop_start,seeker_token))
+    seeker=Thread.new()
+    var error:Error=seeker.start(_restore_selection.bind(index,loop_start,seeker_token))
+    if error!=OK:
+        seeker=null;preparing_loop=false;loop_enabled=false;loop_button.set_pressed_no_signal(false)
+        status.text="Cannot prepare recorded loop: "+error_string(error)
 
 func _cancel_loop_preparation()->void:
     if not preparing_loop:return
@@ -1182,7 +1238,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 ## requested kind; the staged clip id when the package renamed it.
 static func effect_lines(component:Dictionary)->Array[String]:
     var lines:Array[String]=[]
-    var clip:Dictionary=component.get("native_clip",{})
+    var clip:Dictionary=Effects.occurrence_clip(component) if not component.get("native_clip",{}).is_empty() else {}
     if clip.is_empty():
         lines.append("Effect: no package clip ("+str(component.get("reason",""))+")");return lines
     var chosen:Dictionary=Effects.choice(clip)
@@ -1195,10 +1251,32 @@ static func effect_lines(component:Dictionary)->Array[String]:
         # Conditions are native-only in the package: the row says so instead of failing.
         lines.append("Condition lifecycle: "+str(component.lifecycle_key)+" · one occurrence plays application, sustain and removal on the owner's clock")
         for phase in ["application","sustain","removal"]:lines.append(phase.capitalize()+" clip: "+str(component.lifecycle_phases[phase].id))
+    elif clip.get("source_kind")=="standalone_phase":lines.append("Standalone PhaseResource: "+str(clip.id)+" · explicit source assignment (not an indexed clip)")
     else:lines.append("Package clip: "+str(clip.id)+(" (staged as "+staged+")" if staged!=str(clip.id) else ""))
     for approach in chosen.approaches.slice(0,1):
-        lines.append("Approach: "+str(approach.path))
+        lines.append("Approach: "+str(approach.get("id",""))+" · "+str(approach.path))
+        if not str(approach.get("source_phase","")).is_empty():lines.append("Source phase: "+str(approach.source_phase))
         if not approach.get("gaps",[]).is_empty():lines.append("Recording gaps (Factory): "+", ".join(approach.gaps))
+    var method:Dictionary=CapabilityReport.native_method(component)
+    if not str(method.authoring.get("source","")).is_empty():lines.append("Authoring use: "+str(method.authoring.source))
+    if not method.authoring.get("lifecycle",{}).is_empty():lines.append("Authored lifecycle: "+JSON.stringify(method.authoring.lifecycle))
+    if method.authoring.has("axis_scale"):lines.append("Source-coordinate axis calibration: "+JSON.stringify(method.authoring.axis_scale)+"; uniform artistic scale remains separate.")
+    lines.append("Declared source channels: "+", ".join(method.required_channels))
+    if not method.authoring.get("input_policies",{}).is_empty():lines.append("Authored channel policies: "+JSON.stringify(method.authoring.input_policies))
+    if not method.constructor.is_empty():
+        lines.append("Constructor projection: "+str(method.constructor.get("kind",""))+(" / "+str(method.constructor.projection) if method.constructor.has("projection") else ""))
+    var destination:Dictionary=method.destination_admission
+    if not destination.is_empty():
+        var admissions:Array[String]=["source occurrence "+str(destination.source_occurrence)]
+        if destination.has("creation_occurrence"):admissions.append("creation "+str(destination.creation_occurrence))
+        if destination.has("birth_occurrence"):admissions.append("birth "+str(destination.birth_occurrence))
+        if destination.has("body_occurrence"):admissions.append("body disclosure "+str(destination.body_occurrence))
+        admissions.append("public admission "+str(destination.admission_occurrence))
+        admissions.append("publication "+str(component.source_event_uuid)+" at %.1f ms"%float(destination.publication_ms))
+        lines.append("Destination admission: "+{"spatial_creation":"created spatial anchor","actor_birth":"born actor ground"}.get(str(destination.kind),str(destination.kind))+" · "+" · ".join(admissions))
+    if not method.projected_channels.is_empty():lines.append("Recorded result channels: "+", ".join(method.projected_channels))
+    if not method.constructor_gaps.is_empty():lines.append("Unavailable constructor channels: "+", ".join(method.constructor_gaps))
+    if not method.input_gaps.is_empty():lines.append("Unavailable inputs: "+", ".join(method.input_gaps))
     return lines
 
 static func provenance_lines(row:Dictionary)->Array[String]:
@@ -1211,6 +1289,8 @@ static func provenance_lines(row:Dictionary)->Array[String]:
         lines.append("Origin: recorded server event; its visual choices and display timing are authored separately.")
     elif row.get("kind") in ["condition","condition_state"]:
         lines.append("Origin: recorded condition state/lifetime; its visible mechanisms are separate authored child tracks.")
+    elif row.get("kind") in ["spatial_effect","world_animation"]:
+        lines.append("Origin: recorded spatial-owner state and its actual public source cut; the resource selects its rendering program.")
     elif row.get("kind")=="perspective":
         lines.append("Origin: an independently recorded audience view of the same occurrence, not an additional gameplay event.")
     elif requirement.has("authority_source"):
@@ -1223,14 +1303,29 @@ static func provenance_lines(row:Dictionary)->Array[String]:
     var event_id:String=event.get("event_uuid",row.get("source_event_uuid",data.get("source_event_uuid","")))
     if not event_id.is_empty():lines.append("Recorded event: "+event_id)
     if data.get("native_spell",false):lines.append_array(effect_lines(data))
+    if TimelineView.Thumbnails._composed_row(row):
+        lines.append("Composed source preview: exact restored recording, recipient pose, source clock and receiving light/ground cut through the production pane. Requested while playback is paused; the displayed pane is frozen only for the source draw. This thumbnail is not a rendering receipt or artwork approval.")
     if row.has("owner"):
-        lines.append("Recorded condition: "+str(row.owner.id)+(" (already active at initialization)" if row.owner.get("initial",false) else ""))
+        lines.append(("Recorded spatial owner: " if row.owner.has("effect") else "Recorded condition: ")+str(row.owner.id)+(" (already active at initialization)" if row.owner.get("initial",false) else ""))
     if row.has("render_method"):
         var method:Dictionary=row.render_method
         lines.append("Rendering operation: "+str(method.get("label",method.get("node","")))+" on "+str(method.get("surface",""))+" · "+str(row.get("recipient_name",row.get("actor_name",""))))
         lines.append("Renderer: "+str(method.get("renderer","")))
         if method.has("shader"):lines.append("Shader: "+str(method.shader))
-        if row.get("kind")=="light":
+        if method.has("program"):
+            var program:Dictionary=method.program
+            lines.append("World source program: "+str(program.get("kind",""))+" · state field "+str(program.get("state_field",""))+" · "+str(program.get("fps","per-role"))+" fps")
+            if program.has("activation_frames"):lines.append("Activation frames: "+JSON.stringify(program.activation_frames)+"; source contact frame "+str(program.get("contact_frame","undisclosed")))
+            if program.has("projectile"):lines.append("Projectile source: "+JSON.stringify(program.projectile))
+            var occurrence:Dictionary=method.get("occurrence",{})
+            if occurrence.has("source_cut"):lines.append("Actual support/source cut: "+JSON.stringify(occurrence.source_cut))
+            if occurrence.has("contact_ms"):lines.append("Compiled group contact: %.1f ms (authored launch plus actual endpoint travel)."%float(occurrence.contact_ms))
+            if occurrence.has("source_rows"):lines.append("Actual projected world rows: "+str(occurrence.source_rows.size())+"; unavailable: "+JSON.stringify(occurrence.get("unavailable",[])))
+            lines.append("Inspect this source in the existing scene replay. Prepared resources and rendered output remain separate evidence.")
+        elif method.has("residue_id"):
+            lines.append("Release source: "+str(method.get("release_id",""))+" → "+str(method.residue_id)+" · "+str(method.get("asset_id",""))+" · primitive "+str(method.get("primitive","")))
+            lines.append("Actual receiving regions: "+str(method.get("receiving_region_count",0))+"; changed residue tiles: "+str(method.get("revealed_tile_count",0))+". Authored polygons/palette and the existing landing clock own the appearance.")
+        elif row.get("kind")=="light":
             lines.append("Source membership and property keys use actual displayed commits. Position follows compiled actor motion; flicker follows the prepared fixture source. No added fade.")
         elif row.get("kind")=="condition_restore":
             lines.append("Recorded removal restores the composed pose/material selected by the remaining state. This inspection track creates no additional effect.")
@@ -1238,8 +1333,8 @@ static func provenance_lines(row:Dictionary)->Array[String]:
         elif row.get("kind")=="native_light":
             lines.append("Keys come from the selected native AnimationPlayer. Its source clock is mapped onto the parent spell phase; optical colour/strength overrides remain visible in the component.")
         elif row.get("kind")=="native_material":
-            lines.append(str(data.get("preview_reason","")))
-            lines.append("Inspect → Full spell hit material switches between this source and Colour treatment.")
+            lines.append(str(row.get("preview_reason",data.get("preview_reason",""))))
+            if data.has("native_hit"):lines.append("Inspect → Full spell hit material switches the replay between this source and Colour treatment. The dedicated source thumbnail shows the selected native material.")
         else:
             lines.append("Resolved parameters: "+JSON.stringify(row.get("operations",{})))
             lines.append("Preview: composed actor. Mute/solo applies to the owning condition.")
@@ -1292,7 +1387,16 @@ func _refresh_row_inspector(row:Dictionary)->void:
     inspector_row_text="\n".join(provenance_lines(row))+"\n\nDetails\n"+JSON.stringify(shown,"  ") if not row.is_empty() else "Select an occurrence, component or sample on the timeline."
     if row.get("kind")=="light":_refresh_light_inspector()
     elif row.get("kind")=="audio":_refresh_audio_inspector()
+    elif row.get("component",{}).get("native_spell",false):_refresh_native_inspector()
     else:inspector_text.text=inspector_row_text
+
+func _refresh_native_inspector()->void:
+    inspector_update_usec=Time.get_ticks_usec()
+    var owner:Node3D=_row_world(inspected_row)
+    var component:Dictionary=inspected_row.get("component",{})
+    var sample:Dictionary=owner.component_renderer.native_spells.diagnostics.get(str(component.get("id","")),{})
+    inspector_text.text="At playhead %.3f s · current native submission/input diagnostics; framebuffer evidence remains separate.\n%s\n\n%s"%[
+        owner.timeline.display_ms/1000.0,JSON.stringify(sample if not sample.is_empty() else {"status":"not_sampled_at_playhead"},"  "),inspector_row_text]
 
 func _refresh_audio_inspector()->void:
     inspector_update_usec=Time.get_ticks_usec()

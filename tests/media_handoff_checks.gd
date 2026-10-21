@@ -55,12 +55,18 @@ func optional_interleaving(state: Dictionary, prepared: Dictionary, queued: bool
     Media.close(data)
 
 func run() -> void:
+    var recording:String=""
     for arg in OS.get_cmdline_user_args():
-        if arg.begins_with("--state="): state_path = arg.trim_prefix("--state=")
-    if state_path.is_empty(): check(false,"Usage: --state=<recorded canonical state.json>"); finish_handoff(); return
-    var state: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(state_path))
-    check(not state.is_empty() and state.has("generation"),"Explicit authored canonical fixture loads")
-    if state.is_empty() or not state.has("generation"): finish_handoff(); return
+        if arg.begins_with("--state="):state_path=arg.trim_prefix("--state=")
+        if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
+    if state_path.is_empty() and recording.is_empty():check(false,"Usage: --recording=<actual schema16 journal> or --state=<canonical state.json>");finish_handoff();return
+    var loaded:Dictionary=Fixtures.canonical(recording) if not recording.is_empty() else Protocol.parse_json(FileAccess.get_file_as_bytes(state_path))
+    check(loaded.ok,"Explicit original journal/state loads")
+    if not loaded.ok:finish_handoff();return
+    var state:Dictionary=loaded.value
+    check(not state.is_empty() and state.has("generation"),"Original canonical initialization has generation")
+    if state.is_empty() or not state.has("generation"):finish_handoff();return
+    if not recording.is_empty():state_path=recording
     var frozen := var_to_bytes(state)
     var cache := {}
     var old := group("older-current")

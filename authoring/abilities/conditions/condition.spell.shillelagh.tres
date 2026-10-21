@@ -49,7 +49,9 @@ unported = {
 "effects": []
 },
 "classification": {
-"presentationDomains": ["actor"],
+"presentationDomains": [
+"actor"
+],
 "runtimeRole": "actor_state",
 "visualFamily": "condition.spell.shillelagh",
 "visualIntensity": "normal"
@@ -68,25 +70,7 @@ unported = {
 "mediaFailurePolicy": "fail_transaction",
 "persistent": {
 "appearanceLayers": [],
-"bodyColor": null,
-"equipmentModifiers": [{
-"affectedItemOnly": true,
-"alphaMultiplier": 1.0,
-"brightness": 1.0,
-"glint": {
-"color": 9547614.0,
-"endY": 102.0,
-"periodMs": 2000.0,
-"startY": 37.0,
-"strength": 0.36,
-"width": 4.0
-},
-"id": "held-wood",
-"priority": 70.0,
-"saturation": 1.0,
-"slots": ["weapon", "offhand"],
-"tintRgb": 7585340.0
-}]
+"bodyColor": null
 },
 "relationships": {
 "grantsActions": [],
@@ -98,3 +82,4 @@ unported = {
 "effects": []
 }
 }
+notes = "The delivered condition-owned native Shillelagh lifecycle is the selected held-weapon presentation. Its exact real owner, original clock and compatible equipped optical receiver remain authoritative. The old independent tint/glint equipmentModifiers study is explicitly unselected instead of requesting another duplicate equipment renderer. Native output qualification and all artwork review remain separate."

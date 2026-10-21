@@ -5,6 +5,8 @@ const Recording=preload("res://studio/recording.gd")
 const View=preload("res://studio/timeline_view.gd")
 const Studio=preload("res://studio/studio.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Report=preload("res://studio/capability_report.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 var checks=0
 var failures:Array=[]
 func check(value:bool,label:String)->void:
@@ -43,6 +45,19 @@ func run()->void:
     var data=Recording.read(directory)
     check(data.ok,"Actual source recording compiles")
     if not data.ok:finish(directory);return
+    var acid=Recording.read("res://tests/fixtures/schema16/production-condition-handover/spell.acid_arrow__baseline/20261019T141826.056415Z/amber/journal")
+    check(acid.ok,"Actual Acid Arrow original compiles for selected-source inspection")
+    if acid.ok:
+        var deliveries:Array=acid.rows.filter(func(row):return row.get("component",{}).get("native_clip",{}).get("id")=="bg3-36/acid-arrow/delivery")
+        check(not deliveries.is_empty(),"Actual Acid Arrow supplies its authored heavy delivery approach")
+        for row in deliveries:
+            var component:Dictionary=row.component;var method:Dictionary=Report.native_method(component)
+            var selected:Dictionary=Effects.choice(Effects.occurrence_clip(component))
+            check(method.approach.id=="runtime-prepared-heavy-effects-20261020" \
+                and method.approach.id==component.native_cue.approach,"Inspector names the actual authored Acid approach override")
+            check(method.approach.path==selected.approaches[0].path \
+                and method.approach.source_phase==selected.approaches[0].source_phase,"Inspector exposes the exact current renderer constructor and source phase")
+            check(method.runtime_binding=="not_examined","Correct source inspection does not promote current rendered output")
     var original_rows:Array=data.rows.duplicate(true)
     var parents={};var direct={};var by_id={}
     for row in data.rows:

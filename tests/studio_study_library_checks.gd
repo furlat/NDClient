@@ -50,6 +50,11 @@ func run()->void:
     for section in ["spells","conditions","actions"]:
         for id in source.sections.get(section,{}):
             var kind:String=str(id).get_slice(".",0)
+            if section=="conditions" and not Cases.CATEGORY.has(kind):
+                kind="condition"
+                var unbound:Dictionary=panel.report.by_key.get("condition:"+str(id),{})
+                check(unbound.get("category")=="Conditions" and unbound.get("inventory_origin")=="typed_source" and unbound.get("engine_inventory")=="not_listed",
+                    "An unbound declared condition stays discoverable without inventing an engine kind or availability: "+str(id))
             expected[kind+":"+str(id)]=true
     for key in expected:check(panel.report.by_key.has(key),"Current declared capability is discoverable: "+key)
     var rows:Array=tree_rows(panel)
@@ -58,7 +63,7 @@ func run()->void:
     for row in capabilities:
         var entry:Dictionary=row.metadata.capability
         check(entry.has("source_status") and entry.has("scenario_status") and entry.has("presentation_status") and entry.has("approval_status"),"Coverage facts remain separate for "+entry.id)
-        if entry.id in Cases.REJECTED:check(entry.approval_status=="rejected","User-rejected artwork remains rejected: "+entry.id)
+        check(entry.approval_status=="needs_review","All current artwork awaits human review: "+entry.id)
     var missing:Array=capabilities.filter(func(row):return row.metadata.capability.cases.is_empty())
     check(not missing.is_empty(),"Capabilities lacking a recording stay visible")
     if not missing.is_empty():

@@ -10,6 +10,7 @@ const CreationInputs=preload("res://presentation/creation_inputs.gd")
 const ActorBirthInputs=preload("res://presentation/actor_birth_inputs.gd")
 const PropagationInputs=preload("res://presentation/propagation_inputs.gd")
 const NativeItems=preload("res://presentation/native_items.gd")
+const NativePersistent=preload("res://presentation/native_persistent.gd")
 ## Finite, passive presentation mechanisms shared by the compiler and renderer.
 const Authoring=preload("res://presentation/authoring.gd")
 const Palette=preload("res://presentation/palette.gd")
@@ -18,6 +19,8 @@ const Placement=preload("res://placement.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Blood=preload("res://presentation/blood.gd")
 const ImpactPlacement=preload("res://presentation/impact_placement.gd")
+const ConditionResponses=preload("res://presentation/condition_responses.gd")
+const MovementMedia=preload("res://presentation/movement_media.gd")
 
 static func effect_seed(component:Dictionary)->int:
     var occurrence:String=component.get("source_event_uuid","")
@@ -29,9 +32,92 @@ static func effect_seed(component:Dictionary)->int:
         component.get("attachment",""),component.get("actor_uuid",""),component.get("target_uuid",""),
         component.get("condition_uuid",""),component.get("layer",{}).get("id",""),component.get("application_index",0)]))
 
+## Existing environment resources own these programs; native facts supply
+## identity, endpoints and admission. This is not another effect registry.
+static func world_program(content_id:String,cache:Dictionary)->Dictionary:
+    return Authoring.Catalog.environment_index(cache).get("spatial_media",{}).get(content_id,{})
+
+static func world_activation_timing(fact:Dictionary,cache:Dictionary,support:Dictionary={})->Dictionary:
+    var program:Dictionary=world_program(str(fact.get("mechanism_content_id","")),cache)
+    var frames:Array=program.get("activation_frames",[])
+    var fps:float=float(program.get("fps",0.0))
+    if program.get("kind")!="sprite" or frames.is_empty() or fps<=0.0:return {}
+    if str(program.get("default_orientation","")).is_empty() and (fact.get("direction")==null or fact.get("direction")==[0,0]):return {}
+    var contact_index:int=frames.find(program.get("contact_frame",frames[0]))
+    if contact_index<0:return {}
+    var launch:float=float(contact_index)*1000.0/fps
+    var travel:float=0.0
+    var projectile:Dictionary=program.get("projectile",{})
+    if not projectile.is_empty():
+        if fact.get("origin_position")==null or fact.get("end_position")==null:return {}
+        if not support.has("elevation_feet") or not support.has("end_elevation_feet"):return {}
+        var speed:float=float(projectile.get("speed_tiles_per_second",0.0))
+        if speed<=0.0:return {}
+        var a:Array=fact.origin_position;var b:Array=fact.end_position
+        travel=Vector3(b[0]-a[0],(float(support.end_elevation_feet)-float(support.elevation_feet))/5.0,b[1]-a[1]).length()*1000.0/speed
+    return {"launch_delay_ms":launch,"projectile_ms":travel,"contact_ms":launch+travel,
+        "duration_ms":maxf(float(frames.size())*1000.0/fps,launch+travel)}
+
+static func world_activation(group:Dictionary,node:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    var fact:Dictionary=node.fact
+    if node.get("phase")!="completion" or not fact.get("committed",false):return
+    var program:Dictionary=world_program(str(fact.get("mechanism_content_id","")),cache)
+    if program.get("kind")!="sprite" or program.get("activation_frames",[]).is_empty():return
+    var support:Dictionary=graph.get("world_inputs",{}).get(str(node.id),{})
+    var timing:Dictionary=world_activation_timing(fact,cache,support)
+    var parameters:Dictionary={"actor_uuid":null,"target_uuid":fact.get("target_entity_uuid"),
+        "mechanism_uuid":fact.get("mechanism_uuid"),"content_id":str(fact.mechanism_content_id),
+        "origin_position":fact.get("origin_position"),"direction":fact.get("direction"),
+        "end_position":fact.get("end_position"),"affected_positions":fact.get("affected_positions",[]),
+        "elevation_feet":support.get("elevation_feet"),"source_cut":support.get("source_index"),
+        "end_elevation_feet":support.get("end_elevation_feet"),
+        "affected_elevations_feet":support.get("affected_elevations_feet",{}),
+        "missing_support_positions":support.get("missing_support_positions",[]),
+        "launch_delay_ms":timing.get("launch_delay_ms",0.0),"projectile_ms":timing.get("projectile_ms",0.0)}
+    var missing_origin:bool=not support.has("elevation_feet") or fact.get("origin_position")==null
+    var missing_cells:bool=support.get("affected_elevations_feet",{}).is_empty()
+    var missing_endpoint:bool=not program.get("projectile",{}).is_empty() and not support.has("end_elevation_feet")
+    if timing.is_empty() or missing_endpoint or (missing_origin if program.get("requires_object_anchor",true) else missing_cells):
+        parameters.status="missing";parameters.reason="actual_mechanism_origin_or_source_timing_not_bound"
+    add(group,node,"world_activation",float(graph.starts.get(node.id,0.0)),
+        float(timing.get("duration_ms",0.0)),str(program.get("source","authoring/environment/surfaces/"+str(fact.mechanism_content_id)+".tres::world_media")),parameters)
+
+static func world_portal_program(node:Dictionary,graph:Dictionary,cache:Dictionary)->Dictionary:
+    var content_id:String=str(node.fact.get("portal_content_id","")) if node.fact.get("portal_content_id")!=null else ""
+    if content_id.is_empty():content_id=str(graph.get("portal_inputs",{}).get(str(node.id),{}).get("content_id",""))
+    var program:Dictionary=world_program(content_id,cache)
+    return program.merged({"content_id":content_id}) if program.get("kind")=="portal" else {}
+
+static func world_portal_timing(node:Dictionary,graph:Dictionary,cache:Dictionary)->Dictionary:
+    var program:Dictionary=world_portal_program(node,graph,cache)
+    if program.is_empty():return {}
+    var before:Dictionary=graph.get("portal_inputs",{}).get(str(node.id),{})
+    var entry:float=0.0
+    if node.fact.get("start_position")!=null and before.has("elevation_feet"):
+        entry=float(program.get("fall_delay_ms",0.0))+float(program.get("fall_ms",0.0))+float(program.get("transit_ms",0.0))
+    var exit:Dictionary=program.get("roles",{}).get("exit",{})
+    var close:float=float(exit.get("closing_frames",0.0))*1000.0/maxf(1.0,float(exit.get("fps",1.0)))
+    return {"entry_ms":entry,"exit_ms":float(program.get("emerge_ms",0.0))+float(program.get("exit_hold_ms",0.0))+close}
+
+static func world_portal_exit(group:Dictionary,node:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    var fact:Dictionary=node.fact
+    if node.phase!="completion" or not fact.get("committed",false) or fact.get("end_position")==null:return
+    var program:Dictionary=world_portal_program(node,graph,cache)
+    var timing:Dictionary=world_portal_timing(node,graph,cache)
+    var cut:Dictionary=graph.get("portal_inputs",{}).get(str(node.id),{})
+    if program.is_empty() or timing.is_empty() or not cut.has("end_elevation_feet"):return
+    add(group,node,"world_activation",float(graph.get("committed_at",{}).get(str(node.id),graph.times.get(node.id,graph.starts.get(node.id,0.0)))),float(timing.exit_ms),
+        str(program.get("source","authoring/environment/surfaces/"+str(program.content_id)+".tres::world_media")),
+        {"role":"portal_exit","actor_uuid":null,"target_uuid":fact.target_entity_uuid,
+            "mechanism_uuid":fact.get("portal_uuid"),"content_id":program.content_id,
+            "origin_position":fact.end_position,"direction":[0,0],"end_position":fact.end_position,"affected_positions":[fact.end_position],
+            "elevation_feet":cut.end_elevation_feet,"source_cut":cut.source_index})
+
 static func weapon_trail(recipe: Dictionary,fact: Dictionary,actor: Dictionary,cache: Dictionary) -> Dictionary:
     var trail: Dictionary=recipe.get("weaponTrail",{}) if recipe.get("weaponTrail")!=null else {}
     if trail.is_empty() or recipe.get("projectile")!=null or fact.get("attack_source_kind")!="equipped":return {}
+    if str(trail.get("source_id","")).is_empty() or float(trail.get("contact_seconds",0.0))<=0.0 \
+        or float(trail.get("end_seconds",0.0))<float(trail.contact_seconds):return {}
     var outcome: String={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.get("attack_outcome"),"")
     if fact.behavior_id not in trail.get("behaviorIds",[]) and outcome not in trail.get("outcomes",[]):return {}
     var rig_id=Authoring.rig_id(actor,cache)
@@ -44,7 +130,10 @@ static func weapon_trail(recipe: Dictionary,fact: Dictionary,actor: Dictionary,c
         var key:String=rig_id+"/"+str(layer.category)+"/"+str(recipe.actor.clip)
         var document:String=trail.get("poseDocuments",{}).get(key,"")
         if not document.is_empty():
-            return {"pose":Authoring.load_data(document,cache),"palette":trail.palette,"impact_asset_id":trail.impactAssetId}
+            return {"pose":Authoring.load_data(document,cache),"palette":trail.palette,
+                "source_id":str(trail.source_id),"impact_source_id":str(trail.get("impact_source_id","")),
+                "contact_seconds":float(trail.contact_seconds),"end_seconds":float(trail.end_seconds),
+                "source":str(trail.get("source",""))}
     return {}
 
 static func attack_colors(fact: Dictionary,cache: Dictionary) -> Dictionary:
@@ -130,7 +219,7 @@ static func _source(group: Dictionary, node: Dictionary, source_id: String, star
     parameters.reason="" if not record.is_empty() else "native_source_not_imported"
     return add(group,node,"native_effect",start,record.get("duration",0)*1000,"native_effects/index.json:/sources/"+source_id,parameters)
 
-static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,selected:Dictionary,start:float,duration:float,points:Dictionary,cache:Dictionary,owner:Dictionary,fact:Dictionary,application_index:int=0,graph:Dictionary={})->void:
+static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,selected:Dictionary,start:float,duration:float,points:Dictionary,cache:Dictionary,owner:Dictionary,fact:Dictionary,application_index:int=0,graph:Dictionary={},release:Dictionary={})->void:
     var cast:Dictionary=recipe.get("cast",{})
     var placement:Dictionary=recipe.get("projectile",{}).duplicate() if recipe.get("projectile")!=null else {}
     for key in ["sourceSockets","sourceSocketsByRig"]:
@@ -160,6 +249,54 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
         parameters.merge(phase,true)
         parameters.merge({"native_spell":true,"cast_recipe":cast,"native_cast_id":cast_id},true)
         var constructor:Dictionary=phase.native_cue.get("constructor_input",{})
+        var result_descriptor:Dictionary=phase.native_cue.get("observed_result",{})
+        if not result_descriptor.is_empty() and parameters.get("status")!="missing":
+            for observed_result in ApplicationResults.geometry_results(node,result_descriptor,graph):
+                var actual:Dictionary=parameters.duplicate()
+                # The selected source consumes only the actual receiver. Its
+                # original caster remains factual evidence, never a required
+                # optical source when this result has no delivery component.
+                actual.actor_uuid=observed_result.target_uuid;actual.target_uuid=observed_result.target_uuid
+                actual.from_position=observed_result.position;actual.to_position=observed_result.position
+                actual.from_elevation_feet=observed_result.elevation_feet;actual.to_elevation_feet=observed_result.elevation_feet
+                actual.cast_recipe={"enabled":false};actual.ground_target=false
+                actual.native_result_evidence=observed_result.evidence
+                if not graph.has("observed_spell_phases"):graph.observed_spell_phases=[]
+                graph.observed_spell_phases.append({"node":observed_result.node,"parameters":actual,
+                    "offset_ms":0.0,"at_commit":true})
+            continue
+        var destination:Dictionary=phase.native_cue.get("observed_destination",{})
+        if not destination.is_empty() and parameters.get("status")!="missing":
+            var observed:Array=[]
+            if destination.get("kind")=="actor_birth":observed=ActorBirthInputs.observed(node,destination,graph,group.commits)
+            elif destination.get("kind")=="spatial_creation":observed=CreationInputs.spatial_destinations(node,destination,graph,group.commits)
+            if observed.size()!=1:
+                parameters.status="missing"
+                parameters.reason="native_observed_destination_not_disclosed" if observed.is_empty() else "native_observed_destination_ambiguous"
+                add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+            else:
+                var admitted:Dictionary=observed[0]
+                var actual:Dictionary=parameters.duplicate()
+                actual.target_uuid=admitted.target_uuid;actual.to_position=admitted.position
+                actual.to_elevation_feet=admitted.elevation_feet;actual.ground_target=true
+                actual.native_destination=admitted.evidence.merged({"kind":str(destination.kind)})
+                actual.native_cue=parameters.native_cue.duplicate(false)
+                actual.native_cue.launch=float(actual.native_cue.source_launch_local)
+                actual.native_cue.contact=float(actual.native_cue.source_contact_local)
+                if not graph.has("observed_spell_phases"):graph.observed_spell_phases=[]
+                graph.observed_spell_phases.append({"node":admitted.node,"parameters":actual,"offset_ms":0.0,"at_commit":true})
+            continue
+        if constructor.get("kind")=="payload_release":
+            if not release.get("applies",false):continue
+            if release.get("ready",false):
+                parameters.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":"","values":release.values}]
+                parameters.native_constructor_evidence=release.evidence
+                parameters.native_accepted_release=release.release
+            else:
+                parameters.status="missing";parameters.reason=release.reason
+                parameters.unbound_constructor_inputs=["accepted_release"]
+            add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
+            continue
         if constructor.get("kind")=="actor_birth" and parameters.get("status")!="missing":
             var births:Array=ActorBirthInputs.observed(node,constructor,graph,group.commits)
             if births.is_empty():
@@ -177,7 +314,7 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
             continue
         if constructor.get("kind")=="observed_event" and parameters.get("status")!="missing":
             var observations:Array=ApplicationResults.observed(node,constructor,graph)
-            if observations.is_empty() and constructor.outcome=="cast":
+            if observations.is_empty() and constructor.outcome=="cast" and constructor.get("projection")!="immediate_blast":
                 parameters.status="missing";parameters.reason="native_observed_event_recipient_not_disclosed"
                 add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
             for observation in observations:
@@ -185,10 +322,27 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
                 actual.target_uuid=observation.target_uuid
                 actual.to_position=graph.positions.get(observation.target_uuid)
                 actual.to_elevation_feet=graph.contacts.get(observation.target_uuid,{}).get("from_elevation_feet",0)
+                var receiver:Dictionary=graph.get("result_contacts",{}).get(str(observation.node.id),{})
+                if receiver.get("target_uuid")==observation.target_uuid:
+                    actual.to_position=receiver.position;actual.to_elevation_feet=float(receiver.elevation_steps)*5.0
+                if observation.has("origin_position"):
+                    actual.from_position=observation.origin_position;actual.to_position=observation.origin_position
+                    if observation.has("origin_elevation_feet"):
+                        actual.from_elevation_feet=observation.origin_elevation_feet;actual.to_elevation_feet=observation.origin_elevation_feet
+                    elif constructor.get("projection")=="accepted_area_blast":actual.from_elevation_feet=actual.to_elevation_feet
                 actual.ground_target=false
                 actual.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":"","values":observation.values}]
                 actual.native_constructor_evidence=observation.evidence
                 actual.native_inputs=observation.inputs
+                if observation.has("input_values"):actual.native_input_values=observation.input_values
+                if observation.has("endpoint_bindings"):
+                    actual.native_cue=actual.native_cue.duplicate(true)
+                    actual.native_actor_uuids={}
+                    for endpoint in observation.endpoint_bindings:
+                        actual.native_actor_uuids[endpoint.actor]=endpoint.actor_uuid
+                        actual.native_cue.live_endpoints.append({"actor":endpoint.actor,"socket":endpoint.socket})
+                for field in ["native_quarry","creation_binding"]:
+                    if observation.has(field):actual[field]=observation[field]
                 if constructor.outcome=="cast":
                     add(group,observation.node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,actual)
                 else:
@@ -197,11 +351,13 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
                     # the existing post-schedule component pass, at its own clock.
                     if not graph.has("observed_spell_phases"):graph.observed_spell_phases=[]
                     graph.observed_spell_phases.append({"node":observation.node,"parameters":actual,
-                        "offset_ms":float(phase.start_ms)-float(graph.starts[node.id])})
+                        "offset_ms":float(phase.start_ms)-float(graph.starts[node.id]),
+                        "at_commit":constructor.get("projection") in ["breath_grant","quarry_application","condition_outcome","owner_activity"]})
             continue
         if not constructor.is_empty() and parameters.get("status")!="missing":
             var observed:Dictionary={}
-            if constructor.get("kind")=="propagation_links":observed=linked
+            if constructor.get("kind")=="area_links":observed=PropagationInputs.area_project(node,constructor)
+            elif constructor.get("kind")=="propagation_links":observed=linked
             elif constructor.get("kind")=="spell_strike":observed=ApplicationResults.spell_strike(node,constructor,graph)
             elif constructor.get("kind")=="condition_application":observed=ApplicationResults.condition_application(node,constructor,graph)
             else:observed=ApplicationResults.project(node,constructor,graph.get("application_results",{}))
@@ -226,7 +382,9 @@ static func native_spell(group:Dictionary,node:Dictionary,recipe:Dictionary,sele
         add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,parameters)
 
 static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,recipe:Dictionary,track:Dictionary,markers:Dictionary,graph:Dictionary,cache:Dictionary,observations:Array=[])->void:
-    for phase in NativeActions.phases(binding,node.fact,recipe,track,markers,cache):
+    var fact:Dictionary=Occurrences.spell(node,graph) if node.fact.kind=="spell" else node.fact
+    for phase in NativeActions.phases(binding,fact,recipe,track,markers,cache):
+        if phase.native_cue.get("scope")=="cast" and Occurrences.application(node):continue
         var descriptor:Dictionary=phase.native_cue.get("constructor_input",{})
         if descriptor.get("kind")=="reaction_observation":
             var projected:Dictionary=ReactionInputs.project(node,descriptor,graph)
@@ -235,7 +393,8 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
             if projected.ready:
                 actual.native_reaction_observation=projected.observation
                 actual.native_constructor_inputs=[{"component_path":descriptor.component_path,
-                    "input_field":descriptor.input_field,"values":projected.observation}]
+                    "input_field":descriptor.input_field,"values":{} if not phase.native_cue.get("incoming_track",{}).is_empty() else projected.observation}]
+                if projected.has("presentation"):actual.native_counterspell=projected.presentation
                 actual.native_constructor_evidence=projected.evidence
             _native_action_component(group,node,node,actual,ReactionInputs.inputs(projected),graph)
         elif descriptor.get("kind")=="creation_admission":
@@ -255,6 +414,20 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
                 actual.native_constructor_evidence=projected.evidence
             _native_action_component(group,node,node,actual,{"values":projected.get("inputs",{}),
                 "gaps":[] if projected.ready else [projected.reason],"evidence":projected.get("evidence",{})},graph)
+        elif descriptor.get("kind")=="area_links":
+            if Occurrences.application(node):continue
+            var projected:Dictionary=PropagationInputs.area_project(node,descriptor)
+            var contact:Dictionary=graph.get("area_contacts",{}).get(str(node.id),{})
+            if contact.is_empty():projected={"ready":false,"reason":"electric_area_support_not_disclosed"}
+            var actual:Dictionary=phase.duplicate()
+            var points:Dictionary={}
+            if projected.ready:
+                actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
+                actual.native_constructor_evidence=projected.evidence
+                actual.area_geometry=fact.area_geometry;actual.resolved_area_positions=fact.resolved_area_positions;actual.ground_target=true
+                points={"to_position":contact.position,"to_elevation_feet":float(contact.elevation_steps)*5.0}
+            _native_action_component(group,node,node,actual,{"values":projected.get("inputs",{}),
+                "gaps":[] if projected.ready else [projected.reason],"evidence":projected.get("evidence",{})},graph,"",points)
         elif descriptor.get("kind")=="spell_strike":
             var projected:Dictionary=ApplicationResults.spell_strike(node,descriptor,graph)
             var actual:Dictionary=phase.duplicate()
@@ -269,9 +442,19 @@ static func native_action(group:Dictionary,node:Dictionary,binding:Dictionary,re
             for projected in ApplicationResults.observed(node,descriptor,graph):
                 var actual:Dictionary=phase.duplicate()
                 actual.start_ms=float(graph.starts[projected.node.id])+float(phase.start_ms)-float(markers["event.start"])
+                for publication in projected.get("publication_occurrences",[]):
+                    for commit in group.commits:
+                        if str(commit.get("event_uuid",""))==str(publication):actual.start_ms=maxf(actual.start_ms,float(commit.at_ms))
                 actual.native_constructor_inputs=[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}]
                 actual.native_constructor_evidence=projected.evidence
-                _native_action_component(group,node,projected.node,actual,{"values":projected.inputs,"gaps":[],"evidence":projected.evidence},graph,projected.target_uuid)
+                if projected.has("condition"):
+                    actual.condition=projected.condition;actual.condition_uuid=str(projected.condition.condition_uuid)
+                if projected.has("weapon_result_item_uuid"):actual.weapon_result_item_uuid=projected.weapon_result_item_uuid
+                var points:Dictionary={}
+                if projected.has("origin_position"):
+                    points={"from_position":projected.origin_position,"to_position":projected.get("destination_position",projected.origin_position),
+                        "from_elevation_feet":projected.get("origin_elevation_feet",0.0),"to_elevation_feet":projected.get("origin_elevation_feet",0.0)}
+                _native_action_component(group,node,projected.node,actual,{"values":projected.inputs,"gaps":[],"evidence":projected.evidence},graph,projected.target_uuid,points)
         else:
             _native_action_component(group,node,node,phase,NativeActions.inputs(node,binding,phase,graph,observations),graph)
 
@@ -383,12 +566,17 @@ static func _native_interceptions(group:Dictionary,lineage:Dictionary,graph:Dict
             add(group,node,"native_effect",parameters.start_ms,phase.duration_ms,phase.source,parameters)
 
 static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cache: Dictionary) -> Dictionary:
+    for node in lineage.events:
+        for phase in ActorBirthInputs.terminal_phases(node,graph,cache):
+            add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,phase)
     for observed in graph.get("observed_spell_phases",[]):
         var parameters:Dictionary=observed.parameters
         parameters.start_ms=float(graph.starts[observed.node.id])+observed.offset_ms
         if observed.get("at_commit",false):
             for commit in group.commits:
                 if str(commit.get("event_uuid",""))==str(observed.node.id):parameters.start_ms=float(commit.at_ms);break
+        if parameters.has("native_destination"):
+            parameters.native_destination=parameters.native_destination.merged({"publication_ms":parameters.start_ms})
         add(group,observed.node,"native_effect",parameters.start_ms,parameters.duration_ms,parameters.source,parameters)
     _native_interceptions(group,lineage,graph,cache)
     var sounds: Dictionary=Authoring.load_data("audio/bindings.json",cache)
@@ -406,20 +594,29 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
         if track.has("weapon_trail"):
             var trail: Dictionary=track.weapon_trail
             var contact_seconds=(track.contact_ms-track.start_ms)/1000.0
-            var rate=.67/maxf(.001,contact_seconds)
-            var slash=_source(group,track_node,"class.martial.slash",track.start_ms,
+            var rate:float=float(trail.contact_seconds)/maxf(.001,contact_seconds)
+            var slash=_source(group,track_node,str(trail.source_id),track.start_ms,
                 {"actor_uuid":track.actor_uuid,"attachment":"ground","scale":track.presentation_actor.appearance.visual_scale,
-                "weapon_pose":trail.pose,"weapon_contact_seconds":contact_seconds*track.source_end_seconds/(track.duration_ms/1000.0),"native_age_rate":rate,"palette":trail.palette,"source_track":track},cache)
-            slash.duration_ms=.94/rate*1000.0
-            if track_node.fact.attack_outcome in ["Hit","Crit"]:
-                _source(group,track_node,"class.martial.impact",track.impact_ms,
-                    {"actor_uuid":track.actor_uuid,"target_uuid":track.target_uuid,"attachment":"target_body","scale":track.presentation_actor.appearance.visual_scale,"palette":trail.palette},cache)
+                "weapon_pose":trail.pose,"weapon_contact_seconds":contact_seconds*track.source_end_seconds/(track.duration_ms/1000.0),"native_age_rate":rate,"palette":trail.palette,"source_track":track,"assignment_source":str(trail.source)+"::trail_source",
+                "timing_source":str(trail.source)+"::trail_contact_seconds"},cache)
+            slash.duration_ms=float(trail.end_seconds)/rate*1000.0
+            if track_node.fact.attack_outcome in ["Hit","Crit"] and not str(trail.impact_source_id).is_empty():
+                _source(group,track_node,str(trail.impact_source_id),track.impact_ms,
+                    {"actor_uuid":track.actor_uuid,"target_uuid":track.target_uuid,"attachment":"target_body","scale":track.presentation_actor.appearance.visual_scale,"palette":trail.palette,
+                    "assignment_source":str(trail.source)+"::trail_impact_source"},cache)
+        if track.get("motion",false) and track_node.fact.kind=="step" and not track_node.get("canceled",false) and track_node.fact.get("committed",false):
+            for phase in MovementMedia.phases(track,group.actor_tracks,graph.actor_inputs.get(track_node.id,{}).get(track.actor_uuid,{}),cache):
+                add(group,track_node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,phase)
         if track.get("motion",false) and not track.get("spatial_only",false) and track_node.fact.kind=="step":
             _movement_audio(group,track_node,track,sounds,cache)
-    var native_sources: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
+    var fact_media_owners:Dictionary=Authoring.load_data("native_effects/index.json",cache).get("observed_fact_owners",{})
     var action_bindings:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)
     for node in lineage.events:
-        if node.canceled or node.get("fact")==null: continue
+        if node.canceled:continue
+        _passive_results(group,node,graph,action_bindings)
+        if node.get("fact")==null:continue
+        _condition_responses(group,node,graph,cache)
+        if fact_media_owners.has(str(node.fact.kind)):_fact_media(group,node,graph,cache)
         var fact: Dictionary=Occurrences.spell(node,graph) if node.fact.kind=="spell" else node.fact
         var start: float=graph.starts.get(node.id,0)
         var recipe: Dictionary=graph.recipes.get(node.id,{})
@@ -443,6 +640,8 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
         if action_bindings.has(fact.get("behavior_id","")) and action_bindings[fact.behavior_id].has("effect_cues"):
             native_action(group,node,action_bindings[fact.behavior_id],recipe,audio_track,audio_markers,graph,cache,lineage.events)
         if fact.kind=="attack":
+            var attributed:Dictionary=_weapon_result_binding(node,graph,cache,action_bindings)
+            if not attributed.is_empty():native_action(group,node,attributed,recipe,audio_track,audio_markers,graph,cache,lineage.events)
             var impact_binding:Dictionary=NativeItems.impact_binding(fact,cache)
             if not impact_binding.is_empty():
                 var packet={"operation_sequence":group.operation_sequence,"occurrence":str(node.id),"lineage":str(node.lineage_id),
@@ -472,6 +671,10 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                 _bound_audio(group,node,sounds.weapons,str(fact.source_item_id),audio_markers,fact.source_entity_uuid,"weapons",cache,audio_track)
             else:
                 _bound_audio(group,node,sounds.get("attack_sources",{}),str(fact.attack_source_kind),audio_markers,fact.source_entity_uuid,"attack_sources",cache,audio_track)
+        elif fact.kind=="mechanism_activation":
+            world_activation(group,node,graph,cache)
+        elif fact.kind=="portal_transfer":
+            world_portal_exit(group,node,graph,cache)
         elif fact.kind=="spell":
             var caster:Dictionary=graph.get("casts",{}).get(SpellDelivery.cast_key(node,graph),{})
             if caster.get("source_event_uuid",node.id)==node.id:
@@ -508,7 +711,10 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                 group.components.back().position=fact.placement.position
                 group.components.back().elevation_feet=fact.placement.base_height_steps*5.0
         if fact.kind in ["action","shove"]:
-            if recipe.get("actionFeedback")!=null:_feedback(group,node,recipe.actionFeedback,contact,fact.source_entity_uuid,"catalog/body_action_recipes.json:/"+str(fact.behavior_id)+"/actionFeedback",cache)
+            var feedback:Dictionary=Authoring.action_feedback(recipe,fact)
+            if not feedback.is_empty() and (not str(feedback.field).begins_with("reactionFeedback/") or node.get("phase")=="completion"):
+                var feedback_at:float=maxf(contact,float(graph.times.get(node.id,contact))) if str(feedback.field).begins_with("reactionFeedback/") else contact
+                _feedback(group,node,feedback.value,feedback_at,fact.source_entity_uuid,Authoring.recipe_source(recipe,feedback.field,cache),cache)
             if not recipe.get("effectAudioCue","").is_empty():
                 _audio(group,node,recipe.effectAudioCue,contact,fact.source_entity_uuid,cache)
                 group.components.back().assignment_source=Authoring.recipe_source(recipe,"effectAudioCue",cache)
@@ -522,60 +728,25 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                     group.components.back().source_track=audio_track
             if recipe.get("effectAudioCue","").is_empty():
                 _bound_audio(group,node,sounds.actions,fact.behavior_id,audio_markers,fact.source_entity_uuid,"actions",cache,audio_track)
-            var resolved_sources={}
-            for media in recipe.get("media",[]):
-                for source_id in native_sources:
-                    if media.assetId not in native_sources[source_id].get("media_ids",[]) or resolved_sources.has(source_id): continue
-                    resolved_sources[source_id]=true
-                    var component=_source(group,node,source_id,start+media.get("startOffsetMs",0),
-                        {"actor_uuid":fact.source_entity_uuid,"attachment":media.attachment,"scale":media.get("scale",1),"alpha":media.get("alpha",1)},cache)
-                    component.duration_ms=media.get("durationMs",component.duration_ms)
-                    component.loop=media.get("loop",false)
-                    component.source_duration_ms=native_sources[source_id].duration*1000.0
-                    component.fade_in_ms=media.get("fadeInMs",0);component.fade_out_ms=media.get("fadeOutMs",0)
-                    component.fade_curve=media.get("fadeCurve","linear")
+            _action_media(group,node,recipe,str(fact.source_entity_uuid),start,graph,cache)
         elif fact.kind=="damage" and fact.get("stage")=="applied" and fact.get("applied_damage",0)>0:
-            var context=Authoring.load_data("catalog/damage_context.json",cache)
-            var parent: Dictionary=graph.nodes.get(node.get("parent_lineage"),{})
-            var damage_recipe: Dictionary={}
-            var spell_behavior:=""
-            while not parent.is_empty():
-                if spell_behavior.is_empty() and parent.get("fact")!=null and parent.fact.kind=="spell":spell_behavior=Occurrences.spell(parent,graph).get("behavior_id","")
-                if graph.recipes.has(parent.id) and graph.recipes[parent.id].has("damage"):
-                    damage_recipe=graph.recipes[parent.id].damage; break
-                parent=graph.nodes.get(parent.get("parent_lineage"),{})
-            var timing: Dictionary=graph.get("damage_timings",{}).get(node.id,{})
-            var flash: Dictionary=damage_recipe.get("hitFlash",{})
-            if flash.get("enabled",context.get("flashEnabled",false)):
-                var colors: Array=flash.get("palette",{}).get("colors",[])
-                if colors.is_empty():
-                    var palette: Dictionary=context.palette.byDamageType.get(fact.get("damage_type"),context.palette.untyped)
-                    colors=[palette.elementColors.secondary,palette.elementColors.primary,palette.elementColors.tertiary]
-                var hit=add(group,node,"material_flash",timing.get("flash",start),flash.get("durationMs",context.get("flashDurationMs",150)),
-                    "catalog/damage_context.json:/flashEnabled",{"actor_uuid":fact.target_entity_uuid,"material":flash,"colors":colors,"damage_type":fact.get("damage_type"),"attachment":"body"})
-                var native_hit:=NativeSpells.hit(spell_behavior,cache)
-                if not native_hit.is_empty():
-                    hit.native_hit=native_hit
-                    var envelope:Dictionary=Authoring.load_data("sandbox/feedback.json",cache).hit_flash
-                    hit.duration_ms=envelope.durationMs
-                    hit.material=flash.duplicate(true)
-                    hit.material.merge(envelope,true)
-            if context.get("numberEnabled",false):
-                var palette: Dictionary=context.palette.byDamageType.get(fact.get("damage_type"),context.palette.untyped)
-                add(group,node,"damage_number",timing.get("number",start),damage_recipe.get("floatingNumber",{}).get("durationMs",900),
-                    "catalog/damage_context.json:/numberEnabled",{"actor_uuid":fact.target_entity_uuid,"amount":fact.applied_damage,"text":str(fact.applied_damage),"color":palette.impactColor,"style":Authoring.load_data("catalog/number_style.json",cache),"attachment":"head"})
+            _condition_contact(group,node,graph,cache)
+            var timing:Dictionary=graph.get("damage_timings",{}).get(node.id,{})
+            _damage_feedback(group,node,graph,start,cache)
             _bound_audio(group,node,sounds.damage_types,str(fact.get("damage_type")),{"damage.hp":timing.get("hp",start),"event.start":start},fact.target_entity_uuid,"damage_types",cache)
             var release: Dictionary=fact.get("body_release",{}) if fact.get("body_release")!=null else {}
             # Damage alone never authorizes blood or a receiving tile. Region
             # artwork uses the same server ellipse and allowed-cell list as the
             # persistent after-values; air-only releases retain native spray.
-            if release.get("release_id")=="body.blood":
+            var release_binding:Dictionary=Blood.binding(release,cache)
+            if not release_binding.is_empty():
+                var residue_id:String=release_binding.residue_id
                 var blood_start:float=graph.get("damage_timings",{}).get(node.id,{}).get("hp",start)
                 if not release.get("regions",[]).is_empty() and release.get("pattern")!=null:
-                    var blood_asset=Blood.asset(cache)
+                    var blood_asset=Blood.asset(cache,residue_id)
                     if blood_asset.is_empty():
-                        return {"ok":false,"error":{"kind":"authoring","message":"Cannot load selected asset metadata: particles.region.blood","retryable":false}}
-                    var revealed=Blood.reveals(group,node,graph.get("initial_tiles",{}),blood_previous)
+                        return {"ok":false,"error":{"kind":"authoring","message":"Cannot load selected asset metadata: "+str(release_binding.asset_id),"retryable":false}}
+                    var revealed=Blood.reveals(group,node,graph.get("initial_tiles",{}),blood_previous,residue_id)
                     var blood_contact:Dictionary=graph.impact_contacts.get(node.id,{})
                     var source_height:Variant=blood_contact.get("from_elevation_feet")
                     if source_height!=null:source_height=float(source_height)/5.0
@@ -584,13 +755,13 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                             for point in region.positions:
                                 if Blood.key(point)==Blood.key(release.position):source_height=region.elevation_steps
                     add(group,node,"residue_deposit",blood_start,Blood.duration(release,blood_asset),
-                        "authoring/environment/surfaces/residue.blood.tres::region_particles",
-                        {"actor_uuid":fact.target_entity_uuid,"attachment":"ground","position":release.position,"asset_metadata":blood_asset,
+                        release_binding.source,
+                        {"residue_id":residue_id,"actor_uuid":fact.target_entity_uuid,"attachment":"ground","position":release.position,"asset_metadata":blood_asset,
                         "elevation_steps":source_height,"flight_enabled":source_height!=null,
                         "body_release":release.duplicate(true),"reveals":revealed,"residue_deposition":true,
                         "authority_source":"DamageResultFact.body_release.regions + WorldTileState.residues"})
-                else:
-                    var selection: Dictionary=Authoring.load_data("native_effects/responses.json",cache)
+                elif not str(release_binding.get("air_source_catalog","")).is_empty():
+                    var selection: Dictionary=Authoring.load_data(release_binding.air_source_catalog,cache)
                     var source_id: String=selection.damage_types.get(str(release.get("primary_damage_type")),selection.default)
                     var actors: Dictionary=graph.actor_inputs.get(node.id,{})
                     var impact=ImpactPlacement.prepare(actors.get(fact.target_entity_uuid,{}),group.actor_tracks,blood_start,graph.impact_contacts.get(node.id,{}),cache)
@@ -599,6 +770,11 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                         "direction_from":actors.get(fact.get("source_entity_uuid"),{}).get("last_visual_position"),"direction_to":actors.get(fact.target_entity_uuid,{}).get("last_visual_position")}
                     var spray=_source(group,node,source_id,blood_start,common,cache)
                     if impact.status=="missing":spray.status="missing";spray.reason=impact.reason
+                else:
+                    add(group,node,"residue_deposit",blood_start,0.,release_binding.source,
+                        {"actor_uuid":fact.target_entity_uuid,"residue_id":residue_id,"body_release":release.duplicate(true),
+                        "asset_metadata":{},"reveals":[],"status":"missing","reason":"actual_receiving_regions_not_disclosed",
+                        "authority_source":"DamageResultFact.body_release.regions"})
         elif fact.kind=="actor_change":
             if group.actor_tracks.any(func(track):return track.source_event_uuid==node.id and track.get("equipment_change",false)):
                 _bound_audio(group,node,sounds.get("equipment",{}),"change",audio_markers,group.actor_tracks.filter(func(track):return track.source_event_uuid==node.id)[0].actor_uuid,"equipment",cache,audio_track)
@@ -632,6 +808,209 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
         for i in family.size():family[i].same_target_index=i;family[i].same_target_count=family.size()
     return {"ok":true}
 
+
+## Source uses retain their own authored socket/window. Only a registered
+## two-half capture can collapse its matching rear/front aliases; unrelated
+## uses and the two actual Font hands retain independent draw identities.
+static func _action_media(group:Dictionary,node:Dictionary,recipe:Dictionary,actor:String,start:float,graph:Dictionary,cache:Dictionary,witness:Dictionary={})->void:
+    var sources:Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
+    var legacy_seen:Dictionary={};var captures:Dictionary={}
+    for index in recipe.get("media",[]).size():
+        var media:Dictionary=recipe.media[index]
+        if media.get("requiredSaveSuccess",false) and witness.get("succeeded")!=true:continue
+        var condition_evidence:Dictionary={}
+        if not str(media.get("requireAppliedConditionId","")).is_empty():
+            var applied:Array=graph.get("observed_results",{}).get(str(node.id),[]).filter(func(row):return row.kind=="condition_application" \
+                and row.target_uuid==actor and row.condition.get("behavior_id")==media.requireAppliedConditionId \
+                and ApplicationResults._cast_owns_result(node,row.node,graph))
+            if applied.size()!=1:continue
+            condition_evidence={"condition_uuid":applied[0].condition.condition_uuid,"application_occurrence":str(applied[0].node.id)}
+        var explicit:String=str(media.get("source_id",""))
+        var candidates:Array=[explicit] if not explicit.is_empty() else sources.keys().filter(func(id):return media.get("assetId") in sources[id].get("media_ids",[]))
+        for source_id in candidates:
+            var record:Dictionary=sources.get(source_id,{})
+            if not explicit.is_empty() and node.get("phase")!="completion":continue
+            if explicit.is_empty():
+                if legacy_seen.has(source_id):continue
+                legacy_seen[source_id]=true
+            var socket:String=str(media.get("poseSocket",""))
+            var paired:bool=not explicit.is_empty() and media.get("id")==media.get("assetId") and ["back","front"].all(func(half):return half in record.get("capture_halves",[]))
+            var capture:Array=[source_id,socket,media.get("attachment",""),media.get("startOffsetMs",0.0),media.get("durationMs",record.get("duration",0.0)*1000.0),
+                media.get("alpha",1.0),media.get("scale",1.0),media.get("loop",false),media.get("fadeInMs",0.0),media.get("fadeOutMs",0.0),media.get("fadeCurve","linear"),media.get("timeMap",[]),condition_evidence]
+            if paired and captures.has(capture):continue
+            if paired:captures[capture]=true
+            var component:Dictionary=_source(group,node,str(source_id),start+float(media.get("startOffsetMs",0.0)),
+                {"actor_uuid":actor,"attachment":socket if not socket.is_empty() else media.get("attachment","ground"),
+                "scale":media.get("scale",1.0),"alpha":media.get("alpha",1.0)},cache)
+            component.duration_ms=float(media.get("durationMs",component.duration_ms));component.loop=media.get("loop",false)
+            component.source_duration_ms=float(record.get("duration",0.0))*1000.0
+            component.fade_in_ms=float(media.get("fadeInMs",0.0));component.fade_out_ms=float(media.get("fadeOutMs",0.0))
+            component.fade_curve=media.get("fadeCurve","linear")
+            component.authored_use_id=str(media.get("id",index))
+            if not explicit.is_empty():
+                component.assignment_source=Authoring.recipe_source(recipe,"media/"+str(index),cache)
+                component.source=component.assignment_source
+            if not socket.is_empty():component.requires_pose_socket=true
+            if not condition_evidence.is_empty():component.observed_condition=condition_evidence
+            if not witness.is_empty():component.observed_fact=witness.duplicate(true)
+            var time_map:Array=media.get("timeMap",[])
+            if time_map.size()==2:
+                var hz:float=float(record.sample_hz)
+                component.source_time_window={"begin_seconds":float(time_map[0].sourceFrame)/hz,
+                    "end_seconds":float(time_map[1].sourceFrame)/hz,"duration_ms":float(time_map[1].elapsedMs)}
+
+## The derived owner index names authored resources only. Actual public fact
+## kind/stage/witness/recipient values own finite admission and its one clock.
+static func _fact_media(group:Dictionary,node:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    if node.get("phase")!="completion":return
+    var fact:Dictionary=node.fact
+    var metadata:Dictionary=Authoring.load_data("native_effects/index.json",cache)
+    var recipes:Dictionary=Authoring.load_data("catalog/body_action_recipes.json",cache)
+    for owner in metadata.get("observed_fact_owners",{}).get(str(fact.kind),[]):
+        var recipe:Dictionary=recipes.get(owner,{})
+        var selector:Dictionary=recipe.get("observedFact",{})
+        if selector.has("stage") and fact.get("stage")!=selector.stage:continue
+        var witness:Variant=fact.get(str(selector.get("witness","")))
+        if witness==null or not selector.get("when",{}).keys().all(func(key):return witness.get(key)==selector.when[key]):continue
+        var actor:Variant=fact.get(str(selector.get("actor_field","")))
+        if actor==null:continue
+        var selected:Dictionary=recipe.duplicate(false)
+        selected._legacy_source="catalog/body_action_recipes.json:/"+str(owner)
+        var evidence:Dictionary={"authored_owner":owner,"event_uuid":str(node.id),"lineage_uuid":str(node.lineage_id),
+            "kind":fact.kind,"witness_field":selector.witness,"witness":witness.duplicate(true),"actor_uuid":str(actor),
+            "selector_source":Authoring.recipe_source(selected,"observedFact",cache),"succeeded":witness.get("succeeded")}
+        _action_media(group,node,selected,str(actor),float(graph.get("committed_at",{}).get(str(node.id),graph.times.get(node.id,graph.starts.get(node.id,0.0)))),graph,cache,evidence)
+
+## Actual native response facts select one exact immutable condition member.
+## These finite sources share ordinary phase, geometry and teardown handling.
+static func _condition_responses(group:Dictionary,node:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    if node.get("fact")==null or node.fact.get("kind") not in ["damage","heal","temporary_hit_points","actor_change"]:return
+    var recipes:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache)
+    var actors:Dictionary=graph.actor_inputs.get(node.id,{})
+    var seen:Dictionary={}
+    var membership_counts:Dictionary={}
+    for actor in actors.values():
+        for member in actor.get("conditions",[]):
+            var key:String=str(member.get("condition_uuid",""))
+            membership_counts[key]=int(membership_counts.get(key,0))+1
+    for actor in actors.values():
+        for member in actor.get("conditions",[]):
+            if int(membership_counts.get(str(member.get("condition_uuid","")),0))!=1:continue
+            var recipe:Dictionary=recipes.get(str(member.get("behavior_id","")),{})
+            for cue in recipe.get("nativeResponses",[]):
+                var projected:Dictionary=ConditionResponses.project(node,actor,member,cue.get("condition_response",{}),graph)
+                if projected.is_empty():continue
+                var identity:Array=[str(member.condition_uuid),int(cue.source_index)]
+                if seen.has(identity):continue
+                seen[identity]=true
+                _condition_response(group,node,projected,cue,graph,str(member.condition_uuid),str(member.behavior_id),cache)
+    var spatial:Dictionary=graph.get("spatial_contact_inputs",{}).get(str(node.id),{})
+    if spatial.is_empty():return
+    var behavior:String=str(spatial.effect.get("content_ref",{}).get("content_id",""))
+    for cue in recipes.get(behavior,{}).get("nativeResponses",[]):
+        var projected:Dictionary=ConditionResponses.project_spatial(node,spatial,cue.get("condition_response",{}),graph)
+        if projected.is_empty():continue
+        _condition_response(group,node,projected,cue,graph,str(spatial.identity),behavior,cache)
+
+## One finite source compiler for either actual owner kind. The source UUID
+## remains separate from the result occurrence and the receiving actor.
+static func _condition_response(group:Dictionary,node:Dictionary,projected:Dictionary,cue:Dictionary,graph:Dictionary,identity:String,behavior:String,cache:Dictionary)->void:
+    var receiving:Dictionary=graph.condition_response_inputs.get(node.id,{}).get(projected.actor,{})
+    if receiving.is_empty():return
+    var at:float=float(graph.times.get(node.id,graph.starts.get(node.id,0.0)))
+    for commit in group.commits:
+        if str(commit.get("event_uuid",""))==str(node.id):at=float(commit.at_ms);break
+    var source:String=str(cue.get("source","catalog/condition_recipes.json:/"+behavior+"/nativeResponses/"+str(cue.source_index)))
+    var selected:Dictionary={"id":behavior,"source":source,"staging":{"decorative_light_multiplier":float(cue.get("light_multiplier",1.0))},"source_bounds":{},"palette":{}}
+    var phase:Dictionary=NativeSpells._phase(selected,cue,{"prepare":at},at,0.0,0)
+    phase.source=source;phase.source_id=behavior+".response."+str(cue.source_index)
+    phase.erase("spell_id")
+    phase.merge({"native_spell":true,"cast_recipe":{"enabled":false},"actor_uuid":projected.actor,"target_uuid":projected.actor,
+        "condition_response":projected.evidence,
+        "from_position":receiving.position,"to_position":receiving.position,
+        "from_elevation_feet":float(receiving.elevation_steps)*5.0,"to_elevation_feet":float(receiving.elevation_steps)*5.0,
+        "ground_target":false,"native_constructor_evidence":projected.evidence},true)
+    if projected.evidence.get("owner_kind")=="spatial_effect":phase.spatial_effect_uuid=identity
+    else:phase.condition_uuid=identity
+    if projected.has("native_inputs"):
+        phase.native_inputs=projected.native_inputs.duplicate(true)
+        if phase.native_inputs.has("weapon_impact"):phase.native_inputs.weapon_impact.operation_sequence=group.operation_sequence
+    if projected.has("event_state"):
+        phase.native_event_state=projected.event_state
+        phase.native_event_binding=projected.event_binding
+    if projected.has("attack"):
+        var actor:Dictionary=graph.actor_inputs.get(node.id,{}).get(str(projected.recipient),{})
+        var receipt:Dictionary=ImpactPlacement.prepare(actor,group.actor_tracks,at,graph.contacts.get(projected.recipient,{}),cache)
+        var source_support:Dictionary=graph.condition_response_inputs.get(node.id,{}).get(projected.owner,{})
+        if source_support.is_empty():return
+        phase.from_position=source_support.position;phase.from_elevation_feet=float(source_support.elevation_steps)*5.0
+        phase.impact=receipt;phase.native_weapon_impact=true
+        phase.impact_actor_uuid=projected.recipient;phase.impact_at_ms=at
+        if receipt.status=="missing":phase.status="missing";phase.reason=receipt.reason
+    var constructor:Dictionary=cue.get("constructor_input",{})
+    if not constructor.is_empty():
+        var observed:Dictionary=ConditionResponses.source_result(node,identity,behavior,projected,constructor)
+        if observed.is_empty():return
+        phase.native_inputs=observed.inputs
+        phase.native_constructor_inputs=[{"component_path":constructor.component_path,"input_field":str(constructor.get("input_field","")),"values":observed.values}]
+        phase.native_constructor_evidence=observed.evidence
+    add(group,node,"native_effect",phase.start_ms,phase.duration_ms,source,phase)
+
+static func _condition_contact(group:Dictionary,node:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    var fact:Dictionary=node.fact
+    if fact.get("source_condition_uuid")==null:return
+    # Retaliation belongs to the actual condition holder, which can differ
+    # from the damaged recipient and the damage's attributed original caster.
+    var members:Array=[]
+    var holders:Array=[]
+    var member_cut:Dictionary=node
+    while not member_cut.is_empty():
+        for actor in graph.actor_inputs.get(member_cut.id,{}).values():
+            for member in actor.get("conditions",[]):
+                if member.get("condition_uuid")!=fact.source_condition_uuid:continue
+                members.append(member);holders.append(str(actor.uuid))
+        if not members.is_empty():break
+        # A lethal tick can retire its member before the applied DamageFact.
+        # Its exact native ancestor retains the actual pre-emission membership;
+        # never search another operation or unrelated actor/condition by name.
+        var parent:Variant=member_cut.get("parent_lineage")
+        member_cut={} if parent==null else graph.nodes.get(str(parent),{})
+    var spatial:Dictionary=graph.get("spatial_contact_inputs",{}).get(str(node.id),{})
+    if members.size()+int(not spatial.is_empty())!=1:return
+    var selected:Dictionary=NativePersistent.spatial_selection(spatial.effect,cache) if not spatial.is_empty() \
+        else NativeSpells.condition(str(members[0].behavior_id),cache)
+    if selected.is_empty():return
+    for cue in selected.get("staging",{}).get("cues",[]):
+        var descriptor:Dictionary=cue.get("constructor_input",{})
+        var projected:Dictionary={}
+        if not spatial.is_empty():
+            if descriptor.get("projection")!="spatial_contact":continue
+            projected=ApplicationResults.spatial_contact(node,str(spatial.identity),spatial.effect,descriptor,graph)
+        else:
+            if descriptor.get("projection")!="condition_contact":continue
+            projected=ApplicationResults.condition_contact(node,members[0],descriptor,graph)
+        if projected.is_empty():continue
+        if not spatial.is_empty():
+            projected.evidence.spatial_origin_cut=spatial.get("origin_cut","")
+            if spatial.has("removal_occurrence"):projected.evidence.spatial_removal_occurrence=spatial.removal_occurrence
+        if spatial.is_empty():
+            projected.evidence.condition_holder_uuid=holders[0]
+            projected.evidence.membership_cut_occurrence=str(member_cut.id)
+        var at:float=float(graph.starts.get(node.id,0.0))
+        var phase:Dictionary=NativeSpells._phase(selected,cue,{"prepare":at},at,0.0,0)
+        # These finite contacts are optically recipient-owned. The constructor
+        # retains the original caster; an undisclosed caster position is never
+        # required to place a packet that consumes only the recipient surface.
+        var position:Variant=graph.positions.get(fact.target_entity_uuid)
+        if position==null:continue
+        var elevation:float=float(graph.contacts.get(fact.target_entity_uuid,{}).get("from_elevation_feet",0.0))
+        phase.merge({"native_spell":true,"cast_recipe":{"enabled":false},"actor_uuid":str(fact.target_entity_uuid),"target_uuid":str(fact.target_entity_uuid),
+            "from_position":position,"to_position":position,"from_elevation_feet":elevation,"to_elevation_feet":elevation,
+            "ground_target":false,"native_inputs":projected.inputs,
+            "native_constructor_inputs":[{"component_path":descriptor.component_path,"input_field":"","values":projected.values}],
+            "native_constructor_evidence":projected.evidence},true)
+        add(group,node,"native_effect",phase.start_ms,phase.duration_ms,phase.source,phase)
+
 static func _movement_audio(group:Dictionary,node:Dictionary,track:Dictionary,sounds:Dictionary,cache:Dictionary)->void:
     if node.fact.get("movement_mode")!="walking" and not (node.fact.get("movement_mode")==null and track.trajectory=="connector_transfer"):return
     var document:String=sounds.movement_contacts
@@ -657,7 +1036,11 @@ static func _movement_audio(group:Dictionary,node:Dictionary,track:Dictionary,so
             continue
         var times=AudioCues.source_frame_times(track,float(marker.frame),float(clip.fps),int(clip.frames),marker.direction)
         for at in times:
+            var endpoint_error:String=AudioCues.motion_endpoint_error(marker,track,float(at))
             var row=_bound_audio(group,node,sounds.movement,marker.binding,{"body.source_frame":at},track.actor_uuid,"movement",cache,track)
+            if not endpoint_error.is_empty():
+                row.status="missing";row.reason=endpoint_error;row.duration_ms=0.0
+            if marker.has("motion_endpoint"):row.motion_endpoint=marker.motion_endpoint
             row.timing_source=source+"/markers/"+str(contacts.markers.find(marker))
             row.source_frame=marker.frame;row.source_frame_boundary=marker.get("boundary","frame_start")
             row.contact_id=marker.id;row.contact_direction=marker.direction;row.contact_review=contacts.get("review_status","unreviewed")
@@ -683,7 +1066,137 @@ static func _audio(group:Dictionary,node:Dictionary,cue:String,start:float,actor
     group.components.append(row)
     return row
 
+
+## Parent recipe options decorate this exact positive applied result. Source
+## identity follows the actual ancestor chain, never a name/cursor heuristic.
+static func _damage_feedback(group:Dictionary,node:Dictionary,graph:Dictionary,start:float,cache:Dictionary)->void:
+    var fact:Dictionary=node.fact
+    var context:Dictionary=Authoring.load_data("catalog/damage_context.json",cache)
+    var parent:Dictionary=graph.nodes.get(node.get("parent_lineage"),{})
+    var damage_recipe:Dictionary={};var owner_recipe:Dictionary={};var owner_occurrence:String=""
+    var spell_behavior:String=""
+    while not parent.is_empty():
+        if spell_behavior.is_empty() and parent.get("fact")!=null and parent.fact.kind=="spell":spell_behavior=Occurrences.spell(parent,graph).get("behavior_id","")
+        if graph.recipes.has(parent.id) and graph.recipes[parent.id].get("damage") is Dictionary:
+            owner_recipe=graph.recipes[parent.id];damage_recipe=owner_recipe.damage;owner_occurrence=str(parent.id);break
+        parent=graph.nodes.get(parent.get("parent_lineage"),{})
+    var timing:Dictionary=graph.get("damage_timings",{}).get(node.id,{})
+    var flash:Dictionary=damage_recipe.get("hitFlash",{})
+    if flash.get("enabled",context.get("flashEnabled",false)):
+        var colors:Array=flash.get("palette",{}).get("colors",[])
+        if colors.is_empty():
+            if flash.has("color"):colors=[flash.color]
+            else:
+                var palette:Dictionary=context.palette.byDamageType.get(fact.get("damage_type"),context.palette.untyped)
+                colors=[palette.elementColors.secondary,palette.elementColors.primary,palette.elementColors.tertiary]
+        var source:String=Authoring.recipe_source(owner_recipe,"damage/hitFlash",cache) if damage_recipe.has("hitFlash") else "catalog/damage_context.json:/flashEnabled"
+        var hit:Dictionary=add(group,node,"material_flash",timing.get("flash",start),flash.get("durationMs",context.get("flashDurationMs",150)),source,
+            {"actor_uuid":fact.target_entity_uuid,"material":flash,"colors":colors,"damage_type":fact.get("damage_type"),"attachment":"body",
+            "feedback_policy":flash.duplicate(true),"feedback_policy_sources":_feedback_sources(owner_recipe,"hitFlash",flash,cache),"feedback_source_occurrence":owner_occurrence})
+        var native_hit:Dictionary=NativeSpells.hit(spell_behavior,cache)
+        if not native_hit.is_empty():
+            hit.native_hit=native_hit
+            var envelope:Dictionary=Authoring.load_data("sandbox/feedback.json",cache).hit_flash
+            hit.duration_ms=envelope.durationMs
+            hit.material=flash.duplicate(true)
+            hit.material.merge(envelope,true)
+    var number:Dictionary=damage_recipe.get("floatingNumber",{})
+    if number.get("enabled",context.get("numberEnabled",false)):
+        var palette:Dictionary=context.palette.byDamageType.get(fact.get("damage_type"),context.palette.untyped)
+        var label:String=str(number.get("label",""))
+        var source:String=Authoring.recipe_source(owner_recipe,"damage/floatingNumber",cache) if damage_recipe.has("floatingNumber") else "catalog/damage_context.json:/numberEnabled"
+        add(group,node,"damage_number",timing.get("number",start),number.get("durationMs",context.get("numberDurationMs",900)),source,
+            {"actor_uuid":fact.target_entity_uuid,"amount":fact.applied_damage,"label":label,
+            "text":str(fact.applied_damage)+(" "+label if not label.is_empty() else ""),
+            "color":number.get("color",palette.impactColor),"style":Authoring.load_data("catalog/number_style.json",cache),"attachment":"head",
+            "feedback_policy":number.duplicate(true),"feedback_policy_sources":_feedback_sources(owner_recipe,"floatingNumber",number,cache),"feedback_source_occurrence":owner_occurrence})
+
+static func _feedback_sources(recipe:Dictionary,name:String,policy:Dictionary,cache:Dictionary)->Dictionary:
+    var sources:Dictionary={}
+    for field in policy:
+        var source:String=Authoring.recipe_source(recipe,"damage/"+name+"/"+str(field),cache)
+        if not source.is_empty():sources[field]=source
+    return sources
+
 static func _feedback(group: Dictionary,node: Dictionary,feedback: Dictionary,start: float,actor_id: String,source: String,cache: Dictionary) -> void:
+    if not feedback.get("enabled",true):return
     var style=Authoring.load_data("catalog/badge_style.json",cache)
     add(group,node,"feedback_text",start,feedback.get("durationMs",style.durationMs),source,
         {"actor_uuid":actor_id,"text":feedback.text,"color":feedback.color,"style":style,"attachment":"head"})
+
+## The actual effective-handler attribution selects a finite authored passive.
+## It never manufactures an action or activates from a healing/damage amount.
+static func _passive_results(group:Dictionary,trigger:Dictionary,graph:Dictionary,bindings:Dictionary)->void:
+    for attribution in trigger.get("content_attributions",[]):
+        var behavior:String=str(attribution.get("behavior_id",""))
+        var binding:Dictionary=bindings.get(behavior,{})
+        if binding.get("effect_cues",[]).is_empty():continue
+        var results:Array=ReactionInputs.emitted_results(trigger,attribution,graph)
+        var source:String=str(attribution.get("source_entity_uuid",""))
+        for cue in binding.effect_cues:
+            var descriptor:Dictionary=cue.get("constructor_input",{})
+            if descriptor.get("projection")!="effective_handler" or descriptor.get("required_effective_handler")!=behavior:continue
+            for result in results:
+                var fact:Dictionary=result.fact
+                var kind:String=str(descriptor.outcome)
+                if fact.kind!=kind or fact.get("source_entity_uuid")!=source or fact.get("target_entity_uuid")==null:continue
+                var target:String=str(fact.target_entity_uuid)
+                if descriptor.get("self_only",false) and target!=source:continue
+                var event:Dictionary={"uuid":str(result.id),"source_entity_uuid":source,"target_entity_uuid":target,
+                    "canceled":false,"effect_admitted":true}
+                if kind=="heal":
+                    if fact.actual_healing<=0 or fact.was_blocked:continue
+                    event.merge({"actual_healing":fact.actual_healing,"blocked":false})
+                elif kind=="damage":
+                    if fact.get("stage")!="applied" or fact.applied_damage<=0 \
+                            or descriptor.get("damage_type")!=fact.damage_type:continue
+                    event.merge({"actual_damage":fact.applied_damage,"damage_component_uuid":str(result.id)})
+                else:continue
+                var roles:Dictionary={"caster":source,"target":target}
+                var values:Dictionary={"source_entity_uuid":source,"recipient_entity_uuid":target,
+                    "owner_uuid":str(trigger.id),"event_uuid":str(result.id),"actor_roles":roles,
+                    "geometry_actor":roles[descriptor.geometry_actor],"lease":{},"event":{},"plan_only":false,
+                    "native_behavior_id":behavior}
+                var at:float=float(graph.starts.get(result.id,0.0))
+                var selected:Dictionary={"id":str(cue.get("selection",behavior)),"source":str(binding.source),
+                    "source_bounds":{},"palette":{},"staging":{"decorative_light_multiplier":float(cue.get("light_multiplier",0.0))}}
+                var phase:Dictionary=NativeSpells._phase(selected,cue,{"prepare":at},at,0.0,0)
+                phase.source=str(binding.source)+"/"+str(cue.source_index)
+                phase.source_id=behavior+".native."+str(cue.role)
+                phase.erase("spell_id")
+                phase.merge({"native_spell":true,"actor_uuid":source,"target_uuid":target,
+                    "from_position":graph.actor_inputs.get(result.id,{}).get(source,{}).get("last_visual_position",graph.positions.get(source)),
+                    "to_position":graph.actor_inputs.get(result.id,{}).get(target,{}).get("last_visual_position",graph.positions.get(target)),
+                    "from_elevation_feet":graph.contacts.get(source,{}).get("from_elevation_feet",0.0),
+                    "to_elevation_feet":graph.contacts.get(target,{}).get("from_elevation_feet",0.0),
+                    "recipe":{},"cast_recipe":{"enabled":false},"native_inputs":{"lease_input":{},"event_input":event},
+                    "native_constructor_inputs":[{"component_path":descriptor.component_path,"input_field":"","values":values}],
+                    "native_constructor_evidence":{"attribution":attribution,"trigger_terminal_occurrence":str(trigger.id),
+                        "result_occurrence":str(result.id),"result_lineage":str(result.lineage_id),"outcome":kind}},true)
+                add(group,result,"native_effect",phase.start_ms,phase.duration_ms,phase.source,phase)
+
+## Actual disclosed component sources opt into authored finite weapon cues.
+## Neither weapon kind nor aggregate damage type selects a smite/rider.
+static func _weapon_result_binding(node:Dictionary,graph:Dictionary,cache:Dictionary,actions:Dictionary)->Dictionary:
+    var fact:Dictionary=node.fact
+    if fact.get("attack_source_kind")!="equipped" or fact.get("attack_outcome") not in ["Hit","Crit"]:return {}
+    var sources:Array=[]
+    for row in graph.get("observed_results",{}).get(str(node.id),[]):
+        if row.kind!="damage":continue
+        for part in row.node.fact.get("components",[]):
+            if part.get("source_id")!=null and part.source_id not in sources:sources.append(part.source_id)
+    if sources.is_empty():return {}
+    var owners:Array=[]
+    var authored:Dictionary=Authoring.load_data("native_effects/index.json",cache).get("weapon_result_owners",{})
+    for source in sources:
+        for owner in authored.get(source,[]):
+            if owner not in owners:owners.append(owner)
+    var cues:Array=[]
+    for owner in owners:
+        var choices:Array=actions.get(owner.id,{}).get("effect_cues",[]) if owner.kind=="action" \
+            else NativeSpells.selection(str(owner.id),cache).get("staging",{}).get("cues",[])
+        for cue in choices:
+            var descriptor:Dictionary=cue.get("constructor_input",{})
+            if descriptor.get("projection")!="weapon_component" or not descriptor.get("damage_source_ids",[]).any(func(id):return id in sources):continue
+            cues.append(cue)
+    return {} if cues.is_empty() else {"effect_cues":cues,"source":"authoring/abilities/spells::actual_weapon_components"}

@@ -39,6 +39,37 @@ static func mask(points: Array) -> Dictionary:
         var index=int(value[0]-low[0])*height+int(value[1]-low[1]);data[index/8]|=1<<(index%8)
     return {"x0":low[0],"y0":low[1],"width":width,"height":height,"bits":encoded(data)}
 
+static func union_points(prior: Dictionary, added: Array) -> Dictionary:
+    # A canonical mask's occupied bounds are tight. Adding points only expands
+    # those bounds, so the union needs no coordinate population or trim pass.
+    if added.is_empty():return prior.duplicate()
+    var prior_width=int(prior.width);var prior_height=int(prior.height)
+    if prior_width==0:return mask(added)
+    var x0=int(prior.x0);var y0=int(prior.y0);var x1=x0+prior_width-1;var y1=y0+prior_height-1
+    for value in added:
+        x0=mini(x0,value[0]);y0=mini(y0,value[1]);x1=maxi(x1,value[0]);y1=maxi(y1,value[1])
+    var width=x1-x0+1;var height=y1-y0+1;var data=bytes(prior.bits)
+    if x0!=prior.x0 or y0!=prior.y0 or width!=prior_width or height!=prior_height:
+        var expanded=PackedByteArray();expanded.resize((width*height+7)/8);expanded.fill(0)
+        # Each old column is a contiguous bit span. Copy byte fragments into its
+        # new column, preserving little-endian bits and zero tail padding.
+        for column in range(prior_width):
+            var source=column*prior_height
+            var target=(column+int(prior.x0)-x0)*height+int(prior.y0)-y0
+            var remaining=prior_height
+            while remaining>0:
+                var span=mini(8-source%8,remaining)
+                var fragment=(int(data[source/8])>>(source%8))&((1<<span)-1)
+                var shift=target%8
+                expanded[target/8]|=(fragment<<shift)&255
+                if shift+span>8:expanded[target/8+1]|=fragment>>(8-shift)
+                source+=span;target+=span;remaining-=span
+        data=expanded
+    for value in added:
+        var index=(int(value[0])-x0)*height+int(value[1])-y0
+        data[index/8]|=1<<(index%8)
+    return {"x0":x0,"y0":y0,"width":width,"height":height,"bits":encoded(data)}
+
 static func row_indices(bits: Dictionary, count: int) -> Dictionary:
     var result:Array=[];var data=bytes(bits.get("bits",""));var start=int(bits.get("start",0))*8
     for i in range(data.size()*8):
@@ -47,15 +78,47 @@ static func row_indices(bits: Dictionary, count: int) -> Dictionary:
             result.append(start+i)
     return {"ok":true,"value":result}
 
-static func values_map(values: Dictionary) -> Dictionary:
-    var points=mask_points(values.get("cells",{}));var data=bytes(values.get("values",""));var result={}
+static func values_map(values: Dictionary, cell_points: Array = []) -> Dictionary:
+    var points=mask_points(values.get("cells",{})) if cell_points.is_empty() else cell_points
+    var data=bytes(values.get("values",""));var result={}
     for i in range(points.size()):result[key(points[i])]=int(data[i])
     return result
 
-static func values(points: Array, held: Dictionary) -> Dictionary:
+static func values(points: Array, held: Dictionary, cell_mask: Dictionary = {}) -> Dictionary:
     var data=PackedByteArray()
     for value in points:data.append(int(held.get(key(value),0)))
-    return {"cells":mask(points),"values":encoded(data)}
+    # A sensory fold already encoded this exact ordered cell population.
+    return {"cells":mask(points) if cell_mask.is_empty() else cell_mask,"values":encoded(data)}
+
+static func value_indices(prior: Array, points: Array) -> PackedInt64Array:
+    # Both canonical point populations are sorted by x then y. Share this
+    # linear alignment across the light and hazard bytes on that same lattice.
+    var result:=PackedInt64Array();result.resize(points.size());result.fill(-1)
+    var old:int=0;var next:int=0
+    while old<prior.size() and next<points.size():
+        var a:Array=prior[old];var b:Array=points[next]
+        if a[0]<b[0] or (a[0]==b[0] and a[1]<b[1]):old+=1
+        elif a[0]==b[0] and a[1]==b[1]:result[next]=old;old+=1;next+=1
+        else:next+=1
+    return result
+
+static func reindexed_values(prior: Dictionary, prior_count: int, points: Array, changed: Array, cell_mask: Dictionary, indices: PackedInt64Array) -> Dictionary:
+    var source:PackedByteArray=bytes(prior.get("values",""))
+    # Preserve the old helper boundary for malformed short byte populations;
+    # the fast merge must not conceal an invalid old row by dropping its cell.
+    if source.size()<prior_count:
+        var held:Dictionary=values_map(prior)
+        for row in changed:held[key(row.position)]=row.value
+        return values(points,held,cell_mask)
+    var patches:Dictionary={}
+    # Arrays preserve the wire's full integer coordinates. Vector2i would
+    # truncate them, while string keys would repeat the old hot-path work.
+    for row in changed:patches[row.position]=row.value
+    var data:=PackedByteArray();data.resize(points.size());data.fill(0)
+    for i in points.size():
+        if patches.has(points[i]):data[i]=int(patches[points[i]])
+        elif indices[i]>=0:data[i]=source[indices[i]]
+    return {"cells":cell_mask,"values":encoded(data)}
 
 static func selected(rows: Array, bits: Dictionary) -> Dictionary:
     var indices=row_indices(bits,rows.size())

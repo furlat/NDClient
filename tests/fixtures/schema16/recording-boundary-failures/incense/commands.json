@@ -1,0 +1,143 @@
+[
+ {
+  "request": {
+   "do": "action.class.cleric.divine_intervention.arm_thy_servant",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "bc01b8ee-5096-4dcb-ad5a-06dbabc9dd28",
+  "discovery_generation": 1,
+  "preview_request": {
+   "actor_uuid": "7e9ab8cc-dc56-45ea-bea3-16c83104dcb5",
+   "state_revision": "bc01b8ee-5096-4dcb-ad5a-06dbabc9dd28",
+   "discovery_generation": 1,
+   "correlation_id": "a8d9c91e-c8ff-4716-8115-936af8da8104",
+   "selection": {
+    "action_index": 40,
+    "target_indices": [
+     0
+    ],
+    "extra_target_positions": [],
+    "prefer_safe": false
+   }
+  },
+  "selected_action": {
+   "behavior_id": "action.class.cleric.divine_intervention.arm_thy_servant",
+   "display_name": "Divine Intervention: Arm Thy Servant",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "7e9ab8cc-dc56-45ea-bea3-16c83104dcb5",
+   "state_revision": "bc01b8ee-5096-4dcb-ad5a-06dbabc9dd28",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 40,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+   "game_epoch": "387239ad-ea97-4edb-bd55-ea51b7f0b185",
+   "audience_id": "7a8e99de-cd46-4e8f-b952-0f7f3b22e357",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+    "game_epoch": "387239ad-ea97-4edb-bd55-ea51b7f0b185",
+    "audience_id": "7a8e99de-cd46-4e8f-b952-0f7f3b22e357",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "unequip",
+   "by": "caster",
+   "target": "self",
+   "slot": "MELEE_MAIN"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "7e9ab8cc-dc56-45ea-bea3-16c83104dcb5",
+   "state_revision": "97328616-c85d-42a4-9135-88a50a5a1591",
+   "intent": {
+    "kind": "unequip",
+    "item": {
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+   "game_epoch": "387239ad-ea97-4edb-bd55-ea51b7f0b185",
+   "audience_id": "7a8e99de-cd46-4e8f-b952-0f7f3b22e357",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+    "game_epoch": "387239ad-ea97-4edb-bd55-ea51b7f0b185",
+    "audience_id": "7a8e99de-cd46-4e8f-b952-0f7f3b22e357",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "equip",
+   "by": "caster",
+   "target": "self",
+   "slot": "MELEE_MAIN",
+   "item": "weapon.devotees_mace"
+  },
+  "previews": 0,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "7e9ab8cc-dc56-45ea-bea3-16c83104dcb5",
+   "state_revision": "6dea2a54-bba6-488e-89f5-c2d29e17bc2d",
+   "intent": {
+    "kind": "equip",
+    "item": {
+     "item_uuid": "8ba0a34f-68d2-451d-a469-ee7197184d6f",
+     "slot": "MELEE_MAIN"
+    }
+   }
+  },
+  "seat": "party",
+  "actor": "Party caster",
+  "receipt": {
+   "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+   "game_epoch": "387239ad-ea97-4edb-bd55-ea51b7f0b185",
+   "audience_id": "7a8e99de-cd46-4e8f-b952-0f7f3b22e357",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_action_class_cleric_divine_intervention_arm_thy_servant_direct_character",
+    "game_epoch": "387239ad-ea97-4edb-bd55-ea51b7f0b185",
+    "audience_id": "7a8e99de-cd46-4e8f-b952-0f7f3b22e357",
+    "sequence": 10
+   }
+  }
+ }
+]

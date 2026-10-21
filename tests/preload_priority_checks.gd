@@ -7,6 +7,8 @@ const Characters = preload("res://presentation/characters.gd")
 const Catalog = preload("res://source_catalog.gd")
 const Protocol = preload("res://sdk/protocol.gd")
 const Reducer = preload("res://sdk/reducer.gd")
+const Geometry=preload("res://presentation/character_geometry.gd")
+const PROFILE="reference"
 var checks = 0
 var failures: Array = []
 var evidence = {}
@@ -21,7 +23,7 @@ func absolute(paths: Dictionary) -> Dictionary:
     return result
 func bytes_for(paths: Dictionary, family: Dictionary) -> int:
     var size = 0
-    for path in paths: size += int(family.estimate_bytes[path])
+    for path in paths:size+=int(family.estimates[path].bytes)
     return size
 func ordered_queue(data: Dictionary, required: Dictionary, label: String) -> void:
     var expected: Array = []
@@ -35,15 +37,33 @@ func ordered_queue(data: Dictionary, required: Dictionary, label: String) -> voi
     for path in actual: unique[path] = true
     check(unique.size()==actual.size(),label+": queue contains each source once")
 func acknowledge(data: Dictionary, family: Dictionary) -> void:
-    var pending: Array = data.pending
-    data.pending = []; data.queued.clear(); data.stats = {}
+    var owner:Dictionary=Media.physical(data)
+    var pending: Array = owner.pending.duplicate()
+    owner.pending.clear();owner.queued.clear();owner.stats.clear()
     for request in pending:
         var size: Dictionary = family.estimates[request.path]
-        var loaded = {"path":request.path,"cpu_bytes":size.cpu_bytes,"gpu_bytes":size.gpu_bytes}
+        var loaded = {"path":request.path,"cpu_bytes":size.gpu_bytes,"gpu_bytes":size.gpu_bytes}
         if request.fixture: loaded.merge({"energy":.1,"emission_centroid":Vector2(32,40)})
         Media.published(data,loaded)
     Media.release_cold_images(data,-1) # Offline whole-batch acknowledgement for queue ordering.
     Media.boot_ready(data)
+
+func selected_source(actor:Dictionary,clips:Array,state:Dictionary,cache:Dictionary)->Dictionary:
+    var source:Dictionary=Characters.sheet_paths(actor,clips,cache,Characters.item_looks(actor,state))
+    if not source.ok:return source
+    var selected:Dictionary=source.duplicate()
+    selected.value=Geometry.for_profile(source.value,source.normal_sets,PROFILE,cache,"priority-check")
+    selected.cpu_required={};selected.gpu_only={}
+    for path in selected.value:
+        if source.cpu_required.has(path):selected.cpu_required[path]=true
+        elif source.gpu_only.has(path):selected.gpu_only[path]=true
+    return selected
+func settled_selection(data:Dictionary,label:String)->void:
+    var end:int=Time.get_ticks_msec()+30000
+    while Media.diagnostics(data).selection_pending and Time.get_ticks_msec()<end:
+        Media.prepare_optional(data)
+        await process_frame
+    check(not Media.diagnostics(data).selection_pending,label+": bounded optional metadata/selection reaches its actual publication boundary")
 
 func run() -> void:
     for arg in OS.get_cmdline_user_args():
@@ -61,9 +81,10 @@ func run() -> void:
     var frozen := var_to_bytes(state)
     var cache = {}; var exact = {}; var optional = {}
     Media._plan_sources({"key":[0],"state":state,"groups":[]},exact,cache)
+    exact.optional_request.profile=PROFILE
     Media._plan_optional(exact.optional_request,optional,cache)
     var family: Dictionary = optional.value.encounter
-    var rigs: Dictionary = Characters._read("catalog/rigs.json",cache)
+    var rigs: Dictionary = Characters.rigs(cache)
     var movement: Dictionary = Characters._read("catalog/movement_context.json",cache)
     var complete: Dictionary = exact.value.environment_required.duplicate()
     var expected_cpu: Dictionary = complete.duplicate()
@@ -74,9 +95,9 @@ func run() -> void:
         var clips: Array = [rest.value.clip,movement.walkClip,movement.jumpClip]
         for clip in clips:
             if not rig.clips.has(clip): continue
-            var source = Characters.sheet_paths(actor,[clip],cache)
+            var source = selected_source(actor,[clip],state,cache)
             check(source.ok and source.value.keys().all(func(path):return family.priority.has(path)),actor.name+": authored "+clip+" includes every colour and geometry companion in priority")
-        var walking = Characters.sheet_paths(actor,[movement.walkClip],cache)
+        var walking = selected_source(actor,[movement.walkClip],state,cache)
         actor_movement[actor.uuid] = walking
         actor_evidence.append({"name":actor.name,"walking_sources":walking.value.size()})
         var variants: Array = [actor]
@@ -86,22 +107,24 @@ func run() -> void:
             variant.visual_loadout.active_weapon_set = weapon_set
             variants.append(variant)
         for variant in variants:
-            var source = Characters.sheet_paths(variant,rig.clips.keys(),cache)
-            check(source.ok,"Complete existing authored family resolves")
+            var variant_rest:Dictionary=Characters.rest_sample(variant,rig,cache)
+            var source = selected_source(variant,rig.clips.keys() if is_same(variant,actor) else [variant_rest.value.clip],state,cache)
+            check(source.ok,"Active full authored family or inactive weapon-set resting closure resolves")
             if source.ok:
                 complete.merge(source.value); expected_cpu.merge(source.cpu_required); expected_gpu.merge(source.gpu_only)
     for path in expected_cpu: expected_gpu.erase(path)
     check(family.paths==absolute(complete) and family.cpu_required==expected_cpu and family.gpu_only==expected_gpu,
-        "Priority changes no full source membership or CPU/GPU role")
+        "Independent active/inactive selected-profile union preserves every optional source and CPU/GPU role")
     var original_estimates = Encounter.estimates(complete,expected_cpu,expected_gpu,{})
-    check(family.estimates==original_estimates,"Actual PNG header costs match independently assembled exhaustive family")
+    check(family.estimates==original_estimates,"Actual PNG header costs match the independently assembled selected-profile family")
     check(var_to_bytes(state)==frozen,"Priority planning leaves all canonical actor/outfit values unchanged")
     var priority_bytes = bytes_for(family.priority,family)
-    check(priority_bytes<Media.BUDGET_BYTES and family.estimate_summary.bytes>Media.BUDGET_BYTES,"Fixture genuinely fits priority closures but exceeds budget with exhaustive families")
-    var required = exact.value.required.duplicate(); required.merge(exact.value.environment_required)
+    check(priority_bytes<Media.BUDGET_BYTES,"Actual selected-profile priority closures fit the unchanged16GiB default budget")
+    var required = Geometry.for_profile(exact.value.required,exact.value.get("normal_sets",{}),PROFILE,cache,"priority-required").duplicate(); required.merge(exact.value.environment_required)
     required = absolute(required)
     var data = Media.create(); Media.adopt_required(data,1); Media.adopt_encounter(data,family,1)
     Media.demand(data,required,exact.value.environment_required,exact.value.fixtures,exact.value.gpu_only,exact.value.cpu_required)
+    await settled_selection(data,"Initial cold family")
     check(family.priority.keys().all(func(path):return data.preload_selected.has(path)),"Every admitted outfit priority survives initial16GiB selection")
     ordered_queue(data,required,"Initial cold family")
     check(not Media.ready(data,required) and not Media.boot_ready(data),"Priority selection never substitutes for required byte publication")
@@ -117,7 +140,7 @@ func run() -> void:
         Media.prune(data)
         check(source.value.keys().all(func(path):return data.preload_selected.has(path) and data.resident.has(path)) and Media.ready(data,source.value),
             actor.name+": move→idle keeps complete authored movement resident and ready")
-    check(data.preload_estimated_bytes<=Media.BUDGET_BYTES and data.pending.is_empty(),"Warm move→idle neither exceeds16GiB nor requests duplicate decodes")
+    check(Media.preload_progress(data).selected_estimated_bytes<=Media.BUDGET_BYTES and data.pending.is_empty(),"Warm move→idle neither exceeds16GiB nor requests duplicate decodes")
     Media.close(data)
 
     # A costly mandatory action can displace optional movement; readiness still
@@ -126,7 +149,7 @@ func run() -> void:
     var rig: Dictionary = rigs[Characters.rig_id(actor,cache)]
     var costly = {}
     for clip in rig.clips:
-        var source = Characters.sheet_paths(actor,[clip],cache)
+        var source = selected_source(actor,[clip],state,cache)
         if source.ok and source.value.keys().any(func(path):return not family.priority.has(path)):
             costly = source; break
     check(not costly.is_empty(),"Real outfit has a complete nonpriority action source closure")
@@ -134,7 +157,8 @@ func run() -> void:
     Media.adopt_encounter(scarce,family,2)
     var action_required = absolute(costly.value)
     Media.demand(scarce,action_required,{}, {},costly.gpu_only,costly.cpu_required)
-    check(costly.value.keys().all(func(path):return scarce.preload_selected.has(path)) and scarce.preload_estimated_bytes<=scarce.budget_bytes,
+    await settled_selection(scarce,"Expensive mandatory action")
+    check(costly.value.keys().all(func(path):return scarce.preload_selected.has(path)) and Media.preload_progress(scarce).selected_estimated_bytes<=scarce.budget_bytes,
         "Mandatory complete expensive action preempts optional priority within exact budget")
     check(family.priority.keys().any(func(path):return not scarce.preload_selected.has(path)),"Constrained fixture really skips some optional priorities")
     ordered_queue(scarce,action_required,"Expensive mandatory action")
@@ -144,31 +168,49 @@ func run() -> void:
     var reversed_state: Dictionary = state.duplicate(); reversed_state.actors = {}
     var ids: Array = state.actors.keys(); ids.reverse()
     for id in ids: reversed_state.actors[id] = state.actors[id]
-    var reordered = Encounter.plan(reversed_state,exact.value.environment_required,exact.value.fixtures,cache)
-    check(reordered.paths==family.paths and reordered.paths.keys()!=family.paths.keys() and reordered.revision>family.revision,
-        "Same source set with reordered outfit priority invalidates retained closure order")
-    check(is_same(reordered,Encounter.plan(reversed_state,exact.value.environment_required,exact.value.fixtures,cache)),"Unchanged ordered priority reuses immutable closure")
+    var reordered = Encounter.plan(reversed_state,exact.value.environment_required,exact.value.fixtures,cache,[],PROFILE)
+    var order_changed:bool=reordered.paths.keys()!=family.paths.keys()
+    check(reordered.paths==family.paths and (reordered.revision>family.revision if order_changed else reordered.revision==family.revision),
+        "Reversing actual actor order changes revision exactly when its authored source order changes")
+    check(is_same(reordered,Encounter.plan(reversed_state,exact.value.environment_required,exact.value.fixtures,cache,[],PROFILE)),"Unchanged ordered priority reuses immutable closure")
     # Existing pending optional requests must not defeat the new order.
     var ordering = Media.create(); Media.adopt_encounter(ordering,family,3)
     Media.demand(ordering,required)
-    reordered = reordered.duplicate(); reordered.estimates=family.estimates
-    reordered.estimate_bytes=family.estimate_bytes; reordered.estimate_summary=family.estimate_summary
+    # The current initialization can disclose a single outfit, so reversing
+    # actor rows need not alter source order. Exercise queue replacement with
+    # an explicit reordered metadata offer of those same exact admitted paths.
+    reordered=family.duplicate();reordered.paths={};reordered.priority={}
+    var reversed_priority:Array=family.priority.keys();reversed_priority.reverse()
+    for path in reversed_priority:reordered.priority[path]=family.priority[path];reordered.paths[path]=family.paths[path]
+    for path in family.paths:reordered.paths[path]=family.paths[path]
+    reordered.ordered_paths=reordered.paths.keys();reordered.revision=family.revision+1
+    check(reordered.paths==family.paths and reordered.paths.keys()!=family.paths.keys(),"Explicit reordered metadata retains every exact original source and changes actual optional priority")
     Media.adopt_encounter(ordering,reordered,3); Media.demand(ordering,required)
+    await settled_selection(ordering,"Reordered family with existing optional backlog")
     ordered_queue(ordering,required,"Reordered family with existing optional backlog")
     Media.close(ordering)
     var dying_state: Dictionary = state.duplicate(); dying_state.actors = state.actors.duplicate()
     var dying: Dictionary = actor.duplicate(); dying.life_state = "dead"
     dying_state.actors[actor.uuid] = dying
-    var dead_family = Encounter.plan(dying_state,exact.value.environment_required,exact.value.fixtures,cache)
+    var dead_family = Encounter.plan(dying_state,exact.value.environment_required,exact.value.fixtures,cache,[],PROFILE)
     var dead_rest = Characters.rest_sample(dying,rig,cache)
-    var death_source = Characters.sheet_paths(dying,[dead_rest.value.clip],cache)
-    check(dead_family.paths==family.paths and death_source.value.keys().all(func(path):return dead_family.priority.has(path)),
-        "Life-only change refreshes authored resting priority without changing exhaustive source closure")
+    var death_source = selected_source(dying,[dead_rest.value.clip],dying_state,cache)
+    var dead_expected:Dictionary=exact.value.environment_required.duplicate()
+    for member in dying_state.actors.values():
+        var member_rig:Dictionary=rigs[Characters.rig_id(member,cache)]
+        dead_expected.merge(selected_source(member,member_rig.clips.keys(),dying_state,cache).value)
+        for weapon_set in ["melee","ranged"]:
+            var variant:Dictionary=member.duplicate();variant.visual_loadout=member.visual_loadout.duplicate()
+            variant.visual_loadout.active_weapon_set=weapon_set
+            var resting:Dictionary=Characters.rest_sample(variant,member_rig,cache)
+            dead_expected.merge(selected_source(variant,[resting.value.clip],dying_state,cache).value)
+    check(dead_family.paths==absolute(dead_expected) and death_source.value.keys().all(func(path):return dead_family.priority.has(path)),
+        "Life-only change preserves every active clip and refreshes actual inactive-set/resting sources and priority")
     evidence={"actors":actor_evidence,"priority_paths":family.priority.size(),"priority_bytes":priority_bytes,
-        "full_paths":family.paths.size(),"full_bytes":family.estimate_summary.bytes,"budget":Media.BUDGET_BYTES}
+        "full_paths":family.paths.size(),"full_bytes":Encounter.estimate_summary(family).bytes,"budget":Media.BUDGET_BYTES}
     finish()
 func finish() -> void:
     var report={"checks":checks,"failures":failures,"recording":recording,"evidence":evidence,
-        "scope":"Actual authored sources/headers; passive upload acknowledgements verify selection, readiness, retention and queue order without GPU allocations. Full closure/roles and strict16GiB budget preserved. Live latency measured separately."}
+        "scope":"Actual selected Reference-profile authored sources/headers; passive decode/upload acknowledgements verify complete active/inactive-set family membership, roles, movement readiness, retention, asynchronous priority publication and queue order without bitmap allocation. Unchanged16GiB default plus a measured complete-action budget exercises optional displacement. Live latency measured separately."}
     FileAccess.open("res://generated/preload_priority_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PRELOAD_PRIORITY_CHECKS ",JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

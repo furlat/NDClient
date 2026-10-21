@@ -1,28 +1,29 @@
 [gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_quub0"]
-[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="2_a2bld"]
-[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="3_tvfc0"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="surface"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
 
-[sub_resource type="Resource" id="lasting"]
-script = ExtResource("1_quub0")
+[sub_resource type="Resource" id="ActualField"]
+script = ExtResource("effect")
 clip = "review/grease/surface/lifecycle"
 selection = "grease__surface"
-role = "sustain"
+approach = "native"
+role = "attached"
+scope = "spatial"
 at = "owner_start"
-attachment = "area"
-hide_at_contact = PackedStringArray()
-hide_at_release = PackedStringArray()
-hide_nodes = PackedStringArray()
-show_nodes = PackedStringArray()
-opacity_keys = PackedVector2Array()
-staging_from = "factory@20261018-c3c616e88a6b725f"
+attachment = "recipient_ground"
+scale = 1.00000000002812
+orientation = "world"
+light_multiplier = 0.0
+fade_out = 0.8
+lifecycle = {"enter_end_seconds": 0.92, "hold_start_seconds": 0.92, "exit_start_seconds": 3.0, "exit_end_seconds": 3.8}
+staging_from = "factory@runtime-public-admission-20261020-976f8289ebcefa5c"
 
 [resource]
-script = ExtResource("3_tvfc0")
+script = ExtResource("surface")
 id = "spatial_effect.spell.grease"
-lasting = SubResource("lasting")
-art = PackedStringArray()
+lasting = SubResource("ActualField")
+native_staging = true
 legacy = "measured/environment/surfaces/spatial_effect.spell.grease.json"
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "The actual public spatial UUID owns existing Grease ground artwork. The chosen static deployed pose is explicit resource data: source birth0–0.92, pose0.92 held until actual owner removal, then original3–3.8 retirement. This is a static ground treatment, not a claim of continuing liquid flow; no timer, fake observed cells or extra cast is created. Existing AreaMask admits only actual current cells. All artwork remains unreviewed; rendered-output qualification remains separate."

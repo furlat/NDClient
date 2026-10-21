@@ -1,0 +1,164 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "fe2d4d28-1ca4-4ba8-9586-30acd42e37ae": "Amber caster",
+  "225936f6-757c-466d-a7b5-4821d715b31e": "Amber ally",
+  "955ebea2-8a3b-4831-8ef8-c60df4063f43": "Blue target",
+  "c2bc4746-329c-4ac2-8a6d-d19433f78bf4": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.divine_word \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "actor_change": 3,
+   "spell": 2
+  },
+  "behaviors": {
+   "spell.divine_word": 2
+  },
+  "conditions": [
+   "condition.blinded",
+   "condition.deafened",
+   "condition.spell.divine_word"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 52,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.blinded",
+   "kind": "actor_change",
+   "actor_uuid": "955ebea2-8a3b-4831-8ef8-c60df4063f43",
+   "condition_uuid": "32aaad84-2902-4af1-a906-4ab218599471",
+   "condition_id": "condition.blinded",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 56,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.deafened",
+   "kind": "actor_change",
+   "actor_uuid": "955ebea2-8a3b-4831-8ef8-c60df4063f43",
+   "condition_uuid": "8ad21cfe-3c7b-40a3-8b04-56209410fd7d",
+   "condition_id": "condition.deafened",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 58,
+   "lineage": 41,
+   "event_offset": 2,
+   "label": "condition applied condition.spell.divine_word",
+   "kind": "actor_change",
+   "actor_uuid": "955ebea2-8a3b-4831-8ef8-c60df4063f43",
+   "condition_uuid": "73d83592-b6e1-4513-b445-c1432a5268ff",
+   "condition_id": "condition.spell.divine_word",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 60,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "spell",
+   "label": "spell spell.divine_word",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 60,
+   "lineage": 49,
+   "event_offset": 0,
+   "label": "condition applied condition.blinded",
+   "kind": "actor_change",
+   "actor_uuid": "955ebea2-8a3b-4831-8ef8-c60df4063f43",
+   "condition_uuid": "32aaad84-2902-4af1-a906-4ab218599471",
+   "condition_id": "condition.blinded",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 64,
+   "lineage": 49,
+   "event_offset": 1,
+   "label": "condition applied condition.deafened",
+   "kind": "actor_change",
+   "actor_uuid": "955ebea2-8a3b-4831-8ef8-c60df4063f43",
+   "condition_uuid": "8ad21cfe-3c7b-40a3-8b04-56209410fd7d",
+   "condition_id": "condition.deafened",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 66,
+   "lineage": 49,
+   "event_offset": 2,
+   "label": "condition applied condition.spell.divine_word",
+   "kind": "actor_change",
+   "actor_uuid": "955ebea2-8a3b-4831-8ef8-c60df4063f43",
+   "condition_uuid": "73d83592-b6e1-4513-b445-c1432a5268ff",
+   "condition_id": "condition.spell.divine_word",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 67,
+   "lineage": 49,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 69,
+   "lineage": 49,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.divine_word",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

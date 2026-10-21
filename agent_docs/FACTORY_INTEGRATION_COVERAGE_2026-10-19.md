@@ -1,5 +1,11 @@
 # Factory integration coverage — 19 October 2026
 
+**Current artwork-review status — human clarification, 20 October 2026:** all
+artwork still awaits human review. The earlier named four-effect rejection list
+is superseded and must not be treated as current scope or as acceptance of any
+other artwork.
+
+
 The complete machine-readable join is [factory-integration-coverage.json](../generated/reports/factory-integration-coverage.json). It joins the current server snapshot, typed source roots, Factory index, Studio cases, recording safety results and UI art. It is an offline report; the player never parses it.
 
 Authority: frozen engine `211b71134ed15c89e62232587381f7e15a5961c3`, player schema 16, installed whole package `conditions-candidate-7fab471588209a41`. Existing source files remain authoritative. This report does not turn Factory delivery, a ready source or a setter call into visual approval.

@@ -3,9 +3,58 @@
 [ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_fd8p1"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_kn17g"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="owner_field_use"]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/owner-fields-v2-20261021/sources/64338dc77f9df28ee171/stone_straight.tres" id="OwnerFieldPhase0"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/owner-fields-v2-20261021/sources/25d570c7aba326c3e0ab/stone_corner.tres" id="OwnerFieldPhase1"]
+
+[sub_resource type="Resource" id="OwnerField0"]
+script = ExtResource("owner_field_use")
+clip = "wall-native/wall_of_stone_straight_back_native/lifecycle"
+source_phase = ExtResource("OwnerFieldPhase0")
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_inputs = {"zone_geometry": "set_zone_geometry", "owner_state": "set_owner_state", "targets": "set_targets"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+area_mask = false
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["wall"], "input_field": "", "cell_input": "wall_geometry", "content_id": "spatial_effect.spell.wall_of_stone", "geometry_shapes": ["wall_assembly"]}
+scale = 0.4714045206931745
+axis_scale = Vector3(1,0.816496580927726,1)
+requires_spatial_anchor = true
+extra = {"live_endpoints": [{"cue_point": "source"}], "wall_forms": ["segment"]}
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+
+[sub_resource type="Resource" id="OwnerField1"]
+script = ExtResource("owner_field_use")
+clip = "wall-native/stone_wall_assembly_breakup_native/lifecycle"
+source_phase = ExtResource("OwnerFieldPhase1")
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_inputs = {"zone_geometry": "set_zone_geometry", "owner_state": "set_owner_state", "targets": "set_targets"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+area_mask = false
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["wall"], "input_field": "", "cell_input": "wall_geometry", "content_id": "spatial_effect.spell.wall_of_stone", "geometry_shapes": ["wall_assembly"]}
+scale = 0.4714045206931745
+axis_scale = Vector3(1,0.816496580927726,1)
+requires_spatial_anchor = true
+extra = {"live_endpoints": [{"cue_point": "source"}], "wall_forms": ["polyline"]}
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+
 [resource]
 script = ExtResource("2_kn17g")
 id = "spatial_effect.spell.wall_of_stone"
 layer = "field"
 art = PackedStringArray()
-notes = "No art and no Factory scenario."
+lasting = SubResource("OwnerField0")
+lasting_variants = Array[ExtResource("owner_field_use")]([SubResource("OwnerField1")])
+native_staging = true
+status = "partial"
+notes = "Actual immutable wall_assembly geometry selects the native segment or polyline Stone source. Current surviving public construction_sections and real removed ten-foot volumes cut only that owner; no section UUID, debris, Stone dome or timed review shatter is manufactured. The original source-unit conversion is applied once; observed absence removes the wall. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."

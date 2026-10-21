@@ -14,4 +14,8 @@ source = "ui/resources.json icon:condition.generic"
 [resource]
 script = ExtResource("1_ym4ro")
 id = "condition.class.paladin.aura_owner"
+disposition = "state_only"
 icon = SubResource("Resource_5vl6s")
+play_package_lifecycle = false
+status = "internal"
+notes = "PaladinAuraRoot owns the moving spatial aura and its memberships. The real spatial_effect.class.paladin.aura and actual condition.class.paladin.aura_benefit select their own field/recipient presentation; the root bookkeeping member adds no second actor field. State-only here does not qualify the separate field, membership or selector output."

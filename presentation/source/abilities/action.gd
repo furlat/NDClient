@@ -32,7 +32,8 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## drives (environment owns the transition's art), e.g. door -> open.
 @export var target: String = ""
 @export var target_transition: String = ""
-## The spell this sub-action delivers (action.spell.sunbeam.strike -> spell.sunbeam).
+## Related spell authoring identity. This is not a runtime delivery alias:
+## the actual sub-action declares its effects or an explicit state-only owner.
 @export var delivers_spell: String = ""
 
 @export_group("Effects")
@@ -40,6 +41,12 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## section, built from res://assets/native_effects) whose media ids its old
 ## media list names, e.g. class.rage.ground.
 @export var effect_sources: PackedStringArray = []
+## Explicit uses of the existing non-Factory native source programs. The old
+## media descriptor retains its actual socket, finite window and predicates.
+@export var media: Array[Dictionary] = []
+## One completed public fact's immediate nullable witness, not an ActionFact
+## or a gameplay reconstruction. The producer schema validates every field.
+@export var observed_fact: Dictionary = {}
 ## Factory package cues on this action's own authored body/event anchors.
 ## Source media is migrated in the authored entry, never suppressed by name.
 @export var effects: Array[EffectUse] = []
@@ -47,6 +54,9 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 ## this finite set only to prepare sources; actual rows own publication.
 @export var applies_conditions: PackedStringArray = []
 @export var feedback: Feedback
+## Actual ActionFact.reaction.succeeded chooses succeeded or failed. These
+## labels do not infer the reaction mode or a result from canceled children.
+@export var reaction_feedback: Dictionary[String, Feedback] = {}
 @export var sounds: Array[SoundRef] = []
 
 @export_group("Status")

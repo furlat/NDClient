@@ -17,12 +17,12 @@ func run()->void:
                 var component:Dictionary=row.get("component",{})
                 return component.get("native_variant",{}).get("id")==sample.variant and str(component.get("native_clip",{}).get("id","")).ends_with("/"+sample.phase))
             check(rows.size()==1,sample.spell+" / "+seat+" one actual saved receiver phase")
-            if rows.size()==1:await inspect(index,rows[0],sample.spell+" / "+seat)
+            if rows.size()==1:await inspect_saved(index,rows[0],sample.spell+" / "+seat)
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,
         "scope":"Production Ray of Sickness, Vicious Mockery and Dissonant Whispers successful-save receiver output, both original seats, seeking/looping/cleanup. User visual approval remains open."}
     FileAccess.open("res://.runtime/production-spell-variant-render-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PRODUCTION_SPELL_VARIANT_RENDER ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
-func inspect(index:Dictionary,row:Dictionary,label:String)->void:
+func inspect_saved(index:Dictionary,row:Dictionary,label:String)->void:
     var component:Dictionary=row.component
     var viewport:SubViewport=SubViewport.new();viewport.size=root.size;viewport.own_world_3d=true
     viewport.audio_listener_enable_3d=false;viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(viewport)
@@ -48,11 +48,18 @@ func inspect(index:Dictionary,row:Dictionary,label:String)->void:
         check(bindings.unavailable.is_empty(),label+" no unresolved required native inputs")
         world.camera_focus=Play.Placement.contact({"position":component.to_position,"base_height_steps":float(component.get("to_elevation_feet",0.0))/5.0})
         world.camera.size=6;world.initial_focus=true;world.position_camera();world.grid_visible=false
+        # The final camera changes measured recipient surfaces. Certify that
+        # exact input demand before freezing the unchanged original clock.
+        if not await settle(world,component.id):break
+        handle=renderer.handles[component.id]
+        var capture_bindings:Dictionary=renderer.diagnostics.get(component.id,{}).get("input_bindings",{})
+        check(not capture_bindings.is_empty() and capture_bindings.unavailable.is_empty(),label+" final capture camera has every actual receiver input ready")
+        check(world.timeline.display_ms==at,label+" final camera readiness preserves the original source clock")
         await frame();await frame();world.set_process(false)
         var visible:Image=viewport.get_texture().get_image();Effects.hide(handle);await frame();await frame()
         var pixels:int=changed(visible,viewport.get_texture().get_image())
         check(pixels>0,label+" actual saved receiver contributes framebuffer pixels")
-        evidence.append({"case":label,"at_ms":at,"variant":component.native_variant,"event":component.source_event_uuid,"clip":component.native_clip.id,"pixels":pixels})
+        evidence.append({"case":label,"at_ms":at,"variant":component.native_variant,"event":component.source_event_uuid,"clip":component.native_clip.id,"pixels":pixels,"capture_bindings":capture_bindings})
         previous=weakref(handle.root);handle.root.show();world.set_process(true)
     world.component_renderer.native_spells.close(world)
     check(world.component_renderer.native_spells.handles.is_empty(),label+" private native owners close")

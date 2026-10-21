@@ -1,0 +1,161 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "1c144303-a8f4-4558-a0a7-96236f6e4ce3",
+   "state_revision": "6b715706-8167-4d10-b83c-ffa7188990a6",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_launch_detonation",
+   "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+   "audience_id": "bfc15657-ad15-448d-a05d-174cafd95da3",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_launch_detonation",
+    "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+    "audience_id": "bfc15657-ad15-448d-a05d-174cafd95da3",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "32b07f48-e0a1-40bb-8811-02bbc4de80c9",
+   "state_revision": "3295f882-ca58-4907-a0fc-5393bd8bab86",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_launch_detonation",
+   "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+   "audience_id": "d78e2f2f-dd2a-4fe9-b45d-528900d093c7",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_launch_detonation",
+    "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+    "audience_id": "d78e2f2f-dd2a-4fe9-b45d-528900d093c7",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "ff497011-4c26-4633-afdd-0464671bddd1",
+   "state_revision": "c875f7c6-6651-4895-8509-e6d9e7feada7",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_launch_detonation",
+   "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+   "audience_id": "d78e2f2f-dd2a-4fe9-b45d-528900d093c7",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_launch_detonation",
+    "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+    "audience_id": "d78e2f2f-dd2a-4fe9-b45d-528900d093c7",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.freezing_sphere",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "capture_choices": true,
+   "variant": {
+    "form": "launch"
+   }
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "acd24f6e-72bf-4bcf-b2a5-c883207167b7",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.freezing_sphere",
+   "display_name": "Freezing Sphere (Level 6)",
+   "cast_at_level": 6,
+   "variant_facets": [
+    {
+     "key": "form",
+     "value": "launch",
+     "label": "Launch"
+    }
+   ],
+   "target_type": "position_aoe",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "saving_throw",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "1d621d57-2418-4ea3-8001-021de0494d43",
+   "state_revision": "acd24f6e-72bf-4bcf-b2a5-c883207167b7",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 22,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_freezing_sphere_launch_detonation",
+   "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+   "audience_id": "bfc15657-ad15-448d-a05d-174cafd95da3",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_freezing_sphere_launch_detonation",
+    "game_epoch": "45886f13-cd55-4d3f-a0b0-39590f39a53b",
+    "audience_id": "bfc15657-ad15-448d-a05d-174cafd95da3",
+    "sequence": 8
+   }
+  }
+ }
+]

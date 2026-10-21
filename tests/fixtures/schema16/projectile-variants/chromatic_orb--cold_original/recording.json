@@ -1,0 +1,171 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "1c86d553-3b17-4ef6-b69f-aee207e09f77": "Amber caster",
+  "051a76a3-f04d-470b-bc56-2a490ac52ab1": "Amber ally",
+  "c69b7a6d-5586-4d66-a09b-a8ee1b4b6838": "Blue second target",
+  "dc793ebc-2bd7-44b6-b370-e5ac987d18a0": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.chromatic_orb \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "saving_throw": 3,
+   "actor_change": 1,
+   "sensory": 1,
+   "spatial_effect_state": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.chromatic_orb": 1
+  },
+  "conditions": [
+   "condition.prone"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 49,
+   "lineage": 33,
+   "event_offset": 1,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 53,
+   "lineage": 33,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 57,
+   "lineage": 33,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 33,
+   "event_offset": 4,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "dc793ebc-2bd7-44b6-b370-e5ac987d18a0",
+   "condition_uuid": "f8c68093-2679-4693-b77a-26d0413f89a4",
+   "condition_id": "condition.prone",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 63,
+   "lineage": 33,
+   "event_offset": 6,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 69,
+   "lineage": 33,
+   "event_offset": 9,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 57,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 4,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "dc793ebc-2bd7-44b6-b370-e5ac987d18a0",
+   "condition_uuid": "f8c68093-2679-4693-b77a-26d0413f89a4",
+   "condition_id": "condition.prone",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 71,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 77,
+   "lineage": 41,
+   "event_offset": 9,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

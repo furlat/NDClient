@@ -85,9 +85,11 @@ extra = {
 script = ExtResource("1_r7xyh")
 clip = "bg3-36/ensnaring-strike/ensnaring_strike_native/tick"
 role = "attached"
-at = "release"
-delay = 1.98
-attachment = "caster_ground"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "condition_contact", "packet_kind": "condition_tick", "outcome": "damage", "condition_id": "condition.spell.ensnaring_strike", "damage_type": "Piercing", "geometry_actor": "target", "component_path": ["owned_contact"], "input_field": "", "turn_event_type": "turn_start"}
+at = "cast"
+delay = 0.0
+attachment = "recipient_ground"
 orientation = "world"
 source_end = 0.4
 duration_policy = "authored"
@@ -98,19 +100,41 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
-"dynamic_geometry": true,
-"entity_geometry": {
-"actor": "caster",
-"slots": ["weapon"]
-},
-"live_endpoints": [{
-"actor": "caster",
-"socket": "hand"
-}, {
-"actor": "target",
-"socket": "body_center",
-"surface_slots": ["body", "chest", "cloak", "legs", "shoes", "hands", "head", "helmet"]
-}]
+ "dynamic_geometry": true,
+ "input_policies": {
+  "strike_input": {
+   "mode": "not_applicable",
+   "reason": "selected_condition_tick_does_not_consume_strike_input"
+  },
+  "owner_input": {
+   "mode": "not_applicable",
+   "reason": "selected_condition_tick_does_not_consume_owner_input"
+  },
+  "healing_input": {
+   "mode": "not_applicable",
+   "reason": "selected_condition_tick_does_not_consume_healing_input"
+  }
+ },
+ "live_endpoints": [
+  {
+   "actor": "target",
+   "socket": "body_center"
+  },
+  {
+   "actor": "target",
+   "socket": "body_center",
+   "surface_slots": [
+    "body",
+    "chest",
+    "cloak",
+    "legs",
+    "shoes",
+    "hands",
+    "head",
+    "helmet"
+   ]
+  }
+ ]
 }
 
 [sub_resource type="Resource" id="Resource_amcyv"]

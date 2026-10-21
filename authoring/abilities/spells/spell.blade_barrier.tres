@@ -61,7 +61,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -76,5 +76,4 @@ staging_unported = {
 "selection": "blade_barrier_native",
 "source": "assets/vfx/index.json:/selections/blade_barrier_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+notes = "Cast body remains the existing Attack5 stand-in. The fixed four-cell review and example retirement are excluded; actual spatial UUID, disclosed single segment and continuing native spin are assigned by authoring/environment/surfaces/spatial_effect.spell.blade_barrier.tres. Actual positive results retain their receiving damage feedback independently. All artwork remains unreviewed."

@@ -240,12 +240,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_hwlqm"]
 script = ExtResource("10_o3kcs")
 id = "fire_shield__chill_back"
+dispatch_gap = "delegated_exact_energy_selected_condition_responses"
 kind = "element"
 value = "chill"
 selection = "fire_shield__chill_back"
 effects = Array[ExtResource("3_w7kod")]([SubResource("Resource_0fp6o"), SubResource("Resource_463pf"), SubResource("Resource_ewedh")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The actual Fire Shield condition public energy_type selects its warm/chill persistent owner. Exact typed condition responses now own received contact and the separately attributed warm/chill retaliation. This bundled fixed-time lifecycle/contact/reaction review delegates to those real owners and remains unselected as a cast variant. No Cold/Fire outcome is inferred from the draft. All artwork is unreviewed."
 
 [resource]
 script = ExtResource("8_t82dv")

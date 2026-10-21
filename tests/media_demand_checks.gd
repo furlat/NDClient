@@ -153,6 +153,11 @@ func budget_matrix()->void:
     for limit in [0,1,7,17,31,48,64,96]:
         for ids in [[],[0],[3],[0,2],[1,4,7],[3,5,6],[0,1,2,3,4,5,6,7]]:
             reset(source,limit)
+            # This matrix compares ordinary optional selection after startup;
+            # withdrawal during an unfinished startup has its own lifecycle
+            # coverage in media_shared_residency_checks.
+            await demand("Budget matrix initial empty picture %d/%s"%[limit,str(ids)],{})
+            check(Media.boot_ready(current) and Reference.boot_ready(original),"The empty initial picture completes before changed-demand budget comparison")
             var paths:Dictionary={};var gpu:Dictionary={};var required:Dictionary={}
             for i in ids:
                 var path:String="source/"+str(i);paths[path]=source.paths[path];gpu[path]=true;required[path]=amounts[i]
@@ -185,6 +190,7 @@ func failure_controls()->void:
             pair[0].poll(pair[1]);await process_frame
     await demand("Actual missing-source failure persists",{missing:missing},[{},{},{missing:true},{}])
     check(current.failed.has(missing) and not Media.ready(current,{missing:true}) and not physical(current).queued.has(missing),"Actual worker failure is explicit, unavailable and never endlessly requeued")
+    check(Media.boot_ready(current) and Reference.boot_ready(original),"Explicit source failure completes startup without granting image readiness")
     var message:String=current.failed.get(missing,"")
     await demand("Failure withdrawal",{})
     await demand("Failure re-admission",{missing:missing},[{},{},{missing:true},{}])

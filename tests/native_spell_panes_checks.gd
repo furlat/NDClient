@@ -3,6 +3,7 @@ extends SceneTree
 ## even when their disclosed pictures do not require Studio's comparison UI.
 const Recording=preload("res://studio/recording.gd")
 const Play=preload("res://play.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 const Panes=preload("res://studio/replay_panes.gd")
 const REPORT="res://.runtime/native-spell-panes-checks.json"
 const CAPTURES="res://.captures/native-spell-panes"
@@ -25,7 +26,7 @@ func frame()->void:
     await RenderingServer.frame_post_draw
 
 func flights(index:Dictionary)->Array:
-    return index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("native_spell",false) and row.component.spell_id=="magic_missile" and row.component.native_cue.role=="flight")
+    return index.rows.filter(func(row):return row.kind=="native_effect" and row.component.get("native_spell",false) and row.component.spell_id=="spell.magic_missile" and row.component.native_cue.role=="flight")
 
 func make_pane(index:Dictionary,row:Dictionary,at:float)->Dictionary:
     var view=Panes.viewport();view.size=Vector2i(800,600);view.audio_listener_enable_3d=false;root.add_child(view)
@@ -125,8 +126,11 @@ func exercise_owner(changed:Dictionary,held:Dictionary,label:String)->void:
     check(await settle(held,label+" peer resume"),label+": held peer remains ready when production sampling resumes")
 
 func run()->void:
-    var amber=Recording.read("res://.runtime/studio-cases/magic_missile-seed3/amber/journal")
-    var blue=Recording.read("res://.runtime/studio-cases/magic_missile-seed3/blue/journal")
+    var bundle:Dictionary=Recording.read_case(Fixtures.public_case("magic-missile"))
+    check(bundle.ok,"Current exact Magic Missile case admits its independent original seats")
+    if not bundle.ok:finish();return
+    var amber:Dictionary=bundle.views.amber
+    var blue:Dictionary=bundle.views.blue
     check(amber.ok and blue.ok,"Both real faction journals independently reduce and compile")
     if not amber.ok or not blue.ok:finish();return
     check(amber.identity.game_id==blue.identity.game_id and amber.identity.game_epoch==blue.identity.game_epoch,"Both admitted journals describe the same game epoch")
@@ -134,13 +138,13 @@ func run()->void:
     check(amber_flights.size()==3 and blue_flights.size()==3,"Both actual faction streams disclose the three real Magic Missile deliveries")
     if amber_flights.is_empty():finish();return
     var row:Dictionary=amber_flights[0]
-    var matching=blue_flights.filter(func(other):return other.component.source_event_uuid==row.component.source_event_uuid)
-    check(matching.size()==1,"The other journal has one flight owned by the same real event UUID")
+    var matching=blue_flights.filter(func(other):return other.correspondence_event_key==row.correspondence_event_key)
+    check(matching.size()==1,"The other journal has one flight with the same actual shared cause, preserving its local occurrence")
     if matching.size()!=1:finish();return
     var at:float=row.start_ms+(float(row.component.native_cue.launch)+float(row.component.native_cue.contact))*500.0
     var blue_at:float=Recording.switch_time(amber,blue,at,row)
     check(is_equal_approx(at-row.start_ms,blue_at-matching[0].start_ms),"Shared event navigation maps the same recorded flight phase in both views")
-    evidence={"event_uuid":row.component.source_event_uuid,"amber_ms":at,"blue_ms":blue_at,"renderer":RenderingServer.get_current_rendering_method()}
+    evidence={"amber_occurrence":row.component.source_event_uuid,"blue_occurrence":matching[0].component.source_event_uuid,"shared_event":row.correspondence_event_key,"amber_ms":at,"blue_ms":blue_at,"renderer":RenderingServer.get_current_rendering_method()}
     if DisplayServer.get_name()=="headless":finish();return
     var original_vsync=DisplayServer.window_get_vsync_mode();DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     var a=make_pane(amber,row,at);var b=make_pane(blue,matching[0],blue_at)

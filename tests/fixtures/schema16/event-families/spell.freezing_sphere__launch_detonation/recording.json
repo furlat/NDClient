@@ -1,0 +1,434 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "1d621d57-2418-4ea3-8001-021de0494d43": "Amber caster",
+  "1c144303-a8f4-4558-a0a7-96236f6e4ce3": "Amber ally",
+  "32b07f48-e0a1-40bb-8811-02bbc4de80c9": "Blue second target",
+  "ff497011-4c26-4633-afdd-0464671bddd1": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.freezing_sphere \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 8,
+   "actor_change": 6,
+   "damage": 8,
+   "spell": 2,
+   "sensory": 1
+  },
+  "behaviors": {
+   "spell.freezing_sphere": 2
+  },
+  "conditions": [
+   "condition.prone"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Cold"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 64,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 85,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 86,
+   "lineage": 41,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 90,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 106,
+   "lineage": 41,
+   "event_offset": 13,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 107,
+   "lineage": 41,
+   "event_offset": 14,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 111,
+   "lineage": 41,
+   "event_offset": 15,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 127,
+   "lineage": 41,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 128,
+   "lineage": 41,
+   "event_offset": 19,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 133,
+   "lineage": 41,
+   "event_offset": 21,
+   "kind": "spell",
+   "label": "spell spell.freezing_sphere",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 147,
+   "lineage": 41,
+   "event_offset": 23,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 151,
+   "lineage": 41,
+   "event_offset": 24,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 155,
+   "lineage": 41,
+   "event_offset": 25,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "1d621d57-2418-4ea3-8001-021de0494d43",
+   "condition_uuid": "1e53b858-c964-4299-8adc-57666a851051",
+   "condition_id": "condition.prone",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 159,
+   "lineage": 41,
+   "event_offset": 26,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 163,
+   "lineage": 41,
+   "event_offset": 27,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 167,
+   "lineage": 41,
+   "event_offset": 28,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "ff497011-4c26-4633-afdd-0464671bddd1",
+   "condition_uuid": "03179a84-ea1a-4a4b-98c5-6bc6718fc0b7",
+   "condition_id": "condition.prone",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 171,
+   "lineage": 41,
+   "event_offset": 32,
+   "kind": "spell",
+   "label": "spell spell.freezing_sphere",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 64,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 85,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 86,
+   "lineage": 41,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 90,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 106,
+   "lineage": 41,
+   "event_offset": 13,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 107,
+   "lineage": 41,
+   "event_offset": 14,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 111,
+   "lineage": 41,
+   "event_offset": 15,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 127,
+   "lineage": 41,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 128,
+   "lineage": 41,
+   "event_offset": 19,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 133,
+   "lineage": 41,
+   "event_offset": 21,
+   "kind": "spell",
+   "label": "spell spell.freezing_sphere",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 147,
+   "lineage": 41,
+   "event_offset": 23,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 151,
+   "lineage": 41,
+   "event_offset": 24,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 155,
+   "lineage": 41,
+   "event_offset": 25,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "1d621d57-2418-4ea3-8001-021de0494d43",
+   "condition_uuid": "1e53b858-c964-4299-8adc-57666a851051",
+   "condition_id": "condition.prone",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 159,
+   "lineage": 41,
+   "event_offset": 26,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 163,
+   "lineage": 41,
+   "event_offset": 27,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 167,
+   "lineage": 41,
+   "event_offset": 28,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "ff497011-4c26-4633-afdd-0464671bddd1",
+   "condition_uuid": "03179a84-ea1a-4a4b-98c5-6bc6718fc0b7",
+   "condition_id": "condition.prone",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 171,
+   "lineage": 41,
+   "event_offset": 32,
+   "kind": "spell",
+   "label": "spell spell.freezing_sphere",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Cold"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_6hdg0"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_8cwkm"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_bfjvr"]
 script = ExtResource("1_6hdg0")
 path = "art/media/ui/icons/smooth48/condition.generic.png"
@@ -11,7 +13,26 @@ reuses = "condition.generic"
 status = "stand_in"
 source = "ui/resources.json icon:condition.generic"
 
+[sub_resource type="Resource" id="VortexSilenceField"]
+script = ExtResource("effect")
+clip = "review/silence/back/lifecycle"
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+scale = 0.385694607919935
+orientation = "world"
+source_end = 4.0
+light_multiplier = 0.0
+lifecycle = {"enter_end_seconds": 1.5, "hold_start_seconds": 1.5, "exit_start_seconds": 1.5, "exit_end_seconds": 1.5}
+
 [resource]
 script = ExtResource("1_8cwkm")
 id = "spatial_effect.summon.raging_vortex"
+disposition = "authored"
+play_package_lifecycle = false
+effects = Array[ExtResource("effect")]([SubResource("VortexSilenceField")])
 icon = SubResource("Resource_bfjvr")
+
+status = "partial"
+notes = "The producer RagingVortexZone is a real twenty-foot SilenceZone. Its actual spatial UUID and anchor explicitly reuse the existing same-scope Silence shell, retaining the source registration and deployed source pose while that owner is observed. Native silence membership and exact applied Bludgeoning results remain their own facts; the actor lifetime ledger is not another field. This is a silence-field artwork assignment, with no claim of a separately authored rotating vortex body or new wind simulation. All artwork is unreviewed."

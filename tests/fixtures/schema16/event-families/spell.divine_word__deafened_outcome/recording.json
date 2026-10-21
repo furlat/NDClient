@@ -1,0 +1,139 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "9bc2ce30-2c02-4da3-8ec0-7a3c2d3050ac": "Amber caster",
+  "50510f22-8106-49af-b7e0-063f285ac6fc": "Amber ally",
+  "3b27b31d-0989-45c0-91da-333aa6c08554": "Blue target",
+  "c7ea3093-100f-4fe0-b688-9e9cb4c3d37e": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.divine_word \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "actor_change": 2,
+   "spell": 2
+  },
+  "behaviors": {
+   "spell.divine_word": 2
+  },
+  "conditions": [
+   "condition.deafened",
+   "condition.spell.divine_word"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.deafened",
+   "kind": "actor_change",
+   "actor_uuid": "3b27b31d-0989-45c0-91da-333aa6c08554",
+   "condition_uuid": "0ca42c72-6353-4c4a-8526-20b24e1826ba",
+   "condition_id": "condition.deafened",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 53,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.divine_word",
+   "kind": "actor_change",
+   "actor_uuid": "3b27b31d-0989-45c0-91da-333aa6c08554",
+   "condition_uuid": "bee7a0c9-5443-4065-80e6-83446741ca28",
+   "condition_id": "condition.spell.divine_word",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 54,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 55,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.divine_word",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 59,
+   "lineage": 49,
+   "event_offset": 0,
+   "label": "condition applied condition.deafened",
+   "kind": "actor_change",
+   "actor_uuid": "3b27b31d-0989-45c0-91da-333aa6c08554",
+   "condition_uuid": "0ca42c72-6353-4c4a-8526-20b24e1826ba",
+   "condition_id": "condition.deafened",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 49,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.divine_word",
+   "kind": "actor_change",
+   "actor_uuid": "3b27b31d-0989-45c0-91da-333aa6c08554",
+   "condition_uuid": "bee7a0c9-5443-4065-80e6-83446741ca28",
+   "condition_id": "condition.spell.divine_word",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 62,
+   "lineage": 49,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 63,
+   "lineage": 49,
+   "event_offset": 3,
+   "kind": "spell",
+   "label": "spell spell.divine_word",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

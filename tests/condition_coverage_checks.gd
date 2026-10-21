@@ -3,6 +3,7 @@ extends SceneTree
 const Coverage=preload("res://presentation/condition_coverage.gd")
 const Authoring=preload("res://presentation/authoring.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -18,7 +19,9 @@ func run()->void:
     var authored_ids:Array=[];var non_recipe_ids:Array=[];var surfaces:Array=[]
     for id in declared.sections.conditions:
         var source:Resource=load(declared.sections.conditions[id])
-        if not source.disposition.is_empty():authored_ids.append(id)
+        # Native-only spatial owners and explicit creation sources are real
+        # built recipes even when their legacy disposition is empty.
+        if not source.disposition.is_empty() or not source.creation_source_id.is_empty() or not source.effects.is_empty() or not source.responses.is_empty() or not source.lifecycle_opt_in.is_empty():authored_ids.append(id)
         else:non_recipe_ids.append(id)
         if not source.disposition.is_empty() and "ground_zone" in source.unported.get("classification",{}).get("presentationDomains",[]):surfaces.append(id)
     authored_ids.sort();var built_ids:Array=recipes.keys();built_ids.sort()
@@ -63,7 +66,7 @@ func run()->void:
         check(authored_native.size()==source.effects.size(),"Every independently authored typed native hold is inventoried "+entry.id)
         for i in source.effects.size():
             var cue:Resource=source.effects[i]
-            check(authored_native[i].source_id==cue.clip and not Coverage.Effects.resolve(cue.clip,"",cue.role).is_empty() and authored_native[i].source.begins_with(str(declared.sections.conditions[entry.id])+"::effects"),"Typed hold preserves the exact Factory clip and owning Resource "+entry.id+":"+str(i))
+            check(authored_native[i].source_id==cue.clip and not Coverage.Effects.for_cue(Records.cue_from_effect(cue,i),entry.id,cue.role).is_empty() and authored_native[i].source.begins_with(str(declared.sections.conditions[entry.id])+"::effects"),"Typed hold preserves the exact Factory clip and owning Resource "+entry.id+":"+str(i))
             var unbound:Array=Array(cue.unbound_constructor_inputs)
             check(authored_native[i].availability=="available" and authored_native[i].unbound_constructor_inputs==unbound and authored_native[i].status==("missing" if not unbound.is_empty() else "unexercised") and not authored_native[i].rendered and authored_native[i].evidence.is_empty(),"Typed source presence retains explicit missing inputs and cannot manufacture preparation, rendering or visual approval "+entry.id+":"+str(i))
         if not selected.is_empty():
@@ -91,7 +94,7 @@ func run()->void:
     check(authoring_missing==expected_unassigned and report.totals.authoring_assignments==expected_unassigned.size() and ground_assigned==surfaces.size(),"Exact remaining unassigned actor indicators stay explicit; every typed ground owner retains its independent surface assignment: "+JSON.stringify({"expected_actor":expected_unassigned,"actual_actor":authoring_missing,"typed_ground":surfaces.size(),"built_ground":ground_assigned}))
     var dash:Dictionary=entries["condition.dashing"]
     check(dash.indicator_assignments.size()==6 and dash.indicator_assignments.all(func(row):return row.kind=="movement_media"),"Dash retains its six conditional movement assignments instead of an invented sustained contour")
-    check(not dash.requirements.any(func(row):return row.mechanism=="bodyOutline") and dash.requirements.filter(func(row):return row.phase=="movement").all(func(row):return row.status=="missing" and not row.rendered),"Original Dash movement source assignments remain missing renderer work, not rendering evidence")
+    check(not dash.requirements.any(func(row):return row.mechanism=="bodyOutline") and dash.requirements.filter(func(row):return row.phase=="movement").all(func(row):return row.implementation=="implemented" and row.status=="unexercised" and not row.rendered and not row.native_sources.is_empty()),"All original Dash assignments delegate to current native movement sources without claiming rendered output")
     for name in ["dodging","disengaging"]:
         var id="condition."+name
         var outline=entries[id].requirements.filter(func(row):return row.mechanism=="bodyOutline")
@@ -113,7 +116,7 @@ func run()->void:
     check(activity.size()==recipes["condition.hidden"].persistent.activityPoses.size() and not activity.is_empty(),"Every native activity-specific crouch assignment is inventoried")
     check(activity.all(func(row):return row.source.begins_with("res://") and ".tres::" in row.source and row.legacy_source.begins_with("catalog/condition_recipes.json:/condition.hidden/persistent/activityPoses/")),"Crouch requirements expose native properties, never fictitious JSON assignments")
     check(hidden.requirements.filter(func(row):return row.phase in ["application","removal"]).all(func(row):return row.mechanism!="material_flash"),"Condition phase badges cannot be mislabeled as material flashes")
-    check(entries["condition.spell.darkness.zone"].indicator_assignments.size()==1 and entries["condition.spell.darkness.zone"].indicator_assignments[0].source=="authoring/environment/surfaces/spatial_effect.spell.darkness.tres::legacy/spatial_media","Cleansing Daylight trigger cannot count as Darkness indicator assignment")
+    check(entries["condition.spell.darkness.zone"].indicator_assignments.any(func(row):return row.kind=="native_spatial_owner" and row.spatial_content_id=="spatial_effect.spell.darkness" and row.source=="res://authoring/environment/surfaces/spatial_effect.spell.darkness.tres") and not entries["condition.spell.darkness.zone"].indicator_assignments.any(func(row):return row.get("spatial_content_id")=="spatial_effect.spell.daylight"),"Darkness owns its canonical native field; its Daylight removal trigger cannot become the indicator source")
     _assignment_boundaries(cache,recipes)
     check(entries["condition.spell.mirror_image"].requirements.any(func(row):return row.mechanism=="liveCopies" and row.status=="missing"),"Lifecycle capture does not pretend Mirror Image copies are implemented")
     check(entries["condition.blinded"].requirements.any(func(row):return row.mechanism=="native:condition_blinded_native" and row.status=="unexercised") and not entries["condition.blinded"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup")),"Native Blinded lifecycle explicitly replaces the retired grouped sprite marker, without execution evidence")
@@ -167,6 +170,7 @@ func _assignment_boundaries(cache:Dictionary,recipes:Dictionary)->void:
         var row=Coverage.build(local).entries[0]
         check(row.requirements.any(func(value):return value.get("gap_kind")=="authoring_assignment")==(mode=="neutral"),"Authoring intent and neutral defaults remain distinct: "+mode)
     var zone:Dictionary=recipes["condition.spell.fog_cloud.zone"].duplicate(true)
+    zone.disposition="authored";zone.surfaceOwner=""
     zone.relationships.incomingTriggers[0].sourceRef.content_id="spell.unassigned_fixture"
     var local=cache.duplicate();local["catalog/condition_recipes.json"]={"condition.spell.fog_cloud.zone":zone}
     var row=Coverage.build(local).entries[0]

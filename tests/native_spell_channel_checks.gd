@@ -151,8 +151,8 @@ func recording(path:String,sequence:int,behavior:String,deliveries:int,hit_count
                 materials.append(child)
                 check(parent.kind=="material_flash" and child.component.actor_uuid==parent.component.actor_uuid,label+": body material stays below its actual damage recipient")
                 check(parent.component.duration_ms==150,label+": child preserves the existing150ms receiver envelope")
-                check(child.get("preview_scope")=="live_composed_actor" and not child.component.get("preview_reason","").is_empty(),
-                    label+": unavailable composed thumbnail is explicit, not a fabricated source preview")
+                check(child.get("preview_scope")=="composed_actor" and child.get("preview_status")=="available" and not child.component.get("preview_reason","").is_empty(),
+                    label+": recipient material exposes its actual composed source preview and scope")
         trace_channels(group,wrapped.start_ms,children,label)
         check(group==immutable,label+": inspection/evidence leaves compiled playback and state commits unchanged")
     check(phases.size()==phase_count,label+": exact native phase count from actual recorded deliveries")

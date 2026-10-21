@@ -142,7 +142,7 @@ applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "cone_of_cold_native",
 "source": "assets/vfx/index.json:/selections/cone_of_cold_native/staging"
@@ -273,4 +273,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "The delivered actual cone and receiving outcomes are assigned. The retained legacy bodyMaterials.frost_texture uses actual positive damage and its authored finite envelope, but no compatible delivered actor body-UV treatment phase exists; cone volume/floor materials cannot replace it. This exact source-parity boundary is Factory review section15. All artwork remains unreviewed."

@@ -1,7 +1,7 @@
 """Full Python-reference states for unchanged, checked-in two-seat recordings.
 
 Run with the frozen engine on PYTHONPATH, never the production checkout:
-  PYTHONPATH=/home/tommaso/.cache/ndclient/dnd_engine-211b71134 \
+  PYTHONPATH=/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267 \
     /home/tommaso/.cache/dnd-engine/venv/bin/python tools/recorded_state_oracle.py
 
 Raw packets remain in their original journals. The ZIP holds complete canonical

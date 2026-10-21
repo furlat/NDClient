@@ -21,6 +21,10 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_ary3i")
 clip = "reaction-prismatic-study/prismatic_spray_two_colors_native_study"
 role = "attached"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "prismatic_outcomes", "outcome": "cast", "component_path": ["prismatic_spray"], "input_field": "", "geometry_actor": "caster", "contact_seconds": 0.57, "behavior_id": "spell.prismatic_spray", "save_effect_prefix": "spell.prismatic_spray.color_", "recipient_endpoint_start": 3, "recipient_socket": "body_center"}
+input_arguments = {"recipient_outcomes": ["cast_uuid", "source_uuid", "outcomes"], "cast_presence": ["cast_uuid", "source_uuid", "present"]}
+result_contact_seconds = 0.57
 at = "release"
 attachment = "caster_ground"
 orientation = "world"
@@ -33,23 +37,21 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
-"dynamic_geometry": true,
-"follow_attachment": false,
-"live_endpoints": [{
-"actor": "caster",
-"socket": "cast_hand"
-}, {
-"actor": "caster",
-"socket": "ground"
-}, {
-"point": [7.0, 0.0, 0.0]
-}, {
-"actor": "target",
-"socket": "body_center"
-}, {
-"actor": "target2",
-"socket": "body_center"
-}]
+ "dynamic_geometry": true,
+ "follow_attachment": false,
+ "live_endpoints": [
+  {
+   "actor": "caster",
+   "socket": "cast_hand"
+  },
+  {
+   "actor": "caster",
+   "socket": "ground"
+  },
+  {
+   "cue_point": "aim"
+  }
+ ]
 }
 
 [sub_resource type="Resource" id="Resource_v75dd"]
@@ -96,11 +98,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_h4tbg"]
 script = ExtResource("6_03564")
 id = "prismatic_spray_condition_colors_native_study"
+dispatch_gap = "actual_colors_delegate_to_shared_prismatic_outcome_source"
 kind = "form"
 selection = "prismatic_spray_condition_colors_native_study"
 effects = Array[ExtResource("1_ary3i")]([SubResource("Resource_u6e53")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The production source now consumes the actual per-recipient application roll/colours, including nondamaging and double-colour outcomes. This duplicate review selection delegates to that shared cone rather than replaying its fixed recipients."
 
 [sub_resource type="Resource" id="Resource_gevwv"]
 script = ExtResource("1_ary3i")
@@ -140,11 +144,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_4a7ut"]
 script = ExtResource("6_03564")
 id = "prismatic_spray_unapplied_native_study"
+dispatch_gap = "actual_colors_delegate_to_shared_prismatic_outcome_source"
 kind = "form"
 selection = "prismatic_spray_unapplied_native_study"
 effects = Array[ExtResource("1_ary3i")]([SubResource("Resource_gevwv")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The production source now consumes the actual per-recipient application roll/colours, including nondamaging and double-colour outcomes. This duplicate review selection delegates to that shared cone rather than replaying its fixed recipients."
 
 [resource]
 script = ExtResource("4_vi20g")

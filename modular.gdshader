@@ -13,6 +13,13 @@ uniform float authored_base_light = 1.0;
 uniform bool calibrated_component_receiver = true;
 uniform bool use_component_depth = true;
 uniform bool use_component_normals = true;
+// Exact authored lower aperture lip, evaluated on the unchanged painted body.
+// It is unrelated to native receiver/ray depth and never rewrites source pixels.
+uniform bool body_aperture_enabled = false;
+uniform bool body_aperture_diamond = false;
+uniform vec3 body_aperture_center;
+uniform vec3 body_aperture_x;
+uniform vec3 body_aperture_y;
 varying vec3 source_world_origin;
 void vertex() {
     source_world_origin = MODEL_MATRIX[3].xyz;
@@ -21,6 +28,13 @@ void vertex() {
     source_screen_origin = screen[0].xy; source_screen_axis_x = screen[1].xy; source_screen_axis_y = screen[2].xy;
 }
 void fragment() {
+    if (body_aperture_enabled) {
+        if (shadow) { discard; }
+        vec3 relative = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz - body_aperture_center;
+        float x = abs(dot(relative, body_aperture_x));
+        float lip = body_aperture_diamond ? 1.0-x : sqrt(max(0.0, 1.0-x*x));
+        if (-dot(relative, body_aperture_y) > lip) { discard; }
+    }
     // Animated sheets keep one authored cell; texels snap to that cell grid.
     vec2 texel = lit_texel_uv(UV, material_cell_size);
     vec4 colour = modular_source_colour(texel);

@@ -3,250 +3,354 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_pd2wk"]
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_qbmfr"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_terminal"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/material-runtime-20261021/sources/577712791e3d1a072ce8/air_elemental.tres" id="4_terminal"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/material-runtime-20261021/sources/ee2f010c497771da80c7/deva.tres" id="5_terminal"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/material-runtime-20261021/sources/02aad722b95dce013dde/draconic_spirit.tres" id="6_terminal"]
+
+[sub_resource type="Resource" id="Resource_terminal_air_elemental"]
+script = ExtResource("3_terminal")
+clip = "high-level-22/summon-manifestation/air_elemental/terminal"
+source_phase = ExtResource("4_terminal")
+source_inputs = {"terminal_departure": "set_terminal_departure", "live_endpoints": "set_live_endpoints"}
+role = "attached"
+scope = "event"
+constructor_input = {"kind": "actor_terminal", "component_path": ["summon_terminal"], "input_field": "", "creature_ids": ["creature.bison", "creature.blue_raptor", "creature.boar", "creature.brown_bear", "creature.claw_mote_devil", "creature.corrosive_demon", "creature.dread_demon", "creature.dretch", "creature.elephant", "creature.fellwing_devil", "creature.hound", "creature.huntsman_wing_devil", "creature.jaguar", "creature.lion", "creature.mammoth", "creature.ostrich", "creature.polar_bear", "creature.raptor", "creature.rhinoceros", "creature.spell.air_elemental", "creature.spell.air_myrmidon", "creature.spell.earth_elemental", "creature.spell.earth_myrmidon", "creature.spell.fire_elemental", "creature.spell.fire_myrmidon", "creature.spell.water_elemental", "creature.spell.water_myrmidon", "creature.stag", "creature.stegosaurus", "creature.tiger", "creature.triceratops", "creature.wolf"]}
+at = "event.commit"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.4791666666666667
+duration_policy = "authored"
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+extra = {"live_endpoints": [{"cue_point": "target"}]}
+
+[sub_resource type="Resource" id="Resource_terminal_deva"]
+script = ExtResource("3_terminal")
+clip = "high-level-22/summon-manifestation/deva/terminal"
+source_phase = ExtResource("5_terminal")
+source_inputs = {"terminal_departure": "set_terminal_departure", "live_endpoints": "set_live_endpoints"}
+role = "attached"
+scope = "event"
+constructor_input = {"kind": "actor_terminal", "component_path": ["summon_terminal"], "input_field": "", "creature_ids": ["creature.spell.cambion", "creature.spell.deva", "creature.spell.djinni"]}
+at = "event.commit"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.4791666666666667
+duration_policy = "authored"
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+extra = {"live_endpoints": [{"cue_point": "target"}]}
+
+[sub_resource type="Resource" id="Resource_terminal_draconic_spirit"]
+script = ExtResource("3_terminal")
+clip = "high-level-22/summon-manifestation/draconic_spirit/terminal"
+source_phase = ExtResource("6_terminal")
+source_inputs = {"terminal_departure": "set_terminal_departure", "live_endpoints": "set_live_endpoints"}
+role = "attached"
+scope = "event"
+constructor_input = {"kind": "actor_terminal", "component_path": ["summon_terminal"], "input_field": "", "creature_ids": ["creature.spell.draconic_spirit"]}
+at = "event.commit"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.4791666666666667
+duration_policy = "authored"
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+extra = {"live_endpoints": [{"cue_point": "target"}]}
+
 [resource]
 script = ExtResource("1_pd2wk")
 id = "entity_lifecycle_media"
+effects = Array[ExtResource("3_terminal")]([SubResource("Resource_terminal_air_elemental"), SubResource("Resource_terminal_deva"), SubResource("Resource_terminal_draconic_spirit")])
 unported = {
-"arrival": {
-"bodyFadeMs": [500.0, 625.0],
-"durationMs": 1750.0,
-"tracksByManifestation": {
-"fey_spirit": [{
-"assetId": "summoning.fey_spirit.arrival.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fey_spirit.arrival.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fey_spirit.arrival.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.front",
-"viewFacing": "E"
-}],
-"fiend": [{
-"assetId": "summoning.fiend.arrival.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fiend.arrival.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fiend.arrival.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.front",
-"viewFacing": "E"
-}],
-"natural": [{
-"assetId": "summoning.natural.arrival.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.natural.arrival.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.natural.arrival.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 1750.0,
-"fps": 32.0,
-"id": "arrival.front",
-"viewFacing": "E"
-}]
+  "review_only": {
+    "enabled": false,
+    "reason": "Preserved old fixed arrival/bond/departure side-sheet studies are explicitly unselected. Production uses actual birth assignments and the independent witnessed terminal sources; body fade and implicit bond clocks are not inferred.",
+    "records": {
+      "arrival": {
+        "bodyFadeMs": [
+          500.0,
+          625.0
+        ],
+        "durationMs": 1750.0,
+        "tracksByManifestation": {
+          "fey_spirit": [
+            {
+              "assetId": "summoning.fey_spirit.arrival.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fey_spirit.arrival.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fey_spirit.arrival.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.front",
+              "viewFacing": "E"
+            }
+          ],
+          "fiend": [
+            {
+              "assetId": "summoning.fiend.arrival.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fiend.arrival.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fiend.arrival.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.front",
+              "viewFacing": "E"
+            }
+          ],
+          "natural": [
+            {
+              "assetId": "summoning.natural.arrival.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.natural.arrival.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.natural.arrival.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 1750.0,
+              "fps": 32.0,
+              "id": "arrival.front",
+              "viewFacing": "E"
+            }
+          ]
+        }
+      },
+      "bond": {
+        "durationMs": 750.0,
+        "tracksByManifestation": {
+          "fey_spirit": [
+            {
+              "assetId": "summoning.fey_spirit.bond.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fey_spirit.bond.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fey_spirit.bond.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.front",
+              "viewFacing": "E"
+            }
+          ],
+          "fiend": [
+            {
+              "assetId": "summoning.fiend.bond.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fiend.bond.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fiend.bond.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.front",
+              "viewFacing": "E"
+            }
+          ],
+          "natural": [
+            {
+              "assetId": "summoning.natural.bond.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.natural.bond.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.natural.bond.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 750.0,
+              "fps": 32.0,
+              "id": "bond.front",
+              "viewFacing": "E"
+            }
+          ]
+        }
+      },
+      "departure": {
+        "bodyFadeMs": [
+          187.5,
+          687.5
+        ],
+        "durationMs": 1500.0,
+        "tracksByManifestation": {
+          "fey_spirit": [
+            {
+              "assetId": "summoning.fey_spirit.departure.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fey_spirit.departure.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fey_spirit.departure.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.front",
+              "viewFacing": "E"
+            }
+          ],
+          "fiend": [
+            {
+              "assetId": "summoning.fiend.departure.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fiend.departure.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.fiend.departure.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.front",
+              "viewFacing": "E"
+            }
+          ],
+          "natural": [
+            {
+              "assetId": "summoning.natural.departure.ground",
+              "attachment": "target_ground",
+              "depth": "ground",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.ground",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.natural.departure.back",
+              "attachment": "target_ground",
+              "depth": "behind_body",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.back",
+              "viewFacing": "E"
+            },
+            {
+              "assetId": "summoning.natural.departure.front",
+              "attachment": "target_ground",
+              "depth": "front_body",
+              "durationMs": 1500.0,
+              "fps": 32.0,
+              "id": "departure.front",
+              "viewFacing": "E"
+            }
+          ]
+        }
+      }
+    }
+  }
 }
-},
-"bond": {
-"durationMs": 750.0,
-"tracksByManifestation": {
-"fey_spirit": [{
-"assetId": "summoning.fey_spirit.bond.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fey_spirit.bond.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fey_spirit.bond.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.front",
-"viewFacing": "E"
-}],
-"fiend": [{
-"assetId": "summoning.fiend.bond.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fiend.bond.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fiend.bond.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.front",
-"viewFacing": "E"
-}],
-"natural": [{
-"assetId": "summoning.natural.bond.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.natural.bond.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.natural.bond.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 750.0,
-"fps": 32.0,
-"id": "bond.front",
-"viewFacing": "E"
-}]
-}
-},
-"departure": {
-"bodyFadeMs": [187.5, 687.5],
-"durationMs": 1500.0,
-"tracksByManifestation": {
-"fey_spirit": [{
-"assetId": "summoning.fey_spirit.departure.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fey_spirit.departure.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fey_spirit.departure.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.front",
-"viewFacing": "E"
-}],
-"fiend": [{
-"assetId": "summoning.fiend.departure.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fiend.departure.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.fiend.departure.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.front",
-"viewFacing": "E"
-}],
-"natural": [{
-"assetId": "summoning.natural.departure.ground",
-"attachment": "target_ground",
-"depth": "ground",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.ground",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.natural.departure.back",
-"attachment": "target_ground",
-"depth": "behind_body",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.back",
-"viewFacing": "E"
-}, {
-"assetId": "summoning.natural.departure.front",
-"attachment": "target_ground",
-"depth": "front_body",
-"durationMs": 1500.0,
-"fps": 32.0,
-"id": "departure.front",
-"viewFacing": "E"
-}]
-}
-}
-}
+
+notes = "The three delivered terminal-only sources now own finite accents at an actual visually witnessed completed terminal departure. Explicit creature lists reuse the existing neutral Air/Deva/Draconic source artwork; this is not distinct body art. Actual public terminal cause/commit occurrence, disclosed position and same-cut support provide admission and the source-clock origin. Current actor absence cannot remove the admitted accent. No original birth event, live body, fixed review departure or unseen terminal cause is invented. All artwork remains unreviewed."

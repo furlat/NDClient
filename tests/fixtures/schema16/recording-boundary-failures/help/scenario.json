@@ -1,0 +1,75 @@
+{
+ "id": "action.help_attack/consume_assistance",
+ "title": "Help Attack: helper selects enemy and ally, actual assisted attack consumes owner",
+ "kind": "action",
+ "subjects": {
+  "spell": [],
+  "action": [
+   "action.help_attack",
+   "action.attack"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    6
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "premade": "fighter",
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "premade": "fighter",
+   "at": [
+    5,
+    6
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "action.help_attack",
+   "by": "caster",
+   "target": "target",
+   "recipients": [
+    "target",
+    "ally"
+   ],
+   "capture_choices": true
+  },
+  {
+   "do": "action.attack",
+   "by": "ally",
+   "target": "target",
+   "weapon_slot": "MELEE_MAIN"
+  }
+ ],
+ "seed": 3,
+ "required_behaviors": [
+  "action.help_attack",
+  "action.attack"
+ ],
+ "required_conditions": [],
+ "required_condition_ends": [],
+ "required_facts": [
+  "attack"
+ ]
+}

@@ -8,6 +8,7 @@ const NativeChannels=preload("res://presentation/native_spell_channels.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const NativePersistent=preload("res://presentation/native_persistent.gd")
 const SpellDelivery=preload("res://presentation/spell_delivery.gd")
+const Blood=preload("res://presentation/blood.gd")
 const LIMIT = 2000
 
 static func create() -> Dictionary:
@@ -96,7 +97,7 @@ static func _media_needed(row: Dictionary, media: Array, source: String, base_ms
             missing.timing={"resolved":true,"start_ms":start,"end_ms":start+float(item.durationMs),"reason":"authored_offset_duration_from_occurrence"}
         row.components.append(missing)
 
-static func _recipe_missing(row: Dictionary, recipe: Dictionary, source: String, pointer: String) -> void:
+static func _recipe_missing(row: Dictionary, recipe: Dictionary, source: String, pointer: String, fact:Dictionary, cache:Dictionary) -> void:
     if recipe.is_empty():
         var unresolved=_component("recipe","action_presentation_owner_unresolved",pointer)
         unresolved.merge(Requirements.row("recipe","Presentation owner unassessed",pointer,"unassessed","missing",[row.kind],"owner","No selected recipe resolves this occurrence's own or delegated presentation. An absent recipe is not an explicit state-only decision."),true)
@@ -111,8 +112,10 @@ static func _recipe_missing(row: Dictionary, recipe: Dictionary, source: String,
         var component = _component("body","authored_body_not_implemented",source+".actor")
         component.clip = recipe.actor.get("clip","")
         row.components.append(component)
-    if recipe.get("actionFeedback") != null:
-        _need(row,"feedback_text","authored_feedback_not_implemented",source+".actionFeedback","text",recipe.actionFeedback.get("text",""))
+    var feedback:Dictionary=Authoring.action_feedback(recipe,fact)
+    if not feedback.is_empty() and feedback.value.get("enabled",true) and (not str(feedback.field).begins_with("reactionFeedback/") or row.phase=="completion"):
+        var feedback_source:String=Authoring.recipe_source(recipe,str(feedback.field),cache)
+        _need(row,"feedback_text","authored_feedback_not_implemented",feedback_source,"text",feedback.value.get("text",""))
     if not recipe.get("effectAudioCue","").is_empty():
         _need(row,"audio","authored_action_audio_not_implemented",recipe.get("_source_fields",{}).get("effectAudioCue",pointer+"/effectAudioCue"),"cue_id",recipe.effectAudioCue)
 
@@ -176,6 +179,61 @@ static func _lifecycle_components(row:Dictionary,condition:Dictionary,actor_uuid
         component.persistent=true
         row.components.append(component)
 
+## Bounded source/method metadata shared with the offline index. No native
+## handles, mutable state cuts or particle templates enter this description.
+static func world_method(program:Dictionary)->Dictionary:
+    var authored:Dictionary={}
+    for field in ["kind","fps","state_field","state_frames","transition_frames","activation_frames","contact_frame","frames_by_pose","frames_by_quarter","roles","projectile","successful_save_hop","actor_depth","placement","origin_offset","requires_object_anchor","default_orientation","residue_overlays","fall_delay_ms","fall_ms","transit_ms","emerge_ms","exit_hold_ms","entrance_aperture","exit_aperture"]:
+        if program.has(field):authored[field]=program[field].duplicate(true) if program[field] is Dictionary or program[field] is Array else program[field]
+    return {"label":"Source-owned world media","surface":"disclosed spatial owner and actual support",
+        "renderer":"res://presentation/sprite_sources.gd::sample_world_media + res://presentation/component_renderer.gd",
+        "source":str(program.get("source","")),"program":authored,
+        "prepared":"not_examined","rendered":"not_witnessed"}
+
+## The existing native source table is an authored program, separate from a
+## recorded occurrence and from any readiness, framebuffer or artwork receipt.
+static func source_method(source_id:String,cache:Dictionary)->Dictionary:
+    var record:Dictionary=Authoring.load_data("native_effects/index.json",cache).get("sources",{}).get(source_id,{})
+    return {"label":"Authored native source","renderer":"res://presentation/component_renderer.gd",
+        "source_runtime":"res://presentation/native_effects.gd",
+        "source_kind":"native_source","source_id":source_id,"source":"native_effects/index.json:/sources/"+source_id,
+        "program":record.duplicate(true),"source_availability":"assigned" if not record.is_empty() else "missing",
+        "runtime_binding":"not_examined","prepared":"not_examined","rendered":"not_witnessed"}
+
+static func render_method(component:Dictionary,cache:Dictionary)->Dictionary:
+    if component.get("render_method") is Dictionary:return component.render_method.duplicate(true)
+    if component.get("kind")=="native_effect" and not component.get("native_spell",false):
+        var method:Dictionary=source_method(str(component.get("source_id","")),cache)
+        method.assignment_source=str(component.get("assignment_source",component.get("source","")))
+        method.occurrence={}
+        for field in ["authored_use_id","attachment","requires_pose_socket","source_time_window","source_duration_ms","duration_ms","loop","fade_in_ms","fade_out_ms","fade_curve","scale","alpha","observed_fact","observed_condition"]:
+            if component.has(field):method.occurrence[field]=component[field].duplicate(true) if component[field] is Dictionary or component[field] is Array else component[field]
+        return method
+    if component.get("kind")=="world_activation":
+        var program:Dictionary=Authoring.Catalog.environment_index(cache).get("spatial_media",{}).get(str(component.get("content_id","")),{})
+        if not program.get("native_world_media",false):return {}
+        var method:Dictionary=world_method(program)
+        method.label="Committed world activation"
+        method.occurrence={}
+        for field in ["role","mechanism_uuid","content_id","target_uuid","origin_position","direction","end_position","affected_positions","elevation_feet","end_elevation_feet","affected_elevations_feet","missing_support_positions","source_cut","launch_delay_ms","projectile_ms"]:
+            if component.has(field):method.occurrence[field]=component[field].duplicate(true) if component[field] is Dictionary or component[field] is Array else component[field]
+        if component.get("role","")!="portal_exit":method.occurrence.contact_ms=float(component.start_ms)+float(component.get("launch_delay_ms",0.0))+float(component.get("projectile_ms",0.0))
+        return method
+    if component.get("kind")=="residue_deposit":
+        var release:Dictionary=component.get("body_release",{})
+        var selected:Dictionary=Blood.binding(release,cache)
+        var asset:Dictionary=component.get("asset_metadata",{})
+        var style:Dictionary=asset.get("region",{})
+        return {"label":"Authoritative residue release","surface":"actual receiving regions and tile after-values",
+            "renderer":"res://presentation/blood_renderer.gd","source":str(component.get("source",selected.get("source",""))),
+            "release_id":str(release.get("release_id","")),"residue_id":str(component.get("residue_id",selected.get("residue_id",""))),
+            "asset_id":str(selected.get("asset_id",asset.get("assetId",""))),"primitive":str(style.get("primitive","")),
+            "palette":style.get("palette",[]).duplicate() if style.get("palette") is Array else [],
+            "pattern":str(release.get("pattern","")),"critical_hit":bool(release.get("critical_hit",false)),
+            "receiving_region_count":release.get("regions",[]).size(),"revealed_tile_count":component.get("reveals",[]).size(),
+            "flight_enabled":bool(component.get("flight_enabled",false)),"prepared":"not_examined","rendered":"not_witnessed"}
+    return {}
+
 static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dictionary:
     var row=_component(component.kind,component.get("reason",""),component.get("source",""))
     row.merge({"id":component.id,"trace_track_id":component.id,"actor_uuid":component.get("actor_uuid",""),
@@ -184,14 +242,18 @@ static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dic
         "timing":{"resolved":true,"start_ms":component.start_ms,"end_ms":component.start_ms+component.duration_ms,"reason":"compiled_source_clock"}},true)
     # Only finite diagnostic identities are retained. No actor/world snapshots,
     # source tracks, materials or native handles enter the bounded live trace.
-    for field in ["attachment","text","source_id","authored_id","cue_id","intercepted_by_condition_uuid","native_variant"]:
+    for field in ["attachment","text","source_id","authored_id","cue_id","intercepted_by_condition_uuid","native_variant","amount","label","color","feedback_source_occurrence"]:
         if component.has(field):row[field]=component[field]
+    if component.has("feedback_policy"):row.feedback_policy=component.feedback_policy.duplicate(true)
+    if component.has("feedback_policy_sources"):row.feedback_policy_sources=component.feedback_policy_sources.duplicate(true)
+    var method:Dictionary=render_method(component,cache)
+    if not method.is_empty():row.render_method=method
     if component.has("layer"):
         row.slot=component.layer.get("slot","");row.authored_id=component.layer.get("id","")
     if component.kind=="native_effect":
         row.selected_weapon_pose=not component.get("weapon_pose",{}).is_empty()
         var selected:Dictionary=Authoring.load_data("native_effects/index.json",cache).get("sources",{}).get(component.get("source_id"),{})
-        row.asset_ids=selected.get("media_ids",[component.asset_id] if component.has("asset_id") else []).duplicate()
+        row.asset_ids=component.get("authored_media",selected.get("media_ids",[component.asset_id] if component.has("asset_id") else [])).duplicate()
     elif component.has("asset_id"):row.asset_ids=[component.asset_id]
     return row
 
@@ -244,20 +306,20 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 var outcome: String = {"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.get("attack_outcome"),"")
                 var effect: String = "onCrit" if outcome == "critical" else ("onHit" if outcome == "hit" else "onMiss")
                 var vfx:Dictionary=recipe.get("attackVfx",{}).get(effect,{})
-                var native_trail=row.components.any(func(component):return component.kind=="native_effect" and component.get("source_id")=="class.martial.slash" and component.get("selected_weapon_pose",false) and not component.trace_track_id.is_empty())
+                var trail: Dictionary = recipe.get("weaponTrail",{}) if recipe.get("weaponTrail") != null else {}
+                var native_trail=row.components.any(func(component):return component.kind=="native_effect" and component.get("source_id")==trail.get("source_id") and component.get("selected_weapon_pose",false) and not component.trace_track_id.is_empty())
                 for slot in vfx:
                     if slot=="slash" and native_trail and fact.get("damage_types",[]).all(func(type):return type in ["Bludgeoning","Piercing","Slashing"]):continue
                     _need(row,"sprite_layer","authored_attack_vfx_not_implemented",source+".attackVfx."+effect+"."+slot,"slot",slot)
                 if recipe.get("attackFeedback",{}) != null and recipe.get("attackFeedback",{}).get(outcome) != null:
                     _need(row,"feedback_text","authored_attack_feedback_not_implemented",source+".attackFeedback."+outcome,"text",recipe.attackFeedback[outcome].get("text",""))
-                var trail: Dictionary = recipe.get("weaponTrail",{}) if recipe.get("weaponTrail") != null else {}
                 if recipe.get("projectile")==null and fact.get("attack_source_kind")=="equipped" and (fact.behavior_id in trail.get("behaviorIds",[]) or outcome in trail.get("outcomes",[])):
                     var trail_pointer="catalog/attack_recipes.json:/"+str(fact.behavior_id)+"/weaponTrail"
                     for variant_index in recipe.get("variants",[]).size():
                         var variant:Dictionary=recipe.variants[variant_index]
                         if variant.id==recipe.get("selected_variant","") and variant.has("weaponTrail"):trail_pointer="catalog/attack_recipes.json:/"+str(fact.behavior_id)+"/variants/"+str(variant_index)+"/weaponTrail"
                     if not native_trail:_need(row,"weapon_trail","authored_weapon_trail_not_implemented",source+".weaponTrail","",null,trail_pointer)
-                    elif fact.get("attack_outcome") in ["Hit","Crit"]:_need(row,"native_effect","authored_weapon_impact_not_implemented",source+".weaponTrail.impactAssetId","source_id","class.martial.impact")
+                    elif fact.get("attack_outcome") in ["Hit","Crit"] and not str(trail.get("impact_source_id","")).is_empty():_need(row,"native_effect","authored_weapon_impact_not_implemented",source+".weaponTrail.impact_source_id","source_id",str(trail.impact_source_id))
         "damage":
             if fact.get("stage") != "applied" or fact.get("applied_damage",0) <= 0:
                 row.reasons = ["no_applied_damage_visual"]; return
@@ -266,11 +328,15 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
             if row.get("damage_timing",{}).get("body_enabled",true):
                 _need(row,"body","missing_authored_clip","catalog/damage_context.json.bodyClip")
             var context = Authoring.load_data("catalog/damage_context.json",cache)
-            for field in ["flashEnabled","numberEnabled"]:
-                if context.get(field,false):_need(row,"material_flash" if field=="flashEnabled" else "damage_number","authored_damage_feedback_not_implemented","catalog/damage_context.json."+field)
+            var damage_recipe:Dictionary=graph.get("damage_timings",{}).get(node.id,{}).get("recipe",{})
+            for definition in [["flashEnabled","hitFlash","material_flash"],["numberEnabled","floatingNumber","damage_number"]]:
+                if damage_recipe.get(definition[1],{}).get("enabled",context.get(definition[0],false)):
+                    _need(row,definition[2],"authored_damage_feedback_not_implemented","catalog/damage_context.json."+definition[0])
             var release:Dictionary=fact.get("body_release",{}) if fact.get("body_release")!=null else {}
-            if release.get("release_id")=="body.blood" and not release.get("regions",[]).is_empty() and not _has(row,"residue_deposit"):
-                var residue=_component("residue_deposit","authoritative_residue_renderer_not_implemented","authoring/environment/surfaces/residue.blood.tres")
+            var release_binding:Dictionary=Blood.binding(release,cache)
+            if not release_binding.is_empty() and not release.get("regions",[]).is_empty() and not _has(row,"residue_deposit"):
+                var residue=_component("residue_deposit","authoritative_residue_renderer_not_implemented",release_binding.source)
+                residue.residue_id=release_binding.residue_id
                 residue.source_pointer=residue.source
                 residue.actor_uuid=fact.target_entity_uuid
                 residue.gap_kind="renderer"
@@ -310,7 +376,7 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
             var recipe_id: String = str(fact.get("behavior_id",""))
             if row.kind == "action":
                 recipe_id = Authoring.load_data("catalog/body_action_bindings.json",cache).get(recipe_id,{}).get("source_recipe",recipe_id)
-            _recipe_missing(row,resolved_recipe,resolved_recipe.get("_resource_source",file+":"+recipe_id),file+":/"+recipe_id)
+            _recipe_missing(row,resolved_recipe,resolved_recipe.get("_resource_source",file+":"+recipe_id),file+":/"+recipe_id,fact,cache)
         "spell":
             var recipe:Dictionary=resolved_recipe
             if recipe.is_empty():row.components.append(_component("spell","spell_presentation_not_implemented"))

@@ -1,17 +1,68 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_5kwoj"]
-[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_3178r"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="image"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="response_effect"]
 
-[sub_resource type="Resource" id="Resource_us0rb"]
-script = ExtResource("1_3178r")
+[sub_resource type="Resource" id="Icon"]
+script = ExtResource("image")
 path = "art/media/ui/icons/smooth48/condition.generic.png"
 native_size = Vector2i(48, 48)
 reuses = "condition.generic"
 status = "stand_in"
 source = "ui/resources.json icon:condition.generic"
 
+[sub_resource type="Resource" id="ResultResponse0"]
+script = ExtResource("response_effect")
+clip = "weapons/contact/electric/medium"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.25
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_component", "participant": "recipient", "action_behavior_id": "action.monster.multiattack", "when_state": {"prerequisite": "Shocked"}, "damage_type": "Lightning"}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
+
+[sub_resource type="Resource" id="ResultResponse1"]
+script = ExtResource("response_effect")
+clip = "weapons/contact/fire/medium"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.28
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_component", "participant": "recipient", "action_behavior_id": "action.monster.multiattack", "when_state": {"prerequisite": "Burning"}, "damage_type": "Fire"}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
+
+[sub_resource type="Resource" id="ResultResponse2"]
+script = ExtResource("response_effect")
+clip = "weapons/contact/ice/medium"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_component", "participant": "recipient", "action_behavior_id": "action.monster.multiattack", "when_state": {"prerequisite": "Chilled"}, "damage_type": "Cold"}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
+
 [resource]
-script = ExtResource("1_5kwoj")
+script = ExtResource("condition")
 id = "condition.summon.elemental_multiattack_bonus"
-icon = SubResource("Resource_us0rb")
+icon = SubResource("Icon")
+disposition = "authored"
+play_package_lifecycle = false
+responses = Array[ExtResource("response_effect")]([SubResource("ResultResponse0"), SubResource("ResultResponse1"), SubResource("ResultResponse2")])
+status = "partial"
+notes = "The actual retained prerequisite and exact positive attributed Lightning/Fire/Cold component select three finite recipient contact candidates: Shocked electric, Burning fire, Chilled ice. Admission requires this member behavior as DamageFact.components.source_id, the exact source actor and source_damage_uuid, positive after_affinity_damage, a positive enclosing applied packet and its actual successful item-attributed attack under Multiattack. No component HP allocation is inferred. BODY attacks use their real AttackFact item identity without inventing displayed HELD pixels. Earth/Prone physical bonus delegates to the same actual enclosing Bludgeoning DamageFact material/contact already emitted by Components._events via catalog/damage_context.json; it creates no duplicate physical flash. Its dedicated weapon-only event decorator stays unselected, as do the other prepared weapon-decorator alternatives. There is no condition-wide idle coating. All artwork is unreviewed."

@@ -47,10 +47,10 @@ func recorded(directory:String)->void:
                 var node={}
                 for lineage in admitted.normalized.lineages:
                     for candidate in lineage.events:
-                        if candidate.uuid==row.event_uuid:node=candidate;break
-                if node.is_empty() or node.canceled:continue
+                        if str(int(candidate.occurrence))==row.event_uuid:node=candidate;break
+                if node.is_empty() or node.get("canceled",false):continue
                 var fact:Dictionary=node.fact
-                var bodies:Array=group.actor_tracks.filter(func(track):return track.source_event_uuid==node.uuid)
+                var bodies:Array=group.actor_tracks.filter(func(track):return track.source_event_uuid==str(int(node.occurrence)))
                 if fact.kind=="death_save":
                     counts.saves+=1
                     check(bodies.is_empty(),"A death save never starts a body fall")
@@ -74,7 +74,7 @@ func recorded(directory:String)->void:
                 Tracks.samples([body],body.start_ms+9000)
                 check(Tracks.samples([body],body.start_ms+body.duration_ms*.5)==first,"Seek/loop resampling is deterministic")
                 var actor:Dictionary=displayed.actors[fact.entity_uuid]
-                var rig:Dictionary=Authoring.load_data("catalog/rigs.json",cache)[body.rig]
+                var rig:Dictionary=Authoring.rigs(cache)[body.rig]
                 var rest=Characters.rest_sample(actor,rig,cache)
                 if actor.life_state in ["dead","dying","stable"]:
                     check(rest.ok and rest.value.source_seconds==float(rig.clips[rest.value.clip].frames)/rig.clips[rest.value.clip].fps,"Terminal idle holds source endpoint after body track retires")

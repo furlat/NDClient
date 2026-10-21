@@ -8,5 +8,108 @@ script = ExtResource("2_cr46r")
 id = "spatial_effect.environment.spike_trap"
 art = PackedStringArray("spikes")
 legacy = "measured/environment/surfaces/spatial_effect.environment.spike_trap.json"
+world_media = {
+  "kind": "sprite",
+  "state_field": "trap_state",
+  "art_ids": [
+    "spikes",
+    "spikes.blood"
+  ],
+  "frames_by_pose": {
+    "e": [
+      "spikes.e.0",
+      "spikes.e.1",
+      "spikes.e.2",
+      "spikes.e.3",
+      "spikes.e.4",
+      "spikes.e.5",
+      "spikes.e.6"
+    ],
+    "n": [
+      "spikes.n.0",
+      "spikes.n.1",
+      "spikes.n.2",
+      "spikes.n.3",
+      "spikes.n.4",
+      "spikes.n.5",
+      "spikes.n.6"
+    ],
+    "s": [
+      "spikes.s.0",
+      "spikes.s.1",
+      "spikes.s.2",
+      "spikes.s.3",
+      "spikes.s.4",
+      "spikes.s.5",
+      "spikes.s.6"
+    ],
+    "w": [
+      "spikes.w.0",
+      "spikes.w.1",
+      "spikes.w.2",
+      "spikes.w.3",
+      "spikes.w.4",
+      "spikes.w.5",
+      "spikes.w.6"
+    ]
+  },
+  "fps": 24,
+  "state_frames": {
+    "activated": 6,
+    "deactivated": 0,
+    "ready": 0
+  },
+  "residue_overlays": {
+    "residue.blood": {
+      "e": [
+        "spikes.blood.e.0",
+        "spikes.blood.e.1",
+        "spikes.blood.e.2",
+        "spikes.blood.e.3",
+        "spikes.blood.e.4",
+        "spikes.blood.e.5",
+        "spikes.blood.e.6"
+      ],
+      "n": [
+        "spikes.blood.n.0",
+        "spikes.blood.n.1",
+        "spikes.blood.n.2",
+        "spikes.blood.n.3",
+        "spikes.blood.n.4",
+        "spikes.blood.n.5",
+        "spikes.blood.n.6"
+      ],
+      "s": [
+        "spikes.blood.s.0",
+        "spikes.blood.s.1",
+        "spikes.blood.s.2",
+        "spikes.blood.s.3",
+        "spikes.blood.s.4",
+        "spikes.blood.s.5",
+        "spikes.blood.s.6"
+      ],
+      "w": [
+        "spikes.blood.w.0",
+        "spikes.blood.w.1",
+        "spikes.blood.w.2",
+        "spikes.blood.w.3",
+        "spikes.blood.w.4",
+        "spikes.blood.w.5",
+        "spikes.blood.w.6"
+      ]
+    }
+  },
+  "activation_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "contact_frame": 6,
+  "default_orientation": "east"
+}
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Source-authored world program promoted from measured/environment/surfaces/spatial_effect.environment.spike_trap.json. The shared environment path retains the exact observed spatial owner, disclosed state and original numeric pose-frame ordering. Finite activation is driven only by actual committed mechanism facts; state transitions use actual successive owner values. Spike activation explicitly raises through the existing seven-frame bank at24fps and contacts at the declared activated pose6; this authors art timing, never an event or save outcome. Projectile, avoidance, depth and residue declarations remain separate factual inputs. All artwork remains unreviewed; source assignment does not qualify runtime output."

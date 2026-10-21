@@ -12,21 +12,22 @@ const Build=preload("res://tools/presentation_build/abilities.gd")
 const Sources=preload("res://presentation/native_presentation_sources.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Constructed=preload("res://presentation/native_constructed_occurrence.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
 const OWNER_CLIPS={
     "spatial_effect.spell.acid_surface":"bg3-36/chromatic-orb/acid/observed-surface",
-    "spatial_effect.material.ice":"bg3-36/chromatic-orb/cold/observed-surface",
+    "spatial_effect.material.ice":"high-level-22/freezing-sphere/launch_observed_ice",
     "spatial_effect.material.fire":"bg3-36/chromatic-orb/fire/observed-surface",
     "spatial_effect.material.electrified_water":"bg3-36/chromatic-orb/lightning/observed-surface",
     "spatial_effect.spell.simple_toxin":"bg3-36/chromatic-orb/poison/observed-surface"}
 class SurfaceReceiver extends Node3D:
-    var presence:bool=false
-    var presence_calls:int=0
+    var owner_state:Dictionary={}
+    var owner_calls:int=0
     var targets:Array=[]
-    var cells:Array=[]
-    func set_surface_presence(value:bool)->void:presence=value;presence_calls+=1
+    var partition:Dictionary={}
+    func set_owner_state(value:Dictionary)->void:owner_state=value;owner_calls+=1
     func set_targets(value:Array)->void:targets=value
-    func set_admitted_cells(value:Array)->void:cells=value
+    func set_surface_partition(value:Dictionary)->void:partition=value
 class World extends Node:
     var timeline=Timeline.new()
     var visual_actors:Dictionary={}
@@ -38,22 +39,24 @@ func check(ok:bool,label:String)->void:
     if not ok:failures.append(label);printerr("SPATIAL_INPUT_FAIL "+label)
 
 func run()->void:
-    var entries:Dictionary={};var paths:Dictionary={}
     for identity in OWNER_CLIPS:
-        var path:String="res://authoring/abilities/conditions/"+identity+".tres"
+        var path:String="res://authoring/environment/surfaces/"+identity+".tres"
         var entry:Resource=load(path)
-        check(entry!=null and entry.id==identity and entry.effects.size()==1,identity+" has one exact typed spatial source")
-        if entry==null:finish();return
-        entries[identity]=entry;paths[identity]=path
-        var clip:Dictionary=Effects.clip(OWNER_CLIPS[identity])
-        check(entry.effects[0].clip==clip.id and clip.inputs.size()==3 and ["admitted_cells","surface_presence","targets"].all(func(channel):return channel in clip.inputs),identity+" binds the supplied source with its declared channels")
-        var phase:Resource=load(Effects.choice(clip).approaches[0].source_phase)
-        check(phase.to_clip().components[0].input.observed_surface_kind==identity,identity+" is the sealed source's explicit surface kind, not a name-based visual match")
+        check(entry!=null and entry.id==identity and entry.lasting!=null and entry.native_staging,identity+" has its canonical typed spatial source")
+        if entry==null or entry.lasting==null:finish();return
+        var cue:Dictionary=Records.cue_from_effect(entry.lasting,0)
+        var clip:Dictionary=Effects.for_cue(cue,identity,"attached")
+        var channels:Array=["surface_partition","owner_state","targets"]
+        check(entry.lasting.clip==OWNER_CLIPS[identity] and clip.inputs.size()==channels.size() and channels.all(func(channel):return channel in clip.inputs),identity+" binds its delivered current-owner partition interface")
+        var report:Dictionary={"errors":[],"warnings":[]}
+        Build._check_constructor(entry.lasting,"ground/"+identity,{entry.lasting.clip:clip},report)
+        check(report.errors.is_empty(),identity+" actual production constructor passes offline admission")
+        check(not cue.area_mask and cue.constructor_input.cell_input=="partitioned_surface",identity+" native full-owner topology owns its footprint without a second flat mask")
         check(entry.status=="partial",identity+" source presence does not claim native visual approval")
     var orb:Resource=load("res://authoring/abilities/spells/spell.chromatic_orb.tres")
     check(orb.effects.all(func(use):return not use.clip.ends_with("/observed-surface")),"Default cast no longer owns surface review topology")
     check(orb.variants.all(func(variant):return variant.effects.all(func(use):return not use.clip.ends_with("/observed-surface"))),"All Orb element/outcome variants hand over surface ownership")
-    var built:Dictionary=Build.documents({"conditions":entries,"spells":{orb.id:orb}},{"conditions":paths,"spells":{orb.id:"res://authoring/abilities/spells/spell.chromatic_orb.tres"}})
+    var built:Dictionary={}
     var directory:String="res://tests/fixtures/schema16/scenarios/chromatic-orb"
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--recording="):directory=argument.trim_prefix("--recording=")
@@ -67,18 +70,8 @@ func run()->void:
     check(seats==2 and total==2,"Both actual seats independently own their disclosed Acid surface")
     finish()
 
-func source_cache(built:Dictionary)->Dictionary:
-    var cache:Dictionary={}
-    var recipes:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache).duplicate()
-    recipes.merge(built.docs["catalog/condition_recipes.json"],true)
-    cache["catalog/condition_recipes.json"]=recipes
-    var admitted:Dictionary=Sources.admission(cache)
-    var index:Resource=admitted.index.duplicate()
-    index.spells=admitted.index.spells.duplicate();index.spells["spell.chromatic_orb"]="actual typed Orb source"
-    var loaded:Dictionary=admitted.loaded.duplicate()
-    loaded["spell.chromatic_orb"]=built.native.records["spell.chromatic_orb"]
-    cache[Sources.CACHE_KEY]=Sources.make_admission(index,loaded)
-    return cache
+func source_cache(_built:Dictionary)->Dictionary:
+    return {}
 
 func read_seat(directory:String,seat:String,built:Dictionary)->int:
     var journal:RefCounted=Journal.new()
@@ -115,7 +108,7 @@ func read_seat(directory:String,seat:String,built:Dictionary)->int:
                 if requirement.get("spatial_owner",false) and requirement.has("native_constructor_inputs"):
                     check(requirement.native_constructor_evidence.spatial_effect_uuid==requirement.spatial_effect_uuid,seat+" compiler prepares the actual owner, not a cast-only fixture")
         var effects:Dictionary=journal.state.senses.spatial_effects if journal.state.senses!=null else {}
-        Persistent.observe_spatial(owners,effects,duration)
+        Persistent.observe_spatial(owners,effects,duration,false,[],journal.state.tiles)
         final_rows=Persistent.spatial_samples(owners,duration,cache)
         for row in final_rows:
             if not OWNER_CLIPS.has(row.get("spatial_content_id","")):continue
@@ -135,15 +128,14 @@ func read_seat(directory:String,seat:String,built:Dictionary)->int:
     return recorded_owners.size()
 
 func constructor(row:Dictionary,seat:String)->void:
-    var phase:Resource=load(Effects.choice(row.native_clip).approaches[0].source_phase)
-    var original:Dictionary=phase.to_clip()
-    var neutral:Dictionary=Constructed.clip_with_inputs(phase,row.native_constructor_inputs)
-    var input:Dictionary=neutral.components[0].input
-    check(not input.surface_admitted and input.admitted_cells.is_empty() and is_inf(float(input.retire_at_seconds)),seat+" constructor cannot admit review cells, review presence or fixed retirement")
-    for field in original.components[0].input:
-        if field in ["surface_admitted","admitted_cells","retire_at_seconds"]:continue
-        check(input[field]==original.components[0].input[field],seat+" sealed source setting unchanged: "+str(field))
-    check(phase.to_clip()==original,seat+" private constructor leaves delivered Resource untouched")
+    var phase:Resource=load(Effects.choice(Effects.occurrence_clip(row)).approaches[0].source_phase)
+    var original:PackedByteArray=var_to_bytes(phase.to_clip())
+    var operands:Array=row.native_constructor_inputs
+    check(operands.size()==1 and operands[0].values=={"surface_uuid":str(row.spatial_effect_uuid)},seat+" public constructor receives only the actual surface UUID")
+    check(operands[0].component_path==["surface"] and row.native_clip.source_kind=="standalone_phase",seat+" liquid public wrapper owns its virtual ground/film fan-out")
+    var partition:Dictionary=row.spatial_surface_partition
+    check(partition.owner_uuid==row.spatial_effect_uuid and partition.capacity==128 and partition.draw_count==row.resolved_area_positions.size(),seat+" actual admitted footprint owns the bounded disjoint source packet")
+    check(var_to_bytes(phase.to_clip())==original,seat+" operand inspection leaves the complete delivered Resource untouched")
 
 func routing(row:Dictionary,state:Dictionary,seat:String)->void:
     var receiver:SurfaceReceiver=SurfaceReceiver.new();root.add_child(receiver)
@@ -153,16 +145,14 @@ func routing(row:Dictionary,state:Dictionary,seat:String)->void:
     var points={"from":anchor,"hand":anchor,"to":anchor,"ground":anchor,"caster_ground":anchor}
     var handle={"clip":row.native_clip,"occurrence":receiver,"root":receiver}
     var result:Dictionary=inputs.sync(world,handle,row,points)
-    check(result.unavailable.is_empty() and result.supplied.size()==3 and receiver.presence,seat+" production native-input boundary forwards all three actual public channels")
+    check(result.unavailable.is_empty() and result.supplied.size()==3 and receiver.owner_state.present and receiver.owner_state.observed and not receiver.owner_state.suppressed,seat+" production native-input boundary forwards all three actual public channels")
     check(receiver.targets==[{"point":anchor,"cue_point":"source"}],seat+" ground endpoint belongs to the actual spatial anchor")
-    var expected:Array=[]
-    for point in row.resolved_area_positions:expected.append([float(point[0])-anchor.x,float(point[1])-anchor.z])
-    check(receiver.cells==expected,seat+" existing cell adapter maps actual world cells once into source-local coordinates")
+    check(receiver.partition==row.spatial_surface_partition,seat+" native setter receives the exact public-helper partition packet")
     inputs.sync(world,handle,row,points)
-    check(receiver.presence_calls==1,seat+" unchanged presence is not republished every frame")
+    check(receiver.owner_calls==1,seat+" unchanged presence is not republished every frame")
     world.timeline.state={"senses":{"spatial_effects":{}}}
     result=inputs.sync(world,handle,row,points)
-    check(not receiver.presence and receiver.presence_calls==2 and result.unavailable.is_empty(),seat+" absent current-view membership sends false instead of retaining review presence")
+    check(not receiver.owner_state.present and receiver.owner_calls==2 and result.unavailable.is_empty(),seat+" absent current-view membership sends false instead of retaining review presence")
     inputs.clear();world.free();receiver.free()
 
 func boundaries(row:Dictionary,effect:Dictionary,state:Dictionary,cache:Dictionary,seat:String)->void:
@@ -180,10 +170,19 @@ func boundaries(row:Dictionary,effect:Dictionary,state:Dictionary,cache:Dictiona
     check(Spatial.presence(unknown,state).reason=="surface_spatial_content_not_bound",seat+" another kind cannot reuse the actual owner's source")
     var ordinary:Dictionary=row.duplicate();ordinary.erase("spatial_owner")
     check(Spatial.presence(ordinary,state).reason=="surface_spatial_owner_not_bound",seat+" cast-only review cues cannot claim independent surface ownership")
-    var large:Dictionary=effect.duplicate(true);large.positions=[]
-    for index in 33:large.positions.append([index,0])
-    check(Spatial.construction(str(row.spatial_effect_uuid),large,row.native_cue).reason=="spatial_source_cell_capacity_exceeded",seat+" sealed source's 32-cell capacity stays an explicit gap instead of asserting or clipping authoritative cells")
-    var owners:Dictionary={row.spatial_effect_uuid:{"id":row.spatial_effect_uuid,"effect":effect,"start_ms":0.0,"end_ms":INF,"initial":false}}
+    var large:Array=[]
+    for index in 300:large.append([index,0])
+    var planned:Dictionary=Spatial.surface_partitions(str(row.spatial_effect_uuid),large,[0,0],row.native_cue.constructor_input)
+    var drawn:Dictionary={};var duplicates:int=0
+    for part in planned.partitions:
+        for index in int(part.count):
+            if part.draw_flags[index]<.5:continue
+            var point:Vector2=part.points[index]
+            if drawn.has(point):duplicates+=1
+            drawn[point]=true
+    check(planned.error.is_empty() and planned.partitions.size()>1 and drawn.size()==300 and duplicates==0,seat+" independent300cell control retains every draw exactly once with native neighbor support")
+    var owners:Dictionary={}
+    Persistent.observe_spatial(owners,{row.spatial_effect_uuid:effect},0.0,false,[],state.tiles)
     Persistent.observe_spatial(owners,{},600.0)
     check(Persistent.spatial_samples(owners,600.0,cache).is_empty(),seat+" explicit departure retires the same owner at its publication boundary")
     check(var_to_bytes(effect)==original,seat+" boundary checks preserve the original observed effect")

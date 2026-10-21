@@ -1,0 +1,477 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "3d80eb35-49f3-49ec-9cd2-39b5aeb67afd": "Amber caster",
+  "80f09974-cb78-44f1-9125-3c9625bd2705": "Amber ally",
+  "1008fcc1-902b-45ac-a5d8-54cad4cebfec": "Blue second target",
+  "4f15eab4-0b2d-4fc3-82f8-5b6bcad582fc": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.vitriolic_sphere \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "saving_throw": 4,
+   "actor_change": 8,
+   "damage": 8,
+   "spell": 5
+  },
+  "behaviors": {
+   "spell.vitriolic_sphere": 5
+  },
+  "conditions": [
+   "condition.spell.vitriolic_sphere.residue"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Acid"
+  ],
+  "item_effects": [],
+  "ended_item_effects": [],
+  "item_effect_memberships": [],
+  "item_attacks": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 71,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "3d80eb35-49f3-49ec-9cd2-39b5aeb67afd",
+   "condition_uuid": "a99dc0a6-6fc2-4679-ad42-50400885ee6c",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 72,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 78,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 95,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 96,
+   "lineage": 41,
+   "event_offset": 11,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 100,
+   "lineage": 41,
+   "event_offset": 12,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "80f09974-cb78-44f1-9125-3c9625bd2705",
+   "condition_uuid": "67224068-b3e0-46a9-ba03-28d13fe2e40f",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 101,
+   "lineage": 41,
+   "event_offset": 13,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 107,
+   "lineage": 41,
+   "event_offset": 14,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 124,
+   "lineage": 41,
+   "event_offset": 17,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 125,
+   "lineage": 41,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 129,
+   "lineage": 41,
+   "event_offset": 19,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "4f15eab4-0b2d-4fc3-82f8-5b6bcad582fc",
+   "condition_uuid": "ce3c6dd1-8add-4322-b167-ab11279cd25f",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 130,
+   "lineage": 41,
+   "event_offset": 20,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 136,
+   "lineage": 41,
+   "event_offset": 21,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 153,
+   "lineage": 41,
+   "event_offset": 24,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 154,
+   "lineage": 41,
+   "event_offset": 25,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 158,
+   "lineage": 41,
+   "event_offset": 26,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "1008fcc1-902b-45ac-a5d8-54cad4cebfec",
+   "condition_uuid": "f366e85f-6a4e-46cc-8140-114630f2f5c3",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 159,
+   "lineage": 41,
+   "event_offset": 27,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 160,
+   "lineage": 41,
+   "event_offset": 28,
+   "kind": "spell",
+   "label": "spell spell.vitriolic_sphere",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 71,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "3d80eb35-49f3-49ec-9cd2-39b5aeb67afd",
+   "condition_uuid": "a99dc0a6-6fc2-4679-ad42-50400885ee6c",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 72,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 78,
+   "lineage": 41,
+   "event_offset": 7,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 95,
+   "lineage": 41,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 96,
+   "lineage": 41,
+   "event_offset": 11,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 100,
+   "lineage": 41,
+   "event_offset": 12,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "80f09974-cb78-44f1-9125-3c9625bd2705",
+   "condition_uuid": "67224068-b3e0-46a9-ba03-28d13fe2e40f",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 101,
+   "lineage": 41,
+   "event_offset": 13,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 107,
+   "lineage": 41,
+   "event_offset": 14,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 124,
+   "lineage": 41,
+   "event_offset": 17,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 125,
+   "lineage": 41,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 129,
+   "lineage": 41,
+   "event_offset": 19,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "4f15eab4-0b2d-4fc3-82f8-5b6bcad582fc",
+   "condition_uuid": "ce3c6dd1-8add-4322-b167-ab11279cd25f",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 130,
+   "lineage": 41,
+   "event_offset": 20,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 136,
+   "lineage": 41,
+   "event_offset": 21,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 153,
+   "lineage": 41,
+   "event_offset": 24,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 154,
+   "lineage": 41,
+   "event_offset": 25,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 158,
+   "lineage": 41,
+   "event_offset": 26,
+   "label": "condition applied condition.spell.vitriolic_sphere.residue",
+   "kind": "actor_change",
+   "actor_uuid": "1008fcc1-902b-45ac-a5d8-54cad4cebfec",
+   "condition_uuid": "f366e85f-6a4e-46cc-8140-114630f2f5c3",
+   "condition_id": "condition.spell.vitriolic_sphere.residue",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 159,
+   "lineage": 41,
+   "event_offset": 27,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 160,
+   "lineage": 41,
+   "event_offset": 28,
+   "kind": "spell",
+   "label": "spell spell.vitriolic_sphere",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Acid"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7",
+  "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "2c11d7a9919c8aa9b1490628fff224627f19d6388c3884171d14a4a5cbecea22"
+ },
+ "sdk": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7/sdk/python/src",
+  "query_adapter": "strict_selected_SDK_choices",
+  "source": {
+   "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+   "branch": "feature/rules-checking",
+   "source": "/mnt/c/Users/tommaso/Documents/Dev/dnd_engine",
+   "export": "git archive committed tree; no working-tree changes"
+  }
+ }
+}

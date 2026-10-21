@@ -82,7 +82,7 @@ static func _consumer_record(data:Dictionary)->Dictionary:
     # Aliases to the consumer's existing readiness, without retaining data and
     # creating a cycle back to the physical owner.
     return {"paths":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"records":[],"record_ids":{},"record_unkeyed":[],"record_roles":{},"family":{},"hint":{},"later_families":[],"due_paths":{},"host":data.get("host"),
-        "ready_paths":data.ready_paths,"boot_paths":data.boot_paths,"boot_waiting":data.boot_waiting}
+        "ready_paths":data.ready_paths,"boot_paths":data.boot_paths,"boot_waiting":data.boot_waiting,"boot_roles":{}}
 
 static func share(data:Dictionary,reference:Dictionary)->void:
     if is_same(physical(data),physical(reference)):return
@@ -437,8 +437,11 @@ static func _withdraw(data:Dictionary)->void:
     if not owner.consumers.has(data.consumer_id):return
     prioritize(data,{})
     var before:Dictionary=owner.consumers[data.consumer_id]
-    for path in before.paths:
-        _change_interest(owner,path,before.paths[path],_role_values(before.paths,before.environment,before.fixtures,before.gpu_only,before.cpu_required,path,true),[0,0,0,0,0])
+    var paths:Dictionary=before.paths.duplicate()
+    for path in before.boot_roles:paths[path]=before.boot_paths[path]
+    for path in paths:
+        var mask:int=_consumer_role_mask(before.record_roles.get(path,[0,0,0,0]))|int(before.boot_roles.get(path,0))
+        _change_interest(owner,path,paths[path],[mask&1,0,(mask>>1)&1,(mask>>2)&1,(mask>>3)&1],[0,0,0,0,0])
     _family_interest(owner,before.family,-1)
     _family_interest(owner,before.hint,-1)
     for family in before.later_families:_family_interest(owner,family,-1)
@@ -995,12 +998,16 @@ static func _consumer_requirements(consumer:Dictionary,path:String,resident:Dict
 
 static func _consumer_requirements_with_hint(consumer:Dictionary,path:String,resident:Dictionary,offered:Dictionary)->int:
     var hint:Dictionary=offered if not consumer.paths.has(path) and offered.get("paths",{}).has(path) else {}
+    var startup:int=int(consumer.boot_roles.get(path,0))
+    # A withdrawn startup path still has its exact saved descriptor. Historical
+    # CPU use cannot promote an originally GPU-only source after pose changes.
+    if startup!=0 and not consumer.paths.has(path) and hint.is_empty():return (startup>>1)&3
     var roles:Dictionary=consumer if hint.is_empty() else hint
     var fixture:bool=roles.get("fixtures",{}).has(path)
     var cpu:bool=fixture or roles.get("environment",{}).has(path) or roles.get("cpu_required",{}).has(path)
     if not cpu:
         cpu=not roles.get("gpu_only",{}).has(path) and (not hint.is_empty() or resident.get("cpu_required",true))
-    return int(cpu)|(int(fixture)<<1)
+    return int(cpu)|(int(fixture)<<1)|((startup>>1)&3)
 
 static func _refresh_consumer(owner:Dictionary,consumer:Dictionary,path:String)->void:
     var available:bool=_consumer_available(owner,consumer,path)
@@ -1125,8 +1132,12 @@ static func demand_records(data:Dictionary,records:Array,hint:Dictionary={},late
         else:
             before.record_roles.erase(path)
             for field in ["paths","environment","fixtures","gpu_only","cpu_required"]:before[field].erase(path)
-        _change_interest(owner,path,delta[0],[previous&1,0,(previous>>1)&1,(previous>>2)&1,(previous>>3)&1],
-            [current&1,0,(current>>1)&1,(current>>2)&1,(current>>3)&1],true)
+        # Until first publication, the exact startup roles still own their
+        # sources even when a seek or pose change withdraws current demand.
+        var startup:int=int(before.boot_roles.get(path,0))
+        var held:int=previous|startup;var selected:int=current|startup
+        _change_interest(owner,path,delta[0],[held&1,0,(held>>1)&1,(held>>2)&1,(held>>3)&1],
+            [selected&1,0,(selected>>1)&1,(selected>>2)&1,(selected>>3)&1],true)
         changed[path]=true
     before.records=records
     if not is_same(before.hint,hint) and (not before.hint.get("paths",{}).is_empty() or not hint.get("paths",{}).is_empty()):
@@ -1156,6 +1167,7 @@ static func demand_records(data:Dictionary,records:Array,hint:Dictionary={},late
     data.preload_selected=owner.preload_selected
     if (data.required_plan or not data.encounter.is_empty()) and not data.boot_started:
         data.boot_started=true;data.boot_paths.merge(before.paths)
+        for path in before.paths:before.boot_roles[path]=_consumer_role_mask(before.record_roles[path])
         changed.merge(before.paths)
     for path in changed:_refresh_path(owner,path)
     # A hint changes only this consumer's readiness operands. Physical role
@@ -1568,6 +1580,16 @@ static func boot_ready(data: Dictionary) -> bool:
     if data.boot_complete: return true
     if not data.boot_started or not data.boot_waiting.is_empty(): return false
     data.boot_complete = true
+    var owner:Dictionary=physical(data)
+    var consumer:Dictionary=owner.consumers[data.consumer_id]
+    var startup:Dictionary=consumer.boot_roles
+    consumer.boot_roles={}
+    for path in startup:
+        var current:int=_consumer_role_mask(consumer.record_roles.get(path,[0,0,0,0]))
+        var held:int=current|int(startup[path])
+        _change_interest(owner,path,consumer.boot_paths[path],[held&1,0,(held>>1)&1,(held>>2)&1,(held>>3)&1],
+            [current&1,0,(current>>1)&1,(current>>2)&1,(current>>3)&1])
+    _update_pending(owner)
     return true
 
 static func preload_progress(data: Dictionary) -> Dictionary:

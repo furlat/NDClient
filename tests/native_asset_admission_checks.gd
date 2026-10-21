@@ -42,7 +42,13 @@ func run()->void:
     var cold_ms:float=(Time.get_ticks_usec()-before)/1000.0
     var source:Resource=load("res://authoring/environment/surfaces/residue.blood.tres")
     var expected:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/"+source.region_particles))
-    check(not blood.is_empty() and blood==expected,"Blood metadata exactly equals its independent authored measured source")
+    var measured:Dictionary=blood.duplicate(false);measured.erase("retained_deposit")
+    check(not blood.is_empty() and measured==expected,"Blood region metadata exactly equals its independent authored measured source")
+    var retained_profile:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/"+source.deposit_profile))
+    var deposit:Dictionary=blood.get("retained_deposit",{})
+    var ellipse:Dictionary=retained_profile.liquid_surfaces.ellipse.duplicate(true);ellipse.angle=float(ellipse.get("angle",0.0))
+    check(deposit.get("profile")==source.deposit_profile and deposit.get("ellipse")==ellipse \
+        and deposit.get("radius_cells")==int(retained_profile.deposit_media.radiusCells),"Retained empty-ellipse deposits add their independently authored original liquid ellipse and radius")
     check(blood.get("assetId")=="particles.region.blood","Exact imported blood asset identity is preserved")
     check(is_same(blood,Catalog.prepared_residue_asset(cache)),"Prepared blood lookup borrows the admitted environment value")
     check(not cache.has("catalog/action_media_assets.json") and native.loaded.is_empty(),"Blood admission reads neither the retired asset JSON nor a native spell Resource")

@@ -2,13 +2,13 @@ extends "res://tests/support_spell_event_checks.gd"
 ## Production metadata and original admitted memberships, not native pixels.
 const HANDOVERS={
     "acid_arrow":{"owner":"condition.spell.acid_arrow","cues":[2],"keep":[0,1,3,4],"lifecycle":"condition_acid_arrow_persistent"},
-    "branding_smite":{"owner":"condition.spell.branding_smite","cues":[1,2],"keep":[0],"lifecycle":"condition_branding_smite_persistent","producer_gap":true},
+    "branding_smite":{"owner":"condition.spell.branding_smite","cues":[1,2],"keep":[],"results":{0:"weapon_component"},"lifecycle":"condition_branding_smite_persistent","producer_gap":true},
     "divine_favor":{"owner":"condition.spell.divine_favor","cues":[1,2,3],"keep":[0],"lifecycle":"condition_divine_favor_persistent"},
-    "ensnaring_strike":{"owner":"condition.spell.ensnaring_strike","cues":[1,3],"keep":[0,2],"lifecycle":"condition_ensnaring_vines_persistent","producer_gap":true},
-    "hex":{"owner":"condition.spell.hex.quarry","cues":[1,2,4],"keep":[0],"lifecycle":"condition_hex_persistent"},
-    "hunters_mark":{"owner":"condition.spell.hunters_mark.quarry","cues":[1,2,4],"keep":[0],"lifecycle":"condition_hunters_mark_persistent"},
-    "magic_weapon":{"owner":"condition.spell.magic_weapon","cues":[2,3],"keep":[0,1],"lifecycle":"condition_magic_weapon_persistent","baseline_has_owner":false},
-    "searing_smite":{"owner":"condition.spell.searing_smite","cues":[1,2],"keep":[0,3],"lifecycle":"condition_burning_persistent","producer_gap":true},
+    "ensnaring_strike":{"owner":"condition.spell.ensnaring_strike","cues":[1,3],"keep":[0],"lifecycle":"condition_ensnaring_vines_persistent","producer_gap":true},
+    "hex":{"owner":"condition.spell.hex.quarry","cues":[],"keep":[0,1],"lifecycle":"condition_hex_persistent","mode":"quarry"},
+    "hunters_mark":{"owner":"condition.spell.hunters_mark.quarry","cues":[],"keep":[0,1],"lifecycle":"condition_hunters_mark_persistent","mode":"quarry"},
+    "magic_weapon":{"owner":"condition.spell.magic_weapon","cues":[2,3],"owned":[],"keep":[],"lifecycle":"condition_magic_weapon_persistent","baseline_has_owner":false,"mode":"item"},
+    "searing_smite":{"owner":"condition.spell.searing_smite","cues":[1,2],"keep":[],"results":{0:"weapon_component",3:"condition_contact",4:"weapon_component"},"lifecycle":"condition_burning_persistent","producer_gap":true},
     "shillelagh":{"owner":"condition.spell.shillelagh","cues":[0],"keep":[],"lifecycle":"condition_shillelagh_persistent"},
     "starry_wisp":{"owner":"condition.spell.starry_wisp","cues":[2,3],"keep":[0,1],"lifecycle":"condition_starry_wisp_persistent"}}
 const Conditions=preload("res://presentation/conditions.gd")
@@ -23,18 +23,32 @@ func run()->void:
         var spec:Dictionary=HANDOVERS[name];var entry:Resource=entries[id]
         condition_entries[spec.owner]=load("res://authoring/abilities/conditions/"+spec.owner+".tres")
         check(entry.owner_kind=="condition" and Array(entry.owner_ids)==[spec.owner] and Array(entry.owner_cues)==spec.cues,id+" names the exact existing condition and only held/retire cues")
-        check(condition_entries[spec.owner].play_package_lifecycle,id+" actual typed condition permits its delivered lifecycle")
-        var lifecycles:Array=Effects.conditions(spec.owner)
-        check(lifecycles.any(func(selection):return selection.key==spec.lifecycle and selection.condition.get("body_channel_included",false) \
-            and selection.condition.get("complete_visual_channels",false)),id+" exact delivered complete body lifecycle exists")
+        var condition:Resource=condition_entries[spec.owner]
+        if spec.get("mode")=="quarry":
+            check(condition.effects.size()==1 and condition.effects[0].constructor_input.get("kind")=="quarry_owner" \
+                and condition.effects[0].constructor_input.get("recipient_condition_id")==spec.owner,id+" actual quarry source requires the distinct public sustain/recipient owners")
+        elif spec.get("mode")=="item":
+            var context:Resource=load("res://authoring/abilities/contexts/item_attachments.tres")
+            var item_uses:Array=context.effects.filter(func(use):return use.item_effect_behavior_id==spec.owner)
+            check(not condition.play_package_lifecycle and item_uses.size()==1 and item_uses[0].extra.has("item_lifecycle"),id+" exact global item owner replaces actor-condition review probes")
+        else:
+            check(condition.play_package_lifecycle,id+" actual typed condition permits its delivered lifecycle")
+            var lifecycles:Array=Effects.conditions(spec.owner)
+            check(lifecycles.any(func(selection):return selection.key==spec.lifecycle and selection.condition.get("body_channel_included",false) \
+                and selection.condition.get("complete_visual_channels",false)),id+" exact delivered complete body lifecycle exists")
     var built:Dictionary=Build.documents({"spells":entries,"conditions":condition_entries,
         "contexts":{"hit_flash":load("res://authoring/abilities/contexts/hit_flash.tres")}}, {"spells":paths})
     var cache:Dictionary=source_cache(built,paths)
     for name in HANDOVERS:
         var spec:Dictionary=HANDOVERS[name];var selected:Dictionary=built.native.records["spell."+name].selection
         var frozen:PackedByteArray=var_to_bytes(selected)
-        check(Spells.owned_cues(selected)==spec.cues,name+" existing ownership filter consumes exactly the held/retire duplicates")
-        check(Spells.event_cues(selected).map(func(cue):return cue.source_index)==spec.keep,name+" cast/application/impact/hit/tick/reveal accents remain event cues")
+        check(Spells.owned_cues(selected)==spec.get("owned",spec.cues),name+" existing ownership filter consumes exactly the held/retire duplicates")
+        check(Spells.event_cues(selected).map(func(cue):return cue.source_index)==spec.keep,name+" ordinary event cues exclude retained owners and separately admitted result contacts")
+        for ordinal in spec.get("results",{}):
+            var cue:Dictionary=selected.staging.cues[ordinal]
+            check(cue.constructor_input.get("kind")=="observed_event" and cue.constructor_input.get("projection")==spec.results[ordinal] \
+                and not cue.get("clip","").is_empty() and ordinal not in Spells.event_cues(selected).map(func(value):return value.source_index),
+                name+" result cue"+str(ordinal)+" retains its exact actual-result consumer instead of replaying on every cast")
         check(Spells.condition(spec.owner,cache).id==name,name+" exact UUID lifecycle resolves the authored spell finish through ordinary ownership")
         check(var_to_bytes(selected)==frozen,name+" ownership inspection does not mutate shared selections")
         if spec.get("producer_gap",false):
@@ -103,9 +117,15 @@ func recorded_owner(name:String,directory:String,seat:String,built:Dictionary,pa
         check(not samples.any(func(row):return row.get("condition",{}).get("behavior_id")==spec.owner),label+" cast without a real owner does not synthesize a held lifetime")
     for uuid in actual:
         check(timeline.condition_owners.has(uuid),label+" original condition UUID owns the retained lifetime")
-        var rows:Array=samples.filter(func(row):return row.get("condition_uuid")==uuid and row.get("lifecycle_key")==spec.lifecycle)
-        check(rows.size()==1 and rows[0].persistent_owner and rows[0].actor_uuid==actual[uuid] \
-            and rows[0].native_clip.id==Effects.conditions(spec.owner).filter(func(value):return value.key==spec.lifecycle)[0].condition.phases.application,
-            label+" one exact delivered native occurrence is owned by this actual recipient/condition")
+        var rows:Array=samples.filter(func(row):return row.get("condition_uuid")==uuid)
+        if spec.get("mode")=="quarry":
+            var owner:Dictionary=timeline.condition_owners[uuid]
+            check(not owner.get("creation_binding",{}).get("ready",false) and not rows.any(func(row):return row.get("native_quarry",false)),
+                label+" this archived child without a public sustain root cannot construct a successful quarry fixture")
+        else:
+            rows=rows.filter(func(row):return row.get("lifecycle_key")==spec.lifecycle)
+            check(rows.size()==1 and rows[0].persistent_owner and rows[0].actor_uuid==actual[uuid] \
+                and rows[0].native_clip.id==Effects.conditions(spec.owner).filter(func(value):return value.key==spec.lifecycle)[0].condition.phases.application,
+                label+" one exact delivered native occurrence is owned by this actual recipient/condition")
     check(not timeline.busy() and Compare.difference(timeline.state,journal.state).is_empty(),label+" presentation drains to this seat's independently folded canonical state")
     evidence.append({"spell":name,"seat":seat,"journal":directory,"actual_condition_uuids":actual.keys(),"finite_duplicates":finite_duplicates})

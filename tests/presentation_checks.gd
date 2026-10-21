@@ -3,6 +3,7 @@ const Compiler = preload("res://presentation/compiler.gd")
 const Journal = preload("res://sdk/journal.gd")
 const Reducer = preload("res://sdk/reducer.gd")
 const Timeline = preload("res://presentation/timeline.gd")
+const Occurrences=preload("res://presentation/occurrences.gd")
 const Authoring = preload("res://presentation/authoring.gd")
 var evidence = {"committed_steps":0,"uncommitted_steps":0,"jump_segments":0,"oa":0,"damage_contacts":0,"canceled":0}
 var failed := 0
@@ -24,7 +25,7 @@ func verify_group(before: Dictionary, group: Dictionary, lineage: Dictionary, ca
         check(not before.tiles.has(key),"staged support never replaces existing terrain")
         check(group.staged_tile_at_ms.has(key),"staged support has admission time")
     var by_lineage = {}
-    for node in lineage.events: by_lineage[node.lineage_uuid] = node
+    for node in lineage.events: by_lineage[node.lineage_id] = node
     var occurrences = {}
     for node in lineage.events:
         if node.fact != null and node.fact.kind == "attack" and node.fact.behavior_id == "reaction.opportunity_attack": evidence.oa += 1
@@ -50,7 +51,7 @@ func verify_group(before: Dictionary, group: Dictionary, lineage: Dictionary, ca
     for node in lineage.events:
         if node.canceled:
             evidence.canceled += 1
-            check(not group.actor_tracks.any(func(t): return t.source_lineage == node.lineage_uuid and t.priority >= 10),"canceled body is not played")
+            check(not group.actor_tracks.any(func(t): return t.source_lineage == node.lineage_id and t.priority >= 10),"canceled body is not played")
         if node.fact == null: continue
         var fact: Dictionary = node.fact
         if fact.kind == "step":
@@ -91,7 +92,7 @@ func verify_group(before: Dictionary, group: Dictionary, lineage: Dictionary, ca
             for identity in node.children_lineages:
                 var child: Dictionary = by_lineage.get(identity,{})
                 if child.is_empty() or child.fact == null or child.fact.kind != "attack": continue
-                var attacks = group.actor_tracks.filter(func(t): return t.occurrence == child.lineage_uuid and t.priority == 20)
+                var attacks = group.actor_tracks.filter(func(t): return t.occurrence == child.lineage_id and t.priority == 20)
                 if attacks.is_empty(): continue
                 var attack: Dictionary = attacks[0]
                 check(track.start_ms >= attack.start_ms+attack.duration_ms,"OA completes before entry")
@@ -103,11 +104,11 @@ func verify_group(before: Dictionary, group: Dictionary, lineage: Dictionary, ca
                 ancestor = by_lineage[ancestor.parent_lineage]
                 if ancestor.fact != null and ancestor.fact.kind == "attack": break
             if ancestor.fact == null or ancestor.fact.kind != "attack": continue
-            var attacks = group.actor_tracks.filter(func(t): return t.occurrence == ancestor.lineage_uuid and t.priority == 20)
+            var attacks = group.actor_tracks.filter(func(t): return t.occurrence == ancestor.lineage_id and t.priority == 20)
             if attacks.is_empty(): continue
             evidence.damage_contacts += 1
             var attack: Dictionary = attacks[0]
-            var commits = group.commits.filter(func(c): return c.get("event_uuid") == node.uuid)
+            var commits = group.commits.filter(func(c): return c.get("event_uuid") == node.id)
             check(commits.size() == 1 and is_equal_approx(commits[0].at_ms,attack.contact_ms),"HP commits exactly at authored contact/release")
             check(attack.contact_ms > attack.start_ms,"contact/release is after attack start")
             var prior = at_time(before,group,maxf(0,attack.contact_ms-.001))
@@ -117,11 +118,12 @@ func verify_group(before: Dictionary, group: Dictionary, lineage: Dictionary, ca
                 check(prior.state.actors[fact.target_entity_uuid].normal_hp != fact.resulting_normal_hp,"HP after-value not visible before contact")
 
 func _initialize() -> void:
-    var directory = "C:/Users/tommaso/AppData/Local/Temp/ndclient-sdk-spells-verified/amber/journal"
+    var directory = ""
     var limit = 12
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--journal="): directory = arg.trim_prefix("--journal=")
         if arg.begins_with("--limit="): limit = int(arg.trim_prefix("--limit="))
+    if directory.is_empty():printerr("Requires --journal=<actual schema16 journal>");quit(2);return
     var names = DirAccess.get_files_at(directory)
     names.sort()
     var journal = Journal.new()
@@ -152,8 +154,8 @@ func _initialize() -> void:
         check(reused.ok and reused.value == compiled.value,"Journal-admitted compilation preserves every track and commit "+name)
         var displayed = state.duplicate(true)
         for group in compiled.value.groups:
-            var source = packet.lineages.filter(func(l): return l.lineage_uuid == group.id)
-            if not source.is_empty(): verify_group(displayed,group,source[0],cache)
+            var source = packet.lineages.filter(func(l): return str(l.lineage) == str(group.id))
+            if not source.is_empty(): verify_group(displayed,group,Occurrences.group(source[0]),cache)
             var last = -1.0
             for commit in group.commits:
                 check(commit.at_ms >= last,"ordered commits "+name)

@@ -47,11 +47,13 @@ func run()->void:
         {"spells":{ID:PATH},"actions":{ACTION_ID:ACTION_PATH}})
     check(spell.owner_kind=="condition" and spell.owner_ids==PackedStringArray(["condition.spell.vampiric_touch"]) \
         and spell.owner_cues==PackedInt32Array([3,4]) and spell.excluded_cues.is_empty(),"Held and retire probes hand over to the exact existing UUID lifecycle, without exclusions")
-    check(not spell.effects[0].unbound_constructor_inputs.is_empty() and spell.status=="partial", "Future owner before application remains an explicit windup gap")
-    check(action.effects.size()==2 and action.effects[1].unbound_constructor_inputs.is_empty() \
-        and action.effects[1].constructor_input.get("owner_condition_id")=="condition.spell.vampiric_touch" and action.status=="partial", "Native repeat contact has its own exact grant/result contract; pre-application windup remains partial")
+    check(spell.effects[0].unbound_constructor_inputs.is_empty() and spell.effects[0].constructor_input.projection=="owner_activity", "Windup binds actual event-local activity without borrowing a future owner")
+    var strikes:Array=action.effects.filter(func(use):return use.constructor_input.get("kind")=="spell_strike")
+    var returns:Array=action.effects.filter(func(use):return use.constructor_input.get("projection")=="healing_return")
+    check(action.effects.size()==3 and strikes.size()==1 and strikes[0].unbound_constructor_inputs.is_empty() \
+        and strikes[0].constructor_input.get("owner_condition_id")=="condition.spell.vampiric_touch", "Exactly one repeat contact retains its actual grant/result contract beside windup and healing")
     var descriptor:Dictionary=spell.effects[2].constructor_input
-    check(descriptor.projection=="healing_return" and action.effects[0].constructor_input==descriptor \
+    check(descriptor.projection=="healing_return" and returns.size()==1 and returns[0].constructor_input==descriptor \
         and spell.effects[2].at=="cast" and spell.effects[2].delay==0.0,"First and repeat use the same observed-heal projection without a second authored delay")
     var selected:Dictionary=built.native.records[ID].selection
     check(NativeSpells.owned_cues(selected)==[3,4] and NativeSpells.effect_clips(selected).all(func(clip):return not str(clip.id).ends_with("/condition") and not str(clip.id).ends_with("/retire")),"Shared owner handover retires both independent probe sources")

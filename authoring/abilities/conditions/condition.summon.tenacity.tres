@@ -1,17 +1,38 @@
 [gd_resource type="Resource" script_class="PresentationCondition" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7e32v"]
-[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_p8mmw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="image"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="response_effect"]
 
-[sub_resource type="Resource" id="Resource_2y5jy"]
-script = ExtResource("1_7e32v")
-path = "art/media/ui/icons/smooth48/condition.generic.png"
+[sub_resource type="Resource" id="Icon"]
+script = ExtResource("image")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.tenacity.png"
 native_size = Vector2i(48, 48)
-reuses = "condition.generic"
-status = "stand_in"
-source = "ui/resources.json icon:condition.generic"
+reuses = "srd22.creature_action.tenacity"
+status = "ready"
+source = "Installed Tenacity mechanic glyph shared by its actual summon condition; ui-delivery-20261018 srd22.creature_action.tenacity"
+
+[sub_resource type="Resource" id="ResultResponse0"]
+script = ExtResource("response_effect")
+clip = "conditions/continuation/condition_tenacity_contact_event/sustain"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = false
+orientation = "world"
+source_end = 0.22
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "miss_damage", "participant": "recipient", "damage_type": "Bludgeoning", "attack_outcomes": ["Miss", "Crit Miss"], "range_type": "Reach"}
+extra = {"entity_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"], "region": {"at": "impact", "id": "damage_contact", "radius_cells": 0.16}}}
+staging_from = "Actual attributed native result; existing Factory receiver candidate. All artwork unreviewed."
 
 [resource]
-script = ExtResource("1_p8mmw")
+script = ExtResource("condition")
 id = "condition.summon.tenacity"
-icon = SubResource("Resource_2y5jy")
+icon = SubResource("Icon")
+disposition = "authored"
+play_package_lifecycle = false
+responses = Array[ExtResource("response_effect")]([SubResource("ResultResponse0")])
+status = "partial"
+notes = "Finite delivered stone chips require a real Miss/Crit Miss attack, positive actual Bludgeoning DamageFact and this exact retained source_condition_uuid/source actor. The exact attributed native Tenacity handler is the Reach witness: it only emits after its native Reach check; public AttackFact carries no range field and the client performs no range calculation. The actual authored ImpactPlacement point scopes measured recipient pixels and their matching geometry revision. Event/action/lineage keys are original native occurrence indices; stream generation is the actual journal generation. The source uses the ordinary finite occurrence clock and no retained readiness/cadence or fabricated hit. The package idle lifecycle is disabled. All artwork is unreviewed."

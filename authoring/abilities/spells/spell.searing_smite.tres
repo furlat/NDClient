@@ -21,7 +21,8 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_wnj3x")
 clip = "bg3-36/searing-smite/searing_smite_native/impact"
 role = "attached"
-at = "release"
+scope = "cast"
+at = "event.start"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.52
@@ -32,7 +33,9 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "weapon_component", "outcome": "damage", "geometry_actor": "caster", "damage_type": "Fire", "damage_source_ids": ["spell.searing_smite"], "recipient_condition": {"condition_key": "unbound:dnd.spatial.environmental_conditions.Wet", "present": false}, "component_path": ["smite"], "input_field": ""}
 extra = {
+"input_policies": {"condition_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_condition"}, "tick_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_tick"}},
 "delay_seconds": 0.0,
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -117,9 +120,11 @@ extra = {
 script = ExtResource("1_wnj3x")
 clip = "bg3-36/searing-smite/searing_smite_native/tick"
 role = "attached"
-at = "release"
-delay = 1.98
-attachment = "caster_ground"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "condition_contact", "packet_kind": "condition_tick", "outcome": "damage", "condition_id": "condition.spell.searing_smite", "damage_type": "Fire", "geometry_actor": "target", "component_path": ["smite"], "input_field": "", "turn_event_type": "turn_start"}
+at = "cast"
+delay = 0.0
+attachment = "recipient_ground"
 orientation = "world"
 source_end = 0.42
 duration_policy = "authored"
@@ -130,19 +135,33 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
-"dynamic_geometry": true,
-"entity_geometry": {
-"actor": "caster",
-"slots": ["weapon"]
-},
-"live_endpoints": [{
-"actor": "caster",
-"socket": "hand"
-}, {
-"actor": "target",
-"socket": "body_center",
-"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
-}]
+ "dynamic_geometry": true,
+ "input_policies": {
+  "strike_input": {
+   "mode": "not_applicable",
+   "reason": "selected_condition_tick_does_not_consume_strike_input"
+  }
+ },
+ "live_endpoints": [
+  {
+   "actor": "target",
+   "socket": "body_center"
+  },
+  {
+   "actor": "target",
+   "socket": "body_center",
+   "surface_slots": [
+    "body",
+    "chest",
+    "cloak",
+    "legs",
+    "shoes",
+    "hands",
+    "head",
+    "helmet"
+   ]
+  }
+ ]
 }
 
 [sub_resource type="Resource" id="Resource_4ggvr"]
@@ -155,7 +174,9 @@ source = "ui-delivery-20261018"
 script = ExtResource("1_wnj3x")
 clip = "bg3-36/searing-smite/searing_smite_already_wet_native/impact"
 role = "attached"
-at = "release"
+at = "event.start"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "weapon_component", "outcome": "damage", "geometry_actor": "caster", "damage_type": "Fire", "damage_source_ids": ["spell.searing_smite"], "recipient_condition": {"condition_key": "unbound:dnd.spatial.environmental_conditions.Wet", "present": true}, "component_path": ["smite"], "input_field": ""}
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.52
@@ -167,6 +188,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"input_policies": {"condition_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_condition"}, "tick_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_tick"}},
 "delay_seconds": 0.0,
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -282,11 +304,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_sd36e"]
 script = ExtResource("6_jle0h")
 id = "searing_smite_already_wet_native"
+dispatch_gap = "delegated_to_actual_wet_strike_result"
 kind = "form"
 selection = "searing_smite_already_wet_native"
 effects = Array[ExtResource("1_wnj3x")]([SubResource("Resource_tmago"), SubResource("Resource_00fvy"), SubResource("Resource_uk10l"), SubResource("Resource_rx0iq")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The default source assignments select only this impact on an actual positive Searing component and exact before-attack Wet membership. Burn, retirement and tick review phases remain unselected; actual condition membership/removal and source-attributed turn packets own those separate phases. Wet appearance never invents a strike or burn rejection."
 
 [sub_resource type="Resource" id="Resource_5oh6q"]
 script = ExtResource("1_wnj3x")
@@ -419,11 +443,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_vh0by"]
 script = ExtResource("6_jle0h")
 id = "searing_smite_recovered_native"
+dispatch_gap = "review_recovery_delegates_actual_owner_removal_and_finite_tick"
 kind = "form"
 selection = "searing_smite_recovered_native"
 effects = Array[ExtResource("1_wnj3x")]([SubResource("Resource_5oh6q"), SubResource("Resource_ow7cb"), SubResource("Resource_1i5jj"), SubResource("Resource_clhfm")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Actual membership owns removal; its positive source-attributed turn-start packet owns the finite tick. This imported whole review sequence is not replayed on recovery."
 
 [sub_resource type="Resource" id="Resource_5taa3"]
 script = ExtResource("1_wnj3x")
@@ -556,11 +582,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_f8u1f"]
 script = ExtResource("6_jle0h")
 id = "searing_smite_miss_native"
+dispatch_gap = "negative_admission_review_miss_has_no_applied_payload"
 kind = "outcome"
 selection = "searing_smite_miss_native"
 effects = Array[ExtResource("1_wnj3x")]([SubResource("Resource_5taa3"), SubResource("Resource_w2sws"), SubResource("Resource_xmcub"), SubResource("Resource_l5tlc")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Factory Miss study is a negative payload-admission control, not an additional impact or condition on a missed attack. Keep it inspectable without replaying its review strike, condition or tick packets. Actual positive source-attributed contacts select the separate production impact assignments."
 
 [resource]
 script = ExtResource("4_ymm1h")
@@ -568,7 +596,7 @@ id = "spell.searing_smite"
 icon = SubResource("Resource_4ggvr")
 delivery = "melee_spell_attack"
 body = SubResource("Resource_bnpu3")
-effects = Array[ExtResource("1_wnj3x")]([SubResource("Resource_uvegw"), SubResource("Resource_ogd8e"), SubResource("Resource_jl3qp"), SubResource("Resource_dqalk")])
+effects = Array[ExtResource("1_wnj3x")]([SubResource("Resource_uvegw"), SubResource("Resource_ogd8e"), SubResource("Resource_jl3qp"), SubResource("Resource_dqalk"), SubResource("Resource_tmago")])
 native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
@@ -591,4 +619,4 @@ staging_unported = {
 "source": "assets/vfx/index.json:/selections/searing_smite_native/staging"
 }
 notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
-Plays its imported Factory staging (coverage fill)."
+The actual attributed Fire component owns each positive weapon impact, selecting the Wet-labelled impact only from exact before-attack Wet membership. Actual burn UUIDs own sustain/removal, and their positive source-attributed turn-start results own finite ticks. No timed Wet/recovery/Miss study sequence is replayed; artwork and output qualification remain open."

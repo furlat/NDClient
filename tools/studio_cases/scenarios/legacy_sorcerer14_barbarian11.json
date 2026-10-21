@@ -1,0 +1,584 @@
+[
+ {
+  "name": "Party caster",
+  "base_ability_scores": [
+   [
+    "strength",
+    8
+   ],
+   [
+    "dexterity",
+    14
+   ],
+   [
+    "constitution",
+    13
+   ],
+   [
+    "intelligence",
+    10
+   ],
+   [
+    "wisdom",
+    12
+   ],
+   [
+    "charisma",
+    15
+   ]
+  ],
+  "flexible_ability_bonuses": [
+   [
+    "constitution",
+    1
+   ],
+   [
+    "charisma",
+    2
+   ]
+  ],
+  "species": "species.human",
+  "background": "background.adventurer",
+  "class_levels": [
+   {
+    "step_id": "class.sorcerer.level_1",
+    "character_level": 1,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 1,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.first_class.starting_equipment",
+      "values": [
+       "starting_equipment.sorcerer.dagger"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.proficiencies.skills",
+      "values": [
+       "arcana",
+       "deception"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_1.subclass",
+      "values": [
+       "subclass.sorcerer.draconic_bloodline"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_1.cantrips",
+      "values": [
+       "spell.acid_splash",
+       "spell.chill_touch",
+       "spell.fire_bolt",
+       "spell.ray_of_frost"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_1.spell_known",
+      "values": [
+       "spell.burning_hands",
+       "spell.magic_missile"
+      ]
+     },
+     {
+      "choice_id": "subclass.sorcerer.draconic_bloodline.level_1.ancestry",
+      "values": [
+       "class_feature.sorcerer.draconic_ancestry.red"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_2",
+    "character_level": 2,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 2,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_2.spell_known",
+      "values": [
+       "spell.charm_person"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_3",
+    "character_level": 3,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 3,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_3.spell_known",
+      "values": [
+       "spell.scorching_ray"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_3.metamagic",
+      "values": [
+       "class_feature.sorcerer.metamagic.quickened_spell",
+       "class_feature.sorcerer.metamagic.twinned_spell"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_4",
+    "character_level": 4,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 4,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_4.cantrips",
+      "values": [
+       "spell.light"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_4.spell_known",
+      "values": [
+       "spell.hold_person"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_4.asi_or_feat",
+      "values": [
+       "ability_score.charisma.2"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_5",
+    "character_level": 5,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 5,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_5.spell_known",
+      "values": [
+       "spell.fireball"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_6",
+    "character_level": 6,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 6,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_6.spell_known",
+      "values": [
+       "spell.haste"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_7",
+    "character_level": 7,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 7,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_7.spell_known",
+      "values": [
+       "spell.lightning_bolt"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_8",
+    "character_level": 8,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 8,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_8.spell_known",
+      "values": [
+       "spell.misty_step"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_8.asi_or_feat",
+      "values": [
+       "ability_score.dexterity.2"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_9",
+    "character_level": 9,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 9,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_9.spell_known",
+      "values": [
+       "spell.cone_of_cold"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_10",
+    "character_level": 10,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 10,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_10.cantrips",
+      "values": [
+       "spell.shocking_grasp"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_10.spell_known",
+      "values": [
+       "spell.greater_invisibility"
+      ]
+     },
+     {
+      "choice_id": "class.sorcerer.level_10.metamagic",
+      "values": [
+       "class_feature.sorcerer.metamagic.distant_spell"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_11",
+    "character_level": 11,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 11,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_11.spell_known",
+      "values": [
+       "spell.chain_lightning"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_12",
+    "character_level": 12,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 12,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_12.asi_or_feat",
+      "values": [
+       "ability_score.constitution.2"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_13",
+    "character_level": 13,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 13,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": [
+     {
+      "choice_id": "class.sorcerer.level_13.spell_known",
+      "values": [
+       "spell.prismatic_spray"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.sorcerer.level_14",
+    "character_level": 14,
+    "class_id": "class.sorcerer",
+    "resulting_class_level": 14,
+    "subclass_id": "subclass.sorcerer.draconic_bloodline",
+    "choices": []
+   }
+  ],
+  "item_loadout": [
+   {
+    "item_id": "weapon.dagger",
+    "quantity": 1,
+    "equipment_slot": "MELEE_MAIN"
+   },
+   {
+        "item_id": "apparel.robes.wizard",
+    "quantity": 1,
+    "equipment_slot": "Body"
+   },
+   {
+    "item_id": "equipment.portable_torch",
+    "quantity": 1,
+    "equipment_slot": null
+   }
+  ],
+  "appearance": {
+   "visual_scale": 1.0,
+   "visual_scale_x": 1.0,
+   "body_category": "NakedBody",
+   "skin_tint": 15121560,
+   "head_category": "Head22",
+   "hair_tint": 10043136,
+   "has_beard": false,
+   "beard_tint": 10043136,
+   "portrait_key": "hero.sorcerer_l5_standard_torch.hero"
+  },
+  "species_variant": null,
+  "origin_choices": [
+   {
+    "choice_id": "species.human.additional_language",
+    "values": [
+     "language.draconic"
+    ]
+   }
+  ],
+  "prepared_spells": [],
+  "scribed_spell_ids": [],
+  "permanent_feature_uses": [],
+  "feature_toggles": [],
+  "character_body_id": "creature.player.humanoid_body",
+  "description": "Direct player character",
+  "faction": null,
+  "position": [
+   0,
+   0
+  ],
+  "weight": 150
+ },
+ {
+  "name": "Party ally",
+  "base_ability_scores": [
+   [
+    "strength",
+    14
+   ],
+   [
+    "dexterity",
+    12
+   ],
+   [
+    "constitution",
+    15
+   ],
+   [
+    "intelligence",
+    8
+   ],
+   [
+    "wisdom",
+    10
+   ],
+   [
+    "charisma",
+    13
+   ]
+  ],
+  "flexible_ability_bonuses": [
+   [
+    "constitution",
+    1
+   ],
+   [
+    "charisma",
+    2
+   ]
+  ],
+  "species": "species.human",
+  "background": "background.adventurer",
+  "class_levels": [
+   {
+    "step_id": "class.barbarian.level_1",
+    "character_level": 1,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 1,
+    "subclass_id": null,
+    "choices": [
+     {
+      "choice_id": "class.barbarian.first_class.starting_equipment",
+      "values": [
+       "starting_equipment.barbarian.greataxe"
+      ]
+     },
+     {
+      "choice_id": "class.barbarian.proficiencies.skills",
+      "values": [
+       "athletics",
+       "perception"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.barbarian.level_2",
+    "character_level": 2,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 2,
+    "subclass_id": null,
+    "choices": []
+   },
+   {
+    "step_id": "class.barbarian.level_3",
+    "character_level": 3,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 3,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": [
+     {
+      "choice_id": "class.barbarian.level_3.subclass",
+      "values": [
+       "subclass.barbarian.berserker"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.barbarian.level_4",
+    "character_level": 4,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 4,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": [
+     {
+      "choice_id": "class.barbarian.level_4.asi_or_feat",
+      "values": [
+       "ability_score.strength.2"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.barbarian.level_5",
+    "character_level": 5,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 5,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": []
+   },
+   {
+    "step_id": "class.barbarian.level_6",
+    "character_level": 6,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 6,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": []
+   },
+   {
+    "step_id": "class.barbarian.level_7",
+    "character_level": 7,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 7,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": []
+   },
+   {
+    "step_id": "class.barbarian.level_8",
+    "character_level": 8,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 8,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": [
+     {
+      "choice_id": "class.barbarian.level_8.asi_or_feat",
+      "values": [
+       "ability_score.charisma.2"
+      ]
+     }
+    ]
+   },
+   {
+    "step_id": "class.barbarian.level_9",
+    "character_level": 9,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 9,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": []
+   },
+   {
+    "step_id": "class.barbarian.level_10",
+    "character_level": 10,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 10,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": []
+   },
+   {
+    "step_id": "class.barbarian.level_11",
+    "character_level": 11,
+    "class_id": "class.barbarian",
+    "resulting_class_level": 11,
+    "subclass_id": "subclass.barbarian.berserker",
+    "choices": []
+   }
+  ],
+  "item_loadout": [
+   {
+    "item_id": "weapon.greataxe",
+    "quantity": 1,
+    "equipment_slot": "MELEE_MAIN"
+   },
+   {
+    "item_id": "apparel.costume.pit_fighter_wrap",
+    "quantity": 1,
+    "equipment_slot": "Body"
+   },
+   {
+    "item_id": "apparel.leather_boots",
+    "quantity": 1,
+    "equipment_slot": "Feet"
+   }
+  ],
+  "appearance": {
+   "visual_scale": 1.0,
+   "visual_scale_x": 1.0,
+   "body_category": "NakedBody",
+   "skin_tint": 15121560,
+   "head_category": "Head17",
+   "hair_tint": 10043136,
+   "has_beard": false,
+   "beard_tint": 10043136,
+   "portrait_key": "hero.barbarian_l5_berserker_torch.hero"
+  },
+  "species_variant": null,
+  "origin_choices": [
+   {
+    "choice_id": "species.human.additional_language",
+    "values": [
+     "language.draconic"
+    ]
+   }
+  ],
+  "prepared_spells": [],
+  "scribed_spell_ids": [],
+  "permanent_feature_uses": [],
+  "feature_toggles": [],
+  "character_body_id": "creature.player.humanoid_body",
+  "description": "Direct player character",
+  "faction": null,
+  "position": [
+   0,
+   0
+  ],
+  "weight": 150
+ }
+]

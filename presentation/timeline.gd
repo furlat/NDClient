@@ -132,7 +132,7 @@ func accept(message: Dictionary) -> void:
         Conditions.observe(condition_owners,state.actors,display_ms,true)
         _record_history_cut(display_ms,{},display_ms)
         NativeItems.observe(item_effect_owners,state,display_ms,appearance_cache)
-        NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},display_ms,true)
+        NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},display_ms,true,[],state.tiles)
         sequence = int(message.sequence)
         revision += 1
         resource_revision += 1
@@ -338,7 +338,7 @@ static func pose_admissions(commit:Dictionary,state:Dictionary,owners:Dictionary
             if not inputs.has(id):continue
             if change.before==null and change.after!=null and Conditions.ConditionPose.departure_requested(change.after,cache):
                 var samples:Array=Conditions.samples(Appearance.copy_owners(ordered_owners),at_ms,cache,{},false)+source_samples
-                var departure:Dictionary=_history_draw_operands(ordered_actors[id],state,active,samples,cache,Compiler.WorldRows.visible_actor(ordered_actors[id],state))
+                var departure:Dictionary=_history_draw_operands(ordered_actors[id],state,active,samples,cache,Compiler.WorldRows.visible_actor(ordered_actors[id],state),ordered_owners,at_ms)
                 if not departure.is_empty():departures[change.after.condition_uuid]=departure
             var next:Dictionary=ordered_actors[id].duplicate(false)
             next.conditions=next.get("conditions",[]).filter(func(condition):return condition.condition_uuid!=change.row.condition_uuid)
@@ -358,19 +358,27 @@ static func _history_finite_samples(candidates:Array,at_ms:float)->Array:
         sample.absolute_start_ms=begin;result.append(sample);seen[component.id]=true
     return result
 
-static func _history_draw_operands(actor:Dictionary,state_inputs:Dictionary,active:Dictionary,samples:Array,cache:Dictionary,visible:bool)->Dictionary:
+static func _history_draw_operands(actor:Dictionary,state_inputs:Dictionary,active:Dictionary,samples:Array,cache:Dictionary,visible:bool,owners:Dictionary,at_ms:float)->Dictionary:
     if not visible:return {}
-    actor=ActorConstruction.actor_with_loadout(actor,ActorConstruction.loadouts(active,samples))
+    actor=ActorConstruction.actor_with_loadout(actor,ActorConstruction.loadouts(active,samples+Appearance.components(owners,at_ms,cache)))
     var resolved:Dictionary=Characters.resolve(actor,state_inputs,cache)
     if not resolved.ok or resolved.value==null:return {}
     var id:String=actor.uuid
-    var missing:String=""
-    if samples.any(func(sample):return sample.get("actor_uuid")==id and "actor_layers" in sample.get("native_clip",{}).get("inputs",[])):missing="departure_native_body_treatment_not_bound"
-    if samples.any(func(sample):return sample.get("actor_uuid")==id and not sample.get("native_hit",{}).is_empty()):missing="departure_native_hit_frame_not_bound"
-    if resolved.value.equipment_layers.any(func(layer):return layer.get("effect",{}).get("kind")=="condition_appearance"):missing="departure_appearance_opacity_not_bound"
+    var draw_samples:Array=[]
+    for sample in samples:
+        if sample.get("actor_uuid")!=id:continue
+        var inputs:Array=sample.get("native_clip",{}).get("inputs",[])
+        if "actor_layers" not in inputs and "appearance_provider" not in inputs:continue
+        var original:Dictionary=sample.duplicate(false)
+        if original.has("lifecycle_phases"):
+            original.history_owner_state=NativePersistent.lifecycle_state(original,float(original.age_ms)/1000.0)
+            original.history_owner_state.make_read_only()
+        original.make_read_only()
+        draw_samples.append(original)
     var config:Dictionary=Characters.Catalog.read_file(Characters.Catalog.read_file("catalog-index.json",cache).rig,cache)
     return {"actor":actor,"row":resolved.value,"item_looks":Characters.item_looks(actor,state_inputs),"material":Conditions.material(id,samples),
-        "layer_samples":samples.filter(func(sample):return sample.kind=="sprite_layer" and sample.actor_uuid==id),"tile_width":float(config.TILE_W),"reason":missing}
+        "layer_samples":samples.filter(func(sample):return sample.kind=="sprite_layer" and sample.actor_uuid==id),
+        "draw_samples":draw_samples,"tile_width":float(config.TILE_W),"reason":""}
 
 func _record_history_cut(at_ms:float,group:Dictionary,start_ms:float)->void:
     var wanted:Dictionary={}
@@ -517,7 +525,7 @@ func _history_capture(cut:Dictionary,owner:Dictionary,at_ms:float)->Dictionary:
     if not rest.ok:return {"ready":false,"reason":rest.error.message}
     var active:Dictionary=Tracks.samples(cut.tracks,at_ms-float(cut.group_start_ms))
     var samples:Array=Conditions.samples(Appearance.copy_owners(cut.owners),at_ms,appearance_cache,{},false)+_history_finite_samples(cut.finite,at_ms)
-    var departure:Dictionary=_history_draw_operands(actor,cut.state_inputs,active,samples,appearance_cache,true)
+    var departure:Dictionary=_history_draw_operands(actor,cut.state_inputs,active,samples,appearance_cache,true,cut.owners,at_ms)
     if departure.is_empty():return {"ready":false,"reason":"actor_history_draw_not_disclosed"}
     if not departure.reason.is_empty():return {"ready":false,"reason":departure.reason}
     var pose:Dictionary=Conditions.pose(actor,rig_id,appearance_cache,cut.owners)
@@ -540,7 +548,7 @@ func _observe_resource_owners(delta:Dictionary,at_ms:float,rows:Array=[],event_u
     if NativeItems.interested(item_effect_owners,delta,appearance_cache):
         changed=NativeItems.observe(item_effect_owners,state,at_ms,appearance_cache,event_uuid,item_rows) or changed
     if delta.get("set",{}).has("senses") or not spatial_rows.is_empty():
-        var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},at_ms,false,spatial_rows)
+        var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}) if state.senses!=null else {},at_ms,false,spatial_rows,state.tiles)
         changed=changed or spatial_changed
     if changed:resource_revision+=1
 

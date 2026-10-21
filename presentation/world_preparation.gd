@@ -227,7 +227,7 @@ static func _candidate_visibility(input: Dictionary, patch: Dictionary) -> Dicti
     var changes = {}
     var full: bool = patch.full or input.changes.get("senses",false)
     if full:
-        cells = {}; visibility = WorldRows.current_ids(input.state,input.retained.get("boundaries",{}),cells,patch)
+        cells = {}; visibility = WorldRows.current_ids(input.state,input.retained.get("boundaries",{}),cells,patch,patch.get("prepared_indexes",{}).get("spatial_rows",input.retained.get("spatial_rows",{})),patch.get("prepared_indexes",{}).get("residue_rows",input.retained.get("residue_rows",{})))
         for id in visibility:
             if not input.visibility.has(id): changes[id] = true
         for id in input.visibility:
@@ -245,6 +245,12 @@ static func _candidate_visibility(input: Dictionary, patch: Dictionary) -> Dicti
                 current = senses.get("objects",{}).get(id,{}).get("visual",false)
                 for cell in WorldRows.projected_index(input.retained,patch,"boundary_cells",id,[]): current = current or cells.has(cell)
             if visibility.has(id)!=current: changes[id] = current
+        for id in patch.get("writes",{}).get("residue_rows",{}):
+            var row:Dictionary=patch.writes.residue_rows[id]
+            changes[id]=cells.has(WorldRows.cell_key(row.position))
+        for id in patch.get("removes",{}).get("residue_rows",{}):changes[id]=false
+        for id in patch.get("writes",{}).get("spatial_rows",{}):changes[id]=true
+        for id in patch.get("removes",{}).get("spatial_rows",{}):changes[id]=false
     return {"visibility":visibility,"cells":cells,"changes":changes,"sparse":not full}
 
 func candidate_visible(id: String) -> bool:
@@ -272,6 +278,7 @@ static func _row_sources(row:Dictionary,quarter:int,cache:Dictionary)->Dictionar
         if source.get("water_surface",false):
             var assets:Dictionary=Catalog.environment_resources(cache)
             paths[assets.resources[assets.water.ripple].path]=true
+    paths.merge(EnvironmentMedia.world_media_paths(row,cache))
     if row.has("lit_animation"):
         var assets:Dictionary=Catalog.environment_resources(cache)
         for frame in assets.animations[row.lit_animation].frames:
@@ -388,13 +395,6 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
     var ground = {}; var wanted = {}; var packets = {}; var supports = {}
     var ground_changes = {}; var ground_removed = {}; var removed_wanted: Array = []
     var rows_to_route: Array = all_rows if full_membership else patch.visual_changes.values()
-    var residue_source_admitted:bool=not Catalog.prepared_residue_asset(input.cache).is_empty()
-    var residue_source_needed:bool=false
-    if not full_membership and not residue_source_admitted:
-        for key in input.changes.get("tiles",{}):
-            var tile:Dictionary=input.state.tiles.get(key,{})
-            if tile.get("residues",[]).any(func(value):return value.residue_id=="residue.blood"):
-                residue_source_needed=true;break
     if not full_membership:
         for id in patch.visual_changes:
             var old: Dictionary = _old_visual(input.retained,id)
@@ -408,9 +408,6 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
             elif row.is_empty() or _floor(row,background): removed_wanted.append(id)
     for row in rows_to_route:
         if row.is_empty(): continue
-        if row.kind=="terrain" and not residue_source_admitted and not residue_source_needed:
-            var source_tile:Dictionary=input.state.tiles.get(WorldRows.cell_key(row.position),{})
-            residue_source_needed=source_tile.get("residues",[]).any(func(value):return value.residue_id=="residue.blood")
         if _floor(row,background):
             if full_membership:
                 if not ground.has(row.material): ground[row.material] = []
@@ -427,12 +424,6 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
                 var key = WorldRows.cell_key([point.x,point.y])
                 var tile: Dictionary = WorldRows.projected_row(input.retained,patch,"tiles",key)
                 if GroundReceiving.eligible(tile): supports[point] = float(tile.base_height_steps)
-    # A disclosed residue can change without changing its terrain geometry or
-    # disclosing an injury event. Its server tile after-value owns this source.
-    if residue_source_needed and Catalog.residue_asset(input.cache).is_empty():
-        WorkerThreadPool.wait_for_task_completion(side_task)
-        output.merge({"complete":false,"error":"Cannot load selected asset metadata: particles.region.blood","worker_ms":(Time.get_ticks_usec()-started)/1000.0})
-        return
     worker_phases.routing=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     # Each floor material is independent: one task per material, results
     # merged in material order.
@@ -498,23 +489,28 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
         for row in rows_to_route:
             if not row.is_empty() and row.kind=="terrain":blood_keys[WorldRows.cell_key(row.position)]=true
         for key in input.get("blood_existing",{}):blood_keys[key]=true
-    for key in blood_keys:
-        var tile:Dictionary=input.state.tiles.get(key,{})
-        var residue:Dictionary=Blood.residue(tile)
-        var canonical:Dictionary=canonical_tiles.get(key,{})
-        var canonical_residue:Dictionary=residue if is_same(tile,canonical) else Blood.residue(canonical)
-        if not canonical_residue.is_empty():blood_index.updates[key]=canonical
-        elif not blood_index.full:blood_index.removed[key]=true
-        if residue.is_empty():
-            if input.get("blood_existing",{}).has(key):blood_rows[key]={"removed":true}
-            continue
-        var source:Dictionary=Catalog.residue_asset(input.cache)
-        if source.is_empty():output.merge({"complete":false,"error":"Cannot prepare persistent blood source"});return
-        var prior:Dictionary=input.get("blood_existing",{}).get(key,{})
-        if is_same(prior.get("value"),residue) and is_same(prior.get("source"),source):continue
-        var kernel_cache:Dictionary={}
-        var kernels:Array=Blood.kernels(residue,tile.position,[],source,kernel_cache)
-        blood_rows[key]={"tile":tile,"value":residue,"source":source,"cache":kernel_cache,"kernels":kernels,"coverage":Blood.has_coverage(kernels)}
+    var residue_ids:Array=Blood.residue_ids(input.cache)
+    var cells:Dictionary={}
+    for field in blood_keys:cells[Blood.field_cell(str(field))]=true
+    for cell in cells:
+        var tile:Dictionary=input.state.tiles.get(cell,{})
+        var canonical:Dictionary=canonical_tiles.get(cell,{})
+        for residue_id in residue_ids:
+            var key:String=Blood.field_id(cell,residue_id)
+            var residue:Dictionary=Blood.residue(tile,residue_id)
+            var canonical_residue:Dictionary=residue if is_same(tile,canonical) else Blood.residue(canonical,residue_id)
+            if not canonical_residue.is_empty():blood_index.updates[key]=canonical
+            elif not blood_index.full:blood_index.removed[key]=true
+            if residue.is_empty():
+                if input.get("blood_existing",{}).has(key):blood_rows[key]={"removed":true}
+                continue
+            var source:Dictionary=Catalog.residue_asset(input.cache,residue_id)
+            if source.is_empty():output.merge({"complete":false,"error":"Cannot prepare selected residue source: "+str(residue_id)});return
+            var prior:Dictionary=input.get("blood_existing",{}).get(key,{})
+            if is_same(prior.get("value"),residue) and is_same(prior.get("source"),source):continue
+            var kernel_cache:Dictionary={}
+            var kernels:Array=Blood.kernels(residue,tile.position,[],source,kernel_cache)
+            blood_rows[key]={"tile":tile,"value":residue,"source":source,"cache":kernel_cache,"kernels":kernels,"coverage":Blood.has_coverage(kernels)}
     worker_phases.blood=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var light_state:Dictionary=input.light_state if input.has("light_state") else input.actor_state
     var light_resolution:Dictionary={}
@@ -887,12 +883,20 @@ func _prepare_environment_resources(deadline:int)->void:
     if not packets.is_empty():
         var declared:Dictionary=environment_parameter_names()
         environment_batch_output={}
-        environment_task=WorkerThreadPool.add_task(EnvironmentResources.build_private.bind(packets,textures,declared,environment_batch_output),false,"Prepare resident environment resources")
+        # This Godot dummy backend's material RID owner is not thread-safe.
+        # Keep the same private constructor/adoption path on its scene thread.
+        if DisplayServer.get_name()=="headless" and RenderingServer.get_rendering_device()==null:
+            EnvironmentResources.build_private(packets,textures,declared,environment_batch_output)
+            _poll_environment_resources()
+        else:
+            environment_task=WorkerThreadPool.add_task(EnvironmentResources.build_private.bind(packets,textures,declared,environment_batch_output),false,"Prepare resident environment resources")
     if host.profile.get("recording",false):phase_usec.environment_resource_capture=phase_usec.get("environment_resource_capture",0)+Time.get_ticks_usec()-began
 
 func _poll_environment_resources()->void:
-    if environment_task<0 or not WorkerThreadPool.is_task_completed(environment_task):return
-    WorkerThreadPool.wait_for_task_completion(environment_task);environment_task=-1
+    if environment_task>=0:
+        if not WorkerThreadPool.is_task_completed(environment_task):return
+        WorkerThreadPool.wait_for_task_completion(environment_task);environment_task=-1
+    elif environment_batch_output.is_empty():return
     if not environment_batch_output.get("complete",false) or not str(environment_batch_output.get("error","")).is_empty():
         media_issue=str(environment_batch_output.get("error","Private environment resources did not complete"));phase="failed"
         if media_issue not in presentation_errors:presentation_errors.append(media_issue)
@@ -1007,20 +1011,30 @@ func _prepare_actor_resources()->void:
     if actor_resource_inputs.is_empty():actor_resource_output={"complete":true,"error":"","rows":{},"worker_ms":0.0}
     else:
         actor_resource_names=ActorConstruction.source_parameter_names()
-        actor_resource_task=WorkerThreadPool.add_task(ActorResources.build_private.bind(actor_resource_inputs,actor_resource_textures,noise_resources,actor_resource_names,actor_resource_output),false,"Prepare private actor resources")
+        # The headless dummy renderer cannot allocate materials concurrently.
+        # Native GPU views retain the ordinary finite resource worker.
+        if DisplayServer.get_name()=="headless" and RenderingServer.get_rendering_device()==null:
+            ActorResources.build_private(actor_resource_inputs,actor_resource_textures,noise_resources,actor_resource_names,actor_resource_output)
+            _complete_actor_resources()
+        else:
+            actor_resource_task=WorkerThreadPool.add_task(ActorResources.build_private.bind(actor_resource_inputs,actor_resource_textures,noise_resources,actor_resource_names,actor_resource_output),false,"Prepare private actor resources")
     _record_actor_phase("actor_resource_capture",started)
 
 func _poll_actor_resources()->bool:
     if actor_resource_task>=0:
         if not WorkerThreadPool.is_task_completed(actor_resource_task):return false
         WorkerThreadPool.wait_for_task_completion(actor_resource_task);actor_resource_task=-1
-        if not actor_resource_output.get("complete",false) or not str(actor_resource_output.get("error","")).is_empty():
-            media_issue=str(actor_resource_output.get("error","Private actor resources did not complete"));phase="failed"
-            if media_issue not in presentation_errors:presentation_errors.append(media_issue)
-            return false
-        var elapsed:float=actor_resource_output.get("worker_ms",0.0)
-        result.worker_ms+=elapsed;result.worker_phases.actor_resources=elapsed
+        if not _complete_actor_resources():return false
     return actor_resource_output.get("complete",false)
+
+func _complete_actor_resources()->bool:
+    if not actor_resource_output.get("complete",false) or not str(actor_resource_output.get("error","")).is_empty():
+        media_issue=str(actor_resource_output.get("error","Private actor resources did not complete"));phase="failed"
+        if media_issue not in presentation_errors:presentation_errors.append(media_issue)
+        return false
+    var elapsed:float=actor_resource_output.get("worker_ms",0.0)
+    result.worker_ms+=elapsed;result.worker_phases.actor_resources=elapsed
+    return true
 
 func _adopt_actor_resource(prepared:Dictionary,index:int)->Dictionary:
     if not _poll_actor_resources():return {}
@@ -1387,7 +1401,11 @@ func can_publish_membership(target_revision: int = -1) -> bool:
         var actor:Dictionary=native_actors[id]
         if actor.get("reuse_actor",false):
             if not is_same(host.visual_actors.get(id),actor.actor_base) or host.playbacks.get(id)!=actor.playback:return false
-            if actor.has("shadow_base") and not is_same(host.generated_shadows.actors.get(id),actor.shadow_base):return false
+        if actor.has("shadow_base"):
+            if not is_same(host.generated_shadows.actors.get(id),actor.shadow_base):return false
+            for borrowed in actor.shadow_rekeys:
+                if not is_instance_valid(borrowed.node) or actor.shadow_base.casters.get(borrowed.before)!=borrowed.node:return false
+                if borrowed.node.mesh!=borrowed.mesh:return false
     if not source_only() and not host.source_lighting.preparation_valid(light_preparation):return false
     var expected:int=host.timeline.world_revision if target_revision<0 else target_revision
     return epoch==host.timeline.initialization_revision and quarter==host.quarter \
@@ -1497,6 +1515,10 @@ func publish_membership() -> void:
         for id in result.visibility_changes:
             if result.visibility_changes[id]: result.visibility[id] = true
             else: result.visibility.erase(id)
+    for entry in membership.scenery.entry_remove:
+        if entry.placement.has("world_media_content"):host.world_media_entries.erase(entry)
+    for entry in membership.scenery.entry_add:
+        if entry.placement.has("world_media_content"):host.world_media_entries.append(entry)
     host.static_entries = membership.entries; host.fixture_entries = membership.fixtures
     host.world_groups = membership.groups; host.ground_groups = membership.ground
 

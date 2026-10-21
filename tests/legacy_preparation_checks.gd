@@ -3,10 +3,13 @@ extends SceneTree
 const Recording=preload("res://studio/recording.gd")
 const Renderer=preload("res://presentation/component_renderer.gd")
 const Profile=preload("res://frame_profile.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 class NativeStub extends RefCounted:
     var ready=true
     var issues:Array=[]
     var witnesses:Array=[]
+    var preparation_revision:int=0
+    var diagnostics:Dictionary={}
     func prepare(_groups:Array,_cache:Dictionary,_world:Node,_future:Array,_budget:Dictionary,_optional:bool,_optical:Array)->Dictionary:return {"ready":true,"errors":[]}
     func sample(_world:Node,_samples:Array,_seconds:float)->void:pass
     func close(_world:Node)->void:pass
@@ -14,6 +17,7 @@ class HitsStub extends RefCounted:
     var ready=true
     var issues:Array=[]
     func prepare(_world:Node,_samples:Array,_cache:Dictionary,_future:Array,_budget:Dictionary,_optional:bool)->Dictionary:return {"ready":true,"issues":[]}
+    func decorate(_world:Node,_samples:Array,_full:bool=true)->Dictionary:return {"ready":true,"issues":[]}
     func close()->void:pass
 class BloodStub extends RefCounted:
     var ready=true
@@ -37,6 +41,9 @@ class World extends Node3D:
     var playback_speed=1.0
     var light_cap_enabled=false
     var light_cap=1.0
+    var quarter:int=0
+    var native_spell_hit_material:bool=true
+    var displayed_components:Array=[]
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -45,13 +52,13 @@ func check(ok:bool,label:String)->void:
     if not ok:failures.append(label);printerr(label)
 func budget()->Dictionary:return {"frame":Engine.get_process_frames(),"used_usec":0,"limit_usec":1000000}
 func run()->void:
-    var index=Recording.read("res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal")
-    check(index.ok,"Actual class action recording admits")
+    var index=Recording.read(Fixtures.journal("intrinsic-weapon-soul-draining-morningstar"))
+    check(index.ok,"Actual current weapon original with a later independent critical hit admits")
     if not index.ok:quit(1);return
     var component:Dictionary={}
     for item in index.groups:
         for row in item.group.components:
-            if row.kind=="native_effect" and not row.get("native_spell",false) and not row.has("weapon_pose"):component=row.duplicate();break
+            if row.kind=="native_effect" and not row.get("native_spell",false) and row.get("source_id")=="class.martial.impact":component=row.duplicate();break
         if not component.is_empty():break
     check(not component.is_empty(),"Actual recording supplies a selected legacy native source")
     if component.is_empty():quit(1);return
@@ -67,10 +74,18 @@ func run()->void:
     world.timeline.queue=[];world.timeline.group_start_ms=0.0;world.timeline.display_ms=0.0
     world.timeline.state.tiles["0,0"]={"elevation_steps":0}
     world.catalog_cache=index.cache
+    world.source_lighting=preload("res://presentation/native_source_lights.gd").new()
     var record=Renderer.NativeSources.source_record(component.source_id,world.catalog_cache)
     # Synchronous fixture setup isolates the preparation/publication contract;
     # global threaded loading and draw fences have their own native suite.
     for path in record.get("preload_paths",[record.get("script",record.get("scene",""))]):world.catalog_cache[path]=load(path)
+    var source_ready:Dictionary=Renderer.NativeSources.prepare([component.source_id],world.catalog_cache)
+    var source_deadline:int=Time.get_ticks_msec()+30000
+    while not source_ready.ready and source_ready.errors.is_empty() and Time.get_ticks_msec()<source_deadline:
+        await process_frame
+        source_ready=Renderer.NativeSources.prepare([component.source_id],world.catalog_cache)
+    check(source_ready.ready and source_ready.errors.is_empty(),"The exact actual source finishes ordinary resource/material admission before the publication fixture")
+    if not source_ready.ready:world.free();quit(1);return
     var renderer=Renderer.new();renderer.native_spells=NativeStub.new();renderer.native_hits=HitsStub.new();renderer.blood=BloodStub.new()
     renderer.epoch=world.timeline.initialization_revision
     var saved=world.timeline.state.duplicate(true)
@@ -104,5 +119,5 @@ func run()->void:
         check(renderer.handles.is_empty(),"Cancelled unpublished cue releases its private presenter")
     check(world.presentation_errors.is_empty(),"Recorded class source has no presentation errors")
     renderer.close(world);world.queue_free();await process_frame
-    print("LEGACY_PREPARATION ",JSON.stringify({"checks":checks,"failures":failures,"scope":"Real recorded class source and renderer publication; headless, no pixel or frame-budget qualification."}))
+    print("LEGACY_PREPARATION ",JSON.stringify({"checks":checks,"failures":failures,"scope":"Actual current independent critical-hit class.martial.impact source and existing legacy renderer publication; native spell/hit/blood lanes explicitly idle stand-ins. Headless, no pixel or frame-budget qualification."}))
     quit(0 if failures.is_empty() else 1)

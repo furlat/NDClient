@@ -13,6 +13,8 @@ import sys
 import time
 
 PROJECT=Path(__file__).resolve().parents[2]
+SDK=Path('/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267/sdk/python/src')
+sys.path.insert(0,str(SDK))
 sys.path.insert(0,str(PROJECT/'tools'))
 import adapter
 from cases import spell_baselines
@@ -84,7 +86,7 @@ async def run(args):
                         summary=adapter.journal_summary(folder/'amber/journal')
                         missing=set(scenario.get('required_behaviors',[]))-summary['behaviors'].keys()
                         if result['ok'] and missing:result.update(ok=False,failure='Missing required actual occurrences: '+', '.join(sorted(missing)))
-                        for field,observed in (('required_facts',summary['facts']),('required_conditions',summary['conditions']),('required_condition_ends',summary['ended_conditions']),('required_applied_damage_types',summary['positive_applied_damage_types'])):
+                        for field,observed in (('required_facts',summary['facts']),('required_conditions',summary['conditions']),('required_condition_ends',summary['ended_conditions']),('required_item_effects',summary['item_effects']),('required_item_effect_ends',summary['ended_item_effects']),('required_applied_damage_types',summary['positive_applied_damage_types'])):
                             missing=set(scenario.get(field,()))-set(observed)
                             if result['ok'] and missing:result.update(ok=False,failure=field+' absent from actual journal: '+', '.join(sorted(missing)))
                         result['summary']=summary
@@ -140,7 +142,7 @@ async def run(args):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--engine',type=Path,default=Path('/home/tommaso/.cache/ndclient/dnd_engine-211b71134'))
+    parser.add_argument('--engine',type=Path,default=Path('/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267'))
     parser.add_argument('--godot',type=Path,default=PROJECT.parent/'Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe')
     parser.add_argument('--only',default='spell')
     parser.add_argument('--start-after',help='Resume a recorded inventory partition after this exact case ID; earlier evidence is retained in its original run')

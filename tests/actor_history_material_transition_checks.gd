@@ -20,10 +20,30 @@ static func transition(index:Dictionary)->Dictionary:
     if owners.size()!=1 or flashes.size()!=1:return {}
     return {"owner":owners[0].owner,"flash":flashes[0],"at_ms":float(flashes[0].end_ms)+40.0}
 
+static func native_studies()->Array:
+    var result:Array=[]
+    for spell in ["fire-bolt","magic-missile"]:
+        var directory:String="res://tests/fixtures/schema16/history-native-hit/"+spell
+        var proof:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(directory+"/native-hit-evidence.json"))
+        for seat in ["amber","blue"]:
+            var owners:Dictionary=proof.views[seat].owners
+            var original:String=str(proof.views[seat].applied_damage[0].disclosed_blur_owners_before_result[0])
+            result.append({"directory":directory+"/"+seat,"label":spell+"-"+seat,"actor":proof.actor_uuid,
+                "owner":original,"clock":proof.expected_authored_clock_parameter,"retirement_recorded":owners[original].has("removal")})
+    return result
+
+static func native_transition(index:Dictionary,source:Dictionary)->Dictionary:
+    var owners:Array=index.rows.filter(func(row):return row.kind=="condition" and row.owner.id==source.owner)
+    var flashes:Array=index.rows.filter(func(row):return row.get("component",{}).get("kind")=="material_flash" \
+        and row.component.actor_uuid==source.actor and not row.component.get("native_hit",{}).is_empty())
+    if owners.size()!=1 or flashes.size()!=1:return {}
+    return {"owner":owners[0].owner,"flash":flashes[0],"at_ms":float(flashes[0].end_ms)+40.0}
+
 func run()->void:
     for seat in ["amber","blue"]:inspect_seat(seat)
+    for source in native_studies():inspect_native(source)
     var report:Dictionary={"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Untouched Blur journals: actual positive damage owns a finite treatment; original-prefix delayed materials retain it after the current body restores. No recorded equipment transition, native output or visual acceptance is claimed."}
+        "scope":"Untouched Blur journals and four real Fire Bolt/Magic Missile hit originals: logical original-age hit/treatment descriptors, independently restored prefixes and real owner retirement where recorded. No native output or visual acceptance is claimed."}
     FileAccess.open("res://.runtime/actor-history-material-transition-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("HISTORY_MATERIAL_TRANSITION ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 
@@ -75,3 +95,38 @@ func inspect_seat(seat:String)->void:
     check(var_to_bytes(captured.captures)==frozen and var_to_bytes([index.initialization,index.groups,index.rows])==immutable,seat+" later prefix/removal cannot mutate captured materials or original data")
     evidence.append({"seat":seat,"condition_uuid":OWNER,"actor_uuid":ACTOR,"damage_occurrence":str(int(facts[0].node.occurrence)),
         "flash_start_ms":row.start_ms,"flash_end_ms":row.end_ms,"at_ms":at,"historical_treated_samples":positive,"equipment_transition":"not_recorded"})
+
+func inspect_native(source:Dictionary)->void:
+    var index:Dictionary=Recording.read(source.directory)
+    var label:String=source.label
+    check(index.ok,label+" unchanged native-hit original compiles")
+    if not index.ok:return
+    var original:PackedByteArray=var_to_bytes([index.initialization,index.groups,index.rows])
+    var study:Dictionary=native_transition(index,source)
+    check(not study.is_empty(),label+" exactly one real applied native hit overlaps its original Blur UUID")
+    if study.is_empty():return
+    var timeline:RefCounted=Recording.restore(index,study.at_ms)
+    var history:Dictionary=timeline.history_captures(source.actor,source.owner,study.at_ms,[0.0,.08,.16,.24])
+    check(history.ready and history.get("complete_window",false),label+" native-hit overlap now retains an authentic complete prefix: "+str(history.get("reason")))
+    if not history.ready:return
+    var positive:int=0
+    for capture in history.captures:
+        var flash:Dictionary=capture.departure.material.flash
+        if flash.is_empty():continue
+        positive+=1
+        var exact:RefCounted=Recording.restore(index,capture.sample_ms)
+        var expected:Dictionary=Conditions.material(source.actor,exact.component_samples(index.cache)).flash
+        check(flash.id==study.flash.component.id and flash.source_event_uuid==study.flash.component.source_event_uuid \
+            and is_equal_approx(float(flash.age_ms),float(capture.sample_ms)-float(study.flash.start_ms)),label+" original result identity and absolute hit clock are preserved")
+        check(flash.id==expected.id and flash.native_hit==expected.native_hit and is_equal_approx(flash.age_ms,expected.age_ms),label+" descriptor equals independently restored actual prefix")
+        check(flash.native_hit.definition.get("clock_parameter","")==source.clock \
+            and not flash.has("native_surface"),label+" selected animated/static native source is retained without a borrowed framebuffer")
+    check(positive>0 and history.captures.back().departure.material.flash.is_empty(),label+" earlier native hit and restored current body coexist")
+    var terminal:RefCounted=Recording.restore(index,index.presentation_end_ms)
+    var retained:bool=terminal.state.actors[source.actor].conditions.any(func(condition):return condition.condition_uuid==source.owner)
+    check(retained!=source.retirement_recorded,label+" actual removal/recast or absent removal is reported without invented expiration")
+    var again:RefCounted=Recording.restore(index,study.at_ms)
+    check(var_to_bytes(again.history_captures(source.actor,source.owner,study.at_ms,[0.0,.08,.16,.24]).captures)==var_to_bytes(history.captures),label+" reverse seek restores exact original operands")
+    check(var_to_bytes([index.initialization,index.groups,index.rows])==original,label+" native-hit evidence remains immutable")
+    evidence.append({"case":label,"actor_uuid":source.actor,"condition_uuid":source.owner,"at_ms":study.at_ms,
+        "hit_component":study.flash.component.id,"historical_treated_samples":positive,"retirement_recorded":source.retirement_recorded})

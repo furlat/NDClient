@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_uoc6c"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_uu4hu"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
 [sub_resource type="Resource" id="Resource_mfyt7"]
 script = ExtResource("1_6vnvd")
 role = "act"
@@ -29,6 +31,20 @@ path = "art/media/ui/icons/smooth48/spell.hellish-rebuke.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:spell.hellish-rebuke"
 
+[sub_resource type="Resource" id="AcceptedRebuke"]
+script = ExtResource("effect")
+clip = "review/hellish_rebuke/back/lifecycle"
+role = "attached"
+at = "event.start"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 0.833333333333333
+duration_policy = "authored"
+fade_out = 0.25
+light_multiplier = 0.0
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
 [resource]
 script = ExtResource("3_k4r8w")
 id = "reaction.spell.hellish_rebuke"
@@ -38,6 +54,7 @@ icon = SubResource("Resource_k4r8w")
 disposition = "authored"
 body = SubResource("Resource_mfyt7")
 delivers_spell = "spell.hellish_rebuke"
+effects = Array[ExtResource("effect")]([SubResource("AcceptedRebuke")])
 effect_sources = PackedStringArray()
 feedback = SubResource("Resource_svp42")
 status = "partial"
@@ -61,3 +78,5 @@ unported = {
 "projectile": null,
 "variants": []
 }
+
+notes = "The real completed reaction ActionFact owns this finite source at its actual attacker recipient. The producer does not publish another Hellish Rebuke SpellFact; delivers_spell is descriptive metadata rather than a dispatch alias. Actual Dexterity save, Fire damage and receiving body feedback retain their native occurrences, including saved or immune outcomes. Canceled reactions emit no source. Artwork is unreviewed; this source assignment has not been requalified."

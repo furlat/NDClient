@@ -2,9 +2,11 @@ extends SceneTree
 const Audience = preload("res://sdk/audience.gd")
 const Journal = preload("res://sdk/journal.gd")
 const Reducer = preload("res://sdk/reducer.gd")
+const Compare = preload("res://tests/schema16_fold_vectors_checks.gd")
+const ORACLE = "res://tests/fixtures/schema16/spool-oracle"
 var checks = 0
 var failures: Array = []
-var rejection_evidence: Dictionary = {}
+var rejection_evidence: Array = []
 
 func check(ok: bool, label: String) -> void:
     checks += 1
@@ -30,10 +32,9 @@ func verify(first: Array, second: Array, expected: Array, label: String) -> void
         for i in actual.size(): identical = identical and is_same(actual[i],winners[i])
         check(identical,label+": last input reference retained")
 
-func verify_public_rejection(directory: String) -> void:
+func verify_public_rejection(directory: String,seat:Dictionary={},states:ZIPReader=null) -> void:
     check(DirAccess.dir_exists_absolute(directory),"Recorded rejection fixture exists")
     if not DirAccess.dir_exists_absolute(directory): return
-    # Select the recording's existing schema without replaying or writing packets.
     var journal = Journal.new()
     var opened = journal.open(directory,true,false)
     check(opened.ok,"Recorded rejection fixture selects its admitted protocol")
@@ -43,7 +44,7 @@ func verify_public_rejection(directory: String) -> void:
     var packet_name = RegEx.new()
     packet_name.compile("^[0-9]{16}\\.json$")
     var state: Dictionary = {}
-    var sequence = 0
+    var sequence = 0;var rejected_late:bool=false
     for name in names:
         if packet_name.search(name) == null: continue
         check(name == "%016d.json" % sequence,"Recorded rejection fixture is contiguous")
@@ -52,39 +53,62 @@ func verify_public_rejection(directory: String) -> void:
         var decoded = journal.protocol.decode(kind,FileAccess.get_file_as_bytes(directory.path_join(name)))
         check(decoded.ok,"Recorded rejection fixture decodes " + name)
         if not decoded.ok: return
-        var packet: Dictionary = journal.protocol.normalize(kind,decoded.value)
+        # Native16 admission preserves exact sparse producer values. The
+        # retired schema9 adapter's default-filling normalization is not this
+        # public reducer's input boundary.
+        var packet: Dictionary = decoded.value
         var sensory_count = 0
         if sequence > 0:
             for lineage in packet.lineages:
                 for event in lineage.events:
-                    if not event.canceled and event.fact != null and event.fact.kind == "sensory": sensory_count += 1
+                    if not event.get("canceled",false) and event.get("fact") != null and event.fact.kind == "sensory": sensory_count += 1
         var prior = state.duplicate(true)
         var original_packet = packet.duplicate(true)
         var reduced = Reducer.reduce_initialization(packet.initialization,packet.content_additions) if sequence == 0 else Reducer.reduce_operation(state,packet)
         check(reduced.ok,"Original recorded operation succeeds " + name)
         if not reduced.ok: return
         check(state == prior and packet == original_packet,"Successful reduction leaves original inputs unchanged " + name)
-        if sequence > 0 and sensory_count > 0 and packet.hud != null:
-            # Every real lineage and sensory fact remains intact. Only the final
-            # operation HUD is made invalid, after those facts have been folded.
+        if states!=null:
+            var expected:Variant=JSON.parse_string(states.read_file(seat.records[sequence].expected).get_string_from_utf8())
+            var issue:String=Compare.difference(reduced.value,expected)
+            check(issue.is_empty(),str(seat.id)+": entire original prefix matches independent frozen Python state "+str(sequence)+" "+issue)
+        if sequence > 0 and sensory_count > 0 and not rejected_late:
+            # Labelled malformed-input control: preserve every real lineage,
+            # source row and sensory fact, but name an unheld final HUD resource.
+            # Native HUD patches have no schema9 revision field.
             var invalid = packet.duplicate(true)
-            var committed_cursor = int(reduced.value.reducer_cursor)
-            invalid.hud.revision = committed_cursor + 1
+            var sheet:Dictionary=state.hud_snapshot.sheets[0]
+            var held:Dictionary=sheet.resources[0]
+            var malformed:Dictionary={"actor_uuid":sheet.actor_uuid,"changes":{},"resource_values":[{"key":str(held.key)+":not-held-control","current":held.current,"maximum":held.maximum}]}
+            invalid.hud=packet.hud.duplicate(true) if packet.get("hud")!=null else {}
+            var patches:Array=invalid.hud.get("sheets",[]).duplicate(true)
+            patches=patches.filter(func(row):return row.actor_uuid!=sheet.actor_uuid);patches.append(malformed);invalid.hud.sheets=patches
             var original_invalid = invalid.duplicate(true)
+            check(journal.protocol.decode("PlayerOperation",JSON.stringify(invalid,"",false,true).to_utf8_buffer()).ok,"Malformed HUD resource still passes current wire schema")
             var rejected = Reducer.reduce_operation(state,invalid)
-            check(not rejected.ok,"Public operation rejects final future HUD after sensory work")
-            check(not rejected.ok and rejected.error.message == "HUD belongs to a different or future operation",
+            check(not rejected.ok,"Public operation rejects an unheld final HUD resource after actual sensory work")
+            check(not rejected.ok and rejected.error.message == "Resource values name a row the sheet does not hold",
                 "Rejection occurs at the final operation HUD boundary")
             check(state == prior,"Late public rejection preserves the complete prior state")
             check(invalid == original_invalid,"Late public rejection preserves the complete invalid input packet")
             check(packet == original_packet,"Rejection fixture preserves the original recorded operation")
-            rejection_evidence = {"sequence":sequence,"sensory_facts":sensory_count,
-                "prior_reducer_cursor":prior.reducer_cursor,"committed_reducer_cursor":committed_cursor,
-                "rejected_hud_revision":invalid.hud.revision}
-            return
+            rejection_evidence.append({"case":seat.get("id",directory),"sequence":sequence,"sensory_facts":sensory_count,
+                "prior_reducer_cursor":prior.reducer_cursor,"committed_reducer_cursor":reduced.value.reducer_cursor,
+                "negative_control":"unheld final HUD resource key; original native facts/rows unchanged"})
+            rejected_late=true
         state = reduced.value
         sequence += 1
-    check(false,"Recording contains an operation with sensory facts and a final HUD")
+    check(rejected_late,"Recording exercises final HUD refusal after actual sensory work")
+
+func native_originals()->void:
+    var index:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(ORACLE.path_join("index.json")))
+    var states:=ZIPReader.new()
+    check(states.open(ORACLE.path_join(index.states_archive))==OK,"Frozen independent Python expected cuts open")
+    for seat in index.seats:
+        var directory:String=ORACLE.path_join(str(seat.records[0].bytes)).get_base_dir()
+        verify_public_rejection(directory,seat,states)
+    states.close()
+    check(rejection_evidence.size()==4,"Both actual Door and lethal-OA factions exercise late HUD refusal")
 
 func _initialize() -> void:
     verify([],[],[],"empty")
@@ -110,7 +134,8 @@ func _initialize() -> void:
         if argument.begins_with("--journal="):
             journal_requested = true
             directory = argument.trim_prefix("--journal=")
-    if journal_requested: verify_public_rejection(directory)
+    if journal_requested:verify_public_rejection(directory)
+    else:native_originals()
     FileAccess.open("res://generated/sdk_points_union_checks.json",FileAccess.WRITE).store_string(
         JSON.stringify({"checks":checks,"failures":failures,"rejection_after_sensory":rejection_evidence},"  "))
     print("POINTS_UNION_CHECKS ",checks," failures=",failures)

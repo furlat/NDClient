@@ -157,7 +157,6 @@ hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
-unbound_constructor_inputs = PackedStringArray("propagation_variant_not_qualified")
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "live_endpoints": [{
@@ -180,11 +179,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_516en"]
 script = ExtResource("10_11ufo")
 id = "chain_live_branches"
+dispatch_gap = "unselected_fixed_branch_review_actual_propagation_owns_links"
 kind = "outcome"
 selection = "chain_live_branches"
 effects = Array[ExtResource("3_0t0rm")]([SubResource("Resource_17cb1")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The review source fixes four endpoints and a branched edge list. Production propagation uses the actual disclosed application links through propagation_links; do not select this draft from a title or invent additional recipients. The default source already renders each exact disclosed propagation link; this fixed four-endpoint assembly remains deliberately unselected artwork, without claiming an additional missing network operand."
 
 [sub_resource type="Resource" id="Resource_ejb2q"]
 script = ExtResource("3_0t0rm")
@@ -201,7 +202,6 @@ hide_at_release = PackedStringArray()
 hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
-unbound_constructor_inputs = PackedStringArray("propagation_variant_not_qualified")
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
 "live_endpoints": [{
@@ -218,11 +218,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_nyhkx"]
 script = ExtResource("10_11ufo")
 id = "chain_live_single"
+dispatch_gap = "duplicate_review_of_selected_propagation_source"
 kind = "outcome"
 selection = "chain_live_single"
 effects = Array[ExtResource("3_0t0rm")]([SubResource("Resource_ejb2q")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The default already selects live-electric/chain_live_single with the actual propagation_links constructor and qualified density-mask policy. This imported draft would discard that factual construction and is not a second cast variant."
 
 [resource]
 script = ExtResource("8_ovw87")

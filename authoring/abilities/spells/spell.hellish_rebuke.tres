@@ -135,6 +135,7 @@ source = "ui/resources.json icon:spell.hellish-rebuke"
 [sub_resource type="Resource" id="Resource_x4ccf"]
 script = ExtResource("10_l1c1h")
 id = "reaction.spell.hellish_rebuke"
+dispatch_gap = "delegated_to_actual_reaction_owner"
 kind = "reaction"
 value = "hellish_rebuke"
 recipe = {
@@ -653,7 +654,7 @@ recipe = {
 }
 staging_from = "client"
 status = "partial"
-notes = "Old child draft (reaction.spell.hellish_rebuke), a complete recipe of the old model; nothing maps a server fact to it."
+notes = "The typed reaction.spell.hellish_rebuke source owns the actual reaction and result. This legacy full spell recipe is not a second spell declaration or reaction dispatch route; native and live qualification retain their existing independent scope."
 
 [resource]
 script = ExtResource("8_0pjnx")

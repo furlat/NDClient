@@ -1,0 +1,78 @@
+[
+ {
+  "request": {
+   "do": "action.jump",
+   "by": "caster",
+   "target": [
+    2,
+    6
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "66dced44-4a24-40c0-8faa-06b3b8236ab4",
+  "discovery_generation": 1,
+  "preview_request": {
+   "actor_uuid": "c9939736-cc12-4424-bfdb-bc84b9b8c22b",
+   "state_revision": "66dced44-4a24-40c0-8faa-06b3b8236ab4",
+   "discovery_generation": 1,
+   "correlation_id": "c247eb19-86d1-47fa-b4be-e76dc9665637",
+   "selection": {
+    "action_index": 12,
+    "target_indices": [],
+    "extra_target_positions": [
+     [
+      2,
+      6
+     ]
+    ],
+    "prefer_safe": false
+   }
+  },
+  "selected_action": {
+   "behavior_id": "action.jump",
+   "display_name": "Jump",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "position_los",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "c9939736-cc12-4424-bfdb-bc84b9b8c22b",
+   "state_revision": "66dced44-4a24-40c0-8faa-06b3b8236ab4",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 12,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       2,
+       6
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_reaction_opportunity_attack_jump_resume",
+   "game_epoch": "49f82b23-8d94-4271-9c2f-300a72acec2d",
+   "audience_id": "13047f78-db6b-4375-b31b-7f272c1922b6",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_reaction_opportunity_attack_jump_resume",
+    "game_epoch": "49f82b23-8d94-4271-9c2f-300a72acec2d",
+    "audience_id": "13047f78-db6b-4375-b31b-7f272c1922b6",
+    "sequence": 2
+   }
+  }
+ }
+]

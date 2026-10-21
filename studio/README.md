@@ -6,6 +6,11 @@ journals from `.runtime/studio-library/index.json`; it does not start a server.
 conditions and actions by family, characters, environment, surfaces, items and
 rules. Search by label or exact ID. Every current `authoring/server_ids.json` ID
 is listed, including capabilities that have no recording yet.
+Search also matches linked case names and recording failure reasons. The status
+filter separates ready recordings, failed/stale captures, missing recordings,
+linked output evidence, output gaps, source gaps and rejected art. Counts describe
+the filtered capabilities, so a multi-subject case remains reachable from each
+owner without creating duplicate capability IDs.
 
 Select a capability or its case to open that exact current recording. The compact
 header selects another case in the same category. One faction is rendered;
@@ -19,6 +24,13 @@ actual presentation qualification, and visual approval. A recorded case is not
 proof that its VFX/provider works or that the user accepted it. Aid, Bless, False
 Life and Sacred Flame retain their rejected status. Current unqualified renderer
 inputs remain **not assessed**, rather than becoming green from a body animation.
+The four facts appear as separate columns. Output receipts are joined offline in
+`generated/reports/studio-case-evidence.json`; hover a capability or case's Output
+evidence cell for the exact receipt path, original package identity and scope.
+Reader safety, native replay/pixels and actual audio transport starts remain
+separate witnesses. Historical package receipts and receipts without a package
+identity do not qualify the installed successor. Audio starts do not establish
+that every required spell sound exists or that its timing/mix was accepted.
 
 The same production reducer, compiler, authoring, renderer and audio power the
 preview. Drag the divider to resize the preview and timeline. The optional Study
@@ -152,16 +164,10 @@ blood renderer. Source availability is never presented as proof of a rendered
 or visually qualified occurrence.
 
 Use play/pause, source-sample stepping, speed, loop and fit/zoom controls. **Q/E**
-rotates the linked preview cameras. When recorded perspectives differ, Studio
-shows two independently reduced worlds on a shared causal timeline. The faction
-selector chooses which pane supplies audio; switching it does not reload either
-world. Identical rendered perspectives keep one pane. Events retain their split
-faction tracks.
-Unseen audiences and empty branches take no rows in the default timeline. A
-single useful view is shown directly; split labels remain only for meaningful
-alternate presentations. Both panes preserve the selected occurrence and phase, including an unseen
-event whose other view has no animation duration. Omitted intervals hold the
-unaffected view without changing source animation rates. Technical
+rotates the preview camera. The faction selector opens its independently reduced
+original journal and supplies audio from that selected world. The default is one
+rendered faction. Switching preserves the corresponding recorded occurrence and
+phase; an unobserved event does not borrow another faction's facts. Technical
 metadata and detailed missing-source explanations stay in the inspector. The existing Invisibility case is
 under **Conditions → Perception**.
 
@@ -293,9 +299,13 @@ The30 migrated spells select their native Factory phases through
 same compiled event components, native source sampler, placement and receiving
 body material. Phase rows show actual source previews; their child rows expose
 source-light keys and the actual damaged recipient's material interval.
-**Inspect → Full spell hit material** switches between that material and Colour
-treatment. The dedicated assembled-body thumbnail remains an explicit gap;
-inspect the receiving actor in the replay for that channel.
+**Inspect → Full spell hit material** switches the replay between that material
+and Colour treatment. Material rows also show a dedicated composed source
+thumbnail using the actual recipient pose, equipment, condition colour/opacity,
+native material and private occurrence clock. Those source previews use neutral
+illumination; inspect the receiving actor in replay for actual scene lighting.
+Held weapon/material sources without an isolated preview keep their explicit
+missing-preview reason.
 
 The real Shield-blocked case can be opened with
 `studio.cmd --recording=res://.runtime/studio-cases/magic_missile-seed3/amber/journal`.

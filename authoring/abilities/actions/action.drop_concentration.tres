@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_uylps"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_axwl1"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="event_family"]
+
 [sub_resource type="Resource" id="Resource_vyfyw"]
 script = ExtResource("1_0cct2")
 role = "act"
@@ -23,6 +25,39 @@ path = "art/media/ui/icons/smooth48/action.drop-concentration.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:action.drop-concentration"
 
+[sub_resource type="Resource" id="Resource_event_family_0"]
+script = ExtResource("event_family")
+clip = "high-level-22/delayed-blast-fireball/native_target_packet"
+role = "attached"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "finite_contact", "outcome": "damage", "geometry_actor": "target", "damage_type": "Fire", "save_effect_id": "spell.delayed_blast_fireball.explosion", "retained_caster": true, "payload_kind": "delayed_fire", "component_path": ["effect"]}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="Resource_retirement_blast"]
+script = ExtResource("event_family")
+clip = "high-level-22/delayed-blast-fireball/native_retirement_blast"
+role = "attached"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "retired_payload_blast", "outcome": "cast", "geometry_actor": "caster", "item_id": "spell_payload.delayed_fireball", "save_effect_id": "spell.delayed_blast_fireball.explosion", "component_path": ["effect"], "behavior_id": "action.drop_concentration", "lifetime_condition_id": "condition.spell.payload_lifetime", "payload_kind": "delayed_fire"}
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.9
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{"cue_point": "source"}]
+}
+
 [resource]
 script = ExtResource("3_uylps")
 id = "action.drop_concentration"
@@ -32,6 +67,7 @@ icon = SubResource("Resource_4pvu3")
 disposition = "authored"
 body = SubResource("Resource_vyfyw")
 effect_sources = PackedStringArray()
+effects = Array[ExtResource("event_family")]([SubResource("Resource_event_family_0"), SubResource("Resource_retirement_blast")])
 status = "partial"
 unported = {
 "actionFeedback": null,

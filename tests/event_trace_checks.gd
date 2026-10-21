@@ -7,6 +7,8 @@ const Compiler = preload("res://presentation/compiler.gd")
 const Timeline = preload("res://presentation/timeline.gd")
 const Trace = preload("res://presentation/event_trace.gd")
 const Protocol = preload("res://sdk/protocol.gd")
+const Occurrences = preload("res://presentation/occurrences.gd")
+const LOG_ORIGINAL = "res://tests/oracles/event_trace_original"
 var checks = 0
 var failed = 0
 var retained_missing_reference: Dictionary = {}
@@ -29,7 +31,7 @@ func verify(state: Dictionary, group: Dictionary, lineage: Dictionary) -> void:
     check(events.size() == lineage.events.size(),"one disclosed event row per admitted node")
     var expected = {}
     var last = -1
-    for node in lineage.events: expected["%s:%s" % [group.operation_sequence,node.uuid]] = node
+    for node in lineage.events: expected["%s:%s" % [group.operation_sequence,node.id]] = node
     for event in events:
         evidence.nodes += 1
         check(expected.has(event.id) and event.source_index >= last,"exact event identity and source order")
@@ -57,7 +59,7 @@ func verify(state: Dictionary, group: Dictionary, lineage: Dictionary) -> void:
         if visible_rows.is_empty() or snapshot.selected.is_empty(): continue
         for view in [visible_rows[0],snapshot.selected]:
             check(not view.committed and view.status == "playing" and view.reasons.is_empty(),"precommit attack status/reasons do not disclose future result")
-            check(view.components.all(func(c): return c.kind == "body" and not c.trace_track_id.is_empty()),"precommit normal and selected rows show only scheduled body components")
+            check(view.components.all(func(c): return c.kind in ["body","motion"] and not c.trace_track_id.is_empty()),"precommit normal and selected rows show only scheduled body components")
         check(snapshot.selected.committed_log == null,"selected attack does not disclose original nested log before commit")
         var displayed_counts = {}
         for row in snapshot.events: displayed_counts[row.status] = int(displayed_counts.get(row.status,0))+1
@@ -107,27 +109,27 @@ func verify(state: Dictionary, group: Dictionary, lineage: Dictionary) -> void:
         check(log_ids.find(attack[0].id)<log_ids.find(damage[0].id) and log_ids.find(damage[0].id)<log_ids.find(death.id),"real lethal logs display attack then damage then death")
         check(attack[0].depth+1==damage[0].depth and damage[0].depth+1==death.depth,"real lethal results are nested subevents, not flat reordered labels")
         var pending = timeline_for(state,group)
-        var attack_commit: Array = group.commits.filter(func(c):return c.get("event_uuid")==expected[attack[0].id].uuid)
+        var attack_commit: Array = group.commits.filter(func(c):return c.get("event_uuid")==expected[attack[0].id].id)
         if not attack_commit.is_empty() and attack_commit[0].at_ms>0:
             pending.advance(float(attack_commit[0].at_ms)-0.001)
             check(not pending.event_log(2000).entries.any(func(r):return r.id in [attack[0].id,damage[0].id,death.id]),"child summaries wait for logged parent without revealing its future outcome")
         evidence.lethal_chains += 1
     var node_log_count = 0
     for node in lineage.events:
-        if node.combat_log != null: node_log_count += 1
+        if node.get("combat_log") != null: node_log_count += 1
     check(logs.size() >= node_log_count,"native node logs all appear at commit")
     var native_logs: Array = []
     for node in lineage.events:
-        if node.combat_log != null: native_logs.append(node.combat_log)
+        if node.get("combat_log") != null: native_logs.append(node.get("combat_log"))
     for node in lineage.events:
-        if node.combat_log == null: continue
-        var id = "%s:%s" % [group.operation_sequence,node.uuid]
+        if node.get("combat_log") == null: continue
+        var id = "%s:%s" % [group.operation_sequence,node.id]
         var matching = logs.filter(func(r): return r.event_id == id)
-        check(matching.size() == 1 and matching[0].entry.compact == node.combat_log.compact,"native text preserved exactly once")
-        check(fast.event_trace(1,id).selected.committed_log==node.combat_log,"selected diagnostic preserves original native log including aggregate indices")
-        if native_nested_reference.is_empty() and not node.combat_log.get("sub_entries",[]).is_empty():
-            native_nested_reference=node.combat_log.duplicate(true)
-        for child in node.combat_log.get("sub_entries",[]):
+        check(matching.size() == 1 and matching[0].entry.compact == node.get("combat_log").compact,"native text preserved exactly once")
+        check(fast.event_trace(1,id).selected.committed_log==node.get("combat_log"),"selected diagnostic preserves original native log including aggregate indices")
+        if native_nested_reference.is_empty() and not node.get("combat_log").get("sub_entries",[]).is_empty():
+            native_nested_reference=node.get("combat_log").duplicate(true)
+        for child in node.get("combat_log").get("sub_entries",[]):
             var independently_logged: bool=child in native_logs
             if child.data.get("kind")=="step_movement":
                 for native in native_logs:
@@ -181,20 +183,18 @@ func verify(state: Dictionary, group: Dictionary, lineage: Dictionary) -> void:
         # Post-draw evidence may arrive after a later advance completed a group.
         fast.record_presented([{"trace_track_id":track.trace_track_id,"visible":true,"display_ms":at}])
         check(fast.event_trace(1,id).selected.components.any(func(c): return c.trace_track_id == track.trace_track_id and c.sample_count == 1),"late exact frame witness survives group completion")
-        break
+        # Every actual track matters: an earlier cast/movement body must not
+        # skip a later attack or independently authored terminal life body.
 
-func _initialize() -> void:
-    var directory = "res://.runtime/player-runs/20261011T225557.695498Z/journal"
-    for arg in OS.get_cmdline_user_args():
-        if arg.begins_with("--journal="): directory = arg.trim_prefix("--journal=")
+func _recording(directory:String) -> Dictionary:
     var journal = Journal.new()
     var opened = journal.open(directory,true,false)
-    check(opened.ok,"historical recorded protocol opens")
-    if not opened.ok: print(opened); quit(1); return
+    check(opened.ok,"Current original recorded protocol opens: "+directory)
+    if not opened.ok:return {}
     var protocol = journal.protocol
     var decoded = protocol.decode("InitializationResponse",FileAccess.get_file_as_bytes(directory.path_join("0000000000000000.json")))
-    check(decoded.ok,"real initialization admitted")
-    if not decoded.ok: quit(1); return
+    check(decoded.ok,"real initialization admitted: "+directory)
+    if not decoded.ok:return {}
     var packet: Dictionary = protocol.normalize("InitializationResponse",decoded.value)
     var state: Dictionary = Reducer.reduce_initialization(packet.initialization,packet.content_additions).value
     var initial_rows = Trace.initialization(packet.initialization)
@@ -205,35 +205,58 @@ func _initialize() -> void:
     var init_revision: int = initialized.trace_revision
     initialized.accept({"kind":"initialization","state":state.duplicate(true),"sequence":0,"events":initial_rows})
     check(initialized.trace_revision == init_revision,"repeated initialization diagnostics deduplicate")
-    var previous_journal = Journal.new()
-    var previous_open = previous_journal.open("res://.runtime/gallery-route/journal",true,false)
-    check(previous_open.ok,"pre-container-loot recording opens with its frozen identity")
-    if previous_open.ok:
-        var previous_raw = FileAccess.get_file_as_bytes("res://.runtime/gallery-route/journal/0000000000000000.json")
-        var previous_packet = previous_journal.protocol.decode("InitializationResponse",previous_raw)
-        check(previous_packet.ok,"prior source-lighting schema remains decodable without relabeling bytes")
-        if previous_packet.ok: check(not Protocol.new().check_identity(previous_packet.value.protocol).ok,"current live protocol remains strict against previous schema")
     var cache = {}
     var first_group: Dictionary = {}
-    for seq in range(1,61):
-        var filename = "%016d.json" % seq
+    var files:PackedStringArray=DirAccess.get_files_at(directory);files.sort()
+    for filename in files:
+        if not filename.ends_with(".json") or filename.get_basename().length()!=16 or not filename.get_basename().is_valid_int() or int(filename.get_basename())==0:continue
         var result = protocol.decode("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join(filename)))
-        check(result.ok,"real operation admitted "+filename)
-        if not result.ok: break
+        check(result.ok,"real operation admitted "+directory+"/"+filename)
+        if not result.ok:return {}
         var operation: Dictionary = protocol.normalize("PlayerOperation",result.value)
         var original = state.duplicate(true)
         var compiled = Compiler.compile(state,operation,cache)
-        check(compiled.ok,"real operation compiled "+filename)
-        if not compiled.ok: break
+        check(compiled.ok,"real operation compiled "+directory+"/"+filename)
+        if not compiled.ok:return {}
         var displayed = state.duplicate(true)
         for group in compiled.value.groups:
-            var lineage = operation.lineages.filter(func(l): return l.lineage_uuid == group.id)
-            if not lineage.is_empty(): verify(displayed,group,lineage[0])
-            if first_group.is_empty() and not group.get("events",[]).is_empty(): first_group = group
-            for commit in group.commits: Compiler.apply_delta(displayed,commit.delta)
+            var lineage:Array=operation.lineages.filter(func(value):return str(value.lineage)==group.id)
+            check(lineage.size()==1,"compiled group joins one actual current lineage")
+            if lineage.size()==1:verify(displayed,group,Occurrences.group(lineage[0]))
+            if first_group.is_empty() and not group.get("events",[]).is_empty():first_group=group
+            for commit in group.commits:Compiler.apply_delta(displayed,commit.delta)
         check(displayed == compiled.value.final_state and state == original,"diagnostics preserve canonical result and input ownership")
         state = compiled.value.final_state
         evidence.operations += 1
+    return {"initial_rows":initial_rows,"first_group":first_group,"state":state}
+
+func _initialize() -> void:
+    var directories:Array=[]
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--journal="):directories.append(arg.trim_prefix("--journal="))
+    if directories.is_empty():
+        printerr("Requires explicit current --journal=<original> inputs; Gallery, lethal jumping opportunity attack and revive supply the declared cohort")
+        quit(2);return
+    var source_record:Dictionary={}
+    for directory in directories:
+        var record:Dictionary=_recording(directory)
+        if source_record.is_empty() and not record.is_empty():source_record=record
+    if source_record.is_empty():quit(1);return
+    var initial_rows:Array=source_record.initial_rows
+    var first_group:Dictionary=source_record.first_group
+    var state:Dictionary=source_record.state
+    # Historical originals are finite log API operands only. Never normalize or
+    # admit their retired packet/fact schema into current gameplay replay.
+    var log_originals:Array=[]
+    for sequence in [59,84]:
+        var path:String=LOG_ORIGINAL.path_join("%016d.json"%sequence)
+        var original:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(path))
+        check(not Protocol.new().check_identity(original.protocol).ok,"Historical log provenance cannot enter the current replay protocol")
+        log_originals.append(original)
+        for lineage in original.lineages:
+            for node in lineage.events:
+                var entry:Variant=node.get("combat_log")
+                if native_nested_reference.is_empty() and entry!=null and not entry.get("sub_entries",[]).is_empty():native_nested_reference=entry
     check(evidence.supported_tracks > 0 and evidence.partial_attacks > 0 and evidence.future_contacts > 0,"real movement and partial attack covered")
     var stalled = timeline_for(state,first_group)
     stalled.record_preparation_issue("not-the-front-group","missing media")
@@ -296,7 +319,10 @@ func _initialize() -> void:
     check(Trace.operation_logs(append_packet).is_empty(),"node-attached and appended copy of same native log deduplicates")
     append_packet.lineages = []
     var appends = Trace.operation_logs(append_packet)
-    check(appends.size() == 1 and appends[0].entry == native_entry,"standalone native log remains intact")
+    var standalone:Dictionary=appends[0].entry.duplicate() if appends.size()==1 else {}
+    var children:Array=standalone.get("sub_entries",[]);standalone.erase("sub_entries")
+    var disclosed:Dictionary=native_entry.duplicate();disclosed.erase("sub_entries")
+    check(appends.size() == 1 and standalone == disclosed and children.is_empty(),"standalone current native log preserves every disclosed field exactly and has no invented nested children")
     check(not native_nested_reference.is_empty(),"actual source contains nested native entries")
     var nested_packet={"cursor":{"sequence":10},"lineages":[],"combat_log_appends":[{"generation":1,"encounter_log_index":8,"operation_end_cursor":13,"entry":native_nested_reference}]}
     var nested_trace=Trace.create()
@@ -317,22 +343,18 @@ func _initialize() -> void:
             "combat_log_appends":[{"generation":1,"encounter_log_index":9,"operation_end_cursor":14,"entry":aggregate}]}
         var deduplicated: Array=Trace.operation_logs(one_native)
         check(deduplicated.size()==1 and deduplicated[0].entry.sub_entries==[repeated_child],"one native step consumes only one aggregate duplicate; repeated nested occurrence survives")
-    # These two real Gallery operations repeat the same route steps. Their
-    # native IDs remain separate even when aggregate duplicate text is removed.
+    # Two unchanged historical Gallery raw log corpora repeat the same route.
+    # This tests only finite log identity/composition; current replay is above.
     var repeated_step_rows={}
-    for seq in [59,84]:
-        var raw=FileAccess.get_file_as_bytes("res://.runtime/gallery-route/journal/%016d.json" % seq)
-        var decoded_repeat=previous_journal.protocol.decode("PlayerOperation",raw)
-        check(decoded_repeat.ok,"actual repeated route operation admitted")
-        if not decoded_repeat.ok: continue
-        var repeated_packet: Dictionary=previous_journal.protocol.normalize("PlayerOperation",decoded_repeat.value)
-        for lineage in repeated_packet.lineages:
+    for original in log_originals:
+        var seq:int=int(original.cursor.sequence)
+        for lineage in original.lineages:
             for node in lineage.events:
-                if node.combat_log==null or node.combat_log.data.get("kind")!="step_movement": continue
-                var log: Dictionary=node.combat_log
-                var key: String=JSON.stringify([log.source_uuid,log.data.from_position,log.data.to_position])
-                if not repeated_step_rows.has(key): repeated_step_rows[key]=[]
-                repeated_step_rows[key].append({"id":"%s:%s" % [seq,node.uuid],"sequence":seq,"source_index":0,"entry":log})
+                if node.get("combat_log")==null or node.combat_log.data.get("kind")!="step_movement":continue
+                var log:Dictionary=node.combat_log
+                var key:String=JSON.stringify([log.source_uuid,log.data.from_position,log.data.to_position])
+                if not repeated_step_rows.has(key):repeated_step_rows[key]=[]
+                repeated_step_rows[key].append({"id":"%s:%s"%[seq,node.uuid],"sequence":seq,"source_index":0,"entry":log})
     var repeated_count=0
     for occurrences in repeated_step_rows.values():
         if occurrences.size()<2: continue
@@ -345,7 +367,7 @@ func _initialize() -> void:
         var repeated_logs: Array=Trace.logs(repeated_trace,200).entries
         check(repeated_logs.size()==occurrences.size() and repeated_logs.all(func(r):return r.id in ids),"nested dedup never merges independently logged repeated move occurrences")
         repeated_count+=1
-    check(repeated_count>0,"actual Gallery recording includes repeated moves across operations")
+    check(repeated_count>0,"unchanged historical log originals include independently recorded repeated moves")
     var log_trace = Trace.create()
     Trace.append_logs(log_trace,appends)
     Trace.append_logs(log_trace,appends)
@@ -366,7 +388,9 @@ func _initialize() -> void:
     orphan_log._log_parent_id = "not-disclosed-or-evicted"
     Trace.append_logs(absent_parent,[orphan_log])
     check(Trace.logs(absent_parent,200).entries[0].parent_id=="","absent or evicted log parent cannot block retained child forever")
-    var report = {"checks":checks,"failures":failed,"evidence":evidence}
+    var report = {"checks":checks,"failures":failed,"evidence":evidence,"recordings":directories,
+        "historical_finite_log_originals":[LOG_ORIGINAL+"/0000000000000059.json",LOG_ORIGINAL+"/0000000000000084.json"],
+        "scope":"Current schema16 originals qualify event identity/privacy/ancestry/contact/retention. Unchanged historical raw log operands separately qualify finite nested composition/multiplicity/repeated identity only; no historical normalization or current nested/repeated-route replay proof is claimed."}
     var file = FileAccess.open("res://generated/event_trace_checks.json",FileAccess.WRITE)
     file.store_string(JSON.stringify(report,"  ")+"\n")
     print("EVENT_TRACE_CHECKS ",JSON.stringify(report))

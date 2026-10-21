@@ -33,9 +33,9 @@ func examine(directory:String)->void:
             check(commit.source_index>=previous_cursor and commit.at_ms>=previous_time,"Original event commit order remains monotonic")
             previous_cursor=commit.source_index;previous_time=commit.at_ms
         for event in item.group.events:
-            if event.kind!="equipment":continue
+            var tracks:Array=item.group.actor_tracks.filter(func(track):return track.source_event_uuid==event.event_uuid and (event.kind=="equipment" or track.get("equipment_change",false)))
+            if event.kind!="equipment" and tracks.is_empty():continue
             count+=1
-            var tracks=item.group.actor_tracks.filter(func(track):return track.source_event_uuid==event.event_uuid)
             check(tracks.size()==1,"One actual equipment occurrence owns one selected body")
             if tracks.is_empty():continue
             var track:Dictionary=tracks[0]
@@ -71,5 +71,5 @@ func examine(directory:String)->void:
     var complete=Recording.restore(index,index.presentation_end_ms+1)
     check(complete.state==journal.state,"Entire displayed final state equals independent canonical replay")
     check(index.groups==held,"Forward/reverse sampling leaves compiled groups immutable")
-    var rig=Authoring.load_data("catalog/rigs.json",index.cache)["smallscale.goblin01"]
+    var rig:Dictionary=Authoring.rigs(index.cache)["smallscale.goblin01"]
     check(rig.body_contexts.any(func(row):return row.role=="equipment" and not row.body.actor.enabled),"Disabled rig override remains in its authored source")

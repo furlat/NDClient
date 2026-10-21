@@ -20,6 +20,7 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 [sub_resource type="Resource" id="Resource_nw1jp"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/fire/delivery"
+unbound_constructor_inputs = PackedStringArray("chosen_spell_element_not_disclosed")
 role = "attached"
 at = "release"
 delay = -0.3
@@ -45,15 +46,15 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_m6loi"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/fire/impact"
-role = "attached"
-at = "release"
-delay = 0.38
+unbound_constructor_inputs = PackedStringArray("chosen_spell_element_not_disclosed")
+role = "impact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -65,6 +66,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"contact_delay": 0.38,
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -111,15 +113,14 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_1owh6"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/acid/impact"
-role = "attached"
-at = "release"
-delay = 0.38
+role = "impact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -131,6 +132,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"contact_delay": 0.38,
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -151,7 +153,10 @@ value = "acid"
 selection = "sorcerous_burst_acid_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_cupom"), SubResource("Resource_1owh6")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Acid"], "attack_outcome": ["Hit", "Crit"], "target_kind": ["creature"]}
 
 [sub_resource type="Resource" id="Resource_akfsd"]
 script = ExtResource("1_v37ej")
@@ -181,15 +186,14 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_h6bil"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/cold/impact"
-role = "attached"
-at = "release"
-delay = 0.38
+role = "impact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -201,6 +205,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"contact_delay": 0.38,
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -221,7 +226,10 @@ value = "cold"
 selection = "sorcerous_burst_cold_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_akfsd"), SubResource("Resource_h6bil")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Cold"], "attack_outcome": ["Hit", "Crit"], "target_kind": ["creature"]}
 
 [sub_resource type="Resource" id="Resource_0nfkv"]
 script = ExtResource("1_v37ej")
@@ -246,11 +254,14 @@ extra = {
 "actor": "caster",
 "socket": "cast_hand"
 }, {
-"point": [2.0, 0.8, 0.65]
+"actor": "target",
+"socket": "body_center",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_n0edh"]
@@ -260,7 +271,10 @@ kind = "outcome"
 selection = "sorcerous_burst_miss_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_0nfkv")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Fire"], "attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
 
 [sub_resource type="Resource" id="Resource_siy30"]
 script = ExtResource("1_v37ej")
@@ -290,7 +304,8 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_10axk"]
@@ -329,6 +344,8 @@ kind = "form"
 selection = "sorcerous_burst_extra_dice_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_siy30"), SubResource("Resource_10axk")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = "actual_extra_dice_occurrence_not_disclosed"
+notes = "Deliberately unselected optional accent: the selected production element already owns delivery and actual positive contact. The current public applied packet and component attribution do not identify an added-die occurrence or its source clock; aggregate damage or random-face values cannot select this extra Fire accent. This does not block the thirteen actual element/Hit/Miss production assignments or request new artwork."
 status = "partial"
 
 [sub_resource type="Resource" id="Resource_tpaom"]
@@ -359,7 +376,8 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_ninej"]
@@ -398,7 +416,10 @@ kind = "outcome"
 selection = "sorcerous_burst_critical_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_tpaom"), SubResource("Resource_ninej")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Fire"], "attack_outcome": ["Crit"], "target_kind": ["creature"]}
 
 [sub_resource type="Resource" id="Resource_o75yj"]
 script = ExtResource("1_v37ej")
@@ -428,15 +449,14 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_4g3n2"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/lightning/impact"
-role = "attached"
-at = "release"
-delay = 0.38
+role = "impact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -448,6 +468,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"contact_delay": 0.38,
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -468,7 +489,10 @@ value = "lightning"
 selection = "sorcerous_burst_lightning_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_o75yj"), SubResource("Resource_4g3n2")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Lightning"], "attack_outcome": ["Hit", "Crit"], "target_kind": ["creature"]}
 
 [sub_resource type="Resource" id="Resource_8nq7j"]
 script = ExtResource("1_v37ej")
@@ -498,15 +522,14 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_8vrx2"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/poison/impact"
-role = "attached"
-at = "release"
-delay = 0.38
+role = "impact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -518,6 +541,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"contact_delay": 0.38,
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -538,7 +562,10 @@ value = "poison"
 selection = "sorcerous_burst_poison_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_8nq7j"), SubResource("Resource_8vrx2")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Poison"], "attack_outcome": ["Hit", "Crit"], "target_kind": ["creature"]}
 
 [sub_resource type="Resource" id="Resource_w46r1"]
 script = ExtResource("1_v37ej")
@@ -568,15 +595,14 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_r80y2"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/psychic/impact"
-role = "attached"
-at = "release"
-delay = 0.38
+role = "impact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -588,6 +614,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"contact_delay": 0.38,
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -608,7 +635,10 @@ value = "psychic"
 selection = "sorcerous_burst_psychic_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_w46r1"), SubResource("Resource_r80y2")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Psychic"], "attack_outcome": ["Hit", "Crit"], "target_kind": ["creature"]}
 
 [sub_resource type="Resource" id="Resource_4ajd4"]
 script = ExtResource("1_v37ej")
@@ -638,15 +668,14 @@ extra = {
 }, {
 "cue_point": "source"
 }],
-"source_launch_local": 0.3
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
 }
 
 [sub_resource type="Resource" id="Resource_8nj6k"]
 script = ExtResource("1_v37ej")
 clip = "bg3-36/sorcerous-burst/thunder/impact"
-role = "attached"
-at = "release"
-delay = 0.38
+role = "impact"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.46
@@ -658,6 +687,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"contact_delay": 0.38,
 "dynamic_geometry": true,
 "live_endpoints": [{
 "actor": "caster",
@@ -678,13 +708,353 @@ value = "thunder"
 selection = "sorcerous_burst_thunder_native"
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_4ajd4"), SubResource("Resource_8nj6k")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
+dispatch_gap = ""
+notes = "Selected by the root SpellFact singleton damage_types and actual attack_outcome. Miss uses the authored optical edge endpoint; no later damage fact selects an element."
 status = "partial"
+when = {"damage_types": ["Thunder"], "attack_outcome": ["Hit", "Crit"], "target_kind": ["creature"]}
+
+[sub_resource type="Resource" id="Resource_chosen_acid_miss_delivery"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/acid/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
+}
+
+[sub_resource type="Resource" id="Resource_chosen_acid_miss"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_acid_miss_native"
+kind = "outcome"
+selection = "sorcerous_burst_acid_miss_native"
+when = {"damage_types": ["Acid"], "attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_chosen_acid_miss_delivery")])
+staging_from = "client:selected-element-producer-20261020"
+status = "partial"
+notes = "The chosen-element delivery phase has no outcome-dependent hit geometry; route its single bolt to the authored optical miss edge and omit the separate impact phase."
+
+[sub_resource type="Resource" id="Resource_chosen_cold_miss_delivery"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/cold/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
+}
+
+[sub_resource type="Resource" id="Resource_chosen_cold_miss"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_cold_miss_native"
+kind = "outcome"
+selection = "sorcerous_burst_cold_miss_native"
+when = {"damage_types": ["Cold"], "attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_chosen_cold_miss_delivery")])
+staging_from = "client:selected-element-producer-20261020"
+status = "partial"
+notes = "The chosen-element delivery phase has no outcome-dependent hit geometry; route its single bolt to the authored optical miss edge and omit the separate impact phase."
+
+[sub_resource type="Resource" id="Resource_chosen_lightning_miss_delivery"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/lightning/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
+}
+
+[sub_resource type="Resource" id="Resource_chosen_lightning_miss"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_lightning_miss_native"
+kind = "outcome"
+selection = "sorcerous_burst_lightning_miss_native"
+when = {"damage_types": ["Lightning"], "attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_chosen_lightning_miss_delivery")])
+staging_from = "client:selected-element-producer-20261020"
+status = "partial"
+notes = "The chosen-element delivery phase has no outcome-dependent hit geometry; route its single bolt to the authored optical miss edge and omit the separate impact phase."
+
+[sub_resource type="Resource" id="Resource_chosen_poison_miss_delivery"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/poison/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
+}
+
+[sub_resource type="Resource" id="Resource_chosen_poison_miss"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_poison_miss_native"
+kind = "outcome"
+selection = "sorcerous_burst_poison_miss_native"
+when = {"damage_types": ["Poison"], "attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_chosen_poison_miss_delivery")])
+staging_from = "client:selected-element-producer-20261020"
+status = "partial"
+notes = "The chosen-element delivery phase has no outcome-dependent hit geometry; route its single bolt to the authored optical miss edge and omit the separate impact phase."
+
+[sub_resource type="Resource" id="Resource_chosen_psychic_miss_delivery"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/psychic/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
+}
+
+[sub_resource type="Resource" id="Resource_chosen_psychic_miss"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_psychic_miss_native"
+kind = "outcome"
+selection = "sorcerous_burst_psychic_miss_native"
+when = {"damage_types": ["Psychic"], "attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_chosen_psychic_miss_delivery")])
+staging_from = "client:selected-element-producer-20261020"
+status = "partial"
+notes = "The chosen-element delivery phase has no outcome-dependent hit geometry; route its single bolt to the authored optical miss edge and omit the separate impact phase."
+
+[sub_resource type="Resource" id="Resource_chosen_thunder_miss_delivery"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/thunder/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"optical_miss": {"side": "right", "clearance_cells": 0.2}
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
+}
+
+[sub_resource type="Resource" id="Resource_chosen_thunder_miss"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_thunder_miss_native"
+kind = "outcome"
+selection = "sorcerous_burst_thunder_miss_native"
+when = {"damage_types": ["Thunder"], "attack_outcome": ["Miss", "Crit Miss"], "target_kind": ["creature"]}
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_chosen_thunder_miss_delivery")])
+staging_from = "client:selected-element-producer-20261020"
+status = "partial"
+notes = "The chosen-element delivery phase has no outcome-dependent hit geometry; route its single bolt to the authored optical miss edge and omit the separate impact phase."
+
+[sub_resource type="Resource" id="Resource_chosen_fire_base_0"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3,
+"source_contact_local": 0.68
+}
+
+[sub_resource type="Resource" id="Resource_chosen_fire_base_1"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/impact"
+role = "impact"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"contact_delay": 0.38,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_chosen_fire_base"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_fire_selected_native"
+kind = "element"
+value = "fire"
+selection = "sorcerous_burst_fire_selected_native"
+when = {"damage_types": ["Fire"], "attack_outcome": ["Hit"], "target_kind": ["creature"]}
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_chosen_fire_base_0"), SubResource("Resource_chosen_fire_base_1")])
+staging_from = "client:selected-element-producer-20261020"
+status = "partial"
+notes = "Explicit actual selected element; historical casts with no selected element retain the unbound baseline."
 
 [resource]
 script = ExtResource("4_l0n5b")
 id = "spell.sorcerous_burst"
 icon = SubResource("Resource_2sgs0")
 delivery = "projectile"
+impact_delay = 0.38
 body = SubResource("Resource_2s4s0")
 effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_nw1jp"), SubResource("Resource_m6loi")])
 native_staging = true
@@ -697,7 +1067,7 @@ owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 feedback_ramp = PackedStringArray()
-variants = Array[ExtResource("6_qbj7j")]([SubResource("Resource_ci834"), SubResource("Resource_1vu7h"), SubResource("Resource_n0edh"), SubResource("Resource_lpxs0"), SubResource("Resource_0bibu"), SubResource("Resource_lswqx"), SubResource("Resource_l08us"), SubResource("Resource_uuowh"), SubResource("Resource_fe1dm")])
+variants = Array[ExtResource("6_qbj7j")]([SubResource("Resource_ci834"), SubResource("Resource_1vu7h"), SubResource("Resource_n0edh"), SubResource("Resource_lpxs0"), SubResource("Resource_0bibu"), SubResource("Resource_lswqx"), SubResource("Resource_l08us"), SubResource("Resource_uuowh"), SubResource("Resource_fe1dm"), SubResource("Resource_chosen_acid_miss"), SubResource("Resource_chosen_cold_miss"), SubResource("Resource_chosen_lightning_miss"), SubResource("Resource_chosen_poison_miss"), SubResource("Resource_chosen_psychic_miss"), SubResource("Resource_chosen_thunder_miss"), SubResource("Resource_chosen_fire_base")])
 applies_conditions = PackedStringArray()
 applies_surfaces = PackedStringArray()
 summons = PackedStringArray()
@@ -707,5 +1077,5 @@ staging_unported = {
 "selection": "sorcerous_burst_native",
 "source": "assets/vfx/index.json:/selections/sorcerous_burst_native/staging"
 }
-notes = "Cast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
+notes = "The historical Fire baseline remains unbound when selected-element facts are absent. Current singleton damage_types selects the exact authored element and observed Hit/Crit/Miss delivery; body and attributed HP remain independent.\nCast body is a stand-in (Attack5, release 7, the most common old gesture) until the spell has its own (coverage fill).
 Plays its imported Factory staging (coverage fill)."

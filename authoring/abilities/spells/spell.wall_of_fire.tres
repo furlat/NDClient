@@ -136,12 +136,14 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 [sub_resource type="Resource" id="Resource_rl0op"]
 script = ExtResource("10_mfmuu")
 id = "wall_of_fire_ring_native"
+dispatch_gap = "unselected_fixed_ring_review_actual_geometry_not_bound"
 kind = "element"
 value = "fire"
 selection = "wall_of_fire_ring_native"
 effects = Array[ExtResource("3_ibhd4")]([SubResource("Resource_d1lfl")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The assembly fixes a review ring and does not accept actual wall geometry. It cannot represent arbitrary disclosed ring cells/sections or retire by the real wall owner; a compatible construction/phase contract and actual ring original remain required."
 
 [resource]
 script = ExtResource("8_skqna")
@@ -156,7 +158,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -168,7 +170,7 @@ applies_conditions = PackedStringArray("condition.spell.wall_of_fire.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.wall_of_fire")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "wall_of_fire_straight_native",
 "source": "assets/vfx/index.json:/selections/wall_of_fire_straight_native/staging"
@@ -187,4 +189,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "Factory source boundary (§13 of agent_docs/FACTORY_REVIEW_2026-10-20.md): The delivered fixed modules/ring, timed entry expiry and emission stop do not consume actual wall geometry or retained lifetime. The fixed review cue0 is explicitly unselected in production. Cast body/palette and actual receiving damage, movement or condition feedback remain independent. This family stays partial pending the named source repair; all artwork remains unreviewed."

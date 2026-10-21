@@ -1,0 +1,387 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "2f98c640-3a9e-4022-84a6-15163f4bb194",
+   "state_revision": "59eed84e-661f-4c5f-b8eb-e31c7ae7857b",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "df1d9809-91ec-42d6-951b-89904e034645",
+   "state_revision": "c778d09c-fc8a-4447-be18-f2c9c361a63c",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "df96cf01-c1ac-4e9a-9ddf-76f0cbc9253e",
+   "state_revision": "3b9f2332-3b6d-40c6-a7bb-d9752ea3909e",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.dragons_breath",
+   "by": "caster",
+   "target": "ally",
+   "variant": {
+    "damage_type": "acid"
+   }
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "e6ad65f8-e33a-4e97-9f26-bc69116d35d7",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.dragons_breath",
+   "display_name": "Dragon's Breath (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "damage_type",
+     "value": "acid",
+     "label": "Acid"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "9bd7b555-0522-40eb-89b9-78b505868bb5",
+   "state_revision": "e6ad65f8-e33a-4e97-9f26-bc69116d35d7",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "ally"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "9bd7b555-0522-40eb-89b9-78b505868bb5",
+   "state_revision": "f66cb3f9-c537-43e5-9dba-df0a13632724",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.spell.dragons_breath.exhale",
+   "by": "ally",
+   "target": [
+    5,
+    7
+   ],
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "35991bcb-92a6-482b-b35d-befad0caee78",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.spell.dragons_breath.exhale",
+   "display_name": "Exhale Dragon's Breath",
+   "cast_at_level": 2,
+   "variant_facets": [],
+   "target_type": "position_aoe",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "2f98c640-3a9e-4022-84a6-15163f4bb194",
+   "state_revision": "35991bcb-92a6-482b-b35d-befad0caee78",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 21,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       5,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+    "sequence": 11
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 5,
+   "actor_uuid": "2f98c640-3a9e-4022-84a6-15163f4bb194",
+   "state_revision": "1d0fc778-1d03-4129-b288-7f91311fcb72",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+   "command_number": 5,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+    "sequence": 12
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "df1d9809-91ec-42d6-951b-89904e034645",
+   "state_revision": "436d8b8c-0ffc-4622-8951-a5e893015280",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+    "sequence": 14
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "df96cf01-c1ac-4e9a-9ddf-76f0cbc9253e",
+   "state_revision": "a11b8fe7-7729-4608-9a8a-53178a1b4cf6",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "369e6e38-ff64-4dd8-a49c-449053186338",
+    "sequence": 16
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "66376af9-e6d2-4f63-8598-7a725c1be7a2",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 6,
+   "actor_uuid": "9bd7b555-0522-40eb-89b9-78b505868bb5",
+   "state_revision": "66376af9-e6d2-4f63-8598-7a725c1be7a2",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 30,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+   "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+   "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+   "command_number": 6,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_dragons_breath_acid_grant_exhale_end",
+    "game_epoch": "453a943d-9523-4f70-a9a9-6da21101f3de",
+    "audience_id": "856ded6a-c228-4f10-a5d9-ce9d38c74d83",
+    "sequence": 18
+   }
+  }
+ }
+]

@@ -1,0 +1,830 @@
+{
+ "source": "dnd.core.cells.mask_from_positions + mask_union",
+ "engine": "211b71134ed15c89e62232587381f7e15a5961c3",
+ "cases": [
+  {
+   "name": "empty",
+   "prior": {
+    "x0": 0,
+    "y0": 0,
+    "width": 0,
+    "height": 0,
+    "bits": ""
+   },
+   "added": [],
+   "expected": {
+    "x0": 0,
+    "y0": 0,
+    "width": 0,
+    "height": 0,
+    "bits": ""
+   }
+  },
+  {
+   "name": "empty_added_duplicates",
+   "prior": {
+    "x0": 0,
+    "y0": 0,
+    "width": 0,
+    "height": 0,
+    "bits": ""
+   },
+   "added": [
+    [
+     -4,
+     7
+    ],
+    [
+     3,
+     -2
+    ],
+    [
+     -4,
+     7
+    ]
+   ],
+   "expected": {
+    "x0": -4,
+    "y0": -2,
+    "width": 8,
+    "height": 10,
+    "bits": "AAIAAAAAAABAAA=="
+   }
+  },
+  {
+   "name": "held_empty_added",
+   "prior": {
+    "x0": -2,
+    "y0": 3,
+    "width": 9,
+    "height": 7,
+    "bits": "AQAAAAAAAEA="
+   },
+   "added": [],
+   "expected": {
+    "x0": -2,
+    "y0": 3,
+    "width": 9,
+    "height": 7,
+    "bits": "AQAAAAAAAEA="
+   }
+  },
+  {
+   "name": "contained_duplicates",
+   "prior": {
+    "x0": -3,
+    "y0": -5,
+    "width": 8,
+    "height": 13,
+    "bits": "AQAAAAAAAAAAAAAAgA=="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 8,
+    "height": 13,
+    "bits": "AQAAAAAQAAAAAAAAgA=="
+   }
+  },
+  {
+   "name": "single_new_column",
+   "prior": {
+    "x0": 2,
+    "y0": -4,
+    "width": 1,
+    "height": 9,
+    "bits": "AQE="
+   },
+   "added": [
+    [
+     1,
+     0
+    ],
+    [
+     3,
+     0
+    ]
+   ],
+   "expected": {
+    "x0": 1,
+    "y0": -4,
+    "width": 3,
+    "height": 9,
+    "bits": "EAJCAA=="
+   }
+  },
+  {
+   "name": "single_new_row",
+   "prior": {
+    "x0": -4,
+    "y0": 2,
+    "width": 9,
+    "height": 1,
+    "bits": "AQE="
+   },
+   "added": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     3
+    ]
+   ],
+   "expected": {
+    "x0": -4,
+    "y0": 1,
+    "width": 9,
+    "height": 3,
+    "bits": "AlAAAg=="
+   }
+  },
+  {
+   "name": "negative_disjoint",
+   "prior": {
+    "x0": -9,
+    "y0": -7,
+    "width": 4,
+    "height": 5,
+    "bits": "AQAI"
+   },
+   "added": [
+    [
+     -20,
+     -12
+    ],
+    [
+     3,
+     2
+    ]
+   ],
+   "expected": {
+    "x0": -20,
+    "y0": -12,
+    "width": 24,
+    "height": 15,
+    "bits": "AQAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAACAAAAAAAAAAAAAAAAAAAAACA"
+   }
+  },
+  {
+   "name": "int64_positive",
+   "prior": {
+    "x0": 9007199254740993,
+    "y0": 9007199254740995,
+    "width": 1,
+    "height": 1,
+    "bits": "AQ=="
+   },
+   "added": [
+    [
+     9007199254740992,
+     9007199254740997
+    ]
+   ],
+   "expected": {
+    "x0": 9007199254740992,
+    "y0": 9007199254740995,
+    "width": 2,
+    "height": 3,
+    "bits": "DA=="
+   }
+  },
+  {
+   "name": "int64_negative",
+   "prior": {
+    "x0": -9007199254740995,
+    "y0": -9007199254740993,
+    "width": 1,
+    "height": 1,
+    "bits": "AQ=="
+   },
+   "added": [
+    [
+     -9007199254740997,
+     -9007199254740992
+    ]
+   ],
+   "expected": {
+    "x0": -9007199254740997,
+    "y0": -9007199254740993,
+    "width": 3,
+    "height": 2,
+    "bits": "Eg=="
+   }
+  },
+  {
+   "name": "column_height_1",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 1,
+    "bits": "DQ=="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     -2
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 4,
+    "bits": "ISCC"
+   }
+  },
+  {
+   "name": "column_height_2",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 2,
+    "bits": "oQ=="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     -1
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 5,
+    "bits": "QQBDIA=="
+   }
+  },
+  {
+   "name": "column_height_3",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 3,
+    "bits": "gQg="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     0
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 6,
+    "bits": "gQAYCAg="
+   }
+  },
+  {
+   "name": "column_height_4",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 4,
+    "bits": "AYQ="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 7,
+    "bits": "AQFAAQEC"
+   }
+  },
+  {
+   "name": "column_height_5",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 5,
+    "bits": "ARAI"
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 8,
+    "bits": "AQIACiCA"
+   }
+  },
+  {
+   "name": "column_height_6",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 6,
+    "bits": "AYCA"
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 9,
+    "bits": "AQQAkAAEIA=="
+   }
+  },
+  {
+   "name": "column_height_7",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 7,
+    "bits": "AQACCA=="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 10,
+    "bits": "AQgAgASAAAg="
+   }
+  },
+  {
+   "name": "column_height_8",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 8,
+    "bits": "AQAQgA=="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 11,
+    "bits": "ARAAAEQAEAAC"
+   }
+  },
+  {
+   "name": "column_height_9",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 9,
+    "bits": "AQBAAAg="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     6
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 12,
+    "bits": "ASAAACACAAKA"
+   }
+  },
+  {
+   "name": "column_height_10",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 10,
+    "bits": "AQAAAoA="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 13,
+    "bits": "AUAAAAAhAEAAIA=="
+   }
+  },
+  {
+   "name": "column_height_11",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 11,
+    "bits": "AQAACAAI"
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     8
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 14,
+    "bits": "AYAAAAAIAQAIAAg="
+   }
+  },
+  {
+   "name": "column_height_12",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 12,
+    "bits": "AQAAQACA"
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     9
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 15,
+    "bits": "AQABAABAEAAAAQAC"
+   }
+  },
+  {
+   "name": "column_height_13",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 13,
+    "bits": "AQAAAAEACA=="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     10
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 16,
+    "bits": "AQACAAAAggAAIACA"
+   }
+  },
+  {
+   "name": "column_height_14",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 14,
+    "bits": "AQAAAAgAgA=="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     11
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 17,
+    "bits": "AQAEAAAAEAgAAAQAIA=="
+   }
+  },
+  {
+   "name": "column_height_15",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 15,
+    "bits": "AQAAACAAAAg="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     12
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 18,
+    "bits": "AQAIAAAAgEAAAIAAAAg="
+   }
+  },
+  {
+   "name": "column_height_16",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 16,
+    "bits": "AQAAAAABAIA="
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     13
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 19,
+    "bits": "AQAQAAAAAAQEAAAQAAAC"
+   }
+  },
+  {
+   "name": "column_height_17",
+   "prior": {
+    "x0": -2,
+    "y0": -4,
+    "width": 4,
+    "height": 17,
+    "bits": "AQAAAAAEAAAI"
+   },
+   "added": [
+    [
+     -3,
+     -5
+    ],
+    [
+     2,
+     14
+    ],
+    [
+     0,
+     -4
+    ],
+    [
+     -3,
+     -5
+    ]
+   ],
+   "expected": {
+    "x0": -3,
+    "y0": -5,
+    "width": 6,
+    "height": 20,
+    "bits": "AQAgAAAAACAgAAAAAgCA"
+   }
+  }
+ ]
+}

@@ -133,7 +133,7 @@ native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
-excluded_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array(0)
 owner_ids = PackedStringArray()
 owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
@@ -144,7 +144,7 @@ applies_conditions = PackedStringArray("condition.spell.darkness.zone")
 applies_surfaces = PackedStringArray("spatial_effect.spell.darkness")
 summons = PackedStringArray()
 staging_from = "factory@20261018-c3c616e88a6b725f"
-status = "ready"
+status = "partial"
 staging_unported = {
 "selection": "darkness__volume",
 "source": "assets/vfx/index.json:/selections/darkness__volume/staging"
@@ -163,4 +163,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "The actual spatial_effect.spell.darkness UUID now owns the continuing prepared source through its canonical GroundSurface assignment. The delivered material-runtime interface uses real owner age/presence/observation instead of review retirement. Old finite field cue0 stays excluded, avoiding duplicate fields and fixture owners. Cast body/palette and actual result feedback remain independent. Source assignment is unvalidated; all artwork remains unreviewed."

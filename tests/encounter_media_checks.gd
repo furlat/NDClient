@@ -6,7 +6,7 @@ const Encounter=preload("res://presentation/encounter_media.gd")
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Catalog=preload("res://source_catalog.gd")
-const Protocol=preload("res://sdk/protocol.gd")
+const Journal=preload("res://sdk/journal.gd")
 const Reducer=preload("res://sdk/reducer.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks:int=0
@@ -116,9 +116,15 @@ func accounting(data:Dictionary,label:String)->void:
             and actual.pinned_bytes==pins and actual.pending==pending,label+" independent physical byte/pin/queue accounting "+str(category))
 func run()->void:
     source_root=load("res://authoring/characters.tres");appearance=entry("appearance","modular")
-    var protocol:RefCounted=Protocol.new()
-    var packet:Dictionary=protocol.decode_server("InitializationResponse",FileAccess.get_file_as_bytes(Fixtures.journal("door","amber").path_join("0000000000000000.json")))
-    check(packet.ok,"Original current-schema Door initialization decodes")
+    # Original immutable fixtures use their exact stored native16 contract;
+    # live decode_server intentionally admits only the current producer.
+    var journal:RefCounted=Journal.new()
+    var directory:String=Fixtures.journal("door","amber")
+    var opened:Dictionary=journal.open(directory,true,false)
+    check(opened.ok,"Original Door journal admits its exact stored producer contract: "+str(opened.get("error","")))
+    if not opened.ok:finish({});return
+    var packet:Dictionary=journal.decode_record(0,FileAccess.get_file_as_bytes(directory.path_join("0000000000000000.json")))
+    check(packet.ok,"Original schema16 Door initialization decodes without rewriting packets")
     if not packet.ok:finish({});return
     var reduced:Dictionary=Reducer.reduce_initialization(packet.value.initialization,packet.value.content_additions)
     check(reduced.ok,"Actual initialization reduces through canonical SDK")

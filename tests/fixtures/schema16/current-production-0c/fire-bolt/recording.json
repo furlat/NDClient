@@ -1,0 +1,126 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 4,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "65e04382-7943-4acc-a668-f6a9b2082055": "Amber caster",
+  "d9eba72e-6c14-4a2d-8283-a57d5d2e189a": "Amber ally",
+  "18856879-bf0a-4fac-aa9d-760d21d9ffa1": "Blue target",
+  "896a4e20-22b2-4c34-a918-9cf2c0002310": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.fire_bolt \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 7,
+   "actor_change": 1,
+   "damage": 2,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.fire_bolt": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Fire"
+  ],
+  "item_effects": [],
+  "ended_item_effects": [],
+  "item_effect_memberships": [],
+  "item_attacks": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 68,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell spell.fire_bolt",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Fire"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7",
+  "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "2c11d7a9919c8aa9b1490628fff224627f19d6388c3884171d14a4a5cbecea22"
+ },
+ "sdk": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7/sdk/python/src",
+  "query_adapter": "strict_selected_SDK_choices",
+  "source": {
+   "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+   "branch": "feature/rules-checking",
+   "source": "/mnt/c/Users/tommaso/Documents/Dev/dnd_engine",
+   "export": "git archive committed tree; no working-tree changes"
+  }
+ }
+}

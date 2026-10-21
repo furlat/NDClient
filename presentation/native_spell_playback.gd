@@ -61,8 +61,8 @@ static func transform(cue:Dictionary,time:float,hand:Vector3,scale_multiplier:fl
     if cue.has("charge_scale_from") and time<cue.launch:
         var progress=clampf((time-cue.begin)/maxf(.001,cue.launch-cue.begin),0,1)
         scale*=lerpf(float(cue.charge_scale_from),1.0,smoothstep(0,1,progress))
-    # A uniform transform preserves the native geometry's 3D proportions.
-    return Transform3D(basis.scaled(Vector3.ONE*scale),origin)
+    var axes:Array=cue.get("axis_scale",[1.0,1.0,1.0])
+    return Transform3D(basis.scaled_local(Vector3(axes[0],axes[1],axes[2])*scale),origin)
 
 ## A staged node the effect lacks is reported at construction
 ## (EffectPackage.missing_paths) and skipped here.

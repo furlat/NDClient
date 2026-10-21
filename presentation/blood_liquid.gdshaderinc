@@ -12,3 +12,17 @@ vec4 blood_liquid(float field,vec2 world){
     float alpha=field>=threshold?round(min(246.,120.+depth*150.))/255.:0.;
     return vec4(colour,alpha);
 }
+
+// The delivered non-default palettes use this same authored liquid field.
+vec4 blood_palette_liquid(float field,vec2 world,vec3 p0,vec3 p1,vec3 p2){
+    vec2 w=world*64.;float n=blood_noise(w/9.,0u),fine=blood_noise(w/2.8,3u);
+    field*=.72+n*.65;float threshold=.13+(fine-.5)*.045;
+    float depth=clamp((field-threshold)*1.6,0.,1.);float rim=max(0.,1.-depth*5.);
+    float wet=blood_noise(w/vec2(17.,13.),9u);
+    float hi=float(depth>.12&&depth<.5&&wet>.66&&blood_noise(w/4.,8u)>.56);
+    float red=88.-38.*depth+rim*24.+(n-.5)*27.+hi*37.;
+    float t=clamp((red-35.)/105.,0.,1.);
+    vec3 colour=round((t<.55?mix(p0,p1,t/.55):mix(p1,p2,(t-.55)/.45))*255.)/255.;
+    float alpha=field>=threshold?round(min(246.,120.+depth*150.))/255.:0.;
+    return vec4(colour,alpha);
+}

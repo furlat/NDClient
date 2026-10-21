@@ -26,10 +26,22 @@ func _initialize()->void:
     check(Requirements.fact("future_visual_fact").gap_kind=="unassessed","An unknown future fact cannot silently become state-only")
     check(Requirements.fact("item_charge").gap_kind=="explicit_none","Explicit reducer-only item accounting stays nonvisual")
     check(Requirements.fact("sensory").gap_kind=="explicit_none","Sensory publication does not invent independent effects or duplicate light lanes")
-    var inspection:Dictionary=Authoring.Catalog.environment_index(cache).inspection
+    var environment:Dictionary=Authoring.Catalog.environment_index(cache)
+    var inspection:Dictionary=environment.inspection
     for kind in ["world_animation","portal","device"]:
         check(not inspection[kind].is_empty(),"The environment build lists its "+kind+" owners")
-        for id in inspection[kind]:check(index.has(kind+":"+id),"Selected owner remains visible without a recorded occurrence: "+kind+":"+id)
+        for id in inspection[kind]:
+            var program:Dictionary=environment.get("spatial_media",{}).get(id,{})
+            var active:bool=kind in ["world_animation","portal"] and program.get("native_world_media",false)
+            var identity:String=("spatial_media" if active else kind)+":"+id
+            check(index.has(identity),"Selected owner remains visible without a recorded occurrence: "+identity)
+            if active and index.has(identity):
+                var methods:Array=index[identity].requirements.filter(func(row):return row.get("kind","")==kind)
+                check(methods.size()==1,"Active source has exactly one classified method among its separate authoring fields: "+identity)
+                if methods.size()==1:
+                    check(methods[0].source==program.source and methods[0].implementation=="implemented" \
+                        and methods[0].status=="unexercised" and not methods[0].rendered,
+                        "Active source retains exact method ownership without a render claim: "+identity)
     for pair in [["catalog/action_materials.json","action_material"],["catalog/action_intakes.json","action_intake"],["catalog/body_materials.json","body_material"],["catalog/item_attachments.json","item_attachment"]]:
         var source:Dictionary=Authoring.load_data(pair[0],cache)
         for id in source:check(index.has(pair[1]+":"+id),"Selected owner remains visible without a recorded occurrence: "+pair[1]+":"+id)
@@ -50,10 +62,20 @@ func _initialize()->void:
     check(Requirements.recipe(fireball,"spells/spell.fireball.json:").any(func(r):return r.kind=="area_geometry" and r.status=="explicit_none"),"Explicitly disabled original area geometry is not reported as required rendering")
     var fireball_requirements=Requirements.recipe(fireball,"spells/spell.fireball.json:")
     check(fireball_requirements.any(func(r):return r.kind=="damage_clock" and r.implementation=="implemented" and r.disposition=="parent_owned"),"Existing damage callback overrides remain their actual child's owner, not a second spell effect")
-    check(fireball_requirements.any(func(r):return r.kind=="damage_number" and r.source=="spells/spell.fireball.json:/damage/floatingNumber" and r.gap_kind=="unassessed"),"A generic damage number does not certify all authored per-spell options")
+    check(fireball_requirements.any(func(r):return r.kind=="damage_number" and r.source=="spells/spell.fireball.json:/damage/floatingNumber" \
+        and r.implementation=="implemented" and r.disposition=="parent_owned" and r.authored_policy==fireball.damage.floatingNumber and not r.rendered),
+        "Shared damage number support exposes its exact parent policy without claiming recorded output")
+    check(fireball_requirements.any(func(r):return r.kind=="damage_death" and r.execution_owner=="fact:life" and r.unused_legacy_fields==["frame"]),
+        "Legacy death frame remains inspectable unused metadata beside the actual Life owner, never a new delay")
     check(Requirements.recipe(blight,"spells/spell.blight.json:").any(func(r):return r.kind=="contact_policy" and r.gap_kind=="unassessed"),"Authored non-projectile contact policy is not silently omitted")
-    var mechanism_event=trace({"kind":"mechanism_activation","mechanism_content_id":"spatial_effect.environment.dart_launcher","committed":true},{})
-    check(mechanism_event.components.any(func(c):return c.kind=="world_animation" and c.gap_kind=="renderer" and c.implementation=="missing"),"Static final sprites do not certify a selected finite dart-launcher sequence")
+    var mechanism_fact={"kind":"mechanism_activation","mechanism_content_id":"spatial_effect.environment.dart_launcher","committed":true}
+    var mechanism_requirements:Array=Requirements.occurrence(mechanism_fact,{},"",cache)
+    var mechanism_program:Dictionary=environment.spatial_media[mechanism_fact.mechanism_content_id]
+    check(mechanism_requirements.any(func(c):return c.kind=="world_animation" and c.source==mechanism_program.source \
+        and c.implementation=="implemented" and c.methods.finite_activation=="implemented" and not c.rendered \
+        and not c.timing.resolved and c.availability=="not_examined"),"Actual mechanism identity resolves its finite authored program without inventing placement, time or pixels")
+    check(not Requirements.occurrence({"kind":"mechanism_activation","mechanism_content_id":mechanism_fact.mechanism_content_id,"committed":false},{},"",cache).any(func(c):return c.kind=="world_animation"),"Uncommitted activation does not demand an executed finite program")
+    check(Requirements.owner("world_animation","unbound","typed:unbound",{}).implementation=="missing","A final sprite without an admitted source program still cannot certify finite animation")
     var unrelated={"id":"cast","kind":"native_effect","source_event_uuid":"1","start_ms":0.0,"duration_ms":100.0,"status":"available","source":"unrelated","source_id":"class.martial.burst"}
     check(trace(event,blight,[unrelated]).components.any(func(c):return c.kind=="bodyMaterials" and c.status=="missing"),"A compiled sibling does not erase an unimplemented material operation")
     check(trace(event,blight,[],true).components.is_empty(),"Canceled event produces no executed missing-component demand")
@@ -61,13 +83,28 @@ func _initialize()->void:
     var equipment=trace({"kind":"equipment","source_entity_uuid":"actor"},{})
     var appearance=equipment.components.filter(func(c):return c.kind=="fact:equipment")
     check(appearance.size()==1 and appearance[0].gap_kind=="inspection" and appearance[0].implementation=="implemented","Equipment appearance is an inspection gap, not an invented missing renderer")
-    var portal=trace({"kind":"portal_transfer","portal_content_id":"spatial_effect.environment.portal","committed":true},{})
-    check(portal.components.any(func(c):return c.source=="authoring/environment/surfaces/spatial_effect.environment.portal.tres"),"Actual portal identity resolves its selected owner source")
+    var portal_fact={"kind":"portal_transfer","portal_content_id":"spatial_effect.environment.portal","committed":true}
+    var portal=trace(portal_fact,{})
+    var portal_program:Dictionary=environment.spatial_media[portal_fact.portal_content_id]
+    check(Requirements.occurrence(portal_fact,{},"",cache).any(func(c):return c.kind=="portal" and c.source==portal_program.source \
+        and c.implementation=="implemented" and c.methods.portal_transfer=="implemented" and c.methods.actor_aperture=="implemented" \
+        and not c.rendered and not c.timing.resolved),"Actual portal identity resolves its exact authored owner method without an output claim")
     check(not "state_only_no_animation_claim" in portal.reasons,"Portal transfer no longer silently falls through as nonvisual")
     var feast_id="action.environment.heroes_feast.eat"
     var feast=trace({"kind":"action","behavior_id":feast_id,"source_entity_uuid":"actor"},Authoring.load_data("catalog/body_action_recipes.json",cache).get(feast_id,{}))
-    check(feast.components.any(func(c):return c.kind=="action_material" and c.source=="catalog/action_materials.json:/"+feast_id),"Actual action-owned finite material is projected without an asset ID")
-    check(feast.components.any(func(c):return c.kind=="action_intake" and c.source=="catalog/action_intakes.json:/"+feast_id),"Actual action-owned intake is projected without an emitted component")
+    var feast_binding:Dictionary=Authoring.load_data("catalog/body_action_bindings.json",cache)[feast_id]
+    var feast_uses:Array=feast_binding.effect_cues
+    check(feast_uses.size()==1 and feast_uses[0].clip=="native/feast/consume" and feast_uses[0].at=="body.effect", "Actual Eat action owns its finite native use on the authored body marker")
+    var feast_methods:Array=index[feast_id].requirements.filter(func(row):return row.get("kind","")=="native_effect")
+    check(feast_methods.size()==1,"Eat action exposes exactly its one selected native use among separate authoring fields")
+    if feast_uses.size()==1 and feast_methods.size()==1:
+        var pointer:String=str(feast_uses[0].get("source",str(feast_binding.source)+"/"+str(feast_uses[0].source_index)))
+        check(pointer=="res://authoring/abilities/actions/action.environment.heroes_feast.eat.tres::effects/0" \
+            and feast_methods[0].source==pointer and feast_methods[0].authored_use==feast_uses[0] \
+            and feast_methods[0].implementation=="implemented" and not feast_methods[0].rendered,"Native action source is independently inspectable without an emitted component")
+    check(not Authoring.load_data("catalog/action_materials.json",cache).has(feast_id) \
+        and not Authoring.load_data("catalog/action_intakes.json",cache).has(feast_id) \
+        and not feast.components.any(func(c):return c.kind in ["action_material","action_intake"]),"Retired Feast side sheets do not demand duplicate material or intake effects")
     var bone=trace({"kind":"damage","stage":"applied","applied_damage":2,"target_entity_uuid":"actor","body_release":{"release_id":"body.bone"}},{})
     check(bone.components.any(func(c):return c.kind=="body_release" and c.source=="catalog/body_release_media.json:/body.bone"),"Blood implementation cannot hide another authoritative release family")
     var destroyed=trace({"kind":"object_destroyed","item_id":"environment.storage_chest"},{})

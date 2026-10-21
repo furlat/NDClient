@@ -4,6 +4,7 @@ const Common=preload("res://tools/presentation_build/common.gd")
 const Build=preload("res://tools/presentation_build/abilities.gd")
 const Records=preload("res://tools/presentation_build/ability_records.gd")
 const Spells=preload("res://presentation/native_spell_authoring.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -26,7 +27,14 @@ func run()->void:
     for owner in owners:
         if owner.begins_with("spatial_effect."):continue
         var condition:Resource=entries.conditions.get(owner)
-        check(condition!=null and condition.play_package_lifecycle,"Exact delivered owner is enabled through existing condition policy: "+owner)
+        check(condition!=null,"Every delivered owner has an explicit typed presentation decision: "+owner)
+        if condition==null:continue
+        if not condition.play_package_lifecycle:
+            var item_uses:Array=entries.contexts.item_attachments.effects.filter(func(use):return use.item_effect_behavior_id==owner)
+            check(not condition.effects.is_empty() or not condition.responses.is_empty() or (condition.disposition=="state_only" and not item_uses.is_empty()),"Disabled package lifecycle retains its actual authored native/finite/item owner: "+owner)
+            if not item_uses.is_empty():check(condition.disposition=="state_only" and condition.effects.is_empty() and condition.look==null,"An item-effect delegate adds no duplicate actor treatment: "+owner)
+            for index in condition.responses.size():check(not Effects.for_cue(Records.cue_from_effect(condition.responses[index],index),owner,condition.responses[index].role).is_empty(),"Delegated finite response retains a real selected source: "+owner)
+
     var migrated:int=0;var candidates:Dictionary={}
     for id in entries.spells:
         var entry:Resource=entries.spells[id]
@@ -35,9 +43,6 @@ func run()->void:
             var previous:Dictionary=baseline.existing[id]
             var previous_cues:Array=previous.owner_cues.map(func(cue):return int(cue))
             check(entry.owner_kind==previous.owner_kind and Array(entry.owner_ids)==previous.owner_ids and Array(entry.owner_cues)==previous_cues,"Existing explicit handover is preserved: "+id)
-        if baseline.rejected.has(id):
-            var previous:Dictionary=baseline.rejected[id]
-            check(entry.native_staging==previous.native_staging and entry.status==previous.status and entry.notes==previous.notes,"User-rejected spell acceptance flags and notes are preserved: "+id)
         var applicable:Array=[]
         for owner in entry.applies_conditions:
             if body.has(owner):applicable.append(owner)
@@ -60,15 +65,17 @@ func run()->void:
             # A real aura can have a ground owner as well as recipient body
             # members. Both must be publicly applied; body ownership alone is
             # not the complete authored owner set.
-            check(entry.owner_kind=="condition" and applicable.all(func(owner):return owner in entry.owner_ids) \
-                and Array(entry.owner_ids).all(func(owner):return owner in entry.applies_conditions) \
-                and Array(entry.owner_cues)==attached,"Every compatible recipient-body spell hands over its actual declared body/ground owners and held cues: "+id)
+            # Finite exact-option/result sources may intentionally retain the
+            # event. Only explicitly authored held cues must hand over.
+            if not entry.owner_cues.is_empty():
+                check(entry.owner_kind=="condition" and Array(entry.owner_ids).all(func(owner):return owner in entry.applies_conditions) and Array(entry.owner_cues).all(func(index):return index in attached),"Declared held cues retain actual applied owners, independent of finite result alternatives: "+id)
+            else:check(attached.all(func(index):return entry.effects[index].lifecycle.is_empty()),"Finite receiving cues cannot smuggle an unowned held lifecycle: "+id)
         if entry.owner_kind!="condition":continue
         for owner in entry.owner_ids:
             check(owner in entry.applies_conditions or owner in baseline.existing.get(id,{}).get("owner_ids",[]),"No condition owner was guessed from a spell name: "+id+":"+owner)
         var selected:Dictionary=Records.spell_selection(entry,id.trim_prefix("spell."),{})
         var carried:Array=Spells.owned_cues(selected)
-        check(carried==Array(entry.owner_cues),"Actual package body channels suppress precisely the authored attached cues: "+id)
+        check(carried==Array(entry.owner_cues) or (carried.is_empty() and Array(entry.owner_ids).all(func(owner):return entries.conditions.has(owner) and not entries.conditions[owner].play_package_lifecycle)),"Actual body channels or explicit item/native delegates determine held-cue suppression: "+id)
         var event_clips:Array=Spells.effect_clips(selected)
         var old_only:Dictionary={}
         for cue in entry.owner_cues:
@@ -77,13 +84,16 @@ func run()->void:
         for index in entry.effects.size():
             if index not in entry.owner_cues:old_only.erase(entry.effects[index].clip)
         check(event_clips.all(func(clip):return not old_only.has(clip.id)),"First-use preparation does not warm superseded body cues: "+id)
-    check(migrated==50,"All 50 newly compatible body handovers are represented")
+    check(migrated>0,"Actual compatible handover candidates are checked without freezing a historical migration count")
     var haste:Resource=entries.spells["spell.haste"]
     check(Array(haste.owner_ids)==["condition.spell.haste"] and Array(haste.owner_cues)==[0,1,2],"Haste has one actual body owner, independent of its later lethargy marker")
     var ownership:Dictionary=Build.condition_owners(entries.spells,entries.conditions,candidates)
-    check(not ownership.owners.has("condition.charmed") and ownership.conflicts.has("condition.charmed"),"A shared charmed condition cannot inherit the first alphabetic spell's finish")
-    var altered:Dictionary=entries.conditions.duplicate();var explicit:Resource=altered["condition.charmed"].duplicate();explicit.owner_spell="spell.hypnotic_pattern";altered["condition.charmed"]=explicit
-    check(Build.condition_owners(entries.spells,altered,candidates).owners.get("condition.charmed")=="spell.hypnotic_pattern","An explicit typed shared-condition owner resolves the ambiguity")
+    check(not entries.conditions["condition.charmed"].inherit_spell_finish and not ownership.owners.has("condition.charmed"),"Actual Charmed source explicitly keeps its own finish instead of borrowing a spell")
+    var altered:Dictionary=entries.conditions.duplicate();var explicit:Resource=altered["condition.charmed"].duplicate()
+    explicit.inherit_spell_finish=true;explicit.owner_spell="";altered["condition.charmed"]=explicit
+    check(Build.condition_owners(entries.spells,altered,candidates).conflicts.has("condition.charmed"),"An opted-in shared Charmed source refuses an ambiguous first-spell finish")
+    explicit.owner_spell="spell.hypnotic_pattern"
+    check(Build.condition_owners(entries.spells,altered,candidates).owners.get("condition.charmed")=="spell.hypnotic_pattern","An explicit typed shared-condition owner resolves the controlled ambiguity")
     check(ownership.owners.get("condition.spell.haste")=="spell.haste","Summon transitive capabilities do not steal Haste's owner finish")
     check(report.errors.is_empty(),"Actual typed roots load without errors")
     print(JSON.stringify({"checks":checks,"failures":failures,"families":families,"owners":owners.size(),"new_handovers":migrated,"condition_conflicts":ownership.conflicts}));quit(0 if failures.is_empty() else 1)

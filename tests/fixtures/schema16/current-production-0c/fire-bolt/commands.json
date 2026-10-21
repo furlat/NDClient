@@ -1,0 +1,159 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "d9eba72e-6c14-4a2d-8283-a57d5d2e189a",
+   "state_revision": "36ddfda1-74fc-4f03-819d-71c676ae84fd",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_fire_bolt_hit",
+   "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+   "audience_id": "a2c8c751-14a1-4308-8c7d-20b97a61a515",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_fire_bolt_hit",
+    "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+    "audience_id": "a2c8c751-14a1-4308-8c7d-20b97a61a515",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "896a4e20-22b2-4c34-a918-9cf2c0002310",
+   "state_revision": "b86e37b9-08b4-4d9a-a0c9-9fc146ae757d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_fire_bolt_hit",
+   "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+   "audience_id": "a0b79ee5-dcd4-4ea1-a323-379f67722551",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_fire_bolt_hit",
+    "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+    "audience_id": "a0b79ee5-dcd4-4ea1-a323-379f67722551",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "18856879-bf0a-4fac-aa9d-760d21d9ffa1",
+   "state_revision": "bbb2ba77-d08f-47aa-a6e4-49377eab8437",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_fire_bolt_hit",
+   "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+   "audience_id": "a0b79ee5-dcd4-4ea1-a323-379f67722551",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_fire_bolt_hit",
+    "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+    "audience_id": "a0b79ee5-dcd4-4ea1-a323-379f67722551",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.fire_bolt",
+   "by": "caster",
+   "target": "target"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "a0f17041-9c89-4d30-8a01-f3b9e756204b",
+  "discovery_generation": 1,
+  "preview_request": {
+   "actor_uuid": "65e04382-7943-4acc-a668-f6a9b2082055",
+   "state_revision": "a0f17041-9c89-4d30-8a01-f3b9e756204b",
+   "discovery_generation": 1,
+   "correlation_id": "ce210eec-ce1a-4aab-8df5-8907c21794f4",
+   "selection": {
+    "action_index": 5,
+    "target_indices": [
+     0
+    ],
+    "extra_target_positions": [],
+    "prefer_safe": false
+   }
+  },
+  "selected_action": {
+   "behavior_id": "spell.fire_bolt",
+   "display_name": "Fire Bolt",
+   "cast_at_level": 0,
+   "variant_facets": [],
+   "target_type": "creature_or_object",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "65e04382-7943-4acc-a668-f6a9b2082055",
+   "state_revision": "a0f17041-9c89-4d30-8a01-f3b9e756204b",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 5,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_fire_bolt_hit",
+   "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+   "audience_id": "a2c8c751-14a1-4308-8c7d-20b97a61a515",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_fire_bolt_hit",
+    "game_epoch": "47e2cb83-f94c-4386-ac04-228af5065f03",
+    "audience_id": "a2c8c751-14a1-4308-8c7d-20b97a61a515",
+    "sequence": 8
+   }
+  }
+ }
+]

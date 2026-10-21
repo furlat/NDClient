@@ -5,6 +5,112 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_iodc6"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_1f51d"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="Eyebite0"]
+script = ExtResource("effect")
+clip = "live/eyebite/frightened/eye"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "action.spell.eyebite.strike", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.panicked", "component_path": ["assembly"], "input_field": ""}
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"delivery_source_interval": [0.3, 1.43],
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}, {
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Eyebite1"]
+script = ExtResource("effect")
+clip = "live/eyebite/frightened/impact"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "action.spell.eyebite.strike", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.panicked", "component_path": ["assembly"], "input_field": ""}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Eyebite2"]
+script = ExtResource("effect")
+clip = "live/eyebite/sickened/eye"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "action.spell.eyebite.strike", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.sickened", "component_path": ["assembly"], "input_field": ""}
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"delivery_source_interval": [0.3, 1.43],
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}, {
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Eyebite3"]
+script = ExtResource("effect")
+clip = "live/eyebite/sickened/impact"
+role = "attached"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "action.spell.eyebite.strike", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.sickened", "component_path": ["assembly"], "input_field": ""}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true
+}
+
 [sub_resource type="Resource" id="Resource_p2x24"]
 script = ExtResource("1_j425s")
 role = "act"
@@ -32,6 +138,7 @@ icon = SubResource("Resource_03v13")
 disposition = "authored"
 body = SubResource("Resource_p2x24")
 delivers_spell = "spell.eyebite"
+effects = Array[ExtResource("effect")]([SubResource("Eyebite0"), SubResource("Eyebite1"), SubResource("Eyebite2"), SubResource("Eyebite3")])
 effect_sources = PackedStringArray()
 status = "partial"
 unported = {
@@ -54,3 +161,5 @@ unported = {
 "projectile": null,
 "variants": []
 }
+
+notes = "Each actual granted strike projects only its own failed save and new Sickened/Panicked recipient membership. The shared finite sources do not recast Eyebite or replay held recipient markers; those retain their actual condition owners. Successful-save form is not disclosed by the common save ID. Native visual acceptance remains open."

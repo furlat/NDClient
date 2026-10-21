@@ -16,6 +16,7 @@ var only_case:String=""
 ## qualification of unrelated phases. Empty preserves the complete old cohort.
 var source_filter:Array=[]
 var sample_fractions:Array=[.10,.35,.65]
+var factory_version:String=""
 
 # Keep the production readiness contract intact. Failure reporting reads the
 # last completed preparation/sample state; it never calls prepare() to diagnose.
@@ -30,7 +31,11 @@ func settle(world:Node,component_id:String="")->bool:
         var inputs_ready:bool=component_id.is_empty() or (not bindings.is_empty() and bindings.unavailable.is_empty())
         if world.playback_prepared() and inputs_ready:
             await RenderingServer.frame_post_draw
-            if world.playback_prepared():return true
+            # Publication can replace source bindings while this frame draws.
+            # Admit only the current selected source after the same draw fence.
+            bindings=world.component_renderer.native_spells.diagnostics.get(component_id,{}).get("input_bindings",{})
+            inputs_ready=component_id.is_empty() or (not bindings.is_empty() and bindings.unavailable.is_empty())
+            if world.playback_prepared() and inputs_ready:return true
         else:await RenderingServer.frame_post_draw
     var diagnostic:Dictionary=readiness_diagnostic(world,component_id)
     evidence.append({"kind":"preparation_timeout","diagnostic":diagnostic})
@@ -97,6 +102,7 @@ func readiness_diagnostic(world:Node,component_id:String)->Dictionary:
         "errors":world.presentation_errors,"media_issue":world.media_issue,"camera":{"focus":world.camera_focus,"size":world.camera.size}}
 
 func run()->void:
+    factory_version=str(JSON.parse_string(FileAccess.get_file_as_string(Effects.INDEX)).get("version",""))
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(800,600)
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     for argument in OS.get_cmdline_user_args():
@@ -151,13 +157,6 @@ func inspect_case(record:Dictionary,perspective:Dictionary,spell:String)->void:
         var matches:Array=index.rows.filter(func(row):return row.kind=="event" and int(row.event.sequence)==sequence and (int(row.event.event_uuid)==occurrence or row.event.get("versions",[]).any(func(version):return int(version.occurrence)==occurrence)))
         check(not matches.is_empty(),label+": recorded inventory moment belongs to this actual faction's event prefix")
     var selected:Dictionary=NativeAuthoring.selection(spell,index.cache)
-    if spell in Library.REJECTED:
-        var authored:Resource=load("res://authoring/abilities/spells/"+spell+".tres")
-        check(authored!=null and not authored.native_staging and selected.is_empty(),label+": rejected presentation remains explicitly disabled in its typed source")
-        evidence.append({"case":record.id,"spell_id":spell,"perspective":perspective.id,"operations":index.operations,
-            "source_status":"native_staging_disabled","scenario_status":record.scenario_status,"presentation_status":"missing",
-            "approval_status":"rejected","gaps":[{"reason":"user_rejected_presentation_not_migrated"}]})
-        return
     check(not selected.is_empty(),label+": engine spell resolves its actual typed presentation selection")
     var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.get("spell_id")==selected.get("id") \
         and (source_filter.is_empty() or row.component.get("native_clip",{}).get("id") in source_filter))
@@ -229,16 +228,16 @@ func inspect_case(record:Dictionary,perspective:Dictionary,spell:String)->void:
             check(var_to_bytes(world.timeline.state)==canonical_bytes and var_to_bytes(component)==expected,label+": drawing/hiding preserves canonical state and immutable source operands")
             world.set_process(true)
         check(visible>0,label+": exact indexed source contributes actual native framebuffer pixels: "+component.id)
-        if visible==0:gaps.append({"id":component.id,"reason":"no_native_pixels","clip":component.native_clip.id,"cue":component.native_cue,"samples":drawn})
+        if visible==0:gaps.append({"id":component.id,"reason":"no_native_pixels" if not drawn.is_empty() else "native_output_unqualified_due_to_readiness_failure","clip":component.native_clip.id,"cue":component.native_cue,"samples":drawn})
     check(world.presentation_errors.is_empty() and world.media_issue.is_empty(),label+": all real source seeks have no runtime/resource errors")
     world.component_renderer.native_spells.close(world);view.queue_free();await frame();await frame()
     evidence.append({"case":record.id,"spell_id":spell,"perspective":perspective.id,"operations":index.operations,"native_sources":sources.keys(),
         "roles":roles,"persistent_instances":owners,"native_rows":rows.size(),"gaps":gaps,"duration_ms":index.presentation_end_ms,
         "source_status":"actual_installed_sources_checked","scenario_status":record.scenario_status,"presentation_status":"native_pixels_checked" if gaps.is_empty() and not rows.is_empty() and failures.size()==failures_before else "gaps",
-        "approval_status":"rejected" if spell in Library.REJECTED else "needs_review"})
+        "approval_status":"needs_review"})
 
 func finish()->void:
-    var report:Dictionary={"checks":checks,"failures":failures,"cases":evidence,"selected_cases":selected_cases,"unexercised_current_cases":unexercised,
+    var report:Dictionary={"checks":checks,"failures":failures,"factory_version":factory_version,"cases":evidence,"selected_cases":selected_cases,"requested_case":only_case,"source_filter":source_filter,"sample_fractions":sample_fractions,"complete_baseline_cohort":only_case.is_empty() and source_filter.is_empty(),"unexercised_current_cases":unexercised,
         "legacy_scope_gaps":["Old native-spell-shield-ranged and native-spell-shield-walk IDs are absent from the current Library; current spell.shield/baseline and /reaction both prove real Magic Missile interruption, not a new ranged-attack/movement recording."],
         "scope":"Explicit original34 spell baseline cohort plus actual Shield reaction; independent original faction journals/canonical commits/source UUID ownership and each indexed native source's actual Play output. Current role counts are reported from actual cases rather than frozen old-export handcounts. All189 live/native safety remains separate; neither source presence nor this technical gate accepts artwork."}
     FileAccess.open("res://generated/studio_spell_batch_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

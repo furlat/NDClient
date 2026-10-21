@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_evqdh"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_nov7p"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="result_accent"]
+
 [sub_resource type="Resource" id="Resource_45rnc"]
 script = ExtResource("1_bj5wa")
 enabled = false
@@ -33,9 +35,24 @@ steps = Array[ExtResource("3_evqdh")]([SubResource("Resource_332da")])
 script = ExtResource("1_bj5wa")
 enabled = false
 
+[sub_resource type="Resource" id="ActualResultAccent"]
+script = ExtResource("result_accent")
+clip = "spells/cure_wounds/back/production_impact"
+scale = 0.3
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_healing", "participant": "recipient"}
+
+
 [resource]
 script = ExtResource("4_nov7p")
 id = "condition.spell.regenerate"
+responses = Array[ExtResource("result_accent")]([SubResource("ActualResultAccent")])
 label = "Regenerating"
 icon = SubResource("Resource_nov7p")
 disposition = "authored"
@@ -157,3 +174,5 @@ unported = {
 "trigger": "healed"
 }]
 }
+
+notes = "Exact attributed positive unblocked healing selects existing finite Cure Wounds impact as chosen healing artwork. This explicit reuse does not replay the seven-second Regenerate review or infer a pulse schedule. The actual UUID lifecycle independently owns the lasting treatment. All artwork remains unreviewed."

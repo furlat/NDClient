@@ -5,6 +5,10 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_5vs71"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="2_uf4sk"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="event_family"]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/public-admission-20261020/sources/6033ff6a0d8ffe5824a1/phase.tres" id="public_explosion"]
+
 [sub_resource type="Resource" id="Resource_5vs71"]
 script = ExtResource("1_uf4sk")
 role = "throw"
@@ -19,6 +23,57 @@ reuses = "ui.filter-actions"
 status = "stand_in"
 source = "ui/resources.json icon:ui.filter-actions"
 
+[sub_resource type="Resource" id="Resource_event_family_0"]
+script = ExtResource("event_family")
+clip = "high-level-22/freezing-sphere/launch_target_packet"
+role = "attached"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "finite_contact", "outcome": "damage", "geometry_actor": "target", "damage_type": "Cold", "save_effect_id": "spell.freezing_sphere.explosion", "retained_caster": true, "payload_kind": "freezing", "component_path": ["effect"]}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="Resource_event_family_1"]
+script = ExtResource("event_family")
+clip = "high-level-22/delayed-blast-fireball/native_target_packet"
+role = "attached"
+scope = "cast"
+constructor_input = {"kind": "observed_event", "projection": "finite_contact", "outcome": "damage", "geometry_actor": "target", "damage_type": "Fire", "save_effect_id": "spell.delayed_blast_fireball.explosion", "retained_caster": true, "payload_kind": "delayed_fire", "component_path": ["effect"]}
+at = "event.start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {"actor": "target", "slots": ["body", "chest", "head", "legs"]},
+"live_endpoints": [{"actor": "target", "socket": "body_center"}]
+}
+
+[sub_resource type="Resource" id="ActualPortableFreezingBlast"]
+script = ExtResource("event_family")
+clip = "high-level-22/freezing-sphere/launch_blast"
+source_phase = ExtResource("public_explosion")
+source_inputs = Dictionary[String, String]({"observed_explosion":"set_observed_explosion", "targets":"set_targets"})
+source_seekable = true
+role = "attached"
+scope = "cast"
+at = "event.start"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.2
+duration_policy = "authored"
+constructor_input = {"kind":"observed_event", "projection":"portable_payload_blast", "outcome":"cast", "geometry_actor":"caster", "component_path":["effect"], "input_field":"", "behavior_id":"action.spell.payload.throw", "explosion_behavior_id":"action.spell.payload.throw", "payload_kind":"freezing", "area_shape":"sphere", "area_propagation":"line_of_effect"}
+extra = {"live_endpoints":[{"cue_point":"source"}]}
+staging_from = "factory@runtime-public-admission-20261020-976f8289ebcefa5c; actual public finite explosion, independent of retained/private item ownership."
+
 [resource]
 script = ExtResource("1_jhau2")
 id = "action.spell.payload.throw"
@@ -27,4 +82,5 @@ family = "spell"
 icon = SubResource("Resource_7gwy4")
 body = SubResource("Resource_5vs71")
 effect_sources = PackedStringArray()
-notes = "Body role from the server's body kind (throw); the rig resolves it to a clip once roles are built (coverage fill)."
+effects = Array[ExtResource("event_family")]([SubResource("Resource_event_family_0"), SubResource("Resource_event_family_1"), SubResource("ActualPortableFreezingBlast")])
+notes = "Actual public Freezing explosion uses its completed native spell occurrence and linked completed accepted throw, public sphere origin/resolved cells and real target support. Both independent seats can render it without another seat's inventory or lifetime. The original caster remains distinct from the acting thrower. The source discriminator rejects the connected Delayed Fireball branch; its existing finite recipient result contacts remain separately authored. Direct-launch and retained-item Freezing sources keep their existing strict gates. All artwork is unreviewed; production native output/readiness qualification remains separate."

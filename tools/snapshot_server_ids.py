@@ -20,7 +20,7 @@ import subprocess
 import sys
 import uuid
 
-DEFAULT_ENGINE = "/home/tommaso/.cache/ndclient/dnd_engine-211b71134"
+DEFAULT_ENGINE = "/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267"
 DEFAULT_PYTHON = "/home/tommaso/.cache/dnd-engine/npc-mechanics-venv/bin/python"
 DEFAULT_OUTPUT = "authoring/server_ids.json"
 
@@ -199,6 +199,7 @@ def spell_entry(decl, cls, ids_by_class):
     if meta and meta.aoe:
         area = {key: value for key, value in meta.aoe.model_dump().items() if value is not None}
     return {
+        "visibility": decl.descriptor.visibility.value,
         "level": level,
         "school": school,
         "shape": spell_shape(meta, cls, source, conditions, zone_layers),

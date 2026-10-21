@@ -1,0 +1,119 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "50510f22-8106-49af-b7e0-063f285ac6fc",
+   "state_revision": "b617ede4-24f3-4fd5-bf6b-d0cbed397035",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_divine_word_deafened_outcome",
+   "game_epoch": "c07f44af-e0f1-4d0b-8061-cfd59ffe1dd4",
+   "audience_id": "e22a30c8-cea5-453a-8759-d040e0220bf4",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_word_deafened_outcome",
+    "game_epoch": "c07f44af-e0f1-4d0b-8061-cfd59ffe1dd4",
+    "audience_id": "e22a30c8-cea5-453a-8759-d040e0220bf4",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "c7ea3093-100f-4fe0-b688-9e9cb4c3d37e",
+   "state_revision": "501f54a5-06ca-4207-aaf6-78ef5d23d2a9",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_divine_word_deafened_outcome",
+   "game_epoch": "c07f44af-e0f1-4d0b-8061-cfd59ffe1dd4",
+   "audience_id": "c01e7239-8594-4413-80e1-77efe94fffb1",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_word_deafened_outcome",
+    "game_epoch": "c07f44af-e0f1-4d0b-8061-cfd59ffe1dd4",
+    "audience_id": "c01e7239-8594-4413-80e1-77efe94fffb1",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.divine_word",
+   "by": "caster",
+   "target": "target",
+   "recipients": [
+    "target"
+   ],
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "b87e6828-8839-4a83-a1aa-4c0a33237c9d",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.divine_word",
+   "display_name": "Divine Word (Level 7)",
+   "cast_at_level": 7,
+   "variant_facets": [],
+   "target_type": "multi_entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "9bc2ce30-2c02-4da3-8ec0-7a3c2d3050ac",
+   "state_revision": "b87e6828-8839-4a83-a1aa-4c0a33237c9d",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_divine_word_deafened_outcome",
+   "game_epoch": "c07f44af-e0f1-4d0b-8061-cfd59ffe1dd4",
+   "audience_id": "e22a30c8-cea5-453a-8759-d040e0220bf4",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_divine_word_deafened_outcome",
+    "game_epoch": "c07f44af-e0f1-4d0b-8061-cfd59ffe1dd4",
+    "audience_id": "e22a30c8-cea5-453a-8759-d040e0220bf4",
+    "sequence": 6
+   }
+  }
+ }
+]

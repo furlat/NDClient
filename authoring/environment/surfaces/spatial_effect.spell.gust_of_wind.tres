@@ -3,11 +3,33 @@
 [ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_a6bwq"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_ds7iv"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="owner_field_use"]
+
+[ext_resource type="Resource" path="res://assets/vfx/extensions/owner-fields-v2-20261021/sources/f2699aff8bd985672766/wind.tres" id="OwnerFieldPhase0"]
+
+[sub_resource type="Resource" id="OwnerField0"]
+script = ExtResource("owner_field_use")
+clip = "review/gust_of_wind/whole/lifecycle"
+source_phase = ExtResource("OwnerFieldPhase0")
+source_inputs = {"targets": "set_targets", "owner_state": "set_owner_state", "zone_geometry": "set_zone_geometry"}
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+area_mask = false
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["effect"], "input_field": "", "cell_input": "owned_field", "content_id": "spatial_effect.spell.gust_of_wind"}
+extra = {"live_endpoints": [{"cue_point": "source"}]}
+staging_from = "factory@runtime-spike-seed-20261021-7ca62e2877bf5156"
+
 [resource]
 script = ExtResource("2_ds7iv")
 id = "spatial_effect.spell.gust_of_wind"
 layer = "field"
 art = PackedStringArray()
 legacy = "measured/environment/surfaces/spatial_effect.spell.gust_of_wind.json"
+lasting = SubResource("OwnerField0")
+native_staging = true
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Actual retained line anchor/direction/extent, current cells/suppression and owner age select the delivered Gust continuation. The native source owns its travelling strands and exact geometry/footprint; outer world scale stays identity because the supplied source already owns its optical calibration. No guessed cast hand or fixed review reach/retirement is used. All artwork remains unreviewed; source assignment is not rendered/readiness/performance qualification."

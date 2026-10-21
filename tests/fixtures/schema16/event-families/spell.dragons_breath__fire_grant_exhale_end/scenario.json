@@ -1,0 +1,108 @@
+{
+ "id": "spell.dragons_breath/fire_grant_exhale_end",
+ "title": "Dragon's Breath: fire grant, actual recipient exhale and end",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.dragons_breath"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.dragons_breath"
+  ],
+  "action": [
+   "action.spell.dragons_breath.exhale",
+   "action.drop_concentration"
+  ],
+  "condition": [
+   "condition.spell.dragons_breath"
+  ],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "steps": [
+  {
+   "do": "spell.dragons_breath",
+   "by": "caster",
+   "target": "ally",
+   "variant": {
+    "damage_type": "fire"
+   }
+  },
+  {
+   "do": "action.spell.dragons_breath.exhale",
+   "by": "ally",
+   "target": [
+    5,
+    7
+   ],
+   "capture_choices": true
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  }
+ ],
+ "required_behaviors": [
+  "spell.dragons_breath",
+  "action.spell.dragons_breath.exhale",
+  "action.drop_concentration"
+ ],
+ "required_conditions": [
+  "condition.spell.dragons_breath"
+ ],
+ "required_condition_ends": [
+  "condition.spell.dragons_breath"
+ ],
+ "required_applied_damage_types": [
+  "Fire"
+ ],
+ "purpose": "Actual granted action, native condition UUID and disclosed results. Element/readiness are never inferred from concentration."
+}

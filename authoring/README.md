@@ -1,142 +1,78 @@
-# Editable NDClient authoring
+# Editable presentation authoring
 
-This directory is Git-tracked source. It is the NDClient copy of the effective
-Pygame authoring, updated to the selected Factory replacements and the installed
-artwork paths. Editing it does not change Pygame's `game/data/` files.
+The production sources are the three typed roots
+[abilities.tres](abilities.tres), [characters.tres](characters.tres) and
+[environment.tres](environment.tres). Play and Studio consume their ordinary
+`build/presentation/` output through the same presentation code. Edit the
+resources listed by these roots; an unlisted entry is a build error.
 
-## Files and ownership
+The old `catalog/`, `items/`, `ui/` and media JSON preserve intake and source
+measurements. They are not a second runtime catalog. Editing an old exported
+spell or item document does not replace its typed source assignment.
 
-- `catalog-index.json` assembles the existing `AnimationData` fields. It maps
-  existing identities to files; it does not assign new spell or creature IDs.
-- `spells/` contains all 149 spell/effect drafts, including gestures, sockets,
-  release/contact timing, travel, impacts, damage feedback and child outcomes.
-- `catalog/` contains action and condition recipes, rig registrations, material
-  and palette behavior, resource URLs and the remaining catalog fields. Conditions
-  keep their independent application, persistent and removal lifecycle.
-- `characters/sheet-components.json` holds per-source body/shadow/accent
-  annotations. [Character authoring](characters/README.md) explains whole-layer,
-  source-RGBA and registered-mask records, plus the implemented source-interaction
-  material for all Goblins/Demons. Original body/shadow/effect inputs drive the same
-  reusable shader in the inspection page. Other packs retain initial partition
-  qualifications; these labels are not a universal shadow/swoosh/depth filter.
-- `media/definitions/` contains the selected asset definitions and phase metadata.
-- `media/storage/` binds those same IDs to ordinary frame regions or paired bank
-  selections, including windows, directions, components and coalescing.
-- `media/banks/` contains the 193 shared depth/normal banks: clocks, crop/canvas,
-  pivot, camera matrices, radiance interpretation and appearance/geometry URLs.
-- `world.json` owns world material bindings. Spatial, construction, concentration
-  and deposit mappings are referenced from the catalog index with JSON pointers;
-  they are not duplicated as separately editable catalog files.
-- `assets.json` holds the selected image resources and their authored geometry.
-- `ui/index.json` assembles the existing UI resource, presentation, choice,
-  selected skin and font sections. [UI authoring](ui/README.md) connects the
-  selected icons/portraits, preserves all 103 choice records and records the
-  Skeleton Warrior portrait and dedicated Unarmed icon gaps. Free portraits do
-  not create native content assignments.
-- `items/index.json` assembles the existing item appearance, material and variant
-  documents, plus `materials/source-palettes.json`. [Item authoring](items/README.md)
-  locates the four source owners, held/ground selections, coatings and equipment
-  layer references. They reuse the installed modular library and retain existing
-  authored values; item attachments remain in `catalog/item_attachments.json`.
-- `environment/index.json` assembles the selected existing `EnvironmentDocument`: 324 banks,
-  11 door families, 12 traps, 113 props, 28 wreck records and two ordinary-wall
-  destruction mappings. It retains opening/state/destruction choices, parent and
-  insert behavior, frame/leaf associations, source pivots and depth calibration,
-  masks and passage points. Paths reference existing `/media/environment/` files.
-- `environment/banks/` groups the existing banks by family and state. Door, prop,
-  trap and wreck selectors have their own readable files; bank IDs are unchanged.
-- `environment/source-records/` preserves the 60 delivered records, their units,
-  evidence and qualifications, plus installed-media addresses. Existing native
-  assignments link from the corresponding door/prop's `authoring_record`; these
-  records are inspection sources, not alternative collision or placement rules.
-- `schemas/environment.schema.json` comes from that same Python owner. Existing
-  `actor_depth` and optional `surface_geometry_by_pose` remain available for new
-  companions; no new normal export is required to load existing authoring.
-- `schemas/assets.schema.json` and `schemas/world.schema.json` use the existing
-  passive owners. Static `geometry_region` locates a sampled companion alongside
-  existing ray-depth calibration. `wall_corner_faces` preserves the existing
-  wall join rule separately from cliff corner faces.
-- `schemas/animation.schema.json` comes from the existing passive Python owner,
-  extended for paired banks. Ordinary parameter edits do not regenerate schemas.
+## Where to author
 
-The selected catalog retains 160 condition recipes, 236 condition media layers,
-1,054 media identities and 2,730 resource bindings. Of those media identities,
-392 select replacement banks; preserved casting/travel layers remain ordinary
-sheets. These counts describe prepared authoring, not completed renderer support.
+| Content | Source owner | Shared consumer |
+| --- | --- | --- |
+| Spell gestures, native effects, variants, outcome branches, source timing and placement | `abilities/spells/`, `PresentationSpell`, `PresentationEffectUse` | Existing spell/action compiler and native renderer |
+| Actions and reactions, including incoming Counterspell preparation | `abilities/actions/`, `PresentationAction`, `PresentationEffectUse.incoming_track` | Existing action compiler and incoming-track projection |
+| Committed movement accents | `abilities/contexts/movement.tres`, `PresentationEffectUse.movement` | Existing motion tracks and movement phase compiler |
+| Condition application/hold/removal, material/pose changes and finite responses | `abilities/conditions/`, `PresentationCondition`, `PresentationEffectUse.condition_response` | Existing condition owners, material/pose paths and result compiler |
+| Weapon trails and actual attributed contact/rider choices | `abilities/attacks/`, spell/action/condition result assignments | Existing attack tracks and exact observed-result joins |
+| Intrinsic item decorations and actual item-effect memberships | `characters/gear/`, shared ability item-attachment context | Existing item UUID/effect UUID/holder membership and native item paths |
+| Worn equipment and dropped item variants | `characters/gear/`, `PresentationGear.slots`, `.family`, `.ground` | Existing body assembly and environment sprite path |
+| Creature bodies, rigs, source geometry, sockets and portraits | `characters/` and its existing measured registrations | Existing character assembly and optical input providers |
+| Terrain, objects, doors and structures | `environment/` | Existing world preparation and environment material |
+| Retained native spatial fields, mechanism state/activation, portals and residues | `environment/surfaces/`, `PresentationGroundSurface` | Existing native spatial owner or environment program/material path |
+| Audio source, event/contact assignment and source-frame crossings | `audio/cues.json`, `bindings.json`, `contacts.json` | Existing selected-audience audio compiler and playback |
+| Icons | The owning spell/action/condition/gear `ImageRef` | Generated icon maps shared by HUD and Studio |
 
-## Binding examples
+The passive resource definitions are in `presentation/source/`. Their exports
+are the editable schema; resource IDs and observed engine facts supply identity.
+Do not add spell-name branches to the renderer to express another selection,
+timing window, offset, orientation, recipient slot or source setter.
 
-`spell.fireball` keeps its existing impact ID
-`shared.fireball.20ft-ground.smoke.v3`. Its storage now selects `core:fireball`,
-frames `[0,46)` at 24 FPS. The bank points to
-`/media/vfx/areas/fireball/explosion/{near,far}/…`; the stable `.v3` ID does not
-select old pixels. Travel and casting sockets retain their independent authoring.
+## Authoring an effect use
 
-The impact storage also owns Fireball's `emitter`, adopted from the accepted
-v4 demo on 10 October at the user's request. Its seven linearly interpolated keys
-retain the demo's 0.44 s peak and fade to zero at 46/24 s. Times use the demo's
-playback clock, positions are already in occurrence-local host `[x,height,z]`
-units, ranges remain grid units, and intensities include the demo's ×4 gain.
-Do not apply that transform/gain again or emit one light per near/far packet.
-This is the demo's fitted cosmetic curve, not recovered physical emission or a
-gameplay illumination rule. Other spell media currently have no `VisualEmitter`
-curves; their authoring is deferred until Fireball is tested in the shared renderer,
-as agreed on 10 October. None are inferred automatically from bright pixels. Shared rendering
-consumes this same optional field when its lighting path is implemented.
+Select an installed package clip and its exact approach, or an explicitly
+delivered standalone PhaseResource from the package's public source table.
+`role`, `scope`, `at`, `attachment`, `follow`, transforms and source windows own
+staging. `source_inputs` and ordered `input_arguments` declare public setters.
+`constructor_input` or `observed_result` binds the source's actual occurrence
+operands; `when` and ordered resource variants choose among disclosed values.
 
-Ice Knife enables the delivered burst, with coverage debris and the additive
-zero-opacity flash kept as separate components. Thunderwave retains the whole
-crest and occurrence coalescing. Sunbeam uses the source's explicit directional
-mapping. Frigid Air uses wall-axis selection. Flat condition sheets, procedural
-Lightning/Chain Lightning and construction operators remain their own kinds of
-media. No retired XYZ storage or conversion fallback is selected.
+For Counterspell, edit the actual reaction resource's `incoming_track`; the
+spell declaration delegates to that reaction. For movement, edit the shared
+movement context. For a finite condition response, edit the condition's response
+uses. These tracks retain the existing preparation, publication, lighting and
+source clocks. A finite inspection lifetime does not become a retained gameplay
+owner's lifetime.
 
-## Edit and assemble
+Item sustain follows an actual item/effect membership and current holder;
+contacts follow the actual equipped attack/result snapshot. Ground appearances
+use their exact authored variant, camera rows, pivot, scale and original optical
+companions. Family reuse is explicit data, including its stand-in limitations.
 
-Edit these JSON files directly. From the repository root:
+Unsupported operands or source topology remain explicit in the owning resource
+and Studio. Do not substitute a fixture UUID, hidden payload, guessed outcome,
+another actor's body/socket, synthetic landing, or finite review sequence.
+Source assignment and rendering evidence do not establish human art approval.
+
+## Publish a batch
+
+From the Windows Godot console executable, with this checkout's absolute path:
 
 ```sh
-python3 tools/build_authoring.py
-python3 tools/build_authoring.py --output .runtime/presentation.json
-python3 -m unittest discover -s tests -v
+Godot_v4.7.2-stable_win64_console.exe --headless --path C:/Users/tommaso/Documents/Dev/NDClientGodot --script res://tools/build_presentation.gd
 ```
 
-The first command checks installed resource references. The optional output is
-an assembled catalog/world/assets/environment document with the four item/palette
-and five UI sections, using their existing shapes; it is a
-preparation artifact, not the complete application release. Build needs no
-Pygame, native engine, Factory, copy receipts or media import. The installed
-artwork must be present for the resource check. `/media/` will map to `.media/`.
+The one build publishes characters, environment and abilities and writes
+`build/presentation/coverage.json`. Do not run another publication, Studio index
+reader or generated-resource consumer concurrently with it. Make broad content
+changes first, publish them together, then perform the agreed consolidated
+qualification. No per-spell build or test is required for each parameter edit.
 
-`tools/import_vfx_authoring.py` performed the initial import through the existing
-engine exporter. It refuses to run when `authoring/` already exists, protecting
-client edits. Do not delete this directory to refresh artwork. Family copy tools
-only refresh private media/receipts; intentional binding changes are edits here.
-
-`tools/import_environment_authoring.py` adopted the current non-Desert engine
-selection once, preserving all selected bank and state values and relocating
-only file addresses. It refuses to replace existing client authoring or schema.
-New export channels belong in the corresponding existing bank/resource record;
-do not rerun intake over client edits.
-
-Stair contacts, support offsets and cliff corner directions remain single-owned
-in `world.json`. Door/frame selections and source pose offsets are in
-`environment/doors/` and `environment/banks/`. The 60 delivered supplemental
-records now live in `environment/source-records/`, with their original evidence
-and installed-media addresses; relevant existing door/prop owners link to them.
-They are inspection references, not automatically selected runtime geometry. Source
-example layouts are not universal compatibility rules. The six indoor-door mounts
-and timber support correction are now connected at the typed bank/door/library
-owners: physical contacts, camera mapping, effective transforms and finite
-member/support data. Normal assembly requires no source-record interpreter.
-The 10 October assembly pre-phase verified source registration preservation,
-independent contact/projection arithmetic and all affected samples. No additional
-artist measurement or artwork copy was needed. The fractional-rise timber flight is not
-substituted for the selected two-step staircase. See the engine's
-[environment handoff](/mnt/c/users/tommaso/documents/dev/dnd_engine/agent_docs/audits/ndclient-environment-assets-20261009/README.md).
-This adoption does not claim renderer, adjacency selection or placement acceptance.
-
-The raw Factory manifest and capture provenance live in ignored
-`.runtime/vfx-replacements/`; they are intake evidence, not runtime authoring.
-Pixel/plane files live in ignored `.media/`. The original Pygame JSON and source
-artwork were not overwritten by this migration.
+The [current remaining-work inventory](../agent_docs/REMAINING_WORK_2026-10-20.md)
+and [named content/source boundaries](../agent_docs/AUTHORING_CONTENT_REMAINING_2026-10-20.md)
+distinguish implemented source, genuine external requirements, unqualified
+runtime behavior and artwork awaiting human review.

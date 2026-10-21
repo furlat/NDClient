@@ -14,9 +14,73 @@ func check(ok:bool,label:String)->void:
     if not ok:failures.append(label);print("STUDIO_TRANSPORT_FAIL ",label)
 func ready(s:Control)->bool:
     return not s.index.is_empty() and s.loader==null and (s.seeker==null or s.preparing_loop) and (not s.installing or s.preparing_loop) and s.requested_seek<0
+func history_pending(world:Node)->Array:
+    var native=world.component_renderer.native_spells;var rows:Array=[]
+    var displayed:Dictionary={}
+    for component in world.displayed_components:displayed[component.id]=true
+    for id in native.handles:
+        var handle:Dictionary=native.handles[id]
+        if "actor_context" not in handle.clip.get("inputs",[]):continue
+        var helper:RefCounted=handle.occurrence.actor_history
+        var records:Array=[];var suspended:int=0;var complete:int=0;var closed:int=0
+        for poses in helper.history.values():
+            for pose in poses:
+                if not pose.has("capture"):continue
+                var record:Dictionary=pose.capture
+                if record.get("suspended",false):suspended+=1
+                if record.get("ready",false):complete+=1
+                if record.get("closed",false):closed+=1
+                if records.size()<2 and not record.get("ready",false):
+                    records.append({"requested_identity":record.get("requested_identity",{}),"drawn_identity":record.get("drawn_identity",{}),
+                        "drawn_frame":record.get("drawn_frame",-1),"attempt":record.get("attempt",0),"suspended":record.get("suspended",false),
+                        "closed":record.get("closed",false),"error":record.get("error","")})
+        rows.append({"id":id,"displayed":displayed.has(id),"required":native._required_ids.has(id),
+            "wanted":id in native.preparation_state.get("wanted_ids",[]),"allocated":handle.get("history_allocated",false),
+            "actor_context_bound":handle.get("actor_context_bound",false),"admitted":helper.admitted,
+            "history_requested_key":handle.get("history_requested_key",[]),"history_seeded_key":handle.get("history_seeded_key",[]),
+            "departure_seeded_key":handle.get("departure_seeded_key",[]),"sample_time":handle.sample_time,
+            "requested_time":handle.requested_time,"drawn_time":handle.drawn_time,"native_diagnostic":native.diagnostics.get(id,{}),
+            "capture_complete":complete,"capture_suspended":suspended,"capture_closed":closed,"pending_examples":records})
+        if rows.size()==6:break
+    return rows
+func pending_world_snapshot(world:Node)->Dictionary:
+    if not is_instance_valid(world):return {}
+    var native=world.component_renderer.native_spells
+    var pending:Dictionary={}
+    if world.pending_world!=null:
+        var owner=world.pending_world
+        pending={"phase":owner.phase,"prepared":owner.prepared,"admitted":owner.admitted,"stale":owner.stale,
+            "epoch":owner.epoch,"quarter":owner.quarter,"boundary":owner.boundary.get("preparation_key",[])}
+    var frames:Array=world.profile.frames
+    var last:Dictionary=frames[posmod(int(world.profile.cursor)-1,frames.size())] if not frames.is_empty() else {}
+    return {"id":world.get_instance_id(),"process_mode":world.process_mode,"processing":world.is_processing(),
+        "display_ms":world.timeline.display_ms,"sequence":world.timeline.sequence,"paused":world.timeline.paused,
+        "world_revision":world.world_revision,"timeline_world_revision":world.timeline.world_revision,
+        "waiting_world":world.timeline.waiting_for_world,"waiting_media":world.timeline.waiting_for_media,
+        "rotation_pending":world.rotation_pending(),"viewport_update_mode":world.get_viewport().render_target_update_mode,
+        "media_gate":world.media_gate.duplicate(true),"media_issue":world.media_issue,"media_metadata_ready":world.media_metadata_ready,
+        "boot_complete":world.media_warmup.boot_complete,"boot_waiting_count":world.media_warmup.boot_waiting.size(),
+        "components_ready":world.component_renderer.ready,"component_leaves":world.component_renderer.readiness.duplicate(true),
+        "native_ready":native.ready,"native_preparation":native.preparation_state.duplicate(true),"native_issues":native.issues.duplicate(true),
+        "native_startup":world.native_startup.duplicate(true),"native_background":world.native_startup_background,
+        "pending_world":pending,"history_owners":history_pending(world),"frame_budget":world.preparation_admission.duplicate(true),
+        "last_completed_frame":last.duplicate(true),"errors":world.presentation_errors.duplicate()}
+func pending_snapshot(s:Control,reason:String)->void:
+    # Failure-only reads: never call playback_prepared or spend a preparation
+    # allowance from diagnostics. The existing deadlines and clocks stay exact.
+    var snapshot:Dictionary={"reason":reason,"frame":Engine.get_process_frames(),"generation":s.seek_generation,
+        "installation_generation":s.installation_generation,"worker_generation":s.worker_generation,
+        "loader":s.loader!=null,"seeker":s.seeker!=null,"requested_seek":s.requested_seek,"installing":s.installing,
+        "preparing_loop":s.preparing_loop,"loop_start":s.loop_start,"loop_end":s.loop_end,
+        "frozen_candidate_viewports":s.frozen_candidate_viewports.size(),"frozen_spare_viewports":s.frozen_spare_viewports.size(),
+        "displayed":pending_world_snapshot(s.world),"candidate":pending_world_snapshot(s.candidate_world)}
+    if not evidence.has("pending_diagnostics"):evidence.pending_diagnostics=[]
+    evidence.pending_diagnostics.append(snapshot)
+    print("STUDIO_TRANSPORT_PENDING ",JSON.stringify(snapshot))
 func settle(s:Control)->bool:
     var deadline=Time.get_ticks_msec()+90000
     while not ready(s) and Time.get_ticks_msec()<deadline:await process_frame
+    if not ready(s):pending_snapshot(s,"settle_deadline")
     check(ready(s),"Visible requested selection publishes independently of background loop preparation")
     return ready(s)
 func button(view:Control,at:Vector2,pressed:bool)->void:
@@ -102,7 +166,10 @@ func run()->void:
     var started=Time.get_ticks_msec();s.tracks._gui_input(click)
     if not await settle(s):await finish(s);return
     evidence.select_to_ready_ms=Time.get_ticks_msec()-started
-    check(s.selected_row.id==body.id and s.loop_start==body.start_ms and s.loop_end==body.end_ms,"Track-label selection sets the exact clicked animation interval")
+    check(s.selected_row.id==body.id,"Track-label selection retains the exact clicked animation identity")
+    var expected_loop_start:float=maxf(0.0,float(body.start_ms)-s.Recording.PREVIEW_LEAD_IN_MS)
+    var expected_loop_end:float=minf(float(s.index.get("presentation_end_ms",s.index.duration_ms)),float(body.end_ms)+s.Recording.PREVIEW_OPERATION_GAP_MS)
+    check(s.loop_start==expected_loop_start and s.loop_end==expected_loop_end,"Track-label selection retains the exact authored context around the clicked animation interval")
     check(not s.world.timeline.paused,"Selected animation starts without a separate Play click")
     var wraps=0;var last=s.world.timeline.display_ms;var end_wait=-1;var max_wait=0
     var frame_times:Array=[];var last_frame=Time.get_ticks_usec()
@@ -124,6 +191,7 @@ func run()->void:
     evidence.loop_wraps=wraps;evidence.max_loop_end_hold_ms=max_wait;evidence.loop_visible_hosts=seen_hosts.size();evidence.max_hosts=max_hosts
     frame_times.sort()
     if not frame_times.is_empty():evidence.loop_frame_ms={"median":frame_times[frame_times.size()/2],"p95":frame_times[mini(frame_times.size()-1,int(frame_times.size()*.95))],"max":frame_times.back()}
+    if wraps!=3:pending_snapshot(s,"loop_deadline")
     check(wraps==3,"Selected interval repeats automatically")
     check(seen_hosts.size()==2 and max_hosts<=2,"Three loops alternate exactly two existing hosts without accumulating native worlds")
     check(s.transport_measurements.filter(func(row):return row.get("loop",false) and row.get("reused_spare",false)).size()>=2,"Warm loops prepare the existing spare rather than constructing another renderer")

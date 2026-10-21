@@ -265,6 +265,9 @@ var media_due_parts:Array=[]
 var media_due:Dictionary={}
 var native_spell_hit_material:bool=true
 var draw_order_dirty = true
+var depth_order_input:Array=[]
+var depth_order_output:Array=[]
+var depth_order_signature:Array=[]
 var wall_pick_order: Array = []
 var wall_support_candidates = 0
 var wall_max_member_candidates = 0
@@ -779,6 +782,11 @@ func _process(delta: float) -> void:
         _sync_scenery()
         FrameProfile.end_phase(profile,"scenery_sync",scenery_started)
         _sample_fixtures()
+        if sample_world_media(timeline.spatial_effect_owners,timeline.display_ms,displayed_components):static_order_dirty=true
+        var depth_sources:Array=world_media_entries+component_renderer.media_handles.values()
+        if sample_actor_depth_bands(depth_sources):static_order_dirty=true
+        if depth_sources.any(func(entry):return entry.get("actor_depth_needs_preparation",false)):
+            component_renderer.invalidate_preparation();component_renderer.ready=false
         var light_anchors = {}
         for row in actor_rows: light_anchors[row.id] = row
         source_lighting.sample(light_anchors,fixture_energy,fixture_heights,fixture_shadow_heights)
@@ -1405,7 +1413,7 @@ func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
     while not retiring_views.is_empty() and released<16 and metadata_steps<4096 and (Time.get_ticks_usec()-started<allowance or (minimum and released==0 and metadata_steps==0)):
         var view: Dictionary = retiring_views[0]
         if view.nodes.is_empty():retiring_views.pop_front();continue
-        var node:Node=view.nodes.back()
+        var node:Variant=view.nodes.back()
         if is_instance_valid(node) and node.get_child_count()>0:
             view.nodes.append(node.get_child(node.get_child_count()-1))
             retiring_node_count+=1;metadata_steps+=1
@@ -1601,7 +1609,7 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
         else:
             var state: Dictionary = timeline.presentation_state()
             var boundaries: Dictionary = WorldRows.boundary_index(state) if force or world_row_cache.is_empty() else world_row_cache.boundaries
-            current = WorldRows.current_ids(state,boundaries,scenery_visible_cells)
+            current = WorldRows.current_ids(state,boundaries,scenery_visible_cells,{},world_row_cache.get("spatial_rows",{}),world_row_cache.get("residue_rows",{}))
             changed = {}
             for id in current:
                 if not scenery_visibility.has(id): changed[id] = true
@@ -2721,6 +2729,7 @@ func _sample_actors() -> void:
             FrameProfile.end_phase(profile,"actor_sprite_setup",actor_setup_started)
             continue
         var sample: Dictionary = displayed_samples.get(id,{})
+        show=show and sample.get("body_visible",true)
         row.visual_height = float(sample.get("lift_pixels",0))*(128.0/rig_config.TILE_W)/64.0
         var rig: Dictionary = rigs[row.rig]
         var resting = Characters.rest_sample(actor,rig,catalog_cache)
@@ -2731,6 +2740,7 @@ func _sample_actors() -> void:
         # particular, damage/body surfaces must keep sampling between frames,
         # while an unchanged resting body need not resend every shader uniform.
         var projected:Dictionary=Conditions.parameters(material_state,textures,resources)
+        projected.merge(ActorConstruction.aperture_parameters(sample,camera.basis,float(rig_config.TILE_W)),true)
         # Each actor owns one immutable set of actual shader operands. All its
         # layers consume that same value; clocks still change it when sampled.
         if visual.get("condition_parameters",{})!=projected:
@@ -2995,7 +3005,78 @@ func _sort_draws() -> void:
     phase = Time.get_ticks_usec()
     _order_moving(statics_changed,forward)
     FrameProfile.end_phase(profile,"actor_order",phase)
+    _order_actor_depth_bands()
     _sync_wall_mask()
+
+## Bands inherit the ordinary source pixels and surround the actual peer draw
+## commands at whose painter contacts they were clipped. Gameplay placements,
+## the existing grid key and the ordinary peer order remain unchanged.
+func _order_actor_depth_bands()->void:
+    var sources:Array=world_media_entries+component_renderer.media_handles.values()
+    var bands:Array=[];var signature:Array=[]
+    for source in sources:
+        for band in source.get("actor_depth_bands",[]):
+            if band.node.visible:bands.append(band)
+        if source.has("actor_depth_bands"):signature.append([source.node.get_instance_id(),source.get("actor_depth_order_inputs",[]),source.get("actor_depth_order_status")])
+    # Ordinary worlds never scan or rebuild their full painter list here.
+    if bands.is_empty():return
+    if signature==depth_order_signature and (is_same(draw_order,depth_order_input) or is_same(draw_order,depth_order_output)):
+        draw_order=depth_order_output;return
+    depth_order_input=draw_order
+    var ordinary:Array=[]
+    for entry in draw_order:
+        if entry.node.visible and not entry.get("actor_depth_band",false):ordinary.append(entry)
+    var refused:Dictionary={}
+    var slots:Dictionary={}
+    for index in ordinary.size():slots[ordinary[index].node.get_instance_id()]=index
+    # Both inequalities must fit the existing peer sequence. A source interval
+    # cannot justify reversing ordinary peers whose grid order differs from its
+    # continuous contact order; retain the original fixture in that exact case.
+    for band in bands:
+        var lower:int=0;var upper:int=ordinary.size()
+        for peer in band.get("actor_depth_after",[]):
+            if slots.has(peer.node.get_instance_id()):lower=maxi(lower,int(slots[peer.node.get_instance_id()])+1)
+        for peer in band.get("actor_depth_before",[]):
+            if slots.has(peer.node.get_instance_id()):upper=mini(upper,int(slots[peer.node.get_instance_id()]))
+        if lower>upper:refused[band.actor_depth_owner.node.get_instance_id()]=band.actor_depth_owner
+    for source in refused.values():
+        source.actor_depth_order_status="incompatible_peer_order";source.node.visible=true
+        for band in source.actor_depth_bands:band.node.visible=false
+        source.order_key=Order.key(source.placement,source.role,source.layer,quarter,ground_is_background)
+        var slot:int=0
+        while slot<ordinary.size() and _entry_before(ordinary[slot],source):slot+=1
+        var low:float=float(ordinary[slot-1].draw_rank) if slot>0 else -1.0
+        var high:float=float(ordinary[slot].draw_rank) if slot<ordinary.size() else low+1.0
+        _order_rank(source,lerpf(low,high,0.5),order_forward);ordinary.insert(slot,source);static_order_dirty=true
+    slots.clear()
+    for index in ordinary.size():slots[ordinary[index].node.get_instance_id()]=index
+    var insertions:Dictionary={}
+    for band in bands:
+        if not band.node.visible:continue
+        var lower:int=0;var upper:int=ordinary.size()
+        for peer in band.get("actor_depth_after",[]):
+            if slots.has(peer.node.get_instance_id()):lower=maxi(lower,int(slots[peer.node.get_instance_id()])+1)
+        for peer in band.get("actor_depth_before",[]):
+            if slots.has(peer.node.get_instance_id()):upper=mini(upper,int(slots[peer.node.get_instance_id()]))
+        var slot:int=upper
+        if band.get("actor_depth_before",[]).is_empty() and not band.get("actor_depth_after",[]).is_empty():slot=lower
+        elif band.get("actor_depth_before",[]).is_empty() and band.get("actor_depth_after",[]).is_empty():
+            slot=0
+            var source:Dictionary=band.actor_depth_owner
+            var key:Array=Order.key(source.placement,source.role,source.layer,quarter,ground_is_background)
+            while slot<ordinary.size() and Order.less(ordinary[slot].order_key,key):slot+=1
+        if not insertions.has(slot):insertions[slot]=[]
+        insertions[slot].append(band)
+    var merged:Array=[]
+    for slot in range(ordinary.size()+1):
+        var pending:Array=insertions.get(slot,[])
+        var low:float=float(ordinary[slot-1].draw_rank) if slot>0 else -1.0
+        var high:float=float(ordinary[slot].draw_rank) if slot<ordinary.size() else low+1.0
+        for index in pending.size():
+            _order_rank(pending[index],lerpf(low,high,float(index+1)/float(pending.size()+1)),order_forward)
+            merged.append(pending[index])
+        if slot<ordinary.size():merged.append(ordinary[slot])
+    draw_order=merged;depth_order_output=merged;depth_order_signature=signature
 
 func _sync_ground_overlay() -> void:
     # Disclosed supports, the preview, the grid toggle and the view are the
@@ -3407,7 +3488,7 @@ func _prepare_rotation() -> void:
     _deactivate_static_view(true)
     static_views[target] = prepared
     quarter = target; position_camera(); _activate_static_view(target,false)
-    _sample_actors(); _sample_fixtures(); _sync_scenery()
+    _sample_actors(); _sample_fixtures(); _sync_scenery(); sample_world_media(timeline.spatial_effect_owners,timeline.display_ms,displayed_components)
     _sort_draws()
     hover_key = []; hover_hit = {}; hover_preview = {}
     FrameProfile.end_phase(profile,"rotation_publish",started)
@@ -3882,7 +3963,7 @@ func pick_world(screen: Vector2) -> Dictionary:
             var hit = _pick_wall_member(entry,_wall_relative_pixel(entry,screen))
             if not hit.is_empty(): return hit
             continue
-        return _identity_hit(entry.placement.id)
+        return _identity_hit(str(entry.placement.get("subject_uuid",entry.placement.id)))
     if not forced.is_empty(): return _identity_hit(forced.placement.id)
     var cell = pick_cell(screen)
     return {"id":"","kind":"ground","label":"","position":cell.position} if not cell.is_empty() else {}
@@ -4017,7 +4098,7 @@ func _entry_contains(entry: Dictionary, screen: Vector2) -> bool:
     # Deposited blood uses a horizontal PlaneMesh; airborne/native effects can
     # use other geometry or borrow an actor's placement. They are presentation
     # layers, never selectable world subjects or blockers for the artwork below.
-    if entry.get("ground_overlay",false) or entry.placement.kind=="effect" or entry.role=="native_effect":return false
+    if entry.get("ground_overlay",false) or entry.placement.get("presentation_only",false) or entry.placement.kind=="effect" or entry.role=="native_effect":return false
     var transform: Transform3D = entry.node.global_transform
     var normal = transform.basis.z.normalized()
     var intersection: Variant = Plane(normal,normal.dot(transform.origin)).intersects_ray(camera.project_ray_origin(screen),camera.project_ray_normal(screen))
@@ -4026,7 +4107,27 @@ func _entry_contains(entry: Dictionary, screen: Vector2) -> bool:
     var mesh: QuadMesh = entry.node.mesh
     var uv = Vector2((local.x-mesh.center_offset.x)/mesh.size.x+0.5,0.5-(local.y-mesh.center_offset.y)/mesh.size.y)
     if uv.x < 0 or uv.y < 0 or uv.x >= 1 or uv.y >= 1: return false
+    if entry.get("actor_depth_band",false):
+        var depth_path:String=str(entry.get("actor_depth_path",""))
+        var depth_image:Image=source_images.get(depth_path)
+        if depth_image==null:return false
+        var rect:Vector4=SourceMaterial.value(entry,"actor_depth_rect")
+        var pixel:Vector2i=Vector2i(floori(rect.x+uv.x*rect.z),floori(rect.y+uv.y*rect.w))
+        var colour:Color=depth_image.get_pixelv(pixel)
+        var code:int=roundi(colour.r*255.0)+256*roundi(colour.g*255.0)
+        var depth:float=float(SourceMaterial.value(entry,"actor_depth_origin"))
+        if code>0:
+            var interval:Vector2=SourceMaterial.value(entry,"actor_depth_range")
+            depth+=(float(code-1)/65534.0*(interval.y-interval.x)+interval.x)*float(SourceMaterial.value(entry,"actor_depth_scale"))
+        var limits:Vector2=SourceMaterial.value(entry,"actor_depth_limits")
+        if depth<=limits.x or depth>limits.y:return false
     if entry.placement.kind == "actor":
+        if SourceMaterial.value(entry,"body_aperture_enabled")==true:
+            if entry.role=="shadow":return false
+            var relative:Vector3=intersection-SourceMaterial.value(entry,"body_aperture_center")
+            var x:float=absf(relative.dot(SourceMaterial.value(entry,"body_aperture_x")))
+            var lip:float=1.0-x if SourceMaterial.value(entry,"body_aperture_diamond")==true else sqrt(maxf(0.0,1.0-x*x))
+            if -relative.dot(SourceMaterial.value(entry,"body_aperture_y"))>lip:return false
         var frame: Vector4 = SourceMaterial.value(entry,"frame_uv")
         var source: Image = source_images[entry.texture_path]
         var pixel = Vector2i((frame.x+uv.x*frame.z)*source.get_width(),(frame.y+uv.y*frame.w)*source.get_height())

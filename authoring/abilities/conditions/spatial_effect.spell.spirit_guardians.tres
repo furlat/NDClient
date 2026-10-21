@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="RadiantOwner"]
+script = ExtResource("effect")
+clip = "assembled/spirit_guardians_radiant_native"
+role = "attached"
+scope = "source"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.5
+fade_out = 0.5
+light_multiplier = 0.0
+when = {"energy_type": "Radiant"}
+lifecycle = {"enter_end_seconds": 0.5, "hold_start_seconds": 0.5, "exit_start_seconds": 4.0, "exit_end_seconds": 4.5}
+
+[sub_resource type="Resource" id="NecroticOwner"]
+script = ExtResource("effect")
+clip = "assembled/spirit_guardians_necrotic_native"
+role = "attached"
+scope = "source"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.5
+fade_out = 0.5
+light_multiplier = 0.0
+when = {"energy_type": "Necrotic"}
+lifecycle = {"enter_end_seconds": 0.5, "hold_start_seconds": 0.5, "exit_start_seconds": 4.0, "exit_end_seconds": 4.5}
+
+[resource]
+script = ExtResource("condition")
+id = "spatial_effect.spell.spirit_guardians"
+disposition = "state_only"
+play_package_lifecycle = false
+surface = "spatial_effect.spell.spirit_guardians"
+status = "partial"
+notes = "This spatial recipe delegates its body visual to canonical GroundSurface spatial_effect.spell.spirit_guardians, which consumes the actual same spatial UUID, observed geometry/cells, suppression and lifetime. The former ability-side source is retained here only as inactive source provenance; no second condition or fixed-review field is drawn. Existing independent responses and metadata remain unchanged. Current source optical/shape/cost limits remain in the delivery handoff; this assignment is unvalidated and all artwork remains unreviewed."

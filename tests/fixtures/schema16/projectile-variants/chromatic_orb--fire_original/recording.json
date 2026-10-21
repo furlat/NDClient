@@ -1,0 +1,89 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "22c974cb-4f5a-4ab5-a56c-a654fb454911": "Amber caster",
+  "a6eb1021-e66a-428e-8f24-974c6dc236ca": "Amber ally",
+  "48a82c3b-df6c-4e6b-a606-874f18a58b78": "Blue target",
+  "8ad0ca34-3bb0-431a-b282-786124fce9c2": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.chromatic_orb \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "sensory": 1,
+   "spatial_effect_state": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.chromatic_orb": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": []
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 43,
+   "lineage": 33,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 53,
+   "lineage": 33,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 51,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 41,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

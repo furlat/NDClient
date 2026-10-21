@@ -4,15 +4,97 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="2_dtudn"]
 [ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="3_dgp6r"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="motion_effect"]
+
 [sub_resource type="Resource" id="Resource_yvx3d"]
 script = ExtResource("1_oq7a0")
 role = "movement"
 clip = "Run"
 hidden_slots = PackedStringArray()
 
+[sub_resource type="Resource" id="DashTrail"]
+script = ExtResource("motion_effect")
+clip = "review/expeditious_retreat/back/dash_retreat"
+role = "attached"
+at = "movement.interval"
+attachment = "recipient_ground"
+follow = false
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+movement = {"trajectory": "path", "when_conditions": ["condition.dashing"], "unless_conditions": ["condition.spell.haste", "condition.spell.expeditious_retreat"], "replaces_media": ["pending.dash_retreat.back", "pending.dash_retreat.front"], "interval_seconds": 0.18}
+opacity_keys = PackedVector2Array(0, 0.5, 2, 0.5)
+
+[sub_resource type="Resource" id="RetreatTrail"]
+script = ExtResource("motion_effect")
+clip = "review/expeditious_retreat/back/dash_retreat"
+role = "attached"
+at = "movement.interval"
+attachment = "recipient_ground"
+follow = false
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+movement = {"trajectory": "path", "when_conditions": ["condition.dashing", "condition.spell.expeditious_retreat"], "unless_conditions": ["condition.spell.haste"], "replaces_media": ["pending.dash_retreat.back", "pending.dash_retreat.front"], "interval_seconds": 0.18}
+
+[sub_resource type="Resource" id="HasteTrail"]
+script = ExtResource("motion_effect")
+clip = "review/haste/back/dash_haste"
+role = "attached"
+at = "movement.interval"
+attachment = "recipient_ground"
+follow = false
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+movement = {"trajectory": "path", "when_conditions": ["condition.dashing", "condition.spell.haste"], "unless_conditions": [], "replaces_media": ["pending.dash_haste.back", "pending.dash_haste.front"], "interval_seconds": 0.18}
+
+[sub_resource type="Resource" id="JumpTakeoff"]
+script = ExtResource("motion_effect")
+clip = "review/jump/back/takeoff"
+role = "attached"
+at = "movement.takeoff"
+attachment = "recipient_ground"
+follow = false
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+movement = {"trajectory": "direct_arc", "when_conditions": ["condition.spell.jump"], "unless_conditions": [], "replaces_media": ["pending.takeoff.back", "pending.takeoff.front"]}
+
+[sub_resource type="Resource" id="JumpFlight"]
+script = ExtResource("motion_effect")
+clip = "review/jump/back/flight"
+role = "attached"
+at = "movement.track"
+attachment = "recipient_body"
+follow = true
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+movement = {"trajectory": "direct_arc", "when_conditions": ["condition.spell.jump"], "unless_conditions": [], "replaces_media": ["pending.flight.back", "pending.flight.front"], "fit_to_motion": true}
+
+[sub_resource type="Resource" id="JumpLanding"]
+script = ExtResource("motion_effect")
+clip = "review/jump/back/takeoff"
+role = "attached"
+at = "movement.landing"
+attachment = "recipient_ground"
+follow = false
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+movement = {"trajectory": "direct_arc", "when_conditions": ["condition.spell.jump"], "unless_conditions": [], "replaces_media": ["pending.takeoff.back", "pending.takeoff.front"]}
+
 [resource]
 script = ExtResource("2_dtudn")
 id = "movement"
+effects = Array[ExtResource("motion_effect")]([SubResource("DashTrail"), SubResource("RetreatTrail"), SubResource("HasteTrail"), SubResource("JumpTakeoff"), SubResource("JumpFlight"), SubResource("JumpLanding")])
 body = SubResource("Resource_yvx3d")
 values = {
 "reference_speed_feet": 30.0,
@@ -294,3 +376,5 @@ unported = {
 "media": []
 }
 }
+
+notes = "Six native movement assignments replace the twelve legacy side-sheet rows below. Actual Step tracks own cadence, departure/arrival and airborne progress; Factory keeps its original finite source clock. Source programs contain the complete authored 3D part and are not replayed once per old back/front bank. All artwork remains unreviewed."

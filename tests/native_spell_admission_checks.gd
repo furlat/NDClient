@@ -85,7 +85,7 @@ func run()->void:
     replacement.spells={};replacement.conditions={}
     Catalog.adopt_snapshot(displayed,{Sources.CACHE_KEY:Sources.make_admission(replacement,{})})
     check(is_same(Sources.find("spell.fireball",displayed),fireball),"Another revision cannot overwrite the displayed source owner")
-    for id in ["aid","bless","false_life","sacred_flame"]:check(Spells.selection("spell."+id,cache).is_empty(),"Preserve user deferral "+id)
+    for id in ["aid","bless","false_life","sacred_flame"]:check(not Spells.selection("spell."+id,cache).is_empty(),"Authored source remains inspectable pending human artwork review: "+id)
     var result={"checks":checks,"failures":failures,"warm_lookup_samples":samples,"scope":"Every natively staged spell of the abilities source: definitions, phases, receiver treatments and requirements as built; no native framebuffer or live latency claim."}
     FileAccess.open("res://generated/native_spell_admission_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("NATIVE_SPELL_ADMISSION ",checks," failures=",JSON.stringify(failures))

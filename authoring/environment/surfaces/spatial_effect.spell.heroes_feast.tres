@@ -1,13 +1,34 @@
 [gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_ulh41"]
-[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_v0o6d"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="surface"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="ActualFeastBody"]
+script = ExtResource("effect")
+clip = "assembled/heroes_feast_native"
+selection = "heroes_feast_native"
+approach = "native"
+role = "attached"
+scope = "spatial"
+requires_spatial_anchor = true
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+scale = 1.0
+source_end = 4.5
+duration_policy = "authored"
+lifecycle = {"enter_end_seconds": 0.6, "hold_start_seconds": 0.6, "exit_start_seconds": 3.9, "exit_end_seconds": 4.5}
+opacity_keys = PackedVector2Array(0, 0, 0.6, 1, 3.9, 1, 4.5, 0)
+fade_out = 0.6
+light_multiplier = 0.0
+staging_from = "factory@runtime-public-admission-20261020-976f8289ebcefa5c"
 
 [resource]
-script = ExtResource("2_v0o6d")
+script = ExtResource("surface")
 id = "spatial_effect.spell.heroes_feast"
 layer = "field"
-art = PackedStringArray()
+lasting = SubResource("ActualFeastBody")
+native_staging = true
 legacy = "measured/environment/surfaces/spatial_effect.spell.heroes_feast.json"
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "The real world-object-anchored Feast spatial UUID owns the delivered spectral table at its public anchor/elevation. The source's actual radial surface gather0.02–0.60s remains the birth; deployed source pose0.60 is explicitly held until actual owner removal, then original opacity retirement3.9–4.5 runs. This is static deployed artwork: continuing candle/mote motion is not claimed. The ordinary table stand-in is delegated only while this same current public zone names the exact actual item UUID. Eating is the separate accepted EatFromFeast finite source; real benefit condition UUID/lifecycle stays independent. No feast duration, servings, heals or object identity is invented. All artwork remains unreviewed; current rendering qualification remains separate."

@@ -1,0 +1,101 @@
+{
+ "id": "spell.delayed_blast_fireball/concentration_end_detonation",
+ "title": "spell.delayed_blast_fireball: actual concentration_end detonation",
+ "kind": "spell",
+ "seed": 2,
+ "actors": [
+  {
+   "role": "caster",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "caster_level": 20,
+   "spells": [
+    "spell.delayed_blast_fireball"
+   ],
+   "at": [
+    3,
+    7
+   ]
+  },
+  {
+   "role": "ally",
+   "side": "amber",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    3,
+    8
+   ]
+  },
+  {
+   "role": "target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    7
+   ]
+  },
+  {
+   "role": "second_target",
+   "side": "blue",
+   "creature": "creature.generic_caster",
+   "level": 20,
+   "at": [
+    4,
+    8
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "do": "spell.delayed_blast_fireball",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "capture_choices": true
+  },
+  {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    2,
+    7
+   ]
+  },
+  {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  }
+ ],
+ "subjects": {
+  "spell": [
+   "spell.delayed_blast_fireball"
+  ],
+  "action": [
+   "action.drop_concentration"
+  ],
+  "condition": [],
+  "creature": [],
+  "environment_object": [],
+  "spatial_effect": [],
+  "residue": [],
+  "item": []
+ },
+ "required_behaviors": [
+  "spell.delayed_blast_fireball",
+  "action.drop_concentration"
+ ],
+ "required_facts": [
+  "damage"
+ ],
+ "required_applied_damage_types": [
+  "Fire"
+ ],
+ "purpose": "Legal release/retirement and original applied results; no fabricated payload state or blast admission."
+}

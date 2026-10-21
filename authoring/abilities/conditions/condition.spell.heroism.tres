@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_kblxd"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_wrk56"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="response_effect"]
+
 [sub_resource type="Resource" id="Resource_ru88f"]
 script = ExtResource("1_kblxd")
 path = "art/ui-delivery-20261018/runtime/smooth48/spell.heroism.png"
@@ -11,7 +13,24 @@ reuses = "spell.heroism"
 status = "stand_in"
 source = "ui-delivery-20261018"
 
+[sub_resource type="Resource" id="ConditionResponse0"]
+script = ExtResource("response_effect")
+clip = "bg3-36/heroism/response"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = true
+orientation = "world"
+source_end = 0.8
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+condition_response = {"kind": "temporary_hp_refresh", "participant": "recipient", "grant_source_prefix": "condition.heroism."}
+extra = {"recipient_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+
 [resource]
 script = ExtResource("1_wrk56")
 id = "condition.spell.heroism"
+responses = Array[ExtResource("response_effect")]([SubResource("ConditionResponse0")])
 icon = SubResource("Resource_ru88f")
+
+notes = "Only an accepted temporary-HP grant sourced from this exact Heroism instance under the real recipient TurnStart admits the finite refresh. Initial application and rejected grants do not replay the response."

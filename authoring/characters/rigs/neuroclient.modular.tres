@@ -321,7 +321,7 @@ slot_categories = Dictionary[String, PackedStringArray]({
 "effect3": PackedStringArray("Effect1", "Effect2", "Effect3"),
 "hands": PackedStringArray("Hands1", "Hands2", "Hands3", "Hands4"),
 "head": PackedStringArray("Head1", "Head9", "Head10", "Head16", "Head17", "Head22"),
-"helmet": PackedStringArray("Head3", "Head4", "Head5", "Head6", "Head7", "Head8", "Head10", "Head11", "Head12", "Head13", "Head14", "Head15", "Head18", "Head19", "Head20", "Head21", "Head22", "Head23", "Head24"),
+"helmet": PackedStringArray("Head3", "Head4", "Head5", "Head6", "Head7", "Head8", "Head10", "Head12", "Head13", "Head14", "Head15", "Head18", "Head19", "Head20", "Head21", "Head22", "Head23", "Head24"),
 "legs": PackedStringArray("Legs1", "Legs2", "Legs3", "Legs4", "Legs5", "Legs6", "Legs7", "Legs8", "Legs9"),
 "mount": PackedStringArray("Mount1", "Mount2", "Mount3", "Mount4", "Mount5"),
 "offhand": PackedStringArray("Shield1", "Shield2", "Shield3", "Shield4", "Shield5", "Shield6", "Shield7", "Offhand1", "Offhand2"),
@@ -336,4 +336,5 @@ clips = Array[ExtResource("1_2iho2")]([SubResource("Resource_1akdu"), SubResourc
 hold_clips = PackedStringArray("Die")
 ground_pixels = 19.0
 measurements = "measured/characters/rigs/neuroclient.modular.json"
-notes = "Modular characters: parts per slot. The 19 px optical ground line is the client's standing assumption (the modular packets carry none)."
+notes = "Modular characters: parts per slot. The 19 px optical ground line is the client's standing assumption (the modular packets carry none).
+Head11 is not offered: the installed delivery has neither that sprite part nor optical companions. No current gear or appearance selects it; Leather Hood already explicitly uses Head12/Head7."

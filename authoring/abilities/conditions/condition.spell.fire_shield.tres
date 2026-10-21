@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_4wdeb"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_f8nok"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="response_effect"]
+
 [sub_resource type="Resource" id="Resource_ggvps"]
 script = ExtResource("1_vhnof")
 enabled = false
@@ -31,9 +33,66 @@ steps = Array[ExtResource("3_4wdeb")]([SubResource("Resource_76yqq")])
 script = ExtResource("1_vhnof")
 enabled = false
 
+[sub_resource type="Resource" id="ConditionResponse0"]
+script = ExtResource("response_effect")
+clip = "original-repairs/fire-shield-contact/warm/contact"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = true
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+condition_response = {"kind": "attributed_damage", "participant": "recipient", "source_actor": "owner", "damage_type": "Fire", "when_state": {"energy_type": "Fire"}}
+extra = {"recipient_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+
+[sub_resource type="Resource" id="ConditionResponse1"]
+script = ExtResource("response_effect")
+clip = "original-repairs/fire-shield-contact/warm/reaction"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = true
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+condition_response = {"kind": "attributed_damage", "participant": "owner", "source_actor": "owner", "damage_type": "Fire", "when_state": {"energy_type": "Fire"}}
+extra = {"recipient_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+
+[sub_resource type="Resource" id="ConditionResponse2"]
+script = ExtResource("response_effect")
+clip = "original-repairs/fire-shield-contact/chill/contact"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = true
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+condition_response = {"kind": "attributed_damage", "participant": "recipient", "source_actor": "owner", "damage_type": "Cold", "when_state": {"energy_type": "Cold"}}
+extra = {"recipient_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+
+[sub_resource type="Resource" id="ConditionResponse3"]
+script = ExtResource("response_effect")
+clip = "original-repairs/fire-shield-contact/chill/reaction"
+role = "impact"
+at = "contact"
+attachment = "recipient_body"
+follow = true
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+condition_response = {"kind": "attributed_damage", "participant": "owner", "source_actor": "owner", "damage_type": "Cold", "when_state": {"energy_type": "Cold"}}
+extra = {"recipient_geometry": {"actor": "target", "slots": ["body", "head", "weapon", "offhand"]}}
+
 [resource]
 script = ExtResource("4_f8nok")
 id = "condition.spell.fire_shield"
+responses = Array[ExtResource("response_effect")]([SubResource("ConditionResponse0"), SubResource("ConditionResponse1"), SubResource("ConditionResponse2"), SubResource("ConditionResponse3")])
 label = "Fire Shield"
 icon = SubResource("Resource_f8nok")
 disposition = "authored"
@@ -142,102 +201,7 @@ unported = {
 "removal": {
 "durationMs": 0.0,
 "effects": []
-},
-"responses": [{
-"effects": [{
-"animation": "contact",
-"assetId": "nature.warm-reaction.contact.front",
-"attachment": "body",
-"category": "nature_utility",
-"colors": {
-"primary": 16777215.0,
-"secondary": 16777215.0,
-"tertiary": 16777215.0
-},
-"durationMs": 1000.0,
-"id": "warm-reaction-front",
-"priority": 50.0,
-"whenEnergyType": "Fire"
-}, {
-"animation": "contact",
-"assetId": "nature.chill-reaction.contact.front",
-"attachment": "body",
-"category": "nature_utility",
-"colors": {
-"primary": 16777215.0,
-"secondary": 16777215.0,
-"tertiary": 16777215.0
-},
-"durationMs": 1000.0,
-"id": "chill-reaction-front",
-"priority": 50.0,
-"whenEnergyType": "Cold"
-}],
-"trigger": "damage_requested"
-}, {
-"effects": [{
-"animation": "contact",
-"assetId": "nature.warm-contact.contact.back",
-"attachment": "body",
-"category": "nature_utility",
-"colors": {
-"primary": 16777215.0,
-"secondary": 16777215.0,
-"tertiary": 16777215.0
-},
-"drawOrder": "behind_body",
-"durationMs": 1000.0,
-"id": "warm-contact-back",
-"participant": "recipient",
-"priority": 50.0,
-"whenEnergyType": "Fire"
-}, {
-"animation": "contact",
-"assetId": "nature.warm-contact.contact.front",
-"attachment": "body",
-"category": "nature_utility",
-"colors": {
-"primary": 16777215.0,
-"secondary": 16777215.0,
-"tertiary": 16777215.0
-},
-"durationMs": 1000.0,
-"id": "warm-contact-front",
-"participant": "recipient",
-"priority": 50.0,
-"whenEnergyType": "Fire"
-}, {
-"animation": "contact",
-"assetId": "nature.chill-contact.contact.back",
-"attachment": "body",
-"category": "nature_utility",
-"colors": {
-"primary": 16777215.0,
-"secondary": 16777215.0,
-"tertiary": 16777215.0
-},
-"drawOrder": "behind_body",
-"durationMs": 1000.0,
-"id": "chill-contact-back",
-"participant": "recipient",
-"priority": 50.0,
-"whenEnergyType": "Cold"
-}, {
-"animation": "contact",
-"assetId": "nature.chill-contact.contact.front",
-"attachment": "body",
-"category": "nature_utility",
-"colors": {
-"primary": 16777215.0,
-"secondary": 16777215.0,
-"tertiary": 16777215.0
-},
-"durationMs": 1000.0,
-"id": "chill-contact-front",
-"participant": "recipient",
-"priority": 50.0,
-"whenEnergyType": "Cold"
-}],
-"trigger": "damage_applied"
-}]
 }
+}
+
+notes = "The actual attributed Fire Shield retaliation result admits its finite attacker contact and shield-owner reaction. Energy type selects the disclosed warm/chill source; no demonstration timestamps or proximity inference are used."

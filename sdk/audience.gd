@@ -85,16 +85,21 @@ static func fold(target:Dictionary,fact:Dictionary,values:Dictionary)->Dictionar
     var added=_selected_cells(values.cells,fact.get("visible_cells_added",{}));var removed=_selected_cells(values.cells,fact.get("visible_cells_removed",{}))
     if not added.ok:return added
     if not removed.ok:return removed
-    var visible=Cells.point_set(Cells.mask_points(held.visible))
+    var prior_points:Array=Cells.mask_points(held.visible)
+    var visible=Cells.point_set(prior_points)
     for point in removed.value:visible.erase(Cells.key(point))
     for point in added.value:visible[Cells.key(point)]=point
-    var points=Cells.sorted_points(visible);var result:Dictionary=held.duplicate();result.visible=Cells.mask(points);result.seen=Cells.mask(points_union(Cells.mask_points(held.seen),added.value))
+    var points=Cells.sorted_points(visible);var result:Dictionary=held.duplicate();result.visible=Cells.mask(points);result.seen=Cells.union_points(held.seen,added.value)
+    var value_indices:PackedInt64Array=Cells.value_indices(prior_points,points)
     for pair in [["effective_light_levels","light_levels","effective_light_levels_changed"],["hazardous_cells","hazards","hazardous_cells_changed"]]:
         var changed=Cells.selected(values[pair[1]],fact.get(pair[2],{}))
         if not changed.ok:return changed
-        var prior=Cells.values_map(held[pair[0]])
-        for row in changed.value:prior[Cells.key(row.position)]=row.value
-        result[pair[0]]=Cells.values(points,prior)
+        if held[pair[0]].get("cells",{})==held.visible:
+            result[pair[0]]=Cells.reindexed_values(held[pair[0]],prior_points.size(),points,changed.value,result.visible,value_indices)
+        else:
+            var prior=Cells.values_map(held[pair[0]])
+            for row in changed.value:prior[Cells.key(row.position)]=row.value
+            result[pair[0]]=Cells.values(points,prior,result.visible)
     for pair in [["entities","entity_members","entity_contacts_changed","entity_contacts_removed"],["objects","object_contact_members","object_contacts_changed","object_contacts_removed"]]:
         var contacts:Dictionary=held[pair[0]].duplicate();result[pair[0]]=contacts;var members:Dictionary=target[pair[1]];var named={}
         for index in fact.get(pair[3],[]):

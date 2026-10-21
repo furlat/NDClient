@@ -5,6 +5,7 @@ const Catalog=preload("res://source_catalog.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Persistent=preload("res://presentation/native_persistent.gd")
+const Responses=preload("res://presentation/condition_responses.gd")
 
 static func _require(entry: Dictionary,phase: String,mechanism: String,source: String,implemented: bool,reason: String="",availability: String="not_required",details: Dictionary={}) -> Dictionary:
     var row={"id":source+"#"+mechanism,"phase":phase,"mechanism":mechanism,"source":source,
@@ -28,9 +29,16 @@ static func _motion_assignments(entry:Dictionary,cache:Dictionary)->void:
     if not motion_assignments.is_empty():
         entry.indicator_assignments=motion_assignments
         for assignment in motion_assignments:
-            _require(entry,"movement",assignment.role,assignment.source,false,"authored_movement_media_not_implemented","assigned",
+            var uses:Array=movement.get("nativeEffects",[]).filter(func(cue):
+                var rule:Dictionary=cue.get("movement",{})
+                return assignment.asset_id in rule.get("replaces_media",[]) \
+                    and rule.get("when_conditions",[])==assignment.when_conditions and rule.get("unless_conditions",[])==assignment.unless_conditions)
+            var available:bool=uses.any(func(cue):return not Effects.for_cue(cue,"movement",str(cue.role)).is_empty())
+            _require(entry,"movement",assignment.role,assignment.source,available,"" if available else "authored_movement_media_not_implemented","assigned",
                 {"label":"Movement "+str(assignment.role)+" · "+str(assignment.asset_id),"asset_id":assignment.asset_id,
-                "gap_kind":"renderer","when_conditions":assignment.when_conditions,"unless_conditions":assignment.unless_conditions})
+                "gap_kind":"" if available else "renderer","when_conditions":assignment.when_conditions,"unless_conditions":assignment.unless_conditions,
+                "native_sources":uses.map(func(cue):return {"clip":cue.clip,"source":cue.source,"at":cue.at}),
+                "qualification":"Actual Step tracks select these native assignments; current source output and human review remain separate."})
 
 static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Dictionary) -> void:
     var classification:Dictionary=recipe.get("classification",{})
@@ -48,6 +56,21 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
         var spatial:Dictionary=Catalog.environment_index(cache).get("spatial_media",{})
         var triggers:Array=recipe.get("relationships",{}).get("incomingTriggers",[])
         var assignments:Array=[]
+        var declared:String=str(recipe.get("surfaceOwner",""))
+        var owner_ids:Array=[] if declared.is_empty() else [declared]
+        for trigger in triggers:
+            if trigger.get("effect")=="apply":
+                var candidate:String="spatial_effect."+str(trigger.get("sourceRef",{}).get("content_id",""))
+                if candidate not in owner_ids:owner_ids.append(candidate)
+        for owner_id in owner_ids:
+            var config:Dictionary=Persistent.spatial_config(str(owner_id),cache)
+            var uses:Array=config.get("persistent",{}).get("nativeEffects",[])
+            if uses.is_empty():continue
+            assignments.append({"kind":"native_spatial_owner","spatial_content_id":owner_id,
+                "source":str(config.get("_resource_source",Catalog.source_pointer("catalog/condition_recipes.json",str(owner_id),cache))),
+                "declared_owner_source":entry.source+"/surfaceOwner" if owner_id==declared else entry.source+"/relationships/incomingTriggers",
+                "native_sources":uses.map(func(cue):return {"clip":cue.get("clip",""),"source":cue.get("source",""),"at":cue.get("at","")}),
+                "qualification":"The declared spatial owner has a native source assignment. Actual owner inputs, playback and rendered evidence remain separate; no duplicate actor indicator is created."})
         for i in triggers.size():
             if triggers[i].get("effect")!="apply":continue
             var ref:Dictionary=triggers[i].get("sourceRef",{})
@@ -61,10 +84,11 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
         entry.indicator_assignments=assignments
         if not assignments.is_empty():return
         _require(entry,"persistent","persistent_indicator",entry.source+"/persistent",false,
-            "indicator_ownership_unresolved","unresolved",{
-                "gap_kind":"authoring_review","implementation":"not_applicable","presentation_domains":domains,
+            "indicator_ownership_unresolved" if declared.is_empty() else "declared_spatial_owner_source_not_assigned","unresolved",{
+                "gap_kind":"authoring_review" if declared.is_empty() else "source","implementation":"not_applicable","presentation_domains":domains,
                 "expected_source":entry.source+"/persistent","related_source":"authoring/environment/surfaces",
-                "note":"Indicator ownership unresolved between this ground condition and world spatial media. Review authoring; this is not evidence of absent VFX."})
+                "spatial_content_id":declared,
+                "note":"Indicator ownership unresolved between this ground condition and world spatial media. Review authoring; this is not evidence of absent VFX." if declared.is_empty() else "The Resource names its actual spatial presentation owner, but that owner has no selected native assignment here. Keep its source boundary explicit; no duplicate actor effect is required."})
         return
     # Assignment and execution are separate. A real package lifecycle or typed
     # held source owns an indicator even when its runtime inputs remain absent.
@@ -155,6 +179,15 @@ static func _native(entry:Dictionary,recipe:Dictionary,selected:Dictionary,cache
         _native_phase(entry,phase,"persistent","native:"+str(phase.source_id))
     for phase in Persistent.authored_phases(recipe,str(entry.id),cache,str(entry.source)):
         _native_phase(entry,phase,"persistent","native_authored:"+str(phase.native_cue.source_index))
+    for cue in recipe.get("nativeResponses",[]):
+        var pointer:String=str(cue.get("source",str(entry.source)+"/nativeResponses/"+str(cue.source_index)))
+        var selection:Dictionary={"id":str(entry.id),"source":pointer,"staging":{},"source_bounds":{},"palette":{}}
+        var phase:Dictionary=NativeSpells._phase(selection,cue,{"prepare":0.0},0.0,0.0,0)
+        phase.source=pointer;phase.source_id=str(entry.id)+".response."+str(cue.source_index)
+        _native_phase(entry,phase,"response","native_response:"+str(cue.source_index))
+        var requirement:Dictionary=entry.requirements.back()
+        if not Responses.supported(cue.get("condition_response",{})):
+            requirement.implementation="missing";requirement.status="missing";requirement.reason="condition_response_not_compiled"
     var index=0
     for phase in NativeSpells.contact_phases(selected):
         _native_phase(entry,phase,"interception","native_contact:"+str(index))
@@ -191,7 +224,9 @@ static func _recorded(entry: Dictionary,rows: Array) -> void:
         if not persistent and not entry.requirements.any(func(requirement):return component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]):continue
         for requirement in entry.requirements:
             var matched=false
-            if requirement.mechanism.begins_with("native_contact:"):
+            if requirement.mechanism.begins_with("native_response:"):
+                matched=row.kind=="native_effect" and component.get("condition_response",{}).get("condition_id")==entry.id and component_source==requirement.source
+            elif requirement.mechanism.begins_with("native_contact:"):
                 matched=row.kind=="native_effect" and row.get("component",{}).has("intercepted_by_condition_uuid") and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]
             elif requirement.mechanism=="cast_binding":
                 matched=row.kind=="body" and row.get("track",{}).get("reaction_cast_binding")==requirement.binding and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]
@@ -209,7 +244,7 @@ static func _recorded(entry: Dictionary,rows: Array) -> void:
                 matched=requirement.mechanism=="layer:"+str(layer.get("id",""))
             if not matched or (persistent and requirement.phase!="persistent"):continue
             var evidence:Dictionary={"kind":"indexed_candidate" if row.get("selection_policy")=="sampled" else "resolved_recording","recording":row.get("recording",""),"row_id":row.id,
-                "condition_uuid":null if spatial else component.get("intercepted_by_condition_uuid",row.get("track",{}).get("condition_uuid",owner.get("id"))),"start_ms":row.start_ms,"end_ms":row.end_ms,"source_start_ms":row.get("source_start_ms",row.start_ms)}
+                "condition_uuid":null if spatial else component.get("condition_uuid",component.get("intercepted_by_condition_uuid",row.get("track",{}).get("condition_uuid",owner.get("id")))),"start_ms":row.start_ms,"end_ms":row.end_ms,"source_start_ms":row.get("source_start_ms",row.start_ms)}
             if spatial:evidence.spatial_effect_uuid=component.spatial_effect_uuid
             requirement.evidence.append(evidence)
             if requirement.status!="missing" and row.get("selection_policy")!="sampled":requirement.status="implemented"

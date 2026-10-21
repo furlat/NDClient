@@ -40,7 +40,9 @@ ramp = PackedColorArray()
 script = ExtResource("3_ep8kh")
 clip = "live/eyebite/frightened/eye"
 role = "attached"
-at = "release"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "spell.eyebite", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.panicked", "component_path": ["assembly"], "input_field": ""}
+at = "cast"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 1.2
@@ -52,6 +54,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"dynamic_geometry": true,
 "delivery_source_interval": [0.3, 1.43],
 "follow_attachment": true,
 "live_endpoints": [{
@@ -67,7 +70,9 @@ extra = {
 script = ExtResource("3_ep8kh")
 clip = "live/eyebite/frightened/impact"
 role = "attached"
-at = "contact"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "spell.eyebite", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.panicked", "component_path": ["assembly"], "input_field": ""}
+at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 1.5
@@ -191,7 +196,9 @@ source = "ui/resources.json icon:spell.eyebite"
 script = ExtResource("3_ep8kh")
 clip = "live/eyebite/sickened/eye"
 role = "attached"
-at = "release"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "spell.eyebite", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.sickened", "component_path": ["assembly"], "input_field": ""}
+at = "cast"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 1.2
@@ -203,6 +210,7 @@ show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
 extra = {
+"dynamic_geometry": true,
 "delivery_source_interval": [0.3, 1.43],
 "follow_attachment": true,
 "live_endpoints": [{
@@ -218,7 +226,9 @@ extra = {
 script = ExtResource("3_ep8kh")
 clip = "live/eyebite/sickened/impact"
 role = "attached"
-at = "contact"
+scope = "source"
+constructor_input = {"kind": "observed_event", "outcome": "condition_application", "projection": "condition_outcome", "geometry_actor": "target", "behavior_id": "spell.eyebite", "save_effect_id": "spell.eyebite.saving_throw", "save_succeeded": false, "condition_id": "condition.spell.eyebite.sickened", "component_path": ["assembly"], "input_field": ""}
+at = "cast"
 attachment = "recipient_ground"
 orientation = "world"
 source_end = 1.5
@@ -278,15 +288,18 @@ extra = {
 [sub_resource type="Resource" id="Resource_hrm2j"]
 script = ExtResource("10_12xvm")
 id = "eyebite_sickened_native"
+dispatch_gap = "delegated_actual_recipient_membership_and_granted_action"
 kind = "form"
 selection = "eyebite_sickened_native"
-effects = Array[ExtResource("3_ep8kh")]([SubResource("Resource_8mhct"), SubResource("Resource_n5m8h"), SubResource("Resource_3bn2d"), SubResource("Resource_t1hhm")])
+effects = Array[ExtResource("3_ep8kh")]([SubResource("Resource_8mhct"), SubResource("Resource_n5m8h")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The baseline and granted action carry the same finite Sickened/Panicked projections. Exact failed-save ancestry plus the new recipient condition selects a form at its actual admission; the common saving-throw effect ID alone cannot disclose a successful-save form. Recipient condition lifecycles own the lasting body and overhead marker. This unselected whole review must not duplicate those owners. Native visual acceptance remains open."
 
 [sub_resource type="Resource" id="Resource_n786i"]
 script = ExtResource("10_12xvm")
 id = "action.spell.eyebite.strike"
+dispatch_gap = "delegated_to_actual_granted_action_owner"
 kind = "sub_action"
 value = "strike"
 recipe = {
@@ -1620,7 +1633,7 @@ recipe = {
 }
 staging_from = "client"
 status = "partial"
-notes = "Old child draft (action.spell.eyebite.strike), a complete recipe of the old model; nothing maps a server fact to it."
+notes = "The typed action.spell.eyebite.strike source owns the granted action. This legacy full spell recipe is not a dispatch route and must not create another cast or replay the initial application. Actual granted-action output remains separately qualified."
 
 [resource]
 script = ExtResource("8_38r3c")
@@ -1630,7 +1643,7 @@ delivery = "ray"
 body = SubResource("Resource_icgoe")
 hand_layers = Array[ExtResource("4_u5m0e")]([SubResource("Resource_0jkbc"), SubResource("Resource_elc70")])
 sockets = "measured/abilities/spells/spell.eyebite.sockets.json"
-effects = Array[ExtResource("3_ep8kh")]([SubResource("Resource_awhax"), SubResource("Resource_rc0l2"), SubResource("Resource_pll8e"), SubResource("Resource_un6hj")])
+effects = Array[ExtResource("3_ep8kh")]([SubResource("Resource_awhax"), SubResource("Resource_rc0l2"), SubResource("Resource_8mhct"), SubResource("Resource_n5m8h")])
 native_staging = true
 effect_scope = "single"
 effect_roles = PackedStringArray()
@@ -1638,7 +1651,7 @@ event_cues = PackedInt32Array()
 excluded_cues = PackedInt32Array()
 owner_kind = "condition"
 owner_ids = PackedStringArray("condition.spell.eyebite.asleep", "condition.spell.eyebite.casting")
-owner_cues = PackedInt32Array(1, 2, 3)
+owner_cues = PackedInt32Array()
 contact_cues = PackedInt32Array()
 light_multiplier = 0.0
 colours = SubResource("Resource_fux8y")
@@ -2529,4 +2542,4 @@ unported = {
 "viewFacing": "E"
 }]
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "Finite gaze/contact sources follow actual failed-save recipient admissions for Sickened and Panicked, including the granted strike. The caster eye and recipient holds/removals remain owned by their actual condition UUIDs. No form is inferred for a successful save, and no second casting body is added to a strike. Native visual acceptance remains open."

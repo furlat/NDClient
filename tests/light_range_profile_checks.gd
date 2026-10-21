@@ -1,5 +1,6 @@
 extends SceneTree
-## Actual admitted light -> native PointLight2D gradient boundary. No pixel claim.
+## Actual admitted light -> PointLight2D and its generated radial source image.
+## No framebuffer/radiance claim; the independent native Gradient oracle is retained.
 const Journal = preload("res://sdk/journal.gd")
 const Lighting = preload("res://presentation/lighting_2d.gd")
 const Existing = preload("res://presentation/lighting.gd")
@@ -14,6 +15,12 @@ func check(ok: bool, label: String) -> void:
 
 func _initialize() -> void:
     run.call_deferred()
+
+func prepare_cookies(adapter:RefCounted,resolved:Dictionary)->void:
+    var until:int=Time.get_ticks_msec()+10000
+    while resolved.sources.any(func(source):return adapter.prepare_cookie(source)==null) and Time.get_ticks_msec()<until:
+        await process_frame
+    check(resolved.sources.all(func(source):return not adapter.cookie_pending(source)),"Actual asynchronous radial source images complete before native publication")
 
 func run() -> void:
     var recording := ""
@@ -33,7 +40,7 @@ func run() -> void:
     if not replayed.ok: quit(1); return
     var state: Dictionary = journal.snapshot()
     var original := state.duplicate(true)
-    var resolved: Dictionary = Existing.resolve(state)
+    var resolved: Dictionary = Lighting.resolve(state)
     var carried: Array = resolved.sources.filter(func(s): return s.actor_uuid in state.audience.controlled and s.item_id == "equipment.portable_torch")
     check(carried.size() == 1, "Real boundary contains one controlled lit portable torch")
     if carried.size() != 1: quit(1); return
@@ -56,6 +63,7 @@ func run() -> void:
     root.add_child(page)
     var adapter = Lighting.new()
     adapter.attach(page)
+    await prepare_cookies(adapter,resolved)
     adapter.sync(state)
     adapter.project(camera)
     check(adapter.range_profile != null and adapter.issues.is_empty(), "Default native range profile resolves without external cookie or source errors")
@@ -85,32 +93,37 @@ func run() -> void:
     var textures := {}
     for item_case in cases:
         var candidate := state.duplicate(true)
-        var item: Dictionary = candidate.actors[source.actor_uuid].controlled_items.filter(func(i): return i.item_uuid == source.item_uuid)[0]
+        var item: Dictionary = candidate.light_sources[source.item_uuid]
         item.very_bright_radius_feet = item_case.feet[0]
         item.bright_radius_feet = item_case.feet[1]
         item.dim_radius_feet = item_case.feet[2]
+        await prepare_cookies(adapter,Lighting.resolve(candidate))
         adapter.sync(candidate)
         adapter.project(camera)
         var row: Dictionary = adapter.canvas_sources().filter(func(r): return r.id == source.item_uuid)[0]
         check(adapter.nodes[source.item_uuid] == node, item_case.name + ": retained native emitter")
-        check(node.texture is GradientTexture2D and row.texture == node.texture, item_case.name + ": public node/exposure share native gradient")
-        var texture: GradientTexture2D = node.texture
-        textures[item_case.name] = texture
-        var gradient: Gradient = texture.gradient
-        # Native Gradient may retain insertion order until its first sample.
-        # Compare boundary positions, without mutating its storage or point colors.
-        var offsets: PackedFloat32Array = gradient.offsets.duplicate()
-        offsets.sort()
-        var expected: Array = item_case.knots
-        var exact := offsets.size() == expected.size()
-        for i in mini(offsets.size(), expected.size()):
-            exact = exact and is_equal_approx(offsets[i], expected[i])
-        check(exact, item_case.name + ": exact very/bright/outer boundary ratios")
-        var edge_values := true
-        for i in expected.size():
-            edge_values = edge_values and is_equal_approx(gradient.sample(expected[i]).r, item_case.intensities[i])
-        check(edge_values, item_case.name + ": actual sampled boundary intensities match the default authored profile")
-        check(texture.fill == GradientTexture2D.FILL_RADIAL and texture.fill_from == Vector2(.5,.5) and texture.fill_to == Vector2(1,.5), item_case.name + ": native radial texture spans centre to outer radius")
+        check(node.texture is ImageTexture and row.texture == node.texture and node.texture.has_meta(&"cookie_image"), item_case.name + ": public node/exposure share the actual completed radial source image")
+        var texture:Texture2D=node.texture
+        textures[item_case.name]=texture
+        var image:Image=texture.get_meta(&"cookie_image")
+        # Retain the native Gradient numerical oracle and original explicit
+        # boundary values, independently of the production cookie generator.
+        var gradient=Gradient.new();gradient.interpolation_mode=Gradient.GRADIENT_INTERPOLATE_CUBIC
+        gradient.offsets=PackedFloat32Array(item_case.knots)
+        var colours=PackedColorArray()
+        for value in item_case.intensities:colours.append(Color(value,value,value))
+        gradient.colors=colours
+        var offsets:PackedFloat32Array=gradient.offsets.duplicate();offsets.sort()
+        var exact:bool=image.get_size()==Vector2i(256,256) and image.get_format()==Image.FORMAT_RGBA8
+        var error:float=0.0
+        for y in image.get_height():
+            for x in image.get_width():
+                var radius:float=clampf((Vector2(x,y)/float(image.get_width()-1)-Vector2(.5,.5)).length()*2.0,0.0,1.0)
+                var expected:Color=gradient.sample(radius)
+                var actual:Color=image.get_pixel(x,y)
+                error=maxf(error,absf(actual.r-expected.r))
+                exact=exact and actual.r==actual.g and actual.g==actual.b and actual.a==1.0
+        check(exact and error<=1.0/255.0, item_case.name + ": every generated radial pixel matches the independent native Gradient within one RGBA8 quantum, including exact supplied zone ratios")
         check(is_equal_approx(row.outer, item_case.outer) and is_equal_approx(row.span.x, 2.0 * item_case.outer * ppu) and is_equal_approx(row.span.y, row.span.x * absf(camera.basis.z.y)), item_case.name + ": exact backend total radius drives projected support ellipse")
         check(node.position.is_equal_approx(camera.unproject_position(baseline.sampled[source.item_uuid].position)) and node.color == Lighting.TORCH_COLOUR and is_equal_approx(node.height, expected_height), item_case.name + ": radius changes preserve position/color/height")
         var finite := true
@@ -130,19 +143,18 @@ func run() -> void:
         evidence.append({"case":item_case.name,"feet":item_case.feet,"outer_cells":row.outer,"offsets":Array(offsets),"minimum":low,"maximum":high,"monotonic":monotonic,"finite":finite})
     check(textures.actual_torch == initial_texture, "Equal source/profile reuses original native texture")
     check(textures.same_ratios_double_radius == initial_texture, "Common boundary ratios reuse one native texture across absolute ranges")
-    check(textures.different_inner_same_outer != initial_texture and not is_equal_approx(textures.different_inner_same_outer.gradient.sample(.25).r, initial_texture.gradient.sample(.25).r), "Changed inner radii at same outer change actual native profile")
+    check(textures.different_inner_same_outer != initial_texture and textures.different_inner_same_outer.get_meta(&"cookie_image").get_data()!=initial_texture.get_meta(&"cookie_image").get_data(), "Changed inner radii at same outer change actual native profile")
     var duplicated := state.duplicate(true)
-    var items: Array = duplicated.actors[source.actor_uuid].controlled_items
-    items.append(items.filter(func(i): return i.item_uuid == source.item_uuid)[0].duplicate(true))
+    duplicated.light_sources[source.item_uuid]=duplicated.light_sources[source.item_uuid].duplicate(true)
     adapter.sync(duplicated); adapter.project(camera)
-    check(adapter.nodes.size() == resolved.sources.size() and adapter.canvas_sources().size() == resolved.sources.size(), "Repeated disclosed item identity creates no duplicate emitter")
-    check(node.texture == initial_texture and node.enabled, "Duplicate source retains the actual finite enabled profile")
+    check(adapter.nodes.size() == resolved.sources.size() and adapter.canvas_sources().size() == resolved.sources.size(), "Repeated canonical light-source identity creates no duplicate emitter")
+    check(node.texture == initial_texture and node.enabled, "Repeated source publication retains the actual finite enabled profile")
     check(state == original and journal.snapshot() == original, "All radius perturbations leave admitted replay state untouched")
     adapter.clear_pages()
     view.queue_free(); page.queue_free()
     await process_frame
     var report := {"checks":checks,"failures":failures,"recording":recording,"sequence":sequence,"cases":evidence,
-        "scope":"Headless native PointLight2D/GradientTexture2D boundary from actual admitted Hide/light state plus named radius perturbations. Tests source ratios, finite monotonic radial profile, identity reuse and unchanged positioning/color/height. No framebuffer, world-floor radiance or gameplay-light equivalence claim.",
+        "scope":"Headless PointLight2D and actual completed radial ImageTexture source from original admitted Hide/light optical descriptors plus named radius perturbations. Independent native Gradient oracle checks every RGBA8 source pixel and exact expected boundary profile; finite monotone radial samples, canonical identity reuse and unchanged positioning/color/height remain. No framebuffer, world-floor radiance or gameplay-light equivalence claim.",
         "invocation":{"script":"res://tests/light_range_profile_checks.gd","arguments":Array(OS.get_cmdline_user_args())}}
     FileAccess.open("res://generated/light_range_profile_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("LIGHT_RANGE_PROFILE ",JSON.stringify({"checks":checks,"failures":failures}))

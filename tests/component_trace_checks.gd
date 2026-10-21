@@ -5,6 +5,7 @@ const Trace=preload("res://presentation/event_trace.gd")
 const Authoring=preload("res://presentation/authoring.gd")
 const Occurrences=preload("res://presentation/occurrences.gd")
 const Compiler=preload("res://presentation/compiler.gd")
+const Components=preload("res://presentation/components.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
@@ -134,10 +135,83 @@ func hierarchy(sample:Dictionary,seat:String)->void:
             found=true;break
     check(found,seat+" actual attack/damage hierarchy exercises parent-gated log publication")
 
+
+## Synthetic authoring selectors around one unchanged original applied packet;
+## these controls are not a new recording or native framebuffer qualification.
+func damage_feedback_policies(sample:Dictionary)->void:
+    var actual_recipe:Dictionary=Trace.NativeSpells.source("spell.fireball",cache).recipe
+    var resource:String="res://authoring/abilities/spells/spell.fireball.tres"
+    check(Authoring.recipe_source(actual_recipe,"damage/floatingNumber",cache)==resource+"::unported/damage/floatingNumber" \
+        and Authoring.recipe_source(actual_recipe,"damage/floatingNumber/label",cache)==resource+"::unported/damage/floatingNumber/label" \
+        and Authoring.recipe_source(actual_recipe,"damage/floatingNumber/durationMs",cache)==resource+"::number_duration",
+        "The real selected spell keeps raw policy options and typed duration at their actual resource fields")
+    var node:Dictionary=sample.node
+    var original:PackedByteArray=var_to_bytes(sample.lineage.events)
+    var graph:Dictionary={"nodes":{},"recipes":{},"damage_timings":{node.id:{"flash":125.0,"number":225.0}}}
+    for actual in sample.lineage.events:graph.nodes[actual.lineage_id]=actual
+    var owner:Dictionary=graph.nodes.get(node.parent_lineage,{})
+    while not owner.is_empty() and (owner.get("fact")==null or owner.fact.kind not in ["attack","spell","action"]):
+        owner=graph.nodes.get(owner.get("parent_lineage"),{})
+    check(not owner.is_empty(),"Original damage supplies its actual causal attack/action/spell parent for policy controls")
+    if owner.is_empty():return
+    var context:Dictionary=Authoring.load_data("catalog/damage_context.json",cache).duplicate(true)
+    var private_cache:Dictionary=cache.duplicate()
+    private_cache["catalog/damage_context.json"]=context
+    var palette:Dictionary=context.palette.byDamageType.get(node.fact.damage_type,context.palette.untyped)
+    var group:Dictionary={"operation_sequence":sample.sequence,"components":[]}
+    Components._damage_feedback(group,node,graph,25.0,private_cache)
+    var baseline:Array=group.components.filter(func(row):return row.kind=="damage_number")
+    check(baseline.size()==1 and baseline[0].text==str(node.fact.applied_damage) and baseline[0].color==palette.impactColor,
+        "Unset parent number policy retains actual amount and global damage-type palette")
+    var recipe:Dictionary={"damage":{"hitFlash":{"enabled":true,"color":0,"durationMs":170.0},
+        "floatingNumber":{"enabled":true,"color":0x123456,"label":"Authored","durationMs":1200.0}},
+        "_source_fields":{"damage/hitFlash":"unit-authoring::damage/hitFlash","damage/floatingNumber":"unit-authoring::damage/floatingNumber"}}
+    graph.recipes[owner.id]=recipe
+    context.flashEnabled=false;context.numberEnabled=false
+    group.components=[];Components._damage_feedback(group,node,graph,25.0,private_cache)
+    var flashes:Array=group.components.filter(func(row):return row.kind=="material_flash")
+    var numbers:Array=group.components.filter(func(row):return row.kind=="damage_number")
+    check(flashes.size()==1 and flashes[0].colors==[0] and flashes[0].duration_ms==170.0 and flashes[0].start_ms==125.0,
+        "Explicit plain flash colour including black replaces only the unset-palette fallback at its existing callback")
+    check(numbers.size()==1 and numbers[0].text==str(node.fact.applied_damage)+" Authored" and numbers[0].color==0x123456 \
+        and numbers[0].duration_ms==1200.0 and numbers[0].start_ms==225.0,
+        "Authored number enable/colour/label/duration override global defaults without changing the callback clock")
+    if numbers.size()==1:
+        var number:Dictionary=numbers[0]
+        check(number.actor_uuid==node.fact.target_entity_uuid and number.amount==node.fact.applied_damage \
+            and number.source_event_uuid==node.id and number.feedback_source_occurrence==str(owner.id) and number.source==recipe._source_fields["damage/floatingNumber"],
+            "Feedback keeps actual recipient/result and the exact causal parent's editable policy pointer")
+        var inspected:Dictionary=Trace._compiled_component(number,private_cache)
+        check(inspected.feedback_policy==recipe.damage.floatingNumber and inspected.text==number.text and inspected.source==number.source,
+            "Passive inspection retains the actual selected policy and resolved text")
+        inspected.feedback_policy.label="private-inspection-control"
+        check(recipe.damage.floatingNumber.label=="Authored","Inspection cannot mutate the authored parent policy")
+    context.flashEnabled=true;context.numberEnabled=true
+    recipe.damage.hitFlash.enabled=false;recipe.damage.floatingNumber.enabled=false
+    group.components=[];Components._damage_feedback(group,node,graph,25.0,private_cache)
+    check(group.components.is_empty(),"Explicit disabled feedback overrides enabled global defaults without another visual")
+    recipe.damage.hitFlash={"enabled":true,"color":0,"palette":{"colors":[0x112233,0x445566,0x778899]}}
+    recipe.damage.floatingNumber={"enabled":true,"label":""}
+    group.components=[];Components._damage_feedback(group,node,graph,25.0,private_cache)
+    flashes=group.components.filter(func(row):return row.kind=="material_flash")
+    numbers=group.components.filter(func(row):return row.kind=="damage_number")
+    check(flashes.size()==1 and flashes[0].colors==recipe.damage.hitFlash.palette.colors,"A declared ordered palette is never flattened to scalar colour")
+    check(numbers.size()==1 and numbers[0].text==str(node.fact.applied_damage) and numbers[0].color==palette.impactColor,
+        "Explicit empty label keeps number-only text and an unset colour retains the original palette")
+    graph.recipes[owner.id]=actual_recipe
+    group.components=[];Components._damage_feedback(group,node,graph,25.0,private_cache)
+    numbers=group.components.filter(func(row):return row.kind=="damage_number")
+    check(numbers.size()==1 and numbers[0].source==resource+"::unported/damage/floatingNumber" \
+        and numbers[0].feedback_policy_sources.label==resource+"::unported/damage/floatingNumber/label" \
+        and numbers[0].feedback_policy_sources.durationMs==resource+"::number_duration",
+        "The emitted result exposes the real selected parent policy and typed field provenance")
+    check(var_to_bytes(sample.lineage.events)==original,"Shared feedback controls leave every original native fact unchanged")
+
 func run()->void:
     for seat in ["amber","blue"]:
         hierarchy(select("melee","attack",Callable(),seat),seat)
     var damage=select("melee","damage",func(value):return value.fact.get("stage")=="applied" and value.fact.applied_damage>0)
+    damage_feedback_policies(damage)
     var partial=compile(damage,[component("material_flash")])
     check(partial.rows[0].components.any(func(c):return c.kind=="damage_number" and c.status=="missing"),"Rendered flash cannot hide missing authored damage number")
     check(not partial.rows[0].components.any(func(c):return c.kind=="material_flash" and c.status=="missing"),"Compiled flash removes only its matching old missing requirement")
@@ -186,7 +260,7 @@ func run()->void:
     check(slash.rows[0].components.filter(func(c):return c.reason=="authored_attack_vfx_not_implemented").size()==1,"One authored attack slot cannot satisfy another missing slot")
     var all_slots=compile(attack,[component("sprite_layer","slash",{"layer":{"id":"attack.slash","slot":"slash"}}),component("sprite_layer","magic",{"layer":{"id":"attack.magic","slot":"magic"}})],vfx_recipe,false)
     check(not all_slots.rows[0].components.any(func(c):return c.reason=="authored_attack_vfx_not_implemented"),"Each actual attack layer qualifies its exact authored slot")
-    var trail_recipe=vfx_recipe.duplicate(true);trail_recipe.weaponTrail={"outcomes":["miss"]}
+    var trail_recipe=vfx_recipe.duplicate(true);trail_recipe.weaponTrail={"outcomes":["miss"],"source_id":"class.martial.slash"}
     var native_slash=component("native_effect","native-slash",{"source_id":"class.martial.slash","weapon_pose":{"clip":"Slash1"}})
     var replaced=compile(attack,[native_slash],trail_recipe,false)
     check(not replaced.rows[0].components.any(func(c):return c.reason=="authored_weapon_trail_not_implemented") and replaced.rows[0].components.filter(func(c):return c.reason=="authored_attack_vfx_not_implemented").size()==1,"Actual selected native weapon pose replaces only physical slash and retains magic sibling requirement")

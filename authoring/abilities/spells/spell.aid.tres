@@ -125,7 +125,9 @@ source = "ui/resources.json icon:spell.aid"
 script = ExtResource("8_acd6k")
 id = "spell.aid"
 icon = SubResource("Resource_4hhcq")
+native_staging = true
 delivery = "condition_only"
+effect_scope = "application"
 body = SubResource("Resource_0skxn")
 hand_layers = Array[ExtResource("4_e8qlo")]([SubResource("Resource_16rfy"), SubResource("Resource_nvffv")])
 sockets = "measured/abilities/spells/spell.aid.sockets.json"
@@ -166,3 +168,5 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
+
+notes = "Native source selection is available for review. Actual Aid condition UUIDs own application/hold/removal through the existing package lifecycle; its old cast review must not create a duplicate owner. All artwork remains unreviewed."

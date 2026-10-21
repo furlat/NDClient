@@ -32,55 +32,81 @@ icon = SubResource("Resource_vkeh5")
 disposition = "authored"
 body = SubResource("Resource_u0scm")
 effect_sources = PackedStringArray()
-status = "ready"
+status = "partial"
+media = Array[Dictionary]([
+ {
+  "alpha": 0.95,
+  "assetId": "class.font_gather.charge-q0-all",
+  "assetIdsByCamera": [
+   "class.font_gather.charge-q0-all",
+   "class.font_gather.charge-q1-all",
+   "class.font_gather.charge-q2-all",
+   "class.font_gather.charge-q3-all"
+  ],
+  "attachment": "source_ground",
+  "id": "charge-hand",
+  "poseSocket": "hand",
+  "scale": 0.3,
+  "timeMap": [
+   {
+    "elapsedMs": 0.0,
+    "sourceFrame": 39.0
+   },
+   {
+    "elapsedMs": 1250.0,
+    "sourceFrame": 0.0
+   }
+  ],
+  "source_id": "class.font_gather",
+  "durationMs": 1250.0
+ },
+ {
+  "alpha": 0.95,
+  "assetId": "class.font_gather.charge-q0-all",
+  "assetIdsByCamera": [
+   "class.font_gather.charge-q0-all",
+   "class.font_gather.charge-q1-all",
+   "class.font_gather.charge-q2-all",
+   "class.font_gather.charge-q3-all"
+  ],
+  "attachment": "source_ground",
+  "id": "charge-other_hand",
+  "poseSocket": "other_hand",
+  "scale": 0.3,
+  "timeMap": [
+   {
+    "elapsedMs": 0.0,
+    "sourceFrame": 39.0
+   },
+   {
+    "elapsedMs": 1250.0,
+    "sourceFrame": 0.0
+   }
+  ],
+  "source_id": "class.font_gather",
+  "durationMs": 1250.0
+ }
+])
+notes = "Explicit existing native Font charge source at each distinct authored hand socket; original alpha, scale and finite 1250 ms chronology are preserved. The slot-to-points direction retains exact source frame 39/32 seconds to 0 over 1250 ms. No point or slot totals are inferred. Missing other_hand cannot reuse hand. Artwork and production qualification remain unreviewed."
 unported = {
-"actionFeedback": null,
-"actor": {
-"media": []
-},
-"attackFeedback": null,
-"compatibleCueKinds": ["action"],
-"counterspellFeedback": null,
-"definitionRef": {
-"content_id": "action.class.sorcerer.convert_slot_to_sorcery_points",
-"content_version": 1.0,
-"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
-"definition_kind": "action",
-"pack_id": "content.srd_5_1_cc"
-},
-"media": [{
-"alpha": 0.95,
-"assetId": "class.font_gather.charge-q0-all",
-"assetIdsByCamera": ["class.font_gather.charge-q0-all", "class.font_gather.charge-q1-all", "class.font_gather.charge-q2-all", "class.font_gather.charge-q3-all"],
-"attachment": "source_ground",
-"id": "charge-hand",
-"poseSocket": "hand",
-"scale": 0.3,
-"timeMap": [{
-"elapsedMs": 0.0,
-"sourceFrame": 39.0
-}, {
-"elapsedMs": 1250.0,
-"sourceFrame": 0.0
-}]
-}, {
-"alpha": 0.95,
-"assetId": "class.font_gather.charge-q0-all",
-"assetIdsByCamera": ["class.font_gather.charge-q0-all", "class.font_gather.charge-q1-all", "class.font_gather.charge-q2-all", "class.font_gather.charge-q3-all"],
-"attachment": "source_ground",
-"id": "charge-other_hand",
-"poseSocket": "other_hand",
-"scale": 0.3,
-"timeMap": [{
-"elapsedMs": 0.0,
-"sourceFrame": 39.0
-}, {
-"elapsedMs": 1250.0,
-"sourceFrame": 0.0
-}]
-}],
-"mediaFailurePolicy": "fail_transaction",
-"previewChildCueKinds": [],
-"projectile": null,
-"variants": []
+ "actionFeedback": null,
+ "actor": {
+  "media": []
+ },
+ "attackFeedback": null,
+ "compatibleCueKinds": [
+  "action"
+ ],
+ "counterspellFeedback": null,
+ "definitionRef": {
+  "content_id": "action.class.sorcerer.convert_slot_to_sorcery_points",
+  "content_version": 1.0,
+  "definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+  "definition_kind": "action",
+  "pack_id": "content.srd_5_1_cc"
+ },
+ "mediaFailurePolicy": "fail_transaction",
+ "previewChildCueKinds": [],
+ "projectile": null,
+ "variants": []
 }

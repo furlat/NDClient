@@ -1,6 +1,8 @@
 extends SceneTree
 ## Fresh-process disk thumbnails at the real Recording -> TimelineView boundary.
 ## This measures thumbnail availability, not full Studio Library navigation.
+const Fixtures=preload("res://tests/recording_fixtures.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const Recording=preload("res://studio/recording.gd")
 const TimelineView=preload("res://studio/timeline_view.gd")
 const Thumbnails=preload("res://studio/thumbnail_cache.gd")
@@ -109,18 +111,21 @@ func dependency_revision(row:Dictionary,texture:Texture2D)->void:
     var root_path:String="res://.runtime/native-preview-resource-probe-"+str(OS.get_process_id())
     DirAccess.make_dir_recursive_absolute(root_path)
     var component:Dictionary=row.component.duplicate(true)
-    var source:String=component.native_clip.components[0].input.get("scene","")
-    check(source.ends_with(".tscn") and FileAccess.file_exists(source),"Dependency qualification uses this phase's actual native scene")
-    if not source.ends_with(".tscn") or not FileAccess.file_exists(source):
+    component.native_clip=Effects.occurrence_clip(component).duplicate(true)
+    var selected:Dictionary=Effects.choice(component.native_clip)
+    var actual:Dictionary=selected.approaches[0] if not selected.approaches.is_empty() else {}
+    var source:String=str(actual.get("source_phase",""))
+    check(source.ends_with(".tres") and FileAccess.file_exists(source),"Dependency qualification uses this selected phase's actual current native Resource")
+    if not source.ends_with(".tres") or not FileAccess.file_exists(source):
         DirAccess.remove_absolute(root_path);return
-    var fixture:String=root_path.path_join("source.tscn")
+    var fixture:String=root_path.path_join("source.tres")
     var original:String=FileAccess.get_file_as_string(source)
     FileAccess.open(fixture,FileAccess.WRITE).store_string(original)
-    component.native_clip.components[0].input.scene=fixture
+    actual.source_phase=fixture
     var store=Store.new()
     var hz:float=maxf(1,float(row.get("source_fps",component.get("sample_hz",32))))
     var descriptor:Dictionary=store.descriptor(component,hz)
-    check(descriptor.dependencies.has(fixture),"Actual selected scene participates in source invalidation")
+    check(descriptor.dependencies.has(fixture),"Actual selected source phase participates in source invalidation")
     var packet=Packet.new()
     packet.signature=descriptor.signature;packet.specification=descriptor.specification;packet.dependencies=descriptor.dependencies
     packet.quarter=0;packet.hz=hz;packet.ticks.append(0);packet.textures.append(texture)
@@ -159,16 +164,15 @@ func run()->void:
     check(DisplayServer.get_name()!="headless","Disk availability qualification uses a native renderer and completed draw")
     if DisplayServer.get_name()=="headless":finish();return
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-    var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_spell_case_inventory.json"))
-    var cases:Array=inventory.cases.filter(func(item):return item.spell_id=="fireball")
-    check(cases.size()==1,"The actual migrated Fireball recording is available")
-    if cases.size()!=1:finish();return
+    var original:Dictionary=Fixtures.case_record("fireball")
+    check(original.get("id")=="spell.fireball/area","The exact current independent Fireball original is available")
+    if original.is_empty():finish();return
     var begin:int=Time.get_ticks_usec()
-    var index:Dictionary=Recording.read(cases[0].perspectives[0].journal)
+    var index:Dictionary=Recording.read(Fixtures.journal("fireball"))
     var indexing_ms:float=float(Time.get_ticks_usec()-begin)/1000.0
     check(index.ok,"Original Fireball journal compiles with the ordinary Studio Recording")
     if not index.ok:finish();return
-    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.spell_id=="fireball")
+    var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_spell",false) and row.component.spell_id=="spell.fireball")
     check(rows.size()==3,"Real recording retains cast, flight and area source rows")
     if rows.size()!=3:finish();return
     var immutable:PackedByteArray=var_to_bytes(rows)

@@ -21,7 +21,8 @@ hidden_slots = PackedStringArray("weapon", "offhand")
 script = ExtResource("1_glu07")
 clip = "bg3-36/divine-smite/divine_smite_native/impact"
 role = "attached"
-at = "release"
+scope = "cast"
+at = "event.start"
 attachment = "caster_ground"
 orientation = "world"
 source_end = 0.52
@@ -32,7 +33,9 @@ hide_nodes = PackedStringArray()
 show_nodes = PackedStringArray()
 opacity_keys = PackedVector2Array()
 staging_from = "factory@20261018-c3c616e88a6b725f"
+constructor_input = {"kind": "observed_event", "projection": "weapon_component", "outcome": "damage", "geometry_actor": "caster", "damage_type": "Radiant", "damage_source_ids": ["class_feature.paladin.divine_smite"], "component_path": ["smite"], "input_field": "", "handler_behavior_id": "reaction.class_feature.paladin.divine_smite"}
 extra = {
+"input_policies": {"condition_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_condition"}, "tick_input": {"mode": "not_applicable", "reason": "selected_smite_impact_does_not_consume_tick"}},
 "delay_seconds": 0.0,
 "dynamic_geometry": true,
 "entity_geometry": {
@@ -90,11 +93,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_iohmg"]
 script = ExtResource("5_6ingn")
 id = "divine_smite_miss_native"
+dispatch_gap = "negative_admission_review_miss_has_no_applied_payload"
 kind = "outcome"
 selection = "divine_smite_miss_native"
 effects = Array[ExtResource("1_glu07")]([SubResource("Resource_yruri")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Factory Miss study is a negative payload-admission control, not an additional impact or condition on a missed attack. Keep it inspectable without replaying its review strike, condition or tick packets. Positive attributed smite contacts remain unfinished separately."
 
 [resource]
 script = ExtResource("3_cnfp5")

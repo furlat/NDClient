@@ -1,0 +1,540 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 6,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "5f210f70-272f-4083-a49c-71efd3d79ce6": "Amber caster",
+  "a3d75bdc-90fb-4373-aba8-38897e404477": "Amber ally",
+  "3baed701-d29b-499d-a745-3fc85f0c441a": "Blue second target",
+  "9cddbba7-3f32-4226-9c72-982cbbc0e33c": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.freezing_sphere \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.spell.payload.throw \u00b7 Amber ally"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 11,
+   "actor_change": 10,
+   "spell": 2,
+   "saving_throw": 8,
+   "damage": 8,
+   "sensory": 1,
+   "spatial_effect_state": 1,
+   "action": 1
+  },
+  "behaviors": {
+   "spell.freezing_sphere": 1,
+   "action.spell.payload.throw": 2
+  },
+  "conditions": [
+   "condition.prone",
+   "condition.spell.payload_lifetime"
+  ],
+  "ended_conditions": [
+   "condition.spell.payload_lifetime"
+  ],
+  "positive_applied_damage_types": [
+   "Cold"
+  ],
+  "item_effects": [],
+  "ended_item_effects": [],
+  "item_effect_memberships": [],
+  "item_attacks": []
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.spell.payload_lifetime",
+   "kind": "actor_change",
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "condition_uuid": "12196cba-5913-47f3-b54f-dcfdc5e8a1ce",
+   "condition_id": "condition.spell.payload_lifetime",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.freezing_sphere",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 74,
+   "lineage": 63,
+   "event_offset": 1,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 90,
+   "lineage": 63,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 91,
+   "lineage": 63,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 95,
+   "lineage": 63,
+   "event_offset": 6,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 111,
+   "lineage": 63,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 112,
+   "lineage": 63,
+   "event_offset": 10,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 116,
+   "lineage": 63,
+   "event_offset": 11,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 132,
+   "lineage": 63,
+   "event_offset": 14,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 133,
+   "lineage": 63,
+   "event_offset": 15,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 137,
+   "lineage": 63,
+   "event_offset": 16,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 153,
+   "lineage": 63,
+   "event_offset": 19,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 154,
+   "lineage": 63,
+   "event_offset": 20,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 159,
+   "lineage": 63,
+   "event_offset": 22,
+   "kind": "spell",
+   "label": "spell action.spell.payload.throw",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 173,
+   "lineage": 63,
+   "event_offset": 24,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 177,
+   "lineage": 63,
+   "event_offset": 25,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 181,
+   "lineage": 63,
+   "event_offset": 26,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "condition_uuid": "18ccdf00-cb1c-47f2-a596-9969b17ad08c",
+   "condition_id": "condition.prone",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 185,
+   "lineage": 63,
+   "event_offset": 27,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 189,
+   "lineage": 63,
+   "event_offset": 28,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 193,
+   "lineage": 63,
+   "event_offset": 29,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "a3d75bdc-90fb-4373-aba8-38897e404477",
+   "condition_uuid": "7214cd45-817f-45f1-9b72-8a44f72b53f7",
+   "condition_id": "condition.prone",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 195,
+   "lineage": 63,
+   "event_offset": 31,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 197,
+   "lineage": 63,
+   "event_offset": 33,
+   "label": "condition ended condition.spell.payload_lifetime",
+   "kind": "actor_change",
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "condition_uuid": "12196cba-5913-47f3-b54f-dcfdc5e8a1ce",
+   "condition_id": "condition.spell.payload_lifetime",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 198,
+   "lineage": 63,
+   "event_offset": 34,
+   "kind": "action",
+   "label": "action action.spell.payload.throw",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.spell.payload_lifetime",
+   "kind": "actor_change",
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "condition_uuid": "12196cba-5913-47f3-b54f-dcfdc5e8a1ce",
+   "condition_id": "condition.spell.payload_lifetime",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "spell",
+   "label": "spell spell.freezing_sphere",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 72,
+   "lineage": 62,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 88,
+   "lineage": 62,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 89,
+   "lineage": 62,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 93,
+   "lineage": 62,
+   "event_offset": 5,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 109,
+   "lineage": 62,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 110,
+   "lineage": 62,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 114,
+   "lineage": 62,
+   "event_offset": 10,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 130,
+   "lineage": 62,
+   "event_offset": 13,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 131,
+   "lineage": 62,
+   "event_offset": 14,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 135,
+   "lineage": 62,
+   "event_offset": 15,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 151,
+   "lineage": 62,
+   "event_offset": 18,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 152,
+   "lineage": 62,
+   "event_offset": 19,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 157,
+   "lineage": 62,
+   "event_offset": 21,
+   "kind": "spell",
+   "label": "spell action.spell.payload.throw",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 171,
+   "lineage": 62,
+   "event_offset": 23,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 175,
+   "lineage": 62,
+   "event_offset": 24,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 179,
+   "lineage": 62,
+   "event_offset": 25,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "condition_uuid": "18ccdf00-cb1c-47f2-a596-9969b17ad08c",
+   "condition_id": "condition.prone",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 183,
+   "lineage": 62,
+   "event_offset": 26,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 187,
+   "lineage": 62,
+   "event_offset": 27,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 191,
+   "lineage": 62,
+   "event_offset": 28,
+   "label": "condition applied condition.prone",
+   "kind": "actor_change",
+   "actor_uuid": "a3d75bdc-90fb-4373-aba8-38897e404477",
+   "condition_uuid": "7214cd45-817f-45f1-9b72-8a44f72b53f7",
+   "condition_id": "condition.prone",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 193,
+   "lineage": 62,
+   "event_offset": 30,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 195,
+   "lineage": 62,
+   "event_offset": 32,
+   "label": "condition ended condition.spell.payload_lifetime",
+   "kind": "actor_change",
+   "actor_uuid": "5f210f70-272f-4083-a49c-71efd3d79ce6",
+   "condition_uuid": "12196cba-5913-47f3-b54f-dcfdc5e8a1ce",
+   "condition_id": "condition.spell.payload_lifetime",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 196,
+   "lineage": 62,
+   "event_offset": 33,
+   "kind": "action",
+   "label": "action action.spell.payload.throw",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Cold"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7",
+  "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "2c11d7a9919c8aa9b1490628fff224627f19d6388c3884171d14a4a5cbecea22"
+ },
+ "sdk": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-0c2e5a0d7/sdk/python/src",
+  "query_adapter": "strict_selected_SDK_choices",
+  "source": {
+   "commit": "0c2e5a0d74919402c6e528f40c580b7ca3c22e93",
+   "branch": "feature/rules-checking",
+   "source": "/mnt/c/Users/tommaso/Documents/Dev/dnd_engine",
+   "export": "git archive committed tree; no working-tree changes"
+  }
+ }
+}

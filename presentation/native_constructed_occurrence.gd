@@ -43,27 +43,41 @@ func forward_arguments(method:String,arguments:Array)->void:
         source_input_revision+=1
         handle.source_inputs_dirty=true
 
+## Reflow only the source equations at an already sampled age. The ordinary
+## occurrence still owns its clock and the sealed sampler's pending GPU delta.
+## Shared by constructed phases and authored dynamic-geometry indexed cues.
+static func held_sample(source:Dictionary,seconds:float)->bool:
+    if not source.get("initialized",false) or not is_equal_approx(seconds,float(source.age)):return false
+    var trails:Dictionary=source.get("motion_trails",{})
+    if seconds>=0.0 and trails.values().any(func(binding):return not binding.released):return false
+    return trails.is_empty() or is_equal_approx(maxf(0.0,seconds),float(source.motion_age))
+
+static func refresh_held_source(source:Dictionary,seconds:float)->bool:
+    # Match the sealed sampler's exact held branch. A pending trail release
+    # or changed motion age still belongs to its ordinary full sample once.
+    if not held_sample(source,seconds):return false
+    var placement_changed:bool=source.has("last_sample_transform") and source.last_sample_transform!=source.root.global_transform
+    if not source.get("source_inputs_dirty",false) and not placement_changed:return false
+    for binding in source.opacity_bindings:binding.material.set_shader_parameter(binding.uniform,binding.native)
+    for binding in source.clip.bindings:
+        if binding.kind!="sample":continue
+        var component:Node=source.components[binding.component]
+        var source_age:float=seconds*float(binding.rate)+float(binding.offset_seconds)
+        if component.has_method("refresh_live_inputs"):component.refresh_live_inputs(source_age)
+        else:component.sample(source_age)
+    for binding in source.opacity_bindings:binding.native=float(binding.material.get_shader_parameter(binding.uniform))
+    source.source_inputs_dirty=false
+    source.last_sample_transform=source.root.global_transform
+    return true
+
 func sample(seconds:float)->void:
     if not construction_error.is_empty():return
-    var same_clock:bool=handle.get("initialized",false) and is_equal_approx(seconds,float(handle.age))
+    var same_clock:bool=held_sample(handle,seconds)
     var placement_changed:bool=handle.has("last_sample_transform") and handle.last_sample_transform!=handle.root.global_transform
     if same_clock and (source_input_revision!=sampled_input_revision or placement_changed):
-        # Restore the source-owned envelope before component sampling, then
-        # retain its new value for the caller's ordinary attenuation. Never
-        # advance/restart particles, players or native callbacks a second time.
-        for binding in handle.opacity_bindings:binding.material.set_shader_parameter(binding.uniform,binding.native)
-        for binding in handle.clip.bindings:
-            if binding.kind!="sample":continue
-            var component:Node=handle.components[binding.component]
-            var source_age:float=seconds*float(binding.rate)+float(binding.offset_seconds)
-            # The complete successor's public refresh hook owns audited source
-            # updates. Retained sources without it keep the proven equation-only
-            # reflow; neither arm steps particles/players or runs the other arm.
-            if component.has_method("refresh_live_inputs"):component.refresh_live_inputs(source_age)
-            else:component.sample(source_age)
-        for binding in handle.opacity_bindings:binding.native=float(binding.material.get_shader_parameter(binding.uniform))
-        handle.source_inputs_dirty=false
-        handle.last_sample_transform=handle.root.global_transform
+        # A caller may already have consumed the same dirty packet through
+        # the shared indexed-source path. The helper refuses a second reflow.
+        refresh_held_source(handle,seconds)
         _ensure_material_bindings()
         clock.sample(seconds)
         previous_age=seconds

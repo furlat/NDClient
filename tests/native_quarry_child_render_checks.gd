@@ -24,10 +24,17 @@ func child_source(name:String,seat:String)->void:
     if not index.ok or not opened.ok:return
     index.media_preload=MEDIA.plan(index)
     var rows:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("lifecycle_key")=="condition_"+name+"_persistent")
-    var unresolved:Array=index.rows.filter(func(row):return row.kind=="native_effect" and row.get("component",{}).get("native_cue",{}).get("source_index",-1)==0 \
-        and row.get("component",{}).get("spell_id")==name)
-    check(not rows.is_empty() and unresolved.size()==1 and unresolved[0].status=="missing" \
-        and unresolved[0].component.get("unbound_constructor_inputs",[])==["retained_caster_sustain_uuid_not_disclosed"],label+": available child and actual missing caster-root disposition remain separate")
+    var entry:Resource=load("res://authoring/abilities/spells/spell."+name+".tres")
+    var applications:Array=entry.effects.filter(func(use):return use.constructor_input.get("projection")=="quarry_application")
+    check(applications.size()==2 and applications.all(func(use):return use.unbound_constructor_inputs.is_empty() \
+        and use.constructor_input.owner_condition_id=="condition.spell."+name \
+        and use.constructor_input.recipient_condition_id=="condition.spell."+name+".quarry"),label+": both current finite sources require the exact real sustain and recipient pair")
+    var members:Array=[]
+    for actor in journal.state.actors.values():members.append_array(actor.conditions)
+    check(not rows.is_empty() and members.filter(func(member):return member.behavior_id=="condition.spell."+name+".quarry").size()==1 \
+        and members.filter(func(member):return member.behavior_id=="condition.spell."+name).is_empty(),label+": original child and absent distinct caster sustain remain separate actual memberships")
+    check(not index.rows.any(func(candidate):return candidate.get("component",{}).get("spell_id")==name \
+        and candidate.get("component",{}).get("native_quarry",false)),label+": absent original sustain cannot publish a successful quarry constructor")
     if rows.is_empty():return
     var row:Dictionary=rows[0];var component:Dictionary=row.component;var owner:Dictionary=row.owner
     var at:float=float(owner.start_ms)+float(component.lifecycle_phases.application.seconds)*1000.0+100.0
@@ -61,6 +68,7 @@ func child_source(name:String,seat:String)->void:
     world.install_playback(Recording.restore(index,maxf(at,index.presentation_end_ms)+1.0))
     if await settle(world):check(world.timeline.state==journal.snapshot(),label+": end equals the independent original canonical reducer")
     check(world.presentation_errors.is_empty() and world.media_issue.is_empty(),label+": no production source error")
-    evidence.append({"spell":name,"seat":seat,"owner_uuid":owner.id,"changed_pixels":count,"retained_root":"not_disclosed","native_rider":"not_qualified"})
+    evidence.append({"spell":name,"seat":seat,"owner_uuid":owner.id,"changed_pixels":count,"retained_root":"not_disclosed","native_rider":"not_qualified",
+        "finite_pair_sources":applications.map(func(use):return {"clip":str(use.clip),"constructor":use.constructor_input.duplicate(true)})})
     native.close(world);check(native.handles.is_empty() and native.groups.is_empty(),label+": private native owners close")
     view.queue_free();await frame();await frame()

@@ -7,6 +7,10 @@ extends RefCounted
 ## shader: each system names its role and this assigns the client's shader.
 const LightUnits=preload("res://presentation/native_light_units.gd")
 const FORMAT:="res://assets/vfx/format/recording.gd"
+const Recording=preload(FORMAT)
+## Delivered opt-in recording schema: the same fixed VAT data plus explicit
+## material placements and source-cycle declarations. It has its own base script.
+const DeclaredRecording=preload("res://assets/vfx/extensions/production-review-20261020/sources/9a688fed1008a610ee01/declared_recording.gd")
 const PARTICLES=preload("res://presentation/baked_particles.gdshader")
 const TRAILING=preload("res://presentation/baked_trailing_particles.gdshader")
 const PATH_TRAIL=preload("res://presentation/baked_path_trail.gdshader")
@@ -119,7 +123,7 @@ static func _pump()->void:
             push_warning("Recorded effect failed to load (status %d); skipping it: %s"%[status,_loading])
         else:
             var bundle:Resource=ResourceLoader.load_threaded_get(_loading)
-            if bundle==null or bundle.get_script()==null or bundle.get_script().resource_path!=FORMAT:
+            if not (bundle is Recording or bundle is DeclaredRecording):
                 push_warning("Not a package recording; skipping it: "+_loading)
             else:
                 owner.loaded.append(bundle)
@@ -228,11 +232,27 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
     var materials:Array=material_locations(root)
     phases.baked_material_locations=(Time.get_ticks_usec()-phase_started)/1000.0
     phase_started=Time.get_ticks_usec()
-    var copies:Dictionary={}
-    for index in bundle.private_materials:
+    # The delivered recorder separates ordinary bindable materials from
+    # non-primitive draw-pass materials. Both sets belong to this occurrence;
+    # the latter require an owned mesh per actual particle pass, retaining
+    # every surface instead of replacing the whole node with an override.
+    var mesh_private:Array=bundle.get_meta("factory_mesh_private_materials",[])
+    var private_indices:Array=bundle.private_materials.duplicate()
+    for index in mesh_private:
+        if index not in private_indices:private_indices.append(index)
+    var copies:Dictionary={};var meshes:Dictionary={}
+    for index in private_indices:
         var copy:Material=materials[index].material.duplicate()
         copies[index]=copy
-        for location in materials[index].locations:_bind(root,location,copy)
+        for location in materials[index].locations:
+            if index not in mesh_private or location.kind!="pass":
+                _bind(root,location,copy);continue
+            var particles:GPUParticles3D=root.get_node(location.path)
+            var key:Array=[particles,location.pass]
+            if not meshes.has(key):
+                var mesh:Mesh=particles.get_draw_pass_mesh(location.pass).duplicate()
+                particles.set_draw_pass_mesh(location.pass,mesh);meshes[key]=mesh
+            meshes[key].surface_set_material(location.surface,copy)
     phases.baked_private_materials=(Time.get_ticks_usec()-phase_started)/1000.0
     phase_started=Time.get_ticks_usec()
     if _still_path==null:_still_path=ImageTexture.create_from_image(Image.create_from_data(1,3,false,Image.FORMAT_RGBAF,PackedFloat32Array([1,0,0,0, 0,1,0,0, 0,0,1,0]).to_byte_array()))
@@ -263,6 +283,26 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
         var target:Object=root.get_node(track.path) if track.kind in ["node","bone"] else copies.get(int(track.material))
         if target==null:handle.error="Recorded track target missing: "+str(track);return handle
         handle.tracks.append({"target":target,"track":track})
+    var declarations:Variant=bundle.get("material_placements")
+    if declarations is Array and not declarations.is_empty():
+        var placement:Dictionary=_prepare_placement(root,declarations,private_indices,materials,copies)
+        if not placement.error.is_empty():handle.error=placement.error;return handle
+        handle.recorded_placements=placement.bindings
+    var loop:Variant=bundle.get("source_loop")
+    if loop is Dictionary and not loop.is_empty():
+        if not loop.has("begin_seconds") or not loop.has("period_seconds") \
+            or not is_finite(float(loop.begin_seconds)) or not is_finite(float(loop.period_seconds)) \
+            or float(loop.begin_seconds)<0.0 or float(loop.period_seconds)<=0.0 \
+            or float(loop.begin_seconds)+float(loop.period_seconds)!=float(bundle.seconds) \
+            or not bundle.systems.is_empty() or not bundle.trails.is_empty() or bundle.moving:
+            handle.error="Explicit source cycle requires its complete fixed mesh-only recorded domain";return handle
+        handle.source_loop=loop.duplicate()
+    for entry in handle.tracks:
+        var mode:String=str(entry.track.get("interpolation",""))
+        if mode.is_empty():continue
+        if mode!="nearest" or entry.track.kind!="material" or not entry.target is ShaderMaterial \
+            or entry.track.values.size()!=bundle.frames or entry.track.blend:
+            handle.error="Unsupported explicit recorded track interpolation";return handle
     phases.baked_tracks=(Time.get_ticks_usec()-phase_started)/1000.0
     phase_started=Time.get_ticks_usec()
     for node in root.find_children("*","",true,false):
@@ -340,6 +380,11 @@ static func _write_column(image:Image,column:int,transform:Transform3D)->void:
 ## opacity envelopes and named hides (Playback.controls).
 static func sample(handle:Dictionary,seconds:float)->void:
     var bundle:Resource=handle.bundle
+    var loop:Dictionary=handle.get("source_loop",{})
+    if not loop.is_empty():
+        seconds=maxf(0.0,seconds)
+        if seconds>float(loop.begin_seconds)+float(loop.period_seconds):
+            seconds=float(loop.begin_seconds)+fposmod(seconds-float(loop.begin_seconds),float(loop.period_seconds))
     var frame:float=clampf(seconds*bundle.rate,0.0,float(bundle.frames-1))
     var low:int=int(frame)
     var high:int=mini(low+1,bundle.frames-1)
@@ -353,7 +398,7 @@ static func sample(handle:Dictionary,seconds:float)->void:
         for entry in handle.tracks:
             var track:Dictionary=entry.track
             var values:Array=track.values
-            var value:Variant=values[low]
+            var value:Variant=values[clampi(int(roundf(seconds*bundle.rate)),0,bundle.frames-1)] if track.get("interpolation","")=="nearest" else values[low]
             if track.blend and high!=low:value=_blend(values[low],values[high],weight)
             if track.kind=="bone":entry.target.set_bone_pose(int(track.property),value)
             elif track.kind=="node" or not entry.target is ShaderMaterial:entry.target.set(track.property,value)
@@ -364,6 +409,34 @@ static func sample(handle:Dictionary,seconds:float)->void:
         handle.age=seconds;handle.sampled=true
     else:
         LightUnits.rescale(handle.light_units,absf(handle.root.global_basis.get_scale().x))
+    # Placement remains a live optical operand even when the source age is held.
+    for binding in handle.get("recorded_placements",[]):
+        var node:Node3D=binding.node
+        if not is_instance_valid(node):handle.error="Recorded source placement owner was released";handle.root.hide();return
+        if not node.is_inside_tree():continue
+        var transform:Transform3D=node.global_transform
+        if binding.last!=null and binding.last==transform:continue
+        if not transform.is_finite() or transform.basis.determinant()==0.0:
+            handle.error="Recorded source placement requires a finite invertible actual transform";handle.root.hide();return
+        binding.material.set_shader_parameter(binding.uniform,transform.affine_inverse());binding.last=transform
+
+## Recording declarations name an exact owned material and actual scene node.
+## Resolve once after ordinary private-material binding, with no shader-name rule.
+static func _prepare_placement(root:Node3D,declared:Array,private_indices:Variant,materials:Array,copies:Dictionary)->Dictionary:
+    var result:Dictionary={"bindings":[],"error":""}
+    for record in declared:
+        var index:int=int(record.get("material",-1));var uniform:String=str(record.get("uniform",""))
+        var path:NodePath=NodePath(str(record.get("path","")))
+        if index<0 or index>=materials.size() or index not in private_indices or uniform.is_empty() \
+            or path.is_empty() or path.is_absolute() or path.get_subname_count()!=0:
+            result.error="Invalid explicit private recorded placement binding";return result
+        var node:Node3D=root.get_node_or_null(path)
+        var material:ShaderMaterial=copies.get(index) as ShaderMaterial
+        if node==null or node!=root and not root.is_ancestor_of(node) or material==null or material.shader==null \
+            or not material.shader.get_shader_uniform_list().any(func(row):return row.name==uniform):
+            result.error="Missing actual source node/private shader uniform in recorded placement";return result
+        result.bindings.append({"node":node,"material":material,"uniform":uniform,"last":null})
+    return result
 
 ## New particle lives stop at this source time (emitting=false in the source).
 static func stop_emission(handle:Dictionary,source_seconds:float)->void:

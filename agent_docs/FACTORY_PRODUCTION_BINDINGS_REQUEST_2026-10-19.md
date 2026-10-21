@@ -1,5 +1,11 @@
 # Factory work available now — production bindings and remaining artwork
 
+**Current artwork-review status — human clarification, 20 October 2026:** all
+artwork still awaits human review. The earlier named four-effect rejection list
+is superseded and must not be treated as current scope or as acceptance of any
+other artwork.
+
+
 19 October 2026. This is work the Factory author can start while client integration continues. It covers the complete delivered spell, condition and class library, rather than a special repair for Haste. It does not authorize replacing the client's renderer or changing game rules.
 
 ## 19 October receiving update

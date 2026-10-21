@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_a3iow"]
 [ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_slh3x"]
 [ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_a3iow"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="feast_effect"]
 
 [sub_resource type="Resource" id="Resource_ld3yk"]
 script = ExtResource("1_2p08s")
@@ -23,6 +24,23 @@ path = "art/media/ui/icons/smooth48/action.eat-from-feast.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:action.eat-from-feast"
 
+[sub_resource type="Resource" id="ActualConsumption"]
+script = ExtResource("feast_effect")
+clip = "native/feast/consume"
+selection = "heroes_feast_native"
+approach = "runtime-prepared-20261020"
+role = "attached"
+scope = "source"
+at = "body.effect"
+attachment = "caster_ground"
+orientation = "world"
+scale = 0.55
+source_end = 1.8
+duration_policy = "authored"
+follow = true
+light_multiplier = 0.0
+staging_from = "factory@runtime-public-admission-20261020-976f8289ebcefa5c"
+
 [resource]
 script = ExtResource("2_slh3x")
 id = "action.environment.heroes_feast.eat"
@@ -34,7 +52,9 @@ body = SubResource("Resource_ld3yk")
 plays = "action.environment.heroes_feast.eat"
 target = "source_item"
 effect_sources = PackedStringArray()
-status = "ready"
+effects = Array[ExtResource("feast_effect")]([SubResource("ActualConsumption")])
+status = "partial"
+notes = "The accepted actual EatFromFeast action selects the existing finite native/feast/consume source at its authored body.effect, on the actual eater's ground. Its original scale0.55 and1.8-second source clock are retained through the existing prepared constructor. This explicitly replaces the unconsumed feast-blessing action-material and clasped-hands particle-intake side sheets; no guessed hand socket, recipe palette or new consumer is required. The actual child Heroes Feast benefit retains its independent condition UUID/lifecycle; consumption artwork does not assert a HealFact or alter HP. All artwork remains unreviewed; current output qualification remains separate."
 unported = {
 "actionFeedback": null,
 "actor": {

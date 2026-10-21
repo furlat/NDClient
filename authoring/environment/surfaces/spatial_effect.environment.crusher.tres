@@ -9,5 +9,123 @@ id = "spatial_effect.environment.crusher"
 layer = "none"
 art = PackedStringArray("trap-workshop.crusher")
 legacy = "measured/environment/surfaces/spatial_effect.environment.crusher.json"
+world_media = {
+  "kind": "sprite",
+  "requires_object_anchor": true,
+  "state_field": "trap_state",
+  "art_ids": [
+    "trap-workshop.crusher",
+    "trap-workshop.crusher.actor-depth"
+  ],
+  "frames_by_pose": {
+    "e": [
+      "trap-workshop.crusher.e.0",
+      "trap-workshop.crusher.e.1",
+      "trap-workshop.crusher.e.2",
+      "trap-workshop.crusher.e.3",
+      "trap-workshop.crusher.e.4",
+      "trap-workshop.crusher.e.5",
+      "trap-workshop.crusher.e.6",
+      "trap-workshop.crusher.e.7",
+      "trap-workshop.crusher.e.8",
+      "trap-workshop.crusher.e.9",
+      "trap-workshop.crusher.e.10",
+      "trap-workshop.crusher.e.11"
+    ],
+    "n": [
+      "trap-workshop.crusher.n.0",
+      "trap-workshop.crusher.n.1",
+      "trap-workshop.crusher.n.2",
+      "trap-workshop.crusher.n.3",
+      "trap-workshop.crusher.n.4",
+      "trap-workshop.crusher.n.5",
+      "trap-workshop.crusher.n.6",
+      "trap-workshop.crusher.n.7",
+      "trap-workshop.crusher.n.8",
+      "trap-workshop.crusher.n.9",
+      "trap-workshop.crusher.n.10",
+      "trap-workshop.crusher.n.11"
+    ],
+    "s": [
+      "trap-workshop.crusher.s.0",
+      "trap-workshop.crusher.s.1",
+      "trap-workshop.crusher.s.2",
+      "trap-workshop.crusher.s.3",
+      "trap-workshop.crusher.s.4",
+      "trap-workshop.crusher.s.5",
+      "trap-workshop.crusher.s.6",
+      "trap-workshop.crusher.s.7",
+      "trap-workshop.crusher.s.8",
+      "trap-workshop.crusher.s.9",
+      "trap-workshop.crusher.s.10",
+      "trap-workshop.crusher.s.11"
+    ],
+    "w": [
+      "trap-workshop.crusher.w.0",
+      "trap-workshop.crusher.w.1",
+      "trap-workshop.crusher.w.2",
+      "trap-workshop.crusher.w.3",
+      "trap-workshop.crusher.w.4",
+      "trap-workshop.crusher.w.5",
+      "trap-workshop.crusher.w.6",
+      "trap-workshop.crusher.w.7",
+      "trap-workshop.crusher.w.8",
+      "trap-workshop.crusher.w.9",
+      "trap-workshop.crusher.w.10",
+      "trap-workshop.crusher.w.11"
+    ]
+  },
+  "fps": 12,
+  "state_frames": {
+    "activated": 0,
+    "deactivated": 0,
+    "ready": 0
+  },
+  "activation_frames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "contact_frame": 5,
+  "depth": "world",
+  "successful_save_hop": {
+    "effect_id": "spatial_effect.environment.crusher.avoidance",
+    "body_clip": "Rolling",
+    "duration_ms": 360.0,
+    "height_px": 10.0
+  },
+  "actor_depth": {
+    "asset_id": "trap-workshop.crusher.actor-depth",
+    "cell": [
+      256,
+      256
+    ],
+    "rows_by_pose": {
+      "e": 0,
+      "n": 3,
+      "s": 1,
+      "w": 2
+    },
+    "depth_range": [
+      -4.0,
+      4.0
+    ],
+    "pixels_per_unit_by_pose": {
+      "e": 22.857127046414462,
+      "n": 22.857137836007496,
+      "s": 22.857137836007496,
+      "w": 22.85714862560053
+    }
+  }
+}
 status = "partial"
-notes = "Art or a Factory scenario exists; the game does not draw it."
+notes = "Source-authored world program promoted from measured/environment/surfaces/spatial_effect.environment.crusher.json. The shared environment path retains the exact observed spatial owner, disclosed state and original numeric pose-frame ordering. Finite activation is driven only by actual committed mechanism facts; state transitions use actual successive owner values. Projectile, avoidance, depth and residue declarations remain separate factual inputs. All artwork remains unreviewed; source assignment does not qualify runtime output."

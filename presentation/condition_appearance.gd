@@ -17,13 +17,17 @@ class Binding extends RefCounted:
     var actor_uuid:String
     var world:Node
     var owner_ids:Dictionary={}
+    # Private original-prefix outfits use the same lease contract. Their
+    # materials are occurrence-owned and never enter the live actor registry.
+    var private_entries:Array=[]
     func acquire_condition_appearance(owner_id:int,specification:Dictionary)->bool:
         if str(specification.get("actor_uuid",""))!=actor_uuid:return false
-        var accepted:bool=appearances.acquire(world,condition_uuid,actor_uuid,owner_id,specification)
+        var accepted:bool=appearances.acquire_entries(private_entries if not private_entries.is_empty() else appearances.entries(world,actor_uuid,condition_uuid),condition_uuid,actor_uuid,owner_id,specification)
         if accepted:owner_ids[owner_id]=true
         return accepted
     func set_condition_appearance_opacity(owner_id:int,value:float)->void:
         appearances.set_opacity(condition_uuid,owner_id,value)
+        if not private_entries.is_empty():appearances.sync_private_entries(actor_uuid,private_entries)
     func release_condition_appearance(owner_id:int)->void:
         appearances.release(condition_uuid,owner_id)
         owner_ids.erase(owner_id)
@@ -82,10 +86,13 @@ static func entries(world:Node,actor:String,condition_uuid:String)->Array:
         return effect.get("kind")=="condition_appearance" and condition_uuid in effect.get("condition_uuids",[]))
 
 func acquire(world:Node,condition_uuid:String,actor:String,owner_id:int,specification:Dictionary)->bool:
+    return acquire_entries(entries(world,actor,condition_uuid),condition_uuid,actor,owner_id,specification)
+
+func acquire_entries(candidates:Array,condition_uuid:String,actor:String,owner_id:int,specification:Dictionary)->bool:
     if condition_uuid.is_empty() or specification.get("body_animation_override",false) \
         or specification.get("pose_policy")!="current_actor_pose_and_facing":return false
     var layer:Dictionary=specification.layer
-    var matching:Array=entries(world,actor,condition_uuid).filter(func(entry):return entry.actor_layer.slot==layer.slot \
+    var matching:Array=candidates.filter(func(entry):return entry.actor_layer.slot==layer.slot \
         and entry.actor_layer.category==layer.category and entry.actor_layer.effect.id==layer.id)
     if matching.is_empty():return false
     if leases.has(owner_id):return leases[owner_id].condition_uuid==condition_uuid and leases[owner_id].actor==actor
@@ -113,6 +120,16 @@ func bind(world:Node,handle:Dictionary,component:Dictionary)->String:
 
 func begin_sample()->void:
     sampled_leases.clear()
+
+func sync_private_entries(actor:String,selected:Array)->void:
+    for entry in selected:
+        var effect:Dictionary=entry.actor_layer.get("effect",{})
+        if effect.get("kind")!="condition_appearance":continue
+        var opacity:float=0.0
+        for lease in leases.values():
+            if lease.actor==actor and lease.condition_uuid in effect.condition_uuids and lease.layer.id==effect.id \
+                and lease.layer.slot==entry.actor_layer.slot and lease.layer.category==entry.actor_layer.category:opacity=maxf(opacity,lease.opacity)
+        SourceMaterial.set_parameter(entry,"layer_alpha",opacity)
 
 func sampled(handle:Dictionary)->void:
     var binding:Binding=handle.get("appearance_binding")

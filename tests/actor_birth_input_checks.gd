@@ -38,7 +38,10 @@ func run()->void:
         var id:String="spell."+name;var path:String="res://authoring/abilities/spells/"+id+".tres"
         entries[id]=load(path);paths[id]=path
         var cue:Resource=entries[id].effects[0]
-        check(cue.constructor_input=={"kind":"actor_birth","component_path":["summon_manifestation"],"input_field":"","creature_id":"creature.spell."+CASES[name].form},id+" exact authored form and native component")
+        check(cue.constructor_input.kind=="actor_birth" and cue.constructor_input.component_path==["summon_manifestation"] and cue.constructor_input.input_field.is_empty(),id+" exact native birth component")
+        if cue.constructor_input.has("creature_ids"):
+            check(cue.constructor_input.creature_ids==Array(entries[id].summons) and not cue.constructor_input.has("creature_id"),id+" neutral source admits exactly its declared summon family")
+        else:check(cue.constructor_input.creature_id=="creature.spell."+CASES[name].form,id+" exact singular authored form")
         check(cue.scope=="cast" and cue.at=="cast" and cue.delay==0.0,id+" single observation-owned phase, not one per spell application")
         check(cue.extra.live_endpoints==[{"actor":"target","socket":"ground"}] and not cue.extra.has("review_stationary_ground"),id+" actual born actor owns the one birth endpoint; no review ground/terminal")
         check(is_equal_approx(cue.source_end,2.1291666666666667) and entries[id].status=="partial",id+" full original finite birth, no whole-family acceptance claim")
@@ -151,7 +154,7 @@ func constructor(component:Dictionary,actual:Dictionary,label:String)->void:
     var original_input:Dictionary=original.components[0].input
     check(input.owner_uuid==actual.target_uuid and input.birth_event_uuid==actual.binding.birth_occurrence,label+" exact actual identity replaces review constructor UUIDs")
     check(input.initial_state=={"owner_uuid":actual.target_uuid,"birth_admitted":false,"observed":false,"suppressed":false} and input.review_states.is_empty(),label+" constructor starts optically inactive and cannot replay review terminal states")
-    check(input.entries==original_input.entries and input.form==original_input.form,label+" original native art/material/composition and birth timing unchanged")
+    check(input.entries==original_input.entries and input.form==actual.binding.creature_id,label+" original native art/material/composition and birth timing unchanged")
     var birth:Dictionary=input.entries.filter(func(row):return row.kind=="birth")[0]
     check(is_equal_approx(birth.begin_seconds+birth.seconds,component.native_cue.source_end),label+" source window ends after every original birth frame")
     check(input.entries.any(func(row):return row.kind=="terminal") and not input.initial_state.has("terminal_event_uuid"),label+" original terminal art retained without fabricated terminal admission")
@@ -180,7 +183,7 @@ func negative(owner:Dictionary,descriptor:Dictionary,graph:Dictionary,commits:Ar
     check(Birth.observed(application,descriptor,graph,commits).is_empty(),label+" application cannot replay the root birth")
     var unrelated:Dictionary=owner.duplicate();unrelated.lineage_id="unrelated-root-control"
     check(Birth.observed(unrelated,descriptor,graph,commits).is_empty(),label+" another native root cannot acquire this birth")
-    var wrong:Dictionary=descriptor.duplicate();wrong.creature_id="creature.spell.not_this_form"
+    var wrong:Dictionary=descriptor.duplicate();wrong.erase("creature_ids");wrong.creature_id="creature.spell.not_this_form"
     check(Birth.observed(owner,wrong,graph,commits).is_empty(),label+" incompatible actual creature cannot select this source")
     var missing:Dictionary=graph.duplicate();missing.body_records=[]
     check(Birth.observed(owner,descriptor,missing,commits).is_empty(),label+" spatial entry alone cannot fabricate a known actor form")

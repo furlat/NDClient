@@ -1,0 +1,175 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "a0a91514-4980-4c82-b31e-5b85e5bdb9d1": "Amber caster",
+  "f062d3bd-99d4-4007-b913-048288f1c590": "Amber ally",
+  "29746e23-83e3-4730-aa92-7a875a76afe4": "Blue second target",
+  "9ac77de5-9629-4bab-9c20-abc3532dab48": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.divine_word \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "actor_change": 2,
+   "damage": 2,
+   "life": 1,
+   "spell": 2,
+   "sensory": 1
+  },
+  "behaviors": {
+   "spell.divine_word": 2
+  },
+  "conditions": [
+   "condition.spell.divine_word"
+  ],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Force"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 59,
+   "lineage": 41,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 62,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "life",
+   "label": "life ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 65,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 66,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied condition.spell.divine_word",
+   "kind": "actor_change",
+   "actor_uuid": "9ac77de5-9629-4bab-9c20-abc3532dab48",
+   "condition_uuid": "1ead2508-f490-4333-80bd-7b2f8857df3b",
+   "condition_id": "condition.spell.divine_word",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 67,
+   "lineage": 41,
+   "event_offset": 6,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "spell",
+   "label": "spell spell.divine_word",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 67,
+   "lineage": 49,
+   "event_offset": 1,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 74,
+   "lineage": 49,
+   "event_offset": 3,
+   "kind": "life",
+   "label": "life ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 77,
+   "lineage": 49,
+   "event_offset": 5,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 78,
+   "lineage": 49,
+   "event_offset": 6,
+   "label": "condition applied condition.spell.divine_word",
+   "kind": "actor_change",
+   "actor_uuid": "9ac77de5-9629-4bab-9c20-abc3532dab48",
+   "condition_uuid": "1ead2508-f490-4333-80bd-7b2f8857df3b",
+   "condition_id": "condition.spell.divine_word",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 79,
+   "lineage": 49,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 81,
+   "lineage": 49,
+   "event_offset": 9,
+   "kind": "spell",
+   "label": "spell spell.divine_word",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Force"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

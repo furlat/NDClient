@@ -40,6 +40,8 @@ ramp = PackedColorArray()
 [sub_resource type="Resource" id="Resource_sxk7o"]
 script = ExtResource("3_tp0bh")
 clip = "review/finger_of_death/normal_back/lifecycle"
+approach = "runtime-prepared-input-reduction-20261021"
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
 role = "attached"
 at = "release"
 delay = -0.183333333333333
@@ -65,7 +67,8 @@ extra = {
 "socket": "body_center"
 }],
 "orientation": "facing",
-"source_launch_local": 1.1
+"source_launch_local": 1.1,
+"source_contact_local": 1.75
 }
 
 [sub_resource type="Resource" id="Resource_i1yfr"]
@@ -73,6 +76,7 @@ script = ExtResource("3_tp0bh")
 clip = "native/finger_of_death/impact"
 role = "attached"
 at = "contact"
+delay = 1.566666666666667
 attachment = "recipient_ground"
 scale = 0.565685424949238
 orientation = "world"
@@ -152,6 +156,8 @@ source = "ui/resources.json icon:spell.finger-of-death"
 [sub_resource type="Resource" id="Resource_yj1q1"]
 script = ExtResource("3_tp0bh")
 clip = "private/finger-counterspell-v193/full_sequence"
+approach = "runtime-prepared-input-reduction-20261021"
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
 role = "attached"
 at = "release"
 delay = -0.183333333333333
@@ -183,17 +189,20 @@ extra = {
 [sub_resource type="Resource" id="Resource_2puci"]
 script = ExtResource("10_jc61o")
 id = "finger_of_death__counterspell_back"
+dispatch_gap = "unselected_fixed_cancellation_study_not_general_counterspell"
 kind = "form"
 selection = "finger_of_death__counterspell_back"
 effects = Array[ExtResource("3_tp0bh")]([SubResource("Resource_yj1q1")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The private full-sequence source consumes a fixed Finger of Death cancellation study. It does not supply the general interrupted incoming-presentation API or authorize a canceled declaration to play its normal impact; actual reaction/cancellation ownership remains required."
 
 [resource]
 script = ExtResource("8_40hig")
 id = "spell.finger_of_death"
 icon = SubResource("Resource_ekhp1")
 delivery = "ray"
+impact_delay = 1.566666666666667
 body = SubResource("Resource_coq5h")
 hand_layers = Array[ExtResource("4_x7ido")]([SubResource("Resource_i7nnl"), SubResource("Resource_isbor")])
 sockets = "measured/abilities/spells/spell.finger_of_death.sockets.json"
@@ -425,4 +434,4 @@ unported = {
 "scale": 0.46875
 }]
 }
-notes = "Plays its imported Factory staging (coverage fill)."
+notes = "The normal finite source explicitly selects the delivered same-owner material-sharing alternative with actual caster/recipient geometry, delivery clock and impact. The private cancellation study stays unselected; general Counterspell owns interrupted presentation. Raw early-overlap RGB differences and source/readiness cost flags remain. This assignment is unvalidated; all artwork remains unreviewed."

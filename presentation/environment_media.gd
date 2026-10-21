@@ -9,6 +9,9 @@ const EncounterMedia=preload("res://presentation/encounter_media.gd")
 static func record_paths(record: Dictionary, paths: Dictionary, cache: Dictionary) -> void:
     if record.is_empty(): return
     paths[record.path] = true
+    for face in record.get("wall_motif_faces",[]):paths[face.profile.path]=true
+    for path in record.get("component_binding",{}).get("paths",{}):paths[path]=true
+    if record.has("ground_shadow"):record_paths(record.ground_shadow,paths,cache)
     for field in ["geometry_region","hit_mask","door_partition"]:
         if record.has(field): paths[record[field].path] = true
     if record.has("normal"): paths[record.normal.region.path] = true
@@ -44,10 +47,11 @@ static func row_paths(row: Dictionary, cache: Dictionary) -> Dictionary:
     # Repeated tiles/walls in large rooms share a finite original source set.
     var key = JSON.stringify([row.kind,row.get("source_kind"),row.get("material"),row.get("asset"),row.get("orientation"),
         row.get("state"),row.get("boundaries",[]),row.get("views"),row.get("lit_animation"),
-        row.get("destroyed",false),row.get("outcome")])
+        row.get("destroyed",false),row.get("outcome"),row.get("world_media_content"),row.get("world_media_role"),row.get("world_media_frame"),row.get("ground_equipment"),row.get("floor_motifs",{}).get("art_id"),row.get("surface_residues",[]),row.get("residue_observed_faces",[]),row.get("wall_members",[]).map(func(member):return [member.get("surface_residues",[]),member.get("residue_observed_faces",[])])])
     if not cache.has("__live_media_sources"): cache.__live_media_sources = {}
     if cache.__live_media_sources.has(key): return cache.__live_media_sources[key]
     var paths = {}
+    paths.merge(world_media_paths(row,cache))
     for quarter in range(4):
         var source: Dictionary = row.duplicate()
         if source.has("views"): source.asset = source.views[Placement.pose(source.orientation,quarter)]
@@ -64,8 +68,24 @@ static func row_paths(row: Dictionary, cache: Dictionary) -> Dictionary:
     cache.__live_media_sources[key] = paths
     return paths
 
+static func world_media_paths(row:Dictionary,cache:Dictionary)->Dictionary:
+    var content:String=str(row.get("world_media_content",row.get("mechanism_content_id",row.get("content_id",""))))
+    var program:Dictionary=Catalog.environment_index(cache).get("spatial_media",{}).get(content,{})
+    if not program.get("native_world_media",false):return {}
+    var key:String="world-media-paths:"+content
+    if cache.has(key):return cache[key]
+    var paths:Dictionary={};var resources:Dictionary=Catalog.environment_resources(cache).resources
+    var programs:Array=program.get("roles",{}).values() if program.get("kind")=="portal" else [program,program.get("projectile",{})]
+    var depth_id:String=str(program.get("actor_depth",{}).get("asset_id",""))
+    if not depth_id.is_empty():record_paths(resources.get(depth_id,{}),paths,cache)
+    for source in programs:
+        for frames in source.get("frames_by_quarter",source.get("frames_by_pose",{})).values():
+            for frame in frames:record_paths(resources.get(frame,{}),paths,cache)
+    paths.make_read_only();cache[key]=paths
+    return paths
+
 static func _collect(state: Dictionary, paths: Dictionary, cache: Dictionary) -> void:
-    var rows = WorldRows.rows(state,cache)
+    var rows = WorldRows.rows(state,cache,false)
     for row in rows.visual_rows:
         paths.merge(row_paths(row,cache))
         # Hidden corners and Ctrl picks use the original straight members.
@@ -77,7 +97,7 @@ static func _cell(object: Dictionary) -> String:
 static func _index(cache: Dictionary) -> Dictionary:
     if not cache.has("__environment_demand_index"):
         cache.__environment_demand_index = {"tiles":{},"objects":{},"visual":{},"cells":{},"tile_paths":{},"cell_paths":{},
-            "contacts":{},"senses":null,"tile_materials":{},"changed_row_builds":0,"plans":0,"paths_dirty":true,"paths":{}}
+            "contacts":{},"senses":null,"tile_sources":{},"changed_row_builds":0,"plans":0,"paths_dirty":true,"paths":{}}
     return cache.__environment_demand_index
 
 static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, removed: Array,
@@ -85,16 +105,21 @@ static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, r
     var changed_paths = {}
     var contacts: Dictionary = senses.get("objects",{}) if senses != null else {}
     var cells = {}
+    var floor_residues:Dictionary=Catalog.environment_index(cache).get("floor_residue_sources",{})
     for key in tiles:
         var tile: Dictionary = tiles[key]
         var material: String = tile.surface.base_material
         index.tiles[key] = tile
-        # WorldRows terrain rows have fixed orientation/boundaries; row_paths
-        # selects their sheets only by base material. Contact/elevation/light
-        # still reach the world renderer, but cannot change this source closure.
-        if index.tile_materials.get(key)==material: continue
+        var residues:Array=[]
+        for residue in tile.get("residues",[]):
+            if floor_residues.has(residue.residue_id) and float(residue.amount)>0.0 and residue.get("condition_uuid")!=null:
+                residues.append(residue.residue_id)
+        # Terrain and authored residue atlases are selected by actual tile
+        # after-values. Amount, support and neighbor masks change no file path.
+        var selector:String=JSON.stringify([material,residues])
+        if index.tile_sources.get(key)==selector: continue
         index.paths_dirty=true
-        index.tile_materials[key] = material
+        index.tile_sources[key] = selector
         var paths = {}
         _collect({"tiles":{key:tiles[key]},"objects":{},"senses":senses},paths,cache)
         index.tile_paths[key] = paths
@@ -125,6 +150,12 @@ static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, r
             if index.visual.get(id)==visual: continue
             index.visual[id] = visual; cells[_cell(index.objects[id])] = true
     index.contacts = contacts;index.senses=senses
+    var spatial_paths:Dictionary={}
+    var spatial:Dictionary=WorldRows.spatial_projection({"tiles":index.tiles,"objects":index.objects,"senses":senses},cache)
+    for row in spatial.rows:spatial_paths.merge(world_media_paths(row,cache))
+    if index.get("spatial_paths",{}).keys()!=spatial_paths.keys():
+        spatial_paths.make_read_only();index.spatial_paths=spatial_paths;index.paths_dirty=true
+    changed_paths.merge(spatial_paths)
     for cell in cells:
         var members: Dictionary = index.cells[cell]
         if members.is_empty():
@@ -143,15 +174,15 @@ static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, r
 static func _all_paths(index: Dictionary) -> Dictionary:
     if not index.get("paths_dirty",true):return index.paths
     var paths = {}
-    # Terrain source selection is keyed solely by base material above. Merge
-    # its first disclosed closure once, preserving the original path order.
-    var materials = {}
+    # Equal terrain/residue selections share their immutable source closure.
+    var selections = {}
     for key in index.tile_paths:
-        var material: String = index.tile_materials[key]
-        if materials.has(material): continue
-        materials[material] = true
+        var selector:String=index.tile_sources[key]
+        if selections.has(selector): continue
+        selections[selector] = true
         paths.merge(index.tile_paths[key])
     for closure in index.cell_paths.values(): paths.merge(closure)
+    paths.merge(index.get("spatial_paths",{}))
     paths.make_read_only();index.paths=paths;index.paths_dirty=false
     return paths
 
@@ -253,7 +284,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
     if not skip_initial:
         for key in index.tiles.keys():
             if not state.tiles.has(key):
-                index.tiles.erase(key); index.tile_paths.erase(key); index.tile_materials.erase(key);index.paths_dirty=true
+                index.tiles.erase(key); index.tile_paths.erase(key); index.tile_sources.erase(key);index.paths_dirty=true
         var removed: Array = []
         for id in index.objects:
             if not state.objects.has(id): removed.append(id)
@@ -275,6 +306,11 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary, origin_sta
         phase_started = Time.get_ticks_usec()
         var group: Dictionary = groups[group_index]
         var first_use = {}
+        for component in group.get("components",[]):
+            if component.get("kind")!="world_activation" or component.get("status")=="missing":continue
+            var component_paths:Dictionary=world_media_paths(component,cache)
+            paths=_extend_paths(paths,component_paths)
+            _first_use(initial,first_use,component_paths,float(component.get("start_ms",0.0)))
         for key in group.get("staged_tiles",{}):
             if not index.tiles.has(key):
                 var staged_paths = {}

@@ -40,25 +40,27 @@ ramp = PackedColorArray()
 script = ExtResource("3_y2yfs")
 clip = "live-electric/bolt_live_heavy"
 role = "attached"
+scope = "cast"
+constructor_input = {
+"source_resources": {"gpu_shape_banks": ["res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res"]},
+"kind": "area_links",
+"component_path": ["network"],
+"input_field": "",
+"area_shape": "line",
+"edges": [{"from": 0, "to": 1, "delay": 0.28}],
+"endpoint_count": 2,
+"charge_coil": true
+}
 at = "release"
 delay = -0.28
 attachment = "caster_ground"
 orientation = "world"
 source_end = 1.53
 duration_policy = "authored"
-hide_at_contact = PackedStringArray()
-hide_at_release = PackedStringArray()
-hide_nodes = PackedStringArray()
-show_nodes = PackedStringArray()
-opacity_keys = PackedVector2Array()
-staging_from = "factory@20261018-c3c616e88a6b725f"
+staging_from = "client-public-area-20261020"
 extra = {
-"live_endpoints": [{
-"actor": "caster",
-"socket": "cast_hand"
-}, {
-"point": [6.0, 1.0, 0.0]
-}],
+"live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"area_point": "line_end"}],
+"input_policies": {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}},
 "source_rate": 1.0
 }
 
@@ -125,6 +127,34 @@ path = "art/media/ui/icons/smooth48/spell.lightning-bolt.png"
 native_size = Vector2i(48, 48)
 source = "ui/resources.json icon:spell.lightning-bolt"
 
+[sub_resource type="Resource" id="Resource_actual_electric_contact"]
+script = ExtResource("3_y2yfs")
+clip = "live-electric/bolt_live_heavy"
+role = "attached"
+scope = "cast"
+constructor_input = {
+"source_resources": {"gpu_shape_banks": ["res://assets/vfx/extensions/followup-20261020/sources/fb68b9bfa1274243122a/heavy-47291.res"]},
+"kind": "observed_event",
+"projection": "finite_contact",
+"outcome": "damage",
+"geometry_actor": "target",
+"component_path": ["network"],
+"input_field": "",
+"packet": "electric_network",
+"damage_type": "Lightning",
+"save_effect_id": "spell.lightning_bolt.saving_throw"
+}
+at = "cast"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 0.72
+duration_policy = "authored"
+staging_from = "client-public-area-20261020"
+extra = {
+"live_endpoints": [{"actor": "target", "socket": "body_center", "surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]}],
+"input_policies": {"density_field": {"mode": "not_applicable", "reason": "selected_factory_density_mask_disabled"}}
+}
+
 [resource]
 script = ExtResource("8_bbyr5")
 id = "spell.lightning_bolt"
@@ -133,7 +163,8 @@ delivery = "line"
 body = SubResource("Resource_innuk")
 hand_layers = Array[ExtResource("4_1q7n6")]([SubResource("Resource_m8wms"), SubResource("Resource_mobsk")])
 sockets = "measured/abilities/spells/spell.lightning_bolt.sockets.json"
-effects = Array[ExtResource("3_y2yfs")]([SubResource("Resource_hpdc1")])
+effects = Array[ExtResource("3_y2yfs")]([SubResource("Resource_hpdc1"), SubResource("Resource_actual_electric_contact")])
+native_staging = true
 effect_scope = "area"
 effect_roles = PackedStringArray()
 event_cues = PackedInt32Array()
@@ -176,5 +207,4 @@ unported = {
 "pack_id": "content.srd_5_1_cc"
 }
 }
-notes = "Not played in the game: its Factory live-electric clips need live target endpoints the client does not supply (their live approaches assert in electric_network.gd); the imported staging stays as review data.
-Plays its imported Factory staging (coverage fill)."
+notes = "Native area source consumes the real disclosed line origin/direction/length and actual cast hand. The source retains its optical edge program; fixture recipient schedules are cleared. Separate finite contacts require an actual matching save and positive Lightning result. Density masking is disabled in the selected source. Artwork and actual-context output remain unreviewed/unqualified."

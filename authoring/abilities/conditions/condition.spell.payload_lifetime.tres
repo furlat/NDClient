@@ -3,6 +3,10 @@
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_3mf58"]
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_elu6d"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="payload_effect"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/source-preparation-20261020/sources/90f9a5a22d9213d09bc2/retained_fire.tres" id="payload_delayed_fire"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/source-preparation-20261020/sources/1602e5ab2c9262f9e0c5/retained.tres" id="payload_freezing"]
+
 [sub_resource type="Resource" id="Resource_t7eif"]
 script = ExtResource("1_3mf58")
 path = "art/media/ui/icons/smooth48/condition.generic.png"
@@ -11,7 +15,49 @@ reuses = "condition.generic"
 status = "stand_in"
 source = "ui/resources.json icon:condition.generic"
 
+[sub_resource type="Resource" id="Payload_delayed_fire"]
+script = ExtResource("payload_effect")
+clip = "production-review/retained-payload/delayed_fire"
+source_phase = ExtResource("payload_delayed_fire")
+source_inputs = Dictionary[String, String]({
+"payload_state": "set_payload_state",
+"payload_anchor": "set_payload_anchor",
+"targets": "set_live_endpoints"
+})
+source_seekable = true
+role = "attached"
+scope = "source"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+constructor_input = {"kind": "retained_payload", "payload_kind": "delayed_fire", "component_path": ["effect"], "input_field": "", "source_behavior_id": "spell.delayed_blast_fireball", "item_id": "spell_payload.delayed_fireball", "lifetime_condition_id": "condition.spell.payload_lifetime"}
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+extra = {"live_endpoints": [{"cue_point": "source"}]}
+
+[sub_resource type="Resource" id="Payload_freezing"]
+script = ExtResource("payload_effect")
+clip = "production-review/retained-payload/freezing"
+source_phase = ExtResource("payload_freezing")
+source_inputs = Dictionary[String, String]({
+"payload_state": "set_payload_state",
+"payload_anchor": "set_payload_anchor",
+"targets": "set_live_endpoints"
+})
+source_seekable = true
+role = "attached"
+scope = "source"
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+constructor_input = {"kind": "retained_payload", "payload_kind": "freezing", "component_path": ["effect"], "input_field": "", "source_behavior_id": "spell.freezing_sphere", "item_id": "spell_payload.freezing_sphere", "lifetime_condition_id": "condition.spell.payload_lifetime"}
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+extra = {"live_endpoints": [{"cue_point": "source"}]}
+
 [resource]
 script = ExtResource("1_elu6d")
 id = "condition.spell.payload_lifetime"
 icon = SubResource("Resource_t7eif")
+disposition = "authored"
+effects = Array[ExtResource("payload_effect")]([SubResource("Payload_delayed_fire"), SubResource("Payload_freezing")])
+status = "partial"
+notes = "The actual lifetime/caster/item join selects one delivered retained payload source. Current observed floor placement owns its anchor; inventory alone never supplies exposed-hand or container geometry. Optional undisclosed power/DC stay absent and the source uses its authored baseline. Native original-case pixels and human approval remain separate."

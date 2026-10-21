@@ -6,6 +6,7 @@ const Palette=preload("res://presentation/palette.gd")
 const NativePersistent=preload("res://presentation/native_persistent.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const ComponentRenderer=preload("res://presentation/component_renderer.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 class WitnessWorld extends Node:
     var timeline={"display_ms":600.0}
 var checks=0
@@ -92,21 +93,37 @@ func run()->void:
         if row.condition_uuid=="a-owner":row.removal_age_ms=10
     check(Conditions.select_layers(paired,0).all(func(row):return row.condition_uuid=="z-owner"),"Live marker owner wins over lower-UUID fading owner without deleting semantic lifetime")
     var thumbnails=Thumbnails.new()
-    var native_rows: Array=raw.filter(func(row):return row.has("lifecycle_phases"))
+    var native_rows:Array=raw.filter(func(row):return row.has("lifecycle_phases"))
     check(not native_rows.is_empty(),"Current condition sources provide actual native preview candidates")
     if not native_rows.is_empty():
         var marker:Dictionary=native_rows[0]
-        var preview_row={"id":"native-preview","kind":marker.kind,"status":marker.status,"component":marker,"start_ms":0.0,"source_start_ms":0.0}
-        var key:String=thumbnails.request(preview_row,600,0,false)
-        check(thumbnails.requested.has(key) and thumbnails.pending.size()==1 and is_equal_approx(thumbnails.pending[0].age_ms,600),"Native thumbnail queues the same unshifted owner clock used by its lifecycle")
-        check(thumbnails.pending[0].component.lifecycle_phases==marker.lifecycle_phases,"Thumbnail retains the exact source phase records, not retired spritesheet aliases")
+        var unbound={"id":"unbound-preview-control","kind":marker.kind,"status":marker.status,"component":marker,"start_ms":0.0}
+        var rejected:String=thumbnails.request(unbound,600,0,false)
+        check(thumbnails.errors.get(rejected,"")=="Composed source preview requires this actual recording" and thumbnails.pending.is_empty(),"A source fragment cannot invent an actor/pose recording for its composed preview")
     thumbnails.reset()
     check(thumbnails.pending.is_empty() and thumbnails.requested.is_empty() and thumbnails.inactive.is_empty(),"Thumbnail reset cancels all queued/inactive generation state")
-    for component in charm_samples:
-        var at:float=float(component.lifecycle_phases.application.seconds)*1000.0+50
-        var preview_row={"id":"charm-preview:"+component.id,"kind":component.kind,"status":component.status,"component":component,"start_ms":0.0,"source_start_ms":0.0}
-        thumbnails.request(preview_row,at,0,false)
-        check(is_equal_approx(thumbnails.pending[-1].age_ms,floorf(at*60/1000.0)*1000.0/60.0),"Native thumbnail clock retains the authored lifecycle boundary and exact sample quantization")
+    var preview_candidates:int=0
+    for id in ["poisoned","haste"]:
+        var recorded:Dictionary=Fixtures.read(id)
+        check(recorded.ok,"Original condition recording admits for composed thumbnail ownership: "+id)
+        if not recorded.ok:continue
+        thumbnails.recording=recorded
+        var candidates:Array=recorded.rows.filter(func(row):return Thumbnails._composed_row(row) and row.end_ms>row.start_ms and row.get("component",{}).has("lifecycle_phases"))
+        check(not candidates.is_empty(),"Actual recorded condition has composed lifecycle rows: "+id)
+        for actual in candidates:
+            preview_candidates+=1
+            var component:Dictionary=actual.component
+            var at:float=lerpf(float(actual.start_ms),float(actual.end_ms),.5)
+            var key:String=thumbnails.request(actual,at,0,false)
+            check(thumbnails.requested.has(key) and not thumbnails.pending.is_empty(),"Actual composed lifecycle sample queues through the recording path: "+id)
+            if thumbnails.pending.is_empty():continue
+            var job:Dictionary=thumbnails.pending[-1]
+            check(job.composed and is_same(job.recording,recorded) and is_equal_approx(job.sample_ms,at),"Composed restore retains the exact recording and absolute sample clock: "+id)
+            check(job.component==component and job.component.lifecycle_phases==component.lifecycle_phases,"Composed request retains the exact owner and phase registration: "+id)
+            var expected_phase:Dictionary=NativePersistent.lifecycle_state(component,(at-float(component.absolute_start_ms))/1000.0)
+            check(expected_phase.phase==actual.lifecycle_phase,"Absolute recorded row clock selects its actual authored lifecycle phase: "+id)
+            thumbnails.reset();thumbnails.recording=recorded
+    check(preview_candidates>0,"Recorded composed lifecycle requests were exercised without synthetic actors or native pixel claims")
     thumbnails.close()
     var result={"checks":checks,"failures":failures,"original_source":oracle.source,"recordings":oracle.recordings,"scope":"Original marker operator and authored composition/state predicates; current exact native lifecycle source clocks/registration and thumbnail jobs; no native pixel claim"}
     FileAccess.open("res://generated/condition_selection_checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))

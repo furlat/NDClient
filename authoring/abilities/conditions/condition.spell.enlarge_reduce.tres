@@ -17,7 +17,7 @@ orientation = "world"
 source_end = 0.72
 duration_policy = "authored"
 light_multiplier = 0.0
-extra = {"when": {"size_change": "enlarge"}}
+when = {"size_change": "enlarge"}
 
 [sub_resource type="Resource" id="Resource_reduce_application"]
 script = ExtResource("5_finite")
@@ -29,7 +29,7 @@ orientation = "world"
 source_end = 0.72
 duration_policy = "authored"
 light_multiplier = 0.0
-extra = {"when": {"size_change": "reduce"}}
+when = {"size_change": "reduce"}
 
 [sub_resource type="Resource" id="Resource_4ittd"]
 script = ExtResource("1_gex3e")

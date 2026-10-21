@@ -191,3 +191,19 @@ static func layer_transform(camera_basis:Basis,row:Dictionary,rig:Dictionary,sam
         position=Placement.contact(row)+(position-Placement.contact(row))*body_scale
     if role != "shadow": position.y += float(sample.get("lift_pixels",0))*(128.0/tile_width)/64.0*Placement.HEIGHT_UNIT
     return Transform3D(basis,position)
+
+## Authored aperture lip in the painted plane, independent of body geometry,
+## lighting and the viewport size. Private captures retain these same operands.
+static func aperture_parameters(sample:Dictionary,camera_basis:Basis,tile_width:float)->Dictionary:
+    var result:Dictionary={"body_aperture_enabled":false}
+    var aperture:Dictionary=sample.get("aperture",{})
+    if aperture.get("shape") not in ["ellipse","diamond"] or float(sample.get("lift_pixels",0.0))>=0.0:return result
+    if sample.get("from_position")==null or not sample.has("from_elevation_feet"):return result
+    var scale:float=128.0/tile_width*float(aperture.get("source_scale",1.0))/Placement.PIXELS_PER_UNIT
+    var width:float=float(aperture.get("half_width_px",0.0))*scale
+    var height:float=float(aperture.get("half_height_px",0.0))*scale
+    if width<=0.0 or height<=0.0:return result
+    result.merge({"body_aperture_enabled":true,"body_aperture_diamond":aperture.shape=="diamond",
+        "body_aperture_center":Vector3(sample.from_position[0],float(sample.from_elevation_feet)/5.0*Placement.HEIGHT_UNIT,sample.from_position[1]),
+        "body_aperture_x":camera_basis.x/width,"body_aperture_y":camera_basis.y/height})
+    return result

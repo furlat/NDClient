@@ -4,7 +4,9 @@ const Renderer=preload("res://presentation/component_renderer.gd")
 const Native=preload("res://presentation/native_spell_renderer.gd")
 const Conditions=preload("res://presentation/conditions.gd")
 const Profile=preload("res://frame_profile.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 class Spy extends RefCounted:
+    var preparation_revision:int=0
     var components:Array=[]
     var optional:Array=[]
     var blocked:Dictionary={}
@@ -28,12 +30,11 @@ class BloodSpy extends RefCounted:
             requested[id]=true
             if blocked.has(id):ready=false
         return ready
-class World extends Node:
-    var timeline:RefCounted
-    var profile:Dictionary=Profile.create()
-    var visual_actors:Dictionary={}
-    var playbacks:Dictionary={}
-    var catalog_cache:Dictionary={}
+class World extends "res://play.gd":
+    func _ready()->void:
+        set_process(false);set_process_unhandled_input(false)
+        camera=Camera3D.new();add_child(camera);add_child(context_menu)
+        rig_config=Characters._read("catalog/rig.json",catalog_cache)
 class Playback extends Node:
     var clip:String="Idle"
 var checks=0
@@ -82,7 +83,7 @@ func scheduled_admission(index:Dictionary)->void:
         later.sort_custom(func(a,b):return a.start_ms<b.start_ms)
         var late:Dictionary=later[0]
         for world_boundary in [false,true]:
-            var world=World.new()
+            var world=World.new();root.add_child(world)
             world.timeline=Recording.restore(index,maxf(0,item.start_ms-0.001))
             world.timeline.current={};world.timeline.queue=[item.group]
             world.timeline.display_ms=item.start_ms;world.timeline.group_start_ms=item.start_ms;world.timeline.commit_index=0
@@ -140,6 +141,7 @@ func old_images(renderer:RefCounted,world:World)->Dictionary:
                 for clip in clips:
                     var path:String=entry.actor_layer.paths.get(clip,"")
                     if path.is_empty():continue
+                    wanted[path]=true # Exact requested socket pose owns its colour even without optical maps.
                     for value in Native.Support.required_paths(path,entry.actor_layer.slot,world.catalog_cache).values():wanted[value]=true
     return wanted
 
@@ -167,7 +169,7 @@ func owner_values(path:String,label:String,spatial:bool)->void:
         if not change.is_empty():break
     check(not change.is_empty(),label+" contains an actual same-UUID native owner value change")
     if change.is_empty():return
-    var world=World.new();world.timeline=Recording.Timeline.new();world.timeline.display_ms=change.at
+    var world=World.new();root.add_child(world);world.timeline=Recording.Timeline.new();world.timeline.display_ms=change.at
     var target:Dictionary=world.timeline.spatial_effect_owners if spatial else world.timeline.condition_owners
     target[change.id]=change.before.duplicate(true)
     var renderer=Renderer.new();var spy=Spy.new()
@@ -200,7 +202,7 @@ func compiled_requirements(index:Dictionary,require_persistent:bool=false)->void
     if require_persistent:check(count>0,"Actual lifecycle recording exercises compiled persistent native requirements")
 
 func run()->void:
-    var directory="res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal"
+    var directory=Fixtures.journal("gallery")
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--recording="):directory=argument.trim_prefix("--recording=")
     var index=Recording.read(directory)
@@ -208,14 +210,14 @@ func run()->void:
     if not index.ok:quit(1);return
     compiled_requirements(index)
     scheduled_admission(index)
-    owner_values("res://.runtime/studio-spells-20261015/shield-seed3/blue/journal","Shield",false)
-    owner_values("res://.runtime/studio-spells-20261015/web-seed2/amber/journal","Web",true)
+    owner_values(Fixtures.journal("shield","blue"),"Shield",false)
+    owner_values(Fixtures.journal("web"),"Web",true)
     var native_count=0;var hit_count=0;var clips={}
     for item in index.groups:
         for component in item.group.components:
             if component.get("native_spell",false):native_count+=1;clips[component.native_clip.id]=true
             if component.has("native_hit"):hit_count+=1
-    var world=World.new();var renderer=Renderer.new();var spy=Spy.new()
+    var world=World.new();root.add_child(world);var renderer=Renderer.new();var spy=Spy.new()
     renderer.native_spells=spy;renderer.native_hits=HitSpy.new();renderer.blood=BloodSpy.new()
     for at in [0.0,3350.0,5183.1,6000.0,10165.2,12000.0,25000.0,42000.0]:
         world.timeline=Recording.restore(index,at);renderer.epoch=world.timeline.initialization_revision
@@ -281,12 +283,22 @@ func run()->void:
         var path:String=selected[i];var slot:String=table.records[path].slots[0]
         world.visual_actors[str(i)]={"entries":[{"role":"actor","texture_path":path,"actor_layer":{"slot":slot,"paths":{"Idle":selected[0],"Magic1":selected[1],"Run":selected[2]}}}]}
         var playback=Playback.new();world.playbacks[str(i)]=playback
-    for i in 5:native.handles[str(i)]={"component":{"actor_uuid":"0","target_uuid":"1","cast_recipe":{"actionClip":"Magic1"}}}
+    var source_component:Dictionary={}
+    for item in index.groups:
+        for component in item.group.components:
+            if component.get("native_spell",false) and "weapon_binding" not in component.native_clip.get("inputs",[]) and Native.Inputs.geometry_interests(component).is_empty():
+                source_component=component;break
+        if not source_component.is_empty():break
+    check(not source_component.is_empty(),"Actual current source without measured geometry channels isolates the retained socket-source image contract")
+    if source_component.is_empty():renderer.audio.close();world.free();quit(1);return
+    var image_component:Dictionary=source_component.duplicate();image_component.actor_uuid="0";image_component.target_uuid="1"
+    image_component.cast_recipe={"actionClip":"Magic1"}
+    for i in 5:native.handles[str(i)]={"component":image_component}
     for change in 5:
         if change==1:world.playbacks["0"].clip="Run"
         elif change==2:world.visual_actors["0"].entries[0].texture_path=selected[2]
         elif change==3:native.handles.clear()
-        elif change==4:native.handles["new"]={"component":{"actor_uuid":"2","target_uuid":"1","cast_recipe":{"actionClip":"Run"}}}
+        elif change==4:var alternate:Dictionary=image_component.duplicate();alternate.actor_uuid="2";alternate.cast_recipe={"actionClip":"Run"};native.handles["new"]={"component":alternate}
         native._required_ids={}
         for id in native.handles:native._required_ids[id]=native.handles[id].component
         native._image_requirements(world)

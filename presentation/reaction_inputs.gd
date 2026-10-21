@@ -6,9 +6,29 @@ extends RefCounted
 static func unavailable(reason:String)->Dictionary:
     return {"ready":false,"reason":reason,"observation":{},"evidence":{}}
 
+## Effective passives have no ActionFact. Their disclosed handler attribution
+## names the triggering version and emitted native lineages directly.
+static func emitted_results(owner:Dictionary,attribution:Dictionary,graph:Dictionary)->Array:
+    if owner.get("canceled",false) or attribution.get("role")!="effective_handler" \
+            or attribution.get("outcome")!="emitted_events" or attribution.get("source_entity_uuid")==null \
+            or str(attribution.get("triggering_lineage"))!=str(owner.lineage_id):return []
+    var versions:Array=graph.get("version_index",{}).get("lineages",{}).get(str(owner.lineage_id),[])
+    if not versions.any(func(row):return str(row.occurrence)==str(attribution.get("triggering_occurrence"))):return []
+    var emitted:Array=attribution.get("emitted_lineages",[]).map(func(value):return str(value))
+    var result:Array=[]
+    for candidate in graph.get("nodes",{}).values():
+        if candidate.get("canceled",false) or candidate.get("phase")!="completion" or candidate.get("fact")==null:continue
+        var lineage:Variant=candidate.lineage_id
+        while lineage!=null:
+            if str(lineage) in emitted:result.append(candidate);break
+            var parent:Dictionary=graph.nodes.get(str(lineage),{})
+            if parent.is_empty() or parent.get("canceled",false):break
+            lineage=parent.get("parent_lineage")
+    return result
+
 static func observe(node:Dictionary,graph:Dictionary)->Dictionary:
     var fact:Dictionary=node.get("fact",{}) if node.get("fact")!=null else {}
-    if node.get("canceled",false) or fact.get("kind")!="action" or fact.get("reaction")==null:
+    if node.get("canceled",false) or node.get("phase")!="completion" or fact.get("kind")!="action" or fact.get("reaction")==null:
         return unavailable("reaction_completion_not_observed")
     var reaction:Dictionary=fact.reaction
     if reaction.get("triggered_lineage")==null:
@@ -65,12 +85,13 @@ static func project(node:Dictionary,descriptor:Dictionary,graph:Dictionary)->Dic
     result.evidence.incoming_behavior_id=incoming.get("behavior_id")
     result.evidence.incoming_source_entity_uuid=incoming.source_entity_uuid
     result.evidence.incoming_target_entity_uuid=incoming.get("target_entity_uuid")
+    if graph.get("interrupted_presentations",{}).has(str(node.id)):
+        result.presentation=graph.interrupted_presentations[str(node.id)]
+        result.evidence.incoming_presentation_uuid=result.presentation.presentation_uuid
     return result
 
-## Native values are ready before presentation geometry is ready. A successful
-## cancellation currently has no scheduled incoming flight to sample. Keep
-## that fact distinct from a missing backend reaction and do not construct the
-## delivered study's saved Fireball path, midpoint or outcome fixture.
+## Native reaction and its declared private preparation remain separate.
+## A missing original pose cannot be replaced by a review donor or live idle.
 static func inputs(projected:Dictionary)->Dictionary:
-    var gaps:Array=["reaction_incoming_presentation_path_unavailable"] if projected.ready else [projected.reason]
+    var gaps:Array=[] if projected.ready and projected.has("presentation") else ["reaction_incoming_presentation_path_unavailable"] if projected.ready else [projected.reason]
     return {"values":{},"gaps":gaps,"evidence":projected.evidence}

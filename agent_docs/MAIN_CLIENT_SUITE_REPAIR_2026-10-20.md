@@ -1,5 +1,11 @@
 # Main client recovery and active work — 20 October 2026
 
+**Current artwork-review status — human clarification, 20 October 2026:** all
+artwork still awaits human review. The earlier named four-effect rejection list
+is superseded and must not be treated as current scope or as acceptance of any
+other artwork.
+
+
 **Current remaining-task authority:** [Everything remaining](REMAINING_WORK_2026-10-20.md).
 Production receipts remain in [production integration closure](PRODUCTION_INTEGRATION_CLOSURE_2026-10-20.md).
 The percentage table below is withdrawn; it mixed unrelated evidence and had no

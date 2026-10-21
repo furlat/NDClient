@@ -1,0 +1,267 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "a7fc4a71-ccb1-40b2-8da8-4dd666feb9ce",
+   "state_revision": "0fd61566-2b30-4fd2-9469-0d23b2205d81",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+   "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+   "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+    "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+    "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "e167f599-c2f8-4ffa-9d75-afeb6f9ada37",
+   "state_revision": "4d0a63bd-e409-4018-ac69-e25774151d72",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue second target",
+  "receipt": {
+   "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+   "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+   "audience_id": "707e3ddf-eb97-4611-b1ee-c1ed76490db5",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+    "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+    "audience_id": "707e3ddf-eb97-4611-b1ee-c1ed76490db5",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "af107e9c-8f5e-4311-ab95-158fa20b11b3",
+   "state_revision": "af7ec5d5-9662-4817-bdf1-cefbad659252",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+   "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+   "audience_id": "707e3ddf-eb97-4611-b1ee-c1ed76490db5",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+    "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+    "audience_id": "707e3ddf-eb97-4611-b1ee-c1ed76490db5",
+    "sequence": 6
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.delayed_blast_fireball",
+   "by": "caster",
+   "target": [
+    6,
+    7
+   ],
+   "capture_choices": true
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "68622fff-7f10-4997-8fd0-6407f4891d70",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.delayed_blast_fireball",
+   "display_name": "Delayed Blast Fireball (Level 7)",
+   "cast_at_level": 7,
+   "variant_facets": [],
+   "target_type": "position_los",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "d908ac10-be2b-4367-86fe-f10168a07487",
+   "state_revision": "68622fff-7f10-4997-8fd0-6407f4891d70",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 16,
+     "target_indices": [],
+     "extra_target_positions": [
+      [
+       6,
+       7
+      ]
+     ],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+   "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+   "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+    "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+    "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+    "sequence": 8
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.move",
+   "by": "caster",
+   "target": [
+    2,
+    7
+   ]
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "73c6df7a-6fa5-4491-95c5-fc5311f21591",
+  "discovery_generation": 2,
+  "selected_action": {
+   "behavior_id": "action.move",
+   "display_name": "Move",
+   "cast_at_level": null,
+   "variant_facets": [
+    {
+     "key": "movement",
+     "value": "walking",
+     "label": "Walking"
+    }
+   ],
+   "target_type": "position_path",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 3,
+   "actor_uuid": "d908ac10-be2b-4367-86fe-f10168a07487",
+   "state_revision": "73c6df7a-6fa5-4491-95c5-fc5311f21591",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 2,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+   "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+   "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+   "command_number": 3,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+    "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+    "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+    "sequence": 9
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.drop_concentration",
+   "by": "caster",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "f53639fd-9f04-4afe-a575-418664a0843f",
+  "discovery_generation": 3,
+  "selected_action": {
+   "behavior_id": "action.drop_concentration",
+   "display_name": "Drop Concentration",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 4,
+   "actor_uuid": "d908ac10-be2b-4367-86fe-f10168a07487",
+   "state_revision": "f53639fd-9f04-4afe-a575-418664a0843f",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 3,
+    "selection": {
+     "action_index": 26,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+   "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+   "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+   "command_number": 4,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_delayed_blast_fireball_concentration_end_detonation",
+    "game_epoch": "31fef27f-d741-4376-95a4-ebec2cc13bf8",
+    "audience_id": "40f2e30b-fe97-4461-ae78-64db06c54d02",
+    "sequence": 10
+   }
+  }
+ }
+]

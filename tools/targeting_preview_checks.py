@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import socket
 import sys
+import traceback
 from uuid import uuid4
 
 from dnd_player import (Follower, acknowledge, action_options, all_actions, attach,
@@ -12,7 +13,7 @@ from dnd_player import (Follower, acknowledge, action_options, all_actions, atta
 from devtools.player_server_acceptance.fixtures import combat_configuration
 
 PROJECT = Path(__file__).resolve().parents[1]
-ENGINE = PROJECT.parent / 'dnd_engine'
+ENGINE = Path('/home/tommaso/.cache/ndclient/dnd_engine-9f81d5267')
 
 async def run():
     output = PROJECT / '.runtime' / ('targeting-preview-' + uuid4().hex[:8])
@@ -23,7 +24,7 @@ async def run():
     config_path.chmod(0o600)
     with socket.socket() as sock:
         sock.bind(('127.0.0.1',0)); port = sock.getsockname()[1]
-    failures, checks, records = [], [], []
+    failures, checks, records, http_records = [], [], [], []
     def check(value, label):
         checks.append(label)
         if not value: failures.append(label)
@@ -53,6 +54,19 @@ async def run():
             await wait_for_cursor(follower,before['published_cursor'])
             await acknowledge(connection,follower.consumed)
             before = await status(connection)
+            async def retain_response(response):
+                endpoint=response.request.url.path.rsplit('/',1)[-1]
+                if endpoint not in ('choices','preview'):
+                    return
+                # Retain the original public response before the SDK's strict
+                # admission. Rejected producer values remain failed evidence.
+                raw=await response.aread()
+                stem=f'{len(http_records)+1:04}-{endpoint}'
+                (output/(stem+'-response.json')).write_bytes(raw)
+                (output/(stem+'-request.json')).write_bytes(response.request.content)
+                http_records.append({'endpoint':endpoint,'status':response.status_code,
+                    'request':stem+'-request.json','response':stem+'-response.json'})
+            connection.http.event_hooks['response'].append(retain_response)
             actor = before['boundary']['input_actor_uuid']
             revision = before['boundary']['state_revision']
             domain = (await choices(connection,{'actor_uuid':actor,'state_revision':revision,'force_attack':False,'correlation_id':str(uuid4())}))['choices']
@@ -96,9 +110,17 @@ async def run():
             check(after['next_command_number']==before['next_command_number'],'No preview spends or allocates a game command')
             check(after['published_cursor']==before['published_cursor'],'Preview-only inspection publishes no new gameplay packet')
             report={'ok':not failures,'checks':len(checks),'failures':failures,'assertions':checks,'choices':domain,'records':records,
-                'before_status':before,'after_status':after,'scope':'Independent real server and current Python SDK; exact Fireball AoE and missile prefix/undo queries; no game commands'}
+                'before_status':before,'after_status':after,'http_records':http_records,
+                'scope':'Independent real server and current Python SDK; exact Fireball AoE and missile prefix/undo queries; no game commands'}
             (output/'checks.json').write_text(json.dumps(report,indent=2))
             print(json.dumps({'ok':not failures,'checks':len(checks),'failures':failures,'output':str(output)}),flush=True)
+        except Exception as error:
+            failures.append(type(error).__name__+': '+str(error))
+            (output/'checks.json').write_text(json.dumps({'ok':False,'checks':len(checks),
+                'failures':failures,'assertions':checks,'records':records,'http_records':http_records,
+                'scope':'Original public requests/responses retained; failed SDK admission is not bypassed.'},indent=2))
+            print(json.dumps({'ok':False,'checks':len(checks),'failures':failures,'output':str(output)}),flush=True)
+            traceback.print_exc()
         finally:
             if task:
                 task.cancel()

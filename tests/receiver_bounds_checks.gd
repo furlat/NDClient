@@ -35,7 +35,7 @@ func run()->void:
     var mat=ShaderMaterial.new();mat.shader=load("res://modular.gdshader");node.material_override=mat
     var path="res://assets/art/media/smallscale/modular/Head15/Idle.png";var source=Geometry.record(path,"helmet",cache)
     var root_path:String=Geometry._root(source)
-    var depth=Image.load_from_file(root_path.path_join(source.files.depth));var normal=Image.load_from_file(root_path.path_join(source.files.normal))
+    var depth=Image.load_from_file(root_path.path_join(source.files.depth));var normal=Image.load_from_file(Geometry.normal_paths(path,"helmet",cache).value.original)
     var raw=Image.load_from_file(root_path.path_join(source.files.support));var valid=Image.load_from_file(root_path.path_join(source.files.normal_valid))
     # Choose an opaque supported original texel, then exercise the admitted
     # packet extremum explicitly. Natural sampled receivers were inside the

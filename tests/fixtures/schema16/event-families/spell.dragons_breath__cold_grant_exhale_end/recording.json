@@ -1,0 +1,270 @@
+{
+ "ok": false,
+ "failure": "required_conditions absent from actual journal: condition.spell.dragons_breath",
+ "commands": 10,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "a589d32a-7844-457f-8fc5-f942f9733fe1": "Amber caster",
+  "2f8d784f-858e-45e0-9ec3-fc58099276a5": "Amber ally",
+  "836206a7-a124-4b82-a8bc-03c337a22f1c": "Blue target",
+  "ebdc913c-d63a-40f1-8d8d-c8cf4f6b2f03": "Blue second target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "spell.dragons_breath \u00b7 Amber caster",
+  "end_turn \u00b7 Amber caster",
+  "action.spell.dragons_breath.exhale \u00b7 Amber ally",
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "end_turn \u00b7 Blue target",
+  "action.drop_concentration \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 17,
+   "actor_change": 4,
+   "spell": 3,
+   "saving_throw": 1,
+   "damage": 2,
+   "action": 1
+  },
+  "behaviors": {
+   "spell.dragons_breath": 1,
+   "action.spell.dragons_breath.exhale": 2,
+   "action.drop_concentration": 1
+  },
+  "conditions": [
+   "condition.concentrating"
+  ],
+  "ended_conditions": [
+   "condition.concentrating"
+  ],
+  "positive_applied_damage_types": [
+   "Cold"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "a589d32a-7844-457f-8fc5-f942f9733fe1",
+   "condition_uuid": "ba2338f4-416a-4cca-a608-d1c6747b18d4",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "a589d32a-7844-457f-8fc5-f942f9733fe1",
+   "condition_uuid": "ba2338f4-416a-4cca-a608-d1c6747b18d4",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.dragons_breath",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 71,
+   "lineage": 63,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 88,
+   "lineage": 63,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 89,
+   "lineage": 63,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 90,
+   "lineage": 63,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 95,
+   "lineage": 63,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell action.spell.dragons_breath.exhale",
+   "faction": "amber"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 125,
+   "lineage": 120,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "a589d32a-7844-457f-8fc5-f942f9733fe1",
+   "condition_uuid": "ba2338f4-416a-4cca-a608-d1c6747b18d4",
+   "condition_id": "condition.concentrating",
+   "faction": "amber"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 127,
+   "lineage": 120,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "amber"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 47,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "a589d32a-7844-457f-8fc5-f942f9733fe1",
+   "condition_uuid": "ba2338f4-416a-4cca-a608-d1c6747b18d4",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 48,
+   "lineage": 41,
+   "event_offset": 1,
+   "label": "condition applied condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "a589d32a-7844-457f-8fc5-f942f9733fe1",
+   "condition_uuid": "ba2338f4-416a-4cca-a608-d1c6747b18d4",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 8,
+   "occurrence": 49,
+   "lineage": 41,
+   "event_offset": 2,
+   "kind": "spell",
+   "label": "spell spell.dragons_breath",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 71,
+   "lineage": 63,
+   "event_offset": 0,
+   "kind": "saving_throw",
+   "label": "saving_throw ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 88,
+   "lineage": 63,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 89,
+   "lineage": 63,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 90,
+   "lineage": 63,
+   "event_offset": 5,
+   "kind": "spell",
+   "label": "spell ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 11,
+   "occurrence": 95,
+   "lineage": 63,
+   "event_offset": 7,
+   "kind": "spell",
+   "label": "spell action.spell.dragons_breath.exhale",
+   "faction": "blue"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 125,
+   "lineage": 120,
+   "event_offset": 0,
+   "label": "condition ended condition.concentrating",
+   "kind": "actor_change",
+   "actor_uuid": "a589d32a-7844-457f-8fc5-f942f9733fe1",
+   "condition_uuid": "ba2338f4-416a-4cca-a608-d1c6747b18d4",
+   "condition_id": "condition.concentrating",
+   "faction": "blue"
+  },
+  {
+   "sequence": 18,
+   "occurrence": 127,
+   "lineage": 120,
+   "event_offset": 1,
+   "kind": "action",
+   "label": "action action.drop_concentration",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Cold"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

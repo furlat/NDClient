@@ -23,7 +23,18 @@ func descendants(owner:Dictionary,events:Array,nodes:Dictionary)->Array:
         var parent:Variant=event.parent_lineage
         while parent!=null:
             if str(parent)==owner.lineage_id:result.append(event);break
-            parent=nodes.get(str(parent),{}).get("parent_lineage")
+            var ancestor:Dictionary=nodes.get(str(parent),{})
+            if ancestor.is_empty() or ancestor.get("canceled",false):break
+            var boundary:Variant=ancestor.get("fact")
+            if boundary!=null and boundary.kind in ["spell","action","attack"]:
+                # A recipient application is an explicitly linked version of
+                # this native owner. A nested attack/action is its own result
+                # owner even when it descends from the same operation root.
+                if boundary.kind!=owner.fact.kind or boundary.kind=="attack" \
+                    or str(ancestor.get("resolution_record",{}).get("lineage"))!=str(owner.lineage_id) \
+                    or boundary.get("behavior_id",owner.fact.behavior_id)!=owner.fact.behavior_id \
+                    or boundary.get("source_entity_uuid",owner.fact.source_entity_uuid)!=owner.fact.source_entity_uuid:break
+            parent=ancestor.get("parent_lineage")
     return result
 
 func controls(owner:Dictionary,actual:Dictionary,events:Array)->void:

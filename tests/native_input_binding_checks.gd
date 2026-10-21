@@ -4,10 +4,14 @@ const Inputs=preload("res://presentation/native_inputs.gd")
 const Effects=preload("res://presentation/effect_package.gd")
 const Body=preload("res://modular.gdshader")
 const Construction=preload("res://presentation/actor_construction.gd")
+const Records=preload("res://tools/presentation_build/ability_records.gd")
 class OwnerTimeline extends RefCounted:
     var condition_owners:Dictionary={}
+    var display_ms:float=0.0
 class World extends Node3D:
     var timeline:RefCounted=OwnerTimeline.new()
+    var displayed_components:Array=[]
+    var native_spell_hit_material:bool=false
     var visual_actors:Dictionary={}
     var rigs:Dictionary={"fixture":{"cell_width":128,"cell_height":128,"origin_y_from_ground":32,"facing_rows":{"SW":0},"clips":{"Idle":{"fps":1.0,"frames":1}},"body_anchor":Vector2(64,64),
         "pose_sockets":{"head":{"Idle":{"SW":[Vector2(64,16)]}},"hand":{"Idle":{"SW":[Vector2(72,64)]}}}}}
@@ -86,6 +90,74 @@ func actor(world:World,id:String)->Dictionary:
     node.position=Inputs.Sockets.Placement.contact(row)
     world.visual_actors[id]={"valid":true,"row":row,"entries":[entry]}
     return entry
+func attached_source_timing(world:World,bridge:RefCounted)->void:
+    # Source-to-provider boundary: real sealed constructors, with no sampling
+    # or invented gameplay flight. Include inactive alternatives so changing a
+    # predicate later cannot silently restore the same zero-travel failure.
+    var counts:Dictionary={"chromatic_orb":18,"sorcerous_burst":17,"dragons_breath":12,"glyph_of_warding":12,"flaming_sphere":4,"vitriolic_sphere":1,"finger_of_death":1}
+    var clips:Array=[]
+    for owner in counts:
+        var entry:Resource=load("res://authoring/abilities/spells/spell."+owner+".tres")
+        var uses:Array=entry.effects.duplicate()
+        for variant in entry.variants:uses.append_array(variant.effects)
+        for use in uses:
+            if not use.extra.get("delivery_timing",false) or use.clip=="private/finger-counterspell-v193/full_sequence":continue
+            var clip:Dictionary=Effects.clip(use.clip).duplicate(false)
+            if not use.approach.is_empty():clip.approach_id=use.approach
+            # This constructor chronology check supplies no gameplay packet.
+            # It still prepares the actual immutable bank before make_component.
+            clip.construction_inputs=[]
+            clips.append(clip)
+    var started:int=Time.get_ticks_msec()
+    var readiness:Dictionary={}
+    while Time.get_ticks_msec()-started<30000:
+        readiness=Effects.prepare(clips,world.catalog_cache)
+        if readiness.ready or not readiness.errors.is_empty():break
+        await process_frame
+    check(readiness.get("ready",false),"Timed constructor cohort completes actual immutable resource preparation: "+str(readiness))
+    if not readiness.get("ready",false):return
+    var actual:Dictionary={}
+    for owner in counts:
+        var entry:Resource=load("res://authoring/abilities/spells/spell."+owner+".tres")
+        var uses:Array=entry.effects.duplicate()
+        for variant in entry.variants:uses.append_array(variant.effects)
+        actual[owner]=0
+        for use in uses:
+            if not use.extra.get("delivery_timing",false):continue
+            if use.clip=="private/finger-counterspell-v193/full_sequence":
+                check(not use.extra.has("source_contact_local"),"The original Counterspell hand deliberately has no ordinary projectile contact")
+                continue
+            actual[owner]+=1
+            var clip:Dictionary=Effects.clip(use.clip).duplicate(false)
+            if not use.approach.is_empty():clip.approach_id=use.approach
+            var selected:Dictionary=Effects.choice(clip)
+            check(selected.approaches.size()==1,"One actual timed source is selected: "+use.clip)
+            if selected.approaches.size()!=1:continue
+            var phase:Resource=load(selected.approaches[0].source_phase)
+            check(phase.components.size()==1,"Timed phase retains its actual single source assembly: "+use.clip)
+            if phase.components.size()!=1:continue
+            var part:Resource=phase.components[0]
+            var source:Node3D=load(part.constructor_script).make_component(part.input)
+            var expected:Vector2
+            if owner=="finger_of_death":
+                var hand:Dictionary=source.definition.components[0].input
+                expected=Vector2(hand.launch_seconds,hand.travel_seconds)
+            else:expected=Vector2(source.launch_seconds,source.travel_seconds)
+            var cue:Dictionary=Records.cue_from_effect(use,0)
+            check(cue.has("source_launch_local") and cue.has("source_contact_local"),"Finite internal source has both authored timing markers: "+use.clip)
+            if not cue.has("source_contact_local"):
+                source.free();continue
+            check(expected.y>0.0 and Vector2(cue.source_launch_local,cue.source_contact_local-cue.source_launch_local).is_equal_approx(expected),"Authored pair preserves the actual source constructor's finite chronology: "+use.clip)
+            # Reproduce the attached compiler's zero external travel: the real
+            # provider must preserve finite source travel instead of stomping it.
+            cue.launch=0.0;cue.contact=0.0
+            clip.inputs=["delivery_timing"]
+            var handle:Dictionary={"clip":clip,"occurrence":source}
+            var result:Dictionary=bridge.sync(world,handle,{"native_cue":cue},{})
+            var delivered:Vector2=Vector2(source.delivery_timing[0],source.delivery_timing[1]) if owner=="finger_of_death" else Vector2(source.launch_seconds,source.travel_seconds)
+            check(result.unavailable.is_empty() and delivered.is_equal_approx(expected),"Actual source setter retains finite travel with zero external flight: "+use.clip)
+            source.free()
+        check(actual[owner]==counts[owner],"The complete authored timed-source family is exercised: "+owner+" actual="+str(actual[owner])+" expected="+str(counts[owner]))
 func run()->void:
     var world:World=World.new();root.add_child(world)
     world.camera=Node3D.new();world.add_child(world.camera)
@@ -273,6 +345,13 @@ func run()->void:
     result=bridge.sync(world,cell_handle,area,exact)
     check(cell_probe.admitted==[{"centre":Vector3(2,2*Inputs.Sockets.Placement.HEIGHT_UNIT,3),"half_size":Vector2(.5,.5)},{"centre":Vector3(5,2*Inputs.Sockets.Placement.HEIGHT_UNIT,7),"half_size":Vector2(.5,.5)}],"Spatial membership passes only actual disclosed cells and their elevation")
     check(cell_probe.delivery==Vector2(.25,.5),"Delivery timing uses the actual two-argument setter")
+    area.native_cue.source_launch_local=.45;area.native_cue.source_contact_local=.95
+    bridge.sync(world,cell_handle,area,exact)
+    check(cell_probe.delivery.is_equal_approx(Vector2(.45,.5)),"An attached native source receives its authored source-local launch/contact chronology")
+    check(area.native_cue.launch==.25 and area.native_cue.contact==.75,"Source timing does not change the compiled authoritative contact clock")
+    area.native_cue.erase("source_launch_local");area.native_cue.erase("source_contact_local")
+    bridge.sync(world,cell_handle,area,exact)
+    check(cell_probe.delivery.is_equal_approx(Vector2(.25,.5)),"A cue without an explicit source-local pair retains its compiled timing")
     bridge.sync(world,cell_handle,area,exact)
     check(cell_probe.cells_calls==1,"Unchanged footprint performs no cell conversion, setter or upload")
     area.resolved_area_positions=[];bridge.sync(world,cell_handle,area,exact)
@@ -357,6 +436,7 @@ func run()->void:
     check(projection_probe.packet.removed_seconds==5.0,"A real observed end updates the same source owner")
     projection_component.initial=true;result=bridge.sync(world,projection_handle,projection_component,exact)
     check(result.unavailable.get("owner_projection")=="condition_application_not_observed","A pre-existing owner never borrows a fabricated application history")
+    await attached_source_timing(world,bridge)
     projection_probe.free();generic.free();generic_source.free()
     legacy.free();source.free();prepared.free();cell_probe.free();native_cells.free();cell_source.free();native_root.free()
     bridge.clear();world.queue_free();await process_frame

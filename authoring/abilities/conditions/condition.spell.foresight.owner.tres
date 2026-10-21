@@ -14,4 +14,8 @@ source = "ui-delivery-20261018 srd22.spell.foresight"
 [resource]
 script = ExtResource("1_lh7dw")
 id = "condition.spell.foresight.owner"
+disposition = "state_only"
 icon = SubResource("Resource_7ujwl")
+play_package_lifecycle = false
+status = "internal"
+notes = "ForesightOwner holds one same-caster lease across target changes and creates the exact recipient condition.spell.foresight child. That child owns the existing Foresight lens lifecycle; the owner bookkeeping member adds no second caster lens or timed recipient guess. All artwork remains unreviewed."

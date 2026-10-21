@@ -3,6 +3,24 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="1_67rwf"]
 [ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_r61fs"]
 
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="owner_effect"]
+[ext_resource type="Resource" path="res://assets/vfx/extensions/production-review-20261020/sources/2b93d2f154712e5f200b/owner.tres" id="owner_phase"]
+
+[sub_resource type="Resource" id="AuraOwnerField"]
+script = ExtResource("owner_effect")
+clip = "production-review/aura-of-life/main_owner"
+source_phase = ExtResource("owner_phase")
+immutable_preparation = "res://assets/vfx/extensions/production-review-20261020/sources/7dd1897cdd5ee8a903b9/source_readiness.gd"
+source_inputs = Dictionary[String, String]({"root_path": "set_root_path", "owner_binding": "set_owner_binding", "actual_owner_state": "set_owner_state"})
+source_seekable = true
+role = "attached"
+at = "owner_start"
+attachment = "recipient_ground"
+follow = true
+orientation = "world"
+fade_out = 0.38
+staging_from = "factory@runtime-production-review-20261020-937fdd136d621742"
+
 [sub_resource type="Resource" id="Resource_r820p"]
 script = ExtResource("1_r61fs")
 path = "art/ui-delivery-20261018/runtime/smooth48/srd22.spell.aura_of_life.png"
@@ -14,4 +32,7 @@ source = "ui-delivery-20261018 srd22.spell.aura_of_life"
 [resource]
 script = ExtResource("1_67rwf")
 id = "condition.spell.aura_of_life.owner"
+disposition = "authored"
 icon = SubResource("Resource_r820p")
+effects = Array[ExtResource("owner_effect")]([SubResource("AuraOwnerField")])
+notes = "Explicit actual self-owned main field; the existing mapped standalone source consumes observed UUID/state/root and actual owner age. Recipient benefits and finite windup remain separate. Source inspection length does not expire this owner; all artwork and actual-context qualification remain unreviewed."

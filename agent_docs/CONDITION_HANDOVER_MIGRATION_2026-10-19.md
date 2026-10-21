@@ -1,5 +1,11 @@
 # Spell and condition handover migration — 2026-10-19
 
+**Current artwork-review status — human clarification, 20 October 2026:** all
+artwork still awaits human review. The earlier named four-effect rejection list
+is superseded and must not be treated as current scope or as acceptance of any
+other artwork.
+
+
 This report covers all **191 typed spell entries** (189 current server spell IDs), against the installed Factory package `conditions-candidate-7fab471588209a41`: **155 lifecycle families, 148 exact owner IDs, 109 body-bearing owner IDs**. It records metadata and ownership compatibility; it does not claim visual approval or complete scenarios.
 
 All **278 typed condition entries** use the existing `play_package_lifecycle` policy. Every one of the **147 condition owners** named by the package has an enabled typed entry. The remaining package owner is the existing spatial Web owner, whose explicit handover is preserved.

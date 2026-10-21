@@ -63,21 +63,24 @@ func run()->void:
         check(var_to_bytes([record.recipe,record.selection,record.variants])==frozen,id+" selection/Studio/seek leave the shared production source immutable")
     check(count==17,"Exactly seventeen existing option identities are routed; no draft native alternative is implicitly activated")
     print("PRODUCTION_OPTION_IDENTITIES ",JSON.stringify({"checks":checks,"failures":failures,"evidence":evidence,
-        "scope":"Seventeen actual typed predicates and nine original two-seat option paths, including five complete Enhance membership/move/remove/restoration journals; existing fifteen condition forms are not new graphics. Native output, eight unavailable public alternate choices and Deaf finite art remain separate."}))
+        "scope":"Seventeen actual typed predicates and nine original two-seat option paths, including five complete Enhance membership/move/remove/restoration journals; existing fifteen condition forms are not new graphics. Native output, alternate original recordings and native finite Deafness output remain separate."}))
     quit(0 if failures.is_empty() else 1)
 func deaf_controls(source:Dictionary)->void:
     # Selection-only policy controls, not an invented Deafness recording.
     var deaf:Dictionary=Spells.selected(source,{"behavior_id":"spell.blindness_deafness","effect_id":"control.deafened"})
     var phases:Array=Spells.phases(deaf.selection,{"prepare":0.0},100.0,0.0,0,true)
-    check(phases.size()==1 and phases[0].get("status")=="missing" \
-        and phases[0].get("reason")=="native_constructor_inputs_unbound:deafened_finite_source_not_delivered",
-        "Exact Deafness identity reports the missing finite source rather than playing hardcoded Blinded art")
-    check(Spells.effect_clips(deaf.selection).is_empty(),"Missing finite Deafness art does not enter optical preparation as an admitted source")
+    check(phases.size()==1 and phases[0].get("status","available")=="available" \
+        and phases[0].native_clip.id=="production-review/deafness/finite_application" \
+        and is_equal_approx(phases[0].duration_ms,1200.0),
+        "Exact Deafness identity selects its delivered finite source without borrowing Blinded art")
+    var clips:Array=Spells.effect_clips(deaf.selection)
+    check(clips.size()==1 and clips[0].id=="production-review/deafness/finite_application" \
+        and clips[0].input_setters.get("live_endpoints")=="set_live_endpoints","The exact Deafness receiving source enters preparation with its actual geometry contract")
     var markers:Array=Persistent.lifecycles({"behavior_id":"condition.deafened","state":{}})
     check(markers.any(func(selection):return selection.key=="condition_deafened_native" \
         and selection.condition.get("marker",{}).get("group")=="deafened" \
         and not selection.condition.get("body_channel_included",false)),
-        "The already delivered condition marker remains distinct from missing finite Deafness art")
+        "The condition marker remains distinct from the finite Deafness receiving source")
 func original(name:String,seat:String,source:Dictionary,cache:Dictionary,override:Dictionary={})->void:
     var spec:Dictionary=CASES[name] if override.is_empty() else override;var label:String=spec.folder+"/"+seat
     var directory:String=ROOT+spec.folder+"/"+seat+str(spec.get("journal_suffix","/journal"))

@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="condition"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="image"]
+
+[sub_resource type="Resource" id="Icon"]
+script = ExtResource("image")
+path = "art/media/ui/icons/smooth48/spell.guardian-of-faith.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.guardian-of-faith"
+
+[sub_resource type="Resource" id="ActualSentinelIdle"]
+script = ExtResource("effect")
+clip = "native/guardian/sentinel"
+approach = "runtime-prepared-heavy-effects-20261020"
+role = "attached"
+scope = "spatial"
+requires_spatial_anchor = true
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+lifecycle = {"enter_end_seconds": 0.4, "hold_start_seconds": 1.0, "exit_start_seconds": 1.0, "exit_end_seconds": 1.0}
+light_multiplier = 0.0
+extra = {
+"live_endpoints": [{"cue_point": "source"}],
+"fade_bindings": [{"closed": 0.0, "node": "assembly/effect", "open": 1.0, "property": "visor_opacity"}],
+"opacity_keys": [[0.0, 0.0], [0.4, 1.0]]
+}
+staging_from = "Actual spatial UUID owns the prepared native guardian at its disclosed anchor; authored pre-strike idle window only."
+
+[sub_resource type="Resource" id="ActualRadiantContact"]
+script = ExtResource("effect")
+clip = "native/guardian/contact"
+role = "impact"
+scope = "recipient"
+at = "contact"
+attachment = "recipient_body"
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+light_multiplier = 0.0
+condition_response = {"kind": "attributed_damage", "participant": "recipient", "damage_type": "Radiant"}
+extra = {"dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "legs", "chest", "head", "helmet"]}, "follow_attachment": true}
+staging_from = "Exact positive native Radiant packet attributed to this observed spatial UUID; no timer or inferred save."
+
+[resource]
+script = ExtResource("condition")
+id = "spatial_effect.spell.guardian_of_faith"
+label = "Guardian of Faith"
+icon = SubResource("Icon")
+disposition = "authored"
+play_package_lifecycle = false
+effects = Array[ExtResource("effect")]([SubResource("ActualSentinelIdle")])
+responses = Array[ExtResource("effect")]([SubResource("ActualRadiantContact")])
+status = "partial"
+notes = "The actual world-object-anchored Guardian spatial UUID owns the spectral body at its disclosed anchor/elevation. Its prepared source reaches the explicit idle age1.0 and stays there for the actual owner lifetime; the source's fixed strike begins at frame64/2s and is never visited by this held assignment. No target, sword swing, damage budget, duration or removal is simulated. Each exact positive Radiant result naming that spatial UUID owns one finite measured-recipient contact at its actual commit; saved and failed outcomes need no different art or guessed save. The old three-second cast sentinel and delayed2.4167s contact probes are excluded. Native object/spatial retirement removes this owner immediately, without playing the demo strike. Source-compatible idle/contact assignment only; new native output qualification and all artwork review remain open."

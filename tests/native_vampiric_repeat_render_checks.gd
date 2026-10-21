@@ -27,7 +27,7 @@ func repeat_seat(seat:String)->void:
     var index:Dictionary=Recording.read(directory)
     check(opened.ok and index.ok,seat+": original independent journal and ordinary Studio index open")
     if not opened.ok or not index.ok:return
-    var decoded:Dictionary=journal.protocol.decode_server("PlayerOperation",FileAccess.get_file_as_bytes(directory.path_join("0000000000000019.json")))
+    var decoded:Dictionary=journal.decode_record(19,FileAccess.get_file_as_bytes(directory.path_join("0000000000000019.json")))
     check(decoded.ok,seat+": original repeat packet decodes exact native integer identities")
     if not decoded.ok:return
     var actions:Array=[];var damage:Array=[]

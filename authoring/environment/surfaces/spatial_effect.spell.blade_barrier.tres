@@ -1,11 +1,30 @@
 [gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_knsdd"]
 [ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_u5hsv"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="ActualSegment"]
+script = ExtResource("effect")
+clip = "high-level-22/blade_barrier/crossing"
+approach = "gpu"
+sampling = "absolute"
+role = "attached"
+scope = "spatial"
+requires_spatial_anchor = true
+at = "owner_start"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.15
+light_multiplier = 0.0
+constructor_input = {"kind": "spatial_owner", "component_path": ["field"], "input_field": "", "cell_input": "wall_segment", "content_id": "spatial_effect.spell.blade_barrier", "width_feet": 5.0, "height_feet": 20.0}
+extra = {"live_endpoints": [{"area_point": "segment_start"}, {"area_point": "segment_end"}]}
 
 [resource]
 script = ExtResource("2_u5hsv")
 id = "spatial_effect.spell.blade_barrier"
 layer = "field"
+lasting = SubResource("ActualSegment")
+native_staging = true
 art = PackedStringArray()
-notes = "No art and no Factory scenario."
+status = "partial"
+notes = "The actual public spatial UUID and its disclosed single wall segment own the original whirling steel. Construction receives the real length, clears timed fixture retirement and keeps the native absolute spin clock until actual disappearance. Both endpoints come from the current actual wall geometry; unchanged width/height must match the selected source. No crossing, damage or save is inferred. Receiving damage feedback remains on its actual result. The old fixed four-cell cast review is excluded. All artwork remains unreviewed; rendered-output qualification remains separate."

@@ -5,6 +5,9 @@
 [ext_resource type="Script" path="res://presentation/source/abilities/attack.gd" id="3_6nbld"]
 [ext_resource type="Script" path="res://presentation/source/abilities/attack_variant.gd" id="4_rycfr"]
 
+[ext_resource type="Resource" path="res://authoring/abilities/sources/class.martial.slash.tres" id="trail_source"]
+[ext_resource type="Resource" path="res://authoring/abilities/sources/class.martial.impact.tres" id="impact_source"]
+
 [sub_resource type="Resource" id="Resource_0vtgh"]
 script = ExtResource("1_gs02h")
 role = "attack"
@@ -3085,9 +3088,12 @@ trail_palette = PackedStringArray()
 trail_outcomes = PackedStringArray("critical")
 trail_behaviours = PackedStringArray("action.class.barbarian.frenzied_strike", "action.feature.extra_attack")
 trail_points = "measured/abilities/attacks/action.attack.trail.json"
+trail_source = ExtResource("trail_source")
+trail_impact_source = ExtResource("impact_source")
+trail_contact_seconds = 0.67
+trail_end_seconds = 0.94
 trail_unported = {
 "handlerIds": ["reaction.class_feature.barbarian.retaliation"],
-"impactAssetId": "class.martial.impact",
 "palette": [6564651.0, 12539717.0, 14994609.0]
 }
 variant_sockets = "measured/abilities/attacks/action.class.barbarian.frenzied_strike.sockets.json"

@@ -66,11 +66,13 @@ extra = {
 [sub_resource type="Resource" id="Resource_5ks36"]
 script = ExtResource("6_q5m06")
 id = "plant_growth_partial_burn_native"
+dispatch_gap = "delegated_actual_spatial_removed_cells_owner"
 kind = "form"
 selection = "plant_growth_partial_burn_native"
 effects = Array[ExtResource("1_hen5u")]([SubResource("Resource_b1r5n")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "The existing Plant Growth spatial owner consumes exact observed removed_positions, retains original source topology, and drives partial/full removal on that UUID. This bundled review is not a spell form or another vegetation owner. Its selection remains an inspectable alternative; it must not replay review geometry or duplicate the existing actual transition."
 
 [resource]
 script = ExtResource("4_k57e3")
@@ -99,4 +101,4 @@ staging_unported = {
 "selection": "plant_growth_native",
 "source": "assets/vfx/index.json:/selections/plant_growth_native/staging"
 }
-notes = "Cast body retains the authored Attack5/release7 gesture pending visual review. The former default ground probe is excluded: actual spatial membership owns the one constructed vegetation source via spatial_effect.spell.plant_growth. The partial-burn variant remains a probe requiring a real removal recording; it is not automatically selected or accepted art."
+notes = "Cast body retains the authored Attack5/release7 gesture pending visual review. The former default ground probe is excluded: actual spatial membership owns the one constructed vegetation source via spatial_effect.spell.plant_growth. Actual spatial removed cells already drive partial and full retirement. The bundled partial-burn review is not another cast form or accepted art."

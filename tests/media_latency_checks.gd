@@ -8,6 +8,8 @@ const Compiler = preload("res://presentation/compiler.gd")
 const Catalog = preload("res://source_catalog.gd")
 const Player = preload("res://play.gd")
 const Protocol = preload("res://sdk/protocol.gd")
+const Fixtures = preload("res://tests/recording_fixtures.gd")
+const Encounter = preload("res://presentation/encounter_media.gd")
 var checks = 0
 var failures: Array = []
 var evidence = {}
@@ -131,15 +133,20 @@ func staged_metadata(state: Dictionary, expected_environment: Dictionary) -> voi
     var candidates_only:Array=required.value.optical_candidates.keys().filter(func(path):return not wanted.has(path))
     check(not candidates_only.is_empty() and candidates_only.all(func(path):return not player.media_warmup.queued.has(path)),"Ordinary animation optical metadata prepares native tails without decoding or demanding unused masks")
     check(player.media_warmup.boot_started and not Media.boot_ready(player.media_warmup),"Initial exact demand gates startup before publication")
+    var original_publications:Dictionary={}
     for path in wanted:
         var loaded = {"path":path,"cpu_bytes":16,"gpu_bytes":16}
         if player.media_warmup.fixtures.has(path): loaded.merge({"energy":.4,"emission_centroid":Vector2(2,3)})
+        original_publications[path]=loaded.duplicate()
         Media.published(player.media_warmup,loaded)
     check(player.media_metadata_ready and Media.ready(player.media_warmup,player.media_plan.required) and player._environment_sources_ready() and Media.boot_ready(player.media_warmup),"All required publications become ready before optional metadata adoption")
-    var missing: String = wanted.keys()[0]
-    player.media_warmup.ready_paths.erase(missing)
+    var published_required:Array=player.media_plan.required.keys().filter(func(path):return original_publications.has(path))
+    check(not published_required.is_empty(),"Actual actor plan supplies a published required physical source")
+    if published_required.is_empty():Media.close(data);dispose(player);return
+    var missing:String=published_required[0]
+    Media.published(player.media_warmup,original_publications[missing].merged({"cpu_bytes":0,"gpu_bytes":0},true))
     check(not Media.ready(player.media_warmup,player.media_plan.required),"Required readiness still blocks missing resident bytes")
-    Media._refresh_path(player.media_warmup,missing)
+    Media.published(player.media_warmup,original_publications[missing])
     var original = player.media_empty_plan
     check(data.plan_thread==null and not data.optional_pending.is_empty(),"Required completion leaves optional dispatch pending until exact scene demand")
     Media.adopt_required(data,1)
@@ -182,40 +189,56 @@ func publication(environment: Dictionary) -> void:
         var path: String = paths[i]
         if i>0: wanted[path] = Catalog.media_path(path)
         originals[path] = Image.load_from_file(Catalog.media_path(path))
+    var optional_paths:Dictionary={paths[0]:Catalog.media_path(paths[0])}
+    # Optional work must retain a real consumer family. Inserting a selected
+    # path alone leaves no owner, so the normal worker correctly discards it.
+    var family:Dictionary={"paths":optional_paths,"environment":optional_paths,"cpu_required":optional_paths,
+        "estimates":Encounter.estimates(optional_paths,optional_paths,{},{}),"errors":[]}
+    Media.adopt_encounter(player.media_warmup,family,1)
     Media.demand(player.media_warmup,wanted,wanted)
-    player.media_warmup.pending.clear(); player.media_warmup.queued.clear(); player.media_warmup.stats = {}
-    player.media_warmup.preload_selected[paths[0]] = Catalog.media_path(paths[0])
+    var selection_until:int=Time.get_ticks_msec()+10000
+    while Media.diagnostics(player.media_warmup).selection_pending and Time.get_ticks_msec()<selection_until:
+        Media.prepare_optional(player.media_warmup)
+        await process_frame
+    check(not Media.diagnostics(player.media_warmup).selection_pending and player.media_warmup.preload_selected.has(paths[0]),"Actual optional source family owns its selected publication before workers run")
+    var physical:Dictionary=Media.physical(player.media_warmup)
+    physical.pending.clear();physical.queued.clear();physical.stats={}
     for path in paths:
         var result = {}
         var task = WorkerThreadPool.add_task(Media._decode.bind({"path":path,"absolute":Catalog.media_path(path)},result))
-        player.media_warmup.decode_jobs.append({"task":task,"path":path,"result":result})
-        player.media_warmup.queued[path] = true
-    while player.media_warmup.decode_jobs.any(func(job):return not WorkerThreadPool.is_task_completed(job.task)):
+        physical.decode_jobs.append({"task":task,"path":path,"result":result})
+        physical.queued[path] = true
+    while physical.decode_jobs.any(func(job):return not WorkerThreadPool.is_task_completed(job.task)):
         await process_frame
     player._warm_media()
-    var first: Dictionary = player.media_warmup.publication.duplicate()
+    var first:Dictionary=physical.publication.duplicate()
     check(first.required>0 and first.optional==0 and not player.textures.has(paths[0]),"Completed required sources publish before an older optional result")
     check(first.count>1 or first.elapsed_ms>=first.budget_ms,"Cheap completed required uploads share a frame until the measured budget is reached")
     check(first.count<=Media.PUBLICATIONS_PER_FRAME,"Publication remains bounded by its safety ceiling")
     var tries = 0
     while not Media.ready(player.media_warmup,wanted) and tries<10:
-        player._warm_media(); tries += 1
+        await process_frame
+        player._warm_media();tries+=1
     check(Media.ready(player.media_warmup,wanted),"All required images make progress to complete readiness")
     for path in wanted:
         check(player.source_images.has(path) and player.source_images[path].get_data()==originals[path].get_data(),"Published original CPU image bytes remain exact: "+path)
+    await process_frame
     player._warm_media()
     check(player.textures.has(paths[0]),"Optional warming resumes after the required backlog")
     evidence.publication = first
     dispose(player)
 
 func run() -> void:
+    var recording:String=""
     for arg in OS.get_cmdline_user_args():
-        if arg.begins_with("--state="): state_path = arg.trim_prefix("--state=")
-    if state_path.is_empty():
-        check(false,"Usage: --state=<recorded canonical state.json>"); finish(); return
-    var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes(state_path))
-    check(parsed.ok,"Explicit recorded canonical state loads")
-    if not parsed.ok: finish(); return
+        if arg.begins_with("--state="):state_path=arg.trim_prefix("--state=")
+        if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
+    if state_path.is_empty() and recording.is_empty():
+        check(false,"Usage: --recording=<actual schema16 journal> or --state=<recorded canonical state.json>");finish();return
+    var parsed:Dictionary=Fixtures.canonical(recording) if not recording.is_empty() else Protocol.parse_json(FileAccess.get_file_as_bytes(state_path))
+    check(parsed.ok,"Explicit original journal/state loads")
+    if not parsed.ok:finish();return
+    if not recording.is_empty():state_path=recording
     var environment = source_cases(parsed.value)
     await staged_metadata(parsed.value,environment)
     await publication(environment)

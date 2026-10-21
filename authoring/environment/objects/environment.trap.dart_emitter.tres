@@ -10,8 +10,9 @@
 script = ExtResource("3_6peqb")
 id = "environment.trap.dart_emitter"
 kind = "trap"
+native_owner_content = "spatial_effect.environment.dart_launcher"
 views = PackedStringArray()
 art = PackedStringArray()
 stand_in = "environment.furniture.loose_floorboards"
-status = "stand_in"
-notes = "No object art; its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section. Drawn with environment.furniture.loose_floorboards."
+status = "partial"
+notes = "Body delegated only when the current observed spatial_effect.environment.dart_launcher explicitly names this same physical item UUID in anchor_item_uuid. The shared world program owns the single mechanism body and actual committed activation clock; no nearby owner or matching position suffices. The existing object banks/stand-in and material/style identities remain the fallback when that exact observed link is absent. This explicitly shares the canonical workshop mechanism motion across this hardware variant; its alternate static art remains available as fallback. All artwork remains unreviewed; runtime output is unqualified."

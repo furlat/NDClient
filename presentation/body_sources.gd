@@ -144,3 +144,17 @@ static func equipment(item:Dictionary,slot:String,cache:Dictionary)->Dictionary:
     var key:Array=["" if gear.is_empty() else gear[0],item.get("visual_variant_id"),slot]
     if selected.equipment.has(key):return {"ok":true,"value":selected.equipment[key]}
     return {"ok":false,"error":{"kind":"authoring","message":selected.equipment_errors.get(key,"No built item visual: "+str([item.get("item_id"),item.get("visual_variant_id"),slot]))}}
+
+## The current public variant is authoritative. A null variant admits only the
+## base row; unrelated variants never inherit a base appearance.
+static func ground(item:Dictionary,cache:Dictionary)->Dictionary:
+    var selected:Index=index(cache)
+    if selected==null:return {}
+    var authored:Dictionary=selected.ground_equipment.get(str(item.get("item_id","")),{})
+    var actual:Variant=item.get("visual_variant_id")
+    var variant:String="" if actual==null else str(actual)
+    var own:Dictionary=authored.get("variants",{})
+    if own.has(variant):return own[variant]
+    var family:String=str(authored.get("family",""))
+    if family.is_empty():return {}
+    return selected.ground_equipment.get(family,{}).get("variants",{}).get(variant,{})

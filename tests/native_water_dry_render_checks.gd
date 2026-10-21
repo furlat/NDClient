@@ -54,8 +54,30 @@ func actual_dry(seat:String)->void:
     if not is_equal_approx(world.timeline.display_ms,at) or not await PREPARED.settle(self,world,[component.id]):viewport.queue_free();await frame();return
     var native:RefCounted=world.component_renderer.native_spells
     var source_handles:Array=owned(world,DESTROY)
-    check(source_handles.size()==1 and owned(world,CREATE).is_empty() and not world.timeline.state.senses.spatial_effects.has(WATER),seat+": one finite optical retirement, no held duplicate or mechanical water resurrection")
+    var held:Array=owned(world,CREATE)
+    var retirement:Dictionary={"destroy_count":source_handles.size(),"held_count":held.size(),
+        "canonical_present":world.timeline.state.senses.spatial_effects.has(WATER),"handles":[]}
+    for candidate in native.handles.values():
+        if candidate.component.get("spatial_effect_uuid")!=WATER:continue
+        retirement.handles.append({"id":candidate.component.id,"clip":candidate.component.get("native_clip",{}).get("id"),
+            "root_visible":candidate.root.is_visible_in_tree(),"positions":candidate.component.get("resolved_area_positions",[]),
+            "mask_positions":candidate.get("area_mask",{}).get("positions"),"diagnostic":native.diagnostics.get(candidate.component.id,{})})
+    check(source_handles.size()==1,seat+": one finite optical retirement: "+str(retirement))
+    check(not retirement.canonical_present,seat+": finite optical retirement does not resurrect mechanical water: "+str(retirement))
+    check(held.all(func(candidate):return candidate.component.get("resolved_area_positions",[])==[] \
+        and candidate.get("area_mask",{}).get("positions")==[]),seat+": retained immutable CREATE draws have no admitted cells after whole DRY: "+str(retirement))
     if source_handles.size()!=1:viewport.queue_free();await frame();return
+    # Immutable coverage may remain allocated until this owner's finite close
+    # interval ends. Empty admission must contribute no duplicate water pixels.
+    world.set_process(false);await frame();await frame()
+    var with_retained:Image=viewport.get_texture().get_image()
+    for candidate in held:candidate.root.hide()
+    await frame();await frame()
+    var retained_pixels:int=changed(with_retained,viewport.get_texture().get_image())
+    check(retained_pixels==0,seat+": hiding retained zero-cell CREATE draws changes no framebuffer pixels: "+str(retirement))
+    for candidate in held:candidate.root.show()
+    world.set_process(true)
+    evidence.append({"seat":seat,"retirement":retirement,"retained_create_changed_pixels":retained_pixels})
     var handle:Dictionary=source_handles[0];var program:Node=handle.occurrence.input_receivers.set_surface_records[0]
     check(program.prepared and program.specification.form=="destroy" and program.records==handle.component.spatial_surface_records and program.records.all(func(record):return record.source_uuid==WATER),seat+": exact original program was constructed with actual owner/groups")
     check(handle.component.actor_uuid==null and handle.component.target_uuid==null and handle.component.native_constructor_evidence.event_uuid==("102" if seat=="amber" else "106"),seat+": no invented actor or other-seat occurrence ownership")

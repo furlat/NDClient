@@ -89,7 +89,11 @@ func run()->void:
     if not await choose(panel,0):await finish(panel);return
     var all_conditions=panel.filtered.filter(func(entry):return entry.group=="Conditions")
     var state_only=all_conditions.filter(func(entry):return entry.get("disposition")=="state_only")
-    check(state_only.size()==36,"All includes explicit state-only recipes without inventing absent VFX")
+    var expected_state_only:Array=recipes.keys().filter(func(id):return recipes[id].get("disposition")=="state_only")
+    var actual_state_only:Array=state_only.map(func(entry):return entry.id)
+    expected_state_only.sort();actual_state_only.sort()
+    check(not expected_state_only.is_empty() and actual_state_only==expected_state_only,
+        "All includes every exact current state-only owner without inventing or dropping a VFX assignment: "+JSON.stringify(actual_state_only))
     var conditions_group=range(panel.group_picker.item_count).filter(func(i):return panel.group_picker.get_item_metadata(i)=="Conditions")[0]
     panel.group_picker.select(conditions_group);panel.group_picker.item_selected.emit(conditions_group)
     if not await prepared(panel):await finish(panel);return

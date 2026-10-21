@@ -3,6 +3,7 @@ extends SceneTree
 const HUD = preload("res://play_hud.gd")
 const Settings = preload("res://presentation/render_settings.gd")
 const FixtureWorld = preload("res://tests/ui_fixture_world.gd")
+const Fixtures=preload("res://tests/recording_fixtures.gd")
 var checks=0
 var failures=[]
 var world:Node3D
@@ -61,12 +62,14 @@ func click(point:Vector2,button:MouseButton=MOUSE_BUTTON_LEFT)->void:
         var event=InputEventMouseButton.new();event.position=point;event.global_position=point;event.button_index=button;event.pressed=pressed
         root.push_input(event)
 func run()->void:
+    var recording:String=""
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--state="):state_path=arg.trim_prefix("--state=")
-    if state_path.is_empty() or not FileAccess.file_exists(state_path):
-        check(false,"Usage: --state=<recorded canonical state.json>")
-        finish();return
-    var state:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(state_path))
+        if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
+    var loaded:Dictionary=Fixtures.canonical(recording) if not recording.is_empty() else {"ok":not state_path.is_empty() and FileAccess.file_exists(state_path)}
+    check(loaded.ok,"Supply actual --recording=<journal> or --state=<canonical state.json>")
+    if not loaded.ok:finish();return
+    var state:Dictionary=loaded.value if not recording.is_empty() else JSON.parse_string(FileAccess.get_file_as_string(state_path))
     check(not state.is_empty() and state.has("actors"),"Explicit recorded player state loads")
     if state.is_empty() or not state.has("actors"):finish();return
     root.size=Vector2i(1280,720)

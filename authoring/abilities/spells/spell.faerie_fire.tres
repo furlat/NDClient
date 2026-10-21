@@ -84,12 +84,14 @@ staging_from = "factory@20261018-c3c616e88a6b725f"
 [sub_resource type="Resource" id="Resource_rv185"]
 script = ExtResource("6_kw6af")
 id = "faerie_fire_saved_native"
+dispatch_gap = "unselected_saved_review_requires_actual_recipient_outcomes"
 kind = "element"
 value = "fire"
 selection = "faerie_fire_saved_native"
 effects = Array[ExtResource("1_lpasj")]([SubResource("Resource_a2u6o")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "This saved review carries only the initial area. Actual per-recipient saves and condition.spell.faerie_fire membership must own saved versus applied feedback; a saved recipient cannot suppress the cast area or another recipient outline. Its source selection remains unqualified."
 
 [sub_resource type="Resource" id="Resource_jbwgb"]
 script = ExtResource("1_lpasj")
@@ -136,12 +138,14 @@ extra = {
 [sub_resource type="Resource" id="Resource_lvktd"]
 script = ExtResource("6_kw6af")
 id = "faerie_fire_moving_native"
+dispatch_gap = "delegated_actual_condition_motion_not_a_cast_variant"
 kind = "element"
 value = "fire"
 selection = "faerie_fire_moving_native"
 effects = Array[ExtResource("1_lpasj")]([SubResource("Resource_jbwgb"), SubResource("Resource_6b6eo")])
 staging_from = "factory@20261018-c3c616e88a6b725f"
 status = "partial"
+notes = "Held motion belongs to the actual condition.spell.faerie_fire recipient and current optical pose. This review repeats the initial area plus an outline and is not a separate spell form; do not replay application on movement or add a second persistent outline."
 
 [resource]
 script = ExtResource("4_dl3lc")

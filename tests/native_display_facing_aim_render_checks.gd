@@ -24,10 +24,10 @@ func aim_seat(seat:String)->void:
     for lineage in packet.lineages:
         for node in lineage.events:
             var fact:Variant=node.get("fact")
-            if fact!=null and fact.get("behavior_id")=="spell.eyebite" and node.phase=="completion":casts.append(node)
+            if fact!=null and fact.get("behavior_id")=="spell.eyebite" and node.phase=="completion":casts.append({"node":node,"lineage":str(int(lineage.lineage))})
     check(casts.size()==1,seat+" original packet discloses one completed Eyebite cast")
     if casts.size()!=1:return
-    var cast:Dictionary={"occurrence":str(int(casts[0].occurrence)),"fact":casts[0].fact}
+    var cast:Dictionary={"occurrence":str(int(casts[0].node.occurrence)),"fact":casts[0].node.fact,"lineage":casts[0].lineage}
     var index:Dictionary=Recording.read(directory)
     check(index.ok,seat+" unchanged original recording compiles")
     if not index.ok:return
@@ -40,7 +40,7 @@ func aim_seat(seat:String)->void:
     check(owner.id=="e94cc307-c32a-436f-8d99-5136e2ff8eaf" and owner.actor_uuid==cast.fact.source_entity_uuid \
         and not owner.initial and is_inf(owner.end_ms),seat+" recorded lifetime begins at actual admission and invents no removal")
     check(span.recipe.persistent.get("nativeAim")=="display_facing",seat+" actual condition authoring explicitly selects displayed-facing optical aim")
-    finite_targeting(index,cast,seat)
+    finite_targeting(index,cast,packet,seat)
     var before:float=maxf(0.0,float(owner.start_ms)-2.0)
     var during:float=float(owner.start_ms)+600.0
     check(during<float(span.end_ms) and during<index.presentation_end_ms,seat+" native observation lies inside the original casting lifetime")
@@ -100,7 +100,7 @@ func aim_seat(seat:String)->void:
     check(world.presentation_errors.is_empty() and world.media_issue.is_empty(),seat+" real views/seeking/looping introduce no presentation or media errors")
     view.queue_free();await frame();await frame()
 
-func finite_targeting(index:Dictionary,cast:Dictionary,label:String)->void:
+func finite_targeting(index:Dictionary,cast:Dictionary,packet:Dictionary,label:String)->void:
     var rows:Array=index.rows.filter(func(row):
         var component:Dictionary=row.get("component",{})
         var clip:String=str(component.get("native_clip",{}).get("id",""))
@@ -108,8 +108,35 @@ func finite_targeting(index:Dictionary,cast:Dictionary,label:String)->void:
     check(rows.size()==1,label+" the actual finite caster-to-target eye clip remains separate")
     for row in rows:
         var component:Dictionary=row.component;var cue:Dictionary=component.native_cue
-        check(component.actor_uuid==cast.fact.source_entity_uuid and component.target_uuid==cast.fact.target_entity_uuid \
-            and str(component.source_event_uuid)==cast.occurrence,label+" finite clip retains this seat's actual cast and target identities")
+        check(component.actor_uuid==cast.fact.source_entity_uuid and component.target_uuid==cast.fact.target_entity_uuid,label+" finite clip retains this seat's actual caster and target identities")
+        var descriptor:Dictionary=cue.constructor_input
+        var admissions:Array=[];var saves:Array=[]
+        # The original native recipient membership admits this finite result.
+        # Its publication occurrence is distinct from its owning accepted cast.
+        for lineage in packet.lineages:
+            for node in lineage.events:
+                var fact:Variant=node.get("fact")
+                if fact==null or node.phase!="completion" or node.get("canceled",false):continue
+                if fact.kind=="actor_change":
+                    for actor in fact.actors:
+                        if actor.actor_uuid!=cast.fact.target_entity_uuid:continue
+                        for change in actor.rows:
+                            var member:Variant=change.get("member")
+                            if change.field=="condition" and member!=null and member.behavior_id==descriptor.condition_id:
+                                admissions.append({"occurrence":str(int(node.occurrence)),"condition_uuid":member.condition_uuid})
+                elif fact.kind=="saving_throw" and fact.target_entity_uuid==cast.fact.target_entity_uuid \
+                        and fact.effect_id==descriptor.save_effect_id and fact.succeeded==descriptor.save_succeeded:
+                    saves.append(str(int(node.occurrence)))
+        check(admissions.size()==1 and saves.size()==1,label+" unchanged original supplies one selected recipient membership and actual save")
+        if admissions.size()==1 and saves.size()==1:
+            var provenance:Dictionary=component.native_constructor_evidence
+            check(str(component.source_event_uuid)==admissions[0].occurrence \
+                and provenance.result_occurrence==admissions[0].occurrence \
+                and provenance.condition_uuid==admissions[0].condition_uuid \
+                and provenance.condition_id==descriptor.condition_id \
+                and provenance.source_occurrence==cast.occurrence and provenance.source_lineage==cast.lineage \
+                and provenance.source_uuid==cast.fact.source_entity_uuid and provenance.target_uuid==cast.fact.target_entity_uuid \
+                and provenance.save_occurrence==saves[0] and provenance.save_succeeded==descriptor.save_succeeded,label+" finite result publishes at its exact original membership while retaining actual cast/save provenance")
         check(cue.get("live_endpoints",[])==[{"actor":"caster","socket":"ground"},{"actor":"target","socket":"body_center"}] \
             and not cue.has("aim_policy"),label+" finite authored target endpoints cannot borrow cosmetic maintained-eye aim")
 

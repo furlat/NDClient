@@ -6,9 +6,9 @@ const Journal=preload("res://sdk/journal.gd")
 const Compare=preload("res://tests/schema16_fold_vectors_checks.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
 const CASES={
-    "air-elemental":{"actor":"615e48e0-09ab-4063-8157-bd1be68e2981","form":"air_elemental"},
-    "deva":{"actor":"ec65bbc6-f89d-4c39-ae06-82aa3ae18904","form":"deva"},
-    "draconic-spirit":{"actor":"92a47894-dfc0-4cd2-b482-e0c88ffb3853","form":"draconic_spirit"}}
+    "air-elemental":{"actor":"615e48e0-09ab-4063-8157-bd1be68e2981","form":"air_elemental","namespace":"content.srd_5_1_cc"},
+    "deva":{"actor":"ec65bbc6-f89d-4c39-ae06-82aa3ae18904","form":"deva","namespace":"content.srd_5_1_cc"},
+    "draconic-spirit":{"actor":"92a47894-dfc0-4cd2-b482-e0c88ffb3853","form":"draconic_spirit","namespace":"content.srd_5_2_cc"}}
 
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(800,600)
@@ -29,6 +29,8 @@ func birth_seat(name:String,seat:String)->void:
     var identity:String=CASES[name].actor
     check(reference.actors.has(identity),label+" original canonical journal actually admits the expected actor")
     if not reference.actors.has(identity):return
+    var creature:String="creature.spell."+str(CASES[name].form)
+    check(reference.actors[identity].get("creature_content_ref")==str(CASES[name].namespace)+":creature:"+creature+"@1",label+" independent original body supplies the exact native creature identity")
     var index:Dictionary=Recording.read(directory)
     check(index.ok,label+" original recording compiles through production")
     if not index.ok:return
@@ -75,7 +77,8 @@ func birth_seat(name:String,seat:String)->void:
         if programs.size()!=1:await close_birth(world,view,label);return
         var program:Node3D=programs[0]
         check(program.specification.owner_uuid==identity and program.specification.birth_event_uuid==component.native_actor_birth.birth_occurrence,label+" constructor receives actual actor and local native birth identities")
-        check(program.specification.form==CASES[name].form and program.specification.review_states.is_empty(),label+" selected original form retains no fixture review lifecycle")
+        check(program.specification.form==creature and component.native_actor_birth.creature_id==creature \
+            and program.specification.review_states.is_empty(),label+" exact original native creature identity retains no fixture review lifecycle")
         check(program.specification.initial_state=={"owner_uuid":identity,"birth_admitted":false,"observed":false,"suppressed":false},label+" private construction starts optically inactive")
         check(program.supplied_state=={"owner_uuid":identity,"birth_admitted":true,"observed":true,"suppressed":false},label+" actual published and displayed born actor admits the source")
         check(not program.supplied_state.has("terminal_event_uuid"),label+" no undisclosed terminal UUID is fabricated")

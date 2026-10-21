@@ -49,7 +49,7 @@ func run()->void:
 func owner(index:Dictionary,identity:String,effect:Dictionary,seat:String)->void:
     check(Persistent.spatial_selection(effect,index.cache).is_empty() and Persistent.spatial_lifecycles(effect).is_empty(),seat+" actual Acid uses the authored-only source arm, not a legacy spell or package lifecycle")
     var policy:Dictionary=Recording._spatial_presentation(effect,index.cache)
-    var config:Dictionary=Recording.Compiler.Authoring.load_data("catalog/condition_recipes.json",index.cache)[CONTENT]
+    var config:Dictionary=Persistent.spatial_config(CONTENT,index.cache)
     check(policy.eligible and policy.close_ms==Persistent.authored_removal_ms(config),seat+" Studio eligibility and retirement use the production authored close policy")
     var lifetimes:Array=index.rows.filter(func(row):return row.kind=="spatial_effect" and row.owner.id==identity)
     check(lifetimes.size()==1,seat+" Studio exposes one lifetime for the actual spatial UUID")
@@ -64,7 +64,7 @@ func owner(index:Dictionary,identity:String,effect:Dictionary,seat:String)->void
         source_ids[component.id]=true
         check(component.native_clip.id==CLIP and component.spatial_effect_uuid==identity,seat+" track selects exact authored source and spatial owner")
         check(component.actor_uuid==null and component.target_uuid==null and not component.has("condition"),seat+" spatial source invents no actor or condition owner")
-        check(row.source=="res://authoring/abilities/conditions/"+CONTENT+".tres::effects/0" and row.source_start_ms==life.start_ms,seat+" editable typed field and private source clock stay attached to the lifetime")
+        check(row.source=="res://authoring/environment/surfaces/"+CONTENT+".tres::lasting" and row.source_start_ms==life.start_ms,seat+" editable typed field and private source clock stay attached to the lifetime")
         check(row.status==component.status and row.coverage.rendered=="not_witnessed" and row.coverage.prepared=="not_examined",seat+" track/source presence cannot become native render evidence")
         check(row.start_ms>=life.start_ms and row.end_ms<=life.end_ms and row.end_ms>row.start_ms,seat+" native member interval stays inside its actual lifetime")
         var restored:RefCounted=Recording.restore(index,(row.start_ms+row.end_ms)*.5)

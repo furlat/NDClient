@@ -1,0 +1,176 @@
+[
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "target"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "58ef3f8c-0841-4173-98f8-605ff2d19379",
+   "state_revision": "b2a94e06-52f9-448b-9869-6eb094bb82d3",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber ally",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+   "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+   "audience_id": "7a1e7e67-a349-4fd8-8f69-c2706ba5fcb8",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+    "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+    "audience_id": "7a1e7e67-a349-4fd8-8f69-c2706ba5fcb8",
+    "sequence": 2
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "action.dodge",
+   "by": "target",
+   "target": "self"
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "640b8a2b-bea0-4b25-9a68-e1e71d71a00e",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "action.dodge",
+   "display_name": "Dodge",
+   "cast_at_level": null,
+   "variant_facets": [],
+   "target_type": "self",
+   "weapon_slot": null
+  },
+  "outcome_resolution": null,
+  "command_issued": true,
+  "command": {
+   "command_number": 1,
+   "actor_uuid": "594015af-1a5e-43b4-b54b-9f7e5884e45f",
+   "state_revision": "640b8a2b-bea0-4b25-9a68-e1e71d71a00e",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 22,
+     "target_indices": [
+      0
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false
+    }
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+   "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+   "audience_id": "0d3c6aca-89fc-4d58-aa2c-db265a89dfd3",
+   "command_number": 1,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+    "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+    "audience_id": "0d3c6aca-89fc-4d58-aa2c-db265a89dfd3",
+    "sequence": 4
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "end_turn",
+   "waiting_for": "caster"
+  },
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "594015af-1a5e-43b4-b54b-9f7e5884e45f",
+   "state_revision": "fd165077-451f-4283-988f-8d78c44a317d",
+   "intent": {
+    "kind": "end_turn"
+   }
+  },
+  "seat": "blue",
+  "actor": "Blue target",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+   "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+   "audience_id": "0d3c6aca-89fc-4d58-aa2c-db265a89dfd3",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+    "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+    "audience_id": "0d3c6aca-89fc-4d58-aa2c-db265a89dfd3",
+    "sequence": 5
+   }
+  }
+ },
+ {
+  "request": {
+   "do": "spell.acid_arrow",
+   "by": "caster",
+   "target": "target",
+   "level": 2
+  },
+  "previews": 1,
+  "stage": "preview_1",
+  "query_revision": "236e083f-4b03-46d0-b21f-138a02ab7d8f",
+  "discovery_generation": 1,
+  "selected_action": {
+   "behavior_id": "spell.acid_arrow",
+   "display_name": "Acid Arrow (Level 2)",
+   "cast_at_level": 2,
+   "variant_facets": [
+    {
+     "key": "side",
+     "value": "creature",
+     "label": "Creature"
+    }
+   ],
+   "target_type": "entity",
+   "weapon_slot": null
+  },
+  "outcome_resolution": "attack_roll",
+  "command_issued": true,
+  "command": {
+   "command_number": 2,
+   "actor_uuid": "f293827a-f24c-4aa2-a3e1-c937ec4abe1f",
+   "state_revision": "236e083f-4b03-46d0-b21f-138a02ab7d8f",
+   "intent": {
+    "kind": "execute_selection",
+    "discovery_generation": 1,
+    "selection": {
+     "action_index": 10,
+     "target_indices": [
+      1
+     ],
+     "extra_target_positions": [],
+     "prefer_safe": false,
+     "cast_at_level": 2
+    }
+   }
+  },
+  "seat": "amber",
+  "actor": "Amber caster",
+  "receipt": {
+   "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+   "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+   "audience_id": "7a1e7e67-a349-4fd8-8f69-c2706ba5fcb8",
+   "command_number": 2,
+   "kind": "committed",
+   "cursor": {
+    "game_id": "studio_spell_acid_arrow_dodge_seed_3",
+    "game_epoch": "fd940ad6-bff1-4e69-ab41-71939a2c09fc",
+    "audience_id": "7a1e7e67-a349-4fd8-8f69-c2706ba5fcb8",
+    "sequence": 7
+   }
+  }
+ }
+]

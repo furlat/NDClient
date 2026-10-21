@@ -191,6 +191,7 @@ func equipped_contract(world:World,bridge:RefCounted,current:Dictionary,offhand:
     source.set_weapon_binding(bad)
     check(not source._receiver_identity_valid(),"A different item cannot retain the original exact optical receiver")
     var item:Dictionary=current.duplicate(true)
+    for field in ["lifecycle_phases","persistent_owner","condition_uuid","condition"]:item.erase(field)
     item.native_item=true;item.intrinsic_item_effect=true;item.item_owner_uuid="item-a"
     item.source="res://authoring/characters/gear/weapon.roster.ember_longsword.tres::effects/0"
     item.start_ms=0.0;item.age_ms=42000.0

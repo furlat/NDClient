@@ -38,8 +38,16 @@ static func describe(row:Dictionary,record:Dictionary,source_role:int,quarter:in
     var value:Dictionary=quad(row,record,quarter,camera_basis)
     value.record=record;value.visible=not record.get("hidden",false);value.floor_group=record.get("flat_ground",false)
     var p:Dictionary={"source_tint":v4(row.get("tint",[1,1,1,1])),"colour_size":value.cell,
-        "colour_rect":v4(record.get("rect",[0,0,value.cell.x,value.cell.y])),"door_leaf_partition":0}
+        "colour_rect":v4(record.get("rect",[0,0,value.cell.x,value.cell.y])),"door_leaf_partition":0,
+        "has_component_geometry":false,"use_component_depth":false,"use_component_normals":false,
+        "native_scene_enabled":false,"native_scene_plane":false,"use_floor_motifs":false,"wall_motif_face_count":0}
     var textures:Dictionary={"colour_texture":record.path}
+    if record.has("floor_motifs") and source_role==1:
+        p.merge(_floor_motif_parameters(row,record.floor_motifs),true)
+    if source_role==1 and not record.get("wall_motif_faces",[]).is_empty():
+        var wall:Dictionary=_wall_motif_parameters(record.wall_motif_faces)
+        p.merge(wall.parameters,true);textures.merge(wall.textures,true)
+        if wall.has("reason"):value.wall_residue_gap=wall.reason
     if source_role==3 or (source_role==1 and row.kind=="door"):
         var partition:Dictionary=record.get("door_partition",{})
         if partition.is_empty():
@@ -54,8 +62,8 @@ static func describe(row:Dictionary,record:Dictionary,source_role:int,quarter:in
     for role in record.get("roles",[]):
         if role.role=="ground_shadow":selection=role.selection;break
     var shadow_pass:bool=source_role==0
-    if shadow_pass and selection.is_empty():value.visible=false
-    p.source_unlit=shadow_pass;p.highlighted=false;p.use_selection=not selection.is_empty();p.invert_selection=not shadow_pass
+    if shadow_pass and selection.is_empty() and not record.get("ground_equipment_shadow",false):value.visible=false
+    p.source_unlit=shadow_pass or row.get("unlit",false);p.highlighted=false;p.use_selection=not selection.is_empty();p.invert_selection=not shadow_pass
     if not selection.is_empty():
         p.selection_kind=1 if selection.kind=="source_rgba" else 0
         if selection.kind=="source_rgba":
@@ -90,8 +98,100 @@ static func describe(row:Dictionary,record:Dictionary,source_role:int,quarter:in
                     var point:Vector3=p.pixel_to_ray*Vector3(x+sampling.pixel_center[0],y+sampling.pixel_center[1],1)+p.ray_direction*float(depth)
                     bounds=bounds.expand(receiver_to_quad*point)
         value.aabb=bounds
+    var binding:Dictionary=record.get("component_binding",{})
+    if not binding.is_empty():
+        p.merge(binding.parameters,true);textures.merge(binding.textures,true)
+        p.use_component_depth=source_depth;p.use_component_normals=source_normals
+        var sheet:Vector2=v2(record.component_sheet_size);var rect:Vector4=p.colour_rect
+        p.material_cell_size=value.cell;p.frame_uv=Vector4(rect.x/sheet.x,rect.y/sheet.y,rect.z/sheet.x,rect.w/sheet.y)
+        p.native_scene_pivot=value.pivot;p.native_scene_enabled=source_depth
+        # Apply the very same image-plane registration to the original optical
+        # surface. Its ray-depth origin/range and encoding remain unchanged.
+        var source_pivot:Vector2=v2(record.source_pivot)
+        var units:float=binding.parameters.component_units
+        p.native_scene_ground_height=float(binding.ground)*units-(value.pivot.y-source_pivot.y)*camera_basis.y.y*units
+        var shift:=Vector3(source_pivot.x-value.pivot.x,value.pivot.y-source_pivot.y,0.)*units
+        for point in binding.bounds:value.aabb=value.aabb.expand(point+shift)
+    if record.has("ground_equipment_tint"):
+        var tint:=Color(str(record.ground_equipment_tint))
+        p.source_tint*=Vector4(tint.r,tint.g,tint.b,tint.a)
     value.parameters=p;value.texture_parameters=textures
     return value
+
+## Bounded source sampling metadata, not a baked image. Compute the original
+## integer hash on the CPU so negative coordinates and 64-bit products are not
+## silently replaced by a shader's 32-bit hash. All raster sampling stays on GPU.
+static func _motif_variation(x:int,y:int)->int:
+    return posmod(((x+37)*73856093)^((y+19)*19349663),997)
+
+static func _motif_floor_div(value:int,divisor:int)->int:
+    var quotient:int=value/divisor
+    return quotient-1 if value<0 and value%divisor!=0 else quotient
+
+static func _motif_round_even(value:float)->int:
+    var low:int=floori(value)
+    return low if value-float(low)<.5 or (value-float(low)==.5 and low%2==0) else low+1
+
+static func _floor_motif_parameters(row:Dictionary,profile:Dictionary)->Dictionary:
+    var origin_x:int=int(row.position[0])*32-16
+    var origin_y:int=int(row.position[1])*32-16
+    var placements:=PackedVector4Array();placements.resize(16)
+    var count:int=0
+    for gx in range(_motif_floor_div(origin_x-55,48),_motif_floor_div(origin_x+32+55,48)+1):
+        for gy in range(_motif_floor_div(origin_y-55,48),_motif_floor_div(origin_y+32+55,48)+1):
+            var variant:int=_motif_variation(gx,gy)
+            var left:int=_motif_round_even(float(gx*48+12-origin_x-35)+(float(variant)/997.-.5)*14.)
+            placements[count]=Vector4(left,gy*48+12-origin_y-35,variant%4,0.);count+=1
+    var noise:=PackedFloat32Array();noise.resize(144)
+    var first_x:int=_motif_floor_div(origin_x,3)
+    var first_y:int=_motif_floor_div(origin_y,3)
+    for x in range(12):
+        for y in range(12):noise[x*12+y]=2.+float(_motif_variation(first_x+x,first_y+y))/997.*4.
+    var starts:=Vector4();var widths:=Vector4()
+    for column in range(4):
+        starts[column]=_motif_round_even(float(column)*float(profile.art_size[0])/4.)
+        widths[column]=_motif_round_even(float(column+1)*float(profile.art_size[0])/4.)-starts[column]
+    return {"use_floor_motifs":true,"floor_motif_count":count,"floor_motif_placements":placements,
+        "floor_motif_noise":noise,"floor_motif_noise_phase":Vector2(posmod(origin_x,3),posmod(origin_y,3)),
+        "floor_motif_columns":starts,"floor_motif_widths":widths,"floor_motif_height":_motif_round_even(float(profile.art_size[1])/4.),
+        "floor_motif_neighbors":int(row.connected_neighbors),"floor_motif_opacity":float(profile.opacity)}
+
+## Existing wall material receives the original source UV treatment. Bounds
+## come from the supplied profile: at most two planes for each of two joined
+## original boundaries, and six overlapping motifs in each80px wall field.
+static func _wall_motif_parameters(faces:Array)->Dictionary:
+    if faces.size()>4:return {"parameters":{},"textures":{},"reason":"wall_motif_source_plane_capacity"}
+    var origins:=PackedVector4Array();origins.resize(4)
+    var axes:=PackedVector4Array();axes.resize(4)
+    var columns:=PackedVector4Array();columns.resize(4)
+    var widths:=PackedVector4Array();widths.resize(4)
+    var placements:=PackedVector4Array();placements.resize(24)
+    var variants:=PackedFloat32Array();variants.resize(24)
+    var counts:=Vector4();var heights:=Vector4();var reverse:=Vector4();var opacity:=Vector4()
+    var textures:Dictionary={}
+    for index in faces.size():
+        var face:Dictionary=faces[index];var profile:Dictionary=face.profile;var plane:Dictionary=face.plane
+        origins[index]=Vector4(plane.origin[0],plane.origin[1],0.,0.)
+        axes[index]=Vector4(plane.across[0],plane.across[1],plane.down[0],plane.down[1])
+        var lefts:=Vector4();var spans:=Vector4()
+        for column in range(4):
+            lefts[column]=_motif_round_even(float(column)*float(profile.art_size[0])/4.)
+            spans[column]=_motif_round_even(float(column+1)*float(profile.art_size[0])/4.)-lefts[column]
+        columns[index]=lefts;widths[index]=spans
+        heights[index]=_motif_round_even(float(profile.art_size[1])/4.)
+        reverse[index]=1. if face.reverse else 0.;opacity[index]=float(profile.opacity)
+        textures["wall_motif_texture"+str(index)]=profile.path
+        var origin:int=int(face.along)*64-40;var count:int=0
+        for at in range(_motif_floor_div(origin-80,51),_motif_floor_div(origin+160,51)+1):
+            var variant:int=_motif_variation(at,int(face.line_twice))
+            var width:int=70+variant%37;var height:int=80+variant%100
+            placements[index*6+count]=Vector4(_motif_round_even(float(at*51-origin)-float(width)*.5),192-height,width,height)
+            variants[index*6+count]=variant%4;count+=1
+        counts[index]=count
+    return {"parameters":{"wall_motif_face_count":faces.size(),"wall_motif_origins":origins,"wall_motif_axes":axes,
+        "wall_motif_columns":columns,"wall_motif_widths":widths,"wall_motif_heights":heights,
+        "wall_motif_reverse":reverse,"wall_motif_opacity":opacity,"wall_motif_counts":counts,
+        "wall_motif_placements":placements,"wall_motif_variants":variants},"textures":textures}
 
 static func row_packet(row:Dictionary,quarter:int,camera_basis:Basis,cache:Dictionary,source_depth:bool,source_normals:bool)->Dictionary:
     # Fixture flames stay scene-owned; their static body uses this packet.
@@ -118,7 +218,7 @@ static func row_packet(row:Dictionary,quarter:int,camera_basis:Basis,cache:Dicti
         if variant.kind=="door":layers.append([role,base,3]);layers.append([role,base+1,2])
         layers.append([role,base+2,1])
         for layer in layers:
-            var selected:Dictionary=frames[index] if layer[2]==2 else record
+            var selected:Dictionary=frames[index] if layer[2]==2 else Catalog.environment_role(record,layer[2])
             var descriptor:Dictionary=describe(variant,selected,layer[2],quarter,camera_basis,source_depth,source_normals)
             var entry:Dictionary={"id":variant.id+":"+str(layer[1])+":"+layer[0],"placement":variant,"role":layer[0],
                 "layer":layer[1],"source_role":layer[2],"mobile":false,"descriptor":descriptor}
@@ -134,4 +234,5 @@ static func row_packet(row:Dictionary,quarter:int,camera_basis:Basis,cache:Dicti
                 picks.sort_custom(func(a,b):return Order.less(a.key,b.key) if a.key!=b.key else a.row.id<b.row.id)
                 entry.wall_picks=picks
             entries.append(entry)
+    paths.merge(EnvironmentMedia.world_media_paths(row,cache))
     return {"eligible":true,"entries":entries,"paths":paths}

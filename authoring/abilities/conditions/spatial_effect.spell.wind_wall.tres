@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="owner"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="effect"]
+
+[sub_resource type="Resource" id="Wall0"]
+script = ExtResource("effect")
+clip = "wall-native/wind_wall_corner_native/lifecycle"
+role = "attached"
+scope = "spatial"
+at = "owner_start"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+approach = "runtime-prepared-wall-child-v3-20261021"
+sampling = "absolute"
+fade_out = 0.6
+constructor_input = {"kind": "spatial_owner", "component_path": ["wall"], "input_field": "", "cell_input": "wall_assembly", "content_id": "spatial_effect.spell.wind_wall", "contact_behavior_id": "spell.wind_wall"}
+staging_from = "factory@runtime-wall-child-v3-20261021-8b695014a812da72"
+extra = {"wall_forms": ["segment", "polyline"]}
+
+[resource]
+script = ExtResource("owner")
+id = "spatial_effect.spell.wind_wall"
+disposition = "authored"
+effects = Array[ExtResource("effect")]([SubResource("Wall0")])
+status = "partial"
+notes = "Actual spatial UUID/anchor/wall_assembly and absolute owner age drive the explicit selective-readiness successor of the original Wind controller. Current optical occupants never assert contact. Only exact native contact ancestry supplies named pulses; visibility loss and real removal remain distinct. This retains the source's documented indivisible readiness publication tail; whole-game performance is not qualified by this assignment. Native output and human visual acceptance require original-case evidence."

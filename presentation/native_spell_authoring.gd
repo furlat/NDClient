@@ -19,6 +19,13 @@ static func selected(source_value:Dictionary,fact:Dictionary,save_context:Dictio
         var matches:bool=true
         for field in variant.when:
             if field=="save_succeeded":continue
+            if field=="damage_types":
+                # The producer discloses the chosen element on the cast even
+                # when it misses. These fixed-element recipes require exactly
+                # one declared type; later damage is not a selection operand.
+                var declared:Array=fact.get("damage_types",[])
+                if declared.size()!=1 or declared[0] not in variant.when[field]:matches=false;break
+                continue
             if fact.get(field)==null or fact[field] not in variant.when[field]:matches=false;break
         if not matches:continue
         if variant.when.has("save_succeeded"):
@@ -87,7 +94,7 @@ static func _effect_clips(selected:Dictionary,result:Array,seen:Dictionary)->voi
     for at in cues.size():
         if at in selected.get("excluded_cue_indices",[]) or at in persistent:continue
         if not cues[at].get("unbound_constructor_inputs",[]).is_empty():continue
-        var clip:Dictionary=Effects.resolve(str(cues[at].clip),str(selected.get("id","")),str(cues[at].get("role","")))
+        var clip:Dictionary=Effects.for_cue(cues[at],str(selected.get("id","")),str(cues[at].get("role","")))
         if clip.is_empty():continue
         clip=Effects.occurrence_clip({"native_clip":clip,"native_cue":cues[at]})
         var identity:String=Effects.key(clip)
@@ -114,7 +121,8 @@ static func event_cues(selected:Dictionary)->Array:
         var source_index:int=choice.source_index
         return source_index not in selected.get("excluded_cue_indices",[]) \
             and (not selected.get("explicit_event_cues",false) or source_index in selected.event_cue_indices) \
-            and source_index not in persistent)
+            and source_index not in persistent \
+            and choice.get("constructor_input",{}).get("projection") not in ["condition_contact","spatial_contact","weapon_component"])
 
 static func phases(selected:Dictionary,owner:Dictionary,launch_ms:float,travel_ms:float,application_index:int,include_cast:bool)->Array:
     var rows:Array=[]
@@ -129,8 +137,8 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
     var contact:float=(launch_ms+travel_ms)/1000.0
     var preparation:float=owner.get("prepare",owner.get("start",launch_ms))/1000.0
     var source_index:int=choice.get("source_index",choice.source_index)
-    var source:String=selected.source+"/cues/"+str(source_index)
-    var clip:Dictionary=Effects.resolve(str(choice.clip),str(selected.id),str(choice.role))
+    var source:String=str(choice.get("source",selected.source+"/cues/"+str(source_index)))
+    var clip:Dictionary=Effects.for_cue(choice,str(selected.id),str(choice.role))
     if clip.is_empty():
         return {"start_ms":launch_ms,"duration_ms":maxf(1.0,travel_ms),"status":"missing",
             "reason":"effect_not_in_package","native_cue":choice,"native_clip":{},
@@ -159,7 +167,8 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
         "impact","area":
             begin=contact+float(cue.get("contact_delay",0.0));end=begin+native_end/rate
         "attached":
-            begin={"cast":preparation,"release":launch,"contact":contact}[cue.get("at","release")]+float(cue.get("delay_seconds",0.0))
+            begin={"cast":preparation,"cast_start":preparation,"event.start":preparation,"action_start":preparation,
+                "release":launch,"contact":contact}[cue.get("at","release")]+float(cue.get("delay_seconds",0.0))
             end=begin+native_end/rate
         _:
             return {"start_ms":launch_ms,"duration_ms":maxf(1.0,travel_ms),"status":"missing","reason":"native_phase_role_unsupported",
@@ -186,9 +195,10 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
     var row={"start_ms":begin*1000.0,"duration_ms":(end-begin)*1000.0,
         "native_cue":cue,"native_clip":clip,"spell_id":selected.id,"native_lights":bounds.get("lights",[]),
         "source_id":"spell."+selected.id+".native."+str(cue.role),"finish_profile":selected.palette,
-        "optical":{"energy_multiplier":staging.get("decorative_light_multiplier",1.0)},"source":source}
+        "optical":{"energy_multiplier":cue.get("light_multiplier",staging.get("decorative_light_multiplier",1.0))},"source":source}
     if selected.has("variant"):row.native_variant=selected.variant
-    if staging.has("light_color"):row.optical.color=Color(staging.light_color)
+    if cue.has("light_color"):row.optical.color=Color(cue.light_color)
+    elif staging.has("light_color"):row.optical.color=Color(staging.light_color)
     var unbound:Array=cue.get("unbound_constructor_inputs",[])
     if not unbound.is_empty():
         row.status="missing";row.unbound_constructor_inputs=unbound

@@ -30,6 +30,7 @@ static func samples(tracks: Array, local: float) -> Dictionary:
         if result.has(id) and int(result[id].priority) > int(track.get("priority",0)): continue
         var fraction = clampf((local-start)/maxf(0.000001,float(track.duration_ms)),0,1)
         var sample: Dictionary = track.duplicate()
+        if track.has("visible_until_ms"):sample.body_visible=local-start<float(track.visible_until_ms)
         if not track.get("spatial_only",false):sample.source_seconds = lerpf(track.get("source_start_seconds",0.0),track.get("source_end_seconds",0.0),fraction)
         if not track.get("spatial_only",false) and track.has("source_time_keys"):
             var keys: Array = track.source_time_keys
@@ -46,6 +47,8 @@ static func samples(tracks: Array, local: float) -> Dictionary:
             sample.base_height_steps = lerpf(track.get("from_elevation_feet",0.0),track.get("to_elevation_feet",0.0),spatial_fraction)/5.0
             var motion = lerpf(track.get("motion_fraction_from",0.0),track.get("motion_fraction_to",1.0),fraction)
             sample.lift_pixels = sin(PI*motion)*float(track.get("arc_height_px",0)) if track.get("trajectory","") in ["direct_arc","connector_transfer"] else 0.0
+            if not track.get("lift_pixels_keys",[]).is_empty():
+                sample.lift_pixels=_source_at(track.lift_pixels_keys,fraction)
             if track.has("passage"):
                 var approach=smoothstep(0.0,.5-float(track.passage.passageHoldFraction)/2,fraction)
                 var exit_fraction=1.0-smoothstep(.5+float(track.passage.passageHoldFraction)/2,1.0,fraction)

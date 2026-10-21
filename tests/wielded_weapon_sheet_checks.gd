@@ -7,6 +7,8 @@ const BodyIndex=preload("res://presentation/resources/body_source_index.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Items=preload("res://presentation/native_items.gd")
 const Journal=preload("res://sdk/journal.gd")
+const Effects=preload("res://presentation/effect_package.gd")
+const Equipment=preload("res://tests/weapon_effect_support.gd")
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -23,7 +25,8 @@ func run()->void:
         var gear=load("res://authoring/characters/gear/"+spec[0]+".tres")
         check(gear.family==spec[1],spec[0]+": authored sheet family replaces no body")
         if spec[0]=="weapon.flame_blade":
-            check(gear.effects.is_empty() and not index.item_effects.has(spec[0]),spec[0]+": excluded native-body decoration is not silently assigned")
+            check(gear.effects.size()==1 and index.item_effects[spec[0]][0].clip=="weapons/equipped/fire/blade_tongues/medium/sustain",spec[0]+": explicit modular fire decoration keeps the existing Scimitar body")
+            check(gear.effects.all(func(use):return "created_item_binding" not in Effects.clip(use.clip).get("inputs",[])),spec[0]+": no excluded native weapon-body source is selected")
         else:
             check(gear.effects.size()==1 and index.item_effects[spec[0]][0].clip=="weapons/equipped/radiant/solar_bevel/medium/sustain",spec[0]+": explicit current main-hand candidate keeps the same modular sheet")
         for hand in [["weapon_melee_main",spec[2],"weapon"],["weapon_melee_off",spec[3],"offhand"]]:
@@ -52,7 +55,13 @@ func run()->void:
         check(found,seat+": original journal contains the actually equipped Flame Blade")
         var owners:Dictionary={}
         Items.observe(owners,journal.state,0.0,cache)
-        check(owners.is_empty() and Items.samples(owners,journal.state,0.0).is_empty(),seat+": native-body provenance is not required or invented for a sheet weapon")
+        var samples:Array=Items.samples(owners,journal.state,0.0)
+        check(owners.size()==1 and samples.size()==1,seat+": exactly one decoration follows the actual equipped item")
+        if samples.size()==1:
+            var sample:Dictionary=samples[0]
+            check(journal.state.items[sample.item_owner_uuid].look.item_id=="weapon.flame_blade" and sample.intrinsic_item_effect \
+                and not sample.has("condition_uuid") and not sample.has("item_effect_uuid") \
+                and "created_item_binding" not in sample.native_clip.get("inputs",[]),seat+": decoration retains actual item UUID without native-body provenance or invented membership")
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Built main/offhand modular sheet selection and both original faction item UUIDs; attached VFX, native pixels and full-character weapon registration are not qualified."}))
     quit(0 if failures.is_empty() else 1)
 
@@ -60,7 +69,7 @@ func compiled_overlay()->void:
     var fixture=load("res://tests/fixtures/wielded_weapon_overlay.tres")
     var scimitar=load("res://authoring/characters/gear/weapon.scimitar.tres")
     var built=BodyIndex.new()
-    Builder._equipment({"index":built},{fixture.id:fixture,scimitar.id:scimitar})
+    Equipment.equipment(built,{fixture.id:fixture,scimitar.id:scimitar})
     var cues:Array=built.item_effects.get(fixture.id,[])
     check(cues.size()==2,"Typed item decorations compile into distinct ordered cues")
     if cues.is_empty():return

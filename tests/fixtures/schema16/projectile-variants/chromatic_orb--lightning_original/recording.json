@@ -1,0 +1,275 @@
+{
+ "ok": true,
+ "failure": null,
+ "commands": 3,
+ "tracked": null,
+ "gaps": [],
+ "notes": [],
+ "names": {
+  "30b4314b-118c-402d-9307-c4379fc06835": "Amber caster",
+  "942eff80-22f9-426a-92d7-d4b49cf5f7a0": "Amber ally",
+  "f13b7eb3-440d-430f-a458-49550bbfb944": "Blue second target",
+  "f25e0267-b17c-4a28-b00e-2410a3ffc6f4": "Blue target"
+ },
+ "roles": {
+  "caster": "Amber caster",
+  "ally": "Amber ally",
+  "target": "Blue target",
+  "second_target": "Blue second target"
+ },
+ "sequence": [
+  "end_turn \u00b7 Amber ally",
+  "end_turn \u00b7 Blue second target",
+  "spell.chromatic_orb \u00b7 Amber caster"
+ ],
+ "summary": {
+  "facts": {
+   "turn": 5,
+   "actor_change": 6,
+   "damage": 6,
+   "sensory": 1,
+   "spatial_effect_state": 1,
+   "spell": 1
+  },
+  "behaviors": {
+   "spell.chromatic_orb": 1
+  },
+  "conditions": [],
+  "ended_conditions": [],
+  "positive_applied_damage_types": [
+   "Lightning"
+  ]
+ },
+ "moments": [
+  {
+   "sequence": 6,
+   "occurrence": 45,
+   "lineage": 33,
+   "event_offset": 0,
+   "label": "condition applied edda745c-0de5-4df7-9efb-4c8b9de26dfd",
+   "kind": "actor_change",
+   "actor_uuid": "30b4314b-118c-402d-9307-c4379fc06835",
+   "condition_uuid": "edda745c-0de5-4df7-9efb-4c8b9de26dfd",
+   "condition_id": null,
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 61,
+   "lineage": 33,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 62,
+   "lineage": 33,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 66,
+   "lineage": 33,
+   "event_offset": 5,
+   "label": "condition applied 820c6891-eae3-42e2-8aef-fcbe4a95739a",
+   "kind": "actor_change",
+   "actor_uuid": "f13b7eb3-440d-430f-a458-49550bbfb944",
+   "condition_uuid": "820c6891-eae3-42e2-8aef-fcbe4a95739a",
+   "condition_id": null,
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 82,
+   "lineage": 33,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 83,
+   "lineage": 33,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 87,
+   "lineage": 33,
+   "event_offset": 10,
+   "label": "condition applied 0cc12888-a30a-4949-930c-0c42f798f133",
+   "kind": "actor_change",
+   "actor_uuid": "f25e0267-b17c-4a28-b00e-2410a3ffc6f4",
+   "condition_uuid": "0cc12888-a30a-4949-930c-0c42f798f133",
+   "condition_id": null,
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 98,
+   "lineage": 33,
+   "event_offset": 12,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 99,
+   "lineage": 33,
+   "event_offset": 13,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 101,
+   "lineage": 33,
+   "event_offset": 15,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 111,
+   "lineage": 33,
+   "event_offset": 19,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "amber"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 53,
+   "lineage": 41,
+   "event_offset": 0,
+   "label": "condition applied edda745c-0de5-4df7-9efb-4c8b9de26dfd",
+   "kind": "actor_change",
+   "actor_uuid": "30b4314b-118c-402d-9307-c4379fc06835",
+   "condition_uuid": "edda745c-0de5-4df7-9efb-4c8b9de26dfd",
+   "condition_id": null,
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 69,
+   "lineage": 41,
+   "event_offset": 3,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 70,
+   "lineage": 41,
+   "event_offset": 4,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 74,
+   "lineage": 41,
+   "event_offset": 5,
+   "label": "condition applied 820c6891-eae3-42e2-8aef-fcbe4a95739a",
+   "kind": "actor_change",
+   "actor_uuid": "f13b7eb3-440d-430f-a458-49550bbfb944",
+   "condition_uuid": "820c6891-eae3-42e2-8aef-fcbe4a95739a",
+   "condition_id": null,
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 90,
+   "lineage": 41,
+   "event_offset": 8,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 91,
+   "lineage": 41,
+   "event_offset": 9,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 95,
+   "lineage": 41,
+   "event_offset": 10,
+   "label": "condition applied 0cc12888-a30a-4949-930c-0c42f798f133",
+   "kind": "actor_change",
+   "actor_uuid": "f25e0267-b17c-4a28-b00e-2410a3ffc6f4",
+   "condition_uuid": "0cc12888-a30a-4949-930c-0c42f798f133",
+   "condition_id": null,
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 106,
+   "lineage": 41,
+   "event_offset": 12,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 107,
+   "lineage": 41,
+   "event_offset": 13,
+   "kind": "damage",
+   "label": "damage ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 109,
+   "lineage": 41,
+   "event_offset": 15,
+   "kind": "spatial_effect_state",
+   "label": "spatial_effect_state ",
+   "faction": "blue"
+  },
+  {
+   "sequence": 6,
+   "occurrence": 119,
+   "lineage": 41,
+   "event_offset": 19,
+   "kind": "spell",
+   "label": "spell spell.chromatic_orb",
+   "faction": "blue"
+  }
+ ],
+ "perspectives": [
+  "amber",
+  "blue"
+ ],
+ "positive_applied_damage_types": [
+  "Lightning"
+ ],
+ "engine": {
+  "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+  "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+  "protocol_version": 1,
+  "player_schema_version": 16,
+  "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+ }
+}

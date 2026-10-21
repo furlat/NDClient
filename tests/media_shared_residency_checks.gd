@@ -90,6 +90,7 @@ func cpu_cache_roles()->void:
     Media.demand(a.media_warmup,paths,{},{},{},{path:true})
     Media.demand(b.media_warmup,paths,{},{},{path:true})
     check(await prepared([a,b],a.media_warmup,paths),"CPU and GPU consumers share one prepared original")
+    check(Media.boot_ready(a.media_warmup) and Media.boot_ready(b.media_warmup),"Both initial pictures publish before post-startup CPU cache changes")
     var owner=Media.physical(a.media_warmup)
     var texture=a.textures[path]
     Media.demand(a.media_warmup,paths,{},{},{path:true})
@@ -112,6 +113,62 @@ func cpu_cache_roles()->void:
     check(owner.decoded==2 and is_same(a.textures[path],texture),"Budget recovery decodes once without replacing the surviving GPU allocation")
     check(Media.release_cold_images(a.media_warmup).is_empty() and Media.diagnostics(a.media_warmup).pinned_over_budget_bytes==64,"Current CPU demand remains pinned even when required residency exceeds the optional budget")
     dispose(a);dispose(b)
+
+func frozen_startup_sources()->void:
+    var absolute:String=ProjectSettings.globalize_path(source_path)
+    var data:Dictionary;var owner:Dictionary
+    for cpu_required in [true,false]:
+        data=Media.create();owner=Media.physical(data)
+        data.budget_bytes=0;owner.budget_bytes=0
+        Media.adopt_required(data,1)
+        Media.adopt_source_sizes(data,{"support":64,"latch":64,"next":64},1)
+        var gpu:Dictionary={"latch":true}
+        if not cpu_required:gpu.support=true
+        Media.demand(data,{"support":absolute,"latch":absolute},{},{},gpu,{"support":true} if cpu_required else {})
+        Media.published(data,{"path":"support","cpu_bytes":64,"gpu_bytes":64})
+        if not cpu_required:
+            Media.demand(data,{"support":absolute,"latch":absolute},{},{},{"latch":true},{"support":true})
+            check(Media.release_cold_images(data,-1).is_empty(),"A current CPU promotion remains pinned even when startup requires only the GPU source")
+        # A before-first-publication seek replaces the current pose. Startup
+        # owns the original role, not a later pose's historical CPU use.
+        Media.demand(data,{"next":absolute},{},{},{"next":true})
+        Media.published(data,{"path":"next","cpu_bytes":0,"gpu_bytes":64})
+        check(Media.ready(data,{"next":true}) and not Media.boot_ready(data),"A replacement picture cannot fabricate the unfinished startup publication")
+        await process_frame
+        var released:Array=Media.release_cold_images(data,-1)
+        check(released.has("support")==not cpu_required and Media.prune(data,0).is_empty(),"Zero-budget startup retains exact CPU roles while allowing GPU-only source pixels to retire")
+        check(Media.ready(data,{"support":true}) and not Media.boot_ready(data),"The saved startup role remains ready after withdrawal and CPU retirement while its unpublished latch still holds boot")
+        var received:Dictionary={}
+        while received.is_empty() and Time.get_ticks_msec()<deadline:
+            received=Media.poll(data,true)
+            if received.is_empty():await process_frame
+        check(received.get("path")=="latch" and received.get("image")!=null and received.image.get_data()==original.get_data(),"Withdrawn startup work still decodes its exact original PNG through the required source owner")
+        if not received.is_empty():Media.published(data,received)
+        check(Media.boot_ready(data) and Media.ready(data,{"next":true}),"Actual startup receipt opens the held gate without changing current picture readiness")
+        await process_frame
+        released=Media.release_cold_images(data,-1)
+        check((not cpu_required or released.has("support")) and data.resident.support.cpu_bytes==0,"Completed startup releases its old CPU pin to ordinary zero-budget retirement")
+        Media.close(data)
+
+    data=Media.create();owner=Media.physical(data);data.budget_bytes=0;owner.budget_bytes=0
+    Media.adopt_required(data,1)
+    Media.demand(data,{"old":absolute})
+    Media.demand(data,{"current":absolute},{},{},{"current":true})
+    Media.adopt_required(data,2)
+    Media.demand(data,{"new":absolute},{},{},{"new":true})
+    check(not Media.ready(data,{"new":true}) and not Media.boot_ready(data) and Media.diagnostics(data).pending==1,"A new seek epoch retires withdrawn startup requests and owns only its new unpublished source")
+    Media.published(data,{"path":"new","cpu_bytes":0,"gpu_bytes":64})
+    check(Media.boot_ready(data),"The new epoch completes independently of the previous startup images")
+    Media.close(data)
+
+    var survivor:Dictionary=Media.create();data=Media.create();Media.share(data,survivor)
+    Media.adopt_required(data,1);Media.demand(data,{"closed-startup":absolute})
+    Media.demand(data,{})
+    Media.demand(survivor,{"survivor":absolute},{},{},{"survivor":true})
+    Media.published(survivor,{"path":"survivor","cpu_bytes":0,"gpu_bytes":64})
+    Media.close(data)
+    check(Media.ready(survivor,{"survivor":true}) and Media.diagnostics(survivor).pending==0,"Closing an unfinished startup releases its withdrawn queue while preserving another pane's ready source")
+    Media.close(survivor)
 
 func optional_and_budgets()->void:
     var a=Media.create();var b=Media.create();Media.share(b,a)
@@ -248,6 +305,7 @@ func run()->void:
         print("MEDIA_DUE_PRIORITY ",JSON.stringify(report));quit(0 if failures.is_empty() else 1);return
     await shared_source()
     await cpu_cache_roles()
+    await frozen_startup_sources()
     await optional_and_budgets()
     await optional_consumers()
     await cancelled_optional_backlog()

@@ -1,0 +1,35 @@
+{
+  "scope": "Preserved original public HTTP bytes and Amber native journal before the failed Python SDK Choices admission; no prospective witness passed and no gameplay command was submitted.",
+  "capture_directory": ".runtime/targeting-preview-6ae3af70",
+  "recorder": "tools/targeting_preview_checks.py",
+  "engine": {
+    "path": "/home/tommaso/.cache/ndclient/dnd_engine-211b71134",
+    "commit": "211b71134ed15c89e62232587381f7e15a5961c3",
+    "protocol_version": 1,
+    "player_schema_version": 16,
+    "schema_digest": "49d14bc20920f5698eb4f09e3aeece442380242cd1453893d45f94ea9fb0c8a5"
+  },
+  "sdk": "Unmodified frozen sdk/python/src/dnd_player; exact import paths and rejection retained in sdk-refusal-review.json.",
+  "source_snapshot": "host-result.json preserves the host's original pre-start source_snapshot_unix_ns, scope and complete source_sha256 map.",
+  "preserved_files": [
+    "0001-choices-request.json",
+    "0001-choices-response.json",
+    "checks.json",
+    "sdk-refusal-review.json",
+    "host-result.json",
+    "host-first-human-boundary.json",
+    "amber/journal/0000000000000000.json",
+    "amber/journal/0000000000000001.json"
+  ],
+  "original_gate": {
+    "ok": false,
+    "checks": 0,
+    "error": "ProtocolError: Contradictory action availability and target set"
+  },
+  "not_preserved": [
+    "server.json (credentials)",
+    "spool/",
+    "server.log"
+  ],
+  "independence": "The raw response and packets are copied byte-for-byte. sdk-refusal-review.json is explicitly offline diagnosis, not a replacement response, gameplay fixture, successful scenario or generated oracle."
+}

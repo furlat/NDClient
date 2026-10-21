@@ -72,7 +72,9 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
     if share_sources:
         owner.presentation_mutes=reference.presentation_mutes.duplicate()
         owner.presentation_solo=reference.presentation_solo.duplicate()
-    owner.quarter=reference.quarter;owner.requested_quarter=reference.quarter
+    # A reused pane still owns its published static quarter. Change it through
+    # the ordinary prepared view publication, preserving source/billboard basis.
+    if not reused:owner.quarter=reference.quarter;owner.requested_quarter=reference.quarter
     owner.wall_mode=reference.wall_mode;owner.grid_visible=reference.grid_visible
     if not reused:pane.viewport.add_child(owner)
     owner.native_spell_hit_material=reference.native_spell_hit_material
@@ -82,5 +84,6 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
     owner.playback_end_ms=source.get("presentation_end_ms",source.duration_ms)
     owner.position_camera()
     if not reused:owner.install_playback(restored)
+    else:owner.request_view(reference.quarter)
     pane.reused=reused
     return pane
