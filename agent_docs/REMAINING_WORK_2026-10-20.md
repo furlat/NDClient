@@ -12,9 +12,10 @@ execution order; later sections and appendices hold the exact inventory/evidence
 ## 1. The actual situation
 
 
-**Current execution boundary,21October19:32UTC:** complete Factory8dd is committed
-at **`4ac732d3`**; client checkpoint **`5258b326`** is followed by the coherent
-source batch described here. Indexed condition lifecycle selections, real
+**Current execution boundary,21October19:49UTC:** complete Factory8dd is committed
+at **`4ac732d3`**. Source checkpoint **`24a993f0`** contains the coherent authoring
+and shared-renderer batch below; **`c76e2139`** then repairs two Studio navigation/
+preview-queue defects. Indexed condition lifecycle selections, real
 class-held owners, ranged/offhand coatings, four elemental own rigs/eight
 intrinsic gestures, distinct temporary-HP grants and their Studio tracks now
 use the existing compiler, preparation, renderer, source clocks and lighting.
@@ -22,6 +23,19 @@ All130 imported alternatives retain explicit dispositions. A source audit found
 no further enabled/nonempty body selections silently omitted after the eight
 intrinsic Action dispositions were corrected. This is a bounded source finding,
 not proof that every legacy method, optional study or artwork is accepted.
+
+**Runtime continuation:** the remaining29 enabled headless gate rows now pass,
+including **49,862/0** checks over all369 successful originals/both factions.
+The exact230-row enabled headless inventory joins to230 passes after affected
+repairs; each receipt keeps its actual source cutoff. This is not a new single
+230-process run. [Headless230 join](../.runtime/material-runtime-integration-20261021/current-headless230-joined.json).
+The real Gallery thumbnail queue control passes41/0, and native Hide/light
+same-clock audience navigation passes187/0 with clean exits. A single broad
+native queue is now active:181 new invocations plus that current thumbnail
+receipt, with the unchanged Factory-dependent Event row explicitly pending.
+The183 enabled-row inventory is fully accounted for; completion is not inferred
+from an active queue. User dragon previews remain running, so native timings
+are nonquiet functional diagnostics. [Native queue](../.runtime/tests/20261021T194629.980426Z-current-native-tail/summary.json).
 
 **Current native content:** all four unchanged actual elemental originals pass
 **28,661/0**, native exit0, zero engine errors. Movement, ordinary hit/death,

@@ -8,11 +8,11 @@ rules. Search by label or exact ID. Every current `authoring/server_ids.json` ID
 is listed, including capabilities that have no recording yet.
 Search also matches linked case names and recording failure reasons. The status
 filter separates ready recordings, failed/stale captures, missing recordings,
-linked output evidence, output gaps, source gaps and rejected art. Counts describe
+linked output evidence, output gaps, source gaps and artwork awaiting review. Counts describe
 the filtered capabilities, so a multi-subject case remains reachable from each
 owner without creating duplicate capability IDs.
 
-Select a capability or its case to open that exact current recording. The compact
+Select a capability or its case to open that exact compatible original recording. The compact
 header selects another case in the same category. One faction is rendered;
 select another faction to load its own independently reduced original journal.
 Stale, failed and missing recordings never silently substitute another scenario.
@@ -21,15 +21,18 @@ Stale, failed and missing recordings never silently substitute another scenario.
 
 The browser keeps four separate facts: source/build coverage, scenario recording,
 actual presentation qualification, and visual approval. A recorded case is not
-proof that its VFX/provider works or that the user accepted it. Aid, Bless, False
-Life and Sacred Flame retain their rejected status. Current unqualified renderer
+proof that its VFX/provider works or that the user accepted it. **All artwork and
+audio remain unreviewed.** The earlier four-effect rejection claim is superseded.
+Current unqualified renderer
 inputs remain **not assessed**, rather than becoming green from a body animation.
 The four facts appear as separate columns. Output receipts are joined offline in
 `generated/reports/studio-case-evidence.json`; hover a capability or case's Output
 evidence cell for the exact receipt path, original package identity and scope.
 Reader safety, native replay/pixels and actual audio transport starts remain
 separate witnesses. Historical package receipts and receipts without a package
-identity do not qualify the installed successor. Audio starts do not establish
+identity do not qualify the installed successor. A positive assertion marker
+without an actual successful process exit remains an inspectable, unqualified
+receipt. Partial engine identity stays partial. Audio starts do not establish
 that every required spell sound exists or that its timing/mix was accepted.
 
 The same production reducer, compiler, authoring, renderer and audio power the
@@ -74,6 +77,9 @@ Opening prepares only the selected faction's original journal. Selecting another
 faction loads it on demand and maps the corresponding recorded event/phase; its
 numeric presentation time may differ. Each loaded audience retains its own state
 and index. The previous preview remains visible during preparation.
+An explicit seek clears a retained faction anchor even when the clock stays at
+the same frame. Deferred composed previews keep their requests while ordinary
+visible previews continue through the existing bounded queue.
 
 Case loading plans the actual recorded body/environment sources, including
 later groups, using the production media planners and existing memory budget.
